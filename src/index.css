@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* 3D Flip Card Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+  
+  header, nav, aside, footer, .no-print,
+  #btn-explore-all-plans, #btn-upgrade-pro-header,
+  #btn-export-billing-csv, #btn-bulk-download-pdf,
+  #btn-print-invoice-table, #btn-print-invoices-table,
+  #toggle-auto-renew, #input-filter-invoices,
+  #input-search-invoices, #select-invoice-status,
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  #section-billing-invoices {
+    display: block !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 16px !important;
+    border-radius: 8px !important;
+  }
+
+  #section-billing-invoices table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    color: #111827 !important;
+  }
+
+  #section-billing-invoices th {
+    background-color: #f3f4f6 !important;
+    color: #374151 !important;
+    border-bottom: 2px solid #e5e7eb !important;
+    padding: 8px 6px !important;
+  }
+
+  #section-billing-invoices td {
+    color: #1f2937 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 8px 6px !important;
+  }
+}

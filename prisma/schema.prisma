@@ -1,0 +1,283 @@
+// prisma/schema.prisma
+// Nihomi (にほみ) — Recurring Revenue & Subscription Engine v1.1
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+
+enum Role {
+  STUDENT
+  ADMIN
+  INSTRUCTOR
+}
+
+enum SubscriptionStatus {
+  trialing
+  active
+  past_due
+  paused
+  cancelled
+  expired
+}
+
+enum BillingInterval {
+  monthly
+  yearly
+}
+
+enum PaymentStatus {
+  initiated
+  pending
+  paid
+  failed
+  refunded
+  cancelled
+}
+
+enum InvoiceStatus {
+  draft
+  paid
+  void
+  uncollectible
+}
+
+enum DiscountType {
+  percentage
+  fixed
+}
+
+// ----------------------------------------------------
+// USER & CORE RELATIONS
+// ----------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(STUDENT)
+  phoneNumber   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Billing Relations
+  subscriptions Subscription[]
+  payments      Payment[]
+  invoices      Invoice[]
+  usageRecords  UsageRecord[]
+  auditLogs     AdminAuditLog[] @relation("AdminAuditor")
+  targetAudits  AdminAuditLog[] @relation("TargetUser")
+
+  @@index([email])
+}
+
+// ----------------------------------------------------
+// SUBSCRIPTION & STATE MACHINE
+// ----------------------------------------------------
+
+model Subscription {
+  id                 String             @id @default(cuid())
+  userId             String
+  planId             String             // 'free' | 'starter' | 'pro' | 'japan_ready'
+  planPriceId        String             // Unique identifier for the selected pricing tier
+  status             SubscriptionStatus @default(trialing)
+  billingInterval    BillingInterval    @default(monthly)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  trialStart         DateTime?
+  trialEnd           DateTime?
+  cancelAtPeriodEnd  Boolean            @default(false)
+  cancelledAt        DateTime?
+  gracePeriodEnd     DateTime?          // Set for past_due handling (e.g. +4 days)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  // Relations
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments           Payment[]
+  invoices           Invoice[]
+  events             SubscriptionEvent[]
+
+  @@index([userId, status])
+  @@index([status, currentPeriodEnd])
+  @@index([status, gracePeriodEnd])
+}
+
+model SubscriptionEvent {
+  id             String             @id @default(cuid())
+  subscriptionId String
+  previousState  SubscriptionStatus
+  newState       SubscriptionStatus
+  reason         String?
+  triggeredBy    String             // 'webhook', 'cron_dunning', 'admin_manual', 'user_checkout'
+  metadata       Json?
+  createdAt      DateTime           @default(now())
+
+  subscription   Subscription       @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, createdAt])
+}
+
+// ----------------------------------------------------
+// PAYMENTS & AUDIT TRAILS
+// ----------------------------------------------------
+
+model Payment {
+  id                    String        @id @default(cuid())
+  userId                String
+  subscriptionId        String?
+  invoiceId             String?       @unique
+  paymentProvider       String        // 'bkash', 'sslcommerz', 'aamarpay', 'stripe'
+  providerTransactionId String        @unique
+  amount                Decimal       @db.Decimal(10, 2)
+  currency              String        @default("BDT")
+  status                PaymentStatus @default(initiated)
+  paymentMethod         String?       // 'bkash_wallet', 'visa', 'mastercard'
+  metadata              Json?
+  paidAt                DateTime?
+  createdAt             DateTime      @default(now())
+
+  // Relations
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription          Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  invoice               Invoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  attempts              PaymentAttempt[]
+
+  @@index([userId, status])
+  @@index([paymentProvider, providerTransactionId])
+}
+
+model PaymentAttempt {
+  id           String   @id @default(cuid())
+  paymentId    String
+  attemptNo    Int      @default(1)
+  rawRequest   Json?
+  rawResponse  Json?
+  errorCode    String?
+  errorMessage String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  payment      Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([paymentId])
+}
+
+// ----------------------------------------------------
+// INVOICING
+// ----------------------------------------------------
+
+model Invoice {
+  id                 String        @id @default(cuid())
+  invoiceNumber      String        @unique // e.g. 'NIH-2026-0001'
+  userId             String
+  subscriptionId     String
+  planName           String
+  billingInterval    BillingInterval
+  subtotal           Decimal       @db.Decimal(10, 2)
+  discountAmount     Decimal       @default(0.00) @db.Decimal(10, 2)
+  totalAmount        Decimal       @db.Decimal(10, 2)
+  currency           String        @default("BDT")
+  status             InvoiceStatus @default(draft)
+  billingPeriodStart DateTime
+  billingPeriodEnd   DateTime
+  pdfStoragePath     String?
+  issuedAt           DateTime      @default(now())
+  paidAt             DateTime?
+
+  // Relations
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription       Subscription  @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  payment            Payment?
+
+  @@index([userId, status])
+  @@index([invoiceNumber])
+}
+
+// ----------------------------------------------------
+// WEBHOOK IDEMPOTENCY & LOGGING
+// ----------------------------------------------------
+
+model WebhookEvent {
+  id             String    @id @default(cuid())
+  eventId        String    // Unique Gateway Event Identifier
+  provider       String    // 'bkash', 'sslcommerz', 'stripe'
+  eventType      String    // e.g. 'payment.success', 'payment.failed'
+  transactionId  String?
+  rawHeaders     Json
+  rawPayload     Json
+  signature      String?
+  signatureValid Boolean   @default(false)
+  processed      Boolean   @default(false)
+  errorLog       String?   @db.Text
+  responseCode   Int?
+  processedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@unique([provider, eventId])
+  @@index([processed, createdAt])
+}
+
+// ----------------------------------------------------
+// USAGE LIMITS & AI QUOTAS
+// ----------------------------------------------------
+
+model UsageRecord {
+  id          String   @id @default(cuid())
+  userId      String
+  featureKey  String   // e.g. 'ai_coach', 'jlpt_mock_exam'
+  usageCount  Int      @default(0)
+  periodStart DateTime
+  periodEnd   DateTime
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, featureKey, periodStart])
+  @@index([userId, featureKey])
+}
+
+// ----------------------------------------------------
+// PROMOTIONS & AUDIT LOGS
+// ----------------------------------------------------
+
+model Coupon {
+  id               String       @id @default(cuid())
+  code             String       @unique
+  discountType     DiscountType @default(percentage)
+  discountValue    Decimal      @db.Decimal(10, 2)
+  maxRedemptions   Int?
+  redemptionsCount Int          @default(0)
+  expiresAt        DateTime?
+  isActive         Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+
+  @@index([code, isActive])
+}
+
+model AdminAuditLog {
+  id            String   @id @default(cuid())
+  adminUserId   String
+  targetUserId  String?
+  action        String   // 'GRANT_PROMO', 'MANUAL_OVERRIDE', 'WEBHOOK_RETRY', 'CANCEL_SUB'
+  reason        String
+  payloadBefore Json?
+  payloadAfter  Json?
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  adminUser     User     @relation("AdminAuditor", fields: [adminUserId], references: [id], onDelete: Cascade)
+  targetUser    User?    @relation("TargetUser", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([adminUserId, createdAt])
+  @@index([action])
+}

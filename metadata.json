@@ -1,0 +1,6 @@
+{
+  "name": "Nihomi - Japanese Learning Platform",
+  "description": "Production Japanese learning platform and subscription engine featuring JLPT N5-N3 courses, Japanese for Work, interactive quizzes, AI Japanese Coach, and localized Bangladesh recurring billing (bKash & SSLCommerz).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
