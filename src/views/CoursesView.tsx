@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext.js';
 import { apiRequest } from '../lib/api.js';
 import { Course, JLPTLevel, Module, LessonSummary } from '../types.js';
 import { NihomiBookReader } from '../components/NihomiBookReader.js';
+import { EbookShowcaseCarousel } from '../components/EbookShowcaseCarousel.js';
 import {
   BookOpen,
   CheckCircle2,
@@ -318,6 +319,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ initialCourseId, onNav
             )}
           </div>
         </div>
+
+        {/* Ebook & Masterbook Library Showcase */}
+        <EbookShowcaseCarousel />
       </div>
     </div>
   );

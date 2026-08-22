@@ -1,6 +1,7 @@
 import React from 'react';
-import { BookOpen, CheckCircle2, Award, ArrowRight, Layers } from 'lucide-react';
+import { BookOpen, CheckCircle2, Award, ArrowRight, Layers, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.js';
+import { QuickQuizWidget } from '../components/QuickQuizWidget.js';
 
 interface LearningOverviewViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -133,6 +134,19 @@ export const LearningOverviewView: React.FC<LearningOverviewViewProps> = ({ onNa
                 <p className="text-stone-600 leading-relaxed">Express opinions, participate in meetings, understand indirect polite refusals, and speak at near-native speed.</p>
               </div>
             </div>
+          </div>
+
+          {/* Rapid Fire Grammar & Particle Test Section */}
+          <div className="space-y-4">
+            <div className="text-center space-y-1">
+              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">
+                Instant Skill Check &bull; কুইক প্র্যাকটিস
+              </span>
+              <h3 className="text-xl font-bold font-serif text-stone-900">
+                ৩০ সেকেন্ডের লাইভ গ্রামার চ্যালেঞ্জ
+              </h3>
+            </div>
+            <QuickQuizWidget />
           </div>
 
           {/* Future N2 / N1 Note */}

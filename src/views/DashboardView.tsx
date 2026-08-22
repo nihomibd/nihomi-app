@@ -26,6 +26,9 @@ import {
 import { VisionSenseiModal } from '../components/VisionSenseiModal.js';
 import { SentenceDnaModal } from '../components/SentenceDnaModal.js';
 import { NhkMethodologyCard } from '../components/NhkMethodologyCard.js';
+import { HanabiBackground } from '../components/HanabiBackground.js';
+import { KanjiFlipGrid } from '../components/KanjiFlipGrid.js';
+import { QuickQuizWidget } from '../components/QuickQuizWidget.js';
 
 interface DashboardViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -62,11 +65,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const sub = subscriptionDetails?.subscription;
 
   return (
-    <div id="nihomi-dashboard-view" className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8">
+    <div id="nihomi-dashboard-view" className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Hanabi Festival Ambient Effect */}
+      <HanabiBackground />
+
       <VisionSenseiModal isOpen={isVisionOpen} onClose={() => setIsVisionOpen(false)} />
       <SentenceDnaModal isOpen={isDnaOpen} onClose={() => setIsDnaOpen(false)} />
 
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         {/* Past Due Grace Period Alert if active */}
         {sub?.status === 'past_due' && (
           <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 flex items-center justify-between gap-4 text-xs text-amber-900">
@@ -84,7 +90,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         )}
 
         {/* 1. Master Coordinated Mission Capsule */}
-        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white/95 backdrop-blur-md border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-5">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
@@ -155,7 +161,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div
             onClick={() => setIsVisionOpen(true)}
-            className="p-5 rounded-3xl bg-white border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
+            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
           >
             <div className="w-11 h-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-bold">
               <Camera className="w-5 h-5" />
@@ -166,7 +172,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
           <div
             onClick={() => onNavigate('interview-lab')}
-            className="p-5 rounded-3xl bg-white border border-stone-200 hover:border-purple-500 cursor-pointer shadow-sm transition-all space-y-2 group"
+            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-purple-500 cursor-pointer shadow-sm transition-all space-y-2 group"
           >
             <div className="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
               <GraduationCap className="w-5 h-5" />
@@ -177,7 +183,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
           <div
             onClick={() => onNavigate('memory-os')}
-            className="p-5 rounded-3xl bg-white border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
+            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
           >
             <div className="w-11 h-11 rounded-2xl bg-stone-100 text-stone-800 flex items-center justify-center font-bold">
               <FileText className="w-5 h-5 text-red-600" />
@@ -188,7 +194,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
           <div
             onClick={() => onNavigate('coordination-hub')}
-            className="p-5 rounded-3xl bg-white border border-stone-200 hover:border-emerald-500 cursor-pointer shadow-sm transition-all space-y-2 group"
+            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-emerald-500 cursor-pointer shadow-sm transition-all space-y-2 group"
           >
             <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
               <Compass className="w-5 h-5" />
@@ -198,9 +204,49 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* 3. Progress DNA Matrix & AI Recovery Intervention */}
+        {/* 3. Dedicated Kanji Study Section with KanjiFlipGrid */}
+        <section id="kanji-study-section" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-serif font-bold text-sm">
+                漢
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold font-serif text-stone-900">
+                  JLPT N5 কাঞ্জি প্র্যাকটিস ল্যাব
+                </h2>
+                <p className="text-xs text-stone-500">
+                  ১২০টি আবশ্যক কাঞ্জির ইন্টারেক্টিভ ফ্লিপ কার্ড ও অডিও উচ্চারণ
+                </p>
+              </div>
+            </div>
+          </div>
+          <KanjiFlipGrid />
+        </section>
+
+        {/* 4. Rapid-Fire 30-Second Japanese Quiz Widget */}
+        <section id="quick-quiz-section" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm">
+                ⚡
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold font-serif text-stone-900">
+                  র‌্যাপিড গ্রামার ও পার্টিকেল কুইজ
+                </h2>
+                <p className="text-xs text-stone-500">
+                  ৩০ সেকেন্ডের স্পিড চ্যালেঞ্জ নিয়ে বাড়িয়ে নিন আপনার রিফ্লেক্স
+                </p>
+              </div>
+            </div>
+          </div>
+          <QuickQuizWidget />
+        </section>
+
+        {/* 5. Progress DNA Matrix & AI Recovery Intervention */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7 bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+          <div className="lg:col-span-7 bg-white/95 backdrop-blur-sm border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
             <h3 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-500" />
               <span>Nihomi Progress DNA™ Matrix</span>
@@ -272,9 +318,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* 4. NHK World Easy Japanese Methodology Card */}
+        {/* 6. NHK World Easy Japanese Methodology Card */}
         <NhkMethodologyCard />
       </div>
     </div>
   );
 };
+export default DashboardView;
