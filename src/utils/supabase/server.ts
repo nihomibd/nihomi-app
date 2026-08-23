@@ -12,16 +12,16 @@ const getEnvVar = (key: string): string => {
 
 export async function createClient() {
   const supabaseUrl =
-    getEnvVar('SUPABASE_URL') ||
     getEnvVar('NEXT_PUBLIC_SUPABASE_URL') ||
     getEnvVar('VITE_SUPABASE_URL') ||
-    'https://nihomi-preview.supabase.co';
+    getEnvVar('SUPABASE_URL') ||
+    'https://tphmukxemzeuwhewblwv.supabase.co';
 
   const supabaseAnonKey =
-    getEnvVar('SUPABASE_ANON_KEY') ||
     getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY') ||
     getEnvVar('VITE_SUPABASE_ANON_KEY') ||
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder-anon-key';
+    getEnvVar('SUPABASE_ANON_KEY') ||
+    'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t';
 
   return createSupabaseClient(supabaseUrl, supabaseAnonKey, {
     auth: {
