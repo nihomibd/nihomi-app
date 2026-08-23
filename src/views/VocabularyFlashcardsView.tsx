@@ -226,6 +226,49 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
     } catch {}
   };
 
+  // Sync published curriculum decks from Content Engine
+  useEffect(() => {
+    async function loadPublishedDecks() {
+      try {
+        const res = await fetch('/api/content/published');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.lessons || !Array.isArray(data.lessons)) return;
+
+        const publishedDecks: VocabularyDeck[] = data.lessons
+          .filter((l: any) => l.vocabulary && l.vocabulary.length > 0)
+          .map((l: any) => ({
+            id: `deck-pub-${l.id}`,
+            title: `${l.level} • ${l.title}`,
+            level: l.level || 'N5',
+            description: `Published curriculum deck extracted from "${l.title}". Includes ${l.vocabulary.length} vocabulary terms with SRS tracking.`,
+            color: 'from-amber-600 to-red-700',
+            cards: l.vocabulary.map((v: any, idx: number) => ({
+              id: v.id || `card-pub-${l.id}-${idx}`,
+              kanji: v.japanese || '',
+              reading: v.furigana || '',
+              romaji: v.romaji || '',
+              english: v.english || '',
+              bangla: v.banglaMeaning || '',
+              exampleSentence: v.exampleSentenceJa || '',
+              notes: v.notes || (v.partOfSpeech ? `Part of speech: ${v.partOfSpeech}` : undefined)
+            }))
+          }));
+
+        if (publishedDecks.length > 0) {
+          setDecks((prev) => {
+            const existingIds = new Set(prev.map((d) => d.id));
+            const newDecks = publishedDecks.filter((pd) => !existingIds.has(pd.id));
+            return newDecks.length > 0 ? [...prev, ...newDecks] : prev;
+          });
+        }
+      } catch (err) {
+        console.warn('[VocabularyFlashcards] Failed to load published decks:', err);
+      }
+    }
+    loadPublishedDecks();
+  }, []);
+
   const togglePin = (cardId: string) => {
     setPinnedCardIds((prev) => {
       const next = prev.includes(cardId) ? prev.filter((id) => id !== cardId) : [...prev, cardId];

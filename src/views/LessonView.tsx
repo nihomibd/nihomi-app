@@ -809,6 +809,9 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
                       </div>
                     </div>
                     <p className="text-sm font-bold text-stone-800">{v.english}</p>
+                    {v.banglaMeaning && (
+                      <p className="text-xs font-semibold text-emerald-700 font-sans mt-0.5">{v.banglaMeaning}</p>
+                    )}
                   </div>
                 );
               })}

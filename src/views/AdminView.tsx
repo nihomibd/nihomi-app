@@ -36,12 +36,14 @@ import {
 import { RevenueMetrics, Payment, Coupon, PlanId, WebhookEvent, RevenueTrends } from '../types.js';
 import { RevenueD3Charts } from '../components/RevenueD3Charts.js';
 import { WebhookInspectorModal } from '../components/WebhookInspectorModal.js';
+import { ContentStudioSection } from '../components/ContentStudio/ContentStudioSection.js';
+import { UploadCloud } from 'lucide-react';
 
 interface AdminViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-type AdminTab = 'revenue' | 'trends' | 'webhooks' | 'subscriptions' | 'payments' | 'coupons' | 'curriculum' | 'audit_logs';
+type AdminTab = 'content_engine' | 'revenue' | 'trends' | 'webhooks' | 'subscriptions' | 'payments' | 'coupons' | 'curriculum' | 'audit_logs';
 
 export const AdminView: React.FC<AdminViewProps> = ({ onNavigate }) => {
   const { user } = useAuth();
@@ -305,6 +307,22 @@ export const AdminView: React.FC<AdminViewProps> = ({ onNavigate }) => {
           {/* Tab Navigation */}
           <div className="flex flex-wrap gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
             <button
+              onClick={() => setActiveTab('content_engine')}
+              className={`px-3.5 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'content_engine'
+                  ? 'bg-red-600 text-white shadow-xs'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+              }`}
+              id="admin-tab-content-engine"
+            >
+              <UploadCloud className="w-3.5 h-3.5" />
+              <span>Content Engine (AI)</span>
+              <span className="px-1 py-0.2 rounded text-[9px] bg-amber-500 text-black font-extrabold uppercase">
+                New
+              </span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('revenue')}
               className={`px-3.5 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
                 activeTab === 'revenue'
@@ -422,6 +440,11 @@ export const AdminView: React.FC<AdminViewProps> = ({ onNavigate }) => {
             <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
             <span>{actionError}</span>
           </div>
+        )}
+
+        {/* TAB 0: CONTENT ENGINE (AI CURRICULUM STUDIO) */}
+        {activeTab === 'content_engine' && (
+          <ContentStudioSection courses={[]} />
         )}
 
         {/* TAB 1: REVENUE METRICS */}

@@ -39,7 +39,13 @@ import {
   BillingInterval,
   SubscriptionStatus,
   PaymentStatus,
-  PaymentProviderType
+  PaymentProviderType,
+  ContentSource,
+  ContentDraft,
+  ContentVersion,
+  ContentDraftStatus,
+  ContentSourceProcessingStatus,
+  StructuredEducationalContent
 } from './types.js';
 import {
   INITIAL_COURSES,
@@ -344,7 +350,12 @@ class Database {
     refunds: [],
     webhookEvents: [],
     subscriptionEvents: [],
-    adminAuditLogs: []
+    adminAuditLogs: [],
+    
+    // Content Engine Collections
+    contentSources: [],
+    contentDrafts: [],
+    contentVersions: []
   };
 
   private isLoaded = false;
@@ -371,8 +382,12 @@ class Database {
           this.data.plans = SEED_PLANS;
           this.data.planPrices = SEED_PLAN_PRICES;
           this.data.coupons = SEED_COUPONS;
-          this.save();
         }
+        // Ensure Content Engine collections are initialized
+        if (!this.data.contentSources) this.data.contentSources = [];
+        if (!this.data.contentDrafts) this.data.contentDrafts = [];
+        if (!this.data.contentVersions) this.data.contentVersions = [];
+        this.save();
         this.isLoaded = true;
       } else {
         this.seedDefaultData();
@@ -726,9 +741,24 @@ class Database {
           details: { message: 'Production subscription engine initialized with BDT pricing tiers.' },
           createdAt: new Date().toISOString()
         }
-      ]
+      ],
+      contentSources: [],
+      contentDrafts: [],
+      contentVersions: []
     };
     this.isLoaded = true;
+  }
+
+  public logAdminAction(entry: Omit<AdminAuditLog, 'id' | 'createdAt'>): AdminAuditLog {
+    const log: AdminAuditLog = {
+      ...entry,
+      id: `log-${crypto.randomUUID().slice(0, 8)}`,
+      createdAt: new Date().toISOString()
+    };
+    if (!this.data.adminAuditLogs) this.data.adminAuditLogs = [];
+    this.data.adminAuditLogs.push(log);
+    this.save();
+    return log;
   }
 
   public save() {
@@ -2497,6 +2527,364 @@ class Database {
     this.data.workJapanese.splice(idx, 1);
     this.save();
     return true;
+  }
+
+  // ==========================================
+  // CONTENT ENGINE PERSISTENCE (V1.0)
+  // ==========================================
+
+  public getContentSources(): ContentSource[] {
+    return this.data.contentSources || [];
+  }
+
+  public getContentSourceById(id: string): ContentSource | null {
+    return (this.data.contentSources || []).find((s) => s.id === id) || null;
+  }
+
+  public getContentSourceByHash(hash: string): ContentSource | null {
+    return (this.data.contentSources || []).find((s) => s.contentHash === hash) || null;
+  }
+
+  public createContentSource(data: Omit<ContentSource, 'id' | 'createdAt' | 'updatedAt'>): ContentSource {
+    const source: ContentSource = {
+      ...data,
+      id: `src-${crypto.randomUUID().slice(0, 8)}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    if (!this.data.contentSources) this.data.contentSources = [];
+    this.data.contentSources.unshift(source);
+    this.save();
+    return source;
+  }
+
+  public updateContentSource(id: string, updates: Partial<ContentSource>): ContentSource | null {
+    if (!this.data.contentSources) this.data.contentSources = [];
+    const idx = this.data.contentSources.findIndex((s) => s.id === id);
+    if (idx === -1) return null;
+    this.data.contentSources[idx] = {
+      ...this.data.contentSources[idx],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    this.save();
+    return this.data.contentSources[idx];
+  }
+
+  public deleteContentSource(id: string): boolean {
+    if (!this.data.contentSources) return false;
+    const idx = this.data.contentSources.findIndex((s) => s.id === id);
+    if (idx === -1) return false;
+    this.data.contentSources.splice(idx, 1);
+    this.save();
+    return true;
+  }
+
+  public getContentDrafts(filter?: { sourceId?: string; status?: ContentDraftStatus; courseId?: string }): ContentDraft[] {
+    let drafts = this.data.contentDrafts || [];
+    if (filter?.sourceId) {
+      drafts = drafts.filter((d) => d.sourceId === filter.sourceId);
+    }
+    if (filter?.status) {
+      drafts = drafts.filter((d) => d.status === filter.status);
+    }
+    if (filter?.courseId) {
+      drafts = drafts.filter((d) => d.courseId === filter.courseId);
+    }
+    return drafts;
+  }
+
+  public getContentDraftById(id: string): ContentDraft | null {
+    return (this.data.contentDrafts || []).find((d) => d.id === id) || null;
+  }
+
+  public createContentDraft(data: Omit<ContentDraft, 'id' | 'createdAt' | 'updatedAt'>): ContentDraft {
+    const draft: ContentDraft = {
+      ...data,
+      id: `draft-${crypto.randomUUID().slice(0, 8)}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    if (!this.data.contentDrafts) this.data.contentDrafts = [];
+    this.data.contentDrafts.unshift(draft);
+    this.save();
+    return draft;
+  }
+
+  public updateContentDraft(id: string, updates: Partial<ContentDraft>): ContentDraft | null {
+    if (!this.data.contentDrafts) this.data.contentDrafts = [];
+    const idx = this.data.contentDrafts.findIndex((d) => d.id === id);
+    if (idx === -1) return null;
+    this.data.contentDrafts[idx] = {
+      ...this.data.contentDrafts[idx],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    this.save();
+    return this.data.contentDrafts[idx];
+  }
+
+  public deleteContentDraft(id: string): boolean {
+    if (!this.data.contentDrafts) return false;
+    const idx = this.data.contentDrafts.findIndex((d) => d.id === id);
+    if (idx === -1) return false;
+    this.data.contentDrafts.splice(idx, 1);
+    this.save();
+    return true;
+  }
+
+  public approveContentDraft(id: string, adminUserId: string, notes?: string): { success: boolean; draft?: ContentDraft; error?: string } {
+    const draft = this.getContentDraftById(id);
+    if (!draft) return { success: false, error: 'Draft not found' };
+    if (draft.status === 'PUBLISHED') return { success: false, error: 'Draft is already published' };
+
+    draft.status = 'APPROVED';
+    draft.reviewedBy = adminUserId;
+    draft.reviewedAt = new Date().toISOString();
+    if (notes) draft.reviewNotes = notes;
+    draft.updatedAt = new Date().toISOString();
+    this.save();
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'APPROVE_CONTENT_DRAFT',
+      targetResource: `content_draft:${id}`,
+      details: { title: draft.title, level: draft.level, sourceId: draft.sourceId }
+    });
+
+    return { success: true, draft };
+  }
+
+  public rejectContentDraft(id: string, adminUserId: string, notes?: string): { success: boolean; draft?: ContentDraft; error?: string } {
+    const draft = this.getContentDraftById(id);
+    if (!draft) return { success: false, error: 'Draft not found' };
+
+    draft.status = 'REJECTED';
+    draft.reviewedBy = adminUserId;
+    draft.reviewedAt = new Date().toISOString();
+    if (notes) draft.reviewNotes = notes;
+    draft.updatedAt = new Date().toISOString();
+    this.save();
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'REJECT_CONTENT_DRAFT',
+      targetResource: `content_draft:${id}`,
+      details: { title: draft.title, notes }
+    });
+
+    return { success: true, draft };
+  }
+
+  public requestRevisionContentDraft(id: string, adminUserId: string, notes: string): { success: boolean; draft?: ContentDraft; error?: string } {
+    const draft = this.getContentDraftById(id);
+    if (!draft) return { success: false, error: 'Draft not found' };
+
+    draft.status = 'REVISION_REQUIRED';
+    draft.reviewedBy = adminUserId;
+    draft.reviewedAt = new Date().toISOString();
+    draft.reviewNotes = notes;
+    draft.updatedAt = new Date().toISOString();
+    this.save();
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'REVISION_REQUESTED_CONTENT_DRAFT',
+      targetResource: `content_draft:${id}`,
+      details: { title: draft.title, notes }
+    });
+
+    return { success: true, draft };
+  }
+
+  public publishContentDraft(id: string, adminUserId: string): { success: boolean; draft?: ContentDraft; lesson?: Lesson; version?: ContentVersion; error?: string } {
+    const draft = this.getContentDraftById(id);
+    if (!draft) return { success: false, error: 'Draft not found' };
+    if (draft.status !== 'APPROVED') {
+      return { success: false, error: `Draft cannot be published from state '${draft.status}'. It must be APPROVED first.` };
+    }
+
+    // Determine target course & module
+    let targetCourse = this.getCourseById(draft.courseId);
+    if (!targetCourse) {
+      // Find course by level or fallback to first matching level
+      targetCourse = this.getCourses(true).find((c) => c.level === draft.level) || this.getCourses(true)[0];
+    }
+    if (!targetCourse) {
+      return { success: false, error: 'No course found to link published lesson' };
+    }
+
+    let targetModule = (this.data.modules || []).find((m) => m.id === draft.moduleId && m.courseId === targetCourse.id);
+    if (!targetModule) {
+      targetModule = (this.data.modules || []).find((m) => m.courseId === targetCourse.id);
+      if (!targetModule) {
+        // Create an automated module if none exists
+        targetModule = this.createModule({
+          courseId: targetCourse.id,
+          title: `${draft.level} Masterclass Curriculum`,
+          titleJa: `${draft.level} マスタークラス`,
+          description: `Educational lessons generated and curated via Nihomi Content Engine for JLPT ${draft.level}.`,
+          order: 1,
+          level: draft.level,
+          isPublished: true
+        });
+      }
+    }
+
+    // Optional: Create or update Quiz if included in structuredContent
+    const existingLesson = draft.lessonId ? this.getLessonById(draft.lessonId) : null;
+    let quizId = existingLesson?.quizId;
+
+    if (draft.structuredContent.quiz && draft.structuredContent.quiz.questions?.length > 0) {
+      if (quizId && this.data.quizzes.some((q) => q.id === quizId)) {
+        this.updateQuiz(quizId, {
+          title: draft.structuredContent.quiz.title || `${draft.title} Mastery Quiz`,
+          description: `Comprehensive evaluation covering vocabulary, kanji, and grammar from ${draft.title}.`,
+          passingScore: draft.structuredContent.quiz.passingScore || 70,
+          questions: draft.structuredContent.quiz.questions,
+          isPublished: true
+        });
+      } else {
+        const createdQuiz = this.createQuiz({
+          courseId: targetCourse.id,
+          level: draft.level,
+          title: draft.structuredContent.quiz.title || `${draft.title} Mastery Quiz`,
+          description: `Comprehensive evaluation covering vocabulary, kanji, and grammar from ${draft.title}.`,
+          passingScore: draft.structuredContent.quiz.passingScore || 70,
+          questions: draft.structuredContent.quiz.questions,
+          isPublished: true
+        });
+        quizId = createdQuiz.id;
+      }
+    }
+
+    // Publish or update the Lesson entity into the live learning system
+    let targetLesson: Lesson;
+
+    if (existingLesson) {
+      const updated = this.updateLesson(existingLesson.id, {
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        level: draft.level,
+        vocabulary: draft.structuredContent.vocabulary || [],
+        grammar: draft.structuredContent.grammar || [],
+        kanji: draft.structuredContent.kanji || [],
+        dialogue: draft.structuredContent.dialogue || [],
+        practiceExercises: draft.structuredContent.practiceExercises || [],
+        quizId: quizId || existingLesson.quizId,
+        isPublished: true
+      });
+      targetLesson = updated!;
+    } else {
+      const existingLessonsInModule = this.getLessonsByModuleId(targetModule.id, true);
+      const nextLessonNumber = existingLessonsInModule.length + 1;
+
+      targetLesson = this.createLesson({
+        moduleId: targetModule.id,
+        courseId: targetCourse.id,
+        level: draft.level,
+        lessonNumber: nextLessonNumber,
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        isPublished: true,
+        estimatedMinutes: Math.max(15, (draft.structuredContent.vocabulary?.length || 0) * 2 + (draft.structuredContent.grammar?.length || 0) * 5),
+        vocabulary: draft.structuredContent.vocabulary || [],
+        grammar: draft.structuredContent.grammar || [],
+        kanji: draft.structuredContent.kanji || [],
+        dialogue: draft.structuredContent.dialogue || [],
+        practiceExercises: draft.structuredContent.practiceExercises || [],
+        quizId
+      });
+    }
+
+    // Create immutable ContentVersion audit record
+    if (!this.data.contentVersions) this.data.contentVersions = [];
+    const previousVersions = this.data.contentVersions.filter((v) => v.draftId === draft.id);
+    const newVersion: ContentVersion = {
+      id: `ver-${crypto.randomUUID().slice(0, 8)}`,
+      draftId: draft.id,
+      sourceId: draft.sourceId,
+      versionNumber: previousVersions.length + 1,
+      contentJson: JSON.parse(JSON.stringify(draft.structuredContent)),
+      targetLessonId: targetLesson.id,
+      targetCourseId: targetCourse.id,
+      approvedBy: draft.reviewedBy || adminUserId,
+      publishedBy: adminUserId,
+      approvedAt: draft.reviewedAt || new Date().toISOString(),
+      publishedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
+    };
+    this.data.contentVersions.unshift(newVersion);
+
+    // Update draft status
+    draft.status = 'PUBLISHED';
+    draft.lessonId = targetLesson.id;
+    draft.courseId = targetCourse.id;
+    draft.moduleId = targetModule.id;
+    draft.updatedAt = new Date().toISOString();
+    this.save();
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'PUBLISH_CONTENT_DRAFT',
+      targetResource: `lesson:${targetLesson.id}`,
+      details: {
+        draftId: draft.id,
+        version: newVersion.versionNumber,
+        courseId: targetCourse.id,
+        moduleId: targetModule.id,
+        title: draft.title
+      }
+    });
+
+    return { success: true, draft, lesson: targetLesson, version: newVersion };
+  }
+
+  public unpublishContentDraft(id: string, adminUserId: string): { success: boolean; draft?: ContentDraft; error?: string } {
+    const draft = this.getContentDraftById(id);
+    if (!draft) return { success: false, error: 'Draft not found' };
+
+    if (draft.lessonId) {
+      this.updateLesson(draft.lessonId, { isPublished: false });
+    }
+
+    draft.status = 'APPROVED';
+    draft.updatedAt = new Date().toISOString();
+    this.save();
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'UNPUBLISH_CONTENT_DRAFT',
+      targetResource: `content_draft:${id}`,
+      details: { draftId: draft.id, lessonId: draft.lessonId }
+    });
+
+    return { success: true, draft };
+  }
+
+  public getContentVersionsByDraftId(draftId: string): ContentVersion[] {
+    return (this.data.contentVersions || []).filter((v) => v.draftId === draftId);
+  }
+
+  public getPublishedContent(level?: JLPTLevel): { lessons: Lesson[]; drafts: ContentDraft[] } {
+    let publishedLessons = (this.data.lessons || []).filter((l) => l.isPublished);
+    let publishedDrafts = (this.data.contentDrafts || []).filter((d) => d.status === 'PUBLISHED');
+
+    if (level) {
+      publishedLessons = publishedLessons.filter((l) => l.level === level);
+      publishedDrafts = publishedDrafts.filter((d) => d.level === level);
+    }
+
+    return { lessons: publishedLessons, drafts: publishedDrafts };
   }
 
   public resetAllToSeed() {

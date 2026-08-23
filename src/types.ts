@@ -88,6 +88,7 @@ export interface VocabularyItem {
   furigana?: string;
   romaji: string;
   english: string;
+  banglaMeaning?: string;
   partOfSpeech: string;
   level: JLPTLevel;
   exampleSentenceJa: string;
@@ -95,6 +96,8 @@ export interface VocabularyItem {
   exampleFurigana?: string;
   audioText?: string;
   notes?: string;
+  sourceDerived?: boolean;
+  sourcePage?: number;
 }
 
 export interface GrammarItem {
@@ -664,6 +667,162 @@ export interface SentenceDnaResponse {
   politeVersion: string;
   realLifeContext: string;
 }
+
+// Content Engine V1.0 Types
+export type ContentSourceProcessingStatus =
+  | 'UPLOADED'
+  | 'EXTRACTING'
+  | 'AI_PROCESSING'
+  | 'COMPLETED'
+  | 'FAILED'
+  | 'SCANNED_PDF_OCR_REQUIRED';
+
+export type ContentDraftStatus =
+  | 'AI_GENERATED'
+  | 'UNDER_REVIEW'
+  | 'REVISION_REQUIRED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'PUBLISHED';
+
+export type ContentEngineType =
+  | 'lesson'
+  | 'vocabulary'
+  | 'grammar'
+  | 'kanji'
+  | 'reading'
+  | 'listening'
+  | 'speaking'
+  | 'exercises'
+  | 'quiz';
+
+export interface ContentSource {
+  id: string;
+  title: string;
+  originalFilename: string;
+  storagePath: string;
+  mimeType: string;
+  fileSize: number;
+  sourceLanguage: string;
+  targetJlptLevel: JLPTLevel;
+  courseId?: string;
+  moduleId?: string;
+  lessonId?: string;
+  processingStatus: ContentSourceProcessingStatus;
+  processingError?: string;
+  pageCount?: number;
+  extractedText?: string;
+  contentHash?: string;
+  uploadedBy: string;
+  uploadedByEmail?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReadingPassageItem {
+  id?: string;
+  title: string;
+  passage: string;
+  furigana?: string;
+  translationEn: string;
+  translationBn: string;
+  questions: Array<{
+    question: string;
+    options: string[];
+    answer: string;
+    explanation: string;
+  }>;
+  sourcePage?: number;
+}
+
+export interface ListeningScriptItem {
+  id?: string;
+  title: string;
+  situation: string;
+  dialogue: LessonDialogue[];
+  comprehensionQuestions: Array<{
+    question: string;
+    options: string[];
+    answer: string;
+  }>;
+  sourcePage?: number;
+}
+
+export interface SpeakingScenarioItem {
+  id?: string;
+  situation: string;
+  roles: string[];
+  targetExpressions: string[];
+  pronunciationNotes: string;
+  rolePlayInstructions: string;
+  sourcePage?: number;
+}
+
+export interface StructuredEducationalContent {
+  vocabulary: VocabularyItem[];
+  grammar: GrammarItem[];
+  kanji: KanjiItem[];
+  dialogue?: LessonDialogue[];
+  practiceExercises: LessonPracticeExercise[];
+  readingPassages?: ReadingPassageItem[];
+  listeningScripts?: ListeningScriptItem[];
+  speakingScenarios?: SpeakingScenarioItem[];
+  quiz?: {
+    title: string;
+    passingScore: number;
+    questions: QuizQuestion[];
+  };
+}
+
+export interface ContentDraftGenerationMetadata {
+  modelUsed: string;
+  sourceDerived: boolean;
+  aiEnriched: boolean;
+  generatedAt: string;
+  tokenEstimate?: number;
+  sourcePageReferences?: number[];
+  confidenceScore?: number;
+  disclaimer: string;
+}
+
+export interface ContentDraft {
+  id: string;
+  sourceId: string;
+  courseId: string;
+  moduleId?: string;
+  lessonId?: string;
+  contentType: ContentEngineType;
+  title: string;
+  titleJa: string;
+  summary: string;
+  explanation: string;
+  level: JLPTLevel;
+  structuredContent: StructuredEducationalContent;
+  status: ContentDraftStatus;
+  reviewNotes?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  generationMetadata: ContentDraftGenerationMetadata;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ContentVersion {
+  id: string;
+  draftId: string;
+  sourceId: string;
+  versionNumber: number;
+  contentJson: StructuredEducationalContent;
+  targetLessonId?: string;
+  targetCourseId?: string;
+  approvedBy: string;
+  publishedBy: string;
+  approvedAt: string;
+  publishedAt: string;
+  createdAt: string;
+}
+
 
 
 

@@ -432,6 +432,47 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
 
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoPlayIndex, setAutoPlayIndex] = useState(0);
+  const [publishedVocab, setPublishedVocab] = useState<VocabularyCardData[]>([]);
+
+  useEffect(() => {
+    async function loadPublished() {
+      try {
+        const res = await fetch('/api/content/published');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.lessons || !Array.isArray(data.lessons)) return;
+
+        const extraVocab: VocabularyCardData[] = [];
+        data.lessons.forEach((lesson: any) => {
+          if (Array.isArray(lesson.vocabulary)) {
+            lesson.vocabulary.forEach((v: any, idx: number) => {
+              extraVocab.push({
+                id: v.id || `voc-pub-${lesson.id}-${idx}`,
+                japanese: v.japanese || '',
+                furigana: v.furigana || v.japanese || '',
+                romaji: v.romaji || '',
+                english: v.english || '',
+                bengali: v.banglaMeaning || 'পাঠ্যক্রম শব্দভাণ্ডার',
+                level: (['N5', 'N4', 'N3', 'N2', 'N1'].includes(v.level) ? v.level : lesson.level || 'N5') as JLPTLevel,
+                category: v.partOfSpeech?.toLowerCase().includes('verb') ? 'Verbs' : v.partOfSpeech?.toLowerCase().includes('adj') ? 'Adjectives' : 'Daily Life',
+                exampleJa: v.exampleSentenceJa || '',
+                exampleEn: v.exampleSentenceEn || '',
+                exampleBn: v.exampleSentenceBn,
+                notes: v.notes || (v.partOfSpeech ? `Part of Speech: ${v.partOfSpeech}` : undefined)
+              });
+            });
+          }
+        });
+
+        if (extraVocab.length > 0) {
+          setPublishedVocab(extraVocab);
+        }
+      } catch (err) {
+        console.warn('[VocabularyView] Failed to fetch published vocab:', err);
+      }
+    }
+    loadPublished();
+  }, []);
 
   const toggleFavorite = (id: string) => {
     setFavorites((prev) => {
@@ -458,7 +499,8 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
 
   // Filtered list
   const filteredVocabulary = useMemo(() => {
-    return MASTER_VOCABULARY_BANK.filter((item) => {
+    const combined = [...MASTER_VOCABULARY_BANK, ...publishedVocab];
+    return combined.filter((item) => {
       const matchesSearch =
         !searchQuery ||
         item.japanese.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -472,7 +514,7 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
 
       return matchesSearch && matchesLevel && matchesCat;
     });
-  }, [searchQuery, selectedLevel, selectedCategory]);
+  }, [searchQuery, selectedLevel, selectedCategory, publishedVocab]);
 
   // Continuous hands-free auto-play loop
   useEffect(() => {
