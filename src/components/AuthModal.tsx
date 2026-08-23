@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Phone, Mail, KeyRound, ArrowRight, CheckCircle2, AlertCircle, X, Sparkles, RefreshCw } from 'lucide-react';
+import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw } from 'lucide-react';
+import { apiRequest, setStoredToken } from '../lib/api.js';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -8,7 +9,7 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
-  const [authMethod, setAuthMethod] = useState<'phone' | 'email' | 'google'>('phone');
+  const [authMethod, setAuthMethod] = useState<'phone' | 'email' | 'google'>('email');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
@@ -31,10 +32,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setTimeout(() => {
       setIsLoading(false);
       setOtpSent(true);
-    }, 800);
+    }, 500);
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     const fullCode = otpCode.join('');
     if (fullCode.length < 6) {
@@ -45,36 +46,89 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setIsLoading(true);
     setErrorMsg(null);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      const user = {
-        id: `usr_${Date.now()}`,
-        name: 'Nihomi Student',
-        phone: `+880${phoneNumber.replace(/^0/, '')}`,
-        role: 'STUDENT',
-        targetLevel: 'N5'
-      };
-      localStorage.setItem('nihomi_user', JSON.stringify(user));
-      onSuccess(user);
+    try {
+      const phoneEmail = `phone_${phoneNumber.replace(/\D/g, '')}@nihomi.com`;
+      const res = await apiRequest<{
+        token: string;
+        user: any;
+        profile: any;
+        progress: any;
+      }>('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email: phoneEmail, password: 'phone_otp_verified' })
+      });
+
+      if (res.token) {
+        setStoredToken(res.token);
+      }
+      onSuccess(res.user);
       onClose();
-    }, 800);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'OTP verification failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
+  const handleEmailPasswordLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setErrorMsg('ইমেইল এবং পাসওয়ার্ড উভয় ফিল্ড পূরণ করুন');
+      return;
+    }
+
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      const user = {
-        id: `usr_g_${Date.now()}`,
-        name: 'Google User',
-        email: 'student@nihomi.com',
-        role: 'STUDENT',
-        targetLevel: 'N5'
-      };
-      localStorage.setItem('nihomi_user', JSON.stringify(user));
-      onSuccess(user);
+    setErrorMsg(null);
+
+    try {
+      const res = await apiRequest<{
+        token: string;
+        user: any;
+        profile: any;
+        progress: any;
+      }>('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email: email.trim(), password: password.trim() })
+      });
+
+      if (res.token) {
+        setStoredToken(res.token);
+      }
+      onSuccess(res.user);
       onClose();
-    }, 600);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড পুনরায় চেক করুন।');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setErrorMsg(null);
+
+    try {
+      const googleEmail = email.trim() || 'student@nihomi.com';
+      const res = await apiRequest<{
+        token: string;
+        user: any;
+        profile: any;
+        progress: any;
+      }>('/api/auth/google', {
+        method: 'POST',
+        body: JSON.stringify({ email: googleEmail, displayName: googleEmail.split('@')[0] })
+      });
+
+      if (res.token) {
+        setStoredToken(res.token);
+      }
+      onSuccess(res.user);
+      onClose();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Google Login failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -219,7 +273,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
         {/* Tab: Email / Password */}
         {authMethod === 'email' && (
-          <form onSubmit={(e) => { e.preventDefault(); handleGoogleLogin(); }} className="space-y-4">
+          <form onSubmit={handleEmailPasswordLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">ইমেইল এড্রেস</label>
               <input
@@ -242,9 +296,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold rounded-2xl transition text-sm shadow-lg shadow-red-600/20 cursor-pointer"
+              disabled={isLoading}
+              className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-2xl transition text-sm shadow-lg shadow-red-600/20 cursor-pointer flex items-center justify-center space-x-2"
             >
-              লগইন করুন
+              {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>লগইন করুন</span>}
             </button>
           </form>
         )}
