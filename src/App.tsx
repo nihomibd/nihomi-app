@@ -38,10 +38,11 @@ import { VocabularyFlashcardsView } from './views/VocabularyFlashcardsView.js';
 import { BadgesView } from './views/BadgesView.js';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal.js';
 import { OfflineNotificationToast } from './components/OfflineNotificationToast.js';
+import { AuthModal } from './components/AuthModal.js';
 import { supabase } from './lib/supabase.js';
 
 function AppContent() {
-  const { user, isLoading, refreshUser } = useAuth();
+  const { user, isLoading, refreshUser, isLoginModalOpen, closeLoginModal } = useAuth();
   const [currentView, setCurrentView] = useState<string>('home');
   const [viewParams, setViewParams] = useState<Record<string, any>>({});
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false);
@@ -52,7 +53,7 @@ function AppContent() {
       if (typeof window === 'undefined') return;
       const url = new URL(window.location.href);
       const code = url.searchParams.get('code');
-      const isCallbackPath = url.pathname.includes('/auth/callback');
+      const isCallbackPath = url.pathname.includes('/auth/callback') || window.location.hash.includes('access_token');
 
       if (code || isCallbackPath) {
         if (code) {
@@ -63,6 +64,7 @@ function AppContent() {
             console.warn('OAuth exchange error:', err);
           }
         }
+        closeLoginModal();
         const next = url.searchParams.get('next') || 'dashboard';
         window.history.replaceState({}, document.title, '/');
         setCurrentView(next.replace(/^\//, '') || 'dashboard');
@@ -70,7 +72,7 @@ function AppContent() {
     };
 
     handleAuthCallback();
-  }, [refreshUser]);
+  }, [refreshUser, closeLoginModal]);
 
   // Auto-switch to dashboard on initial load if logged in and at home
   useEffect(() => {
@@ -231,6 +233,19 @@ function AppContent() {
         isOpen={isShortcutsModalOpen}
         onClose={() => setIsShortcutsModalOpen(false)}
         onNavigate={handleNavigate}
+      />
+
+      {/* Global Auth Modal */}
+      <AuthModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal}
+        onSuccess={async () => {
+          closeLoginModal();
+          await refreshUser();
+          if (currentView === 'home' || currentView === 'auth') {
+            setCurrentView('dashboard');
+          }
+        }}
       />
 
       {/* Connectivity & Offline Notification Toast */}

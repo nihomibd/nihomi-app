@@ -7,6 +7,8 @@ export interface User {
   email: string;
   role: UserRole;
   name?: string;
+  avatar?: string;
+  nihomiAccountId?: string;
 }
 
 export interface UserProfile {
@@ -17,6 +19,8 @@ export interface UserProfile {
   dailyGoalMinutes: number;
   bio?: string;
   avatarSeed?: string;
+  avatar?: string;
+  nihomiAccountId?: string;
   createdAt: string;
   updatedAt: string;
 }

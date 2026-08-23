@@ -39,7 +39,9 @@ import {
   Pause,
   RotateCcw,
   Check,
-  Keyboard
+  Keyboard,
+  GraduationCap,
+  LayoutDashboard
 } from 'lucide-react';
 import { DualTimeWeatherHeader } from './DualTimeWeatherHeader.js';
 import { VisionSenseiModal } from '../VisionSenseiModal.js';
@@ -51,7 +53,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
-  const { user, profile, progress, logout, updateProfile, refreshProgress } = useAuth();
+  const { user, profile, progress, logout, updateProfile, refreshProgress, openLoginModal } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -589,84 +591,158 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                     <button
                       id="user-menu-btn"
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center space-x-2 p-1.5 rounded-full hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs cursor-pointer"
+                      className="flex items-center space-x-2 p-1.5 pr-3 rounded-2xl hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs transition cursor-pointer shadow-xs bg-white"
+                      title="Student Profile & Menu"
                     >
-                      <div className="w-7 h-7 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-bold text-xs">
-                        {profile?.displayName?.charAt(0) || 'U'}
+                      {profile?.avatar || user.avatar ? (
+                        <img
+                          src={profile?.avatar || user.avatar}
+                          alt={profile?.displayName || user.name || 'Student'}
+                          className="w-7 h-7 rounded-full object-cover border border-red-200"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                          {(profile?.displayName || user.name || 'S').charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="flex flex-col text-left">
+                        <span className="max-w-[90px] truncate text-xs font-bold text-stone-900 leading-tight">
+                          {profile?.displayName || user.name || 'Learner'}
+                        </span>
+                        <span className="text-[10px] font-mono font-bold text-red-600 leading-tight">
+                          {user.nihomiAccountId || profile?.nihomiAccountId || `NHM-${user.id.slice(0, 6).toUpperCase()}`}
+                        </span>
                       </div>
-                      <span className="max-w-[80px] truncate text-xs font-bold text-stone-800">
-                        {profile?.displayName || 'Learner'}
-                      </span>
+                      <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
                     </button>
 
                     {userDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-56 bg-white border border-stone-200 rounded-2xl shadow-lg py-2 z-50 animate-in fade-in">
-                        <div className="px-4 py-2 border-b border-stone-100">
-                          <p className="text-xs font-bold text-stone-900 truncate">{profile?.displayName}</p>
-                          <p className="text-[11px] text-stone-500 truncate">{user.email}</p>
-                          <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 font-bold uppercase">
-                            Role: {user.role}
-                          </span>
+                      <div className="absolute right-0 mt-2 w-64 bg-white border border-stone-200 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in">
+                        {/* Student Badge Card Header */}
+                        <div className="px-4 py-3 border-b border-stone-100 bg-stone-50/80 rounded-t-2xl">
+                          <div className="flex items-center space-x-2.5 mb-1.5">
+                            {profile?.avatar || user.avatar ? (
+                              <img
+                                src={profile?.avatar || user.avatar}
+                                alt={profile?.displayName || user.name || 'Student'}
+                                className="w-9 h-9 rounded-full object-cover border border-red-200"
+                                referrerPolicy="no-referrer"
+                              />
+                            ) : (
+                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                                {(profile?.displayName || user.name || 'S').charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs font-bold text-stone-900 truncate">
+                                {profile?.displayName || user.name || 'Learner'}
+                              </p>
+                              <p className="text-[11px] text-stone-500 truncate">{user.email}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-1 pt-1 border-t border-stone-200/60">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-red-100 text-red-700 font-bold border border-red-200">
+                              {user.nihomiAccountId || profile?.nihomiAccountId || `NHM-${user.id.slice(0, 6).toUpperCase()}`}
+                            </span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-md bg-stone-200 text-stone-700 font-bold uppercase">
+                              {user.role}
+                            </span>
+                          </div>
                         </div>
-                        <button onClick={() => handleNav('profile')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2">
-                          <UserIcon className="w-3.5 h-3.5 text-stone-400" />
-                          <span>Profile, Goals & Themes</span>
-                        </button>
-                        <button onClick={() => handleNav('badges')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2">
-                          <Award className="w-3.5 h-3.5 text-amber-500" />
-                          <span className="font-semibold text-stone-900">Milestone Badges (মাইলস্টোন)</span>
-                        </button>
-                        <button onClick={() => handleNav('flashcards')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2">
-                          <Layers className="w-3.5 h-3.5 text-red-600" />
-                          <span className="font-semibold text-stone-900">Custom Flashcard Decks</span>
-                        </button>
-                        <button onClick={() => handleNav('vocabulary')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2">
-                          <Volume2 className="w-3.5 h-3.5 text-red-600" />
-                          <span className="font-semibold text-stone-900">Vocab Bank & Audio</span>
-                        </button>
-                        <button onClick={() => handleNav('japan-twin')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2" id="nav-user-japan-twin-link">
-                          <Sparkles className="w-3.5 h-3.5 text-red-600" />
-                          <span className="font-semibold text-stone-900">JapanTwin™ (Tokyo Simulator)</span>
-                        </button>
-                        <button onClick={() => handleNav('ghost-mode')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2" id="nav-user-ghost-mode-link">
-                          <History className="w-3.5 h-3.5 text-purple-600" />
-                          <span className="font-semibold text-stone-900">Ghost Mode™ (Mistake Recovery)</span>
-                        </button>
-                        <button onClick={() => handleNav('day1-blueprint')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2" id="nav-user-day1-blueprint-link">
-                          <Plane className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="font-semibold text-stone-900">Day-1 Arrival Blueprint™</span>
-                        </button>
-                        <button onClick={() => handleNav('subscription')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2" id="nav-user-subscription-link">
-                          <CreditCard className="w-3.5 h-3.5 text-red-600" />
-                          <span>Subscription & Invoices</span>
-                        </button>
-                        <button onClick={() => handleNav('interview-lab')} className="w-full text-left px-4 py-2 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2">
-                          <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                          <span>Interview Lab™ (Tokyo Principal)</span>
-                        </button>
-                        {(user.role === 'admin' || user.role === 'instructor') && (
-                          <button onClick={() => handleNav('instructor-portal')} className="w-full text-left px-4 py-2 text-xs text-purple-700 font-bold hover:bg-purple-50 cursor-pointer flex items-center gap-2">
-                            <Users className="w-3.5 h-3.5 text-purple-600" />
-                            <span>Instructor Workspace</span>
+
+                        {/* Primary Required Navigation Items */}
+                        <div className="py-1">
+                          <button
+                            id="nav-user-student-dashboard-link"
+                            onClick={() => { setUserDropdownOpen(false); handleNav('dashboard'); }}
+                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
+                          >
+                            <LayoutDashboard className="w-3.5 h-3.5 text-red-600" />
+                            <span>Student Dashboard</span>
                           </button>
-                        )}
-                        {user.role === 'admin' && (
-                          <button onClick={() => handleNav('admin')} className="w-full text-left px-4 py-2 text-xs text-red-600 font-bold hover:bg-red-50 cursor-pointer flex items-center gap-2" id="nav-admin-portal-link">
-                            <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
-                            <span>Founder Command Center</span>
+                          <button
+                            id="nav-user-my-courses-link"
+                            onClick={() => { setUserDropdownOpen(false); handleNav('courses'); }}
+                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
+                          >
+                            <BookOpen className="w-3.5 h-3.5 text-red-600" />
+                            <span>My Courses</span>
                           </button>
-                        )}
+                          <button
+                            id="nav-user-digital-id-link"
+                            onClick={() => { setUserDropdownOpen(false); handleNav('passport'); }}
+                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
+                          >
+                            <GraduationCap className="w-3.5 h-3.5 text-red-600" />
+                            <span>Digital ID</span>
+                          </button>
+                        </div>
+
                         <div className="border-t border-stone-100 my-1"></div>
+
+                        {/* Additional Platform Features */}
+                        <div className="py-1">
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('profile'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
+                            <UserIcon className="w-3.5 h-3.5 text-stone-400" />
+                            <span>Profile & Goals</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('badges'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
+                            <Award className="w-3.5 h-3.5 text-amber-500" />
+                            <span>Milestone Badges (মাইলস্টোন)</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('flashcards'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
+                            <Layers className="w-3.5 h-3.5 text-red-600" />
+                            <span>Custom Flashcard Decks</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('vocabulary'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
+                            <Volume2 className="w-3.5 h-3.5 text-red-600" />
+                            <span>Vocab Bank & Audio</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('japan-twin'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-japan-twin-link">
+                            <Sparkles className="w-3.5 h-3.5 text-red-600" />
+                            <span>JapanTwin™ (Tokyo Simulator)</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('ghost-mode'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-ghost-mode-link">
+                            <History className="w-3.5 h-3.5 text-purple-600" />
+                            <span>Ghost Mode™ (Mistake Recovery)</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('day1-blueprint'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-day1-blueprint-link">
+                            <Plane className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Day-1 Arrival Blueprint™</span>
+                          </button>
+                          <button onClick={() => { setUserDropdownOpen(false); handleNav('subscription'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-subscription-link">
+                            <CreditCard className="w-3.5 h-3.5 text-red-600" />
+                            <span>Subscription & Invoices</span>
+                          </button>
+                          {(user.role === 'admin' || user.role === 'instructor') && (
+                            <button onClick={() => { setUserDropdownOpen(false); handleNav('instructor-portal'); }} className="w-full text-left px-4 py-1.5 text-xs text-purple-700 font-bold hover:bg-purple-50 cursor-pointer flex items-center gap-2">
+                              <Users className="w-3.5 h-3.5 text-purple-600" />
+                              <span>Instructor Workspace</span>
+                            </button>
+                          )}
+                          {user.role === 'admin' && (
+                            <button onClick={() => { setUserDropdownOpen(false); handleNav('admin'); }} className="w-full text-left px-4 py-1.5 text-xs text-red-600 font-bold hover:bg-red-50 cursor-pointer flex items-center gap-2" id="nav-admin-portal-link">
+                              <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
+                              <span>Founder Command Center</span>
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="border-t border-stone-100 my-1"></div>
+
+                        {/* Logout action */}
                         <button
                           onClick={async () => {
+                            setUserDropdownOpen(false);
                             await logout();
                             handleNav('home');
                           }}
-                          className="w-full text-left px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 cursor-pointer flex items-center gap-2"
+                          className="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 cursor-pointer flex items-center gap-2 transition"
                           id="nav-logout-btn"
                         >
                           <LogOut className="w-3.5 h-3.5" />
-                          <span>Log out</span>
+                          <span>Logout</span>
                         </button>
                       </div>
                     )}
@@ -675,15 +751,27 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               ) : (
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => handleNav('auth', { mode: 'login' })}
-                    className="px-3.5 py-2 text-xs font-bold text-stone-700 hover:bg-stone-100 rounded-xl cursor-pointer"
+                    onClick={() => {
+                      if (openLoginModal) {
+                        openLoginModal('login');
+                      } else {
+                        handleNav('auth', { mode: 'login' });
+                      }
+                    }}
+                    className="px-3.5 py-2 text-xs font-bold text-stone-700 hover:bg-stone-100 rounded-xl cursor-pointer transition"
                     id="nav-login-btn"
                   >
                     {t('login')}
                   </button>
                   <button
-                    onClick={() => handleNav('auth', { mode: 'register' })}
-                    className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-xs cursor-pointer"
+                    onClick={() => {
+                      if (openLoginModal) {
+                        openLoginModal('register');
+                      } else {
+                        handleNav('auth', { mode: 'register' });
+                      }
+                    }}
+                    className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-xs cursor-pointer transition"
                     id="nav-register-btn"
                   >
                     {t('start_free')}
@@ -747,51 +835,131 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-stone-200 bg-white px-4 py-3 space-y-2">
-            <button
-              onClick={() => handleNav(user ? 'dashboard' : 'home')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              {t('dashboard')}
-            </button>
-            <button
-              onClick={() => handleNav('courses')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              {t('courses')}
-            </button>
-            <button
-              onClick={() => handleNav('flashcards')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              Flashcards & Decks
-            </button>
-            <button
-              onClick={() => handleNav('quizzes')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              {t('quizzes')}
-            </button>
-            <button
-              onClick={() => handleNav('ai-coach')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              {t('ai_sensei')}
-            </button>
-            <button
-              onClick={() => handleNav('progress')}
-              className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl"
-            >
-              Progress & Analytics
-            </button>
-            {user?.role === 'admin' && (
-              <button
-                onClick={() => handleNav('admin')}
-                className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl flex items-center gap-2"
-                id="mobile-nav-admin-portal-link"
-              >
-                <ShieldCheck className="w-4 h-4 text-red-600" />
-                <span>Founder Command Center</span>
-              </button>
+            {user ? (
+              <>
+                {/* Mobile Student Badge */}
+                <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 mb-2">
+                  <div className="flex items-center space-x-2.5">
+                    {profile?.avatar || user.avatar ? (
+                      <img
+                        src={profile?.avatar || user.avatar}
+                        alt={profile?.displayName || user.name || 'Student'}
+                        className="w-8 h-8 rounded-full object-cover border border-red-200"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        {(profile?.displayName || user.name || 'S').charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-stone-900 truncate">{profile?.displayName || user.name || 'Learner'}</p>
+                      <p className="text-[10px] font-mono font-bold text-red-600">{user.nihomiAccountId || profile?.nihomiAccountId || `NHM-${user.id.slice(0, 6).toUpperCase()}`}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('dashboard'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-red-600" />
+                  <span>Student Dashboard</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('courses'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <BookOpen className="w-4 h-4 text-red-600" />
+                  <span>My Courses</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('passport'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <GraduationCap className="w-4 h-4 text-red-600" />
+                  <span>Digital ID</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('flashcards'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <Layers className="w-4 h-4 text-stone-400" />
+                  <span>Flashcards & Decks</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('quizzes'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <Award className="w-4 h-4 text-stone-400" />
+                  <span>{t('quizzes')}</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('ai-coach'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <Bot className="w-4 h-4 text-stone-400" />
+                  <span>{t('ai_sensei')}</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('progress'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <BarChart3 className="w-4 h-4 text-stone-400" />
+                  <span>Progress & Analytics</span>
+                </button>
+                {user?.role === 'admin' && (
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); handleNav('admin'); }}
+                    className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl flex items-center gap-2"
+                    id="mobile-nav-admin-portal-link"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-red-600" />
+                    <span>Founder Command Center</span>
+                  </button>
+                )}
+                <div className="border-t border-stone-200 my-1"></div>
+                <button
+                  onClick={async () => {
+                    setMobileMenuOpen(false);
+                    await logout();
+                    handleNav('home');
+                  }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4 text-red-600" />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
+              <div className="space-y-2 pt-1">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (openLoginModal) {
+                      openLoginModal('login');
+                    } else {
+                      handleNav('auth', { mode: 'login' });
+                    }
+                  }}
+                  className="w-full text-center px-4 py-2.5 text-xs font-bold text-stone-700 border border-stone-300 rounded-xl cursor-pointer"
+                >
+                  {t('login')}
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (openLoginModal) {
+                      openLoginModal('register');
+                    } else {
+                      handleNav('auth', { mode: 'register' });
+                    }
+                  }}
+                  className="w-full text-center px-4 py-2.5 text-xs font-bold text-white bg-red-600 rounded-xl shadow-xs cursor-pointer"
+                >
+                  {t('start_free')}
+                </button>
+              </div>
             )}
           </div>
         )}
