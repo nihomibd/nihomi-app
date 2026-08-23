@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext.js';
 import { LanguageProvider } from './context/LanguageContext.js';
+import { ThemeProvider } from './context/ThemeContext.js';
 import { Navbar } from './components/layout/Navbar.js';
 import { Footer } from './components/layout/Footer.js';
 
@@ -33,11 +34,16 @@ import { JapanTwinView } from './views/JapanTwinView.js';
 import { GhostModeView } from './views/GhostModeView.js';
 import { Day1BlueprintView } from './views/Day1BlueprintView.js';
 import { WhatsAppSenseiView } from './views/WhatsAppSenseiView.js';
+import { VocabularyFlashcardsView } from './views/VocabularyFlashcardsView.js';
+import { BadgesView } from './views/BadgesView.js';
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal.js';
+import { OfflineNotificationToast } from './components/OfflineNotificationToast.js';
 
 function AppContent() {
   const { user, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState<string>('home');
   const [viewParams, setViewParams] = useState<Record<string, any>>({});
+  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false);
 
   // Auto-switch to dashboard on initial load if logged in and at home
   useEffect(() => {
@@ -51,6 +57,65 @@ function AppContent() {
     setViewParams(params);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Global Keyboard Shortcuts Listener ('K', 'D', 'L', 'Q', 'F', 'M', 'P', 'B', '?')
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Avoid triggering when user is actively typing in form inputs, textareas, contenteditable
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      // Do not override standard browser modifier shortcuts (Ctrl, Meta, Alt)
+      if (e.ctrlKey || e.metaKey || e.altKey) {
+        return;
+      }
+
+      const key = e.key.toUpperCase();
+
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        setIsShortcutsModalOpen((prev) => !prev);
+        return;
+      }
+
+      if (key === 'D') {
+        e.preventDefault();
+        handleNavigate('dashboard');
+      } else if (key === 'L') {
+        e.preventDefault();
+        handleNavigate('courses');
+      } else if (key === 'K') {
+        e.preventDefault();
+        handleNavigate('ai-coach');
+      } else if (key === 'Q') {
+        e.preventDefault();
+        handleNavigate('quizzes');
+      } else if (key === 'F') {
+        e.preventDefault();
+        handleNavigate('flashcards');
+      } else if (key === 'M') {
+        e.preventDefault();
+        handleNavigate('memory-os');
+      } else if (key === 'P') {
+        e.preventDefault();
+        handleNavigate('progress');
+      } else if (key === 'B') {
+        e.preventDefault();
+        handleNavigate('badges');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   if (isLoading) {
     return (
@@ -88,6 +153,9 @@ function AppContent() {
         {currentView === 'lesson' && (
           <LessonView lessonId={viewParams.lessonId || 'l-n5-g1'} onNavigate={handleNavigate} />
         )}
+        {(currentView === 'flashcards' || currentView === 'vocabulary') && (
+          <VocabularyFlashcardsView onNavigate={handleNavigate} />
+        )}
         {currentView === 'work-japanese' && <WorkJapaneseView onNavigate={handleNavigate} />}
         {currentView === 'work-detail' && (
           <WorkDetailView id={viewParams.id} itemId={viewParams.itemId || viewParams.id || 'work-keigo-1'} onNavigate={handleNavigate} />
@@ -102,6 +170,7 @@ function AppContent() {
           />
         )}
         {currentView === 'progress' && <ProgressView onNavigate={handleNavigate} />}
+        {currentView === 'badges' && <BadgesView onNavigate={handleNavigate} />}
         {currentView === 'profile' && <ProfileView onNavigate={handleNavigate} />}
         {currentView === 'admin' && <AdminView onNavigate={handleNavigate} />}
         {currentView === 'pricing' && <PricingView onNavigate={handleNavigate} />}
@@ -129,16 +198,28 @@ function AppContent() {
       </main>
 
       <Footer onNavigate={handleNavigate} />
+
+      {/* Global Keyboard Shortcuts Cheat Sheet Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsModalOpen}
+        onClose={() => setIsShortcutsModalOpen(false)}
+        onNavigate={handleNavigate}
+      />
+
+      {/* Connectivity & Offline Notification Toast */}
+      <OfflineNotificationToast />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Compass,
   Building2,
@@ -10,9 +10,13 @@ import {
   Globe,
   Lock,
   Smartphone,
-  CreditCard
+  CreditCard,
+  Wifi,
+  WifiOff,
+  Volume2,
+  CheckCircle2
 } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage } from '../../context/LanguageContext.js';
 
 interface FooterProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -20,6 +24,25 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { t } = useLanguage();
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
+      return navigator.onLine;
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   return (
     <footer id="nihomi-footer" className="bg-stone-950 text-stone-300 border-t border-stone-800 py-16 px-4 sm:px-6 lg:px-8 font-sans">
@@ -43,6 +66,29 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <p className="text-[11px] text-stone-500 leading-relaxed max-w-sm">
               An AI-powered Japanese Learning & Japan Readiness Operating System combining online AI self-study, live mentorship, physical classrooms at Dhaka International Language School, and air travel via bdTrip24.com.
             </p>
+
+            {/* Live Connection & PWA Service Worker Status Indicator */}
+            <div id="footer-connection-status" className="pt-2">
+              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold ${
+                isOnline
+                  ? 'bg-emerald-950/60 border-emerald-800/80 text-emerald-400'
+                  : 'bg-rose-950/80 border-rose-700 text-rose-300 animate-pulse'
+              }`}>
+                {isOnline ? (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <Wifi className="w-3.5 h-3.5" />
+                    <span>System Status: Online & Synchronized</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                    <WifiOff className="w-3.5 h-3.5" />
+                    <span>Connection Lost: Offline Local Cache Active</span>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Col 2: 3 Learning Pathways */}
@@ -67,6 +113,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li>
                 <button onClick={() => onNavigate('courses')} className="hover:text-red-400 transition-colors text-stone-400 hover:underline">
                   JLPT Curriculum (N5 &bull; N4 &bull; N3)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate('vocabulary')} className="hover:text-red-400 transition-colors text-stone-400 hover:underline flex items-center gap-1">
+                  <Volume2 className="w-3 h-3 text-red-500" />
+                  <span>Vocabulary & Audio Bank</span>
                 </button>
               </li>
               <li>
@@ -130,6 +182,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <button onClick={() => onNavigate('coordination-hub')} className="hover:text-red-400 transition-colors text-stone-400 hover:underline flex items-center gap-1">
                   <Plane className="w-3.5 h-3.5 text-blue-400" />
                   <span>bdTrip24.com Student Flights</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate('quizzes')} className="hover:text-red-400 transition-colors text-stone-400 hover:underline flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Quizzes & Leaderboards</span>
                 </button>
               </li>
               <li>

@@ -936,6 +936,40 @@ class Database {
     return p;
   }
 
+  public addStudyTime(userId: string, minutes: number, xpGained = 0): UserProgress {
+    const p = this.getProgressByUserId(userId);
+    const today = new Date().toISOString().split('T')[0];
+
+    // Maintain streak logic
+    if (p.lastActiveDate !== today) {
+      const lastDate = new Date(p.lastActiveDate);
+      const currentDate = new Date(today);
+      const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        p.currentStreak += 1;
+        if (p.currentStreak > p.longestStreak) {
+          p.longestStreak = p.currentStreak;
+        }
+      } else if (diffDays > 1) {
+        p.currentStreak = 1;
+      }
+      p.lastActiveDate = today;
+    }
+
+    p.totalStudyMinutes += Math.max(1, Math.round(minutes));
+    if (xpGained > 0) {
+      p.experiencePoints += xpGained;
+    } else {
+      // 2 XP per minute studied
+      p.experiencePoints += Math.max(2, Math.round(minutes * 2));
+    }
+    p.updatedAt = new Date().toISOString();
+    this.save();
+    return p;
+  }
+
   public setCurrentLesson(userId: string, lessonId: string): UserProgress {
     const p = this.getProgressByUserId(userId);
     const lesson = this.data.lessons.find((l) => l.id === lessonId);

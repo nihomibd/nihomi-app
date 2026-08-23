@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Volume2,
   X,
   BookOpen,
-  Loader2
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import { apiRequest } from '../lib/api';
 import { speakJapanese } from '../lib/tts';
@@ -23,21 +24,36 @@ export const SentenceDnaModal: React.FC<SentenceDnaModalProps> = ({
 }) => {
   const [inputSentence, setInputSentence] = useState(initialSentence);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dnaResult, setDnaResult] = useState<SentenceDnaResponse | null>(null);
 
-  const handleAnalyze = async () => {
-    if (!inputSentence.trim()) return;
+  useEffect(() => {
+    if (initialSentence) {
+      setInputSentence(initialSentence);
+    }
+  }, [initialSentence]);
+
+  useEffect(() => {
+    if (isOpen && inputSentence.trim()) {
+      handleAnalyze(inputSentence.trim());
+    }
+  }, [isOpen]);
+
+  const handleAnalyze = async (sentenceToAnalyze?: string) => {
+    const text = (sentenceToAnalyze || inputSentence).trim();
+    if (!text) return;
     setIsLoading(true);
+    setErrorMessage(null);
     try {
       const res = await apiRequest<{ success: boolean; sentenceDna: SentenceDnaResponse }>('/api/ai/sentence-dna', {
         method: 'POST',
-        body: JSON.stringify({ sentence: inputSentence.trim() })
+        body: JSON.stringify({ sentence: text })
       });
       if (res.success && res.sentenceDna) {
         setDnaResult(res.sentenceDna);
       }
     } catch (err: any) {
-      alert(err.message || 'Failed to analyze Sentence DNA.');
+      setErrorMessage(err.message || 'Failed to analyze Sentence DNA.');
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +79,7 @@ export const SentenceDnaModal: React.FC<SentenceDnaModalProps> = ({
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 rounded-xl">
+          <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 rounded-xl cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -75,18 +91,28 @@ export const SentenceDnaModal: React.FC<SentenceDnaModalProps> = ({
               type="text"
               value={inputSentence}
               onChange={(e) => setInputSentence(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAnalyze();
+              }}
               placeholder="Paste any Japanese sentence here (e.g. 日本語を勉強しています。)"
               className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm font-serif"
             />
             <button
-              onClick={handleAnalyze}
+              onClick={() => handleAnalyze()}
               disabled={isLoading || !inputSentence.trim()}
-              className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
               <span>Analyze DNA</span>
             </button>
           </div>
+
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
 
           {dnaResult && (
             <div className="space-y-6 animate-in fade-in">

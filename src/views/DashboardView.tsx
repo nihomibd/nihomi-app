@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { useLanguage } from '../context/LanguageContext.js';
 import { apiRequest } from '../lib/api.js';
-import { Course } from '../types.js';
+import { Course, JLPTLevel } from '../types.js';
 import {
   BookOpen,
   Briefcase,
@@ -21,7 +21,11 @@ import {
   GraduationCap,
   Plane,
   AlertTriangle,
-  RotateCcw
+  RotateCcw,
+  Volume2,
+  Mic,
+  Layers,
+  Search
 } from 'lucide-react';
 import { VisionSenseiModal } from '../components/VisionSenseiModal.js';
 import { SentenceDnaModal } from '../components/SentenceDnaModal.js';
@@ -29,18 +33,31 @@ import { NhkMethodologyCard } from '../components/NhkMethodologyCard.js';
 import { HanabiBackground } from '../components/HanabiBackground.js';
 import { KanjiFlipGrid } from '../components/KanjiFlipGrid.js';
 import { QuickQuizWidget } from '../components/QuickQuizWidget.js';
+import { DailyStreakTracker } from '../components/DailyStreakTracker.js';
+import { MilestoneCelebrationModal } from '../components/MilestoneCelebrationModal.js';
+import { ConfettiOverlay } from '../components/ConfettiOverlay.js';
+import { KanjiOfTheDay } from '../components/KanjiOfTheDay.js';
+import { DailyLearningGoal } from '../components/DailyLearningGoal.js';
+import { DailyStudyReminder } from '../components/DailyStudyReminder.js';
+import { VoiceSenseiWidget } from '../components/VoiceSenseiWidget.js';
+import { CurriculumRoadmap } from '../components/CurriculumRoadmap.js';
+import { GlobalLeaderboard } from '../components/GlobalLeaderboard.js';
+import { DashboardSrsSummaryWidget } from '../components/DashboardSrsSummaryWidget.js';
+import { RecentlyViewedLessons } from '../components/RecentlyViewedLessons.js';
 
 interface DashboardViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
-  const { user, profile, progress, subscriptionDetails } = useAuth();
+  const { user, profile, progress, subscriptionDetails, updateProfile } = useAuth();
   const { t } = useLanguage();
   const [dashboardData, setDashboardData] = useState<any | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
   const [isVisionOpen, setIsVisionOpen] = useState(false);
   const [isDnaOpen, setIsDnaOpen] = useState(false);
+  const [isMilestoneOpen, setIsMilestoneOpen] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -64,6 +81,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const totalMinutes = progress?.totalStudyMinutes || 0;
   const sub = subscriptionDetails?.subscription;
 
+  // Course progress calculation for Radial Progress Bar
+  const totalLessonsInLevel = 25;
+  const coursePercentage = Math.min(100, Math.round((completedCount / totalLessonsInLevel) * 100));
+
+  // Auto-detect if user has completed level milestone (e.g. >= 20 lessons completed)
+  const isLevelMilestoneReached = completedCount >= 20 || (dashboardData?.stats?.totalCompleted >= 20);
+
+  useEffect(() => {
+    // Trigger celebration confetti if streak or level milestone recently achieved
+    if (isLevelMilestoneReached || streak >= 7) {
+      const shownKey = `nihomi_confetti_shown_${streak}_${currentLevel}`;
+      if (!sessionStorage.getItem(shownKey)) {
+        setShowConfetti(true);
+        sessionStorage.setItem(shownKey, 'true');
+      }
+    }
+  }, [streak, currentLevel, isLevelMilestoneReached]);
+
+  const handleAdvanceLevel = async (nextLevel: JLPTLevel) => {
+    if (updateProfile) {
+      await updateProfile({ targetLevel: nextLevel });
+    }
+    onNavigate('courses');
+  };
+
   return (
     <div id="nihomi-dashboard-view" className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Hanabi Festival Ambient Effect */}
@@ -71,6 +113,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       <VisionSenseiModal isOpen={isVisionOpen} onClose={() => setIsVisionOpen(false)} />
       <SentenceDnaModal isOpen={isDnaOpen} onClose={() => setIsDnaOpen(false)} />
+
+      {/* Confetti Milestone Celebration Animation Overlay */}
+      <ConfettiOverlay
+        isActive={showConfetti}
+        onComplete={() => setShowConfetti(false)}
+        title={isLevelMilestoneReached ? `🎉 JLPT ${currentLevel} Milestone Unlocked!` : `🔥 ${streak}-Day Learning Streak!`}
+        subtitle="Keep up the incredible consistency on your journey to Japan."
+      />
+
+      {/* Level Milestone Celebration Modal */}
+      <MilestoneCelebrationModal
+        isOpen={isMilestoneOpen}
+        onClose={() => setIsMilestoneOpen(false)}
+        level={currentLevel}
+        completedLessonsCount={completedCount}
+        totalStudyMinutes={totalMinutes}
+        streakDays={streak}
+        onAdvanceLevel={handleAdvanceLevel}
+      />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         {/* Past Due Grace Period Alert if active */}
@@ -89,9 +150,34 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         )}
 
-        {/* 1. Master Coordinated Mission Capsule */}
+        {/* Milestone Celebration Banner */}
+        {isLevelMilestoneReached && (
+          <div className="p-5 rounded-3xl bg-gradient-to-r from-amber-500 via-red-600 to-rose-600 text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center font-bold text-white shrink-0">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold font-serif flex items-center gap-2">
+                  <span>🎉 JLPT {currentLevel} Mastery Milestone Achieved!</span>
+                </h3>
+                <p className="text-xs text-white/90">
+                  You have completed the essential core modules for JLPT {currentLevel}. View your celebration certificate!
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsMilestoneOpen(true)}
+              className="px-5 py-2.5 rounded-xl bg-white text-red-600 hover:bg-stone-100 font-bold text-xs shadow-md transition cursor-pointer shrink-0"
+            >
+              View Milestone Celebration
+            </button>
+          </div>
+        )}
+
+        {/* 1. Master Coordinated Mission Capsule with Radial Progress Bar */}
         <div className="bg-white/95 backdrop-blur-md border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-5">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-100 pb-5">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200">
@@ -107,25 +193,61 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               </p>
             </div>
 
-            {/* 4 Status Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0 text-center">
-              <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200">
-                <span className="text-[10px] uppercase font-bold text-stone-400 block">Japan Countdown</span>
-                <span className="text-sm font-extrabold text-stone-900">206 Days</span>
+            {/* Radial Progress Bar & Status Badges */}
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Radial Progress Bar for Active Course */}
+              <div className="flex items-center gap-3 bg-stone-50 rounded-2xl p-3 border border-stone-200 shadow-xs">
+                <div className="relative w-14 h-14 flex items-center justify-center">
+                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      className="text-stone-200"
+                      strokeWidth="3.5"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-red-600 transition-all duration-1000 ease-out"
+                      strokeDasharray={`${coursePercentage}, 100`}
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <span className="absolute font-mono text-xs font-extrabold text-stone-900">
+                    {coursePercentage}%
+                  </span>
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-bold text-stone-400 uppercase block">Course Progress</span>
+                  <span className="text-xs font-bold text-stone-900">{completedCount}/{totalLessonsInLevel} Lessons</span>
+                </div>
               </div>
-              <div className="p-3 bg-red-50/60 rounded-2xl border border-red-200">
-                <span className="text-[10px] uppercase font-bold text-red-600 block">Japan Readiness</span>
-                <span className="text-sm font-extrabold text-red-700">68%</span>
-              </div>
-              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200">
-                <span className="text-[10px] uppercase font-bold text-amber-700 block">Study Streak</span>
-                <span className="text-sm font-extrabold text-amber-900 flex items-center justify-center gap-1">
-                  {streak}d <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-600" />
-                </span>
-              </div>
-              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
-                <span className="text-[10px] uppercase font-bold text-emerald-700 block">JLPT Level</span>
-                <span className="text-sm font-extrabold text-emerald-900">{currentLevel}</span>
+
+              {/* Status Badges */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-center">
+                <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200">
+                  <span className="text-[10px] uppercase font-bold text-amber-700 block">Streak</span>
+                  <span className="text-sm font-extrabold text-amber-900 flex items-center justify-center gap-1">
+                    {streak}d <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-600" />
+                  </span>
+                </div>
+                <div
+                  onClick={() => setIsMilestoneOpen(true)}
+                  className="p-3 bg-emerald-50 hover:bg-emerald-100 rounded-2xl border border-emerald-200 cursor-pointer transition"
+                  title="Click to check Level Milestone"
+                >
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 block">JLPT Level</span>
+                  <span className="text-sm font-extrabold text-emerald-900 flex items-center justify-center gap-1">
+                    {currentLevel} <GraduationCap className="w-3.5 h-3.5 text-emerald-600" />
+                  </span>
+                </div>
+                <div className="p-3 bg-red-50/60 rounded-2xl border border-red-200">
+                  <span className="text-[10px] uppercase font-bold text-red-600 block">Readiness</span>
+                  <span className="text-sm font-extrabold text-red-700">68%</span>
+                </div>
               </div>
             </div>
           </div>
@@ -157,94 +279,114 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* 2. The 4 Minimal Power Portals */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div
-            onClick={() => setIsVisionOpen(true)}
-            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-bold">
-              <Camera className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-sm text-stone-900 group-hover:text-red-600">Vision Sensei™ (📷 OCR)</h3>
-            <p className="text-[11px] text-stone-500 leading-tight">ছবি তুলে যেকোনো জাপানিজ লেখার তাৎক্ষণিক বাংলা অর্থ ও ব্যাকরণ।</p>
+        {/* Recently Viewed Lessons for Quick Resumption */}
+        <section id="dashboard-recently-viewed-section">
+          <RecentlyViewedLessons
+            onNavigateLesson={(lessonId) => onNavigate('lesson', { lessonId })}
+          />
+        </section>
+
+        {/* Spaced Repetition (SRS) Flashcards Due Today Queue Widget */}
+        <section id="dashboard-srs-summary-section">
+          <DashboardSrsSummaryWidget
+            onStartReview={(filter) => onNavigate('flashcards', { filter })}
+          />
+        </section>
+
+        {/* 2. Voice-Activated Sensei Chat Assistant Widget */}
+        <section id="dashboard-voice-sensei-section">
+          <VoiceSenseiWidget onOpenFullChat={() => onNavigate('ai-coach')} />
+        </section>
+
+        {/* 3. JLPT N5-N3 Curriculum Roadmap Visualizer Timeline */}
+        <section id="dashboard-curriculum-roadmap-section">
+          <CurriculumRoadmap
+            currentLevel={currentLevel}
+            completedLessonsCount={completedCount}
+            onNavigate={onNavigate}
+          />
+        </section>
+
+        {/* 4. Global Student Leaderboard */}
+        <section id="dashboard-global-leaderboard-section">
+          <GlobalLeaderboard
+            currentUserXp={progress?.experiencePoints || 450}
+            currentUserStreak={streak}
+          />
+        </section>
+
+        {/* 5. Bento Grid: Kanji of the Day & Daily Learning Goal */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <KanjiOfTheDay />
+          <DailyLearningGoal currentStreak={streak} initialTodayXp={45} />
+        </div>
+
+        {/* 3. Daily Study Reminder Notification Configuration Card */}
+        <DailyStudyReminder />
+
+        {/* 4. Quick Tools Navigation Bar (Flashcards, MemoryOS, Quizzes, Pronunciation) */}
+        <div className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-400">
+              Interactive Japanese Modules:
+            </span>
           </div>
 
-          <div
-            onClick={() => onNavigate('interview-lab')}
-            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-purple-500 cursor-pointer shadow-sm transition-all space-y-2 group"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-              <GraduationCap className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-sm text-stone-900 group-hover:text-purple-600">Tokyo Principal AI</h3>
-            <p className="text-[11px] text-stone-500 leading-tight">জাপানিজ স্কুল প্রিন্সিপাল ও ভিসা ইন্টারভিউ ওরাল সিমুলেটর।</p>
-          </div>
+          <div className="flex flex-wrap items-center gap-2.5 text-xs font-bold">
+            <button
+              onClick={() => onNavigate('flashcards')}
+              className="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-red-50 hover:text-red-700 text-stone-700 flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Layers className="w-4 h-4 text-red-600" />
+              <span>Vocabulary Flashcards</span>
+            </button>
 
-          <div
-            onClick={() => onNavigate('memory-os')}
-            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-red-500 cursor-pointer shadow-sm transition-all space-y-2 group"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-stone-100 text-stone-800 flex items-center justify-center font-bold">
-              <FileText className="w-5 h-5 text-red-600" />
-            </div>
-            <h3 className="font-bold text-sm text-stone-900 group-hover:text-red-600">Nihomi MemoryOS™</h3>
-            <p className="text-[11px] text-stone-500 leading-tight">আপনার নিজের ভুলের ওপর তৈরি ব্যক্তিগত Mistake DNA বই (PDF)।</p>
-          </div>
+            <button
+              onClick={() => onNavigate('memory_os')}
+              className="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-purple-50 hover:text-purple-700 text-stone-700 flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-purple-600" />
+              <span>MemoryOS™ Spaced Repetition</span>
+            </button>
 
-          <div
-            onClick={() => onNavigate('coordination-hub')}
-            className="p-5 rounded-3xl bg-white/95 backdrop-blur-sm border border-stone-200 hover:border-emerald-500 cursor-pointer shadow-sm transition-all space-y-2 group"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <Compass className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-sm text-stone-900 group-hover:text-emerald-600">Coordination Hub</h3>
-            <p className="text-[11px] text-stone-500 leading-tight">লাইভ ক্লাস, ঢাকা স্কুলের COE/ভিসা ও bdTrip24 বিমান টিকিট।</p>
+            <button
+              onClick={() => onNavigate('quizzes')}
+              className="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-emerald-50 hover:text-emerald-700 text-stone-700 flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Award className="w-4 h-4 text-emerald-600" />
+              <span>JLPT Assessments</span>
+            </button>
+
+            <button
+              onClick={() => onNavigate('progress')}
+              className="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-blue-50 hover:text-blue-700 text-stone-700 flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Zap className="w-4 h-4 text-blue-600" />
+              <span>Analytics & Recharts</span>
+            </button>
           </div>
         </div>
 
-        {/* 3. Dedicated Kanji Study Section with KanjiFlipGrid */}
-        <section id="kanji-study-section" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-serif font-bold text-sm">
-                漢
-              </div>
-              <div>
-                <h2 className="text-lg sm:text-xl font-bold font-serif text-stone-900">
-                  JLPT N5 কাঞ্জি প্র্যাকটিস ল্যাব
-                </h2>
-                <p className="text-xs text-stone-500">
-                  ১২০টি আবশ্যক কাঞ্জির ইন্টারেক্টিভ ফ্লিপ কার্ড ও অডিও উচ্চারণ
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* 5. Interactive Daily Streak & Consistency Tracker */}
+        <section id="dashboard-daily-streak-tracker">
+          <DailyStreakTracker
+            currentStreak={streak}
+            longestStreak={Math.max(streak, 14)}
+            totalStudyDays={Math.max(streak * 2, 18)}
+          />
+        </section>
+
+        {/* 6. JLPT N5 Essential 120 Kanji Flip Grid */}
+        <section id="dashboard-kanji-flip-mastery">
           <KanjiFlipGrid />
         </section>
 
-        {/* 4. Rapid-Fire 30-Second Japanese Quiz Widget */}
-        <section id="quick-quiz-section" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm">
-                ⚡
-              </div>
-              <div>
-                <h2 className="text-lg sm:text-xl font-bold font-serif text-stone-900">
-                  র‌্যাপিড গ্রামার ও পার্টিকেল কুইজ
-                </h2>
-                <p className="text-xs text-stone-500">
-                  ৩০ সেকেন্ডের স্পিড চ্যালেঞ্জ নিয়ে বাড়িয়ে নিন আপনার রিফ্লেক্স
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* 7. Quick Daily Particle & Grammar Assessment */}
+        <section id="dashboard-quick-quiz">
           <QuickQuizWidget />
         </section>
 
-        {/* 5. Progress DNA Matrix & AI Recovery Intervention */}
+        {/* 8. Progress DNA Matrix & AI Recovery Intervention */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-7 bg-white/95 backdrop-blur-sm border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
             <h3 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
@@ -318,7 +460,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* 6. NHK World Easy Japanese Methodology Card */}
+        {/* 9. NHK World Easy Japanese Methodology Card */}
         <NhkMethodologyCard />
       </div>
     </div>

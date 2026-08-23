@@ -22,7 +22,7 @@ const translations: Record<string, Record<Language, string>> = {
   courses: {
     bn: 'কোর্সসমূহ',
     en: 'Courses',
-    ja: 'コース'
+    ja: 'コース一覧'
   },
   coordination_hub: {
     bn: 'কোঅর্ডিনেশন হাব',
@@ -59,10 +59,60 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Dashboard',
     ja: 'ダッシュボード'
   },
+  community: {
+    bn: 'কমিউনিটি লিডারবোর্ড',
+    en: 'Community Leaderboard',
+    ja: 'コミュニティ・順位表'
+  },
+  daily_goal: {
+    bn: 'দৈনিক লক্ষ্য',
+    en: 'Daily Goal',
+    ja: '今日の目標'
+  },
+  study_timer: {
+    bn: 'স্টাডি টাইমার',
+    en: 'Study Timer',
+    ja: '学習タイマー'
+  },
+  focus_mode: {
+    bn: 'ফোকাস মোড',
+    en: 'Focus Mode',
+    ja: '集中モード'
+  },
+  quizzes: {
+    bn: 'কুইজ ও পরীক্ষা',
+    en: 'Quizzes & Tests',
+    ja: 'クイズ・模擬試験'
+  },
+  badges: {
+    bn: 'অর্জিত ব্যাজ',
+    en: 'Badges & Milestones',
+    ja: '獲得バッジ'
+  },
+  shortcuts: {
+    bn: 'কিবোর্ড শর্টকাট',
+    en: 'Keyboard Shortcuts',
+    ja: 'キーボードショートカット'
+  },
+  offline_mode: {
+    bn: 'অফলাইন মোড',
+    en: 'Offline Mode',
+    ja: 'オフラインモード'
+  },
+  online_status: {
+    bn: 'অনলাইন সংযুক্ত',
+    en: 'Online Connected',
+    ja: 'オンライン接続中'
+  },
   login: {
     bn: 'লগ ইন',
     en: 'Log In',
     ja: 'ログイン'
+  },
+  logout: {
+    bn: 'লগ আউট',
+    en: 'Log Out',
+    ja: 'ログアウト'
   },
   start_free: {
     bn: 'বিনামূল্যে শুরু করুন',

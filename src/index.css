@@ -18,6 +18,110 @@
   transform: rotateY(180deg);
 }
 
+/* Dark Mode Overrides (Neo-Tokyo Dark Theme #0a0a12) */
+html.dark {
+  color-scheme: dark;
+  background-color: #0a0a12;
+  color: #f1f5f9;
+}
+
+html.dark body {
+  background-color: #0a0a12;
+  color: #f1f5f9;
+}
+
+html.dark .bg-\[\#F8F9FA\] {
+  background-color: #0a0a12 !important;
+}
+
+html.dark .bg-white {
+  background-color: #12121e !important;
+  color: #f1f5f9;
+}
+
+html.dark .bg-white\/95 {
+  background-color: rgba(18, 18, 30, 0.95) !important;
+}
+
+html.dark .bg-stone-50 {
+  background-color: #1a1a2c !important;
+}
+
+html.dark .bg-stone-100 {
+  background-color: #232338 !important;
+}
+
+html.dark .border-stone-200,
+html.dark .border-stone-100 {
+  border-color: #27273f !important;
+}
+
+html.dark .text-stone-900,
+html.dark .text-stone-800 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-stone-700,
+html.dark .text-stone-600 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-stone-500 {
+  color: #94a3b8 !important;
+}
+
+/* Sepia Mode (Eye-friendly low-light warm paper #fbf0d9 / #433422) */
+html.sepia {
+  color-scheme: light;
+  background-color: #fbf0d9;
+  color: #433422;
+}
+
+html.sepia body {
+  background-color: #fbf0d9;
+  color: #433422;
+}
+
+html.sepia .bg-\[\#F8F9FA\] {
+  background-color: #fbf0d9 !important;
+}
+
+html.sepia .bg-white {
+  background-color: #f4e5c3 !important;
+  color: #433422;
+}
+
+html.sepia .bg-white\/95 {
+  background-color: rgba(244, 229, 195, 0.95) !important;
+}
+
+html.sepia .bg-stone-50 {
+  background-color: #ede0b9 !important;
+}
+
+html.sepia .bg-stone-100 {
+  background-color: #e5d5a7 !important;
+}
+
+html.sepia .border-stone-200,
+html.sepia .border-stone-100 {
+  border-color: #d9c595 !important;
+}
+
+html.sepia .text-stone-900,
+html.sepia .text-stone-800 {
+  color: #382a17 !important;
+}
+
+html.sepia .text-stone-700,
+html.sepia .text-stone-600 {
+  color: #5c472d !important;
+}
+
+html.sepia .text-stone-500 {
+  color: #7a6344 !important;
+}
+
 @media print {
   body {
     background-color: #ffffff !important;

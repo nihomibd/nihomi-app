@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apiRequest } from '../lib/api.js';
 import { useAuth } from '../context/AuthContext.js';
 import { speakJapanese } from '../lib/tts.js';
+import { saveSrsItemReview, getSrsState, SrsItemState } from '../lib/srs.js';
 import { QuizQuestion } from '../types.js';
 import {
   Award,
@@ -12,7 +13,10 @@ import {
   RotateCcw,
   Sparkles,
   ArrowRight,
-  HelpCircle
+  HelpCircle,
+  Calendar,
+  Layers,
+  Brain
 } from 'lucide-react';
 
 interface QuizRunnerViewProps {
@@ -31,6 +35,13 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
     results: any[];
     message: string;
   } | null>(null);
+  const [scheduledSrsItems, setScheduledSrsItems] = useState<{
+    id: string;
+    question: string;
+    intervalDays: number;
+    stage: string;
+    isCorrect: boolean;
+  }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -83,6 +94,32 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
       });
 
       setSubmissionResult(res);
+
+      // Spaced Repetition (SRS) SM-2 Algorithm Integration
+      const scheduled: {
+        id: string;
+        question: string;
+        intervalDays: number;
+        stage: string;
+        isCorrect: boolean;
+      }[] = [];
+
+      if (res.results && Array.isArray(res.results)) {
+        res.results.forEach((r: any) => {
+          const rating = r.isCorrect ? 'good' : 'again';
+          const qData = quiz.questions.find((q: any) => q.id === r.questionId);
+          const srsResult = saveSrsItemReview(r.questionId, rating);
+          scheduled.push({
+            id: r.questionId,
+            question: qData?.questionJa || qData?.question || r.questionId,
+            intervalDays: srsResult.intervalDays,
+            stage: srsResult.stage,
+            isCorrect: r.isCorrect
+          });
+        });
+      }
+      setScheduledSrsItems(scheduled);
+
       await refreshProgress();
     } catch (err) {
       console.error('Failed to submit quiz:', err);
@@ -94,6 +131,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
   const handleRetake = () => {
     setSelectedAnswers({});
     setSubmissionResult(null);
+    setScheduledSrsItems([]);
   };
 
   if (isLoading) {
@@ -193,22 +231,72 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={handleRetake}
-                className="px-4 py-2 rounded-xl bg-white hover:bg-stone-50 text-stone-900 text-xs font-bold border border-stone-300 transition-colors shadow-sm flex items-center space-x-1.5"
+                className="px-4 py-2 rounded-xl bg-white hover:bg-stone-50 text-stone-900 text-xs font-bold border border-stone-300 transition-colors shadow-sm flex items-center space-x-1.5 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Retake Quiz</span>
               </button>
 
               <button
+                onClick={() => onNavigate('memory-os')}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors shadow-sm flex items-center space-x-1.5 cursor-pointer"
+              >
+                <Brain className="w-3.5 h-3.5" />
+                <span>Review in MemoryOS™</span>
+              </button>
+
+              <button
                 onClick={() => onNavigate('dashboard')}
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-sm"
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer"
               >
                 Go to Dashboard
               </button>
             </div>
+
+            {/* SRS Spaced Repetition Auto-Scheduling Grid */}
+            {scheduledSrsItems.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-stone-200/60 dark:border-stone-700/60 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-extrabold flex items-center gap-1.5 text-stone-900">
+                    <Calendar className="w-3.5 h-3.5 text-purple-600" />
+                    <span>MemoryOS™ Spaced Repetition (SRS) Scheduled:</span>
+                  </span>
+                  <span className="text-[11px] text-stone-500 font-medium">SM-2 Algorithm</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                  {scheduledSrsItems.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+                        item.isCorrect
+                          ? 'bg-white/80 border-emerald-300 text-emerald-950'
+                          : 'bg-white/90 border-rose-300 text-rose-950 shadow-xs'
+                      }`}
+                    >
+                      <div className="min-w-0">
+                        <p className="font-bold truncate text-[11px]">{item.question}</p>
+                        <p className="text-[10px] text-stone-500 capitalize">
+                          {item.stage} &bull; {item.isCorrect ? 'Mastered' : 'Needs Practice'}
+                        </p>
+                      </div>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-md font-mono font-bold shrink-0 ${
+                          item.intervalDays <= 1
+                            ? 'bg-rose-100 text-rose-800 border border-rose-200'
+                            : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        }`}
+                      >
+                        {item.intervalDays <= 1 ? 'Review Tomorrow' : `In ${item.intervalDays} Days`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
