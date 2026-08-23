@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
+import { formatApiUrl } from '../lib/api.js';
 import { JLPTLevel } from '../types.js';
 import {
   Volume2,
@@ -437,7 +438,7 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
   useEffect(() => {
     async function loadPublished() {
       try {
-        const res = await fetch('/api/content/published');
+        const res = await fetch(formatApiUrl('/api/content/published'));
         if (!res.ok) return;
         const data = await res.json();
         if (!data.lessons || !Array.isArray(data.lessons)) return;

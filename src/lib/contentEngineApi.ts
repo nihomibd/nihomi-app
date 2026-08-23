@@ -1,4 +1,5 @@
 import { ContentSource, ContentDraft, ContentVersion, JLPTLevel, ContentDraftStatus } from '../types.js';
+import { formatApiUrl } from './api.js';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('nihomi_auth_token');
@@ -10,7 +11,7 @@ export const contentEngineApi = {
   async uploadPdfSource(formData: FormData): Promise<{ success: boolean; source?: ContentSource; error?: string }> {
     try {
       const token = localStorage.getItem('nihomi_auth_token');
-      const res = await fetch('/api/content/sources/upload', {
+      const res = await fetch(formatApiUrl('/api/content/sources/upload'), {
         method: 'POST',
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {})
@@ -29,7 +30,7 @@ export const contentEngineApi = {
 
   async getContentSources(): Promise<{ success: boolean; sources: ContentSource[]; error?: string }> {
     try {
-      const res = await fetch('/api/content/sources', {
+      const res = await fetch(formatApiUrl('/api/content/sources'), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();
@@ -42,7 +43,7 @@ export const contentEngineApi = {
 
   async getContentSourceById(id: string): Promise<{ success: boolean; source?: ContentSource; drafts?: ContentDraft[]; error?: string }> {
     try {
-      const res = await fetch(`/api/content/sources/${id}`, {
+      const res = await fetch(formatApiUrl(`/api/content/sources/${id}`), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();
@@ -55,7 +56,7 @@ export const contentEngineApi = {
 
   async processSource(sourceId: string): Promise<{ success: boolean; source?: ContentSource; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/sources/${sourceId}/process`, {
+      const res = await fetch(formatApiUrl(`/api/content/sources/${sourceId}/process`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ export const contentEngineApi = {
 
   async deleteSource(sourceId: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const res = await fetch(`/api/content/sources/${sourceId}`, {
+      const res = await fetch(formatApiUrl(`/api/content/sources/${sourceId}`), {
         method: 'DELETE',
         headers: { ...getAuthHeaders() }
       });
@@ -94,7 +95,7 @@ export const contentEngineApi = {
       if (filter?.sourceId) params.set('sourceId', filter.sourceId);
       if (filter?.courseId) params.set('courseId', filter.courseId);
 
-      const res = await fetch(`/api/content/drafts?${params.toString()}`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts?${params.toString()}`), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();
@@ -107,7 +108,7 @@ export const contentEngineApi = {
 
   async getContentDraftById(id: string): Promise<{ success: boolean; draft?: ContentDraft; source?: ContentSource; versions?: ContentVersion[]; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}`), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();
@@ -120,7 +121,7 @@ export const contentEngineApi = {
 
   async updateDraftContent(id: string, updates: Partial<ContentDraft>): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +139,7 @@ export const contentEngineApi = {
 
   async moveToReview(id: string): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/review`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/review`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ export const contentEngineApi = {
 
   async approveDraft(id: string, notes?: string): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/approve`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/approve`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +174,7 @@ export const contentEngineApi = {
 
   async rejectDraft(id: string, notes?: string): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/reject`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/reject`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +192,7 @@ export const contentEngineApi = {
 
   async requestRevision(id: string, notes: string): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/revision`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/revision`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -210,7 +211,7 @@ export const contentEngineApi = {
   // 3. Publishing
   async publishDraft(id: string): Promise<{ success: boolean; draft?: ContentDraft; lesson?: any; version?: ContentVersion; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/publish`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/publish`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -227,7 +228,7 @@ export const contentEngineApi = {
 
   async unpublishDraft(id: string): Promise<{ success: boolean; draft?: ContentDraft; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/unpublish`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/unpublish`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +245,7 @@ export const contentEngineApi = {
 
   async getDraftVersions(id: string): Promise<{ success: boolean; versions: ContentVersion[]; error?: string }> {
     try {
-      const res = await fetch(`/api/content/drafts/${id}/versions`, {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/versions`), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();
@@ -259,7 +260,7 @@ export const contentEngineApi = {
   async getPublishedContent(level?: JLPTLevel): Promise<{ success: boolean; lessons: any[]; drafts: ContentDraft[]; error?: string }> {
     try {
       const url = level ? `/api/content/published?level=${level}` : '/api/content/published';
-      const res = await fetch(url, {
+      const res = await fetch(formatApiUrl(url), {
         headers: { ...getAuthHeaders() }
       });
       const data = await res.json();

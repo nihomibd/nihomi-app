@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
 
 import { authRouter } from './server/routes/auth.js';
@@ -30,10 +31,18 @@ setInterval(() => {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  // Enable CORS for web, mobile, and edge proxy environments
+  app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  }));
+
+  app.use(express.json({ limit: '25mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
   // API Routes
   app.get('/api/health', (req, res) => {
@@ -47,6 +56,7 @@ async function startServer() {
 
   app.use('/api/auth', authRouter);
   app.use('/api/billing', billingRouter);
+  app.use('/api/learning', learningRouter);
   app.use('/api', learningRouter);
   app.use('/api/quizzes', quizzesRouter);
   app.use('/api/work-japanese', workRouter);
@@ -57,6 +67,7 @@ async function startServer() {
   app.use('/api/ghost-mode', ghostModeRouter);
   app.use('/api/system-health', systemHealthRouter);
   app.use('/api/content', contentEngineRouter);
+  app.use('/api/content-engine', contentEngineRouter);
 
 
   // Vite middleware for development vs Static files for production

@@ -1,5 +1,26 @@
 const TOKEN_KEY = 'nihomi_auth_token';
 
+export function getApiBaseUrl(): string {
+  try {
+    const metaEnv = (import.meta as any)?.env;
+    if (metaEnv && typeof metaEnv.VITE_API_URL === 'string') {
+      return metaEnv.VITE_API_URL.replace(/\/$/, '');
+    }
+  } catch {
+    // Ignore in non-vite environments
+  }
+  return '';
+}
+
+export function formatApiUrl(endpoint: string): string {
+  if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+    return endpoint;
+  }
+  const base = getApiBaseUrl();
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  return base ? `${base}${normalizedEndpoint}` : normalizedEndpoint;
+}
+
 export function getStoredToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -26,7 +47,9 @@ export async function apiRequest<T = any>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(endpoint, {
+  const url = formatApiUrl(endpoint);
+
+  const response = await fetch(url, {
     ...options,
     headers
   });

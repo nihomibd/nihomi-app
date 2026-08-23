@@ -24,6 +24,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { speakJapanese } from '../lib/tts.js';
+import { formatApiUrl } from '../lib/api.js';
 import {
   getSrsState,
   saveSrsItemReview,
@@ -230,7 +231,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
   useEffect(() => {
     async function loadPublishedDecks() {
       try {
-        const res = await fetch('/api/content/published');
+        const res = await fetch(formatApiUrl('/api/content/published'));
         if (!res.ok) return;
         const data = await res.json();
         if (!data.lessons || !Array.isArray(data.lessons)) return;

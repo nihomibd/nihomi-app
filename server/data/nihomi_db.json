@@ -17,6 +17,15 @@
       "role": "user",
       "createdAt": "2026-08-23T07:12:51.501Z",
       "updatedAt": "2026-08-23T07:12:51.501Z"
+    },
+    {
+      "id": "usr-b9b7c394",
+      "email": "student.nihomi@gmail.com",
+      "passwordHash": "3a36920b640af9d40976aa66e759e140d40e1e90dac07287f641d11d9c331aa6c0c66623f6113f329af3276b1b2c1ae38462840119d5738b2f1d9a56e60bc920",
+      "passwordSalt": "8618fe1e4e3626820d07360b0b955f5a",
+      "role": "user",
+      "createdAt": "2026-08-23T10:25:48.608Z",
+      "updatedAt": "2026-08-23T10:25:48.608Z"
     }
   ],
   "profiles": [
@@ -39,6 +48,16 @@
       "bio": "Excited to learn Japanese for moving to Tokyo!",
       "createdAt": "2026-08-23T07:12:51.501Z",
       "updatedAt": "2026-08-23T07:12:51.501Z"
+    },
+    {
+      "userId": "usr-b9b7c394",
+      "displayName": "Tanvir Explorer",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-08-23T10:25:48.608Z",
+      "updatedAt": "2026-08-23T10:25:48.610Z",
+      "avatarSeed": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
     }
   ],
   "progress": [
@@ -74,6 +93,20 @@
       "lastActiveDate": "2026-08-23",
       "experiencePoints": 120,
       "updatedAt": "2026-08-23T07:12:51.501Z"
+    },
+    {
+      "userId": "usr-b9b7c394",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-08-23",
+      "experiencePoints": 0,
+      "updatedAt": "2026-08-23T10:25:48.608Z"
     }
   ],
   "courses": [
@@ -2104,6 +2137,16 @@
       "aiCoachInteractions": 14,
       "lastInteractionAt": "2026-08-23T07:12:51.501Z",
       "updatedAt": "2026-08-23T07:12:51.501Z"
+    },
+    {
+      "id": "usg-97ebe5",
+      "userId": "usr-b9b7c394",
+      "periodYearMonth": "2026-08",
+      "periodStart": "2026-08-01T00:00:00.000Z",
+      "periodEnd": "2026-08-31T23:59:59.000Z",
+      "aiCoachInteractions": 0,
+      "lastInteractionAt": "2026-08-23T10:25:48.830Z",
+      "updatedAt": "2026-08-23T10:25:48.830Z"
     }
   ],
   "coupons": [
@@ -2201,6 +2244,15 @@
         "amount": 4990
       },
       "createdAt": "2026-08-08T07:12:51.501Z"
+    },
+    {
+      "id": "sev-ab3ac350",
+      "userId": "usr-b9b7c394",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.nihomi@gmail.com"
+      },
+      "createdAt": "2026-08-23T10:25:48.608Z"
     }
   ],
   "adminAuditLogs": [
@@ -3072,6 +3124,21 @@
       "approvedAt": "2026-08-23T10:16:05.166Z",
       "publishedAt": "2026-08-23T10:16:05.172Z",
       "createdAt": "2026-08-23T10:16:05.172Z"
+    }
+  ],
+  "savedPaymentMethods": [
+    {
+      "id": "pm_5a417e96-9",
+      "userId": "usr-b9b7c394",
+      "type": "bkash",
+      "isDefault": true,
+      "bKashNumberMasked": "017*****889",
+      "bKashAgreementId": "AGR_BK_A9749D55",
+      "tokenStatus": "active",
+      "tokenExpiresAt": "2026-11-21T10:27:08.202Z",
+      "lastRefreshedAt": "2026-08-23T10:27:08.202Z",
+      "createdAt": "2026-08-23T10:27:08.202Z",
+      "updatedAt": "2026-08-23T10:27:08.202Z"
     }
   ]
 }
