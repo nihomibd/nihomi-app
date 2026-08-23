@@ -41,13 +41,14 @@ import { UploadCloud } from 'lucide-react';
 
 interface AdminViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
+  initialTab?: AdminTab;
 }
 
 type AdminTab = 'content_engine' | 'revenue' | 'trends' | 'webhooks' | 'subscriptions' | 'payments' | 'coupons' | 'curriculum' | 'audit_logs';
 
-export const AdminView: React.FC<AdminViewProps> = ({ onNavigate }) => {
+export const AdminView: React.FC<AdminViewProps> = ({ onNavigate, initialTab = 'content_engine' }) => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<AdminTab>('revenue');
+  const [activeTab, setActiveTab] = useState<AdminTab>(initialTab);
 
   // Stats & Curriculum CMS
   const [stats, setStats] = useState<any | null>(null);

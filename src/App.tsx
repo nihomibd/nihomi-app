@@ -172,7 +172,7 @@ function AppContent() {
         {currentView === 'progress' && <ProgressView onNavigate={handleNavigate} />}
         {currentView === 'badges' && <BadgesView onNavigate={handleNavigate} />}
         {currentView === 'profile' && <ProfileView onNavigate={handleNavigate} />}
-        {currentView === 'admin' && <AdminView onNavigate={handleNavigate} />}
+        {currentView === 'admin' && <AdminView initialTab={viewParams?.tab} onNavigate={handleNavigate} />}
         {currentView === 'pricing' && <PricingView onNavigate={handleNavigate} />}
         {(currentView === 'subscription' || currentView === 'billing') && (
           <SubscriptionManagementView onNavigate={handleNavigate} />

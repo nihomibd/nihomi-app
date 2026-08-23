@@ -346,6 +346,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                   <span>{t('memory_os')}</span>
                 </button>
+
+                {user.role === 'admin' && (
+                  <button
+                    id="nav-btn-admin-portal"
+                    onClick={() => handleNav('admin')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      currentView === 'admin'
+                        ? 'bg-red-600 text-white shadow-xs'
+                        : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
+                    }`}
+                    title="Founder & Content Engine Command Center"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
+                    <span>Founder Command</span>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="hidden md:flex items-center space-x-6">
@@ -767,6 +783,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             >
               Progress & Analytics
             </button>
+            {user?.role === 'admin' && (
+              <button
+                onClick={() => handleNav('admin')}
+                className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl flex items-center gap-2"
+                id="mobile-nav-admin-portal-link"
+              >
+                <ShieldCheck className="w-4 h-4 text-red-600" />
+                <span>Founder Command Center</span>
+              </button>
+            )}
           </div>
         )}
       </nav>
