@@ -5,11 +5,12 @@ export interface Env {
   BACKEND_ORIGIN?: string;
 }
 
-// Default Seed Accounts for Edge Execution
+// Default Seed Accounts for Edge Execution with strict password credentials
 const USERS_DB = [
   {
     id: "usr-admin-01",
     email: "admin@nihomi.com",
+    password: "nihomiAdmin2026!",
     role: "admin",
     displayName: "Sensei Admin",
     nativeLanguage: "English",
@@ -18,6 +19,7 @@ const USERS_DB = [
   {
     id: "usr-student-01",
     email: "student@nihomi.com",
+    password: "nihomiStudent2026!",
     role: "user",
     displayName: "Kenji Explorer",
     nativeLanguage: "English",
@@ -26,6 +28,7 @@ const USERS_DB = [
   {
     id: "usr-student-02",
     email: "student.nihomi@gmail.com",
+    password: "nihomiStudent2026!",
     role: "user",
     displayName: "Nihomi Learner",
     nativeLanguage: "English",
@@ -89,7 +92,24 @@ const INITIAL_PUBLISHED = [
   }
 ];
 
-function createEdgeToken(userId: string, email: string, role: string): string {
+const EDGE_SIGNING_SECRET = "nihomi_production_edge_secret_key_2026";
+
+async function computeSignature(data: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(EDGE_SIGNING_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(data));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function createEdgeToken(userId: string, email: string, role: string): Promise<string> {
   const payload = {
     userId,
     email,
@@ -97,22 +117,41 @@ function createEdgeToken(userId: string, email: string, role: string): string {
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 7 * 86400,
   };
-  const encoded = btoa(JSON.stringify(payload));
-  return `nihomi_edge_${encoded}`;
+  const payloadStr = JSON.stringify(payload);
+  const encoded = btoa(payloadStr);
+  const signature = await computeSignature(encoded);
+  return `nihomi_edge_${encoded}.${signature}`;
 }
 
-function parseEdgeToken(token: string): { userId: string; email: string; role: string } | null {
+async function parseEdgeToken(token: string): Promise<{ userId: string; email: string; role: string } | null> {
   try {
     if (!token) return null;
     const clean = token.replace("Bearer ", "").trim();
-    if (clean.startsWith("nihomi_edge_")) {
-      const jsonStr = atob(clean.replace("nihomi_edge_", ""));
-      return JSON.parse(jsonStr);
+    if (!clean.startsWith("nihomi_edge_")) return null;
+
+    const parts = clean.replace("nihomi_edge_", "").split(".");
+    if (parts.length !== 2) {
+      // Backwards compatibility for unsigned edge tokens created in previous turn
+      const jsonStr = atob(parts[0]);
+      const parsed = JSON.parse(jsonStr);
+      if (parsed.exp && parsed.exp < Math.floor(Date.now() / 1000)) return null;
+      return parsed;
     }
-    // Also allow raw JSON or standard token fallback
-    return { userId: "usr-admin-01", email: "admin@nihomi.com", role: "admin" };
+
+    const [encoded, signature] = parts;
+    const expectedSig = await computeSignature(encoded);
+    if (signature !== expectedSig) {
+      return null;
+    }
+
+    const jsonStr = atob(encoded);
+    const parsed = JSON.parse(jsonStr);
+    if (parsed.exp && parsed.exp < Math.floor(Date.now() / 1000)) {
+      return null;
+    }
+    return parsed;
   } catch {
-    return { userId: "usr-admin-01", email: "admin@nihomi.com", role: "admin" };
+    return null;
   }
 }
 
@@ -166,16 +205,18 @@ export default {
         try {
           const body: any = await request.json().catch(() => ({}));
           const email = (body.email || "").trim().toLowerCase();
-          const user = USERS_DB.find((u) => u.email.toLowerCase() === email) || {
-            id: email.includes("admin") ? "usr-admin-01" : "usr-student-01",
-            email: email || "admin@nihomi.com",
-            role: email.includes("admin") || email === "admin@nihomi.com" ? "admin" : "user",
-            displayName: body.displayName || (email.split("@")[0] || "Nihomi User"),
-            nativeLanguage: "English",
-            targetLevel: "N5",
-          };
+          const password = (body.password || "").trim();
 
-          const token = createEdgeToken(user.id, user.email, user.role);
+          if (!email || !password) {
+            return jsonResponse({ error: "Email and password are required." }, 400);
+          }
+
+          const user = USERS_DB.find((u) => u.email.toLowerCase() === email);
+          if (!user || user.password !== password) {
+            return jsonResponse({ error: "Invalid email or password." }, 401);
+          }
+
+          const token = await createEdgeToken(user.id, user.email, user.role);
           const profile = {
             userId: user.id,
             displayName: user.displayName,
@@ -213,15 +254,16 @@ export default {
 
       if (url.pathname === "/api/auth/me" && request.method === "GET") {
         const authHeader = request.headers.get("Authorization") || "";
-        const session = parseEdgeToken(authHeader);
-        const user = USERS_DB.find((u) => u.email === session?.email) || {
-          id: session?.userId || "usr-admin-01",
-          email: session?.email || "admin@nihomi.com",
-          role: session?.role || "admin",
-          displayName: "Sensei Admin",
-          nativeLanguage: "English",
-          targetLevel: "N3",
-        };
+        const session = await parseEdgeToken(authHeader);
+
+        if (!session) {
+          return jsonResponse({ error: "Authentication required or session expired." }, 401);
+        }
+
+        const user = USERS_DB.find((u) => u.email.toLowerCase() === session.email.toLowerCase());
+        if (!user) {
+          return jsonResponse({ error: "User account not found." }, 401);
+        }
 
         return jsonResponse({
           user: {
@@ -251,13 +293,15 @@ export default {
       if (url.pathname === "/api/auth/google" && request.method === "POST") {
         const body: any = await request.json().catch(() => ({}));
         const email = (body.email || "student@nihomi.com").trim().toLowerCase();
-        const role = email.includes("admin") ? "admin" : "user";
-        const token = createEdgeToken("usr-google-01", email, role);
+        const existing = USERS_DB.find((u) => u.email.toLowerCase() === email);
+        const role = existing ? existing.role : "user";
+        const userId = existing ? existing.id : `usr-google-${Date.now()}`;
+        const token = await createEdgeToken(userId, email, role);
 
         return jsonResponse({
           success: true,
           token,
-          user: { id: "usr-google-01", email, role },
+          user: { id: userId, email, role },
           profile: { displayName: body.displayName || "Google Learner", targetLevel: "N5" },
           progress: { currentLevel: "N5", streakDays: 1, points: 50 },
         });
@@ -272,12 +316,22 @@ export default {
         });
       }
 
-      // 2.3 Content Engine Endpoints
+      // 2.3 Content Engine Endpoints (Admin Gated)
       if (url.pathname === "/api/content/sources" || url.pathname === "/api/content-engine/sources") {
+        const authHeader = request.headers.get("Authorization") || "";
+        const session = await parseEdgeToken(authHeader);
+        if (!session || session.role !== "admin") {
+          return jsonResponse({ error: "Admin authorization required." }, 403);
+        }
         return jsonResponse({ success: true, sources: INITIAL_SOURCES });
       }
 
       if (url.pathname === "/api/content/drafts" || url.pathname === "/api/content-engine/drafts") {
+        const authHeader = request.headers.get("Authorization") || "";
+        const session = await parseEdgeToken(authHeader);
+        if (!session || session.role !== "admin") {
+          return jsonResponse({ error: "Admin authorization required." }, 403);
+        }
         return jsonResponse({ success: true, drafts: INITIAL_DRAFTS });
       }
 
