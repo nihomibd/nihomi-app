@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { JLPTLevel } from '../types.js';
 import { apiRequest, setStoredToken } from '../lib/api.js';
+import { supabase } from '../lib/supabase.js';
 import {
   ArrowRight,
   CheckCircle2,
@@ -41,36 +42,24 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  // 1-Click Google Sign-In Handler
+  // Direct Supabase Google OAuth Handler
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     setErrorMsg(null);
     try {
-      const mockGoogleProfile = {
-        email: email.trim() || 'student.nihomi@gmail.com',
-        displayName: displayName.trim() || 'Tanvir Explorer',
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-        targetLevel
-      };
-
-      const res = await apiRequest<{
-        token: string;
-        user: any;
-        profile: any;
-        progress: any;
-      }>('/api/auth/google', {
-        method: 'POST',
-        body: JSON.stringify(mockGoogleProfile)
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-      if (res.token) {
-        setStoredToken(res.token);
-        await refreshUser();
-        onNavigate('dashboard');
+      if (error) {
+        throw error;
       }
     } catch (err: any) {
+      console.error('Google OAuth Sign-In error:', err);
       setErrorMsg(err.message || 'Google Sign-In was interrupted. Please try again.');
-    } finally {
       setIsGoogleLoading(false);
     }
   };

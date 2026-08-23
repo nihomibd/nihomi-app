@@ -155,6 +155,35 @@ async function parseEdgeToken(token: string): Promise<{ userId: string; email: s
   }
 }
 
+const MIME_TYPES: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".mjs": "application/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".ico": "image/x-icon",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2",
+  ".ttf": "font/ttf",
+  ".otf": "font/otf",
+  ".wasm": "application/wasm",
+  ".map": "application/json",
+  ".webmanifest": "application/manifest+json",
+};
+
+function getMimeType(pathname: string): string | null {
+  const lastDot = pathname.lastIndexOf(".");
+  if (lastDot === -1) return null;
+  const ext = pathname.slice(lastDot).toLowerCase();
+  return MIME_TYPES[ext] || null;
+}
+
 function jsonResponse(data: any, status = 200, customHeaders: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -398,9 +427,70 @@ export default {
       });
     }
 
-    // 3. Static SPA Assets
+    // 3. Static Assets & SPA Fallback Handler
     if (env.ASSETS) {
-      return env.ASSETS.fetch(request);
+      const isFileAsset = url.pathname.includes(".") && !url.pathname.endsWith(".html");
+      const mimeType = getMimeType(url.pathname);
+
+      try {
+        // Attempt to fetch the requested file directly from assets
+        const response = await env.ASSETS.fetch(request);
+
+        // If the asset exists and was successfully retrieved
+        if (response.status < 400) {
+          const headers = new Headers(response.headers);
+
+          // Ensure proper MIME types for JS, CSS, SVG, etc.
+          if (mimeType && (!headers.get("Content-Type") || headers.get("Content-Type")?.includes("text/plain"))) {
+            headers.set("Content-Type", mimeType);
+          }
+
+          // Cache control optimizations
+          if (url.pathname.startsWith("/assets/")) {
+            headers.set("Cache-Control", "public, max-age=31536000, immutable");
+          } else if (url.pathname === "/" || url.pathname.endsWith(".html")) {
+            headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
+          }
+
+          return new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers,
+          });
+        }
+
+        // If a specific file asset (e.g. .js, .css, .png, .svg) returned 404, return 404 Not Found
+        // (CRITICAL: Do NOT return index.html for missing JS/CSS, to avoid SyntaxError: Unexpected token '<')
+        if (isFileAsset) {
+          return new Response(`Asset not found: ${url.pathname}`, {
+            status: 404,
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8",
+              "Cache-Control": "no-cache",
+            },
+          });
+        }
+
+        // For all non-asset SPA routes (e.g., /dashboard, /courses, /admin, /pricing, etc.)
+        // fallback cleanly to /index.html
+        const indexRequest = new Request(new URL("/index.html", request.url), {
+          method: "GET",
+          headers: request.headers,
+        });
+
+        const indexResponse = await env.ASSETS.fetch(indexRequest);
+        if (indexResponse.status < 400) {
+          const headers = new Headers(indexResponse.headers);
+          headers.set("Content-Type", "text/html; charset=utf-8");
+          headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
+          return new Response(indexResponse.body, {
+            status: 200,
+            headers,
+          });
+        }
+      } catch (assetErr) {
+        console.error("[Nihomi Worker] Asset fetch exception:", assetErr);
+      }
     }
 
     return new Response("Not found", { status: 404 });

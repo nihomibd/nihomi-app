@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User, UserProfile, UserProgress, JLPTLevel, UserSubscriptionDetails, EntitlementFeature, PlanId } from '../types.js';
 import { apiRequest, setStoredToken, getStoredToken } from '../lib/api.js';
+import { supabase } from '../lib/supabase.js';
 
 interface AuthContextType {
   user: User | null;
@@ -69,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Fetch subscription details
       await fetchSubscription();
     } catch (err) {
-      console.warn('Session expired or invalid, logging out.');
+      console.warn('Session expired or invalid, logging out.', err);
       setStoredToken(null);
       setUser(null);
       setProfile(null);
@@ -80,28 +81,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [fetchSubscription]);
 
+  // Handle Supabase Auth state listener for Google OAuth and session persistence
   useEffect(() => {
+    // 1. Initial auth check
     fetchCurrentUser();
+
+    // 2. Listen to Supabase auth events
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.access_token) {
+        setStoredToken(session.access_token);
+        if (session.user) {
+          const userRole = session.user.email?.includes('admin@nihomi.com') ? 'admin' : 'user';
+          setUser({
+            id: session.user.id,
+            email: session.user.email || 'student@nihomi.com',
+            role: userRole,
+            name: session.user.user_metadata?.display_name || session.user.email?.split('@')[0],
+          });
+        }
+        await fetchCurrentUser();
+      } else if (event === 'SIGNED_OUT') {
+        setStoredToken(null);
+        setUser(null);
+        setProfile(null);
+        setProgress(null);
+        setSubscriptionDetails(null);
+      }
+    });
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
   }, [fetchCurrentUser]);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const res = await apiRequest<{
-        token: string;
-        user: User;
-        profile: UserProfile;
-        progress: UserProgress;
-      }>('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password })
+      // 1. Direct Supabase signInWithPassword
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      setStoredToken(res.token);
-      setUser(res.user);
-      setProfile(res.profile);
-      setProgress(res.progress);
-      await fetchSubscription();
+      if (error) {
+        // Fallback to local authentication endpoint
+        const res = await apiRequest<{
+          token: string;
+          user: User;
+          profile: UserProfile;
+          progress: UserProgress;
+        }>('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+        });
+
+        setStoredToken(res.token);
+        setUser(res.user);
+        setProfile(res.profile);
+        setProgress(res.progress);
+        await fetchSubscription();
+        return;
+      }
+
+      if (data.session) {
+        setStoredToken(data.session.access_token);
+      }
+      await fetchCurrentUser();
     } finally {
       setIsLoading(false);
     }
@@ -116,21 +161,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }) => {
     setIsLoading(true);
     try {
-      const res = await apiRequest<{
-        token: string;
-        user: User;
-        profile: UserProfile;
-        progress: UserProgress;
-      }>('/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(data)
+      // 1. Direct Supabase signUp
+      const { data: supaData, error } = await supabase.auth.signUp({
+        email: data.email.trim(),
+        password: data.password.trim(),
+        options: {
+          data: {
+            display_name: data.displayName,
+            target_level: data.targetLevel,
+            native_language: data.nativeLanguage || 'English',
+          },
+        },
       });
 
-      setStoredToken(res.token);
-      setUser(res.user);
-      setProfile(res.profile);
-      setProgress(res.progress);
-      await fetchSubscription();
+      if (error) {
+        // Fallback to API registration
+        const res = await apiRequest<{
+          token: string;
+          user: User;
+          profile: UserProfile;
+          progress: UserProgress;
+        }>('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
+
+        setStoredToken(res.token);
+        setUser(res.user);
+        setProfile(res.profile);
+        setProgress(res.progress);
+        await fetchSubscription();
+        return;
+      }
+
+      if (supaData.session) {
+        setStoredToken(supaData.session.access_token);
+      }
+      await fetchCurrentUser();
     } finally {
       setIsLoading(false);
     }
@@ -138,6 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
+      await supabase.auth.signOut().catch(() => {});
       await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
     } finally {
       setStoredToken(null);
@@ -239,4 +307,4 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
-
+export default AuthContext;

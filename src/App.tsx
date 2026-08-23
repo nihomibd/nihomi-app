@@ -38,12 +38,39 @@ import { VocabularyFlashcardsView } from './views/VocabularyFlashcardsView.js';
 import { BadgesView } from './views/BadgesView.js';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal.js';
 import { OfflineNotificationToast } from './components/OfflineNotificationToast.js';
+import { supabase } from './lib/supabase.js';
 
 function AppContent() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, refreshUser } = useAuth();
   const [currentView, setCurrentView] = useState<string>('home');
   const [viewParams, setViewParams] = useState<Record<string, any>>({});
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false);
+
+  // Handle Supabase OAuth /auth/callback redirection
+  useEffect(() => {
+    const handleAuthCallback = async () => {
+      if (typeof window === 'undefined') return;
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get('code');
+      const isCallbackPath = url.pathname.includes('/auth/callback');
+
+      if (code || isCallbackPath) {
+        if (code) {
+          try {
+            await supabase.auth.exchangeCodeForSession(code);
+            await refreshUser();
+          } catch (err) {
+            console.warn('OAuth exchange error:', err);
+          }
+        }
+        const next = url.searchParams.get('next') || 'dashboard';
+        window.history.replaceState({}, document.title, '/');
+        setCurrentView(next.replace(/^\//, '') || 'dashboard');
+      }
+    };
+
+    handleAuthCallback();
+  }, [refreshUser]);
 
   // Auto-switch to dashboard on initial load if logged in and at home
   useEffect(() => {

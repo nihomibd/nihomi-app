@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw } from 'lucide-react';
+import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw, UserPlus, LogIn } from 'lucide-react';
 import { apiRequest, setStoredToken } from '../lib/api.js';
+import { supabase } from '../lib/supabase.js';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -10,13 +11,16 @@ interface AuthModalProps {
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const [authMethod, setAuthMethod] = useState<'phone' | 'email' | 'google'>('email');
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successNotice, setSuccessNotice] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -70,34 +74,115 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     }
   };
 
-  const handleEmailPasswordLogin = async (e: React.FormEvent) => {
+  const handleEmailPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
       setErrorMsg('ইমেইল এবং পাসওয়ার্ড উভয় ফিল্ড পূরণ করুন');
+      return;
+    }
+
+    if (isSignUpMode && cleanPassword.length < 6) {
+      setErrorMsg('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
       return;
     }
 
     setIsLoading(true);
     setErrorMsg(null);
+    setSuccessNotice(null);
 
     try {
-      const res = await apiRequest<{
-        token: string;
-        user: any;
-        profile: any;
-        progress: any;
-      }>('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: email.trim(), password: password.trim() })
-      });
+      if (isSignUpMode) {
+        // 1. Direct Supabase Sign Up
+        const { data, error } = await supabase.auth.signUp({
+          email: cleanEmail,
+          password: cleanPassword,
+          options: {
+            data: {
+              display_name: displayName.trim() || cleanEmail.split('@')[0],
+              target_level: 'N5',
+            },
+          },
+        });
 
-      if (res.token) {
-        setStoredToken(res.token);
+        if (error) {
+          // If Supabase returns error or unconfigured, attempt graceful API signup fallback
+          try {
+            const apiRes = await apiRequest<{
+              token: string;
+              user: any;
+              profile: any;
+              progress: any;
+            }>('/api/auth/register', {
+              method: 'POST',
+              body: JSON.stringify({
+                email: cleanEmail,
+                password: cleanPassword,
+                displayName: displayName.trim() || cleanEmail.split('@')[0],
+                targetLevel: 'N5',
+              }),
+            });
+
+            if (apiRes.token) {
+              setStoredToken(apiRes.token);
+            }
+            onSuccess(apiRes.user);
+            onClose();
+            return;
+          } catch {
+            throw error;
+          }
+        }
+
+        if (data.session) {
+          setStoredToken(data.session.access_token);
+          onSuccess(data.user);
+          onClose();
+        } else if (data.user && !data.session) {
+          setSuccessNotice('অ্যাকাউন্ট তৈরি হয়েছে! অনুগ্রহ করে আপনার ইমেইল ইনবক্স চেক করে অ্যাকাউন্ট ভেরিফাই করুন।');
+        }
+      } else {
+        // 2. Direct Supabase Sign In With Password
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password: cleanPassword,
+        });
+
+        if (error) {
+          // If Supabase encounters an error, attempt fallback to local auth API
+          try {
+            const apiRes = await apiRequest<{
+              token: string;
+              user: any;
+              profile: any;
+              progress: any;
+            }>('/api/auth/login', {
+              method: 'POST',
+              body: JSON.stringify({ email: cleanEmail, password: cleanPassword }),
+            });
+
+            if (apiRes.token) {
+              setStoredToken(apiRes.token);
+            }
+            onSuccess(apiRes.user);
+            onClose();
+            return;
+          } catch {
+            throw error;
+          }
+        }
+
+        if (data.session) {
+          setStoredToken(data.session.access_token);
+          onSuccess(data.user);
+          onClose();
+        }
       }
-      onSuccess(res.user);
-      onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || 'লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড পুনরায় চেক করুন।');
+      console.error('Authentication error:', err);
+      setErrorMsg(err.message || (isSignUpMode ? 'নিবন্ধন ব্যর্থ হয়েছে।' : 'লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড পুনরায় চেক করুন।'));
     } finally {
       setIsLoading(false);
     }
@@ -108,25 +193,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setErrorMsg(null);
 
     try {
-      const googleEmail = email.trim() || 'student@nihomi.com';
-      const res = await apiRequest<{
-        token: string;
-        user: any;
-        profile: any;
-        progress: any;
-      }>('/api/auth/google', {
-        method: 'POST',
-        body: JSON.stringify({ email: googleEmail, displayName: googleEmail.split('@')[0] })
+      // Direct Supabase OAuth flow without local /api/auth fetch
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-      if (res.token) {
-        setStoredToken(res.token);
+      if (error) {
+        throw error;
       }
-      onSuccess(res.user);
-      onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || 'Google Login failed');
-    } finally {
+      console.error('Google OAuth error:', err);
+      setErrorMsg(err.message || 'Google Login failed. Please check Supabase Google provider configuration.');
       setIsLoading(false);
     }
   };
@@ -136,7 +216,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       <div className="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-8 shadow-2xl text-white relative">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-slate-400 hover:text-white transition p-1.5 rounded-full hover:bg-slate-800"
+          className="absolute top-5 right-5 text-slate-400 hover:text-white transition p-1.5 rounded-full hover:bg-slate-800 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -147,22 +227,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             日
           </div>
           <h3 className="text-2xl font-bold text-white">Nihomi-তে স্বাগতম</h3>
-          <p className="text-xs text-slate-400">জাপানি ভাষা শেখার সেরা প্ল্যাটফর্মে লগইন করুন</p>
+          <p className="text-xs text-slate-400">
+            {isSignUpMode ? 'নতুন অ্যাকাউন্ট খুলে জাপানি ভাষা শেখা শুরু করুন' : 'জাপানি ভাষা শেখার সেরা প্ল্যাটফর্মে লগইন করুন'}
+          </p>
         </div>
 
         {/* Method Switcher */}
         <div className="grid grid-cols-2 gap-2 bg-slate-950/80 p-1 rounded-2xl border border-slate-800 mb-6">
           <button
-            onClick={() => { setAuthMethod('phone'); setOtpSent(false); setErrorMsg(null); }}
-            className={`py-2 text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer ${
-              authMethod === 'phone' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Phone className="w-3.5 h-3.5" />
-            <span>মোবাইল ওটিপি (OTP)</span>
-          </button>
-          <button
-            onClick={() => { setAuthMethod('email'); setErrorMsg(null); }}
+            onClick={() => { setAuthMethod('email'); setErrorMsg(null); setSuccessNotice(null); }}
             className={`py-2 text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer ${
               authMethod === 'email' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
@@ -170,13 +243,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <Mail className="w-3.5 h-3.5" />
             <span>ইমেইল পাসওয়ার্ড</span>
           </button>
+          <button
+            onClick={() => { setAuthMethod('phone'); setOtpSent(false); setErrorMsg(null); setSuccessNotice(null); }}
+            className={`py-2 text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer ${
+              authMethod === 'phone' ? 'bg-red-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Phone className="w-3.5 h-3.5" />
+            <span>মোবাইল ওটিপি</span>
+          </button>
         </div>
 
-        {/* Google 1-Click Button */}
+        {/* Google 1-Click Button (Direct Supabase OAuth) */}
         <button
+          id="btn-google-oauth-login"
           onClick={handleGoogleLogin}
           disabled={isLoading}
-          className="w-full py-3 px-4 bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-2xl transition flex items-center justify-center space-x-2 text-sm shadow-md mb-5 cursor-pointer"
+          className="w-full py-3 px-4 bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-2xl transition flex items-center justify-center space-x-2 text-sm shadow-md mb-5 cursor-pointer disabled:opacity-50"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -197,6 +280,92 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
+        )}
+
+        {successNotice && (
+          <div className="mb-4 p-3 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-xs text-emerald-300 flex items-center space-x-2">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{successNotice}</span>
+          </div>
+        )}
+
+        {/* Tab: Email / Password (Login & SignUp) */}
+        {authMethod === 'email' && (
+          <form onSubmit={handleEmailPasswordSubmit} className="space-y-4">
+            {isSignUpMode && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">আপনার নাম (Full Name)</label>
+                <input
+                  type="text"
+                  placeholder="যেমন: তানভীর আহমেদ"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">ইমেইল এড্রেস</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">পাসওয়ার্ড</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <button
+              id={isSignUpMode ? 'btn-supabase-signup' : 'btn-supabase-login'}
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-2xl transition text-sm shadow-lg shadow-red-600/20 cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50"
+            >
+              {isLoading ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : isSignUpMode ? (
+                <>
+                  <UserPlus className="w-4 h-4" />
+                  <span>রেজিস্ট্রেশন সম্পন্ন করুন</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4" />
+                  <span>লগইন করুন</span>
+                </>
+              )}
+            </button>
+
+            {/* Toggle Login / Register mode */}
+            <div className="pt-2 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignUpMode(!isSignUpMode);
+                  setErrorMsg(null);
+                  setSuccessNotice(null);
+                }}
+                className="text-xs text-slate-400 hover:text-red-400 transition cursor-pointer underline underline-offset-4"
+              >
+                {isSignUpMode
+                  ? 'ইতিমধ্যে অ্যাকাউন্ট আছে? এখানে লগইন করুন'
+                  : 'নতুন শিক্ষার্থী? নতুন অ্যাকাউন্ট খুলুন'}
+              </button>
+            </div>
+          </form>
         )}
 
         {/* Tab: Phone Number + OTP */}
@@ -270,41 +439,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             )}
           </div>
         )}
-
-        {/* Tab: Email / Password */}
-        {authMethod === 'email' && (
-          <form onSubmit={handleEmailPasswordLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">ইমেইল এড্রেস</label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">পাসওয়ার্ড</label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-2xl transition text-sm shadow-lg shadow-red-600/20 cursor-pointer flex items-center justify-center space-x-2"
-            >
-              {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>লগইন করুন</span>}
-            </button>
-          </form>
-        )}
       </div>
     </div>
   );
 };
+
 export default AuthModal;
