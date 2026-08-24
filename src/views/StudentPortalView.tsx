@@ -1,0 +1,819 @@
+import React, { useState, useEffect } from 'react';
+import {
+  BookOpen,
+  Award,
+  Clock,
+  CheckCircle,
+  BarChart3,
+  ShieldCheck,
+  Download,
+  Calendar,
+  Settings,
+  CreditCard,
+  Crown,
+  Sparkles,
+  LogOut,
+  Save,
+  CheckCircle2,
+  ExternalLink,
+  ChevronRight,
+  UserCheck,
+  Phone,
+  Mail,
+  Flame,
+  GraduationCap,
+  FileText
+} from 'lucide-react';
+import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
+import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
+import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
+
+interface StudentPortalViewProps {
+  initialTab?: 'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription';
+  onNavigate?: (view: string) => void;
+}
+
+const MOCK_COURSES: Course[] = [
+  {
+    id: 'c1',
+    title: 'Minna no Nihongo I (Grammar & Sentence Mastery)',
+    titleJa: 'みんなの日本語 初級I 文法',
+    level: 'N5',
+    progressPercent: 76,
+    totalLessons: 25,
+    completedLessons: 19,
+    currentLessonTitle: 'Lesson 20: Plain Form Conjugation (普通形)',
+    category: 'GRAMMAR',
+  },
+  {
+    id: 'c2',
+    title: 'Essential 100 Kanji & Radicals Workshop',
+    titleJa: '漢字100字と部首マスター',
+    level: 'N5',
+    progressPercent: 92,
+    totalLessons: 12,
+    completedLessons: 11,
+    currentLessonTitle: 'Set 12: Directional & Calendar Kanji',
+    category: 'KANJI',
+  },
+  {
+    id: 'c3',
+    title: 'Shadowing: Real Japanese Workplace Conversations',
+    titleJa: 'シャドーイング 日本語会話',
+    level: 'N5',
+    progressPercent: 60,
+    totalLessons: 15,
+    completedLessons: 9,
+    currentLessonTitle: 'Dialogue 10: Arubaito Greetings & Polite Forms',
+    category: 'CONVERSATION',
+  },
+  {
+    id: 'c4',
+    title: 'JLPT N5 Official Listening Masterclass',
+    titleJa: 'JLPT N5 聴解マスター',
+    level: 'N5',
+    progressPercent: 45,
+    totalLessons: 20,
+    completedLessons: 9,
+    currentLessonTitle: 'Section 4: Task-Based Listening & Directions',
+    category: 'GRAMMAR',
+  }
+];
+
+const MOCK_ASSESSMENTS: AssessmentRecord[] = [
+  {
+    id: 'a1',
+    examName: 'JLPT N5 Diagnostic Mock Exam 1',
+    date: '2026-07-15',
+    score: 154,
+    maxScore: 180,
+    passed: true,
+    breakdown: { languageKnowledge: 52, reading: 54, listening: 48 },
+  },
+  {
+    id: 'a2',
+    examName: 'Kanji & Vocabulary Speed Benchmark (N5)',
+    date: '2026-08-01',
+    score: 95,
+    maxScore: 100,
+    passed: true,
+    breakdown: { languageKnowledge: 95, reading: 0, listening: 0 },
+  },
+  {
+    id: 'a3',
+    examName: 'Minna no Nihongo Lesson 1-15 Comprehensive Midterm',
+    date: '2026-08-18',
+    score: 168,
+    maxScore: 180,
+    passed: true,
+    breakdown: { languageKnowledge: 58, reading: 56, listening: 54 },
+  }
+];
+
+export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
+  initialTab = 'dashboard',
+  onNavigate
+}) => {
+  const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState<
+    'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription'
+  >(initialTab);
+
+  useEffect(() => {
+    if (initialTab) setActiveTab(initialTab);
+  }, [initialTab]);
+
+  // Form State for Profile Customization
+  const [name, setName] = useState(user?.name || 'Md. Tanvir Kabir Biplob');
+  const [nameJa, setNameJa] = useState(user?.nameJa || 'タンビル・カビル・ビプロブ');
+  const [email, setEmail] = useState(user?.email || 'mdtanvirkabirbiplob@gmail.com');
+  const [phone, setPhone] = useState(user?.phone || '+880 17555-34997');
+  const [currentLevel, setCurrentLevel] = useState<'N5' | 'N4' | 'N3' | 'N2' | 'N1'>(user?.currentLevel || 'N5');
+  const [targetExam, setTargetExam] = useState(user?.targetExam || 'JLPT N5 December Session');
+  const [targetExamDate, setTargetExamDate] = useState(user?.targetExamDate || '2026-12-06');
+  const [assignedTeacher, setAssignedTeacher] = useState(user?.assignedTeacher || 'Sensei Abdur Razzak');
+  const [profileSavedMsg, setProfileSavedMsg] = useState(false);
+
+  // Subscription Selection State
+  const [selectedPlanId, setSelectedPlanId] = useState<'free' | 'starter' | 'pro' | 'vip'>(
+    (subscriptionDetails?.planId as any) || 'pro'
+  );
+  const [selectedPaymentProvider, setSelectedPaymentProvider] = useState<'bkash' | 'sslcommerz'>('bkash');
+  const [subUpdatedMsg, setSubUpdatedMsg] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setNameJa(user.nameJa || '');
+      setEmail(user.email || '');
+      setPhone(user.phone || '+880 17555-34997');
+      setCurrentLevel(user.currentLevel || 'N5');
+      setTargetExam(user.targetExam || 'JLPT N5 December Session');
+      setTargetExamDate(user.targetExamDate || '2026-12-06');
+      setAssignedTeacher(user.assignedTeacher || 'Sensei Abdur Razzak');
+    }
+  }, [user]);
+
+  const handleProfileSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateProfile({ name, nameJa, email, phone, currentLevel, targetExam, targetExamDate, assignedTeacher });
+    setProfileSavedMsg(true);
+    setTimeout(() => setProfileSavedMsg(false), 3500);
+  };
+
+  const handleSubscriptionChange = () => {
+    updateSubscription(selectedPlanId, selectedPaymentProvider);
+    setSubUpdatedMsg(true);
+    setTimeout(() => setSubUpdatedMsg(false), 3500);
+  };
+
+  const studentData = user || {
+    id: 'DILS-2026-N5042',
+    nihomiAccountId: 'NHM-880-9972',
+    name: 'Md. Tanvir Kabir Biplob',
+    nameJa: 'タンビル・カビル・ビプロブ',
+    email: 'mdtanvirkabirbiplob@gmail.com',
+    avatarUrl: '',
+    enrolledDate: '2026-01-10',
+    currentLevel: 'N5' as const,
+    status: 'ACTIVE' as const,
+    streakDays: 18,
+    totalStudyHours: 124,
+    assignedTeacher: 'Sensei Abdur Razzak',
+    targetExam: 'JLPT N5 December Session',
+    targetExamDate: '2026-12-06',
+    role: 'student' as const,
+    planId: 'pro'
+  };
+
+  const MOCK_CERTIFICATES: CertificateRecord[] = [
+    {
+      id: 'cert-1',
+      certificateNumber: 'NHM-DILS-2026-0814',
+      studentName: studentData.name,
+      studentId: studentData.id,
+      courseTitle: `Foundational Japanese Language & Culture (150 Hours)`,
+      level: studentData.currentLevel,
+      issueDate: '2026-08-15',
+      verificationUrl: `https://nihomi.com/verify/NHM-DILS-2026-0814`,
+      qrCodeUrl: '',
+      authorizedSignatory: 'Dhaka International Language School & Nihomi Academic Council',
+    },
+    {
+      id: 'cert-2',
+      certificateNumber: 'NHM-DILS-2026-0702',
+      studentName: studentData.name,
+      studentId: studentData.id,
+      courseTitle: `Hiragana, Katakana & Pronunciation Benchmark`,
+      level: 'N5',
+      issueDate: '2026-02-28',
+      verificationUrl: `https://nihomi.com/verify/NHM-DILS-2026-0702`,
+      qrCodeUrl: '',
+      authorizedSignatory: 'Sensei Abdur Razzak, DILS Academic Dean',
+    }
+  ];
+
+  return (
+    <div className="bg-[#FAFAFA] min-h-screen pb-20">
+      {/* Top Banner / Student Identity Bar */}
+      <div className="bg-slate-900 text-white border-b border-slate-800 py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-14 h-14 rounded-2xl bg-slate-800 border-2 border-red-500/60 flex items-center justify-center text-xl font-extrabold text-white shadow-md">
+              {studentData.name.charAt(0)}
+            </div>
+            <div>
+              <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+                <h1 className="text-lg font-bold tracking-tight text-white">{studentData.name}</h1>
+                <span className="text-xs text-slate-400 font-medium">({studentData.nameJa})</span>
+                <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded">
+                  {studentData.status}
+                </span>
+                <span className="px-2 py-0.5 bg-red-500/20 text-red-300 text-[10px] font-bold rounded uppercase border border-red-500/30">
+                  {subscriptionDetails?.planName || 'Nihomi Pro'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Student ID: <span className="font-mono text-slate-200">{studentData.id}</span> • Account ID:{' '}
+                <span className="font-mono text-slate-200">{studentData.nihomiAccountId}</span> • Level:{' '}
+                <span className="font-bold text-red-400">{studentData.currentLevel}</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center flex-wrap gap-2.5">
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border cursor-pointer ${
+                activeTab === 'settings'
+                  ? 'bg-white text-slate-900 border-white shadow-sm'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+              }`}
+            >
+              <Settings className="w-3.5 h-3.5 text-slate-400" />
+              <span>প্রোফাইল সেটিংস</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('subscription')}
+              className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border cursor-pointer ${
+                activeTab === 'subscription'
+                  ? 'bg-red-600 text-white border-red-600 shadow-sm'
+                  : 'bg-red-950/60 hover:bg-red-900/60 text-red-200 border-red-800/60'
+              }`}
+            >
+              <Crown className="w-3.5 h-3.5 text-red-400" />
+              <span>সাবস্ক্রিপশন পরিবর্তন</span>
+            </button>
+
+            <button
+              onClick={() => {
+                logout();
+                if (onNavigate) onNavigate('landing');
+              }}
+              className="inline-flex items-center space-x-1 px-2.5 py-1.5 text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>লগ আউট</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="bg-white border-b border-slate-200 sticky top-16 z-40 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto py-3 text-xs font-semibold">
+            {[
+              { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
+              { id: 'courses', label: 'Curriculum & Lessons', icon: BookOpen },
+              { id: 'assessments', label: 'Exams & Scorecards', icon: Clock },
+              { id: 'idcard', label: 'Digital Student ID', icon: ShieldCheck },
+              { id: 'certificates', label: 'Certificates & Records', icon: Award },
+              { id: 'settings', label: '⚙️ Profile Settings', icon: Settings },
+              { id: 'subscription', label: '💳 Subscription & Billing', icon: CreditCard },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`whitespace-nowrap pb-1 transition-all flex items-center space-x-1.5 cursor-pointer ${
+                    activeTab === tab.id
+                      ? 'text-slate-900 border-b-2 border-slate-900 font-bold'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Tab Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* DASHBOARD TAB */}
+        {activeTab === 'dashboard' && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-semibold text-slate-500">Current Target</span>
+                  <span className="px-2 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded">
+                    {studentData.currentLevel}
+                  </span>
+                </div>
+                <div className="text-base font-bold text-slate-900">{studentData.targetExam}</div>
+                <div className="text-xs text-slate-500 mt-1 flex items-center space-x-1">
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Exam: {studentData.targetExamDate}</span>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-semibold text-slate-500">Active Subscription</span>
+                  <Crown className="w-4 h-4 text-amber-500" />
+                </div>
+                <div className="text-base font-bold text-slate-900">{subscriptionDetails?.planName || 'Nihomi Pro'}</div>
+                <div className="text-xs text-emerald-600 mt-1 font-semibold flex items-center space-x-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Valid until {subscriptionDetails?.validUntil || '2026-12-31'}</span>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-semibold text-slate-500">AI Sensei Credits</span>
+                  <Sparkles className="w-4 h-4 text-red-500" />
+                </div>
+                <div className="text-base font-bold text-slate-900">{subscriptionDetails?.aiCreditsRemaining ?? 150} Queries</div>
+                <button
+                  onClick={() => setActiveTab('subscription')}
+                  className="text-xs text-red-600 hover:text-red-700 font-bold mt-1 text-left block cursor-pointer"
+                >
+                  + Instant bKash Top-Up
+                </button>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-semibold text-slate-500">Academic Desk</span>
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                </div>
+                <div className="text-base font-bold text-slate-900">Dhaka Int'l Language School</div>
+                <div className="text-xs text-slate-500 mt-1">{studentData.assignedTeacher}</div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 mb-4">Active Course Progress</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {MOCK_COURSES.map((course) => (
+                  <div key={course.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                          {course.level} • {course.category}
+                        </span>
+                        <h4 className="font-bold text-sm text-slate-900 mt-1">{course.title}</h4>
+                        <p className="text-xs text-slate-400">{course.titleJa}</p>
+                      </div>
+                      <span className="text-sm font-extrabold text-red-600">{course.progressPercent}%</span>
+                    </div>
+
+                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-red-600 h-2 rounded-full transition-all"
+                        style={{ width: `${course.progressPercent}%` }}
+                      ></div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+                      <span>{course.completedLessons}/{course.totalLessons} Lessons Completed</span>
+                      <span className="font-medium text-slate-700 truncate max-w-[200px]">{course.currentLessonTitle}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-slate-900">Digital ID Card & Institutional Verification</h3>
+                <button
+                  onClick={() => setActiveTab('idcard')}
+                  className="text-xs text-red-600 hover:text-red-700 font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>সম্পূর্ণ আইডি কার্ড দেখুন</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <DigitalStudentIdCard student={studentData} />
+            </div>
+          </div>
+        )}
+
+        {/* COURSES TAB */}
+        {activeTab === 'courses' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Curriculum & Learning Tracks</h2>
+                <p className="text-xs text-slate-500">Dhaka International Language School & Nihomi JLPT Syllabus</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {MOCK_COURSES.map((course) => (
+                <div key={course.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
+                        Level {course.level}
+                      </span>
+                      <h3 className="font-bold text-base text-slate-900 mt-2">{course.title}</h3>
+                      <p className="text-xs text-slate-500 font-medium">{course.titleJa}</p>
+                    </div>
+                    <span className="text-base font-extrabold text-red-600">{course.progressPercent}%</span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs text-slate-600 font-medium">
+                      <span>প্রগ্রেস</span>
+                      <span>{course.completedLessons} / {course.totalLessons} অধ্যায় শেষ</span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                      <div className="bg-red-600 h-2.5 rounded-full" style={{ width: `${course.progressPercent}%` }}></div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-bold block">Current Lesson</span>
+                      <span className="font-semibold">{course.currentLessonTitle}</span>
+                    </div>
+                    <button
+                      onClick={() => onNavigate && onNavigate('courses')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                    >
+                      চালিয়ে যান
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ASSESSMENTS TAB */}
+        {activeTab === 'assessments' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">JLPT Diagnostic Mock Exams & Scorecards</h2>
+              <p className="text-xs text-slate-500">Official scoring breakdown following the Japan Foundation evaluation matrix</p>
+            </div>
+
+            <div className="space-y-4">
+              {MOCK_ASSESSMENTS.map((exam) => (
+                <div key={exam.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded">
+                        PASSED
+                      </span>
+                      <h4 className="font-bold text-sm text-slate-900">{exam.examName}</h4>
+                    </div>
+                    <p className="text-xs text-slate-400">তারিখ: {exam.date}</p>
+                    <div className="flex items-center gap-4 text-xs text-slate-600 mt-2">
+                      <span>Language Knowledge: <strong>{exam.breakdown.languageKnowledge}/60</strong></span>
+                      <span>Reading: <strong>{exam.breakdown.reading}/60</strong></span>
+                      <span>Listening: <strong>{exam.breakdown.listening}/60</strong></span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="text-2xl font-black text-slate-900">{exam.score}<span className="text-sm font-normal text-slate-400">/{exam.maxScore}</span></div>
+                      <span className="text-[10px] text-emerald-600 font-bold uppercase">Qualified N5</span>
+                    </div>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>স্কোরকার্ড</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* DIGITAL STUDENT ID TAB */}
+        {activeTab === 'idcard' && (
+          <div className="space-y-6">
+            <div className="text-center max-w-xl mx-auto space-y-1">
+              <h2 className="text-xl font-bold text-slate-900">Official Digital Student ID Card</h2>
+              <p className="text-xs text-slate-500">
+                Institutional ID provided in partnership with Dhaka International Language School. Verifiable by employers and embassy authorities.
+              </p>
+            </div>
+            <DigitalStudentIdCard student={studentData} />
+          </div>
+        )}
+
+        {/* CERTIFICATES TAB */}
+        {activeTab === 'certificates' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">Academic Certificates & Official Verification</h2>
+              <p className="text-xs text-slate-500">Authorized completion documents from Dhaka International Language School</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {MOCK_CERTIFICATES.map((cert) => (
+                <div key={cert.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                      {cert.certificateNumber}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-base text-slate-900">{cert.courseTitle}</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Issued: {cert.issueDate} • Level: {cert.level}</p>
+                    <p className="text-xs text-slate-400 mt-1">{cert.authorizedSignatory}</p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Verifiable Online</span>
+                    </span>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>সার্টিফিকেট ডাউনলোড</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SETTINGS TAB */}
+        {activeTab === 'settings' && (
+          <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">প্রোফাইল ও একাডেমিক তথ্য সম্পাদনা</h2>
+              <p className="text-xs text-slate-500">আপনার ডিজিটাল আইডি ও সার্টিফিকেটের তথ্য আপডেট করুন</p>
+            </div>
+
+            {profileSavedMsg && (
+              <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-xl flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>প্রোফাইল সফলভাবে আপডেট হয়েছে!</span>
+              </div>
+            )}
+
+            <form onSubmit={handleProfileSave} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">পূর্ণ নাম (English)</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">জাপানিজ নাম (Katakana)</label>
+                  <input
+                    type="text"
+                    value={nameJa}
+                    onChange={(e) => setNameJa(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">ইমেইল এড্রেস</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">মোবাইল নম্বর</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">বর্তমান JLPT লেভেল</label>
+                  <select
+                    value={currentLevel}
+                    onChange={(e) => setCurrentLevel(e.target.value as any)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                  >
+                    <option value="N5">JLPT N5</option>
+                    <option value="N4">JLPT N4</option>
+                    <option value="N3">JLPT N3</option>
+                    <option value="N2">JLPT N2</option>
+                    <option value="N1">JLPT N1</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">টার্গেট পরীক্ষা</label>
+                  <input
+                    type="text"
+                    value={targetExam}
+                    onChange={(e) => setTargetExam(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">পরীক্ষার তারিখ</label>
+                  <input
+                    type="date"
+                    value={targetExamDate}
+                    onChange={(e) => setTargetExamDate(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">বরাদ্দকৃত শিক্ষক / সেনসেই</label>
+                <input
+                  type="text"
+                  value={assignedTeacher}
+                  onChange={(e) => setAssignedTeacher(e.target.value)}
+                  className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-slate-900 font-medium"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Save className="w-4 h-4" />
+                <span>পরিবর্তন সংরক্ষণ করুন</span>
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* SUBSCRIPTION TAB */}
+        {activeTab === 'subscription' && (
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">সাবস্ক্রিপশন ও বিলিং ব্যবস্থাপনা</h2>
+              <p className="text-xs text-slate-500">আপনার বর্তমান প্ল্যান পরিবর্তন বা AI ক্রেডিট টপ-আপ করুন</p>
+            </div>
+
+            {subUpdatedMsg && (
+              <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-xl flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>সাবস্ক্রিপশন প্ল্যান সফলভাবে পরিবর্তন করা হয়েছে!</span>
+              </div>
+            )}
+
+            {/* Plan Selector Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {(Object.keys(PLAN_CONFIGS) as Array<'free' | 'starter' | 'pro' | 'vip'>).map((planKey) => {
+                const plan = PLAN_CONFIGS[planKey];
+                const isSelected = selectedPlanId === planKey;
+                const isCurrent = subscriptionDetails?.planId === planKey;
+
+                return (
+                  <div
+                    key={planKey}
+                    onClick={() => setSelectedPlanId(planKey)}
+                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer space-y-3 flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-red-600 bg-red-50/20 shadow-md ring-1 ring-red-600'
+                        : 'border-slate-200 bg-white hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{plan.planId}</span>
+                        {isCurrent && (
+                          <span className="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 font-bold text-[9px] rounded">
+                            CURRENT
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-bold text-sm text-slate-900">{plan.planName}</h4>
+                      <div className="text-lg font-black text-slate-900">
+                        ৳{plan.priceBDT} <span className="text-xs font-normal text-slate-400">/মাস</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600">{plan.aiCreditsRemaining} AI Sensei Queries/মাস</p>
+                      
+                      <ul className="text-[10px] text-slate-500 space-y-1 pt-2 border-t border-slate-100">
+                        {plan.features.slice(0, 3).map((f, i) => (
+                          <li key={i} className="flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3 text-red-500 flex-shrink-0" />
+                            <span className="truncate">{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <button
+                      className={`w-full py-1.5 text-xs font-bold rounded-lg transition ${
+                        isSelected ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-700'
+                      }`}
+                    >
+                      {isSelected ? 'নির্বাচিত' : 'বাছাই করুন'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Payment & Confirmation Box */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+              <h3 className="text-sm font-bold text-slate-900">পেমেন্ট মেথড বাছাই করুন</h3>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer p-3 border rounded-xl border-slate-200 hover:bg-slate-50">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="bkash"
+                    checked={selectedPaymentProvider === 'bkash'}
+                    onChange={() => setSelectedPaymentProvider('bkash')}
+                    className="text-red-600"
+                  />
+                  <span className="font-bold text-xs text-pink-600">bKash Payment</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer p-3 border rounded-xl border-slate-200 hover:bg-slate-50">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="sslcommerz"
+                    checked={selectedPaymentProvider === 'sslcommerz'}
+                    onChange={() => setSelectedPaymentProvider('sslcommerz')}
+                    className="text-red-600"
+                  />
+                  <span className="font-bold text-xs text-blue-600">SSLCommerz / Card</span>
+                </label>
+              </div>
+
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                <div>
+                  <span className="text-xs text-slate-500">টোটাল প্রতি মাসে:</span>
+                  <div className="text-base font-extrabold text-slate-900">
+                    ৳{PLAN_CONFIGS[selectedPlanId]?.priceBDT || 599} BDT
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => topUpCredits(50)}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition cursor-pointer"
+                  >
+                    +৫০ AI ক্রেডিট যোগ করুন
+                  </button>
+
+                  <button
+                    onClick={handleSubscriptionChange}
+                    className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition shadow-sm cursor-pointer"
+                  >
+                    সাবস্ক্রিপশন নিশ্চিত করুন
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
