@@ -598,26 +598,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               </button>
 
               {user ? (
-                <div className="flex items-center gap-3">
-                  <div
-                    id="student-profile-pill"
-                    onClick={() => handleNav('dashboard')}
-                    className="flex items-center gap-2 bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200/80 transition-colors"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-red-600 text-white font-bold text-xs flex items-center justify-center">
-                      {user.user_metadata?.full_name?.[0] || user.email?.[0]?.toUpperCase() || 'T'}
+                <div className="flex items-center gap-2">
+                  {/* User Name Badge */}
+                  <div className="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                    <div className="w-6 h-6 rounded-full bg-red-600 text-white font-bold text-xs flex items-center justify-center">
+                      {user.email ? user.email[0].toUpperCase() : 'T'}
                     </div>
-                    <span className="text-xs font-bold text-slate-900">
-                      {user.user_metadata?.full_name || user.email?.split('@')[0] || 'Tanvir-san'}
-                    </span>
-                    <span className="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">
-                      N5
+                    <span className="text-xs font-bold text-slate-800">
+                      {user.user_metadata?.full_name || 'Tanvir-san'}
                     </span>
                   </div>
+
+                  {/* Explicit Logout Button */}
                   <button
                     id="nav-direct-logout-btn"
-                    onClick={handleSignOut}
-                    className="px-3.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      if (logout) {
+                        await logout();
+                      }
+                      window.location.reload();
+                    }}
+                    className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all cursor-pointer"
                   >
                     লগ আউট
                   </button>
@@ -627,14 +629,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   <button
                     id="nav-login-btn"
                     onClick={() => setIsLoginModalOpen(true)}
-                    className="px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition cursor-pointer"
                   >
                     লগ ইন
                   </button>
                   <button
                     id="nav-register-btn"
                     onClick={() => setIsRegisterModalOpen(true)}
-                    className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-xs transition cursor-pointer"
+                    className="px-3.5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-xs transition cursor-pointer"
                   >
                     বিনামূল্যে শুরু করুন
                   </button>
