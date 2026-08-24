@@ -58,6 +58,7 @@ export interface CertificateRecord {
 }
 
 export interface AuthUser extends StudentProfile {
+  studentId?: string;
   role: 'student' | 'teacher' | 'admin';
   phone?: string;
   planId?: string;
@@ -68,6 +69,16 @@ export interface AuthUser extends StudentProfile {
   dailyGoalMinutes?: number;
   bio?: string;
   nativeLanguage?: string;
+}
+
+export interface GoogleUserProfile {
+  id: string;
+  name: string;
+  nameJa?: string;
+  email: string;
+  avatarUrl?: string;
+  currentLevel: string;
+  studentId: string;
 }
 
 export interface SubscriptionDetails {

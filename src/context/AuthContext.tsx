@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { StudentProfile, AuthUser, SubscriptionDetails } from '../types/nihomi';
+import type { StudentProfile, AuthUser, SubscriptionDetails, GoogleUserProfile } from '../types/nihomi';
 import { JLPTLevel, UserProfile, UserProgress, EntitlementFeature, PlanId } from '../types';
 import { supabase } from '../lib/supabase';
 
-export type { AuthUser, SubscriptionDetails };
+export type { AuthUser, SubscriptionDetails, GoogleUserProfile };
 
 export const PLAN_CONFIGS: Record<string, SubscriptionDetails> = {
   free: {
@@ -66,6 +66,7 @@ export const PLAN_CONFIGS: Record<string, SubscriptionDetails> = {
 
 export const DEFAULT_USER: AuthUser = {
   id: 'DILS-2026-N5042',
+  studentId: 'DILS-2026-N5042',
   nihomiAccountId: 'NHM-880-9972',
   name: 'Md. Tanvir Kabir Biplob',
   full_name: 'Md. Tanvir Kabir Biplob',
@@ -88,8 +89,26 @@ export const DEFAULT_USER: AuthUser = {
   planId: 'pro'
 };
 
+// গুগল JWT টোকেন থেকে আসল নাম, ইমেইল ও ছবি ডিকোড করার ফাংশন
+export function decodeGoogleJwt(token: string) {
+  try {
+    const base64Url = token.split('.')[1] || token;
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('JWT Decode Error:', e);
+    return null;
+  }
+}
+
 export interface AuthContextType {
-  user: AuthUser | null;
+  user: (AuthUser & GoogleUserProfile) | null;
   token: string | null;
   subscriptionDetails: any | null;
   isAuthModalOpen: boolean;
@@ -98,7 +117,9 @@ export interface AuthContextType {
   login: (email: string, pass?: string) => Promise<void>;
   register?: (data: any) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginWithGoogleCredential: (credentialResponse: string) => void;
   logout: () => void;
+  updateUserName: (newName: string) => void;
   updateProfile: (updatedData: Partial<AuthUser>) => void;
   updateSubscription: (planId: 'free' | 'starter' | 'pro' | 'vip', method?: 'bkash' | 'sslcommerz') => void;
   topUpCredits: (amount: number) => void;
@@ -121,7 +142,7 @@ export interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  user: DEFAULT_USER,
+  user: DEFAULT_USER as any,
   token: 'usr-student-001',
   subscriptionDetails: PLAN_CONFIGS['pro'],
   isAuthModalOpen: false,
@@ -129,7 +150,9 @@ const AuthContext = createContext<AuthContextType>({
   closeAuthModal: () => {},
   login: async () => {},
   loginWithGoogle: async () => {},
+  loginWithGoogleCredential: () => {},
   logout: () => {},
+  updateUserName: () => {},
   updateProfile: () => {},
   updateSubscription: () => {},
   topUpCredits: () => {},
@@ -137,12 +160,30 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(() => {
+  const [user, setUser] = useState<(AuthUser & GoogleUserProfile) | null>(() => {
     try {
-      const saved = localStorage.getItem('nihomi_auth_user');
-      return saved ? JSON.parse(saved) : DEFAULT_USER;
+      const googleSaved = localStorage.getItem('nihomi_google_user');
+      if (googleSaved) {
+        const parsed = JSON.parse(googleSaved);
+        return {
+          ...DEFAULT_USER,
+          ...parsed,
+          studentId: parsed.studentId || DEFAULT_USER.id,
+          id: parsed.id || DEFAULT_USER.id,
+        };
+      }
+      const authSaved = localStorage.getItem('nihomi_auth_user');
+      if (authSaved) {
+        const parsed = JSON.parse(authSaved);
+        return {
+          ...DEFAULT_USER,
+          ...parsed,
+          studentId: parsed.studentId || parsed.id || DEFAULT_USER.id,
+        };
+      }
+      return DEFAULT_USER as any;
     } catch {
-      return DEFAULT_USER;
+      return DEFAULT_USER as any;
     }
   });
 
@@ -161,6 +202,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
+  // পেজ লোড হওয়ার সময় URL হ্যাশ বা লোকাল স্টোরেজ চেক
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
+      const params = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = params.get('access_token');
+      if (accessToken) {
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.email) {
+              const studentId = `DILS-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+              const googleUser: AuthUser & GoogleUserProfile = {
+                ...DEFAULT_USER,
+                id: data.sub || `G-${Date.now()}`,
+                name: data.name || data.email.split('@')[0],
+                full_name: data.name || data.email.split('@')[0],
+                displayName: data.name || data.email.split('@')[0],
+                email: data.email,
+                avatarUrl: data.picture || '',
+                avatar: data.picture || '',
+                currentLevel: 'N5',
+                studentId,
+              };
+              setUser(googleUser);
+              localStorage.setItem('nihomi_google_user', JSON.stringify(googleUser));
+              localStorage.setItem('nihomi_auth_user', JSON.stringify(googleUser));
+              window.history.replaceState(null, '', window.location.pathname);
+            }
+          })
+          .catch(console.error);
+      }
+    }
+  }, []);
+
   // Sync Supabase Auth session on mount
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user: supaUser } }) => {
@@ -170,6 +247,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser((prev) => ({
           ...(prev || DEFAULT_USER),
           id: supaUser.id,
+          studentId: prev?.studentId || prev?.id || 'DILS-2026-N5042',
           name: fullName,
           full_name: fullName,
           displayName: fullName,
@@ -189,6 +267,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser((prev) => ({
           ...(prev || DEFAULT_USER),
           id: session.user.id,
+          studentId: prev?.studentId || prev?.id || 'DILS-2026-N5042',
           name: fullName,
           full_name: fullName,
           displayName: fullName,
@@ -207,9 +286,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (user) {
       localStorage.setItem('nihomi_auth_user', JSON.stringify(user));
+      localStorage.setItem('nihomi_google_user', JSON.stringify(user));
       localStorage.setItem('nihomi_auth_token', token || user.id);
     } else {
       localStorage.removeItem('nihomi_auth_user');
+      localStorage.removeItem('nihomi_google_user');
       localStorage.removeItem('nihomi_auth_token');
     }
   }, [user, token]);
@@ -225,6 +306,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
+  // গুগল সাইন-ইন সম্পন্ন হলে কল হবে
+  const loginWithGoogleCredential = (credential: string) => {
+    const payload = decodeGoogleJwt(credential);
+    if (payload && payload.email) {
+      const studentId = user?.studentId || `DILS-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      const googleUser: AuthUser & GoogleUserProfile = {
+        ...DEFAULT_USER,
+        id: payload.sub || `G-${Date.now()}`,
+        name: payload.name || payload.email.split('@')[0],
+        full_name: payload.name || payload.email.split('@')[0],
+        displayName: payload.name || payload.email.split('@')[0],
+        email: payload.email,
+        avatarUrl: payload.picture || '',
+        avatar: payload.picture || '',
+        currentLevel: 'N5',
+        studentId,
+      };
+      setUser(googleUser);
+      setToken('token-google-jwt-' + Date.now());
+      setSubscriptionDetails(PLAN_CONFIGS['pro']);
+      localStorage.setItem('nihomi_google_user', JSON.stringify(googleUser));
+      localStorage.setItem('nihomi_auth_user', JSON.stringify(googleUser));
+      setIsAuthModalOpen(false);
+    }
+  };
+
   const loginWithGoogle = async () => {
     try {
       await supabase.auth.signInWithOAuth({
@@ -234,28 +341,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
     } catch (err) {
-      console.warn('OAuth redirect failed, using local student identity fallback:', err);
+      console.warn('OAuth redirect fallback:', err);
     }
 
-    const googleUser: AuthUser = {
-      ...DEFAULT_USER,
-      name: 'Md. Tanvir Kabir Biplob',
-      full_name: 'Md. Tanvir Kabir Biplob',
-      displayName: 'Md. Tanvir Kabir Biplob',
-      email: 'mdtanvirkabirbiplob@gmail.com',
-      avatarUrl: 'https://lh3.googleusercontent.com/a/default-user',
-      avatar: 'https://lh3.googleusercontent.com/a/default-user'
-    };
-    setUser(googleUser);
-    setToken('token-google-' + Date.now());
-    setSubscriptionDetails(PLAN_CONFIGS['pro']);
-    setIsAuthModalOpen(false);
+    loginWithGoogleCredential(
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+        btoa(
+          JSON.stringify({
+            sub: '1029384756',
+            name: 'Md. Tanvir Kabir Biplob',
+            email: 'mdtanvirkabirbiplob@gmail.com',
+            picture: 'https://lh3.googleusercontent.com/a/default-user',
+          })
+        ) +
+        '.signature'
+    );
   };
 
   const login = async (email: string) => {
-    const loggedUser: AuthUser = {
+    const loggedUser: AuthUser & GoogleUserProfile = {
       ...DEFAULT_USER,
-      email: email || DEFAULT_USER.email
+      email: email || DEFAULT_USER.email,
+      studentId: DEFAULT_USER.studentId || DEFAULT_USER.id,
+      avatarUrl: DEFAULT_USER.avatarUrl || '',
     };
     setUser(loggedUser);
     setToken('token-email-' + Date.now());
@@ -263,14 +371,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (data: any) => {
-    const loggedUser: AuthUser = {
+    const loggedUser: AuthUser & GoogleUserProfile = {
       ...DEFAULT_USER,
       email: data.email || DEFAULT_USER.email,
       name: data.displayName || DEFAULT_USER.name,
       full_name: data.displayName || DEFAULT_USER.full_name,
       displayName: data.displayName || DEFAULT_USER.displayName,
       targetLevel: data.targetLevel || 'N5',
-      currentLevel: data.targetLevel || 'N5'
+      currentLevel: data.targetLevel || 'N5',
+      studentId: `DILS-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+      avatarUrl: '',
     };
     setUser(loggedUser);
     setToken('token-registered-' + Date.now());
@@ -282,7 +392,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setToken(null);
     localStorage.removeItem('nihomi_auth_user');
+    localStorage.removeItem('nihomi_google_user');
     localStorage.removeItem('nihomi_auth_token');
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.google?.accounts?.id) {
+      // @ts-ignore
+      window.google.accounts.id.disableAutoSelect();
+    }
+  };
+
+  const updateUserName = (newName: string) => {
+    if (!user) return;
+    const updated = { ...user, name: newName, full_name: newName, displayName: newName };
+    setUser(updated);
+    localStorage.setItem('nihomi_google_user', JSON.stringify(updated));
+    localStorage.setItem('nihomi_auth_user', JSON.stringify(updated));
   };
 
   const updateProfile = (updatedData: Partial<AuthUser>) => {
@@ -296,8 +420,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       targetLevel: updatedData.targetLevel || updatedData.currentLevel || user.targetLevel,
       currentLevel: updatedData.currentLevel || updatedData.targetLevel || user.currentLevel
     };
-    setUser(updated);
+    setUser(updated as any);
     localStorage.setItem('nihomi_auth_user', JSON.stringify(updated));
+    localStorage.setItem('nihomi_google_user', JSON.stringify(updated));
   };
 
   const updateSubscription = (planId: 'free' | 'starter' | 'pro' | 'vip', method: 'bkash' | 'sslcommerz' = 'bkash') => {
@@ -310,8 +435,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSubscriptionDetails(newConfig);
     if (user) {
       const updatedUser = { ...user, planId };
-      setUser(updatedUser);
+      setUser(updatedUser as any);
       localStorage.setItem('nihomi_auth_user', JSON.stringify(updatedUser));
+      localStorage.setItem('nihomi_google_user', JSON.stringify(updatedUser));
     }
     localStorage.setItem('nihomi_subscription', JSON.stringify(newConfig));
   };
@@ -371,7 +497,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         loginWithGoogle,
+        loginWithGoogleCredential,
         logout,
+        updateUserName,
         updateProfile,
         updateSubscription,
         topUpCredits,
