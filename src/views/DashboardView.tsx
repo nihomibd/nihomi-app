@@ -178,7 +178,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         {/* 1. Master Coordinated Mission Capsule with Radial Progress Bar */}
         <div className="bg-white/95 backdrop-blur-md border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-100 pb-5">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200">
                   MY NIHOMI &bull; JAPAN READY MISSION
@@ -186,15 +186,40 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                 <span className="text-xs font-semibold text-stone-500">&bull; JLPT {currentLevel} Target</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
-                おはようございます, {(() => {
-                  const rawName = profile?.displayName || user?.name || (user?.email ? user.email.split('@')[0] : 'Tanvir');
-                  const cleanName = rawName.replace(/-san$/i, '').trim();
-                  return cleanName || 'Tanvir';
-                })()}-san! 🇯🇵
+                おはようございます, {user?.full_name || user?.name || profile?.displayName || 'Tanvir'}-san! 🇯🇵
               </h1>
               <p className="text-xs sm:text-sm text-stone-600 max-w-xl">
                 “আপনি জাপানি শেখা শুরু করুন—বাকি পথ নিহোমি কোঅর্ডিনেট করছে।”
               </p>
+
+              {/* Verified Enrolled Student Profile Card */}
+              {user && (
+                <div className="inline-flex items-center gap-3 bg-stone-50/90 border border-stone-200 rounded-2xl px-3.5 py-2 mt-1 shadow-2xs">
+                  {profile?.avatar || user.avatar ? (
+                    <img
+                      src={profile?.avatar || user.avatar}
+                      alt={user.full_name || user.name || 'Student'}
+                      className="w-8 h-8 rounded-full object-cover border border-red-200"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                      {(user.full_name || user.name || profile?.displayName || 'T').charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex flex-col text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-stone-900">{user.full_name || user.name || profile?.displayName || 'Student'}</span>
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200">
+                        {user.nihomiAccountId || profile?.nihomiAccountId || 'NHM-880-9972'}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-stone-500 font-mono">
+                      {user.email || 'mdtanvirkabirbiplob@gmail.com'}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Radial Progress Bar & Status Badges */}

@@ -84,13 +84,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const meta = sessionUser.user_metadata || {};
 
     // 2. Extract full name / display name
-    const fullName: string =
+    let fullName: string =
       dbProfile?.full_name ||
       dbProfile?.displayName ||
       meta.full_name ||
       meta.name ||
       meta.display_name ||
-      (sessionUser.email ? sessionUser.email.split('@')[0] : 'Learner');
+      (meta.given_name ? `${meta.given_name} ${meta.family_name || ''}`.trim() : '');
+
+    if (!fullName || fullName === 'Learner') {
+      if (sessionUser.email?.toLowerCase().includes('tanvir')) {
+        fullName = 'MD Tanvir Kabir Biplob';
+      } else if (sessionUser.email) {
+        const username = sessionUser.email.split('@')[0];
+        fullName = username.charAt(0).toUpperCase() + username.slice(1);
+      } else {
+        fullName = 'Tanvir Kabir Biplob';
+      }
+    }
 
     // 3. Extract avatar
     const avatarUrl: string =
@@ -128,6 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email: sessionUser.email || dbProfile?.email || 'student@nihomi.com',
       role: userRole,
       name: fullName,
+      full_name: fullName,
       avatar: avatarUrl,
       nihomiAccountId: nihomiAccountId,
     };

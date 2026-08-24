@@ -46,6 +46,7 @@ import {
 import { DualTimeWeatherHeader } from './DualTimeWeatherHeader.js';
 import { VisionSenseiModal } from '../VisionSenseiModal.js';
 import { QuickDictionaryOverlay } from '../QuickDictionaryOverlay.js';
+import { supabase } from '../../lib/supabase.js';
 
 interface NavbarProps {
   currentView: string;
@@ -66,7 +67,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [isSavingTimer, setIsSavingTimer] = useState(false);
   const [timerToast, setTimerToast] = useState<string | null>(null);
 
-  // Persistent Study Session Timer
+  // Listen to Supabase Auth State in real-time
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session && !user) {
+        refreshProgress();
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, _session) => {
+      // Keep auth context updated
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
   const [studySeconds, setStudySeconds] = useState<number>(() => {
     try {
       const saved = localStorage.getItem('nihomi_study_seconds_v1');
@@ -659,15 +677,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                             className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
                           >
                             <LayoutDashboard className="w-3.5 h-3.5 text-red-600" />
-                            <span>{language === 'bn' ? 'স্টুডেন্ট ড্যাশবোর্ড' : 'Student Dashboard'}</span>
-                          </button>
-                          <button
-                            id="nav-user-my-courses-link"
-                            onClick={() => { setUserDropdownOpen(false); handleNav('courses'); }}
-                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
-                          >
-                            <BookOpen className="w-3.5 h-3.5 text-red-600" />
-                            <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
+                            <span>{language === 'bn' ? 'আমার ড্যাশবোর্ড' : 'My Dashboard'}</span>
                           </button>
                           <button
                             id="nav-user-digital-id-link"
@@ -676,6 +686,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                           >
                             <GraduationCap className="w-3.5 h-3.5 text-red-600" />
                             <span>{language === 'bn' ? 'ডিজিটাল আইডি কার্ড' : 'Digital Student ID'}</span>
+                          </button>
+                          <button
+                            id="nav-user-my-courses-link"
+                            onClick={() => { setUserDropdownOpen(false); handleNav('courses'); }}
+                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
+                          >
+                            <BookOpen className="w-3.5 h-3.5 text-red-600" />
+                            <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
                           </button>
                         </div>
 
@@ -864,14 +882,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
                 >
                   <LayoutDashboard className="w-4 h-4 text-red-600" />
-                  <span>{language === 'bn' ? 'স্টুডেন্ট ড্যাশবোর্ড' : 'Student Dashboard'}</span>
-                </button>
-                <button
-                  onClick={() => { setMobileMenuOpen(false); handleNav('courses'); }}
-                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
-                >
-                  <BookOpen className="w-4 h-4 text-red-600" />
-                  <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
+                  <span>{language === 'bn' ? 'আমার ড্যাশবোর্ড' : 'My Dashboard'}</span>
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); handleNav('passport'); }}
@@ -879,6 +890,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 >
                   <GraduationCap className="w-4 h-4 text-red-600" />
                   <span>{language === 'bn' ? 'ডিজিটাল আইডি কার্ড' : 'Digital Student ID'}</span>
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); handleNav('courses'); }}
+                  className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
+                >
+                  <BookOpen className="w-4 h-4 text-red-600" />
+                  <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); handleNav('flashcards'); }}

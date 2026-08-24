@@ -7,6 +7,7 @@ export interface User {
   email: string;
   role: UserRole;
   name?: string;
+  full_name?: string;
   avatar?: string;
   nihomiAccountId?: string;
 }
