@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext.js';
 import { useLanguage, Language } from '../../context/LanguageContext.js';
@@ -58,23 +60,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
-  // Supabase User State & Listener
+  // Supabase User State & Real-time Listener
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    // Check existing session on mount
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user ?? null);
     });
+
+    // Listen for login / logout state changes in real time
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
+
     return () => subscription.unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    setUser(null);
     if (logout) {
       await logout();
     }
@@ -592,31 +599,25 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
 
               {user ? (
                 <div className="flex items-center gap-3">
-                  {/* Logged in Student Pill */}
                   <div
                     id="student-profile-pill"
                     onClick={() => handleNav('dashboard')}
                     className="flex items-center gap-2 bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200/80 transition-colors"
-                    title="স্টুডেন্ট ড্যাশবোর্ড"
                   >
                     <div className="w-7 h-7 rounded-full bg-red-600 text-white font-bold text-xs flex items-center justify-center">
                       {user.user_metadata?.full_name?.[0] || user.email?.[0]?.toUpperCase() || 'T'}
                     </div>
-                    <div className="text-left">
-                      <div className="text-xs font-bold text-slate-900 leading-tight">
-                        {user.user_metadata?.full_name || 'Tanvir Kabir'}
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono">
-                        NHM-880-9972 • N5
-                      </div>
-                    </div>
+                    <span className="text-xs font-bold text-slate-900">
+                      {user.user_metadata?.full_name || user.email?.split('@')[0] || 'Tanvir-san'}
+                    </span>
+                    <span className="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">
+                      N5
+                    </span>
                   </div>
-
-                  {/* Direct Logout Button */}
                   <button
                     id="nav-direct-logout-btn"
                     onClick={handleSignOut}
-                    className="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
                   >
                     লগ আউট
                   </button>
