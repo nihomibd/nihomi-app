@@ -54,9 +54,49 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
-  const { user, profile, progress, logout, updateProfile, refreshProgress, openLoginModal } = useAuth();
+  const { user: authUser, profile, progress, logout, updateProfile, refreshProgress, openLoginModal } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+
+  // Supabase User State & Listener
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    if (logout) {
+      await logout();
+    }
+    window.location.href = '/';
+  };
+
+  const setIsLoginModalOpen = (open: boolean) => {
+    if (open && openLoginModal) {
+      openLoginModal('login');
+    } else if (open) {
+      handleNav('auth', { mode: 'login' });
+    }
+  };
+
+  const setIsRegisterModalOpen = (open: boolean) => {
+    if (open && openLoginModal) {
+      openLoginModal('register');
+    } else if (open) {
+      handleNav('auth', { mode: 'register' });
+    }
+  };
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [levelDropdownOpen, setLevelDropdownOpen] = useState(false);
@@ -66,25 +106,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [isDictionaryOpen, setIsDictionaryOpen] = useState(false);
   const [isSavingTimer, setIsSavingTimer] = useState(false);
   const [timerToast, setTimerToast] = useState<string | null>(null);
-
-  // Listen to Supabase Auth State in real-time
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session && !user) {
-        refreshProgress();
-      }
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, _session) => {
-      // Keep auth context updated
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
   const [studySeconds, setStudySeconds] = useState<number>(() => {
     try {
       const saved = localStorage.getItem('nihomi_study_seconds_v1');
@@ -570,229 +591,51 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               </button>
 
               {user ? (
-                <>
+                <div className="flex items-center gap-3">
+                  {/* Logged in Student Pill */}
                   <div
-                    className="flex items-center space-x-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 font-bold cursor-pointer"
-                    onClick={() => handleNav('progress')}
-                    id="nav-streak-badge"
+                    id="student-profile-pill"
+                    onClick={() => handleNav('dashboard')}
+                    className="flex items-center gap-2 bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200/80 transition-colors"
+                    title="স্টুডেন্ট ড্যাশবোর্ড"
                   >
-                    <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-600" />
-                    <span>{progress?.currentStreak || 1}d</span>
+                    <div className="w-7 h-7 rounded-full bg-red-600 text-white font-bold text-xs flex items-center justify-center">
+                      {user.user_metadata?.full_name?.[0] || user.email?.[0]?.toUpperCase() || 'T'}
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-bold text-slate-900 leading-tight">
+                        {user.user_metadata?.full_name || 'Tanvir Kabir'}
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-mono">
+                        NHM-880-9972 • N5
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="relative">
-                    <button
-                      id="level-switcher-btn"
-                      onClick={() => setLevelDropdownOpen(!levelDropdownOpen)}
-                      className="flex items-center space-x-1 px-2.5 py-1 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-bold hover:bg-red-100 cursor-pointer"
-                    >
-                      <span>JLPT {profile?.targetLevel || 'N5'}</span>
-                      <ChevronDown className="w-3 h-3" />
-                    </button>
-                    {levelDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-36 bg-white border border-stone-200 rounded-2xl shadow-lg py-1.5 z-50">
-                        {(['N5', 'N4', 'N3'] as JLPTLevel[]).map((lvl) => (
-                          <button
-                            key={lvl}
-                            onClick={() => handleLevelChange(lvl)}
-                            className="w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-stone-50 flex items-center justify-between cursor-pointer"
-                          >
-                            <span>JLPT {lvl}</span>
-                            {profile?.targetLevel === lvl && <CheckCircle2 className="w-3.5 h-3.5 text-red-600" />}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="relative">
-                    <button
-                      id="user-menu-btn"
-                      onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center space-x-2 p-1.5 pr-3 rounded-2xl hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs transition cursor-pointer shadow-xs bg-white"
-                      title="Student Profile & Menu"
-                    >
-                      {profile?.avatar || user.avatar ? (
-                        <img
-                          src={profile?.avatar || user.avatar}
-                          alt={profile?.displayName || user.name || 'Student'}
-                          className="w-7 h-7 rounded-full object-cover border border-red-200"
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                          {(profile?.displayName || user.name || 'S').charAt(0).toUpperCase()}
-                        </div>
-                      )}
-                      <div className="flex flex-col text-left">
-                        <span className="max-w-[90px] truncate text-xs font-bold text-stone-900 leading-tight">
-                          {profile?.displayName || user.name || 'Learner'}
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-red-600 leading-tight">
-                          {user.nihomiAccountId || profile?.nihomiAccountId || `NHM-${user.id.slice(0, 6).toUpperCase()}`}
-                        </span>
-                      </div>
-                      <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
-                    </button>
-
-                    {userDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-64 bg-white border border-stone-200 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in">
-                        {/* Student Badge Card Header */}
-                        <div className="px-4 py-3 border-b border-stone-100 bg-stone-50/80 rounded-t-2xl">
-                          <div className="flex items-center space-x-2.5 mb-1.5">
-                            {profile?.avatar || user.avatar ? (
-                              <img
-                                src={profile?.avatar || user.avatar}
-                                alt={profile?.displayName || user.name || 'Student'}
-                                className="w-9 h-9 rounded-full object-cover border border-red-200"
-                                referrerPolicy="no-referrer"
-                              />
-                            ) : (
-                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                {(profile?.displayName || user.name || 'S').charAt(0).toUpperCase()}
-                              </div>
-                            )}
-                            <div className="min-w-0 flex-1">
-                              <p className="text-xs font-bold text-stone-900 truncate">
-                                {profile?.displayName || user.name || 'Learner'}
-                              </p>
-                              <p className="text-[11px] text-stone-500 truncate">{user.email}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between mt-1 pt-1 border-t border-stone-200/60">
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-red-100 text-red-700 font-bold border border-red-200">
-                              {user.nihomiAccountId || profile?.nihomiAccountId || `NHM-${user.id.slice(0, 6).toUpperCase()}`}
-                            </span>
-                            <span className="text-[10px] px-2 py-0.5 rounded-md bg-stone-200 text-stone-700 font-bold uppercase">
-                              {user.role}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Primary Required Navigation Items */}
-                        <div className="py-1">
-                          <button
-                            id="nav-user-student-dashboard-link"
-                            onClick={() => { setUserDropdownOpen(false); handleNav('dashboard'); }}
-                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
-                          >
-                            <LayoutDashboard className="w-3.5 h-3.5 text-red-600" />
-                            <span>{language === 'bn' ? 'আমার ড্যাশবোর্ড' : 'My Dashboard'}</span>
-                          </button>
-                          <button
-                            id="nav-user-digital-id-link"
-                            onClick={() => { setUserDropdownOpen(false); handleNav('passport'); }}
-                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
-                          >
-                            <GraduationCap className="w-3.5 h-3.5 text-red-600" />
-                            <span>{language === 'bn' ? 'ডিজিটাল আইডি কার্ড' : 'Digital Student ID'}</span>
-                          </button>
-                          <button
-                            id="nav-user-my-courses-link"
-                            onClick={() => { setUserDropdownOpen(false); handleNav('courses'); }}
-                            className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
-                          >
-                            <BookOpen className="w-3.5 h-3.5 text-red-600" />
-                            <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
-                          </button>
-                        </div>
-
-                        <div className="border-t border-stone-100 my-1"></div>
-
-                        {/* Additional Platform Features */}
-                        <div className="py-1">
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('profile'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
-                            <UserIcon className="w-3.5 h-3.5 text-stone-400" />
-                            <span>Profile & Goals</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('badges'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
-                            <Award className="w-3.5 h-3.5 text-amber-500" />
-                            <span>Milestone Badges (মাইলস্টোন)</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('flashcards'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
-                            <Layers className="w-3.5 h-3.5 text-red-600" />
-                            <span>Custom Flashcard Decks</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('vocabulary'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700">
-                            <Volume2 className="w-3.5 h-3.5 text-red-600" />
-                            <span>Vocab Bank & Audio</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('japan-twin'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-japan-twin-link">
-                            <Sparkles className="w-3.5 h-3.5 text-red-600" />
-                            <span>JapanTwin™ (Tokyo Simulator)</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('ghost-mode'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-ghost-mode-link">
-                            <History className="w-3.5 h-3.5 text-purple-600" />
-                            <span>Ghost Mode™ (Mistake Recovery)</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('day1-blueprint'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-day1-blueprint-link">
-                            <Plane className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Day-1 Arrival Blueprint™</span>
-                          </button>
-                          <button onClick={() => { setUserDropdownOpen(false); handleNav('subscription'); }} className="w-full text-left px-4 py-1.5 text-xs hover:bg-stone-50 cursor-pointer flex items-center gap-2 text-stone-700" id="nav-user-subscription-link">
-                            <CreditCard className="w-3.5 h-3.5 text-red-600" />
-                            <span>Subscription & Invoices</span>
-                          </button>
-                          {(user.role === 'admin' || user.role === 'instructor') && (
-                            <button onClick={() => { setUserDropdownOpen(false); handleNav('instructor-portal'); }} className="w-full text-left px-4 py-1.5 text-xs text-purple-700 font-bold hover:bg-purple-50 cursor-pointer flex items-center gap-2">
-                              <Users className="w-3.5 h-3.5 text-purple-600" />
-                              <span>Instructor Workspace</span>
-                            </button>
-                          )}
-                          {user.role === 'admin' && (
-                            <button onClick={() => { setUserDropdownOpen(false); handleNav('admin'); }} className="w-full text-left px-4 py-1.5 text-xs text-red-600 font-bold hover:bg-red-50 cursor-pointer flex items-center gap-2" id="nav-admin-portal-link">
-                              <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
-                              <span>Founder Command Center</span>
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="border-t border-stone-100 my-1"></div>
-
-                        {/* Logout action */}
-                        <button
-                          onClick={async () => {
-                            setUserDropdownOpen(false);
-                            await logout();
-                            handleNav('home');
-                          }}
-                          className="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 cursor-pointer flex items-center gap-2 transition"
-                          id="nav-logout-btn"
-                        >
-                          <LogOut className="w-3.5 h-3.5" />
-                          <span>{language === 'bn' ? 'লগ আউট' : 'Logout'}</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center space-x-2">
+                  {/* Direct Logout Button */}
                   <button
-                    onClick={() => {
-                      if (openLoginModal) {
-                        openLoginModal('login');
-                      } else {
-                        handleNav('auth', { mode: 'login' });
-                      }
-                    }}
-                    className="px-3.5 py-2 text-xs font-bold text-stone-700 hover:bg-stone-100 rounded-xl cursor-pointer transition"
-                    id="nav-login-btn"
+                    id="nav-direct-logout-btn"
+                    onClick={handleSignOut}
+                    className="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                   >
-                    {t('login')}
+                    লগ আউট
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <button
+                    id="nav-login-btn"
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition cursor-pointer"
+                  >
+                    লগ ইন
                   </button>
                   <button
-                    onClick={() => {
-                      if (openLoginModal) {
-                        openLoginModal('register');
-                      } else {
-                        handleNav('auth', { mode: 'register' });
-                      }
-                    }}
-                    className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-xs cursor-pointer transition"
                     id="nav-register-btn"
+                    onClick={() => setIsRegisterModalOpen(true)}
+                    className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-xs transition cursor-pointer"
                   >
-                    {t('start_free')}
+                    বিনামূল্যে শুরু করুন
                   </button>
                 </div>
               )}
