@@ -101,12 +101,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       meta.avatar ||
       '';
 
-    // 4. Extract or generate Nihomi Account ID (e.g. NHM-XXXXXX)
-    const cleanIdPart = sessionUser.id.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+    // 4. Extract or generate Nihomi Account ID (e.g. NHM-880-9972)
+    const cleanDigits = sessionUser.id.replace(/[^0-9]/g, '');
+    const cleanIdPart = sessionUser.id.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const generatedId = cleanDigits.length >= 7
+      ? `NHM-${cleanDigits.slice(0, 3)}-${cleanDigits.slice(3, 7)}`
+      : `NHM-${cleanIdPart.slice(0, 3)}-${cleanIdPart.slice(3, 7).padEnd(4, '9')}`;
     const nihomiAccountId: string =
       dbProfile?.nihomi_account_id ||
       meta.nihomi_account_id ||
-      `NHM-${cleanIdPart.padEnd(6, '7')}`;
+      generatedId;
 
     // 5. Determine Role
     const userRole: UserRole =

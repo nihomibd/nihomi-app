@@ -186,7 +186,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                 <span className="text-xs font-semibold text-stone-500">&bull; JLPT {currentLevel} Target</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
-                おはようございます, {profile?.displayName || 'Learner'}! 🇯🇵
+                おはようございます, {(() => {
+                  const rawName = profile?.displayName || user?.name || (user?.email ? user.email.split('@')[0] : 'Tanvir');
+                  const cleanName = rawName.replace(/-san$/i, '').trim();
+                  return cleanName || 'Tanvir';
+                })()}-san! 🇯🇵
               </h1>
               <p className="text-xs sm:text-sm text-stone-600 max-w-xl">
                 “আপনি জাপানি শেখা শুরু করুন—বাকি পথ নিহোমি কোঅর্ডিনেট করছে।”

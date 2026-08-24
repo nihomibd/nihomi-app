@@ -659,7 +659,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                             className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
                           >
                             <LayoutDashboard className="w-3.5 h-3.5 text-red-600" />
-                            <span>Student Dashboard</span>
+                            <span>{language === 'bn' ? 'স্টুডেন্ট ড্যাশবোর্ড' : 'Student Dashboard'}</span>
                           </button>
                           <button
                             id="nav-user-my-courses-link"
@@ -667,7 +667,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                             className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
                           >
                             <BookOpen className="w-3.5 h-3.5 text-red-600" />
-                            <span>My Courses</span>
+                            <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
                           </button>
                           <button
                             id="nav-user-digital-id-link"
@@ -675,7 +675,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                             className="w-full text-left px-4 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 cursor-pointer flex items-center gap-2.5 transition"
                           >
                             <GraduationCap className="w-3.5 h-3.5 text-red-600" />
-                            <span>Digital ID</span>
+                            <span>{language === 'bn' ? 'ডিজিটাল আইডি কার্ড' : 'Digital Student ID'}</span>
                           </button>
                         </div>
 
@@ -742,7 +742,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                           id="nav-logout-btn"
                         >
                           <LogOut className="w-3.5 h-3.5" />
-                          <span>Logout</span>
+                          <span>{language === 'bn' ? 'লগ আউট' : 'Logout'}</span>
                         </button>
                       </div>
                     )}
@@ -864,21 +864,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
                 >
                   <LayoutDashboard className="w-4 h-4 text-red-600" />
-                  <span>Student Dashboard</span>
+                  <span>{language === 'bn' ? 'স্টুডেন্ট ড্যাশবোর্ড' : 'Student Dashboard'}</span>
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); handleNav('courses'); }}
                   className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
                 >
                   <BookOpen className="w-4 h-4 text-red-600" />
-                  <span>My Courses</span>
+                  <span>{language === 'bn' ? 'আমার কোর্স ও প্রগ্রেস' : 'My Courses & Progress'}</span>
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); handleNav('passport'); }}
                   className="w-full text-left px-3 py-2 text-xs font-bold text-stone-800 hover:bg-stone-50 rounded-xl flex items-center gap-2"
                 >
                   <GraduationCap className="w-4 h-4 text-red-600" />
-                  <span>Digital ID</span>
+                  <span>{language === 'bn' ? 'ডিজিটাল আইডি কার্ড' : 'Digital Student ID'}</span>
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); handleNav('flashcards'); }}
