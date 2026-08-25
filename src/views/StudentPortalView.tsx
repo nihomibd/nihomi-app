@@ -665,6 +665,26 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           </div>
         )}
 
+        {/* INFINITE CONCEPT STUDIO TAB (15 Dynamic Automated Formats) */}
+        {activeTab === 'infinite_concept' && (
+          <div className="space-y-6">
+            <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 space-y-2">
+              <div className="flex items-center space-x-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-amber-400">
+                  NIHOMI INFINITE LEARNING MATRIX™
+                </span>
+              </div>
+              <h2 className="text-xl font-bold font-serif">1 Concept → 15 Dynamic Learning Experiences</h2>
+              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                Transform any Japanese grammatical formula, essential kanji, or core vocabulary into micro-lessons, Leitner 3D flashcards, Tokyo part-time (Baito) dialogues, particle discrimination labs, and pitch accent shadowing drills.
+              </p>
+            </div>
+
+            <InfiniteConceptStudio />
+          </div>
+        )}
+
         {/* ASSESSMENTS TAB */}
         {activeTab === 'assessments' && (
           <div className="space-y-6">
