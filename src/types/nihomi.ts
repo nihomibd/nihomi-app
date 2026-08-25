@@ -27,7 +27,7 @@ export interface Course {
   totalLessons: number;
   completedLessons: number;
   currentLessonTitle: string;
-  category: 'GRAMMAR' | 'KANJI' | 'VOCABULARY' | 'CONVERSATION' | 'CULTURE';
+  category: 'GRAMMAR' | 'KANJI' | 'VOCABULARY' | 'CONVERSATION' | 'CULTURE' | 'READING' | 'INTERVIEW_PREP';
 }
 
 export interface AssessmentRecord {

@@ -8,10 +8,14 @@ export default defineConfig(() => {
     base: '/',
     plugins: [react(), tailwindcss()],
     resolve: {
+      dedupe: ['react', 'react-dom'],
       alias: [
         { find: /^@\/(.*)/, replacement: path.resolve(__dirname, 'src/$1') },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
       ],
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'lucide-react', 'motion', '@supabase/supabase-js'],
     },
     build: {
       outDir: 'dist',

@@ -1,0 +1,22 @@
+{
+  "short_name": "Nihomi",
+  "name": "NIHOMI — Japanese Learning Operating System",
+  "description": "Continuous Japanese Learning Ecosystem from your first Hiragana to real Japanese ability.",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FAF9F6",
+  "theme_color": "#0C0A09",
+  "display": "standalone",
+  "orientation": "portrait"
+}

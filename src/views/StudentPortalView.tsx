@@ -22,9 +22,13 @@ import {
   Mail,
   Flame,
   GraduationCap,
-  FileText
+  FileText,
+  Mic,
+  Volume2,
+  Radio
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
+import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 
@@ -133,6 +137,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const [targetExamDate, setTargetExamDate] = useState(user?.targetExamDate || '2026-12-06');
   const [assignedTeacher, setAssignedTeacher] = useState(user?.assignedTeacher || 'Sensei Abdur Razzak');
   const [profileSavedMsg, setProfileSavedMsg] = useState(false);
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
 
   // Subscription Selection State
   const [selectedPlanId, setSelectedPlanId] = useState<'free' | 'starter' | 'pro' | 'vip'>(
@@ -399,6 +404,38 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* AI Multimodal Speaking & Practice Studio */}
+            <div className="bg-linear-to-r from-red-950 via-slate-900 to-slate-950 text-white p-6 rounded-3xl border border-red-900/50 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center text-white shadow-lg shrink-0">
+                  <Mic className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2 flex-wrap">
+                    <h3 className="text-base font-extrabold text-white">
+                      Nihomi Voice Sensei (ভয়েস অ্যাকসেন্ট প্র্যাকটিস)
+                    </h3>
+                    <span className="px-2 py-0.5 bg-red-500/30 text-red-200 text-[10px] font-bold rounded-md uppercase border border-red-400/40">
+                      Tokyo Pitch AI
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 max-w-xl">
+                    প্র্যাকটিস করুন টোকিও সেলফ-ইন্ট্রোডাকশন, ক্যাফে অর্ডার ও শিনজুকুর দিকনির্দেশনা। রিয়েল-টাইম মোরা রিদম স্কোর ও বাংলা কোচিং ফিডব্যাক পান।
+                  </p>
+                </div>
+              </div>
+
+              <button
+                id="btn-portal-launch-voice-sensei"
+                type="button"
+                onClick={() => setIsVoiceActive(true)}
+                className="px-5 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-lg transition-all active:scale-95 flex items-center space-x-2 shrink-0 cursor-pointer"
+              >
+                <Mic className="w-4 h-4" />
+                <span>ভয়েস প্র্যাকটিস শুরু করুন</span>
+              </button>
             </div>
 
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
@@ -814,6 +851,14 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           </div>
         )}
       </div>
+
+      {/* Multimodal Voice Sensei Practice Modal */}
+      {isVoiceActive && (
+        <VoiceSenseiPractice
+          isOpen={isVoiceActive}
+          onClose={() => setIsVoiceActive(false)}
+        />
+      )}
     </div>
   );
 };

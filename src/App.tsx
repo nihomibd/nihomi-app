@@ -15,6 +15,9 @@ import { QuizRunnerView } from './views/QuizRunnerView';
 import { SubscriptionManagementView } from './views/SubscriptionManagementView';
 import { PricingView } from './views/PricingView';
 import { PassportVerificationView } from './views/PassportVerificationView';
+import { FounderCommandCenterView } from './views/FounderCommandCenterView';
+import { InstitutionPortalView } from './views/InstitutionPortalView';
+import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -27,7 +30,11 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] font-sans antialiased text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors">
+      {/* Offline Feedback & Service Worker Resilience Banner */}
+      <OfflineNotificationBanner />
+
+      {/* Main Header */}
       <Header currentView={currentView} onNavigate={handleNavigate} />
       
       <main className="flex-grow">
@@ -58,7 +65,7 @@ export const App: React.FC = () => {
         {currentView === 'documents' && (
           <DocumentsView />
         )}
-        {currentView === 'contact' && (
+        {(currentView === 'contact' || currentView === 'signature' || currentView === 'email-signature') && (
           <EmailSignatureView />
         )}
         {currentView === 'quizzes' && (
@@ -75,6 +82,12 @@ export const App: React.FC = () => {
         )}
         {currentView === 'passport' && (
           <PassportVerificationView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'institution' || currentView === 'academy' || currentView === 'dils') && (
+          <InstitutionPortalView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'founder' || currentView === 'admin' || currentView === 'command-center') && (
+          <FounderCommandCenterView onNavigate={handleNavigate} />
         )}
       </main>
 

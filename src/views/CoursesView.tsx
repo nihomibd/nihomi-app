@@ -1,328 +1,252 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext.js';
-import { apiRequest } from '../lib/api.js';
-import { Course, JLPTLevel, Module, LessonSummary } from '../types.js';
-import { NihomiBookReader } from '../components/NihomiBookReader.js';
-import { EbookShowcaseCarousel } from '../components/EbookShowcaseCarousel.js';
+import React, { useState } from 'react';
 import {
   BookOpen,
-  CheckCircle2,
-  Clock,
-  ArrowRight,
-  Play,
-  Layers,
-  ChevronDown,
-  ChevronUp,
   Sparkles,
-  Award
+  Award,
+  Clock,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  Layers,
+  GraduationCap,
+  Play,
+  FileText,
+  Filter,
+  Flame,
+  Volume2
 } from 'lucide-react';
+import { Course, JLPTLevel } from '../types/nihomi';
+import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
+import { useAuth } from '../context/AuthContext';
 
 interface CoursesViewProps {
-  initialCourseId?: string;
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-export const CoursesView: React.FC<CoursesViewProps> = ({ initialCourseId, onNavigate }) => {
-  const { profile, progress } = useAuth();
-  const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'All'>(profile?.targetLevel || 'N5');
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [courseModules, setCourseModules] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
-  const [showEBookReader, setShowEBookReader] = useState(false);
+const ALL_COURSES_CATALOG: Course[] = [
+  {
+    id: 'c1',
+    title: 'Minna no Nihongo I (Grammar & Sentence Patterns)',
+    titleJa: 'みんなの日本語 初級I 文法・文型マスター',
+    level: 'N5',
+    progressPercent: 76,
+    totalLessons: 25,
+    completedLessons: 19,
+    currentLessonTitle: 'Lesson 20: Plain Form Conjugation (普通形)',
+    category: 'GRAMMAR',
+  },
+  {
+    id: 'c2',
+    title: 'Essential 100 Foundational Kanji & Radicals Workshop',
+    titleJa: 'JLPT N5 必須漢字100字と部首書き順演習',
+    level: 'N5',
+    progressPercent: 92,
+    totalLessons: 12,
+    completedLessons: 11,
+    currentLessonTitle: 'Set 12: Directional & Calendar Kanji',
+    category: 'KANJI',
+  },
+  {
+    id: 'c3',
+    title: 'Tokyo Language School Skype Interview Prep Lab',
+    titleJa: '日本語学校 オンライン面接シミュレーション',
+    level: 'N5',
+    progressPercent: 50,
+    totalLessons: 6,
+    completedLessons: 3,
+    currentLessonTitle: 'Session 4: Financial Sponsorship & Career Goal Defense',
+    category: 'INTERVIEW_PREP',
+  },
+  {
+    id: 'c4',
+    title: 'Minna no Nihongo II (Intermediate Grammar & Particles)',
+    titleJa: 'みんなの日本語 初級II 文法・複合表現',
+    level: 'N4',
+    progressPercent: 20,
+    totalLessons: 25,
+    completedLessons: 5,
+    currentLessonTitle: 'Lesson 28: Simultaneous Actions (~ながら / V-nagara)',
+    category: 'GRAMMAR',
+  },
+  {
+    id: 'c5',
+    title: 'JLPT N4 300 Kanji & Reading Comprehension Accelerator',
+    titleJa: 'JLPT N4 漢字300字と読解スピードマスター',
+    level: 'N4',
+    progressPercent: 15,
+    totalLessons: 18,
+    completedLessons: 2,
+    currentLessonTitle: 'Module 3: Short Passage Logic & Inference',
+    category: 'READING',
+  },
+  {
+    id: 'c6',
+    title: 'JLPT N3 Bridge to Fluency & Workplace Japanese',
+    titleJa: 'JLPT N3 中級総合・ビジネス日本語基礎',
+    level: 'N3',
+    progressPercent: 0,
+    totalLessons: 30,
+    completedLessons: 0,
+    currentLessonTitle: 'Lesson 1: Formal Speech & Nuance Distinction',
+    category: 'GRAMMAR',
+  },
+];
 
-  // Load all courses
-  useEffect(() => {
-    async function fetchCourses() {
-      setIsLoading(true);
-      try {
-        const query = selectedLevel !== 'All' ? `?level=${selectedLevel}` : '';
-        const res = await apiRequest<{ courses: Course[] }>(`/api/courses${query}`);
-        setCourses(res.courses || []);
+export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
+  const { user } = useAuth();
+  const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'ALL'>('ALL');
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [activeCourseToPlay, setActiveCourseToPlay] = useState<Course | null>(null);
 
-        if (initialCourseId) {
-          loadCourseDetail(initialCourseId);
-        } else if (res.courses && res.courses.length > 0) {
-          loadCourseDetail(res.courses[0].id);
-        }
-      } catch (err) {
-        console.error('Failed to load courses:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchCourses();
-  }, [selectedLevel]);
-
-  const loadCourseDetail = async (courseId: string) => {
-    try {
-      const res = await apiRequest<{ course: Course; modules: any[]; userProgress: any }>(
-        `/api/courses/${courseId}`
-      );
-      setSelectedCourse(res.course);
-      setCourseModules(res.modules || []);
-      if (res.modules && res.modules.length > 0) {
-        setExpandedModuleId(res.modules[0].id);
-      }
-    } catch (err) {
-      console.error('Failed to load course details:', err);
-    }
-  };
-
-  const completedLessonIds = progress?.completedLessonIds || [];
+  const filteredCourses = ALL_COURSES_CATALOG.filter((c) => {
+    const matchesLevel = selectedLevel === 'ALL' || c.level === selectedLevel;
+    const matchesCat = selectedCategory === 'ALL' || c.category === selectedCategory;
+    return matchesLevel && matchesCat;
+  });
 
   return (
-    <div id="nihomi-courses-view" className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Bento Hero Header */}
-        <div className="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center space-x-2">
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
-                  JLPT Curriculum
-                </span>
-                <span className="text-xs font-semibold text-stone-500">
-                  Levels N5, N4 & N3 Modules
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
-                Core Japanese Courses & Lessons
-              </h1>
-              <p className="text-xs sm:text-sm text-stone-600 max-w-2xl">
-                Structured step-by-step curriculum featuring furigana breakdowns, native audio, Kanji stroke guides, authentic dialogues, and integrated quizzes.
-              </p>
-            </div>
+    <div className="bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-amber-950 min-h-screen pb-20 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors">
+      
+      {/* Header Banner */}
+      <div className="bg-stone-900 dark:bg-stone-950 text-white border-b border-stone-800 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-4">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-500/20 text-red-300 text-xs font-bold rounded-full border border-red-500/30">
+            <Sparkles className="w-3.5 h-3.5 text-red-400" />
+            <span>CANONICAL JAPANESE CURRICULUM</span>
+          </div>
 
-            {/* Level Filter Bento Pills */}
-            <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            JLPT N5–N1 Structured Programs
+          </h1>
+          <p className="text-xs sm:text-sm text-stone-300 max-w-2xl leading-relaxed">
+            Every course is directly mapped to the Nihomi Master Content repository and synchronized with your personal Learning DNA.
+          </p>
+        </div>
+      </div>
+
+      {/* Main Container */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+        
+        {/* Filters Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] shadow-2xs">
+          
+          {/* Level Filter */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {(['ALL', 'N5', 'N4', 'N3', 'N2', 'N1'] as const).map((lvl) => (
               <button
-                onClick={() => setShowEBookReader(prev => !prev)}
-                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                key={lvl}
+                id={`filter-level-${lvl}`}
+                type="button"
+                onClick={() => setSelectedLevel(lvl)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  selectedLevel === lvl
+                    ? 'bg-stone-900 dark:bg-rose-600 sepia:bg-amber-900 text-white shadow-2xs'
+                    : 'bg-stone-50 dark:bg-stone-800 sepia:bg-[#f0e4cc] hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 sepia:text-amber-950'
+                }`}
               >
-                <BookOpen className="w-4 h-4" />
-                <span>{showEBookReader ? 'Close E-Book' : '📖 Minna no Nihongo E-Book'}</span>
+                {lvl === 'ALL' ? 'All Levels' : `JLPT ${lvl}`}
+              </button>
+            ))}
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex items-center space-x-2 text-xs font-semibold text-stone-500 dark:text-stone-400">
+            <Filter className="w-3.5 h-3.5" />
+            <select
+              id="select-course-category"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-stone-50 dark:bg-stone-800 sepia:bg-[#f0e4cc] border border-stone-200 dark:border-stone-700 sepia:border-[#d9cbaf] px-3 py-1.5 rounded-xl text-stone-800 dark:text-stone-200 sepia:text-amber-950 focus:outline-hidden font-medium cursor-pointer"
+            >
+              <option value="ALL">All Categories</option>
+              <option value="GRAMMAR">Grammar & Patterns</option>
+              <option value="KANJI">Kanji & Radicals</option>
+              <option value="READING">Reading Comprehension</option>
+              <option value="INTERVIEW_PREP">Visa & Interview Prep</option>
+            </select>
+          </div>
+
+        </div>
+
+        {/* Courses Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCourses.map((course) => (
+            <div
+              key={course.id}
+              id={`course-card-${course.id}`}
+              className="bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] rounded-3xl p-6 border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
+            >
+              <div className="space-y-3">
+                
+                {/* Level & Category Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 bg-stone-900 dark:bg-stone-800 text-white text-[10px] font-bold rounded-md uppercase font-mono">
+                    JLPT {course.level}
+                  </span>
+                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">
+                    {course.category}
+                  </span>
+                </div>
+
+                {/* Course Titles */}
+                <div>
+                  <h3 className="text-base font-bold text-stone-900 dark:text-white sepia:text-amber-950 leading-snug">
+                    {course.title}
+                  </h3>
+                  <p className="text-xs text-stone-400 dark:text-stone-500 font-japanese mt-0.5">
+                    {course.titleJa}
+                  </p>
+                </div>
+
+                {/* Progress / Lesson stats */}
+                <div className="p-3 bg-stone-50 dark:bg-stone-800/60 sepia:bg-[#f0e4cc] rounded-xl space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+                    <span>{course.completedLessons}/{course.totalLessons} Lessons</span>
+                    <span className="font-bold text-stone-900 dark:text-white sepia:text-amber-950">{course.progressPercent}%</span>
+                  </div>
+                  <div className="w-full bg-stone-200 dark:bg-stone-700 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="bg-stone-900 dark:bg-rose-500 sepia:bg-amber-900 h-1.5 rounded-full transition-all duration-300"
+                      style={{ width: `${course.progressPercent}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-[11px] text-stone-600 dark:text-stone-300 sepia:text-amber-950 font-medium truncate pt-0.5">
+                    Next: {course.currentLessonTitle}
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Action Button */}
+              <button
+                id={`btn-course-action-${course.id}`}
+                type="button"
+                onClick={() => setActiveCourseToPlay(course)}
+                className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 text-red-400 dark:text-rose-200 fill-red-400 dark:fill-rose-200" />
+                <span>{course.progressPercent > 0 ? 'Resume Lesson' : 'Start Curriculum'}</span>
               </button>
 
-              <div className="flex items-center space-x-1.5 bg-stone-100 p-1.5 rounded-xl border border-stone-200 text-xs font-bold">
-                {(['All', 'N5', 'N4', 'N3'] as const).map((lvl) => (
-                  <button
-                    key={lvl}
-                    onClick={() => {
-                      setSelectedLevel(lvl);
-                      setSelectedCourse(null);
-                    }}
-                    className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedLevel === lvl
-                        ? 'bg-red-600 text-white shadow-sm'
-                        : 'text-stone-600 hover:text-stone-900'
-                    }`}
-                  >
-                    {lvl === 'All' ? 'All Levels' : `JLPT ${lvl}`}
-                  </button>
-                ))}
-              </div>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Interactive E-Book FlipBook Reader */}
-        {showEBookReader && (
-          <div className="animate-in fade-in zoom-in-95 duration-200">
-            <NihomiBookReader
-              initialLesson={1}
-              bookType="vocabulary"
-              onClose={() => setShowEBookReader(false)}
-            />
-          </div>
-        )}
-
-        {/* Bento Grid: Courses List (Left 4 cols) + Module Details (Right 8 cols) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left: Available Courses Bento Column */}
-          <div className="lg:col-span-4 space-y-4">
-            <h2 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Available Courses ({courses.length})
-            </h2>
-
-            <div className="space-y-3">
-              {courses.map((course) => {
-                const isSelected = selectedCourse?.id === course.id;
-                return (
-                  <div
-                    key={course.id}
-                    onClick={() => loadCourseDetail(course.id)}
-                    className={`p-5 rounded-2xl border cursor-pointer transition-all space-y-2.5 ${
-                      isSelected
-                        ? 'bg-white border-red-500 shadow-md ring-1 ring-red-500'
-                        : 'bg-white border-stone-200 hover:border-stone-300 shadow-sm'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
-                        JLPT {course.level}
-                      </span>
-                      <span className="text-[11px] text-stone-400 font-semibold">{course.estimatedHours} hrs</span>
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-bold text-stone-900">{course.title}</h3>
-                      <p className="text-xs text-red-600 font-serif mt-0.5">{course.titleJa}</p>
-                    </div>
-
-                    <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
-                      {course.description}
-                    </p>
-
-                    <div className="pt-2 border-t border-stone-100 flex items-center justify-between text-xs">
-                      <span className="text-stone-500 font-medium">{course.lessonCount || 2} Lessons</span>
-                      <span className="text-red-600 font-bold flex items-center space-x-1">
-                        <span>{isSelected ? 'Viewing' : 'Select'}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Right: Selected Course Modules & Lessons */}
-          <div className="lg:col-span-8">
-            {selectedCourse ? (
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-                {/* Course Header */}
-                <div className="border-b border-stone-100 pb-5 space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
-                      JLPT {selectedCourse.level}
-                    </span>
-                    <span className="text-xs text-stone-400 font-semibold">
-                      &bull; ~{selectedCourse.estimatedHours} study hours
-                    </span>
-                  </div>
-                  <h2 className="text-2xl font-bold font-serif text-stone-900">{selectedCourse.title}</h2>
-                  <p className="text-sm font-serif text-red-600">{selectedCourse.titleJa}</p>
-                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">{selectedCourse.description}</p>
-                </div>
-
-                {/* Modules Accordion */}
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-                    Curriculum Modules ({courseModules.length})
-                  </h3>
-
-                  {courseModules.map((mod, idx) => {
-                    const isExpanded = expandedModuleId === mod.id;
-                    const lessons = mod.lessons || [];
-                    const completedInMod = lessons.filter((l: any) => completedLessonIds.includes(l.id)).length;
-
-                    return (
-                      <div
-                        key={mod.id}
-                        className="bg-stone-50 border border-stone-200 rounded-2xl overflow-hidden shadow-sm"
-                      >
-                        {/* Module Header */}
-                        <div
-                          onClick={() => setExpandedModuleId(isExpanded ? null : mod.id)}
-                          className="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-stone-100/60 transition-colors"
-                        >
-                          <div className="space-y-1">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs font-bold text-red-600">Module {idx + 1}:</span>
-                              <span className="text-sm font-bold text-stone-900">{mod.title}</span>
-                            </div>
-                            <p className="text-xs text-stone-500">{mod.description}</p>
-                          </div>
-
-                          <div className="flex items-center space-x-3 shrink-0">
-                            <span className="text-xs font-semibold text-stone-500">
-                              {completedInMod}/{lessons.length} done
-                            </span>
-                            {isExpanded ? (
-                              <ChevronUp className="w-4 h-4 text-stone-500" />
-                            ) : (
-                              <ChevronDown className="w-4 h-4 text-stone-500" />
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Lessons List */}
-                        {isExpanded && (
-                          <div className="p-4 pt-0 border-t border-stone-200/80 space-y-2.5">
-                            {lessons.map((les: any) => {
-                              const isCompleted = completedLessonIds.includes(les.id);
-                              return (
-                                <div
-                                  key={les.id}
-                                  className="p-4 rounded-xl bg-white border border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-red-300 transition-all shadow-sm"
-                                >
-                                  <div className="space-y-1">
-                                    <div className="flex items-center space-x-2">
-                                      {isCompleted ? (
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                      ) : (
-                                        <div className="w-4 h-4 rounded-full border-2 border-stone-300 shrink-0" />
-                                      )}
-                                      <span className="text-xs font-bold text-stone-900">
-                                        Lesson {les.lessonNumber}: {les.title}
-                                      </span>
-                                    </div>
-                                    <p className="text-xs text-red-600 font-serif pl-6">{les.titleJa}</p>
-                                    <p className="text-xs text-stone-500 pl-6 leading-relaxed">{les.summary}</p>
-                                    <div className="pl-6 flex items-center space-x-3 text-[11px] text-stone-400 pt-1">
-                                      <span>{les.vocabCount} Vocab</span>
-                                      <span>&bull;</span>
-                                      <span>{les.grammarCount} Grammar</span>
-                                      <span>&bull;</span>
-                                      <span>{les.kanjiCount} Kanji</span>
-                                      <span>&bull;</span>
-                                      <span>~{les.estimatedMinutes} min</span>
-                                    </div>
-                                  </div>
-
-                                  <div className="self-end sm:self-center shrink-0 flex items-center space-x-2">
-                                    {les.hasQuiz && (
-                                      <button
-                                        onClick={() => onNavigate('quiz-runner', { lessonId: les.id })}
-                                        className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition-all flex items-center space-x-1"
-                                        title="Take Lesson Quiz"
-                                      >
-                                        <Award className="w-3.5 h-3.5 text-amber-600" />
-                                        <span>Quiz</span>
-                                      </button>
-                                    )}
-                                    <button
-                                      onClick={() => onNavigate('lesson', { lessonId: les.id })}
-                                      className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors flex items-center space-x-1.5 shadow-sm"
-                                    >
-                                      <Play className="w-3 h-3 fill-current" />
-                                      <span>{isCompleted ? 'Review' : 'Start'}</span>
-                                    </button>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <div className="bg-white border border-stone-200 rounded-2xl p-12 text-center text-stone-400 shadow-sm space-y-2">
-                <BookOpen className="w-10 h-10 mx-auto text-stone-300" />
-                <p className="text-xs font-medium">Select a course on the left to view modules and lesson details.</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Ebook & Masterbook Library Showcase */}
-        <EbookShowcaseCarousel />
       </div>
+
+      {/* Interactive Lesson Modal */}
+      {activeCourseToPlay && (
+        <LessonPlayerModal
+          isOpen={!!activeCourseToPlay}
+          onClose={() => setActiveCourseToPlay(null)}
+          course={activeCourseToPlay}
+          onOpenFullLesson={(lessonId) => {
+            setActiveCourseToPlay(null);
+            onNavigate('lesson', { lessonId });
+          }}
+        />
+      )}
+
     </div>
   );
 };
