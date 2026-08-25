@@ -14,7 +14,8 @@ import {
   Check,
   Lock,
   History,
-  Bot
+  Bot,
+  AlertCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -28,6 +29,7 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
   const [provider, setProvider] = useState<'bkash' | 'sslcommerz'>('bkash');
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState<string | null>(null);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   const packs = [
     {
@@ -68,6 +70,7 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
   const handlePurchase = async () => {
     setIsPurchasing(true);
     setPurchaseSuccess(null);
+    setPurchaseError(null);
     try {
       // Simulate real-time bKash tokenized payment checkout or SSLCommerz gateway
       await new Promise((r) => setTimeout(r, 1200));
@@ -81,7 +84,7 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
         }!`
       );
     } catch (err: any) {
-      alert(err.message || 'Payment processing failed.');
+      setPurchaseError(err.message || 'Payment processing failed. Please try again.');
     } finally {
       setIsPurchasing(false);
     }
@@ -243,6 +246,20 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
               </div>
             </button>
           </div>
+
+          {purchaseSuccess && (
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs font-semibold flex items-center space-x-2.5 animate-in fade-in">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span>{purchaseSuccess}</span>
+            </div>
+          )}
+
+          {purchaseError && (
+            <div className="p-4 rounded-2xl bg-red-50 dark:bg-rose-950/40 border border-red-200 dark:border-rose-800 text-red-800 dark:text-rose-200 text-xs font-semibold flex items-center space-x-2.5 animate-in fade-in">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-rose-400 shrink-0" />
+              <span>{purchaseError}</span>
+            </div>
+          )}
 
           <button
             id="btn-top-up-ai-credits"

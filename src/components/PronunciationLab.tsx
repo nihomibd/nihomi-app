@@ -13,7 +13,8 @@ import {
   HelpCircle,
   TrendingUp,
   History,
-  BarChart2
+  BarChart2,
+  Activity
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -26,6 +27,7 @@ import {
   ReferenceLine
 } from 'recharts';
 import { speakJapanese } from '../lib/tts.js';
+import { GamificationService } from '../lib/gamificationService.js';
 
 interface PronunciationPhrase {
   id: string;
@@ -133,6 +135,12 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<any>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [livePitchHz, setLivePitchHz] = useState<number>(0);
+  const [liveVolumeRms, setLiveVolumeRms] = useState<number>(0);
 
   // Persist history to localStorage
   useEffect(() => {
@@ -142,6 +150,16 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
       console.error(e);
     }
   }, [history]);
+
+  // Clean up audio context & canvas loop on unmount
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
 
   // Initialize Speech Recognition if supported
   useEffect(() => {
@@ -203,6 +221,9 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
     setScore(calculatedScore);
     saveAttemptRecord(calculatedScore, target);
 
+    // Reward with gamification badges & XP
+    GamificationService.recordSpeakingScore(calculatedScore);
+
     if (calculatedScore >= 90) {
       setFeedbackNotes('素晴らしい！ (Subarashii!) Tokyo native cadence and pitch accent matched with high fidelity.');
     } else if (calculatedScore >= 75) {
@@ -216,6 +237,61 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
     }
   };
 
+  const drawVisualizer = (analyser: AnalyserNode) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const render = () => {
+      analyser.getByteFrequencyData(dataArray);
+
+      // Calculate approximate RMS volume & dominant frequency
+      let sum = 0;
+      let maxVal = 0;
+      let maxIndex = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        sum += dataArray[i];
+        if (dataArray[i] > maxVal) {
+          maxVal = dataArray[i];
+          maxIndex = i;
+        }
+      }
+      const avgVol = Math.round((sum / bufferLength) * 1.5);
+      const estPitch = Math.round(maxIndex * (22050 / bufferLength));
+      setLiveVolumeRms(Math.min(100, avgVol));
+      if (maxVal > 50 && estPitch > 80 && estPitch < 800) {
+        setLivePitchHz(estPitch);
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw futuristic Neo-Tokyo audio bars
+      const barWidth = (canvas.width / 40) - 2;
+      let x = 0;
+      for (let i = 0; i < 40; i++) {
+        const val = dataArray[i * 2] || 0;
+        const barHeight = (val / 255) * canvas.height * 0.9;
+
+        const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
+        gradient.addColorStop(0, '#dc2626');
+        gradient.addColorStop(0.5, '#f59e0b');
+        gradient.addColorStop(1, '#10b981');
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 2;
+      }
+
+      animationFrameRef.current = requestAnimationFrame(render);
+    };
+
+    render();
+  };
+
   const startRecording = async () => {
     setMicError(null);
     setRecognizedText(null);
@@ -226,6 +302,19 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Initialize Web Audio Context for Real-Time Analysis
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const audioCtx = new AudioCtx();
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      const source = audioCtx.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      audioContextRef.current = audioCtx;
+      analyserRef.current = analyser;
+      drawVisualizer(analyser);
+
       const recorder = new MediaRecorder(stream);
 
       recorder.ondataavailable = (e) => {
@@ -247,6 +336,7 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
             setRecognizedText(selectedPhrase.japanese);
             setFeedbackNotes('Audio recorded & analyzed with Tokyo Sensei acoustic model. Accurate pitch intonation!');
             saveAttemptRecord(fallbackScore, selectedPhrase.japanese);
+            GamificationService.recordSpeakingScore(fallbackScore);
             if (onScoreEarned) onScoreEarned(fallbackScore);
           }, 800);
         }
@@ -267,6 +357,12 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
   };
 
   const stopRecording = () => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+      audioContextRef.current.close().catch(() => {});
+    }
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
@@ -448,10 +544,29 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
       {/* Recording Stage */}
       <div className="flex flex-col items-center justify-center space-y-4 py-4">
         {isRecording ? (
-          <div className="flex flex-col items-center space-y-3 animate-in fade-in">
+          <div className="flex flex-col items-center space-y-4 animate-in fade-in w-full max-w-md">
+            {/* Live Real-time Audio Waveform Spectrum Canvas */}
+            <div className="w-full bg-stone-950 p-4 rounded-2xl border border-stone-800 shadow-inner flex flex-col items-center space-y-2">
+              <div className="flex items-center justify-between w-full text-[11px] font-mono text-stone-400">
+                <span className="flex items-center gap-1.5 text-red-400">
+                  <Activity className="w-3.5 h-3.5 animate-pulse" />
+                  Live Audio Spectrum
+                </span>
+                <span>Pitch: <strong className="text-amber-400">{livePitchHz > 0 ? `${livePitchHz} Hz` : 'Detecting...'}</strong></span>
+                <span>Level: <strong className="text-emerald-400">{liveVolumeRms}%</strong></span>
+              </div>
+              <canvas
+                ref={canvasRef}
+                width={360}
+                height={70}
+                className="w-full h-16 rounded-lg bg-stone-900/80"
+              />
+            </div>
+
             <div className="relative">
               <div className="w-20 h-20 rounded-full bg-red-600 animate-ping absolute inset-0 opacity-40"></div>
               <button
+                type="button"
                 onClick={stopRecording}
                 className="relative w-20 h-20 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-xl shadow-red-600/40 cursor-pointer"
               >
@@ -465,6 +580,7 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
         ) : (
           <div className="flex flex-col items-center space-y-2">
             <button
+              type="button"
               onClick={startRecording}
               className="w-20 h-20 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-xl shadow-red-600/30 active:scale-95 transition cursor-pointer"
               title="Start Voice Recording"

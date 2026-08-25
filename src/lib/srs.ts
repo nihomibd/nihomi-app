@@ -1,10 +1,15 @@
 // Spaced Repetition System (SRS) SM-2 / Leitner Algorithm Engine for Nihomi
+import { supabase, isSupabaseConfigured } from './supabase.js';
 
 export interface SrsItemState {
   id: string; // e.g. kanji character or vocab id
+  itemType?: 'kanji' | 'vocabulary' | 'grammar';
   intervalDays: number;
   repetition: number;
   easeFactor: number;
+  stabilityDays?: number;
+  retentionScore?: number; // 0 - 100 %
+  lapses?: number;
   lastReviewedAt: string; // ISO date string
   nextReviewAt: string; // ISO date string
   stage: 'apprentice' | 'guru' | 'master' | 'enlightened' | 'burned';
@@ -12,13 +17,33 @@ export interface SrsItemState {
 
 export type SrsRating = 'again' | 'hard' | 'good' | 'easy';
 
-const SRS_STORAGE_KEY = 'nihomi_srs_state_v1';
+const SRS_STORAGE_KEY = 'nihomi_srs_state_v2';
+
+/**
+ * Calculates current retention percentage based on Ebbinghaus forgetting curve model
+ * R(t) = exp(-t / S) * 100%
+ */
+export function calculateRetentionLevel(lastReviewedAt: string, stabilityDays: number = 1): number {
+  if (!lastReviewedAt) return 100;
+  const now = new Date().getTime();
+  const last = new Date(lastReviewedAt).getTime();
+  const elapsedDays = Math.max(0, (now - last) / (1000 * 60 * 60 * 24));
+  const stability = Math.max(0.5, stabilityDays);
+  const retention = Math.exp(-elapsedDays / stability) * 100;
+  return Math.min(100, Math.max(5, Math.round(retention)));
+}
 
 export function getSrsState(): Record<string, SrsItemState> {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = localStorage.getItem(SRS_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const raw = localStorage.getItem(SRS_STORAGE_KEY) || localStorage.getItem('nihomi_srs_state_v1');
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    // Enrich with dynamic retention scores
+    Object.values(parsed as Record<string, SrsItemState>).forEach((item) => {
+      item.retentionScore = calculateRetentionLevel(item.lastReviewedAt, item.stabilityDays || item.intervalDays || 1);
+    });
+    return parsed;
   } catch {
     return {};
   }
@@ -27,26 +52,32 @@ export function getSrsState(): Record<string, SrsItemState> {
 export function saveSrsItemReview(
   id: string,
   rating: SrsRating,
-  currentState?: SrsItemState
+  currentState?: SrsItemState,
+  itemType: 'kanji' | 'vocabulary' | 'grammar' = 'kanji'
 ): SrsItemState {
   const allStates = getSrsState();
   const prev = currentState || allStates[id] || {
     id,
+    itemType,
     intervalDays: 0,
     repetition: 0,
     easeFactor: 2.5,
+    stabilityDays: 1,
+    retentionScore: 100,
+    lapses: 0,
     lastReviewedAt: new Date().toISOString(),
     nextReviewAt: new Date().toISOString(),
     stage: 'apprentice'
   };
 
-  let { intervalDays, repetition, easeFactor } = prev;
+  let { intervalDays, repetition, easeFactor, lapses = 0 } = prev;
   const now = new Date();
 
   if (rating === 'again') {
     repetition = 0;
     intervalDays = 1; // 1 day
     easeFactor = Math.max(1.3, easeFactor - 0.2);
+    lapses += 1;
   } else if (rating === 'hard') {
     repetition = Math.max(1, repetition);
     intervalDays = Math.max(1, Math.round((intervalDays || 1) * 1.2));
@@ -72,6 +103,9 @@ export function saveSrsItemReview(
     easeFactor += 0.15;
   }
 
+  // Stability corresponds to the interval where retention is ~90%
+  const stabilityDays = Math.max(1, intervalDays * (easeFactor / 2.5));
+
   // Calculate Next Review Date
   const nextDate = new Date(now);
   nextDate.setDate(now.getDate() + intervalDays);
@@ -90,9 +124,13 @@ export function saveSrsItemReview(
 
   const updatedItem: SrsItemState = {
     id,
+    itemType: prev.itemType || itemType,
     intervalDays,
     repetition,
     easeFactor,
+    stabilityDays,
+    retentionScore: 100, // Just reviewed, 100% immediate recall
+    lapses,
     lastReviewedAt: now.toISOString(),
     nextReviewAt: nextDate.toISOString(),
     stage
@@ -103,7 +141,56 @@ export function saveSrsItemReview(
     localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify(allStates));
   } catch {}
 
+  // Sync asynchronously to Supabase if configured
+  if (isSupabaseConfigured()) {
+    try {
+      Promise.resolve(
+        supabase.from('student_srs_reviews').upsert({
+          item_id: id,
+          item_type: itemType,
+          interval_days: intervalDays,
+          repetition,
+          ease_factor: easeFactor,
+          stability_days: stabilityDays,
+          stage,
+          last_reviewed_at: now.toISOString(),
+          next_review_at: nextDate.toISOString()
+        })
+      ).catch(() => {});
+    } catch {}
+  }
+
   return updatedItem;
+}
+
+export function getCardRetentionLevel(id: string): {
+  score: number;
+  stage: SrsItemState['stage'];
+  isDue: boolean;
+  statusLabel: string;
+} {
+  const allStates = getSrsState();
+  const item = allStates[id];
+  if (!item) {
+    return {
+      score: 100,
+      stage: 'apprentice',
+      isDue: true,
+      statusLabel: 'New'
+    };
+  }
+  const score = calculateRetentionLevel(item.lastReviewedAt, item.stabilityDays || item.intervalDays || 1);
+  const due = isItemDue(item);
+  let statusLabel = 'Optimal Recall';
+  if (score < 60) statusLabel = 'Fading Fast';
+  else if (score < 80) statusLabel = 'Review Recommended';
+
+  return {
+    score,
+    stage: item.stage,
+    isDue: due,
+    statusLabel
+  };
 }
 
 export function formatNextReviewBadge(itemState?: SrsItemState): {

@@ -68,8 +68,35 @@ export const LessonPlayerModal: React.FC<LessonPlayerModalProps> = ({
 
   const handleAudio = (text: string) => {
     setIsPlayingAudio(true);
-    speakJapanese(text);
-    setTimeout(() => setIsPlayingAudio(false), 2000);
+    try {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        
+        // Pick high-quality Japanese voice if available
+        const voices = window.speechSynthesis.getVoices();
+        const jaVoice = voices.find(
+          (v) => v.lang === 'ja-JP' || v.lang === 'ja_JP' || v.name.toLowerCase().includes('japanese') || v.name.toLowerCase().includes('kyoko') || v.name.toLowerCase().includes('otoya')
+        );
+        if (jaVoice) {
+          utterance.voice = jaVoice;
+        }
+
+        utterance.onend = () => setIsPlayingAudio(false);
+        utterance.onerror = () => setIsPlayingAudio(false);
+        window.speechSynthesis.speak(utterance);
+      } else {
+        speakJapanese(text);
+        setTimeout(() => setIsPlayingAudio(false), 2000);
+      }
+    } catch (e) {
+      console.warn('Speech synthesis error:', e);
+      speakJapanese(text);
+      setTimeout(() => setIsPlayingAudio(false), 2000);
+    }
   };
 
   return (

@@ -19,18 +19,21 @@ import {
   Info,
   Layers,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Download,
+  FileSpreadsheet,
+  FileCode
 } from 'lucide-react';
 import {
   KnowledgeObject,
   GrammarObject,
   VocabularyObject,
   KanjiObject,
-  ContentLifecycleStage,
-  KnowledgeObjectVersionSnapshot
+  ContentLifecycleStage
 } from '../../../core/content-engine/types';
 import { ContentIngestionService } from '../../../core/content-engine/contentIngestionService';
 import { NihomiStandardService } from '../../../core/content-engine/nihomiStandardService';
+import { VersionHistorySidebar } from './VersionHistorySidebar';
 import { speakJapanese } from '../../../lib/tts';
 import { useAuth } from '../../../context/AuthContext';
 
@@ -61,9 +64,8 @@ export const ReviewQueueStudio: React.FC = () => {
   const [editExplanationBn, setEditExplanationBn] = useState(() => activeObject?.trilingual?.bn?.explanationBn || '');
   const [editFurigana, setEditFurigana] = useState(() => activeObject?.trilingual?.ja?.furigana || '');
 
-  // Version History State
+  // Version History Sidebar Drawer State
   const [showVersionHistory, setShowVersionHistory] = useState(false);
-  const [selectedDiffVersion, setSelectedDiffVersion] = useState<KnowledgeObjectVersionSnapshot | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -91,7 +93,6 @@ export const ReviewQueueStudio: React.FC = () => {
     setEditMeaningBn(obj.trilingual?.bn?.meaning || '');
     setEditExplanationBn(obj.trilingual?.bn?.explanationBn || '');
     setEditFurigana(obj.trilingual?.ja?.furigana || '');
-    setSelectedDiffVersion(null);
   };
 
   const handleSaveAndReEvaluate = () => {
@@ -106,6 +107,9 @@ export const ReviewQueueStudio: React.FC = () => {
       const v = updated as VocabularyObject;
       v.word = editPattern;
       v.reading = editFormula;
+    } else if (updated.type === 'KANJI') {
+      const k = updated as KanjiObject;
+      k.kanji = editPattern;
     }
 
     updated.trilingual = {
@@ -165,8 +169,101 @@ export const ReviewQueueStudio: React.FC = () => {
       setObjects(ContentIngestionService.getKnowledgeObjects());
       handleSelectObject(reverted);
       showToast(`Successfully reverted "${reverted.code}" to Version ${versionNum}.`);
-      setSelectedDiffVersion(null);
     }
+  };
+
+  // CSV Exporter for HUMAN_REVIEW_REQUIRED items
+  const handleExportCSVReport = () => {
+    const reviewItems = objects.filter((o) => o.lifecycleStage === 'HUMAN_REVIEW_REQUIRED');
+    const headers = [
+      'Code',
+      'Level',
+      'Type',
+      'OverallQualityScore',
+      'ViolationsCount',
+      'CriticalViolations',
+      'WarningViolations',
+      'SourceDocument',
+      'SourcePage',
+      'TargetPattern',
+      'EnglishMeaning',
+      'BengaliMeaning',
+      'ViolationDetails'
+    ];
+
+    const rows = reviewItems.map((item) => {
+      const evaluation = item.qualityEvaluation || NihomiStandardService.evaluateKnowledgeObject(item);
+      const violations = evaluation.violations || [];
+      const criticalCount = violations.filter((v) => v.severity === 'CRITICAL').length;
+      const warningCount = violations.filter((v) => v.severity === 'WARNING').length;
+      const pattern = item.type === 'GRAMMAR' ? (item as GrammarObject).pattern : (item as any).word || (item as any).kanji || '';
+      const violationSummary = violations.map((v) => `[${v.severity}] ${v.ruleId}: ${v.message}`).join(' | ');
+
+      const escapeCSV = (str: string) => `"${(str || '').replace(/"/g, '""')}"`;
+
+      return [
+        escapeCSV(item.code),
+        escapeCSV(item.level),
+        escapeCSV(item.type),
+        evaluation.overallScore,
+        violations.length,
+        criticalCount,
+        warningCount,
+        escapeCSV(item.sourceTraceability?.sourceDocumentTitle || ''),
+        item.sourceTraceability?.sourcePage || '',
+        escapeCSV(pattern),
+        escapeCSV(item.trilingual?.en?.meaning || ''),
+        escapeCSV(item.trilingual?.bn?.meaning || ''),
+        escapeCSV(violationSummary)
+      ].join(',');
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Nihomi_Human_Review_Queue_Audit_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(`✓ Exported ${reviewItems.length} review queue audit items to CSV.`);
+  };
+
+  // JSON Exporter for Snapshot
+  const handleExportJSONSnapshot = () => {
+    const reviewItems = objects.filter((o) => o.lifecycleStage === 'HUMAN_REVIEW_REQUIRED');
+    const exportPayload = {
+      exportedAt: new Date().toISOString(),
+      exporter: user?.email || 'mdtanvirkabirbiplob@gmail.com',
+      totalAuditItems: reviewItems.length,
+      queueItems: reviewItems.map((item) => ({
+        id: item.id,
+        code: item.code,
+        level: item.level,
+        type: item.type,
+        lifecycleStage: item.lifecycleStage,
+        status: item.status,
+        version: item.version,
+        sourceTraceability: item.sourceTraceability,
+        qualityEvaluation: item.qualityEvaluation || NihomiStandardService.evaluateKnowledgeObject(item),
+        trilingual: item.trilingual,
+        versionHistoryCount: item.versionHistory?.length || 0
+      }))
+    };
+
+    const jsonContent = JSON.stringify(exportPayload, null, 2);
+    const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Nihomi_ReviewQueue_Snapshot_${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(`✓ Exported JSON snapshot containing ${reviewItems.length} audit records.`);
   };
 
   const filteredObjects = filterStage === 'ALL'
@@ -177,7 +274,7 @@ export const ReviewQueueStudio: React.FC = () => {
   const violations = evaluation?.violations || [];
 
   return (
-    <div className="space-y-6 text-left">
+    <div id="review-queue-studio" className="space-y-6 text-left">
       {/* Toast */}
       {toastMessage && (
         <div className="p-4 bg-emerald-950/90 border border-emerald-700/80 rounded-2xl text-xs text-emerald-300 font-bold flex items-center space-x-2 animate-in fade-in">
@@ -186,7 +283,7 @@ export const ReviewQueueStudio: React.FC = () => {
         </div>
       )}
 
-      {/* Stage Selector & Counter Bar */}
+      {/* Stage Selector, Counter Bar & Report Exporter */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-stone-950 border border-stone-800 p-4 rounded-2xl">
         <div className="flex items-center space-x-2 overflow-x-auto">
           {[
@@ -199,6 +296,7 @@ export const ReviewQueueStudio: React.FC = () => {
             return (
               <button
                 key={tab.id}
+                id={`filter-stage-${tab.id}`}
                 onClick={() => setFilterStage(tab.id as any)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 whitespace-nowrap ${
                   isSelected
@@ -215,17 +313,41 @@ export const ReviewQueueStudio: React.FC = () => {
           })}
         </div>
 
-        <button
-          onClick={() => setShowVersionHistory(!showVersionHistory)}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 cursor-pointer ${
-            showVersionHistory
-              ? 'bg-stone-800 text-amber-400 border-amber-500/40'
-              : 'bg-stone-900 text-stone-300 border-stone-700 hover:text-white'
-          }`}
-        >
-          <History className="w-3.5 h-3.5" />
-          <span>Version History & Diff</span>
-        </button>
+        {/* Exporter & History Controls */}
+        <div className="flex items-center space-x-2">
+          <button
+            id="export-audit-csv-btn"
+            onClick={handleExportCSVReport}
+            className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-800 cursor-pointer flex items-center space-x-1.5"
+            title="Download CSV Audit Report"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Export CSV</span>
+          </button>
+
+          <button
+            id="export-audit-json-btn"
+            onClick={handleExportJSONSnapshot}
+            className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-800 cursor-pointer flex items-center space-x-1.5"
+            title="Download JSON Audit Snapshot"
+          >
+            <FileCode className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Export JSON</span>
+          </button>
+
+          <button
+            id="toggle-version-history-btn"
+            onClick={() => setShowVersionHistory(!showVersionHistory)}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 cursor-pointer ${
+              showVersionHistory
+                ? 'bg-stone-800 text-amber-400 border-amber-500/40'
+                : 'bg-stone-900 text-stone-300 border-stone-700 hover:text-white'
+            }`}
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>Version History</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Grid: Left Queue List, Right Side-by-Side Audit & Editor */}
@@ -240,7 +362,7 @@ export const ReviewQueueStudio: React.FC = () => {
             <span className="text-[10px] font-mono text-stone-500">23 Dimensions</span>
           </div>
 
-          <div className="space-y-2.5 max-h-[620px] overflow-y-auto pr-1">
+          <div className="space-y-2.5 max-h-[640px] overflow-y-auto pr-1">
             {filteredObjects.length === 0 ? (
               <div className="p-8 text-center text-xs text-stone-500 border border-dashed border-stone-800 rounded-2xl">
                 No items pending for stage "{filterStage}".
@@ -253,6 +375,7 @@ export const ReviewQueueStudio: React.FC = () => {
                 return (
                   <div
                     key={obj.id}
+                    id={`queue-card-${obj.id}`}
                     onClick={() => handleSelectObject(obj)}
                     className={`p-3.5 rounded-2xl border cursor-pointer transition-all space-y-2 ${
                       isSelected
@@ -323,6 +446,7 @@ export const ReviewQueueStudio: React.FC = () => {
 
                 <div className="flex items-center space-x-3 sm:text-right">
                   <button
+                    id="speak-japanese-btn"
                     onClick={() => speakJapanese(editPattern)}
                     className="p-2 bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-white rounded-xl border border-stone-700 cursor-pointer"
                     title="Pronounce Japanese Text"
@@ -338,9 +462,9 @@ export const ReviewQueueStudio: React.FC = () => {
                 </div>
               </div>
 
-              {/* NihomiStandardEvaluation Violations Bar */}
+              {/* NihomiStandardEvaluation Violations Bar in Side-by-Side View */}
               {violations.length > 0 && (
-                <div className="p-4 bg-amber-950/40 border border-amber-800/80 rounded-2xl space-y-2.5 text-xs">
+                <div id="evaluation-violations-panel" className="p-4 bg-amber-950/40 border border-amber-800/80 rounded-2xl space-y-2.5 text-xs">
                   <div className="flex items-center space-x-2 text-amber-400 font-bold font-mono text-xs">
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     <span>23-Dimension Evaluation Violations ({violations.length})</span>
@@ -366,69 +490,13 @@ export const ReviewQueueStudio: React.FC = () => {
                 </div>
               )}
 
-              {/* Version History & Diff Comparison Modal/Drawer */}
+              {/* Version History Sidebar Drawer Component */}
               {showVersionHistory && (
-                <div className="p-5 bg-stone-900 border border-amber-500/40 rounded-2xl space-y-4 text-xs animate-in fade-in">
-                  <div className="flex items-center justify-between border-b border-stone-800 pb-2">
-                    <div className="flex items-center space-x-2">
-                      <History className="w-4 h-4 text-amber-400" />
-                      <strong className="text-white text-xs">Version Snapshots & Diff for {activeObject.code}</strong>
-                    </div>
-                    <span className="text-[10px] text-stone-400 font-mono">Total Versions: {activeObject.versionHistory?.length || 1}</span>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {activeObject.versionHistory?.map((snap) => (
-                      <div key={snap.version} className="p-3 bg-stone-950 rounded-xl border border-stone-800 flex items-center justify-between gap-3">
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-mono text-amber-400 font-bold">Version {snap.version}</span>
-                            <span className="text-[10px] text-stone-500 font-mono">
-                              {new Date(snap.timestamp).toLocaleDateString()} by {snap.author}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-stone-300 mt-0.5">{snap.summary}</p>
-                        </div>
-
-                        <div className="flex items-center space-x-2 shrink-0">
-                          <button
-                            onClick={() => setSelectedDiffVersion(selectedDiffVersion?.version === snap.version ? null : snap)}
-                            className="px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-stone-300 text-[10px] font-bold rounded-lg border border-stone-700 cursor-pointer"
-                          >
-                            {selectedDiffVersion?.version === snap.version ? 'Close Diff' : 'Compare Diff'}
-                          </button>
-                          {snap.version !== activeObject.version && (
-                            <button
-                              onClick={() => handleRevertVersion(snap.version)}
-                              className="px-2.5 py-1 bg-red-950/80 hover:bg-red-900/80 text-red-300 text-[10px] font-bold rounded-lg border border-red-800 cursor-pointer"
-                            >
-                              Revert to v{snap.version}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Diff Inspector Box */}
-                  {selectedDiffVersion && (
-                    <div className="p-4 bg-stone-950 rounded-xl border border-amber-500/30 space-y-3 font-mono text-[11px]">
-                      <strong className="text-amber-400 block">Diff: Current (v{activeObject.version}) vs Snapshot (v{selectedDiffVersion.version})</strong>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="p-2.5 bg-stone-900 rounded border border-stone-800 space-y-1">
-                          <span className="text-[10px] text-stone-500 uppercase block">Snapshot v{selectedDiffVersion.version}</span>
-                          <div className="text-stone-300">Pattern: {selectedDiffVersion.dataSnapshot.patternOrWord}</div>
-                          <div className="text-stone-400">Meaning BN: {selectedDiffVersion.dataSnapshot.trilingual.bn.meaning}</div>
-                        </div>
-                        <div className="p-2.5 bg-stone-900 rounded border border-stone-800 space-y-1">
-                          <span className="text-[10px] text-emerald-400 uppercase block">Current v{activeObject.version}</span>
-                          <div className="text-white">Pattern: {editPattern}</div>
-                          <div className="text-emerald-300">Meaning BN: {editMeaningBn}</div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <VersionHistorySidebar
+                  knowledgeObject={activeObject}
+                  onRevertVersion={handleRevertVersion}
+                  onClose={() => setShowVersionHistory(false)}
+                />
               )}
 
               {/* Side-by-Side Manuscript Traceability vs Trilingual Editor */}
@@ -535,6 +603,7 @@ export const ReviewQueueStudio: React.FC = () => {
               {/* Action Buttons: Re-evaluate & Authorize Gate */}
               <div className="pt-3 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <button
+                  id="re-evaluate-score-btn"
                   onClick={handleSaveAndReEvaluate}
                   className="w-full sm:w-auto px-5 py-2.5 bg-stone-900 hover:bg-stone-800 text-stone-200 text-xs font-bold rounded-xl border border-stone-700 cursor-pointer flex items-center justify-center space-x-1.5"
                 >
@@ -543,6 +612,7 @@ export const ReviewQueueStudio: React.FC = () => {
                 </button>
 
                 <button
+                  id="authorize-and-publish-btn"
                   onClick={handleAuthorizeAndPublish}
                   className="w-full sm:w-auto px-7 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center space-x-2"
                 >

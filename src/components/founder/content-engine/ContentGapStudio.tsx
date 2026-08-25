@@ -20,6 +20,7 @@ import {
 import { JLPTLevel } from '../../../types/nihomi';
 import { ContentGapItem, LevelCompletenessMetrics } from '../../../core/content-engine/types';
 import { ContentGapService } from '../../../core/content-engine/contentGapService';
+import { LevelCoverageWidget } from './LevelCoverageWidget';
 
 interface ContentGapStudioProps {
   selectedLevel: JLPTLevel;
@@ -51,7 +52,7 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
 
     if (result.success) {
       setGaps(ContentGapService.getContentGaps());
-      showToast(`✓ AI-Fix Executed: Generated 4 exemplar sentences and updated syllabus coverage.`);
+      showToast(`✓ AI-Fix Executed: Generated 4 culturally verified exemplars & updated coverage matrix.`);
     }
   };
 
@@ -64,18 +65,8 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
   const openGapsCount = gaps.filter((g) => g.status === 'OPEN').length;
   const resolvedGapsCount = gaps.filter((g) => g.status === 'RESOLVED').length;
 
-  const radarMetrics = [
-    { label: 'Vocabulary', percent: metrics.vocabularyCoveragePercent, color: 'bg-emerald-500' },
-    { label: 'Kanji Radicals', percent: metrics.kanjiCoveragePercent, color: 'bg-amber-500' },
-    { label: 'Grammar Patterns', percent: metrics.grammarCoveragePercent, color: 'bg-blue-500' },
-    { label: 'Reading Passages', percent: metrics.readingCoveragePercent, color: 'bg-purple-500' },
-    { label: 'Listening Audio', percent: metrics.listeningCoveragePercent, color: 'bg-rose-500' },
-    { label: 'Speaking / Shadowing', percent: metrics.speakingCoveragePercent, color: 'bg-cyan-500' },
-    { label: 'Assessment Quizzes', percent: metrics.assessmentCoveragePercent, color: 'bg-orange-500' }
-  ];
-
   return (
-    <div className="space-y-6 text-left">
+    <div id="content-gap-studio" className="space-y-6 text-left">
       {/* Toast */}
       {toastMessage && (
         <div className="p-4 bg-emerald-950/90 border border-emerald-700/80 rounded-2xl text-xs text-emerald-300 font-bold flex items-center space-x-2 animate-in fade-in">
@@ -84,121 +75,11 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
         </div>
       )}
 
-      {/* Level Selector Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-stone-950 border border-stone-800 p-4 rounded-2xl">
-        <div className="flex items-center space-x-2">
-          {(['N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((lvl) => {
-            const isSelected = selectedLevel === lvl;
-            return (
-              <button
-                key={lvl}
-                onClick={() => onSelectLevel(lvl)}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-amber-500 text-stone-950 shadow-xs'
-                    : 'bg-stone-900 text-stone-400 hover:text-white border border-stone-800'
-                }`}
-              >
-                JLPT {lvl}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="flex items-center space-x-3 text-xs font-mono">
-          <span className="text-stone-400">
-            Open Gaps: <strong className="text-amber-400">{openGapsCount}</strong>
-          </span>
-          <span className="text-stone-600">|</span>
-          <span className="text-stone-400">
-            Resolved: <strong className="text-emerald-400">{resolvedGapsCount}</strong>
-          </span>
-        </div>
-      </div>
-
-      {/* Dashboard Widget: Level Completeness Radar & Circular Progress Bars */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Overall Completeness Circular Card */}
-        <div className="lg:col-span-4 bg-stone-950 border border-stone-800 rounded-3xl p-6 flex flex-col justify-between space-y-4">
-          <div className="space-y-1">
-            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-500">
-              Syllabus Completeness Index
-            </span>
-            <h4 className="text-base font-extrabold text-white">JLPT {selectedLevel} Master Coverage</h4>
-          </div>
-
-          <div className="relative w-40 h-40 mx-auto flex items-center justify-center my-2">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path
-                className="text-stone-900"
-                strokeWidth="3.5"
-                stroke="currentColor"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="text-amber-500"
-                strokeDasharray={`${metrics.overallCompletenessPercent}, 100`}
-                strokeWidth="3.5"
-                strokeLinecap="round"
-                stroke="currentColor"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <strong className="text-3xl font-mono font-extrabold text-white">
-                {metrics.overallCompletenessPercent}%
-              </strong>
-              <span className="text-[10px] text-amber-400 font-mono font-semibold uppercase">Calibrated</span>
-            </div>
-          </div>
-
-          <div className="p-3 bg-stone-900/90 rounded-2xl border border-stone-800 text-[11px] space-y-1">
-            <div className="flex justify-between text-stone-300">
-              <span>Total Knowledge Objects:</span>
-              <strong className="font-mono text-white">{metrics.totalKnowledgeObjects}</strong>
-            </div>
-            <div className="flex justify-between text-stone-300">
-              <span>Pending Review Queue:</span>
-              <strong className="font-mono text-amber-400">{metrics.totalPendingReviewCount} items</strong>
-            </div>
-          </div>
-        </div>
-
-        {/* 7-Dimension Breakdown Bars */}
-        <div className="lg:col-span-8 bg-stone-950 border border-stone-800 rounded-3xl p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-stone-800 pb-3">
-            <div className="space-y-0.5">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-stone-300 font-mono flex items-center space-x-2">
-                <BarChart3 className="w-4 h-4 text-amber-400" />
-                <span>7-Dimension Coverage Matrix (JLPT {selectedLevel})</span>
-              </h4>
-              <p className="text-[11px] text-stone-500">Comprehensive curriculum distribution & deficit mapping</p>
-            </div>
-            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-              Live Target Tracking
-            </span>
-          </div>
-
-          <div className="space-y-3.5 pt-1">
-            {radarMetrics.map((item) => (
-              <div key={item.label} className="space-y-1.5 text-xs">
-                <div className="flex justify-between font-mono">
-                  <span className="text-stone-300 font-medium">{item.label}</span>
-                  <span className="text-stone-200 font-bold">{item.percent}%</span>
-                </div>
-                <div className="w-full bg-stone-900 rounded-full h-2 overflow-hidden border border-stone-800">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-500 ${item.color}`}
-                    style={{ width: `${item.percent}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Level Coverage Radar Widget using Recharts */}
+      <LevelCoverageWidget
+        selectedLevel={selectedLevel}
+        onSelectLevel={onSelectLevel}
+      />
 
       {/* Content Gaps List View with Priority & Severity Filters */}
       <div className="bg-stone-950 border border-stone-800 rounded-3xl p-6 space-y-5">
@@ -218,8 +99,9 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
               {(['ALL', 'HIGH', 'MEDIUM', 'LOW'] as const).map((p) => (
                 <button
                   key={p}
+                  id={`gap-filter-priority-${p}`}
                   onClick={() => setPriorityFilter(p)}
-                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold cursor-pointer ${
+                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold cursor-pointer transition-all ${
                     priorityFilter === p ? 'bg-amber-500 text-stone-950' : 'text-stone-400 hover:text-white'
                   }`}
                 >
@@ -233,8 +115,9 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
               {(['ALL', 'CRITICAL', 'WARNING', 'MINOR'] as const).map((s) => (
                 <button
                   key={s}
+                  id={`gap-filter-severity-${s}`}
                   onClick={() => setSeverityFilter(s)}
-                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold cursor-pointer ${
+                  className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold cursor-pointer transition-all ${
                     severityFilter === s ? 'bg-red-500 text-white' : 'text-stone-400 hover:text-white'
                   }`}
                 >
@@ -259,6 +142,7 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
               return (
                 <div
                   key={gap.id}
+                  id={`gap-item-${gap.id}`}
                   className={`p-4 rounded-2xl border transition-all space-y-3 text-xs ${
                     isResolved
                       ? 'bg-stone-900/40 border-stone-800'
@@ -307,6 +191,7 @@ export const ContentGapStudio: React.FC<ContentGapStudioProps> = ({
 
                     {!isResolved ? (
                       <button
+                        id={`trigger-ai-fix-btn-${gap.id}`}
                         onClick={() => handleTriggerAiFix(gap.id)}
                         disabled={isFixing}
                         className="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-extrabold rounded-xl shadow-xs transition-all shrink-0 flex items-center space-x-1.5 cursor-pointer disabled:opacity-40"

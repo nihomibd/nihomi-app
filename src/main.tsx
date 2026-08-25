@@ -4,6 +4,7 @@ import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { FocusModeProvider } from './context/FocusModeContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 
@@ -30,7 +31,9 @@ if (container) {
         <AuthProvider>
           <LanguageProvider>
             <ThemeProvider>
-              <App />
+              <FocusModeProvider>
+                <App />
+              </FocusModeProvider>
             </ThemeProvider>
           </LanguageProvider>
         </AuthProvider>

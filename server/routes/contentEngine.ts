@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
+import crypto from 'crypto';
 import { db } from '../db.js';
 import { requireAdmin, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { contentEngineService } from '../services/contentEngineService.js';
@@ -264,3 +265,83 @@ contentEngineRouter.get('/published', optionalAuth, (req: AuthenticatedRequest, 
   const published = db.getPublishedContent(level);
   return res.json({ success: true, ...published });
 });
+
+// ==========================================
+// 5. BATCH INGESTION PIPELINE (PDF Hash & Extraction)
+// ==========================================
+
+// Multipart form upload route that calculates SHA-256 and triggers ingestion
+contentEngineRouter.post(
+  '/batch-upload',
+  upload.single('pdfFile'),
+  async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          error: 'No PDF file uploaded. Please attach a valid PDF document with key "pdfFile".'
+        });
+      }
+
+      const fileBuffer = req.file.buffer;
+      const originalName = req.file.originalname;
+      const targetLevel: JLPTLevel = (['N5', 'N4', 'N3', 'N2', 'N1'].includes(req.body.level)
+        ? req.body.level
+        : 'N5') as JLPTLevel;
+
+      // 1. Calculate cryptographic SHA-256 hash of PDF binary
+      const sha256 = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+
+      // 2. Create Ingestion Job representation
+      const jobId = `job-batch-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+      const job = {
+        id: jobId,
+        filename: originalName,
+        fileSizeBytes: req.file.size,
+        level: targetLevel,
+        sourceHash: sha256,
+        stage: 'EXTRACTING',
+        progressPercent: 30,
+        extractedConceptsCount: 0,
+        extractedObjectIds: [],
+        status: 'PROCESSING',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // 3. Save source into Content Engine
+      const source = await contentEngineService.saveUploadedPdf(
+        fileBuffer,
+        originalName,
+        req.file.mimetype,
+        targetLevel,
+        req.body.title || originalName.replace(/\.[^/.]+$/, ''),
+        'batch-ingestion-worker',
+        'content-pipeline@nihomi.com'
+      );
+
+      // 4. Process extraction
+      const processResult = await contentEngineService.processSource(source.id);
+
+      return res.status(201).json({
+        success: true,
+        jobId: job.id,
+        sourceHash: sha256,
+        filename: originalName,
+        fileSizeBytes: req.file.size,
+        level: targetLevel,
+        status: processResult.success ? 'COMPLETED' : 'PROCESSING',
+        sourceId: source.id,
+        draft: processResult.draft || null,
+        message: 'PDF uploaded, SHA-256 calculated, and batch pipeline executed successfully.'
+      });
+    } catch (err: any) {
+      console.error('[ContentEngine] Batch upload failed:', err);
+      return res.status(500).json({
+        success: false,
+        error: err.message || 'Batch PDF upload failed'
+      });
+    }
+  }
+);
+

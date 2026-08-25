@@ -32,6 +32,8 @@ import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice'
 import { InfiniteConceptStudio } from '../components/founder/content-engine/InfiniteConceptStudio';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
+import { useFocusMode } from '../context/FocusModeContext';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface StudentPortalViewProps {
   initialTab?: 'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
@@ -160,6 +162,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   onNavigate
 }) => {
   const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
+  const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [activeTab, setActiveTab] = useState<
     'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
   >(initialTab);
@@ -288,6 +291,20 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           </div>
 
           <div className="flex items-center flex-wrap gap-2.5">
+            <button
+              id="btn-toggle-focus-mode"
+              type="button"
+              onClick={() => toggleFocusMode(!isFocusMode)}
+              className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border cursor-pointer ${
+                isFocusMode
+                  ? 'bg-amber-500 text-stone-900 border-amber-400 shadow-md font-bold'
+                  : 'bg-stone-800/90 hover:bg-stone-700 text-amber-300 border-stone-700 hover:border-amber-400/50'
+              }`}
+            >
+              {isFocusMode ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-amber-400" />}
+              <span>{isFocusMode ? 'Exit Focus Mode' : '🧘 Focus Mode'}</span>
+            </button>
+
             <button
               onClick={() => setActiveTab('settings')}
               className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border cursor-pointer ${

@@ -47,6 +47,31 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleFileUpload = async (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    setIsProcessing(true);
+    showToast(`Processing ${files.length} real document file(s) with SHA-256 verification...`);
+
+    const fileList = Array.from(files);
+    for (const file of fileList) {
+      try {
+        await BatchIngestionQueue.processRealFile(file, selectedLevel);
+      } catch (err: any) {
+        console.error('[PDFIngestionStudio] File processing failed:', err);
+      }
+    }
+
+    setJobs(BatchIngestionQueue.getJobs());
+    setIsProcessing(false);
+    showToast(`Successfully extracted ${fileList.length} files. Concepts added to Review Queue!`);
+  };
 
   const handleAddSampleBatch = () => {
     const sampleFiles = [
@@ -61,16 +86,11 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
     showToast('Batch created: 5 Multi-PDF Textbooks queued with SHA-256 deduplication signatures.');
   };
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3500);
-  };
-
   const handleRunBatchPipeline = async () => {
     setIsProcessing(true);
     const allJobs = BatchIngestionQueue.getJobs();
-    for (let step = 0; step < 5; step++) {
-      await new Promise((r) => setTimeout(r, 650));
+    for (let step = 0; step < 4; step++) {
+      await new Promise((r) => setTimeout(r, 500));
       for (const j of allJobs) {
         BatchIngestionQueue.processJobStep(j.id);
       }
@@ -78,6 +98,12 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
     }
     setIsProcessing(false);
     showToast('Ingestion pipeline completed. Extracted concepts loaded into Review Queue & Quality Gate.');
+  };
+
+  const handleClearAllJobs = () => {
+    BatchIngestionQueue.clearJobs();
+    setJobs([]);
+    showToast('Ingestion queue cleared.');
   };
 
   const totalExtracted = jobs.reduce((sum, j) => sum + j.extractedConceptsCount, 0);
@@ -121,6 +147,19 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
       )}
 
       {/* Drag & Drop Upload Stage */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept=".pdf,.txt,.md,.json"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            handleFileUpload(e.target.files);
+          }
+        }}
+      />
+
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -130,7 +169,11 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
         onDrop={(e) => {
           e.preventDefault();
           setDragOver(false);
-          handleAddSampleBatch();
+          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFileUpload(e.dataTransfer.files);
+          } else {
+            handleAddSampleBatch();
+          }
         }}
         className={`border-2 border-dashed rounded-3xl p-8 text-center space-y-4 transition-all ${
           dragOver
@@ -153,6 +196,16 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center space-x-1.5"
+          >
+            <Upload className="w-4 h-4" />
+            <span>Upload Real PDF / Textbooks</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleAddSampleBatch}
             className="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-stone-200 text-xs font-bold rounded-xl border border-stone-700 transition-all cursor-pointer flex items-center space-x-1.5"
           >
@@ -161,16 +214,29 @@ export const PDFIngestionStudio: React.FC<PDFIngestionStudioProps> = ({
           </button>
 
           <button
+            type="button"
             onClick={handleRunBatchPipeline}
             disabled={isProcessing || jobs.length === 0}
-            className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-extrabold rounded-xl shadow-xs transition-all flex items-center space-x-2 cursor-pointer disabled:opacity-40"
+            className="px-6 py-2.5 bg-stone-800 hover:bg-stone-700 text-white text-xs font-extrabold rounded-xl border border-stone-700 shadow-xs transition-all flex items-center space-x-2 cursor-pointer disabled:opacity-40"
           >
-            {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            <span>{isProcessing ? 'Executing Extraction Pipeline...' : 'Run Automated Pipeline'}</span>
+            {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-amber-400" />}
+            <span>{isProcessing ? 'Executing Extraction Pipeline...' : 'Process All Queued Batches'}</span>
           </button>
+
+          {jobs.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClearAllJobs}
+              className="px-3.5 py-2.5 bg-stone-900 hover:bg-red-950/60 text-stone-400 hover:text-red-300 text-xs font-semibold rounded-xl border border-stone-800 transition-all cursor-pointer flex items-center space-x-1.5"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Clear</span>
+            </button>
+          )}
 
           {finishedCount > 0 && onNavigateToReview && (
             <button
+              type="button"
               onClick={onNavigateToReview}
               className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer"
             >

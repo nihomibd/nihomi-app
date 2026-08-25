@@ -555,7 +555,30 @@ const SEED_KNOWLEDGE_OBJECTS: KnowledgeObject[] = [
   } as KanjiObject
 ];
 
-let knowledgeObjects: KnowledgeObject[] = [...SEED_KNOWLEDGE_OBJECTS];
+const KNOWLEDGE_STORAGE_KEY = 'nihomi_master_knowledge_objects_v2';
+
+function loadSavedKnowledgeObjects(): KnowledgeObject[] {
+  if (typeof window === 'undefined') return [...SEED_KNOWLEDGE_OBJECTS];
+  try {
+    const raw = localStorage.getItem(KNOWLEDGE_STORAGE_KEY);
+    if (!raw) return [...SEED_KNOWLEDGE_OBJECTS];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : [...SEED_KNOWLEDGE_OBJECTS];
+  } catch {
+    return [...SEED_KNOWLEDGE_OBJECTS];
+  }
+}
+
+function persistKnowledgeObjects(objs: KnowledgeObject[]) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(KNOWLEDGE_STORAGE_KEY, JSON.stringify(objs));
+  } catch (err) {
+    console.warn('[ContentIngestionService] Could not persist knowledge objects:', err);
+  }
+}
+
+let knowledgeObjects: KnowledgeObject[] = loadSavedKnowledgeObjects();
 
 export const ContentIngestionService = {
   getKnowledgeObjects(filterStage?: ContentLifecycleStage): KnowledgeObject[] {
@@ -567,6 +590,21 @@ export const ContentIngestionService = {
 
   getKnowledgeObjectById(id: string): KnowledgeObject | undefined {
     return knowledgeObjects.find((k) => k.id === id);
+  },
+
+  upsertKnowledgeObject(obj: KnowledgeObject, author = 'system_ingestion_pipeline', summary = 'Upserted knowledge object'): KnowledgeObject {
+    const existingIndex = knowledgeObjects.findIndex((k) => k.id === obj.id);
+    if (existingIndex >= 0) {
+      knowledgeObjects[existingIndex] = {
+        ...obj,
+        updatedAt: new Date().toISOString(),
+        updatedBy: author
+      };
+    } else {
+      knowledgeObjects.unshift(obj);
+    }
+    persistKnowledgeObjects(knowledgeObjects);
+    return obj;
   },
 
   registerOrUpdateObject(obj: KnowledgeObject, author = 'mdtanvirkabirbiplob@gmail.com', summary = 'Content edit'): KnowledgeObject {
@@ -607,6 +645,7 @@ export const ContentIngestionService = {
     } else {
       knowledgeObjects.push(updatedObj);
     }
+    persistKnowledgeObjects(knowledgeObjects);
     return updatedObj;
   },
 
@@ -639,6 +678,7 @@ export const ContentIngestionService = {
     if (existingIndex >= 0) {
       knowledgeObjects[existingIndex] = restored;
     }
+    persistKnowledgeObjects(knowledgeObjects);
     return restored;
   },
 
@@ -656,6 +696,17 @@ export const ContentIngestionService = {
     const evalResult = NihomiStandardService.evaluateKnowledgeObject(obj);
     obj.qualityEvaluation = evalResult;
 
+    const existingIndex = knowledgeObjects.findIndex((k) => k.id === objectId);
+    if (existingIndex >= 0) {
+      knowledgeObjects[existingIndex] = obj;
+    }
+    persistKnowledgeObjects(knowledgeObjects);
     return obj;
+  },
+
+  resetToSeed(): KnowledgeObject[] {
+    knowledgeObjects = [...SEED_KNOWLEDGE_OBJECTS];
+    persistKnowledgeObjects(knowledgeObjects);
+    return [...knowledgeObjects];
   }
 };
