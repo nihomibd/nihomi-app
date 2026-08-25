@@ -56,6 +56,14 @@ export interface SourceTraceability {
   copyrightLicense: 'PUBLIC_DOMAIN' | 'ORIGINAL_PROPRIETARY' | 'ACADEMIC_FAIR_USE' | 'RIGHTS_REVIEW_REQUIRED';
 }
 
+export interface NihomiStandardEvaluationViolation {
+  ruleId: string;
+  dimension: string;
+  severity: 'CRITICAL' | 'WARNING' | 'INFO';
+  message: string;
+  suggestedFix?: string;
+}
+
 export interface NihomiStandardEvaluation {
   evaluatedAt: string;
   overallScore: number;
@@ -86,12 +94,7 @@ export interface NihomiStandardEvaluation {
     versionIntegrity: number;
     humanReviewState: number;
   };
-  violations: {
-    ruleId: string;
-    severity: 'CRITICAL' | 'WARNING' | 'INFO';
-    message: string;
-    suggestedFix?: string;
-  }[];
+  violations: NihomiStandardEvaluationViolation[];
   reviewNotes?: string;
 }
 
@@ -114,6 +117,24 @@ export interface TrilingualContent {
   };
 }
 
+export interface KnowledgeObjectVersionSnapshot {
+  version: number;
+  timestamp: string;
+  author: string;
+  summary: string;
+  dataSnapshot: {
+    code: string;
+    type: KnowledgeObjectType;
+    level: JLPTLevel;
+    status: PublicationStatus;
+    lifecycleStage: ContentLifecycleStage;
+    patternOrWord: string;
+    formulaOrReading: string;
+    trilingual: TrilingualContent;
+    qualityScore: number;
+  };
+}
+
 export interface BaseKnowledgeObject {
   id: string;
   code: string;
@@ -124,6 +145,7 @@ export interface BaseKnowledgeObject {
   status: PublicationStatus;
   version: number;
   previousVersionId?: string;
+  versionHistory?: KnowledgeObjectVersionSnapshot[];
   sourceTraceability: SourceTraceability;
   qualityEvaluation: NihomiStandardEvaluation;
   prerequisites: string[];
@@ -219,6 +241,16 @@ export interface ContentGapItem {
   gapType: 'MISSING_EXEMPLARS' | 'MISSING_BANGLA_TRANSLATION' | 'MISSING_PREREQUISITE' | 'MISSING_ASSESSMENT' | 'LOW_QUALITY_SCORE';
   reason: string;
   priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  severity: 'CRITICAL' | 'WARNING' | 'MINOR';
+  status: 'OPEN' | 'RESOLVED' | 'IN_PROGRESS';
   detectedAt: string;
+  resolvedAt?: string;
   recommendedAction: string;
+  exemplarsGenerated?: {
+    ja: string;
+    furigana: string;
+    romaji: string;
+    en: string;
+    bn: string;
+  }[];
 }

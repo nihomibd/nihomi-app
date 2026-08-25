@@ -29,11 +29,12 @@ import {
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
+import { InfiniteConceptStudio } from '../components/founder/content-engine/InfiniteConceptStudio';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 
 interface StudentPortalViewProps {
-  initialTab?: 'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription';
+  initialTab?: 'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
   onNavigate?: (view: string) => void;
 }
 
@@ -160,7 +161,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
 }) => {
   const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription'
+    'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
   >(initialTab);
 
   useEffect(() => {
@@ -332,6 +333,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
               { id: 'courses', label: 'Curriculum & Lessons', icon: BookOpen },
+              { id: 'infinite_concept', label: '⚡ Infinite Learning Hub™ (15 Formats)', icon: Sparkles },
               { id: 'assessments', label: 'Exams & Scorecards', icon: Clock },
               { id: 'idcard', label: 'Digital Student ID', icon: ShieldCheck },
               { id: 'certificates', label: 'Certificates & Records', icon: Award },
@@ -978,6 +980,25 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* INFINITE CONCEPT HUB (15 FORMATS) */}
+        {activeTab === 'infinite_concept' && (
+          <div className="space-y-6">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 text-white text-left space-y-2 shadow-xs">
+              <div className="flex items-center space-x-2">
+                <span className="px-2.5 py-0.5 bg-red-500/20 text-red-300 font-mono text-[10px] font-bold rounded-lg border border-red-500/30">
+                  STUDENT 15-IN-1 LEARNING MATRIX
+                </span>
+                <span className="text-xs text-slate-400 font-mono">Dynamic Concept Synthesis</span>
+              </div>
+              <h2 className="text-xl font-bold text-white">Infinite Concept Studio™</h2>
+              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                Study any JLPT N5/N4/N3 grammar point, kanji character, or vocabulary word across 15 interactive pedagogical formats — from Tokyo baito roleplays and pitch accent shadowing to Leitner flashcards and Ghost Mode particle discrimination.
+              </p>
+            </div>
+            <InfiniteConceptStudio />
           </div>
         )}
       </div>
