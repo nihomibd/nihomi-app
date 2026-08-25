@@ -18,6 +18,7 @@ import { PassportVerificationView } from './views/PassportVerificationView';
 import { FounderCommandCenterView } from './views/FounderCommandCenterView';
 import { InstitutionPortalView } from './views/InstitutionPortalView';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
+import { InstallPWA } from './components/common/InstallPWA';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -95,6 +96,9 @@ export const App: React.FC = () => {
 
       {/* Google Sign-in & Authentication Modal */}
       <AuthModal />
+
+      {/* PWA Home Screen Installation Prompt Banner */}
+      <InstallPWA />
     </div>
   );
 };

@@ -658,6 +658,15 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
                       <div className="flex items-center gap-1.5 shrink-0">
                         <button
                           type="button"
+                          onClick={() => setSpeakingTarget({ phrase: ex.japanese, english: ex.english })}
+                          className="px-2 py-1 rounded-lg bg-purple-50 text-purple-700 text-[10px] font-bold border border-purple-200 hover:bg-purple-100 flex items-center gap-1 cursor-pointer"
+                          title="Practice Speaking (Web Speech API)"
+                        >
+                          <Mic className="w-3 h-3 text-purple-600" />
+                          <span>Speak</span>
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setDnaSentence(ex.japanese)}
                           className="px-2 py-1 rounded-lg bg-red-50 text-red-700 text-[10px] font-bold border border-red-200 hover:bg-red-100 cursor-pointer"
                         >

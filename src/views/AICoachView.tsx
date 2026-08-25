@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { apiRequest } from '../lib/api.js';
-import { speakJapanese } from '../lib/tts.js';
+import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
 import { AISessionMessage } from '../types.js';
 import {
   Bot,
   Send,
   Sparkles,
   Volume2,
+  VolumeX,
   AlertCircle,
   RotateCcw,
   Camera,
@@ -16,7 +17,9 @@ import {
   Mic,
   MicOff,
   Globe,
-  Loader2
+  Radio,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { VisionSenseiModal } from '../components/VisionSenseiModal.js';
 import { SentenceDnaModal } from '../components/SentenceDnaModal.js';
@@ -33,13 +36,29 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
   const [scenario, setScenario] = useState<string>('General Conversation');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | undefined>(undefined);
+  
+  // Voice State
   const [isRecording, setIsRecording] = useState(false);
+  const [isHandsFreeMode, setIsHandsFreeMode] = useState(false);
+  const [isAutoSpeakEnabled, setIsAutoSpeakEnabled] = useState(true);
+  const [speechLanguage, setSpeechLanguage] = useState<'ja-JP' | 'bn-BD' | 'en-US'>('ja-JP');
+  const [liveTranscript, setLiveTranscript] = useState('');
+  const [isSpeechSupported, setIsSpeechSupported] = useState(true);
 
   // Modals
   const [isVisionModalOpen, setIsVisionModalOpen] = useState(false);
   const [dnaSentence, setDnaSentence] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+  const silenceTimerRef = useRef<any>(null);
+  const isHandsFreeActiveRef = useRef(isHandsFreeMode);
+
+  // Keep ref synced
+  useEffect(() => {
+    isHandsFreeActiveRef.current = isHandsFreeMode;
+  }, [isHandsFreeMode]);
+
   const usage = subscriptionDetails?.usage;
   const plan = subscriptionDetails?.plan;
   const isFreeOrStarter = activePlanId === 'free' || activePlanId === 'starter';
@@ -58,7 +77,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
         {
           id: 'welcome-msg',
           role: 'assistant',
-          content: `こんにちは、${profile?.displayName || 'Learner'}さん！🇯🇵\nআমি নিহোমি এআই সেনসেই। আপনার সাথে জাপানি ভাষায় কথোপকথন, বাক্যের ব্যাকরণ সংশোধন (Sentence Correction) এবং বাস্তব জাপানি জীবনের প্রস্তুতিতে সাহায্য করতে প্রস্তুত। আজকে আপনি কী অনুশীলন করতে চান?`,
+          content: `こんにちは、${profile?.displayName || 'Learner'}さん！🇯🇵\nআমি নিহোমি এআই সেনসেই। আপনার সাথে জাপানি ভাষায় কথোপকথন, বাক্যের ব্যাকরণ সংশোধন (Sentence Correction) এবং বাস্তব জাপানি জীবনের প্রস্তুতিতে সাহায্য করতে প্রস্তুত। আপনি কিবোর্ডে লিখে কিংবা সরাসরি হ্যান্ডস-ফ্রি ভয়েস মোড (Hands-free Voice) অন করে কথা বলতে পারেন।`,
           mode: 'conversation',
           timestamp: new Date().toISOString()
         }
@@ -70,12 +89,137 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!inputText.trim() || isLoading) return;
+  // Setup Web Speech API Recognition
+  useEffect(() => {
+    const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
-    const userText = inputText.trim();
+    if (!SpeechRecognitionClass) {
+      setIsSpeechSupported(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognitionClass();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = speechLanguage;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      let finalTranscript = '';
+      let interimTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+
+      const activeText = (finalTranscript || interimTranscript).trim();
+      if (activeText) {
+        setLiveTranscript(activeText);
+        setInputText(activeText);
+
+        // If in hands-free mode, trigger auto-send after 1.5s of silence
+        if (isHandsFreeActiveRef.current) {
+          if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+          silenceTimerRef.current = setTimeout(() => {
+            if (activeText.length > 1) {
+              handleSendDirectText(activeText);
+            }
+          }, 1600);
+        }
+      }
+    };
+
+    recognition.onerror = (event: any) => {
+      console.warn('Speech recognition warning:', event.error);
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        setIsRecording(false);
+        setIsHandsFreeMode(false);
+      }
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+      // If hands-free mode is still on and not currently waiting for AI reply, restart listening
+      if (isHandsFreeActiveRef.current && !isLoading) {
+        try {
+          recognition.start();
+        } catch {
+          // ignore already started error
+        }
+      }
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      try {
+        recognition.stop();
+      } catch {}
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+    };
+  }, [speechLanguage, isLoading]);
+
+  // Toggle single manual voice recording
+  const handleToggleManualRecording = () => {
+    if (!recognitionRef.current) {
+      alert('Speech Recognition is not supported in this browser. Please use Chrome or Safari.');
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      try {
+        setLiveTranscript('');
+        recognitionRef.current.start();
+      } catch (err) {
+        console.warn('Mic start error:', err);
+      }
+    }
+  };
+
+  // Toggle Continuous Hands-Free Voice Mode
+  const handleToggleHandsFree = () => {
+    const nextState = !isHandsFreeMode;
+    setIsHandsFreeMode(nextState);
+
+    if (nextState) {
+      try {
+        setLiveTranscript('');
+        recognitionRef.current?.start();
+      } catch (err) {
+        console.warn('Hands-free mic start error:', err);
+      }
+    } else {
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      try {
+        recognitionRef.current?.stop();
+      } catch {}
+      setIsRecording(false);
+    }
+  };
+
+  const handleSendDirectText = async (rawText: string) => {
+    if (!rawText.trim() || isLoading) return;
+
+    const userText = rawText.trim();
     setInputText('');
+    setLiveTranscript('');
+
+    if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+
+    // Stop recognition while waiting for AI reply to avoid self-echoing
+    try {
+      recognitionRef.current?.stop();
+    } catch {}
 
     const newMsg: AISessionMessage = {
       id: `temp-${Date.now()}`,
@@ -113,18 +257,43 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
       });
 
       setSessionId(res.sessionId);
+      const assistantReply = res.reply;
+
       if (res.messages && res.messages.length > 0) {
         setMessages(res.messages);
       } else {
         const assistantMsg: AISessionMessage = {
           id: `ai-${Date.now()}`,
           role: 'assistant',
-          content: res.reply,
+          content: assistantReply,
           mode,
           correctionData: res.correctionData,
           timestamp: new Date().toISOString()
         };
         setMessages((prev) => [...prev, assistantMsg]);
+      }
+
+      // Auto-Speak AI Response if enabled
+      if (isAutoSpeakEnabled && assistantReply) {
+        // Extract Japanese portions or full text
+        speakJapanese(assistantReply, {
+          onEnd: () => {
+            // Resume listening in Hands-Free Mode after speech finishes
+            if (isHandsFreeActiveRef.current) {
+              try {
+                recognitionRef.current?.start();
+              } catch {}
+            }
+          }
+        });
+      } else {
+        if (isHandsFreeActiveRef.current) {
+          setTimeout(() => {
+            try {
+              recognitionRef.current?.start();
+            } catch {}
+          }, 600);
+        }
       }
     } catch (err: any) {
       console.error('Failed to send AI message:', err);
@@ -139,6 +308,11 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSendMessage = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    handleSendDirectText(inputText);
   };
 
   return (
@@ -165,23 +339,53 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
                 Nihomi AI Sensei™ (AI জাপানি কোচ)
               </h1>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200 uppercase">
-                Gemini 3.7
+                Gemini 3.7 Multimodal
               </span>
             </div>
             <p className="text-xs text-stone-500">
-              বাস্তব কথোপকথন, তাৎক্ষণিক বাক্য সংশোধন, ভয়েস উচ্চারণ এবং ক্যামেরা দিয়ে ছবি স্ক্যান।
+              বাস্তব কথোপকথন, তাৎক্ষণিক বাক্য সংশোধন, হ্যান্ডস-ফ্রি ভয়েস ইনপুট এবং ক্যামেরা ছবি স্ক্যান।
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Hands-Free Mode Toggle Button */}
+            <button
+              id="btn-toggle-hands-free-coach"
+              type="button"
+              onClick={handleToggleHandsFree}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer ${
+                isHandsFreeMode
+                  ? 'bg-red-600 text-white ring-2 ring-red-400 ring-offset-1 animate-pulse'
+                  : 'bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200'
+              }`}
+              title="Toggle Hands-free Voice-to-Text Conversation"
+            >
+              <Radio className={`w-3.5 h-3.5 ${isHandsFreeMode ? 'text-white' : 'text-red-600'}`} />
+              <span>{isHandsFreeMode ? 'হ্যান্ডস-ফ্রি ভয়েস (ON)' : 'হ্যান্ডস-ফ্রি মোড (OFF)'}</span>
+            </button>
+
+            {/* Auto-Speak AI Audio Toggle */}
+            <button
+              type="button"
+              onClick={() => setIsAutoSpeakEnabled(!isAutoSpeakEnabled)}
+              className={`p-2 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                isAutoSpeakEnabled
+                  ? 'bg-stone-900 text-white border-stone-800'
+                  : 'bg-stone-100 text-stone-400 border-stone-200 hover:text-stone-700'
+              }`}
+              title={isAutoSpeakEnabled ? 'অটো-ভয়েস রিপ্লাই চালু' : 'অটো-ভয়েস রিপ্লাই বন্ধ'}
+            >
+              {isAutoSpeakEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+
             {/* Vision Sensei Quick Trigger */}
             <button
               type="button"
               onClick={() => setIsVisionModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Camera className="w-4 h-4 text-red-400" />
-              <span>Vision Sensei (📷 OCR)</span>
+              <Camera className="w-3.5 h-3.5 text-red-400" />
+              <span>Vision (📷 OCR)</span>
             </button>
 
             {/* Quota Badge */}
@@ -213,6 +417,39 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
             </button>
           ))}
         </div>
+
+        {/* Hands-free Voice Live Status Banner */}
+        {isHandsFreeMode && (
+          <div className="p-3.5 bg-red-600 text-white rounded-2xl shadow-md flex items-center justify-between gap-3 animate-in fade-in duration-300">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center animate-bounce">
+                <Mic className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-bold">
+                  {isRecording ? '🎙️ হ্যান্ডস-ফ্রি ভয়েস সক্রিয় — জাপানি বা বাংলায় কথা বলুন...' : 'AI Sensei প্রস্তুত হচ্ছে...'}
+                </p>
+                <p className="text-[11px] text-red-100">
+                  {liveTranscript ? `শুনছি: "${liveTranscript}"` : 'আপনার কথা শেষ হলে স্বয়ংক্রিয়ভাবে উত্তর দেয়া হবে ও অডিও বাজবে।'}
+                </p>
+              </div>
+            </div>
+
+            {/* Language Selector for Voice */}
+            <div className="flex items-center gap-1.5 text-xs font-semibold">
+              <span className="text-[11px] text-red-200">ভাষা:</span>
+              <select
+                value={speechLanguage}
+                onChange={(e) => setSpeechLanguage(e.target.value as any)}
+                className="bg-black/30 text-white text-xs rounded-lg px-2 py-1 border border-white/20 focus:outline-none cursor-pointer"
+              >
+                <option value="ja-JP">日本語 (Japanese)</option>
+                <option value="bn-BD">বাংলা (Bengali)</option>
+                <option value="en-US">English (US)</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {/* Main Grid: Left Scenarios + Right Terminal */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -334,11 +571,13 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
             <form onSubmit={handleSendMessage} className="p-3 border-t border-stone-200 bg-stone-50 flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setIsRecording(!isRecording)}
+                onClick={handleToggleManualRecording}
                 className={`p-3 rounded-xl transition-colors cursor-pointer ${
-                  isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-white border border-stone-300 text-stone-600 hover:text-red-600'
+                  isRecording
+                    ? 'bg-red-600 text-white animate-pulse'
+                    : 'bg-white border border-stone-300 text-stone-600 hover:text-red-600'
                 }`}
-                title="Voice Input (Speak in Japanese)"
+                title="ভয়েস রেকর্ড করুন (Voice-to-Text)"
               >
                 {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
               </button>
@@ -346,7 +585,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Type in Japanese (日本語) or Bengali / English..."
+                placeholder={isRecording ? 'Listening... Speak in Japanese or Bengali...' : 'Type in Japanese (日本語) or Bengali / English...'}
                 className="flex-1 p-3 rounded-xl bg-white border border-stone-300 text-xs text-stone-900 focus:outline-none focus:border-red-500"
               />
               <button
@@ -364,3 +603,5 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default AICoachView;

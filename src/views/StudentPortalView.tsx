@@ -46,6 +46,9 @@ const MOCK_COURSES: Course[] = [
     progressPercent: 76,
     totalLessons: 25,
     completedLessons: 19,
+    completedQuizzes: 18,
+    totalQuizzes: 25,
+    quizAverageScore: 92,
     currentLessonTitle: 'Lesson 20: Plain Form Conjugation (普通形)',
     category: 'GRAMMAR',
   },
@@ -57,6 +60,9 @@ const MOCK_COURSES: Course[] = [
     progressPercent: 92,
     totalLessons: 12,
     completedLessons: 11,
+    completedQuizzes: 11,
+    totalQuizzes: 12,
+    quizAverageScore: 95,
     currentLessonTitle: 'Set 12: Directional & Calendar Kanji',
     category: 'KANJI',
   },
@@ -68,19 +74,53 @@ const MOCK_COURSES: Course[] = [
     progressPercent: 60,
     totalLessons: 15,
     completedLessons: 9,
+    completedQuizzes: 8,
+    totalQuizzes: 15,
+    quizAverageScore: 88,
     currentLessonTitle: 'Dialogue 10: Arubaito Greetings & Polite Forms',
     category: 'CONVERSATION',
   },
   {
     id: 'c4',
+    title: 'Minna no Nihongo II (JLPT N4 Intermediate Bridge)',
+    titleJa: 'みんなの日本語 初級II (N4)',
+    level: 'N4',
+    progressPercent: 28,
+    totalLessons: 25,
+    completedLessons: 7,
+    completedQuizzes: 6,
+    totalQuizzes: 25,
+    quizAverageScore: 85,
+    currentLessonTitle: 'Lesson 32: 〜ほうがいい / Advise & Suggestions',
+    category: 'GRAMMAR',
+  },
+  {
+    id: 'c5',
     title: 'JLPT N5 Official Listening Masterclass',
     titleJa: 'JLPT N5 聴解マスター',
     level: 'N5',
     progressPercent: 45,
     totalLessons: 20,
     completedLessons: 9,
+    completedQuizzes: 9,
+    totalQuizzes: 20,
+    quizAverageScore: 84,
     currentLessonTitle: 'Section 4: Task-Based Listening & Directions',
     category: 'GRAMMAR',
+  },
+  {
+    id: 'c6',
+    title: 'JLPT N3 Business Keigo & Career Readiness',
+    titleJa: 'JLPT N3 ビジネス敬語・就職準備',
+    level: 'N3',
+    progressPercent: 15,
+    totalLessons: 20,
+    completedLessons: 3,
+    completedQuizzes: 3,
+    totalQuizzes: 20,
+    quizAverageScore: 90,
+    currentLessonTitle: 'Module 4: Sonkeigo vs Kenjougo Office Emailing',
+    category: 'INTERVIEW_PREP',
   }
 ];
 
@@ -375,34 +415,89 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             </div>
 
             <div>
-              <h3 className="text-sm font-bold text-slate-900 mb-4">Active Course Progress</h3>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Active JLPT Course & Quiz Progress</h3>
+                  <p className="text-xs text-slate-500">Real-time tracking of lessons completed, quiz mastery, and mock scores</p>
+                </div>
+                <button
+                  onClick={() => setActiveTab('courses')}
+                  className="text-xs text-red-600 hover:text-red-700 font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>সকল কোর্স ({MOCK_COURSES.length})</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {MOCK_COURSES.map((course) => (
-                  <div key={course.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition space-y-3">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
-                          {course.level} • {course.category}
-                        </span>
-                        <h4 className="font-bold text-sm text-slate-900 mt-1">{course.title}</h4>
-                        <p className="text-xs text-slate-400">{course.titleJa}</p>
+                {MOCK_COURSES.slice(0, 4).map((course) => {
+                  const quizPercent = Math.round(((course.completedQuizzes || 0) / (course.totalQuizzes || course.totalLessons)) * 100);
+                  return (
+                    <div key={course.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition space-y-3.5">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                              {course.level} • {course.category}
+                            </span>
+                            {course.quizAverageScore && (
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
+                                🎯 {course.quizAverageScore}% Quiz Avg
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="font-bold text-sm text-slate-900 mt-1.5">{course.title}</h4>
+                          <p className="text-xs text-slate-400">{course.titleJa}</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-extrabold text-red-600">{course.progressPercent}%</span>
+                          <span className="block text-[10px] text-slate-400 font-medium">Overall</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-extrabold text-red-600">{course.progressPercent}%</span>
-                    </div>
 
-                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="bg-red-600 h-2 rounded-full transition-all"
-                        style={{ width: `${course.progressPercent}%` }}
-                      ></div>
-                    </div>
+                      {/* Dual Progress Bars: Lessons & Quizzes */}
+                      <div className="space-y-2 pt-1">
+                        <div>
+                          <div className="flex justify-between text-[11px] text-slate-600 font-medium mb-1">
+                            <span>লেসন সম্পন্ন ({course.completedLessons}/{course.totalLessons})</span>
+                            <span className="font-bold">{course.progressPercent}%</span>
+                          </div>
+                          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                            <div
+                              className="bg-red-600 h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${course.progressPercent}%` }}
+                            ></div>
+                          </div>
+                        </div>
 
-                    <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-                      <span>{course.completedLessons}/{course.totalLessons} Lessons Completed</span>
-                      <span className="font-medium text-slate-700 truncate max-w-[200px]">{course.currentLessonTitle}</span>
+                        <div>
+                          <div className="flex justify-between text-[11px] text-slate-500 font-medium mb-1">
+                            <span>কুইজ অনুশীলন ({course.completedQuizzes || 0}/{course.totalQuizzes || course.totalLessons})</span>
+                            <span className="font-bold text-amber-700">{quizPercent}%</span>
+                          </div>
+                          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div
+                              className="bg-amber-500 h-1.5 rounded-full transition-all duration-500"
+                              style={{ width: `${quizPercent}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
+                        <span className="font-medium text-slate-700 truncate max-w-[220px] text-[11px]">
+                          📍 {course.currentLessonTitle}
+                        </span>
+                        <button
+                          onClick={() => onNavigate && onNavigate('courses')}
+                          className="text-xs font-bold text-red-600 hover:text-red-700 transition cursor-pointer"
+                        >
+                          চালিয়ে যান &rarr;
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -457,51 +552,86 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
         {/* COURSES TAB */}
         {activeTab === 'courses' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-slate-900">Curriculum & Learning Tracks</h2>
                 <p className="text-xs text-slate-500">Dhaka International Language School & Nihomi JLPT Syllabus</p>
               </div>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600">
+                <span className="px-3 py-1 bg-white rounded-lg shadow-xs text-slate-900">All Tracks ({MOCK_COURSES.length})</span>
+                <span className="px-3 py-1 text-slate-500">N5 Foundation</span>
+                <span className="px-3 py-1 text-slate-500">N4 Bridge</span>
+                <span className="px-3 py-1 text-slate-500">N3 Career</span>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {MOCK_COURSES.map((course) => (
-                <div key={course.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
-                        Level {course.level}
-                      </span>
-                      <h3 className="font-bold text-base text-slate-900 mt-2">{course.title}</h3>
-                      <p className="text-xs text-slate-500 font-medium">{course.titleJa}</p>
+              {MOCK_COURSES.map((course) => {
+                const quizPercent = Math.round(((course.completedQuizzes || 0) / (course.totalQuizzes || course.totalLessons)) * 100);
+                return (
+                  <div key={course.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 hover:border-slate-300 transition">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
+                            Level {course.level}
+                          </span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                            {course.category}
+                          </span>
+                          {course.quizAverageScore && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              ⭐ {course.quizAverageScore}% Mastery
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-bold text-base text-slate-900 mt-2">{course.title}</h3>
+                        <p className="text-xs text-slate-500 font-medium">{course.titleJa}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-base font-extrabold text-red-600">{course.progressPercent}%</span>
+                        <span className="block text-[10px] text-slate-400">Complete</span>
+                      </div>
                     </div>
-                    <span className="text-base font-extrabold text-red-600">{course.progressPercent}%</span>
-                  </div>
 
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between text-xs text-slate-600 font-medium">
-                      <span>প্রগ্রেস</span>
-                      <span>{course.completedLessons} / {course.totalLessons} অধ্যায় শেষ</span>
-                    </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                      <div className="bg-red-600 h-2.5 rounded-full" style={{ width: `${course.progressPercent}%` }}></div>
-                    </div>
-                  </div>
+                    {/* Multi-Metric Progress Bar: Lessons & Quizzes */}
+                    <div className="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                      <div>
+                        <div className="flex justify-between text-xs text-slate-700 font-semibold mb-1">
+                          <span>📚 অধ্যায় সম্পন্ন ({course.completedLessons} / {course.totalLessons})</span>
+                          <span>{course.progressPercent}%</span>
+                        </div>
+                        <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                          <div className="bg-red-600 h-2 rounded-full transition-all duration-500" style={{ width: `${course.progressPercent}%` }}></div>
+                        </div>
+                      </div>
 
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-400 uppercase font-bold block">Current Lesson</span>
-                      <span className="font-semibold">{course.currentLessonTitle}</span>
+                      <div>
+                        <div className="flex justify-between text-xs text-slate-600 font-medium mb-1">
+                          <span>📝 কুইজ ও প্র্যাকটিস টেস্ট ({course.completedQuizzes || 0} / {course.totalQuizzes || course.totalLessons})</span>
+                          <span className="font-bold text-amber-700">{quizPercent}%</span>
+                        </div>
+                        <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-amber-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${quizPercent}%` }}></div>
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => onNavigate && onNavigate('courses')}
-                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition cursor-pointer"
-                    >
-                      চালিয়ে যান
-                    </button>
+
+                    <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">Current Lesson</span>
+                        <span className="font-semibold">{course.currentLessonTitle}</span>
+                      </div>
+                      <button
+                        onClick={() => onNavigate && onNavigate('courses')}
+                        className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                      >
+                        চালিয়ে যান
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -48,6 +48,7 @@ import {
   FileSpreadsheet
 } from 'lucide-react';
 import { FounderGuard } from '../components/founder/FounderGuard';
+import { MasterContentStudio } from '../components/founder/MasterContentStudio';
 import { useAuth } from '../context/AuthContext';
 
 interface FounderCommandCenterViewProps {
@@ -540,6 +541,52 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                 </div>
               </div>
             </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* 4. LEARNING ENGINE                                                        */}
+          {/* ========================================================================= */}
+          {activeSection === 'learning' && (
+            <div className="space-y-6">
+              <div className="p-6 bg-stone-950 border border-stone-800 rounded-3xl space-y-4">
+                <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+                  <div>
+                    <h3 className="text-base font-bold text-white">MemoryOS™ & Spaced Repetition Core</h3>
+                    <p className="text-xs text-stone-400">Continuous adaptive particle confusion and Leitner algorithm parameters.</p>
+                  </div>
+                  <button
+                    onClick={() => handleSaveSettings('Learning Engine Parameters')}
+                    className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl cursor-pointer shadow-xs"
+                  >
+                    Save SRS Calibration
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+                  <div className="p-4 bg-stone-900 rounded-2xl border border-stone-800 space-y-2">
+                    <span className="text-stone-400 font-bold block">Ghost Mode Threshold</span>
+                    <strong className="text-white text-base">3 Errors / Session</strong>
+                    <span className="text-[10px] text-stone-500 block">Triggers automatic particle drills</span>
+                  </div>
+                  <div className="p-4 bg-stone-900 rounded-2xl border border-stone-800 space-y-2">
+                    <span className="text-stone-400 font-bold block">Kanji Stroke Tolerance</span>
+                    <strong className="text-emerald-400 text-base">±15% Bézier Canvas</strong>
+                    <span className="text-[10px] text-stone-500 block">Real-time stroke order verification</span>
+                  </div>
+                  <div className="p-4 bg-stone-900 rounded-2xl border border-stone-800 space-y-2">
+                    <span className="text-stone-400 font-bold block">Pitch Accent Calibration</span>
+                    <strong className="text-amber-400 text-base">Tokyo Standard (NHK)</strong>
+                    <span className="text-[10px] text-stone-500 block">High-low mora intonation curve</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* 5. MASTER CONTENT & PRODUCTION INTELLIGENCE SUITE                         */}
+          {/* ========================================================================= */}
+          {activeSection === 'master_content' && (
+            <MasterContentStudio />
           )}
 
           {/* ========================================================================= */}

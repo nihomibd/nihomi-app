@@ -1,5 +1,16 @@
 export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
 
+export type ContentDomain =
+  | 'GRAMMAR'
+  | 'VOCABULARY'
+  | 'KANJI'
+  | 'CONVERSATION'
+  | 'READING'
+  | 'LISTENING'
+  | 'BAITO'
+  | 'INTERVIEW'
+  | 'CULTURE';
+
 export interface StudentProfile {
   id: string;
   nihomiAccountId: string;
@@ -26,6 +37,9 @@ export interface Course {
   progressPercent: number;
   totalLessons: number;
   completedLessons: number;
+  completedQuizzes?: number;
+  totalQuizzes?: number;
+  quizAverageScore?: number;
   currentLessonTitle: string;
   category: 'GRAMMAR' | 'KANJI' | 'VOCABULARY' | 'CONVERSATION' | 'CULTURE' | 'READING' | 'INTERVIEW_PREP';
 }
