@@ -9,50 +9,76 @@ interface LanguageContextType {
 }
 
 const translations: Record<string, Record<Language, string>> = {
+  // Navigation & Core Labels
   welcome_title: {
     bn: 'নিহোমিতে আপনাকে স্বাগতম',
     en: 'Welcome to Nihomi',
     ja: 'Nihomiへようこそ'
   },
   tagline: {
-    bn: 'আমরা জাপানি ভাষা শিক্ষা সমন্বয় করি',
-    en: 'We Coordinate Japanese Learning',
-    ja: '日本語学習をコーディネートします'
+    bn: 'আমরা জাপানি ভাষা শিক্ষা ও ক্যারিয়ার সমন্বয় করি',
+    en: 'We Coordinate Japanese Learning & Relocation',
+    ja: '日本語学習と日本進出を一括コーディネート'
   },
-  courses: {
+  nav_home: {
+    bn: 'হোম',
+    en: 'Home',
+    ja: 'ホーム'
+  },
+  nav_courses: {
     bn: 'কোর্সসমূহ',
     en: 'Courses',
-    ja: 'コース一覧'
+    ja: 'コース'
+  },
+  nav_portal: {
+    bn: 'স্টুডেন্ট পোর্টাল',
+    en: 'Portal',
+    ja: 'ポータル'
+  },
+  nav_quizzes: {
+    bn: 'মক টেস্ট',
+    en: 'Quizzes',
+    ja: '試験・クイズ'
+  },
+  nav_coordination: {
+    bn: 'ভিসা ও ক্যারিয়ার',
+    en: 'Visa & Job',
+    ja: '就職・ビザ'
+  },
+  courses: {
+    bn: 'কোর্স ও পাঠ্যক্রম',
+    en: 'Courses & Curriculum',
+    ja: 'コース・カリキュラム'
   },
   coordination_hub: {
-    bn: 'কোঅর্ডিনেশন হাব',
-    en: 'Coordination Hub',
-    ja: '総合案内ハブ'
+    bn: 'কোঅর্ডিনেশন হাব (ভিসা ও জব)',
+    en: 'Coordination Hub (Visa & Job)',
+    ja: '総合案内ハブ (ビザ・就職)'
   },
   ai_sensei: {
-    bn: 'AI সেনসেই',
-    en: 'AI Sensei',
-    ja: 'AI先生'
+    bn: 'AI সেনসেই (২৪/৭ টিউটর)',
+    en: 'AI Sensei (24/7 Tutor)',
+    ja: 'AI先生 (24時間指導)'
   },
   vision_sensei: {
-    bn: 'ভিশন সেনসেই (📷 OCR)',
-    en: 'Vision Sensei (📷 OCR)',
-    ja: 'ビジョン先生 (📷 OCR)'
+    bn: 'ভিশন সেনসেই (📷 OCR স্ক্যানার)',
+    en: 'Vision Sensei (📷 OCR Scanner)',
+    ja: 'ビジョン先生 (📷 OCR解析)'
   },
   memory_os: {
-    bn: 'মেমোরি ওএস™',
-    en: 'MemoryOS™',
-    ja: 'メモリーOS™'
+    bn: 'মেমোরি ওএস™ (SRS ট্র্যাকার)',
+    en: 'MemoryOS™ (Spaced Repetition)',
+    ja: 'メモリーOS™ (忘却曲線記憶)'
   },
   baito_os: {
-    bn: 'বাইতো ওএস™ (জব ল্যাব)',
-    en: 'BaitoOS™ (Job Lab)',
-    ja: 'バイトOS™ (仕事ラボ)'
+    bn: 'বাইতো ওএস™ (জাপান জব ল্যাব)',
+    en: 'BaitoOS™ (Part-time Job Lab)',
+    ja: 'バイトOS™ (アルバイト準備)'
   },
   pricing: {
-    bn: 'প্রাইসিং ও প্ল্যান',
-    en: 'Pricing & Plans',
-    ja: '料金プラン'
+    bn: 'প্রাইসিং ও মেম্বারশিপ',
+    en: 'Pricing & Membership',
+    ja: '料金・会員プラン'
   },
   dashboard: {
     bn: 'ড্যাশবোর্ড',
@@ -85,9 +111,9 @@ const translations: Record<string, Record<Language, string>> = {
     ja: 'クイズ・模擬試験'
   },
   badges: {
-    bn: 'অর্জিত ব্যাজ',
+    bn: 'অর্জিত ব্যাজ ও মেডেল',
     en: 'Badges & Milestones',
-    ja: '獲得バッジ'
+    ja: '獲得バッジ・マイルストーン'
   },
   shortcuts: {
     bn: 'কিবোর্ড শর্টকাট',
@@ -128,6 +154,92 @@ const translations: Record<string, Record<Language, string>> = {
     bn: 'টোকিও (জাপান)',
     en: 'Tokyo (Japan)',
     ja: '東京 (日本)'
+  },
+  // Portal and Learning Metrics
+  overview_summary: {
+    bn: 'সারসংক্ষেপ ও অগ্রগতি',
+    en: 'Overview & Summary',
+    ja: '概要・進捗サマリー'
+  },
+  curriculum_lessons: {
+    bn: 'পাঠ্যক্রম ও অধ্যায়',
+    en: 'Curriculum & Lessons',
+    ja: 'カリキュラム・レッスン'
+  },
+  exams_scorecards: {
+    bn: 'পরীক্ষা ও স্কোরকার্ড',
+    en: 'Exams & Scorecards',
+    ja: '試験結果・スコア'
+  },
+  digital_student_id: {
+    bn: 'ডিজিটাল স্টুডেন্ট আইডি',
+    en: 'Digital Student ID',
+    ja: 'デジタル学生証'
+  },
+  certificates_records: {
+    bn: 'সার্টিফিকেট ও সনদ',
+    en: 'Certificates & Records',
+    ja: '修了証・認定証'
+  },
+  profile_settings: {
+    bn: 'প্রোফাইল সেটিংস',
+    en: 'Profile Settings',
+    ja: 'プロファイル設定'
+  },
+  subscription_billing: {
+    bn: 'সাবস্ক্রিপশন ও বিলিং',
+    en: 'Subscription & Billing',
+    ja: 'サブスクリプション管理'
+  },
+  infinite_hub: {
+    bn: 'ইনফিনিট লার্নিং হাব™',
+    en: 'Infinite Learning Hub™',
+    ja: 'インフィニット学習ハブ™'
+  },
+  save_changes: {
+    bn: 'পরিবর্তন সংরক্ষণ করুন',
+    en: 'Save Changes',
+    ja: '変更を保存'
+  },
+  install_pwa_title: {
+    bn: 'নিহোমি মোবাইল অ্যাপ ইনস্টল করুন',
+    en: 'Install Nihomi Mobile App',
+    ja: 'Nihomiアプリをインストール'
+  },
+  install_pwa_desc: {
+    bn: 'হোম স্ক্রিন থেকে সহজে ও দ্রুত অফলাইনে জাপানি শিখুন।',
+    en: 'Add to home screen for lightning-fast offline Japanese study.',
+    ja: 'ホーム画面に追加して、オフラインでも超高速で日本語学習。'
+  },
+  install_now: {
+    bn: 'ইনস্টল করুন',
+    en: 'Install Now',
+    ja: 'インストール'
+  },
+  cancel: {
+    bn: 'বাতিল',
+    en: 'Cancel',
+    ja: 'キャンセル'
+  },
+  close: {
+    bn: 'বন্ধ করুন',
+    en: 'Close',
+    ja: '閉じる'
+  },
+  continue_learning: {
+    bn: 'পড়া চালিয়ে যান',
+    en: 'Continue Learning',
+    ja: '学習を続ける'
+  },
+  start_quiz: {
+    bn: 'কুইজ শুরু করুন',
+    en: 'Start Quiz',
+    ja: 'クイズ開始'
+  },
+  listen_pronunciation: {
+    bn: 'উচ্চারণ শুনুন',
+    en: 'Listen Audio',
+    ja: '音声を聴く'
   }
 };
 
@@ -137,19 +249,27 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [language, setLanguageState] = useState<Language>('bn'); // Default to Bengali
 
   useEffect(() => {
-    const saved = localStorage.getItem('nihomi_preferred_lang') as Language;
-    if (saved && (saved === 'bn' || saved === 'en' || saved === 'ja')) {
-      setLanguageState(saved);
+    try {
+      const saved = localStorage.getItem('nihomi_preferred_lang') as Language;
+      if (saved && (saved === 'bn' || saved === 'en' || saved === 'ja')) {
+        setLanguageState(saved);
+      }
+    } catch (e) {
+      console.warn('Language persistence error:', e);
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('nihomi_preferred_lang', lang);
+    try {
+      localStorage.setItem('nihomi_preferred_lang', lang);
+    } catch (e) {
+      console.warn('Language storage error:', e);
+    }
   };
 
   const t = (key: string): string => {
-    return translations[key]?.[language] || translations[key]?.['en'] || key;
+    return translations[key]?.[language] || translations[key]?.['en'] || translations[key]?.['bn'] || key;
   };
 
   return (

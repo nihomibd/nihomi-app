@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
+import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { LandingView } from './views/LandingView';
 import { StudentPortalView } from './views/StudentPortalView';
 import { DocumentsView } from './views/DocumentsView';
@@ -34,36 +35,36 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
       {/* Offline Feedback & Service Worker Resilience Banner */}
       {!isFocusMode && <OfflineNotificationBanner />}
 
       {/* Focus Mode Zen Floating Bar */}
       {isFocusMode && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-stone-900/90 dark:bg-stone-950/95 backdrop-blur-md text-white px-4 py-2 rounded-full border border-stone-700 shadow-2xl flex items-center space-x-3 text-xs animate-in fade-in slide-in-from-top-3">
-          <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
-            <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-            <span>Zen Focus Mode</span>
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-stone-900/90 dark:bg-stone-950/95 backdrop-blur-md text-white px-4 py-2 rounded-full border border-stone-700 shadow-2xl flex items-center space-x-3 text-xs animate-in fade-in slide-in-from-top-3 max-w-[95vw] overflow-hidden">
+          <div className="flex items-center space-x-1.5 text-amber-400 font-semibold truncate">
+            <Sparkles className="w-3.5 h-3.5 animate-pulse shrink-0" />
+            <span className="truncate">Zen Focus Mode</span>
           </div>
           <span className="text-stone-500">•</span>
           <button
             type="button"
             onClick={toggleZenSound}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-full transition-colors cursor-pointer ${
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-full transition-colors cursor-pointer shrink-0 ${
               zenSoundActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'text-stone-400 hover:text-stone-200'
             }`}
           >
             {zenSoundActive ? <Volume2 className="w-3 h-3 text-amber-400 animate-pulse" /> : <VolumeX className="w-3 h-3" />}
-            <span className="text-[11px]">{zenSoundActive ? 'Zen Chimes ON' : 'Zen Audio'}</span>
+            <span className="text-[11px] hidden sm:inline">{zenSoundActive ? 'Zen Chimes ON' : 'Zen Audio'}</span>
           </button>
           <span className="text-stone-500">•</span>
           <button
             type="button"
             id="btn-exit-focus-mode"
             onClick={() => toggleFocusMode(false)}
-            className="flex items-center space-x-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full shadow-xs transition-colors cursor-pointer"
+            className="flex items-center space-x-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full shadow-xs transition-colors cursor-pointer shrink-0"
           >
-            <span>Exit Focus (ESC)</span>
+            <span>Exit</span>
             <X className="w-3 h-3" />
           </button>
         </div>
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
       {/* Main Header */}
       {!isFocusMode && <Header currentView={currentView} onNavigate={handleNavigate} />}
       
-      <main className={`flex-grow ${isFocusMode ? 'pt-8' : ''}`}>
+      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} pb-16 md:pb-0`}>
         {(currentView === 'landing' || currentView === 'home') && (
           <LandingView onNavigate={handleNavigate} />
         )}
@@ -127,6 +128,9 @@ export const App: React.FC = () => {
       </main>
 
       {!isFocusMode && <Footer onNavigate={handleNavigate} />}
+
+      {/* Mobile Bottom Bar for PWA Touch Experience */}
+      {!isFocusMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
 
       {/* Google Sign-in & Authentication Modal */}
       <AuthModal />

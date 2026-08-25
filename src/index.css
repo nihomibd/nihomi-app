@@ -18,6 +18,38 @@
   transform: rotateY(180deg);
 }
 
+/* Global Mobile Viewport & Boundary Enforcement (Zero Horizontal Overflow) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+/* Safe Area Inset Support for Modern Mobile Devices (iOS Notch & Android Nav) */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+}
+
+/* Minimum interactive touch target for mobile thumb comfort (44px) */
+button, a, input, select, textarea, [role="button"] {
+  min-height: 44px;
+}
+
+/* Text Wrapping & Strict Boundary Break */
+p, h1, h2, h3, h4, h5, h6, span, div, li {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 /* Dark Mode Overrides (Neo-Tokyo Dark Theme #0a0a12) */
 html.dark {
   color-scheme: dark;
@@ -30,7 +62,8 @@ html.dark body {
   color: #f1f5f9;
 }
 
-html.dark .bg-\[\#F8F9FA\] {
+html.dark .bg-\[\#F8F9FA\],
+html.dark .bg-\[\#FAFAFA\] {
   background-color: #0a0a12 !important;
 }
 
@@ -52,21 +85,28 @@ html.dark .bg-stone-100 {
 }
 
 html.dark .border-stone-200,
-html.dark .border-stone-100 {
+html.dark .border-stone-100,
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
   border-color: #27273f !important;
 }
 
 html.dark .text-stone-900,
-html.dark .text-stone-800 {
+html.dark .text-stone-800,
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
   color: #f8fafc !important;
 }
 
 html.dark .text-stone-700,
-html.dark .text-stone-600 {
+html.dark .text-stone-600,
+html.dark .text-slate-700,
+html.dark .text-slate-600 {
   color: #cbd5e1 !important;
 }
 
-html.dark .text-stone-500 {
+html.dark .text-stone-500,
+html.dark .text-slate-500 {
   color: #94a3b8 !important;
 }
 
@@ -82,7 +122,8 @@ html.sepia body {
   color: #433422;
 }
 
-html.sepia .bg-\[\#F8F9FA\] {
+html.sepia .bg-\[\#F8F9FA\],
+html.sepia .bg-\[\#FAFAFA\] {
   background-color: #fbf0d9 !important;
 }
 
@@ -104,21 +145,28 @@ html.sepia .bg-stone-100 {
 }
 
 html.sepia .border-stone-200,
-html.sepia .border-stone-100 {
+html.sepia .border-stone-100,
+html.sepia .border-slate-200,
+html.sepia .border-slate-100 {
   border-color: #d9c595 !important;
 }
 
 html.sepia .text-stone-900,
-html.sepia .text-stone-800 {
+html.sepia .text-stone-800,
+html.sepia .text-slate-900,
+html.sepia .text-slate-800 {
   color: #382a17 !important;
 }
 
 html.sepia .text-stone-700,
-html.sepia .text-stone-600 {
+html.sepia .text-stone-600,
+html.sepia .text-slate-700,
+html.sepia .text-slate-600 {
   color: #5c472d !important;
 }
 
-html.sepia .text-stone-500 {
+html.sepia .text-stone-500,
+html.sepia .text-slate-500 {
   color: #7a6344 !important;
 }
 
@@ -129,6 +177,7 @@ html.sepia .text-stone-500 {
   }
   
   header, nav, aside, footer, .no-print,
+  #nihomi-mobile-bottom-nav,
   #btn-explore-all-plans, #btn-upgrade-pro-header,
   #btn-export-billing-csv, #btn-bulk-download-pdf,
   #btn-print-invoice-table, #btn-print-invoices-table,
