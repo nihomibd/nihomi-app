@@ -30,6 +30,7 @@ import {
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
 import { InfiniteConceptStudio } from '../components/founder/content-engine/InfiniteConceptStudio';
+import { LanguageProgressTracker } from '../components/LanguageProgressTracker';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
@@ -432,6 +433,15 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <div className="text-xs text-slate-500 mt-1">{studentData.assignedTeacher}</div>
               </div>
             </div>
+
+            {/* Language Progress Tracker (Kanji, Vocabulary, and Grammar Progress Rings) */}
+            <LanguageProgressTracker
+              initialLevel={studentData.currentLevel as any}
+              onNavigate={(v) => {
+                if (v === 'courses') setActiveTab('courses');
+                else if (onNavigate) onNavigate(v);
+              }}
+            />
 
             <div>
               <div className="flex items-center justify-between mb-4">

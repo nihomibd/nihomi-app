@@ -5,6 +5,7 @@ import { generateProgressReportPdf } from '../lib/pdfReport.js';
 import { DailyStreakTracker } from '../components/DailyStreakTracker.js';
 import { D3VocabMasteryChart } from '../components/D3VocabMasteryChart.js';
 import { LearningVelocityChart } from '../components/LearningVelocityChart.js';
+import { LanguageProgressTracker } from '../components/LanguageProgressTracker.js';
 import {
   BarChart3,
   Flame,
@@ -189,6 +190,12 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ onNavigate }) => {
             )}
           </button>
         </div>
+
+        {/* Language Progress Tracker (Kanji, Vocabulary, and Grammar Progress Rings) */}
+        <LanguageProgressTracker
+          initialLevel={targetLevel as any}
+          onNavigate={onNavigate}
+        />
 
         {/* 4 Bento Stat Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

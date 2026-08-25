@@ -43,6 +43,7 @@ import { VoiceSenseiWidget } from '../components/VoiceSenseiWidget.js';
 import { CurriculumRoadmap } from '../components/CurriculumRoadmap.js';
 import { GlobalLeaderboard } from '../components/GlobalLeaderboard.js';
 import { DashboardSrsSummaryWidget } from '../components/DashboardSrsSummaryWidget.js';
+import { LanguageProgressTracker } from '../components/LanguageProgressTracker.js';
 import { RecentlyViewedLessons } from '../components/RecentlyViewedLessons.js';
 
 interface DashboardViewProps {
@@ -307,6 +308,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
             </button>
           </div>
         </div>
+
+        {/* Language Progress Tracker (Kanji, Vocabulary, and Grammar Progress Rings) */}
+        <section id="dashboard-language-progress-tracker-section">
+          <LanguageProgressTracker
+            initialLevel={currentLevel as any}
+            onNavigate={onNavigate}
+          />
+        </section>
 
         {/* Recently Viewed Lessons for Quick Resumption */}
         <section id="dashboard-recently-viewed-section">
