@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { zenAudioService } from '../lib/zenAudio';
 
 interface FocusModeContextType {
   isFocusMode: boolean;
@@ -10,6 +11,7 @@ interface FocusModeContextType {
 const FocusModeContext = createContext<FocusModeContextType | undefined>(undefined);
 
 const FOCUS_STORAGE_KEY = 'nihomi_focus_mode_active_v1';
+const ZEN_SOUND_STORAGE_KEY = 'nihomi_zen_sound_active_v1';
 
 export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState<boolean>(() => {
@@ -17,7 +19,10 @@ export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return localStorage.getItem(FOCUS_STORAGE_KEY) === 'true';
   });
 
-  const [zenSoundActive, setZenSoundActive] = useState<boolean>(false);
+  const [zenSoundActive, setZenSoundActive] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(ZEN_SOUND_STORAGE_KEY) === 'true';
+  });
 
   const toggleFocusMode = (enable?: boolean) => {
     setIsFocusMode((prev) => {
@@ -25,13 +30,43 @@ export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       try {
         localStorage.setItem(FOCUS_STORAGE_KEY, String(next));
       } catch {}
+      if (!next && zenSoundActive) {
+        zenAudioService.stop();
+        setZenSoundActive(false);
+        try {
+          localStorage.setItem(ZEN_SOUND_STORAGE_KEY, 'false');
+        } catch {}
+      }
       return next;
     });
   };
 
   const toggleZenSound = () => {
-    setZenSoundActive((prev) => !prev);
+    setZenSoundActive((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(ZEN_SOUND_STORAGE_KEY, String(next));
+      } catch {}
+      if (next) {
+        zenAudioService.start();
+      } else {
+        zenAudioService.stop();
+      }
+      return next;
+    });
   };
+
+  // Sync audio state if started
+  useEffect(() => {
+    if (isFocusMode && zenSoundActive) {
+      zenAudioService.start();
+    } else {
+      zenAudioService.stop();
+    }
+    return () => {
+      zenAudioService.stop();
+    };
+  }, [isFocusMode, zenSoundActive]);
 
   // Keyboard shortcut: Escape exits Focus Mode
   useEffect(() => {
@@ -65,3 +100,4 @@ export const useFocusMode = (): FocusModeContextType => {
   }
   return context;
 };
+
