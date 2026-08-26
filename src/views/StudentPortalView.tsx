@@ -31,13 +31,20 @@ import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard
 import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
 import { InfiniteConceptStudio } from '../components/founder/content-engine/InfiniteConceptStudio';
 import { LanguageProgressTracker } from '../components/LanguageProgressTracker';
+import { MonthlyCalendarWidget } from '../components/student/MonthlyCalendarWidget';
+import { StudyStreakHeatmap } from '../components/student/StudyStreakHeatmap';
+import { AchievementBadges } from '../components/student/AchievementBadges';
+import { NihomiStandardDashboard } from '../components/student/NihomiStandardDashboard';
+import { LearningGapRadar } from '../components/student/LearningGapRadar';
+import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
+import { ContentExportService } from '../core/content-engine/contentExportService';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
 import { Eye, EyeOff } from 'lucide-react';
 
 interface StudentPortalViewProps {
-  initialTab?: 'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
+  initialTab?: 'dashboard' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
   onNavigate?: (view: string) => void;
 }
 
@@ -165,7 +172,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
   const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
+    'dashboard' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
   >(initialTab);
 
   useEffect(() => {
@@ -263,6 +270,60 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
     }
   ];
 
+  const handleDownloadReport = () => {
+    try {
+      ContentExportService.exportStudentProficiencyPdf({
+        studentName: studentData.name,
+        studentNameJa: studentData.nameJa,
+        studentId: studentData.id,
+        accountId: studentData.nihomiAccountId,
+        level: studentData.currentLevel,
+        targetExam: studentData.targetExam,
+        targetDate: studentData.targetExamDate,
+        totalXp: (studentData as any).pointsEarned || 2850,
+        studyStreakDays: studentData.streakDays || 18,
+        totalStudyHours: studentData.totalStudyHours || 124,
+        completedLessons: 19,
+        totalLessons: 25,
+        quizAverageScore: 94,
+        kanjiMastered: 100,
+        vocabMastered: 480,
+        grammarRulesMastered: 28,
+        institutionName: "Dhaka International Language School (DILS)",
+        assignedTeacher: studentData.assignedTeacher,
+        overallMasteryScore: 96.4,
+        masteredConcepts: [
+          { code: 'N5-GR-001', title: 'N1 は N2 です (Topic Particle & Affirmative Copula)', category: 'Grammar', score: 98 },
+          { code: 'N5-GR-002', title: 'N1 は N2 じゃありません (Negative Copula)', category: 'Grammar', score: 96 },
+          { code: 'N5-KJ-001', title: '日 (Sun / Day / Japan)', category: 'Kanji', score: 99 },
+          { code: 'N5-VOC-001', title: 'わたし (I / Myself)', category: 'Vocabulary', score: 100 },
+          { code: 'N5-VOC-002', title: 'がくせい (Student)', category: 'Vocabulary', score: 98 }
+        ]
+      });
+    } catch {
+      generateStudentSummaryPdf({
+        studentName: studentData.name,
+        studentNameJa: studentData.nameJa,
+        studentId: studentData.id,
+        accountId: studentData.nihomiAccountId,
+        level: studentData.currentLevel,
+        targetExam: studentData.targetExam,
+        targetDate: studentData.targetExamDate,
+        totalXp: (studentData as any).pointsEarned || 2450,
+        studyStreakDays: 14,
+        totalStudyHours: 42,
+        completedLessons: 19,
+        totalLessons: 25,
+        quizAverageScore: 92,
+        kanjiMastered: 100,
+        vocabMastered: 480,
+        grammarRulesMastered: 28,
+        institutionName: "Dhaka International Language School (DILS)",
+        assignedTeacher: studentData.assignedTeacher
+      });
+    }
+  };
+
   return (
     <div className="bg-[#FAFAFA] min-h-screen pb-20">
       {/* Top Banner / Student Identity Bar */}
@@ -292,6 +353,17 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           </div>
 
           <div className="flex items-center flex-wrap gap-2.5">
+            <button
+              id="btn-download-academic-pdf"
+              type="button"
+              onClick={handleDownloadReport}
+              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all bg-red-600 hover:bg-red-700 text-white shadow-sm cursor-pointer"
+              title="Download official A4 summary report"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>রিপোর্ট ডাউনলোড (PDF)</span>
+            </button>
+
             <button
               id="btn-toggle-focus-mode"
               type="button"
@@ -350,6 +422,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto py-3 text-xs font-semibold">
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
+              { id: 'nihomi_standard', label: '🌟 Nihomi Standard™ (23-D)', icon: Award },
               { id: 'courses', label: 'Curriculum & Lessons', icon: BookOpen },
               { id: 'infinite_concept', label: '⚡ Infinite Learning Hub™ (15 Formats)', icon: Sparkles },
               { id: 'assessments', label: 'Exams & Scorecards', icon: Clock },
@@ -442,6 +515,22 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 else if (onNavigate) onNavigate(v);
               }}
             />
+
+            {/* Study Streak & Habit Heatmap Tracker */}
+            <StudyStreakHeatmap
+              currentStreak={14}
+              longestStreak={26}
+              totalStudyDays={68}
+            />
+
+            {/* Monthly Attendance & Learning Rhythm Calendar Widget */}
+            <MonthlyCalendarWidget />
+
+            {/* Academic Achievement & Badge Showcase */}
+            <AchievementBadges />
+
+            {/* Learning Gap Diagnostic Radar */}
+            <LearningGapRadar studentLevel={studentData.currentLevel} />
 
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -576,6 +665,11 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
               <DigitalStudentIdCard student={studentData} />
             </div>
           </div>
+        )}
+
+        {/* NIHOMI STANDARD TAB */}
+        {activeTab === 'nihomi_standard' && (
+          <NihomiStandardDashboard studentData={studentData} />
         )}
 
         {/* COURSES TAB */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.js';
+import { useProgressSync } from '../hooks/useProgressSync.js';
 import { apiRequest } from '../lib/api.js';
 import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
 import { getSrsState, saveSrsItemReview, formatNextReviewBadge, SrsItemState, SrsRating } from '../lib/srs.js';
@@ -41,6 +42,9 @@ import { CanvasWritingPractice } from '../components/CanvasWritingPractice.js';
 import { PronunciationLab } from '../components/PronunciationLab.js';
 import { AiLessonFeedbackModal } from '../components/AiLessonFeedbackModal.js';
 import { SpeechPracticeWidget } from '../components/SpeechPracticeWidget.js';
+import { motion } from 'motion/react';
+import { cacheLessonOffline, getCachedLessonOffline } from '../lib/offlineDb.js';
+import { soundEffects } from '../lib/soundEffects.js';
 import {
   isLessonDownloaded,
   saveLessonOffline,
@@ -56,6 +60,7 @@ interface LessonViewProps {
 
 export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) => {
   const { user, refreshProgress } = useAuth();
+  const { syncLessonCompletion } = useProgressSync();
   const [lessonData, setLessonData] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<'grammar' | 'vocab' | 'kanji' | 'canvas-trace' | 'pronunciation' | 'dialogue' | 'practice'>('grammar');
   const [isLoading, setIsLoading] = useState(true);
@@ -121,6 +126,11 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
         );
         setLessonData(data);
 
+        // Cache automatically into IndexedDB for offline study
+        if (data?.lesson) {
+          cacheLessonOffline(data.lesson.id, data, data.lesson.title, data.lesson.level);
+        }
+
         // Record in Recently Viewed Lessons storage
         if (data?.lesson) {
           try {
@@ -147,18 +157,24 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
         }
       } catch (err) {
         console.warn('Network load failed, checking offline storage:', err);
-        // Fallback to offline stored lesson
-        const offlineItem = isLessonDownloaded(lessonId);
-        if (offlineItem) {
-          const { getOfflineLesson } = await import('../lib/offlineStorage.js');
-          const cached = getOfflineLesson(lessonId);
-          if (cached) {
-            setLessonData({
-              lesson: cached.lesson,
-              courseTitle: cached.courseTitle,
-              moduleTitle: cached.moduleTitle,
-              isCompleted: false
-            });
+        // Fallback to IndexedDB first
+        const idbCached = await getCachedLessonOffline(lessonId);
+        if (idbCached && idbCached.data) {
+          setLessonData(idbCached.data);
+        } else {
+          // Fallback to offline stored lesson
+          const offlineItem = isLessonDownloaded(lessonId);
+          if (offlineItem) {
+            const { getOfflineLesson } = await import('../lib/offlineStorage.js');
+            const cached = getOfflineLesson(lessonId);
+            if (cached) {
+              setLessonData({
+                lesson: cached.lesson,
+                courseTitle: cached.courseTitle,
+                moduleTitle: cached.moduleTitle,
+                isCompleted: false
+              });
+            }
           }
         }
       } finally {
@@ -247,7 +263,15 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           studyMinutes: lessonData.lesson.estimatedMinutes || 15
         })
       });
+      // Synchronize to Supabase database (lesson_progress + learning_progress + activity_logs)
+      await syncLessonCompletion(
+        lessonData.lesson.id,
+        100,
+        (lessonData.lesson.estimatedMinutes || 15) * 60,
+        lessonData.lesson.xpReward || 50
+      );
       setCompletedSuccess(true);
+      soundEffects.playLessonCelebration();
       await refreshProgress();
       if (lessonData) {
         setLessonData({ ...lessonData, isCompleted: true });
@@ -552,6 +576,53 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           <p className="text-stone-700 leading-relaxed">
             <strong>বাংলাদেশে আমরা কী করি:</strong> পরিচিত বন্ধু বা ছোট ভাইদের সাথে কথা বলা আর পরিবারের মুরুব্বি বা শিক্ষকদের সাথে কথা বলার আদব যেমন আলাদা, জাপানেও তেমনি পরিস্থিতি অনুযায়ী Teineigo এবং Keigo ব্যবহার করা হয়।
           </p>
+        </div>
+
+        {/* Animated Lesson Progress Bar (Framer Motion) */}
+        <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-stone-900 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Lesson Mastery Progress</span>
+              </span>
+              <span className="text-[11px] text-stone-500">
+                ({isCompleted ? '100% Complete' : activeTab === 'practice' ? '85% Progress' : 'In Progress'})
+              </span>
+            </div>
+            <div className="font-bold text-red-600">
+              {isCompleted ? '100%' : activeTab === 'practice' ? '85%' : activeTab === 'dialogue' ? '70%' : activeTab === 'pronunciation' ? '55%' : activeTab === 'canvas-trace' ? '40%' : activeTab === 'kanji' ? '30%' : activeTab === 'vocab' ? '20%' : '10%'}
+            </div>
+          </div>
+
+          <div className="w-full bg-stone-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-stone-200">
+            <motion.div
+              className={`h-full rounded-full ${
+                isCompleted
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-sm shadow-emerald-500/50'
+                  : 'bg-gradient-to-r from-red-600 via-amber-500 to-red-500'
+              }`}
+              initial={{ width: '0%' }}
+              animate={{
+                width: isCompleted
+                  ? '100%'
+                  : activeTab === 'practice'
+                  ? '85%'
+                  : activeTab === 'dialogue'
+                  ? '70%'
+                  : activeTab === 'pronunciation'
+                  ? '55%'
+                  : activeTab === 'canvas-trace'
+                  ? '40%'
+                  : activeTab === 'kanji'
+                  ? '30%'
+                  : activeTab === 'vocab'
+                  ? '20%'
+                  : '10%',
+              }}
+              transition={{ type: 'spring', stiffness: 60, damping: 15 }}
+            />
+          </div>
         </div>
 
         {/* Tab Navigation */}

@@ -19,6 +19,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
 import { ThemeSelector } from '../common/ThemeSelector';
 import { SyncStatusIndicator } from '../common/SyncStatusIndicator';
+import { useActiveTenant, TenantService } from '../../core/content-engine/tenantService';
 
 interface HeaderProps {
   currentView: string;
@@ -28,9 +29,12 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const { user, subscriptionDetails, logout, openAuthModal, loginWithGoogleCredential, loginWithGoogle } = useAuth();
   const { t } = useLanguage();
+  const tenant = useActiveTenant();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [tenantDropdownOpen, setTenantDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const tenantRef = useRef<HTMLDivElement>(null);
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
   // গুগল সাইন-ইন বাটন রেন্ডার করার জন্য useEffect
@@ -110,24 +114,36 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo */}
+          {/* Dynamic Academy Logo & Branding */}
           <div
             id="nihomi-logo-btn"
             className="flex items-center space-x-3 cursor-pointer select-none"
             onClick={() => onNavigate('landing')}
           >
-            <div className="w-9 h-9 rounded-lg bg-slate-900 dark:bg-rose-600 sepia:bg-amber-900 flex items-center justify-center text-white font-bold text-lg tracking-wider shadow-sm">
-              日
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-lg tracking-wider shadow-sm transition-all"
+              style={{ backgroundColor: tenant.customBranding.primaryColorHex || '#DC2626' }}
+            >
+              {tenant.academyName.includes('DILS') ? 'D' : tenant.academyName.includes('CELS') ? 'C' : '日'}
             </div>
             <div className="flex flex-col">
               <div className="flex items-center space-x-1.5">
-                <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white sepia:text-amber-950">NIHOMI</span>
-                <span className="text-xs px-1.5 py-0.5 bg-red-50 dark:bg-rose-950/60 sepia:bg-[#ebdcc3] text-red-700 dark:text-rose-400 sepia:text-amber-900 font-medium rounded border border-red-200 dark:border-rose-900 sepia:border-[#d9cbaf]">
-                  日本語
+                <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white sepia:text-amber-950">
+                  {tenant.academyName.includes('DILS') ? 'DILS' : tenant.academyName.includes('CELS') ? 'CELS' : 'NIHOMI'}
+                </span>
+                <span
+                  className="text-xs px-1.5 py-0.5 font-medium rounded border font-japanese"
+                  style={{
+                    color: tenant.customBranding.primaryColorHex || '#DC2626',
+                    borderColor: `${tenant.customBranding.primaryColorHex || '#DC2626'}40`,
+                    backgroundColor: `${tenant.customBranding.primaryColorHex || '#DC2626'}15`
+                  }}
+                >
+                  {tenant.academyNameJa || '日本語'}
                 </span>
               </div>
-              <span className="text-[10px] text-slate-500 dark:text-stone-400 sepia:text-amber-800 tracking-wider font-medium uppercase">
-                Japanese Learning & Readiness
+              <span className="text-[10px] text-slate-500 dark:text-stone-400 sepia:text-amber-800 tracking-wider font-medium uppercase truncate max-w-[210px]">
+                {tenant.academyName}
               </span>
             </div>
           </div>
@@ -141,17 +157,67 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 onClick={() => onNavigate(item.id)}
                 className={`text-xs font-semibold tracking-wide transition-colors ${
                   currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'))
-                    ? 'text-slate-900 dark:text-white sepia:text-amber-950 border-b-2 border-slate-900 dark:border-rose-500 sepia:border-amber-900 py-1'
+                    ? 'text-slate-900 dark:text-white sepia:text-amber-950 border-b-2 py-1'
                     : 'text-slate-600 dark:text-stone-400 sepia:text-stone-700 hover:text-slate-900 dark:hover:text-white'
                 }`}
+                style={
+                  currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'))
+                    ? { borderColor: tenant.customBranding.primaryColorHex || '#DC2626' }
+                    : {}
+                }
               >
                 {item.label}
               </button>
             ))}
           </nav>
 
-          {/* Utilities & Controls Bar (Sync Status, Language Switcher, Theme Selector, Auth) */}
+          {/* Utilities & Controls Bar (Sync Status, Language Switcher, Theme Selector, Academy Selector, Auth) */}
           <div className="hidden md:flex items-center space-x-2.5">
+            {/* Dynamic Academy Switcher Selector */}
+            <div className="relative" ref={tenantRef}>
+              <button
+                id="header-tenant-selector-btn"
+                onClick={() => setTenantDropdownOpen(!tenantDropdownOpen)}
+                className="inline-flex items-center space-x-1.5 px-2.5 py-1 bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-xl text-[11px] font-mono text-stone-700 dark:text-stone-300 transition-colors cursor-pointer"
+                title="Switch Partner Academy Branding"
+              >
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: tenant.customBranding.primaryColorHex }}
+                />
+                <span className="font-bold truncate max-w-[85px]">{tenant.tenantId.replace('tenant-', '').toUpperCase()}</span>
+                <ChevronDown className="w-3 h-3 text-stone-400" />
+              </button>
+
+              {tenantDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in">
+                  <div className="px-3 py-1.5 text-[10px] font-mono text-stone-400 uppercase font-bold border-b border-stone-200 dark:border-stone-800">
+                    Partner Academies (Branding)
+                  </div>
+                  {TenantService.getTenants().map((t) => (
+                    <button
+                      key={t.tenantId}
+                      onClick={() => {
+                        TenantService.setActiveTenant(t.tenantId);
+                        setTenantDropdownOpen(false);
+                      }}
+                      className={`w-full px-3 py-2 text-left text-xs flex items-center space-x-2 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer ${
+                        t.tenantId === tenant.tenantId ? 'font-bold text-stone-900 dark:text-white bg-stone-50 dark:bg-stone-800/50' : 'text-stone-600 dark:text-stone-400'
+                      }`}
+                    >
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: t.customBranding.primaryColorHex }}
+                      />
+                      <div className="truncate">
+                        <div className="text-[11px] truncate font-medium">{t.academyName}</div>
+                        <div className="text-[9px] text-stone-400 font-mono">{t.domain}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             {/* Visual Sync Status Indicator */}
             <SyncStatusIndicator />
 

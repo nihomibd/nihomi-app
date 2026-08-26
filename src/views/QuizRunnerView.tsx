@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { apiRequest } from '../lib/api.js';
 import { useAuth } from '../context/AuthContext.js';
+import { useProgressSync } from '../hooks/useProgressSync.js';
 import { speakJapanese } from '../lib/tts.js';
 import { saveSrsItemReview, getSrsState, SrsItemState } from '../lib/srs.js';
+import { soundEffects } from '../lib/soundEffects.js';
 import { QuizQuestion } from '../types.js';
+import { ContentAnalyticsService } from '../core/content-engine/contentAnalyticsService';
 import {
   Award,
   ArrowLeft,
@@ -16,7 +19,9 @@ import {
   HelpCircle,
   Calendar,
   Layers,
-  Brain
+  Brain,
+  Lightbulb,
+  X
 } from 'lucide-react';
 
 interface QuizRunnerViewProps {
@@ -27,9 +32,16 @@ interface QuizRunnerViewProps {
 
 export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId, onNavigate }) => {
   const { user, refreshProgress } = useAuth();
+  const { syncQuizCompletion } = useProgressSync();
   const [quiz, setQuiz] = useState<any | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smartRemediationToast, setSmartRemediationToast] = useState<{
+    show: boolean;
+    conceptCode: string;
+    reasonBn: string;
+    suggestionBn: string;
+  } | null>(null);
   const [submissionResult, setSubmissionResult] = useState<{
     attempt: any;
     results: any[];
@@ -95,6 +107,27 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
 
       setSubmissionResult(res);
 
+      if (res?.attempt?.passed) {
+        soundEffects.playLessonCelebration();
+      } else if (res?.results?.some((r: any) => r.isCorrect)) {
+        soundEffects.playCorrectPing();
+      } else {
+        soundEffects.playIncorrectSoft();
+      }
+
+      // Synchronize quiz attempt to Supabase database (quiz_attempts + learning_progress + activity_logs)
+      if (res?.attempt) {
+        await syncQuizCompletion({
+          quizId: quiz.id,
+          score: res.attempt.score ?? 0,
+          totalQuestions: res.attempt.totalQuestions ?? quiz.questions.length,
+          correctAnswers: res.attempt.correctAnswers ?? 0,
+          passed: Boolean(res.attempt.passed),
+          timeSpentSeconds: res.attempt.timeSpentSeconds ?? 60,
+          answersJson: answersPayload
+        }, res.attempt.passed ? 100 : 30);
+      }
+
       // Spaced Repetition (SRS) SM-2 Algorithm Integration
       const scheduled: {
         id: string;
@@ -105,6 +138,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
       }[] = [];
 
       if (res.results && Array.isArray(res.results)) {
+        const wrongItems: any[] = [];
         res.results.forEach((r: any) => {
           const rating = r.isCorrect ? 'good' : 'again';
           const qData = quiz.questions.find((q: any) => q.id === r.questionId);
@@ -116,7 +150,26 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
             stage: srsResult.stage,
             isCorrect: r.isCorrect
           });
+
+          if (!r.isCorrect && qData) {
+            wrongItems.push(qData);
+          }
         });
+
+        // Trigger Smart Correction Toast from ContentAnalyticsService if student missed concepts
+        if (wrongItems.length > 0) {
+          const targetFailedQ = wrongItems[0];
+          const queryCode = targetFailedQ.conceptCode || targetFailedQ.questionJa || targetFailedQ.question || '';
+          const remediation = ContentAnalyticsService.getRemediationForConcept(queryCode);
+          if (remediation) {
+            setSmartRemediationToast({
+              show: true,
+              conceptCode: remediation.conceptCode,
+              reasonBn: remediation.reasonBn,
+              suggestionBn: remediation.suggestionBn,
+            });
+          }
+        }
       }
       setScheduledSrsItems(scheduled);
 
@@ -132,6 +185,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
     setSelectedAnswers({});
     setSubmissionResult(null);
     setScheduledSrsItems([]);
+    setSmartRemediationToast(null);
   };
 
   if (isLoading) {
@@ -419,6 +473,40 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
               <span>{isSubmitting ? 'Evaluating...' : 'Submit Quiz'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+          </div>
+        )}
+
+        {/* Smart Correction Toast Notification from ContentAnalyticsService */}
+        {smartRemediationToast && smartRemediationToast.show && (
+          <div
+            id="smart-correction-toast"
+            className="fixed bottom-6 right-6 max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl border border-amber-500/40 z-50 animate-in slide-in-from-bottom-5 duration-200"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <Lightbulb className="w-4 h-4" />
+              </div>
+              <div className="space-y-1 text-left flex-1">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
+                    Smart Correction &bull; {smartRemediationToast.conceptCode}
+                  </span>
+                </div>
+                <p className="text-xs font-semibold text-stone-200">
+                  {smartRemediationToast.reasonBn}
+                </p>
+                <div className="p-2.5 bg-stone-800/80 rounded-xl border border-stone-700 text-[11px] text-amber-200/90 leading-relaxed font-sans">
+                  💡 <span className="font-bold text-white">টিপ্স: </span>{smartRemediationToast.suggestionBn}
+                </div>
+              </div>
+              <button
+                onClick={() => setSmartRemediationToast(null)}
+                className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-stone-800 transition-colors"
+                title="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
       </div>

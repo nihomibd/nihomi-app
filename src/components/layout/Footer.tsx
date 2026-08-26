@@ -17,6 +17,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.js';
+import { useActiveTenant } from '../../core/content-engine/tenantService';
 
 interface FooterProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -24,6 +25,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { t } = useLanguage();
+  const tenant = useActiveTenant();
   const [isOnline, setIsOnline] = useState<boolean>(() => {
     if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
       return navigator.onLine;
@@ -51,20 +53,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Col 1: Brand & Positioning (2 cols on lg) */}
           <div className="space-y-4 lg:col-span-2">
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavigate('home')}>
-              <div className="w-10 h-10 rounded-2xl bg-red-600 flex items-center justify-center text-white font-bold text-lg font-serif shadow-md">
-                日
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavigate('landing')}>
+              <div
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold text-lg font-serif shadow-md transition-colors"
+                style={{ backgroundColor: tenant.customBranding.primaryColorHex || '#DC2626' }}
+              >
+                {tenant.academyName.includes('DILS') ? 'D' : tenant.academyName.includes('CELS') ? 'C' : '日'}
               </div>
               <div>
-                <span className="font-bold text-xl text-white font-serif tracking-tight">Nihomi.com</span>
-                <span className="text-[10px] block text-stone-400 font-sans">We Coordinate Japanese Learning</span>
+                <span className="font-bold text-xl text-white font-serif tracking-tight">{tenant.academyName}</span>
+                <span className="text-[10px] block text-stone-400 font-sans">{tenant.customBranding.watermarkText}</span>
               </div>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed max-w-sm">
-              “আপনি জাপানি শেখা শুরু করুন—বাকি পথ, প্রস্তুতি ও জাপানের ভিসা ও ফ্লাইট সমন্বয় করবে Nihomi।”
+              “আপনি জাপানি শেখা শুরু করুন—বাকি পথ, প্রস্তুতি ও জাপানের ভিসা ও ফ্লাইট সমন্বয় করবে Nihomi ও {tenant.academyName}।”
             </p>
             <p className="text-[11px] text-stone-500 leading-relaxed max-w-sm">
-              An AI-powered Japanese Learning & Japan Readiness Operating System combining online AI self-study, live mentorship, physical classrooms at Dhaka International Language School, and air travel via bdTrip24.com.
+              Official academic partner platform for {tenant.academyNameJa}. Synchronized with Nihomi Standard™ 23-Dimension Curriculum Engine, NBR Mushak Tax Compliance ({tenant.mushakBinNumber}), and Tokyo air travel coordination.
             </p>
 
             {/* Live Connection & PWA Service Worker Status Indicator */}
@@ -78,7 +83,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <Wifi className="w-3.5 h-3.5" />
-                    <span>System Status: Online & Synchronized</span>
+                    <span>System Status: {tenant.domain} Online</span>
                   </>
                 ) : (
                   <>
@@ -232,8 +237,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           <div className="text-center md:text-right space-y-0.5">
-            <p className="font-bold text-stone-200">Nihomi.com &bull; Nihomi Academy Ltd.</p>
-            <p className="text-[11px] text-stone-500">Dhaka Campus: Banani & Dhanmondi &bull; Tokyo Coordination Desk</p>
+            <p className="font-bold text-stone-200">{tenant.academyName} &bull; Nihomi Academic Council</p>
+            <p className="text-[11px] text-stone-500">Mushak BIN: {tenant.mushakBinNumber} &bull; {tenant.domain} &bull; Tokyo Coordination Desk</p>
           </div>
         </div>
 

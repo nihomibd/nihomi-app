@@ -16,7 +16,13 @@ import {
   Command,
   Search,
   X,
-  Keyboard
+  Keyboard,
+  Download,
+  FileSpreadsheet,
+  Building2,
+  ChevronDown,
+  AlertCircle,
+  TrendingUp
 } from 'lucide-react';
 import { JLPTLevel } from '../../types/nihomi';
 import { PDFIngestionStudio } from './content-engine/PDFIngestionStudio';
@@ -28,6 +34,10 @@ import { ContentHealthSummary } from './content-engine/ContentHealthSummary';
 import { LevelCoverageWidget } from './content-engine/LevelCoverageWidget';
 import { ContentIngestionService } from '../../core/content-engine/contentIngestionService';
 import { ContentGapService } from '../../core/content-engine/contentGapService';
+import { ContentExportService } from '../../core/content-engine/contentExportService';
+import { ContentAnalyticsService, ContentPerformanceMetrics, ContentQualitySignal } from '../../core/content-engine/contentAnalyticsService';
+import { TenantService, TenantConfig } from '../../core/content-engine/tenantService';
+import { NihomiStandardService } from '../../core/content-engine/nihomiStandardService';
 
 export type MasterStudioTab = 'ingestion' | 'review' | 'gaps' | 'infinite' | 'seo' | 'health';
 
@@ -36,12 +46,74 @@ export const MasterContentStudio: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<JLPTLevel>('N5');
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [commandSearch, setCommandSearch] = useState('');
+  const [signalFilter, setSignalFilter] = useState<'ALL' | 'WARNING_CRITICAL' | 'POSITIVE_ENGAGEMENT'>('ALL');
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [auditSummaryMsg, setAuditSummaryMsg] = useState<string | null>(null);
+  
+  // Multi-Tenant & Analytics State
+  const [tenants, setTenants] = useState<TenantConfig[]>(() => TenantService.getTenants());
+  const [activeTenant, setActiveTenant] = useState<TenantConfig>(() => TenantService.getActiveTenant());
+  const [analytics, setAnalytics] = useState<ContentPerformanceMetrics>(() => ContentAnalyticsService.getPerformanceMetrics());
+  const [exportNotice, setExportNotice] = useState<string | null>(null);
+
+  const handleRunQuickAudit = () => {
+    setIsAuditing(true);
+    try {
+      const objects = ContentIngestionService.getKnowledgeObjects();
+      let evaluatedCount = 0;
+      let passingCount = 0;
+
+      objects.forEach((obj) => {
+        const evaluation = NihomiStandardService.evaluateKnowledgeObject(obj);
+        obj.qualityEvaluation = evaluation;
+        evaluatedCount++;
+        if (evaluation.passed) passingCount++;
+        ContentIngestionService.upsertKnowledgeObject(obj, 'founder_quick_audit', 'Real-time 23-dimension standard evaluation');
+      });
+
+      const updatedAnalytics = ContentAnalyticsService.getPerformanceMetrics();
+      setAnalytics({ ...updatedAnalytics });
+      setAuditSummaryMsg(`✓ Quick Audit Complete: ${evaluatedCount} objects evaluated across 23 dimensions (${passingCount} pristine / approved)`);
+      setTimeout(() => setAuditSummaryMsg(null), 4000);
+    } catch (err) {
+      console.error('Quick audit error:', err);
+    } finally {
+      setIsAuditing(false);
+    }
+  };
 
   const allObjects = ContentIngestionService.getKnowledgeObjects();
   const pendingReviewCount = allObjects.filter((o) => o.lifecycleStage === 'HUMAN_REVIEW_REQUIRED').length;
   const publishedCount = allObjects.filter((o) => o.status === 'PUBLISHED' || o.lifecycleStage === 'PUBLISHED').length;
   const gaps = ContentGapService.getContentGaps();
   const openGapsCount = gaps.filter((g) => g.status === 'OPEN').length;
+
+  const handleExportJson = () => {
+    const jsonStr = ContentExportService.exportToJson(selectedLevel);
+    ContentExportService.downloadFile(
+      jsonStr,
+      `nihomi_knowledge_base_${selectedLevel}_${new Date().toISOString().slice(0, 10)}.json`,
+      'application/json'
+    );
+    setExportNotice(`✓ Successfully exported JLPT ${selectedLevel} Knowledge Base as JSON`);
+    setTimeout(() => setExportNotice(null), 3500);
+  };
+
+  const handleExportAnki = () => {
+    const csvStr = ContentExportService.exportToAnkiCsv(selectedLevel);
+    ContentExportService.downloadFile(
+      csvStr,
+      `nihomi_anki_deck_${selectedLevel}_${new Date().toISOString().slice(0, 10)}.csv`,
+      'text/csv'
+    );
+    setExportNotice(`✓ Successfully exported JLPT ${selectedLevel} Anki Flashcards Deck (CSV)`);
+    setTimeout(() => setExportNotice(null), 3500);
+  };
+
+  const handleSelectTenant = (tenantId: string) => {
+    const updated = TenantService.setActiveTenant(tenantId);
+    setActiveTenant({ ...updated });
+  };
 
   const studioTabs = [
     {
@@ -151,13 +223,32 @@ export const MasterContentStudio: React.FC = () => {
       {/* Studio Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800 pb-6">
         <div className="space-y-1">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center flex-wrap gap-2">
             <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-400 font-mono text-[10px] font-bold rounded-lg border border-amber-500/20">
               NIHOMI CONTENT ENGINE™
             </span>
             <span className="px-2 py-0.5 bg-stone-800 text-stone-300 font-mono text-[10px] rounded">
               23-Dimension Standard
             </span>
+
+            {/* Active Multi-Tenant Selector */}
+            <div className="inline-flex items-center space-x-1.5 bg-stone-900 border border-stone-700 px-2.5 py-0.5 rounded-lg text-[10px] font-mono text-stone-300">
+              <Building2 className="w-3 h-3 text-emerald-400 shrink-0" />
+              <select
+                id="select-active-tenant"
+                value={activeTenant.tenantId}
+                onChange={(e) => handleSelectTenant(e.target.value)}
+                aria-label="Active Tenant"
+                className="bg-transparent text-white font-bold cursor-pointer focus:outline-none"
+              >
+                {tenants.map((t) => (
+                  <option key={t.tenantId} value={t.tenantId} className="bg-stone-900 text-white">
+                    {t.academyName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <button
               id="open-command-palette-btn"
               onClick={() => setIsCommandPaletteOpen(true)}
@@ -176,20 +267,152 @@ export const MasterContentStudio: React.FC = () => {
           </p>
         </div>
 
-        {/* Top Metric Pills */}
-        <div className="flex items-center space-x-3 text-xs font-mono">
-          <div className="px-3.5 py-2 bg-stone-950 border border-stone-800 rounded-xl">
-            <span className="text-[10px] text-stone-500 block uppercase">Published</span>
-            <strong className="text-emerald-400 text-sm">{publishedCount} Objects</strong>
+        {/* Top Actions: Level Filter & Export Tools */}
+        <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3">
+          {/* Level Filter Pills */}
+          <div className="flex items-center space-x-1 bg-stone-950 p-1 rounded-xl border border-stone-800">
+            {(['N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((lvl) => (
+              <button
+                key={lvl}
+                id={`btn-select-level-${lvl}`}
+                onClick={() => setSelectedLevel(lvl)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                  selectedLevel === lvl
+                    ? 'bg-amber-500 text-stone-950 shadow-xs'
+                    : 'text-stone-400 hover:text-white hover:bg-stone-900'
+                }`}
+              >
+                {lvl}
+              </button>
+            ))}
           </div>
-          <div className="px-3.5 py-2 bg-stone-950 border border-stone-800 rounded-xl">
-            <span className="text-[10px] text-stone-500 block uppercase">Human Review</span>
-            <strong className="text-amber-400 text-sm">{pendingReviewCount} Pending</strong>
+
+          {/* Export Controls */}
+          <div className="flex items-center space-x-1.5">
+            <button
+              id="btn-export-knowledge-json"
+              onClick={handleExportJson}
+              className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-stone-200 text-xs font-mono font-bold rounded-xl border border-stone-700 cursor-pointer flex items-center space-x-1.5 transition-all"
+              title={`Export JLPT ${selectedLevel} Knowledge Base as JSON`}
+            >
+              <Download className="w-3.5 h-3.5 text-amber-400" />
+              <span>JSON</span>
+            </button>
+
+            <button
+              id="btn-export-anki-csv"
+              onClick={handleExportAnki}
+              className="px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-stone-200 text-xs font-mono font-bold rounded-xl border border-stone-700 cursor-pointer flex items-center space-x-1.5 transition-all"
+              title={`Export JLPT ${selectedLevel} Flashcards to Anki CSV`}
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Anki CSV</span>
+            </button>
           </div>
-          <div className="px-3.5 py-2 bg-stone-950 border border-stone-800 rounded-xl">
-            <span className="text-[10px] text-stone-500 block uppercase">Open Gaps</span>
-            <strong className="text-red-400 text-sm">{openGapsCount} Deficits</strong>
+        </div>
+      </div>
+
+      {exportNotice && (
+        <div className="p-3.5 bg-emerald-950/80 border border-emerald-700 rounded-2xl text-xs font-mono text-emerald-300 font-bold flex items-center space-x-2 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{exportNotice}</span>
+        </div>
+      )}
+
+      {auditSummaryMsg && (
+        <div className="p-3.5 bg-amber-950/80 border border-amber-600 rounded-2xl text-xs font-mono text-amber-300 font-bold flex items-center space-x-2 animate-in fade-in">
+          <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{auditSummaryMsg}</span>
+        </div>
+      )}
+
+      {/* Real-time Content Performance & Quality Signals Alert Banner */}
+      <div className="p-4 bg-stone-950 border border-stone-800 rounded-3xl space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-stone-800/80 pb-2.5">
+          <div className="flex items-center space-x-2 text-xs font-mono flex-wrap gap-y-1">
+            <TrendingUp className="w-4 h-4 text-amber-400" />
+            <strong className="text-white">Content Performance Intelligence (MemoryOS™ Signals)</strong>
+            <span className="text-[10px] text-stone-500 font-normal">
+              • Audited: {analytics.totalConceptsAudited} Concepts • Average Student Mastery: {analytics.averageMasteryRatePercent}%
+            </span>
           </div>
+
+          <div className="flex items-center space-x-2 text-[10px] font-mono flex-wrap gap-y-1">
+            {/* Quick Audit Button */}
+            <button
+              id="btn-run-quick-audit"
+              onClick={handleRunQuickAudit}
+              disabled={isAuditing}
+              className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-lg transition-all flex items-center space-x-1 cursor-pointer disabled:opacity-50"
+              title="Trigger real-time NihomiStandardService 23-dimension evaluation across all objects"
+            >
+              <Sparkles className={`w-3 h-3 ${isAuditing ? 'animate-spin' : ''}`} />
+              <span>{isAuditing ? 'Auditing...' : 'Quick Audit (23-D)'}</span>
+            </button>
+
+            {/* Quality Signal Filter Toggle */}
+            <div className="flex items-center space-x-1 bg-stone-900 p-0.5 rounded-lg border border-stone-800">
+              <button
+                onClick={() => setSignalFilter('ALL')}
+                className={`px-2 py-0.5 rounded text-[9px] font-mono cursor-pointer transition-colors ${
+                  signalFilter === 'ALL' ? 'bg-stone-800 text-white font-bold' : 'text-stone-400 hover:text-stone-200'
+                }`}
+              >
+                All ({analytics.activeQualitySignals.length})
+              </button>
+              <button
+                onClick={() => setSignalFilter('WARNING_CRITICAL')}
+                className={`px-2 py-0.5 rounded text-[9px] font-mono cursor-pointer transition-colors ${
+                  signalFilter === 'WARNING_CRITICAL' ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30' : 'text-amber-500/80 hover:text-amber-300'
+                }`}
+              >
+                ⚠️ Warnings ({analytics.conceptsNeedingRevisionCount})
+              </button>
+              <button
+                onClick={() => setSignalFilter('POSITIVE_ENGAGEMENT')}
+                className={`px-2 py-0.5 rounded text-[9px] font-mono cursor-pointer transition-colors ${
+                  signalFilter === 'POSITIVE_ENGAGEMENT' ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30' : 'text-emerald-500/80 hover:text-emerald-300'
+                }`}
+              >
+                ✓ Mastered ({analytics.highPerformingConceptsCount})
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Quality Signals Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          {analytics.activeQualitySignals
+            .filter((sig) => {
+              if (signalFilter === 'WARNING_CRITICAL') return sig.severity === 'WARNING' || sig.severity === 'CRITICAL';
+              if (signalFilter === 'POSITIVE_ENGAGEMENT') return sig.severity === 'POSITIVE';
+              return true;
+            })
+            .map((sig) => (
+              <div
+                key={sig.id}
+                className={`p-3 rounded-2xl border flex items-start space-x-3 transition-all ${
+                  sig.severity === 'WARNING' || sig.severity === 'CRITICAL'
+                    ? 'bg-amber-950/20 border-amber-800/40 text-amber-200'
+                    : 'bg-emerald-950/20 border-emerald-800/40 text-emerald-200'
+                }`}
+              >
+                {sig.severity === 'WARNING' || sig.severity === 'CRITICAL' ? (
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                ) : (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                )}
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2 font-mono text-[10px]">
+                    <strong className="text-white">{sig.conceptCode}</strong>
+                    <span className="text-stone-400 font-semibold">{sig.signalType}</span>
+                    <span className="font-bold">Fail Rate: {sig.failRatePercent}% ({sig.totalAttempts} attempts)</span>
+                  </div>
+                  <p className="text-[11px] font-sans text-stone-300 leading-snug">{sig.detectedReasonBn}</p>
+                  <p className="text-[10px] font-mono text-stone-400">💡 {sig.suggestedImprovementBn}</p>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import type { StudentProfile, AuthUser, SubscriptionDetails, GoogleUserProfile } from '../types/nihomi';
 import { JLPTLevel, UserProfile, UserProgress, EntitlementFeature, PlanId } from '../types';
 import { supabase } from '../lib/supabase';
+import { syncUserProfileToSupabase, logStudentMilestoneActivity } from '../lib/supabaseService';
 
 export type { AuthUser, SubscriptionDetails, GoogleUserProfile };
 
@@ -202,7 +203,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
-  // পেজ লোড হওয়ার সময় URL হ্যাশ বা লোকাল স্টোরেজ চেক
+  // Helper to sync profile & user in DB upon authentication change
+  const handleUserPersistenceAndDBSync = useCallback(async (newUser: AuthUser & GoogleUserProfile) => {
+    setUser(newUser);
+    localStorage.setItem('nihomi_auth_user', JSON.stringify(newUser));
+    localStorage.setItem('nihomi_google_user', JSON.stringify(newUser));
+    
+    // Auto-create or update profile in Supabase
+    await syncUserProfileToSupabase({
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+      fullName: newUser.full_name || newUser.displayName,
+      avatarUrl: newUser.avatarUrl || newUser.avatar,
+      studentId: newUser.studentId,
+      nihomiAccountId: newUser.nihomiAccountId,
+      targetLevel: (newUser.targetLevel as any) || 'N5',
+      preferredLanguage: 'bn',
+    });
+
+    // Log login activity
+    await logStudentMilestoneActivity({
+      userId: newUser.id,
+      eventType: 'PROFILE_SYNCED',
+      title: 'User Profile Synchronized',
+      description: `Student ${newUser.name || newUser.email} signed in and synchronized profile state.`,
+    });
+  }, []);
+
+  // Check URL hash for OAuth return on page load
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
       const params = new URLSearchParams(window.location.hash.substring(1));
@@ -227,16 +256,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 currentLevel: 'N5',
                 studentId,
               };
-              setUser(googleUser);
-              localStorage.setItem('nihomi_google_user', JSON.stringify(googleUser));
-              localStorage.setItem('nihomi_auth_user', JSON.stringify(googleUser));
+              handleUserPersistenceAndDBSync(googleUser);
               window.history.replaceState(null, '', window.location.pathname);
             }
           })
           .catch(console.error);
       }
     }
-  }, []);
+  }, [handleUserPersistenceAndDBSync]);
 
   // Sync Supabase Auth session on mount
   useEffect(() => {
@@ -244,19 +271,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (supaUser) {
         const meta = supaUser.user_metadata || {};
         const fullName = meta.full_name || meta.name || supaUser.email?.split('@')[0] || 'Md. Tanvir Kabir Biplob';
-        setUser((prev) => ({
-          ...(prev || DEFAULT_USER),
+        const authenticatedUser: AuthUser & GoogleUserProfile = {
+          ...(user || DEFAULT_USER),
           id: supaUser.id,
-          studentId: prev?.studentId || prev?.id || 'DILS-2026-N5042',
+          studentId: user?.studentId || user?.id || 'DILS-2026-N5042',
           name: fullName,
           full_name: fullName,
           displayName: fullName,
           email: supaUser.email || 'mdtanvirkabirbiplob@gmail.com',
-          avatarUrl: meta.avatar_url || meta.picture || prev?.avatarUrl || '',
-          avatar: meta.avatar_url || meta.picture || prev?.avatarUrl || '',
-          nihomiAccountId: meta.nihomi_account_id || prev?.nihomiAccountId || 'NHM-880-9972',
+          avatarUrl: meta.avatar_url || meta.picture || user?.avatarUrl || '',
+          avatar: meta.avatar_url || meta.picture || user?.avatarUrl || '',
+          nihomiAccountId: meta.nihomi_account_id || user?.nihomiAccountId || 'NHM-880-9972',
           role: (meta.role as any) || 'student'
-        }));
+        };
+        handleUserPersistenceAndDBSync(authenticatedUser);
       }
     });
 
@@ -264,24 +292,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         const meta = session.user.user_metadata || {};
         const fullName = meta.full_name || meta.name || session.user.email?.split('@')[0] || 'Md. Tanvir Kabir Biplob';
-        setUser((prev) => ({
-          ...(prev || DEFAULT_USER),
+        const authenticatedUser: AuthUser & GoogleUserProfile = {
+          ...(user || DEFAULT_USER),
           id: session.user.id,
-          studentId: prev?.studentId || prev?.id || 'DILS-2026-N5042',
+          studentId: user?.studentId || user?.id || 'DILS-2026-N5042',
           name: fullName,
           full_name: fullName,
           displayName: fullName,
           email: session.user.email || 'mdtanvirkabirbiplob@gmail.com',
-          avatarUrl: meta.avatar_url || meta.picture || prev?.avatarUrl || '',
-          avatar: meta.avatar_url || meta.picture || prev?.avatarUrl || '',
-          nihomiAccountId: meta.nihomi_account_id || prev?.nihomiAccountId || 'NHM-880-9972',
+          avatarUrl: meta.avatar_url || meta.picture || user?.avatarUrl || '',
+          avatar: meta.avatar_url || meta.picture || user?.avatarUrl || '',
+          nihomiAccountId: meta.nihomi_account_id || user?.nihomiAccountId || 'NHM-880-9972',
           role: (meta.role as any) || 'student'
-        }));
+        };
+        handleUserPersistenceAndDBSync(authenticatedUser);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [handleUserPersistenceAndDBSync]);
 
   useEffect(() => {
     if (user) {
@@ -323,11 +352,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentLevel: 'N5',
         studentId,
       };
-      setUser(googleUser);
       setToken('token-google-jwt-' + Date.now());
       setSubscriptionDetails(PLAN_CONFIGS['pro']);
-      localStorage.setItem('nihomi_google_user', JSON.stringify(googleUser));
-      localStorage.setItem('nihomi_auth_user', JSON.stringify(googleUser));
+      handleUserPersistenceAndDBSync(googleUser);
       setIsAuthModalOpen(false);
     }
   };
@@ -365,8 +392,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       studentId: DEFAULT_USER.studentId || DEFAULT_USER.id,
       avatarUrl: DEFAULT_USER.avatarUrl || '',
     };
-    setUser(loggedUser);
     setToken('token-email-' + Date.now());
+    await handleUserPersistenceAndDBSync(loggedUser);
     setIsAuthModalOpen(false);
   };
 
@@ -382,8 +409,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       studentId: `DILS-2026-${Math.floor(1000 + Math.random() * 9000)}`,
       avatarUrl: '',
     };
-    setUser(loggedUser);
     setToken('token-registered-' + Date.now());
+    await handleUserPersistenceAndDBSync(loggedUser);
     setIsAuthModalOpen(false);
   };
 
@@ -404,9 +431,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateUserName = (newName: string) => {
     if (!user) return;
     const updated = { ...user, name: newName, full_name: newName, displayName: newName };
-    setUser(updated);
-    localStorage.setItem('nihomi_google_user', JSON.stringify(updated));
-    localStorage.setItem('nihomi_auth_user', JSON.stringify(updated));
+    handleUserPersistenceAndDBSync(updated);
   };
 
   const updateProfile = (updatedData: Partial<AuthUser>) => {
@@ -420,9 +445,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       targetLevel: updatedData.targetLevel || updatedData.currentLevel || user.targetLevel,
       currentLevel: updatedData.currentLevel || updatedData.targetLevel || user.currentLevel
     };
-    setUser(updated as any);
-    localStorage.setItem('nihomi_auth_user', JSON.stringify(updated));
-    localStorage.setItem('nihomi_google_user', JSON.stringify(updated));
+    handleUserPersistenceAndDBSync(updated as any);
   };
 
   const updateSubscription = (planId: 'free' | 'starter' | 'pro' | 'vip', method: 'bkash' | 'sslcommerz' = 'bkash') => {
@@ -435,9 +458,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSubscriptionDetails(newConfig);
     if (user) {
       const updatedUser = { ...user, planId };
-      setUser(updatedUser as any);
-      localStorage.setItem('nihomi_auth_user', JSON.stringify(updatedUser));
-      localStorage.setItem('nihomi_google_user', JSON.stringify(updatedUser));
+      handleUserPersistenceAndDBSync(updatedUser as any);
     }
     localStorage.setItem('nihomi_subscription', JSON.stringify(newConfig));
   };

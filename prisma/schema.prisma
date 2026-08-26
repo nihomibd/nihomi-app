@@ -19,6 +19,52 @@ enum Role {
   INSTRUCTOR
 }
 
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum JLPTLevel {
+  N5
+  N4
+  N3
+  N2
+  N1
+}
+
+enum LessonItemType {
+  VOCABULARY
+  GRAMMAR
+  KANJI
+  DIALOGUE
+  LISTENING
+  READING
+  EXERCISE
+}
+
+enum QuizType {
+  LESSON_CHECK
+  MODULE_ASSESSMENT
+  JLPT_MOCK_EXAM
+  GHOST_MODE_PRACTICE
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  FILL_IN_BLANK
+  PARTICLE_SELECT
+  AUDIO_LISTENING
+  KANJI_READING
+  TRANSLATION
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
 enum SubscriptionStatus {
   trialing
   active
@@ -69,6 +115,12 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  // Profile & Learning Relations
+  profile          Profile?
+  learningProgress LearningProgress?
+  lessonProgresses LessonProgress[]
+  quizAttempts     QuizAttempt[]
+
   // Billing Relations
   subscriptions Subscription[]
   payments      Payment[]
@@ -78,6 +130,315 @@ model User {
   targetAudits  AdminAuditLog[] @relation("TargetUser")
 
   @@index([email])
+}
+
+// ----------------------------------------------------
+// 1. STUDENT PROFILE
+// ----------------------------------------------------
+
+model Profile {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  bio                String?
+  targetJLPTLevel    JLPTLevel @default(N5)
+  preferredLanguage  String    @default("bn") // 'bn' | 'en' | 'ja'
+  dailyGoalMinutes   Int       @default(20)
+  targetVisaType     String?   // 'student_visa', 'ssw_tokutei_ginou', 'engineer_specialist', 'dependent'
+  country            String    @default("Bangladesh")
+  city               String?
+  notificationEmail  Boolean   @default(true)
+  notificationPush   Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([targetJLPTLevel])
+}
+
+// ----------------------------------------------------
+// 2. CURRICULUM ARCHITECTURE (COURSES, MODULES, LESSONS, ITEMS)
+// ----------------------------------------------------
+
+model Course {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String?       @db.Text
+  level       JLPTLevel     @default(N5)
+  thumbnail   String?
+  orderIndex  Int           @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  modules     Module[]
+  quizzes     Quiz[]
+
+  @@index([level, status])
+  @@index([orderIndex])
+}
+
+model Module {
+  id          String        @id @default(cuid())
+  courseId    String
+  title       String
+  slug        String
+  description String?       @db.Text
+  orderIndex  Int           @default(0)
+  status      ContentStatus @default(PUBLISHED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  course      Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@unique([courseId, slug])
+  @@index([courseId, orderIndex])
+}
+
+model Lesson {
+  id              String         @id @default(cuid())
+  moduleId        String
+  title           String
+  slug            String
+  lessonNumber    Int            // e.g. Lesson 1..25 for Minna no Nihongo
+  description     String?        @db.Text
+  durationMinutes Int            @default(15)
+  xpReward        Int            @default(50)
+  isFreePreview   Boolean        @default(false)
+  orderIndex      Int            @default(0)
+  status          ContentStatus  @default(PUBLISHED)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  module          Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  items           LessonItem[]
+  vocabularies    Vocabulary[]
+  grammars        Grammar[]
+  kanjis          Kanji[]
+  quizzes         Quiz[]
+  progressRecords LessonProgress[]
+
+  @@unique([moduleId, slug])
+  @@index([moduleId, orderIndex])
+  @@index([lessonNumber])
+}
+
+model LessonItem {
+  id          String         @id @default(cuid())
+  lessonId    String
+  itemType    LessonItemType
+  title       String?
+  content     Json?          // Flexible payload (audio URL, markdown dialogue, practice task)
+  orderIndex  Int            @default(0)
+  referenceId String?        // Optional foreign key pointer to Vocabulary, Grammar, or Kanji
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId, orderIndex])
+  @@index([itemType])
+}
+
+// ----------------------------------------------------
+// 3. LINGUISTIC KNOWLEDGE BASES (VOCABULARY, GRAMMAR, KANJI)
+// ----------------------------------------------------
+
+model Vocabulary {
+  id                 String    @id @default(cuid())
+  lessonId           String?
+  word               String    // e.g. "学生" or "わたし"
+  readingHiragana    String    // e.g. "がくせい"
+  romaji             String    // e.g. "gakusei"
+  meaningEn          String    // e.g. "Student"
+  meaningBn          String    // e.g. "ছাত্র / শিক্ষার্থী"
+  partOfSpeech       String    // 'noun', 'verb_u', 'verb_ru', 'verb_irr', 'i_adj', 'na_adj', 'adverb', 'particle'
+  jlptLevel          JLPTLevel @default(N5)
+  pitchAccent        String?   // e.g. "0", "1", "2" (Tokyo Standard Pitch)
+  audioUrl           String?
+  exampleSentenceJa  String?   @db.Text
+  exampleSentenceEn  String?   @db.Text
+  exampleSentenceBn  String?   @db.Text
+  orderIndex         Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  lesson             Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([word])
+  @@index([jlptLevel])
+  @@index([lessonId, orderIndex])
+}
+
+model Grammar {
+  id                   String    @id @default(cuid())
+  lessonId             String?
+  title                String    // e.g. "〜は〜です (~ wa ~ desu)"
+  pattern              String    // e.g. "N1 は N2 です"
+  meaningEn            String    // e.g. "N1 is N2"
+  meaningBn            String    // e.g. "N1 হলো N2"
+  explanationEn        String    @db.Text
+  explanationBn        String    @db.Text
+  jlptLevel            JLPTLevel @default(N5)
+  structure            String?   // Formula breakdown e.g. "Noun + は + Noun + です"
+  examplesJson         Json      // Array of [{ja, hiragana, romaji, en, bn, audioUrl}]
+  commonMistakes       String?   @db.Text // e.g. Particle confusion notes (は vs が)
+  orderIndex           Int       @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  lesson               Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([title])
+  @@index([jlptLevel])
+  @@index([lessonId, orderIndex])
+}
+
+model Kanji {
+  id             String    @id @default(cuid())
+  lessonId       String?
+  character      String    @unique // e.g. "日"
+  strokeCount    Int
+  jlptLevel      JLPTLevel @default(N5)
+  grade          Int?      // Japanese Elementary Grade (1-6)
+  onyomi         String[]  // e.g. ["ニチ", "ジツ"]
+  kunyomi        String[]  // e.g. ["ひ", "-び", "-か"]
+  meaningEn      String    // e.g. "Sun, Day, Japan"
+  meaningBn      String    // e.g. "সূর্য, দিন, জাপান"
+  radicals       String[]  // e.g. ["日"]
+  strokeOrderSvg String?   @db.Text
+  examplesJson   Json      // Array of [{compound: "日本", reading: "にほん", en: "Japan", bn: "জাপান"}]
+  orderIndex     Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  lesson         Lesson?   @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([character])
+  @@index([jlptLevel])
+  @@index([lessonId, orderIndex])
+}
+
+// ----------------------------------------------------
+// 4. TESTING & ASSESSMENT ENGINE (QUIZZES, QUESTIONS, ATTEMPTS)
+// ----------------------------------------------------
+
+model Quiz {
+  id               String          @id @default(cuid())
+  lessonId         String?
+  courseId         String?
+  title            String
+  description      String?         @db.Text
+  quizType         QuizType        @default(LESSON_CHECK)
+  timeLimitMinutes Int?            // Optional timer for JLPT mock tests
+  passingScore     Int             @default(70) // Percentage required to pass
+  totalPoints      Int             @default(100)
+  status           ContentStatus   @default(PUBLISHED)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  // Relations
+  lesson           Lesson?         @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  course           Course?         @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  questions        QuizQuestion[]
+  attempts         QuizAttempt[]
+
+  @@index([lessonId])
+  @@index([courseId])
+  @@index([quizType, status])
+}
+
+model QuizQuestion {
+  id             String       @id @default(cuid())
+  quizId         String
+  questionText   String       @db.Text
+  questionType   QuestionType @default(MULTIPLE_CHOICE)
+  optionsJson    Json         // Array of options [{id: "A", text: "わたし", isCorrect: true}]
+  correctAnswer  String       // Identifier or literal match
+  explanationEn  String?      @db.Text
+  explanationBn  String?      @db.Text
+  points         Int          @default(10)
+  orderIndex     Int          @default(0)
+  audioUrl       String?
+  imageUrl       String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  quiz           Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId, orderIndex])
+}
+
+model QuizAttempt {
+  id               String         @id @default(cuid())
+  userId           String
+  quizId           String
+  score            Int
+  totalQuestions   Int
+  correctAnswers   Int
+  passed           Boolean        @default(false)
+  timeSpentSeconds Int            @default(0)
+  answersJson      Json           // Detailed audit of student selections
+  status           ProgressStatus @default(COMPLETED)
+  completedAt      DateTime       @default(now())
+  createdAt        DateTime       @default(now())
+
+  // Relations
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz             Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId, quizId])
+  @@index([userId, passed])
+}
+
+// ----------------------------------------------------
+// 5. PROGRESS & MEMORYOS™ SPATIAL INTELLIGENCE
+// ----------------------------------------------------
+
+model LessonProgress {
+  id               String         @id @default(cuid())
+  userId           String
+  lessonId         String
+  status           ProgressStatus @default(NOT_STARTED)
+  progressPercent  Int            @default(0) // 0-100%
+  timeSpentSeconds Int            @default(0)
+  lastAccessedAt   DateTime       @default(now())
+  completedAt      DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson           Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId, status])
+}
+
+model LearningProgress {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  currentJLPTLevel     JLPTLevel @default(N5)
+  totalXP              Int       @default(0)
+  currentStreakDays    Int       @default(0)
+  longestStreakDays    Int       @default(0)
+  lastStudyDate        DateTime?
+  masteredVocabCount   Int       @default(0)
+  masteredGrammarCount Int       @default(0)
+  masteredKanjiCount   Int       @default(0)
+  totalStudyMinutes    Int       @default(0)
+  memoryOsHealthScore  Int       @default(100) // Ebbinghaus SRS Retention Index (0-100%)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, currentJLPTLevel])
 }
 
 // ----------------------------------------------------

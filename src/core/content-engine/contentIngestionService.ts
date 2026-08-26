@@ -5,7 +5,8 @@ import {
   KanjiObject,
   KnowledgeObjectVersionSnapshot,
   ContentLifecycleStage,
-  PublicationStatus
+  PublicationStatus,
+  ContentGapItem
 } from './types';
 import { NihomiStandardService } from './nihomiStandardService';
 
@@ -581,9 +582,16 @@ function persistKnowledgeObjects(objs: KnowledgeObject[]) {
 let knowledgeObjects: KnowledgeObject[] = loadSavedKnowledgeObjects();
 
 export const ContentIngestionService = {
-  getKnowledgeObjects(filterStage?: ContentLifecycleStage): KnowledgeObject[] {
-    if (filterStage) {
-      return knowledgeObjects.filter((k) => k.lifecycleStage === filterStage);
+  getKnowledgeObjects(filter?: ContentLifecycleStage | { level?: string; stage?: ContentLifecycleStage }): KnowledgeObject[] {
+    if (typeof filter === 'string') {
+      return knowledgeObjects.filter((k) => k.lifecycleStage === filter);
+    }
+    if (filter && typeof filter === 'object') {
+      return knowledgeObjects.filter((k) => {
+        if (filter.level && k.level !== filter.level) return false;
+        if (filter.stage && k.lifecycleStage !== filter.stage) return false;
+        return true;
+      });
     }
     return [...knowledgeObjects];
   },
@@ -702,6 +710,72 @@ export const ContentIngestionService = {
     }
     persistKnowledgeObjects(knowledgeObjects);
     return obj;
+  },
+
+  getGapAnalysis(): ContentGapItem[] {
+    return [
+      {
+        id: 'gap-001',
+        level: 'N5',
+        domain: 'GRAMMAR',
+        missingConcept: '〜から〜まで (Time & Location Boundaries)',
+        gapType: 'MISSING_BANGLA_TRANSLATION',
+        reason: 'বাঙালি শিক্ষার্থীদের জন্য「〜から」এবং「〜に」এর ব্যবহারের পার্থক্য স্পষ্ট করার জন্য বাংলা বিশ্লেষণ অপর্যাপ্ত।',
+        priority: 'HIGH',
+        severity: 'WARNING',
+        status: 'OPEN',
+        detectedAt: '2026-08-25T12:00:00Z',
+        recommendedAction: 'অতিরিক্ত ২ টি বাংলা কর্মক্ষেত্রের উদাহরণ বাক্য ও সময় সারণী যুক্ত করুন।',
+        exemplarsGenerated: [
+          {
+            ja: 'ぎんこうは ９じから ３じまでです。',
+            furigana: '[銀行|ぎんこう]は ９[時|じ]から ３[時|じ]までです。',
+            romaji: 'Ginkou wa kuji kara sanji made desu.',
+            en: 'The bank is open from 9:00 to 3:00.',
+            bn: 'ব্যাংক সকাল ৯টা থেকে বিকাল ৩টা পর্যন্ত খোলা থাকে।'
+          }
+        ]
+      },
+      {
+        id: 'gap-002',
+        level: 'N5',
+        domain: 'KANJI',
+        missingConcept: 'Essential Directional Kanji (東・西・南・北)',
+        gapType: 'MISSING_EXEMPLARS',
+        reason: 'দিক-নির্দেশক কাঞ্জির কম্পাউন্ড শব্দে টোকিও মেট্রো এবং স্টেশন সাইনবোর্ডের বাস্তব ছবি উদাহরণ হিসেবে কম।',
+        priority: 'MEDIUM',
+        severity: 'MINOR',
+        status: 'OPEN',
+        detectedAt: '2026-08-25T14:30:00Z',
+        recommendedAction: 'টোকিও সাবওয়ে স্টেশনের ৪ টি রিয়েল-লাইফ এক্সাম্পলার ও ওনিয়োমি ড্রিল যোগ করুন।',
+      },
+      {
+        id: 'gap-003',
+        level: 'N4',
+        domain: 'GRAMMAR',
+        missingConcept: '〜てはいけません vs 〜なければなりません (Prohibition vs Obligation)',
+        gapType: 'LOW_QUALITY_SCORE',
+        reason: 'জাপানের কর্মক্ষেত্রে নিরাপত্তা ও নিয়মাবলী বিষয়ক কাস্টম কন্টেক্সট প্রয়োজন।',
+        priority: 'HIGH',
+        severity: 'WARNING',
+        status: 'OPEN',
+        detectedAt: '2026-08-25T16:00:00Z',
+        recommendedAction: 'ফ্যাক্টরি ও হাসপাতালের জন্য দুটি বিশেষ ডায়ালগ যুক্ত করুন।'
+      },
+      {
+        id: 'gap-004',
+        level: 'N5',
+        domain: 'VOCABULARY',
+        missingConcept: 'Essential Hospital & Health Symptoms (びょういん・くすり)',
+        gapType: 'MISSING_ASSESSMENT',
+        reason: 'ডাক্তারের চেম্বারে ব্যবহৃত লক্ষণ প্রকাশের শব্দভাণ্ডারে কুইজ অ্যাসেসমেন্ট অনুপস্থিত।',
+        priority: 'MEDIUM',
+        severity: 'MINOR',
+        status: 'OPEN',
+        detectedAt: '2026-08-25T17:15:00Z',
+        recommendedAction: '৫টি ইন্টারেক্টিভ এসআরএস কুইজ প্রশ্ন ও অডিও প্রম্পট যোগ করুন।'
+      }
+    ];
   },
 
   resetToSeed(): KnowledgeObject[] {
