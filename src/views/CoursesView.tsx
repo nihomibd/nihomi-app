@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Course, JLPTLevel } from '../types/nihomi';
 import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
+import { CurriculumUnitLinearTracker } from '../components/courses/CurriculumUnitLinearTracker';
 import { useAuth } from '../context/AuthContext';
 
 interface CoursesViewProps {
@@ -167,6 +168,14 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
           </div>
 
         </div>
+
+        {/* Sequenced Curriculum Unit Progression Pipeline */}
+        <section id="courses-curriculum-linear-tracker-section">
+          <CurriculumUnitLinearTracker
+            selectedLevel={selectedLevel}
+            onNavigateLesson={(lessonId) => onNavigate('lesson', { lessonId })}
+          />
+        </section>
 
         {/* Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

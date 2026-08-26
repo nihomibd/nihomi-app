@@ -45,6 +45,8 @@ import { GlobalLeaderboard } from '../components/GlobalLeaderboard.js';
 import { DashboardSrsSummaryWidget } from '../components/DashboardSrsSummaryWidget.js';
 import { LanguageProgressTracker } from '../components/LanguageProgressTracker.js';
 import { RecentlyViewedLessons } from '../components/RecentlyViewedLessons.js';
+import { JlptMasteryHeatmap } from '../components/dashboard/JlptMasteryHeatmap';
+import { KanjiMasteryTrendChart } from '../components/dashboard/KanjiMasteryTrendChart';
 
 interface DashboardViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -308,6 +310,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
             </button>
           </div>
         </div>
+
+        {/* JLPT Mastery Activity Heatmap & Skill Density Matrix */}
+        <section id="dashboard-jlpt-mastery-heatmap-section">
+          <JlptMasteryHeatmap
+            currentLevel={currentLevel as any}
+            completedLessonsCount={completedCount}
+          />
+        </section>
+
+        {/* Kanji Mastery Progress Trend Chart (Recharts) */}
+        <section id="dashboard-kanji-mastery-trend-section">
+          <KanjiMasteryTrendChart
+            currentLevel={currentLevel as any}
+            masteredCount={Math.min(120, Math.max(14 * completedCount, 24))}
+          />
+        </section>
 
         {/* Language Progress Tracker (Kanji, Vocabulary, and Grammar Progress Rings) */}
         <section id="dashboard-language-progress-tracker-section">

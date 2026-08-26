@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
@@ -21,12 +21,37 @@ import { InstitutionPortalView } from './views/InstitutionPortalView';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
-import { Eye, EyeOff, Sparkles, Volume2, VolumeX, X } from 'lucide-react';
+import { QuickDictionaryOverlay } from './components/QuickDictionaryOverlay';
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
+import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
+import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
+import { ExportToastNotification } from './components/common/ExportToastNotification';
+import {
+  Sparkles,
+  Volume2,
+  VolumeX,
+  X,
+  Music,
+  ChevronDown
+} from 'lucide-react';
+import { ZenSoundscapeType } from './lib/zenAudio';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('landing');
   const [viewParams, setViewParams] = useState<Record<string, any>>({});
-  const { isFocusMode, toggleFocusMode, zenSoundActive, toggleZenSound } = useFocusMode();
+  const [isDictionaryOpen, setIsDictionaryOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isSoundscapeMenuOpen, setIsSoundscapeMenuOpen] = useState(false);
+
+  const {
+    isFocusMode,
+    toggleFocusMode,
+    zenSoundActive,
+    toggleZenSound,
+    soundscapeMode,
+    setSoundscapeMode,
+    soundscapes
+  } = useFocusMode();
 
   const handleNavigate = (view: string, params: Record<string, any> = {}) => {
     setCurrentView(view);
@@ -34,44 +59,80 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Global Keyboard Shortcut Listener (Cmd+K, ?, Escape, and Ctrl/Cmd helper)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if user is typing in an input or textarea
+      const target = e.target as HTMLElement;
+      const isInput =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable;
+
+      // Cmd+K or Ctrl+K -> Quick Dictionary
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsDictionaryOpen((prev) => !prev);
+        return;
+      }
+
+      // If typing in input, ignore single key navigation shortcuts
+      if (isInput) return;
+
+      if (e.key === '?') {
+        e.preventDefault();
+        setIsShortcutsOpen((prev) => !prev);
+      } else if (e.key.toLowerCase() === 'd' && !e.metaKey && !e.ctrlKey) {
+        handleNavigate('portal');
+      } else if (e.key.toLowerCase() === 'l' && !e.metaKey && !e.ctrlKey) {
+        handleNavigate('courses');
+      } else if (e.key.toLowerCase() === 'q' && !e.metaKey && !e.ctrlKey) {
+        handleNavigate('quizzes');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const activeSoundscape = soundscapes.find((s) => s.id === soundscapeMode) || soundscapes[0];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
       {/* Offline Feedback & Service Worker Resilience Banner */}
       {!isFocusMode && <OfflineNotificationBanner />}
 
-      {/* Focus Mode Zen Floating Bar */}
+      {/* Focus Mode Sakura Ambient Canvas Background */}
+      <FocusSakuraBackground
+        isActive={isFocusMode}
+        soundscapeMode={soundscapeMode}
+        soundActive={zenSoundActive}
+      />
+
+      {/* Focus Mode Pomodoro Bar (25m / 50m / 5m Break Intervals + Zen Soundscape Player) */}
       {isFocusMode && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-stone-900/90 dark:bg-stone-950/95 backdrop-blur-md text-white px-4 py-2 rounded-full border border-stone-700 shadow-2xl flex items-center space-x-3 text-xs animate-in fade-in slide-in-from-top-3 max-w-[95vw] overflow-hidden">
-          <div className="flex items-center space-x-1.5 text-amber-400 font-semibold truncate">
-            <Sparkles className="w-3.5 h-3.5 animate-pulse shrink-0" />
-            <span className="truncate">Zen Focus Mode</span>
-          </div>
-          <span className="text-stone-500">•</span>
-          <button
-            type="button"
-            onClick={toggleZenSound}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-full transition-colors cursor-pointer shrink-0 ${
-              zenSoundActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'text-stone-400 hover:text-stone-200'
-            }`}
-          >
-            {zenSoundActive ? <Volume2 className="w-3 h-3 text-amber-400 animate-pulse" /> : <VolumeX className="w-3 h-3" />}
-            <span className="text-[11px] hidden sm:inline">{zenSoundActive ? 'Zen Chimes ON' : 'Zen Audio'}</span>
-          </button>
-          <span className="text-stone-500">•</span>
-          <button
-            type="button"
-            id="btn-exit-focus-mode"
-            onClick={() => toggleFocusMode(false)}
-            className="flex items-center space-x-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full shadow-xs transition-colors cursor-pointer shrink-0"
-          >
-            <span>Exit</span>
-            <X className="w-3 h-3" />
-          </button>
-        </div>
+        <FocusPomodoroBar
+          zenSoundActive={zenSoundActive}
+          toggleZenSound={toggleZenSound}
+          soundscapeMode={soundscapeMode}
+          setSoundscapeMode={setSoundscapeMode}
+          soundscapes={soundscapes}
+          onExitFocus={() => toggleFocusMode(false)}
+        />
       )}
 
+      {/* Global Export Download Path Toast Notification */}
+      <ExportToastNotification />
+
       {/* Main Header */}
-      {!isFocusMode && <Header currentView={currentView} onNavigate={handleNavigate} />}
+      {!isFocusMode && (
+        <Header
+          currentView={currentView}
+          onNavigate={handleNavigate}
+          onOpenDictionary={() => setIsDictionaryOpen(true)}
+          onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        />
+      )}
       
       <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} pb-16 md:pb-0`}>
         {(currentView === 'landing' || currentView === 'home') && (
@@ -131,6 +192,20 @@ export const App: React.FC = () => {
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
       {!isFocusMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
+
+      {/* Quick Dictionary Search Overlay (Triggered from Header or ⌘K) */}
+      <QuickDictionaryOverlay
+        isOpen={isDictionaryOpen}
+        onClose={() => setIsDictionaryOpen(false)}
+        onNavigateToFlashcards={() => handleNavigate('portal')}
+      />
+
+      {/* Global Keyboard Shortcut Helper Overlay (Triggered from Header or '?' key) */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
+        onNavigate={handleNavigate}
+      />
 
       {/* Google Sign-in & Authentication Modal */}
       <AuthModal />
