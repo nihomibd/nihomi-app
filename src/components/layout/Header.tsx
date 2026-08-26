@@ -26,8 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     { id: 'landing', label: 'Home' },
     { id: 'courses', label: 'Courses' },
     { id: 'portal', label: 'Dashboard' },
-    { id: 'coordination', label: 'Coordination' },
-    { id: 'documents', label: 'Documents' },
+    { id: 'coordination', label: 'Coordination / Docs' },
   ];
 
   return (
