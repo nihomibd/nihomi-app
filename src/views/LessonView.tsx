@@ -1162,6 +1162,41 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           </div>
         )}
 
+        {/* Speak & Compare Web Speech & Gemini Pronunciation Modal */}
+        {speakingTarget && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 animate-in fade-in zoom-in-95 duration-150 space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-xl bg-purple-100 text-purple-700">
+                    <Mic className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-bold text-stone-900">Speak & Compare (AI Clarity Scoring)</h3>
+                    <p className="text-[11px] text-stone-500">Record your pronunciation and receive Gemini AI Sensei clarity feedback</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSpeakingTarget(null)}
+                  className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-sm font-bold transition cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <SpeechPracticeWidget
+                targetPhrase={speakingTarget.phrase}
+                romaji={speakingTarget.romaji}
+                english={speakingTarget.english}
+                onSuccess={(score) => {
+                  soundEffects.playCorrectPing();
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Kanji Stroke Order Animator Modal */}
         {selectedKanjiForStrokeAnim && (
           <KanjiStrokeAnimator

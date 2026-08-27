@@ -51,15 +51,19 @@ import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
 import { ContentExportService } from '../core/content-engine/contentExportService';
 import { BadgeSystem } from '../components/BadgeSystem';
 import { RecentAiFeedbackTab } from '../components/RecentAiFeedbackTab';
+import { StudyScheduleWidget } from '../components/dashboard/StudyScheduleWidget';
+import { StudyCirclesTab } from '../components/student/StudyCirclesTab';
+import { PushNotificationService } from '../lib/pushNotification';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
-import { Eye, EyeOff, TrendingUp, Brush, Headphones, Timer } from 'lucide-react';
+import { Eye, EyeOff, TrendingUp, Brush, Headphones, Timer, Users, Bell } from 'lucide-react';
 
 interface StudentPortalViewProps {
   initialTab?:
     | 'dashboard'
     | 'analytics'
+    | 'study_circles'
     | 'nihomi_standard'
     | 'kanji_visualizer'
     | 'pronunciation_coach'
@@ -201,6 +205,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const [activeTab, setActiveTab] = useState<
     | 'dashboard'
     | 'analytics'
+    | 'study_circles'
     | 'nihomi_standard'
     | 'kanji_visualizer'
     | 'pronunciation_coach'
@@ -462,6 +467,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto py-3 text-xs font-semibold">
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
+              { id: 'study_circles', label: '👥 Study Circles (Cohorts)', icon: Users },
               { id: 'analytics', label: '📊 Learning Analytics & Charts', icon: TrendingUp },
               { id: 'badges', label: '🏆 Nihomi Achievements & Badges', icon: Award },
               { id: 'ai_feedback', label: '🤖 Recent AI Sensei Feedback', icon: Sparkles },
@@ -551,6 +557,15 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <div className="text-xs text-slate-500 mt-1">{studentData.assignedTeacher}</div>
               </div>
             </div>
+
+            {/* Personalized 4-Week AI Study Schedule & Weak Area Blueprint */}
+            <StudyScheduleWidget
+              userLevel={studentData.currentLevel}
+              onNavigateAction={(v) => {
+                if (v === 'courses') setActiveTab('courses');
+                else if (onNavigate) onNavigate(v);
+              }}
+            />
 
             {/* Interactive 30-Day Frequency & Consistency Study Heatmap */}
             <Past30DaysStudyHeatmap currentStreak={studentData.streakDays} />
@@ -747,6 +762,21 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             totalStudyHours={studentData.totalStudyHours}
             studyStreakDays={studentData.streakDays}
             onLaunchSrsReview={() => setActiveTab('courses')}
+          />
+        )}
+
+        {/* NIHOMI STUDY CIRCLES (COHORTS) TAB */}
+        {activeTab === 'study_circles' && (
+          <StudyCirclesTab
+            currentUser={{
+              id: studentData.id,
+              name: studentData.name,
+              level: (studentData.currentLevel as any) || 'N5',
+              streak: studentData.streakDays || 14
+            }}
+            onNavigate={(v) => {
+              if (onNavigate) onNavigate(v);
+            }}
           />
         )}
 

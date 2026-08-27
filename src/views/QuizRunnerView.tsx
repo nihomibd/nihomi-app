@@ -5,6 +5,7 @@ import { useProgressSync } from '../hooks/useProgressSync.js';
 import { speakJapanese } from '../lib/tts.js';
 import { saveSrsItemReview, getSrsState, SrsItemState } from '../lib/srs.js';
 import { soundEffects } from '../lib/soundEffects.js';
+import { haptic } from '../lib/haptic.js';
 import { QuizQuestion } from '../types.js';
 import { ContentAnalyticsService } from '../core/content-engine/contentAnalyticsService';
 import { LearningFeedbackLoopService } from '../core/content-engine/learningFeedbackLoopService';
@@ -187,10 +188,13 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
 
       if (res?.attempt?.passed) {
         soundEffects.playLessonCelebration();
+        haptic.trigger('quiz_pass');
       } else if (res?.results?.some((r: any) => r.isCorrect)) {
         soundEffects.playCorrectPing();
+        haptic.trigger('success');
       } else {
         soundEffects.playIncorrectSoft();
+        haptic.trigger('error');
       }
 
       // Synchronize quiz attempt to Supabase database (quiz_attempts + learning_progress + activity_logs)

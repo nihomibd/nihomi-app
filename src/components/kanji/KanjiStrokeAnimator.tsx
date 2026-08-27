@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts';
+import { haptic } from '../../lib/haptic';
 
 export interface KanjiStrokeData {
   character: string;
@@ -431,7 +432,15 @@ export const KanjiStrokeAnimator: React.FC<KanjiStrokeAnimatorProps> = ({
   const stopDrawing = () => {
     if (isDrawing) {
       setIsDrawing(false);
-      setDrawnStrokesCount((prev) => prev + 1);
+      setDrawnStrokesCount((prev) => {
+        const next = prev + 1;
+        if (next >= kanjiData.strokeCount) {
+          haptic.trigger('kanji_complete');
+        } else {
+          haptic.trigger('kanji_stroke');
+        }
+        return next;
+      });
     }
   };
 

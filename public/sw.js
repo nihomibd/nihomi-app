@@ -1,5 +1,5 @@
-// NIHOMI PWA SERVICE WORKER — CACHE ENGINE V2
-const CACHE_VERSION = 'v2';
+// NIHOMI PWA SERVICE WORKER — CACHE & OFFLINE ENGINE V3
+const CACHE_VERSION = 'v3';
 const CURRENT_CACHE_NAME = `nihomi-pwa-cache-${CACHE_VERSION}`;
 
 // Critical Static & Offline UI Assets
@@ -16,17 +16,41 @@ const OFFLINE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap'
 ];
 
-// 1. Install Phase — Precache Offline Shell & Core Assets
+// Key Offline Curriculum API Routes to Pre-Cache & Support Unstable Networks
+const OFFLINE_CURRICULUM_ROUTES = [
+  '/api/learning/modules',
+  '/api/learning/lessons/1',
+  '/api/learning/lessons/2',
+  '/api/learning/lessons/3',
+  '/api/quizzes',
+  '/api/work-japanese/modules'
+];
+
+// 1. Install Phase — Precache Offline Shell & Core Curriculum Assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CURRENT_CACHE_NAME).then(async (cache) => {
-      // Use individual caching to prevent a single missing remote font or asset from failing entire SW install
+      // 1.1 Cache Static Shell Assets
       await Promise.allSettled(
         OFFLINE_ASSETS.map((asset) =>
           cache.add(asset).catch((err) => {
-            console.warn(`SW: Non-fatal precache skip for ${asset}:`, err);
+            console.warn(`SW: Non-fatal precache skip for static ${asset}:`, err);
           })
         )
+      );
+
+      // 1.2 Attempt background pre-fetch for core curriculum JSON endpoints
+      await Promise.allSettled(
+        OFFLINE_CURRICULUM_ROUTES.map(async (route) => {
+          try {
+            const resp = await fetch(route, { headers: { 'Accept': 'application/json' } });
+            if (resp && resp.ok) {
+              await cache.put(route, resp);
+            }
+          } catch (e) {
+            console.warn(`SW: Non-fatal precache skip for curriculum route ${route}:`, e);
+          }
+        })
       );
     })
   );
@@ -51,23 +75,39 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Fetch Phase — Cache-First with Network Fallback & Runtime Caching
+// 3. Notification Click Handler for Browser-Based Push Alerts
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(event.notification.data?.url || '/');
+      }
+    })
+  );
+});
+
+// 4. Fetch Phase — Cache-First with Stale-While-Revalidate & Seamless Offline Fallback
 self.addEventListener('fetch', (event) => {
   // Only intercept GET requests
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // Skip caching for backend API mutation endpoints, auth callbacks, or webhooks
-  if (url.pathname.startsWith('/api/auth') || url.pathname.startsWith('/api/payments')) {
+  // Skip caching for sensitive auth callbacks or payment gateways
+  if (url.pathname.startsWith('/api/auth') || url.pathname.startsWith('/api/billing/webhook') || url.pathname.startsWith('/api/payments')) {
     return;
   }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // Cache-First: Return immediate match from cache if available
+      // If we have a cached version, return it immediately while fetching fresh data in the background
       if (cachedResponse) {
-        // Fetch in background to update cache for next time (Stale-While-Revalidate pattern for internal assets)
         if (url.origin === self.location.origin) {
           fetch(event.request)
             .then((networkResponse) => {
@@ -79,22 +119,24 @@ self.addEventListener('fetch', (event) => {
               }
             })
             .catch(() => {
-              // Ignore background fetch network errors
+              // Ignore background sync errors when offline
             });
         }
         return cachedResponse;
       }
 
-      // Network Fallback: Fetch from network and cache valid static/GET responses
+      // Network Fallback: Fetch from network and cache curriculum/static data
       return fetch(event.request)
         .then((networkResponse) => {
           if (!networkResponse || networkResponse.status !== 200) {
             return networkResponse;
           }
 
-          // Cache same-origin assets or font stylesheets
+          // Cache same-origin assets, curriculum APIs, or font stylesheets
           if (
             networkResponse.type === 'basic' ||
+            url.pathname.startsWith('/api/learning') ||
+            url.pathname.startsWith('/api/quizzes') ||
             url.hostname.includes('fonts.googleapis.com') ||
             url.hostname.includes('fonts.gstatic.com')
           ) {
@@ -107,12 +149,27 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // If offline and navigating to a page, serve the cached SPA index.html shell
+          // If offline and navigating to an app route, serve cached SPA index.html
           if (
             event.request.mode === 'navigate' ||
             (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'))
           ) {
             return caches.match('/index.html');
+          }
+
+          // If requesting an API while offline and not in cache, return an offline JSON fallback
+          if (url.pathname.startsWith('/api/')) {
+            return new Response(
+              JSON.stringify({
+                offline: true,
+                message: 'Offline-Only Mode active. Loaded from Nihomi offline cache.',
+                timestamp: new Date().toISOString()
+              }),
+              {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              }
+            );
           }
         });
     })

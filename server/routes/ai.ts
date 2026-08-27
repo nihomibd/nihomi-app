@@ -7,7 +7,8 @@ import {
   processSentenceDnaRequest,
   processExampleSentenceRequest,
   processExplainMistakeRequest,
-  processPronunciationAssessmentRequest
+  processPronunciationAssessmentRequest,
+  processStudyScheduleRequest
 } from '../gemini.js';
 import { getUserActivePlanId, PLAN_LIMITS } from '../services/entitlements.js';
 import crypto from 'crypto';
@@ -274,5 +275,23 @@ aiRouter.post('/pronunciation-assessment', async (req, res) => {
     return res.status(500).json({ error: 'Failed to evaluate pronunciation.' });
   }
 });
+
+// 10. AI-Generated Personalized 4-Week Study Schedule
+aiRouter.post('/study-schedule', async (req, res) => {
+  try {
+    const { userLevel, quizHistory, weakCategories } = req.body;
+    const schedule = await processStudyScheduleRequest({
+      userLevel: typeof userLevel === 'string' ? userLevel : 'N5',
+      quizHistory: Array.isArray(quizHistory) ? quizHistory : [],
+      weakCategories: Array.isArray(weakCategories) ? weakCategories : []
+    });
+
+    return res.json({ success: true, schedule });
+  } catch (err: any) {
+    console.error('Study schedule error:', err);
+    return res.status(500).json({ error: 'Failed to generate personalized study schedule.' });
+  }
+});
+
 
 

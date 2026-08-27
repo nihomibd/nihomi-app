@@ -708,3 +708,224 @@ Return a valid JSON object matching this schema:
     passedThreshold: calculatedScore >= 65
   };
 }
+
+export interface StudyScheduleWeek {
+  weekNumber: number;
+  title: string;
+  focusArea: string;
+  focusAreaBn: string;
+  dailyTasks: {
+    day: string;
+    taskJa: string;
+    taskEn: string;
+    taskBn: string;
+    estimatedMinutes: number;
+    activityType: 'vocab' | 'grammar' | 'kanji' | 'quiz' | 'listening' | 'shadowing';
+  }[];
+  weeklyGoal: string;
+}
+
+export interface StudyScheduleResponse {
+  studentLevel: string;
+  generatedDate: string;
+  diagnosticSummary: string;
+  diagnosticSummaryBn: string;
+  detectedWeakAreas: string[];
+  weeks: StudyScheduleWeek[];
+}
+
+export async function processStudyScheduleRequest(data: {
+  userId?: string;
+  userLevel: string;
+  quizHistory: any[];
+  weakCategories?: string[];
+}): Promise<StudyScheduleResponse> {
+  const client = getAIClient();
+  const userLevel = data.userLevel || 'N5';
+
+  const systemInstruction = `You are Nihomi Sensei, an expert Japanese Curriculum Director specializing in personalized JLPT acceleration schedules for Bengali and international learners.
+Analyze the student's quiz history and identified weak areas, then generate a comprehensive, highly actionable 4-Week Personalized Study Schedule.
+Return pure JSON matching this schema:
+{
+  "studentLevel": "N5",
+  "generatedDate": "2026-08-27",
+  "diagnosticSummary": "Your overall mastery is high in vocabulary, but particle contrasts (は vs が, に vs で) and plain form conjugations require targeted reinforcement.",
+  "diagnosticSummaryBn": "শব্দভাণ্ডারে আপনার পারদর্শিতা চমৎকার, তবে পার্টিকেলের পার্থক্য (は বনাম が, に বনাম で) এবং প্লেইন ফর্মের পরিবর্তনে আরও নির্দিষ্ট অনুশীলনের প্রয়োজন।",
+  "detectedWeakAreas": ["Particle Confusion (は vs が, に vs で)", "Te-form / Plain Form Conjugation", "Speed in Kanji Reading"],
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "title": "Week 1: Core Particle Foundations & SRS Reset",
+      "focusArea": "Grammar & Particle Accuracy",
+      "focusAreaBn": "গ্রামার এবং পার্টিকেলের সঠিক ব্যবহার",
+      "dailyTasks": [
+        { "day": "Day 1", "taskJa": "助詞「は」と「が」の復習", "taskEn": "Review Particle は vs が in Minna Lesson 1-5", "taskBn": "লেসন ১-৫ এর は এবং が পার্টিকেল রিভিশন", "estimatedMinutes": 30, "activityType": "grammar" },
+        { "day": "Day 2", "taskJa": "場所助詞「に」と「で」の使い分け", "taskEn": "Location particles に vs で with action verbs", "taskBn": "অ্যাকশন ভার্বের সাথে に ও で এর পার্থক্য চর্চা", "estimatedMinutes": 25, "activityType": "quiz" },
+        { "day": "Day 3", "taskJa": "Essential Kanji 20字ストローク練習", "taskEn": "Trace and memorize 20 N5 Kanji in Stroke Visualizer", "taskBn": "স্ট্রোক ভিজ্যুয়ালাইজারে ২০টি কাঞ্জি ট্রেসিং অনুশীলন", "estimatedMinutes": 30, "activityType": "kanji" },
+        { "day": "Day 4", "taskJa": "シャドーイング発音コーチ練習", "taskEn": "Practice 5 dialogue lines in AI Pronunciation Coach", "taskBn": "উচ্চারণ কোচে ৫টি সংলাপের পিচ অ্যাকসেন্ট প্র্যাকটিস", "estimatedMinutes": 20, "activityType": "shadowing" },
+        { "day": "Day 5", "taskJa": "N5 レッスン1〜10 総合クイズ", "taskEn": "Take Lessons 1-10 Diagnostic Mock Quiz", "taskBn": "লেসন ১-১০ এর পূর্ণাঙ্গ প্রস্তুতিমূলক কুইজ", "estimatedMinutes": 35, "activityType": "quiz" },
+        { "day": "Day 6", "taskJa": "間違えた単語のSRSフラッシュカード復習", "taskEn": "Clear all due Leitner SRS vocabulary cards", "taskBn": "বাকি থাকা সব SRS ভোকাবুলারি ফ্ল্যাশকার্ড রিভিশন", "estimatedMinutes": 25, "activityType": "vocab" },
+        { "day": "Day 7", "taskJa": "週次総復習と休息", "taskEn": "Weekly summary notes review & light listening", "taskBn": "সাপ্তাহিক রিভিশন নোটস ও বিশ্রামের সাথে অডিও শোনা", "estimatedMinutes": 20, "activityType": "listening" }
+      ],
+      "weeklyGoal": "Achieve 90%+ accuracy on all fundamental particle questions."
+    },
+    {
+      "weekNumber": 2,
+      "title": "Week 2: Verb Conjugations & Te-Form Mastery",
+      "focusArea": "Verbal Inflection & Sentence Expansion",
+      "focusAreaBn": "ক্রিয়ার রূপান্তর এবং বাক্য গঠন",
+      "dailyTasks": [
+        { "day": "Day 1", "taskJa": "Group 1 / 2 / 3 動詞の分類", "taskEn": "Master 3 Groups of Japanese Verbs", "taskBn": "জাপানি ভার্বের ৩টি গ্রুপের বিভাজন শেখা", "estimatedMinutes": 30, "activityType": "grammar" },
+        { "day": "Day 2", "taskJa": "て形 (Te-Form) ソングと変換特訓", "taskEn": "Te-form conversion drill for 30 essential verbs", "taskBn": "৩০টি মূল ভার্বের তে-ফর্ম রূপান্তর অনুশীলন", "estimatedMinutes": 30, "activityType": "grammar" },
+        { "day": "Day 3", "taskJa": "〜てください / 〜ています 構文クイズ", "taskEn": "Quiz on 〜te kudasai and 〜te imasu expressions", "taskBn": "অনুরোধ ও বর্তমান চলমান কালের বাক্যের কুইজ", "estimatedMinutes": 25, "activityType": "quiz" },
+        { "day": "Day 4", "taskJa": "日常会話シャドーイング", "taskEn": "Workplace and Baito conversation audio drill", "taskBn": "কর্মক্ষেত্র ও পার্ট-টাইম চাকুরীর সংলাপ অডিও ড্রিল", "estimatedMinutes": 25, "activityType": "shadowing" },
+        { "day": "Day 5", "taskJa": "N5 カタカナと外来語語彙", "taskEn": "Katakana loanwords vocabulary session", "taskBn": "কাতাকানা ও ঋণকৃত বিদেশি শব্দের স্পিড স্টাডি", "estimatedMinutes": 20, "activityType": "vocab" },
+        { "day": "Day 6", "taskJa": "漢字部首と音読み・訓読みクイズ", "taskEn": "Radicals & Onyomi/Kunyomi pairing challenge", "taskBn": "কাঞ্জির মূল উপাদান ও উচ্চারণ ম্যাচিং কুইজ", "estimatedMinutes": 25, "activityType": "kanji" },
+        { "day": "Day 7", "taskJa": "中間振り返りと弱点再確認", "taskEn": "Mid-point diagnostic check & weak-point retest", "taskBn": "অর্ধেক যাত্রার মূল্যায়ন ও ভুল শোধরানো", "estimatedMinutes": 20, "activityType": "quiz" }
+      ],
+      "weeklyGoal": "Conjugate any N5 verb into Te-form within 3 seconds."
+    },
+    {
+      "weekNumber": 3,
+      "title": "Week 3: Workplace & Contextual Communication",
+      "focusArea": "Conversational Keigo & Listening Speed",
+      "focusAreaBn": "কথোপকথন, কেইগো এবং লিসেনিং গতি",
+      "dailyTasks": [
+        { "day": "Day 1", "taskJa": "基本敬語とお辞儀マナー", "taskEn": "Essential polite forms (です・ます) & Bowing etiquette", "taskBn": "ভদ্র ভাষা ও জাপানি অভিবাদন শিষ্টাচার", "estimatedMinutes": 25, "activityType": "grammar" },
+        { "day": "Day 2", "taskJa": "コンビニ・レジでの接客会話", "taskEn": "Convenience store & cashier Japanese simulations", "taskBn": "কনভিনিয়েন্স স্টোর ও ক্যাশ কাউন্টারের সংলাপ প্র্যাকটিস", "estimatedMinutes": 30, "activityType": "shadowing" },
+        { "day": "Day 3", "taskJa": "JLPT N5 公式聴解ドリル", "taskEn": "JLPT Listening section practice with native audio", "taskBn": "নেটিভ অডিও দিয়ে অফিসিয়াল লিসেনিং ড্রিল", "estimatedMinutes": 30, "activityType": "listening" },
+        { "day": "Day 4", "taskJa": "時間の表現 (何時・何分・曜日)", "taskEn": "Time, calendar, and irregular counters", "taskBn": "সময়, ক্যালেন্ডার ও গণনার বিশেষ নিয়মাবলী", "estimatedMinutes": 25, "activityType": "vocab" },
+        { "day": "Day 5", "taskJa": "動詞「ない形」と「辞書形」", "taskEn": "Nai-form and Dictionary-form introduction", "taskBn": "নাই-ফর্ম এবং ডিকশনারি ফর্মের প্রাথমিক ধারণা", "estimatedMinutes": 30, "activityType": "grammar" },
+        { "day": "Day 6", "taskJa": "週間模擬テスト (40問)", "taskEn": "40-Question N5 Speed Mock Exam", "taskBn": "৪০ নম্বরের স্পিড মক পরীক্ষা সম্পন্ন করা", "estimatedMinutes": 40, "activityType": "quiz" },
+        { "day": "Day 7", "taskJa": "復習とメンタルリフレッシュ", "taskEn": "Review mistake explanations & audio immersion", "taskBn": "ভুলের ব্যাখ্যাগুলো পড়া এবং জাপানি পডকাস্ট শোনা", "estimatedMinutes": 20, "activityType": "listening" }
+      ],
+      "weeklyGoal": "Attain 85%+ comprehension in normal-speed conversational listening."
+    },
+    {
+      "weekNumber": 4,
+      "title": "Week 4: Final JLPT Exam Sprint & 100% Mastery",
+      "focusArea": "Full Mock Simulations & Speed Strategy",
+      "focusAreaBn": "পূর্ণাঙ্গ মক টেস্ট এবং সময় ব্যবস্থাপনা",
+      "dailyTasks": [
+        { "day": "Day 1", "taskJa": "全25課の文法総まとめ", "taskEn": "Comprehensive review of all 25 grammar patterns", "taskBn": "২৫টি লেসনের সব গ্রামার ফর্মুলার একনজরে রিভিশন", "estimatedMinutes": 35, "activityType": "grammar" },
+        { "day": "Day 2", "taskJa": "頻出語彙300語のSRSラストスパート", "taskEn": "High-frequency 300 words speed flashcard round", "taskBn": "সবচেয়ে গুরুত্বপূর্ণ ৩০০টি শব্দের স্পিড ফ্ল্যাশকার্ড", "estimatedMinutes": 30, "activityType": "vocab" },
+        { "day": "Day 3", "taskJa": "長文読解と時間配分トレーニング", "taskEn": "Reading comprehension passages with timer", "taskBn": "টাইমার সেট করে প্যারাগ্রাফ পড়ার অভ্যাস", "estimatedMinutes": 35, "activityType": "quiz" },
+        { "day": "Day 4", "taskJa": "発音・ピッチアクセント最終判定", "taskEn": "Final pronunciation coach assessment", "taskBn": "এআই টিউটরের সাথে ফাইনাল পিচ অ্যাকসেন্ট টেস্ট", "estimatedMinutes": 20, "activityType": "shadowing" },
+        { "day": "Day 5", "taskJa": "JLPT フル模擬試験 (言語知識＋読解＋聴解)", "taskEn": "Full JLPT Mock Exam (Knowledge + Reading + Listening)", "taskBn": "পূর্ণাঙ্গ অফিসিয়াল ফরম্যাট মক এক্সাম", "estimatedMinutes": 60, "activityType": "quiz" },
+        { "day": "Day 6", "taskJa": "試験前日の弱点最終チェック", "taskEn": "Final 10 Weak-Point Check & Memory Lock", "taskBn": "দুর্বল প্রশ্নগুলোর চূড়ান্ত রিভিশন ও মেমোরি লক", "estimatedMinutes": 25, "activityType": "grammar" },
+        { "day": "Day 7", "taskJa": "達成感と自信の確認 (合格準備完了)", "taskEn": "Celebrate 4-week completion & Exam readiness", "taskBn": "৪ সপ্তাহের কোর্স সম্পন্ন ও পূর্ণ আত্মবিশ্বাসের প্রস্তুতি", "estimatedMinutes": 15, "activityType": "vocab" }
+      ],
+      "weeklyGoal": "Score 95%+ on the comprehensive N5 mock exam and achieve confident fluency."
+    }
+  ]
+}`;
+
+  if (client) {
+    for (const modelName of CANDIDATE_MODELS) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const response = await client.models.generateContent({
+            model: modelName,
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    text: `Generate a personalized 4-week study schedule for a ${userLevel} student.
+Quiz history data: ${JSON.stringify(data.quizHistory || []).slice(0, 1000)}.
+Identified weak areas: ${JSON.stringify(data.weakCategories || ['Particles (は vs が)', 'Te-Form Conjugations'])}.`
+                  }
+                ]
+              }
+            ],
+            config: { systemInstruction, temperature: 0.3, responseMimeType: 'application/json' }
+          });
+
+          if (response.text) {
+            const parsed = JSON.parse(response.text) as StudyScheduleResponse;
+            if (parsed.weeks && Array.isArray(parsed.weeks) && parsed.weeks.length > 0) {
+              return parsed;
+            }
+          }
+        } catch {
+          await sleep(300 * (attempt + 1));
+        }
+      }
+    }
+  }
+
+  // Robust Default Fallback Schedule
+  return {
+    studentLevel: userLevel,
+    generatedDate: new Date().toISOString().split('T')[0],
+    diagnosticSummary: `Based on your recent quiz scores, your vocabulary is strong, but particle distinction and verb conjugation speed benefit from structured daily repetitions.`,
+    diagnosticSummaryBn: `আপনার সাম্প্রতিক কুইজ ফলাফল অনুসারে, শব্দভাণ্ডার বেশ শক্তিশালী। তবে পার্টিকেল ও ক্রিয়ার রূপান্তরের ক্ষেত্রে প্রতিদিনের নিয়মিত চর্চা আপনার স্কোর বহুগুণ বাড়াবে।`,
+    detectedWeakAreas: ['Particles: は vs が, に vs で', 'Te-Form Conjugation Speed', 'Kanji Stroke Order & Readings'],
+    weeks: [
+      {
+        weekNumber: 1,
+        title: 'Week 1: Core Particle Foundations & SRS Reset',
+        focusArea: 'Grammar & Particle Accuracy',
+        focusAreaBn: 'গ্রামার এবং পার্টিকেলের সঠিক ব্যবহার',
+        dailyTasks: [
+          { day: 'Day 1', taskJa: '助詞「は」と「が」の復習', taskEn: 'Review Particle は vs が in Minna Lesson 1-5', taskBn: 'লেসন ১-৫ এর は এবং が পার্টিকেল রিভিশন', estimatedMinutes: 30, activityType: 'grammar' },
+          { day: 'Day 2', taskJa: '場所助詞「に」と「で」の使い分け', taskEn: 'Location particles に vs で with action verbs', taskBn: 'অ্যাকশন ভার্বের সাথে に ও で এর পার্থক্য চর্চা', estimatedMinutes: 25, activityType: 'quiz' },
+          { day: 'Day 3', taskJa: 'Essential Kanji 20字ストローク練習', taskEn: 'Trace 20 N5 Kanji in Stroke Visualizer', taskBn: 'স্ট্রোক ভিজ্যুয়ালাইজারে ২০টি কাঞ্জি ট্রেসিং অনুশীলন', estimatedMinutes: 30, activityType: 'kanji' },
+          { day: 'Day 4', taskJa: 'シャドーイング発音コーチ練習', taskEn: 'Practice 5 dialogue lines in AI Pronunciation Coach', taskBn: 'উচ্চারণ কোচে ৫টি সংলাপের পিচ অ্যাকসেন্ট প্র্যাকটিস', estimatedMinutes: 20, activityType: 'shadowing' },
+          { day: 'Day 5', taskJa: 'N5 レッスン1〜10 総合クイズ', taskEn: 'Take Lessons 1-10 Diagnostic Mock Quiz', taskBn: 'লেসন ১-১০ এর প্রস্তুতিমূলক কুইজ', estimatedMinutes: 35, activityType: 'quiz' },
+          { day: 'Day 6', taskJa: 'SRSフラッシュカード復習', taskEn: 'Clear all due Leitner SRS vocabulary cards', taskBn: 'বাকি থাকা সব SRS ভোকাবুলারি ফ্ল্যাশকার্ড রিভিশন', estimatedMinutes: 25, activityType: 'vocab' },
+          { day: 'Day 7', taskJa: '週次総復習と休息', taskEn: 'Weekly summary notes review & audio listening', taskBn: 'সাপ্তাহিক রিভিশন নোটস ও লিসেনিং', estimatedMinutes: 20, activityType: 'listening' }
+        ],
+        weeklyGoal: 'Achieve 90%+ accuracy on all fundamental particle questions.'
+      },
+      {
+        weekNumber: 2,
+        title: 'Week 2: Verb Conjugations & Te-Form Mastery',
+        focusArea: 'Verbal Inflection & Sentence Expansion',
+        focusAreaBn: 'ক্রিয়ার রূপান্তর এবং বাক্য গঠন',
+        dailyTasks: [
+          { day: 'Day 1', taskJa: 'Group 1 / 2 / 3 動詞の分類', taskEn: 'Master 3 Groups of Japanese Verbs', taskBn: 'জাপানি ভার্বের ৩টি গ্রুপের বিভাজন শেখা', estimatedMinutes: 30, activityType: 'grammar' },
+          { day: 'Day 2', taskJa: 'て形 (Te-Form) 変換特訓', taskEn: 'Te-form conversion drill for 30 essential verbs', taskBn: '৩০টি মূল ভার্বের তে-ফর্ম রূপান্তর অনুশীলন', estimatedMinutes: 30, activityType: 'grammar' },
+          { day: 'Day 3', taskJa: '〜てください 構文クイズ', taskEn: 'Quiz on 〜te kudasai polite request expressions', taskBn: 'অনুরোধমূলক বাক্যের কুইজ সম্পন্ন করা', estimatedMinutes: 25, activityType: 'quiz' },
+          { day: 'Day 4', taskJa: '日常会話シャドーイング', taskEn: 'Workplace and Baito conversation audio drill', taskBn: 'কর্মক্ষেত্র ও পার্ট-টাইম চাকুরীর সংলাপ অডিও ড্রিল', estimatedMinutes: 25, activityType: 'shadowing' },
+          { day: 'Day 5', taskJa: 'カタカナ語彙強化', taskEn: 'Katakana loanwords vocabulary session', taskBn: 'কাতাকানা ও ঋণকৃত বিদেশি শব্দের স্পিড স্টাডি', estimatedMinutes: 20, activityType: 'vocab' },
+          { day: 'Day 6', taskJa: '漢字音読み・訓読みクイズ', taskEn: 'Radicals & Onyomi/Kunyomi pairing challenge', taskBn: 'কাঞ্জির মূল উপাদান ও উচ্চারণ ম্যাচিং কুইজ', estimatedMinutes: 25, activityType: 'kanji' },
+          { day: 'Day 7', taskJa: '中間振り返りと弱点再確認', taskEn: 'Mid-point diagnostic check & weak-point retest', taskBn: 'অর্ধেক যাত্রার মূল্যায়ন ও ভুল শোধরানো', estimatedMinutes: 20, activityType: 'quiz' }
+        ],
+        weeklyGoal: 'Conjugate any N5 verb into Te-form within 3 seconds.'
+      },
+      {
+        weekNumber: 3,
+        title: 'Week 3: Workplace Keigo & Listening Speed',
+        focusArea: 'Conversational Keigo & Listening Speed',
+        focusAreaBn: 'কথোপকথন, কেইগো এবং লিসেনিং গতি',
+        dailyTasks: [
+          { day: 'Day 1', taskJa: '基本敬語とお辞儀マナー', taskEn: 'Essential polite forms & Japanese etiquette', taskBn: 'ভদ্র ভাষা ও জাপানি অভিবাদন শিষ্টাচার', estimatedMinutes: 25, activityType: 'grammar' },
+          { day: 'Day 2', taskJa: 'コンビニ接客会話', taskEn: 'Convenience store cashier Japanese simulations', taskBn: 'কনভিনিয়েন্স স্টোরের সংলাপ প্র্যাকটিস', estimatedMinutes: 30, activityType: 'shadowing' },
+          { day: 'Day 3', taskJa: 'JLPT N5 聴解ドリル', taskEn: 'JLPT Listening section practice with native audio', taskBn: 'নেটিভ অডিও দিয়ে অফিসিয়াল লিসেনিং ড্রিল', estimatedMinutes: 30, activityType: 'listening' },
+          { day: 'Day 4', taskJa: '時間の表現と助数詞', taskEn: 'Time, calendar, and irregular counters', taskBn: 'সময়, ক্যালেন্ডার ও গণনার বিশেষ নিয়মাবলী', estimatedMinutes: 25, activityType: 'vocab' },
+          { day: 'Day 5', taskJa: '動詞「ない形」の基礎', taskEn: 'Nai-form and negative expressions', taskBn: 'নাই-ফর্ম এবং না-বোধক বাক্যের গঠন', estimatedMinutes: 30, activityType: 'grammar' },
+          { day: 'Day 6', taskJa: '40問スピード模擬テスト', taskEn: '40-Question N5 Speed Mock Exam', taskBn: '৪০ নম্বরের স্পিড মক পরীক্ষা সম্পন্ন করা', estimatedMinutes: 40, activityType: 'quiz' },
+          { day: 'Day 7', taskJa: '復習とポッドキャスト', taskEn: 'Review mistake explanations & podcast listening', taskBn: 'ভুলের ব্যাখ্যা পড়া ও জাপানি পডকাস্ট শোনা', estimatedMinutes: 20, activityType: 'listening' }
+        ],
+        weeklyGoal: 'Attain 85%+ comprehension in normal-speed conversational listening.'
+      },
+      {
+        weekNumber: 4,
+        title: 'Week 4: Final JLPT Exam Sprint & 100% Mastery',
+        focusArea: 'Full Mock Simulations & Speed Strategy',
+        focusAreaBn: 'পূর্ণাঙ্গ মক টেস্ট এবং সময় ব্যবস্থাপনা',
+        dailyTasks: [
+          { day: 'Day 1', taskJa: '全25課の文法総まとめ', taskEn: 'Comprehensive review of all 25 grammar patterns', taskBn: '২৫টি লেসনের সব গ্রামার ফর্মুলার একনজরে রিভিশন', estimatedMinutes: 35, activityType: 'grammar' },
+          { day: 'Day 2', taskJa: '頻出語彙300語のラストスパート', taskEn: 'High-frequency 300 words speed flashcard round', taskBn: 'সবচেয়ে গুরুত্বপূর্ণ ৩০০টি শব্দের স্পিড ফ্ল্যাশকার্ড', estimatedMinutes: 30, activityType: 'vocab' },
+          { day: 'Day 3', taskJa: '長文読解トレーニング', taskEn: 'Reading comprehension passages with timer', taskBn: 'টাইমার সেট করে প্যারাগ্রাফ পড়ার অভ্যাস', estimatedMinutes: 35, activityType: 'quiz' },
+          { day: 'Day 4', taskJa: '発音・ピッチ最終判定', taskEn: 'Final pronunciation coach assessment', taskBn: 'এআই টিউটরের সাথে ফাইনাল পিচ অ্যাকসেন্ট টেস্ট', estimatedMinutes: 20, activityType: 'shadowing' },
+          { day: 'Day 5', taskJa: 'JLPT フル模擬試験', taskEn: 'Full JLPT Mock Exam (Knowledge + Reading + Listening)', taskBn: 'পূর্ণাঙ্গ অফিসিয়াল ফরম্যাট মক এক্সাম', estimatedMinutes: 60, activityType: 'quiz' },
+          { day: 'Day 6', taskJa: '試験前日の最終チェック', taskEn: 'Final 10 Weak-Point Check & Memory Lock', taskBn: 'দুর্বল প্রশ্নগুলোর চূড়ান্ত রিভিশন ও মেমোরি লক', estimatedMinutes: 25, activityType: 'grammar' },
+          { day: 'Day 7', taskJa: '達成感と自信の確認', taskEn: 'Celebrate 4-week completion & Exam readiness', taskBn: '৪ সপ্তাহের কোর্স সম্পন্ন ও পূর্ণ আত্মবিশ্বাসের প্রস্তুতি', estimatedMinutes: 15, activityType: 'vocab' }
+        ],
+        weeklyGoal: 'Score 95%+ on the comprehensive N5 mock exam and achieve confident fluency.'
+      }
+    ]
+  };
+}

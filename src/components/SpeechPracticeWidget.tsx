@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
+import { apiRequest } from '../lib/api.js';
+import { haptic } from '../lib/haptic.js';
 import {
   Mic,
   MicOff,
@@ -10,7 +12,8 @@ import {
   RotateCcw,
   Award,
   HelpCircle,
-  Radio
+  Radio,
+  Loader2
 } from 'lucide-react';
 
 interface SpeechPracticeWidgetProps {
@@ -29,9 +32,12 @@ export const SpeechPracticeWidget: React.FC<SpeechPracticeWidgetProps> = ({
   compact = false
 }) => {
   const [isListening, setIsListening] = useState(false);
+  const [isEvaluatingAi, setIsEvaluatingAi] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [score, setScore] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedbackBn, setFeedbackBn] = useState<string | null>(null);
+  const [coachingTips, setCoachingTips] = useState<string[]>([]);
   const [isSupported, setIsSupported] = useState(true);
   const [audioLevel, setAudioLevel] = useState<number>(0);
   const [waveformBars, setWaveformBars] = useState<number[]>([10, 15, 25, 40, 60, 45, 30, 20, 15, 10]);
@@ -211,17 +217,59 @@ export const SpeechPracticeWidget: React.FC<SpeechPracticeWidgetProps> = ({
     stopAudioVisualizer();
   };
 
-  const evaluateSpeech = (spoken: string) => {
+  const evaluateSpeech = async (spoken: string) => {
+    // Initial quick match computation
     const calculatedScore = calculateSimilarity(spoken, targetPhrase);
     setScore(calculatedScore);
+    setIsEvaluatingAi(true);
 
+    try {
+      const res = await apiRequest<{ success: boolean; assessment: any }>('/api/ai/pronunciation-assessment', {
+        method: 'POST',
+        body: JSON.stringify({
+          targetPhrase,
+          targetRomaji: romaji,
+          spokenTranscript: spoken,
+          userLevel: 'N5'
+        })
+      });
+
+      if (res?.success && res.assessment) {
+        const finalScore = res.assessment.clarityScore ?? calculatedScore;
+        setScore(finalScore);
+        setFeedback(res.assessment.phonemeFeedback || 'Pronunciation analyzed.');
+        setFeedbackBn(res.assessment.phonemeFeedbackBn || null);
+        setCoachingTips(res.assessment.coachingTips || []);
+
+        if (finalScore >= 80) {
+          haptic.trigger('success');
+          if (onSuccess) onSuccess(finalScore);
+        } else if (finalScore < 50) {
+          haptic.trigger('error');
+        } else {
+          haptic.trigger('light');
+        }
+      } else {
+        fallbackEvaluation(calculatedScore);
+      }
+    } catch {
+      fallbackEvaluation(calculatedScore);
+    } finally {
+      setIsEvaluatingAi(false);
+    }
+  };
+
+  const fallbackEvaluation = (calculatedScore: number) => {
     if (calculatedScore >= 80) {
       setFeedback('素晴らしい！ Excellent native Tokyo pitch & clarity!');
+      haptic.trigger('success');
       if (onSuccess) onSuccess(calculatedScore);
     } else if (calculatedScore >= 50) {
       setFeedback('Good effort! Listen to native Tokyo audio and retry for higher accuracy.');
+      haptic.trigger('light');
     } else {
       setFeedback('Keep practicing! Tap Listen, then speak clearly into your mic.');
+      haptic.trigger('error');
     }
   };
 
@@ -375,20 +423,43 @@ export const SpeechPracticeWidget: React.FC<SpeechPracticeWidgetProps> = ({
         </div>
       )}
 
-      {feedback && (
-        <div
-          className={`p-3 rounded-2xl text-xs flex items-center gap-2 ${
-            score && score >= 80
-              ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
-              : 'bg-amber-50 text-amber-900 border border-amber-200'
-          }`}
-        >
-          {score && score >= 80 ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          ) : (
-            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+      {isEvaluatingAi && (
+        <div className="p-3 rounded-2xl bg-red-50 text-red-700 text-xs flex items-center gap-2 border border-red-200">
+          <Loader2 className="w-4 h-4 animate-spin text-red-600 shrink-0" />
+          <span>Gemini AI Sensei is analyzing your pitch contour, mora rhythm & pronunciation clarity...</span>
+        </div>
+      )}
+
+      {feedback && !isEvaluatingAi && (
+        <div className="space-y-2">
+          <div
+            className={`p-3 rounded-2xl text-xs flex items-start gap-2.5 ${
+              score && score >= 80
+                ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                : 'bg-amber-50 text-amber-900 border border-amber-200'
+            }`}
+          >
+            {score && score >= 80 ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            ) : (
+              <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            )}
+            <div className="space-y-1">
+              <p className="font-medium leading-relaxed">{feedback}</p>
+              {feedbackBn && <p className="text-[11px] text-stone-600 dark:text-stone-300">{feedbackBn}</p>}
+            </div>
+          </div>
+
+          {coachingTips.length > 0 && (
+            <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200 text-[11px] text-stone-700 space-y-1.5">
+              <span className="font-bold uppercase tracking-wider text-[10px] text-stone-500 block">💡 AI Pronunciation Tips:</span>
+              <ul className="list-disc list-inside space-y-1 text-stone-600">
+                {coachingTips.map((tip, idx) => (
+                  <li key={idx}>{tip}</li>
+                ))}
+              </ul>
+            </div>
           )}
-          <span>{feedback}</span>
         </div>
       )}
     </div>
