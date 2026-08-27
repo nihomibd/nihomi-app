@@ -17,6 +17,7 @@ import { ghostModeRouter } from './server/routes/ghostMode.js';
 import { systemHealthRouter } from './server/routes/systemHealth.js';
 import { contentEngineRouter } from './server/routes/contentEngine.js';
 import { contentStudioRouter } from './server/routes/contentStudio.js';
+import { whiteLabelRouter } from './server/routes/whiteLabelRoutes.js';
 import { db } from './server/db.js';
 
 dotenv.config();
@@ -70,6 +71,8 @@ async function startServer() {
   app.use('/api/content', contentEngineRouter);
   app.use('/api/content-engine', contentEngineRouter);
   app.use('/api/content-studio', contentStudioRouter);
+  app.use('/api/branding', whiteLabelRouter);
+  app.use('/api/white-label', whiteLabelRouter);
 
 
   // Vite middleware for development vs Static files for production

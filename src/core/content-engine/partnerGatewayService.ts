@@ -1,56 +1,66 @@
 import { KnowledgeObject } from './types';
 import { NihomiStandardService } from './nihomiStandardService';
 
+export interface PartnerCustomBranding {
+  primaryColor: string;
+  accentColor: string;
+  logoUrl?: string;
+  certificateHeader?: string;
+  campusFooterText?: string;
+}
+
 export interface PartnerAcademyTenant {
   tenantId: string;
-  institutionName: string;
   subdomain: string;
-  campuses: string[];
+  institutionName: string;
+  institutionNameJa: string;
+  customBranding: PartnerCustomBranding;
+  campuses?: string[];
   contactEmail: string;
-  customBranding: {
-    logoUrl?: string;
-    primaryColor: string;
-    accentColor: string;
-    certificateHeader: string;
-  };
-  totalSeatsPurchased: number;
-  allocatedSeatsCount: number;
-  status: 'ACTIVE' | 'PILOT' | 'SUSPENDED';
-  joinedAt: string;
+  verifiedAt: string;
+  totalSeatsPurchased?: number;
+  allocatedSeatsCount?: number;
+  status?: 'ACTIVE' | 'PILOT' | 'SUSPENDED';
 }
 
 export const VERIFIED_PARTNER_TENANTS: PartnerAcademyTenant[] = [
   {
-    tenantId: 'dils-dhaka',
-    institutionName: 'Dhaka International Language School (DILS)',
+    tenantId: 'dils',
     subdomain: 'dils.nihomi.com',
+    institutionName: 'Dhaka International Language School',
+    institutionNameJa: 'ダッカ国際語学学校',
     campuses: ['Farmgate Main Campus, Dhaka', 'Banani Executive Desk, Dhaka'],
-    contactEmail: 'care.dils2014@gmail.com',
     customBranding: {
-      primaryColor: '#0c0a09',
-      accentColor: '#059669',
-      certificateHeader: 'Dhaka International Language School & Nihomi Academic Council',
+      primaryColor: '#0F172A',
+      accentColor: '#2563EB',
+      logoUrl: 'https://nihomi.com/assets/partners/dils-logo.svg',
+      certificateHeader: 'DILS Japanese Language Division in Academic Partnership with NIHOMI™',
+      campusFooterText: 'DILS Campus, Dhaka • Academic Council Certified',
     },
+    contactEmail: 'contact@dils.edu.bd',
+    verifiedAt: '2026-08-01T00:00:00Z',
     totalSeatsPurchased: 200,
     allocatedSeatsCount: 142,
     status: 'ACTIVE',
-    joinedAt: '2026-02-01T00:00:00Z',
   },
   {
-    tenantId: 'cels-chittagong',
-    institutionName: 'Chittagong Elite Language & Skills Academy',
+    tenantId: 'cels',
     subdomain: 'cels.nihomi.com',
+    institutionName: 'Center for Excellence in Language Studies',
+    institutionNameJa: 'エクセレンス語学研究センター',
     campuses: ['GEC Circle, Nasirabad, Chittagong'],
-    contactEmail: 'info.cels@gmail.com',
     customBranding: {
-      primaryColor: '#0c0a09',
-      accentColor: '#2563eb',
-      certificateHeader: 'Chittagong Elite Academy & Nihomi Platform',
+      primaryColor: '#18181B',
+      accentColor: '#059669',
+      logoUrl: 'https://nihomi.com/assets/partners/cels-logo.svg',
+      certificateHeader: 'CELS Executive Japanese Academy Powered by NIHOMI™',
+      campusFooterText: 'CELS Language Institute • Tokyo-Dhaka Academic Exchange',
     },
+    contactEmail: 'info@cels.edu.bd',
+    verifiedAt: '2026-08-15T00:00:00Z',
     totalSeatsPurchased: 100,
     allocatedSeatsCount: 35,
     status: 'ACTIVE',
-    joinedAt: '2026-05-15T00:00:00Z',
   },
 ];
 
@@ -60,8 +70,9 @@ export class PartnerGatewayService {
   }
 
   static getTenantBySubdomain(subdomain: string): PartnerAcademyTenant | null {
+    const clean = subdomain.toLowerCase().trim();
     return (
-      VERIFIED_PARTNER_TENANTS.find((t) => t.subdomain === subdomain || t.tenantId === subdomain) ||
+      VERIFIED_PARTNER_TENANTS.find((t) => clean.includes(t.subdomain) || clean.includes(t.tenantId)) ||
       null
     );
   }

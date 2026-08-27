@@ -1,5 +1,11 @@
 import { JLPTLevel } from '../../types/nihomi';
 
+export interface BadgeStyle {
+  bg: string;
+  text: string;
+  border: string;
+}
+
 export interface BrandingThemeTokens {
   brandName: string;
   brandNameJa: string;
@@ -10,7 +16,7 @@ export interface BrandingThemeTokens {
   fontSans: string;
   fontJapanese: string;
   fontSerif: string;
-  badgeColors: Record<JLPTLevel, { bg: string; text: string; border: string }>;
+  badgeColors: Record<JLPTLevel, BadgeStyle>;
   watermarkText: string;
   certifiedSealText: string;
 }
@@ -41,7 +47,7 @@ export class ContentDesignSystem {
     return NIHOMI_CORE_DESIGN_SYSTEM;
   }
 
-  static getBadgeStyle(level: JLPTLevel) {
+  static getBadgeStyle(level: JLPTLevel): BadgeStyle {
     return NIHOMI_CORE_DESIGN_SYSTEM.badgeColors[level] || NIHOMI_CORE_DESIGN_SYSTEM.badgeColors.N5;
   }
 }

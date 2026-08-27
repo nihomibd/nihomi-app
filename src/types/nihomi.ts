@@ -1,5 +1,18 @@
 export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
 
+export interface BaseEntity {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserProfile extends BaseEntity {
+  name: string;
+  email: string;
+  targetLevel: JLPTLevel;
+  currentHoursCompleted: number;
+}
+
 export type ContentDomain =
   | 'GRAMMAR'
   | 'VOCABULARY'
