@@ -14,9 +14,14 @@ import {
   ExternalLink,
   Copy,
   Check,
-  UserCheck
+  UserCheck,
+  Layers,
+  BookOpen,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { exportVocabularyDeckPdf, VocabExportItem } from '../lib/pdfReportGenerator';
+import { SrsVocabularyService } from '../lib/srsService';
 
 interface VerificationRecord {
   valid: boolean;
@@ -34,7 +39,7 @@ interface VerificationRecord {
 
 export const DocumentsView: React.FC = () => {
   const { user, profile } = useAuth();
-  const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice'>('certificate');
+  const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice' | 'vocab_deck'>('certificate');
 
   // Verification search state
   const [verificationCode, setVerificationCode] = useState('');
@@ -50,6 +55,38 @@ export const DocumentsView: React.FC = () => {
   const studentPhone = user?.phone || '+880 17555-34997';
 
   const defaultCertCode = `NHM-DILS-2026-${currentLevel}042`;
+
+  const handleExportVocabPdf = () => {
+    const recordList = Object.values(SrsVocabularyService.getAllSrsRecords());
+    const exportItems: VocabExportItem[] = recordList.length > 0
+      ? recordList.map((r) => ({
+          japanese: `${r.word} (${r.reading})`,
+          romaji: r.word,
+          english: r.meaningEn,
+          banglaMeaning: r.meaningBn,
+          boxLevel: r.leitnerBox || 1,
+          exampleSentence: undefined
+        }))
+      : [
+          { japanese: '先生 (せんせい)', romaji: 'Sensei', english: 'Teacher / Instructor', banglaMeaning: 'শিক্ষক / গুরু', boxLevel: 4, exampleSentence: '田中先生は日本語を教えます。' },
+          { japanese: '学生 (がくせい)', romaji: 'Gakusei', english: 'Student', banglaMeaning: 'ছাত্র / ছাত্রী', boxLevel: 3, exampleSentence: 'わたしは留学生です。' },
+          { japanese: '本 (ほん)', romaji: 'Hon', english: 'Book', banglaMeaning: 'বই', boxLevel: 5, exampleSentence: '日本語の本を読みます。' },
+          { japanese: '勉強 (べんきょう)', romaji: 'Benkyou', english: 'Study', banglaMeaning: 'পড়াশোনা / অধ্যয়ন', boxLevel: 2, exampleSentence: '毎日日本語を勉強します。' },
+          { japanese: '日本 (にほん)', romaji: 'Nihon', english: 'Japan', banglaMeaning: 'জাপান', boxLevel: 5, exampleSentence: 'いつ日本へ行きますか。' },
+          { japanese: '友達 (ともだち)', romaji: 'Tomodachi', english: 'Friend', banglaMeaning: 'বন্ধু', boxLevel: 4, exampleSentence: '友達と東京へ行きます。' },
+          { japanese: '食べる (たべる)', romaji: 'Taberu', english: 'To eat', banglaMeaning: 'খাওয়া', boxLevel: 3, exampleSentence: '朝ご飯を食べます。' },
+          { japanese: '行く (いく)', romaji: 'Iku', english: 'To go', banglaMeaning: 'যাওয়া', boxLevel: 4, exampleSentence: '学校へ行きます。' },
+          { japanese: '車 (くるま)', romaji: 'Kuruma', english: 'Car / Vehicle', banglaMeaning: 'গাড়ি', boxLevel: 3, exampleSentence: '車を運転します。' },
+          { japanese: '水 (みず)', romaji: 'Mizu', english: 'Water', banglaMeaning: 'পানি / জল', boxLevel: 5, exampleSentence: '冷たい水を飲みます。' }
+        ];
+
+    exportVocabularyDeckPdf({
+      studentName,
+      studentId,
+      level: currentLevel,
+      items: exportItems
+    });
+  };
 
   const handleVerifySearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,17 +166,30 @@ export const DocumentsView: React.FC = () => {
               <option value="certificate">150-Hour Japanese Study Certificate</option>
               <option value="letterhead">Tokyo Embassy / Visa Letterhead</option>
               <option value="invoice">NBR Mushak-6.3 Tuition Receipt</option>
+              <option value="vocab_deck">Offline Vocabulary & Flashcard Deck (PDF)</option>
             </select>
 
-            <button
-              id="btn-print-a4-pdf"
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
-            >
-              <Printer className="w-3.5 h-3.5 text-red-400 dark:text-rose-200" />
-              <span>Print / Export A4 PDF</span>
-            </button>
+            {docType === 'vocab_deck' ? (
+              <button
+                id="btn-download-vocab-deck-pdf"
+                type="button"
+                onClick={handleExportVocabPdf}
+                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
+              >
+                <Download className="w-3.5 h-3.5 text-white" />
+                <span>Download Vocabulary PDF Deck</span>
+              </button>
+            ) : (
+              <button
+                id="btn-print-a4-pdf"
+                type="button"
+                onClick={() => window.print()}
+                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
+              >
+                <Printer className="w-3.5 h-3.5 text-red-400 dark:text-rose-200" />
+                <span>Print / Export A4 PDF</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -415,6 +465,85 @@ export const DocumentsView: React.FC = () => {
                   </tr>
                 </tfoot>
               </table>
+            </div>
+          )}
+
+          {/* DOCUMENT: OFFLINE VOCABULARY STUDY DECK */}
+          {docType === 'vocab_deck' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-stone-200 pb-4">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px] uppercase font-mono">
+                      JLPT {currentLevel} FLASHCARD DECK
+                    </span>
+                    <span className="text-[10px] text-stone-500 font-mono">
+                      SRS Memory Engine • Printable A4 Layout
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold font-serif text-stone-900 mt-1">
+                    Saved Vocabulary & Flashcard Reference Sheet
+                  </h2>
+                </div>
+
+                <button
+                  onClick={handleExportVocabPdf}
+                  className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-xs transition cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Formatted PDF</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                {[
+                  { japanese: '先生 (せんせい)', romaji: 'Sensei', english: 'Teacher / Instructor', bangla: 'শিক্ষক / গুরু', box: 4, ex: '田中先生は日本語を教えます。' },
+                  { japanese: '学生 (がくせい)', romaji: 'Gakusei', english: 'Student', bangla: 'ছাত্র / ছাত্রী', box: 3, ex: 'わたしは留学生です。' },
+                  { japanese: '本 (ほん)', romaji: 'Hon', english: 'Book', bangla: 'বই', box: 5, ex: '日本語の本を読みます。' },
+                  { japanese: '勉強 (べんきょう)', romaji: 'Benkyou', english: 'Study / Practice', bangla: 'পড়াশোনা / অধ্যয়ন', box: 2, ex: '毎日日本語を勉強します。' },
+                  { japanese: '日本 (にほん)', romaji: 'Nihon', english: 'Japan', bangla: 'জাপান', box: 5, ex: 'いつ日本へ行きますか。' },
+                  { japanese: '友達 (ともだち)', romaji: 'Tomodachi', english: 'Friend', bangla: 'বন্ধু', box: 4, ex: '友達と東京へ行きます。' }
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 text-stone-800 space-y-1.5 relative overflow-hidden"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-baseline space-x-2">
+                        <span className="text-base font-bold font-serif text-stone-900">{item.japanese}</span>
+                        <span className="text-xs text-stone-500 font-mono">[{item.romaji}]</span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold font-mono ${
+                        item.box >= 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        Box {item.box}
+                      </span>
+                    </div>
+
+                    <div className="text-xs">
+                      <strong className="text-stone-900">{item.english}</strong>
+                      <span className="text-emerald-700 ml-1.5 font-medium">({item.bangla})</span>
+                    </div>
+
+                    <p className="text-[11px] text-stone-500 italic font-serif truncate">
+                      Ex: {item.ex}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-xs text-red-800 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-red-600" />
+                  <strong>Tip:</strong> The exported PDF contains full multi-column A4 flashcards with cut marks for offline folding and physical study!
+                </span>
+                <button
+                  onClick={handleExportVocabPdf}
+                  className="font-bold text-red-700 hover:underline cursor-pointer"
+                >
+                  Generate Now &rarr;
+                </button>
+              </div>
             </div>
           )}
 

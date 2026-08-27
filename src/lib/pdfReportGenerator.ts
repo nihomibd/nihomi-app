@@ -213,3 +213,142 @@ export function generateStudentSummaryPdf(data: StudentReportData): void {
   // Save the PDF
   doc.save(`Nihomi_Student_Report_${data.studentName.replace(/\s+/g, '_')}_${data.level}.pdf`);
 }
+
+export interface VocabExportItem {
+  japanese: string;
+  romaji: string;
+  english: string;
+  banglaMeaning?: string;
+  boxLevel?: number;
+  partOfSpeech?: string;
+  exampleSentence?: string;
+}
+
+export interface VocabDeckExportOptions {
+  studentName: string;
+  studentId: string;
+  level: string;
+  deckTitle?: string;
+  items: VocabExportItem[];
+}
+
+export function exportVocabularyDeckPdf(options: VocabDeckExportOptions): void {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  // Top Header Banner
+  doc.setFillColor(15, 23, 42); // slate-900
+  doc.rect(0, 0, pageWidth, 32, 'F');
+  doc.setFillColor(220, 38, 38); // red-600 stripe
+  doc.rect(0, 32, pageWidth, 2.5, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('NIHOMI OFFLINE VOCABULARY STUDY DECK', 14, 15);
+
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(203, 213, 225);
+  doc.text(`Student: ${options.studentName} (${options.studentId}) • JLPT ${options.level} • Generated: ${today}`, 14, 23);
+  doc.text(`Total Flashcards: ${options.items.length} Words • Spaced Repetition (SRS) Leitner Deck`, 14, 28);
+
+  let y = 42;
+  const itemsPerPage = 8;
+  const cardHeight = 26;
+  const cardGap = 3.5;
+
+  options.items.forEach((item, index) => {
+    // Check page overflow
+    if (y + cardHeight > pageHeight - 18) {
+      doc.addPage();
+      // Re-draw small header on new pages
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, pageWidth, 16, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`NIHOMI VOCABULARY STUDY GUIDE • JLPT ${options.level} (Page ${doc.getNumberOfPages()})`, 14, 11);
+      y = 24;
+    }
+
+    // Card Container
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(14, y, pageWidth - 28, cardHeight, 2, 2, 'FD');
+
+    // Left accent badge with item index
+    doc.setFillColor(220, 38, 38);
+    doc.rect(14, y, 1.5, cardHeight, 'F');
+
+    // Index & Box badge
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(148, 163, 184);
+    doc.text(`#${index + 1}`, 18, y + 6);
+
+    const boxLevel = item.boxLevel || 1;
+    doc.setFillColor(boxLevel >= 4 ? 209 : 254, boxLevel >= 4 ? 250 : 243, boxLevel >= 4 ? 229 : 199);
+    doc.roundedRect(pageWidth - 36, y + 3, 18, 5, 1, 1, 'F');
+    doc.setFontSize(6.5);
+    doc.setTextColor(boxLevel >= 4 ? 6 : 180, boxLevel >= 4 ? 95 : 83, boxLevel >= 4 ? 70 : 9);
+    doc.text(`SRS Box ${boxLevel}`, pageWidth - 34, y + 6.5);
+
+    // Main Japanese Term & Romaji
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text(item.japanese, 18, y + 13);
+
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 116, 139);
+    doc.text(`[${item.romaji}]`, 18 + doc.getTextWidth(item.japanese) + 4, y + 13);
+
+    // English & Bengali Meaning
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 41, 59);
+    doc.text(item.english, 18, y + 19);
+
+    if (item.banglaMeaning) {
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(5, 150, 105);
+      doc.text(`• ${item.banglaMeaning}`, 20 + doc.getTextWidth(item.english), y + 19);
+    }
+
+    if (item.exampleSentence) {
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'italic');
+      doc.setTextColor(100, 116, 139);
+      doc.text(`Ex: ${item.exampleSentence.slice(0, 75)}`, 18, y + 24);
+    }
+
+    y += cardHeight + cardGap;
+  });
+
+  // Footer
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      `Nihomi EdTech Platform • Printable Flashcard Sheet • Page ${i} of ${totalPages} • https://nihomi.com`,
+      14,
+      pageHeight - 6
+    );
+  }
+
+  // Save
+  doc.save(`Nihomi_Vocab_Deck_${options.level}_${options.studentName.replace(/\s+/g, '_')}.pdf`);
+}

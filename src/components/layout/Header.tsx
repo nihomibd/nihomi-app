@@ -14,6 +14,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { DailyStreakBadge } from '../common/DailyStreakBadge';
 
 interface HeaderProps {
   currentView: string;
@@ -140,6 +141,9 @@ export const Header: React.FC<HeaderProps> = ({
               <Keyboard className="w-4 h-4" />
             </button>
 
+            {/* Daily Streak Badge */}
+            <DailyStreakBadge onNavigateStreak={() => onNavigate('portal')} />
+
             {isFounder && (
               <button
                 onClick={() => onNavigate('founder')}
@@ -153,20 +157,11 @@ export const Header: React.FC<HeaderProps> = ({
 
             {user ? (
               <div className="relative">
-                {/* ENHANCED PROFILE PILL: NAME + STREAK + SVG SPARKLINE */}
+                {/* ENHANCED PROFILE PILL: NAME + SVG SPARKLINE */}
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
                   className="flex items-center space-x-2.5 p-1 pl-2.5 pr-2 rounded-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-2xs hover:border-stone-300 dark:hover:border-stone-700 transition-colors cursor-pointer group"
                 >
-                  {/* Daily Learning Streak Counter */}
-                  <div
-                    className="flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-[11px] font-bold border border-amber-200/80 dark:border-amber-800/80"
-                    title={`Daily Learning Streak: ${streakDays} Consecutive Days`}
-                  >
-                    <Flame className="w-3 h-3 text-amber-600 fill-amber-500 animate-pulse" />
-                    <span>{streakDays}d</span>
-                  </div>
-
                   {/* SVG Minimalist Progress Sparkline Chart */}
                   <div
                     className="hidden xl:flex items-center px-1"
@@ -297,23 +292,23 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* MOBILE CONTROLS (SEARCH, USER, HAMBURGER) */}
+          {/* MOBILE CONTROLS (SEARCH, STREAK, USER, HAMBURGER) */}
           <div className="md:hidden flex items-center space-x-1.5">
             <button
               onClick={onOpenDictionary}
-              className="p-2 text-stone-600 dark:text-stone-300 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 transition cursor-pointer"
+              className="p-1.5 text-stone-600 dark:text-stone-300 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 transition cursor-pointer"
               title="Quick Dictionary"
             >
               <Search className="w-4 h-4 text-red-600" />
             </button>
 
+            <DailyStreakBadge onNavigateStreak={() => onNavigate('portal')} />
+
             {user ? (
               <button
                 onClick={() => onNavigate('portal')}
-                className="flex items-center space-x-1.5 px-2 py-1 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-white text-xs font-bold"
+                className="flex items-center space-x-1 p-1 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-white text-xs font-bold"
               >
-                <Flame className="w-3 h-3 text-amber-600 fill-amber-500" />
-                <span>{streakDays}d</span>
                 <div className="w-5 h-5 rounded-full bg-stone-900 dark:bg-white text-white dark:text-stone-950 text-[9px] flex items-center justify-center font-bold">
                   {user.name.charAt(0)}
                 </div>
@@ -321,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <button
                 onClick={openAuthModal}
-                className="px-3 py-1 bg-stone-900 dark:bg-white text-white dark:text-stone-950 rounded-full text-xs font-bold"
+                className="px-2.5 py-1 bg-stone-900 dark:bg-white text-white dark:text-stone-950 rounded-full text-xs font-bold"
               >
                 Sign In
               </button>

@@ -53,6 +53,7 @@ import {
 import { Download, DownloadCloud, Wind, RefreshCw } from 'lucide-react';
 import { ZenBreathingPrompt } from '../components/ZenBreathingPrompt.js';
 import { LessonFocusTimerTracker } from '../components/reading/LessonFocusTimerTracker.js';
+import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator.js';
 
 interface LessonViewProps {
   lessonId: string;
@@ -114,6 +115,9 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
 
   // Active phrase for speech practice modal/widget
   const [speakingTarget, setSpeakingTarget] = useState<{ phrase: string; romaji?: string; english?: string } | null>(null);
+
+  // Selected Kanji for Stroke Order Animation
+  const [selectedKanjiForStrokeAnim, setSelectedKanjiForStrokeAnim] = useState<{ character: string; meaning?: string } | null>(null);
 
   // Zen Breathing Prompt Modal state
   const [isZenBreathingOpen, setIsZenBreathingOpen] = useState<boolean>(false);
@@ -952,6 +956,16 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
                         <p>Onyomi: {k.onyomi?.join(', ')}</p>
                         <p>Kunyomi: {k.kunyomi?.join(', ')}</p>
                       </div>
+
+                      {/* Stroke Order Animation Trigger Button */}
+                      <button
+                        onClick={() => setSelectedKanjiForStrokeAnim({ character: k.character, meaning: k.meaning })}
+                        className="mt-2 w-full py-1.5 px-2 rounded-xl bg-red-50 dark:bg-red-950/40 hover:bg-red-100 text-red-700 dark:text-red-400 font-bold text-[11px] border border-red-200 dark:border-red-900 flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        title="View animated stroke order & trace"
+                      >
+                        <PenTool className="w-3.5 h-3.5" />
+                        <span>Stroke Order (書き順)</span>
+                      </button>
                     </div>
 
                     {/* SRS Next Review Metadata Badge & Action Buttons */}
@@ -1111,6 +1125,16 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
               );
             })}
           </div>
+        )}
+
+        {/* Kanji Stroke Order Animator Modal */}
+        {selectedKanjiForStrokeAnim && (
+          <KanjiStrokeAnimator
+            isModal={true}
+            character={selectedKanjiForStrokeAnim.character}
+            meaning={selectedKanjiForStrokeAnim.meaning}
+            onClose={() => setSelectedKanjiForStrokeAnim(null)}
+          />
         )}
       </div>
     </div>

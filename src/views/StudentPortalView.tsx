@@ -34,20 +34,23 @@ import { LanguageProgressTracker } from '../components/LanguageProgressTracker';
 import { MonthlyCalendarWidget } from '../components/student/MonthlyCalendarWidget';
 import { StudyStreakHeatmap } from '../components/student/StudyStreakHeatmap';
 import { AchievementBadges } from '../components/student/AchievementBadges';
+import { LearningMilestones } from '../components/student/LearningMilestones';
 import { NihomiStandardDashboard } from '../components/student/NihomiStandardDashboard';
 import { LearningGapRadar } from '../components/student/LearningGapRadar';
 import { DailyStreakCalendarWidget } from '../components/dashboard/DailyStreakCalendarWidget';
 import { LeitnerStudyBoxWidget } from '../components/dashboard/LeitnerStudyBoxWidget';
 import { JlptRadarMasteryDashboard } from '../components/dashboard/JlptRadarMasteryDashboard';
+import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
+import { DailyStudyReminder } from '../components/DailyStudyReminder';
 import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
 import { ContentExportService } from '../core/content-engine/contentExportService';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, TrendingUp } from 'lucide-react';
 
 interface StudentPortalViewProps {
-  initialTab?: 'dashboard' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
+  initialTab?: 'dashboard' | 'analytics' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
   onNavigate?: (view: string) => void;
 }
 
@@ -175,7 +178,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
   const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
+    'dashboard' | 'analytics' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
   >(initialTab);
 
   useEffect(() => {
@@ -425,6 +428,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto py-3 text-xs font-semibold">
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
+              { id: 'analytics', label: '📊 Learning Analytics', icon: TrendingUp },
               { id: 'nihomi_standard', label: '🌟 Nihomi Standard™ (23-D)', icon: Award },
               { id: 'courses', label: 'Curriculum & Lessons', icon: BookOpen },
               { id: 'infinite_concept', label: '⚡ Infinite Learning Hub™ (15 Formats)', icon: Sparkles },
@@ -545,6 +549,13 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
 
             {/* Academic Achievement & Badge Showcase */}
             <AchievementBadges />
+
+            {/* Interactive Learning Milestones & Unlockable Cards */}
+            <LearningMilestones
+              studentName={studentData.name}
+              totalStudyHours={124}
+              completedLessonsCount={19}
+            />
 
             {/* Learning Gap Diagnostic Radar */}
             <LearningGapRadar studentLevel={studentData.currentLevel} />
@@ -682,6 +693,17 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
               <DigitalStudentIdCard student={studentData} />
             </div>
           </div>
+        )}
+
+        {/* LEARNING ANALYTICS TAB */}
+        {activeTab === 'analytics' && (
+          <LearningAnalyticsDashboard
+            studentName={studentData.name}
+            currentLevel={studentData.currentLevel}
+            totalStudyHours={studentData.totalStudyHours}
+            studyStreakDays={studentData.streakDays}
+            onLaunchSrsReview={() => setActiveTab('courses')}
+          />
         )}
 
         {/* NIHOMI STANDARD TAB */}
@@ -1012,6 +1034,11 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <span>পরিবর্তন সংরক্ষণ করুন</span>
               </button>
             </form>
+
+            {/* Daily Notification Reminders for PWA Background Studies */}
+            <div className="pt-2">
+              <DailyStudyReminder />
+            </div>
           </div>
         )}
 
