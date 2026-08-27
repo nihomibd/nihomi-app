@@ -26,6 +26,7 @@ import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
+import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
 import {
   Sparkles,
   Volume2,
@@ -209,6 +210,9 @@ export const App: React.FC = () => {
 
       {/* Google Sign-in & Authentication Modal */}
       <AuthModal />
+
+      {/* Persistent AI Sensei Instant Grammar Floating Coach */}
+      <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && <InstallPWA />}

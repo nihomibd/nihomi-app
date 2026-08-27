@@ -52,6 +52,7 @@ import {
 } from '../lib/offlineStorage.js';
 import { Download, DownloadCloud, Wind, RefreshCw } from 'lucide-react';
 import { ZenBreathingPrompt } from '../components/ZenBreathingPrompt.js';
+import { LessonFocusTimerTracker } from '../components/reading/LessonFocusTimerTracker.js';
 
 interface LessonViewProps {
   lessonId: string;
@@ -551,6 +552,13 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             />
           </div>
         )}
+
+        {/* Lesson Reading Focus Timer & Immersion Session Tracker */}
+        <LessonFocusTimerTracker
+          lessonTitle={lesson.title}
+          jlptLevel={lesson.level}
+          charCount={lesson.content ? lesson.content.length : 350}
+        />
 
         {/* Lesson Header Banner */}
         <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">

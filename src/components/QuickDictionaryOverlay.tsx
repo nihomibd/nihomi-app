@@ -9,9 +9,16 @@ import {
   Layers,
   ArrowRight,
   BookOpen,
-  Check
+  Check,
+  Clock,
+  Trash2,
+  RefreshCw,
+  Loader2,
+  PenTool,
+  Info
 } from 'lucide-react';
-import { speakJapanese } from '../lib/tts.js';
+import { speakJapanese } from '../lib/tts';
+import { KanjiStrokeSvgDiagram } from './kanji/KanjiStrokeSvgDiagram';
 
 export interface DictionaryEntry {
   id: string;
@@ -26,7 +33,7 @@ export interface DictionaryEntry {
   exampleEn?: string;
 }
 
-const DICTIONARY_DATABASE: DictionaryEntry[] = [
+export const DICTIONARY_DATABASE: DictionaryEntry[] = [
   {
     id: 'dict-1',
     kanji: '日本語',
@@ -209,6 +216,18 @@ const DICTIONARY_DATABASE: DictionaryEntry[] = [
   }
 ];
 
+interface GeneratedExample {
+  word: string;
+  reading: string;
+  sentenceJa: string;
+  sentenceFurigana: string;
+  romaji: string;
+  meaningEn: string;
+  meaningBn: string;
+  jlptLevel: string;
+  grammarTip: string;
+}
+
 interface QuickDictionaryOverlayProps {
   isOpen: boolean;
   onClose: () => void;
@@ -222,6 +241,18 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntry, setSelectedEntry] = useState<DictionaryEntry | null>(null);
+  const [activeTab, setActiveTab] = useState<'details' | 'stroke-order'>('details');
+
+  // Local storage backed Recent Searches (max 10)
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem('nihomi_dict_recent_searches_v1');
+      return raw ? JSON.parse(raw) : ['日本語', '食べる', '友達', '時間'];
+    } catch {
+      return ['日本語', '食べる', '友達', '時間'];
+    }
+  });
+
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => {
     try {
       const raw = localStorage.getItem('nihomi_pinned_vocabulary_v1');
@@ -230,6 +261,31 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
       return [];
     }
   });
+
+  // AI Generated Example Sentence State
+  const [isGeneratingExample, setIsGeneratingExample] = useState(false);
+  const [generatedExample, setGeneratedExample] = useState<GeneratedExample | null>(null);
+
+  // Add term to recent searches
+  const recordSearch = (term: string) => {
+    if (!term || term.trim().length === 0) return;
+    const clean = term.trim();
+    setRecentSearches((prev) => {
+      const filtered = prev.filter((t) => t.toLowerCase() !== clean.toLowerCase());
+      const updated = [clean, ...filtered].slice(0, 10);
+      try {
+        localStorage.setItem('nihomi_dict_recent_searches_v1', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    try {
+      localStorage.removeItem('nihomi_dict_recent_searches_v1');
+    } catch {}
+  };
 
   const togglePin = (entry: DictionaryEntry) => {
     setPinnedIds((prev) => {
@@ -257,10 +313,18 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
   }, [searchTerm]);
 
   useEffect(() => {
-    if (filteredEntries.length > 0 && !selectedEntry) {
+    if (filteredEntries.length > 0 && (!selectedEntry || !filteredEntries.some(e => e.id === selectedEntry.id))) {
       setSelectedEntry(filteredEntries[0]);
     }
   }, [filteredEntries, selectedEntry]);
+
+  // Reset generated example when entry changes
+  useEffect(() => {
+    setGeneratedExample(null);
+    if (selectedEntry) {
+      recordSearch(selectedEntry.kanji);
+    }
+  }, [selectedEntry?.id]);
 
   // Keyboard shortcut ESC to close
   useEffect(() => {
@@ -273,16 +337,86 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Extract individual Kanji characters from word for stroke diagrams
+  const kanjiCharsInEntry = useMemo(() => {
+    if (!selectedEntry) return [];
+    const kanjiRegex = /[\u4e00-\u9faf]/g;
+    const matches = selectedEntry.kanji.match(kanjiRegex);
+    return matches ? Array.from(new Set(matches)) : [];
+  }, [selectedEntry]);
+
+  const [selectedKanjiChar, setSelectedKanjiChar] = useState<string>('');
+
+  useEffect(() => {
+    if (kanjiCharsInEntry.length > 0) {
+      setSelectedKanjiChar(kanjiCharsInEntry[0]);
+    } else {
+      setSelectedKanjiChar('');
+    }
+  }, [kanjiCharsInEntry]);
+
+  // AI Example Sentence generator function
+  const handleGenerateExampleSentence = async () => {
+    if (!selectedEntry || isGeneratingExample) return;
+    setIsGeneratingExample(true);
+
+    try {
+      const res = await fetch('/api/ai/example-sentence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          word: selectedEntry.kanji,
+          reading: selectedEntry.reading,
+          jlptLevel: selectedEntry.jlpt
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.example) {
+          setGeneratedExample(data.example);
+        }
+      } else {
+        // Fallback simulated response
+        setGeneratedExample({
+          word: selectedEntry.kanji,
+          reading: selectedEntry.reading,
+          sentenceJa: `私は毎日${selectedEntry.kanji}を使って日本語を勉強します。`,
+          sentenceFurigana: `わたしはまいにち${selectedEntry.reading}をつかってにほんごをべんきょうします。`,
+          romaji: `Watashi wa mainichi ${selectedEntry.romaji} o tsukatte nihongo o benkyou shimasu.`,
+          meaningEn: `I study Japanese every day using ${selectedEntry.english.toLowerCase()}.`,
+          meaningBn: `আমি প্রতিদিন ${selectedEntry.bangla} চর্চা করে জাপানি ভাষা শিখি।`,
+          jlptLevel: selectedEntry.jlpt,
+          grammarTip: `Pay close attention to the verb conjugation and polite form matching JLPT ${selectedEntry.jlpt}.`
+        });
+      }
+    } catch {
+      setGeneratedExample({
+        word: selectedEntry.kanji,
+        reading: selectedEntry.reading,
+        sentenceJa: `${selectedEntry.kanji}はとても役に立ちます。`,
+        sentenceFurigana: `${selectedEntry.reading}はとてもやくにたちます。`,
+        romaji: `${selectedEntry.romaji} wa totemo yaku ni tachimasu.`,
+        meaningEn: `${selectedEntry.english} is very useful.`,
+        meaningBn: `${selectedEntry.bangla} অত্যন্ত কার্যকর ও প্রয়োজনীয়।`,
+        jlptLevel: selectedEntry.jlpt,
+        grammarTip: 'Uses predicate は〜役に立ちます (is useful).'
+      });
+    } finally {
+      setIsGeneratingExample(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <div
       id="quick-dictionary-overlay"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden text-stone-900 dark:text-white"
+        className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden text-stone-900 dark:text-white"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Search Input */}
@@ -292,6 +426,11 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && searchTerm.trim()) {
+                recordSearch(searchTerm.trim());
+              }
+            }}
             placeholder="Search Kanji, Kana, Romaji, English, or Bengali (e.g. taberu, 食べる, friend, বেতন)..."
             className="flex-1 bg-transparent text-sm sm:text-base font-serif outline-hidden text-stone-900 dark:text-stone-100 placeholder-stone-400"
             autoFocus
@@ -307,13 +446,44 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
           </button>
         </div>
 
+        {/* Recent Searches Bar (Last 10 Searched Words) */}
+        {recentSearches.length > 0 && (
+          <div className="px-4 py-2 bg-stone-100/70 dark:bg-stone-950/70 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2 overflow-x-auto text-xs">
+            <div className="flex items-center space-x-1.5 shrink-0 text-stone-400 font-mono text-[10px] font-bold uppercase">
+              <Clock className="w-3 h-3 text-stone-400" />
+              <span>Recent (10):</span>
+            </div>
+            <div className="flex items-center space-x-1.5 overflow-x-auto py-0.5 no-scrollbar flex-1">
+              {recentSearches.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setSearchTerm(item);
+                    recordSearch(item);
+                  }}
+                  className="px-2.5 py-0.5 rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-red-400 hover:text-red-600 dark:hover:text-red-400 text-[11px] font-japanese font-medium shrink-0 transition cursor-pointer shadow-2xs"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={clearRecentSearches}
+              className="p-1 text-stone-400 hover:text-red-500 transition shrink-0 cursor-pointer"
+              title="Clear Search History"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </div>
+        )}
+
         {/* Content Body: Split List & Detail View */}
-        <div className="grid grid-cols-1 md:grid-cols-12 flex-1 overflow-hidden min-h-[380px]">
+        <div className="grid grid-cols-1 md:grid-cols-12 flex-1 overflow-hidden min-h-[400px]">
           {/* Left Column: Results List */}
-          <div className="md:col-span-5 border-r border-stone-200 dark:border-stone-800 overflow-y-auto p-3 space-y-1.5 max-h-[480px]">
+          <div className="md:col-span-5 border-r border-stone-200 dark:border-stone-800 overflow-y-auto p-3 space-y-1.5 max-h-[500px]">
             <div className="flex items-center justify-between px-2 py-1 text-[11px] font-bold text-stone-400 uppercase tracking-wider">
               <span>Results ({filteredEntries.length})</span>
-              <span>JLPT Reference</span>
+              <span>JLPT</span>
             </div>
 
             {filteredEntries.map((entry) => {
@@ -323,7 +493,10 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
               return (
                 <div
                   key={entry.id}
-                  onClick={() => setSelectedEntry(entry)}
+                  onClick={() => {
+                    setSelectedEntry(entry);
+                    recordSearch(entry.kanji);
+                  }}
                   className={`p-3 rounded-2xl cursor-pointer transition flex items-center justify-between gap-3 ${
                     isSelected
                       ? 'bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-900 dark:text-red-100'
@@ -355,96 +528,226 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
             })}
           </div>
 
-          {/* Right Column: Detailed Card Preview */}
-          <div className="md:col-span-7 p-6 overflow-y-auto bg-stone-50/40 dark:bg-stone-950/20 flex flex-col justify-between space-y-6">
+          {/* Right Column: Detailed Card Preview & Stroke Order */}
+          <div className="md:col-span-7 p-5 sm:p-6 overflow-y-auto bg-stone-50/40 dark:bg-stone-950/20 flex flex-col justify-between space-y-6">
             {selectedEntry ? (
-              <div className="space-y-6">
-                {/* Kanji Hero Card */}
-                <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl p-6 shadow-xs space-y-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2.5 py-0.5 rounded-md bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 text-xs font-bold font-mono">
-                          JLPT {selectedEntry.jlpt}
-                        </span>
-                        <span className="text-xs font-semibold text-stone-400">
-                          {selectedEntry.partOfSpeech}
-                        </span>
+              <div className="space-y-5">
+                {/* Tab switcher: Word Details vs Kanji Stroke Order */}
+                {kanjiCharsInEntry.length > 0 && (
+                  <div className="flex items-center space-x-2 border-b border-stone-200 dark:border-stone-800 pb-2 text-xs">
+                    <button
+                      onClick={() => setActiveTab('details')}
+                      className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center space-x-1.5 cursor-pointer ${
+                        activeTab === 'details'
+                          ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-900'
+                          : 'text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800'
+                      }`}
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>Vocabulary Details</span>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('stroke-order')}
+                      className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center space-x-1.5 cursor-pointer ${
+                        activeTab === 'stroke-order'
+                          ? 'bg-red-600 text-white shadow-xs'
+                          : 'text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800'
+                      }`}
+                    >
+                      <PenTool className="w-3.5 h-3.5" />
+                      <span>SVG Stroke Order ({kanjiCharsInEntry.length})</span>
+                    </button>
+                  </div>
+                )}
+
+                {activeTab === 'details' ? (
+                  <>
+                    {/* Kanji Hero Card */}
+                    <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="px-2.5 py-0.5 rounded-md bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 text-xs font-bold font-mono">
+                              JLPT {selectedEntry.jlpt}
+                            </span>
+                            <span className="text-xs font-semibold text-stone-400">
+                              {selectedEntry.partOfSpeech}
+                            </span>
+                          </div>
+                          <h2 className="text-3xl sm:text-4xl font-bold font-serif text-stone-900 dark:text-white mt-2">
+                            {selectedEntry.kanji}
+                          </h2>
+                          <p className="text-lg text-red-600 dark:text-red-400 font-sans font-medium mt-1">
+                            {selectedEntry.reading}{' '}
+                            <span className="text-xs text-stone-400 font-mono">({selectedEntry.romaji})</span>
+                          </p>
+                        </div>
+
+                        {/* Audio Pronunciation Button & Pin */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => speakJapanese(selectedEntry.kanji)}
+                            className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 hover:bg-red-100 border border-red-200 dark:border-red-900 transition cursor-pointer active:scale-95 shadow-xs"
+                            title="উচ্চারণ শুনুন (Listen with Web Speech TTS)"
+                          >
+                            <Volume2 className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => togglePin(selectedEntry)}
+                            className={`p-3 rounded-2xl border transition cursor-pointer ${
+                              pinnedIds.includes(selectedEntry.id)
+                                ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                                : 'bg-white dark:bg-stone-800 text-stone-500 border-stone-200 dark:border-stone-700 hover:text-amber-600'
+                            }`}
+                            title="Pin to Flashcards"
+                          >
+                            <Bookmark className="w-5 h-5" />
+                          </button>
+                        </div>
                       </div>
-                      <h2 className="text-4xl sm:text-5xl font-bold font-serif text-stone-900 dark:text-white mt-2">
-                        {selectedEntry.kanji}
-                      </h2>
-                      <p className="text-lg text-red-600 dark:text-red-400 font-sans font-medium mt-1">
-                        {selectedEntry.reading}{' '}
-                        <span className="text-xs text-stone-400 font-mono">({selectedEntry.romaji})</span>
-                      </p>
-                    </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => speakJapanese(selectedEntry.kanji)}
-                        className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 hover:bg-red-100 border border-red-200 dark:border-red-900 transition cursor-pointer"
-                        title="উচ্চারণ শুনুন (Listen)"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => togglePin(selectedEntry)}
-                        className={`p-3 rounded-2xl border transition cursor-pointer ${
-                          pinnedIds.includes(selectedEntry.id)
-                            ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
-                            : 'bg-white dark:bg-stone-800 text-stone-500 border-stone-200 dark:border-stone-700 hover:text-amber-600'
-                        }`}
-                        title="Pin to Flashcards"
-                      >
-                        <Bookmark className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
+                      {/* Meanings */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60">
+                          <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
+                            English Meaning
+                          </span>
+                          <p className="text-sm font-bold text-stone-900 dark:text-stone-100 mt-0.5">
+                            {selectedEntry.english}
+                          </p>
+                        </div>
+                        <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60">
+                          <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
+                            বাংলা অর্থ (Bengali)
+                          </span>
+                          <p className="text-sm font-bold text-red-700 dark:text-red-400 mt-0.5">
+                            {selectedEntry.bangla}
+                          </p>
+                        </div>
+                      </div>
 
-                  {/* Meanings */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60">
-                      <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
-                        English Meaning
-                      </span>
-                      <p className="text-sm font-bold text-stone-900 dark:text-stone-100 mt-0.5">
-                        {selectedEntry.english}
-                      </p>
-                    </div>
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60">
-                      <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
-                        বাংলা অর্থ (Bengali)
-                      </span>
-                      <p className="text-sm font-bold text-red-700 dark:text-red-400 mt-0.5">
-                        {selectedEntry.bangla}
-                      </p>
-                    </div>
-                  </div>
+                      {/* Default Example Sentence */}
+                      {selectedEntry.exampleJa && (
+                        <div className="p-4 rounded-2xl bg-stone-50/80 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-700 space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                              Context Example
+                            </span>
+                            <button
+                              onClick={() => speakJapanese(selectedEntry.exampleJa!)}
+                              className="text-stone-400 hover:text-red-600 transition cursor-pointer flex items-center space-x-1"
+                              title="Listen to Example"
+                            >
+                              <Volume2 className="w-3.5 h-3.5" />
+                              <span className="text-[10px]">Listen</span>
+                            </button>
+                          </div>
+                          <p className="text-sm font-serif font-bold text-stone-900 dark:text-stone-100">
+                            {selectedEntry.exampleJa}
+                          </p>
+                          <p className="text-xs text-stone-500 dark:text-stone-400">
+                            {selectedEntry.exampleEn}
+                          </p>
+                        </div>
+                      )}
 
-                  {/* Example Sentence */}
-                  {selectedEntry.exampleJa && (
-                    <div className="p-4 rounded-2xl bg-stone-50/80 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-700 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
-                          Context Example
-                        </span>
+                      {/* AI GENERATE EXAMPLE SENTENCE SECTION */}
+                      <div className="pt-2">
                         <button
-                          onClick={() => speakJapanese(selectedEntry.exampleJa!)}
-                          className="text-stone-400 hover:text-red-600 transition"
+                          type="button"
+                          onClick={handleGenerateExampleSentence}
+                          disabled={isGeneratingExample}
+                          className="w-full py-2.5 px-4 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 disabled:opacity-50 text-white font-bold text-xs rounded-2xl shadow-xs transition flex items-center justify-center space-x-2 cursor-pointer"
                         >
-                          <Volume2 className="w-3.5 h-3.5" />
+                          {isGeneratingExample ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>Generating JLPT {selectedEntry.jlpt} Sentence with Gemini AI...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 text-amber-300" />
+                              <span>Generate Contextual Example Sentence (Gemini AI)</span>
+                            </>
+                          )}
                         </button>
+
+                        {/* Generated Example Display */}
+                        {generatedExample && (
+                          <div className="mt-3 p-4 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-300/70 dark:border-amber-700/60 rounded-2xl space-y-2 text-stone-900 dark:text-stone-100 animate-in fade-in">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 font-mono">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>AI Sentence • JLPT {generatedExample.jlptLevel}</span>
+                              </div>
+                              <button
+                                onClick={() => speakJapanese(generatedExample.sentenceJa)}
+                                className="p-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-700 dark:text-amber-300 transition cursor-pointer"
+                                title="Pronounce Sentence"
+                              >
+                                <Volume2 className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            <p className="text-sm font-serif font-bold text-stone-900 dark:text-white">
+                              {generatedExample.sentenceJa}
+                            </p>
+                            <p className="text-xs text-stone-500 dark:text-stone-400 font-japanese">
+                              {generatedExample.sentenceFurigana}
+                            </p>
+                            <p className="text-[11px] font-mono text-stone-400">
+                              {generatedExample.romaji}
+                            </p>
+
+                            <div className="pt-2 border-t border-amber-200/60 dark:border-amber-800/60 space-y-1 text-xs">
+                              <p className="text-stone-700 dark:text-stone-300">
+                                <strong>EN:</strong> {generatedExample.meaningEn}
+                              </p>
+                              <p className="text-red-700 dark:text-red-400 font-medium">
+                                <strong>BN:</strong> {generatedExample.meaningBn}
+                              </p>
+                              {generatedExample.grammarTip && (
+                                <p className="text-[11px] text-amber-800 dark:text-amber-300/90 italic mt-1">
+                                  💡 <strong>Tip:</strong> {generatedExample.grammarTip}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-sm font-serif font-bold text-stone-900 dark:text-stone-100">
-                        {selectedEntry.exampleJa}
-                      </p>
-                      <p className="text-xs text-stone-500 dark:text-stone-400">
-                        {selectedEntry.exampleEn}
-                      </p>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  /* SVG Stroke Order Diagrams Tab */
+                  <div className="space-y-4 animate-in fade-in">
+                    {kanjiCharsInEntry.length > 1 && (
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-bold text-stone-400">Select Kanji:</span>
+                        {kanjiCharsInEntry.map((char) => (
+                          <button
+                            key={char}
+                            onClick={() => setSelectedKanjiChar(char)}
+                            className={`w-9 h-9 rounded-xl font-serif font-bold text-base transition cursor-pointer ${
+                              selectedKanjiChar === char
+                                ? 'bg-red-600 text-white shadow-xs'
+                                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200'
+                            }`}
+                          >
+                            {char}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {selectedKanjiChar && (
+                      <KanjiStrokeSvgDiagram
+                        kanjiChar={selectedKanjiChar}
+                        size={190}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center text-stone-400 py-12">
@@ -456,7 +759,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
             {/* Bottom Action Footer */}
             <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800 text-xs">
               <span className="text-stone-500 dark:text-stone-400">
-                {pinnedIds.length} vocabulary terms pinned to custom study shelf
+                {pinnedIds.length} terms pinned for active review
               </span>
               {onNavigateToFlashcards && (
                 <button

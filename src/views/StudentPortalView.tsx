@@ -36,6 +36,9 @@ import { StudyStreakHeatmap } from '../components/student/StudyStreakHeatmap';
 import { AchievementBadges } from '../components/student/AchievementBadges';
 import { NihomiStandardDashboard } from '../components/student/NihomiStandardDashboard';
 import { LearningGapRadar } from '../components/student/LearningGapRadar';
+import { DailyStreakCalendarWidget } from '../components/dashboard/DailyStreakCalendarWidget';
+import { LeitnerStudyBoxWidget } from '../components/dashboard/LeitnerStudyBoxWidget';
+import { JlptRadarMasteryDashboard } from '../components/dashboard/JlptRadarMasteryDashboard';
 import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
 import { ContentExportService } from '../core/content-engine/contentExportService';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
@@ -506,6 +509,20 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <div className="text-xs text-slate-500 mt-1">{studentData.assignedTeacher}</div>
               </div>
             </div>
+
+            {/* Leitner Spaced Repetition (SRS) Daily Study Deck */}
+            <LeitnerStudyBoxWidget
+              onNavigateStudy={(v) => {
+                if (v === 'flashcards') setActiveTab('courses');
+                else if (onNavigate) onNavigate(v);
+              }}
+            />
+
+            {/* Daily Consecutive Study Streak Calendar & Nihomi Gems Reward Widget */}
+            <DailyStreakCalendarWidget />
+
+            {/* JLPT N5-N1 Recharts Mastery Radar & Category Evaluation */}
+            <JlptRadarMasteryDashboard />
 
             {/* Language Progress Tracker (Kanji, Vocabulary, and Grammar Progress Rings) */}
             <LanguageProgressTracker

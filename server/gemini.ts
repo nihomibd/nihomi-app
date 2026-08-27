@@ -428,3 +428,74 @@ JSON schema:
   // Graceful high-quality procedural fallback based on the actual provided sentence
   return generateProceduralSentenceDna(sentence, userLevel);
 }
+
+export interface ExampleSentenceResponse {
+  word: string;
+  reading: string;
+  sentenceJa: string;
+  sentenceFurigana: string;
+  romaji: string;
+  meaningEn: string;
+  meaningBn: string;
+  jlptLevel: string;
+  grammarTip: string;
+}
+
+export async function processExampleSentenceRequest(
+  word: string,
+  reading?: string,
+  jlptLevel = 'N5'
+): Promise<ExampleSentenceResponse> {
+  const client = getAIClient();
+  const systemInstruction = `You are the Nihomi.com Japanese Linguistic Engine.
+Create an authentic, natural, context-appropriate Japanese example sentence specifically utilizing the vocabulary/kanji "${word}" (Reading: "${reading || word}") tailored for a JLPT ${jlptLevel} student.
+Return strictly valid JSON matching this schema:
+{
+  "word": "${word}",
+  "reading": "${reading || word}",
+  "sentenceJa": "Japanese sentence with kanji",
+  "sentenceFurigana": "Japanese sentence with furigana/kana",
+  "romaji": "Romanized transcription",
+  "meaningEn": "Natural English translation",
+  "meaningBn": "Natural Bengali (বাংলা) translation",
+  "jlptLevel": "${jlptLevel}",
+  "grammarTip": "A concise 1-sentence tip on how ${word} is used in this sentence context."
+}`;
+
+  if (client) {
+    for (const modelName of CANDIDATE_MODELS) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const response = await client.models.generateContent({
+            model: modelName,
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: `Generate an authentic JLPT ${jlptLevel} example sentence for word: "${word}"` }]
+              }
+            ],
+            config: { systemInstruction, temperature: 0.3, responseMimeType: 'application/json' }
+          });
+          if (response.text) {
+            return JSON.parse(response.text) as ExampleSentenceResponse;
+          }
+        } catch {
+          await sleep(300 * (attempt + 1));
+        }
+      }
+    }
+  }
+
+  // Fallback if offline / rate limited
+  return {
+    word,
+    reading: reading || word,
+    sentenceJa: `私は毎日${word}を大切にしています。`,
+    sentenceFurigana: `わたしはまいにち${reading || word}をたいせつにしています。`,
+    romaji: `Watashi wa mainichi ${reading || word} o taisetsu ni shiteimasu.`,
+    meaningEn: `I value and cherish ${word} every single day.`,
+    meaningBn: `আমি প্রতিদিন ${word}-কে গুরুত্ব সহকারে চর্চা করি।`,
+    jlptLevel,
+    grammarTip: `Use ${word} with appropriate case particle (を/に/は) depending on transitive/intransitive verb context.`
+  };
+}

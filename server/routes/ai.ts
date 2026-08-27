@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
-import { processAICoachRequest, processVisionSenseiRequest, processSentenceDnaRequest } from '../gemini.js';
+import { processAICoachRequest, processVisionSenseiRequest, processSentenceDnaRequest, processExampleSentenceRequest } from '../gemini.js';
 import { getUserActivePlanId, PLAN_LIMITS } from '../services/entitlements.js';
 import crypto from 'crypto';
 
@@ -195,6 +195,27 @@ aiRouter.post('/endless-drills', requireAuth, async (req: AuthenticatedRequest, 
   } catch (err: any) {
     console.error('Endless drills error:', err);
     return res.status(500).json({ error: 'Failed to generate endless drills' });
+  }
+});
+
+// 7. Contextual JLPT Example Sentence Generator
+aiRouter.post('/example-sentence', async (req, res) => {
+  try {
+    const { word, reading, jlptLevel } = req.body;
+    if (!word || typeof word !== 'string') {
+      return res.status(400).json({ error: 'Word string is required.' });
+    }
+
+    const result = await processExampleSentenceRequest(
+      word.trim(),
+      typeof reading === 'string' ? reading.trim() : undefined,
+      typeof jlptLevel === 'string' ? jlptLevel.trim() : 'N5'
+    );
+
+    return res.json({ success: true, example: result });
+  } catch (err: any) {
+    console.error('Example sentence generator error:', err);
+    return res.status(500).json({ error: 'Failed to generate example sentence.' });
   }
 });
 
