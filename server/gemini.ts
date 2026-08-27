@@ -499,3 +499,93 @@ Return strictly valid JSON matching this schema:
     grammarTip: `Use ${word} with appropriate case particle (を/に/は) depending on transitive/intransitive verb context.`
   };
 }
+
+export interface ExplainMistakeRequest {
+  question: string;
+  questionJa?: string;
+  selectedOption: string;
+  correctOption: string;
+  allOptions?: string[];
+  userLevel?: string;
+  conceptCode?: string;
+}
+
+export interface ExplainMistakeResponse {
+  whyChosenIsIncorrect: string;
+  whyChosenIsIncorrectBn: string;
+  correctRuleExplanation: string;
+  correctRuleExplanationBn: string;
+  keyGrammarRule: string;
+  contrastExampleJa: string;
+  contrastExampleRomaji: string;
+  contrastExampleEn: string;
+  contrastExampleBn: string;
+  senseiProTip: string;
+}
+
+export async function processExplainMistakeRequest(
+  data: ExplainMistakeRequest
+): Promise<ExplainMistakeResponse> {
+  const client = getAIClient();
+  const userLevel = data.userLevel || 'N5';
+
+  const systemInstruction = `You are Nihomi Sensei, an expert Japanese linguistic professor helping Bangladeshi and global students master Japanese grammar for the JLPT (${userLevel}).
+A student answered a quiz question incorrectly. Explain their mistake thoroughly, kindly, and with pedagogical precision.
+Question: "${data.questionJa ? data.questionJa + ' / ' + data.question : data.question}"
+Student Chose (Incorrect): "${data.selectedOption}"
+Correct Answer: "${data.correctOption}"
+${data.allOptions ? `All Options: ${data.allOptions.join(', ')}` : ''}
+${data.conceptCode ? `Grammar Concept: ${data.conceptCode}` : ''}
+
+Provide a structured, deeply informative breakdown in JSON matching this exact schema:
+{
+  "whyChosenIsIncorrect": "Detailed English explanation of why the selected option creates a grammatical error, particle mismatch, tense error, or wrong nuance in this specific context.",
+  "whyChosenIsIncorrectBn": "Detailed Bengali (বাংলা) explanation of why their chosen answer is incorrect, explaining the particle or vocabulary clash.",
+  "correctRuleExplanation": "Step-by-step English explanation of the correct grammar pattern, particle rule, or conjugation formula.",
+  "correctRuleExplanationBn": "Step-by-step Bengali (বাংলা) explanation of the correct grammar rule and how to recognize it.",
+  "keyGrammarRule": "Short memorable rule summary (e.g. 'Noun + に denotes destination or specific time; で denotes location of action').",
+  "contrastExampleJa": "A clear Japanese contrast sentence showing the correct usage in action.",
+  "contrastExampleRomaji": "Romaji transcription of the contrast sentence.",
+  "contrastExampleEn": "English translation of the contrast sentence.",
+  "contrastExampleBn": "Bengali (বাংলা) translation of the contrast sentence.",
+  "senseiProTip": "A smart mnemonic or memory trick to never confuse this rule again in JLPT exams."
+}`;
+
+  if (client) {
+    for (const modelName of CANDIDATE_MODELS) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const response = await client.models.generateContent({
+            model: modelName,
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: `Explain why choosing "${data.selectedOption}" instead of "${data.correctOption}" for question "${data.questionJa || data.question}" is incorrect for JLPT ${userLevel}.` }]
+              }
+            ],
+            config: { systemInstruction, temperature: 0.2, responseMimeType: 'application/json' }
+          });
+          if (response.text) {
+            return JSON.parse(response.text) as ExplainMistakeResponse;
+          }
+        } catch {
+          await sleep(300 * (attempt + 1));
+        }
+      }
+    }
+  }
+
+  // Fallback if offline or API key unavailable
+  return {
+    whyChosenIsIncorrect: `Choosing "${data.selectedOption}" fails because it does not fit the grammatical function required by the sentence predicate. Japanese particles and conjugations demand strict syntactic alignment.`,
+    whyChosenIsIncorrectBn: `"${data.selectedOption}" নির্বাচন করা ভুল হয়েছে কারণ বাক্যের ক্রিয়া ও অর্থের সাথে এর ব্যাকরণগত মিল নেই।`,
+    correctRuleExplanation: `The correct answer is "${data.correctOption}". It fulfills the necessary syntactic role (such as topic marker, case particle, or correct verb inflection).`,
+    correctRuleExplanationBn: `সঠিক উত্তর হলো "${data.correctOption}"। এটি সঠিক কারক বিভক্তি (Particle) বা সঠিক ক্রিয়ার রূপ নির্দেশ করে।`,
+    keyGrammarRule: `Focus on the relationship between the noun and the predicate verb to identify the correct particle or inflection.`,
+    contrastExampleJa: `図書館で勉強します。学校に行きます。`,
+    contrastExampleRomaji: `Toshokan de benkyou shimasu. Gakkou ni ikimasu.`,
+    contrastExampleEn: `I study AT the library (action = で). I go TO school (destination = に).`,
+    contrastExampleBn: `লাইব্রেরিতে পড়াশোনা করি (কাজের স্থান = で)। স্কুলে যাচ্ছি (গন্তব্য = に)।`,
+    senseiProTip: `Always identify the main verb at the end of the sentence first before choosing the connecting particle or conjugation!`
+  };
+}

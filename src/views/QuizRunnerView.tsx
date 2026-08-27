@@ -57,6 +57,83 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
   }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // AI Mistake Explanation state keyed by questionId
+  const [aiMistakeExplanations, setAiMistakeExplanations] = useState<
+    Record<
+      string,
+      {
+        loading: boolean;
+        data?: {
+          whyChosenIsIncorrect: string;
+          whyChosenIsIncorrectBn: string;
+          correctRuleExplanation: string;
+          correctRuleExplanationBn: string;
+          keyGrammarRule: string;
+          contrastExampleJa: string;
+          contrastExampleRomaji: string;
+          contrastExampleEn: string;
+          contrastExampleBn: string;
+          senseiProTip: string;
+        };
+        error?: string;
+      }
+    >
+  >({});
+
+  const handleRequestMistakeExplanation = async (
+    questionItem: any,
+    resultItem: any,
+    selectedIdx: number
+  ) => {
+    const qId = questionItem.id;
+    setAiMistakeExplanations((prev) => ({
+      ...prev,
+      [qId]: { loading: true }
+    }));
+
+    try {
+      const selectedOptText =
+        selectedIdx >= 0 && questionItem.options[selectedIdx]
+          ? questionItem.options[selectedIdx]
+          : 'No answer selected';
+      const correctOptText =
+        resultItem.correctIndex !== undefined && questionItem.options[resultItem.correctIndex]
+          ? questionItem.options[resultItem.correctIndex]
+          : 'Correct answer';
+
+      const res = await apiRequest<{ success: boolean; explanation: any }>('/api/ai/explain-mistake', {
+        method: 'POST',
+        body: JSON.stringify({
+          question: questionItem.question,
+          questionJa: questionItem.questionJa,
+          selectedOption: selectedOptText,
+          correctOption: correctOptText,
+          allOptions: questionItem.options,
+          userLevel: quiz?.level || 'N5',
+          conceptCode: questionItem.conceptCode
+        })
+      });
+
+      if (res.success && res.explanation) {
+        setAiMistakeExplanations((prev) => ({
+          ...prev,
+          [qId]: { loading: false, data: res.explanation }
+        }));
+      } else {
+        throw new Error('Could not generate explanation');
+      }
+    } catch (err: any) {
+      console.error('Failed to get AI mistake explanation:', err);
+      setAiMistakeExplanations((prev) => ({
+        ...prev,
+        [qId]: {
+          loading: false,
+          error: 'Failed to retrieve AI explanation. Please check connection and try again.'
+        }
+      }));
+    }
+  };
+
   useEffect(() => {
     async function loadQuizData() {
       setIsLoading(true);
@@ -478,6 +555,137 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
                   <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-700 space-y-1">
                     <p className="font-bold text-stone-900">Explanation:</p>
                     <p className="text-[11px] leading-relaxed">{resultItem.explanation}</p>
+                  </div>
+                )}
+
+                {/* AI-Powered Personalized Mistake Explainer for Incorrect Answers */}
+                {resultItem && !resultItem.isCorrect && (
+                  <div className="mt-2 pt-2 border-t border-rose-100">
+                    {!aiMistakeExplanations[q.id]?.data && (
+                      <button
+                        type="button"
+                        onClick={() => handleRequestMistakeExplanation(q, resultItem, selectedOpt ?? -1)}
+                        disabled={aiMistakeExplanations[q.id]?.loading}
+                        className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                      >
+                        <Sparkles className={`w-3.5 h-3.5 ${aiMistakeExplanations[q.id]?.loading ? 'animate-spin' : ''}`} />
+                        <span>
+                          {aiMistakeExplanations[q.id]?.loading
+                            ? 'AI Sensei Analyzing Mistake...'
+                            : 'AI Explain Mistake (ভুলের কারণ ও ব্যাকরণ জানুন)'}
+                        </span>
+                      </button>
+                    )}
+
+                    {/* Rendered AI Grammar Breakdown Card */}
+                    {aiMistakeExplanations[q.id]?.data && (
+                      <div className="mt-3 p-4 rounded-2xl bg-gradient-to-br from-purple-50/80 via-white to-indigo-50/80 border border-purple-200 text-stone-900 space-y-3.5 shadow-sm">
+                        <div className="flex items-center justify-between border-b border-purple-100 pb-2.5">
+                          <div className="flex items-center space-x-2">
+                            <span className="p-1.5 rounded-lg bg-purple-600 text-white">
+                              <Brain className="w-4 h-4" />
+                            </span>
+                            <div>
+                              <h4 className="text-xs font-extrabold text-purple-950">
+                                AI Sensei Personalized Grammar Analysis
+                              </h4>
+                              <p className="text-[10px] text-purple-700 font-medium">
+                                JLPT {quiz?.level || 'N5'} Grammar Diagnostics &bull; ভুলের বিশ্লেষণ
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 border border-purple-200">
+                            Smart Sensei™
+                          </span>
+                        </div>
+
+                        {/* Why your answer was incorrect */}
+                        <div className="space-y-1 bg-rose-50/70 border border-rose-200 p-3 rounded-xl">
+                          <div className="flex items-center space-x-1.5 text-rose-800 text-xs font-bold">
+                            <XCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>কেন আপনার উত্তরটি ভুল হয়েছিল (Why Your Selection Was Wrong):</span>
+                          </div>
+                          <p className="text-xs text-rose-950 leading-relaxed font-medium">
+                            {aiMistakeExplanations[q.id].data!.whyChosenIsIncorrect}
+                          </p>
+                          <p className="text-[11px] text-rose-800/90 leading-relaxed font-sans mt-1">
+                            {aiMistakeExplanations[q.id].data!.whyChosenIsIncorrectBn}
+                          </p>
+                        </div>
+
+                        {/* Correct rule formula */}
+                        <div className="space-y-1 bg-emerald-50/70 border border-emerald-200 p-3 rounded-xl">
+                          <div className="flex items-center space-x-1.5 text-emerald-800 text-xs font-bold">
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                            <span>সঠিক ব্যাকরণ নিয়ম ও প্রয়োগ (Correct Grammar Pattern):</span>
+                          </div>
+                          <p className="text-xs text-emerald-950 leading-relaxed font-medium">
+                            {aiMistakeExplanations[q.id].data!.correctRuleExplanation}
+                          </p>
+                          <p className="text-[11px] text-emerald-800/90 leading-relaxed font-sans mt-1">
+                            {aiMistakeExplanations[q.id].data!.correctRuleExplanationBn}
+                          </p>
+                          {aiMistakeExplanations[q.id].data!.keyGrammarRule && (
+                            <div className="mt-2 px-2.5 py-1.5 bg-white/80 rounded-lg border border-emerald-300 text-[11px] font-mono font-semibold text-emerald-900">
+                              📌 Rule: {aiMistakeExplanations[q.id].data!.keyGrammarRule}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Contrast Example with speech audio */}
+                        {aiMistakeExplanations[q.id].data!.contrastExampleJa && (
+                          <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl space-y-1.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-stone-700 flex items-center gap-1.5">
+                                <Sparkles className="w-3 h-3 text-amber-500" />
+                                <span>সঠিক উদাহরণ বাক্য (Contrast Example):</span>
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  speakJapanese(
+                                    aiMistakeExplanations[q.id].data!.contrastExampleJa
+                                  )
+                                }
+                                className="p-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-red-600 transition"
+                                title="Listen in Japanese"
+                              >
+                                <Volume2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                            <p className="text-xs sm:text-sm font-serif font-bold text-stone-900">
+                              {aiMistakeExplanations[q.id].data!.contrastExampleJa}
+                            </p>
+                            <p className="text-[11px] text-stone-500 font-mono">
+                              {aiMistakeExplanations[q.id].data!.contrastExampleRomaji}
+                            </p>
+                            <p className="text-[11px] text-stone-700">
+                              🇬🇧 {aiMistakeExplanations[q.id].data!.contrastExampleEn}
+                            </p>
+                            <p className="text-[11px] text-stone-700 font-sans">
+                              🇧🇩 {aiMistakeExplanations[q.id].data!.contrastExampleBn}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Sensei Pro Tip */}
+                        {aiMistakeExplanations[q.id].data!.senseiProTip && (
+                          <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] text-amber-900 flex items-start gap-2">
+                            <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                            <div>
+                              <strong className="text-amber-800">Sensei Mnemonic Tip: </strong>
+                              {aiMistakeExplanations[q.id].data!.senseiProTip}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {aiMistakeExplanations[q.id]?.error && (
+                      <p className="text-[11px] text-rose-600 mt-1 font-semibold">
+                        {aiMistakeExplanations[q.id].error}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

@@ -95,6 +95,35 @@ class SoundEngine {
   }
 
   /**
+   * Subtle soft click for button taps and timer controls
+   */
+  public playButtonTap(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.05);
+    } catch (e) {
+      console.warn('Button tap audio failed:', e);
+    }
+  }
+
+  /**
    * Fanfare melody when a quiz or lesson is 100% completed
    */
   public playLessonCelebration(): void {

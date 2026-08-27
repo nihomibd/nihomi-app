@@ -42,15 +42,32 @@ import { LeitnerStudyBoxWidget } from '../components/dashboard/LeitnerStudyBoxWi
 import { JlptRadarMasteryDashboard } from '../components/dashboard/JlptRadarMasteryDashboard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
 import { DailyStudyReminder } from '../components/DailyStudyReminder';
+import { Past30DaysStudyHeatmap } from '../components/student/Past30DaysStudyHeatmap';
+import { FloatingMiniTimer } from '../components/focus/FloatingMiniTimer';
+import { KanjiStrokeVisualizer } from '../components/kanji/KanjiStrokeVisualizer';
+import { LearningProgressChart } from '../components/dashboard/LearningProgressChart';
+import { PronunciationCoach } from '../components/practice/PronunciationCoach';
 import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
 import { ContentExportService } from '../core/content-engine/contentExportService';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
-import { Eye, EyeOff, TrendingUp } from 'lucide-react';
+import { Eye, EyeOff, TrendingUp, Brush, Headphones, Timer } from 'lucide-react';
 
 interface StudentPortalViewProps {
-  initialTab?: 'dashboard' | 'analytics' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept';
+  initialTab?:
+    | 'dashboard'
+    | 'analytics'
+    | 'nihomi_standard'
+    | 'kanji_visualizer'
+    | 'pronunciation_coach'
+    | 'courses'
+    | 'assessments'
+    | 'idcard'
+    | 'certificates'
+    | 'settings'
+    | 'subscription'
+    | 'infinite_concept';
   onNavigate?: (view: string) => void;
 }
 
@@ -178,7 +195,18 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const { user, subscriptionDetails, updateProfile, updateSubscription, topUpCredits, logout } = useAuth();
   const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'analytics' | 'nihomi_standard' | 'courses' | 'assessments' | 'idcard' | 'certificates' | 'settings' | 'subscription' | 'infinite_concept'
+    | 'dashboard'
+    | 'analytics'
+    | 'nihomi_standard'
+    | 'kanji_visualizer'
+    | 'pronunciation_coach'
+    | 'courses'
+    | 'assessments'
+    | 'idcard'
+    | 'certificates'
+    | 'settings'
+    | 'subscription'
+    | 'infinite_concept'
   >(initialTab);
 
   useEffect(() => {
@@ -428,7 +456,9 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto py-3 text-xs font-semibold">
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
-              { id: 'analytics', label: '📊 Learning Analytics', icon: TrendingUp },
+              { id: 'analytics', label: '📊 Learning Analytics & Charts', icon: TrendingUp },
+              { id: 'kanji_visualizer', label: '🖌️ Kanji Stroke Tracing', icon: Brush },
+              { id: 'pronunciation_coach', label: '🎙️ Pronunciation Coach', icon: Headphones },
               { id: 'nihomi_standard', label: '🌟 Nihomi Standard™ (23-D)', icon: Award },
               { id: 'courses', label: 'Curriculum & Lessons', icon: BookOpen },
               { id: 'infinite_concept', label: '⚡ Infinite Learning Hub™ (15 Formats)', icon: Sparkles },
@@ -513,6 +543,12 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <div className="text-xs text-slate-500 mt-1">{studentData.assignedTeacher}</div>
               </div>
             </div>
+
+            {/* Interactive 30-Day Frequency & Consistency Study Heatmap */}
+            <Past30DaysStudyHeatmap currentStreak={studentData.streakDays} />
+
+            {/* Recharts Comprehensive Learning Progress & Milestone Growth Chart */}
+            <LearningProgressChart studentLevel={studentData.currentLevel} />
 
             {/* Leitner Spaced Repetition (SRS) Daily Study Deck */}
             <LeitnerStudyBoxWidget
@@ -704,6 +740,20 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             studyStreakDays={studentData.streakDays}
             onLaunchSrsReview={() => setActiveTab('courses')}
           />
+        )}
+
+        {/* KANJI STROKE VISUALIZER TAB */}
+        {activeTab === 'kanji_visualizer' && (
+          <div className="space-y-6">
+            <KanjiStrokeVisualizer />
+          </div>
+        )}
+
+        {/* PRONUNCIATION COACH TAB */}
+        {activeTab === 'pronunciation_coach' && (
+          <div className="space-y-6">
+            <PronunciationCoach />
+          </div>
         )}
 
         {/* NIHOMI STANDARD TAB */}
@@ -1195,6 +1245,9 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           onClose={() => setIsVoiceActive(false)}
         />
       )}
+
+      {/* Floating Independent Focused Study Mini-Timer */}
+      <FloatingMiniTimer />
     </div>
   );
 };

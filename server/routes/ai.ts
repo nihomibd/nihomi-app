@@ -1,7 +1,13 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
-import { processAICoachRequest, processVisionSenseiRequest, processSentenceDnaRequest, processExampleSentenceRequest } from '../gemini.js';
+import {
+  processAICoachRequest,
+  processVisionSenseiRequest,
+  processSentenceDnaRequest,
+  processExampleSentenceRequest,
+  processExplainMistakeRequest
+} from '../gemini.js';
 import { getUserActivePlanId, PLAN_LIMITS } from '../services/entitlements.js';
 import crypto from 'crypto';
 
@@ -216,6 +222,31 @@ aiRouter.post('/example-sentence', async (req, res) => {
   } catch (err: any) {
     console.error('Example sentence generator error:', err);
     return res.status(500).json({ error: 'Failed to generate example sentence.' });
+  }
+});
+
+// 8. AI-Powered Quiz Mistake & Grammar Rule Explainer
+aiRouter.post('/explain-mistake', async (req, res) => {
+  try {
+    const { question, questionJa, selectedOption, correctOption, allOptions, userLevel, conceptCode } = req.body;
+    if (!question || !selectedOption || !correctOption) {
+      return res.status(400).json({ error: 'question, selectedOption, and correctOption are required.' });
+    }
+
+    const explanation = await processExplainMistakeRequest({
+      question: String(question),
+      questionJa: questionJa ? String(questionJa) : undefined,
+      selectedOption: String(selectedOption),
+      correctOption: String(correctOption),
+      allOptions: Array.isArray(allOptions) ? allOptions.map(String) : undefined,
+      userLevel: userLevel ? String(userLevel) : 'N5',
+      conceptCode: conceptCode ? String(conceptCode) : undefined
+    });
+
+    return res.json({ success: true, explanation });
+  } catch (err: any) {
+    console.error('Explain mistake error:', err);
+    return res.status(500).json({ error: 'Failed to explain mistake.' });
   }
 });
 

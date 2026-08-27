@@ -21,10 +21,16 @@ import {
   Clock,
   Flame,
   Brain,
-  AlertCircle
+  AlertCircle,
+  Folder,
+  FolderPlus,
+  FolderCheck,
+  Tag,
+  Edit2
 } from 'lucide-react';
 import { speakJapanese } from '../lib/tts.js';
 import { formatApiUrl } from '../lib/api.js';
+import { VocabFolderService, VocabFolder } from '../lib/vocabFolderService';
 import {
   getSrsState,
   saveSrsItemReview,
@@ -202,6 +208,82 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
   const [searchTerm, setSearchTerm] = useState('');
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
+  // Custom Vocabulary Folders State
+  const [folders, setFolders] = useState<VocabFolder[]>(() => VocabFolderService.getFolders());
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const [isFolderModalOpen, setIsFolderModalOpen] = useState<boolean>(false);
+  const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
+  const [folderName, setFolderName] = useState('');
+  const [folderEmoji, setFolderEmoji] = useState('📁');
+  const [folderColor, setFolderColor] = useState('from-red-600 to-rose-600');
+  const [folderDesc, setFolderDesc] = useState('');
+  const [isAssignFolderModalOpen, setIsAssignFolderModalOpen] = useState(false);
+  const [cardToAssign, setCardToAssign] = useState<FlashcardItem | null>(null);
+
+  const refreshFolders = () => {
+    setFolders(VocabFolderService.getFolders());
+  };
+
+  const handleOpenCreateFolder = () => {
+    setEditingFolderId(null);
+    setFolderName('');
+    setFolderEmoji('📁');
+    setFolderColor('from-red-600 to-rose-600');
+    setFolderDesc('');
+    setIsFolderModalOpen(true);
+  };
+
+  const handleOpenEditFolder = (f: VocabFolder, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingFolderId(f.id);
+    setFolderName(f.name);
+    setFolderEmoji(f.emoji);
+    setFolderColor(f.color);
+    setFolderDesc(f.description);
+    setIsFolderModalOpen(true);
+  };
+
+  const handleSaveFolder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!folderName.trim()) return;
+
+    if (editingFolderId) {
+      VocabFolderService.updateFolder(editingFolderId, {
+        name: folderName.trim(),
+        emoji: folderEmoji,
+        color: folderColor,
+        description: folderDesc.trim()
+      });
+    } else {
+      const created = VocabFolderService.createFolder({
+        name: folderName.trim(),
+        emoji: folderEmoji,
+        color: folderColor,
+        description: folderDesc.trim()
+      });
+      setSelectedFolderId(created.id);
+    }
+
+    refreshFolders();
+    setIsFolderModalOpen(false);
+  };
+
+  const handleDeleteFolder = (folderId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm('Are you sure you want to delete this custom folder?')) {
+      VocabFolderService.deleteFolder(folderId);
+      if (selectedFolderId === folderId) {
+        setSelectedFolderId(null);
+      }
+      refreshFolders();
+    }
+  };
+
+  const handleToggleCardInFolder = (folderId: string, cardId: string) => {
+    VocabFolderService.toggleCardInFolder(folderId, cardId);
+    refreshFolders();
+  };
+
   // Modals
   const [isCreateDeckModalOpen, setIsCreateDeckModalOpen] = useState(false);
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false);
@@ -281,9 +363,12 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
   };
 
   const activeDeck = decks.find((d) => d.id === activeDeckId) || decks[0];
+  const selectedFolder = folders.find((f) => f.id === selectedFolderId);
 
   const baseCards = showPinnedOnly
     ? decks.flatMap((d) => d.cards).filter((c) => pinnedCardIds.includes(c.id))
+    : selectedFolder
+    ? decks.flatMap((d) => d.cards).filter((c) => selectedFolder.cardIds.includes(c.id))
     : activeDeck?.cards || [];
 
   const cardsToStudy = showDueOnly
@@ -425,6 +510,100 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
               <Plus className="w-4 h-4" />
               <span>Create New Deck</span>
             </button>
+
+            <button
+              onClick={handleOpenCreateFolder}
+              className="px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <FolderPlus className="w-4 h-4 text-amber-400" />
+              <span>+ New Folder</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Custom Vocabulary Folders Management Strip */}
+        <div className="bg-white border border-stone-200 rounded-3xl p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Folder className="w-5 h-5 text-amber-500" />
+              <h2 className="text-sm font-bold text-stone-900">Custom Vocabulary Folders (ফোল্ডারভিত্তিক শব্দ ভাণ্ডার)</h2>
+              <span className="px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 text-xs font-bold">
+                {folders.length} Folders
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {selectedFolderId && (
+                <button
+                  onClick={() => setSelectedFolderId(null)}
+                  className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Clear Folder Filter</span>
+                </button>
+              )}
+              <button
+                onClick={handleOpenCreateFolder}
+                className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+              >
+                <FolderPlus className="w-3.5 h-3.5" />
+                <span>Create Folder</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {folders.map((folder) => {
+              const isSelected = selectedFolderId === folder.id;
+              return (
+                <div
+                  key={folder.id}
+                  onClick={() => {
+                    setSelectedFolderId(isSelected ? null : folder.id);
+                    setShowPinnedOnly(false);
+                    setIsStudyMode(false);
+                  }}
+                  className={`p-3.5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-2.5 ${
+                    isSelected
+                      ? 'bg-amber-50/70 border-2 border-amber-500 shadow-sm ring-2 ring-amber-100'
+                      : 'bg-stone-50/70 border-stone-200 hover:border-stone-300 hover:bg-stone-100/50'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center space-x-2 truncate">
+                      <span className="text-xl shrink-0">{folder.emoji}</span>
+                      <div className="truncate">
+                        <h4 className="text-xs font-bold text-stone-900 truncate">{folder.name}</h4>
+                        <span className="text-[10px] text-stone-500 font-medium">
+                          {folder.cardIds.length} card{folder.cardIds.length === 1 ? '' : 's'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={(e) => handleOpenEditFolder(folder, e)}
+                        className="p-1 text-stone-400 hover:text-stone-700 rounded-md hover:bg-stone-200"
+                        title="Edit Folder"
+                      >
+                        <Edit2 className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteFolder(folder.id, e)}
+                        className="p-1 text-stone-400 hover:text-red-600 rounded-md hover:bg-stone-200"
+                        title="Delete Folder"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {folder.description && (
+                    <p className="text-[11px] text-stone-600 line-clamp-1">{folder.description}</p>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -791,6 +970,16 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                           <span className="text-2xl font-bold font-serif text-stone-900">{card.kanji}</span>
                           <div className="flex items-center gap-1">
                             <button
+                              onClick={() => {
+                                setCardToAssign(card);
+                                setIsAssignFolderModalOpen(true);
+                              }}
+                              className="p-1.5 text-stone-500 hover:text-amber-600 rounded-lg hover:bg-stone-200"
+                              title="Assign to Folder"
+                            >
+                              <Folder className="w-3.5 h-3.5" />
+                            </button>
+                            <button
                               onClick={() => speakJapanese(card.kanji)}
                               className="p-1.5 text-stone-500 hover:text-red-600 rounded-lg hover:bg-stone-200"
                               title="Listen"
@@ -810,6 +999,23 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                             </button>
                           </div>
                         </div>
+
+                        {/* Associated Folder Badges */}
+                        {folders.some((f) => f.cardIds.includes(card.id)) && (
+                          <div className="flex flex-wrap gap-1 pt-0.5">
+                            {folders
+                              .filter((f) => f.cardIds.includes(card.id))
+                              .map((f) => (
+                                <span
+                                  key={f.id}
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-800"
+                                >
+                                  <span>{f.emoji}</span>
+                                  <span>{f.name}</span>
+                                </span>
+                              ))}
+                          </div>
+                        )}
 
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs text-red-600 font-sans font-medium">{card.reading}</span>
@@ -1022,6 +1228,190 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Create / Edit Custom Folder Modal */}
+        {isFolderModalOpen && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+                <div className="flex items-center space-x-2">
+                  <FolderPlus className="w-5 h-5 text-amber-500" />
+                  <h3 className="text-lg font-bold font-serif text-stone-900">
+                    {editingFolderId ? 'Edit Vocabulary Folder' : 'Create Custom Vocabulary Folder'}
+                  </h3>
+                </div>
+                <button onClick={() => setIsFolderModalOpen(false)} className="text-stone-400 hover:text-stone-600">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveFolder} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Folder Name (ফোল্ডারের নাম) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={folderName}
+                    onChange={(e) => setFolderName(e.target.value)}
+                    placeholder="e.g. Travel & Airport Verbs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 font-sans text-sm"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-stone-700 mb-1">Emoji Icon</label>
+                    <div className="flex items-center gap-1.5">
+                      {['📁', '✈️', '🍜', '💼', '🌸', '🏮', '🚆', '⚡'].map((em) => (
+                        <button
+                          key={em}
+                          type="button"
+                          onClick={() => setFolderEmoji(em)}
+                          className={`w-8 h-8 rounded-lg text-sm flex items-center justify-center border transition ${
+                            folderEmoji === em ? 'bg-amber-100 border-amber-500 ring-2 ring-amber-300' : 'bg-stone-50 border-stone-200'
+                          }`}
+                        >
+                          {em}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-stone-700 mb-1">Color Theme</label>
+                    <select
+                      value={folderColor}
+                      onChange={(e) => setFolderColor(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-stone-300 bg-white"
+                    >
+                      <option value="from-red-600 to-rose-600">Crimson Red</option>
+                      <option value="from-amber-600 to-orange-600">Warm Amber</option>
+                      <option value="from-emerald-600 to-teal-600">Emerald Green</option>
+                      <option value="from-blue-600 to-indigo-600">Royal Indigo</option>
+                      <option value="from-purple-600 to-pink-600">Sakura Purple</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Description / Notes (বিবরণ)</label>
+                  <textarea
+                    rows={2}
+                    value={folderDesc}
+                    onChange={(e) => setFolderDesc(e.target.value)}
+                    placeholder="Brief description or purpose of this vocabulary group..."
+                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 font-sans"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-3 border-t border-stone-100">
+                  <button
+                    type="button"
+                    onClick={() => setIsFolderModalOpen(false)}
+                    className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-xs"
+                  >
+                    {editingFolderId ? 'Save Changes' : 'Create Folder'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Assign Card to Folder Modal */}
+        {isAssignFolderModalOpen && cardToAssign && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+                <div>
+                  <h3 className="text-lg font-bold font-serif text-stone-900">Assign to Vocabulary Folders</h3>
+                  <p className="text-xs text-stone-500">
+                    Organize <span className="font-bold text-stone-900">"{cardToAssign.kanji}"</span> into your custom study folders
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsAssignFolderModalOpen(false);
+                    setCardToAssign(null);
+                  }}
+                  className="text-stone-400 hover:text-stone-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-60 overflow-y-auto py-1">
+                {folders.length === 0 ? (
+                  <p className="text-xs text-stone-400 text-center py-4">No custom folders created yet.</p>
+                ) : (
+                  folders.map((folder) => {
+                    const isContained = folder.cardIds.includes(cardToAssign.id);
+                    return (
+                      <div
+                        key={folder.id}
+                        onClick={() => handleToggleCardInFolder(folder.id, cardToAssign.id)}
+                        className={`p-3 rounded-2xl border transition cursor-pointer flex items-center justify-between ${
+                          isContained
+                            ? 'bg-amber-50 border-amber-400 text-amber-900'
+                            : 'bg-stone-50 border-stone-200 hover:bg-stone-100 text-stone-700'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2.5">
+                          <span className="text-lg">{folder.emoji}</span>
+                          <div>
+                            <p className="text-xs font-bold">{folder.name}</p>
+                            <p className="text-[10px] text-stone-500">{folder.cardIds.length} word(s)</p>
+                          </div>
+                        </div>
+
+                        <div
+                          className={`w-5 h-5 rounded-md flex items-center justify-center border transition ${
+                            isContained
+                              ? 'bg-amber-500 border-amber-600 text-white'
+                              : 'bg-white border-stone-300 text-transparent'
+                          }`}
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="flex justify-between items-center pt-3 border-t border-stone-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAssignFolderModalOpen(false);
+                    handleOpenCreateFolder();
+                  }}
+                  className="text-xs font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1"
+                >
+                  <FolderPlus className="w-3.5 h-3.5" />
+                  <span>+ Create New Folder</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAssignFolderModalOpen(false);
+                    setCardToAssign(null);
+                  }}
+                  className="px-5 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold shadow-xs"
+                >
+                  Done
+                </button>
+              </div>
             </div>
           </div>
         )}
