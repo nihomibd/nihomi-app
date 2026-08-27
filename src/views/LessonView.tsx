@@ -54,6 +54,8 @@ import { Download, DownloadCloud, Wind, RefreshCw } from 'lucide-react';
 import { ZenBreathingPrompt } from '../components/ZenBreathingPrompt.js';
 import { LessonFocusTimerTracker } from '../components/reading/LessonFocusTimerTracker.js';
 import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator.js';
+import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
+import { PronunciationCoach } from '../components/PronunciationCoach.js';
 
 interface LessonViewProps {
   lessonId: string;
@@ -69,6 +71,9 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
   const [isCompleting, setIsCompleting] = useState(false);
   const [completedSuccess, setCompletedSuccess] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isSessionReportOpen, setIsSessionReportOpen] = useState(false);
+  const [sessionStartTime] = useState<number>(() => Date.now());
+  const [resumedToast, setResumedToast] = useState<string | null>(null);
 
   // Focus Mode state
   const [isFocusMode, setIsFocusMode] = useState(false);
@@ -189,8 +194,37 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
     if (lessonId) {
       loadLesson();
       setIsDownloaded(isLessonDownloaded(lessonId));
+
+      // Restore saved progress if available
+      try {
+        const saved = localStorage.getItem(`nihomi_lesson_progress_${lessonId}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.activeTab) setActiveTab(parsed.activeTab);
+          if (typeof parsed.currentWordIndex === 'number') setCurrentWordIndex(parsed.currentWordIndex);
+          setResumedToast(`Resumed previous session at ${parsed.activeTab.toUpperCase()} tab.`);
+          setTimeout(() => setResumedToast(null), 3500);
+        }
+      } catch {}
     }
   }, [lessonId]);
+
+  // Auto-save student progress as they navigate tabs or vocabulary
+  useEffect(() => {
+    if (lessonId && lessonData?.lesson) {
+      try {
+        localStorage.setItem(
+          `nihomi_lesson_progress_${lessonId}`,
+          JSON.stringify({
+            lessonId,
+            activeTab,
+            currentWordIndex,
+            lastUpdated: Date.now()
+          })
+        );
+      } catch {}
+    }
+  }, [lessonId, activeTab, currentWordIndex, lessonData]);
 
   const handleToggleOfflineDownload = () => {
     if (!lessonData?.lesson) return;
@@ -281,8 +315,9 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
       if (lessonData) {
         setLessonData({ ...lessonData, isCompleted: true });
       }
-      // Open AI Lesson Feedback Modal
+      // Open AI Lesson Feedback Modal and Session Summary
       setIsFeedbackModalOpen(true);
+      setIsSessionReportOpen(true);
     } catch (err) {
       console.error('Failed to complete lesson:', err);
     } finally {
@@ -1136,6 +1171,31 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             onClose={() => setSelectedKanjiForStrokeAnim(null)}
           />
         )}
+
+        {/* Post-Study Session Report Overlay */}
+        <SessionReportOverlay
+          isOpen={isSessionReportOpen}
+          onClose={() => setIsSessionReportOpen(false)}
+          data={{
+            title: lesson.title,
+            category: moduleTitle || 'JLPT Curriculum',
+            durationSeconds: Math.max(60, Math.floor((Date.now() - sessionStartTime) / 1000)),
+            vocabCount: lesson.vocabulary?.length || 12,
+            kanjiCount: lesson.kanji?.length || 5,
+            grammarPoints: lesson.grammarNotes?.length || 3,
+            xpEarned: lesson.xpReward || 50,
+            jlptLevel: lesson.level || 'N5',
+            proficiencyGainPercent: 1.5
+          }}
+          onRetake={() => {
+            setIsSessionReportOpen(false);
+            setActiveTab('grammar');
+          }}
+          onNavigateToPortal={() => {
+            setIsSessionReportOpen(false);
+            onNavigate('portal');
+          }}
+        />
       </div>
     </div>
   );

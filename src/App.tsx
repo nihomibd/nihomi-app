@@ -22,6 +22,7 @@ import { OfflineNotificationBanner } from './components/common/OfflineNotificati
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
 import { QuickDictionaryOverlay } from './components/QuickDictionaryOverlay';
+import { CommandPaletteModal } from './components/CommandPaletteModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
@@ -41,6 +42,7 @@ export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('landing');
   const [viewParams, setViewParams] = useState<Record<string, any>>({});
   const [isDictionaryOpen, setIsDictionaryOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isSoundscapeMenuOpen, setIsSoundscapeMenuOpen] = useState(false);
 
@@ -70,8 +72,15 @@ export const App: React.FC = () => {
         target.tagName === 'TEXTAREA' ||
         target.isContentEditable;
 
-      // Cmd+K or Ctrl+K -> Quick Dictionary
+      // Cmd+K or Ctrl+K -> Global Nihomi Command Palette
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+        return;
+      }
+
+      // Cmd+J or Ctrl+J -> Quick Dictionary Search
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'j') {
         e.preventDefault();
         setIsDictionaryOpen((prev) => !prev);
         return;
@@ -194,7 +203,14 @@ export const App: React.FC = () => {
       {/* Mobile Bottom Bar for PWA Touch Experience */}
       {!isFocusMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
 
-      {/* Quick Dictionary Search Overlay (Triggered from Header or ⌘K) */}
+      {/* Global Command Palette (Triggered from Header search bar or ⌘K) */}
+      <CommandPaletteModal
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigate={handleNavigate}
+      />
+
+      {/* Quick Dictionary Search Overlay (Triggered from Header or ⌘J) */}
       <QuickDictionaryOverlay
         isOpen={isDictionaryOpen}
         onClose={() => setIsDictionaryOpen(false)}

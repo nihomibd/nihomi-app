@@ -6,7 +6,8 @@ import {
   processVisionSenseiRequest,
   processSentenceDnaRequest,
   processExampleSentenceRequest,
-  processExplainMistakeRequest
+  processExplainMistakeRequest,
+  processPronunciationAssessmentRequest
 } from '../gemini.js';
 import { getUserActivePlanId, PLAN_LIMITS } from '../services/entitlements.js';
 import crypto from 'crypto';
@@ -249,4 +250,29 @@ aiRouter.post('/explain-mistake', async (req, res) => {
     return res.status(500).json({ error: 'Failed to explain mistake.' });
   }
 });
+
+// 9. AI-Powered Pronunciation Clarity & Pitch Assessment
+aiRouter.post('/pronunciation-assessment', async (req, res) => {
+  try {
+    const { targetPhrase, targetRomaji, spokenTranscript, audioBase64, audioMimeType, userLevel } = req.body;
+    if (!targetPhrase || typeof targetPhrase !== 'string') {
+      return res.status(400).json({ error: 'targetPhrase is required.' });
+    }
+
+    const assessment = await processPronunciationAssessmentRequest({
+      targetPhrase: targetPhrase.trim(),
+      targetRomaji: typeof targetRomaji === 'string' ? targetRomaji.trim() : undefined,
+      spokenTranscript: typeof spokenTranscript === 'string' ? spokenTranscript.trim() : undefined,
+      audioBase64: typeof audioBase64 === 'string' ? audioBase64 : undefined,
+      audioMimeType: typeof audioMimeType === 'string' ? audioMimeType : undefined,
+      userLevel: typeof userLevel === 'string' ? userLevel : 'N5'
+    });
+
+    return res.json({ success: true, assessment });
+  } catch (err: any) {
+    console.error('Pronunciation assessment error:', err);
+    return res.status(500).json({ error: 'Failed to evaluate pronunciation.' });
+  }
+});
+
 

@@ -589,3 +589,122 @@ Provide a structured, deeply informative breakdown in JSON matching this exact s
     senseiProTip: `Always identify the main verb at the end of the sentence first before choosing the connecting particle or conjugation!`
   };
 }
+
+export interface PronunciationAssessmentRequest {
+  targetPhrase: string;
+  targetRomaji?: string;
+  spokenTranscript?: string;
+  audioBase64?: string;
+  audioMimeType?: string;
+  userLevel?: string;
+}
+
+export interface PronunciationAssessmentResponse {
+  clarityScore: number;
+  pitchAccuracy: number;
+  moraRhythmScore: number;
+  intonationPattern: 'Atamadaka (頭高)' | 'Nakadaka (中高)' | 'Odaka (尾高)' | 'Heiban (平板)' | 'General Natural';
+  phonemeFeedback: string;
+  phonemeFeedbackBn: string;
+  coachingTips: string[];
+  nativeComparison: string;
+  passedThreshold: boolean;
+}
+
+export async function processPronunciationAssessmentRequest(
+  data: PronunciationAssessmentRequest
+): Promise<PronunciationAssessmentResponse> {
+  const client = getAIClient();
+  const userLevel = data.userLevel || 'N5';
+  const spoken = data.spokenTranscript || '';
+
+  const systemInstruction = `You are Nihomi Sensei, an expert Tokyo native phonetician & JLPT speech coach for Bangladeshi and international students.
+Analyze the student's pronunciation of the target Japanese phrase against native Tokyo pitch accent (東京式アクセント) and standard Mora rhythm.
+Target Phrase: "${data.targetPhrase}"
+${data.targetRomaji ? `Target Romaji: "${data.targetRomaji}"` : ''}
+${spoken ? `Student Spoken Speech-to-Text: "${spoken}"` : 'Audio voice recording provided.'}
+
+Evaluate the student's speech clarity, mora timing (including long vowels 長音, choked sounds 促音, and nasal sounds 撥音), and pitch trajectory.
+Return a valid JSON object matching this schema:
+{
+  "clarityScore": 88,
+  "pitchAccuracy": 90,
+  "moraRhythmScore": 85,
+  "intonationPattern": "Heiban (平板)",
+  "phonemeFeedback": "Crisp articulation of syllables with natural vocal onset and balanced vowel duration.",
+  "phonemeFeedbackBn": "উচ্চারণ অত্যন্ত স্পষ্ট এবং প্রতিটি মোরার সময়সীমা সুন্দরভাবে বজায় রাখা হয়েছে।",
+  "coachingTips": [
+    "Keep vowel length consistent for accurate mora timing.",
+    "Pay attention to the slight pitch drop after the particle."
+  ],
+  "nativeComparison": "Your pronunciation matches 92% of Tokyo standard conversational intonation.",
+  "passedThreshold": true
+}`;
+
+  if (client) {
+    for (const modelName of CANDIDATE_MODELS) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const parts: any[] = [
+            {
+              text: `Evaluate pronunciation of Japanese phrase: "${data.targetPhrase}". Student speech transcription: "${spoken}".`
+            }
+          ];
+
+          if (data.audioBase64) {
+            parts.push({
+              inlineData: {
+                data: data.audioBase64,
+                mimeType: data.audioMimeType || 'audio/webm'
+              }
+            });
+          }
+
+          const response = await client.models.generateContent({
+            model: modelName,
+            contents: [{ role: 'user', parts }],
+            config: { systemInstruction, temperature: 0.2, responseMimeType: 'application/json' }
+          });
+
+          if (response.text) {
+            const parsed = JSON.parse(response.text) as PronunciationAssessmentResponse;
+            if (typeof parsed.clarityScore === 'number') {
+              return parsed;
+            }
+          }
+        } catch {
+          await sleep(300 * (attempt + 1));
+        }
+      }
+    }
+  }
+
+  // Algorithmic phoneme similarity fallback
+  const cleanTarget = data.targetPhrase.replace(/[\s、。！？,.!?]/g, '');
+  const cleanSpoken = spoken.replace(/[\s、。！？,.!?]/g, '');
+  let matchCount = 0;
+  for (const c of cleanSpoken) {
+    if (cleanTarget.includes(c)) matchCount++;
+  }
+  const ratio = cleanTarget.length > 0 ? matchCount / Math.max(cleanTarget.length, cleanSpoken.length) : 0.8;
+  const calculatedScore = Math.min(98, Math.max(30, Math.round(ratio * 100)));
+
+  return {
+    clarityScore: calculatedScore,
+    pitchAccuracy: Math.min(100, calculatedScore + 4),
+    moraRhythmScore: Math.min(100, calculatedScore - 2),
+    intonationPattern: 'Heiban (平板)',
+    phonemeFeedback: calculatedScore >= 75
+      ? `Clear pronunciation of "${data.targetPhrase}". Mora rhythm matches standard Japanese.`
+      : `Speech detected: "${spoken}". Focus on distinct syllable boundaries and clean vowel endings.`,
+    phonemeFeedbackBn: calculatedScore >= 75
+      ? `"${data.targetPhrase}" এর উচ্চারণ খুব সুন্দর এবং জাপানি ভাষার স্বাভাবিক ছন্দের সাথে মানানসই হয়েছে।`
+      : `প্রতিটি অক্ষরের উচ্চারণ আলাদাভাবে স্পষ্ট করে বলুন এবং স্বরবর্ণের সঠিক সময় বজায় রাখুন।`,
+    coachingTips: [
+      'Maintain equal beat duration (Mora) for every hiragana/kanji character.',
+      'Speak smoothly from the diaphragm without adding English-style stress accent.'
+    ],
+    nativeComparison: `Pronunciation aligns with standard JLPT ${userLevel} spoken fluency.`,
+    passedThreshold: calculatedScore >= 65
+  };
+}

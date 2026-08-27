@@ -49,6 +49,8 @@ import { LearningProgressChart } from '../components/dashboard/LearningProgressC
 import { PronunciationCoach } from '../components/practice/PronunciationCoach';
 import { generateStudentSummaryPdf } from '../lib/pdfReportGenerator';
 import { ContentExportService } from '../core/content-engine/contentExportService';
+import { BadgeSystem } from '../components/BadgeSystem';
+import { RecentAiFeedbackTab } from '../components/RecentAiFeedbackTab';
 import { Course, AssessmentRecord, CertificateRecord } from '../types/nihomi';
 import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
 import { useFocusMode } from '../context/FocusModeContext';
@@ -61,6 +63,8 @@ interface StudentPortalViewProps {
     | 'nihomi_standard'
     | 'kanji_visualizer'
     | 'pronunciation_coach'
+    | 'badges'
+    | 'ai_feedback'
     | 'courses'
     | 'assessments'
     | 'idcard'
@@ -200,6 +204,8 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
     | 'nihomi_standard'
     | 'kanji_visualizer'
     | 'pronunciation_coach'
+    | 'badges'
+    | 'ai_feedback'
     | 'courses'
     | 'assessments'
     | 'idcard'
@@ -457,6 +463,8 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             {[
               { id: 'dashboard', label: 'Overview & Summary', icon: BarChart3 },
               { id: 'analytics', label: '📊 Learning Analytics & Charts', icon: TrendingUp },
+              { id: 'badges', label: '🏆 Nihomi Achievements & Badges', icon: Award },
+              { id: 'ai_feedback', label: '🤖 Recent AI Sensei Feedback', icon: Sparkles },
               { id: 'kanji_visualizer', label: '🖌️ Kanji Stroke Tracing', icon: Brush },
               { id: 'pronunciation_coach', label: '🎙️ Pronunciation Coach', icon: Headphones },
               { id: 'nihomi_standard', label: '🌟 Nihomi Standard™ (23-D)', icon: Award },
@@ -740,6 +748,20 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             studyStreakDays={studentData.streakDays}
             onLaunchSrsReview={() => setActiveTab('courses')}
           />
+        )}
+
+        {/* NIHOMI ACHIEVEMENTS & BADGES TAB */}
+        {activeTab === 'badges' && (
+          <div className="space-y-6">
+            <BadgeSystem />
+          </div>
+        )}
+
+        {/* RECENT AI SENSEI FEEDBACK TAB */}
+        {activeTab === 'ai_feedback' && (
+          <div className="space-y-6">
+            <RecentAiFeedbackTab />
+          </div>
         )}
 
         {/* KANJI STROKE VISUALIZER TAB */}

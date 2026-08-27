@@ -11,9 +11,13 @@ import {
   Flame,
   Keyboard,
   BookOpen,
-  HelpCircle
+  HelpCircle,
+  Sun,
+  Moon,
+  Coffee
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme, AppTheme } from '../../context/ThemeContext';
 import { DailyStreakBadge } from '../common/DailyStreakBadge';
 
 interface HeaderProps {
@@ -30,8 +34,10 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenShortcuts,
 }) => {
   const { user, openAuthModal, logout } = useAuth();
+  const { theme, setTheme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
 
   // Simulated / dynamic 7-day study streak (default 18 days if logged in or active)
   const streakDays = user ? 18 : 7;
@@ -131,6 +137,66 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Search className="w-4 h-4" />
             </button>
+
+            {/* Persistent Theme Selector (Light, Dark Neo-Tokyo, Sepia) */}
+            <div className="relative">
+              <button
+                id="btn-header-theme-toggle"
+                onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-stone-100/90 dark:bg-stone-900/90 sepia:bg-[#ede0b9] border border-stone-200 dark:border-stone-800 sepia:border-[#d9c595] text-stone-600 dark:text-stone-300 sepia:text-[#433422] text-xs font-semibold hover:border-stone-400 dark:hover:border-stone-600 transition cursor-pointer shadow-2xs"
+                title={`Current Theme: ${theme.toUpperCase()} (Click to change)`}
+              >
+                {theme === 'light' && <Sun className="w-3.5 h-3.5 text-amber-500" />}
+                {theme === 'dark' && <Moon className="w-3.5 h-3.5 text-indigo-400" />}
+                {theme === 'sepia' && <Coffee className="w-3.5 h-3.5 text-amber-700" />}
+                <span className="capitalize text-[11px] hidden xl:inline">{theme === 'dark' ? 'Neo-Tokyo' : theme}</span>
+                <ChevronDown className="w-3 h-3 text-stone-400" />
+              </button>
+
+              {isThemeMenuOpen && (
+                <div
+                  id="theme-dropdown-menu"
+                  className="absolute right-0 mt-2 w-44 bg-white dark:bg-stone-900 sepia:bg-[#f4e5c3] rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 sepia:border-[#d9c595] py-2 z-50 animate-in fade-in slide-in-from-top-2"
+                >
+                  <p className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                    Display Theme
+                  </p>
+                  {(
+                    [
+                      { id: 'light' as AppTheme, label: 'Light', desc: 'Classic Clean', icon: Sun, color: 'text-amber-500' },
+                      { id: 'dark' as AppTheme, label: 'Dark (Neo-Tokyo)', desc: 'Slate #0a0a12', icon: Moon, color: 'text-indigo-400' },
+                      { id: 'sepia' as AppTheme, label: 'Sepia', desc: 'Warm Paper', icon: Coffee, color: 'text-amber-700' }
+                    ]
+                  ).map((t) => {
+                    const IconComponent = t.icon;
+                    const isSelected = theme === t.id;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => {
+                          setTheme(t.id);
+                          setIsThemeMenuOpen(false);
+                        }}
+                        className={`w-full px-3.5 py-2 text-left text-xs flex items-center justify-between transition cursor-pointer ${
+                          isSelected
+                            ? 'bg-stone-100 dark:bg-stone-800 sepia:bg-[#ede0b9] font-bold text-stone-900 dark:text-white sepia:text-[#382a17]'
+                            : 'text-stone-600 dark:text-stone-400 sepia:text-[#5c472d] hover:bg-stone-50 dark:hover:bg-stone-800/60'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <IconComponent className={`w-4 h-4 ${t.color}`} />
+                          <div>
+                            <p className="text-xs font-semibold">{t.label}</p>
+                            <p className="text-[10px] text-stone-400">{t.desc}</p>
+                          </div>
+                        </div>
+                        {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
             {/* Keyboard Shortcuts Trigger */}
             <button
@@ -366,6 +432,46 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Founder Command Center</span>
             </button>
           )}
+
+          {/* Mobile Theme Selector */}
+          <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
+            <p className="text-[10px] font-bold uppercase text-stone-400 px-1 mb-1.5">Theme / থিম</p>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                onClick={() => setTheme('light')}
+                className={`py-2 px-3 rounded-xl border flex items-center justify-center gap-1.5 font-bold text-xs ${
+                  theme === 'light'
+                    ? 'bg-amber-100 border-amber-400 text-amber-900'
+                    : 'bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300'
+                }`}
+              >
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span>Light</span>
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                className={`py-2 px-3 rounded-xl border flex items-center justify-center gap-1.5 font-bold text-xs ${
+                  theme === 'dark'
+                    ? 'bg-indigo-950/60 border-indigo-500 text-indigo-200'
+                    : 'bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Neo-Tokyo</span>
+              </button>
+              <button
+                onClick={() => setTheme('sepia')}
+                className={`py-2 px-3 rounded-xl border flex items-center justify-center gap-1.5 font-bold text-xs ${
+                  theme === 'sepia'
+                    ? 'bg-[#ede0b9] border-[#d9c595] text-[#382a17]'
+                    : 'bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300'
+                }`}
+              >
+                <Coffee className="w-3.5 h-3.5 text-amber-700" />
+                <span>Sepia</span>
+              </button>
+            </div>
+          </div>
 
           <div className="pt-2 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between text-stone-500 px-2">
             <button
