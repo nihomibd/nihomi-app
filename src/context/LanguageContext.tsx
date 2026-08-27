@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { WhiteLabelService } from '../core/content-engine/whiteLabelService';
+import { ContentDesignSystem } from '../core/content-engine/contentDesignSystem';
 
 export type Language = 'bn' | 'en' | 'ja';
 
@@ -6,6 +8,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  dynamicDictionary: Record<string, string>;
+  setDictionaryOverride: (key: string, value: string) => void;
 }
 
 const translations: Record<string, Record<Language, string>> = {
@@ -247,6 +251,37 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('bn'); // Default to Bengali
+  const [dynamicOverrides, setDynamicOverrides] = useState<Record<string, string>>({});
+
+  // Initialize dynamic branding tokens from WhiteLabelService
+  const [brandingTokens, setBrandingTokens] = useState<Record<string, Record<Language, string>>>(() => {
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : 'nihomi.com';
+    const resolved = WhiteLabelService.resolveTenantFromHost(hostname);
+    const b = resolved.branding;
+
+    return {
+      brandName: {
+        bn: b.brandName,
+        en: b.brandName,
+        ja: b.brandName === 'NIHOMI™' ? 'ニホミ™' : b.brandName
+      },
+      brandNameJa: {
+        bn: b.brandNameJa,
+        en: b.brandNameJa,
+        ja: b.brandNameJa
+      },
+      watermarkText: {
+        bn: b.watermarkText,
+        en: b.watermarkText,
+        ja: b.watermarkText
+      },
+      certifiedSealText: {
+        bn: b.certifiedSealText,
+        en: b.certifiedSealText,
+        ja: b.certifiedSealText
+      }
+    };
+  });
 
   useEffect(() => {
     try {
@@ -256,6 +291,33 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     } catch (e) {
       console.warn('Language persistence error:', e);
+    }
+
+    if (typeof window !== 'undefined') {
+      const resolved = WhiteLabelService.resolveTenantFromHost(window.location.hostname);
+      const b = resolved.branding;
+      setBrandingTokens({
+        brandName: {
+          bn: b.brandName,
+          en: b.brandName,
+          ja: b.brandName === 'NIHOMI™' ? 'ニホミ™' : b.brandName
+        },
+        brandNameJa: {
+          bn: b.brandNameJa,
+          en: b.brandNameJa,
+          ja: b.brandNameJa
+        },
+        watermarkText: {
+          bn: b.watermarkText,
+          en: b.watermarkText,
+          ja: b.watermarkText
+        },
+        certifiedSealText: {
+          bn: b.certifiedSealText,
+          en: b.certifiedSealText,
+          ja: b.certifiedSealText
+        }
+      });
     }
   }, []);
 
@@ -268,12 +330,35 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  const setDictionaryOverride = (key: string, value: string) => {
+    setDynamicOverrides((prev) => ({ ...prev, [key]: value }));
+  };
+
   const t = (key: string): string => {
+    if (dynamicOverrides[key]) {
+      return dynamicOverrides[key];
+    }
+    if (brandingTokens[key]) {
+      return brandingTokens[key][language] || brandingTokens[key]['en'] || brandingTokens[key]['bn'];
+    }
     return translations[key]?.[language] || translations[key]?.['en'] || translations[key]?.['bn'] || key;
   };
 
+  // Compile active dictionary for external UI component inspections
+  const dynamicDictionary: Record<string, string> = {
+    ...Object.keys(translations).reduce((acc, k) => {
+      acc[k] = translations[k][language] || translations[k]['en'] || translations[k]['bn'];
+      return acc;
+    }, {} as Record<string, string>),
+    ...Object.keys(brandingTokens).reduce((acc, k) => {
+      acc[k] = brandingTokens[k][language] || brandingTokens[k]['en'] || brandingTokens[k]['bn'];
+      return acc;
+    }, {} as Record<string, string>),
+    ...dynamicOverrides
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, dynamicDictionary, setDictionaryOverride }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -282,10 +367,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (!context) {
+    const tokens = ContentDesignSystem.getDesignTokens();
     return {
       language: 'bn',
       setLanguage: () => {},
-      t: (key: string) => translations[key]?.['bn'] || translations[key]?.['en'] || key,
+      t: (key: string) => {
+        if (key === 'brandNameJa') return tokens.brandNameJa;
+        if (key === 'brandName') return tokens.brandName;
+        if (key === 'watermarkText') return tokens.watermarkText;
+        if (key === 'certifiedSealText') return tokens.certifiedSealText;
+        return translations[key]?.['bn'] || translations[key]?.['en'] || key;
+      },
+      dynamicDictionary: {},
+      setDictionaryOverride: () => {}
     };
   }
   return context;

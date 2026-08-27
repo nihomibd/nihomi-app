@@ -404,7 +404,16 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
                   Executive Fast Actions
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                  <button
+                    onClick={() => onNavigate('content-studio')}
+                    className="p-4 bg-gradient-to-br from-red-950/60 to-stone-900 hover:from-red-900/70 hover:to-stone-850 border border-red-800/60 rounded-2xl text-left space-y-1 transition-all cursor-pointer shadow-md"
+                  >
+                    <Sparkles className="w-5 h-5 text-red-400 animate-pulse" />
+                    <strong className="text-white block">Content Studio™ 1.0</strong>
+                    <span className="text-[11px] text-red-200/80">AI Pipeline & 14-Section Factory</span>
+                  </button>
+
                   <button
                     onClick={() => setActiveSection('publishing')}
                     className="p-4 bg-stone-900 hover:bg-stone-800 border border-stone-800 rounded-2xl text-left space-y-1 transition-all cursor-pointer"

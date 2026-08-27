@@ -17,6 +17,7 @@ import { SubscriptionManagementView } from './views/SubscriptionManagementView';
 import { PricingView } from './views/PricingView';
 import { PassportVerificationView } from './views/PassportVerificationView';
 import { FounderCommandCenterView } from './views/FounderCommandCenterView';
+import { ContentStudioView } from './views/ContentStudioView';
 import { InstitutionPortalView } from './views/InstitutionPortalView';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
@@ -195,6 +196,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'founder' || currentView === 'admin' || currentView === 'command-center') && (
           <FounderCommandCenterView onNavigate={handleNavigate} />
+        )}
+        {currentView === 'content-studio' && (
+          <ContentStudioView onNavigate={handleNavigate} />
         )}
       </main>
 

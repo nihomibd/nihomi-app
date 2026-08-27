@@ -16,6 +16,7 @@ import { japanTwinRouter } from './server/routes/japanTwin.js';
 import { ghostModeRouter } from './server/routes/ghostMode.js';
 import { systemHealthRouter } from './server/routes/systemHealth.js';
 import { contentEngineRouter } from './server/routes/contentEngine.js';
+import { contentStudioRouter } from './server/routes/contentStudio.js';
 import { db } from './server/db.js';
 
 dotenv.config();
@@ -68,6 +69,7 @@ async function startServer() {
   app.use('/api/system-health', systemHealthRouter);
   app.use('/api/content', contentEngineRouter);
   app.use('/api/content-engine', contentEngineRouter);
+  app.use('/api/content-studio', contentStudioRouter);
 
 
   // Vite middleware for development vs Static files for production

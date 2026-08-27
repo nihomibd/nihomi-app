@@ -5,6 +5,7 @@ export type ContentDomain =
   | 'VOCABULARY'
   | 'KANJI'
   | 'CONVERSATION'
+  | 'EXPRESSION'
   | 'READING'
   | 'LISTENING'
   | 'BAITO'
