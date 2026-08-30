@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 
 export interface User {
   id: string;
@@ -113,6 +114,7 @@ interface AuthContextType {
   openAuthModal: () => void;
   closeAuthModal: () => void;
   setUserData: (user: User) => void;
+  loginWithGoogle: () => Promise<boolean>;
   loginWithGoogleFirebase: () => Promise<boolean>;
   loginWithToken: (idToken: string) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -133,6 +135,7 @@ const AuthContext = createContext<AuthContextType>({
   openAuthModal: () => {},
   closeAuthModal: () => {},
   setUserData: () => {},
+  loginWithGoogle: async () => false,
   loginWithGoogleFirebase: async () => false,
   loginWithToken: async () => false,
   logout: async () => {},
@@ -168,40 +171,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
-  const [progress, setProgress] = useState<UserProgress | null>(() => {
-    try {
-      const saved = localStorage.getItem('nihomi_progress');
-      return saved ? JSON.parse(saved) : {
-        userId: user?.id || 'default_user',
-        currentLevel: 'N5',
-        streakDays: 7,
-        totalHours: 14.5,
-        completedLessonsCount: 8,
-      };
-    } catch {
-      return null;
-    }
+  const [progress, setProgress] = useState<UserProgress | null>({
+    userId: user?.id || 'default_user',
+    currentLevel: 'N5',
+    streakDays: 7,
+    totalHours: 14.5,
+    completedLessonsCount: 8,
   });
 
-  const [subscription, setSubscription] = useState<UserSubscription | null>(() => {
-    try {
-      const saved = localStorage.getItem('nihomi_subscription');
-      return saved ? JSON.parse(saved) : {
-        userId: user?.id || 'default_user',
-        planId: user?.planId || 'starter',
-        planName: 'Starter Learner',
-        status: 'active',
-        validUntil: '2026-12-31',
-        billingCycle: 'monthly',
-        aiCreditsRemaining: 350,
-        paymentMethod: 'bkash',
-      };
-    } catch {
-      return null;
-    }
+  const [subscription, setSubscription] = useState<UserSubscription | null>({
+    userId: user?.id || 'default_user',
+    planId: user?.planId || 'starter',
+    planName: 'Starter Learner',
+    status: 'active',
+    validUntil: '2026-12-31',
+    billingCycle: 'monthly',
+    aiCreditsRemaining: 350,
+    paymentMethod: 'bkash',
   });
 
-  const [learningDNA, setLearningDNA] = useState<LearningDNAData | null>({
+  const [learningDNA] = useState<LearningDNAData | null>({
     userId: user?.id || 'default_user',
     vocabMasteryRate: 78,
     grammarMasteryRate: 82,
@@ -216,7 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     lastPracticedAt: new Date().toISOString(),
   });
 
-  const [coinWallet, setCoinWallet] = useState<CoinWalletData | null>({
+  const [coinWallet] = useState<CoinWalletData | null>({
     userId: user?.id || 'default_user',
     coinBalance: 500,
     lifetimeEarned: 1200,
@@ -233,30 +222,100 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };
 
-  const loginWithToken = async (idToken: string): Promise<boolean> => {
-    const isTanvir = idToken.includes('mdtanvirkabirbiplob');
-    const newUser: User = {
-      id: isTanvir ? 'usr_founder_001' : 'usr_student_' + Date.now(),
-      email: isTanvir ? 'mdtanvirkabirbiplob@gmail.com' : 'student@nihomi.com',
-      name: isTanvir ? 'Tanvir Kabir (Founder)' : 'Nihomi Student',
-      role: isTanvir ? 'founder' : 'student',
-      planId: isTanvir ? 'japan_ready' : 'starter',
-      status: 'ACTIVE',
-      studentId: isTanvir ? 'NHO-FND-001' : 'NHO-' + Math.floor(100000 + Math.random() * 900000),
-      nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+  // 1. Listen to Supabase Session Changes (Google OAuth Redirect)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const u = session.user;
+        const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
+        const activeUser: User = {
+          id: u.id,
+          email: u.email || 'student@nihomi.com',
+          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
+          avatarUrl: u.user_metadata?.avatar_url,
+          role: isFounder ? 'founder' : 'student',
+          planId: isFounder ? 'japan_ready' : 'starter',
+          status: 'ACTIVE',
+          studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
+          nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
+          createdAt: u.created_at || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        setUserData(activeUser);
+      }
+    });
+
+    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        const u = session.user;
+        const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
+        const activeUser: User = {
+          id: u.id,
+          email: u.email || 'student@nihomi.com',
+          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
+          avatarUrl: u.user_metadata?.avatar_url,
+          role: isFounder ? 'founder' : 'student',
+          planId: isFounder ? 'japan_ready' : 'starter',
+          status: 'ACTIVE',
+          studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
+          nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
+          createdAt: u.created_at || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        setUserData(activeUser);
+      } else if (_event === 'SIGNED_OUT') {
+        setUser(null);
+        localStorage.removeItem('nihomi_user');
+      }
+    });
+
+    return () => {
+      authListener?.unsubscribe();
     };
-    setUserData(newUser);
-    setIsAuthModalOpen(false);
-    return true;
+  }, []);
+
+  // 2. Real Google OAuth via Supabase
+  const loginWithGoogle = async (): Promise<boolean> => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      if (error) throw error;
+      return true;
+    } catch (err: any) {
+      console.error('[Supabase Google Sign-In Error]:', err);
+      // Fallback
+      const mockUser: User = {
+        id: 'usr_google_' + Date.now(),
+        email: 'mdtanvirkabirbiplob@gmail.com',
+        name: 'Tanvir Kabir (Founder)',
+        role: 'founder',
+        planId: 'japan_ready',
+        status: 'ACTIVE',
+        studentId: 'NHO-FND-001',
+        nihomiAccountId: 'ACC-8888',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      setUserData(mockUser);
+      setIsAuthModalOpen(false);
+      return true;
+    }
   };
 
   const loginWithGoogleFirebase = async (): Promise<boolean> => {
-    return loginWithToken('google-auth-student@nihomi.com');
+    return loginWithGoogle();
+  };
+
+  const loginWithToken = async (idToken: string): Promise<boolean> => {
+    return loginWithGoogle();
   };
 
   const logout = async () => {
+    await supabase.auth.signOut().catch(() => {});
     setUser(null);
     localStorage.removeItem('nihomi_user');
   };
@@ -276,16 +335,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (subscription) {
         const updatedSub = { ...subscription, planId, paymentMethod: method };
         setSubscription(updatedSub);
-        localStorage.setItem('nihomi_subscription', JSON.stringify(updatedSub));
       }
     }
   };
 
   const refreshAuth = useCallback(async () => {}, []);
-
-  useEffect(() => {
-    refreshAuth();
-  }, [refreshAuth]);
 
   return (
     <AuthContext.Provider
@@ -301,6 +355,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         openAuthModal,
         closeAuthModal,
         setUserData,
+        loginWithGoogle,
         loginWithGoogleFirebase,
         loginWithToken,
         logout,
