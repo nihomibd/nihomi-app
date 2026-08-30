@@ -113,7 +113,7 @@ export const DocumentsView: React.FC = () => {
         </div>
 
         {/* Printable Document Paper */}
-        <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[1000px] relative text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8">
+        <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[900px] relative text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8">
           
           {/* Official Document Header */}
           <div className="flex items-start justify-between border-b-2 border-stone-900 pb-4 mb-8">
@@ -185,84 +185,6 @@ export const DocumentsView: React.FC = () => {
               </div>
 
               {/* Signatures */}
-              <div className="pt-12 grid grid-cols-2 gap-8 text-xs text-center border-t border-stone-200 mt-12">
+              <div className="pt-10 grid grid-cols-2 gap-8 text-xs text-center border-t border-stone-200 mt-10">
                 <div className="space-y-1">
-                  <div className="font-serif italic font-bold text-stone-900 text-sm">Yuki Tanaka (Sensei)</div>
-                  <div className="w-36 h-0.5 bg-stone-400 mx-auto"></div>
-                  <div className="text-[10px] text-stone-500">
-                    Lead Academic Director<br />Nihomi Japanese Council
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="font-serif italic font-bold text-stone-900 text-sm">MD Tanvir Kabir Biplob</div>
-                  <div className="w-36 h-0.5 bg-stone-400 mx-auto"></div>
-                  <div className="text-[10px] text-stone-500">
-                    Founder & CEO<br />Nihomi Japanese Learning Platform
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TEMPLATE 2: LETTERHEAD */}
-          {docType === 'letterhead' && (
-            <div className="space-y-6 text-xs text-stone-800 leading-relaxed pt-4">
-              <div className="flex justify-between text-[11px] text-stone-600 font-mono">
-                <div>
-                  <strong>To:</strong> Academic Institutions & Verification Bodies<br />
-                  Japanese Language Proficiency Board
-                </div>
-                <div className="text-right">
-                  <strong>Date:</strong> {new Date().toISOString().split('T')[0]}<br />
-                  <strong>Ref:</strong> NHM/VERIF/2026-99
-                </div>
-              </div>
-
-              <div className="pt-2 space-y-3">
-                <strong className="block text-sm font-bold text-stone-900">
-                  SUBJECT: Verification of 150-Hour Japanese Study & Active Academic Standing
-                </strong>
-
-                <p>
-                  This official academic letter confirms that <strong>{studentName}</strong> (Student ID: <span className="font-mono font-bold">{studentId}</span>) is an active, verified learner on the Nihomi Japanese Learning Platform.
-                </p>
-
-                <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-[11px] space-y-1 font-mono">
-                  <div><strong>Student Name:</strong> {studentName}</div>
-                  <div><strong>Student ID:</strong> {studentId}</div>
-                  <div><strong>Curriculum:</strong> Japanese JLPT {currentLevel} Foundational Program</div>
-                  <div><strong>Certified Hours:</strong> 150 Hours of Adaptive Multimodal Instruction</div>
-                </div>
-
-                <p>
-                  The candidate maintains disciplined continuous practice, high memory retention in Minna no Nihongo grammar patterns, and active speaking progress verified by the Nihomi Learning DNA system.
-                </p>
-              </div>
-
-              <div className="pt-16">
-                <div className="font-bold text-stone-900">Academic Registrar</div>
-                <div className="text-[10px] text-stone-500">Nihomi Academic Council • nihomi.com</div>
-              </div>
-            </div>
-          )}
-
-          {/* TEMPLATE 3: INVOICE */}
-          {docType === 'invoice' && (
-            <div className="space-y-6 text-xs text-stone-800 pt-2">
-              <div className="flex justify-between items-start border-b border-stone-200 pb-4">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 font-mono">
-                    OFFICIAL SUBSCRIPTION INVOICE
-                  </span>
-                  <h3 className="text-base font-bold text-stone-900 uppercase">NIHOMI LEARNING TUITION RECEIPT</h3>
-                  <p className="text-[11px] text-stone-500 font-mono">Invoice No: NHM-INV-2026-0812</p>
-                </div>
-                <div className="text-right text-[11px]">
-                  <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-200">
-                    PAID IN FULL
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-
+                  <div className="font
