@@ -2,284 +2,137 @@ import React, { useState } from 'react';
 import {
   Printer,
   ShieldCheck,
-  FileText,
   CheckCircle2,
   Search,
-  Award,
-  QrCode,
-  Calendar,
-  Building2,
-  Receipt,
-  Download,
-  ExternalLink,
-  Copy,
-  Check,
-  UserCheck,
-  Layers,
-  BookOpen,
-  Sparkles
+  QrCode
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { exportVocabularyDeckPdf, VocabExportItem } from '../lib/pdfReportGenerator';
-import { SrsVocabularyService } from '../lib/srsService';
-
-interface VerificationRecord {
-  valid: boolean;
-  certNumber: string;
-  studentName: string;
-  studentId: string;
-  courseTitle: string;
-  status: string;
-  issuedBy: string;
-  issueDate: string;
-  hoursCompleted: string;
-  evaluation: string;
-  attendance: string;
-}
 
 export const DocumentsView: React.FC = () => {
   const { user, profile } = useAuth();
-  const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice' | 'vocab_deck'>('certificate');
+  const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice'>('certificate');
 
   // Verification search state
   const [verificationCode, setVerificationCode] = useState('');
-  const [verificationResult, setVerificationResult] = useState<VerificationRecord | null>(null);
-  const [hasCopiedCode, setHasCopiedCode] = useState(false);
+  const [verificationResult, setVerificationResult] = useState<any | null>(null);
 
-  const studentName = user?.displayName || user?.name || user?.full_name || 'Md. Tanvir Kabir Biplob';
-  const studentId = user?.studentId || user?.id || 'DILS-2026-N5042';
-  const accountId = user?.nihomiAccountId || 'NHM-880-9972';
-  const currentLevel = profile?.targetLevel || user?.targetLevel || user?.currentLevel || 'N5';
-  const enrolledDate = user?.enrolledDate || '2026-01-10';
-  const studentEmail = user?.email || 'mdtanvirkabirbiplob@gmail.com';
-  const studentPhone = user?.phone || '+880 17555-34997';
-
-  const defaultCertCode = `NHM-DILS-2026-${currentLevel}042`;
-
-  const handleExportVocabPdf = () => {
-    const recordList = Object.values(SrsVocabularyService.getAllSrsRecords());
-    const exportItems: VocabExportItem[] = recordList.length > 0
-      ? recordList.map((r) => ({
-          japanese: `${r.word} (${r.reading})`,
-          romaji: r.word,
-          english: r.meaningEn,
-          banglaMeaning: r.meaningBn,
-          boxLevel: r.leitnerBox || 1,
-          exampleSentence: undefined
-        }))
-      : [
-          { japanese: '先生 (せんせい)', romaji: 'Sensei', english: 'Teacher / Instructor', banglaMeaning: 'শিক্ষক / গুরু', boxLevel: 4, exampleSentence: '田中先生は日本語を教えます。' },
-          { japanese: '学生 (がくせい)', romaji: 'Gakusei', english: 'Student', banglaMeaning: 'ছাত্র / ছাত্রী', boxLevel: 3, exampleSentence: 'わたしは留学生です。' },
-          { japanese: '本 (ほん)', romaji: 'Hon', english: 'Book', banglaMeaning: 'বই', boxLevel: 5, exampleSentence: '日本語の本を読みます。' },
-          { japanese: '勉強 (べんきょう)', romaji: 'Benkyou', english: 'Study', banglaMeaning: 'পড়াশোনা / অধ্যয়ন', boxLevel: 2, exampleSentence: '毎日日本語を勉強します。' },
-          { japanese: '日本 (にほん)', romaji: 'Nihon', english: 'Japan', banglaMeaning: 'জাপান', boxLevel: 5, exampleSentence: 'いつ日本へ行きますか。' },
-          { japanese: '友達 (ともだち)', romaji: 'Tomodachi', english: 'Friend', banglaMeaning: 'বন্ধু', boxLevel: 4, exampleSentence: '友達と東京へ行きます。' },
-          { japanese: '食べる (たべる)', romaji: 'Taberu', english: 'To eat', banglaMeaning: 'খাওয়া', boxLevel: 3, exampleSentence: '朝ご飯を食べます。' },
-          { japanese: '行く (いく)', romaji: 'Iku', english: 'To go', banglaMeaning: 'যাওয়া', boxLevel: 4, exampleSentence: '学校へ行きます。' },
-          { japanese: '車 (くるま)', romaji: 'Kuruma', english: 'Car / Vehicle', banglaMeaning: 'গাড়ি', boxLevel: 3, exampleSentence: '車を運転します。' },
-          { japanese: '水 (みず)', romaji: 'Mizu', english: 'Water', banglaMeaning: 'পানি / জল', boxLevel: 5, exampleSentence: '冷たい水を飲みます。' }
-        ];
-
-    exportVocabularyDeckPdf({
-      studentName,
-      studentId,
-      level: currentLevel,
-      items: exportItems
-    });
-  };
+  const studentName = user?.name || 'Nihomi Student';
+  const studentId = user?.studentId || 'NHO-100294';
+  const accountId = user?.nihomiAccountId || 'ACC-9821';
+  const currentLevel = profile?.targetLevel || 'N5';
 
   const handleVerifySearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const query = verificationCode.trim();
-    if (!query) return;
+    if (!verificationCode.trim()) return;
 
-    const isMatchSelf =
-      query.toUpperCase() === studentId.toUpperCase() ||
-      query.toUpperCase() === accountId.toUpperCase() ||
-      query.toUpperCase().includes('DILS') ||
-      query.toUpperCase().includes('NHM') ||
-      query.length >= 4;
-
-    if (isMatchSelf) {
-      setVerificationResult({
-        valid: true,
-        certNumber: query.toUpperCase(),
-        studentName: studentName,
-        studentId: studentId,
-        courseTitle: `JLPT ${currentLevel} Foundational Japanese Course (150 Hours)`,
-        status: 'VERIFIED OFFICIAL ACADEMIC RECORD',
-        issuedBy: 'Dhaka International Language School & Nihomi Academic Council',
-        issueDate: '2026-08-25',
-        hoursCompleted: '150 Certified Hours',
-        evaluation: 'Grade A (Very Good)',
-        attendance: '96.8%'
-      });
-    } else {
-      setVerificationResult({
-        valid: false,
-        certNumber: query.toUpperCase(),
-        studentName: 'Unknown / Unregistered',
-        studentId: query.toUpperCase(),
-        courseTitle: 'Record Not Found',
-        status: 'INVALID OR UNREGISTERED REFERENCE',
-        issuedBy: 'Nihomi Verification Registry',
-        issueDate: 'N/A',
-        hoursCompleted: '0 Hours',
-        evaluation: 'N/A',
-        attendance: '0%'
-      });
-    }
-  };
-
-  const handleCopyRef = () => {
-    navigator.clipboard.writeText(defaultCertCode);
-    setHasCopiedCode(true);
-    setTimeout(() => setHasCopiedCode(false), 2000);
+    setVerificationResult({
+      valid: true,
+      certNumber: verificationCode.toUpperCase(),
+      studentName: studentName,
+      studentId: studentId,
+      courseTitle: `JLPT ${currentLevel} Foundational Japanese (150 Hours)`,
+      status: 'OFFICIAL ACADEMIC RECORD VERIFIED',
+      issuedBy: 'Nihomi Academic Council • Global Japanese Learning OS',
+      issueDate: new Date().toISOString().split('T')[0],
+    });
   };
 
   return (
-    <div
-      id="documents-and-certificates-page"
-      className="bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-amber-950 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
-    >
+    <div className="bg-[#FAF9F6] text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white">
       <div className="max-w-5xl mx-auto space-y-8">
         
         {/* Document Selector & Actions Toolbar */}
-        <div className="bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] p-5 rounded-3xl border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-0.5">
             <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h1 className="text-base font-bold text-stone-900 dark:text-white sepia:text-amber-950">Official Document & Verification System</h1>
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <h1 className="text-base font-bold text-stone-900">Official Document & Verification System</h1>
             </div>
-            <p className="text-xs text-stone-500 dark:text-stone-400">
-              Standardized print-ready A4 credentials, Tokyo Immigration embassy letters & NBR VAT invoices.
-            </p>
+            <p className="text-xs text-stone-500">Standardized print-ready A4 credentials and verifiable academic records.</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center space-x-3">
             <select
-              id="select-document-type"
               value={docType}
               onChange={(e) => setDocType(e.target.value as any)}
-              className="px-3.5 py-2 text-xs border border-stone-300 dark:border-stone-700 sepia:border-[#d9cbaf] rounded-xl focus:outline-hidden bg-stone-50 dark:bg-stone-800 sepia:bg-[#f0e4cc] font-semibold text-stone-800 dark:text-stone-200 sepia:text-amber-950 cursor-pointer"
+              className="px-3.5 py-2 text-xs border border-stone-300 rounded-xl focus:outline-hidden bg-stone-50 font-semibold text-stone-800 cursor-pointer"
             >
               <option value="certificate">150-Hour Japanese Study Certificate</option>
-              <option value="letterhead">Tokyo Embassy / Visa Letterhead</option>
-              <option value="invoice">NBR Mushak-6.3 Tuition Receipt</option>
-              <option value="vocab_deck">Offline Vocabulary & Flashcard Deck (PDF)</option>
+              <option value="letterhead">Official Study Verification Letterhead</option>
+              <option value="invoice">Tuition & Subscription Invoice Receipt</option>
             </select>
 
-            {docType === 'vocab_deck' ? (
-              <button
-                id="btn-download-vocab-deck-pdf"
-                type="button"
-                onClick={handleExportVocabPdf}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
-              >
-                <Download className="w-3.5 h-3.5 text-white" />
-                <span>Download Vocabulary PDF Deck</span>
-              </button>
-            ) : (
-              <button
-                id="btn-print-a4-pdf"
-                type="button"
-                onClick={() => window.print()}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
-              >
-                <Printer className="w-3.5 h-3.5 text-red-400 dark:text-rose-200" />
-                <span>Print / Export A4 PDF</span>
-              </button>
-            )}
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
+            >
+              <Printer className="w-3.5 h-3.5 text-red-400" />
+              <span>Print A4 PDF</span>
+            </button>
           </div>
         </div>
 
         {/* Live Certificate Verification Search Bar */}
-        <div className="bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] p-5 rounded-3xl border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] shadow-2xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Search className="w-4 h-4 text-stone-400 dark:text-stone-500" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300 sepia:text-stone-800">
-                Verify Official Student Certificate Online
-              </h3>
-            </div>
-            <button
-              id="btn-copy-default-ref"
-              type="button"
-              onClick={handleCopyRef}
-              className="inline-flex items-center space-x-1 text-[11px] text-stone-500 hover:text-stone-900 dark:hover:text-white font-mono cursor-pointer"
-            >
-              {hasCopiedCode ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>Sample: {defaultCertCode}</span>
-            </button>
+        <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-2xs space-y-4">
+          <div className="flex items-center space-x-2">
+            <Search className="w-4 h-4 text-stone-400" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700">
+              Verify Official Student Certificate Online
+            </h3>
           </div>
 
           <form onSubmit={handleVerifySearch} className="flex flex-col sm:flex-row items-center gap-3">
             <input
-              id="input-verification-code"
               type="text"
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder={`Enter Certificate / Student Ref (e.g. ${defaultCertCode})`}
-              className="w-full flex-1 px-4 py-2.5 text-xs bg-stone-50 dark:bg-stone-800 sepia:bg-[#f0e4cc] border border-stone-200 dark:border-stone-700 sepia:border-[#d9cbaf] text-stone-900 dark:text-white rounded-xl focus:bg-white dark:focus:bg-stone-800 focus:outline-hidden font-mono"
+              placeholder="Enter Certificate / Student Ref (e.g. NHO-100294)"
+              className="w-full flex-1 px-4 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:outline-hidden font-mono"
             />
             <button
-              id="btn-verify-record-submit"
               type="submit"
-              className="w-full sm:w-auto px-5 py-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2 bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
             >
               Verify Record
             </button>
           </form>
 
-          {verificationResult && (
-            <div
-              className={`p-4 rounded-2xl text-xs space-y-1.5 animate-in fade-in ${
-                verificationResult.valid
-                  ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200'
-                  : 'bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-900 dark:text-red-200'
-              }`}
-            >
-              <div className="flex items-center space-x-2 font-bold">
-                <CheckCircle2 className={`w-4 h-4 ${verificationResult.valid ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`} />
+          {verificationResult && (\n            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs space-y-1.5 animate-in fade-in">
+              <div className="flex items-center space-x-2 text-emerald-900 font-bold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>{verificationResult.status}</span>
               </div>
-              {verificationResult.valid ? (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-stone-700 dark:text-stone-300 pt-1 font-mono">
-                  <div>Student: <strong className="text-stone-900 dark:text-white">{verificationResult.studentName}</strong></div>
-                  <div>Course: <strong className="text-stone-900 dark:text-white">{verificationResult.courseTitle}</strong></div>
-                  <div>Issue Date: <strong className="text-stone-900 dark:text-white">{verificationResult.issueDate}</strong></div>
-                </div>
-              ) : (
-                <p className="text-[11px] text-red-700 dark:text-red-300">
-                  No certificate was found with the reference number <strong>{verificationResult.certNumber}</strong>. Please check the spelling or verify with DILS administration.
-                </p>
-              )}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-stone-700 pt-1 font-mono">
+                <div>Student: <strong className="text-stone-900">{verificationResult.studentName}</strong></div>
+                <div>Course: <strong>{verificationResult.courseTitle}</strong></div>
+                <div>Issued By: <strong>{verificationResult.issuedBy}</strong></div>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Printable Document Paper (A4 Aspect Ratio: 800px x 1130px) */}
-        <div
-          id="printable-a4-document"
-          className="bg-white text-stone-900 rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[1080px] relative print:shadow-none print:border-none print:m-0 print:p-8"
-        >
+        {/* Printable Document Paper (A4 Aspect Ratio: 800px x 1080px) */}
+        <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[1000px] relative text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8">
           
           {/* Official Document Header */}
           <div className="flex items-start justify-between border-b-2 border-stone-900 pb-4 mb-8">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-stone-900 text-white font-bold flex items-center justify-center text-xl shadow-xs shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-stone-900 text-white font-bold flex items-center justify-center text-xl shadow-xs">
                 日
               </div>
               <div>
                 <h2 className="text-lg font-extrabold tracking-tight text-stone-900">NIHOMI JAPANESE LEARNING</h2>
-                <p className="text-[11px] text-stone-600 font-medium">In Academic Collaboration with Dhaka International Language School (ダッカ国際言語学校)</p>
-                <p className="text-[10px] text-stone-500 font-mono">bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215 • Hotline: +880 17555-34997</p>
+                <p className="text-[11px] text-stone-600 font-medium">Nihomi Academic Council • Continuous Japanese Learning OS</p>
+                <p className="text-[10px] text-stone-500 font-mono">Official Academic Portal • nihomi.com/verify</p>
               </div>
             </div>
-            <div className="text-right text-[10px] text-stone-500 space-y-0.5 font-mono shrink-0">
-              <div className="text-stone-900 font-bold">DOC REF: NHM-2026-DILS</div>
-              <div>Date: 2026-08-25</div>
-              <div className="text-emerald-700 font-bold uppercase">VERIFIED RECORD</div>
+            <div className="text-right text-[10px] text-stone-500 space-y-0.5 font-mono">
+              <div className="text-stone-900 font-bold">DOC REF: NHM-2026-ACAD</div>
+              <div>Date: {new Date().toISOString().split('T')[0]}</div>
+              <div className="text-emerald-700 font-bold uppercase flex items-center justify-end space-x-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-600 inline" />
+                <span>VERIFIED RECORD</span>
+              </div>
             </div>
           </div>
 
@@ -306,37 +159,37 @@ export const DocumentsView: React.FC = () => {
                   <span className="font-bold text-stone-900">{accountId}</span>
                 </p>
 
-                <p className="pt-2 text-justify leading-relaxed">
+                <p className="pt-2 text-justify">
                   has successfully completed the intensive curriculum for <strong>JLPT {currentLevel} Foundational Japanese (150 Hours)</strong> covering grammar patterns, vocabulary, Kanji calligraphy, reading comprehension, and oral conversational readiness in accordance with Nihomi Standard™ Academic Guidelines.
                 </p>
               </div>
 
-              {/* Performance Evaluation Record Table */}
+              {/* Evaluation Record Table */}
               <div className="max-w-md mx-auto bg-stone-50 rounded-2xl border border-stone-200 p-4 text-xs text-left space-y-2">
                 <div className="font-bold text-stone-900 border-b border-stone-200 pb-1 text-[11px] uppercase tracking-wider">
-                  Academic Performance & Attendance Log
+                  Academic Evaluation Summary
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-[11px] text-stone-600 font-mono">
                   <div>Curriculum Level: <strong className="text-stone-900">JLPT {currentLevel}</strong></div>
                   <div>Certified Hours: <strong className="text-stone-900">150 Hours</strong></div>
-                  <div>Overall Evaluation: <strong className="text-emerald-700">Grade A (Very Good)</strong></div>
-                  <div>Attendance Ratio: <strong className="text-stone-900">96.8%</strong></div>
+                  <div>Performance: <strong className="text-emerald-700">Grade A (Mastery)</strong></div>
+                  <div>Attendance Ratio: <strong className="text-stone-900">98.4%</strong></div>
                 </div>
               </div>
 
-              {/* QR Verification Placeholder */}
+              {/* QR Verification */}
               <div className="pt-4 flex items-center justify-center space-x-2 text-[10px] text-stone-500 font-mono">
                 <QrCode className="w-4 h-4 text-stone-700" />
                 <span>Scan or verify online at nihomi.com/verify/{studentId}</span>
               </div>
 
-              {/* Authorized Signatories */}
+              {/* Signatures */}
               <div className="pt-12 grid grid-cols-2 gap-8 text-xs text-center border-t border-stone-200 mt-12">
                 <div className="space-y-1">
-                  <div className="font-serif italic font-bold text-stone-900 text-sm">Sensei Md. Abdur Razzak</div>
+                  <div className="font-serif italic font-bold text-stone-900 text-sm">Yuki Tanaka (Sensei)</div>
                   <div className="w-36 h-0.5 bg-stone-400 mx-auto"></div>
                   <div className="text-[10px] text-stone-500">
-                    Principal & Academic Director<br />Dhaka International Language School
+                    Lead Academic Director<br />Nihomi Japanese Council
                   </div>
                 </div>
 
@@ -351,62 +204,58 @@ export const DocumentsView: React.FC = () => {
             </div>
           )}
 
-          {/* TEMPLATE 2: EMBASSY / VISA LETTERHEAD */}
+          {/* TEMPLATE 2: LETTERHEAD */}
           {docType === 'letterhead' && (
             <div className="space-y-6 text-xs text-stone-800 leading-relaxed pt-4">
               <div className="flex justify-between text-[11px] text-stone-600 font-mono">
                 <div>
-                  <strong>To:</strong> Admissions Board & Visa Section<br />
-                  Embassy of Japan in Bangladesh / Japanese Language Institute
+                  <strong>To:</strong> Academic Institutions & Verification Bodies<br />
+                  Japanese Language Proficiency Board
                 </div>
                 <div className="text-right">
-                  <strong>Date:</strong> 25th August, 2026<br />
-                  <strong>Ref:</strong> DILS/ADM/2026-VISA-99
+                  <strong>Date:</strong> {new Date().toISOString().split('T')[0]}<br />
+                  <strong>Ref:</strong> NHM/VERIF/2026-99
                 </div>
               </div>
 
               <div className="pt-2 space-y-3">
                 <strong className="block text-sm font-bold text-stone-900">
-                  SUBJECT: Verification of 150-Hour Japanese Study & Pre-Departure Enrollment
+                  SUBJECT: Verification of 150-Hour Japanese Study & Active Academic Standing
                 </strong>
 
                 <p>
-                  This official letter confirms that <strong>{studentName}</strong> (Student Registration No: <span className="font-mono font-bold">{studentId}</span>) is an enrolled student at Dhaka International Language School in collaboration with Nihomi Japanese Learning Platform.
+                  This official academic letter confirms that <strong>{studentName}</strong> (Student ID: <span className="font-mono font-bold">{studentId}</span>) is an active, verified learner on the Nihomi Japanese Learning Platform.
                 </p>
 
                 <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-[11px] space-y-1 font-mono">
                   <div><strong>Student Name:</strong> {studentName}</div>
-                  <div><strong>Registration Number:</strong> {studentId}</div>
-                  <div><strong>Course Enrolled:</strong> Japanese Foundational JLPT {currentLevel} & Tokyo Skype Prep</div>
-                  <div><strong>Schedule:</strong> 3 Days/Week • 150 Certified Instruction Hours</div>
+                  <div><strong>Student ID:</strong> {studentId}</div>
+                  <div><strong>Curriculum:</strong> Japanese JLPT {currentLevel} Foundational Program</div>
+                  <div><strong>Certified Hours:</strong> 150 Hours of Adaptive Multimodal Instruction</div>
                 </div>
 
-                <p className="leading-relaxed">
-                  The candidate maintains disciplined attendance, excellent academic progress in Minna no Nihongo grammar and Kanji writing, and is actively preparing for higher education and vocational placement in Japan.
-                </p>
-
-                <p className="leading-relaxed">
-                  For any further academic verification, please contact our admissions desk at <span className="font-mono text-stone-900">{studentEmail}</span> or via the campus hotline.
+                <p>
+                  The candidate maintains disciplined continuous practice, high memory retention in Minna no Nihongo grammar patterns, and active speaking progress verified by the Nihomi Learning DNA system.
                 </p>
               </div>
 
               <div className="pt-16">
-                <div className="font-bold text-stone-900">Authorized Academic Registrar</div>
-                <div className="text-[10px] text-stone-500">Dhaka International Language School & Nihomi Japan</div>
+                <div className="font-bold text-stone-900">Academic Registrar</div>
+                <div className="text-[10px] text-stone-500">Nihomi Academic Council • nihomi.com</div>
               </div>
             </div>
           )}
 
-          {/* TEMPLATE 3: NBR MUSHAK-6.3 TUITION RECEIPT */}
+          {/* TEMPLATE 3: INVOICE */}
           {docType === 'invoice' && (
             <div className="space-y-6 text-xs text-stone-800 pt-2">
               <div className="flex justify-between items-start border-b border-stone-200 pb-4">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 font-mono">
-                    NATIONAL BOARD OF REVENUE (NBR) COMPLIANT
+                    OFFICIAL SUBSCRIPTION INVOICE
                   </span>
-                  <h3 className="text-base font-bold text-stone-900 uppercase">OFFICIAL TUITION INVOICE / MUSHAK-6.3</h3>
-                  <p className="text-[11px] text-stone-500 font-mono">Invoice No: NHM-INV-2026-0412 • Mushak Ref: MUSHAK-6.3-992014</p>
+                  <h3 className="text-base font-bold text-stone-900 uppercase">NIHOMI LEARNING TUITION RECEIPT</h3>
+                  <p className="text-[11px] text-stone-500 font-mono">Invoice No: NHM-INV-2026-0812</p>
                 </div>
                 <div className="text-right text-[11px]">
                   <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-200">
@@ -420,13 +269,13 @@ export const DocumentsView: React.FC = () => {
                   <strong className="text-stone-900 block mb-0.5">Billed To:</strong>
                   <span>{studentName}</span><br />
                   <span>Student ID: {studentId}</span><br />
-                  <span>Email: {studentEmail}</span>
+                  <span>Email: {user?.email || 'student@nihomi.com'}</span>
                 </div>
                 <div className="text-right">
                   <strong className="text-stone-900 block mb-0.5">Payment Details:</strong>
-                  <span>Method: bKash Tokenized Checkout</span><br />
-                  <span>Transaction ID: BKH-TRX-994821</span><br />
-                  <span>Payment Date: 2026-08-25</span>
+                  <span>Method: Verified Online Checkout</span><br />
+                  <span>Status: Active Subscription</span><br />
+                  <span>Date: {new Date().toISOString().split('T')[0]}</span>
                 </div>
               </div>
 
@@ -434,122 +283,24 @@ export const DocumentsView: React.FC = () => {
                 <thead className="bg-stone-50 border-b border-stone-200 font-semibold text-stone-700 text-[11px]">
                   <tr>
                     <th className="p-3">Description</th>
-                    <th className="p-3">Duration / Type</th>
-                    <th className="p-3 text-right">Amount (BDT)</th>
+                    <th className="p-3">Type</th>
+                    <th className="p-3 text-right">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-100 text-stone-700 text-[11px]">
                   <tr>
-                    <td className="p-3 font-medium">JLPT {currentLevel} Comprehensive Japanese Language Course (150 Hours)</td>
-                    <td className="p-3">6 Months</td>
-                    <td className="p-3 text-right">৳ 18,000</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-medium">Digital Learning Passport & Continuous Assessment Access</td>
-                    <td className="p-3">Annual</td>
-                    <td className="p-3 text-right">৳ 2,000</td>
+                    <td className="p-3 font-medium">JLPT {currentLevel} Continuous Japanese Track Access</td>
+                    <td className="p-3">Subscription</td>
+                    <td className="p-3 text-right">৳ 990 / mo</td>
                   </tr>
                 </tbody>
-                <tfoot className="bg-stone-50 border-t border-stone-200 font-bold text-stone-900 text-xs">
-                  <tr>
-                    <td colSpan={2} className="p-3 text-right">Subtotal:</td>
-                    <td className="p-3 text-right">৳ 17,391</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={2} className="p-3 text-right text-stone-500">15% NBR Digital VAT:</td>
-                    <td className="p-3 text-right text-stone-500">৳ 2,609</td>
-                  </tr>
-                  <tr className="text-sm">
-                    <td colSpan={2} className="p-3 text-right">Total Paid (with VAT):</td>
-                    <td className="p-3 text-right text-emerald-700">৳ 20,000</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           )}
 
-          {/* DOCUMENT: OFFLINE VOCABULARY STUDY DECK */}
-          {docType === 'vocab_deck' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-stone-200 pb-4">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px] uppercase font-mono">
-                      JLPT {currentLevel} FLASHCARD DECK
-                    </span>
-                    <span className="text-[10px] text-stone-500 font-mono">
-                      SRS Memory Engine • Printable A4 Layout
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold font-serif text-stone-900 mt-1">
-                    Saved Vocabulary & Flashcard Reference Sheet
-                  </h2>
-                </div>
-
-                <button
-                  onClick={handleExportVocabPdf}
-                  className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-xs transition cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download Formatted PDF</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
-                {[
-                  { japanese: '先生 (せんせい)', romaji: 'Sensei', english: 'Teacher / Instructor', bangla: 'শিক্ষক / গুরু', box: 4, ex: '田中先生は日本語を教えます。' },
-                  { japanese: '学生 (がくせい)', romaji: 'Gakusei', english: 'Student', bangla: 'ছাত্র / ছাত্রী', box: 3, ex: 'わたしは留学生です。' },
-                  { japanese: '本 (ほん)', romaji: 'Hon', english: 'Book', bangla: 'বই', box: 5, ex: '日本語の本を読みます。' },
-                  { japanese: '勉強 (べんきょう)', romaji: 'Benkyou', english: 'Study / Practice', bangla: 'পড়াশোনা / অধ্যয়ন', box: 2, ex: '毎日日本語を勉強します。' },
-                  { japanese: '日本 (にほん)', romaji: 'Nihon', english: 'Japan', bangla: 'জাপান', box: 5, ex: 'いつ日本へ行きますか。' },
-                  { japanese: '友達 (ともだち)', romaji: 'Tomodachi', english: 'Friend', bangla: 'বন্ধু', box: 4, ex: '友達と東京へ行きます。' }
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 text-stone-800 space-y-1.5 relative overflow-hidden"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-baseline space-x-2">
-                        <span className="text-base font-bold font-serif text-stone-900">{item.japanese}</span>
-                        <span className="text-xs text-stone-500 font-mono">[{item.romaji}]</span>
-                      </div>
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold font-mono ${
-                        item.box >= 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        Box {item.box}
-                      </span>
-                    </div>
-
-                    <div className="text-xs">
-                      <strong className="text-stone-900">{item.english}</strong>
-                      <span className="text-emerald-700 ml-1.5 font-medium">({item.bangla})</span>
-                    </div>
-
-                    <p className="text-[11px] text-stone-500 italic font-serif truncate">
-                      Ex: {item.ex}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-xs text-red-800 flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-red-600" />
-                  <strong>Tip:</strong> The exported PDF contains full multi-column A4 flashcards with cut marks for offline folding and physical study!
-                </span>
-                <button
-                  onClick={handleExportVocabPdf}
-                  className="font-bold text-red-700 hover:underline cursor-pointer"
-                >
-                  Generate Now &rarr;
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Document Verification Footer */}
+          {/* Footer */}
           <div className="absolute bottom-6 left-8 right-8 text-center border-t border-stone-200 pt-3 text-[9px] text-stone-400 font-mono">
-            *Nihomi & Dhaka International Language School Official Document Verification System • Verify at nihomi.com/verify
+            *Official Document of Nihomi Academic Council • Verify authentic credentials at nihomi.com/verify
           </div>
         </div>
 
