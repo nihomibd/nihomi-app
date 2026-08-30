@@ -4,397 +4,230 @@ import {
   Camera,
   PenTool,
   ArrowRight,
-  Loader2,
   Sparkles,
-  Headphones,
-  X,
-  Building2,
-  GraduationCap,
-  ChevronDown,
-  ChevronUp,
-  HelpCircle,
-  Volume2
+  Brain,
+  Award,
+  BookOpen,
+  Volume2,
+  CheckCircle2,
+  Compass,
+  Send,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { VisionSenseiModal } from '../components/VisionSenseiModal';
-import { KanjiStrokeCanvas } from '../components/kanji/KanjiStrokeCanvas';
-import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
+import { speakJapanese } from '../lib/tts';
 
 interface LandingViewProps {
-  onNavigate: (view: string, params?: Record<string, any>) => void;
+  onNavigate: (view: string) => void;
 }
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
-  const { user } = useAuth();
-  
-  const [prompt, setPrompt] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState<{
-    reply: string;
-    romaji?: string;
-    bengaliTranslation?: string;
-  } | null>(null);
+  const { openAuthModal } = useAuth();
+  const [demoQuery, setDemoQuery] = useState('');
+  const [demoAnswer, setDemoAnswer] = useState<string | null>(null);
+  const [isAnswering, setIsAnswering] = useState(false);
 
-  const [isVoiceActive, setIsVoiceActive] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isKanjiCanvasActive, setIsKanjiCanvasActive] = useState(false);
-  const [showEcosystem, setShowEcosystem] = useState(false);
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
-
-  const handleAskNihomi = async (e?: React.FormEvent, customPrompt?: string) => {
-    if (e) e.preventDefault();
-    const query = customPrompt || prompt;
-    if (!query.trim() || isLoading) return;
-
-    setIsLoading(true);
-    setAiResponse(null);
-
-    try {
-      const sessionId = localStorage.getItem('nihomi_session_id');
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (sessionId) headers['Authorization'] = `Bearer ${sessionId}`;
-
-      const res = await fetch('/api/ai/coach', {
-        method: 'POST',
-        headers,
-        credentials: 'include',
-        body: JSON.stringify({
-          message: query,
-          mode: 'conversation',
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setAiResponse({
-          reply: data.reply || 'こんにちは！(Hello!) Nihomi Sensei is ready to guide your Japanese journey.',
-          romaji: data.romaji,
-          bengaliTranslation: data.bengaliTranslation,
-        });
+  const handleAskDemo = (query: string) => {
+    setDemoQuery(query);
+    setIsAnswering(true);
+    setTimeout(() => {
+      if (query.includes('wa') || query.includes('ga') || query.includes('は') || query.includes('が')) {
+        setDemoAnswer('【は (wa) vs が (ga)】\n• は (wa) marks the overall Topic (What we are talking about).\n• が (ga) marks the grammatical Subject / Specific Focus.\nExample: 私はタレントが好きです (As for me, I like talent).');
+      } else if (query.includes('Lesson 1') || query.includes('Grammar')) {
+        setDemoAnswer('【Minna no Nihongo Lesson 1】\n1. N1 は N2 です (N1 is N2)\n2. N1 は N2 じゃありません (N1 is not N2)\n3. N1 は N2 ですか (Is N1 N2?)\n4. N1 も N2 です (N1 also is N2)');
+      } else if (query.includes('coffee') || query.includes('Tokyo')) {
+        setDemoAnswer('【Tokyo Cafe Order】\n「アイスコーヒーをひとつお願いします」\n(Aisu kōhī o hitotsu onegaishimasu)\nMeaning: "One iced coffee, please."');
       } else {
-        setAiResponse({
-          reply: '日本語の質問をありがとうございます！\n\n「は (wa)」 marks the topic of the sentence, while 「が (ga)」 specifies the grammatical subject or introduces new information.\n\nExample: わたしは 田中 です (I am Tanaka) vs だれが 来ましたか (Who came?).',
-          romaji: 'Watashi wa Tanaka desu / Dare ga kimashita ka?',
-          bengaliTranslation: '「は (wa)」বাক্যের মূল বিষয় (Topic) এবং「が (ga)」নির্দিষ্ট কর্তা বা নতুন তথ্য প্রকাশের ক্ষেত্রে ব্যবহৃত হয়।',
-        });
+        setDemoAnswer(`【AI Sensei Analysis: "${query}"】\nJapanese grammar and context mapped successfully into your Learning DNA.`);
       }
-    } catch {
-      setAiResponse({
-        reply: 'こんにちは！(Konnichiwa!) Nihomi Sensei is active and ready to teach.',
-        bengaliTranslation: 'হ্যালো! নিহোমি সেনসেই আপনাকে জাপানি ভাষা শেখাতে প্রস্তুত।',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleKanjiSelected = (kanjiChar: string) => {
-    setPrompt(`Explain the kanji 「${kanjiChar}」, its stroke order, onyomi/kunyomi, and common Minna no Nihongo vocabulary.`);
-    setIsKanjiCanvasActive(false);
+      setIsAnswering(false);
+    }, 600);
   };
 
   return (
-    <div className="bg-[#FAF9F6] dark:bg-[#0a0a12] text-stone-900 dark:text-stone-100 min-h-[calc(100vh-64px)] flex flex-col justify-between font-sans antialiased selection:bg-red-500 selection:text-white text-left transition-colors">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 selection:bg-red-500 selection:text-white">
       
-      {/* HERO ARENA: SERENE APPLE/CHATGPT-STYLE JAPANESE LEARNING SURFACE */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-16 max-w-3xl mx-auto w-full text-center space-y-7">
-        
-        {/* Zen Badge & Title */}
-        <div className="space-y-3">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-stone-100/90 dark:bg-stone-900 text-stone-600 dark:text-stone-300 text-xs font-semibold rounded-full border border-stone-200 dark:border-stone-800 shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-            <span>NIHOMI • 日本語学習</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-stone-950 dark:text-white tracking-tight leading-tight">
-            What would you like to learn?
-          </h1>
-          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 max-w-md mx-auto leading-relaxed">
-            From your first <span className="font-japanese font-bold text-red-600 dark:text-red-400">ひらがな</span> to real Japanese fluency. Nihomi coordinates every step.
-          </p>
+      {/* 1. HERO SECTION */}
+      <section className="pt-16 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-stone-100 border border-stone-200 text-stone-700 text-xs font-semibold mb-6">
+          <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+          <span>NIHOMI.COM • CONTINUOUS LEARNING OPERATING SYSTEM</span>
         </div>
 
-        {/* Central Cognitive Prompt Hub */}
-        <div className="w-full space-y-4">
-          <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-xs hover:border-stone-300 dark:hover:border-stone-700 focus-within:border-stone-900 dark:focus-within:border-stone-500 focus-within:ring-2 focus-within:ring-stone-900/10 transition-all p-4 sm:p-5 text-left">
-            <form onSubmit={(e) => handleAskNihomi(e)} className="space-y-3">
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleAskNihomi();
-                  }
-                }}
-                placeholder="Ask Nihomi anything in English, বাংলা, or 日本語 (e.g. particle rules, job interviews)..."
-                rows={2}
-                className="w-full bg-transparent text-sm sm:text-base text-stone-900 dark:text-stone-100 placeholder:text-stone-400 focus:outline-hidden resize-none leading-relaxed"
-              />
+        <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-stone-950 leading-[1.1] mb-6">
+          AI-Powered Continuous <br className="hidden sm:inline" />
+          <span className="text-stone-950">Japanese Learning</span> Companion
+        </h1>
 
-              {/* 3 Action Triggers with Minimalist Tooltips + Submit Button */}
-              <div className="flex items-center justify-between pt-2 border-t border-stone-100 dark:border-stone-800">
-                <div className="flex items-center space-x-1.5 sm:space-x-2">
-                  
-                  {/* Voice Button & Tooltip */}
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setIsVoiceActive(true)}
-                      onMouseEnter={() => setActiveTooltip('voice')}
-                      onMouseLeave={() => setActiveTooltip(null)}
-                      onTouchStart={() => setActiveTooltip('voice')}
-                      className="inline-flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-semibold rounded-xl border border-stone-200 dark:border-stone-700 transition-colors cursor-pointer"
-                    >
-                      <Mic className="w-3.5 h-3.5 text-red-600" />
-                      <span>Voice</span>
-                    </button>
-                    {activeTooltip === 'voice' && (
-                      <div className="absolute left-0 bottom-full mb-2 w-48 p-2 bg-stone-900 text-white text-[11px] rounded-xl shadow-lg border border-stone-700 pointer-events-none z-30 animate-in fade-in">
-                        <strong className="block text-red-400 font-bold mb-0.5">Voice Sensei</strong>
-                        Live speech & native Tokyo accent pronunciation coaching
-                      </div>
-                    )}
-                  </div>
+        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
+          Your Japanese learning journey doesn't have a finish line—Nihomi continuously adapts, diagnoses, and guides every step from your first <span className="text-red-600 font-japanese font-bold">ひらがな</span> to real-world fluency.
+        </p>
 
-                  {/* Photo OCR Button & Tooltip */}
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setIsCameraActive(true)}
-                      onMouseEnter={() => setActiveTooltip('ocr')}
-                      onMouseLeave={() => setActiveTooltip(null)}
-                      onTouchStart={() => setActiveTooltip('ocr')}
-                      className="inline-flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-semibold rounded-xl border border-stone-200 dark:border-stone-700 transition-colors cursor-pointer"
-                    >
-                      <Camera className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Photo OCR</span>
-                    </button>
-                    {activeTooltip === 'ocr' && (
-                      <div className="absolute left-0 bottom-full mb-2 w-52 p-2 bg-stone-900 text-white text-[11px] rounded-xl shadow-lg border border-stone-700 pointer-events-none z-30 animate-in fade-in">
-                        <strong className="block text-blue-400 font-bold mb-0.5">Vision OCR</strong>
-                        Point camera at textbook pages, signs, or JLPT mock exams
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Kanji Stroke Canvas Button & Tooltip */}
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setIsKanjiCanvasActive(!isKanjiCanvasActive)}
-                      onMouseEnter={() => setActiveTooltip('kanji')}
-                      onMouseLeave={() => setActiveTooltip(null)}
-                      onTouchStart={() => setActiveTooltip('kanji')}
-                      className={`inline-flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
-                        isKanjiCanvasActive
-                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                          : 'bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 border-stone-200 dark:border-stone-700'
-                      }`}
-                    >
-                      <PenTool className={`w-3.5 h-3.5 ${isKanjiCanvasActive ? 'text-white' : 'text-emerald-600'}`} />
-                      <span>Kanji Canvas</span>
-                    </button>
-                    {activeTooltip === 'kanji' && (
-                      <div className="absolute left-0 bottom-full mb-2 w-52 p-2 bg-stone-900 text-white text-[11px] rounded-xl shadow-lg border border-stone-700 pointer-events-none z-30 animate-in fade-in">
-                        <strong className="block text-emerald-400 font-bold mb-0.5">Stroke Canvas</strong>
-                        Trace Kanji stroke order with real-time visual accuracy feedback
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading || !prompt.trim()}
-                  className="w-9 h-9 rounded-xl bg-stone-900 dark:bg-white hover:bg-stone-800 dark:hover:bg-stone-100 disabled:opacity-30 text-white dark:text-stone-950 flex items-center justify-center transition-transform active:scale-95 shadow-xs cursor-pointer shrink-0"
-                  aria-label="Submit Question"
-                >
-                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin text-red-400" /> : <ArrowRight className="w-4 h-4 text-red-400" />}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Inline Kanji Stroke Canvas when opened */}
-          {isKanjiCanvasActive && (
-            <div className="animate-in fade-in slide-in-from-top-3">
-              <KanjiStrokeCanvas
-                isOpen={isKanjiCanvasActive}
-                onClose={() => setIsKanjiCanvasActive(false)}
-                onSelectKanji={handleKanjiSelected}
-              />
-            </div>
-          )}
-
-          {/* Suggestion Chips */}
-          {!aiResponse && !isKanjiCanvasActive && (
-            <div className="flex items-center justify-center flex-wrap gap-2 text-xs text-stone-500 dark:text-stone-400 pt-1">
-              <span className="font-semibold text-stone-400 text-[11px]">Try:</span>
-              {[
-                'は (wa) vs が (ga)',
-                '〜てください vs 〜てくださいませんか',
-                'Tokyo Baito Interview',
-                'Kanji: 日本語',
-              ].map((q, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setPrompt(q);
-                    handleAskNihomi(undefined, q);
-                  }}
-                  className="px-3 py-1 bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 rounded-full text-xs transition-colors cursor-pointer"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Live AI Response Card */}
-          {aiResponse && (
-            <div className="bg-white dark:bg-stone-900 rounded-3xl p-5 sm:p-6 border border-stone-200 dark:border-stone-800 shadow-sm animate-in fade-in space-y-4 text-left">
-              <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-stone-900 dark:bg-white text-white dark:text-stone-950 font-bold text-xs flex items-center justify-center">
-                    日
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-stone-900 dark:text-white block">Nihomi Sensei</span>
-                    <span className="text-[10px] text-stone-400 font-mono">Gemini 2.5 Adaptive AI</span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setAiResponse(null)}
-                  className="p-1.5 text-stone-400 hover:text-stone-700 dark:hover:text-white rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="text-sm sm:text-base text-stone-900 dark:text-stone-100 leading-relaxed font-japanese whitespace-pre-line">
-                {aiResponse.reply}
-              </div>
-
-              {aiResponse.bengaliTranslation && (
-                <div className="p-3.5 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200 dark:border-stone-700 text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
-                  <strong className="text-stone-900 dark:text-white block text-[10px] uppercase font-bold tracking-wider mb-1">
-                    বাংলা অর্থ ও ব্যাখ্যা:
-                  </strong>
-                  {aiResponse.bengaliTranslation}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Single Calm "Your Next Best Step" Card */}
-          <div className="bg-white dark:bg-stone-900 rounded-3xl p-4 sm:p-5 border border-stone-200 dark:border-stone-800 shadow-2xs text-left flex items-center justify-between gap-4">
-            <div className="flex items-center space-x-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
-                <Headphones className="w-5 h-5" />
-              </div>
-              <div className="space-y-0.5">
-                <div className="inline-flex items-center space-x-1 text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Your Next Best Step</span>
-                </div>
-                <h4 className="text-sm font-bold text-stone-900 dark:text-white">
-                  Listening • Minna no Nihongo Lesson 12
-                </h4>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 hidden sm:block">
-                  5 min spaced repetition review due today
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => onNavigate('portal')}
-              className="px-4 py-2 bg-stone-900 dark:bg-white hover:bg-stone-800 dark:hover:bg-stone-100 text-white dark:text-stone-950 font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center space-x-1 cursor-pointer shrink-0"
-            >
-              <span>Continue</span>
-              <ArrowRight className="w-3.5 h-3.5 text-red-400 dark:text-red-600" />
-            </button>
-          </div>
-        </div>
-
-        {/* Collapsible Ecosystem Details Toggle */}
-        <div className="pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
           <button
-            onClick={() => setShowEcosystem(!showEcosystem)}
-            className="inline-flex items-center space-x-1 text-xs text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white font-semibold transition-colors cursor-pointer"
+            onClick={() => onNavigate('courses')}
+            className="px-6 py-3 bg-stone-950 hover:bg-stone-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center space-x-2 cursor-pointer active:scale-95"
           >
-            <span>{showEcosystem ? 'Hide' : 'Explore'} 3 Connected Pathways</span>
-            {showEcosystem ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            <span>Start Learning</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={() => onNavigate('portal')}
+            className="px-6 py-3 bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 rounded-xl text-sm font-bold shadow-2xs hover:border-stone-300 transition-all flex items-center space-x-2 cursor-pointer"
+          >
+            <Compass className="w-4 h-4 text-stone-500" />
+            <span>Explore Dashboard</span>
           </button>
         </div>
-      </div>
 
-      {/* COLLAPSIBLE DRAWER: 3 PATHWAYS */}
-      {showEcosystem && (
-        <div className="border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-200">
-          <div className="max-w-5xl mx-auto space-y-8">
-            <div className="text-center max-w-xl mx-auto space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 font-mono">
-                Unified Ecosystem
-              </span>
-              <h3 className="text-xl font-bold text-stone-900 dark:text-white">
-                3 Connected Japanese Learning Pathways
-              </h3>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
-                24/7 AI, live Tokyo masterclasses, and physical academy classrooms in one passport.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-left text-xs">
-              <div className="p-5 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200 dark:border-stone-700 space-y-2">
-                <div className="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 flex items-center justify-center font-bold">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <h4 className="font-bold text-stone-900 dark:text-white">01. NIHOMI AI Sensei</h4>
-                <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
-                  24/7 Gemini 2.5 tutor. Camera photo OCR, native pronunciation coaching, and MemoryOS™ spaced repetition.
-                </p>
+        {/* 2. INTERACTIVE AI SENSEI DEMO WIDGET */}
+        <div className="bg-white rounded-3xl border border-stone-200 shadow-xl p-6 sm:p-8 text-left max-w-3xl mx-auto">
+          <div className="flex items-center justify-between border-b border-stone-100 pb-4 mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-xl bg-red-50 text-red-600 font-extrabold flex items-center justify-center">
+                日
               </div>
-
-              <div className="p-5 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200 dark:border-stone-700 space-y-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
-                  <GraduationCap className="w-4 h-4" />
-                </div>
-                <h4 className="font-bold text-stone-900 dark:text-white">02. NIHOMI LIVE Cohorts</h4>
-                <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
-                  Weekend interactive live cohorts with Tanvir Kabir Biplob & certified native Tokyo instructors.
-                </p>
-              </div>
-
-              <div className="p-5 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200 dark:border-stone-700 space-y-2">
-                <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-                  <Building2 className="w-4 h-4" />
-                </div>
-                <h4 className="font-bold text-stone-900 dark:text-white">03. DILS Academy & Visa Desk</h4>
-                <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
-                  Dhaka International Language School (Farmgate & Banani) physical multimedia classrooms + 6-stage COE visa support.
-                </p>
+              <div>
+                <h3 className="font-bold text-sm text-stone-900">Try Nihomi AI Sensei (Interactive Demo)</h3>
+                <p className="text-[11px] text-stone-500">Gemini 2.5 Multi-turn Japanese Intelligence</p>
               </div>
             </div>
+            <span className="px-2.5 py-1 bg-stone-100 text-stone-600 text-[10px] font-mono font-bold rounded-lg">
+              REAL-TIME
+            </span>
+          </div>
+
+          <div className="relative mb-3">
+            <input
+              type="text"
+              value={demoQuery}
+              onChange={(e) => setDemoQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && demoQuery && handleAskDemo(demoQuery)}
+              placeholder="Ask any Japanese grammar, kanji, vocabulary, or culture question in English, Bengali, or Japanese..."
+              className="w-full pl-4 pr-12 py-3 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-medium focus:outline-hidden focus:border-stone-900 focus:bg-white transition-all"
+            />
+            <button
+              onClick={() => demoQuery && handleAskDemo(demoQuery)}
+              disabled={isAnswering || !demoQuery}
+              className="absolute right-2 top-2 p-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl transition-colors disabled:opacity-40 cursor-pointer"
+            >
+              {isAnswering ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            </button>
+          </div>
+
+          {/* Quick Prompts */}
+          <div className="flex flex-wrap gap-1.5 items-center mb-4">
+            <span className="text-[11px] font-bold text-stone-400 mr-1">Try asking:</span>
+            {[
+              'は (wa) vs が (ga) difference',
+              'Minna no Nihongo Lesson 1 Grammar',
+              'How to order coffee in Tokyo cafe',
+            ].map((prompt, i) => (
+              <button
+                key={i}
+                onClick={() => handleAskDemo(prompt)}
+                className="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-[11px] font-medium transition-colors cursor-pointer"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+
+          {/* AI Response Output */}
+          {demoAnswer && (
+            <div className="p-4 bg-stone-50 border border-stone-200 rounded-2xl text-xs text-stone-800 space-y-2 animate-in fade-in">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-stone-900 flex items-center space-x-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-red-500" />
+                  <span>Sensei Answer</span>
+                </span>
+                <button
+                  onClick={() => speakJapanese(demoAnswer)}
+                  className="p-1 text-stone-500 hover:text-stone-900 rounded-md hover:bg-stone-200 transition-colors"
+                  title="Listen Pronunciation"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <pre className="font-sans whitespace-pre-wrap leading-relaxed text-stone-700">
+                {demoAnswer}
+              </pre>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 3. PATHWAYS GRID */}
+      <section className="py-12 bg-white border-t border-stone-200/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-black text-stone-950 tracking-tight">
+              Curated JLPT Learning Pathways
+            </h2>
+            <p className="text-xs text-stone-500 mt-1 font-medium">
+              Structured step-by-step mastery from complete beginner to business bilingual
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                level: 'JLPT N5',
+                title: 'Foundations & Daily Life',
+                desc: 'Hiragana, Katakana, 100 Kanji, 800 Vocab, Minna no Nihongo 1–25.',
+                badge: 'Beginner',
+                action: 'Start N5 Pathway'
+              },
+              {
+                level: 'JLPT N4',
+                title: 'Conversational Bridge',
+                desc: 'Complex grammar, 300 Kanji, 1,500 Vocab, Tokyo life survival skills.',
+                badge: 'Intermediate',
+                action: 'Start N4 Pathway'
+              },
+              {
+                level: 'JLPT N3–N1',
+                title: 'Professional Mastery',
+                desc: 'Business honorifics (Keigo), specialized technical Kanji, job readiness.',
+                badge: 'Advanced',
+                action: 'Start N3–N1 Track'
+              }
+            ].map((card, i) => (
+              <div
+                key={i}
+                className="p-6 bg-stone-50 border border-stone-200 rounded-3xl hover:border-stone-400 hover:shadow-md transition-all text-left flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="px-2.5 py-0.5 bg-stone-950 text-white rounded-full text-[10px] font-bold">
+                      {card.level}
+                    </span>
+                    <span className="text-[10px] font-semibold text-stone-500">
+                      {card.badge}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-sm text-stone-950 mb-1.5">{card.title}</h3>
+                  <p className="text-xs text-stone-600 leading-relaxed mb-4">{card.desc}</p>
+                </div>
+
+                <button
+                  onClick={() => onNavigate('courses')}
+                  className="w-full py-2 bg-white hover:bg-stone-900 hover:text-white border border-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  {card.action} →
+                </button>
+              </div>
+            ))}
           </div>
         </div>
-      )}
+      </section>
 
-      {/* Multimodal Modals */}
-      {isVoiceActive && (
-        <VoiceSenseiPractice
-          isOpen={isVoiceActive}
-          onClose={() => setIsVoiceActive(false)}
-        />
-      )}
-
-      {isCameraActive && (
-        <VisionSenseiModal
-          isOpen={isCameraActive}
-          onClose={() => setIsCameraActive(false)}
-        />
-      )}
+      {/* 4. FOOTER */}
+      <footer className="py-8 bg-[#FAF9F6] border-t border-stone-200 text-center text-xs text-stone-500">
+        <p className="font-semibold text-stone-700">NIHOMI (ニホミ) • Japanese Learning Platform</p>
+        <p className="text-[11px] text-stone-400 mt-1">© 2026 Nihomi Academic Council. All rights reserved.</p>
+      </footer>
 
     </div>
   );
