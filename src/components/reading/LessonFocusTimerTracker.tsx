@@ -80,6 +80,14 @@ export const LessonFocusTimerTracker: React.FC<LessonFocusTimerTrackerProps> = (
       retentionRating: retention
     };
 
+    // Update total study seconds in localStorage
+    try {
+      const current = parseInt(localStorage.getItem('nihomi_total_focus_seconds') || '0', 10);
+      localStorage.setItem('nihomi_total_focus_seconds', (current + seconds).toString());
+    } catch (e) {
+      console.error('Failed to update total focus seconds', e);
+    }
+
     setFocusReport(summary);
     setIsReportOpen(true);
     onFinishSession?.(summary);

@@ -385,3 +385,103 @@ export function getDueItemsCount(items?: { id: string }[]): number {
   return items.filter((item) => isItemDue(allStates[item.id])).length;
 }
 
+/**
+ * Automatically schedules vocabulary and Kanji reviews based on user performance in lesson quizzes.
+ * If user answers incorrectly, marks as 'again' (repetition reset, lapse added, ease factor reduced, scheduled for immediate/next-day review).
+ * If user answers correctly, marks as 'good' or 'easy' (increasing interval and ease factor).
+ */
+export function recordQuizTermPerformance(
+  id: string,
+  isCorrect: boolean,
+  metadata?: {
+    word?: string;
+    lessonNumber?: number;
+    itemType?: 'vocabulary' | 'kanji' | 'grammar';
+  }
+): SrsItemState {
+  const rating: SrsRating = isCorrect ? 'good' : 'again';
+  const itemType = metadata?.itemType || 'vocabulary';
+  return saveSrsItemReview(id, rating, undefined, itemType);
+}
+
+/**
+ * Calculates optimal review metrics for a specific lesson based on all its vocabulary and kanji items.
+ */
+export function getLessonSrsReviewSummary(
+  lessonNumber: number,
+  vocabList?: { kanji: string; hiragana: string }[],
+  kanjiList?: { kanji: string }[]
+): {
+  isReviewDue: boolean;
+  dueItemCount: number;
+  totalTracked: number;
+  retentionAverage: number;
+  nextOptimalReviewDate: Date | null;
+  strugglingTerms: string[];
+} {
+  const allStates = getSrsState();
+  const trackedItems: SrsItemState[] = [];
+  const strugglingTerms: string[] = [];
+
+  const checkItem = (id: string, label: string) => {
+    const state = allStates[id];
+    if (state) {
+      trackedItems.push(state);
+      if ((state.lapses && state.lapses > 0) || (state.retentionScore && state.retentionScore < 75)) {
+        strugglingTerms.push(label);
+      }
+    }
+  };
+
+  if (vocabList) {
+    vocabList.forEach((v) => {
+      checkItem(`voc-n5-l${lessonNumber}-${v.kanji || v.hiragana}`, v.kanji || v.hiragana);
+      checkItem(v.kanji || v.hiragana, v.kanji || v.hiragana);
+    });
+  }
+
+  if (kanjiList) {
+    kanjiList.forEach((k) => {
+      checkItem(k.kanji, k.kanji);
+      checkItem(`kanji-${k.kanji}`, k.kanji);
+    });
+  }
+
+  if (trackedItems.length === 0) {
+    return {
+      isReviewDue: false,
+      dueItemCount: 0,
+      totalTracked: 0,
+      retentionAverage: 100,
+      nextOptimalReviewDate: null,
+      strugglingTerms: []
+    };
+  }
+
+  let dueCount = 0;
+  let totalRetention = 0;
+  let earliestDue: Date | null = null;
+
+  trackedItems.forEach((item) => {
+    const isDue = isItemDue(item);
+    if (isDue) dueCount++;
+    const ret = calculateRetentionLevel(item.lastReviewedAt, item.stabilityDays || item.intervalDays || 1);
+    totalRetention += ret;
+
+    const nextDate = new Date(item.nextReviewAt);
+    if (!earliestDue || nextDate.getTime() < earliestDue.getTime()) {
+      earliestDue = nextDate;
+    }
+  });
+
+  return {
+    isReviewDue: dueCount > 0,
+    dueItemCount: dueCount,
+    totalTracked: trackedItems.length,
+    retentionAverage: Math.round(totalRetention / trackedItems.length),
+    nextOptimalReviewDate: earliestDue,
+    strugglingTerms: Array.from(new Set(strugglingTerms))
+  };
+}
+
+

@@ -123,6 +123,10 @@ class SoundEngine {
     }
   }
 
+  public playClickSoft(): void {
+    this.playButtonTap();
+  }
+
   /**
    * Fanfare melody when a quiz or lesson is 100% completed
    */

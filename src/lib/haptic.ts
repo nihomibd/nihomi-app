@@ -8,6 +8,7 @@ export type HapticPattern =
   | 'light'
   | 'medium'
   | 'heavy'
+  | 'warning'
   | 'success'
   | 'achievement'
   | 'error'
@@ -40,6 +41,10 @@ class HapticFeedbackService {
         case 'heavy':
           // Modal opening or destructive warning
           navigator.vibrate(60);
+          break;
+        case 'warning':
+          // Warning countdown vibration
+          navigator.vibrate([20, 20, 20]);
           break;
         case 'kanji_stroke':
           // Individual accurate kanji brush stroke

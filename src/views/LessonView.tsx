@@ -1200,9 +1200,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
         {/* Kanji Stroke Order Animator Modal */}
         {selectedKanjiForStrokeAnim && (
           <KanjiStrokeAnimator
-            isModal={true}
-            character={selectedKanjiForStrokeAnim.character}
-            meaning={selectedKanjiForStrokeAnim.meaning}
+            kanji={selectedKanjiForStrokeAnim.character}
             onClose={() => setSelectedKanjiForStrokeAnim(null)}
           />
         )}

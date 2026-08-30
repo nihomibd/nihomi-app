@@ -2,11 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrandingThemeTokens, ContentDesignSystem } from '../core/content-engine/contentDesignSystem';
 import { WhiteLabelService } from '../core/content-engine/whiteLabelService';
 import { PartnerAcademyTenant } from '../core/content-engine/partnerGatewayService';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
-export type AppTheme = 'light' | 'dark' | 'sepia';
+export type AppTheme = 'system' | 'light' | 'dark' | 'sepia';
+export type ResolvedTheme = 'light' | 'dark' | 'sepia';
 
 interface ThemeContextType {
   theme: AppTheme;
+  resolvedTheme: ResolvedTheme;
   setTheme: (theme: AppTheme) => void;
   toggleTheme: () => void;
   branding: BrandingThemeTokens;
@@ -16,25 +19,47 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const THEME_STORAGE_KEY = 'nihomi_theme_mode_v1';
+const THEME_STORAGE_KEY = 'nihomi_theme_mode_v2';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<AppTheme>(() => {
     if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem(THEME_STORAGE_KEY) as AppTheme | null;
-        if (stored && ['light', 'dark', 'sepia'].includes(stored)) {
+        if (stored && ['system', 'light', 'dark', 'sepia'].includes(stored)) {
           return stored;
         }
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
+        const legacyStored = localStorage.getItem('nihomi_theme_mode_v1') as AppTheme | null;
+        if (legacyStored && ['light', 'dark', 'sepia'].includes(legacyStored)) {
+          return legacyStored;
         }
       } catch (err) {
         console.error('Failed to read theme preference:', err);
       }
     }
-    return 'light';
+    return 'system';
   });
+
+  const [systemDark, setSystemDark] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  // Listen to OS system color scheme changes
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemDark(e.matches);
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // Compute resolved actual theme
+  const resolvedTheme: ResolvedTheme = theme === 'system' ? (systemDark ? 'dark' : 'light') : theme;
 
   const [resolvedBranding, setResolvedBranding] = useState<{
     tenant: PartnerAcademyTenant | null;
@@ -67,40 +92,22 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.style.setProperty('--nihomi-font-serif', b.fontSerif);
       root.style.setProperty('--nihomi-watermark-text', `"${b.watermarkText}"`);
       root.style.setProperty('--nihomi-certified-seal-text', `"${b.certifiedSealText}"`);
-
-      // Dynamic Favicon Update based on resolved branding
-      try {
-        let faviconLink = document.querySelector("link[rel*='icon']") as HTMLLinkElement | null;
-        if (!faviconLink) {
-          faviconLink = document.createElement('link');
-          faviconLink.rel = 'shortcut icon';
-          document.head.appendChild(faviconLink);
-        }
-
-        if (resolved.isWhiteLabel && resolved.tenant) {
-          // Generate SVG favicon with tenant accent color
-          const svgFavicon = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="${encodeURIComponent(b.accentColor)}"/><text x="50%" y="58%" font-size="52" font-weight="900" fill="white" font-family="sans-serif" text-anchor="middle" dominant-baseline="middle">${resolved.tenant.institutionName.charAt(0)}</text></svg>`;
-          faviconLink.href = svgFavicon;
-        } else {
-          faviconLink.href = '/favicon.svg';
-        }
-      } catch (err) {
-        console.warn('Favicon dynamic update notice:', err);
-      }
     }
   }, []);
 
+  // Apply resolved theme classes to html & body
   useEffect(() => {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
       root.classList.remove('light', 'dark', 'sepia');
-      root.classList.add(theme);
-      root.setAttribute('data-theme', theme);
+      root.classList.add(resolvedTheme);
+      root.setAttribute('data-theme', resolvedTheme);
+      root.setAttribute('data-theme-setting', theme);
 
-      if (theme === 'dark') {
+      if (resolvedTheme === 'dark') {
         document.body.style.backgroundColor = '#0a0a12';
         document.body.style.color = '#f1f5f9';
-      } else if (theme === 'sepia') {
+      } else if (resolvedTheme === 'sepia') {
         document.body.style.backgroundColor = '#fbf0d9';
         document.body.style.color = '#433422';
       } else {
@@ -114,17 +121,46 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.error('Failed to persist theme:', err);
       }
     }
-  }, [theme, resolvedBranding]);
+  }, [theme, resolvedTheme, resolvedBranding]);
+
+  // Sync theme to Supabase when user is authenticated
+  const syncThemeToSupabase = async (newTheme: AppTheme) => {
+    if (!isSupabaseConfigured()) return;
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData?.session?.user;
+      if (user) {
+        await supabase
+          .from('user_settings')
+          .upsert(
+            {
+              user_id: user.id,
+              theme_preference: newTheme,
+              updated_at: new Date().toISOString()
+            },
+            { onConflict: 'user_id' }
+          );
+      }
+    } catch (err) {
+      console.warn('Could not sync theme preference to Supabase:', err);
+    }
+  };
 
   const setTheme = (newTheme: AppTheme) => {
     setThemeState(newTheme);
+    syncThemeToSupabase(newTheme);
   };
 
   const toggleTheme = () => {
     setThemeState((prev) => {
-      if (prev === 'light') return 'dark';
-      if (prev === 'dark') return 'sepia';
-      return 'light';
+      let next: AppTheme = 'light';
+      if (prev === 'light') next = 'dark';
+      else if (prev === 'dark') next = 'sepia';
+      else if (prev === 'sepia') next = 'system';
+      else next = 'light';
+
+      syncThemeToSupabase(next);
+      return next;
     });
   };
 
@@ -132,6 +168,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <ThemeContext.Provider
       value={{
         theme,
+        resolvedTheme,
         setTheme,
         toggleTheme,
         branding: resolvedBranding.branding,
@@ -148,7 +185,8 @@ export function useTheme(): ThemeContextType {
   const context = useContext(ThemeContext);
   if (!context) {
     return {
-      theme: 'light',
+      theme: 'system',
+      resolvedTheme: 'light',
       setTheme: () => {},
       toggleTheme: () => {},
       branding: ContentDesignSystem.getDesignTokens(),

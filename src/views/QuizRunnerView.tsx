@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { apiRequest } from '../lib/api.js';
 import { useAuth } from '../context/AuthContext.js';
 import { useProgressSync } from '../hooks/useProgressSync.js';
@@ -23,21 +23,44 @@ import {
   Layers,
   Brain,
   Lightbulb,
-  X
+  X,
+  Zap,
+  Flame,
+  Clock,
+  Timer,
+  Target
 } from 'lucide-react';
+
+export type QuizIntensity = 'standard' | 'speed_challenge' | 'adaptive_mastery';
 
 interface QuizRunnerViewProps {
   quizId?: string;
   lessonId?: string;
+  intensity?: QuizIntensity;
+  targetConcept?: string;
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId, onNavigate }) => {
+export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
+  quizId,
+  lessonId,
+  intensity: initialIntensity = 'standard',
+  targetConcept,
+  onNavigate
+}) => {
   const { user, refreshProgress } = useAuth();
   const { syncQuizCompletion } = useProgressSync();
   const [quiz, setQuiz] = useState<any | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quizIntensity, setQuizIntensity] = useState<QuizIntensity>(initialIntensity);
+
+  // Speed Challenge Timers & Streak
+  const [questionTimeLeft, setQuestionTimeLeft] = useState<number>(15);
+  const [speedStreak, setSpeedStreak] = useState<number>(0);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
+  const speedTimerRef = useRef<any>(null);
+
   const [smartRemediationToast, setSmartRemediationToast] = useState<{
     show: boolean;
     conceptCode: string;
@@ -80,6 +103,34 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
       }
     >
   >({});
+
+  // Speed challenge countdown timer loop
+  useEffect(() => {
+    if (quizIntensity === 'speed_challenge' && !submissionResult && !isLoading) {
+      setQuestionTimeLeft(15);
+      if (speedTimerRef.current) clearInterval(speedTimerRef.current);
+
+      speedTimerRef.current = setInterval(() => {
+        setQuestionTimeLeft((prev) => {
+          if (prev <= 1) {
+            soundEffects.playIncorrectSoft();
+            haptic.trigger('warning');
+            return 0;
+          }
+          if (prev === 5) {
+            soundEffects.playClickSoft();
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      if (speedTimerRef.current) clearInterval(speedTimerRef.current);
+    }
+
+    return () => {
+      if (speedTimerRef.current) clearInterval(speedTimerRef.current);
+    };
+  }, [quizIntensity, activeQuestionIndex, submissionResult, isLoading]);
 
   const handleRequestMistakeExplanation = async (
     questionItem: any,
@@ -164,6 +215,15 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
       ...prev,
       [questionId]: optionIndex
     }));
+
+    // In speed challenge mode, reward fast answer with sound & reset timer for next item
+    if (quizIntensity === 'speed_challenge') {
+      soundEffects.playClickSoft();
+      haptic.trigger('light');
+      setActiveQuestionIndex((prev) => prev + 1);
+      setQuestionTimeLeft(15);
+      setSpeedStreak((prev) => prev + 1);
+    }
   };
 
   const handleSubmit = async () => {
@@ -318,19 +378,153 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({ quizId, lessonId
           </div>
         </div>
 
-        {/* Bento Hero Card */}
-        <div className="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-3">
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
-              JLPT {quiz.level}
-            </span>
-            <span className="text-xs text-stone-500 font-semibold">
-              Passing threshold: {quiz.passingScore}%
-            </span>
+        {/* Bento Hero Card with Intensity Modes */}
+        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
+                  JLPT {quiz.level}
+                </span>
+                <span className="text-xs text-stone-500 font-semibold">
+                  Passing threshold: {quiz.passingScore}%
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black font-serif text-stone-900">{quiz.title}</h1>
+              <p className="text-xs sm:text-sm text-stone-600">{quiz.description}</p>
+            </div>
+
+            {/* Performance Insights quick link */}
+            <button
+              onClick={() => onNavigate('quiz-insights')}
+              className="px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors self-start sm:self-auto cursor-pointer border border-stone-200"
+            >
+              <Target className="w-3.5 h-3.5 text-red-600" />
+              <span>View Retention Insights</span>
+            </button>
           </div>
 
-          <h1 className="text-2xl font-bold font-serif text-stone-900">{quiz.title}</h1>
-          <p className="text-xs sm:text-sm text-stone-600">{quiz.description}</p>
+          {/* Intensity Mode Selector */}
+          {!submissionResult && (
+            <div className="pt-3 border-t border-stone-100 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Select Quiz Intensity Mode</span>
+                </span>
+                <span className="text-[11px] text-stone-400">
+                  {quizIntensity === 'speed_challenge'
+                    ? '⚡ Timed 15s / question with combo multiplier'
+                    : quizIntensity === 'adaptive_mastery'
+                    ? '🧠 Focus on weak particles & Kanji'
+                    : '🎯 Balanced standard pacing'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {/* Standard */}
+                <button
+                  type="button"
+                  onClick={() => setQuizIntensity('standard')}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                    quizIntensity === 'standard'
+                      ? 'bg-stone-900 text-white border-stone-900 shadow-md ring-2 ring-stone-900'
+                      : 'bg-stone-50 hover:bg-stone-100 text-stone-800 border-stone-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black">Standard Practice</span>
+                    <span className="text-[10px] opacity-70">標準</span>
+                  </div>
+                  <p className="text-[11px] opacity-80 mt-1">
+                    Self-paced answering with comprehensive explanations at the end.
+                  </p>
+                </button>
+
+                {/* Speed Challenge */}
+                <button
+                  type="button"
+                  onClick={() => setQuizIntensity('speed_challenge')}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                    quizIntensity === 'speed_challenge'
+                      ? 'bg-linear-to-r from-red-600 to-amber-600 text-white border-red-600 shadow-md ring-2 ring-red-500'
+                      : 'bg-stone-50 hover:bg-stone-100 text-stone-800 border-stone-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black flex items-center gap-1">
+                      <Flame className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Speed Challenge</span>
+                    </span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/20">15s</span>
+                  </div>
+                  <p className="text-[11px] opacity-90 mt-1">
+                    15-second timer per question with combo streak bonuses (+50% XP).
+                  </p>
+                </button>
+
+                {/* Adaptive Mastery */}
+                <button
+                  type="button"
+                  onClick={() => setQuizIntensity('adaptive_mastery')}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                    quizIntensity === 'adaptive_mastery'
+                      ? 'bg-linear-to-r from-purple-700 to-indigo-700 text-white border-purple-600 shadow-md ring-2 ring-purple-500'
+                      : 'bg-stone-50 hover:bg-stone-100 text-stone-800 border-stone-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black flex items-center gap-1">
+                      <Brain className="w-3.5 h-3.5 text-purple-300" />
+                      <span>Adaptive Mastery</span>
+                    </span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/20">AI</span>
+                  </div>
+                  <p className="text-[11px] opacity-90 mt-1">
+                    Socratic guidance targeting weak particles (は vs が, に vs で) and kanji.
+                  </p>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Speed Challenge Active Timer Bar */}
+          {quizIntensity === 'speed_challenge' && !submissionResult && (
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 space-y-2 animate-in fade-in duration-200">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="flex items-center gap-1.5 text-red-600">
+                  <Timer className={`w-4 h-4 ${questionTimeLeft <= 5 ? 'animate-bounce text-red-600' : ''}`} />
+                  <span>Question Countdown:</span>
+                </span>
+                <span className={`font-mono text-sm font-black ${questionTimeLeft <= 5 ? 'text-red-600 animate-pulse' : 'text-stone-900'}`}>
+                  {questionTimeLeft}s
+                </span>
+              </div>
+              <div className="h-2 w-full bg-amber-200 rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-1000 rounded-full ${
+                    questionTimeLeft <= 5 ? 'bg-red-600' : 'bg-amber-500'
+                  }`}
+                  style={{ width: `${(questionTimeLeft / 15) * 100}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Adaptive Mastery Active Focus Banner */}
+          {quizIntensity === 'adaptive_mastery' && !submissionResult && (
+            <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 text-purple-950 flex items-start gap-3 text-xs">
+              <Sparkles className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-bold text-purple-900">
+                  Adaptive Focus Active: Prioritizing Particle & Memory Stability
+                </p>
+                <p className="text-purple-800/80 text-[11px] mt-0.5">
+                  AI Sensei will adaptively analyze subtle particle nuances (「へ」 vs 「に」, 「は」 vs 「が」) and provide Socratic breakdowns.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Results Banner if submitted */}
