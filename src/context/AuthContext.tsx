@@ -222,17 +222,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };
 
-  // 1. Listen to Supabase Session Changes (Google OAuth Redirect)
+  // Listen to Supabase Session & extract Google Avatar
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
+        const avatar =
+          u.user_metadata?.avatar_url ||
+          u.user_metadata?.picture ||
+          u.user_metadata?.avatar ||
+          undefined;
+
         const activeUser: User = {
           id: u.id,
           email: u.email || 'student@nihomi.com',
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
-          avatarUrl: u.user_metadata?.avatar_url,
+          avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',
           planId: isFounder ? 'japan_ready' : 'starter',
           status: 'ACTIVE',
@@ -249,11 +255,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
+        const avatar =
+          u.user_metadata?.avatar_url ||
+          u.user_metadata?.picture ||
+          u.user_metadata?.avatar ||
+          undefined;
+
         const activeUser: User = {
           id: u.id,
           email: u.email || 'student@nihomi.com',
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
-          avatarUrl: u.user_metadata?.avatar_url,
+          avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',
           planId: isFounder ? 'japan_ready' : 'starter',
           status: 'ACTIVE',
@@ -274,7 +286,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  // 2. Real Google OAuth via Supabase
   const loginWithGoogle = async (): Promise<boolean> => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -287,22 +298,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return true;
     } catch (err: any) {
       console.error('[Supabase Google Sign-In Error]:', err);
-      // Fallback
-      const mockUser: User = {
-        id: 'usr_google_' + Date.now(),
-        email: 'mdtanvirkabirbiplob@gmail.com',
-        name: 'Tanvir Kabir (Founder)',
-        role: 'founder',
-        planId: 'japan_ready',
-        status: 'ACTIVE',
-        studentId: 'NHO-FND-001',
-        nihomiAccountId: 'ACC-8888',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setUserData(mockUser);
-      setIsAuthModalOpen(false);
-      return true;
+      return false;
     }
   };
 

@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-// Self-contained Nihomi Master Monogram SVG (No external file dependency)
+// Self-contained Nihomi Master Monogram SVG
 const NihomiMonogram: React.FC<{ size?: number; className?: string }> = ({ size = 32, className = '' }) => (
   <svg
     width={size}
@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* 1. MASTER BRAND LOGO */}
+          {/* LOGO */}
           <button
             onClick={() => onNavigate('landing')}
             className="flex items-center space-x-3 group cursor-pointer focus:outline-hidden"
@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             </div>
           </button>
 
-          {/* 2. DESKTOP NAVIGATION */}
+          {/* DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'));
@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             })}
           </nav>
 
-          {/* 3. RIGHT CONTROLS */}
+          {/* RIGHT CONTROLS: GOOGLE AVATAR PILL */}
           <div className="hidden md:flex items-center space-x-3">
             {isFounder && (
               <button
@@ -110,17 +110,42 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   <span className="text-xs font-bold text-stone-900 max-w-[100px] truncate">
                     {user.name.split(' ')[0]}
                   </span>
-                  <div className="w-6 h-6 rounded-full bg-stone-950 text-white text-[10px] font-bold flex items-center justify-center">
-                    {user.name.charAt(0)}
-                  </div>
+                  
+                  {/* Google Profile Picture / Initial */}
+                  {user.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl}
+                      alt={user.name}
+                      className="w-6 h-6 rounded-full object-cover border border-stone-200"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-stone-950 text-white text-[10px] font-bold flex items-center justify-center">
+                      {user.name.charAt(0)}
+                    </div>
+                  )}
+
                   <ChevronDown className="w-3 h-3 text-stone-400" />
                 </button>
 
+                {/* Dropdown Menu */}
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-stone-200 py-2 z-50 text-xs text-stone-700 animate-in fade-in slide-in-from-top-2">
-                    <div className="px-4 py-2 border-b border-stone-100">
-                      <p className="font-bold text-stone-900 truncate">{user.name}</p>
-                      <p className="text-[10px] text-stone-400 font-mono truncate">{user.email}</p>
+                  <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-stone-200 py-2 z-50 text-xs text-stone-700 animate-in fade-in slide-in-from-top-2">
+                    <div className="px-4 py-3 border-b border-stone-100 flex items-center space-x-3">
+                      {user.avatarUrl ? (
+                        <img
+                          src={user.avatarUrl}
+                          alt={user.name}
+                          className="w-10 h-10 rounded-full object-cover border border-stone-200 shadow-xs"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-stone-950 text-white font-bold text-sm flex items-center justify-center">
+                          {user.name.charAt(0)}
+                        </div>
+                      )}
+                      <div className="overflow-hidden">
+                        <p className="font-bold text-stone-900 truncate">{user.name}</p>
+                        <p className="text-[10px] text-stone-400 font-mono truncate">{user.email}</p>
+                      </div>
                     </div>
 
                     <button
@@ -183,14 +208,20 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* 4. MOBILE HAMBURGER BUTTON */}
+          {/* MOBILE TOGGLE */}
           <div className="md:hidden flex items-center space-x-2">
             {user ? (
               <button
                 onClick={() => onNavigate('portal')}
-                className="w-8 h-8 rounded-full bg-stone-950 text-white text-xs font-bold flex items-center justify-center"
+                className="w-8 h-8 rounded-full overflow-hidden border border-stone-200 flex items-center justify-center cursor-pointer"
               >
-                {user.name.charAt(0)}
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-stone-950 text-white text-xs font-bold flex items-center justify-center">
+                    {user.name.charAt(0)}
+                  </div>
+                )}
               </button>
             ) : (
               <button
@@ -212,7 +243,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
         </div>
       </div>
 
-      {/* MOBILE DRAWER */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#FAF9F6] border-b border-stone-200 px-4 pt-2 pb-6 space-y-2 text-xs">
           {navItems.map((item) => (
