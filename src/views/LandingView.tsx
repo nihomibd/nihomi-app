@@ -91,7 +91,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 selection:bg-red-500 selection:text-white">
+    <div className="bg-[#FAF9F6] text-stone-900 selection:bg-red-500 selection:text-white">
       
       {/* 1. HERO & PROMPT HUB */}
       <section className="pt-14 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
@@ -132,7 +132,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        {/* 2. EXACT SEARCH BAR WITH VOICE, PHOTO OCR & KANJI CANVAS (Matching Screenshot) */}
+        {/* 2. SEARCH BAR WITH VOICE, PHOTO OCR & KANJI CANVAS */}
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-3xl border border-stone-200 shadow-sm hover:border-stone-300 transition-all p-4 sm:p-5 text-left space-y-4">
             
@@ -149,7 +149,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             {/* Bottom Actions Row: 3 Trigger Buttons + Send Arrow */}
             <div className="flex items-center justify-between pt-2 border-t border-stone-100">
               
-              {/* 3 Buttons: Voice, Photo OCR, Kanji Canvas */}
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
@@ -257,7 +256,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* 3. CURATED PATHWAYS OVERVIEW */}
-      <section className="py-12 bg-white border-t border-stone-200/80 px-4 sm:px-6 lg:px-8">
+      <section className="py-14 bg-white border-t border-stone-200/80 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-black text-stone-950 tracking-tight">
@@ -320,12 +319,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
-
-      {/* 4. FOOTER */}
-      <footer className="py-8 bg-[#FAF9F6] border-t border-stone-200 text-center text-xs text-stone-500">
-        <p className="font-semibold text-stone-700">NIHOMI (ニホミ) • Japanese Learning Platform</p>
-        <p className="text-[11px] text-stone-400 mt-1">© 2026 Nihomi Global. All rights reserved.</p>
-      </footer>
 
       {/* INTERACTIVE MODALS */}
       {isVoiceActive && (

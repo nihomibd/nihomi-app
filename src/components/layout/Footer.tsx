@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NihomiMonogram: React.FC<{ size?: number }> = ({ size = 28 }) => (
+const NihomiMonogram: React.FC<{ size?: number }> = ({ size = 26 }) => (
   <svg
     width={size}
     height={size}
@@ -23,42 +23,56 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
-    <footer className="w-full bg-[#FAF9F6] border-t border-stone-200 py-12 px-4 sm:px-6 lg:px-8 text-xs text-stone-500 font-sans antialiased text-left">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-stone-200/80">
-          
-          <div className="space-y-2 max-w-md">
-            <div className="flex items-center space-x-3">
-              <NihomiMonogram size={28} />
+    <footer className="w-full bg-[#FAF9F6] border-t border-stone-200/80 py-12 px-4 sm:px-6 lg:px-8 text-xs text-stone-500 font-sans antialiased">
+      <div className="max-w-5xl mx-auto space-y-8">
+        
+        {/* Top Centered Brand Identity */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-stone-200/60">
+          <div className="flex items-center space-x-3">
+            <NihomiMonogram size={26} />
+            <div className="flex items-baseline space-x-1.5">
               <span className="font-black text-stone-950 text-base tracking-tight">NIHOMI</span>
-              <span className="text-stone-300">•</span>
-              <span className="font-semibold text-stone-700">nihomi.com</span>
+              <span className="text-[11px] font-japanese font-medium text-stone-500">日本語</span>
             </div>
-            <p className="text-[11px] text-stone-500 leading-relaxed">
-              AI-Powered Continuous Japanese Learning Companion. Seamless adaptive JLPT N5–N1 mastery ecosystem.
-            </p>
+            <span className="text-stone-300">•</span>
+            <span className="text-xs text-stone-600 font-medium">Continuous Learning OS</span>
           </div>
 
-          <div className="flex items-center space-x-6 text-stone-600 font-medium">
-            <button onClick={() => onNavigate?.('courses')} className="hover:text-stone-950 transition-colors cursor-pointer">
+          {/* Quick Clean Navigation Links */}
+          <div className="flex items-center space-x-6 text-xs font-semibold text-stone-600">
+            <button
+              onClick={() => onNavigate?.('courses')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
               Pathways
             </button>
-            <button onClick={() => onNavigate?.('documents')} className="hover:text-stone-950 transition-colors cursor-pointer">
+            <button
+              onClick={() => onNavigate?.('portal')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => onNavigate?.('documents')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
               Resources
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-stone-400 font-mono">
+        {/* Bottom Legal & Philosophy Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-stone-400">
           <div>
-            © {new Date().getFullYear()} NIHOMI Global. All rights reserved.
+            © {new Date().getFullYear()} NIHOMI.COM. All rights reserved.
           </div>
-          <div className="flex items-center space-x-3">
-            <span>Infinity Learning Loop</span>
+          <div className="flex items-center space-x-2">
+            <span>Adaptive JLPT Intelligence</span>
             <span>•</span>
-            <span>N∞O Monogram DNA</span>
+            <span>N∞O Learning DNA</span>
           </div>
         </div>
+
       </div>
     </footer>
   );
