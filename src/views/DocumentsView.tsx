@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Printer,
-  ShieldCheck,
-  CheckCircle2,
-  Search,
-  QrCode
-} from 'lucide-react';
+import { Printer, ShieldCheck, CheckCircle2, Search, QrCode } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const DocumentsView: React.FC = () => {
   const { user, profile } = useAuth();
   const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice'>('certificate');
-
-  // Verification search state
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationResult, setVerificationResult] = useState<any | null>(null);
 
@@ -21,34 +13,30 @@ export const DocumentsView: React.FC = () => {
   const accountId = user?.nihomiAccountId || 'ACC-9821';
   const currentLevel = profile?.targetLevel || 'N5';
 
-  const handleVerifySearch = (e: React.FormEvent) => {
+  const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (!verificationCode.trim()) return;
-
     setVerificationResult({
-      valid: true,
-      certNumber: verificationCode.toUpperCase(),
-      studentName: studentName,
-      studentId: studentId,
-      courseTitle: `JLPT ${currentLevel} Foundational Japanese (150 Hours)`,
       status: 'OFFICIAL ACADEMIC RECORD VERIFIED',
+      studentName,
+      studentId,
+      courseTitle: 'JLPT ' + currentLevel + ' Foundational Japanese (150 Hours)',
       issuedBy: 'Nihomi Academic Council • Global Japanese Learning OS',
-      issueDate: new Date().toISOString().split('T')[0],
     });
   };
 
   return (
     <div className="bg-[#FAF9F6] text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* Document Selector & Actions Toolbar */}
+        {/* Top Controls */}
         <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="space-y-0.5">
+          <div>
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <h1 className="text-base font-bold text-stone-900">Official Document & Verification System</h1>
+              <h1 className="text-base font-bold text-stone-900">Official Academic Credentials</h1>
             </div>
-            <p className="text-xs text-stone-500">Standardized print-ready A4 credentials and verifiable academic records.</p>
+            <p className="text-xs text-stone-500">Print-ready A4 credentials and verifiable records.</p>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -72,16 +60,16 @@ export const DocumentsView: React.FC = () => {
           </div>
         </div>
 
-        {/* Live Certificate Verification Search Bar */}
+        {/* Verification Box */}
         <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-2xs space-y-4">
           <div className="flex items-center space-x-2">
             <Search className="w-4 h-4 text-stone-400" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-stone-700">
-              Verify Official Student Certificate Online
+              Verify Student Certificate Online
             </h3>
           </div>
 
-          <form onSubmit={handleVerifySearch} className="flex flex-col sm:flex-row items-center gap-3">
+          <form onSubmit={handleVerify} className="flex flex-col sm:flex-row items-center gap-3">
             <input
               type="text"
               value={verificationCode}
@@ -113,78 +101,117 @@ export const DocumentsView: React.FC = () => {
         </div>
 
         {/* Printable Document Paper */}
-        <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[900px] relative text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8">
+        <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-12 max-w-[800px] mx-auto text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8 space-y-6">
           
-          {/* Official Document Header */}
-          <div className="flex items-start justify-between border-b-2 border-stone-900 pb-4 mb-8">
+          {/* Header */}
+          <div className="flex items-start justify-between border-b-2 border-stone-900 pb-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-stone-900 text-white font-bold flex items-center justify-center text-xl shadow-xs">
+              <div className="w-10 h-10 rounded-xl bg-stone-900 text-white font-bold flex items-center justify-center text-lg shadow-xs">
                 日
               </div>
               <div>
-                <h2 className="text-lg font-extrabold tracking-tight text-stone-900">NIHOMI JAPANESE LEARNING</h2>
+                <h2 className="text-base font-extrabold tracking-tight text-stone-900">NIHOMI JAPANESE LEARNING</h2>
                 <p className="text-[11px] text-stone-600 font-medium">Nihomi Academic Council • Continuous Japanese Learning OS</p>
-                <p className="text-[10px] text-stone-500 font-mono">Official Academic Portal • nihomi.com/verify</p>
               </div>
             </div>
-            <div className="text-right text-[10px] text-stone-500 space-y-0.5 font-mono">
-              <div className="text-stone-900 font-bold">DOC REF: NHM-2026-ACAD</div>
-              <div>Date: {new Date().toISOString().split('T')[0]}</div>
+            <div className="text-right text-[10px] text-stone-500 font-mono space-y-0.5">
+              <div className="text-stone-900 font-bold">DOC REF: NHM-2026</div>
               <div className="text-emerald-700 font-bold uppercase flex items-center justify-end space-x-1">
                 <ShieldCheck className="w-3 h-3 text-emerald-600 inline" />
-                <span>VERIFIED RECORD</span>
+                <span>VERIFIED</span>
               </div>
             </div>
           </div>
 
-          {/* TEMPLATE 1: 150-HOUR CERTIFICATE */}
+          {/* Certificate Body */}
           {docType === 'certificate' && (
-            <div className="text-center py-6 space-y-6">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 font-mono">
-                  ACADEMIC COMPLETION RECORD
-                </span>
-                <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight">
-                  CERTIFICATE OF JAPANESE PROFICIENCY
-                </h3>
-                <p className="text-xs text-stone-500 font-japanese">日本語学習修了証明書</p>
-              </div>
+            <div className="text-center py-4 space-y-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 font-mono block">
+                ACADEMIC COMPLETION RECORD
+              </span>
+              <h3 className="text-xl font-extrabold text-stone-900 tracking-tight">
+                CERTIFICATE OF JAPANESE PROFICIENCY
+              </h3>
+              <p className="text-xs text-stone-500 font-japanese">日本語学習修了証明書</p>
 
-              <div className="max-w-xl mx-auto text-xs text-stone-700 leading-relaxed space-y-3 pt-2">
+              <div className="max-w-lg mx-auto text-xs text-stone-700 space-y-2 pt-2">
                 <p>This is to officially certify that</p>
-                <p className="text-xl font-bold text-stone-900 font-serif border-b border-stone-300 pb-1 inline-block px-8">
+                <p className="text-lg font-bold text-stone-900 font-serif border-b border-stone-300 pb-1 inline-block px-6">
                   {studentName}
                 </p>
-                <p className="text-stone-500 font-mono text-[11px]">
-                  Student ID: <span className="font-bold text-stone-900">{studentId}</span> • Account ID:{' '}
-                  <span className="font-bold text-stone-900">{accountId}</span>
+                <p className="text-stone-500 font-mono text-[10px]">
+                  Student ID: <span className="font-bold text-stone-900">{studentId}</span> • Account ID: <span className="font-bold text-stone-900">{accountId}</span>
                 </p>
-
                 <p className="pt-2 text-justify">
-                  has successfully completed the intensive curriculum for <strong>JLPT {currentLevel} Foundational Japanese (150 Hours)</strong> covering grammar patterns, vocabulary, Kanji calligraphy, reading comprehension, and oral conversational readiness in accordance with Nihomi Standard™ Academic Guidelines.
+                  has successfully completed the intensive curriculum for <strong>JLPT {currentLevel} Foundational Japanese (150 Hours)</strong> covering grammar patterns, vocabulary, Kanji calligraphy, and conversational readiness.
                 </p>
               </div>
 
-              {/* Evaluation Record Table */}
-              <div className="max-w-md mx-auto bg-stone-50 rounded-2xl border border-stone-200 p-4 text-xs text-left space-y-2">
-                <div className="font-bold text-stone-900 border-b border-stone-200 pb-1 text-[11px] uppercase tracking-wider">
-                  Academic Evaluation Summary
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-[11px] text-stone-600 font-mono">
-                  <div>Curriculum Level: <strong className="text-stone-900">JLPT {currentLevel}</strong></div>
-                  <div>Certified Hours: <strong className="text-stone-900">150 Hours</strong></div>
-                  <div>Performance: <strong className="text-emerald-700">Grade A (Mastery)</strong></div>
-                  <div>Attendance Ratio: <strong className="text-stone-900">98.4%</strong></div>
-                </div>
-              </div>
-
-              {/* QR Verification */}
-              <div className="pt-4 flex items-center justify-center space-x-2 text-[10px] text-stone-500 font-mono">
-                <QrCode className="w-4 h-4 text-stone-700" />
-                <span>Scan or verify online at nihomi.com/verify/{studentId}</span>
-              </div>
-
-              {/* Signatures */}
-              <div className="pt-10 grid grid-cols-2 gap-8 text-xs text-center border-t border-stone-200 mt-10">
+              <div className="pt-6 grid grid-cols-2 gap-6 text-xs text-center border-t border-stone-200 mt-6">
                 <div className="space-y-1">
-                  <div className="font
+                  <div className="font-serif italic font-bold text-stone-900 text-xs">Yuki Tanaka (Sensei)</div>
+                  <div className="text-[10px] text-stone-500">Lead Academic Director</div>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-serif italic font-bold text-stone-900 text-xs">MD Tanvir Kabir Biplob</div>
+                  <div className="text-[10px] text-stone-500">Founder & CEO</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Letterhead Body */}
+          {docType === 'letterhead' && (
+            <div className="space-y-4 text-xs text-stone-800 pt-2 text-left">
+              <div className="space-y-1">
+                <strong className="block text-sm font-bold text-stone-900">
+                  SUBJECT: Verification of 150-Hour Japanese Study & Academic Standing
+                </strong>
+                <p>
+                  This official academic letter confirms that <strong>{studentName}</strong> (Student ID: <span className="font-mono font-bold">{studentId}</span>) is an active, verified learner on the Nihomi Japanese Learning Platform.
+                </p>
+              </div>
+              <div className="bg-stone-50 p-4 rounded-xl border border-stone-200 text-[11px] space-y-1 font-mono">
+                <div>Student: {studentName}</div>
+                <div>Registration: {studentId}</div>
+                <div>Curriculum: Japanese JLPT {currentLevel} Program (150 Hours)</div>
+              </div>
+            </div>
+          )}
+
+          {/* Invoice Body */}
+          {docType === 'invoice' && (
+            <div className="space-y-4 text-xs text-stone-800 pt-2 text-left">
+              <div className="flex justify-between items-start border-b border-stone-200 pb-3">
+                <div>
+                  <h3 className="text-sm font-bold text-stone-900">NIHOMI LEARNING TUITION RECEIPT</h3>
+                  <p className="text-[10px] text-stone-500 font-mono">Invoice: NHM-INV-2026-0812</p>
+                </div>
+                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold text-[10px] rounded border border-emerald-200">
+                  PAID IN FULL
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-4 text-[11px]">
+                <div>
+                  <strong className="text-stone-900 block">Billed To:</strong>
+                  <span>{studentName} ({studentId})</span>
+                </div>
+                <div className="text-right">
+                  <strong className="text-stone-900 block">Plan:</strong>
+                  <span>JLPT {currentLevel} Continuous Track (৳ 990/mo)</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Footer Note */}
+          <div className="pt-4 text-center border-t border-stone-200 text-[9px] text-stone-400 font-mono">
+            *Official Document of Nihomi Academic Council • Verify at nihomi.com/verify
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};
