@@ -9,7 +9,24 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { NihomiMonogram } from '../common/NihomiMonogram';
+
+// Self-contained Nihomi Master Monogram SVG (No external file dependency)
+const NihomiMonogram: React.FC<{ size?: number; className?: string }> = ({ size = 32, className = '' }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 100 100"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={`inline-block shrink-0 ${className}`}
+  >
+    <path d="M20 82V28C20 23.5817 23.5817 20 28 20H32C36.4183 20 40 23.5817 40 28V82H20Z" fill="#0F172A" />
+    <path d="M32 24L72 76C75 80 80 80 84 76C88 72 88 66 84 62L62 38C58 34 52 34 48 38L32 54" stroke="#4F46E5" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M68 82V38C68 33.5817 71.5817 30 76 30H80C84.4183 30 88 33.5817 88 38V82H68Z" fill="#0F172A" />
+    <circle cx="50" cy="50" r="10" stroke="#4F46E5" strokeWidth="6" strokeDasharray="4 2" />
+    <circle cx="78" cy="22" r="8" fill="#E11D48" />
+  </svg>
+);
 
 interface HeaderProps {
   currentView: string;
@@ -35,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* LOGO */}
+          {/* 1. MASTER BRAND LOGO */}
           <button
             onClick={() => onNavigate('landing')}
             className="flex items-center space-x-3 group cursor-pointer focus:outline-hidden"
@@ -51,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             </div>
           </button>
 
-          {/* DESKTOP NAVIGATION */}
+          {/* 2. DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'));
@@ -71,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             })}
           </nav>
 
-          {/* RIGHT CONTROLS */}
+          {/* 3. RIGHT CONTROLS */}
           <div className="hidden md:flex items-center space-x-3">
             {isFounder && (
               <button
@@ -166,7 +183,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* MOBILE TOGGLE */}
+          {/* 4. MOBILE HAMBURGER BUTTON */}
           <div className="md:hidden flex items-center space-x-2">
             {user ? (
               <button
@@ -195,6 +212,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
         </div>
       </div>
 
+      {/* MOBILE DRAWER */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#FAF9F6] border-b border-stone-200 px-4 pt-2 pb-6 space-y-2 text-xs">
           {navItems.map((item) => (
