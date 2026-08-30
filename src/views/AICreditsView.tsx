@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
-  Zap,
+  Coins,
   CheckCircle2,
-  ShieldCheck,
   CreditCard,
-  Tag,
-  ArrowRight,
-  Loader2,
-  Crown,
-  Flame,
-  Smartphone,
-  Check,
-  Lock,
-  History,
-  Bot,
-  AlertCircle
+  ShieldCheck,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,124 +13,125 @@ interface AICreditsViewProps {
 }
 
 export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
-  const { user, subscriptionDetails, topUpCredits, refreshSubscription } = useAuth();
-  const [selectedPack, setSelectedPack] = useState<string>('pack-ai-1500');
-  const [provider, setProvider] = useState<'bkash' | 'sslcommerz'>('bkash');
+  const { coinWallet, user, setUserData } = useAuth();
+  const [selectedPack, setSelectedPack] = useState<string>('pack-coins-750');
+  const [provider, setProvider] = useState<'card' | 'eps' | 'bkash'>('bkash');
+  const [currency, setCurrency] = useState<'USD' | 'JPY' | 'BDT'>('BDT');
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState<string | null>(null);
-  const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   const packs = [
     {
-      id: 'pack-ai-500',
-      credits: 500,
-      title: 'Starter AI Add-On',
-      priceBDT: 150,
-      description: 'Perfect for quick sign photo translations, Furigana checks & voice chats.',
-      features: ['500 AI Sensei Queries', 'Vision Sensei 📷 OCR Scans', 'Never Expires', 'Voice Pitch Accent Check']
+      id: 'pack-coins-250',
+      coins: 250,
+      title: 'Starter Pack',
+      priceUSD: 4,
+      priceJPY: 600,
+      priceBDT: 480,
+      description: 'Ideal for extra voice coaching and daily photo OCR scans.',
     },
     {
-      id: 'pack-ai-1500',
-      credits: 1500,
-      title: 'Power Learner AI Add-On',
-      priceBDT: 350,
-      badge: 'Most Popular',
-      description: 'Extensive voice notes practice, JLPT question breakdowns, and camera scans.',
-      features: ['1,500 Voice & Text Interactions', 'Full Sentence DNA™ Access', 'High-Speed Priority Routing', 'Never Expires']
+      id: 'pack-coins-750',
+      coins: 750,
+      title: 'Power Learner',
+      priceUSD: 10,
+      priceJPY: 1500,
+      priceBDT: 1200,
+      badge: 'MOST POPULAR',
+      description: 'Extensive voice notes, JLPT question breakdowns, and Kanji canvas evaluation.',
     },
     {
-      id: 'pack-ai-5000',
-      credits: 5000,
-      title: 'Career & Interview Booster',
-      priceBDT: 850,
-      badge: 'Best Value',
-      description: 'High-volume Japanese job interview prep and live voice dialogue coaching.',
-      features: ['5,000 AI Queries', 'Tokyo Principal Interview Lab', 'BaitoOS™ Voice Practice Mode', 'Never Expires']
+      id: 'pack-coins-2000',
+      coins: 2000,
+      title: 'Career Booster',
+      priceUSD: 24,
+      priceJPY: 3600,
+      priceBDT: 2880,
+      badge: 'BEST VALUE',
+      description: 'High-volume Japanese job interview prep and unlimited Gemini AI Sensei coaching.',
     },
   ];
 
-  const currentActivePack = packs.find((p) => p.id === selectedPack) || packs[1];
-
-  const remainingQuota =
-    subscriptionDetails?.aiCreditsRemaining ??
-    subscriptionDetails?.usage?.remainingQuota ??
-    150;
-
-  const handlePurchase = async () => {
+  const handlePurchase = () => {
     setIsPurchasing(true);
     setPurchaseSuccess(null);
-    setPurchaseError(null);
-    try {
-      // Simulate real-time bKash tokenized payment checkout or SSLCommerz gateway
-      await new Promise((r) => setTimeout(r, 1200));
-      
-      topUpCredits(currentActivePack.credits);
-      await refreshSubscription();
-      
-      setPurchaseSuccess(
-        `Successfully added ${currentActivePack.credits.toLocaleString()} AI Credits to your account via ${
-          provider === 'bkash' ? 'bKash MFS (Instant Tokenized)' : 'SSLCommerz Gateway'
-        }!`
-      );
-    } catch (err: any) {
-      setPurchaseError(err.message || 'Payment processing failed. Please try again.');
-    } finally {
+
+    const pack = packs.find((p) => p.id === selectedPack);
+    const addedCoins = pack?.coins || 250;
+
+    setTimeout(() => {
+      if (coinWallet) {
+        coinWallet.coinBalance += addedCoins;
+        coinWallet.lifetimeEarned += addedCoins;
+      }
+      if (user) {
+        setUserData({ ...user });
+      }
+      setPurchaseSuccess(`✓ Successfully added ${addedCoins} Nihomi Coins to your wallet!`);
       setIsPurchasing(false);
-    }
+    }, 1000);
   };
 
+  const currentCoins = coinWallet?.coinBalance ?? 500;
+
   return (
-    <div
-      id="ai-credits-wallet-page"
-      className="min-h-screen bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-amber-950 py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
-    >
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header Hero */}
-        <div className="bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] rounded-3xl p-8 sm:p-10 shadow-2xs space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-50 dark:bg-rose-950/60 sepia:bg-[#f0e4cc] text-red-700 dark:text-rose-300 sepia:text-amber-900 text-xs font-bold border border-red-200 dark:border-rose-900 sepia:border-[#d9cbaf]">
-            <Sparkles className="w-4 h-4 text-red-500 dark:text-rose-400" />
-            <span>NIHOMI AI SENSEI CREDIT HUB</span>
+        <div className="bg-white border border-stone-200 rounded-3xl p-8 sm:p-10 shadow-2xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200">
+              <Coins className="w-4 h-4 text-amber-600" />
+              <span>NIHOMI COINS ECONOMY</span>
+            </div>
+
+            {/* Currency Selector */}
+            <div className="flex items-center space-x-1 text-xs font-bold bg-stone-100 p-1 rounded-xl">
+              {(['BDT', 'USD', 'JPY'] as const).map((curr) => (
+                <button
+                  key={curr}
+                  onClick={() => setCurrency(curr)}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                    currency === curr ? 'bg-white text-stone-900 shadow-2xs' : 'text-stone-500 hover:text-stone-900'
+                  }`}
+                >
+                  {curr === 'USD' ? '$ USD' : curr === 'JPY' ? '¥ JPY' : '৳ BDT'}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900 dark:text-white sepia:text-amber-950">
-            AI Credits & Instant Top-Up Packs
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-950">
+            Nihomi Coins & Learning Credits
           </h1>
-          <p className="text-stone-600 dark:text-stone-300 sepia:text-stone-800 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Your Nihomi subscription includes a generous monthly quota. If you need additional credits for extensive voice conversation, continuous camera photo OCR, or deep grammar inquiries, top up instantly with bKash.
+          <p className="text-stone-600 text-xs sm:text-sm max-w-2xl leading-relaxed">
+            Your Nihomi account includes regular monthly coins. Top up flexible prepaid Nihomi Coins anytime for voice speech coaching, book page OCR parsing, and personalized mock exam simulations.
           </p>
 
-          {/* Current Quota Status Pill */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-stone-50 dark:bg-stone-800/80 sepia:bg-[#f0e4cc] border border-stone-200 dark:border-stone-700 sepia:border-[#d9cbaf] flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
-            <div className="space-y-1">
-              <span className="text-[10px] text-stone-500 dark:text-stone-400 font-bold uppercase tracking-wider block">
-                Active AI Voice & Vision Quota
+          {/* Current Balance */}
+          <div className="p-5 rounded-2xl bg-stone-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+            <div className="space-y-0.5">
+              <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider block font-mono">
+                Active Wallet Balance
               </span>
-              <p className="text-2xl font-black text-stone-900 dark:text-white sepia:text-amber-950 flex items-center gap-2">
-                <Zap className="w-6 h-6 text-amber-500" />
-                <span>{remainingQuota.toLocaleString()} Queries Remaining</span>
+              <p className="text-3xl font-black text-white font-mono flex items-center space-x-2">
+                <Coins className="w-6 h-6 text-amber-400" />
+                <span>{currentCoins} Coins</span>
               </p>
-              <span className="text-[11px] text-stone-500 dark:text-stone-400">
-                Credits never expire and roll over automatically across billing cycles.
-              </span>
             </div>
             <button
-              id="btn-navigate-subscription-tier"
-              type="button"
-              onClick={() => onNavigate('pricing')}
-              className="px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer shrink-0"
+              onClick={() => onNavigate('courses')}
+              className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-xs transition-colors cursor-pointer shrink-0"
             >
-              Manage Subscription Plan
+              Explore Japanese Curriculum →
             </button>
           </div>
         </div>
 
         {purchaseSuccess && (
-          <div
-            id="alert-purchase-success"
-            className="p-4 bg-emerald-50 dark:bg-emerald-950/60 sepia:bg-[#f0e4cc] border border-emerald-200 dark:border-emerald-800 sepia:border-[#d9cbaf] rounded-2xl text-xs text-emerald-950 dark:text-emerald-200 sepia:text-emerald-900 font-bold flex items-center space-x-2 animate-in fade-in"
-          >
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-950 font-bold flex items-center space-x-2 animate-in fade-in">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{purchaseSuccess}</span>
           </div>
         )}
@@ -153,42 +143,33 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
             return (
               <div
                 key={p.id}
-                id={`pack-card-${p.id}`}
                 onClick={() => setSelectedPack(p.id)}
                 className={`p-6 rounded-3xl border cursor-pointer transition-all relative flex flex-col justify-between space-y-4 ${
                   isSelected
-                    ? 'bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] border-red-600 dark:border-rose-500 shadow-md ring-2 ring-red-500/20 dark:ring-rose-500/30'
-                    : 'bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] hover:border-stone-300 dark:hover:border-stone-700 shadow-2xs'
+                    ? 'bg-white border-stone-950 shadow-md ring-2 ring-stone-900/20'
+                    : 'bg-white border-stone-200 hover:border-stone-300 shadow-2xs'
                 }`}
               >
                 {p.badge && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-red-600 dark:bg-rose-600 sepia:bg-amber-900 text-white text-[10px] font-extrabold rounded-full uppercase tracking-wider shadow-2xs">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-stone-950 text-white text-[10px] font-extrabold rounded-full uppercase tracking-wider shadow-2xs">
                     {p.badge}
                   </div>
                 )}
-                <div className="space-y-3">
-                  <span className="text-xs font-bold text-red-600 dark:text-rose-400 uppercase tracking-wider">
-                    {p.credits.toLocaleString()} AI CREDITS
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-amber-600 uppercase tracking-wider font-mono">
+                    {p.coins} NIHOMI COINS
                   </span>
-                  <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">{p.title}</h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">{p.description}</p>
-                  
-                  <div className="pt-2 space-y-1.5 border-t border-stone-100 dark:border-stone-800 sepia:border-[#d9cbaf]">
-                    {p.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center space-x-2 text-[11px] text-stone-600 dark:text-stone-300">
-                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="text-lg font-bold text-stone-950">{p.title}</h3>
+                  <p className="text-xs text-stone-500 leading-relaxed">{p.description}</p>
                 </div>
-
-                <div className="pt-4 border-t border-stone-100 dark:border-stone-800 sepia:border-[#d9cbaf] flex items-baseline justify-between">
-                  <span className="text-2xl font-extrabold text-stone-900 dark:text-white sepia:text-amber-950 font-mono">
-                    ৳{p.priceBDT}
+                <div className="pt-4 border-t border-stone-100 flex items-baseline justify-between">
+                  <span className="text-2xl font-extrabold text-stone-950 font-mono">
+                    {currency === 'USD' && `$${p.priceUSD}`}
+                    {currency === 'JPY' && `¥${p.priceJPY}`}
+                    {currency === 'BDT' && `৳${p.priceBDT}`}
                   </span>
-                  <span className={`text-xs font-bold ${isSelected ? 'text-red-600 dark:text-rose-400' : 'text-stone-400'}`}>
-                    {isSelected ? '✓ Selected' : 'Click to select'}
+                  <span className="text-xs font-bold text-stone-900">
+                    {isSelected ? '✓ Selected' : 'Select'}
                   </span>
                 </div>
               </div>
@@ -196,87 +177,81 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
           })}
         </div>
 
-        {/* Payment Method & Checkout */}
-        <div className="bg-white dark:bg-stone-900 sepia:bg-[#fff9ed] border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbaf] rounded-3xl p-6 sm:p-8 shadow-2xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <h3 className="text-base font-bold text-stone-900 dark:text-white sepia:text-amber-950">
-              Select Payment Method (Instant Activation)
-            </h3>
-            <span className="text-xs text-stone-500 dark:text-stone-400">
-              Selected: <strong className="text-stone-900 dark:text-white">{currentActivePack.title} (৳{currentActivePack.priceBDT})</strong>
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Payment Methods */}
+        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-2xs space-y-5">
+          <h3 className="text-base font-bold text-stone-950">
+            Select Payment Method
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <button
-              id="payment-method-bkash"
               type="button"
               onClick={() => setProvider('bkash')}
-              className={`p-4 rounded-2xl border flex items-center space-x-3.5 transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl border flex items-center space-x-3 transition-all cursor-pointer ${
                 provider === 'bkash'
-                  ? 'border-pink-500 bg-pink-50/60 dark:bg-pink-950/40 ring-2 ring-pink-500/20'
-                  : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 bg-stone-50 dark:bg-stone-800/60'
+                  ? 'border-pink-500 bg-pink-50/60 ring-2 ring-pink-500/10'
+                  : 'border-stone-200 hover:border-stone-300'
               }`}
             >
-              <div className="w-10 h-10 rounded-xl bg-[#E2136E] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-pink-600 text-white font-black text-xs flex items-center justify-center">
                 bK
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-stone-900 dark:text-white sepia:text-amber-950">bKash Tokenized Checkout</p>
-                <p className="text-[10px] text-stone-500 dark:text-stone-400">Direct PIN / OTP & Instant Credit Wallet Top-Up</p>
+                <p className="text-xs font-bold text-stone-900">bKash MFS</p>
+                <p className="text-[10px] text-stone-500">Instant Local Activation</p>
               </div>
             </button>
 
             <button
-              id="payment-method-sslcommerz"
               type="button"
-              onClick={() => setProvider('sslcommerz')}
-              className={`p-4 rounded-2xl border flex items-center space-x-3.5 transition-all cursor-pointer ${
-                provider === 'sslcommerz'
-                  ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/40 ring-2 ring-blue-500/20'
-                  : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 bg-stone-50 dark:bg-stone-800/60'
+              onClick={() => setProvider('card')}
+              className={`p-4 rounded-2xl border flex items-center space-x-3 transition-all cursor-pointer ${
+                provider === 'card'
+                  ? 'border-stone-950 bg-stone-50 ring-2 ring-stone-900/10'
+                  : 'border-stone-200 hover:border-stone-300'
               }`}
             >
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
-                <CreditCard className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-xl bg-stone-950 text-white font-bold flex items-center justify-center">
+                <CreditCard className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-stone-900 dark:text-white sepia:text-amber-950">SSLCommerz / Cards / MFS</p>
-                <p className="text-[10px] text-stone-500 dark:text-stone-400">Nagad, Rocket, Visa, Mastercard, Internet Banking</p>
+                <p className="text-xs font-bold text-stone-900">International Cards</p>
+                <p className="text-[10px] text-stone-500">Visa, Mastercard, Amex</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setProvider('eps')}
+              className={`p-4 rounded-2xl border flex items-center space-x-3 transition-all cursor-pointer ${
+                provider === 'eps'
+                  ? 'border-indigo-600 bg-indigo-50/60 ring-2 ring-indigo-600/10'
+                  : 'border-stone-200 hover:border-stone-300'
+              }`}
+            >
+              <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-xs">
+                EPS
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-bold text-stone-900">EPS & Global Bank</p>
+                <p className="text-[10px] text-stone-500">Japan & Overseas Gateway</p>
               </div>
             </button>
           </div>
 
-          {purchaseSuccess && (
-            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs font-semibold flex items-center space-x-2.5 animate-in fade-in">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>{purchaseSuccess}</span>
-            </div>
-          )}
-
-          {purchaseError && (
-            <div className="p-4 rounded-2xl bg-red-50 dark:bg-rose-950/40 border border-red-200 dark:border-rose-800 text-red-800 dark:text-rose-200 text-xs font-semibold flex items-center space-x-2.5 animate-in fade-in">
-              <AlertCircle className="w-5 h-5 text-red-600 dark:text-rose-400 shrink-0" />
-              <span>{purchaseError}</span>
-            </div>
-          )}
-
           <button
-            id="btn-top-up-ai-credits"
-            type="button"
             onClick={handlePurchase}
             disabled={isPurchasing}
-            className="w-full py-3.5 rounded-xl bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
+            className="w-full py-3.5 rounded-xl bg-stone-950 hover:bg-stone-800 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
           >
             {isPurchasing ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-red-400 dark:text-rose-200" />
-                <span>Processing Instant Top-Up with {provider === 'bkash' ? 'bKash' : 'SSLCommerz'}...</span>
+                <Loader2 className="w-4 h-4 animate-spin text-red-400" />
+                <span>Processing Payment Securely...</span>
               </>
             ) : (
               <>
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Top Up {currentActivePack.credits.toLocaleString()} AI Credits (৳{currentActivePack.priceBDT})</span>
+                <span>Authorize & Top Up Coins</span>
               </>
             )}
           </button>
