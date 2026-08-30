@@ -31,7 +31,6 @@ import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
-import { GlobalTextSenseiPopup } from './components/GlobalTextSenseiPopup';
 import {
   Sparkles,
   Volume2,
@@ -242,9 +241,6 @@ export const App: React.FC = () => {
 
       {/* Persistent AI Sensei Instant Grammar Floating Coach */}
       <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />
-
-      {/* Global Text Selection Sensei Breakdown Tool */}
-      <GlobalTextSenseiPopup />
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && <InstallPWA />}
