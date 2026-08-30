@@ -97,7 +97,8 @@ export const DocumentsView: React.FC = () => {
             </button>
           </form>
 
-          {verificationResult && (\n            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs space-y-1.5 animate-in fade-in">
+          {verificationResult && (
+            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs space-y-1.5 animate-in fade-in">
               <div className="flex items-center space-x-2 text-emerald-900 font-bold">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>{verificationResult.status}</span>
@@ -111,7 +112,7 @@ export const DocumentsView: React.FC = () => {
           )}
         </div>
 
-        {/* Printable Document Paper (A4 Aspect Ratio: 800px x 1080px) */}
+        {/* Printable Document Paper */}
         <div className="bg-white rounded-3xl shadow-xl border border-stone-300 p-8 sm:p-14 max-w-[800px] mx-auto min-h-[1000px] relative text-stone-900 print:shadow-none print:border-none print:m-0 print:p-8">
           
           {/* Official Document Header */}
@@ -264,47 +265,4 @@ export const DocumentsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-[11px]">
-                <div>
-                  <strong className="text-stone-900 block mb-0.5">Billed To:</strong>
-                  <span>{studentName}</span><br />
-                  <span>Student ID: {studentId}</span><br />
-                  <span>Email: {user?.email || 'student@nihomi.com'}</span>
-                </div>
-                <div className="text-right">
-                  <strong className="text-stone-900 block mb-0.5">Payment Details:</strong>
-                  <span>Method: Verified Online Checkout</span><br />
-                  <span>Status: Active Subscription</span><br />
-                  <span>Date: {new Date().toISOString().split('T')[0]}</span>
-                </div>
-              </div>
-
-              <table className="w-full text-left text-xs border border-stone-200 rounded-xl overflow-hidden">
-                <thead className="bg-stone-50 border-b border-stone-200 font-semibold text-stone-700 text-[11px]">
-                  <tr>
-                    <th className="p-3">Description</th>
-                    <th className="p-3">Type</th>
-                    <th className="p-3 text-right">Amount</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-stone-100 text-stone-700 text-[11px]">
-                  <tr>
-                    <td className="p-3 font-medium">JLPT {currentLevel} Continuous Japanese Track Access</td>
-                    <td className="p-3">Subscription</td>
-                    <td className="p-3 text-right">৳ 990 / mo</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Footer */}
-          <div className="absolute bottom-6 left-8 right-8 text-center border-t border-stone-200 pt-3 text-[9px] text-stone-400 font-mono">
-            *Official Document of Nihomi Academic Council • Verify authentic credentials at nihomi.com/verify
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-};
+              <div className="grid grid-cols-2 gap-4 text-
