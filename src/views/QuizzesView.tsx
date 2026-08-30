@@ -34,7 +34,7 @@ interface RecommendedQuizItem {
 
 export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
   const { profile, user } = useAuth();
-  const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'All'>(profile?.targetLevel || 'All');
+  const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'All'>((profile?.targetLevel as JLPTLevel) || 'All');
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

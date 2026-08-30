@@ -5,46 +5,72 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  displayName?: string;
+  full_name?: string;
   nameJa?: string;
   phone?: string;
+  avatar?: string;
   avatarUrl?: string;
-  role: 'student' | 'instructor' | 'admin' | 'founder';
-  planId: 'free' | 'starter' | 'pro' | 'japan_ready';
-  status: 'ACTIVE' | 'SUSPENDED' | 'ARCHIVED';
+  role: 'student' | 'instructor' | 'admin' | 'founder' | string;
+  planId: 'free' | 'starter' | 'pro' | 'japan_ready' | string;
+  status: 'ACTIVE' | 'SUSPENDED' | 'ARCHIVED' | string;
   studentId: string;
   nihomiAccountId: string;
   country?: string;
+  streakDays?: number;
+  currentLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | string;
+  targetLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | string;
+  enrolledDate?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface UserProfile {
   userId: string;
-  targetLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  name?: string;
+  displayName?: string;
+  avatar?: string;
+  avatarUrl?: string;
+  targetLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | string;
+  currentLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | string;
   targetExam: string;
   targetExamDate: string;
   preferredSensei: string;
   preferredLanguage: string;
+  nativeLanguage?: string;
+  bio?: string;
   dailyGoalMinutes: number;
+  nihomiAccountId?: string;
 }
 
 export interface UserProgress {
   userId: string;
-  currentLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  currentLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | string;
   streakDays: number;
+  currentStreak?: number;
+  longestStreak?: number;
   totalHours: number;
+  totalStudyMinutes?: number;
   completedLessonsCount: number;
+  completedLessonIds?: string[];
+  experiencePoints?: number;
+  retentionRate?: number;
+  lastActivityDate?: string;
 }
 
 export interface UserSubscription {
   userId: string;
-  planId: 'free' | 'starter' | 'pro' | 'japan_ready';
+  planId: 'free' | 'starter' | 'pro' | 'japan_ready' | string;
   planName: string;
-  status: 'active' | 'trial' | 'expired' | 'cancelled';
+  status: 'active' | 'trial' | 'expired' | 'cancelled' | string;
   validUntil: string;
-  billingCycle: 'monthly' | 'yearly';
+  billingCycle: 'monthly' | 'yearly' | string;
   aiCreditsRemaining: number;
-  paymentMethod: 'bkash' | 'sslcommerz' | 'card' | 'eps' | 'paddle';
+  paymentMethod: 'bkash' | 'sslcommerz' | 'card' | 'eps' | 'paddle' | string;
+  features?: string[];
+  subscription?: any;
+  usage?: any;
+  plan?: any;
 }
 
 export interface LearningDNAData {
@@ -102,24 +128,35 @@ export const PLAN_CONFIGS: Record<string, any> = {
   },
 };
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   profile: UserProfile | null;
   progress: UserProgress | null;
   subscription: UserSubscription | null;
+  subscriptionDetails: UserSubscription | null;
+  activePlanId: string;
   learningDNA: LearningDNAData | null;
   coinWallet: CoinWalletData | null;
   loading: boolean;
+  isLoading: boolean;
   isAuthModalOpen: boolean;
-  openAuthModal: () => void;
+  openAuthModal: (mode?: string) => void;
+  openLoginModal: (mode?: string) => void;
   closeAuthModal: () => void;
   setUserData: (user: User) => void;
   loginWithGoogle: () => Promise<boolean>;
   loginWithGoogleFirebase: () => Promise<boolean>;
   loginWithToken: (idToken: string) => Promise<boolean>;
+  login: (email?: string, password?: string) => Promise<boolean>;
+  register: (data?: any) => Promise<boolean>;
   logout: () => Promise<void>;
-  updateProfileData: (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => Promise<void>;
-  updateSubscriptionPlan: (planId: 'free' | 'starter' | 'pro' | 'japan_ready', method?: 'card' | 'eps' | 'paddle' | 'bkash') => Promise<void>;
+  updateProfileData: (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string; displayName?: string; bio?: string; nativeLanguage?: string }>) => Promise<void>;
+  updateProfile: (data: any) => Promise<void>;
+  updateSubscriptionPlan: (planId: 'free' | 'starter' | 'pro' | 'japan_ready' | string, method?: 'card' | 'eps' | 'paddle' | 'bkash' | string) => Promise<void>;
+  topUpCredits: (amount: number) => Promise<void>;
+  refreshSubscription: () => Promise<void>;
+  refreshProgress: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   refreshAuth: () => Promise<void>;
 }
 
@@ -128,19 +165,30 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   progress: null,
   subscription: null,
+  subscriptionDetails: null,
+  activePlanId: 'starter',
   learningDNA: null,
   coinWallet: null,
   loading: false,
+  isLoading: false,
   isAuthModalOpen: false,
   openAuthModal: () => {},
+  openLoginModal: () => {},
   closeAuthModal: () => {},
   setUserData: () => {},
   loginWithGoogle: async () => false,
   loginWithGoogleFirebase: async () => false,
   loginWithToken: async () => false,
+  login: async () => true,
+  register: async () => true,
   logout: async () => {},
   updateProfileData: async () => {},
+  updateProfile: async () => {},
   updateSubscriptionPlan: async () => {},
+  topUpCredits: async () => {},
+  refreshSubscription: async () => {},
+  refreshProgress: async () => {},
+  refreshUser: async () => {},
   refreshAuth: async () => {},
 });
 
@@ -214,7 +262,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
-  const openAuthModal = () => setIsAuthModalOpen(true);
+  const openAuthModal = (_mode?: string) => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
   const setUserData = (newUser: User) => {
@@ -335,6 +383,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const login = async () => true;
+  const register = async () => true;
+  const updateProfile = async (data: any) => updateProfileData(data);
+  const topUpCredits = async (amount: number) => {
+    if (subscription) {
+      setSubscription({
+        ...subscription,
+        aiCreditsRemaining: (subscription.aiCreditsRemaining || 0) + amount,
+      });
+    }
+  };
+  const refreshSubscription = useCallback(async () => {}, []);
+  const refreshProgress = useCallback(async () => {}, []);
+  const refreshUser = useCallback(async () => {}, []);
   const refreshAuth = useCallback(async () => {}, []);
 
   return (
@@ -344,19 +406,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         profile,
         progress,
         subscription,
+        subscriptionDetails: subscription,
+        activePlanId: user?.planId || 'starter',
         learningDNA,
         coinWallet,
         loading: false,
+        isLoading: false,
         isAuthModalOpen,
         openAuthModal,
+        openLoginModal: openAuthModal,
         closeAuthModal,
         setUserData,
         loginWithGoogle,
         loginWithGoogleFirebase,
         loginWithToken,
+        login,
+        register,
         logout,
         updateProfileData,
+        updateProfile,
         updateSubscriptionPlan,
+        topUpCredits,
+        refreshSubscription,
+        refreshProgress,
+        refreshUser,
         refreshAuth,
       }}
     >

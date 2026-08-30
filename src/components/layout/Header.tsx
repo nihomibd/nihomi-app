@@ -31,6 +31,8 @@ const NihomiMonogram: React.FC<{ size?: number; className?: string }> = ({ size 
 interface HeaderProps {
   currentView: string;
   onNavigate: (view: string) => void;
+  onOpenDictionary?: () => void;
+  onOpenShortcuts?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
@@ -200,7 +202,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               </div>
             ) : (
               <button
-                onClick={openAuthModal}
+                onClick={() => openAuthModal()}
                 className="px-4 py-1.5 bg-stone-950 hover:bg-stone-800 text-white rounded-full text-xs font-bold shadow-2xs transition-all cursor-pointer"
               >
                 Sign In
@@ -225,7 +227,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               </button>
             ) : (
               <button
-                onClick={openAuthModal}
+                onClick={() => openAuthModal()}
                 className="px-3 py-1 bg-stone-950 text-white rounded-full text-xs font-bold"
               >
                 Sign In

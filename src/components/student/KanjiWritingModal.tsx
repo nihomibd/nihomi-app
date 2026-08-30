@@ -44,7 +44,7 @@ export const KanjiWritingModal: React.FC<KanjiWritingModalProps> = ({
   const drawGrid = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     ctx.strokeStyle = '#E5E5E5';
     ctx.lineWidth = 1;
-    ctx.setLineDash();
+    ctx.setLineDash([4, 4]);
 
     ctx.beginPath();
     ctx.moveTo(0, height / 2);

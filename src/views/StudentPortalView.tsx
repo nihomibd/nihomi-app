@@ -3,34 +3,27 @@ import {
   BookOpen,
   Award,
   BarChart3,
-  Calendar,
-  Settings,
-  Sparkles,
   LogOut,
   Flame,
   Mic,
-  Camera,
   PenTool,
   ArrowRight,
   User as UserIcon,
-  Play
+  Play,
+  Sparkles,
+  CheckCircle2
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
-import { LearningDNAVisualizer } from '../components/student/LearningDNAVisualizer';
-import { MinimalPromptBox } from '../components/student/MinimalPromptBox';
-import { NextBestActionCard } from '../components/student/NextBestActionCard';
+import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
-import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
 import { VoiceSenseiPractice } from "../components/practice/VoiceSenseiPractice";
 import { SRSFlashcardSession } from '../components/practice/SRSFlashcardSession';
-import { JLPTDiagnosticExamModal } from "../components/assessment/JLPTDiagnosticExamModal";
-import { JLPTMockExamModal } from '../components/assess/JLPTMockExamModal';
 import { Course, StudentProfile, NextBestAction } from '../types/nihomi';
-import { useAuth, PLAN_CONFIGS } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 interface StudentPortalViewProps {
-  initialTab?: 'learn' | 'practice' | 'assess' | 'progress' | 'profile';
+  initialTab?: 'learn' | 'practice' | 'assess' | 'progress' | 'profile' | 'dashboard' | 'settings' | 'subscription';
   onNavigate?: (view: string) => void;
 }
 
@@ -43,12 +36,32 @@ const KANJI_CARDS = [
   { kanji: '先', reading: 'せん・さき', meaning: 'Ahead, Previous', level: 'N5' },
 ];
 
+const DEFAULT_COURSE: Course = {
+  id: 'minna-1',
+  title: 'Minna no Nihongo Lesson 1',
+  titleJa: 'みんなの日本語 第1課',
+  level: 'N5',
+  progressPercent: 40,
+  totalLessons: 25,
+  completedLessons: 1,
+  currentLessonTitle: 'N1 は N2 です (Affirmation, Negation, & Questions)',
+  category: 'GRAMMAR',
+};
+
 export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   initialTab = 'learn',
   onNavigate,
 }) => {
-  const { user, progress, subscription, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState<'learn' | 'practice' | 'assess' | 'progress' | 'profile'>(initialTab);
+  const { user, progress, logout } = useAuth();
+  const resolveTab = (tab: string): 'learn' | 'practice' | 'assess' | 'progress' | 'profile' => {
+    if (tab === 'dashboard') return 'learn';
+    if (tab === 'settings' || tab === 'subscription') return 'profile';
+    if (['learn', 'practice', 'assess', 'progress', 'profile'].includes(tab)) {
+      return tab as any;
+    }
+    return 'learn';
+  };
+  const [activeTab, setActiveTab] = useState<'learn' | 'practice' | 'assess' | 'progress' | 'profile'>(() => resolveTab(initialTab));
 
   // Modals state
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
@@ -56,9 +69,6 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const [isWritingActive, setIsWritingActive] = useState(false);
   const [activeKanjiToDraw, setActiveKanjiToDraw] = useState<{ kanji: string; hiragana: string; english: string; strokes: number } | null>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isDiagnosticActive, setIsDiagnosticActive] = useState(false);
-  const [isMockExamActive, setIsMockExamActive] = useState(false);
 
   const studentProfile: StudentProfile = {
     id: user?.studentId || 'NHO-100294',
@@ -108,6 +118,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 return (
                   <button
                     key={tab.id}
+                    id={`student-tab-${tab.id}`}
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
                       isActive
@@ -155,6 +166,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             </div>
 
             <button
+              id="btn-launch-lesson"
               onClick={() => setIsLessonModalOpen(true)}
               className="px-6 py-3 bg-stone-950 hover:bg-stone-800 text-white text-xs font-bold rounded-2xl shadow-md transition-all flex items-center space-x-2 cursor-pointer active:scale-95 shrink-0"
             >
@@ -166,6 +178,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           {/* Quick AI Practice Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div
+              id="card-srs-deck"
               onClick={() => setIsSRSFlashcardsActive(true)}
               className="p-5 bg-white border border-stone-200 rounded-2xl hover:border-stone-400 hover:shadow-xs transition-all cursor-pointer space-y-2"
             >
@@ -177,6 +190,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             </div>
 
             <div
+              id="card-voice-practice"
               onClick={() => setIsVoiceActive(true)}
               className="p-5 bg-white border border-stone-200 rounded-2xl hover:border-stone-400 hover:shadow-xs transition-all cursor-pointer space-y-2"
             >
@@ -188,14 +202,15 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             </div>
 
             <div
-              onClick={() => setIsDiagnosticActive(true)}
+              id="card-quizzes"
+              onClick={() => onNavigate ? onNavigate('quizzes') : setActiveTab('assess')}
               className="p-5 bg-white border border-stone-200 rounded-2xl hover:border-stone-400 hover:shadow-xs transition-all cursor-pointer space-y-2"
             >
               <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs">
                 <Award className="w-4 h-4" />
               </div>
-              <h4 className="font-bold text-sm text-stone-900">JLPT N5 Diagnostic</h4>
-              <p className="text-xs text-stone-500">Identify grammar weaknesses & learning DNA</p>
+              <h4 className="font-bold text-sm text-stone-900">JLPT N5 Quizzes & Drills</h4>
+              <p className="text-xs text-stone-500">Practice grammar questions & mock tests</p>
             </div>
           </div>
 
@@ -214,6 +229,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             {KANJI_CARDS.map((k) => (
               <div
                 key={k.kanji}
+                id={`kanji-card-${k.kanji}`}
                 onClick={() => {
                   setActiveKanjiToDraw({ kanji: k.kanji, hiragana: k.reading, english: k.meaning, strokes: 4 });
                   setIsWritingActive(true);
@@ -229,20 +245,96 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
         </div>
       )}
 
-      {/* 4. TAB 4: PROGRESS & DNA */}
-      {activeTab === 'progress' && (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 space-y-6">
-          <LearningDNAVisualizer />
+      {/* 4. TAB 3: ASSESS (EVALUATION & QUIZZES) */}
+      {activeTab === 'assess' && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black text-stone-950">Assessment & JLPT Readiness</h2>
+            <p className="text-xs text-stone-500 font-medium">Test your knowledge across Vocabulary, Grammar, Reading, and Listening</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-black">
+                  N5
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-stone-900">JLPT N5 Full Diagnostic</h3>
+                  <p className="text-xs text-stone-500">18 questions covering particle mechanics and essential kanji</p>
+                </div>
+              </div>
+              <ul className="space-y-2 text-xs text-stone-600">
+                <li className="flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Grammar Particles (は, が, に, で, を)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Basic Verb Conjugations (ます, ません, ました)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Time, Numbers, and Direction words</span>
+                </li>
+              </ul>
+              <button
+                id="btn-start-diagnostic"
+                onClick={() => onNavigate ? onNavigate('quizzes') : setActiveTab('learn')}
+                className="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 cursor-pointer transition-all"
+              >
+                <span>Take Diagnostic Quiz</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-black">
+                  <Award className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-stone-900">JLPT Mock Exam Mode</h3>
+                  <p className="text-xs text-stone-500">Timed simulation under authentic JLPT scoring rubrics</p>
+                </div>
+              </div>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Experience the timed pressure of standard JLPT exam conditions with automatic scoring and error-breakdown recommendations.
+              </p>
+              <button
+                id="btn-start-mock-exam"
+                onClick={() => onNavigate ? onNavigate('quizzes') : setActiveTab('learn')}
+                className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 cursor-pointer transition-all"
+              >
+                <span>Launch Mock Exam (Timed)</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* 5. TAB 5: STUDENT PASSPORT / PROFILE */}
+      {/* 5. TAB 4: PROGRESS & DNA */}
+      {activeTab === 'progress' && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+          <LearningAnalyticsDashboard
+            studentName={studentProfile.name}
+            currentLevel={studentProfile.currentLevel}
+            totalStudyHours={studentProfile.totalStudyHours}
+            studyStreakDays={studentProfile.streakDays}
+            onLaunchSrsReview={() => setIsSRSFlashcardsActive(true)}
+          />
+        </div>
+      )}
+
+      {/* 6. TAB 5: STUDENT PASSPORT / PROFILE */}
       {activeTab === 'profile' && (
         <div className="max-w-md mx-auto px-4 pt-8 space-y-6">
           <DigitalStudentIdCard student={studentProfile} />
 
           <div className="p-4 bg-white rounded-2xl border border-stone-200 text-center space-y-3">
             <button
+              id="btn-student-logout"
               onClick={logout}
               className="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
             >
@@ -258,6 +350,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
         <LessonPlayerModal
           isOpen={isLessonModalOpen}
           onClose={() => setIsLessonModalOpen(false)}
+          course={DEFAULT_COURSE}
         />
       )}
 
@@ -280,13 +373,6 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
         <VoiceSenseiPractice
           isOpen={isVoiceActive}
           onClose={() => setIsVoiceActive(false)}
-        />
-      )}
-
-      {isDiagnosticActive && (
-        <JLPTDiagnosticExamModal
-          isOpen={isDiagnosticActive}
-          onClose={() => setIsDiagnosticActive(false)}
         />
       )}
 

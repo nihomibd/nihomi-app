@@ -183,7 +183,7 @@ html.sepia .text-slate-500 {
   #btn-print-invoice-table, #btn-print-invoices-table,
   #toggle-auto-renew, #input-filter-invoices,
   #input-search-invoices, #select-invoice-status,
-  .print\\:hidden {
+  .print-hidden, [class*="print:hidden"] {
     display: none !important;
   }
 

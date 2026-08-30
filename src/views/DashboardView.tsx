@@ -78,7 +78,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     loadData();
   }, [profile?.targetLevel]);
 
-  const currentLevel = profile?.targetLevel || 'N5';
+  const currentLevel = (profile?.targetLevel as JLPTLevel) || 'N5';
   const streak = progress?.currentStreak || 1;
   const completedCount = progress?.completedLessonIds?.length || 0;
   const totalMinutes = progress?.totalStudyMinutes || 0;

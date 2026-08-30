@@ -31,7 +31,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigate }) => {
   const { theme, setTheme } = useTheme();
 
   const [displayName, setDisplayName] = useState(profile?.displayName || '');
-  const [targetLevel, setTargetLevel] = useState<JLPTLevel>(profile?.targetLevel || 'N5');
+  const [targetLevel, setTargetLevel] = useState<JLPTLevel>((profile?.targetLevel as JLPTLevel) || 'N5');
   const [dailyGoalMinutes, setDailyGoalMinutes] = useState<number>(profile?.dailyGoalMinutes || 20);
   const [nativeLanguage, setNativeLanguage] = useState(profile?.nativeLanguage || 'English');
   const [bio, setBio] = useState(profile?.bio || '');

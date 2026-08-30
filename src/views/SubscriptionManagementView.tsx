@@ -117,7 +117,7 @@ interface SubscriptionManagementViewProps {
 
 export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProps> = ({ onNavigate }) => {
   const { user, profile, subscriptionDetails, refreshSubscription } = useAuth();
-  const [details, setDetails] = useState<UserSubscriptionDetails | null>(subscriptionDetails);
+  const [details, setDetails] = useState<UserSubscriptionDetails | null>(subscriptionDetails as any);
   const [isLoading, setIsLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);

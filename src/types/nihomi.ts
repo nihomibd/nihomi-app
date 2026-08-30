@@ -35,12 +35,24 @@ export interface StudentProfile {
   avatarUrl?: string;
   enrolledDate: string;
   currentLevel: JLPTLevel;
-  status: 'ACTIVE' | 'GRADUATED' | 'ON_HOLD' | 'PROBATION';
+  targetLevel?: JLPTLevel | string;
+  targetExamDate?: string;
+  status?: 'ACTIVE' | 'GRADUATED' | 'ON_HOLD' | 'PROBATION' | string;
   streakDays: number;
   totalStudyHours: number;
-  assignedTeacher: string;
-  targetExam: string;
-  targetExamDate: string;
+  assignedTeacher?: string;
+  targetExam?: string;
+  tier?: string;
+}
+
+export interface NextBestAction {
+  id: string;
+  type: string;
+  title: string;
+  subtitle: string;
+  level: string;
+  estimatedMinutes: number;
+  rewardCoins: number;
 }
 
 export interface Course {

@@ -11,7 +11,7 @@ const supabaseAnonKey =
   'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t';
 
 // 1. Export isSupabaseConfigured for SRS and other services
-export const isSupabaseConfigured: boolean = Boolean(
+export const isSupabaseConfigured = (): boolean => Boolean(
   supabaseUrl && supabaseAnonKey && !supabaseAnonKey.includes('placeholder')
 );
 
@@ -34,7 +34,7 @@ export const supabaseHeaders = {
 
 // 4. Export Cloud Sync Helpers
 export async function syncStudentProgressToCloud(userId: string, data: any) {
-  if (!isSupabaseConfigured) return null;
+  if (!isSupabaseConfigured()) return null;
   try {
     const { error } = await supabase.from('user_progress').upsert(
       {
@@ -52,7 +52,7 @@ export async function syncStudentProgressToCloud(userId: string, data: any) {
 }
 
 export async function fetchStudentProgressFromCloud(userId: string) {
-  if (!isSupabaseConfigured) return null;
+  if (!isSupabaseConfigured()) return null;
   try {
     const { data, error } = await supabase
       .from('user_progress')
