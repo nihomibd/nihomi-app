@@ -880,5 +880,69 @@ export interface DatabaseSchema {
   contentSources: ContentSource[];
   contentDrafts: ContentDraft[];
   contentVersions: ContentVersion[];
+
+  // MemoryOS™ & Ghost Mode SRS Tables
+  ghostWeaknesses?: GhostWeaknessItem[];
+  studentErrorLogs?: StudentErrorLog[];
+}
+
+export type ParticleConfusionType =
+  | 'wa_vs_ga'
+  | 'ni_vs_de'
+  | 'o_vs_ga'
+  | 'ni_vs_e'
+  | 'kara_vs_made'
+  | 'to_vs_ya'
+  | 'te_form'
+  | 'transitive_intransitive'
+  | 'honorific_humble'
+  | 'general_grammar';
+
+export interface GhostWeaknessItem {
+  id: string;
+  userId: string;
+  topic: string;
+  conceptCode: string;
+  confusionType: ParticleConfusionType;
+  level: JLPTLevel;
+  targetJapanese: string;
+  romaji: string;
+  bangla: string;
+  failureCount: number;
+  successStreak: number;
+  masteryPercentage: number; // 0 - 100%
+  firstSeenAt: string;
+  lastFailedAt: string;
+  lastReviewedAt?: string;
+  nextReviewAt: string; // ISO date
+  srsStage: 'apprentice' | 'guru' | 'master' | 'enlightened' | 'burned';
+  intervalDays: number;
+  easeFactor: number;
+  lastFailedContext: string;
+  newContextChallenge: string;
+  scenarioPrompt: string;
+  options: {
+    text: string;
+    isCorrect: boolean;
+    explanation: string;
+  }[];
+  isResolved: boolean;
+  resolvedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StudentErrorLog {
+  id: string;
+  userId: string;
+  questionId?: string;
+  quizId?: string;
+  lessonId?: string;
+  conceptCode: string;
+  userSelected: string;
+  correctAnswer: string;
+  category: 'particle' | 'conjugation' | 'kanji' | 'vocabulary' | 'keigo' | 'grammar';
+  details: string;
+  timestamp: string;
 }
 

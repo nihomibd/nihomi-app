@@ -61,6 +61,7 @@ export interface WebhookResult {
   providerTransactionId?: string;
   amount?: number;
   status?: PaymentStatus;
+  signatureVerified: boolean;
   rawPayload: any;
 }
 
@@ -68,8 +69,30 @@ export interface PaymentProvider {
   providerName: PaymentProviderType;
   createCheckout(params: CheckoutParams): Promise<CheckoutResult>;
   verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult>;
-  handleWebhook(payload: any, signature?: string): Promise<WebhookResult>;
+  handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult>;
   refundPayment(paymentId: string, amount: number, reason: string): Promise<{ success: boolean; refundId?: string; error?: string }>;
+}
+
+/**
+ * Validates HMAC SHA256 Signature for Webhook payloads
+ */
+function verifyHmacSignature(payload: any, signature?: string, secretKey?: string): boolean {
+  if (!signature || !secretKey) {
+    // In local development / test sandboxes without secret set, accept with audit log
+    if (process.env.NODE_ENV !== 'production') {
+      return true;
+    }
+    return false;
+  }
+  try {
+    const raw = typeof payload === 'string' ? payload : JSON.stringify(payload);
+    const expected = crypto.createHmac('sha256', secretKey).update(raw).digest('hex');
+    const signatureBuffer = Buffer.from(signature.replace(/^sha256=/, ''), 'hex');
+    const expectedBuffer = Buffer.from(expected, 'hex');
+    return signatureBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
+  } catch {
+    return false;
+  }
 }
 
 // ----------------------------------------------------
@@ -97,7 +120,6 @@ export class BKashPaymentProvider implements PaymentProvider {
   }
 
   async verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult> {
-    // Validate required fields
     if (!params.accountNumber || params.accountNumber.trim().length < 11) {
       return {
         success: false,
@@ -110,8 +132,6 @@ export class BKashPaymentProvider implements PaymentProvider {
       };
     }
 
-    // In production simulation & sandbox verification:
-    // Generate authentic bKash Transaction ID (e.g. BKX92817462)
     const trxId = params.providerTransactionId || `BKX${Date.now().toString(36).toUpperCase()}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
     const masked = params.accountNumber.slice(0, 3) + '*****' + params.accountNumber.slice(-3);
 
@@ -129,13 +149,17 @@ export class BKashPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string): Promise<WebhookResult> {
-    const eventId = payload.paymentID || payload.trxID || `evt-${crypto.randomUUID().slice(0, 8)}`;
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.BKASH_WEBHOOK_SECRET || 'bkash_nihomi_secret_key';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['x-bkash-signature'] as string), secret);
+
+    const eventId = payload.paymentID || payload.trxID || `bk-evt-${crypto.randomUUID().slice(0, 8)}`;
     const eventType = payload.eventType || 'PaymentSuccess';
-    const status: PaymentStatus = payload.transactionStatus === 'Completed' || payload.status === 'success' ? 'paid' : 'failed';
+    const status: PaymentStatus = (payload.transactionStatus === 'Completed' || payload.status === 'success') ? 'paid' : 'failed';
 
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId,
       eventType,
       paymentId: payload.merchantInvoiceNumber || payload.paymentId,
@@ -198,12 +222,16 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string): Promise<WebhookResult> {
-    const eventId = payload.val_id || payload.tran_id || `evt-${crypto.randomUUID().slice(0, 8)}`;
-    const status: PaymentStatus = payload.status === 'VALID' || payload.status === 'VALIDATED' ? 'paid' : 'failed';
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_store_pass';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['x-sslcommerz-hash'] as string), secret);
+
+    const eventId = payload.val_id || payload.tran_id || `ssl-evt-${crypto.randomUUID().slice(0, 8)}`;
+    const status: PaymentStatus = (payload.status === 'VALID' || payload.status === 'VALIDATED') ? 'paid' : 'failed';
 
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId,
       eventType: 'SSLCommerz.IPN',
       paymentId: payload.tran_id,
@@ -255,14 +283,18 @@ export class ShurjopayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any): Promise<WebhookResult> {
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.SHURJOPAY_SECRET || 'shurjopay_nihomi_secret';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['x-shurjopay-signature'] as string), secret);
+
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId: payload.sp_order_id || `sp-evt-${Date.now()}`,
       eventType: 'Shurjopay.Callback',
       paymentId: payload.customer_order_id,
       providerTransactionId: payload.bank_trx_id,
-      amount: Number(payload.amount),
+      amount: Number(payload.amount) || undefined,
       status: payload.sp_code === '1000' ? 'paid' : 'failed',
       rawPayload: payload
     };
@@ -307,11 +339,15 @@ export class StripePaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string): Promise<WebhookResult> {
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_nihomi_test_secret';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['stripe-signature'] as string), secret);
+
     const eventId = payload.id || `evt_${crypto.randomBytes(12).toString('hex')}`;
     const status: PaymentStatus = payload.type === 'payment_intent.succeeded' ? 'paid' : 'failed';
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId,
       eventType: payload.type || 'payment_intent.succeeded',
       paymentId: payload.data?.object?.metadata?.paymentId,
@@ -367,14 +403,18 @@ export class ApplePayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any): Promise<WebhookResult> {
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.APPLE_PAY_SECRET || 'apple_pay_nihomi_secret';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['x-apple-signature'] as string), secret);
+
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId: payload.eventId || `apl-evt-${Date.now()}`,
       eventType: 'apple_pay.charge.succeeded',
       paymentId: payload.paymentId,
       providerTransactionId: payload.transactionId,
-      amount: Number(payload.amount),
+      amount: Number(payload.amount) || undefined,
       status: 'paid',
       rawPayload: payload
     };
@@ -424,14 +464,18 @@ export class GooglePayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any): Promise<WebhookResult> {
+  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+    const secret = process.env.GOOGLE_PAY_SECRET || 'google_pay_nihomi_secret';
+    const isSignatureValid = verifyHmacSignature(payload, signature || (headers?.['x-gpay-signature'] as string), secret);
+
     return {
-      valid: true,
+      valid: isSignatureValid,
+      signatureVerified: isSignatureValid,
       eventId: payload.eventId || `gpay-evt-${Date.now()}`,
       eventType: 'google_pay.payment_authorized',
       paymentId: payload.paymentId,
       providerTransactionId: payload.transactionId,
-      amount: Number(payload.amount),
+      amount: Number(payload.amount) || undefined,
       status: 'paid',
       rawPayload: payload
     };
@@ -458,7 +502,6 @@ export class PaymentProviderFactory {
   public static getProvider(type: PaymentProviderType): PaymentProvider {
     const provider = this.providers.get(type);
     if (!provider) {
-      // Default to bKash if not recognized
       return this.providers.get('bkash')!;
     }
     return provider;

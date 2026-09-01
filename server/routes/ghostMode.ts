@@ -1,58 +1,194 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { JLPTLevel, ParticleConfusionType } from '../types.js';
 
 export const ghostModeRouter = Router();
 
-// 1. Get Active Ghost Weaknesses
+/**
+ * 1. Get Active Ghost Weaknesses for Student (with SRS review filter)
+ */
 ghostModeRouter.get('/active-ghosts', requireAuth, (req: AuthenticatedRequest, res) => {
-  const activeGhosts = [
-    {
-      id: 'ghost-01',
-      topic: 'Particle は vs が in Dependent Clauses',
-      targetJapanese: '田中さんが作ったケーキは美味しいです。',
-      romaji: 'Tanaka-san ga tsukutta keeki wa oishii desu.',
-      bangla: 'তানাকা সাহেবের বানানো কেকটি অনেক সুস্বাদু।',
-      failureCount: 14,
-      firstSeen: '2026-06-12',
-      lastFailedContext: 'Restaurant Ordering (Quiz 4)',
-      newContextChallenge: 'Tokyo Workplace Meeting (회의 / 打ち合わせ)',
-      scenarioPrompt: 'Meeting-এ আপনার বস জানতে চাইলেন: "প্রজেক্টের ডিজাইন কে তৈরি করেছে?" আপনি কীভাবে বলবেন যে "তানাকা সাহেব যে ডিজাইন বানিয়েছেন সেটা ভালো"?',
-      options: [
-        { text: '田中さんが作ったデザインは素晴らしいです。', isCorrect: true, explanation: 'Subordinate clause-এর subject সবসময় が (ga) গ্রহণ করে, আর পুরো বাক্যের topic হল デザイン (wa)!' },
-        { text: '田中さんは作ったデザインが素晴らしいです。', isCorrect: false, explanation: 'ভুল! Subordinate clause-এ は বসলে বাক্যের ফোকাস নষ্ট হয়ে যায়।' }
-      ],
-      isResolved: false
-    },
-    {
-      id: 'ghost-02',
-      topic: 'Te-Form Conjugation for ~Mu/Bu/Nu Verbs',
-      targetJapanese: '友達と遊んで、コーヒーを飲みました。',
-      romaji: 'Tomodachi to asonde, koohii o nomimashita.',
-      bangla: 'বন্ধুর সাথে আড্ডা দিয়ে কফি খেয়েছিলাম।',
-      failureCount: 9,
-      firstSeen: '2026-07-04',
-      lastFailedContext: 'Lesson 2 Te-form Drills',
-      newContextChallenge: 'Shinjuku Weekend Conversation',
-      scenarioPrompt: 'Weekend-এর কাজের ধারা বর্ণনা করতে গিয়ে 遊ぶ (Asobu - আড্ডা দেওয়া) এর সঠিক Te-form কী হবে?',
-      options: [
-        { text: '遊んで (Asonde)', isCorrect: true, explanation: 'Godan verb ending in ぶ (bu) conjugates to んで (nde)!' },
-        { text: '遊びて (Asobite)', isCorrect: false, explanation: 'ভুল! ぶ দিয়ে শেষ হওয়া ভার্ব কখনোই いて/ite হয় না।' }
-      ],
-      isResolved: false
-    }
-  ];
+  try {
+    const userId = req.user!.id;
+    const { level, confusionType, resolved, dueOnly } = req.query;
 
-  return res.json({ success: true, activeGhosts });
+    const filter: {
+      level?: JLPTLevel;
+      confusionType?: ParticleConfusionType;
+      resolved?: boolean;
+      dueOnly?: boolean;
+    } = {};
+
+    if (level) filter.level = level as JLPTLevel;
+    if (confusionType) filter.confusionType = confusionType as ParticleConfusionType;
+    if (resolved !== undefined) filter.resolved = resolved === 'true';
+    if (dueOnly !== undefined) filter.dueOnly = dueOnly === 'true';
+
+    const activeGhosts = db.getGhostWeaknesses(userId, filter);
+    const stats = db.getGhostMasteryStats(userId);
+
+    return res.json({
+      success: true,
+      activeGhosts,
+      stats,
+      count: activeGhosts.length
+    });
+  } catch (error: any) {
+    console.error('[Ghost Mode] Error fetching active ghosts:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to fetch ghost weaknesses' });
+  }
 });
 
-// 2. Resolve Ghost Weakness
+/**
+ * 2. Get Student Ghost Mastery Stats & Particle Confusion Breakdown
+ */
+ghostModeRouter.get('/stats', requireAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const stats = db.getGhostMasteryStats(userId);
+    return res.json({ success: true, stats });
+  } catch (error: any) {
+    console.error('[Ghost Mode] Error fetching stats:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to fetch stats' });
+  }
+});
+
+/**
+ * 3. Resolve / Attempt a Ghost Challenge (SM-2 SRS persistence)
+ */
 ghostModeRouter.post('/resolve-ghost', requireAuth, (req: AuthenticatedRequest, res) => {
-  const { ghostId, selectedAnswerIndex } = req.body;
-  return res.json({
-    success: true,
-    ghostId,
-    status: 'resolved',
-    message: '🟢 Mistake Resolved! Your Learning Memory™ and Progress DNA™ have been updated.'
-  });
+  try {
+    const userId = req.user!.id;
+    const { ghostId, selectedAnswerIndex, isCorrect: directIsCorrect } = req.body;
+
+    if (!ghostId) {
+      return res.status(400).json({ success: false, error: 'ghostId is required' });
+    }
+
+    const ghost = db.getGhostWeaknessById(ghostId);
+    if (!ghost) {
+      return res.status(404).json({ success: false, error: 'Ghost weakness item not found' });
+    }
+
+    // Determine correctness either by index or direct boolean
+    let isCorrect = directIsCorrect;
+    if (isCorrect === undefined && selectedAnswerIndex !== undefined) {
+      const selectedOption = ghost.options[Number(selectedAnswerIndex)];
+      isCorrect = selectedOption ? selectedOption.isCorrect : false;
+    }
+
+    if (isCorrect === undefined) {
+      isCorrect = false;
+    }
+
+    const result = db.recordGhostAttempt(userId, ghostId, Boolean(isCorrect));
+
+    return res.json({
+      success: true,
+      ghostId,
+      isCorrect: Boolean(isCorrect),
+      ghost: result.ghost,
+      progress: result.progress,
+      status: result.ghost.isResolved ? 'resolved' : 'reviewed',
+      message: result.message
+    });
+  } catch (error: any) {
+    console.error('[Ghost Mode] Error resolving ghost:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to record ghost attempt' });
+  }
+});
+
+/**
+ * 4. Explicitly Log a Student Error into MemoryOS™
+ */
+ghostModeRouter.post('/log-error', requireAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const { questionId, quizId, lessonId, conceptCode, userSelected, correctAnswer, category, details } = req.body;
+
+    if (!conceptCode || !userSelected || !correctAnswer) {
+      return res.status(400).json({
+        success: false,
+        error: 'conceptCode, userSelected, and correctAnswer are required.'
+      });
+    }
+
+    const log = db.logStudentError({
+      userId,
+      questionId,
+      quizId,
+      lessonId,
+      conceptCode,
+      userSelected,
+      correctAnswer,
+      category: category || 'particle',
+      details: details || 'Recorded client-side student error'
+    });
+
+    return res.json({ success: true, log });
+  } catch (error: any) {
+    console.error('[Ghost Mode] Error logging student error:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to log student error' });
+  }
+});
+
+/**
+ * 5. Create a new custom Ghost item (for Teachers / Sensei / AI generation)
+ */
+ghostModeRouter.post('/create-ghost', requireAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const {
+      topic,
+      conceptCode,
+      confusionType,
+      level,
+      targetJapanese,
+      romaji,
+      bangla,
+      scenarioPrompt,
+      options,
+      lastFailedContext,
+      newContextChallenge
+    } = req.body;
+
+    if (!topic || !targetJapanese || !scenarioPrompt || !options || !Array.isArray(options)) {
+      return res.status(400).json({
+        success: false,
+        error: 'topic, targetJapanese, scenarioPrompt, and options array are required.'
+      });
+    }
+
+    const now = new Date().toISOString();
+    const created = db.createGhostWeakness({
+      userId,
+      topic,
+      conceptCode: conceptCode || 'custom-grammar-weakness',
+      confusionType: confusionType || 'general_grammar',
+      level: level || 'N5',
+      targetJapanese,
+      romaji: romaji || '',
+      bangla: bangla || '',
+      failureCount: 1,
+      successStreak: 0,
+      masteryPercentage: 20,
+      firstSeenAt: now,
+      lastFailedAt: now,
+      nextReviewAt: now,
+      srsStage: 'apprentice',
+      intervalDays: 1,
+      easeFactor: 2.5,
+      lastFailedContext: lastFailedContext || 'Interactive Lesson Practice',
+      newContextChallenge: newContextChallenge || 'Real-World Workplace Scenario',
+      scenarioPrompt,
+      options,
+      isResolved: false
+    });
+
+    return res.status(201).json({ success: true, ghost: created });
+  } catch (error: any) {
+    console.error('[Ghost Mode] Error creating ghost weakness:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to create ghost weakness' });
+  }
 });

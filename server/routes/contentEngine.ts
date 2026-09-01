@@ -273,8 +273,9 @@ contentEngineRouter.get('/published', optionalAuth, (req: AuthenticatedRequest, 
 // Multipart form upload route that calculates SHA-256 and triggers ingestion
 contentEngineRouter.post(
   '/batch-upload',
+  requireAdmin,
   upload.single('pdfFile'),
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     try {
       if (!req.file) {
         return res.status(400).json({

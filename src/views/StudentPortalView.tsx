@@ -24,8 +24,10 @@ import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
 import { VoiceSenseiPractice } from "../components/practice/VoiceSenseiPractice";
 import { SRSFlashcardSession } from '../components/practice/SRSFlashcardSession';
 import { BadgeSystem } from '../components/BadgeSystem';
+import { GhostModeSRSWidget } from '../components/practice/GhostModeSRSWidget';
 import { Course, StudentProfile, NextBestAction } from '../types/nihomi';
 import { useAuth } from '../context/AuthContext';
+import { Ghost } from 'lucide-react';
 
 interface StudentPortalViewProps {
   initialTab?: 'learn' | 'practice' | 'assess' | 'progress' | 'profile' | 'badges' | 'dashboard' | 'settings' | 'subscription';
@@ -266,6 +268,32 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
               <h4 className="font-bold text-sm text-stone-900 dark:text-stone-100">Community Leaderboard</h4>
               <p className="text-xs text-stone-500">Check weekly XP rankings & student honor roll</p>
             </div>
+
+            <div
+              id="card-ghost-mode"
+              onClick={() => onNavigate ? onNavigate('ghost-mode') : setActiveTab('practice')}
+              className="p-5 bg-[#0f101c] border border-red-500/30 rounded-2xl hover:border-red-500 transition-all cursor-pointer space-y-2 group shadow-sm col-span-1 sm:col-span-2 lg:col-span-4"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-9 h-9 rounded-xl bg-red-950/60 border border-red-500/40 text-red-400 flex items-center justify-center font-bold text-xs">
+                    <Ghost className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-white group-hover:text-red-400 transition-colors">
+                      Ghost Mode™ SRS Weak-Spot Recovery
+                    </h4>
+                    <p className="text-xs text-stone-400">
+                      Master difficult particles (は vs が, に vs で) and verb forms with SM-2 spaced repetition
+                    </p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-red-600/20 text-red-400 text-xs font-bold font-mono rounded-lg border border-red-500/30 flex items-center space-x-1">
+                  <span>Open Lab</span>
+                  <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -274,8 +302,11 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
       {/* 3. TAB 2: PRACTICE (KANJI & MEMORY) */}
       {activeTab === 'practice' && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-black text-stone-950 dark:text-white">Active Practice Matrix</h2>
+          {/* Dedicated Ghost Mode SRS Drill Section */}
+          <GhostModeSRSWidget />
+
+          <div className="space-y-1 pt-4 border-t border-stone-200 dark:border-stone-800">
+            <h2 className="text-2xl font-black text-stone-950 dark:text-white">Active Kanji Stroke Matrix</h2>
             <p className="text-xs text-stone-500 font-medium">Click any Kanji card below to practice stroke order on interactive canvas</p>
           </div>
 

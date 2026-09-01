@@ -145,8 +145,8 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         category: 'Practice & Tools',
         icon: BrainCircuit,
         badge: 'Ghost Mode',
-        action: () => onNavigate('portal', { tab: 'memory-os' }),
-        keywords: ['memoryos', 'ghost', 'particles', 'weakness', 'errors']
+        action: () => onNavigate('ghost-mode'),
+        keywords: ['memoryos', 'ghost', 'particles', 'weakness', 'errors', 'srs']
       },
       {
         id: 'tool-baito-os',

@@ -3,39 +3,40 @@ import { contentStudioDb } from '../services/content-studio/contentStudioDb.js';
 import { SourceExtractionService } from '../services/content-studio/sourceExtractionService.js';
 import { ContentGeneratorService } from '../services/content-studio/contentGeneratorService.js';
 import { QAEngineService } from '../services/content-studio/qaEngineService.js';
-import { optionalAuth, AuthenticatedRequest } from '../authHelper.js';
+import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 
 export const contentStudioRouter = Router();
 
-// 1. Dashboard Stats & Content Health
-contentStudioRouter.get('/stats', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 1. Dashboard Stats & Content Health (Requires Staff: Admin or Instructor)
+contentStudioRouter.get('/stats', requireStaff, (req: AuthenticatedRequest, res) => {
   const stats = contentStudioDb.getStats();
   res.json({ success: true, stats });
 });
 
-// 2. List Lessons with Filter
-contentStudioRouter.get('/lessons', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 2. List Lessons with Filter (Staff)
+contentStudioRouter.get('/lessons', requireStaff, (req: AuthenticatedRequest, res) => {
   const { level, status } = req.query;
   const lessons = contentStudioDb.getLessons({ level: level as string, status: status as string });
   res.json({ success: true, count: lessons.length, lessons });
 });
 
-// 3. Get Single Lesson Details
-contentStudioRouter.get('/lessons/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 3. Get Single Lesson Details (Staff)
+contentStudioRouter.get('/lessons/:id', requireStaff, (req: AuthenticatedRequest, res) => {
   const { id } = req.params;
   const lesson = contentStudioDb.getLessonById(id);
   if (!lesson) return res.status(404).json({ error: `Lesson ${id} not found` });
   res.json({ success: true, lesson });
 });
 
-// 4. Create New Lesson Skeleton
-contentStudioRouter.post('/lessons', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 4. Create New Lesson Skeleton (Staff)
+contentStudioRouter.post('/lessons', requireStaff, (req: AuthenticatedRequest, res) => {
   const newLesson = contentStudioDb.createLesson(req.body);
   res.json({ success: true, message: 'Lesson draft created', lesson: newLesson });
 });
 
-// 5. Update / Save Draft
-contentStudioRouter.patch('/lessons/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 5. Update / Save Draft (Staff)
+contentStudioRouter.patch('/lessons/:id', requireStaff, (req: AuthenticatedRequest, res) => {
   try {
     const updated = contentStudioDb.updateLesson(req.params.id, req.body);
     res.json({ success: true, lesson: updated });
@@ -44,8 +45,8 @@ contentStudioRouter.patch('/lessons/:id', optionalAuth, (req: AuthenticatedReque
   }
 });
 
-// 6. Attach Source File
-contentStudioRouter.post('/lessons/:id/sources', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 6. Attach Source File (Staff)
+contentStudioRouter.post('/lessons/:id/sources', requireStaff, (req: AuthenticatedRequest, res) => {
   const { id } = req.params;
   const { filename, fileType, fileSizeBytes, rawText } = req.body;
   const lesson = contentStudioDb.getLessonById(id);
@@ -57,7 +58,7 @@ contentStudioRouter.post('/lessons/:id/sources', optionalAuth, (req: Authenticat
     fileType: fileType || 'PDF',
     fileSizeBytes: fileSizeBytes || 2500000,
     storagePath: `/storage/sources/${lesson.level?.toLowerCase()}/${lesson.id}/${filename || 'Source.pdf'}`,
-    uploadedBy: req.user?.email || 'mdtanvirkabirbiplob@gmail.com',
+    uploadedBy: req.user?.email || 'admin@nihomi.com',
     uploadedAt: new Date().toISOString(),
     courseId: lesson.courseId,
     level: lesson.level,
@@ -73,8 +74,8 @@ contentStudioRouter.post('/lessons/:id/sources', optionalAuth, (req: Authenticat
   res.json({ success: true, sourceFile, lesson: updated });
 });
 
-// 7. Analyze Sources & Extract Curriculum Map
-contentStudioRouter.post('/lessons/:id/analyze-sources', optionalAuth, async (req: AuthenticatedRequest, res) => {
+// 7. Analyze Sources & Extract Curriculum Map (Staff)
+contentStudioRouter.post('/lessons/:id/analyze-sources', requireStaff, async (req: AuthenticatedRequest, res) => {
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 
@@ -88,8 +89,8 @@ contentStudioRouter.post('/lessons/:id/analyze-sources', optionalAuth, async (re
   res.json({ success: true, curriculumMap: map, lesson: updated });
 });
 
-// 8. Generate 14-Section Content
-contentStudioRouter.post('/lessons/:id/generate', optionalAuth, async (req: AuthenticatedRequest, res) => {
+// 8. Generate 14-Section Content (Staff)
+contentStudioRouter.post('/lessons/:id/generate', requireStaff, async (req: AuthenticatedRequest, res) => {
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 
@@ -118,8 +119,8 @@ contentStudioRouter.post('/lessons/:id/generate', optionalAuth, async (req: Auth
   res.json({ success: true, qaReport, lesson: finalLesson });
 });
 
-// 9. Run QA Audit on demand
-contentStudioRouter.post('/lessons/:id/qa', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 9. Run QA Audit on demand (Staff)
+contentStudioRouter.post('/lessons/:id/qa', requireStaff, (req: AuthenticatedRequest, res) => {
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 
@@ -128,9 +129,9 @@ contentStudioRouter.post('/lessons/:id/qa', optionalAuth, (req: AuthenticatedReq
   res.json({ success: true, qaReport, lesson: updated });
 });
 
-// 10. Approve & Publish
-contentStudioRouter.post('/lessons/:id/publish', optionalAuth, (req: AuthenticatedRequest, res) => {
-  const founderEmail = req.user?.email || 'mdtanvirkabirbiplob@gmail.com';
+// 10. Approve & Publish (Strict Admin Authorization)
+contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: AuthenticatedRequest, res) => {
+  const founderEmail = req.user?.email || 'admin@nihomi.com';
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 

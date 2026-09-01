@@ -38,6 +38,8 @@ export function getUserFromToken(token?: string): User | null {
 
 export interface AuthenticatedRequest extends Request {
   user?: User;
+  file?: Express.Multer.File | any;
+  files?: Express.Multer.File[] | any;
 }
 
 export function requireAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
@@ -81,6 +83,28 @@ export function requireAdmin(req: AuthenticatedRequest, res: Response, next: Nex
   req.user = user;
   next();
 }
+
+export function requireRole(allowedRoles: UserRole | UserRole[]) {
+  const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader || (req.query.token as string);
+    const user = getUserFromToken(token);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized. Please log in.' });
+    }
+
+    if (!rolesArray.includes(user.role)) {
+      return res.status(403).json({ error: `Forbidden. [${rolesArray.join('/')}] privileges required.` });
+    }
+
+    req.user = user;
+    next();
+  };
+}
+
+export const requireStaff = requireRole(['admin', 'instructor']);
 
 export const authenticateUser = requireAuth;
 export const requireUser = requireAuth;

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import {
   DatabaseSchema,
   User,
@@ -45,7 +46,10 @@ import {
   ContentVersion,
   ContentDraftStatus,
   ContentSourceProcessingStatus,
-  StructuredEducationalContent
+  StructuredEducationalContent,
+  GhostWeaknessItem,
+  StudentErrorLog,
+  ParticleConfusionType
 } from './types.js';
 import {
   INITIAL_COURSES,
@@ -54,6 +58,7 @@ import {
   INITIAL_QUIZZES,
   INITIAL_WORK_JAPANESE
 } from './seedData.js';
+import { INITIAL_GHOST_WEAKNESSES } from './ghostSeedData.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -359,9 +364,87 @@ class Database {
   };
 
   private isLoaded = false;
+  private supabaseClient: SupabaseClient | null = null;
+  private isSupabaseConnected = false;
 
   constructor() {
     this.init();
+    this.initSupabase();
+  }
+
+  private initSupabase() {
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseKey) {
+      try {
+        this.supabaseClient = createClient(supabaseUrl, supabaseKey, {
+          auth: { persistSession: false }
+        });
+        this.isSupabaseConnected = true;
+        console.log('[Supabase DB] Connected to Supabase PostgreSQL database layer.');
+        this.syncFromSupabase();
+      } catch (err) {
+        console.warn('[Supabase DB] Notice: Supabase client initialization fallback to local JSON persistence:', err);
+      }
+    } else {
+      console.log('[Supabase DB] Running in resilient local PostgreSQL/JSON storage mode (Supabase credentials optional).');
+    }
+  }
+
+  public getSupabaseClient(): SupabaseClient | null {
+    return this.supabaseClient;
+  }
+
+  public async syncFromSupabase() {
+    if (!this.supabaseClient) return;
+    try {
+      // Sync users & profiles if accessible
+      const { data: remoteUsers, error: userError } = await this.supabaseClient.from('users').select('*');
+      if (!userError && remoteUsers && remoteUsers.length > 0) {
+        for (const ru of remoteUsers) {
+          const existing = this.data.users.find(u => u.id === ru.id || u.email === ru.email);
+          if (!existing) {
+            this.data.users.push({
+              id: ru.id,
+              email: ru.email,
+              passwordHash: ru.password_hash || '',
+              passwordSalt: ru.password_salt || '',
+              role: (ru.role?.toLowerCase() === 'admin' ? 'admin' : 'user'),
+              createdAt: ru.created_at || new Date().toISOString(),
+              updatedAt: ru.updated_at || new Date().toISOString()
+            });
+          }
+        }
+        this.save();
+      }
+    } catch (e) {
+      console.warn('[Supabase DB] Background sync notice:', e);
+    }
+  }
+
+  public async syncUserToSupabase(user: User, profile?: UserProfile, progress?: UserProgress) {
+    if (!this.supabaseClient) return;
+    try {
+      await this.supabaseClient.from('users').upsert({
+        id: user.id,
+        email: user.email,
+        role: user.role === 'admin' ? 'ADMIN' : 'STUDENT',
+        updated_at: user.updatedAt || new Date().toISOString()
+      }, { onConflict: 'id' });
+
+      if (profile) {
+        await this.supabaseClient.from('profiles').upsert({
+          user_id: user.id,
+          target_jlpt_level: profile.targetLevel || 'N5',
+          preferred_language: profile.nativeLanguage === 'Bengali' ? 'bn' : 'en',
+          daily_goal_minutes: profile.dailyGoalMinutes || 20,
+          bio: profile.bio || '',
+          updated_at: profile.updatedAt || new Date().toISOString()
+        }, { onConflict: 'user_id' });
+      }
+    } catch (e) {
+      // Gracefully handle network/schema warnings
+    }
   }
 
   private init() {
@@ -387,6 +470,9 @@ class Database {
         if (!this.data.contentSources) this.data.contentSources = [];
         if (!this.data.contentDrafts) this.data.contentDrafts = [];
         if (!this.data.contentVersions) this.data.contentVersions = [];
+        // Ensure MemoryOS collections are initialized
+        if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
+        if (!this.data.studentErrorLogs) this.data.studentErrorLogs = [];
         this.save();
         this.isLoaded = true;
       } else {
@@ -744,7 +830,12 @@ class Database {
       ],
       contentSources: [],
       contentDrafts: [],
-      contentVersions: []
+      contentVersions: [],
+      ghostWeaknesses: INITIAL_GHOST_WEAKNESSES.map((g) => ({
+        ...g,
+        userId: 'usr-student-01'
+      })),
+      studentErrorLogs: []
     };
     this.isLoaded = true;
   }
@@ -838,6 +929,7 @@ class Database {
     this.recordSubscriptionEvent(user.id, undefined, 'signup', { email: user.email });
 
     this.save();
+    this.syncUserToSupabase(user, profile, progress);
 
     return { user, profile, progress };
   }
@@ -855,6 +947,10 @@ class Database {
       updatedAt: new Date().toISOString()
     };
     this.save();
+    const user = this.findUserById(userId);
+    if (user) {
+      this.syncUserToSupabase(user, this.data.profiles[idx]);
+    }
     return this.data.profiles[idx];
   }
 
@@ -1105,6 +1201,47 @@ class Database {
     };
 
     this.data.quizAttempts.push(attempt);
+
+    // Auto-Log Errors into MemoryOS™ for Weakness Tracking
+    evaluatedAnswers.forEach((ans) => {
+      if (!ans.isCorrect) {
+        const quest = quiz.questions.find((q) => q.id === ans.questionId);
+        if (quest) {
+          const userChoice = ans.selectedIndex >= 0 && quest.options[ans.selectedIndex] ? quest.options[ans.selectedIndex] : 'No answer';
+          const correctChoice = quest.options[quest.correctIndex] || 'Correct Option';
+          
+          let category: 'particle' | 'conjugation' | 'kanji' | 'vocabulary' | 'keigo' | 'grammar' = 'grammar';
+          let conceptCode = `quiz-q-${quest.id}`;
+
+          const qText = `${quest.question} ${quest.questionJa || ''}`;
+          if (qText.includes('は') || qText.includes('が') || qText.includes('に') || qText.includes('で') || qText.includes('を') || qText.includes('へ')) {
+            category = 'particle';
+            conceptCode = 'particle-usage-general';
+            if (qText.includes('は') && qText.includes('が')) conceptCode = 'particle-wa-ga-subordinate';
+            else if (qText.includes('に') && qText.includes('で')) conceptCode = 'particle-ni-de-location';
+            else if (qText.includes('を') && qText.includes('が')) conceptCode = 'particle-o-ga-potential-state';
+          } else if (qText.includes('て形') || qText.includes('Te-form') || qText.includes('verb') || qText.includes('Conjugation')) {
+            category = 'conjugation';
+            conceptCode = 'te-form-godan-conjugation';
+          } else if (quest.type === 'kanji_reading') {
+            category = 'kanji';
+            conceptCode = 'kanji-reading-mastery';
+          }
+
+          this.logStudentError({
+            userId: params.userId,
+            questionId: quest.id,
+            quizId: quiz.id,
+            lessonId: quiz.lessonId,
+            conceptCode,
+            userSelected: userChoice,
+            correctAnswer: correctChoice,
+            category,
+            details: `Failed question: "${quest.question}". ${quest.explanation || ''}`
+          });
+        }
+      }
+    });
 
     // If passed, give XP and complete lesson if tied to lesson
     const progress = this.getProgressByUserId(params.userId);
@@ -2885,6 +3022,269 @@ class Database {
     }
 
     return { lessons: publishedLessons, drafts: publishedDrafts };
+  }
+
+  // ==========================================
+  // MEMORYOS™ & GHOST MODE SRS PERSISTENCE
+  // ==========================================
+
+  public getGhostWeaknesses(
+    userId: string,
+    filter?: {
+      level?: JLPTLevel;
+      confusionType?: ParticleConfusionType;
+      resolved?: boolean;
+      dueOnly?: boolean;
+    }
+  ): GhostWeaknessItem[] {
+    if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
+
+    // Ensure user has seed items if newly registered or empty
+    let userGhosts = this.data.ghostWeaknesses.filter((g) => g.userId === userId);
+    if (userGhosts.length === 0) {
+      const seeded = INITIAL_GHOST_WEAKNESSES.map((g) => ({
+        ...g,
+        id: `ghost-${userId.slice(-4)}-${g.id.replace('ghost-seed-', '')}`,
+        userId
+      }));
+      this.data.ghostWeaknesses.push(...seeded);
+      this.save();
+      userGhosts = seeded;
+    }
+
+    let result = [...userGhosts];
+
+    if (filter?.level) {
+      result = result.filter((g) => g.level === filter.level);
+    }
+    if (filter?.confusionType) {
+      result = result.filter((g) => g.confusionType === filter.confusionType);
+    }
+    if (filter?.resolved !== undefined) {
+      result = result.filter((g) => g.isResolved === filter.resolved);
+    }
+    if (filter?.dueOnly) {
+      const now = Date.now();
+      result = result.filter((g) => !g.isResolved && new Date(g.nextReviewAt).getTime() <= now);
+    }
+
+    return result.sort((a, b) => new Date(a.nextReviewAt).getTime() - new Date(b.nextReviewAt).getTime());
+  }
+
+  public getGhostWeaknessById(id: string): GhostWeaknessItem | undefined {
+    return (this.data.ghostWeaknesses || []).find((g) => g.id === id);
+  }
+
+  public recordGhostAttempt(
+    userId: string,
+    ghostId: string,
+    isCorrect: boolean
+  ): { success: boolean; ghost: GhostWeaknessItem; progress: UserProgress; message: string } {
+    if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
+    const ghost = this.data.ghostWeaknesses.find((g) => g.id === ghostId && g.userId === userId);
+    if (!ghost) {
+      throw new Error(`Ghost weakness with ID ${ghostId} not found for this student.`);
+    }
+
+    const now = new Date();
+
+    if (isCorrect) {
+      ghost.successStreak += 1;
+      ghost.easeFactor = Math.min(3.0, Number((ghost.easeFactor + 0.15).toFixed(2)));
+
+      // SM-2 Interval Calculation
+      if (ghost.successStreak === 1) {
+        ghost.intervalDays = 1;
+      } else if (ghost.successStreak === 2) {
+        ghost.intervalDays = 3;
+      } else if (ghost.successStreak === 3) {
+        ghost.intervalDays = 7;
+      } else if (ghost.successStreak === 4) {
+        ghost.intervalDays = 14;
+      } else {
+        ghost.intervalDays = Math.round(ghost.intervalDays * ghost.easeFactor);
+      }
+
+      // Calculate Stage based on interval and streak
+      if (ghost.intervalDays >= 30 || ghost.successStreak >= 5) {
+        ghost.srsStage = 'burned';
+        ghost.masteryPercentage = 100;
+        ghost.isResolved = true;
+        ghost.resolvedAt = now.toISOString();
+      } else if (ghost.intervalDays >= 14 || ghost.successStreak >= 4) {
+        ghost.srsStage = 'enlightened';
+        ghost.masteryPercentage = Math.min(95, ghost.masteryPercentage + 20);
+        ghost.isResolved = true;
+        ghost.resolvedAt = now.toISOString();
+      } else if (ghost.intervalDays >= 7 || ghost.successStreak >= 3) {
+        ghost.srsStage = 'master';
+        ghost.masteryPercentage = Math.min(85, ghost.masteryPercentage + 15);
+      } else if (ghost.intervalDays >= 3 || ghost.successStreak >= 2) {
+        ghost.srsStage = 'guru';
+        ghost.masteryPercentage = Math.min(70, ghost.masteryPercentage + 15);
+      } else {
+        ghost.srsStage = 'apprentice';
+        ghost.masteryPercentage = Math.min(50, ghost.masteryPercentage + 10);
+      }
+
+      const nextDate = new Date(now);
+      nextDate.setDate(now.getDate() + ghost.intervalDays);
+      ghost.nextReviewAt = nextDate.toISOString();
+      ghost.lastReviewedAt = now.toISOString();
+      ghost.updatedAt = now.toISOString();
+
+      // Award XP and Study Time
+      const progress = this.addStudyTime(userId, 3, 35);
+      this.save();
+
+      return {
+        success: true,
+        ghost,
+        progress,
+        message: ghost.isResolved
+          ? `🟢 Mistake Mastered! You advanced "${ghost.topic}" to ${ghost.srsStage.toUpperCase()} stage (100% MemoryOS DNA).`
+          : `✨ Correct Answer! Next review scheduled in ${ghost.intervalDays} day(s) (SRS Stage: ${ghost.srsStage.toUpperCase()}).`
+      };
+    } else {
+      // Failed attempt
+      ghost.failureCount += 1;
+      ghost.successStreak = 0;
+      ghost.intervalDays = 1;
+      ghost.easeFactor = Math.max(1.3, Number((ghost.easeFactor - 0.2).toFixed(2)));
+      ghost.srsStage = 'apprentice';
+      ghost.masteryPercentage = Math.max(15, ghost.masteryPercentage - 20);
+      ghost.isResolved = false;
+      ghost.resolvedAt = undefined;
+      ghost.lastFailedAt = now.toISOString();
+      ghost.lastReviewedAt = now.toISOString();
+
+      // Schedule review for tomorrow
+      const nextDate = new Date(now);
+      nextDate.setDate(now.getDate() + 1);
+      ghost.nextReviewAt = nextDate.toISOString();
+      ghost.updatedAt = now.toISOString();
+
+      this.logStudentError({
+        userId,
+        conceptCode: ghost.conceptCode,
+        userSelected: 'Incorrect Ghost Option',
+        correctAnswer: ghost.options.find((o) => o.isCorrect)?.text || '',
+        category: 'particle',
+        details: `Failed Ghost challenge on ${ghost.topic}. Prompt: ${ghost.scenarioPrompt}`
+      });
+
+      const progress = this.addStudyTime(userId, 2, 10);
+      this.save();
+
+      return {
+        success: true,
+        ghost,
+        progress,
+        message: `⚠️ Kept in Apprentice review queue. Next MemoryOS™ re-test scheduled for tomorrow.`
+      };
+    }
+  }
+
+  public logStudentError(params: {
+    userId: string;
+    questionId?: string;
+    quizId?: string;
+    lessonId?: string;
+    conceptCode: string;
+    userSelected: string;
+    correctAnswer: string;
+    category: 'particle' | 'conjugation' | 'kanji' | 'vocabulary' | 'keigo' | 'grammar';
+    details: string;
+  }): StudentErrorLog {
+    if (!this.data.studentErrorLogs) this.data.studentErrorLogs = [];
+    const log: StudentErrorLog = {
+      id: `err-${crypto.randomUUID().slice(0, 8)}`,
+      userId: params.userId,
+      questionId: params.questionId,
+      quizId: params.quizId,
+      lessonId: params.lessonId,
+      conceptCode: params.conceptCode,
+      userSelected: params.userSelected,
+      correctAnswer: params.correctAnswer,
+      category: params.category,
+      details: params.details,
+      timestamp: new Date().toISOString()
+    };
+    this.data.studentErrorLogs.unshift(log);
+
+    // Keep error logs bounded to last 500 records per instance
+    if (this.data.studentErrorLogs.length > 500) {
+      this.data.studentErrorLogs = this.data.studentErrorLogs.slice(0, 500);
+    }
+
+    this.save();
+    return log;
+  }
+
+  public getGhostMasteryStats(userId: string): {
+    totalWeaknesses: number;
+    activeWeaknesses: number;
+    resolvedCount: number;
+    masteryRate: number;
+    dueTodayCount: number;
+    particleBreakdown: Record<string, { total: number; resolved: number; avgMastery: number }>;
+  } {
+    const ghosts = this.getGhostWeaknesses(userId);
+    const total = ghosts.length;
+    const resolved = ghosts.filter((g) => g.isResolved).length;
+    const active = total - resolved;
+    const now = Date.now();
+    const dueToday = ghosts.filter((g) => !g.isResolved && new Date(g.nextReviewAt).getTime() <= now).length;
+
+    const breakdown: Record<string, { total: number; resolved: number; sumMastery: number; avgMastery: number }> = {};
+
+    ghosts.forEach((g) => {
+      const type = g.confusionType || 'general_grammar';
+      if (!breakdown[type]) {
+        breakdown[type] = { total: 0, resolved: 0, sumMastery: 0, avgMastery: 0 };
+      }
+      breakdown[type].total += 1;
+      if (g.isResolved) breakdown[type].resolved += 1;
+      breakdown[type].sumMastery += g.masteryPercentage || 0;
+    });
+
+    const formattedBreakdown: Record<string, { total: number; resolved: number; avgMastery: number }> = {};
+    Object.keys(breakdown).forEach((k) => {
+      const item = breakdown[k];
+      formattedBreakdown[k] = {
+        total: item.total,
+        resolved: item.resolved,
+        avgMastery: item.total > 0 ? Math.round(item.sumMastery / item.total) : 0
+      };
+    });
+
+    const overallMastery = total > 0
+      ? Math.round(ghosts.reduce((acc, g) => acc + (g.masteryPercentage || 0), 0) / total)
+      : 100;
+
+    return {
+      totalWeaknesses: total,
+      activeWeaknesses: active,
+      resolvedCount: resolved,
+      masteryRate: overallMastery,
+      dueTodayCount: dueToday,
+      particleBreakdown: formattedBreakdown
+    };
+  }
+
+  public createGhostWeakness(
+    item: Omit<GhostWeaknessItem, 'id' | 'createdAt' | 'updatedAt'>
+  ): GhostWeaknessItem {
+    const newGhost: GhostWeaknessItem = {
+      ...item,
+      id: `ghost-${crypto.randomUUID().slice(0, 8)}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
+    this.data.ghostWeaknesses.unshift(newGhost);
+    this.save();
+    return newGhost;
   }
 
   public resetAllToSeed() {

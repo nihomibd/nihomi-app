@@ -21,6 +21,7 @@ import { ContentStudioView } from './views/ContentStudioView';
 import { InstitutionPortalView } from './views/InstitutionPortalView';
 import { CurriculumExplorerView } from './views/CurriculumExplorerView';
 import { CommunityLeaderboardView } from './views/CommunityLeaderboardView';
+import { GhostModeView } from './views/GhostModeView';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
@@ -207,6 +208,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'leaderboard' || currentView === 'community' || currentView === 'community-leaderboard' || currentView === 'rankings') && (
           <CommunityLeaderboardView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'ghost-mode' || currentView === 'ghost') && (
+          <GhostModeView onNavigate={handleNavigate} />
         )}
       </main>
 
