@@ -22,6 +22,10 @@ import { InstitutionPortalView } from './views/InstitutionPortalView';
 import { CurriculumExplorerView } from './views/CurriculumExplorerView';
 import { CommunityLeaderboardView } from './views/CommunityLeaderboardView';
 import { GhostModeView } from './views/GhostModeView';
+import { MockExamRunnerView } from './views/MockExamRunnerView';
+import { StudyPlanRoadmapView } from './views/StudyPlanRoadmapView';
+import { BaitoOsView } from './views/BaitoOsView';
+import { InterviewLabView } from './views/InterviewLabView';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
@@ -211,6 +215,24 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'ghost-mode' || currentView === 'ghost') && (
           <GhostModeView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'mock-exam-runner' || currentView === 'mock-exam') && (
+          <MockExamRunnerView
+            examId={viewParams.examId || 'mock-n5-01'}
+            onNavigate={handleNavigate}
+          />
+        )}
+        {(currentView === 'study-plan' || currentView === 'roadmap' || currentView === 'study-planner') && (
+          <StudyPlanRoadmapView
+            openDailyMission={viewParams.openDailyMission}
+            onNavigate={handleNavigate}
+          />
+        )}
+        {(currentView === 'baito' || currentView === 'baito-os' || currentView === 'simulation' || currentView === 'relocation') && (
+          <BaitoOsView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'interview' || currentView === 'interview-lab' || currentView === 'visa-defense') && (
+          <BaitoOsView onNavigate={handleNavigate} />
         )}
       </main>
 

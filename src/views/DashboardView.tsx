@@ -43,6 +43,7 @@ import { VoiceSenseiWidget } from '../components/VoiceSenseiWidget.js';
 import { CurriculumRoadmap } from '../components/CurriculumRoadmap.js';
 import { GlobalLeaderboard } from '../components/GlobalLeaderboard.js';
 import { DashboardSrsSummaryWidget } from '../components/DashboardSrsSummaryWidget.js';
+import { StudyPlanRoadmapWidget } from '../components/studyPlan/StudyPlanRoadmapWidget.js';
 import { LanguageProgressTracker } from '../components/LanguageProgressTracker.js';
 import { RecentlyViewedLessons } from '../components/RecentlyViewedLessons.js';
 import { JlptMasteryHeatmap } from '../components/dashboard/JlptMasteryHeatmap';
@@ -310,6 +311,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
             </button>
           </div>
         </div>
+
+        {/* Task 7: Personalized Daily Study Plan & Roadmap Countdown Widget */}
+        <section id="dashboard-study-plan-roadmap-section">
+          <StudyPlanRoadmapWidget onNavigate={onNavigate} />
+        </section>
 
         {/* JLPT Mastery Activity Heatmap & Skill Density Matrix */}
         <section id="dashboard-jlpt-mastery-heatmap-section">

@@ -163,6 +163,99 @@ class SoundEngine {
       console.warn('Celebration audio failed:', e);
     }
   }
+
+  /**
+   * Conbini POS Barcode Scanner Beep (High crisp beep 2400Hz)
+   */
+  public playBarcodeBeep(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(2400, now);
+
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.09);
+    } catch (e) {
+      console.warn('Barcode beep audio failed:', e);
+    }
+  }
+
+  /**
+   * Cash Register Drawer Open / Settlement Chime
+   */
+  public playRegisterSettlement(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Two-tone Japanese POS confirmation (F6 -> A6)
+      const freqs = [1396.91, 1760.0];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const start = now + (idx * 0.09);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0.15, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(start);
+        osc.stop(start + 0.2);
+      });
+    } catch (e) {
+      console.warn('Register chime failed:', e);
+    }
+  }
+
+  /**
+   * Pitch Accent Contour Tones (High Pitch vs Low Pitch)
+   */
+  public playPitchTones(pattern: ('H' | 'L')[]): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      pattern.forEach((p, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const start = now + (idx * 0.22);
+        const freq = p === 'H' ? 523.25 : 349.23; // C5 vs F4
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0.01, start);
+        gain.gain.linearRampToValueAtTime(0.18, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.19);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(start);
+        osc.stop(start + 0.2);
+      });
+    } catch (e) {
+      console.warn('Pitch tone failed:', e);
+    }
+  }
 }
 
 export const soundEffects = new SoundEngine();

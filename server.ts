@@ -14,10 +14,13 @@ import { billingRouter } from './server/routes/billing.js';
 import { coordinationRouter } from './server/routes/coordination.js';
 import { japanTwinRouter } from './server/routes/japanTwin.js';
 import { ghostModeRouter } from './server/routes/ghostMode.js';
+import { mockExamsRouter } from './server/routes/mockExams.js';
 import { systemHealthRouter } from './server/routes/systemHealth.js';
 import { contentEngineRouter } from './server/routes/contentEngine.js';
 import { contentStudioRouter } from './server/routes/contentStudio.js';
 import { whiteLabelRouter } from './server/routes/whiteLabelRoutes.js';
+import { studyPlanRouter } from './server/routes/studyPlan.js';
+import { baitoSimulationRouter } from './server/routes/baitoSimulation.js';
 import { db } from './server/db.js';
 
 dotenv.config();
@@ -67,12 +70,19 @@ async function startServer() {
   app.use('/api/coordination', coordinationRouter);
   app.use('/api/japan-twin', japanTwinRouter);
   app.use('/api/ghost-mode', ghostModeRouter);
+  app.use('/api/mock-exams', mockExamsRouter);
+  app.use('/api/mock-exam', mockExamsRouter);
   app.use('/api/system-health', systemHealthRouter);
   app.use('/api/content', contentEngineRouter);
   app.use('/api/content-engine', contentEngineRouter);
   app.use('/api/content-studio', contentStudioRouter);
   app.use('/api/branding', whiteLabelRouter);
   app.use('/api/white-label', whiteLabelRouter);
+  app.use('/api/study-plan', studyPlanRouter);
+  app.use('/api/study-planner', studyPlanRouter);
+  app.use('/api/baito', baitoSimulationRouter);
+  app.use('/api/simulation', baitoSimulationRouter);
+  app.use('/api/baito-simulation', baitoSimulationRouter);
 
 
   // Vite middleware for development vs Static files for production

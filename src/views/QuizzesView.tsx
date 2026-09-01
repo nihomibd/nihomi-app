@@ -16,9 +16,13 @@ import {
   Compass,
   Zap,
   Flame,
-  AlertCircle
+  AlertCircle,
+  BookOpen,
+  Headphones
 } from 'lucide-react';
 import { QuizLeaderboard } from '../components/QuizLeaderboard.js';
+import { MockExamCard } from '../components/mockExam/MockExamCard.js';
+import { fetchMockExams, MockExamSummaryItem } from '../services/mockExamApi.js';
 
 interface QuizzesViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -34,29 +38,33 @@ interface RecommendedQuizItem {
 
 export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
   const { profile, user } = useAuth();
+  const [activeTab, setActiveTab] = useState<'mock_exams' | 'quizzes'>('mock_exams');
   const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'All'>((profile?.targetLevel as JLPTLevel) || 'All');
   const [quizzes, setQuizzes] = useState<any[]>([]);
+  const [mockExams, setMockExams] = useState<MockExamSummaryItem[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadQuizzes() {
+    async function loadData() {
       setIsLoading(true);
       try {
         const query = selectedLevel !== 'All' ? `?level=${selectedLevel}` : '';
-        const [quizRes, histRes] = await Promise.all([
+        const [quizRes, histRes, mockRes] = await Promise.all([
           apiRequest<{ quizzes: any[] }>(`/api/quizzes${query}`),
-          user ? apiRequest<{ attempts: any[] }>('/api/quizzes/attempts/history').catch(() => ({ attempts: [] })) : Promise.resolve({ attempts: [] })
+          user ? apiRequest<{ attempts: any[] }>('/api/quizzes/attempts/history').catch(() => ({ attempts: [] })) : Promise.resolve({ attempts: [] }),
+          fetchMockExams(selectedLevel !== 'All' ? selectedLevel : undefined)
         ]);
         setQuizzes(quizRes.quizzes || []);
         setHistory(histRes.attempts || []);
+        setMockExams(mockRes || []);
       } catch (err) {
-        console.error('Failed to load quizzes:', err);
+        console.error('Failed to load quizzes and mock exams:', err);
       } finally {
         setIsLoading(false);
       }
     }
-    loadQuizzes();
+    loadData();
   }, [selectedLevel, user]);
 
   // Compute 3 dynamic personalized recommendations
@@ -131,6 +139,39 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
             Test your grammatical comprehension, particle mastery, vocabulary recognition, and listening intuition. All scores and attempts are permanently persisted to track your readiness.
           </p>
 
+          {/* Main Mode Tabs: Mock Exams vs Lesson Quizzes */}
+          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-stone-200 dark:border-stone-800">
+            <button
+              onClick={() => setActiveTab('mock_exams')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all cursor-pointer ${
+                activeTab === 'mock_exams'
+                  ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-lg shadow-rose-600/20 ring-2 ring-rose-500/30'
+                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-rose-400'
+              }`}
+            >
+              <Award className="w-4 h-4" />
+              <span>JLPT Official Mock Exam Engine (模試)</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/20 text-white font-mono">
+                3-Section Timers
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('quizzes')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all cursor-pointer ${
+                activeTab === 'quizzes'
+                  ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
+                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-red-400'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Standard Lesson & Particle Quizzes</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 font-mono">
+                {quizzes.length}
+              </span>
+            </button>
+          </div>
+
           {/* Filter Pills */}
           <div className="flex items-center space-x-2 pt-2">
             {(['All', 'N5', 'N4', 'N3'] as const).map((lvl) => (
@@ -139,17 +180,69 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
                 onClick={() => setSelectedLevel(lvl)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
                   selectedLevel === lvl
-                    ? 'bg-red-600 text-white shadow-red-600/20'
+                    ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-sm'
                     : 'bg-stone-50 dark:bg-stone-800 sepia:bg-[#ede0b9] border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-stone-400'
                 }`}
               >
-                {lvl === 'All' ? 'All Quizzes' : `JLPT ${lvl}`}
+                {lvl === 'All' ? 'All Levels' : `JLPT ${lvl}`}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Dynamic 'Recommended for You' Section */}
+        {/* ========================================================= */}
+        {/* TAB 1: OFFICIAL JLPT MOCK EXAM ENGINE                     */}
+        {/* ========================================================= */}
+        {activeTab === 'mock_exams' && (
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold font-serif text-stone-900 dark:text-white sepia:text-[#382a17] flex items-center gap-2">
+                  <Award className="w-5 h-5 text-rose-500" />
+                  <span>Official JLPT Scaled Mock Exam Simulations</span>
+                </h2>
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                  Full exam simulations featuring Vocabulary, Grammar/Reading, and Tokyo Listening Drills with official 19/60 sectional passing thresholds.
+                </p>
+              </div>
+
+              <button
+                onClick={() => onNavigate('ghost-mode')}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-xs font-bold transition-colors cursor-pointer"
+              >
+                <Flame className="w-4 h-4 text-purple-500" />
+                <span>MemoryOS™ Weak-Spot SRS</span>
+              </button>
+            </div>
+
+            {isLoading ? (
+              <div className="p-12 text-center bg-white dark:bg-[#12121e] rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm">
+                <div className="w-8 h-8 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                <p className="text-xs text-stone-500 font-bold">Loading official mock exam simulations...</p>
+              </div>
+            ) : mockExams.length === 0 ? (
+              <div className="p-12 text-center bg-white dark:bg-[#12121e] rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm">
+                <p className="text-sm text-stone-400">No mock exams found for level {selectedLevel}.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mockExams.map((exam) => (
+                  <MockExamCard
+                    key={exam.id}
+                    exam={exam}
+                    onStartExam={(examId) => onNavigate('mock-exam-runner', { examId })}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 2: STANDARD LESSON QUIZZES                            */}
+        {/* ========================================================= */}
+        {activeTab === 'quizzes' && (
+          <div className="space-y-8">
         {recommendedQuizzes.length > 0 && (
           <section id="quizzes-recommended-section" className="space-y-4">
             <div className="flex items-center justify-between">
@@ -299,6 +392,8 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
             </div>
           )}
         </div>
+      </div>
+    )}
       </div>
     </div>
   );

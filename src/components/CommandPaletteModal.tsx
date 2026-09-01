@@ -19,7 +19,8 @@ import {
   Clock,
   Keyboard,
   CreditCard,
-  Briefcase
+  Briefcase,
+  Target
 } from 'lucide-react';
 
 export interface CommandItem {
@@ -137,6 +138,48 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         badge: 'AI Coach',
         action: () => onNavigate('portal', { tab: 'pronunciation' }),
         keywords: ['pronunciation', 'accent', 'pitch', 'voice', 'speak', 'audio']
+      },
+      {
+        id: 'tool-mock-exams',
+        title: 'Official JLPT Mock Exam Engine (模試)',
+        subtitle: 'Timed multi-section simulations with Tokyo listening & scaled scores',
+        category: 'Quizzes',
+        icon: Award,
+        badge: 'Official Timed',
+        action: () => onNavigate('quizzes'),
+        keywords: ['mock', 'exam', 'simulation', 'listening', 'jlpt', 'timer', 'certificate', 'n5', 'n4', 'n3']
+      },
+      {
+        id: 'tool-study-plan',
+        title: 'Personalized JLPT Roadmap & Daily SRS Quota',
+        subtitle: 'Target exam countdown, 4-phase sprints & daily weak-spot mission checklist',
+        category: 'Practice & Tools',
+        icon: Target,
+        badge: 'Roadmap AI',
+        action: () => onNavigate('study-plan'),
+        keywords: ['roadmap', 'study plan', 'countdown', 'srs', 'quota', 'daily mission', 'jlpt target', 'schedule']
+      },
+      {
+        id: 'tool-mock-n5',
+        title: 'JLPT N5 Official Simulation Exam (Full)',
+        subtitle: 'Vocab (25m), Grammar/Reading (50m) & Tokyo Listening (30m)',
+        category: 'Quizzes',
+        icon: Award,
+        level: 'N5',
+        badge: '180 Pt Scaled',
+        action: () => onNavigate('mock-exam-runner', { examId: 'mock-n5-01' }),
+        keywords: ['mock-n5-01', 'n5 mock', 'n5 exam', 'n5 listening', 'n5 simulation']
+      },
+      {
+        id: 'tool-mock-n4',
+        title: 'JLPT N4 Official Simulation Exam (Full)',
+        subtitle: 'Intermediate sentence structures, te-form & everyday Tokyo dialogues',
+        category: 'Quizzes',
+        icon: Award,
+        level: 'N4',
+        badge: '180 Pt Scaled',
+        action: () => onNavigate('mock-exam-runner', { examId: 'mock-n4-01' }),
+        keywords: ['mock-n4-01', 'n4 mock', 'n4 exam', 'n4 listening', 'n4 simulation']
       },
       {
         id: 'tool-memory-os',

@@ -884,6 +884,145 @@ export interface DatabaseSchema {
   // MemoryOS™ & Ghost Mode SRS Tables
   ghostWeaknesses?: GhostWeaknessItem[];
   studentErrorLogs?: StudentErrorLog[];
+
+  // JLPT Mock Exam Engine Tables
+  mockExams?: MockExam[];
+  mockExamAttempts?: MockExamAttempt[];
+
+  // Personalized Study Plan & Daily SRS Quota Tables
+  studyPlans?: JLPTStudyPlan[];
+  dailyStudySessions?: DailyStudySessionRecord[];
+
+  // Task 8: BaitoOS™ 2.0 & Tokyo Relocation Simulation Hub Tables
+  baitoScenarios?: BaitoScenarioItem[];
+  conbiniProducts?: ConbiniPosProduct[];
+  conbiniOrders?: ConbiniCustomerOrder[];
+  rirekishoProfiles?: JisRirekishoData[];
+}
+
+export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';
+
+export type MockExamQuestionType =
+  | 'kanji_reading'
+  | 'orthography'
+  | 'contextual_usage'
+  | 'paraphrase'
+  | 'sentence_grammar'
+  | 'sentence_composition'
+  | 'text_grammar'
+  | 'short_reading'
+  | 'mid_reading'
+  | 'information_retrieval'
+  | 'task_listening'
+  | 'point_listening'
+  | 'quick_response'
+  | 'utterance_expression';
+
+export interface MockExamQuestion {
+  id: string;
+  sectionType: MockExamSectionType;
+  questionNumber: number;
+  type: MockExamQuestionType;
+  questionText: string;
+  questionTextJa?: string;
+  furigana?: string;
+  readingPassage?: {
+    id: string;
+    title?: string;
+    passageJa: string;
+    passageFurigana?: string;
+    contextNote?: string;
+  };
+  audioScript?: {
+    narratorText: string;
+    dialogue: {
+      speaker: string;
+      textJa: string;
+      romaji?: string;
+      bangla?: string;
+    }[];
+    audioPrompt: string;
+    questionAudioPromptJa: string;
+  };
+  scrambledParts?: string[]; // 4 items: [1], [2], [3], [4] for ★ questions
+  starPositionIndex?: number; // 0, 1, 2, or 3
+  options: string[];
+  correctOptionIndex: number;
+  explanationJa?: string;
+  explanationBn: string;
+  explanationEn?: string;
+  pointValue: number;
+  conceptCode?: string;
+}
+
+export interface MockExamSection {
+  id: string;
+  sectionType: MockExamSectionType;
+  title: string;
+  titleJa: string;
+  timeLimitMinutes: number;
+  maxScaledScore: number; // 60
+  passingThreshold: number; // 19
+  questions: MockExamQuestion[];
+}
+
+export interface MockExam {
+  id: string;
+  examCode: string;
+  title: string;
+  titleJa: string;
+  level: JLPTLevel;
+  description: string;
+  descriptionBn: string;
+  totalTimeMinutes: number;
+  totalPossibleScore: number; // 180
+  overallPassingScore: number; // 80 for N5, 90 for N4, 95 for N3
+  sections: MockExamSection[];
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SectionScoreResult {
+  sectionType: MockExamSectionType;
+  sectionTitle: string;
+  totalQuestions: number;
+  correctQuestions: number;
+  rawScorePercent: number;
+  scaledScore: number;
+  maxScaledScore: number;
+  passingThreshold: number;
+  isSectionPassed: boolean;
+}
+
+export interface MockExamAttempt {
+  id: string;
+  userId: string;
+  mockExamId: string;
+  examCode: string;
+  level: JLPTLevel;
+  startedAt: string;
+  submittedAt: string;
+  timeSpentSeconds: number;
+  sectionTimesSpentSeconds: Record<MockExamSectionType, number>;
+  sectionScores: Record<MockExamSectionType, SectionScoreResult>;
+  totalScaledScore: number; // 0 - 180
+  overallPassingScore: number;
+  isPassed: boolean;
+  failReason?: string;
+  percentileRank?: number;
+  letterGrade: 'A' | 'B' | 'C' | 'F';
+  certificateId: string;
+  userAnswers: {
+    questionId: string;
+    sectionType: MockExamSectionType;
+    selectedOptionIndex: number;
+    isCorrect: boolean;
+    timeSpentSeconds: number;
+  }[];
+  strengthSummaryBn: string;
+  weaknessSummaryBn: string;
+  actionableStudyPlanBn: string[];
 }
 
 export type ParticleConfusionType =
@@ -945,4 +1084,266 @@ export interface StudentErrorLog {
   details: string;
   timestamp: string;
 }
+
+export type LearningPace = 'relaxed' | 'moderate' | 'intensive' | 'turbo';
+
+export interface StudyPlanSprintPhase {
+  phaseNumber: number;
+  totalPhases: number;
+  name: string;
+  nameJa: string;
+  goalDescription: string;
+  goalDescriptionBn: string;
+  startDate: string;
+  endDate: string;
+  progressPercent: number;
+  status: 'completed' | 'active' | 'upcoming';
+  keyMilestones: string[];
+}
+
+export interface DailySrsQuota {
+  newVocabTarget: number;
+  vocabSrsReviewTarget: number;
+  kanjiStrokeTarget: number;
+  grammarPatternsTarget: number;
+  particleWeakSpotsTarget: number;
+  listeningMinutesTarget: number;
+  totalDailyMinutes: number;
+}
+
+export interface WeeklyMilestoneItem {
+  weekNumber: number;
+  weekRange: string;
+  milestoneTitle: string;
+  milestoneTitleBn: string;
+  targetLessons: string;
+  targetKanjiCount: number;
+  isCompleted: boolean;
+  isCurrent: boolean;
+}
+
+export interface DailyRoadmapTask {
+  id: string;
+  taskType: 'vocab_srs' | 'kanji_drill' | 'grammar_lesson' | 'ghost_recovery' | 'listening_drill' | 'mock_exam';
+  title: string;
+  titleJa: string;
+  titleBn: string;
+  targetCount: number;
+  completedCount: number;
+  estimatedMinutes: number;
+  isCompleted: boolean;
+  xpReward: number;
+  linkView: string;
+  linkParams?: Record<string, any>;
+}
+
+export interface DailyStudySessionRecord {
+  id: string;
+  userId: string;
+  date: string; // YYYY-MM-DD
+  completedItems: {
+    vocabSrsDone: number;
+    kanjiDone: number;
+    grammarDone: number;
+    ghostsResolved: number;
+    listeningMinutesDone: number;
+    quizzesDone: number;
+  };
+  totalMinutesSpent: number;
+  dailyQuotaMet: boolean;
+  earnedXp: number;
+  checklist: DailyRoadmapTask[];
+  updatedAt: string;
+}
+
+export interface JLPTStudyPlan {
+  id: string;
+  userId: string;
+  targetLevel: JLPTLevel;
+  targetExamDate: string; // ISO string e.g. 2026-12-06
+  examSessionName: string;
+  targetScore: number; // out of 180
+  dailyTimeMinutes: number;
+  learningPace: LearningPace;
+  focusAreas: string[];
+  daysRemaining: number;
+  weeksRemaining: number;
+  currentSprintPhase: StudyPlanSprintPhase;
+  sprintPhases: StudyPlanSprintPhase[];
+  dailyQuota: DailySrsQuota;
+  weeklySchedule: WeeklyMilestoneItem[];
+  readinessScore: number; // 0 - 100%
+  projectedScore: number; // e.g. 142 / 180
+  passProbability: number; // e.g. 88%
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ==============================================================================
+// Task 8: BaitoOS™ 2.0 & Tokyo Relocation Simulation Hub Types
+// ==============================================================================
+
+export type BaitoScenarioType =
+  | 'conbini_pos'
+  | 'school_principal'
+  | 'embassy_visa'
+  | 'restaurant_izakaya'
+  | 'train_metro'
+  | 'ward_office';
+
+export interface BaitoScenarioItem {
+  id: string;
+  type: BaitoScenarioType;
+  title: string;
+  titleJa: string;
+  titleBn: string;
+  subtitle: string;
+  difficulty: 'N5' | 'N4' | 'N3';
+  location: string;
+  interlocutorName: string;
+  interlocutorRole: string;
+  interlocutorAvatar: string;
+  initialDialogue: {
+    ja: string;
+    romaji: string;
+    bn: string;
+    en: string;
+  };
+  objectives: string[];
+  contextDescription: string;
+  keyVocabulary: Array<{
+    ja: string;
+    kana: string;
+    meaningBn: string;
+    meaningEn: string;
+  }>;
+}
+
+export interface BaitoInterviewMessage {
+  id: string;
+  sender: 'interviewer' | 'student' | 'system';
+  textJa: string;
+  textRomaji?: string;
+  textBn?: string;
+  textEn?: string;
+  audioText?: string;
+  timestamp: string;
+  evaluation?: {
+    keigoAccuracy: number; // 0-100
+    grammarScore: number; // 0-100
+    fluencyScore: number; // 0-100
+    feedbackJa: string;
+    feedbackBn: string;
+    betterAlternativeJa?: string;
+    betterAlternativeRomaji?: string;
+  };
+}
+
+export interface BaitoEvaluationResponse {
+  success: boolean;
+  messageId: string;
+  userText: string;
+  nextInterviewerDialogue: {
+    ja: string;
+    romaji: string;
+    bn: string;
+    en: string;
+  };
+  evaluation: {
+    overallScore: number;
+    keigoLevel: 'Teineigo (Polite)' | 'Kenjougo (Humble)' | 'Sonkeigo (Honorific)' | 'Informal (Needs Fix)';
+    keigoAccuracy: number;
+    grammarScore: number;
+    fluencyScore: number;
+    feedbackJa: string;
+    feedbackBn: string;
+    detectedMistakes: string[];
+    polishedAlternativeJa: string;
+    polishedAlternativeRomaji: string;
+  };
+  isFinished?: boolean;
+  finalReadinessScore?: number;
+}
+
+export interface JisRirekishoData {
+  id: string;
+  userId: string;
+  fullName: string;
+  fullNameKana: string;
+  fullNameRomaji: string;
+  gender: 'male' | 'female' | 'other' | 'unspecified';
+  birthDate: string; // YYYY-MM-DD
+  japaneseEraBirth: string; // e.g. 平成12年10月1日
+  age: number;
+  phone: string;
+  email: string;
+  postalCode: string;
+  currentAddress: string;
+  currentAddressKana: string;
+  photoUrl: string;
+  visaStatus: string;
+  visaExpiry: string;
+  allowedHoursPerWeek: number; // e.g. 28
+  educationHistory: Array<{
+    year: number;
+    month: number;
+    schoolName: string;
+    faculty: string;
+    status: 'enrolled' | 'graduated' | 'expected_graduation';
+  }>;
+  workHistory: Array<{
+    year: number;
+    month: number;
+    companyName: string;
+    role: string;
+    status: 'joined' | 'resigned' | 'current';
+  }>;
+  licensesCertifications: Array<{
+    year: number;
+    month: number;
+    title: string;
+  }>;
+  jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'Studying N5' | 'Studying N4';
+  motivationStatement: string; // 志望の動機
+  motivationStatementPolished?: string;
+  selfPr: string; // 自己PR
+  selfPrPolished?: string;
+  commuteTimeMinutes: number;
+  dependentsCount: number;
+  hasSpouse: boolean;
+  hankoStampUrl?: string;
+  updatedAt: string;
+}
+
+export interface ConbiniPosProduct {
+  id: string;
+  barcode: string;
+  nameJa: string;
+  nameRomaji: string;
+  nameBn: string;
+  priceYen: number;
+  category: 'bento' | 'drink' | 'onigiri' | 'dessert' | 'alcohol_tobacco' | 'hot_snack';
+  needsHeating?: boolean;
+  needsAgeVerification?: boolean;
+  imageIcon: string;
+}
+
+export interface ConbiniCustomerOrder {
+  id: string;
+  customerName: string;
+  customerType: 'salaryman' | 'student' | 'grandma' | 'foreigner';
+  customerSpeechJa: string;
+  customerSpeechRomaji: string;
+  customerSpeechBn: string;
+  items: ConbiniPosProduct[];
+  hasPointCard: boolean;
+  pointCardName?: 'Ponta' | 'd-Point' | 'Rakuten' | 'None';
+  needsBag: boolean;
+  needsChopsticks: boolean;
+  wantsBentoHeated: boolean;
+  paymentMethod: 'cash' | 'suica' | 'paypay' | 'credit';
+  tenderedCashAmount?: number;
+}
+
+
 

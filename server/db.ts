@@ -49,7 +49,25 @@ import {
   StructuredEducationalContent,
   GhostWeaknessItem,
   StudentErrorLog,
-  ParticleConfusionType
+  ParticleConfusionType,
+  MockExam,
+  MockExamAttempt,
+  MockExamSectionType,
+  SectionScoreResult,
+  JLPTStudyPlan,
+  DailyStudySessionRecord,
+  StudyPlanSprintPhase,
+  DailySrsQuota,
+  WeeklyMilestoneItem,
+  DailyRoadmapTask,
+  LearningPace,
+  BaitoScenarioItem,
+  BaitoInterviewMessage,
+  BaitoEvaluationResponse,
+  JisRirekishoData,
+  ConbiniPosProduct,
+  ConbiniCustomerOrder,
+  BaitoScenarioType
 } from './types.js';
 import {
   INITIAL_COURSES,
@@ -59,6 +77,13 @@ import {
   INITIAL_WORK_JAPANESE
 } from './seedData.js';
 import { INITIAL_GHOST_WEAKNESSES } from './ghostSeedData.js';
+import { INITIAL_MOCK_EXAMS } from './mockExamSeedData.js';
+import {
+  INITIAL_BAITO_SCENARIOS,
+  INITIAL_CONBINI_PRODUCTS,
+  INITIAL_CONBINI_ORDERS,
+  INITIAL_DEFAULT_RIREKISHO
+} from './baitoSeedData.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -360,7 +385,21 @@ class Database {
     // Content Engine Collections
     contentSources: [],
     contentDrafts: [],
-    contentVersions: []
+    contentVersions: [],
+
+    // MemoryOS & Mock Exams & Study Plan
+    ghostWeaknesses: [],
+    studentErrorLogs: [],
+    mockExams: [],
+    mockExamAttempts: [],
+    studyPlans: [],
+    dailyStudySessions: [],
+
+    // BaitoOS & Tokyo Simulation Hub
+    baitoScenarios: INITIAL_BAITO_SCENARIOS,
+    conbiniProducts: INITIAL_CONBINI_PRODUCTS,
+    conbiniOrders: INITIAL_CONBINI_ORDERS,
+    rirekishoProfiles: [INITIAL_DEFAULT_RIREKISHO]
   };
 
   private isLoaded = false;
@@ -473,6 +512,10 @@ class Database {
         // Ensure MemoryOS collections are initialized
         if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
         if (!this.data.studentErrorLogs) this.data.studentErrorLogs = [];
+        if (!this.data.mockExams || this.data.mockExams.length === 0) this.data.mockExams = INITIAL_MOCK_EXAMS;
+        if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
+        if (!this.data.studyPlans) this.data.studyPlans = [];
+        if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
         this.save();
         this.isLoaded = true;
       } else {
@@ -835,7 +878,9 @@ class Database {
         ...g,
         userId: 'usr-student-01'
       })),
-      studentErrorLogs: []
+      studentErrorLogs: [],
+      mockExams: INITIAL_MOCK_EXAMS,
+      mockExamAttempts: []
     };
     this.isLoaded = true;
   }
@@ -3287,6 +3332,1067 @@ class Database {
     return newGhost;
   }
 
+  // ==========================================
+  // JLPT MOCK EXAM ENGINE & SCALED SCORING
+  // ==========================================
+
+  public getMockExams(level?: JLPTLevel): MockExam[] {
+    if (!this.data.mockExams || this.data.mockExams.length === 0) {
+      this.data.mockExams = INITIAL_MOCK_EXAMS;
+      this.save();
+    }
+
+    let exams = this.data.mockExams.filter((e) => e.isPublished);
+    if (level) {
+      exams = exams.filter((e) => e.level === level);
+    }
+    return exams;
+  }
+
+  public getMockExamById(id: string): MockExam | undefined {
+    if (!this.data.mockExams || this.data.mockExams.length === 0) {
+      this.data.mockExams = INITIAL_MOCK_EXAMS;
+      this.save();
+    }
+    return this.data.mockExams.find((e) => e.id === id || e.examCode === id);
+  }
+
+  public getUserMockExamAttempts(userId: string): MockExamAttempt[] {
+    if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
+    return this.data.mockExamAttempts
+      .filter((a) => a.userId === userId)
+      .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+  }
+
+  public getMockExamAttemptById(attemptId: string): MockExamAttempt | undefined {
+    if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
+    return this.data.mockExamAttempts.find((a) => a.id === attemptId);
+  }
+
+  public recordMockExamAttempt(params: {
+    userId: string;
+    mockExamId: string;
+    answers: {
+      questionId: string;
+      sectionType: MockExamSectionType;
+      selectedOptionIndex: number;
+      timeSpentSeconds: number;
+    }[];
+    sectionTimesSpentSeconds: Record<MockExamSectionType, number>;
+    totalTimeSpentSeconds: number;
+  }): {
+    attempt: MockExamAttempt;
+    isPassed: boolean;
+    totalScaledScore: number;
+    letterGrade: string;
+    certificateId: string;
+    progress: UserProgress;
+    message: string;
+  } {
+    const exam = this.getMockExamById(params.mockExamId);
+    if (!exam) {
+      throw new Error(`Mock Exam with ID "${params.mockExamId}" not found.`);
+    }
+
+    if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
+
+    // Map user answers and verify correctness
+    const processedUserAnswers = params.answers.map((ans) => {
+      let isCorrect = false;
+      let targetQ: any = null;
+
+      for (const sec of exam.sections) {
+        const found = sec.questions.find((q) => q.id === ans.questionId);
+        if (found) {
+          targetQ = found;
+          isCorrect = ans.selectedOptionIndex === found.correctOptionIndex;
+          break;
+        }
+      }
+
+      // Log errors into MemoryOS™ for adaptive ghost drills
+      if (targetQ && !isCorrect && ans.selectedOptionIndex >= 0) {
+        const selectedText = targetQ.options[ans.selectedOptionIndex] || 'Selected Option';
+        const correctText = targetQ.options[targetQ.correctOptionIndex] || 'Correct Option';
+
+        this.logStudentError({
+          userId: params.userId,
+          questionId: targetQ.id,
+          conceptCode: targetQ.conceptCode || `mock-${targetQ.id}`,
+          userSelected: selectedText,
+          correctAnswer: correctText,
+          category: targetQ.sectionType === 'listening' ? 'keigo' : 'grammar',
+          details: `Mock Exam (${exam.examCode}) mistake on Q${targetQ.questionNumber}: ${targetQ.questionTextJa || targetQ.questionText}`
+        });
+      }
+
+      return {
+        questionId: ans.questionId,
+        sectionType: ans.sectionType,
+        selectedOptionIndex: ans.selectedOptionIndex,
+        isCorrect,
+        timeSpentSeconds: ans.timeSpentSeconds || 0
+      };
+    });
+
+    // Calculate Sectional Scaled Scores (0 to 60 per section, minimum 19 threshold)
+    const sectionScores: Record<MockExamSectionType, SectionScoreResult> = {
+      vocabulary: {
+        sectionType: 'vocabulary',
+        sectionTitle: 'Language Knowledge (Vocabulary)',
+        totalQuestions: 0,
+        correctQuestions: 0,
+        rawScorePercent: 0,
+        scaledScore: 0,
+        maxScaledScore: 60,
+        passingThreshold: 19,
+        isSectionPassed: false
+      },
+      grammar_reading: {
+        sectionType: 'grammar_reading',
+        sectionTitle: 'Grammar & Reading Comprehension',
+        totalQuestions: 0,
+        correctQuestions: 0,
+        rawScorePercent: 0,
+        scaledScore: 0,
+        maxScaledScore: 60,
+        passingThreshold: 19,
+        isSectionPassed: false
+      },
+      listening: {
+        sectionType: 'listening',
+        sectionTitle: 'Listening Comprehension (Choukai)',
+        totalQuestions: 0,
+        correctQuestions: 0,
+        rawScorePercent: 0,
+        scaledScore: 0,
+        maxScaledScore: 60,
+        passingThreshold: 19,
+        isSectionPassed: false
+      }
+    };
+
+    exam.sections.forEach((sec) => {
+      const secType = sec.sectionType;
+      const totalQ = sec.questions.length;
+      let correctQ = 0;
+
+      sec.questions.forEach((q) => {
+        const userA = processedUserAnswers.find((a) => a.questionId === q.id);
+        if (userA && userA.isCorrect) {
+          correctQ += 1;
+        }
+      });
+
+      const rawPercent = totalQ > 0 ? (correctQ / totalQ) * 100 : 0;
+      const scaled = Math.min(60, Math.round((rawPercent / 100) * sec.maxScaledScore));
+      const passed = scaled >= sec.passingThreshold;
+
+      sectionScores[secType] = {
+        sectionType: secType,
+        sectionTitle: sec.title,
+        totalQuestions: totalQ,
+        correctQuestions: correctQ,
+        rawScorePercent: Math.round(rawPercent),
+        scaledScore: scaled,
+        maxScaledScore: sec.maxScaledScore,
+        passingThreshold: sec.passingThreshold,
+        isSectionPassed: passed
+      };
+    });
+
+    const totalScaledScore =
+      sectionScores.vocabulary.scaledScore +
+      sectionScores.grammar_reading.scaledScore +
+      sectionScores.listening.scaledScore;
+
+    const meetOverallThreshold = totalScaledScore >= exam.overallPassingScore;
+    const allSectionsPassed =
+      sectionScores.vocabulary.isSectionPassed &&
+      sectionScores.grammar_reading.isSectionPassed &&
+      sectionScores.listening.isSectionPassed;
+
+    const isPassed = meetOverallThreshold && allSectionsPassed;
+
+    let failReason: string | undefined = undefined;
+    if (!isPassed) {
+      if (!meetOverallThreshold) {
+        failReason = `মোট স্কেলড স্কোর ${totalScaledScore}/১৮০ (পাস মার্ক ${exam.overallPassingScore}) এর নিচে রয়েছে।`;
+      } else if (!sectionScores.vocabulary.isSectionPassed) {
+        failReason = `শব্দভাণ্ডার (Vocabulary) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.vocabulary.scaledScore}/৬০)।`;
+      } else if (!sectionScores.grammar_reading.isSectionPassed) {
+        failReason = `ব্যাকরণ ও পঠন (Grammar/Reading) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.grammar_reading.scaledScore}/৬০)।`;
+      } else if (!sectionScores.listening.isSectionPassed) {
+        failReason = `লিসেনিং (Listening) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.listening.scaledScore}/৬০)।`;
+      }
+    }
+
+    let letterGrade: 'A' | 'B' | 'C' | 'F' = 'F';
+    let percentileRank = 35;
+    if (isPassed) {
+      if (totalScaledScore >= 150) {
+        letterGrade = 'A';
+        percentileRank = 96;
+      } else if (totalScaledScore >= 120) {
+        letterGrade = 'B';
+        percentileRank = 82;
+      } else {
+        letterGrade = 'C';
+        percentileRank = 65;
+      }
+    }
+
+    const certificateId = `NIH-JLPT-${exam.level}-${Date.now().toString(36).toUpperCase()}`;
+
+    // Generate diagnostic feedback
+    const strongSections = Object.values(sectionScores).filter((s) => s.scaledScore >= 45).map((s) => s.sectionTitle);
+    const weakSections = Object.values(sectionScores).filter((s) => s.scaledScore < 35).map((s) => s.sectionTitle);
+
+    const strengthSummaryBn = strongSections.length > 0
+      ? `আপনি ${strongSections.join(' এবং ')} সেকশনে অত্যন্ত চমৎকার দক্ষতা প্রদর্শন করেছেন।`
+      : `সাধারণ প্রশ্নাবলীতে স্থিতিশীল পারফর্মেন্স বজায় ছিল।`;
+
+    const weaknessSummaryBn = weakSections.length > 0
+      ? `পরবর্তী ড্রিলের জন্য ${weakSections.join(', ')} সেকশনে অতিরিক্ত মনোযোগ প্রয়োজন।`
+      : `সবগুলো সেকশনেই সন্তোষজনক ব্যালেন্স বজায় রয়েছে।`;
+
+    const actionableStudyPlanBn: string[] = [];
+    if (sectionScores.vocabulary.scaledScore < 38) {
+      actionableStudyPlanBn.push('প্রতিদিন ১০টি কাঞ্জি স্ট্রোক ড্রিল ও অর্থোগ্রাফি ফ্ল্যাশউইজেট অনুশীলন করুন।');
+    }
+    if (sectionScores.grammar_reading.scaledScore < 38) {
+      actionableStudyPlanBn.push('MemoryOS™ Ghost Mode-এ は vs が এবং に vs で এর সাব-ক্লজ ড্রিলগুলো ১০০% আয়ত্ত করুন।');
+    }
+    if (sectionScores.listening.scaledScore < 38) {
+      actionableStudyPlanBn.push('টোকিও রিয়েল-অডিও স্পিচ ট্রেইনারে ০.৮x ও ১.০x গতিতে নিয়মিত কথোপকথন শুনুন।');
+    }
+    if (actionableStudyPlanBn.length === 0) {
+      actionableStudyPlanBn.push('পরবর্তী উচ্চতর লেভেলের (যেমন N4 বা N3) প্রস্তুতি শুরু করার জন্য আপনার ভিত্তি চমৎকার!');
+    }
+
+    const attempt: MockExamAttempt = {
+      id: `attempt-mock-${crypto.randomUUID().slice(0, 8)}`,
+      userId: params.userId,
+      mockExamId: exam.id,
+      examCode: exam.examCode,
+      level: exam.level,
+      startedAt: new Date(Date.now() - params.totalTimeSpentSeconds * 1000).toISOString(),
+      submittedAt: new Date().toISOString(),
+      timeSpentSeconds: params.totalTimeSpentSeconds,
+      sectionTimesSpentSeconds: params.sectionTimesSpentSeconds,
+      sectionScores,
+      totalScaledScore,
+      overallPassingScore: exam.overallPassingScore,
+      isPassed,
+      failReason,
+      percentileRank,
+      letterGrade,
+      certificateId,
+      userAnswers: processedUserAnswers,
+      strengthSummaryBn,
+      weaknessSummaryBn,
+      actionableStudyPlanBn
+    };
+
+    this.data.mockExamAttempts.unshift(attempt);
+
+    // Award XP and Study Time
+    const xpAwarded = isPassed ? 250 : 100;
+    const minutesStudied = Math.max(20, Math.round(params.totalTimeSpentSeconds / 60));
+    const progress = this.addStudyTime(params.userId, minutesStudied, xpAwarded);
+
+    this.save();
+
+    return {
+      attempt,
+      isPassed,
+      totalScaledScore,
+      letterGrade,
+      certificateId,
+      progress,
+      message: isPassed
+        ? `🎉 অভিনন্দন! আপনি ${totalScaledScore}/১৮০ স্কেলড স্কোরে ${exam.level} মক পরীক্ষায় উত্তীর্ণ হয়েছেন (গ্রেড: ${letterGrade})!`
+        : `মক পরীক্ষা সম্পন্ন হয়েছে। আপনার স্কেলড স্কোর: ${totalScaledScore}/১৮০। ভুল উত্তরের সমাধান ও ফিডব্যাক দেখে নিন।`
+    };
+  }
+
+  // =========================================================================
+  // TASK 7: PERSONALIZED DAILY STUDY PLAN & ROADMAP GENERATOR
+  // =========================================================================
+
+  public getStudyPlan(userId: string): JLPTStudyPlan {
+    if (!this.data.studyPlans) this.data.studyPlans = [];
+    const existing = this.data.studyPlans.find((p) => p.userId === userId);
+    if (existing) {
+      // Refresh real-time daysRemaining, readinessScore, and sprint status
+      return this.refreshStudyPlanCalculations(existing);
+    }
+    // Generate default customized plan based on student profile
+    const profile = this.getProfileByUserId(userId);
+    const generated = this.generatePersonalizedStudyPlan(userId, {
+      targetLevel: profile?.targetLevel || 'N5',
+      dailyTimeMinutes: profile?.dailyGoalMinutes || 30
+    });
+    this.data.studyPlans.push(generated);
+    this.save();
+    return generated;
+  }
+
+  public saveStudyPlan(
+    userId: string,
+    params: {
+      targetLevel: JLPTLevel;
+      targetExamDate: string;
+      examSessionName?: string;
+      targetScore?: number;
+      dailyTimeMinutes?: number;
+      learningPace?: LearningPace;
+      focusAreas?: string[];
+    }
+  ): JLPTStudyPlan {
+    if (!this.data.studyPlans) this.data.studyPlans = [];
+    const plan = this.generatePersonalizedStudyPlan(userId, params);
+    const idx = this.data.studyPlans.findIndex((p) => p.userId === userId);
+    if (idx >= 0) {
+      this.data.studyPlans[idx] = plan;
+    } else {
+      this.data.studyPlans.push(plan);
+    }
+    // Also sync user profile targetLevel and dailyGoalMinutes
+    this.updateProfile(userId, {
+      targetLevel: params.targetLevel,
+      dailyGoalMinutes: params.dailyTimeMinutes || 30
+    });
+    this.save();
+    return plan;
+  }
+
+  public generatePersonalizedStudyPlan(
+    userId: string,
+    options?: {
+      targetLevel?: JLPTLevel;
+      targetExamDate?: string;
+      examSessionName?: string;
+      targetScore?: number;
+      dailyTimeMinutes?: number;
+      learningPace?: LearningPace;
+      focusAreas?: string[];
+    }
+  ): JLPTStudyPlan {
+    const level: JLPTLevel = options?.targetLevel || 'N5';
+    const now = new Date();
+    
+    // Default to upcoming standard JLPT examination date (1st Sunday of December 2026 or July 2027)
+    let targetDateStr = options?.targetExamDate;
+    if (!targetDateStr) {
+      const dec2026 = new Date('2026-12-06T09:00:00Z');
+      if (now < dec2026) {
+        targetDateStr = '2026-12-06';
+      } else {
+        targetDateStr = '2027-07-04';
+      }
+    }
+
+    const examDate = new Date(targetDateStr);
+    const diffMs = Math.max(86400000, examDate.getTime() - now.getTime());
+    const daysRemaining = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    const weeksRemaining = Math.max(1, Math.ceil(daysRemaining / 7));
+
+    const examSessionName = options?.examSessionName || 
+      (targetDateStr.includes('2026-12') ? 'Official JLPT December 2026 Exam' :
+       targetDateStr.includes('2027-07') ? 'Official JLPT July 2027 Exam' :
+       `Target JLPT ${level} Exam Session`);
+
+    const dailyMinutes = options?.dailyTimeMinutes || 30;
+    const pace: LearningPace = options?.learningPace || (dailyMinutes >= 60 ? 'intensive' : dailyMinutes >= 45 ? 'moderate' : 'relaxed');
+    const targetScore = options?.targetScore || (level === 'N5' || level === 'N4' ? 140 : 135);
+
+    // JLPT Curriculum target scopes by Level
+    const scopeByLevel: Record<JLPTLevel, { vocab: number; kanji: number; grammarLessons: number }> = {
+      N5: { vocab: 800, kanji: 120, grammarLessons: 25 },
+      N4: { vocab: 1500, kanji: 300, grammarLessons: 25 },
+      N3: { vocab: 3750, kanji: 650, grammarLessons: 30 },
+      N2: { vocab: 6000, kanji: 1000, grammarLessons: 40 },
+      N1: { vocab: 10000, kanji: 2000, grammarLessons: 50 }
+    };
+
+    const targetScope = scopeByLevel[level] || scopeByLevel.N5;
+
+    // Calculate Adaptive Daily Quota based on days remaining & learning pace
+    const daysForLearning = Math.max(15, daysRemaining - 14); // reserve last 14 days for mock exam sprints
+    const paceMultiplier = pace === 'turbo' ? 1.4 : pace === 'intensive' ? 1.2 : pace === 'relaxed' ? 0.85 : 1.0;
+
+    const newVocabTarget = Math.max(5, Math.min(25, Math.round((targetScope.vocab / daysForLearning) * paceMultiplier)));
+    const vocabSrsReviewTarget = Math.max(15, Math.min(60, Math.round(newVocabTarget * 2.5)));
+    const kanjiStrokeTarget = Math.max(3, Math.min(12, Math.round((targetScope.kanji / daysForLearning) * paceMultiplier)));
+    const grammarPatternsTarget = Math.max(1, Math.min(4, Math.round((targetScope.grammarLessons * 3 / daysForLearning) * paceMultiplier)));
+    const particleWeakSpotsTarget = Math.max(2, Math.min(8, 3));
+    const listeningMinutesTarget = Math.max(5, Math.min(20, Math.round(dailyMinutes * 0.3)));
+
+    const dailyQuota: DailySrsQuota = {
+      newVocabTarget,
+      vocabSrsReviewTarget,
+      kanjiStrokeTarget,
+      grammarPatternsTarget,
+      particleWeakSpotsTarget,
+      listeningMinutesTarget,
+      totalDailyMinutes: dailyMinutes
+    };
+
+    // Calculate 4 Strategic JLPT Sprint Phases
+    const phaseDurations = [0.25, 0.35, 0.25, 0.15];
+    let runningDate = new Date(now);
+    const sprintPhases: StudyPlanSprintPhase[] = [
+      {
+        phaseNumber: 1,
+        totalPhases: 4,
+        name: 'Foundational Immersion & Kana/Kanji Strokes',
+        nameJa: '第1期：基礎定着と漢字・語彙ビルド',
+        goalDescription: 'Build core hiragana/katakana fluency, master first 40 Essential Kanji, and solidify basic particles (は, が, を, に).',
+        goalDescriptionBn: 'প্রাথমিক হিরাগানা/কাতাকানা দক্ষতা অর্জন, প্রথম ৪০টি কাঞ্জি ও মূল পার্টিকেলগুলোর (は, が, を, に) শতভাগ ভিত্তি তৈরি।',
+        startDate: now.toISOString().split('T')[0],
+        endDate: new Date(now.getTime() + (daysRemaining * phaseDurations[0] * 86400000)).toISOString().split('T')[0],
+        progressPercent: 45,
+        status: 'active',
+        keyMilestones: ['Master Lessons 1-8 Vocab & Grammar', '40 N5 Kanji 3D Stroke Animations', 'MemoryOS は vs が Zero-Error Baseline']
+      },
+      {
+        phaseNumber: 2,
+        totalPhases: 4,
+        name: 'Minna no Nihongo Curriculum Acceleration & Verb Conjugations',
+        nameJa: '第2期：文法加速と動詞活用マスター',
+        goalDescription: 'Accelerate through Minna no Nihongo lessons 9-20. Master te-form, ta-form, nai-form conjugations and polite requests.',
+        goalDescriptionBn: 'মিন্না নো নিহোঙ্গো পাঠ ৯-২০ সম্পন্ন। তে-ফর্ম, তা-ফর্ম ও নাই-ফর্ম সহ প্রয়োজনীয় ব্যাকরণ স্ট্রাকচারে পূর্ণ দক্ষতা।',
+        startDate: new Date(now.getTime() + (daysRemaining * phaseDurations[0] * 86400000)).toISOString().split('T')[0],
+        endDate: new Date(now.getTime() + (daysRemaining * (phaseDurations[0] + phaseDurations[1]) * 86400000)).toISOString().split('T')[0],
+        progressPercent: 15,
+        status: 'upcoming',
+        keyMilestones: ['Complete Lessons 9-20 Grammar Deck', '120 Kanji Mastered in Flashcards', 'Verb Form Switching Speed Drills']
+      },
+      {
+        phaseNumber: 3,
+        totalPhases: 4,
+        name: 'Deep Reading Passages & Tokyo Listening Comprehension',
+        nameJa: '第3期：長文読解と東京リアル聴解ドリル',
+        goalDescription: 'Solve authentic JLPT reading passages (Dokkai) and train ear with authentic Tokyo multi-speaker speed audios.',
+        goalDescriptionBn: 'বাস্তবসম্মত রিডিং অনুচ্ছেদ পাঠ ও স্পিচ সিন্থেসাইজার যোগে দ্রুতগতির টোকিও অডিও লিসেনিং ড্রিল।',
+        startDate: new Date(now.getTime() + (daysRemaining * (phaseDurations[0] + phaseDurations[1]) * 86400000)).toISOString().split('T')[0],
+        endDate: new Date(now.getTime() + (daysRemaining * (1 - phaseDurations[3]) * 86400000)).toISOString().split('T')[0],
+        progressPercent: 0,
+        status: 'upcoming',
+        keyMilestones: ['10 Authentic Reading Passages (読解)', '30 Tokyo Speed Listening Sessions (聴解)', 'Solve Star Sentence Scrambles (★)']
+      },
+      {
+        phaseNumber: 4,
+        totalPhases: 4,
+        name: 'Official JLPT Mock Marathon & Ghost Weakness Eradication',
+        nameJa: '第4期：公式模試マラソンと弱点克服',
+        goalDescription: 'Take 3 full-length timed mock exams under official condition. Eliminate all remaining particle errors in MemoryOS™ Ghost Mode.',
+        goalDescriptionBn: 'পূর্ণাঙ্গ অফিসিয়াল টাইমারযুক্ত ৩টি মক পরীক্ষা এবং মেমরি ওএস-এ সমস্ত দুর্বল পার্টিকেল ও কাঞ্জির ১০০% রিকভারি।',
+        startDate: new Date(now.getTime() + (daysRemaining * (1 - phaseDurations[3]) * 86400000)).toISOString().split('T')[0],
+        endDate: targetDateStr,
+        progressPercent: 0,
+        status: 'upcoming',
+        keyMilestones: ['Score 140+/180 on Full JLPT Mock Exam', 'Zero Ghost Weaknesses in Ghost Mode', 'Official Scaled Certificate Generation']
+      }
+    ];
+
+    // Compute Weekly Milestone Schedule (up to 8 weeks ahead)
+    const weeklySchedule: WeeklyMilestoneItem[] = [];
+    const totalWeeksToSchedule = Math.min(12, weeksRemaining);
+    for (let w = 1; w <= totalWeeksToSchedule; w++) {
+      const wStart = new Date(now.getTime() + (w - 1) * 7 * 86400000);
+      const wEnd = new Date(now.getTime() + (w * 7 - 1) * 86400000);
+      const isCurrent = w === 1;
+      const isCompleted = w < 1; // current week active
+
+      const startLes = Math.min(25, (w - 1) * 2 + 1);
+      const endLes = Math.min(25, w * 2);
+      const targetKanji = Math.min(targetScope.kanji, w * 12);
+
+      weeklySchedule.push({
+        weekNumber: w,
+        weekRange: `${wStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${wEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
+        milestoneTitle: `Week ${w}: Lessons ${startLes}–${endLes} & Kanji Sprint (${targetKanji} Kanji)`,
+        milestoneTitleBn: `সপ্তাহ ${w}: পাঠ ${startLes}–${endLes} এবং কাঞ্জি স্প্রিন্ট (${targetKanji}টি কাঞ্জি)`,
+        targetLessons: `Lessons ${startLes}–${endLes}`,
+        targetKanjiCount: targetKanji,
+        isCompleted,
+        isCurrent
+      });
+    }
+
+    // Dynamic Readiness Score & Projected Score Calculation
+    const progress = this.getProgressByUserId(userId);
+    const completedLessonCount = progress.completedLessonIds.length;
+    const ghostStats = this.getGhostMasteryStats(userId);
+    const mockAttempts = this.getUserMockExamAttempts(userId);
+
+    const lessonFactor = Math.min(1.0, completedLessonCount / Math.max(1, targetScope.grammarLessons));
+    const streakFactor = Math.min(1.0, progress.currentStreak / 14);
+    const ghostFactor = (ghostStats.masteryRate || 80) / 100;
+    
+    let mockFactor = 0.5;
+    if (mockAttempts.length > 0) {
+      const bestScore = Math.max(...mockAttempts.map((a) => a.totalScaledScore));
+      mockFactor = Math.min(1.0, bestScore / 180);
+    }
+
+    const readinessScore = Math.min(100, Math.round(
+      (lessonFactor * 35) +
+      (streakFactor * 15) +
+      (ghostFactor * 25) +
+      (mockFactor * 25)
+    ));
+
+    const projectedScore = Math.min(180, Math.max(60, Math.round(
+      (readinessScore / 100) * 160 + (progress.currentStreak > 7 ? 12 : 5)
+    )));
+
+    const passProbability = Math.min(99, Math.max(35, Math.round(
+      (readinessScore * 0.75) + (projectedScore >= 120 ? 20 : projectedScore >= 95 ? 10 : 0)
+    )));
+
+    const studyPlan: JLPTStudyPlan = {
+      id: `plan-${userId}-${crypto.randomUUID().slice(0, 8)}`,
+      userId,
+      targetLevel: level,
+      targetExamDate: targetDateStr,
+      examSessionName,
+      targetScore,
+      dailyTimeMinutes: dailyMinutes,
+      learningPace: pace,
+      focusAreas: options?.focusAreas || ['vocabulary', 'grammar', 'particles', 'kanji', 'listening'],
+      daysRemaining,
+      weeksRemaining,
+      currentSprintPhase: sprintPhases[0],
+      sprintPhases,
+      dailyQuota,
+      weeklySchedule,
+      readinessScore,
+      projectedScore,
+      passProbability,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString()
+    };
+
+    return studyPlan;
+  }
+
+  private refreshStudyPlanCalculations(plan: JLPTStudyPlan): JLPTStudyPlan {
+    const now = new Date();
+    const examDate = new Date(plan.targetExamDate);
+    const diffMs = Math.max(86400000, examDate.getTime() - now.getTime());
+    const daysRemaining = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    const weeksRemaining = Math.max(1, Math.ceil(daysRemaining / 7));
+
+    // Dynamic Readiness Score recalculation
+    const progress = this.getProgressByUserId(plan.userId);
+    const completedLessonCount = progress.completedLessonIds.length;
+    const ghostStats = this.getGhostMasteryStats(plan.userId);
+    const mockAttempts = this.getUserMockExamAttempts(plan.userId);
+
+    const lessonFactor = Math.min(1.0, completedLessonCount / 25);
+    const streakFactor = Math.min(1.0, progress.currentStreak / 14);
+    const ghostFactor = (ghostStats.masteryRate || 80) / 100;
+    
+    let mockFactor = 0.5;
+    if (mockAttempts.length > 0) {
+      const bestScore = Math.max(...mockAttempts.map((a) => a.totalScaledScore));
+      mockFactor = Math.min(1.0, bestScore / 180);
+    }
+
+    const readinessScore = Math.min(100, Math.round(
+      (lessonFactor * 35) +
+      (streakFactor * 15) +
+      (ghostFactor * 25) +
+      (mockFactor * 25)
+    ));
+
+    const projectedScore = Math.min(180, Math.max(60, Math.round(
+      (readinessScore / 100) * 160 + (progress.currentStreak > 7 ? 12 : 5)
+    )));
+
+    const passProbability = Math.min(99, Math.max(35, Math.round(
+      (readinessScore * 0.75) + (projectedScore >= 120 ? 20 : projectedScore >= 95 ? 10 : 0)
+    )));
+
+    // Update Sprint Phase progress
+    const sprintPhases = plan.sprintPhases.map((phase) => {
+      const pStart = new Date(phase.startDate);
+      const pEnd = new Date(phase.endDate);
+      let status: 'completed' | 'active' | 'upcoming' = 'upcoming';
+      let progressPercent = 0;
+
+      if (now > pEnd) {
+        status = 'completed';
+        progressPercent = 100;
+      } else if (now >= pStart && now <= pEnd) {
+        status = 'active';
+        const totalPhaseMs = pEnd.getTime() - pStart.getTime();
+        const elapsedPhaseMs = now.getTime() - pStart.getTime();
+        progressPercent = Math.min(100, Math.max(10, Math.round((elapsedPhaseMs / totalPhaseMs) * 100)));
+      }
+
+      return {
+        ...phase,
+        status,
+        progressPercent
+      };
+    });
+
+    const activePhase = sprintPhases.find((p) => p.status === 'active') || sprintPhases[0];
+
+    const refreshed: JLPTStudyPlan = {
+      ...plan,
+      daysRemaining,
+      weeksRemaining,
+      sprintPhases,
+      currentSprintPhase: activePhase,
+      readinessScore,
+      projectedScore,
+      passProbability,
+      updatedAt: now.toISOString()
+    };
+
+    return refreshed;
+  }
+
+  // =========================================================================
+  // DAILY STUDY SESSION RECORD & INTERACTIVE MISSION CHECKLIST
+  // =========================================================================
+
+  public getDailyStudySession(userId: string, dateStr?: string): DailyStudySessionRecord {
+    if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
+    const targetDate = dateStr || new Date().toISOString().split('T')[0];
+
+    const existing = this.data.dailyStudySessions.find(
+      (s) => s.userId === userId && s.date === targetDate
+    );
+
+    if (existing) {
+      return existing;
+    }
+
+    // Generate dynamic daily session with personalized checklist tasks
+    const studyPlan = this.getStudyPlan(userId);
+    const quota = studyPlan.dailyQuota;
+    const progress = this.getProgressByUserId(userId);
+    const nextLessonNum = Math.min(25, progress.completedLessonIds.length + 1);
+
+    const defaultChecklist: DailyRoadmapTask[] = [
+      {
+        id: `task-vocab-${targetDate}`,
+        taskType: 'vocab_srs',
+        title: `Complete Vocabulary SRS Sprint (${quota.vocabSrsReviewTarget} cards)`,
+        titleJa: `語彙SRS復習（${quota.vocabSrsReviewTarget}枚）`,
+        titleBn: `শব্দভাণ্ডার SRS ফ্ল্যাশকার্ড স্প্রিন্ট (${quota.vocabSrsReviewTarget}টি শব্দ)`,
+        targetCount: quota.vocabSrsReviewTarget,
+        completedCount: 0,
+        estimatedMinutes: 10,
+        isCompleted: false,
+        xpReward: 35,
+        linkView: 'vocabulary',
+        linkParams: { filter: 'due' }
+      },
+      {
+        id: `task-kanji-${targetDate}`,
+        taskType: 'kanji_drill',
+        title: `Practice ${quota.kanjiStrokeTarget} Essential Kanji 3D Stroke Flips`,
+        titleJa: `必須漢字${quota.kanjiStrokeTarget}文字の書き順・読みドリル`,
+        titleBn: `${quota.kanjiStrokeTarget}টি প্রয়োজনীয় কাঞ্জি স্ট্রোক ও ফ্লিপ ড্রিল`,
+        targetCount: quota.kanjiStrokeTarget,
+        completedCount: 0,
+        estimatedMinutes: 8,
+        isCompleted: false,
+        xpReward: 30,
+        linkView: 'curriculum',
+        linkParams: { tab: 'kanji' }
+      },
+      {
+        id: `task-grammar-${targetDate}`,
+        taskType: 'grammar_lesson',
+        title: `Master Lesson ${nextLessonNum} Minna no Nihongo Grammar`,
+        titleJa: `みんなの日本語 第${nextLessonNum}課 文法マスター`,
+        titleBn: `মিন্না নো নিহোঙ্গো লেসন ${nextLessonNum} ব্যাকরণ অধ্যায়ন`,
+        targetCount: 1,
+        completedCount: 0,
+        estimatedMinutes: 15,
+        isCompleted: false,
+        xpReward: 45,
+        linkView: 'curriculum',
+        linkParams: { level: studyPlan.targetLevel, lessonNumber: nextLessonNum }
+      },
+      {
+        id: `task-ghost-${targetDate}`,
+        taskType: 'ghost_recovery',
+        title: `Resolve ${quota.particleWeakSpotsTarget} MemoryOS™ Ghost Weak-Spots (は vs が / に vs で)`,
+        titleJa: `MemoryOS 助詞弱点克服（${quota.particleWeakSpotsTarget}問）`,
+        titleBn: `মেমরি ওএস-এ ${quota.particleWeakSpotsTarget}টি ভুল হওয়া পার্টিকেল রিকভারি`,
+        targetCount: quota.particleWeakSpotsTarget,
+        completedCount: 0,
+        estimatedMinutes: 8,
+        isCompleted: false,
+        xpReward: 40,
+        linkView: 'ghost-mode',
+        linkParams: { autoStart: true }
+      },
+      {
+        id: `task-listening-${targetDate}`,
+        taskType: 'listening_drill',
+        title: `Tokyo Real-Audio Speed Listening Comprehension (${quota.listeningMinutesTarget} min)`,
+        titleJa: `東京リアル音声 聴解トレーニング（${quota.listeningMinutesTarget}分）`,
+        titleBn: `টোকিও রিয়েল-অডিও স্পিচ লিসেনিং ড্রিল (${quota.listeningMinutesTarget} মিনিট)`,
+        targetCount: quota.listeningMinutesTarget,
+        completedCount: 0,
+        estimatedMinutes: quota.listeningMinutesTarget,
+        isCompleted: false,
+        xpReward: 35,
+        linkView: 'quizzes',
+        linkParams: { tab: 'mock' }
+      }
+    ];
+
+    const newSession: DailyStudySessionRecord = {
+      id: `session-${userId}-${targetDate}`,
+      userId,
+      date: targetDate,
+      completedItems: {
+        vocabSrsDone: 0,
+        kanjiDone: 0,
+        grammarDone: 0,
+        ghostsResolved: 0,
+        listeningMinutesDone: 0,
+        quizzesDone: 0
+      },
+      totalMinutesSpent: 0,
+      dailyQuotaMet: false,
+      earnedXp: 0,
+      checklist: defaultChecklist,
+      updatedAt: new Date().toISOString()
+    };
+
+    this.data.dailyStudySessions.push(newSession);
+    this.save();
+    return newSession;
+  }
+
+  public updateDailyTaskCompletion(
+    userId: string,
+    taskId: string,
+    completedIncrement: number = 1
+  ): {
+    session: DailyStudySessionRecord;
+    task: DailyRoadmapTask | null;
+    xpAwarded: number;
+    streak: number;
+    dailyQuotaMet: boolean;
+    message: string;
+  } {
+    const session = this.getDailyStudySession(userId);
+    const task = session.checklist.find((t) => t.id === taskId);
+    let xpAwarded = 0;
+
+    if (task) {
+      task.completedCount = Math.min(task.targetCount, task.completedCount + completedIncrement);
+      if (task.completedCount >= task.targetCount && !task.isCompleted) {
+        task.isCompleted = true;
+        xpAwarded = task.xpReward;
+        session.earnedXp += xpAwarded;
+        session.totalMinutesSpent += task.estimatedMinutes;
+
+        // Register in session completed items
+        if (task.taskType === 'vocab_srs') session.completedItems.vocabSrsDone += task.targetCount;
+        if (task.taskType === 'kanji_drill') session.completedItems.kanjiDone += task.targetCount;
+        if (task.taskType === 'grammar_lesson') session.completedItems.grammarDone += 1;
+        if (task.taskType === 'ghost_recovery') session.completedItems.ghostsResolved += task.targetCount;
+        if (task.taskType === 'listening_drill') session.completedItems.listeningMinutesDone += task.targetCount;
+      }
+    }
+
+    // Check if daily quota is met (e.g. at least 3 out of 5 tasks completed)
+    const completedTasksCount = session.checklist.filter((t) => t.isCompleted).length;
+    session.dailyQuotaMet = completedTasksCount >= 3;
+
+    // Log study time & XP to user progress
+    const progress = this.addStudyTime(userId, task ? task.estimatedMinutes : 5, xpAwarded);
+
+    this.save();
+
+    return {
+      session,
+      task: task || null,
+      xpAwarded,
+      streak: progress.currentStreak,
+      dailyQuotaMet: session.dailyQuotaMet,
+      message: task?.isCompleted
+        ? `🎉 মিশন সম্পন্ন! +${xpAwarded} XP অর্জিত হয়েছে।`
+        : `প্রগ্রেস আপডেট হয়েছে (${task?.completedCount}/${task?.targetCount})।`
+    };
+  }
+
+  public getSrsReviewQueue(userId: string) {
+    const studyPlan = this.getStudyPlan(userId);
+    const activeGhosts = this.getGhostWeaknesses(userId, { resolved: false, dueOnly: true });
+
+    // Aggregate due vocabulary and kanji from lessons matching target level
+    const targetLessons = this.data.lessons.filter((l) => l.level === studyPlan.targetLevel);
+    const allVocab = targetLessons.flatMap((l) => l.vocabulary || []);
+    const dueVocab = allVocab.slice(0, studyPlan.dailyQuota.vocabSrsReviewTarget);
+
+    return {
+      success: true,
+      targetLevel: studyPlan.targetLevel,
+      dailyQuota: studyPlan.dailyQuota,
+      dueVocab,
+      dueGhosts: activeGhosts,
+      totalDueCount: dueVocab.length + activeGhosts.length,
+      daysRemaining: studyPlan.daysRemaining
+    };
+  }
+
+  // ==============================================================================
+  // Task 8: BaitoOS™ 2.0 & Tokyo Relocation Simulation Engine Methods
+  // ==============================================================================
+
+  public getBaitoScenarios(): BaitoScenarioItem[] {
+    if (!this.data.baitoScenarios || this.data.baitoScenarios.length === 0) {
+      this.data.baitoScenarios = INITIAL_BAITO_SCENARIOS;
+      this.save();
+    }
+    return this.data.baitoScenarios;
+  }
+
+  public getBaitoScenarioById(id: string): BaitoScenarioItem | undefined {
+    const scenarios = this.getBaitoScenarios();
+    return scenarios.find((s) => s.id === id);
+  }
+
+  public getConbiniProducts(): ConbiniPosProduct[] {
+    if (!this.data.conbiniProducts || this.data.conbiniProducts.length === 0) {
+      this.data.conbiniProducts = INITIAL_CONBINI_PRODUCTS;
+      this.save();
+    }
+    return this.data.conbiniProducts;
+  }
+
+  public getConbiniOrders(): ConbiniCustomerOrder[] {
+    if (!this.data.conbiniOrders || this.data.conbiniOrders.length === 0) {
+      this.data.conbiniOrders = INITIAL_CONBINI_ORDERS;
+      this.save();
+    }
+    return this.data.conbiniOrders;
+  }
+
+  public getRirekisho(userId: string): JisRirekishoData {
+    if (!this.data.rirekishoProfiles) {
+      this.data.rirekishoProfiles = [];
+    }
+    let found = this.data.rirekishoProfiles.find((r) => r.userId === userId);
+    if (!found) {
+      const userProfile = this.getProfileByUserId(userId);
+      found = {
+        ...INITIAL_DEFAULT_RIREKISHO,
+        id: `rirekisho-${userId}`,
+        userId,
+        fullName: userProfile?.displayName || 'Nihomi Student',
+        fullNameRomaji: (userProfile?.displayName || 'NIHOMI STUDENT').toUpperCase(),
+        updatedAt: new Date().toISOString()
+      };
+      this.data.rirekishoProfiles.push(found);
+      this.save();
+    }
+    return found;
+  }
+
+  public saveRirekisho(userId: string, updateData: Partial<JisRirekishoData>): JisRirekishoData {
+    if (!this.data.rirekishoProfiles) {
+      this.data.rirekishoProfiles = [];
+    }
+    const idx = this.data.rirekishoProfiles.findIndex((r) => r.userId === userId);
+    let updated: JisRirekishoData;
+    if (idx >= 0) {
+      updated = {
+        ...this.data.rirekishoProfiles[idx],
+        ...updateData,
+        userId,
+        updatedAt: new Date().toISOString()
+      };
+      this.data.rirekishoProfiles[idx] = updated;
+    } else {
+      updated = {
+        ...INITIAL_DEFAULT_RIREKISHO,
+        ...updateData,
+        id: `rirekisho-${userId}`,
+        userId,
+        updatedAt: new Date().toISOString()
+      };
+      this.data.rirekishoProfiles.push(updated);
+    }
+    this.save();
+    return updated;
+  }
+
+  public polishRirekishoText(text: string, fieldType: 'motivation' | 'selfPr'): { polishedJa: string; explanationBn: string } {
+    const trimmed = text.trim();
+    if (!trimmed) {
+      return {
+        polishedJa: '貴社の店舗において、日本のハイレベルな接客マナーと丁寧なコミュニケーションを実践しながら、責任感を持って貢献いたします。',
+        explanationBn: 'জাপানিজ স্ট্যান্ডার্ড ফর্মাল কেইগো ও নম্র ভাষায় আবেদন ফরম্যাট পলিশ করা হয়েছে।'
+      };
+    }
+
+    if (fieldType === 'motivation') {
+      return {
+        polishedJa: `貴社の理念と業務内容に強く共感し、実践的な接客マナーと迅速な業務遂行を通じて貢献いたしたく、志望いたしました。留学生として週28時間規定を遵守し、誠心誠意努めてまいります。(${trimmed})`,
+        explanationBn: 'আপনার মূল ভাব বজায় রেখে অত্যন্ত মার্জিত এবং বিনীত (Kenjougo/Teineigo) কেইগোতে কনভার্ট করা হয়েছে।'
+      };
+    } else {
+      return {
+        polishedJa: `私の最大の強みは、異文化環境でも迅速に適応し、何事にも誠実かつ前向きに取り組む協調性です。課題に対しても粘り強く努力を重ね、チームの信頼に応える所存です。(${trimmed})`,
+        explanationBn: 'আপনার আত্মপরিচয় ও শক্তিকে আকর্ষণীয় ও বিশ্বাসযোগ্য জাপানিজ এক্সপ্রেশনে রূপান্তর করা হয়েছে।'
+      };
+    }
+  }
+
+  public evaluateBaitoInterview(
+    scenarioId: string,
+    userText: string,
+    history: Array<{ sender: string; textJa: string }>
+  ): BaitoEvaluationResponse {
+    const scenario = this.getBaitoScenarioById(scenarioId) || this.getBaitoScenarios()[0];
+    const turnCount = history.filter((h) => h.sender === 'student').length + 1;
+    const lower = userText.toLowerCase();
+
+    // Check for polite markers (です / ます / ございます / いたします)
+    const hasTeineigo = /です|ます|ございます|いたします|お願い/.test(userText);
+    const hasHumble = /いたします|申します|伺います|存じます|参ります/.test(userText);
+    const hasInformal = /だよ|だね|じゃん|ぜ|ぞ|うまい|やばい/.test(userText);
+
+    let keigoScore = 70;
+    let grammarScore = 75;
+    let fluencyScore = 80;
+    let detectedMistakes: string[] = [];
+    let keigoLevel: 'Teineigo (Polite)' | 'Kenjougo (Humble)' | 'Sonkeigo (Honorific)' | 'Informal (Needs Fix)' = 'Teineigo (Polite)';
+
+    if (hasHumble) {
+      keigoScore = 95;
+      keigoLevel = 'Kenjougo (Humble)';
+    } else if (hasTeineigo && !hasInformal) {
+      keigoScore = 88;
+      keigoLevel = 'Teineigo (Polite)';
+    } else if (hasInformal) {
+      keigoScore = 45;
+      keigoLevel = 'Informal (Needs Fix)';
+      detectedMistakes.push('Informal sentence endings detected (Avoid だよ/だね in interview or customer service)');
+    }
+
+    if (userText.length < 5) {
+      fluencyScore = 55;
+      grammarScore = 60;
+      detectedMistakes.push('Response is too brief. Elaborate with full polite sentences (〜です / 〜ます).');
+    } else if (userText.length > 25) {
+      fluencyScore = 92;
+      grammarScore = 88;
+    }
+
+    const overallScore = Math.round((keigoScore * 0.4) + (grammarScore * 0.35) + (fluencyScore * 0.25));
+
+    // Dynamic conversation progression based on scenario
+    let nextDialogueJa = '承知いたしました。ありがとうございます。では、次の質問です。';
+    let nextDialogueRomaji = 'Shouchi itashimashita. Arigatou gozaimasu. Dewa, tsugi no shitsumon desu.';
+    let nextDialogueBn = 'বুঝতে পেরেছি। ধন্যবাদ। এবার পরের প্রশ্ন।';
+    let nextDialogueEn = 'Understood. Thank you very much. Now for the next question.';
+    let isFinished = turnCount >= 4;
+
+    if (scenario.type === 'school_principal') {
+      if (turnCount === 1) {
+        nextDialogueJa = '素晴らしい自己紹介ですね。日本で勉強したあと、どのような進路（大学・専門学校・就職）を考えていますか？';
+        nextDialogueRomaji = 'Subarashii jikoshoukai desu ne. Nihon de benkyou shita ato, dono you na shinro o kangaete imasu ka?';
+        nextDialogueBn = 'চমৎকার আত্মপরিচয়। জাপানে পড়াশোনা শেষ করার পর আপনি কী করতে চান (বিশ্ববিদ্যালয়/চাকরি)?';
+        nextDialogueEn = 'Wonderful self-introduction. After your studies in Japan, what post-graduation pathway are you considering?';
+      } else if (turnCount === 2) {
+        nextDialogueJa = '学費や東京での生活費の準備状況はいかがですか？経費支弁者について教えてください。';
+        nextDialogueRomaji = 'Gakuhi ya Tokyo de no seikatsuhi no junbi joukyou wa ikaga desu ka? Keihi shibensha ni tsuite oshiete kudasai.';
+        nextDialogueBn = 'টিউশন ফি এবং টোকিওতে থাকা-খাওয়ার খরচের প্রস্তুতি কেমন? আপনার স্পন্সর সম্পর্কে বলুন।';
+        nextDialogueEn = 'How prepared are you for tuition and Tokyo living expenses? Please tell me about your financial sponsor.';
+      } else if (turnCount === 3) {
+        nextDialogueJa = '最後に、当校に入学したら一番頑張りたいことは何ですか？';
+        nextDialogueRomaji = 'Saigo ni, toukou ni nyuugaku shitara ichiban gambaritai koto wa nan desu ka?';
+        nextDialogueBn = 'সবশেষে, আমাদের একাডেমিতে ভর্তির পর আপনার সবচেয়ে প্রধান লক্ষ্য কী হবে?';
+        nextDialogueEn = 'Lastly, what do you hope to dedicate yourself to most once enrolled in our school?';
+      } else {
+        nextDialogueJa = '面接は以上です。日本語に対する真摯な熱意が大変よく伝わりました。合格の可能性は極めて高いです！';
+        nextDialogueRomaji = 'Mensetsu wa ijou desu. Nihongo ni taisuru shinshi na netsui ga taihen yoku tsutawarimashita. Goukaku no kanousei wa kiwamete takai desu!';
+        nextDialogueBn = 'ইন্টারভিউ সমাপ্ত। জাপানিজ ভাষার প্রতি আপনার একাগ্রতা ও শ্রদ্ধা সত্যিই প্রশংসনীয়। আপনার চান্স পাওয়ার সম্ভাবনা খুবই প্রবল!';
+        nextDialogueEn = 'The interview is concluded. Your sincere enthusiasm for Japanese came through brilliantly!';
+        isFinished = true;
+      }
+    } else if (scenario.type === 'conbini_pos') {
+      if (turnCount === 1) {
+        nextDialogueJa = 'ポイントカードは持っていません。あと、割り箸を2膳つけてもらえますか？';
+        nextDialogueRomaji = 'Pointo kaado wa motte imasen. Ato, waribashi o nizen tsukete moraemasu ka?';
+        nextDialogueBn = 'পয়েন্ট কার্ড নেই। আর সাথে ২ জোড়া চপস্টিকস দেওয়া যাবে?';
+        nextDialogueEn = 'I do not have a point card. Also, could you include 2 pairs of chopsticks?';
+      } else if (turnCount === 2) {
+        nextDialogueJa = 'お会計はSuicaでタッチします。いくらですか？';
+        nextDialogueRomaji = 'Okaikei wa Suica de tacchi shimasu. Ikura desu ka?';
+        nextDialogueBn = 'বিল সুইকা কার্ড দিয়ে পে করবো। মোট কত হলো?';
+        nextDialogueEn = 'I will touch and pay with Suica. How much is the total?';
+      } else {
+        nextDialogueJa = 'スムーズなレジ対応ありがとうございました！ごちそうさまです。';
+        nextDialogueRomaji = 'Sumuuzu na reji taiou arigatou gozaimashita! Gochisousama desu.';
+        nextDialogueBn = 'চমৎকার ক্যাশিয়ার সার্ভিস দেওয়ার জন্য ধন্যবাদ!';
+        nextDialogueEn = 'Thank you for the smooth checkout service!';
+        isFinished = true;
+      }
+    } else if (scenario.type === 'embassy_visa') {
+      if (turnCount === 1) {
+        nextDialogueJa = 'これまでに受けた日本語の試験（JLPTやNAT-TESTなど）の結果と、現在のスコアを教えてください。';
+        nextDialogueRomaji = 'Kore made ni uketa nihongo no shiken no kekka to, genzai no sukoa o oshiete kudasai.';
+        nextDialogueBn = 'এখন পর্যন্ত কোনো জাপানিজ ভাষার পরীক্ষা (যেমন JLPT/NAT-TEST) দিয়েছেন কি না এবং বর্তমান স্কোর কত?';
+        nextDialogueEn = 'Please tell me about any Japanese proficiency exams you have taken so far and your current scores.';
+      } else if (turnCount === 2) {
+        nextDialogueJa = '留学中のアルバイトは週28時間以内と定められていますが、このルールについて理解していますか？';
+        nextDialogueRomaji = 'Ryuugakuchuu no arubaito wa shuu nijuuhachijikan inai to sadamerarete imasu ga, kono ruuru ni tsuite rikai shite imasu ka?';
+        nextDialogueBn = 'স্টাডি ভিসায় খণ্ডকালীন কাজের সর্বোচ্চ সীমা সপ্তাহে ২৮ ঘণ্টা — এই নিয়ম সম্পর্কে আপনি পুরোপুরি অবগত কি?';
+        nextDialogueEn = 'Part-time work is strictly capped at 28 hours per week during your studies. Do you understand this rule?';
+      } else {
+        nextDialogueJa = '質問は以上です。在留資格審査の手続きを進めます。結果は後日通知いたします。';
+        nextDialogueRomaji = 'Shitsumon wa ijou desu. Zairyuu shikaku shinsa no tetsuduki o susumemasu.';
+        nextDialogueBn = 'প্রশ্ন সমাপ্ত। আমরা ভিসা পরীক্ষা প্রক্রিয়া সম্পন্ন করবো। ফলাফল পরে জানানো হবে।';
+        nextDialogueEn = 'No further questions. We will process your visa verification. Results will follow.';
+        isFinished = true;
+      }
+    }
+
+    return {
+      success: true,
+      messageId: `msg-eval-${crypto.randomUUID().slice(0, 8)}`,
+      userText,
+      nextInterviewerDialogue: {
+        ja: nextDialogueJa,
+        romaji: nextDialogueRomaji,
+        bn: nextDialogueBn,
+        en: nextDialogueEn
+      },
+      evaluation: {
+        overallScore,
+        keigoLevel,
+        keigoAccuracy: keigoScore,
+        grammarScore,
+        fluencyScore,
+        feedbackJa: keigoScore >= 80 ? '大変丁寧な敬語・丁寧語で返答できています。発音も明瞭です。' : '丁寧語（〜です・〜ます）を語尾に徹底するとより好印象になります。',
+        feedbackBn: keigoScore >= 80 ? 'অত্যন্ত মার্জিত এবং সঠিক কেইগো শিষ্টাচার প্রদর্শিত হয়েছে।' : 'বাক্যের শেষে です/ます ব্যবহার নিশ্চিত করুন।',
+        detectedMistakes,
+        polishedAlternativeJa: userText.includes('です') ? userText : `${userText}でございます。よろしくお願いいたします。`,
+        polishedAlternativeRomaji: 'Polite Tokyo Native Standard'
+      },
+      isFinished,
+      finalReadinessScore: isFinished ? Math.max(78, overallScore) : undefined
+    };
+  }
+
   public resetAllToSeed() {
     this.seedDefaultData();
     this.save();
@@ -3295,3 +4401,4 @@ class Database {
 }
 
 export const db = new Database();
+
