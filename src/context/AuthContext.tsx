@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { setStoredToken, apiRequest, getStoredToken } from '../lib/api';
 
 export interface User {
   id: string;
@@ -274,6 +275,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
+        if (session.access_token) {
+          setStoredToken(session.access_token);
+        }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
         const avatar =
@@ -301,6 +305,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
+        if (session.access_token) {
+          setStoredToken(session.access_token);
+        }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
         const avatar =
@@ -325,6 +332,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserData(activeUser);
       } else if (_event === 'SIGNED_OUT') {
         setUser(null);
+        setStoredToken(null);
         localStorage.removeItem('nihomi_user');
       }
     });
@@ -354,14 +362,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return loginWithGoogle();
   };
 
-  const loginWithToken = async (idToken: string): Promise<boolean> => {
+  const loginWithToken = async (_idToken: string): Promise<boolean> => {
     return loginWithGoogle();
   };
 
   const logout = async () => {
+    try {
+      await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
+    } catch {}
     await supabase.auth.signOut().catch(() => {});
+    setStoredToken(null);
     setUser(null);
+    setProfile(null);
     localStorage.removeItem('nihomi_user');
+    localStorage.removeItem('nihomi_profile');
   };
 
   const updateProfileData = async (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => {
@@ -383,8 +397,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async () => true;
-  const register = async () => true;
+  const login = async (email?: string, password?: string): Promise<boolean> => {
+    if (!email || !password) return false;
+    try {
+      const data = await apiRequest<{
+        token: string;
+        user: User;
+        profile: UserProfile;
+        progress: UserProgress;
+      }>('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+
+      if (data.token) {
+        setStoredToken(data.token);
+      }
+      if (data.user) {
+        setUserData(data.user);
+      }
+      if (data.profile) {
+        setProfile(data.profile);
+        localStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
+      }
+      if (data.progress) {
+        setProgress(data.progress);
+      }
+      return true;
+    } catch (err: any) {
+      console.error('[AuthContext Login Error]:', err);
+      return false;
+    }
+  };
+
+  const register = async (regData?: any): Promise<boolean> => {
+    if (!regData || !regData.email || !regData.password) return false;
+    try {
+      const data = await apiRequest<{
+        token: string;
+        user: User;
+        profile: UserProfile;
+        progress: UserProgress;
+      }>('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(regData)
+      });
+
+      if (data.token) {
+        setStoredToken(data.token);
+      }
+      if (data.user) {
+        setUserData(data.user);
+      }
+      if (data.profile) {
+        setProfile(data.profile);
+        localStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
+      }
+      if (data.progress) {
+        setProgress(data.progress);
+      }
+      return true;
+    } catch (err: any) {
+      console.error('[AuthContext Register Error]:', err);
+      return false;
+    }
+  };
+
   const updateProfile = async (data: any) => updateProfileData(data);
   const topUpCredits = async (amount: number) => {
     if (subscription) {
@@ -394,10 +472,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     }
   };
-  const refreshSubscription = useCallback(async () => {}, []);
-  const refreshProgress = useCallback(async () => {}, []);
-  const refreshUser = useCallback(async () => {}, []);
-  const refreshAuth = useCallback(async () => {}, []);
+
+  const refreshSubscription = useCallback(async () => {
+    try {
+      const token = getStoredToken();
+      if (!token) return;
+      const res = await apiRequest('/api/billing/subscription');
+      if (res && res.subscription) {
+        setSubscription(res.subscription);
+      }
+    } catch {}
+  }, []);
+
+  const refreshProgress = useCallback(async () => {
+    try {
+      const token = getStoredToken();
+      if (!token) return;
+      const res = await apiRequest('/api/learning/progress');
+      if (res && res.progress) {
+        setProgress(res.progress);
+      }
+    } catch {}
+  }, []);
+
+  const refreshUser = useCallback(async () => {
+    try {
+      const token = getStoredToken();
+      if (!token) return;
+      const res = await apiRequest('/api/auth/me');
+      if (res && res.user) {
+        setUserData(res.user);
+        if (res.profile) setProfile(res.profile);
+        if (res.progress) setProgress(res.progress);
+      }
+    } catch {}
+  }, []);
+
+  const refreshAuth = useCallback(async () => {
+    await refreshUser();
+    await refreshSubscription();
+    await refreshProgress();
+  }, [refreshUser, refreshSubscription, refreshProgress]);
 
   return (
     <AuthContext.Provider

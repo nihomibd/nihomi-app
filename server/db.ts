@@ -5,6 +5,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import {
   DatabaseSchema,
   User,
+  UserRole,
   UserProfile,
   UserProgress,
   Course,
@@ -914,6 +915,71 @@ class Database {
 
   public findUserById(id: string): User | undefined {
     return this.data.users.find((u) => u.id === id);
+  }
+
+  public ensureUserExists(params: {
+    id?: string;
+    email: string;
+    role?: UserRole;
+    displayName?: string;
+    targetLevel?: JLPTLevel;
+  }): User {
+    const cleanEmail = (params.email || '').trim().toLowerCase();
+    let existing = (params.id ? this.findUserById(params.id) : undefined) || (cleanEmail ? this.findUserByEmail(cleanEmail) : undefined);
+    if (existing) {
+      if (params.role && existing.role !== params.role) {
+        existing.role = params.role;
+        existing.updatedAt = new Date().toISOString();
+        this.save();
+      }
+      return existing;
+    }
+
+    const id = params.id || `usr-${crypto.randomUUID().slice(0, 8)}`;
+    const now = new Date().toISOString();
+    const user: User = {
+      id,
+      email: cleanEmail || `user-${id.slice(0, 8)}@nihomi.com`,
+      passwordHash: '',
+      passwordSalt: '',
+      role: params.role || 'user',
+      createdAt: now,
+      updatedAt: now
+    };
+
+    const profile: UserProfile = {
+      userId: id,
+      displayName: params.displayName || cleanEmail.split('@')[0] || 'Japanese Learner',
+      nativeLanguage: 'English',
+      targetLevel: params.targetLevel || 'N5',
+      dailyGoalMinutes: 20,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    const progress: UserProgress = {
+      userId: id,
+      currentLevel: params.targetLevel || 'N5',
+      currentCourseId: 'course-n5',
+      currentModuleId: 'mod-n5-1',
+      currentLessonId: 'les-n5-1-1',
+      completedLessonIds: [],
+      totalStudyMinutes: 0,
+      currentStreak: 1,
+      longestStreak: 1,
+      lastActiveDate: now.split('T')[0],
+      experiencePoints: 0,
+      updatedAt: now
+    };
+
+    this.data.users.push(user);
+    this.data.profiles.push(profile);
+    this.data.progress.push(progress);
+
+    this.save();
+    this.syncUserToSupabase(user, profile, progress);
+
+    return user;
   }
 
   public createUser(params: {
