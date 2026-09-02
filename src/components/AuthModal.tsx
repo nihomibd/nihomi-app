@@ -195,8 +195,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     try {
       // Direct Supabase OAuth flow without local /api/auth fetch
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google', options: { queryParams: { prompt: 'select_account' }, redirectTo: window.location.origin }/auth/callback`,
-        },
+        provider: 'google',
+        options: {
+          queryParams: { prompt: 'select_account' },
+          redirectTo: window.location.origin
+        }
       });
 
       if (error) {
@@ -443,6 +446,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 };
 
 export default AuthModal;
+
 
 
 

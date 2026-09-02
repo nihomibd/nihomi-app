@@ -352,7 +352,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = async (): Promise<boolean> => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google', options: { queryParams: { prompt: 'select_account' }, redirectTo: window.location.origin,
+        provider: 'google',
+        options: {
+          queryParams: { prompt: 'select_account' },
+          redirectTo: window.location.origin
+        }
       });
       if (error) throw error;
       return true;
@@ -586,6 +590,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 export const useAuth = () => useContext(AuthContext);
+
 
 
 
