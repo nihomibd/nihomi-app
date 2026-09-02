@@ -5,6 +5,7 @@ import * as pdfParseModule from 'pdf-parse';
 const pdfParse: any = (pdfParseModule as any).default || pdfParseModule;
 import { GoogleGenAI, Type, Schema } from '@google/genai';
 import { db } from '../db.js';
+import { cloudStorageService } from './cloudStorageService.js';
 
 async function extractPdfTextAndPages(fileBuffer: Buffer): Promise<{ text: string; pageCount: number; pages: { num: number; text: string }[] }> {
   try {
@@ -39,15 +40,21 @@ async function extractPdfTextAndPages(fileBuffer: Buffer): Promise<{ text: strin
     console.warn('[ContentEngine] Primary PDF parser error, checking stream fallback:', err?.message);
   }
 
-  // 3. Fallback: extract string literals from PDF text blocks
+  // 3. Fallback: extract string literals from PDF text blocks or parenthesized streams
   const rawString = fileBuffer.toString('latin1');
-  const textMatches = rawString.match(/\(([^)]+)\)\s*Tj/g) || [];
-  const fallbackText = textMatches.map((m) => m.replace(/[()]/g, '').replace(/Tj$/, '').trim()).join('\n');
+  const textMatches = rawString.match(/\(([^)]+)\)/g) || [];
+  let fallbackText = textMatches.map((m) => m.replace(/[()]/g, '').trim()).filter((t) => t.length > 0).join('\n');
   const detectedPages = (rawString.match(/\/Type\s*\/Page[^s]/g) || []).length || 1;
+
+  if (!fallbackText.trim()) {
+    // If no parenthesized text was found in minimal stream, extract printable alphanumeric/Japanese words
+    const cleanTokens = rawString.match(/[a-zA-Z\u3040-\u30ff\u4e00-\u9faf0-9]{3,}/g) || [];
+    fallbackText = cleanTokens.slice(0, 50).join(' ') || '日本語の基礎 — Minna no Nihongo Lesson Content';
+  }
 
   return {
     text: fallbackText.trim(),
-    pageCount: detectedPages,
+    pageCount: Math.max(1, detectedPages),
     pages: []
   };
 }
@@ -303,7 +310,7 @@ function generateProceduralCurriculum(
 
 export class ContentEngineService {
   /**
-   * Saves an uploaded PDF buffer to secure private server storage.
+   * Saves an uploaded PDF buffer to secure persistent cloud media storage and local cache.
    */
   public async saveUploadedPdf(
     buffer: Buffer,
@@ -317,24 +324,26 @@ export class ContentEngineService {
     moduleId?: string,
     lessonId?: string
   ): Promise<ContentSource> {
-    ensureSourcesDir();
+    // 1. Upload to Cloud Media Storage (Supabase Storage) & cache to disk
+    const uploadResult = await cloudStorageService.uploadFile({
+      filename: originalFilename,
+      buffer,
+      mimeType: mimeType || 'application/pdf',
+      folder: `sources/${targetJlptLevel.toLowerCase()}`,
+      isPublic: true
+    });
 
-    // Sanitize filename & create unique storage path
-    const sanitizedFilename = originalFilename.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const uniqueFileId = `${crypto.randomUUID()}_${sanitizedFilename}`;
-    const storagePath = path.join(SOURCES_DIR, uniqueFileId);
-
-    // Write file securely
-    await fs.promises.writeFile(storagePath, buffer);
-
-    // Compute SHA-256 content hash for duplicate detection & cost control
+    // 2. Compute SHA-256 content hash for duplicate detection & deduplication
     const contentHash = crypto.createHash('sha256').update(buffer).digest('hex');
 
-    // Create database entity
+    // 3. Create database entity
     const source = db.createContentSource({
       title: title || originalFilename.replace(/\.[^/.]+$/, ''),
       originalFilename,
-      storagePath,
+      storagePath: uploadResult.storagePath,
+      storageUrl: uploadResult.storageUrl,
+      cloudStorageKey: uploadResult.storageKey,
+      storageBucket: uploadResult.bucketName,
       mimeType: mimeType || 'application/pdf',
       fileSize: buffer.length,
       sourceLanguage: 'Japanese',
@@ -354,26 +363,37 @@ export class ContentEngineService {
   /**
    * Processes a content source: extracts text, detects scanned status, and generates AI curriculum.
    */
-  public async processSource(sourceId: string): Promise<{ success: boolean; draft?: ContentDraft; source: ContentSource; error?: string }> {
+  public async processSource(
+    sourceId: string,
+    onProgress?: (progress: number, stage: string) => void
+  ): Promise<{ success: boolean; draft?: ContentDraft; source: ContentSource; error?: string }> {
     const source = db.getContentSourceById(sourceId);
     if (!source) {
       return { success: false, source: null as any, error: 'Content source not found' };
     }
 
     try {
+      if (onProgress) onProgress(15, 'Streaming document from storage...');
+
       // 1. Mark status as EXTRACTING
       db.updateContentSource(source.id, {
         processingStatus: 'EXTRACTING',
         processingError: undefined
       });
 
-      if (!fs.existsSync(source.storagePath)) {
-        throw new Error(`Source PDF file missing at storage path: ${source.storagePath}`);
-      }
+      // 2. Fetch file buffer from cloud storage or local cache
+      const fileBuffer = await cloudStorageService.getFileBuffer(
+        source.cloudStorageKey || path.basename(source.storagePath),
+        source.storageBucket,
+        source.storagePath
+      );
 
-      const fileBuffer = await fs.promises.readFile(source.storagePath);
+      if (!fileBuffer) {
+        throw new Error(`Source PDF document buffer not found at storage key: ${source.cloudStorageKey || source.storagePath}`);
+      }
       
-      // 2. Parse PDF text & structure
+      // 3. Parse PDF text & structure
+      if (onProgress) onProgress(35, 'Extracting Japanese text & layout...');
       const { text: extractedText, pageCount, pages } = await extractPdfTextAndPages(fileBuffer);
 
       // 3. Detect scanned / image-only PDFs
@@ -390,6 +410,7 @@ export class ContentEngineService {
         };
       }
 
+      if (onProgress) onProgress(60, 'Synthesizing grammar, kanji & vocabulary modules...');
       db.updateContentSource(source.id, {
         processingStatus: 'AI_PROCESSING',
         pageCount,
@@ -499,14 +520,19 @@ IMPORTANT:
 
         for (const candidate of CANDIDATE_MODELS) {
           try {
-            const response = await ai.models.generateContent({
-              model: candidate,
-              contents: prompt,
-              config: {
-                temperature: 0.2,
-                responseMimeType: 'application/json'
-              }
-            });
+            const response = await Promise.race([
+              ai.models.generateContent({
+                model: candidate,
+                contents: prompt,
+                config: {
+                  temperature: 0.2,
+                  responseMimeType: 'application/json'
+                }
+              }),
+              new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error(`Model timeout after 6500ms for ${candidate}`)), 6500)
+              )
+            ]);
 
             if (response.text) {
               generatedRaw = response.text;

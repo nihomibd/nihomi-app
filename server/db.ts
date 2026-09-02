@@ -48,6 +48,9 @@ import {
   ContentDraftStatus,
   ContentSourceProcessingStatus,
   StructuredEducationalContent,
+  BackgroundJob,
+  BackgroundJobType,
+  BackgroundJobStatus,
   GhostWeaknessItem,
   StudentErrorLog,
   ParticleConfusionType,
@@ -875,6 +878,7 @@ class Database {
       contentSources: [],
       contentDrafts: [],
       contentVersions: [],
+      backgroundJobs: [],
       ghostWeaknesses: INITIAL_GHOST_WEAKNESSES.map((g) => ({
         ...g,
         userId: 'usr-student-01'
@@ -2824,6 +2828,60 @@ class Database {
     const idx = this.data.contentSources.findIndex((s) => s.id === id);
     if (idx === -1) return false;
     this.data.contentSources.splice(idx, 1);
+    this.save();
+    return true;
+  }
+
+  // --- BACKGROUND JOBS & ASYNC QUEUE PERSISTENCE ---
+  public getBackgroundJobs(filter?: { type?: BackgroundJobType; status?: BackgroundJobStatus; targetId?: string }): BackgroundJob[] {
+    let jobs = this.data.backgroundJobs || [];
+    if (filter?.type) {
+      jobs = jobs.filter((j) => j.type === filter.type);
+    }
+    if (filter?.status) {
+      jobs = jobs.filter((j) => j.status === filter.status);
+    }
+    if (filter?.targetId) {
+      jobs = jobs.filter((j) => j.targetId === filter.targetId);
+    }
+    return jobs;
+  }
+
+  public getBackgroundJobById(id: string): BackgroundJob | null {
+    return (this.data.backgroundJobs || []).find((j) => j.id === id) || null;
+  }
+
+  public createBackgroundJob(data: Omit<BackgroundJob, 'id' | 'createdAt' | 'updatedAt'>): BackgroundJob {
+    const job: BackgroundJob = {
+      ...data,
+      id: `job-${crypto.randomUUID().slice(0, 10)}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    if (!this.data.backgroundJobs) this.data.backgroundJobs = [];
+    this.data.backgroundJobs.unshift(job);
+    this.save();
+    return job;
+  }
+
+  public updateBackgroundJob(id: string, updates: Partial<BackgroundJob>): BackgroundJob | null {
+    if (!this.data.backgroundJobs) this.data.backgroundJobs = [];
+    const idx = this.data.backgroundJobs.findIndex((j) => j.id === id);
+    if (idx === -1) return null;
+    this.data.backgroundJobs[idx] = {
+      ...this.data.backgroundJobs[idx],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    this.save();
+    return this.data.backgroundJobs[idx];
+  }
+
+  public deleteBackgroundJob(id: string): boolean {
+    if (!this.data.backgroundJobs) return false;
+    const idx = this.data.backgroundJobs.findIndex((j) => j.id === id);
+    if (idx === -1) return false;
+    this.data.backgroundJobs.splice(idx, 1);
     this.save();
     return true;
   }

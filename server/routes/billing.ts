@@ -392,10 +392,10 @@ billingRouter.post('/webhook/:provider', async (req: Request, res: Response) => 
   try {
     const providerParam = (req.params.provider || 'bkash').toLowerCase() as PaymentProviderType;
     const payload = req.body;
-    const signature = req.headers['x-webhook-signature'] as string | undefined;
+    const signature = (req.headers['x-webhook-signature'] || req.headers['x-bkash-signature'] || req.headers['x-sslcommerz-hash'] || req.headers['stripe-signature']) as string | undefined;
 
     const providerAdapter = PaymentProviderFactory.getProvider(providerParam);
-    const webhookResult = await providerAdapter.handleWebhook(payload, signature);
+    const webhookResult = await providerAdapter.handleWebhook(payload, signature, req.headers as Record<string, any>);
 
     if (!webhookResult.valid) {
       db.recordWebhookEvent({

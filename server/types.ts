@@ -723,6 +723,9 @@ export interface ContentSource {
   title: string;
   originalFilename: string;
   storagePath: string;
+  storageUrl?: string;
+  cloudStorageKey?: string;
+  storageBucket?: string;
   mimeType: string;
   fileSize: number;
   sourceLanguage: string;
@@ -880,6 +883,7 @@ export interface DatabaseSchema {
   contentSources: ContentSource[];
   contentDrafts: ContentDraft[];
   contentVersions: ContentVersion[];
+  backgroundJobs?: BackgroundJob[];
 
   // MemoryOS™ & Ghost Mode SRS Tables
   ghostWeaknesses?: GhostWeaknessItem[];
@@ -1345,5 +1349,54 @@ export interface ConbiniCustomerOrder {
   tenderedCashAmount?: number;
 }
 
+export type BackgroundJobType = 'pdf_extraction' | 'scanned_pdf_ocr' | 'curriculum_structuring' | 'audio_generation' | 'batch_media_sync';
+export type BackgroundJobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled' | 'retrying';
 
+export interface BackgroundJob {
+  id: string;
+  type: BackgroundJobType;
+  targetId: string; // sourceId or draftId
+  status: BackgroundJobStatus;
+  progress: number; // 0 - 100
+  currentStage: string;
+  totalPages?: number;
+  processedPages?: number;
+  result?: any;
+  error?: string;
+  retryCount: number;
+  maxRetries: number;
+  startedAt?: string;
+  completedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  metadata?: Record<string, any>;
+}
 
+export interface StructuredLogEntry {
+  timestamp: string;
+  level: 'info' | 'warn' | 'error' | 'debug';
+  service: string;
+  event: string;
+  message: string;
+  traceId?: string;
+  userId?: string;
+  route?: string;
+  method?: string;
+  statusCode?: number;
+  durationMs?: number;
+  metadata?: Record<string, any>;
+}
+
+export interface SystemAuditMetrics {
+  totalJobsProcessed: number;
+  activeJobsCount: number;
+  completedJobsCount: number;
+  failedJobsCount: number;
+  averageJobDurationMs: number;
+  totalPdfPagesProcessed: number;
+  ocrExtractionCount: number;
+  aiTokensBudgetUsed: number;
+  queueDepth: number;
+  uptimeSeconds: number;
+  lastUpdated: string;
+}

@@ -53,6 +53,105 @@
       "role": "user",
       "createdAt": "2026-09-01T18:42:46.614Z",
       "updatedAt": "2026-09-01T18:42:46.614Z"
+    },
+    {
+      "id": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
+      "email": "mdtanvirkabirbiplob@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-24T05:42:51.32324+00:00",
+      "updatedAt": "2026-08-24T05:42:51.32324+00:00"
+    },
+    {
+      "id": "47e312ad-1da5-4b62-90fd-785b052ce35f",
+      "email": "mdtanvirkabirbiplob1997@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-24T07:11:54.378935+00:00",
+      "updatedAt": "2026-08-24T07:11:54.378935+00:00"
+    },
+    {
+      "id": "f7c46837-647c-475d-9653-9081697bb1af",
+      "email": "care.dils2014@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-24T08:03:27.867533+00:00",
+      "updatedAt": "2026-08-24T08:03:27.867533+00:00"
+    },
+    {
+      "id": "624b2a9c-ad18-445e-94a2-4aef66187d9b",
+      "email": "info.bdtech24.com@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-25T17:01:43.631626+00:00",
+      "updatedAt": "2026-08-25T17:01:43.631626+00:00"
+    },
+    {
+      "id": "cfd783dd-db65-4bee-973c-99055ec70ebc",
+      "email": "focusnews24.com@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-27T08:53:58.773931+00:00",
+      "updatedAt": "2026-08-27T08:53:58.773931+00:00"
+    },
+    {
+      "id": "f2e8ab1d-a8a0-4e57-bf95-a6740b0ae53b",
+      "email": "mdtanvirkabirbiplob24@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-28T19:37:37.982783+00:00",
+      "updatedAt": "2026-08-28T19:37:37.982783+00:00"
+    },
+    {
+      "id": "2c98df93-ffbc-42e6-9378-3cf5055e2416",
+      "email": "24tanvirab@gmail.com",
+      "passwordHash": "",
+      "passwordSalt": "",
+      "role": "user",
+      "createdAt": "2026-08-29T11:21:05.450997+00:00",
+      "updatedAt": "2026-08-29T11:21:05.450997+00:00"
+    },
+    {
+      "id": "usr-c0fcf3eb",
+      "email": "student.iso.1788292917268@nihomi.com",
+      "passwordHash": "0ddc40a66ff22c027dcb52a15eb1a268ad27e187da15b1c0d31a222e6173a02a8901c4085ac3a595a57fd753fed3acb773ee8a2a50587a872061a97ca4fd625b",
+      "passwordSalt": "1b608520b5892c7aeaf031e0806aef36",
+      "role": "user",
+      "createdAt": "2026-09-01T20:01:57.270Z",
+      "updatedAt": "2026-09-01T20:01:57.270Z"
+    },
+    {
+      "id": "usr-33e1989a",
+      "email": "student.iso.1788293570817@nihomi.com",
+      "passwordHash": "abf592ff1372fa7b37b9dce560074cf82b042786cdf1bfb08f12e81ac686fef0fc101b144928f5a588b7eb7551a9926363f312244f30950fd29241940a165756",
+      "passwordSalt": "a408c7cb86ed6370a654d3726d871ad4",
+      "role": "user",
+      "createdAt": "2026-09-01T20:12:50.819Z",
+      "updatedAt": "2026-09-01T20:12:50.819Z"
+    },
+    {
+      "id": "usr-cf0277e9",
+      "email": "student.iso.1788333595662@nihomi.com",
+      "passwordHash": "afbf3b593f10f47aba758486b066d94fcab8e0cdaebea8f3139a663ed1eb2be2bdbe5534e23778967d8fccdcfd2e504ba4ccae41df860df8ae75f0419c616cde",
+      "passwordSalt": "50e743c770ae01c0938194d33e12f33f",
+      "role": "user",
+      "createdAt": "2026-09-02T07:19:55.663Z",
+      "updatedAt": "2026-09-02T07:19:55.663Z"
+    },
+    {
+      "id": "usr-1cd2c4f5",
+      "email": "student.iso.1788333657537@nihomi.com",
+      "passwordHash": "cb80f086dbc29564281156aa36ade68d940d4ea5d78b9fc0fc6ce38639a4f8386908e076749cd45b62d1544b3f2da4d49dbfe31a96303f3f6afdc6ef3b437d15",
+      "passwordSalt": "35f827765f0398802cdcffaf1e804565",
+      "role": "user",
+      "createdAt": "2026-09-02T07:20:57.539Z",
+      "updatedAt": "2026-09-02T07:20:57.539Z"
     }
   ],
   "profiles": [
@@ -112,6 +211,42 @@
       "dailyGoalMinutes": 20,
       "createdAt": "2026-09-01T18:42:46.614Z",
       "updatedAt": "2026-09-01T18:42:46.614Z"
+    },
+    {
+      "userId": "usr-c0fcf3eb",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-01T20:01:57.270Z",
+      "updatedAt": "2026-09-01T20:01:57.270Z"
+    },
+    {
+      "userId": "usr-33e1989a",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-01T20:12:50.819Z",
+      "updatedAt": "2026-09-01T20:12:50.819Z"
+    },
+    {
+      "userId": "usr-cf0277e9",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-02T07:19:55.663Z",
+      "updatedAt": "2026-09-02T07:19:55.663Z"
+    },
+    {
+      "userId": "usr-1cd2c4f5",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-02T07:20:57.539Z",
+      "updatedAt": "2026-09-02T07:20:57.539Z"
     }
   ],
   "progress": [
@@ -203,6 +338,62 @@
       "lastActiveDate": "2026-09-01",
       "experiencePoints": 0,
       "updatedAt": "2026-09-01T18:42:46.614Z"
+    },
+    {
+      "userId": "usr-c0fcf3eb",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-01",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-01T20:01:57.270Z"
+    },
+    {
+      "userId": "usr-33e1989a",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-01",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-01T20:12:50.819Z"
+    },
+    {
+      "userId": "usr-cf0277e9",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-02",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-02T07:19:55.663Z"
+    },
+    {
+      "userId": "usr-1cd2c4f5",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-02",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-02T07:20:57.539Z"
     }
   ],
   "courses": [
@@ -2326,6 +2517,121 @@
       "processed": true,
       "processedAt": "2026-08-08T07:12:51.501Z",
       "createdAt": "2026-08-08T07:12:51.501Z"
+    },
+    {
+      "id": "whe-ce76721d",
+      "eventId": "test-evt-1788292800073",
+      "provider": "bkash",
+      "eventType": "PaymentSuccess",
+      "signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4",
+      "signatureVerified": true,
+      "rawHeaders": {
+        "x-webhook-signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4"
+      },
+      "rawPayload": {
+        "paymentID": "BK-100234",
+        "trxID": "TRX998811",
+        "transactionStatus": "Completed",
+        "amount": 1499,
+        "merchantInvoiceNumber": "pay-test-bkash-001"
+      },
+      "status": "success",
+      "deliveryAttempts": 1,
+      "processed": true,
+      "processedAt": "2026-09-01T20:00:00.074Z",
+      "createdAt": "2026-09-01T20:00:00.074Z"
+    },
+    {
+      "id": "whe-78e74364",
+      "eventId": "test-evt-1788292911453",
+      "provider": "bkash",
+      "eventType": "PaymentSuccess",
+      "signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4",
+      "signatureVerified": true,
+      "rawHeaders": {
+        "x-webhook-signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4"
+      },
+      "rawPayload": {
+        "paymentID": "BK-100234",
+        "trxID": "TRX998811",
+        "transactionStatus": "Completed",
+        "amount": 1499,
+        "merchantInvoiceNumber": "pay-test-bkash-001"
+      },
+      "status": "success",
+      "deliveryAttempts": 1,
+      "processed": true,
+      "processedAt": "2026-09-01T20:01:51.453Z",
+      "createdAt": "2026-09-01T20:01:51.453Z"
+    },
+    {
+      "id": "whe-b2536e2a",
+      "eventId": "test-evt-1788293576817",
+      "provider": "bkash",
+      "eventType": "PaymentSuccess",
+      "signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4",
+      "signatureVerified": true,
+      "rawHeaders": {
+        "x-webhook-signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4"
+      },
+      "rawPayload": {
+        "paymentID": "BK-100234",
+        "trxID": "TRX998811",
+        "transactionStatus": "Completed",
+        "amount": 1499,
+        "merchantInvoiceNumber": "pay-test-bkash-001"
+      },
+      "status": "success",
+      "deliveryAttempts": 1,
+      "processed": true,
+      "processedAt": "2026-09-01T20:12:56.818Z",
+      "createdAt": "2026-09-01T20:12:56.818Z"
+    },
+    {
+      "id": "whe-2c7a0b76",
+      "eventId": "test-evt-1788333597480",
+      "provider": "bkash",
+      "eventType": "PaymentSuccess",
+      "signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4",
+      "signatureVerified": true,
+      "rawHeaders": {
+        "x-webhook-signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4"
+      },
+      "rawPayload": {
+        "paymentID": "BK-100234",
+        "trxID": "TRX998811",
+        "transactionStatus": "Completed",
+        "amount": 1499,
+        "merchantInvoiceNumber": "pay-test-bkash-001"
+      },
+      "status": "success",
+      "deliveryAttempts": 1,
+      "processed": true,
+      "processedAt": "2026-09-02T07:19:57.480Z",
+      "createdAt": "2026-09-02T07:19:57.480Z"
+    },
+    {
+      "id": "whe-401e48d7",
+      "eventId": "test-evt-1788333659243",
+      "provider": "bkash",
+      "eventType": "PaymentSuccess",
+      "signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4",
+      "signatureVerified": true,
+      "rawHeaders": {
+        "x-webhook-signature": "59011877a1fa9b0d4d5b8568118c4bc272fcaa34234a2bbf061f4062d51c4bf4"
+      },
+      "rawPayload": {
+        "paymentID": "BK-100234",
+        "trxID": "TRX998811",
+        "transactionStatus": "Completed",
+        "amount": 1499,
+        "merchantInvoiceNumber": "pay-test-bkash-001"
+      },
+      "status": "success",
+      "deliveryAttempts": 1,
+      "processed": true,
+      "processedAt": "2026-09-02T07:20:59.244Z",
+      "createdAt": "2026-09-02T07:20:59.244Z"
     }
   ],
   "subscriptionEvents": [
@@ -2358,6 +2664,42 @@
         "email": "student.iso.1788288166612@nihomi.com"
       },
       "createdAt": "2026-09-01T18:42:46.614Z"
+    },
+    {
+      "id": "sev-2b4f5f90",
+      "userId": "usr-c0fcf3eb",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1788292917268@nihomi.com"
+      },
+      "createdAt": "2026-09-01T20:01:57.270Z"
+    },
+    {
+      "id": "sev-a1b1abc0",
+      "userId": "usr-33e1989a",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1788293570817@nihomi.com"
+      },
+      "createdAt": "2026-09-01T20:12:50.819Z"
+    },
+    {
+      "id": "sev-1b4aae9b",
+      "userId": "usr-cf0277e9",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1788333595662@nihomi.com"
+      },
+      "createdAt": "2026-09-02T07:19:55.663Z"
+    },
+    {
+      "id": "sev-713e7aa1",
+      "userId": "usr-1cd2c4f5",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1788333657537@nihomi.com"
+      },
+      "createdAt": "2026-09-02T07:20:57.539Z"
     }
   ],
   "adminAuditLogs": [
@@ -2430,6 +2772,231 @@
   ],
   "contentSources": [
     {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_a2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fa2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/a2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "COMPLETED",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-e1dcf165",
+      "createdAt": "2026-09-02T07:23:01.848Z",
+      "updatedAt": "2026-09-02T07:23:13.112Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_319b710a-e26a-40ba-8b61-249a24301c33_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F319b710a-e26a-40ba-8b61-249a24301c33_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/319b710a-e26a-40ba-8b61-249a24301c33_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-303b3817",
+      "createdAt": "2026-09-02T07:21:48.644Z",
+      "updatedAt": "2026-09-02T07:21:50.058Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_e50d5d4f-6b6b-494c-b25e-fc780ace376b_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fe50d5d4f-6b6b-494c-b25e-fc780ace376b_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/e50d5d4f-6b6b-494c-b25e-fc780ace376b_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-99a838bb",
+      "createdAt": "2026-09-02T07:21:05.336Z",
+      "updatedAt": "2026-09-02T07:21:06.724Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Minna N5 Kanji Bank Chapter 1",
+      "originalFilename": "Minna_N5_Kanji_Bank.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_017db81f-f0b7-4136-a2d1-dd4313ed7af5_Minna_N5_Kanji_Bank.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F017db81f-f0b7-4136-a2d1-dd4313ed7af5_Minna_N5_Kanji_Bank.pdf",
+      "cloudStorageKey": "sources/n5/017db81f-f0b7-4136-a2d1-dd4313ed7af5_Minna_N5_Kanji_Bank.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 96,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "UPLOADED",
+      "contentHash": "862af5839493bf2efe910afc923fe7db22779b928ef04e4157590fd934618c38",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-ed31292c",
+      "createdAt": "2026-09-02T07:21:02.446Z",
+      "updatedAt": "2026-09-02T07:21:02.446Z"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_a6cb0870-1a7b-4e8a-bcc2-01f235764509_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fa6cb0870-1a7b-4e8a-bcc2-01f235764509_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/a6cb0870-1a7b-4e8a-bcc2-01f235764509_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-444c0bf5",
+      "createdAt": "2026-09-02T07:20:03.517Z",
+      "updatedAt": "2026-09-02T07:20:04.920Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Minna N5 Kanji Bank Chapter 1",
+      "originalFilename": "Minna_N5_Kanji_Bank.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_dd01b97f-c7dd-49c4-bfc5-593f905128ef_Minna_N5_Kanji_Bank.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fdd01b97f-c7dd-49c4-bfc5-593f905128ef_Minna_N5_Kanji_Bank.pdf",
+      "cloudStorageKey": "sources/n5/dd01b97f-c7dd-49c4-bfc5-593f905128ef_Minna_N5_Kanji_Bank.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 96,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "UPLOADED",
+      "contentHash": "862af5839493bf2efe910afc923fe7db22779b928ef04e4157590fd934618c38",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-d090e096",
+      "createdAt": "2026-09-02T07:20:00.735Z",
+      "updatedAt": "2026-09-02T07:20:00.736Z"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "COMPLETED",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-121c00ac",
+      "createdAt": "2026-09-02T07:19:27.167Z",
+      "updatedAt": "2026-09-02T07:19:40.894Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_a2f1c92b-96ea-402d-b83d-2ca50994fa62_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fa2f1c92b-96ea-402d-b83d-2ca50994fa62_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/a2f1c92b-96ea-402d-b83d-2ca50994fa62_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-968746a9",
+      "createdAt": "2026-09-02T07:19:00.964Z",
+      "updatedAt": "2026-09-02T07:19:02.331Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_c19812ad-a63b-44a0-84b1-59f4a3d2a8c8_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2Fc19812ad-a63b-44a0-84b1-59f4a3d2a8c8_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/c19812ad-a63b-44a0-84b1-59f4a3d2a8c8_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-1fd114b6",
+      "createdAt": "2026-09-02T07:17:54.047Z",
+      "updatedAt": "2026-09-02T07:17:55.439Z",
+      "pageCount": 1,
+      "extractedText": "Async Minna Lesson"
+    },
+    {
+      "title": "Async Minna N5 Lesson Verification",
+      "originalFilename": "Async_Minna_N5_Test.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_03ef0218-9ee1-4945-a2a9-d62f33300127_Async_Minna_N5_Test.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F03ef0218-9ee1-4945-a2a9-d62f33300127_Async_Minna_N5_Test.pdf",
+      "cloudStorageKey": "sources/n5/03ef0218-9ee1-4945-a2a9-d62f33300127_Async_Minna_N5_Test.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 89,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "AI_PROCESSING",
+      "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-e8f03498",
+      "createdAt": "2026-09-02T07:15:13.644Z",
+      "updatedAt": "2026-09-02T07:15:14.982Z",
+      "pageCount": 1,
+      "extractedText": ""
+    },
+    {
+      "title": "Minna N5 Kanji Bank Chapter 1",
+      "originalFilename": "Minna_N5_Kanji_Bank.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_70df0092-c49d-4d67-9895-e1a242231cf4_Minna_N5_Kanji_Bank.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F70df0092-c49d-4d67-9895-e1a242231cf4_Minna_N5_Kanji_Bank.pdf",
+      "cloudStorageKey": "sources/n5/70df0092-c49d-4d67-9895-e1a242231cf4_Minna_N5_Kanji_Bank.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 96,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "UPLOADED",
+      "contentHash": "862af5839493bf2efe910afc923fe7db22779b928ef04e4157590fd934618c38",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-8feeb452",
+      "createdAt": "2026-09-01T20:12:44.752Z",
+      "updatedAt": "2026-09-01T20:12:44.752Z"
+    },
+    {
       "title": "CONTENT_ENGINE_TEST_FIXTURE: JLPT N5 Lesson 1 Foundations",
       "originalFilename": "nihomi_n5_lesson1_fixture.pdf",
       "storagePath": "/app/applet/server/data/content_sources/b0aab121-0a6f-4288-811e-be1081643dcb_nihomi_n5_lesson1_fixture.pdf",
@@ -2466,6 +3033,330 @@
     }
   ],
   "contentDrafts": [
+    {
+      "sourceId": "src-e1dcf165",
+      "courseId": "course-n5",
+      "contentType": "lesson",
+      "title": "Async Minna N5 Lesson Verification",
+      "titleJa": "N5 第1課: Async Minna N5 Lesson Verification",
+      "summary": "Structured educational curriculum for JLPT N5 extracted from Async_Minna_N5_Test.pdf. Includes vocabulary, grammar, kanji, and practice assessments.",
+      "explanation": "Comprehensive lesson extracted and structured via Nihomi Content Engine. Source fidelity: Async_Minna_N5_Test.pdf (1 pages).",
+      "level": "N5",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v001",
+            "japanese": "私",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "私は学生です。",
+            "exampleSentenceEn": "I am a student.",
+            "exampleFurigana": "わたしはがくせいです。",
+            "audioText": "watashi",
+            "sourcePage": 1,
+            "sourceDerived": false
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g001",
+            "title": "Noun A is Noun B",
+            "titleJa": "AはBです",
+            "structure": "Noun + は + Noun + です",
+            "meaning": "A is B",
+            "explanation": "Used to state identity or define a subject.",
+            "explanationBn": "এটি কোনো কিছুর পরিচয় দিতে ব্যবহৃত হয়।",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "私は学生です。",
+                "english": "I am a student.",
+                "furigana": "わたしはがくせいです。",
+                "breakdown": "Watashi (I) + wa (topic marker) + gakusei (student) + desu (copula)."
+              }
+            ],
+            "cautionNotes": "The particle 'wa' is written as 'ha' in hiragana.",
+            "sourcePage": 1
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k001",
+            "character": "一",
+            "meaning": "One",
+            "onyomi": [
+              "いち",
+              "いつ"
+            ],
+            "kunyomi": [
+              "ひと",
+              "ひとつ"
+            ],
+            "strokes": 1,
+            "radicals": "一",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "一人",
+                "reading": "ひとり",
+                "meaning": "one person"
+              }
+            ],
+            "sourcePage": 1
+          }
+        ],
+        "dialogue": [
+          {
+            "speaker": "Tanaka",
+            "speakerRole": "Teacher",
+            "japanese": "はじめまして。",
+            "furigana": "はじめまして。",
+            "english": "Nice to meet you."
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex001",
+            "instruction": "Choose the correct particle.",
+            "questionJa": "私＿学生です。",
+            "type": "multiple_choice",
+            "options": [
+              "が",
+              "は",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "The topic marker 'wa' is used here."
+          }
+        ],
+        "readingPassages": [
+          {
+            "title": "Self Introduction",
+            "passage": "私は田中です。",
+            "furigana": "わたしはたなかです。",
+            "translationEn": "I am Tanaka.",
+            "translationBn": "আমি তানাকা।",
+            "questions": [
+              {
+                "question": "Who is the speaker?",
+                "options": [
+                  "Tanaka",
+                  "Sato",
+                  "Suzuki",
+                  "Yamada"
+                ],
+                "answer": "Tanaka",
+                "explanation": "The text states 'Watashi wa Tanaka desu'."
+              }
+            ],
+            "sourcePage": 1
+          }
+        ],
+        "quiz": {
+          "title": "N5 Basics Quiz",
+          "passingScore": 75,
+          "questions": [
+            {
+              "id": "q001",
+              "question": "What is the meaning of 'Watashi'?",
+              "questionJa": "「私」の意味は何ですか。",
+              "type": "multiple_choice",
+              "options": [
+                "You",
+                "I",
+                "He",
+                "She"
+              ],
+              "correctIndex": 1,
+              "explanation": "Watashi means I."
+            }
+          ]
+        }
+      },
+      "status": "AI_GENERATED",
+      "generationMetadata": {
+        "modelUsed": "gemini-3.1-flash-lite",
+        "sourceDerived": true,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-02T07:23:13.109Z",
+        "confidenceScore": 95,
+        "sourcePageReferences": [
+          1
+        ],
+        "disclaimer": "AI-generated content — Human review required."
+      },
+      "createdBy": "usr-admin-01",
+      "id": "draft-5f8c008f",
+      "createdAt": "2026-09-02T07:23:13.109Z",
+      "updatedAt": "2026-09-02T07:23:13.109Z"
+    },
+    {
+      "sourceId": "src-121c00ac",
+      "courseId": "course-n5",
+      "contentType": "lesson",
+      "title": "Async Minna N5 Lesson Verification",
+      "titleJa": "N5 第1課: Async Minna N5 Lesson Verification",
+      "summary": "Structured educational curriculum for JLPT N5 extracted from Async_Minna_N5_Test.pdf. Includes vocabulary, grammar, kanji, and practice assessments.",
+      "explanation": "Comprehensive lesson extracted and structured via Nihomi Content Engine. Source fidelity: Async_Minna_N5_Test.pdf (1 pages).",
+      "level": "N5",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "voc_001",
+            "japanese": "私",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "私は学生です。",
+            "exampleSentenceEn": "I am a student.",
+            "exampleFurigana": "わたしはがくせいです。",
+            "audioText": "Watashi",
+            "sourcePage": 1,
+            "sourceDerived": false
+          }
+        ],
+        "grammar": [
+          {
+            "id": "gram_001",
+            "title": "Noun A is Noun B",
+            "titleJa": "AはBです",
+            "structure": "Noun + は + Noun + です",
+            "meaning": "A is B",
+            "explanation": "Used to state identity or define a subject.",
+            "explanationBn": "কোন কিছু বা কাউকে পরিচয় করিয়ে দিতে এই গঠনটি ব্যবহৃত হয়।",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "私はミラーです。",
+                "english": "I am Miller.",
+                "furigana": "わたしはみらーです。",
+                "breakdown": "Watashi (I) + wa (topic marker) + Miller + desu (copula)."
+              }
+            ],
+            "cautionNotes": "The particle 'wa' is written as 'ha' in hiragana.",
+            "sourcePage": 1
+          }
+        ],
+        "kanji": [
+          {
+            "id": "kan_001",
+            "character": "一",
+            "meaning": "One",
+            "onyomi": [
+              "いち",
+              "いつ"
+            ],
+            "kunyomi": [
+              "ひと",
+              "ひとつ"
+            ],
+            "strokes": 1,
+            "radicals": "一",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "一人",
+                "reading": "ひとり",
+                "meaning": "one person"
+              }
+            ],
+            "sourcePage": 1
+          }
+        ],
+        "dialogue": [
+          {
+            "speaker": "Tanaka",
+            "speakerRole": "Teacher",
+            "japanese": "はじめまして。",
+            "furigana": "はじめまして。",
+            "english": "Nice to meet you."
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex_001",
+            "instruction": "Choose the correct particle.",
+            "questionJa": "私＿学生です。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "The topic marker 'wa' is used here."
+          }
+        ],
+        "readingPassages": [
+          {
+            "title": "Self Introduction",
+            "passage": "私はサントスです。ブラジルから来ました。",
+            "furigana": "わたしはさんとすです。ぶらじるからきました。",
+            "translationEn": "I am Santos. I came from Brazil.",
+            "translationBn": "আমি সান্তোস। আমি ব্রাজিল থেকে এসেছি।",
+            "questions": [
+              {
+                "question": "Where is Santos from?",
+                "options": [
+                  "Japan",
+                  "Brazil",
+                  "USA",
+                  "India"
+                ],
+                "answer": "Brazil",
+                "explanation": "The text states 'Brazil kara kimashita'."
+              }
+            ],
+            "sourcePage": 1
+          }
+        ],
+        "quiz": {
+          "title": "Async Minna N5 Quiz",
+          "passingScore": 75,
+          "questions": [
+            {
+              "id": "q1",
+              "question": "What is the meaning of 'Watashi'?",
+              "questionJa": "「わたし」の意味は何ですか？",
+              "type": "multiple_choice",
+              "options": [
+                "You",
+                "He",
+                "I",
+                "She"
+              ],
+              "correctIndex": 2,
+              "explanation": "Watashi means I."
+            }
+          ]
+        }
+      },
+      "status": "AI_GENERATED",
+      "generationMetadata": {
+        "modelUsed": "gemini-3.1-flash-lite",
+        "sourceDerived": true,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-02T07:19:40.891Z",
+        "confidenceScore": 95,
+        "sourcePageReferences": [
+          1
+        ],
+        "disclaimer": "AI-generated content — Human review required."
+      },
+      "createdBy": "usr-admin-01",
+      "id": "draft-d07b465e",
+      "createdAt": "2026-09-02T07:19:40.891Z",
+      "updatedAt": "2026-09-02T07:19:40.891Z"
+    },
     {
       "sourceId": "src-099ac52f",
       "courseId": "course-n5",
@@ -4662,6 +5553,1054 @@
       "lastRefreshedAt": "2026-08-23T10:27:08.202Z",
       "createdAt": "2026-08-23T10:27:08.202Z",
       "updatedAt": "2026-08-23T10:27:08.202Z"
+    }
+  ],
+  "backgroundJobs": [
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-e1dcf165",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-7fa91edb-b",
+      "createdAt": "2026-09-02T07:23:01.851Z",
+      "updatedAt": "2026-09-02T07:23:13.115Z",
+      "startedAt": "2026-09-02T07:23:01.854Z",
+      "result": {
+        "success": true,
+        "draft": {
+          "sourceId": "src-e1dcf165",
+          "courseId": "course-n5",
+          "contentType": "lesson",
+          "title": "Async Minna N5 Lesson Verification",
+          "titleJa": "N5 第1課: Async Minna N5 Lesson Verification",
+          "summary": "Structured educational curriculum for JLPT N5 extracted from Async_Minna_N5_Test.pdf. Includes vocabulary, grammar, kanji, and practice assessments.",
+          "explanation": "Comprehensive lesson extracted and structured via Nihomi Content Engine. Source fidelity: Async_Minna_N5_Test.pdf (1 pages).",
+          "level": "N5",
+          "structuredContent": {
+            "vocabulary": [
+              {
+                "id": "v001",
+                "japanese": "私",
+                "furigana": "わたし",
+                "romaji": "watashi",
+                "english": "I",
+                "banglaMeaning": "আমি",
+                "partOfSpeech": "pronoun",
+                "level": "N5",
+                "exampleSentenceJa": "私は学生です。",
+                "exampleSentenceEn": "I am a student.",
+                "exampleFurigana": "わたしはがくせいです。",
+                "audioText": "watashi",
+                "sourcePage": 1,
+                "sourceDerived": false
+              }
+            ],
+            "grammar": [
+              {
+                "id": "g001",
+                "title": "Noun A is Noun B",
+                "titleJa": "AはBです",
+                "structure": "Noun + は + Noun + です",
+                "meaning": "A is B",
+                "explanation": "Used to state identity or define a subject.",
+                "explanationBn": "এটি কোনো কিছুর পরিচয় দিতে ব্যবহৃত হয়।",
+                "level": "N5",
+                "examples": [
+                  {
+                    "japanese": "私は学生です。",
+                    "english": "I am a student.",
+                    "furigana": "わたしはがくせいです。",
+                    "breakdown": "Watashi (I) + wa (topic marker) + gakusei (student) + desu (copula)."
+                  }
+                ],
+                "cautionNotes": "The particle 'wa' is written as 'ha' in hiragana.",
+                "sourcePage": 1
+              }
+            ],
+            "kanji": [
+              {
+                "id": "k001",
+                "character": "一",
+                "meaning": "One",
+                "onyomi": [
+                  "いち",
+                  "いつ"
+                ],
+                "kunyomi": [
+                  "ひと",
+                  "ひとつ"
+                ],
+                "strokes": 1,
+                "radicals": "一",
+                "level": "N5",
+                "examples": [
+                  {
+                    "word": "一人",
+                    "reading": "ひとり",
+                    "meaning": "one person"
+                  }
+                ],
+                "sourcePage": 1
+              }
+            ],
+            "dialogue": [
+              {
+                "speaker": "Tanaka",
+                "speakerRole": "Teacher",
+                "japanese": "はじめまして。",
+                "furigana": "はじめまして。",
+                "english": "Nice to meet you."
+              }
+            ],
+            "practiceExercises": [
+              {
+                "id": "ex001",
+                "instruction": "Choose the correct particle.",
+                "questionJa": "私＿学生です。",
+                "type": "multiple_choice",
+                "options": [
+                  "が",
+                  "は",
+                  "を",
+                  "に"
+                ],
+                "correctAnswer": "は",
+                "explanation": "The topic marker 'wa' is used here."
+              }
+            ],
+            "readingPassages": [
+              {
+                "title": "Self Introduction",
+                "passage": "私は田中です。",
+                "furigana": "わたしはたなかです。",
+                "translationEn": "I am Tanaka.",
+                "translationBn": "আমি তানাকা।",
+                "questions": [
+                  {
+                    "question": "Who is the speaker?",
+                    "options": [
+                      "Tanaka",
+                      "Sato",
+                      "Suzuki",
+                      "Yamada"
+                    ],
+                    "answer": "Tanaka",
+                    "explanation": "The text states 'Watashi wa Tanaka desu'."
+                  }
+                ],
+                "sourcePage": 1
+              }
+            ],
+            "quiz": {
+              "title": "N5 Basics Quiz",
+              "passingScore": 75,
+              "questions": [
+                {
+                  "id": "q001",
+                  "question": "What is the meaning of 'Watashi'?",
+                  "questionJa": "「私」の意味は何ですか。",
+                  "type": "multiple_choice",
+                  "options": [
+                    "You",
+                    "I",
+                    "He",
+                    "She"
+                  ],
+                  "correctIndex": 1,
+                  "explanation": "Watashi means I."
+                }
+              ]
+            }
+          },
+          "status": "AI_GENERATED",
+          "generationMetadata": {
+            "modelUsed": "gemini-3.1-flash-lite",
+            "sourceDerived": true,
+            "aiEnriched": true,
+            "generatedAt": "2026-09-02T07:23:13.109Z",
+            "confidenceScore": 95,
+            "sourcePageReferences": [
+              1
+            ],
+            "disclaimer": "AI-generated content — Human review required."
+          },
+          "createdBy": "usr-admin-01",
+          "id": "draft-5f8c008f",
+          "createdAt": "2026-09-02T07:23:13.109Z",
+          "updatedAt": "2026-09-02T07:23:13.109Z"
+        },
+        "source": {
+          "title": "Async Minna N5 Lesson Verification",
+          "originalFilename": "Async_Minna_N5_Test.pdf",
+          "storagePath": "/app/applet/server/data/content_sources/sources_n5_a2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+          "storageUrl": "/api/content/media/sources%2Fn5%2Fa2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+          "cloudStorageKey": "sources/n5/a2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
+          "storageBucket": "nihomi-content-sources",
+          "mimeType": "application/pdf",
+          "fileSize": 89,
+          "sourceLanguage": "Japanese",
+          "targetJlptLevel": "N5",
+          "processingStatus": "COMPLETED",
+          "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+          "uploadedBy": "usr-admin-01",
+          "uploadedByEmail": "admin@nihomi.com",
+          "id": "src-e1dcf165",
+          "createdAt": "2026-09-02T07:23:01.848Z",
+          "updatedAt": "2026-09-02T07:23:13.112Z",
+          "pageCount": 1,
+          "extractedText": "Async Minna Lesson"
+        }
+      },
+      "completedAt": "2026-09-02T07:23:13.115Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-0ee1100e-a",
+      "createdAt": "2026-09-02T07:23:01.692Z",
+      "updatedAt": "2026-09-02T07:23:01.706Z",
+      "startedAt": "2026-09-02T07:23:01.697Z",
+      "completedAt": "2026-09-02T07:23:01.706Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-81e08dd6-0",
+      "createdAt": "2026-09-02T07:23:01.685Z",
+      "updatedAt": "2026-09-02T07:23:01.689Z",
+      "completedAt": "2026-09-02T07:23:01.689Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-e0fac64b-a",
+      "createdAt": "2026-09-02T07:23:01.576Z",
+      "updatedAt": "2026-09-02T07:23:01.592Z",
+      "startedAt": "2026-09-02T07:23:01.589Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:23:01.591Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-6d1d2ce8-1",
+      "createdAt": "2026-09-02T07:23:01.364Z",
+      "updatedAt": "2026-09-02T07:23:01.480Z",
+      "startedAt": "2026-09-02T07:23:01.368Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:23:01.480Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-303b3817",
+      "status": "processing",
+      "progress": 60,
+      "currentStage": "Synthesizing grammar, kanji & vocabulary modules...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-23761fa2-e",
+      "createdAt": "2026-09-02T07:21:48.647Z",
+      "updatedAt": "2026-09-02T07:21:50.055Z",
+      "startedAt": "2026-09-02T07:21:48.650Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-10f77cb4-c",
+      "createdAt": "2026-09-02T07:21:48.287Z",
+      "updatedAt": "2026-09-02T07:21:48.315Z",
+      "startedAt": "2026-09-02T07:21:48.294Z",
+      "completedAt": "2026-09-02T07:21:48.315Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-5f4cf38c-3",
+      "createdAt": "2026-09-02T07:21:48.280Z",
+      "updatedAt": "2026-09-02T07:21:48.283Z",
+      "completedAt": "2026-09-02T07:21:48.283Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-ef415d31-3",
+      "createdAt": "2026-09-02T07:21:48.171Z",
+      "updatedAt": "2026-09-02T07:21:48.188Z",
+      "startedAt": "2026-09-02T07:21:48.184Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:21:48.188Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-0afced8d-8",
+      "createdAt": "2026-09-02T07:21:47.959Z",
+      "updatedAt": "2026-09-02T07:21:48.072Z",
+      "startedAt": "2026-09-02T07:21:47.963Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:21:48.072Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-99a838bb",
+      "status": "processing",
+      "progress": 60,
+      "currentStage": "Synthesizing grammar, kanji & vocabulary modules...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-bf444a69-1",
+      "createdAt": "2026-09-02T07:21:05.339Z",
+      "updatedAt": "2026-09-02T07:21:06.720Z",
+      "startedAt": "2026-09-02T07:21:05.342Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-000de180-2",
+      "createdAt": "2026-09-02T07:21:05.275Z",
+      "updatedAt": "2026-09-02T07:21:05.288Z",
+      "startedAt": "2026-09-02T07:21:05.280Z",
+      "completedAt": "2026-09-02T07:21:05.288Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-460b5c0d-a",
+      "createdAt": "2026-09-02T07:21:05.269Z",
+      "updatedAt": "2026-09-02T07:21:05.272Z",
+      "completedAt": "2026-09-02T07:21:05.272Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-b053cd25-9",
+      "createdAt": "2026-09-02T07:21:05.162Z",
+      "updatedAt": "2026-09-02T07:21:05.177Z",
+      "startedAt": "2026-09-02T07:21:05.174Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:21:05.177Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-fb195cbe-a",
+      "createdAt": "2026-09-02T07:21:04.949Z",
+      "updatedAt": "2026-09-02T07:21:05.064Z",
+      "startedAt": "2026-09-02T07:21:04.952Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:21:05.064Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-444c0bf5",
+      "status": "processing",
+      "progress": 60,
+      "currentStage": "Synthesizing grammar, kanji & vocabulary modules...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-c0e3cc36-0",
+      "createdAt": "2026-09-02T07:20:03.522Z",
+      "updatedAt": "2026-09-02T07:20:04.917Z",
+      "startedAt": "2026-09-02T07:20:03.526Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-e4a29d1d-b",
+      "createdAt": "2026-09-02T07:20:03.435Z",
+      "updatedAt": "2026-09-02T07:20:03.447Z",
+      "startedAt": "2026-09-02T07:20:03.440Z",
+      "completedAt": "2026-09-02T07:20:03.447Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-0546153b-0",
+      "createdAt": "2026-09-02T07:20:03.428Z",
+      "updatedAt": "2026-09-02T07:20:03.432Z",
+      "completedAt": "2026-09-02T07:20:03.432Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-2b97a058-0",
+      "createdAt": "2026-09-02T07:20:03.320Z",
+      "updatedAt": "2026-09-02T07:20:03.337Z",
+      "startedAt": "2026-09-02T07:20:03.334Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:20:03.337Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-211e10db-8",
+      "createdAt": "2026-09-02T07:20:03.106Z",
+      "updatedAt": "2026-09-02T07:20:03.222Z",
+      "startedAt": "2026-09-02T07:20:03.110Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:20:03.221Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-121c00ac",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-cddb37e8-a",
+      "createdAt": "2026-09-02T07:19:27.170Z",
+      "updatedAt": "2026-09-02T07:19:40.895Z",
+      "startedAt": "2026-09-02T07:19:27.172Z",
+      "result": {
+        "success": true,
+        "draft": {
+          "sourceId": "src-121c00ac",
+          "courseId": "course-n5",
+          "contentType": "lesson",
+          "title": "Async Minna N5 Lesson Verification",
+          "titleJa": "N5 第1課: Async Minna N5 Lesson Verification",
+          "summary": "Structured educational curriculum for JLPT N5 extracted from Async_Minna_N5_Test.pdf. Includes vocabulary, grammar, kanji, and practice assessments.",
+          "explanation": "Comprehensive lesson extracted and structured via Nihomi Content Engine. Source fidelity: Async_Minna_N5_Test.pdf (1 pages).",
+          "level": "N5",
+          "structuredContent": {
+            "vocabulary": [
+              {
+                "id": "voc_001",
+                "japanese": "私",
+                "furigana": "わたし",
+                "romaji": "watashi",
+                "english": "I",
+                "banglaMeaning": "আমি",
+                "partOfSpeech": "pronoun",
+                "level": "N5",
+                "exampleSentenceJa": "私は学生です。",
+                "exampleSentenceEn": "I am a student.",
+                "exampleFurigana": "わたしはがくせいです。",
+                "audioText": "Watashi",
+                "sourcePage": 1,
+                "sourceDerived": false
+              }
+            ],
+            "grammar": [
+              {
+                "id": "gram_001",
+                "title": "Noun A is Noun B",
+                "titleJa": "AはBです",
+                "structure": "Noun + は + Noun + です",
+                "meaning": "A is B",
+                "explanation": "Used to state identity or define a subject.",
+                "explanationBn": "কোন কিছু বা কাউকে পরিচয় করিয়ে দিতে এই গঠনটি ব্যবহৃত হয়।",
+                "level": "N5",
+                "examples": [
+                  {
+                    "japanese": "私はミラーです。",
+                    "english": "I am Miller.",
+                    "furigana": "わたしはみらーです。",
+                    "breakdown": "Watashi (I) + wa (topic marker) + Miller + desu (copula)."
+                  }
+                ],
+                "cautionNotes": "The particle 'wa' is written as 'ha' in hiragana.",
+                "sourcePage": 1
+              }
+            ],
+            "kanji": [
+              {
+                "id": "kan_001",
+                "character": "一",
+                "meaning": "One",
+                "onyomi": [
+                  "いち",
+                  "いつ"
+                ],
+                "kunyomi": [
+                  "ひと",
+                  "ひとつ"
+                ],
+                "strokes": 1,
+                "radicals": "一",
+                "level": "N5",
+                "examples": [
+                  {
+                    "word": "一人",
+                    "reading": "ひとり",
+                    "meaning": "one person"
+                  }
+                ],
+                "sourcePage": 1
+              }
+            ],
+            "dialogue": [
+              {
+                "speaker": "Tanaka",
+                "speakerRole": "Teacher",
+                "japanese": "はじめまして。",
+                "furigana": "はじめまして。",
+                "english": "Nice to meet you."
+              }
+            ],
+            "practiceExercises": [
+              {
+                "id": "ex_001",
+                "instruction": "Choose the correct particle.",
+                "questionJa": "私＿学生です。",
+                "type": "multiple_choice",
+                "options": [
+                  "は",
+                  "が",
+                  "を",
+                  "に"
+                ],
+                "correctAnswer": "は",
+                "explanation": "The topic marker 'wa' is used here."
+              }
+            ],
+            "readingPassages": [
+              {
+                "title": "Self Introduction",
+                "passage": "私はサントスです。ブラジルから来ました。",
+                "furigana": "わたしはさんとすです。ぶらじるからきました。",
+                "translationEn": "I am Santos. I came from Brazil.",
+                "translationBn": "আমি সান্তোস। আমি ব্রাজিল থেকে এসেছি।",
+                "questions": [
+                  {
+                    "question": "Where is Santos from?",
+                    "options": [
+                      "Japan",
+                      "Brazil",
+                      "USA",
+                      "India"
+                    ],
+                    "answer": "Brazil",
+                    "explanation": "The text states 'Brazil kara kimashita'."
+                  }
+                ],
+                "sourcePage": 1
+              }
+            ],
+            "quiz": {
+              "title": "Async Minna N5 Quiz",
+              "passingScore": 75,
+              "questions": [
+                {
+                  "id": "q1",
+                  "question": "What is the meaning of 'Watashi'?",
+                  "questionJa": "「わたし」の意味は何ですか？",
+                  "type": "multiple_choice",
+                  "options": [
+                    "You",
+                    "He",
+                    "I",
+                    "She"
+                  ],
+                  "correctIndex": 2,
+                  "explanation": "Watashi means I."
+                }
+              ]
+            }
+          },
+          "status": "AI_GENERATED",
+          "generationMetadata": {
+            "modelUsed": "gemini-3.1-flash-lite",
+            "sourceDerived": true,
+            "aiEnriched": true,
+            "generatedAt": "2026-09-02T07:19:40.891Z",
+            "confidenceScore": 95,
+            "sourcePageReferences": [
+              1
+            ],
+            "disclaimer": "AI-generated content — Human review required."
+          },
+          "createdBy": "usr-admin-01",
+          "id": "draft-d07b465e",
+          "createdAt": "2026-09-02T07:19:40.891Z",
+          "updatedAt": "2026-09-02T07:19:40.891Z"
+        },
+        "source": {
+          "title": "Async Minna N5 Lesson Verification",
+          "originalFilename": "Async_Minna_N5_Test.pdf",
+          "storagePath": "/app/applet/server/data/content_sources/sources_n5_8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+          "storageUrl": "/api/content/media/sources%2Fn5%2F8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+          "cloudStorageKey": "sources/n5/8bacef8e-02e9-49e7-863b-e95e9c0881c6_Async_Minna_N5_Test.pdf",
+          "storageBucket": "nihomi-content-sources",
+          "mimeType": "application/pdf",
+          "fileSize": 89,
+          "sourceLanguage": "Japanese",
+          "targetJlptLevel": "N5",
+          "processingStatus": "COMPLETED",
+          "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
+          "uploadedBy": "usr-admin-01",
+          "uploadedByEmail": "admin@nihomi.com",
+          "id": "src-121c00ac",
+          "createdAt": "2026-09-02T07:19:27.167Z",
+          "updatedAt": "2026-09-02T07:19:40.894Z",
+          "pageCount": 1,
+          "extractedText": "Async Minna Lesson"
+        }
+      },
+      "completedAt": "2026-09-02T07:19:40.895Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-9448cffd-b",
+      "createdAt": "2026-09-02T07:19:27.076Z",
+      "updatedAt": "2026-09-02T07:19:27.085Z",
+      "startedAt": "2026-09-02T07:19:27.080Z",
+      "completedAt": "2026-09-02T07:19:27.085Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-d468778d-9",
+      "createdAt": "2026-09-02T07:19:27.072Z",
+      "updatedAt": "2026-09-02T07:19:27.074Z",
+      "completedAt": "2026-09-02T07:19:27.074Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-41ee3812-9",
+      "createdAt": "2026-09-02T07:19:26.965Z",
+      "updatedAt": "2026-09-02T07:19:26.977Z",
+      "startedAt": "2026-09-02T07:19:26.975Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:19:26.977Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-5e4580d4-d",
+      "createdAt": "2026-09-02T07:19:26.756Z",
+      "updatedAt": "2026-09-02T07:19:26.867Z",
+      "startedAt": "2026-09-02T07:19:26.759Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:19:26.867Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-968746a9",
+      "status": "processing",
+      "progress": 60,
+      "currentStage": "Synthesizing grammar, kanji & vocabulary modules...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-12a0790c-0",
+      "createdAt": "2026-09-02T07:19:00.968Z",
+      "updatedAt": "2026-09-02T07:19:02.329Z",
+      "startedAt": "2026-09-02T07:19:00.971Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-d4c20f42-6",
+      "createdAt": "2026-09-02T07:19:00.899Z",
+      "updatedAt": "2026-09-02T07:19:00.908Z",
+      "startedAt": "2026-09-02T07:19:00.903Z",
+      "completedAt": "2026-09-02T07:19:00.908Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-79d41e92-9",
+      "createdAt": "2026-09-02T07:19:00.894Z",
+      "updatedAt": "2026-09-02T07:19:00.897Z",
+      "completedAt": "2026-09-02T07:19:00.897Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-c47404a3-9",
+      "createdAt": "2026-09-02T07:19:00.789Z",
+      "updatedAt": "2026-09-02T07:19:00.804Z",
+      "startedAt": "2026-09-02T07:19:00.802Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:19:00.804Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-30da4613-e",
+      "createdAt": "2026-09-02T07:19:00.570Z",
+      "updatedAt": "2026-09-02T07:19:00.681Z",
+      "startedAt": "2026-09-02T07:19:00.573Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:19:00.681Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-1fd114b6",
+      "status": "processing",
+      "progress": 15,
+      "currentStage": "Streaming document from storage...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-ae651a03-d",
+      "createdAt": "2026-09-02T07:17:54.049Z",
+      "updatedAt": "2026-09-02T07:17:54.055Z",
+      "startedAt": "2026-09-02T07:17:54.052Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-bfac36ce-a",
+      "createdAt": "2026-09-02T07:17:53.803Z",
+      "updatedAt": "2026-09-02T07:17:53.814Z",
+      "startedAt": "2026-09-02T07:17:53.809Z",
+      "completedAt": "2026-09-02T07:17:53.814Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-0bad8ab9-9",
+      "createdAt": "2026-09-02T07:17:53.798Z",
+      "updatedAt": "2026-09-02T07:17:53.801Z",
+      "completedAt": "2026-09-02T07:17:53.801Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-b38d792e-8",
+      "createdAt": "2026-09-02T07:17:53.691Z",
+      "updatedAt": "2026-09-02T07:17:53.702Z",
+      "startedAt": "2026-09-02T07:17:53.700Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:17:53.702Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-2a24939f-3",
+      "createdAt": "2026-09-02T07:17:53.482Z",
+      "updatedAt": "2026-09-02T07:17:53.590Z",
+      "startedAt": "2026-09-02T07:17:53.484Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:17:53.590Z"
+    },
+    {
+      "type": "pdf_extraction",
+      "targetId": "src-e8f03498",
+      "status": "processing",
+      "progress": 15,
+      "currentStage": "Streaming document from storage...",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "sourceTitle": "Async Minna N5 Lesson Verification",
+        "targetLevel": "N5"
+      },
+      "id": "job-509ea998-9",
+      "createdAt": "2026-09-02T07:15:13.647Z",
+      "updatedAt": "2026-09-02T07:15:13.651Z",
+      "startedAt": "2026-09-02T07:15:13.649Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-failed-01",
+      "status": "failed",
+      "progress": 100,
+      "currentStage": "Job failed after exhausting all retry attempts",
+      "error": "ContentSource with ID target-failed-01 not found",
+      "retryCount": 3,
+      "maxRetries": 3,
+      "id": "job-7b6c8a06-6",
+      "createdAt": "2026-09-02T07:15:13.297Z",
+      "updatedAt": "2026-09-02T07:15:13.305Z",
+      "startedAt": "2026-09-02T07:15:13.300Z",
+      "completedAt": "2026-09-02T07:15:13.305Z"
+    },
+    {
+      "type": "curriculum_structuring",
+      "targetId": "target-to-cancel-01",
+      "status": "cancelled",
+      "progress": 0,
+      "currentStage": "Job cancelled by user/admin",
+      "retryCount": 0,
+      "maxRetries": 2,
+      "id": "job-4227a6db-b",
+      "createdAt": "2026-09-02T07:15:13.292Z",
+      "updatedAt": "2026-09-02T07:15:13.294Z",
+      "completedAt": "2026-09-02T07:15:13.294Z"
+    },
+    {
+      "type": "batch_media_sync",
+      "targetId": "media-sync-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 1,
+      "maxRetries": 3,
+      "id": "job-cb258e88-5",
+      "createdAt": "2026-09-02T07:15:13.185Z",
+      "updatedAt": "2026-09-02T07:15:13.196Z",
+      "startedAt": "2026-09-02T07:15:13.195Z",
+      "error": "Transient network timeout connecting to cloud bucket",
+      "result": {
+        "syncedItems": 12
+      },
+      "completedAt": "2026-09-02T07:15:13.196Z"
+    },
+    {
+      "type": "audio_generation",
+      "targetId": "audio-test-target-01",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "Processing completed successfully",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "metadata": {
+        "voice": "Tokyo_Native_F1"
+      },
+      "id": "job-69cd24b3-0",
+      "createdAt": "2026-09-02T07:15:12.976Z",
+      "updatedAt": "2026-09-02T07:15:13.087Z",
+      "startedAt": "2026-09-02T07:15:12.978Z",
+      "result": {
+        "audioUrl": "https://nihomi.com/media/audio_sample_01.mp3",
+        "duration": 4.2
+      },
+      "completedAt": "2026-09-02T07:15:13.087Z"
     }
   ]
 }
