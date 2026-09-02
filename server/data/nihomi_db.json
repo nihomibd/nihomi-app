@@ -4380,6 +4380,22 @@
       },
       "id": "log-c2bc35ff",
       "createdAt": "2026-09-02T09:43:30.832Z"
+    },
+    {
+      "adminUserId": "usr-system-backup",
+      "adminEmail": "system@nihomi.com",
+      "action": "database_backup_created",
+      "targetResource": "database_backups",
+      "details": {
+        "backupId": "bkp-daily-2026-09-02T18-45-42-787Z-7af398",
+        "filename": "nihomi_db_daily_2026-09-02T18-45-42-787Z_bkp-daily-2026-09-02T18-45-42-787Z-7af398.json",
+        "backupType": "daily",
+        "totalEntities": 360,
+        "sizeBytes": 379123,
+        "checksum": "1e5c100ac3d09578d82fc67f8da1c6f1f022da62be4fbdd14bc347ab2f484db7"
+      },
+      "id": "log-2a9c60fe",
+      "createdAt": "2026-09-02T18:45:42.837Z"
     }
   ],
   "contentSources": [
