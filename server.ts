@@ -1,6 +1,6 @@
+import './server/env.js';
 import express from 'express';
 import path from 'path';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
 
@@ -22,8 +22,8 @@ import { whiteLabelRouter } from './server/routes/whiteLabelRoutes.js';
 import { studyPlanRouter } from './server/routes/studyPlan.js';
 import { baitoSimulationRouter } from './server/routes/baitoSimulation.js';
 import { db } from './server/db.js';
-
-dotenv.config();
+import { databaseBackupService } from './server/services/databaseBackupService.js';
+import { stateIntegrityService } from './server/services/stateIntegrityService.js';
 
 // Initialize recurring background subscription lifecycle & grace-period monitor
 setInterval(() => {
@@ -33,6 +33,50 @@ setInterval(() => {
     console.error('[Lifecycle Engine] Error during scheduled lifecycle evaluation:', err);
   }
 }, 60 * 1000);
+
+// Initialize automated daily database backup interval (every 24 hours)
+const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+setInterval(async () => {
+  try {
+    console.log('[Automated Backup] Running scheduled daily database backup...');
+    await databaseBackupService.createBackup({
+      type: 'daily',
+      triggeredBy: 'automated_cron_daily'
+    });
+  } catch (err) {
+    console.error('[Automated Backup] Daily backup error:', err);
+  }
+}, TWENTY_FOUR_HOURS_MS);
+
+// Initialize automated weekly database backup interval (every 7 days)
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+setInterval(async () => {
+  try {
+    console.log('[Automated Backup] Running scheduled weekly database backup...');
+    await databaseBackupService.createBackup({
+      type: 'weekly',
+      triggeredBy: 'automated_cron_weekly'
+    });
+  } catch (err) {
+    console.error('[Automated Backup] Weekly backup error:', err);
+  }
+}, SEVEN_DAYS_MS);
+
+// On server startup: Ensure a baseline backup exists and perform initial health check
+(async () => {
+  try {
+    const status = databaseBackupService.getLatestBackupStatus();
+    if (!status.hasBackup) {
+      console.log('[Automated Backup] No existing backups detected. Creating baseline startup snapshot...');
+      await databaseBackupService.createBackup({
+        type: 'daily',
+        triggeredBy: 'system_startup_baseline'
+      });
+    }
+  } catch (err) {
+    console.warn('[Automated Backup] Startup baseline backup warning:', err);
+  }
+})();
 
 async function startServer() {
   const app = express();
@@ -46,8 +90,19 @@ async function startServer() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
   }));
 
-  app.use(express.json({ limit: '25mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+  app.use(express.json({
+    limit: '25mb',
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf;
+    }
+  }));
+  app.use(express.urlencoded({
+    extended: true,
+    limit: '25mb',
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf;
+    }
+  }));
 
   // API Routes
   app.get('/api/health', (req, res) => {

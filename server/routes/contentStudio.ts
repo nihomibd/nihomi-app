@@ -5,6 +5,7 @@ import { ContentGeneratorService } from '../services/content-studio/contentGener
 import { QAEngineService } from '../services/content-studio/qaEngineService.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
+import { db } from '../db.js';
 
 export const contentStudioRouter = Router();
 
@@ -129,9 +130,10 @@ contentStudioRouter.post('/lessons/:id/qa', requireStaff, (req: AuthenticatedReq
   res.json({ success: true, qaReport, lesson: updated });
 });
 
-// 10. Approve & Publish (Strict Admin Authorization)
+// 10. Approve & Publish (Strict Admin Authorization with Zero-Downtime DB Sync)
 contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: AuthenticatedRequest, res) => {
   const founderEmail = req.user?.email || 'admin@nihomi.com';
+  const adminId = req.user?.id || 'admin';
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 
@@ -141,5 +143,187 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
   }
 
   const published = contentStudioDb.approveAndPublishLesson(lesson.id, founderEmail);
-  res.json({ success: true, message: `Lesson "${published.title}" published.`, lesson: published });
+
+  // Synchronize to PostgreSQL persistent ContentDraft / ContentVersion
+  let draft = db.getContentDraftById(lesson.id);
+  const structuredContent = {
+    title: published.title,
+    titleJa: published.titleJa,
+    summary: published.summary || published.introduction?.overviewEn || '',
+    explanation: published.grammarNotes || published.introduction?.overviewBn || '',
+    level: published.level,
+    courseId: `course-${published.level.toLowerCase()}`,
+    vocabulary: (published.vocabulary || []).map((v) => ({
+      id: v.id,
+      word: v.japanese,
+      reading: v.furigana || v.japanese,
+      romaji: v.romaji,
+      meaningEn: v.english,
+      meaningBn: v.bengali,
+      partOfSpeech: v.partOfSpeech,
+      level: published.level,
+      exampleSentenceJa: v.exampleSentenceJa,
+      exampleSentenceEn: v.exampleSentenceEn
+    })),
+    grammar: (published.grammar || []).map((g) => ({
+      id: g.id,
+      title: g.title,
+      titleJa: g.titleJa,
+      structure: g.structure,
+      meaning: g.meaningEn,
+      explanation: g.explanationEn,
+      level: published.level,
+      examples: (g.examples || []).map((ex) => ({
+        japanese: ex.japanese,
+        english: ex.english,
+        furigana: ex.furigana
+      }))
+    })),
+    kanji: (published.kanji || []).map((k) => ({
+      id: k.id,
+      character: k.character,
+      meaning: k.meaningEn,
+      onyomi: k.onyomi,
+      kunyomi: k.kunyomi,
+      strokes: k.strokeCount,
+      radicals: k.radical,
+      level: published.level,
+      examples: (k.examples || []).map((ex) => ({
+        word: ex.word,
+        reading: ex.reading,
+        meaning: ex.meaningEn
+      }))
+    })),
+    dialogue: published.dialogue?.lines ? (published.dialogue.lines || []).map((d) => ({
+      speaker: d.speakerName,
+      speakerRole: d.role,
+      japanese: d.japanese,
+      furigana: d.furigana,
+      english: d.english
+    })) : [],
+    practiceExercises: (published.exercises || []).map((ex) => ({
+      id: ex.id,
+      instruction: ex.instructionEn,
+      questionJa: ex.promptJa,
+      hint: ex.hintEn,
+      type: ex.type === 'ORDER_WORDS' ? 'order_words' : ex.type === 'FILL_BLANK' ? 'fill_blank' : 'multiple_choice',
+      options: ex.options,
+      correctAnswer: ex.correctAnswer,
+      explanation: ex.explanationEn
+    })),
+    quiz: published.quiz && published.quiz.length > 0 ? {
+      title: `${published.title} Mastery Quiz`,
+      passingScore: 70,
+      questions: published.quiz.map((q) => ({
+        id: q.id,
+        question: q.questionEn,
+        questionJa: q.questionJa,
+        type: 'multiple_choice',
+        options: q.options,
+        correctIndex: q.correctAnswerIndex,
+        explanation: q.explanationEn
+      }))
+    } : undefined
+  };
+
+  if (!draft) {
+    draft = db.createContentDraft({
+      title: published.title,
+      titleJa: published.titleJa,
+      summary: published.summary || published.introduction?.overviewEn || '',
+      explanation: published.grammarNotes || published.introduction?.overviewBn || '',
+      level: published.level,
+      sourceId: published.sourceDocumentId || 'src-manual-studio',
+      contentType: 'lesson',
+      rawText: JSON.stringify(published),
+      structuredContent,
+      status: 'APPROVED',
+      reviewedBy: founderEmail,
+      reviewedAt: new Date().toISOString(),
+      courseId: `course-${published.level.toLowerCase()}`
+    });
+  } else {
+    draft.title = published.title;
+    draft.titleJa = published.titleJa;
+    draft.summary = published.summary || published.introduction?.overviewEn || '';
+    draft.explanation = published.grammarNotes || published.introduction?.overviewBn || '';
+    draft.level = published.level;
+    draft.structuredContent = structuredContent;
+    draft.status = 'APPROVED';
+    draft.reviewedBy = founderEmail;
+    draft.reviewedAt = new Date().toISOString();
+    db.updateContentDraft(draft.id, draft);
+  }
+
+  const publishResult = db.publishContentDraft(draft.id, adminId, `Published via Studio by ${founderEmail}`);
+
+  res.json({
+    success: true,
+    message: `Lesson "${published.title}" published with version history.`,
+    lesson: published,
+    version: publishResult.version,
+    draft: publishResult.draft
+  });
+});
+
+// 11. Get Version History for Studio Lesson (Staff)
+contentStudioRouter.get('/lessons/:id/versions', requireStaff, (req: AuthenticatedRequest, res) => {
+  const versions = db.getContentVersionsByDraftId(req.params.id);
+  res.json({ success: true, count: versions.length, versions });
+});
+
+// 12. Rollback Studio Lesson to Specific Version (Admin)
+contentStudioRouter.post('/lessons/:id/rollback', requireAdmin, (req: AuthenticatedRequest, res) => {
+  const { targetVersion, reason } = req.body;
+  const adminId = req.user?.id || 'admin';
+  if (!targetVersion) {
+    return res.status(400).json({ error: 'Missing targetVersion (version number or ID) in request body.' });
+  }
+
+  const rollbackResult = db.rollbackContentDraftToVersion(
+    req.params.id,
+    targetVersion,
+    adminId,
+    reason
+  );
+
+  if (!rollbackResult.success) {
+    return res.status(400).json({ error: rollbackResult.error });
+  }
+
+  // Also update in-memory studio lesson if it exists
+  const existingStudio = contentStudioDb.getLessonById(req.params.id);
+  if (existingStudio && rollbackResult.draft) {
+    contentStudioDb.updateLesson(req.params.id, {
+      title: rollbackResult.draft.title,
+      titleJa: rollbackResult.draft.titleJa,
+      summary: rollbackResult.draft.summary,
+      status: 'DRAFT',
+      updatedAt: new Date().toISOString()
+    });
+  }
+
+  res.json({
+    success: true,
+    message: `Lesson rolled back to Version ${rollbackResult.rolledBackFrom?.versionNumber || targetVersion}.`,
+    version: rollbackResult.version,
+    draft: rollbackResult.draft,
+    lesson: rollbackResult.lesson,
+    rolledBackFrom: rollbackResult.rolledBackFrom
+  });
+});
+
+// 13. Differential Diff between Lesson Draft and Version (Staff)
+contentStudioRouter.post('/lessons/:id/diff', requireStaff, (req: AuthenticatedRequest, res) => {
+  const { compareVersion } = req.body;
+  if (!compareVersion) {
+    return res.status(400).json({ error: 'Missing compareVersion in request body.' });
+  }
+
+  const result = db.diffContentDraftWithVersion(req.params.id, compareVersion);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  res.json({ success: true, diff: result.diff });
 });

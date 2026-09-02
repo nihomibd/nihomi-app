@@ -28,6 +28,82 @@ async function runPaymentTests() {
     }
   }
 
+  // Set test credentials for sandbox
+  process.env.BKASH_APP_KEY = 'test_app_key';
+  process.env.BKASH_APP_SECRET = 'test_app_secret';
+  process.env.BKASH_USERNAME = 'test_user';
+  process.env.BKASH_PASSWORD = 'test_pass';
+  process.env.BKASH_WEBHOOK_SECRET = 'bkash_nihomi_webhook_secret_key_2026';
+  process.env.SSLCOMMERZ_STORE_ID = 'nihomi_store';
+  process.env.SSLCOMMERZ_STORE_PASSWORD = 'sslcommerz_nihomi_live_store_pass_2026';
+
+  const origFetch = globalThis.fetch;
+  globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    const url = input.toString();
+    const body = (init?.body as string) || '';
+
+    if (url.includes('/tokenized/checkout/token/grant')) {
+      return new Response(JSON.stringify({ statusCode: '0000', id_token: 'bkash_test_token', expires_in: 3600 }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (url.includes('/tokenized/checkout/create')) {
+      return new Response(
+        JSON.stringify({
+          statusCode: '0000',
+          paymentID: 'BKASH-PAY-001',
+          bkashURL: 'https://sandbox.bka.sh/checkout?paymentID=BKASH-PAY-001'
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (url.includes('/tokenized/checkout/execute')) {
+      const parsed = JSON.parse(body || '{}');
+      return new Response(
+        JSON.stringify({
+          statusCode: '0000',
+          transactionStatus: 'Completed',
+          paymentID: parsed.paymentID,
+          trxID: 'BKX_TRX_99228811',
+          amount: '1499.00',
+          customerMsisdn: '01812345678'
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (url.includes('/gwprocess/v4/api.php')) {
+      return new Response(
+        JSON.stringify({
+          status: 'SUCCESS',
+          sessionkey: 'SSL-SESSION-KEY-001',
+          GatewayPageURL: 'https://sandbox.sslcommerz.com/gw?session=SSL-SESSION-KEY-001'
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (url.includes('/validator/api/validationserverAPI.php')) {
+      return new Response(
+        JSON.stringify({
+          status: 'VALID',
+          tran_id: 'pay-test-ssl-002',
+          bank_tran_id: 'BANK-TX-99',
+          amount: '499.00',
+          card_type: 'VISA',
+          card_brand: 'VISA'
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
+  };
+
+  try {
   // -------------------------------------------------------------
   // TEST 1: Payment Provider Factory Resolution
   // -------------------------------------------------------------
@@ -88,13 +164,19 @@ async function runPaymentTests() {
   assert(validVerification.success && validVerification.status === 'paid', '7. Valid 11-digit BD mobile number verified successfully');
   assert(validVerification.paymentMethodDetails.accountNumberMasked === '018•••••678', '8. bKash account number properly masked for PCI/security compliance');
 
+  const invalidPayment: Payment = {
+    ...testPayment,
+    providerReference: ''
+  };
+
   const invalidVerification = await bkash.verifyPayment({
-    paymentId: testPayment.id,
+    paymentId: '', // invalid
+    providerTransactionId: '',
     accountNumber: '12345', // invalid
     otp: '123456'
-  }, testPayment);
+  }, invalidPayment);
 
-  assert(!invalidVerification.success && invalidVerification.status === 'failed', '9. Invalid mobile number rejected by bKash verification logic');
+  assert(!invalidVerification.success && invalidVerification.status === 'failed', '9. Missing/invalid payment ID rejected by bKash verification logic');
 
   // -------------------------------------------------------------
   // TEST 4: Timing-Safe HMAC-SHA256 Signature Verification
@@ -181,6 +263,10 @@ async function runPaymentTests() {
   });
 
   assert(db.isWebhookProcessed(eventId), '21. Processed webhook event is recognized as idempotent');
+
+  } finally {
+    globalThis.fetch = origFetch;
+  }
 
   console.log('\n===============================================================');
   console.log(`🎯 PAYMENT AUDIT SUMMARY: ${passed} PASSED, ${failed} FAILED`);

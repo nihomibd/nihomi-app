@@ -1,17 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from '../authHelper.js';
 import { db } from '../db.js';
-import { getUserActivePlanId, PLAN_LIMITS } from '../services/entitlements.js';
-
-// Concurrency lock map to prevent race conditions during rapid concurrent burst calls
-const activeUserAiLocks = new Set<string>();
-
-// Dynamic per-minute sliding window rate limiter
-interface RateLimitWindow {
-  count: number;
-  resetAt: number;
-}
-const userRateLimits = new Map<string, RateLimitWindow>();
 
 export interface AiCostGuardOptions {
   estimatedTokens?: number;
@@ -20,14 +9,15 @@ export interface AiCostGuardOptions {
 }
 
 /**
- * AI Cost Guard Middleware
+ * Distributed AI Cost Guard Middleware
  * 
  * Guarantees that every billable AI call:
  * 1. Has an authenticated user identity
- * 2. Checks active subscription entitlement & tier limits
- * 3. Enforces monthly query quotas & token bounds
- * 4. Limits burst concurrency per user to prevent duplicate charging / race conditions
- * 5. Applies sliding window rate limits (e.g. max 15 requests/min on Pro, 5/min on Free)
+ * 2. Checks active subscription entitlement & tier limits in PostgreSQL (UsageRecord)
+ * 3. Enforces monthly query quotas & token bounds atomically
+ * 4. Applies distributed concurrency locks to prevent race conditions during rapid concurrent burst calls
+ * 5. Applies distributed sliding window rate limits (e.g. max 20/min on Pro, 6/min on Free)
+ * 6. Fails securely (blocks usage) if database verification encounters an error
  */
 export function aiCostGuard(options: AiCostGuardOptions = {}) {
   const { operationType = 'coach', estimatedTokens = 800 } = options;
@@ -43,83 +33,81 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
 
     const userId = user.id;
 
-    // 1. Concurrency Lock check (Strict anti-race condition guard)
-    if (activeUserAiLocks.has(userId)) {
-      return res.status(429).json({
-        error: 'Another AI analysis is currently in progress for your account. Please wait a moment.',
-        code: 'CONCURRENT_REQUEST_BLOCKED',
-        retryAfterSeconds: 2
-      });
-    }
+    // 1. Atomic Database Quota & Concurrency Lock Check
+    const decision = db.checkAndAcquireAiQuotaLock({
+      userId,
+      featureKey: `ai_${operationType}`,
+      estimatedTokens,
+      maxRatePerMinute: options.maxRatePerMinute
+    });
 
-    // 2. Sliding window rate limiting
-    const planId = getUserActivePlanId(userId);
-    const maxPerMinute = options.maxRatePerMinute || (planId === 'free' ? 6 : planId === 'starter' ? 20 : 40);
-    const now = Date.now();
-    const rateRecord = userRateLimits.get(userId) || { count: 0, resetAt: now + 60000 };
-
-    if (now > rateRecord.resetAt) {
-      rateRecord.count = 1;
-      rateRecord.resetAt = now + 60000;
-      userRateLimits.set(userId, rateRecord);
-    } else {
-      rateRecord.count += 1;
-      if (rateRecord.count > maxPerMinute) {
-        const waitTimeSec = Math.ceil((rateRecord.resetAt - now) / 1000);
+    // 2. Enforce Rejection with HTTP 429 Too Many Requests
+    if (!decision.allowed) {
+      if (decision.reason === 'QUOTA_EXCEEDED') {
         return res.status(429).json({
-          error: `AI query speed limit reached. Please wait ${waitTimeSec} seconds before your next query.`,
-          code: 'RATE_LIMIT_EXCEEDED',
-          retryAfterSeconds: waitTimeSec
+          error: decision.error || `Monthly AI Sensei query quota reached (${decision.monthlyQuota} queries on ${decision.planName} plan). Top up AI credits or upgrade your plan to continue!`,
+          code: 'AI_QUOTA_EXCEEDED',
+          quotaExceeded: true,
+          currentUsage: decision.currentUsage,
+          monthlyQuota: decision.monthlyQuota,
+          planId: decision.planId
         });
       }
-      userRateLimits.set(userId, rateRecord);
-    }
 
-    // 3. Plan & Monthly Quota calculation
-    const plan = db.getPlanById(planId) || db.getPlanById('free')!;
-    const monthlyQuota = plan.aiMonthlyLimit || PLAN_LIMITS[planId]?.aiMonthlyQuota || 10;
-    const usage = db.getAIUsageForCurrentMonth(userId);
+      if (decision.reason === 'TOKEN_CAP_REACHED') {
+        return res.status(429).json({
+          error: decision.error || `Monthly AI token bandwidth budget reached for the ${decision.planName} tier.`,
+          code: 'AI_TOKEN_CAP_REACHED',
+          quotaExceeded: true,
+          tokensUsed: decision.tokensUsed,
+          tokenCap: decision.tokenCap,
+          planId: decision.planId
+        });
+      }
 
-    const currentMonthlyInteractions = usage.aiCoachInteractions || 0;
-    const currentTokens = (usage as any).tokensUsed || 0;
-    const tokenCap = (monthlyQuota * 1200); // 1,200 estimated tokens per interaction quota
+      if (decision.reason === 'CONCURRENT_REQUEST_BLOCKED') {
+        return res.status(429).json({
+          error: decision.error || 'Another AI analysis is currently in progress for your account. Please wait a moment.',
+          code: 'CONCURRENT_REQUEST_BLOCKED',
+          retryAfterSeconds: decision.retryAfterSeconds || 2
+        });
+      }
 
-    if (currentMonthlyInteractions >= monthlyQuota) {
-      return res.status(403).json({
-        error: `Monthly AI Sensei query quota reached (${monthlyQuota} queries on ${plan.name} plan). Top up AI credits or upgrade your plan to continue!`,
-        code: 'AI_QUOTA_EXCEEDED',
-        quotaExceeded: true,
-        currentUsage: currentMonthlyInteractions,
-        monthlyQuota,
-        planId
+      if (decision.reason === 'RATE_LIMIT_EXCEEDED') {
+        return res.status(429).json({
+          error: decision.error || `AI query speed limit reached. Please wait ${decision.retryAfterSeconds} seconds before your next query.`,
+          code: 'RATE_LIMIT_EXCEEDED',
+          retryAfterSeconds: decision.retryAfterSeconds || 10
+        });
+      }
+
+      // Fail-Secure default for database or unexpected errors
+      return res.status(429).json({
+        error: decision.error || 'AI request could not be safely verified. Please try again shortly.',
+        code: decision.reason || 'AI_COST_GUARD_BLOCKED'
       });
     }
 
-    // Check strict token budget guard
-    if (currentTokens >= tokenCap) {
-      return res.status(403).json({
-        error: `Monthly AI token bandwidth budget reached for the ${plan.name} tier.`,
-        code: 'AI_TOKEN_CAP_REACHED',
-        quotaExceeded: true
-      });
-    }
-
-    // Set concurrency lock for active request duration
-    activeUserAiLocks.add(userId);
-
-    // Attach guard context to request
+    // 3. Attach guard context to request
     (req as any).aiCostGuard = {
-      planId,
-      monthlyQuota,
-      currentUsage: currentMonthlyInteractions,
+      planId: decision.planId,
+      monthlyQuota: decision.monthlyQuota,
+      currentUsage: decision.currentUsage,
+      tokensUsed: decision.tokensUsed,
+      lockId: decision.lockId,
       estimatedTokens,
       operationType,
       startTime: Date.now()
     };
 
-    // Ensure lock is released upon response completion or client abort
+    // 4. Ensure distributed concurrency lock is released upon response completion or client disconnect
+    const lockId = decision.lockId;
+    let released = false;
     const cleanup = () => {
-      activeUserAiLocks.delete(userId);
+      if (!released) {
+        released = true;
+        db.releaseAiConcurrencyLock(userId, lockId);
+      }
       res.removeListener('finish', cleanup);
       res.removeListener('close', cleanup);
     };
@@ -133,15 +121,14 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
 /**
  * Deduct and log atomic token and query usage after successful AI execution
  */
-export function recordAiCostUsage(userId: string, actualTokens = 400) {
+export function recordAiCostUsage(userId: string, actualTokens = 400, operationType = 'coach') {
   try {
-    const usage = db.getAIUsageForCurrentMonth(userId);
-    usage.aiCoachInteractions = (usage.aiCoachInteractions || 0) + 1;
-    (usage as any).tokensUsed = ((usage as any).tokensUsed || 0) + actualTokens;
-    usage.lastInteractionAt = new Date().toISOString();
-    usage.updatedAt = new Date().toISOString();
-    db.save();
-    return usage;
+    return db.recordAtomicAiUsage({
+      userId,
+      featureKey: `ai_${operationType}`,
+      actualTokens,
+      countIncrement: 1
+    });
   } catch (err) {
     console.error('[AI Cost Guard] Error recording atomic token usage:', err);
     return db.getAIUsageForCurrentMonth(userId);

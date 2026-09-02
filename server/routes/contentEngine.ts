@@ -542,7 +542,73 @@ contentEngineRouter.post('/drafts/:id/unpublish', requireAdmin, (req: Authentica
 // Audit Version History
 contentEngineRouter.get('/drafts/:id/versions', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
   const versions = db.getContentVersionsByDraftId(req.params.id);
-  return res.json({ success: true, versions });
+  return res.json({ success: true, count: versions.length, versions });
+});
+
+// Get Specific Content Version by ID
+contentEngineRouter.get('/versions/:id', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  const version = db.getContentVersionById(req.params.id);
+  if (!version) return res.status(404).json({ error: 'Content version not found' });
+  return res.json({ success: true, version });
+});
+
+// Rollback Draft (and live lesson) to Specific Historical Version
+contentEngineRouter.post('/drafts/:id/rollback', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  const { targetVersion, reason } = req.body;
+  if (!targetVersion) {
+    return res.status(400).json({ error: 'Missing targetVersion (version number or version ID) in request body.' });
+  }
+
+  const result = db.rollbackContentDraftToVersion(
+    req.params.id,
+    targetVersion,
+    req.user?.id || 'admin',
+    reason
+  );
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  return res.json({
+    success: true,
+    message: `Draft successfully rolled back to Version ${result.rolledBackFrom?.versionNumber || targetVersion}.`,
+    draft: result.draft,
+    lesson: result.lesson,
+    version: result.version,
+    rolledBackFrom: result.rolledBackFrom
+  });
+});
+
+// Compute Differential Diff between Current Draft and a Historical Version
+contentEngineRouter.post('/drafts/:id/diff', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  const { compareVersion } = req.body;
+  if (!compareVersion) {
+    return res.status(400).json({ error: 'Missing compareVersion (version number or ID) in request body.' });
+  }
+
+  const result = db.diffContentDraftWithVersion(req.params.id, compareVersion);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  return res.json({
+    success: true,
+    diff: result.diff
+  });
+});
+
+// Compute Differential Diff between two Historical Versions
+contentEngineRouter.get('/versions/:v1/diff/:v2', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  const result = db.diffContentVersions(req.params.v1, req.params.v2);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  return res.json({
+    success: true,
+    diff: result.diff
+  });
 });
 
 // ==========================================

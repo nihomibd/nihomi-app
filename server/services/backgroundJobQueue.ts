@@ -1,6 +1,7 @@
 import { db } from '../db.js';
 import { logger } from './logger.js';
 import { contentEngineService } from './contentEngineService.js';
+import { databaseBackupService } from './databaseBackupService.js';
 import {
   BackgroundJob,
   BackgroundJobType,
@@ -110,6 +111,32 @@ export class BackgroundJobQueueService {
       }
 
       return result;
+    });
+
+    // 4. Daily Database Backup Handler
+    this.registerHandler('database_backup_daily', async (job, updateProgress) => {
+      updateProgress(20, 'Preparing database snapshot...');
+      logger.info('DB_BACKUP_JOB_START', 'Executing automated daily database backup', { jobId: job.id });
+      updateProgress(50, 'Writing serialized snapshot and computing SHA-256...');
+      const summary = await databaseBackupService.createBackup({
+        type: 'daily',
+        triggeredBy: 'background_job_queue'
+      });
+      updateProgress(100, 'Daily backup completed and verified.');
+      return summary;
+    });
+
+    // 5. Weekly Database Backup Handler
+    this.registerHandler('database_backup_weekly', async (job, updateProgress) => {
+      updateProgress(20, 'Preparing weekly full archive snapshot...');
+      logger.info('DB_BACKUP_JOB_START', 'Executing automated weekly database backup', { jobId: job.id });
+      updateProgress(50, 'Serializing data and enforcing retention policy...');
+      const summary = await databaseBackupService.createBackup({
+        type: 'weekly',
+        triggeredBy: 'background_job_queue'
+      });
+      updateProgress(100, 'Weekly backup completed and archived.');
+      return summary;
     });
   }
 

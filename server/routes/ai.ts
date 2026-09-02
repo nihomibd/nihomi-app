@@ -47,7 +47,7 @@ aiRouter.post(
       });
 
       // Atomic Token & Query Deduction via Cost Guard
-      const updatedUsage = recordAiCostUsage(userId, 850);
+      const updatedUsage = recordAiCostUsage(userId, 850, 'coach');
 
       const userMessage = {
         id: `msg-${crypto.randomUUID().slice(0, 8)}`,
@@ -124,7 +124,7 @@ aiRouter.post(
         userLevel
       });
 
-      recordAiCostUsage(userId, 1200);
+      recordAiCostUsage(userId, 1200, 'vision');
 
       return res.json({
         success: true,
@@ -154,7 +154,7 @@ aiRouter.post(
       const profile = db.getProfileByUserId(userId);
       const dna = await processSentenceDnaRequest(sentence.trim(), profile?.targetLevel || 'N5');
 
-      recordAiCostUsage(userId, 500);
+      recordAiCostUsage(userId, 500, 'dna');
 
       return res.json({ success: true, sentenceDna: dna });
     } catch (err: any) {
@@ -212,7 +212,7 @@ aiRouter.post(
       const { InfiniteAiContentEngine } = await import('../services/infiniteAi.js');
       const drills = await InfiniteAiContentEngine.generateEndlessDrills(userId, targetLevel || 'N5');
 
-      recordAiCostUsage(userId, 900);
+      recordAiCostUsage(userId, 900, 'drill');
 
       return res.json({ success: true, drills });
     } catch (err: any) {
@@ -237,7 +237,7 @@ aiRouter.post('/example-sentence', optionalAuth, async (req: AuthenticatedReques
     );
 
     if (req.user?.id) {
-      recordAiCostUsage(req.user.id, 250);
+      recordAiCostUsage(req.user.id, 250, 'explainer');
     }
 
     return res.json({ success: true, example: result });
@@ -266,7 +266,7 @@ aiRouter.post('/explain-mistake', optionalAuth, async (req: AuthenticatedRequest
     });
 
     if (req.user?.id) {
-      recordAiCostUsage(req.user.id, 400);
+      recordAiCostUsage(req.user.id, 400, 'explainer');
     }
 
     return res.json({ success: true, explanation });
@@ -298,7 +298,7 @@ aiRouter.post(
         userLevel: typeof userLevel === 'string' ? userLevel : 'N5'
       });
 
-      recordAiCostUsage(userId, 600);
+      recordAiCostUsage(userId, 600, 'pronunciation');
 
       return res.json({ success: true, assessment });
     } catch (err: any) {
@@ -324,7 +324,7 @@ aiRouter.post(
         weakCategories: Array.isArray(weakCategories) ? weakCategories : []
       });
 
-      recordAiCostUsage(userId, 1000);
+      recordAiCostUsage(userId, 1000, 'explainer');
 
       return res.json({ success: true, schedule });
     } catch (err: any) {

@@ -474,6 +474,12 @@ export interface UsageRecord {
   periodStart: string;
   periodEnd: string;
   aiCoachInteractions: number;
+  tokensUsed?: number;
+  featureKey?: string;
+  activeLockId?: string;
+  activeLockUntil?: string;
+  rateMinuteWindow?: number;
+  rateMinuteCount?: number;
   lastInteractionAt: string;
   updatedAt: string;
 }
@@ -813,19 +819,72 @@ export interface ContentDraft {
   updatedAt: string;
 }
 
+export interface ContentVersionMetadata {
+  title?: string;
+  titleJa?: string;
+  summary?: string;
+  explanation?: string;
+  level?: JLPTLevel;
+  courseId?: string;
+  moduleId?: string;
+}
+
 export interface ContentVersion {
   id: string;
   draftId: string;
   sourceId: string;
   versionNumber: number;
   contentJson: StructuredEducationalContent;
+  metadataJson?: ContentVersionMetadata;
   targetLessonId?: string;
   targetCourseId?: string;
+  changelogSummary?: string;
+  checksumSha256?: string;
+  rollbackFromVersion?: number;
   approvedBy: string;
   publishedBy: string;
   approvedAt: string;
   publishedAt: string;
   createdAt: string;
+}
+
+export interface ContentDiffFieldChange {
+  field: string;
+  oldValue: any;
+  newValue: any;
+}
+
+export interface ContentDiffItem<T = any> {
+  id: string;
+  title?: string;
+  changeType: 'ADDED' | 'REMOVED' | 'MODIFIED' | 'UNCHANGED';
+  fieldChanges?: ContentDiffFieldChange[];
+  oldItem?: T;
+  newItem?: T;
+}
+
+export interface ContentDifferentialDiff {
+  entityId: string;
+  baseVersion: string | number;
+  targetVersion: string | number;
+  timestamp: string;
+  stats: {
+    totalChanges: number;
+    vocabularyChanges: { added: number; removed: number; modified: number };
+    grammarChanges: { added: number; removed: number; modified: number };
+    kanjiChanges: { added: number; removed: number; modified: number };
+    dialogueChanges: { added: number; removed: number; modified: number };
+    exerciseChanges: { added: number; removed: number; modified: number };
+    quizChanges: { added: number; removed: number; modified: number };
+    metadataChanges: number;
+  };
+  metadataDiff: ContentDiffFieldChange[];
+  vocabularyDiff: ContentDiffItem<VocabularyItem>[];
+  grammarDiff: ContentDiffItem<GrammarItem>[];
+  kanjiDiff: ContentDiffItem<KanjiItem>[];
+  dialogueDiff: ContentDiffItem<LessonDialogue>[];
+  exerciseDiff: ContentDiffItem<LessonPracticeExercise>[];
+  quizQuestionDiff: ContentDiffItem<QuizQuestion>[];
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';

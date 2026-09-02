@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAdmin, AuthenticatedRequest } from '../authHelper.js';
+import { databaseBackupService, BackupType } from '../services/databaseBackupService.js';
+import { stateIntegrityService } from '../services/stateIntegrityService.js';
 
 export const adminRouter = Router();
 
@@ -515,6 +517,128 @@ adminRouter.post('/lifecycle/trigger-check', (req: AuthenticatedRequest, res) =>
   } catch (err: any) {
     console.error('Error triggering lifecycle evaluation:', err);
     return res.status(500).json({ error: 'Failed to execute lifecycle evaluation.' });
+  }
+});
+
+// ==========================================
+// DATABASE BACKUP & RESTORATION MANAGEMENT
+// ==========================================
+
+// List all backups with metadata
+adminRouter.get('/backups', (req: AuthenticatedRequest, res) => {
+  try {
+    const backups = databaseBackupService.listBackups();
+    const latestStatus = databaseBackupService.getLatestBackupStatus();
+    return res.json({
+      success: true,
+      backups,
+      totalCount: backups.length,
+      latestStatus
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to list backups.', message: err.message });
+  }
+});
+
+// Trigger a new database backup
+adminRouter.post('/backups/create', async (req: AuthenticatedRequest, res) => {
+  try {
+    const type = (req.body.type === 'daily' || req.body.type === 'weekly' || req.body.type === 'manual')
+      ? (req.body.type as BackupType)
+      : 'manual';
+    const triggeredBy = req.user?.email || req.user?.id || 'admin';
+
+    const backup = await databaseBackupService.createBackup({
+      type,
+      triggeredBy
+    });
+
+    return res.json({
+      success: true,
+      message: `Database backup (${type}) created successfully.`,
+      backup
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to create backup.', message: err.message });
+  }
+});
+
+// Verify cryptographic integrity of a backup
+adminRouter.get('/backups/:id/verify', async (req: AuthenticatedRequest, res) => {
+  try {
+    const { id } = req.params;
+    const result = await databaseBackupService.verifyBackup(id);
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to verify backup.', message: err.message });
+  }
+});
+
+// Restore database from verified backup
+adminRouter.post('/backups/:id/restore', async (req: AuthenticatedRequest, res) => {
+  try {
+    const { id } = req.params;
+    const requestedBy = req.user?.email || req.user?.id || 'admin';
+
+    const result = await databaseBackupService.restoreFromBackup(id, requestedBy);
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to restore backup.', message: err.message });
+  }
+});
+
+// Delete a backup
+adminRouter.delete('/backups/:id', (req: AuthenticatedRequest, res) => {
+  try {
+    const { id } = req.params;
+    const ok = databaseBackupService.deleteBackup(id);
+    if (!ok) {
+      return res.status(404).json({ error: `Backup '${id}' not found.` });
+    }
+    return res.json({ success: true, message: `Backup '${id}' successfully deleted.` });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to delete backup.', message: err.message });
+  }
+});
+
+// Download backup JSON file content
+adminRouter.get('/backups/:id/download', (req: AuthenticatedRequest, res) => {
+  try {
+    const { id } = req.params;
+    const download = databaseBackupService.getBackupDownloadContent(id);
+    if (!download) {
+      return res.status(404).json({ error: `Backup '${id}' not found.` });
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${download.filename}"`);
+    res.setHeader('X-Checksum-SHA256', download.sha256);
+    return res.send(download.content);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to download backup.', message: err.message });
+  }
+});
+
+// Full state integrity report
+adminRouter.get('/integrity/audit', async (req: AuthenticatedRequest, res) => {
+  try {
+    const report = await stateIntegrityService.runFullIntegrityAudit();
+    return res.json({ success: true, report });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to run integrity audit.', message: err.message });
+  }
+});
+
+// Safe orphan record auto-repair
+adminRouter.post('/integrity/repair', async (req: AuthenticatedRequest, res) => {
+  try {
+    const requestedBy = req.user?.email || req.user?.id || 'admin';
+    const result = await stateIntegrityService.repairOrphanRecords(requestedBy);
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to repair orphan records.', message: err.message });
   }
 });
 

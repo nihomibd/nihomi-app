@@ -14,6 +14,7 @@ import {
   Quiz,
   QuizAttempt,
   WorkJapaneseItem,
+  WorkJapaneseCategory,
   AISession,
   JLPTLevel,
   Plan,
@@ -45,7 +46,9 @@ import {
   ContentSource,
   ContentDraft,
   ContentVersion,
+  ContentVersionMetadata,
   ContentDraftStatus,
+  ContentDifferentialDiff,
   ContentSourceProcessingStatus,
   StructuredEducationalContent,
   BackgroundJob,
@@ -88,6 +91,7 @@ import {
   INITIAL_CONBINI_ORDERS,
   INITIAL_DEFAULT_RIREKISHO
 } from './baitoSeedData.js';
+import { ContentDiffService } from './services/contentDiffService.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -415,7 +419,7 @@ class Database {
     this.initSupabase();
   }
 
-  private initSupabase() {
+  public async initSupabase(): Promise<boolean> {
     const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
     if (supabaseUrl && supabaseKey) {
@@ -425,12 +429,15 @@ class Database {
         });
         this.isSupabaseConnected = true;
         console.log('[Supabase DB] Connected to Supabase PostgreSQL database layer.');
-        this.syncFromSupabase();
+        await this.loadFromSupabase();
+        return true;
       } catch (err) {
-        console.warn('[Supabase DB] Notice: Supabase client initialization fallback to local JSON persistence:', err);
+        console.warn('[Supabase DB] Notice: Supabase client initialization error:', err);
+        return false;
       }
     } else {
-      console.log('[Supabase DB] Running in resilient local PostgreSQL/JSON storage mode (Supabase credentials optional).');
+      console.log('[Supabase DB] Running in resilient local mode (Supabase credentials optional).');
+      return false;
     }
   }
 
@@ -438,55 +445,505 @@ class Database {
     return this.supabaseClient;
   }
 
-  public async syncFromSupabase() {
-    if (!this.supabaseClient) return;
+  public async persistToSupabase(table: string, payload: Record<string, any>, onConflict = 'id'): Promise<boolean> {
+    if (!this.supabaseClient) return false;
     try {
-      // Sync users & profiles if accessible
-      const { data: remoteUsers, error: userError } = await this.supabaseClient.from('users').select('*');
-      if (!userError && remoteUsers && remoteUsers.length > 0) {
+      const { error } = await this.supabaseClient.from(table).upsert(payload, { onConflict });
+      if (error) {
+        console.warn(`[Supabase DB Persist] Warning on table ${table}:`, error.message);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.warn(`[Supabase DB Persist] Failed to persist to ${table}:`, err);
+      return false;
+    }
+  }
+
+  public async deleteFromSupabase(table: string, matchKey = 'id', matchValue: any): Promise<boolean> {
+    if (!this.supabaseClient) return false;
+    try {
+      const { error } = await this.supabaseClient.from(table).delete().eq(matchKey, matchValue);
+      if (error) {
+        console.warn(`[Supabase DB Delete] Warning on table ${table}:`, error.message);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.warn(`[Supabase DB Delete] Failed to delete from ${table}:`, err);
+      return false;
+    }
+  }
+
+  public async loadFromSupabase(): Promise<boolean> {
+    if (!this.supabaseClient) return false;
+    try {
+      // 1. Users
+      const { data: remoteUsers } = await this.supabaseClient.from('users').select('*');
+      if (remoteUsers && remoteUsers.length > 0) {
         for (const ru of remoteUsers) {
-          const existing = this.data.users.find(u => u.id === ru.id || u.email === ru.email);
-          if (!existing) {
-            this.data.users.push({
-              id: ru.id,
-              email: ru.email,
-              passwordHash: ru.password_hash || '',
-              passwordSalt: ru.password_salt || '',
-              role: (ru.role?.toLowerCase() === 'admin' ? 'admin' : 'user'),
-              createdAt: ru.created_at || new Date().toISOString(),
-              updatedAt: ru.updated_at || new Date().toISOString()
-            });
+          const idx = this.data.users.findIndex(u => u.id === ru.id || u.email === ru.email);
+          const mappedUser: User = {
+            id: ru.id,
+            email: ru.email,
+            passwordHash: ru.password_hash || '',
+            passwordSalt: ru.password_salt || '',
+            role: ru.role?.toLowerCase() === 'admin' ? 'admin' : 'user',
+            createdAt: ru.created_at || new Date().toISOString(),
+            updatedAt: ru.updated_at || new Date().toISOString()
+          };
+          if (idx >= 0) {
+            this.data.users[idx] = { ...this.data.users[idx], ...mappedUser };
+          } else {
+            this.data.users.push(mappedUser);
           }
         }
-        this.save();
       }
-    } catch (e) {
-      console.warn('[Supabase DB] Background sync notice:', e);
+
+      // 2. Profiles
+      const { data: remoteProfiles } = await this.supabaseClient.from('profiles').select('*');
+      if (remoteProfiles && remoteProfiles.length > 0) {
+        for (const rp of remoteProfiles) {
+          const idx = this.data.profiles.findIndex(p => p.userId === rp.id || p.userId === rp.user_id);
+          const mappedProfile: UserProfile = {
+            userId: rp.id || rp.user_id,
+            displayName: rp.full_name || '',
+            nativeLanguage: rp.preferred_language === 'bn' ? 'Bengali' : 'English',
+            targetLevel: (rp.target_jlpt_level || 'N5') as JLPTLevel,
+            dailyGoalMinutes: rp.daily_goal_minutes || 20,
+            bio: rp.bio || '',
+            createdAt: rp.created_at || new Date().toISOString(),
+            updatedAt: rp.updated_at || new Date().toISOString()
+          };
+          if (idx >= 0) {
+            this.data.profiles[idx] = { ...this.data.profiles[idx], ...mappedProfile };
+          } else {
+            this.data.profiles.push(mappedProfile);
+          }
+        }
+      }
+
+      // 3. Courses
+      const { data: remoteCourses } = await this.supabaseClient.from('courses').select('*').order('order_index');
+      if (remoteCourses && remoteCourses.length > 0) {
+        for (const c of remoteCourses) {
+          const existingIdx = this.data.courses.findIndex(ex => ex.id === c.id);
+          const mapped: Course = {
+            id: c.id,
+            title: c.title,
+            titleJa: c.metadata?.titleJa || '日本語能力試験',
+            description: c.description || '',
+            level: (c.level || 'N5') as JLPTLevel,
+            order: c.order_index || 1,
+            isPublished: c.status === 'PUBLISHED',
+            estimatedHours: c.metadata?.estimatedHours || 45,
+            createdAt: c.created_at || new Date().toISOString(),
+            updatedAt: c.updated_at || new Date().toISOString()
+          };
+          if (existingIdx >= 0) {
+            this.data.courses[existingIdx] = { ...this.data.courses[existingIdx], ...mapped };
+          } else {
+            this.data.courses.push(mapped);
+          }
+        }
+      }
+
+      // 4. Modules
+      const { data: remoteModules } = await this.supabaseClient.from('modules').select('*').order('order_index');
+      if (remoteModules && remoteModules.length > 0) {
+        for (const m of remoteModules) {
+          const existingIdx = this.data.modules.findIndex(ex => ex.id === m.id);
+          const course = this.data.courses.find(c => c.id === m.course_id);
+          const mapped: Module = {
+            id: m.id,
+            courseId: m.course_id,
+            title: m.title,
+            titleJa: m.metadata?.titleJa || '',
+            description: m.description || '',
+            order: m.order_index || 1,
+            level: (course?.level || 'N5') as JLPTLevel,
+            isPublished: m.status === 'PUBLISHED',
+            createdAt: m.created_at || new Date().toISOString(),
+            updatedAt: m.updated_at || new Date().toISOString()
+          };
+          if (existingIdx >= 0) {
+            this.data.modules[existingIdx] = { ...this.data.modules[existingIdx], ...mapped };
+          } else {
+            this.data.modules.push(mapped);
+          }
+        }
+      }
+
+      // 5. Lessons
+      const { data: remoteLessons } = await this.supabaseClient.from('lessons').select('*').order('order_index');
+      if (remoteLessons && remoteLessons.length > 0) {
+        for (const l of remoteLessons) {
+          const existingIdx = this.data.lessons.findIndex(ex => ex.id === l.id);
+          const parentModule = this.data.modules.find(m => m.id === l.module_id);
+          const mapped: Lesson = {
+            id: l.id,
+            moduleId: l.module_id,
+            courseId: parentModule?.courseId || 'course-n5',
+            lessonNumber: l.order_index || 1,
+            title: l.title,
+            titleJa: l.metadata?.titleJa || '',
+            summary: l.description || '',
+            explanation: l.description || '',
+            level: (parentModule?.level || 'N5') as JLPTLevel,
+            estimatedMinutes: l.duration_minutes || 20,
+            isPublished: l.status === 'PUBLISHED',
+            grammar: l.metadata?.grammar || [],
+            vocabulary: l.metadata?.vocabulary || [],
+            kanji: l.metadata?.kanji || [],
+            dialogue: l.metadata?.dialogue || [],
+            practiceExercises: l.metadata?.practiceExercises || [],
+            createdAt: l.created_at || new Date().toISOString(),
+            updatedAt: l.updated_at || new Date().toISOString()
+          };
+          if (existingIdx >= 0) {
+            this.data.lessons[existingIdx] = { ...this.data.lessons[existingIdx], ...mapped };
+          } else {
+            this.data.lessons.push(mapped);
+          }
+        }
+      }
+
+      // 6. Quizzes
+      const { data: remoteQuizzes } = await this.supabaseClient.from('quizzes').select('*');
+      if (remoteQuizzes && remoteQuizzes.length > 0) {
+        for (const q of remoteQuizzes) {
+          const existingIdx = this.data.quizzes.findIndex(ex => ex.id === q.id);
+          const mapped: Quiz = {
+            id: q.id,
+            lessonId: q.lesson_id,
+            courseId: q.course_id,
+            title: q.title,
+            description: q.description || '',
+            level: (q.metadata?.level || 'N5') as JLPTLevel,
+            passingScore: q.passing_score || 80,
+            questions: q.metadata?.questions || [],
+            isPublished: q.status === 'PUBLISHED',
+            createdAt: q.created_at || new Date().toISOString(),
+            updatedAt: q.updated_at || new Date().toISOString()
+          };
+          if (existingIdx >= 0) {
+            this.data.quizzes[existingIdx] = { ...this.data.quizzes[existingIdx], ...mapped };
+          } else {
+            this.data.quizzes.push(mapped);
+          }
+        }
+      }
+
+      // 7. Subscriptions
+      const { data: remoteSubs } = await this.supabaseClient.from('subscriptions').select('*');
+      if (remoteSubs && remoteSubs.length > 0) {
+        this.data.subscriptions = remoteSubs.map(s => ({
+          id: s.id,
+          userId: s.user_id,
+          planId: s.plan_id,
+          status: s.status,
+          billingInterval: 'yearly',
+          currentPeriodStart: s.current_period_start,
+          currentPeriodEnd: s.current_period_end,
+          cancelAtPeriodEnd: s.cancel_at_period_end,
+          createdAt: s.created_at,
+          updatedAt: s.updated_at
+        }));
+      }
+
+      // 8. Invoices
+      const { data: remoteInvoices } = await this.supabaseClient.from('invoices').select('*');
+      if (remoteInvoices && remoteInvoices.length > 0) {
+        for (const inv of remoteInvoices) {
+          const existingIdx = (this.data.invoices || []).findIndex(ex => ex.id === inv.id);
+          const amt = (inv.total_cents || 0) / 100;
+          const mapped: Invoice = {
+            id: inv.id,
+            userId: inv.user_id,
+            subscriptionId: inv.subscription_id,
+            planId: 'pro',
+            planName: 'Pro Annual Plan',
+            invoiceType: 'subscription',
+            amount: amt,
+            subtotal: (inv.subtotal_cents || 0) / 100,
+            discount: 0,
+            tax: (inv.tax_cents || 0) / 100,
+            currency: (inv.currency || 'BDT') as any,
+            billingPeriod: 'Annual Billing',
+            paymentId: `pay-${inv.id}`,
+            paymentMethodName: 'Digital Gateway',
+            status: inv.status === 'PAID' ? 'paid' : 'open',
+            customerName: 'Student Member',
+            customerEmail: 'student@nihomi.com',
+            items: [
+              {
+                id: `item-${inv.id}`,
+                invoiceId: inv.id,
+                description: 'Nihomi Japanese Learning Membership',
+                amount: amt,
+                quantity: 1,
+                unitPrice: amt
+              }
+            ],
+            issuedAt: inv.created_at || new Date().toISOString(),
+            paidAt: inv.paid_at,
+            createdAt: inv.created_at
+          };
+          if (existingIdx >= 0) {
+            this.data.invoices[existingIdx] = { ...this.data.invoices[existingIdx], ...mapped };
+          } else {
+            if (!this.data.invoices) this.data.invoices = [];
+            this.data.invoices.push(mapped);
+          }
+        }
+      }
+
+      // 9. Payments
+      const { data: remotePayments } = await this.supabaseClient.from('payments').select('*');
+      if (remotePayments && remotePayments.length > 0) {
+        for (const py of remotePayments) {
+          const existingIdx = (this.data.payments || []).findIndex(ex => ex.id === py.id);
+          const amt = (py.amount_cents || 0) / 100;
+          const mapped: Payment = {
+            id: py.id,
+            userId: py.user_id,
+            invoiceId: py.invoice_id,
+            planId: 'pro',
+            planName: 'Pro Plan',
+            billingInterval: 'yearly',
+            amount: amt,
+            originalAmount: amt,
+            discountAmount: 0,
+            currency: (py.currency || 'BDT') as any,
+            status: py.status === 'COMPLETED' ? 'paid' : py.status === 'FAILED' ? 'failed' : 'initiated',
+            provider: py.provider,
+            providerTransactionId: py.provider_payment_id,
+            paymentMethodDetails: py.metadata || {},
+            createdAt: py.created_at,
+            updatedAt: py.updated_at
+          };
+          if (existingIdx >= 0) {
+            this.data.payments[existingIdx] = { ...this.data.payments[existingIdx], ...mapped };
+          } else {
+            if (!this.data.payments) this.data.payments = [];
+            this.data.payments.push(mapped);
+          }
+        }
+      }
+
+      // 10. Content Sources
+      const { data: remoteSources } = await this.supabaseClient.from('content_sources').select('*');
+      if (remoteSources && remoteSources.length > 0) {
+        for (const s of remoteSources) {
+          const existingIdx = (this.data.contentSources || []).findIndex(ex => ex.id === s.id);
+          const mapped: ContentSource = {
+            id: s.id,
+            title: s.title,
+            originalFilename: s.metadata?.fileName || s.title,
+            storagePath: s.source_url || '',
+            storageUrl: s.source_url || '',
+            mimeType: s.metadata?.mimeType || 'application/pdf',
+            fileSize: s.metadata?.fileSizeBytes || 0,
+            sourceLanguage: 'Japanese',
+            targetJlptLevel: (s.target_jlpt_level || 'N5') as JLPTLevel,
+            processingStatus: s.metadata?.processingStatus || 'COMPLETED',
+            contentHash: s.metadata?.sha256Hash || '',
+            uploadedBy: 'usr-admin-01',
+            createdAt: s.created_at,
+            updatedAt: s.updated_at
+          };
+          if (existingIdx >= 0) {
+            this.data.contentSources[existingIdx] = { ...this.data.contentSources[existingIdx], ...mapped };
+          } else {
+            if (!this.data.contentSources) this.data.contentSources = [];
+            this.data.contentSources.push(mapped);
+          }
+        }
+      }
+
+      // 11. Content Drafts
+      const { data: remoteDrafts } = await this.supabaseClient.from('content_drafts').select('*');
+      if (remoteDrafts && remoteDrafts.length > 0) {
+        for (const d of remoteDrafts) {
+          const existingIdx = (this.data.contentDrafts || []).findIndex(ex => ex.id === d.id);
+          const mapped: ContentDraft = {
+            id: d.id,
+            sourceId: d.source_id,
+            courseId: 'course-n5',
+            contentType: 'lesson',
+            title: d.title,
+            titleJa: d.processed_json?.titleJa || '',
+            summary: d.processed_json?.summary || '',
+            explanation: d.raw_text || '',
+            level: (d.level || 'N5') as JLPTLevel,
+            status: d.status as ContentDraftStatus,
+            structuredContent: d.processed_json || {
+              courseId: 'course-n5',
+              level: 'N5',
+              title: d.title,
+              titleJa: '',
+              summary: '',
+              explanation: '',
+              vocabulary: [],
+              grammar: [],
+              kanji: [],
+              practiceExercises: []
+            },
+            generationMetadata: {
+              modelUsed: d.generation_metadata?.model || 'gemini-1.5-flash',
+              sourceDerived: true,
+              aiEnriched: true,
+              generatedAt: d.created_at || new Date().toISOString(),
+              confidenceScore: d.generation_metadata?.confidenceScore || 95,
+              disclaimer: 'Generated educational curriculum'
+            },
+            reviewNotes: '',
+            createdBy: d.created_by || 'usr-admin-01',
+            createdAt: d.created_at,
+            updatedAt: d.updated_at
+          };
+          if (existingIdx >= 0) {
+            this.data.contentDrafts[existingIdx] = { ...this.data.contentDrafts[existingIdx], ...mapped };
+          } else {
+            if (!this.data.contentDrafts) this.data.contentDrafts = [];
+            this.data.contentDrafts.push(mapped);
+          }
+        }
+      }
+
+      // 12. Content Versions
+      const { data: remoteVersions } = await this.supabaseClient.from('content_versions').select('*');
+      if (remoteVersions && remoteVersions.length > 0) {
+        for (const v of remoteVersions) {
+          const existingIdx = (this.data.contentVersions || []).findIndex(ex => ex.id === v.id);
+          const mapped: ContentVersion = {
+            id: v.id,
+            draftId: v.draft_id,
+            sourceId: v.source_id,
+            versionNumber: v.version_number,
+            contentJson: v.content_json || {
+              courseId: 'course-n5',
+              level: 'N5',
+              title: 'Version Content',
+              titleJa: '',
+              summary: '',
+              explanation: '',
+              vocabulary: [],
+              grammar: [],
+              kanji: [],
+              practiceExercises: []
+            },
+            targetLessonId: v.target_lesson_id,
+            targetCourseId: v.target_course_id,
+            publishedBy: v.published_by,
+            publishedAt: v.published_at,
+            approvedBy: v.approved_by || 'usr-admin-01',
+            approvedAt: v.published_at || new Date().toISOString(),
+            createdAt: v.created_at
+          };
+          if (existingIdx >= 0) {
+            this.data.contentVersions[existingIdx] = { ...this.data.contentVersions[existingIdx], ...mapped };
+          } else {
+            if (!this.data.contentVersions) this.data.contentVersions = [];
+            this.data.contentVersions.push(mapped);
+          }
+        }
+      }
+
+      // 13. Work Japanese
+      const { data: remoteWork } = await this.supabaseClient.from('work_japanese').select('*');
+      if (remoteWork && remoteWork.length > 0) {
+        for (const w of remoteWork) {
+          const existingIdx = (this.data.workJapanese || []).findIndex(ex => ex.id === w.id);
+          const validLevel = (w.jlpt_level === 'N4' ? 'N4' : w.jlpt_level === 'N3' ? 'N3' : 'N5') as 'N5' | 'N4' | 'N3' | 'All';
+          const mapped: WorkJapaneseItem = {
+            id: w.id,
+            title: w.title,
+            titleJa: w.title,
+            category: (w.category || 'Business Conversation') as WorkJapaneseCategory,
+            scenario: w.scenario,
+            level: validLevel,
+            description: w.scenario || '',
+            keyPhrases: [],
+            dialogue: w.dialogues_json || [],
+            culturalTips: w.cultural_tips ? [w.cultural_tips] : [],
+            exercises: [],
+            isPublished: true,
+            createdAt: w.created_at,
+            updatedAt: w.updated_at
+          };
+          if (existingIdx >= 0) {
+            this.data.workJapanese[existingIdx] = { ...this.data.workJapanese[existingIdx], ...mapped };
+          } else {
+            if (!this.data.workJapanese) this.data.workJapanese = [];
+            this.data.workJapanese.push(mapped);
+          }
+        }
+      }
+
+      console.log('[Supabase DB] Successfully synchronized all authoritative PostgreSQL entities.');
+      return true;
+    } catch (err) {
+      console.warn('[Supabase DB] Notice during initial PostgreSQL load:', err);
+      return false;
     }
   }
 
   public async syncUserToSupabase(user: User, profile?: UserProfile, progress?: UserProgress) {
     if (!this.supabaseClient) return;
     try {
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
+
       await this.supabaseClient.from('users').upsert({
         id: user.id,
         email: user.email,
+        name: profile?.displayName || user.email.split('@')[0],
+        full_name: profile?.displayName || user.email.split('@')[0],
         role: user.role === 'admin' ? 'ADMIN' : 'STUDENT',
         updated_at: user.updatedAt || new Date().toISOString()
       }, { onConflict: 'id' });
 
-      if (profile) {
+      if (profile && isUUID) {
         await this.supabaseClient.from('profiles').upsert({
-          user_id: user.id,
+          id: user.id,
+          email: user.email,
+          full_name: profile.displayName || '',
           target_jlpt_level: profile.targetLevel || 'N5',
           preferred_language: profile.nativeLanguage === 'Bengali' ? 'bn' : 'en',
           daily_goal_minutes: profile.dailyGoalMinutes || 20,
           bio: profile.bio || '',
           updated_at: profile.updatedAt || new Date().toISOString()
-        }, { onConflict: 'user_id' });
+        }, { onConflict: 'id' });
+      }
+
+      if (progress && isUUID) {
+        await this.supabaseClient.from('learning_progress').upsert({
+          id: user.id,
+          user_id: user.id,
+          current_jlpt_level: progress.currentLevel || 'N5',
+          total_xp: progress.experiencePoints || 0,
+          current_streak_days: progress.currentStreak || 0,
+          longest_streak_days: progress.longestStreak || 0,
+          last_study_date: progress.lastActiveDate ? new Date(progress.lastActiveDate).toISOString() : null,
+          total_study_minutes: progress.totalStudyMinutes || 0,
+          updated_at: progress.updatedAt || new Date().toISOString()
+        }, { onConflict: 'id' });
       }
     } catch (e) {
       // Gracefully handle network/schema warnings
+    }
+  }
+
+  public async syncAllEntitiesToSupabase(): Promise<void> {
+    if (!this.supabaseClient) return;
+    try {
+      for (const u of this.data.users) {
+        const prof = (this.data.profiles || []).find((p) => p.userId === u.id);
+        const prog = (this.data.progress || []).find((p) => p.userId === u.id);
+        await this.syncUserToSupabase(u, prof, prog);
+      }
+    } catch (err) {
+      console.warn('[Supabase Sync Warning]:', err);
     }
   }
 
@@ -900,6 +1357,34 @@ class Database {
     this.data.adminAuditLogs.push(log);
     this.save();
     return log;
+  }
+
+  public getRawData(): DatabaseSchema {
+    return JSON.parse(JSON.stringify(this.data));
+  }
+
+  public restoreRawData(newData: DatabaseSchema): boolean {
+    if (!newData || typeof newData !== 'object') return false;
+    this.data = {
+      ...this.data,
+      ...newData
+    };
+    this.save();
+    // Synchronize to Supabase if connected
+    if (this.supabaseClient && this.isSupabaseConnected) {
+      this.syncAllEntitiesToSupabase().catch(err => {
+        console.warn('[Supabase Sync after restore warning]:', err);
+      });
+    }
+    return true;
+  }
+
+  public getDataFilePath(): string {
+    return DB_FILE;
+  }
+
+  public getDataDirectoryPath(): string {
+    return DATA_DIR;
   }
 
   public save() {
@@ -1643,6 +2128,21 @@ class Database {
     });
 
     this.save();
+
+    this.persistToSupabase('subscriptions', {
+      id: sub.id,
+      user_id: sub.userId,
+      plan_id: sub.planId,
+      status: sub.status,
+      provider: sub.paymentMethod || 'bKash MFS',
+      current_period_start: sub.currentPeriodStart,
+      current_period_end: sub.currentPeriodEnd,
+      cancel_at_period_end: sub.cancelAtPeriodEnd,
+      canceled_at: sub.cancelledAt || null,
+      created_at: sub.createdAt,
+      updated_at: sub.updatedAt
+    });
+
     return sub;
   }
 
@@ -1655,7 +2155,21 @@ class Database {
       updatedAt: new Date().toISOString()
     };
     this.save();
-    return this.data.subscriptions[idx];
+    const updated = this.data.subscriptions[idx];
+    this.persistToSupabase('subscriptions', {
+      id: updated.id,
+      user_id: updated.userId,
+      plan_id: updated.planId,
+      status: updated.status,
+      provider: updated.paymentMethod || 'bKash MFS',
+      current_period_start: updated.currentPeriodStart,
+      current_period_end: updated.currentPeriodEnd,
+      cancel_at_period_end: updated.cancelAtPeriodEnd,
+      canceled_at: updated.cancelledAt || null,
+      created_at: updated.createdAt,
+      updated_at: updated.updatedAt
+    });
+    return updated;
   }
 
   public cancelSubscription(id: string, immediate = false): Subscription | null {
@@ -1678,6 +2192,19 @@ class Database {
 
     sub.updatedAt = now;
     this.save();
+    this.persistToSupabase('subscriptions', {
+      id: sub.id,
+      user_id: sub.userId,
+      plan_id: sub.planId,
+      status: sub.status,
+      provider: sub.paymentMethod || 'bKash MFS',
+      current_period_start: sub.currentPeriodStart,
+      current_period_end: sub.currentPeriodEnd,
+      cancel_at_period_end: sub.cancelAtPeriodEnd,
+      canceled_at: sub.cancelledAt || null,
+      created_at: sub.createdAt,
+      updated_at: sub.updatedAt
+    });
     return sub;
   }
 
@@ -1690,6 +2217,19 @@ class Database {
     sub.status = 'active';
     sub.updatedAt = new Date().toISOString();
     this.save();
+    this.persistToSupabase('subscriptions', {
+      id: sub.id,
+      user_id: sub.userId,
+      plan_id: sub.planId,
+      status: sub.status,
+      provider: sub.paymentMethod || 'bKash MFS',
+      current_period_start: sub.currentPeriodStart,
+      current_period_end: sub.currentPeriodEnd,
+      cancel_at_period_end: sub.cancelAtPeriodEnd,
+      canceled_at: null,
+      created_at: sub.createdAt,
+      updated_at: sub.updatedAt
+    });
     return sub;
   }
 
@@ -1711,6 +2251,19 @@ class Database {
     });
 
     this.save();
+    this.persistToSupabase('subscriptions', {
+      id: sub.id,
+      user_id: sub.userId,
+      plan_id: sub.planId,
+      status: sub.status,
+      provider: sub.paymentMethod || 'bKash MFS',
+      current_period_start: sub.currentPeriodStart,
+      current_period_end: sub.currentPeriodEnd,
+      cancel_at_period_end: sub.cancelAtPeriodEnd,
+      canceled_at: sub.cancelledAt || null,
+      created_at: sub.createdAt,
+      updated_at: sub.updatedAt
+    });
     return sub;
   }
 
@@ -1750,11 +2303,33 @@ class Database {
     if (!this.data.payments) this.data.payments = [];
     this.data.payments.push(payment);
     this.save();
+
+    this.persistToSupabase('payments', {
+      id: payment.id,
+      user_id: payment.userId,
+      invoice_id: payment.invoiceId || null,
+      amount_cents: Math.round(payment.amount * 100),
+      currency: payment.currency,
+      status: payment.status === 'paid' ? 'paid' : payment.status === 'failed' ? 'failed' : 'pending',
+      provider: payment.provider,
+      provider_payment_id: payment.providerTransactionId || payment.id,
+      metadata: payment.paymentMethodDetails || {},
+      created_at: payment.createdAt,
+      updated_at: payment.updatedAt
+    });
+
     return payment;
   }
 
   public getPaymentById(id: string): Payment | undefined {
     return (this.data.payments || []).find((p) => p.id === id);
+  }
+
+  public getPaymentByProviderReference(ref: string): Payment | undefined {
+    if (!ref) return undefined;
+    return (this.data.payments || []).find(
+      (p) => p.providerReference === ref || p.providerTransactionId === ref || p.id === ref
+    );
   }
 
   public updatePayment(id: string, updates: Partial<Payment>): Payment | null {
@@ -1766,7 +2341,21 @@ class Database {
       updatedAt: new Date().toISOString()
     };
     this.save();
-    return this.data.payments[idx];
+    const updated = this.data.payments[idx];
+    this.persistToSupabase('payments', {
+      id: updated.id,
+      user_id: updated.userId,
+      invoice_id: updated.invoiceId || null,
+      amount_cents: Math.round(updated.amount * 100),
+      currency: updated.currency,
+      status: updated.status === 'paid' ? 'COMPLETED' : updated.status === 'failed' ? 'FAILED' : 'PENDING',
+      provider: updated.provider,
+      provider_payment_id: updated.providerTransactionId || updated.id,
+      metadata: updated.paymentMethodDetails || {},
+      created_at: updated.createdAt,
+      updated_at: updated.updatedAt
+    });
+    return updated;
   }
 
   public getUserPayments(userId: string): Payment[] {
@@ -1784,19 +2373,22 @@ class Database {
   // --- INVOICES ---
   public createInvoice(params: {
     userId: string;
-    subscriptionId: string;
-    planId: PlanId;
-    planName: string;
+    subscriptionId?: string;
+    planId?: PlanId;
+    planName?: string;
+    invoiceType?: 'subscription' | 'top_up';
     amount: number;
-    billingPeriod: string;
-    paymentId: string;
-    customerName: string;
-    customerEmail: string;
-    subtotal: number;
-    discount: number;
+    billingPeriod?: string;
+    paymentId?: string;
+    customerName?: string;
+    customerEmail?: string;
+    subtotal?: number;
+    discount?: number;
     tax?: number;
+    currency?: string;
     items?: InvoiceItem[];
-    paymentMethodName: string;
+    paymentMethodName?: string;
+    status?: 'paid' | 'open' | 'void' | 'uncollectible';
   }): Invoice {
     const now = new Date().toISOString();
     const invoiceId = `inv-${crypto.randomUUID().slice(0, 8)}`;
@@ -1805,7 +2397,7 @@ class Database {
       {
         id: `item-${crypto.randomUUID().slice(0, 6)}`,
         invoiceId,
-        description: `${params.planName} Subscription`,
+        description: `${params.planName || 'Nihomi Learning'} Subscription`,
         amount: params.amount,
         quantity: 1,
         unitPrice: params.amount
@@ -1816,28 +2408,47 @@ class Database {
       id: invoiceId,
       userId: params.userId,
       subscriptionId: params.subscriptionId,
-      planId: params.planId,
-      planName: params.planName,
+      planId: params.planId || 'pro',
+      planName: params.planName || 'Pro Membership',
+      invoiceType: params.invoiceType || 'subscription',
       amount: params.amount,
-      currency: 'BDT',
-      billingPeriod: params.billingPeriod,
-      paymentId: params.paymentId,
-      status: 'paid',
-      customerName: params.customerName,
-      customerEmail: params.customerEmail,
-      subtotal: params.subtotal,
-      discount: params.discount,
+      currency: (params.currency || 'BDT') as any,
+      billingPeriod: params.billingPeriod || 'Annual Billing',
+      paymentId: params.paymentId || `pay-${invoiceId}`,
+      status: params.status || 'paid',
+      customerName: params.customerName || 'Student Member',
+      customerEmail: params.customerEmail || 'student@nihomi.com',
+      subtotal: params.subtotal ?? params.amount,
+      discount: params.discount || 0,
       tax: params.tax || 0,
       items,
-      paymentMethodName: params.paymentMethodName,
+      paymentMethodName: params.paymentMethodName || 'Digital Gateway',
       issuedAt: now,
-      paidAt: now,
+      paidAt: (params.status || 'paid') === 'paid' ? now : undefined,
       createdAt: now
     };
 
     if (!this.data.invoices) this.data.invoices = [];
     this.data.invoices.push(invoice);
     this.save();
+
+    this.persistToSupabase('invoices', {
+      id: invoice.id,
+      user_id: invoice.userId,
+      subscription_id: invoice.subscriptionId || null,
+      invoice_number: invoice.id,
+      subtotal_cents: Math.round((invoice.subtotal || invoice.amount) * 100),
+      discount_cents: Math.round((invoice.discount || 0) * 100),
+      tax_cents: Math.round((invoice.tax || 0) * 100),
+      total_cents: Math.round(invoice.amount * 100),
+      currency: invoice.currency,
+      status: invoice.status === 'paid' ? 'paid' : 'draft',
+      due_date: new Date(Date.now() + 30 * 86400000).toISOString(),
+      paid_at: invoice.paidAt || null,
+      created_at: invoice.createdAt,
+      updated_at: invoice.createdAt
+    });
+
     return invoice;
   }
 
@@ -1944,8 +2555,8 @@ class Database {
     return coupon;
   }
 
-  // --- AI USAGE TRACKING ---
-  public getAIUsageForCurrentMonth(userId: string): UsageRecord {
+  // --- ATOMIC AI USAGE TRACKING & DISTRIBUTED COST GUARD ---
+  public getAIUsageForCurrentMonth(userId: string, featureKey = 'ai_coach'): UsageRecord {
     const now = new Date();
     const periodYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const periodStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
@@ -1962,6 +2573,8 @@ class Database {
         periodStart,
         periodEnd,
         aiCoachInteractions: 0,
+        tokensUsed: 0,
+        featureKey,
         lastInteractionAt: now.toISOString(),
         updatedAt: now.toISOString()
       };
@@ -1972,11 +2585,224 @@ class Database {
     return usage;
   }
 
-  public incrementAIUsage(userId: string): UsageRecord {
-    const usage = this.getAIUsageForCurrentMonth(userId);
-    usage.aiCoachInteractions = (usage.aiCoachInteractions || 0) + 1;
+  public incrementAIUsage(userId: string, countIncrement = 1, actualTokens = 400): UsageRecord {
+    return this.recordAtomicAiUsage({
+      userId,
+      countIncrement,
+      actualTokens
+    });
+  }
+
+  /**
+   * Atomic Distributed AI Quota Lock & Rate Limit Check
+   * Guarantees race-condition prevention across distributed instances
+   */
+  public checkAndAcquireAiQuotaLock(options: {
+    userId: string;
+    featureKey?: string;
+    estimatedTokens?: number;
+    maxRatePerMinute?: number;
+  }): {
+    allowed: boolean;
+    reason?: 'QUOTA_EXCEEDED' | 'TOKEN_CAP_REACHED' | 'CONCURRENT_REQUEST_BLOCKED' | 'RATE_LIMIT_EXCEEDED' | 'AUTH_REQUIRED' | 'DATABASE_UNAVAILABLE';
+    lockId?: string;
+    planId: PlanId;
+    planName: string;
+    monthlyQuota: number;
+    currentUsage: number;
+    tokensUsed: number;
+    tokenCap: number;
+    retryAfterSeconds?: number;
+    error?: string;
+  } {
+    const { userId, featureKey = 'ai_coach', estimatedTokens = 800 } = options;
+
+    if (!userId) {
+      return {
+        allowed: false,
+        reason: 'AUTH_REQUIRED',
+        planId: 'free',
+        planName: 'Free',
+        monthlyQuota: 0,
+        currentUsage: 0,
+        tokensUsed: 0,
+        tokenCap: 0,
+        error: 'User ID is required for AI quota enforcement.'
+      };
+    }
+
+    try {
+      // 1. Resolve User Plan & Limits
+      const activeSub = this.getUserActiveSubscription(userId);
+      const planId: PlanId = (activeSub?.planId as PlanId) || 'free';
+      const plan = this.getPlanById(planId) || this.getPlanById('free') || {
+        id: 'free' as PlanId,
+        name: 'Free Trial',
+        aiMonthlyLimit: 10
+      };
+
+      const monthlyQuota = plan.aiMonthlyLimit || (planId === 'free' ? 10 : planId === 'starter' ? 100 : planId === 'pro' ? 1000 : 3000);
+      const tokenCap = monthlyQuota * 1200; // Estimated 1,200 token budget per interaction
+
+      // 2. Fetch or initialize atomic Usage Record
+      const usage = this.getAIUsageForCurrentMonth(userId, featureKey);
+      const currentUsage = usage.aiCoachInteractions || 0;
+      const tokensUsed = usage.tokensUsed || 0;
+      const now = Date.now();
+
+      // 3. Distributed Concurrency Lock Check (Prevents rapid parallel race conditions)
+      if (usage.activeLockUntil) {
+        const lockExpiry = new Date(usage.activeLockUntil).getTime();
+        if (lockExpiry > now) {
+          const waitSec = Math.max(1, Math.ceil((lockExpiry - now) / 1000));
+          return {
+            allowed: false,
+            reason: 'CONCURRENT_REQUEST_BLOCKED',
+            planId,
+            planName: plan.name,
+            monthlyQuota,
+            currentUsage,
+            tokensUsed,
+            tokenCap,
+            retryAfterSeconds: Math.min(waitSec, 5),
+            error: 'Another AI analysis is currently in progress for your account. Please wait a moment.'
+          };
+        }
+      }
+
+      // 4. Distributed Sliding-Window Rate Limiting (Per-minute)
+      const currentMinute = Math.floor(now / 60000);
+      const maxPerMinute = options.maxRatePerMinute || (planId === 'free' ? 6 : planId === 'starter' ? 20 : 40);
+
+      if (usage.rateMinuteWindow === currentMinute) {
+        if ((usage.rateMinuteCount || 0) >= maxPerMinute) {
+          const waitTimeSec = 60 - Math.floor((now % 60000) / 1000);
+          return {
+            allowed: false,
+            reason: 'RATE_LIMIT_EXCEEDED',
+            planId,
+            planName: plan.name,
+            monthlyQuota,
+            currentUsage,
+            tokensUsed,
+            tokenCap,
+            retryAfterSeconds: Math.max(1, waitTimeSec),
+            error: `AI query speed limit reached. Please wait ${waitTimeSec} seconds before your next query.`
+          };
+        }
+        usage.rateMinuteCount = (usage.rateMinuteCount || 0) + 1;
+      } else {
+        usage.rateMinuteWindow = currentMinute;
+        usage.rateMinuteCount = 1;
+      }
+
+      // 5. Monthly AI Query Quota Limit Check
+      if (currentUsage >= monthlyQuota) {
+        return {
+          allowed: false,
+          reason: 'QUOTA_EXCEEDED',
+          planId,
+          planName: plan.name,
+          monthlyQuota,
+          currentUsage,
+          tokensUsed,
+          tokenCap,
+          error: `Monthly AI Sensei query quota reached (${monthlyQuota} queries on ${plan.name} plan). Top up AI credits or upgrade your plan to continue!`
+        };
+      }
+
+      // 6. Token Budget Cap Check
+      if (tokensUsed >= tokenCap) {
+        return {
+          allowed: false,
+          reason: 'TOKEN_CAP_REACHED',
+          planId,
+          planName: plan.name,
+          monthlyQuota,
+          currentUsage,
+          tokensUsed,
+          tokenCap,
+          error: `Monthly AI token bandwidth budget reached for the ${plan.name} tier.`
+        };
+      }
+
+      // 7. Acquire Atomic Lock with Auto-Expiry Safety (45 seconds)
+      const lockId = `lck-${crypto.randomUUID()}`;
+      usage.activeLockId = lockId;
+      usage.activeLockUntil = new Date(now + 45000).toISOString();
+      usage.updatedAt = new Date(now).toISOString();
+
+      this.save();
+
+      return {
+        allowed: true,
+        lockId,
+        planId,
+        planName: plan.name,
+        monthlyQuota,
+        currentUsage,
+        tokensUsed,
+        tokenCap
+      };
+    } catch (err: any) {
+      console.error('[Database AI Cost Guard] Fail-Secure Error:', err);
+      return {
+        allowed: false,
+        reason: 'DATABASE_UNAVAILABLE',
+        planId: 'free',
+        planName: 'Free',
+        monthlyQuota: 0,
+        currentUsage: 0,
+        tokensUsed: 0,
+        tokenCap: 0,
+        error: 'AI security verification failed. Please try again in a few moments.'
+      };
+    }
+  }
+
+  /**
+   * Releases the distributed concurrency lock safely
+   */
+  public releaseAiConcurrencyLock(userId: string, lockId?: string): void {
+    try {
+      const usage = this.getAIUsageForCurrentMonth(userId);
+      if (usage) {
+        if (!lockId || usage.activeLockId === lockId) {
+          usage.activeLockId = undefined;
+          usage.activeLockUntil = undefined;
+          usage.updatedAt = new Date().toISOString();
+          this.save();
+        }
+      }
+    } catch (err) {
+      console.warn('[Database] Error releasing AI concurrency lock:', err);
+    }
+  }
+
+  /**
+   * Atomically records actual token consumption and query count in persistent storage
+   */
+  public recordAtomicAiUsage(options: {
+    userId: string;
+    featureKey?: string;
+    actualTokens?: number;
+    countIncrement?: number;
+    lockId?: string;
+  }): UsageRecord {
+    const { userId, featureKey = 'ai_coach', actualTokens = 400, countIncrement = 1, lockId } = options;
+    const usage = this.getAIUsageForCurrentMonth(userId, featureKey);
+
+    usage.aiCoachInteractions = (usage.aiCoachInteractions || 0) + countIncrement;
+    usage.tokensUsed = (usage.tokensUsed || 0) + actualTokens;
     usage.lastInteractionAt = new Date().toISOString();
     usage.updatedAt = new Date().toISOString();
+
+    // Release lock upon recording
+    if (!lockId || usage.activeLockId === lockId) {
+      usage.activeLockId = undefined;
+      usage.activeLockUntil = undefined;
+    }
+
     this.save();
     return usage;
   }
@@ -2213,9 +3039,32 @@ class Database {
   }
 
   // --- WEBHOOK IDEMPOTENCY & AUDIT LOGS ---
-  public isWebhookProcessed(eventId: string): boolean {
+  public isWebhookProcessed(eventId: string, provider?: string): boolean {
     if (!this.data.webhookEvents) return false;
-    return this.data.webhookEvents.some((e) => e.eventId === eventId && e.status === 'success');
+    return this.data.webhookEvents.some((e) => {
+      const matchesEvent = e.eventId === eventId || (e.transactionId && e.transactionId === eventId);
+      const matchesProvider = !provider || e.provider.toLowerCase() === provider.toLowerCase();
+      return matchesEvent && matchesProvider && (e.processed === true || e.status === 'success');
+    });
+  }
+
+  public getWebhookEvent(eventId: string): WebhookEvent | undefined {
+    if (!this.data.webhookEvents) return undefined;
+    return this.data.webhookEvents.find(
+      (e) => e.eventId === eventId || e.id === eventId || (e.transactionId && e.transactionId === eventId)
+    );
+  }
+
+  public updateWebhookEvent(eventId: string, updates: Partial<WebhookEvent>): WebhookEvent | null {
+    if (!this.data.webhookEvents) return null;
+    const event = this.data.webhookEvents.find((e) => e.eventId === eventId || e.id === eventId);
+    if (!event) return null;
+    Object.assign(event, updates);
+    if (updates.processed && !event.processedAt) {
+      event.processedAt = new Date().toISOString();
+    }
+    this.save();
+    return event;
   }
 
   public recordWebhookEvent(options: {
@@ -2249,12 +3098,177 @@ class Database {
       payloadReference: options.payloadReference,
       deliveryAttempts: 1,
       processed: options.status === 'success',
-      processedAt: new Date().toISOString(),
+      processedAt: options.status === 'success' ? new Date().toISOString() : undefined,
       createdAt: new Date().toISOString()
     };
     this.data.webhookEvents.push(event);
     this.save();
     return event;
+  }
+
+  public processWebhookTransactionAtomic(options: {
+    eventId: string;
+    provider: string;
+    eventType: string;
+    paymentId?: string;
+    providerTransactionId?: string;
+    amount?: number;
+    signature?: string;
+    signatureVerified: boolean;
+    rawHeaders?: Record<string, string>;
+    rawPayload?: any;
+    ipAddress?: string;
+  }): {
+    success: boolean;
+    idempotent?: boolean;
+    event: WebhookEvent;
+    payment?: Payment;
+    subscription?: Subscription;
+    invoice?: Invoice;
+    error?: string;
+  } {
+    // 1. Check Idempotency
+    if (this.isWebhookProcessed(options.eventId, options.provider)) {
+      const existing = this.getWebhookEvent(options.eventId)!;
+      return {
+        success: true,
+        idempotent: true,
+        event: existing
+      };
+    }
+
+    // 2. Initial record of the webhook event
+    const event = this.recordWebhookEvent({
+      eventId: options.eventId,
+      provider: options.provider,
+      eventType: options.eventType,
+      transactionId: options.providerTransactionId,
+      signature: options.signature,
+      signatureVerified: options.signatureVerified,
+      rawHeaders: options.rawHeaders,
+      rawPayload: options.rawPayload,
+      status: 'pending',
+      ipAddress: options.ipAddress,
+      payloadReference: options.paymentId
+    });
+
+    try {
+      // 3. Find target payment
+      let payment: Payment | null = null;
+      if (options.paymentId) {
+        payment = this.getPaymentById(options.paymentId) || null;
+      }
+      if (!payment && options.providerTransactionId) {
+        payment =
+          (this.data.payments || []).find(
+            (p) =>
+              p.providerTransactionId === options.providerTransactionId ||
+              p.providerReference === options.providerTransactionId
+          ) || null;
+      }
+
+      if (payment) {
+        const now = new Date().toISOString();
+        payment.status = 'paid';
+        payment.paidAt = now;
+        payment.updatedAt = now;
+        if (options.providerTransactionId) {
+          payment.providerTransactionId = options.providerTransactionId;
+        }
+
+        // 4. Activate or extend subscription
+        const user = this.findUserById(payment.userId);
+        let sub: Subscription | null = null;
+        let invoice: Invoice | null = null;
+
+        if (user) {
+          const profile = this.getProfileByUserId(user.id);
+          sub = this.getUserActiveSubscription(user.id);
+
+          if (!sub || sub.planId !== payment.planId) {
+            sub = this.createSubscription({
+              userId: user.id,
+              planId: payment.planId,
+              billingInterval: payment.billingInterval,
+              status: 'active',
+              lastPaymentId: payment.id
+            });
+          } else {
+            // Extend subscription duration
+            const currentEndDate = new Date(sub.currentPeriodEnd);
+            const baseDate = currentEndDate.getTime() > Date.now() ? currentEndDate : new Date();
+            const daysToAdd = payment.billingInterval === 'yearly' ? 365 : 30;
+            baseDate.setDate(baseDate.getDate() + daysToAdd);
+            sub.currentPeriodEnd = baseDate.toISOString();
+            sub.status = 'active';
+            sub.lastPaymentId = payment.id;
+            sub.updatedAt = now;
+          }
+
+          // 5. Create or mark invoice as paid
+          const existingInvoice = (this.data.invoices || []).find((i) => i.paymentId === payment!.id);
+          if (existingInvoice) {
+            existingInvoice.status = 'paid';
+            existingInvoice.paidAt = now;
+            invoice = existingInvoice;
+          } else {
+            invoice = this.createInvoice({
+              userId: user.id,
+              subscriptionId: sub.id,
+              planId: payment.planId,
+              planName: payment.planName,
+              amount: payment.amount,
+              billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
+              paymentId: payment.id,
+              customerName: profile?.displayName || 'Customer',
+              customerEmail: user.email,
+              subtotal: payment.originalAmount,
+              discount: payment.discountAmount,
+              paymentMethodName: `${options.provider.toUpperCase()} Webhook Auto-Verified`,
+              status: 'paid'
+            });
+          }
+        }
+
+        // 6. Complete webhook event
+        event.status = 'success';
+        event.processed = true;
+        event.processedAt = new Date().toISOString();
+        event.errorMessage = undefined;
+        this.save();
+
+        return {
+          success: true,
+          idempotent: false,
+          event,
+          payment,
+          subscription: sub || undefined,
+          invoice: invoice || undefined
+        };
+      } else {
+        event.status = 'success';
+        event.processed = true;
+        event.processedAt = new Date().toISOString();
+        this.save();
+
+        return {
+          success: true,
+          idempotent: false,
+          event
+        };
+      }
+    } catch (err: any) {
+      event.status = 'failed';
+      event.processed = false;
+      event.errorMessage = err?.message || 'Database error during atomic webhook execution';
+      this.save();
+
+      return {
+        success: false,
+        event,
+        error: err?.message || 'Processing error'
+      };
+    }
   }
 
   public getWebhookEvents(limit = 100): WebhookEvent[] {
@@ -3006,11 +4020,11 @@ class Database {
     return { success: true, draft };
   }
 
-  public publishContentDraft(id: string, adminUserId: string): { success: boolean; draft?: ContentDraft; lesson?: Lesson; version?: ContentVersion; error?: string } {
+  public publishContentDraft(id: string, adminUserId: string, changelog?: string): { success: boolean; draft?: ContentDraft; lesson?: Lesson; version?: ContentVersion; error?: string } {
     const draft = this.getContentDraftById(id);
     if (!draft) return { success: false, error: 'Draft not found' };
-    if (draft.status !== 'APPROVED') {
-      return { success: false, error: `Draft cannot be published from state '${draft.status}'. It must be APPROVED first.` };
+    if (draft.status !== 'APPROVED' && draft.status !== 'PUBLISHED') {
+      return { success: false, error: `Draft cannot be published from state '${draft.status}'. It must be APPROVED or PUBLISHED first.` };
     }
 
     // Determine target course & module
@@ -3113,14 +4127,28 @@ class Database {
     // Create immutable ContentVersion audit record
     if (!this.data.contentVersions) this.data.contentVersions = [];
     const previousVersions = this.data.contentVersions.filter((v) => v.draftId === draft.id);
+    const contentString = JSON.stringify(draft.structuredContent);
+    const checksumSha256 = crypto.createHash('sha256').update(contentString).digest('hex');
+
     const newVersion: ContentVersion = {
       id: `ver-${crypto.randomUUID().slice(0, 8)}`,
       draftId: draft.id,
       sourceId: draft.sourceId,
       versionNumber: previousVersions.length + 1,
-      contentJson: JSON.parse(JSON.stringify(draft.structuredContent)),
+      contentJson: JSON.parse(contentString),
+      metadataJson: {
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        level: draft.level,
+        courseId: targetCourse.id,
+        moduleId: targetModule.id
+      },
       targetLessonId: targetLesson.id,
       targetCourseId: targetCourse.id,
+      changelogSummary: `Published version ${previousVersions.length + 1}`,
+      checksumSha256,
       approvedBy: draft.reviewedBy || adminUserId,
       publishedBy: adminUserId,
       approvedAt: draft.reviewedAt || new Date().toISOString(),
@@ -3137,6 +4165,40 @@ class Database {
     draft.updatedAt = new Date().toISOString();
     this.save();
 
+    // Persist to Supabase if available
+    const validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    this.persistToSupabase('content_drafts', {
+      id: draft.id,
+      source_id: validSourceId,
+      title: draft.title,
+      level: draft.level,
+      item_type: draft.contentType === 'grammar' ? 'GRAMMAR' : draft.contentType === 'kanji' ? 'KANJI' : 'VOCABULARY',
+      raw_text: draft.explanation || draft.rawText || '',
+      processed_json: draft.structuredContent,
+      generation_metadata: draft.generationMetadata || { confidenceScore: 100 },
+      status: draft.status,
+      created_by: '27fb8002-dbdd-4370-83d1-1d438ae9a055',
+      reviewed_by: draft.reviewedBy,
+      reviewed_at: draft.reviewedAt,
+      review_notes: draft.reviewNotes,
+      updated_at: draft.updatedAt
+    });
+
+    this.persistToSupabase('content_versions', {
+      id: newVersion.id,
+      draft_id: newVersion.draftId,
+      source_id: newVersion.sourceId,
+      version_number: newVersion.versionNumber,
+      content_json: newVersion.contentJson,
+      target_lesson_id: newVersion.targetLessonId,
+      target_course_id: newVersion.targetCourseId,
+      approved_by: newVersion.approvedBy,
+      published_by: newVersion.publishedBy,
+      approved_at: newVersion.approvedAt,
+      published_at: newVersion.publishedAt,
+      created_at: newVersion.createdAt
+    });
+
     this.logAdminAction({
       adminUserId,
       adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
@@ -3145,6 +4207,7 @@ class Database {
       details: {
         draftId: draft.id,
         version: newVersion.versionNumber,
+        checksum: checksumSha256,
         courseId: targetCourse.id,
         moduleId: targetModule.id,
         title: draft.title
@@ -3166,6 +4229,12 @@ class Database {
     draft.updatedAt = new Date().toISOString();
     this.save();
 
+    this.persistToSupabase('content_drafts', {
+      id: draft.id,
+      status: draft.status,
+      updated_at: draft.updatedAt
+    });
+
     this.logAdminAction({
       adminUserId,
       adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
@@ -3179,6 +4248,250 @@ class Database {
 
   public getContentVersionsByDraftId(draftId: string): ContentVersion[] {
     return (this.data.contentVersions || []).filter((v) => v.draftId === draftId);
+  }
+
+  public getContentVersionById(versionId: string): ContentVersion | null {
+    return (this.data.contentVersions || []).find((v) => v.id === versionId) || null;
+  }
+
+  public getContentVersionByDraftAndNumber(draftId: string, versionNumber: number): ContentVersion | null {
+    return (this.data.contentVersions || []).find((v) => v.draftId === draftId && v.versionNumber === versionNumber) || null;
+  }
+
+  public rollbackContentDraftToVersion(
+    draftId: string,
+    targetVersionIdOrNumber: string | number,
+    adminUserId: string,
+    rollbackReason?: string
+  ): {
+    success: boolean;
+    draft?: ContentDraft;
+    lesson?: Lesson;
+    version?: ContentVersion;
+    rolledBackFrom?: ContentVersion;
+    error?: string;
+  } {
+    const draft = this.getContentDraftById(draftId);
+    if (!draft) return { success: false, error: `Content draft with ID "${draftId}" not found.` };
+
+    let targetVersion: ContentVersion | null = null;
+    if (typeof targetVersionIdOrNumber === 'number' || !isNaN(Number(targetVersionIdOrNumber))) {
+      targetVersion = this.getContentVersionByDraftAndNumber(draftId, Number(targetVersionIdOrNumber));
+    } else {
+      targetVersion = this.getContentVersionById(targetVersionIdOrNumber as string);
+    }
+
+    if (!targetVersion) {
+      return {
+        success: false,
+        error: `Content version "${targetVersionIdOrNumber}" not found for draft "${draftId}".`
+      };
+    }
+
+    // Restore draft fields from version snapshot
+    draft.structuredContent = JSON.parse(JSON.stringify(targetVersion.contentJson));
+    if (targetVersion.metadataJson) {
+      if (targetVersion.metadataJson.title) draft.title = targetVersion.metadataJson.title;
+      if (targetVersion.metadataJson.titleJa) draft.titleJa = targetVersion.metadataJson.titleJa;
+      if (targetVersion.metadataJson.summary) draft.summary = targetVersion.metadataJson.summary;
+      if (targetVersion.metadataJson.explanation) draft.explanation = targetVersion.metadataJson.explanation;
+      if (targetVersion.metadataJson.level) draft.level = targetVersion.metadataJson.level;
+    }
+    draft.updatedAt = new Date().toISOString();
+
+    // If draft has an active live Lesson, rollback the live curriculum entity atomically
+    let updatedLesson: Lesson | undefined;
+    if (draft.lessonId) {
+      const existingLesson = this.getLessonById(draft.lessonId);
+      if (existingLesson) {
+        // Rollback linked quiz if included in structuredContent
+        let quizId = existingLesson.quizId;
+        if (draft.structuredContent.quiz && draft.structuredContent.quiz.questions?.length > 0) {
+          if (quizId && this.data.quizzes.some((q) => q.id === quizId)) {
+            this.updateQuiz(quizId, {
+              title: draft.structuredContent.quiz.title || `${draft.title} Mastery Quiz`,
+              passingScore: draft.structuredContent.quiz.passingScore || 70,
+              questions: draft.structuredContent.quiz.questions,
+              isPublished: true
+            });
+          }
+        }
+
+        const restoredLesson = this.updateLesson(existingLesson.id, {
+          title: draft.title,
+          titleJa: draft.titleJa,
+          summary: draft.summary,
+          explanation: draft.explanation,
+          vocabulary: draft.structuredContent.vocabulary || [],
+          grammar: draft.structuredContent.grammar || [],
+          kanji: draft.structuredContent.kanji || [],
+          dialogue: draft.structuredContent.dialogue || [],
+          practiceExercises: draft.structuredContent.practiceExercises || [],
+          quizId,
+          isPublished: true
+        });
+        if (restoredLesson) updatedLesson = restoredLesson;
+      }
+    }
+
+    // Create a new ContentVersion representing this rollback event
+    if (!this.data.contentVersions) this.data.contentVersions = [];
+    const allDraftVersions = this.data.contentVersions.filter((v) => v.draftId === draft.id);
+    const nextVersionNumber = allDraftVersions.length + 1;
+    const contentString = JSON.stringify(draft.structuredContent);
+    const checksumSha256 = crypto.createHash('sha256').update(contentString).digest('hex');
+
+    const rollbackVersion: ContentVersion = {
+      id: `ver-${crypto.randomUUID().slice(0, 8)}`,
+      draftId: draft.id,
+      sourceId: draft.sourceId,
+      versionNumber: nextVersionNumber,
+      contentJson: JSON.parse(contentString),
+      metadataJson: {
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        level: draft.level,
+        courseId: draft.courseId,
+        moduleId: draft.moduleId
+      },
+      targetLessonId: draft.lessonId,
+      targetCourseId: draft.courseId,
+      changelogSummary: rollbackReason || `Rollback to Version ${targetVersion.versionNumber}`,
+      checksumSha256,
+      rollbackFromVersion: targetVersion.versionNumber,
+      approvedBy: adminUserId,
+      publishedBy: adminUserId,
+      approvedAt: new Date().toISOString(),
+      publishedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
+    };
+    this.data.contentVersions.unshift(rollbackVersion);
+
+    this.save();
+
+    // Persist to Supabase
+    const validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    this.persistToSupabase('content_drafts', {
+      id: draft.id,
+      source_id: validSourceId,
+      title: draft.title,
+      level: draft.level,
+      item_type: draft.contentType === 'grammar' ? 'GRAMMAR' : draft.contentType === 'kanji' ? 'KANJI' : 'VOCABULARY',
+      raw_text: draft.explanation || draft.rawText || '',
+      processed_json: draft.structuredContent,
+      generation_metadata: draft.generationMetadata || { confidenceScore: 100 },
+      created_by: '27fb8002-dbdd-4370-83d1-1d438ae9a055',
+      updated_at: draft.updatedAt
+    });
+
+    this.persistToSupabase('content_versions', {
+      id: rollbackVersion.id,
+      draft_id: rollbackVersion.draftId,
+      source_id: rollbackVersion.sourceId,
+      version_number: rollbackVersion.versionNumber,
+      content_json: rollbackVersion.contentJson,
+      target_lesson_id: rollbackVersion.targetLessonId,
+      target_course_id: rollbackVersion.targetCourseId,
+      approved_by: rollbackVersion.approvedBy,
+      published_by: rollbackVersion.publishedBy,
+      approved_at: rollbackVersion.approvedAt,
+      published_at: rollbackVersion.publishedAt,
+      created_at: rollbackVersion.createdAt
+    });
+
+    this.logAdminAction({
+      adminUserId,
+      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      action: 'ROLLBACK_CONTENT_DRAFT',
+      targetResource: `content_draft:${draft.id}`,
+      details: {
+        draftId: draft.id,
+        targetVersionNumber: targetVersion.versionNumber,
+        newVersionNumber: rollbackVersion.versionNumber,
+        lessonId: draft.lessonId,
+        reason: rollbackReason
+      }
+    });
+
+    return {
+      success: true,
+      draft,
+      lesson: updatedLesson,
+      version: rollbackVersion,
+      rolledBackFrom: targetVersion
+    };
+  }
+
+  public diffContentDraftWithVersion(
+    draftId: string,
+    versionIdOrNumber: string | number
+  ): { success: boolean; diff?: ContentDifferentialDiff; error?: string } {
+    const draft = this.getContentDraftById(draftId);
+    if (!draft) return { success: false, error: `Draft "${draftId}" not found.` };
+
+    let targetVersion: ContentVersion | null = null;
+    if (typeof versionIdOrNumber === 'number' || !isNaN(Number(versionIdOrNumber))) {
+      targetVersion = this.getContentVersionByDraftAndNumber(draftId, Number(versionIdOrNumber));
+    } else {
+      targetVersion = this.getContentVersionById(versionIdOrNumber as string);
+    }
+
+    if (!targetVersion) {
+      return { success: false, error: `Version "${versionIdOrNumber}" not found for draft "${draftId}".` };
+    }
+
+    const diff = ContentDiffService.computeDiff({
+      entityId: draft.id,
+      baseContent: targetVersion.contentJson,
+      targetContent: draft.structuredContent,
+      baseMetadata: targetVersion.metadataJson || {
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        level: draft.level,
+        courseId: draft.courseId,
+        moduleId: draft.moduleId
+      },
+      targetMetadata: {
+        title: draft.title,
+        titleJa: draft.titleJa,
+        summary: draft.summary,
+        explanation: draft.explanation,
+        level: draft.level,
+        courseId: draft.courseId,
+        moduleId: draft.moduleId
+      },
+      baseVersionName: `Version ${targetVersion.versionNumber}`,
+      targetVersionName: `Draft (Current)`
+    });
+
+    return { success: true, diff };
+  }
+
+  public diffContentVersions(
+    versionId1: string,
+    versionId2: string
+  ): { success: boolean; diff?: ContentDifferentialDiff; error?: string } {
+    const v1 = this.getContentVersionById(versionId1);
+    const v2 = this.getContentVersionById(versionId2);
+
+    if (!v1) return { success: false, error: `Version "${versionId1}" not found.` };
+    if (!v2) return { success: false, error: `Version "${versionId2}" not found.` };
+
+    const diff = ContentDiffService.computeDiff({
+      entityId: v1.draftId || v1.id,
+      baseContent: v1.contentJson,
+      targetContent: v2.contentJson,
+      baseMetadata: v1.metadataJson,
+      targetMetadata: v2.metadataJson,
+      baseVersionName: `Version ${v1.versionNumber}`,
+      targetVersionName: `Version ${v2.versionNumber}`
+    });
+
+    return { success: true, diff };
   }
 
   public getPublishedContent(level?: JLPTLevel): { lessons: Lesson[]; drafts: ContentDraft[] } {

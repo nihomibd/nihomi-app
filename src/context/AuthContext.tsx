@@ -362,8 +362,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return loginWithGoogle();
   };
 
-  const loginWithToken = async (_idToken: string): Promise<boolean> => {
-    return loginWithGoogle();
+  const loginWithToken = async (idToken: string): Promise<boolean> => {
+    if (!idToken) return false;
+    try {
+      const res = await apiRequest<{
+        token: string;
+        user: User;
+        profile: UserProfile;
+        progress: UserProgress;
+      }>('/api/auth/google', {
+        method: 'POST',
+        body: JSON.stringify({ googleToken: idToken })
+      });
+      if (res.token) {
+        setStoredToken(res.token);
+      }
+      if (res.user) {
+        setUserData(res.user);
+      }
+      if (res.profile) {
+        setProfile(res.profile);
+        localStorage.setItem('nihomi_profile', JSON.stringify(res.profile));
+      }
+      if (res.progress) {
+        setProgress(res.progress);
+      }
+      return true;
+    } catch (err: any) {
+      console.error('[Google ID Token Login Error]:', err);
+      return false;
+    }
   };
 
   const logout = async () => {

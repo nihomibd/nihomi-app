@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import { db } from './db.js';
 import { User, UserRole } from './types.js';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'nihomi-production-jwt-secret-key-2026-stateless';
+import { getRequiredJwtSecret } from './env.js';
 
 export interface TokenPayload {
   userId: string;
@@ -37,6 +36,7 @@ export function signStatelessJwt(
   payload: { userId: string; email: string; role: UserRole },
   expiresInSeconds: number = 30 * 24 * 60 * 60 // 30 days
 ): string {
+  const jwtSecret = getRequiredJwtSecret();
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
   const fullPayload: TokenPayload = {
@@ -50,7 +50,7 @@ export function signStatelessJwt(
   const dataToSign = `${encodedHeader}.${encodedPayload}`;
 
   const signature = crypto
-    .createHmac('sha256', JWT_SECRET)
+    .createHmac('sha256', jwtSecret)
     .update(dataToSign)
     .digest('base64')
     .replace(/=/g, '')
@@ -72,9 +72,10 @@ export function verifyStatelessJwt(token: string): TokenPayload | null {
   const [encodedHeader, encodedPayload, signature] = parts;
 
   try {
+    const jwtSecret = getRequiredJwtSecret();
     const dataToSign = `${encodedHeader}.${encodedPayload}`;
     const expectedSignature = crypto
-      .createHmac('sha256', JWT_SECRET)
+      .createHmac('sha256', jwtSecret)
       .update(dataToSign)
       .digest('base64')
       .replace(/=/g, '')
@@ -123,7 +124,7 @@ export function verifyStatelessJwt(token: string): TokenPayload | null {
     }
 
     return null;
-  } catch (err) {
+  } catch {
     return null;
   }
 }

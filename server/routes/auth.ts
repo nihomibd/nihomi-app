@@ -1,39 +1,68 @@
 import { Router } from 'express';
 import { db, verifyPassword, hashPassword } from '../db.js';
 import { createSessionToken, revokeSessionToken, requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { verifyGoogleIdToken } from '../services/googleAuth.js';
 import crypto from 'crypto';
 
 export const authRouter = Router();
 
-// 1. Google OAuth 1-Click Login & Registration
+// 1. Google OAuth Server-Side Verified Login & Registration
 authRouter.post('/google', async (req, res) => {
   try {
-    const { googleToken, email, displayName, photoUrl, targetLevel } = req.body;
+    const rawToken = req.body.googleToken || req.body.idToken || req.body.credential;
 
-    if (!email) {
-      return res.status(400).json({ error: 'Google account email is required.' });
+    if (!rawToken || typeof rawToken !== 'string') {
+      return res.status(401).json({
+        error: 'Google authentication token is required.',
+        code: 'MISSING_GOOGLE_TOKEN'
+      });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-    let user = db.findUserByEmail(cleanEmail);
+    // Cryptographically verify Google token with Google's public keys
+    // Client-provided email/name/photo in body are strictly ignored
+    const verifiedGoogle = await verifyGoogleIdToken(rawToken);
+
+    if (!verifiedGoogle) {
+      return res.status(401).json({
+        error: 'Google authentication failed: Invalid or unverified Google token.',
+        code: 'UNAUTHORIZED_GOOGLE_TOKEN'
+      });
+    }
+
+    const verifiedEmail = verifiedGoogle.email;
+    const isFounder = verifiedEmail === 'mdtanvirkabirbiplob@gmail.com';
+    let user = db.findUserByEmail(verifiedEmail);
 
     if (!user) {
-      // Create new user automatically via Google Auth
-      const { user: newUser, profile, progress } = db.createUser({
-        email: cleanEmail,
-        password: crypto.randomBytes(16).toString('hex'), // Random secure internal hash
-        displayName: displayName || cleanEmail.split('@')[0],
-        targetLevel: targetLevel || 'N5',
+      // Create new user automatically from verified Google identity
+      const { user: newUser } = db.createUser({
+        email: verifiedEmail,
+        password: crypto.randomBytes(24).toString('hex'), // Secure random internal hash
+        displayName: verifiedGoogle.name,
+        role: isFounder ? 'admin' : 'user',
+        targetLevel: (req.body.targetLevel === 'N1' || req.body.targetLevel === 'N2' || req.body.targetLevel === 'N3' || req.body.targetLevel === 'N4' || req.body.targetLevel === 'N5') ? req.body.targetLevel : 'N5',
         nativeLanguage: 'English'
       });
       user = newUser;
 
-      // Update avatar if provided by Google
-      if (photoUrl) {
-        db.updateProfile(user.id, { avatarSeed: photoUrl });
+      if (verifiedGoogle.picture) {
+        db.updateProfile(user.id, { avatarSeed: verifiedGoogle.picture });
+      }
+    } else {
+      // Update existing user profile if needed
+      if (isFounder && user.role !== 'admin') {
+        user.role = 'admin';
+        db.save();
+      }
+      if (verifiedGoogle.picture) {
+        const existingProfile = db.getProfileByUserId(user.id);
+        if (!existingProfile?.avatarSeed) {
+          db.updateProfile(user.id, { avatarSeed: verifiedGoogle.picture });
+        }
       }
     }
 
+    // Issue hardened stateless Nihomi JWT
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
@@ -51,8 +80,8 @@ authRouter.post('/google', async (req, res) => {
       message: 'Successfully authenticated with Google.'
     });
   } catch (error: any) {
-    console.error('Google Auth Error:', error);
-    return res.status(500).json({ error: 'Google authentication failed. Please try again.' });
+    // Avoid leaking sensitive trace details to client
+    return res.status(500).json({ error: 'Internal error during Google authentication.', code: 'SERVER_AUTH_ERROR' });
   }
 });
 

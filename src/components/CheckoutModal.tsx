@@ -16,7 +16,8 @@ import {
   Check,
   Building2,
   Calendar,
-  Gift
+  Gift,
+  ExternalLink
 } from 'lucide-react';
 import { Plan, PlanId, BillingInterval, PaymentProviderType } from '../types';
 import { billingApi } from '../lib/billingApi';
@@ -503,6 +504,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <span className="text-lg font-bold text-red-600">৳{finalPrice.toLocaleString()}</span>
                   </div>
                 </div>
+
+                {paymentInitiationData?.redirectUrl && (
+                  <div className="p-3 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl flex items-center justify-between gap-3 text-xs border border-zinc-200 dark:border-zinc-700">
+                    <span className="text-zinc-600 dark:text-zinc-300">Official Gateway Hosted Checkout is available:</span>
+                    <a
+                      href={paymentInitiationData.redirectUrl}
+                      className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold flex items-center gap-1.5 text-xs shrink-0 transition-colors"
+                      id="link-gateway-hosted-url"
+                    >
+                      <span>Open Gateway Portal</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
 
                 {provider === 'bkash' && (
                   <div className="space-y-4 p-4 rounded-xl border border-pink-200 dark:border-pink-900/40 bg-pink-50/30 dark:bg-pink-950/10">

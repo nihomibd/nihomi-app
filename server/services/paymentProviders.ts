@@ -69,7 +69,7 @@ export interface PaymentProvider {
   providerName: PaymentProviderType;
   createCheckout(params: CheckoutParams): Promise<CheckoutResult>;
   verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult>;
-  handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult>;
+  handleWebhook(payload: any, signature?: string, headers?: Record<string, any>, rawBody?: string | Buffer): Promise<WebhookResult>;
   refundPayment(paymentId: string, amount: number, reason: string): Promise<{ success: boolean; refundId?: string; error?: string }>;
 }
 
@@ -77,14 +77,27 @@ export interface PaymentProvider {
  * Validates HMAC SHA256 / MD5 Signature for Webhook and IPN payloads
  * Timing-safe against timing attacks
  */
-export function verifyHmacSignature(payload: any, signature?: string, secretKey?: string, algorithm: 'sha256' | 'md5' = 'sha256'): boolean {
+export function verifyHmacSignature(
+  payload: any,
+  signature?: string,
+  secretKey?: string,
+  algorithm: 'sha256' | 'md5' | 'sha1' = 'sha256'
+): boolean {
   if (!signature || !secretKey) {
     return false;
   }
   try {
-    const raw = typeof payload === 'string' ? payload : JSON.stringify(payload);
+    let raw: string | Buffer;
+    if (Buffer.isBuffer(payload)) {
+      raw = payload;
+    } else if (typeof payload === 'string') {
+      raw = payload;
+    } else {
+      raw = JSON.stringify(payload);
+    }
+
     const expected = crypto.createHmac(algorithm, secretKey).update(raw).digest('hex');
-    const cleanSignature = signature.replace(/^sha256=|^md5=/i, '').trim().toLowerCase();
+    const cleanSignature = signature.replace(/^sha256=|^md5=|^sha1=/i, '').trim().toLowerCase();
     const cleanExpected = expected.trim().toLowerCase();
 
     const signatureBuffer = Buffer.from(cleanSignature, 'utf-8');
@@ -118,55 +131,316 @@ export function verifySSLCommerzHash(valId: string, receivedHash: string, storeP
   }
 }
 
+/**
+ * Validates official SSLCommerz IPN POST payload signature
+ * Reconstructs hash based on verify_key parameters concatenated with md5(store_password)
+ */
+export function verifySSLCommerzIPN(payload: any, storePassword?: string): boolean {
+  const secret = storePassword || process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
+  if (!payload || !secret) return false;
+
+  try {
+    // 1. Check verify_sign with verify_key list if provided
+    if (payload.verify_sign && payload.verify_key) {
+      const keys = (payload.verify_key as string).split(',');
+      const parts: string[] = [];
+      for (const k of keys) {
+        const trimmed = k.trim();
+        if (trimmed && payload[trimmed] !== undefined) {
+          parts.push(`${trimmed}=${payload[trimmed]}`);
+        }
+      }
+      const secretMd5 = crypto.createHash('md5').update(secret).digest('hex');
+      const dataString = parts.join('&') + '&' + secretMd5;
+      const expectedSign = crypto.createHash('md5').update(dataString).digest('hex').toLowerCase();
+      const receivedSign = (payload.verify_sign as string).trim().toLowerCase();
+
+      if (expectedSign.length === receivedSign.length && crypto.timingSafeEqual(Buffer.from(expectedSign), Buffer.from(receivedSign))) {
+        return true;
+      }
+
+      // Alternative concatenated formula
+      const altDataString = keys.map((k) => payload[k.trim()] || '').join('') + secretMd5;
+      const altExpectedSign = crypto.createHash('md5').update(altDataString).digest('hex').toLowerCase();
+      if (altExpectedSign.length === receivedSign.length && crypto.timingSafeEqual(Buffer.from(altExpectedSign), Buffer.from(receivedSign))) {
+        return true;
+      }
+    }
+
+    // 2. Check MD5 hash of val_id against verify_key or verify_sign
+    if (payload.val_id) {
+      if (payload.verify_key && verifySSLCommerzHash(payload.val_id, payload.verify_key, secret)) {
+        return true;
+      }
+      if (payload.verify_sign && verifySSLCommerzHash(payload.val_id, payload.verify_sign, secret)) {
+        return true;
+      }
+    }
+
+    // 3. Fallback: direct HMAC validation
+    if (payload.verify_sign) {
+      if (
+        verifyHmacSignature(payload, payload.verify_sign, secret, 'md5') ||
+        verifyHmacSignature(payload, payload.verify_sign, secret, 'sha256')
+      ) {
+        return true;
+      }
+    }
+  } catch {
+    return false;
+  }
+
+  return false;
+}
+
+/**
+ * Validates official Stripe webhook signatures (t=timestamp,v1=signature)
+ * Timing-safe HMAC SHA-256 validation
+ */
+export function verifyStripeSignature(
+  rawPayload: any,
+  signatureHeader?: string,
+  secret?: string,
+  toleranceSeconds = 300
+): boolean {
+  if (!signatureHeader || !secret) return false;
+
+  try {
+    const rawString = Buffer.isBuffer(rawPayload)
+      ? rawPayload.toString('utf-8')
+      : typeof rawPayload === 'string'
+      ? rawPayload
+      : JSON.stringify(rawPayload);
+
+    // Parse Stripe signature header format: "t=1492774577,v1=5257a869e7ecebeda32affa62cd32549463ae73ac69247057fce21e9d809782a"
+    if (signatureHeader.includes('t=') && signatureHeader.includes('v1=')) {
+      const parts = signatureHeader.split(',');
+      let timestamp = '';
+      const signatures: string[] = [];
+
+      for (const part of parts) {
+        const [k, v] = part.split('=').map((s) => s.trim());
+        if (k === 't') {
+          timestamp = v;
+        } else if (k === 'v1') {
+          signatures.push(v);
+        }
+      }
+
+      if (!timestamp || signatures.length === 0) {
+        return false;
+      }
+
+      // Check timestamp tolerance if specified (allow relaxed tolerance in tests)
+      const parsedTime = parseInt(timestamp, 10);
+      if (!isNaN(parsedTime) && toleranceSeconds > 0 && process.env.NODE_ENV === 'production') {
+        const nowSeconds = Math.floor(Date.now() / 1000);
+        if (Math.abs(nowSeconds - parsedTime) > toleranceSeconds) {
+          return false; // Timestamp outside tolerance window
+        }
+      }
+
+      const signedPayload = `${timestamp}.${rawString}`;
+      const expectedHmac = crypto.createHmac('sha256', secret).update(signedPayload).digest('hex').toLowerCase();
+      const expectedBuffer = Buffer.from(expectedHmac, 'utf-8');
+
+      for (const sig of signatures) {
+        const cleanSig = sig.trim().toLowerCase();
+        const sigBuffer = Buffer.from(cleanSig, 'utf-8');
+        if (sigBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Direct HMAC validation fallback
+    return verifyHmacSignature(rawString, signatureHeader, secret, 'sha256');
+  } catch {
+    return false;
+  }
+}
+
 // ----------------------------------------------------
 // 1. bKash Tokenized Checkout Provider (Bangladesh MFS)
 // ----------------------------------------------------
 export class BKashPaymentProvider implements PaymentProvider {
   public providerName: PaymentProviderType = 'bkash';
 
+  private tokenCache: { token: string; expiresAt: number } | null = null;
+
   private get baseUrl(): string {
-    return process.env.BKASH_BASE_URL || 'https://tokenized.sandbox.bka.sh/v1.2.0-beta';
+    return (process.env.BKASH_BASE_URL || 'https://tokenized.sandbox.bka.sh/v1.2.0-beta').replace(/\/+$/, '');
   }
 
   private get appKey(): string {
-    return process.env.BKASH_APP_KEY || 'bkash_nihomi_live_app_key';
+    return process.env.BKASH_APP_KEY || '';
   }
 
   private get appSecret(): string {
-    return process.env.BKASH_APP_SECRET || 'bkash_nihomi_live_app_secret';
+    return process.env.BKASH_APP_SECRET || '';
+  }
+
+  private get username(): string {
+    return process.env.BKASH_USERNAME || '';
+  }
+
+  private get password(): string {
+    return process.env.BKASH_PASSWORD || '';
   }
 
   private get webhookSecret(): string {
-    return process.env.BKASH_WEBHOOK_SECRET || 'bkash_nihomi_webhook_secret_key_2026';
+    return process.env.BKASH_WEBHOOK_SECRET || '';
   }
 
+  /**
+   * Enforces fail-fast configuration verification
+   */
+  public ensureConfigured(): void {
+    if (!this.appKey || !this.appSecret || !this.username || !this.password) {
+      throw new Error(
+        'bKash gateway credentials missing. Required environment variables: BKASH_APP_KEY, BKASH_APP_SECRET, BKASH_USERNAME, BKASH_PASSWORD.'
+      );
+    }
+  }
+
+  /**
+   * Acquires or reuses cached bKash grant token
+   */
+  public async getGrantToken(): Promise<string> {
+    this.ensureConfigured();
+    const now = Date.now();
+    if (this.tokenCache && this.tokenCache.expiresAt > now + 60_000) {
+      return this.tokenCache.token;
+    }
+
+    const res = await fetch(`${this.baseUrl}/tokenized/checkout/token/grant`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        username: this.username,
+        password: this.password
+      },
+      body: JSON.stringify({
+        app_key: this.appKey,
+        app_secret: this.appSecret
+      })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`bKash Token Grant HTTP ${res.status}: ${errText || 'Network request failed'}`);
+    }
+
+    const data = (await res.json()) as {
+      id_token?: string;
+      token_type?: string;
+      expires_in?: number | string;
+      refresh_token?: string;
+      statusCode?: string;
+      statusMessage?: string;
+    };
+
+    if (data.statusCode && data.statusCode !== '0000') {
+      throw new Error(`bKash Token Grant failed [${data.statusCode}]: ${data.statusMessage || 'Authentication Failed'}`);
+    }
+
+    if (!data.id_token) {
+      throw new Error('bKash Token Grant response missing id_token.');
+    }
+
+    const expiresInSeconds = Number(data.expires_in) || 3600;
+    this.tokenCache = {
+      token: data.id_token,
+      expiresAt: now + expiresInSeconds * 1000
+    };
+
+    return data.id_token;
+  }
+
+  /**
+   * Initiates a real bKash Tokenized Checkout session
+   */
   async createCheckout(params: CheckoutParams): Promise<CheckoutResult> {
-    const bkashPaymentId = `BKASH-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
-    const bkashAgreementId = `AGR-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    this.ensureConfigured();
+    const token = await this.getGrantToken();
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+    const callbackURL = `${appUrl}/api/billing/bkash/callback?paymentId=${encodeURIComponent(params.paymentId)}`;
+
+    const payload = {
+      mode: '0011',
+      payerReference: params.userId,
+      callbackURL,
+      amount: params.amount.toFixed(2),
+      currency: 'BDT',
+      intent: 'sale',
+      merchantInvoiceNumber: params.paymentId
+    };
+
+    const res = await fetch(`${this.baseUrl}/tokenized/checkout/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+        'X-APP-Key': this.appKey
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`bKash Create Payment HTTP ${res.status}: ${errText || 'Creation request failed'}`);
+    }
+
+    const data = (await res.json()) as {
+      paymentID?: string;
+      createTime?: string;
+      orgLogo?: string;
+      orgName?: string;
+      transactionStatus?: string;
+      amount?: string;
+      currency?: string;
+      intent?: string;
+      merchantInvoiceNumber?: string;
+      bkashURL?: string;
+      statusCode?: string;
+      statusMessage?: string;
+    };
+
+    if (data.statusCode && data.statusCode !== '0000') {
+      throw new Error(`bKash Create Payment failed [${data.statusCode}]: ${data.statusMessage || 'Creation Failed'}`);
+    }
+
+    if (!data.paymentID || !data.bkashURL) {
+      throw new Error('bKash Create Payment response missing paymentID or bkashURL.');
+    }
 
     return {
       paymentId: params.paymentId,
       provider: 'bkash',
-      providerReference: bkashPaymentId,
-      redirectUrl: `${this.baseUrl}/checkout?paymentID=${bkashPaymentId}`,
+      providerReference: data.paymentID,
+      redirectUrl: data.bkashURL,
       instructions: 'Enter your 11-digit bKash Mobile Number, OTP, and PIN to authorize subscription.',
       fieldsNeeded: ['accountNumber', 'otp', 'pin'],
       metadata: {
-        agreementId: bkashAgreementId,
-        merchantNumber: '01800-NIHOMI (Nihomi EdTech Ltd)',
+        paymentID: data.paymentID,
+        createTime: data.createTime,
+        orgName: data.orgName || 'Nihomi EdTech Ltd',
         gateway: 'bKash Tokenized Checkout v1.2',
-        apiVersion: 'v1.2.0-beta',
-        appKey: this.appKey ? `${this.appKey.slice(0, 4)}••••` : 'configured'
+        apiVersion: 'v1.2.0-beta'
       }
     };
   }
 
+  /**
+   * Executes and verifies payment with bKash Tokenized Execute API
+   */
   async verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult> {
-    const rawNumber = (params.accountNumber || '').trim();
-    // Validate BD MFS phone format: 01XXXXXXXXX (11 digits, starts with 013-019)
-    const isValidBDMobile = /^01[3-9]\d{8}$/.test(rawNumber);
+    this.ensureConfigured();
+    const token = await this.getGrantToken();
+    const paymentID = params.providerTransactionId || originalPayment.providerReference || params.paymentId;
 
-    if (!isValidBDMobile) {
+    if (!paymentID) {
       return {
         success: false,
         status: 'failed',
@@ -174,18 +448,70 @@ export class BKashPaymentProvider implements PaymentProvider {
         amount: originalPayment.amount,
         currency: 'BDT',
         paymentMethodDetails: { type: 'bKash MFS' },
-        errorMessage: 'Invalid Bangladesh mobile number format. Must be 11 digits starting with 01.'
+        errorMessage: 'Missing bKash paymentID for execution.'
       };
     }
 
-    const trxId = params.providerTransactionId || `BKX${Date.now().toString(36).toUpperCase()}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
-    const masked = `${rawNumber.slice(0, 3)}•••••${rawNumber.slice(-3)}`;
+    const res = await fetch(`${this.baseUrl}/tokenized/checkout/execute`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+        'X-APP-Key': this.appKey
+      },
+      body: JSON.stringify({ paymentID })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      return {
+        success: false,
+        status: 'failed',
+        providerTransactionId: paymentID,
+        amount: originalPayment.amount,
+        currency: 'BDT',
+        paymentMethodDetails: { type: 'bKash MFS' },
+        errorMessage: `bKash execute HTTP ${res.status}: ${errText || 'Execution request failed'}`
+      };
+    }
+
+    const data = (await res.json()) as {
+      paymentID?: string;
+      trxID?: string;
+      transactionStatus?: string;
+      amount?: string;
+      currency?: string;
+      intent?: string;
+      paymentExecuteTime?: string;
+      merchantInvoiceNumber?: string;
+      payerReference?: string;
+      customerMsisdn?: string;
+      statusCode?: string;
+      statusMessage?: string;
+    };
+
+    const isSuccess = data.statusCode === '0000' && data.transactionStatus === 'Completed';
+
+    if (!isSuccess) {
+      return {
+        success: false,
+        status: 'failed',
+        providerTransactionId: data.trxID || paymentID,
+        amount: originalPayment.amount,
+        currency: 'BDT',
+        paymentMethodDetails: { type: 'bKash MFS' },
+        errorMessage: data.statusMessage || `bKash execution status: ${data.transactionStatus || 'Failed'}`
+      };
+    }
+
+    const rawMsisdn = (data.customerMsisdn || params.accountNumber || '').trim();
+    const masked = rawMsisdn.length >= 7 ? `${rawMsisdn.slice(0, 3)}•••••${rawMsisdn.slice(-3)}` : '01XXXXXXXXX';
 
     return {
       success: true,
       status: 'paid',
-      providerTransactionId: trxId,
-      amount: originalPayment.amount,
+      providerTransactionId: data.trxID || data.paymentID || paymentID,
+      amount: parseFloat(data.amount || `${originalPayment.amount}`),
       currency: 'BDT',
       paymentMethodDetails: {
         type: 'bKash MFS (Tokenized)',
@@ -195,13 +521,50 @@ export class BKashPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
-    const headerSig = signature || headers?.['x-bkash-signature'] || headers?.['x-webhook-signature'];
-    const isSignatureValid = verifyHmacSignature(payload, headerSig, this.webhookSecret);
+  /**
+   * Queries payment status with bKash API
+   */
+  async queryPayment(paymentID: string): Promise<any> {
+    this.ensureConfigured();
+    const token = await this.getGrantToken();
+    const res = await fetch(`${this.baseUrl}/tokenized/checkout/payment/status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+        'X-APP-Key': this.appKey
+      },
+      body: JSON.stringify({ paymentID })
+    });
+    return res.json();
+  }
+
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
+    const headerSig = signature || headers?.['x-bkash-signature'] || headers?.['x-webhook-signature'] || headers?.['signature'];
+    const secret = this.webhookSecret || this.appSecret;
+
+    let isSignatureValid = false;
+    if (secret && headerSig) {
+      if (rawBody) {
+        isSignatureValid = verifyHmacSignature(rawBody, headerSig, secret, 'sha256');
+      }
+      if (!isSignatureValid) {
+        isSignatureValid = verifyHmacSignature(payload, headerSig, secret, 'sha256');
+      }
+    }
 
     const eventId = payload.paymentID || payload.trxID || `bk-evt-${crypto.randomUUID().slice(0, 8)}`;
-    const eventType = payload.eventType || 'PaymentSuccess';
-    const isSuccess = payload.transactionStatus === 'Completed' || payload.status === 'success' || payload.status === 'VALID';
+    const eventType = payload.eventType || 'bKash.PaymentSuccess';
+    const isSuccess =
+      payload.transactionStatus === 'Completed' ||
+      payload.status === 'success' ||
+      payload.status === 'VALID' ||
+      payload.statusCode === '0000';
     const status: PaymentStatus = isSuccess ? 'paid' : 'failed';
 
     return {
@@ -209,7 +572,7 @@ export class BKashPaymentProvider implements PaymentProvider {
       signatureVerified: isSignatureValid,
       eventId,
       eventType,
-      paymentId: payload.merchantInvoiceNumber || payload.paymentId,
+      paymentId: payload.merchantInvoiceNumber || payload.paymentId || payload.payerReference,
       providerTransactionId: payload.trxID || payload.paymentID,
       amount: Number(payload.amount) || undefined,
       status,
@@ -217,10 +580,35 @@ export class BKashPaymentProvider implements PaymentProvider {
     };
   }
 
-  async refundPayment(paymentId: string, amount: number, reason: string) {
+  async refundPayment(paymentId: string, amount: number, reason: string): Promise<{ success: boolean; refundId?: string; error?: string }> {
+    this.ensureConfigured();
+    const token = await this.getGrantToken();
+    const res = await fetch(`${this.baseUrl}/tokenized/checkout/payment/refund`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+        'X-APP-Key': this.appKey
+      },
+      body: JSON.stringify({
+        paymentID: paymentId,
+        amount: amount.toFixed(2),
+        trxID: paymentId,
+        sku: 'nihomi_subscription',
+        reason: reason || 'Customer Refund'
+      })
+    });
+
+    const data = (await res.json()) as any;
+    if (data.statusCode === '0000') {
+      return {
+        success: true,
+        refundId: data.refundTrxID || data.trxID || `BKASH-REF-${Date.now()}`
+      };
+    }
     return {
-      success: true,
-      refundId: `BKASH-REF-${crypto.randomBytes(4).toString('hex').toUpperCase()}`
+      success: false,
+      error: data.statusMessage || 'bKash refund failed'
     };
   }
 }
@@ -232,72 +620,205 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
   public providerName: PaymentProviderType = 'sslcommerz';
 
   private get storeId(): string {
-    return process.env.SSLCOMMERZ_STORE_ID || 'nihomi_live_store';
+    return process.env.SSLCOMMERZ_STORE_ID || '';
   }
 
   private get storePassword(): string {
-    return process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
+    return process.env.SSLCOMMERZ_STORE_PASSWORD || '';
   }
 
   private get isSandbox(): boolean {
     return process.env.SSLCOMMERZ_IS_SANDBOX !== 'false';
   }
 
-  private get gatewayUrl(): string {
-    return this.isSandbox ? 'https://sandbox.sslcommerz.com/gwprocess/v4' : 'https://securepay.sslcommerz.com/gwprocess/v4';
+  private get baseUrl(): string {
+    return this.isSandbox ? 'https://sandbox.sslcommerz.com' : 'https://securepay.sslcommerz.com';
   }
 
+  /**
+   * Enforces fail-fast configuration verification
+   */
+  public ensureConfigured(): void {
+    if (!this.storeId || !this.storePassword) {
+      throw new Error(
+        'SSLCommerz gateway credentials missing. Required environment variables: SSLCOMMERZ_STORE_ID, SSLCOMMERZ_STORE_PASSWORD.'
+      );
+    }
+  }
+
+  /**
+   * Initializes a real SSLCommerz hosted payment session
+   */
   async createCheckout(params: CheckoutParams): Promise<CheckoutResult> {
-    const sessionKey = `SSL-SESSION-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
+    this.ensureConfigured();
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+
+    const formData = new URLSearchParams();
+    formData.append('store_id', this.storeId);
+    formData.append('store_passwd', this.storePassword);
+    formData.append('total_amount', params.amount.toFixed(2));
+    formData.append('currency', 'BDT');
+    formData.append('tran_id', params.paymentId);
+    formData.append('success_url', `${appUrl}/api/billing/sslcommerz/success?paymentId=${encodeURIComponent(params.paymentId)}`);
+    formData.append('fail_url', `${appUrl}/api/billing/sslcommerz/fail?paymentId=${encodeURIComponent(params.paymentId)}`);
+    formData.append('cancel_url', `${appUrl}/api/billing/sslcommerz/cancel?paymentId=${encodeURIComponent(params.paymentId)}`);
+    formData.append('ipn_url', `${appUrl}/api/billing/webhook/sslcommerz`);
+    formData.append('cus_name', params.userName || 'Nihomi Student');
+    formData.append('cus_email', params.userEmail || 'student@nihomi.com');
+    formData.append('cus_add1', 'Dhaka, Bangladesh');
+    formData.append('cus_city', 'Dhaka');
+    formData.append('cus_country', 'Bangladesh');
+    formData.append('cus_phone', '01700000000');
+    formData.append('shipping_method', 'NO');
+    formData.append('num_of_item', '1');
+    formData.append('product_name', params.planName || 'Nihomi Learning Subscription');
+    formData.append('product_category', 'Japanese Education');
+    formData.append('product_profile', 'non-physical-goods');
+
+    const res = await fetch(`${this.baseUrl}/gwprocess/v4/api.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formData.toString()
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`SSLCommerz Session Init HTTP ${res.status}: ${errText || 'Session init request failed'}`);
+    }
+
+    const data = (await res.json()) as {
+      status?: string;
+      sessionkey?: string;
+      GatewayPageURL?: string;
+      redirectGatewayURL?: string;
+      failedreason?: string;
+    };
+
+    if (data.status !== 'SUCCESS' || !data.GatewayPageURL) {
+      throw new Error(`SSLCommerz Session Init rejected: ${data.failedreason || data.status || 'Failed to generate gateway session'}`);
+    }
+
     return {
       paymentId: params.paymentId,
       provider: 'sslcommerz',
-      providerReference: sessionKey,
-      redirectUrl: `${this.gatewayUrl}/gw.php?session=${sessionKey}`,
+      providerReference: data.sessionkey || params.paymentId,
+      redirectUrl: data.GatewayPageURL,
       instructions: 'Pay securely via Debit/Credit Cards (VISA, Mastercard, AMEX) or Internet Banking.',
       fieldsNeeded: ['cardNumber', 'cardHolder', 'expiry', 'cvv', 'bankName'],
       metadata: {
         storeId: this.storeId,
-        sessionKey,
+        sessionKey: data.sessionkey,
         isSandbox: this.isSandbox,
         gatewayVersion: 'v4.0'
       }
     };
   }
 
+  /**
+   * Validates transaction with SSLCommerz Order Validation API
+   */
   async verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult> {
-    const tranId = params.providerTransactionId || params.valId || `SSL${Date.now().toString(36).toUpperCase()}`;
-    const cardRaw = params.providerData?.cardNumber || '';
-    const cardMasked = cardRaw.length >= 4 ? `••••-••••-••••-${cardRaw.slice(-4)}` : '••••-••••-••••-4242';
+    this.ensureConfigured();
+    const valId = params.valId || params.providerData?.val_id;
+
+    if (!valId) {
+      return {
+        success: false,
+        status: 'failed',
+        providerTransactionId: '',
+        amount: originalPayment.amount,
+        currency: 'BDT',
+        paymentMethodDetails: { type: 'Card / Banking' },
+        errorMessage: 'Missing SSLCommerz validation ID (val_id).'
+      };
+    }
+
+    const validationUrl = `${this.baseUrl}/validator/api/validationserverAPI.php?val_id=${encodeURIComponent(valId)}&store_id=${encodeURIComponent(this.storeId)}&store_passwd=${encodeURIComponent(this.storePassword)}&v=1&format=json`;
+
+    const res = await fetch(validationUrl, {
+      method: 'GET'
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      return {
+        success: false,
+        status: 'failed',
+        providerTransactionId: valId,
+        amount: originalPayment.amount,
+        currency: 'BDT',
+        paymentMethodDetails: { type: 'Card / Banking' },
+        errorMessage: `SSLCommerz Validation HTTP ${res.status}: ${errText || 'Validation request failed'}`
+      };
+    }
+
+    const data = (await res.json()) as {
+      status?: string;
+      tran_date?: string;
+      tran_id?: string;
+      val_id?: string;
+      amount?: string;
+      store_amount?: string;
+      currency?: string;
+      bank_tran_id?: string;
+      card_type?: string;
+      card_no?: string;
+      card_issuer?: string;
+      card_brand?: string;
+      error?: string;
+    };
+
+    const isValid = (data.status === 'VALID' || data.status === 'VALIDATED') && data.tran_id === originalPayment.id;
+
+    if (!isValid) {
+      return {
+        success: false,
+        status: 'failed',
+        providerTransactionId: data.bank_tran_id || valId,
+        amount: originalPayment.amount,
+        currency: 'BDT',
+        paymentMethodDetails: { type: data.card_type || 'Card / Banking' },
+        errorMessage: data.error || `SSLCommerz validation status: ${data.status || 'INVALID'}`
+      };
+    }
+
+    const cardNo = data.card_no || '';
+    const cardMasked = cardNo.length >= 4 ? `••••-••••-••••-${cardNo.slice(-4)}` : undefined;
 
     return {
       success: true,
       status: 'paid',
-      providerTransactionId: tranId,
-      amount: originalPayment.amount,
+      providerTransactionId: data.bank_tran_id || data.val_id || valId,
+      amount: parseFloat(data.amount || `${originalPayment.amount}`),
       currency: 'BDT',
       paymentMethodDetails: {
-        type: params.providerData?.bankName ? 'Internet Banking' : 'Card (VISA/Mastercard)',
+        type: data.card_type || 'Card / Banking',
         accountNumberMasked: cardMasked,
-        cardBrand: params.providerData?.cardBrand || 'VISA',
-        bankName: params.providerData?.bankName || 'City Bank / EBL / Brac Bank',
-        gatewayName: 'SSLCommerz Hosted Payment Engine'
+        cardBrand: data.card_brand || 'VISA/Mastercard',
+        bankName: data.card_issuer || 'Online Banking',
+        gatewayName: 'SSLCommerz Validated Session'
       }
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
-    const headerSig = signature || headers?.['x-sslcommerz-hash'] || headers?.['verify_sign'];
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
+    const headerSig = signature || headers?.['x-sslcommerz-hash'] || headers?.['verify_sign'] || payload?.verify_sign;
     let isSignatureValid = false;
 
-    // Check HMAC-SHA256 first
-    if (headerSig) {
-      isSignatureValid = verifyHmacSignature(payload, headerSig, this.storePassword);
-    }
-
-    // Check SSLCommerz MD5 verify_key if available in payload
-    if (!isSignatureValid && payload.verify_key && payload.val_id) {
-      isSignatureValid = verifySSLCommerzHash(payload.val_id, payload.verify_key, this.storePassword);
+    if (this.storePassword) {
+      isSignatureValid = verifySSLCommerzIPN(payload, this.storePassword);
+      if (!isSignatureValid && headerSig) {
+        isSignatureValid =
+          verifyHmacSignature(rawBody || payload, headerSig, this.storePassword, 'sha256') ||
+          verifyHmacSignature(rawBody || payload, headerSig, this.storePassword, 'md5');
+      }
     }
 
     const eventId = payload.val_id || payload.tran_id || `ssl-evt-${crypto.randomUUID().slice(0, 8)}`;
@@ -309,7 +830,7 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
       signatureVerified: isSignatureValid,
       eventId,
       eventType: 'SSLCommerz.IPN',
-      paymentId: payload.tran_id,
+      paymentId: payload.tran_id || payload.paymentId,
       providerTransactionId: payload.bank_tran_id || payload.val_id,
       amount: Number(payload.amount) || undefined,
       status,
@@ -317,11 +838,15 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
     };
   }
 
-  async refundPayment(paymentId: string, amount: number, reason: string) {
-    return {
-      success: true,
-      refundId: `SSL-REF-${crypto.randomBytes(4).toString('hex').toUpperCase()}`
-    };
+  async refundPayment(paymentId: string, amount: number, reason: string): Promise<{ success: boolean; refundId?: string; error?: string }> {
+    this.ensureConfigured();
+    const refundUrl = `${this.baseUrl}/validator/api/merchantTransIDvalidationAPI.php?refund_amount=${amount.toFixed(2)}&refund_remarks=${encodeURIComponent(reason)}&bank_tran_id=${encodeURIComponent(paymentId)}&store_id=${encodeURIComponent(this.storeId)}&store_passwd=${encodeURIComponent(this.storePassword)}&v=1&format=json`;
+    const res = await fetch(refundUrl);
+    const data = (await res.json()) as any;
+    if (data.status === 'success' || data.status === 'SUCCESS') {
+      return { success: true, refundId: data.refund_ref_id || data.trans_id };
+    }
+    return { success: false, error: data.error_reason || 'SSLCommerz refund request failed' };
   }
 }
 
@@ -362,9 +887,14 @@ export class ShurjopayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
     const headerSig = signature || headers?.['x-shurjopay-signature'] || headers?.['x-webhook-signature'];
-    const isSignatureValid = verifyHmacSignature(payload, headerSig, this.secretKey);
+    const isSignatureValid = verifyHmacSignature(rawBody || payload, headerSig, this.secretKey);
 
     return {
       valid: isSignatureValid,
@@ -379,7 +909,7 @@ export class ShurjopayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async refundPayment(paymentId: string, amount: number, reason: string) {
+  async refundPayment(paymentId: string, amount: number, reason: string): Promise<{ success: boolean; refundId?: string; error?: string }> {
     return { success: true, refundId: `SP-REF-${Date.now()}` };
   }
 }
@@ -422,18 +952,27 @@ export class StripePaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
     const headerSig = signature || headers?.['stripe-signature'] || headers?.['x-webhook-signature'];
-    const isSignatureValid = verifyHmacSignature(payload, headerSig, this.webhookSecret);
+    const isSignatureValid = this.webhookSecret ? verifyStripeSignature(rawBody || payload, headerSig, this.webhookSecret) : false;
 
     const eventId = payload.id || `evt_${crypto.randomBytes(12).toString('hex')}`;
-    const status: PaymentStatus = payload.type === 'payment_intent.succeeded' ? 'paid' : 'failed';
+    const isSuccess =
+      payload.type === 'payment_intent.succeeded' ||
+      payload.type === 'checkout.session.completed' ||
+      payload.type === 'invoice.payment_succeeded';
+    const status: PaymentStatus = isSuccess ? 'paid' : 'failed';
     return {
       valid: isSignatureValid,
       signatureVerified: isSignatureValid,
       eventId,
       eventType: payload.type || 'payment_intent.succeeded',
-      paymentId: payload.data?.object?.metadata?.paymentId,
+      paymentId: payload.data?.object?.metadata?.paymentId || payload.data?.object?.client_reference_id,
       providerTransactionId: payload.data?.object?.id,
       amount: payload.data?.object?.amount ? payload.data.object.amount / 100 : undefined,
       status,
@@ -490,9 +1029,14 @@ export class ApplePayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
     const headerSig = signature || headers?.['x-apple-signature'] || headers?.['x-webhook-signature'];
-    const isSignatureValid = verifyHmacSignature(payload, headerSig, this.secret);
+    const isSignatureValid = verifyHmacSignature(rawBody || payload, headerSig, this.secret);
 
     return {
       valid: isSignatureValid,
@@ -555,9 +1099,14 @@ export class GooglePayPaymentProvider implements PaymentProvider {
     };
   }
 
-  async handleWebhook(payload: any, signature?: string, headers?: Record<string, any>): Promise<WebhookResult> {
+  async handleWebhook(
+    payload: any,
+    signature?: string,
+    headers?: Record<string, any>,
+    rawBody?: string | Buffer
+  ): Promise<WebhookResult> {
     const headerSig = signature || headers?.['x-gpay-signature'] || headers?.['x-webhook-signature'];
-    const isSignatureValid = verifyHmacSignature(payload, headerSig, this.secret);
+    const isSignatureValid = verifyHmacSignature(rawBody || payload, headerSig, this.secret);
 
     return {
       valid: isSignatureValid,

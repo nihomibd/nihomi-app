@@ -386,100 +386,377 @@ billingRouter.post('/verify-payment', authenticateUser, async (req: Authenticate
 });
 
 // ==========================================
-// 6. ASYNCHRONOUS WEBHOOK HANDLER (Idempotent)
+// 5b. bKash TOKENIZED CALLBACK ROUTE
+// ==========================================
+async function handleBkashCallback(req: Request, res: Response) {
+  try {
+    const paymentIdParam = (req.query.paymentId as string) || (req.body.paymentId as string);
+    const paymentID = (req.query.paymentID as string) || (req.body.paymentID as string);
+    const status = (req.query.status as string) || (req.body.status as string) || '';
+
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+
+    // Look up payment
+    const payment =
+      (paymentIdParam ? db.getPaymentById(paymentIdParam) : undefined) ||
+      (paymentID ? db.getPaymentByProviderReference(paymentID) : undefined);
+
+    if (!payment) {
+      return res.redirect(`${appUrl}/dashboard?payment=failed&error=Payment+record+not+found`);
+    }
+
+    if (status.toLowerCase() === 'cancel') {
+      db.updatePayment(payment.id, {
+        status: 'cancelled',
+        failureReason: 'User cancelled transaction on bKash checkout page.'
+      });
+      return res.redirect(`${appUrl}/dashboard?payment=cancelled&paymentId=${encodeURIComponent(payment.id)}`);
+    }
+
+    if (status.toLowerCase() === 'failure') {
+      db.updatePayment(payment.id, {
+        status: 'failed',
+        failedAt: new Date().toISOString(),
+        failureReason: 'Transaction declined on bKash gateway.'
+      });
+      return res.redirect(`${appUrl}/dashboard?payment=failed&paymentId=${encodeURIComponent(payment.id)}`);
+    }
+
+    // Status is success (or user completed execution flow)
+    if (payment.status === 'paid') {
+      return res.redirect(`${appUrl}/dashboard?payment=success&paymentId=${encodeURIComponent(payment.id)}&plan=${encodeURIComponent(payment.planId)}`);
+    }
+
+    const providerAdapter = PaymentProviderFactory.getProvider('bkash');
+    const verification = await providerAdapter.verifyPayment(
+      {
+        paymentId: payment.id,
+        providerTransactionId: paymentID || payment.providerReference
+      },
+      payment
+    );
+
+    if (!verification.success || verification.status !== 'paid') {
+      db.updatePayment(payment.id, {
+        status: 'failed',
+        failedAt: new Date().toISOString(),
+        failureReason: verification.errorMessage || 'bKash payment execution was declined.'
+      });
+      return res.redirect(
+        `${appUrl}/dashboard?payment=failed&paymentId=${encodeURIComponent(payment.id)}&error=${encodeURIComponent(verification.errorMessage || 'bKash verification failed')}`
+      );
+    }
+
+    // Atomic activation
+    const paidAt = new Date().toISOString();
+    db.updatePayment(payment.id, {
+      status: 'paid',
+      providerTransactionId: verification.providerTransactionId,
+      paymentMethodDetails: verification.paymentMethodDetails,
+      paidAt
+    });
+
+    const user = db.findUserById(payment.userId);
+    const profile = db.getProfileByUserId(payment.userId);
+    let activeSub = db.getUserActiveSubscription(payment.userId);
+    const monthsToAdd = payment.billingInterval === 'yearly' ? 12 : 1;
+
+    if (activeSub && activeSub.planId === payment.planId) {
+      activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd)!;
+      db.updateSubscription(activeSub.id, {
+        lastPaymentId: payment.id,
+        paymentMethod: verification.paymentMethodDetails.type
+      });
+    } else {
+      if (activeSub) {
+        db.cancelSubscription(activeSub.id, true);
+      }
+      activeSub = db.createSubscription({
+        userId: payment.userId,
+        planId: payment.planId,
+        billingInterval: payment.billingInterval,
+        status: 'active',
+        paymentMethod: verification.paymentMethodDetails.type,
+        lastPaymentId: payment.id
+      });
+    }
+
+    db.updatePayment(payment.id, { subscriptionId: activeSub.id });
+
+    const invoice = db.createInvoice({
+      userId: payment.userId,
+      subscriptionId: activeSub.id,
+      planId: payment.planId,
+      planName: payment.planName,
+      amount: payment.amount,
+      billingPeriod: `${activeSub.currentPeriodStart.split('T')[0]} to ${activeSub.currentPeriodEnd.split('T')[0]}`,
+      paymentId: payment.id,
+      customerName: profile?.displayName || 'Nihomi Student',
+      customerEmail: user?.email || 'student@nihomi.com',
+      subtotal: payment.originalAmount,
+      discount: payment.discountAmount,
+      tax: 0,
+      paymentMethodName: `${verification.paymentMethodDetails.type} (${verification.paymentMethodDetails.accountNumberMasked || 'Verified'})`
+    });
+
+    db.updatePayment(payment.id, { invoiceId: invoice.id });
+
+    if (payment.couponCode && payment.discountAmount > 0) {
+      db.recordCouponRedemption(payment.couponCode, payment.userId, payment.id, payment.discountAmount);
+    }
+
+    db.recordSubscriptionEvent(payment.userId, activeSub.id, 'payment_succeeded', {
+      amount: payment.amount,
+      provider: payment.provider,
+      transactionId: verification.providerTransactionId,
+      invoiceId: invoice.id
+    });
+
+    res.redirect(`${appUrl}/dashboard?payment=success&paymentId=${encodeURIComponent(payment.id)}&plan=${encodeURIComponent(payment.planId)}`);
+  } catch (err: any) {
+    console.error('Error handling bKash callback:', err);
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+    res.redirect(`${appUrl}/dashboard?payment=failed&error=${encodeURIComponent(err.message || 'Callback error')}`);
+  }
+}
+
+billingRouter.get('/bkash/callback', handleBkashCallback);
+billingRouter.post('/bkash/callback', handleBkashCallback);
+
+// ==========================================
+// 5c. SSLCOMMERZ REDIRECT CALLBACK ROUTES
+// ==========================================
+billingRouter.post('/sslcommerz/success', async (req: Request, res: Response) => {
+  try {
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+    const { tran_id, val_id } = req.body;
+
+    const paymentId = tran_id || (req.query.paymentId as string);
+    if (!paymentId) {
+      return res.redirect(`${appUrl}/dashboard?payment=failed&error=Missing+transaction+ID`);
+    }
+
+    const payment = db.getPaymentById(paymentId);
+    if (!payment) {
+      return res.redirect(`${appUrl}/dashboard?payment=failed&error=Payment+not+found`);
+    }
+
+    if (payment.status === 'paid') {
+      return res.redirect(`${appUrl}/dashboard?payment=success&paymentId=${encodeURIComponent(payment.id)}&plan=${encodeURIComponent(payment.planId)}`);
+    }
+
+    const providerAdapter = PaymentProviderFactory.getProvider('sslcommerz');
+    const verification = await providerAdapter.verifyPayment(
+      {
+        paymentId: payment.id,
+        valId: val_id,
+        providerData: req.body
+      },
+      payment
+    );
+
+    if (!verification.success || verification.status !== 'paid') {
+      db.updatePayment(payment.id, {
+        status: 'failed',
+        failedAt: new Date().toISOString(),
+        failureReason: verification.errorMessage || 'SSLCommerz order validation failed.'
+      });
+      return res.redirect(`${appUrl}/dashboard?payment=failed&paymentId=${encodeURIComponent(payment.id)}&error=${encodeURIComponent(verification.errorMessage || 'Validation failed')}`);
+    }
+
+    // Atomic activation
+    const paidAt = new Date().toISOString();
+    db.updatePayment(payment.id, {
+      status: 'paid',
+      providerTransactionId: verification.providerTransactionId,
+      paymentMethodDetails: verification.paymentMethodDetails,
+      paidAt
+    });
+
+    const user = db.findUserById(payment.userId);
+    const profile = db.getProfileByUserId(payment.userId);
+    let activeSub = db.getUserActiveSubscription(payment.userId);
+    const monthsToAdd = payment.billingInterval === 'yearly' ? 12 : 1;
+
+    if (activeSub && activeSub.planId === payment.planId) {
+      activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd)!;
+      db.updateSubscription(activeSub.id, {
+        lastPaymentId: payment.id,
+        paymentMethod: verification.paymentMethodDetails.type
+      });
+    } else {
+      if (activeSub) {
+        db.cancelSubscription(activeSub.id, true);
+      }
+      activeSub = db.createSubscription({
+        userId: payment.userId,
+        planId: payment.planId,
+        billingInterval: payment.billingInterval,
+        status: 'active',
+        paymentMethod: verification.paymentMethodDetails.type,
+        lastPaymentId: payment.id
+      });
+    }
+
+    db.updatePayment(payment.id, { subscriptionId: activeSub.id });
+
+    const invoice = db.createInvoice({
+      userId: payment.userId,
+      subscriptionId: activeSub.id,
+      planId: payment.planId,
+      planName: payment.planName,
+      amount: payment.amount,
+      billingPeriod: `${activeSub.currentPeriodStart.split('T')[0]} to ${activeSub.currentPeriodEnd.split('T')[0]}`,
+      paymentId: payment.id,
+      customerName: profile?.displayName || 'Nihomi Student',
+      customerEmail: user?.email || 'student@nihomi.com',
+      subtotal: payment.originalAmount,
+      discount: payment.discountAmount,
+      tax: 0,
+      paymentMethodName: `${verification.paymentMethodDetails.type} (${verification.paymentMethodDetails.accountNumberMasked || 'Verified'})`
+    });
+
+    db.updatePayment(payment.id, { invoiceId: invoice.id });
+
+    if (payment.couponCode && payment.discountAmount > 0) {
+      db.recordCouponRedemption(payment.couponCode, payment.userId, payment.id, payment.discountAmount);
+    }
+
+    db.recordSubscriptionEvent(payment.userId, activeSub.id, 'payment_succeeded', {
+      amount: payment.amount,
+      provider: payment.provider,
+      transactionId: verification.providerTransactionId,
+      invoiceId: invoice.id
+    });
+
+    res.redirect(`${appUrl}/dashboard?payment=success&paymentId=${encodeURIComponent(payment.id)}&plan=${encodeURIComponent(payment.planId)}`);
+  } catch (err: any) {
+    console.error('Error handling SSLCommerz success callback:', err);
+    const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+    res.redirect(`${appUrl}/dashboard?payment=failed&error=${encodeURIComponent(err.message || 'SSLCommerz processing error')}`);
+  }
+});
+
+billingRouter.post('/sslcommerz/fail', (req: Request, res: Response) => {
+  const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+  const { tran_id, error } = req.body;
+  const paymentId = tran_id || (req.query.paymentId as string);
+
+  if (paymentId) {
+    db.updatePayment(paymentId, {
+      status: 'failed',
+      failedAt: new Date().toISOString(),
+      failureReason: error || 'Payment failed on SSLCommerz gateway.'
+    });
+  }
+
+  res.redirect(`${appUrl}/dashboard?payment=failed&paymentId=${encodeURIComponent(paymentId || '')}`);
+});
+
+billingRouter.post('/sslcommerz/cancel', (req: Request, res: Response) => {
+  const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
+  const { tran_id } = req.body;
+  const paymentId = tran_id || (req.query.paymentId as string);
+
+  if (paymentId) {
+    db.updatePayment(paymentId, {
+      status: 'cancelled',
+      failureReason: 'Payment cancelled on SSLCommerz gateway.'
+    });
+  }
+
+  res.redirect(`${appUrl}/dashboard?payment=cancelled&paymentId=${encodeURIComponent(paymentId || '')}`);
+});
+
+// ==========================================
+// 6. ASYNCHRONOUS WEBHOOK & IPN HANDLER (Idempotent & Cryptographically Signed)
 // ==========================================
 billingRouter.post('/webhook/:provider', async (req: Request, res: Response) => {
+  const providerParam = (req.params.provider || 'bkash').toLowerCase() as PaymentProviderType;
+  const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() || req.ip || '127.0.0.1';
+  const rawBody = (req as any).rawBody || (typeof req.body === 'string' ? req.body : undefined);
+  const payload = req.body || {};
+
+  const signature = (
+    req.headers['stripe-signature'] ||
+    req.headers['x-bkash-signature'] ||
+    req.headers['x-sslcommerz-hash'] ||
+    req.headers['x-shurjopay-signature'] ||
+    req.headers['x-apple-signature'] ||
+    req.headers['x-gpay-signature'] ||
+    req.headers['x-webhook-signature'] ||
+    req.headers['signature'] ||
+    payload.verify_sign ||
+    payload.verify_key
+  ) as string | undefined;
+
   try {
-    const providerParam = (req.params.provider || 'bkash').toLowerCase() as PaymentProviderType;
-    const payload = req.body;
-    const signature = (req.headers['x-webhook-signature'] || req.headers['x-bkash-signature'] || req.headers['x-sslcommerz-hash'] || req.headers['stripe-signature']) as string | undefined;
-
     const providerAdapter = PaymentProviderFactory.getProvider(providerParam);
-    const webhookResult = await providerAdapter.handleWebhook(payload, signature, req.headers as Record<string, any>);
+    const webhookResult = await providerAdapter.handleWebhook(
+      payload,
+      signature,
+      req.headers as Record<string, any>,
+      rawBody
+    );
 
+    // 1. Signature Verification Check
     if (!webhookResult.valid) {
+      console.warn(`[Webhook] Signature verification failed for provider: ${providerParam}`);
       db.recordWebhookEvent({
         eventId: webhookResult.eventId || `err-${Date.now()}`,
         provider: providerParam,
-        eventType: webhookResult.eventType || 'webhook.error',
+        eventType: webhookResult.eventType || `${providerParam}.webhook_invalid_signature`,
         signature,
         signatureVerified: false,
         rawHeaders: req.headers as Record<string, string>,
         rawPayload: payload,
         status: 'failed',
         errorMessage: 'Invalid webhook signature or payload hash mismatch.',
-        ipAddress: req.ip || (req.headers['x-forwarded-for'] as string) || '127.0.0.1'
+        ipAddress
       });
-      return res.status(400).json({ error: 'Invalid webhook signature or payload.' });
+      return res.status(400).json({ error: 'Invalid webhook signature or payload verification failed.' });
     }
 
-    // Check Idempotency
-    if (db.isWebhookProcessed(webhookResult.eventId)) {
-      return res.json({ received: true, idempotent: true, message: 'Event already processed.' });
+    // 2. Strict Idempotency Check
+    if (db.isWebhookProcessed(webhookResult.eventId, providerParam)) {
+      console.log(`[Webhook] Duplicate event ignored for idempotency: ${webhookResult.eventId}`);
+      return res.status(200).json({
+        received: true,
+        idempotent: true,
+        eventId: webhookResult.eventId,
+        message: 'Event already processed.'
+      });
     }
 
-    // Record webhook event
-    db.recordWebhookEvent({
+    // 3. Atomic Webhook Processing (Event Logging -> Payment State -> Subscription Activation -> Tax Invoice)
+    const processResult = db.processWebhookTransactionAtomic({
       eventId: webhookResult.eventId,
       provider: providerParam,
       eventType: webhookResult.eventType,
-      transactionId: webhookResult.providerTransactionId,
-      payloadReference: webhookResult.paymentId,
+      paymentId: webhookResult.paymentId,
+      providerTransactionId: webhookResult.providerTransactionId,
+      amount: webhookResult.amount,
       signature,
       signatureVerified: true,
       rawHeaders: req.headers as Record<string, string>,
       rawPayload: payload,
-      status: webhookResult.status === 'failed' ? 'failed' : 'success',
-      ipAddress: req.ip || (req.headers['x-forwarded-for'] as string) || '127.0.0.1'
+      ipAddress
     });
 
-    // If there's an associated payment, process status update
-    if (webhookResult.paymentId) {
-      const payment = db.getPaymentById(webhookResult.paymentId);
-      if (payment && payment.status !== 'paid' && webhookResult.status === 'paid') {
-        db.updatePayment(payment.id, {
-          status: 'paid',
-          providerTransactionId: webhookResult.providerTransactionId,
-          paidAt: new Date().toISOString()
-        });
-
-        // Ensure subscription activated
-        const user = db.findUserById(payment.userId);
-        if (user) {
-          const profile = db.getProfileByUserId(user.id);
-          let sub = db.getUserActiveSubscription(user.id);
-          if (!sub || sub.planId !== payment.planId) {
-            sub = db.createSubscription({
-              userId: user.id,
-              planId: payment.planId,
-              billingInterval: payment.billingInterval,
-              status: 'active',
-              lastPaymentId: payment.id
-            });
-          }
-
-          db.createInvoice({
-            userId: user.id,
-            subscriptionId: sub.id,
-            planId: payment.planId,
-            planName: payment.planName,
-            amount: payment.amount,
-            billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
-            paymentId: payment.id,
-            customerName: profile?.displayName || 'Customer',
-            customerEmail: user.email,
-            subtotal: payment.originalAmount,
-            discount: payment.discountAmount,
-            paymentMethodName: `${providerParam.toUpperCase()} Webhook Auto-Verified`
-          });
-        }
-      }
+    if (!processResult.success) {
+      console.error(`[Webhook] Failed atomic processing for event ${webhookResult.eventId}:`, processResult.error);
+      return res.status(500).json({ error: 'Webhook processing encountered a state error.' });
     }
 
-    res.json({ received: true, success: true });
+    return res.status(200).json({
+      received: true,
+      success: true,
+      idempotent: processResult.idempotent || false,
+      eventId: webhookResult.eventId
+    });
   } catch (err: any) {
-    console.error('Error handling billing webhook:', err);
-    res.status(500).json({ error: 'Webhook processing error.' });
+    console.error(`[Webhook] Exception handling ${providerParam} webhook:`, err);
+    return res.status(500).json({ error: 'Internal server error processing webhook.' });
   }
 });
 
