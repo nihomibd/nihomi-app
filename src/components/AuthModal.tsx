@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw, UserPlus, LogIn } from 'lucide-react';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
@@ -27,7 +27,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber || phoneNumber.length < 10) {
-      setErrorMsg('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 01712345678)');
+      setErrorMsg('à¦¸à¦ à¦¿à¦• à§§à§§ à¦¡à¦¿à¦œà¦¿à¦Ÿà§‡à¦° à¦®à§‹à¦¬à¦¾à¦‡à¦² à¦¨à¦®à§à¦¬à¦° à¦¦à¦¿à¦¨ (à¦¯à§‡à¦®à¦¨: 01712345678)');
       return;
     }
     setIsLoading(true);
@@ -43,7 +43,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     e.preventDefault();
     const fullCode = otpCode.join('');
     if (fullCode.length < 6) {
-      setErrorMsg('৬ ডিজিটের ওটিপি (OTP) কোডটি সঠিকভাবে পূরণ করুন');
+      setErrorMsg('à§¬ à¦¡à¦¿à¦œà¦¿à¦Ÿà§‡à¦° à¦“à¦Ÿà¦¿à¦ªà¦¿ (OTP) à¦•à§‹à¦¡à¦Ÿà¦¿ à¦¸à¦ à¦¿à¦•à¦­à¦¾à¦¬à§‡ à¦ªà§‚à¦°à¦£ à¦•à¦°à§à¦¨');
       return;
     }
 
@@ -80,12 +80,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     const cleanPassword = password.trim();
 
     if (!cleanEmail || !cleanPassword) {
-      setErrorMsg('ইমেইল এবং পাসওয়ার্ড উভয় ফিল্ড পূরণ করুন');
+      setErrorMsg('à¦‡à¦®à§‡à¦‡à¦² à¦à¦¬à¦‚ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦‰à¦­à§Ÿ à¦«à¦¿à¦²à§à¦¡ à¦ªà§‚à¦°à¦£ à¦•à¦°à§à¦¨');
       return;
     }
 
     if (isSignUpMode && cleanPassword.length < 6) {
-      setErrorMsg('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
+      setErrorMsg('à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦•à¦®à¦ªà¦•à§à¦·à§‡ à§¬ à¦…à¦•à§à¦·à¦°à§‡à¦° à¦¹à¦¤à§‡ à¦¹à¦¬à§‡');
       return;
     }
 
@@ -141,7 +141,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           onSuccess(data.user);
           onClose();
         } else if (data.user && !data.session) {
-          setSuccessNotice('অ্যাকাউন্ট তৈরি হয়েছে! অনুগ্রহ করে আপনার ইমেইল ইনবক্স চেক করে অ্যাকাউন্ট ভেরিফাই করুন।');
+          setSuccessNotice('à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦¤à§ˆà¦°à¦¿ à¦¹à¦¯à¦¼à§‡à¦›à§‡! à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦‡à¦®à§‡à¦‡à¦² à¦‡à¦¨à¦¬à¦•à§à¦¸ à¦šà§‡à¦• à¦•à¦°à§‡ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦­à§‡à¦°à¦¿à¦«à¦¾à¦‡ à¦•à¦°à§à¦¨à¥¤');
         }
       } else {
         // 2. Direct Supabase Sign In With Password
@@ -182,7 +182,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       }
     } catch (err: any) {
       console.error('Authentication error:', err);
-      setErrorMsg(err.message || (isSignUpMode ? 'নিবন্ধন ব্যর্থ হয়েছে।' : 'লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড পুনরায় চেক করুন।'));
+      setErrorMsg(err.message || (isSignUpMode ? 'à¦¨à¦¿à¦¬à¦¨à§à¦§à¦¨ à¦¬à§à¦¯à¦°à§à¦¥ à¦¹à¦¯à¦¼à§‡à¦›à§‡à¥¤' : 'à¦²à¦—à¦‡à¦¨ à¦¬à§à¦¯à¦°à§à¦¥ à¦¹à¦¯à¦¼à§‡à¦›à§‡à¥¤ à¦‡à¦®à§‡à¦‡à¦² à¦¬à¦¾ à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦ªà§à¦¨à¦°à¦¾à¦¯à¦¼ à¦šà§‡à¦• à¦•à¦°à§à¦¨à¥¤'));
     } finally {
       setIsLoading(false);
     }
@@ -195,9 +195,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     try {
       // Direct Supabase OAuth flow without local /api/auth fetch
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+        provider: 'google', options: { queryParams: { prompt: 'select_account' }, redirectTo: window.location.origin }/auth/callback`,
         },
       });
 
@@ -224,11 +222,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         {/* Brand Badge */}
         <div className="text-center space-y-2 mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center font-bold text-xl text-white mx-auto shadow-lg shadow-red-500/20">
-            日
+            æ—¥
           </div>
-          <h3 className="text-2xl font-bold text-white">Nihomi-তে স্বাগতম</h3>
+          <h3 className="text-2xl font-bold text-white">Nihomi-à¦¤à§‡ à¦¸à§à¦¬à¦¾à¦—à¦¤à¦®</h3>
           <p className="text-xs text-slate-400">
-            {isSignUpMode ? 'নতুন অ্যাকাউন্ট খুলে জাপানি ভাষা শেখা শুরু করুন' : 'জাপানি ভাষা শেখার সেরা প্ল্যাটফর্মে লগইন করুন'}
+            {isSignUpMode ? 'à¦¨à¦¤à§à¦¨ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦–à§à¦²à§‡ à¦œà¦¾à¦ªà¦¾à¦¨à¦¿ à¦­à¦¾à¦·à¦¾ à¦¶à§‡à¦–à¦¾ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨' : 'à¦œà¦¾à¦ªà¦¾à¦¨à¦¿ à¦­à¦¾à¦·à¦¾ à¦¶à§‡à¦–à¦¾à¦° à¦¸à§‡à¦°à¦¾ à¦ªà§à¦²à§à¦¯à¦¾à¦Ÿà¦«à¦°à§à¦®à§‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨'}
           </p>
         </div>
 
@@ -241,7 +239,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             }`}
           >
             <Mail className="w-3.5 h-3.5" />
-            <span>ইমেইল পাসওয়ার্ড</span>
+            <span>à¦‡à¦®à§‡à¦‡à¦² à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡</span>
           </button>
           <button
             onClick={() => { setAuthMethod('phone'); setOtpSent(false); setErrorMsg(null); setSuccessNotice(null); }}
@@ -250,7 +248,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             }`}
           >
             <Phone className="w-3.5 h-3.5" />
-            <span>মোবাইল ওটিপি</span>
+            <span>à¦®à§‹à¦¬à¦¾à¦‡à¦² à¦“à¦Ÿà¦¿à¦ªà¦¿</span>
           </button>
         </div>
 
@@ -272,7 +270,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
         <div className="relative my-5 text-center">
           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-800"></div></div>
-          <span className="relative bg-slate-900 px-3 text-[11px] text-slate-400 uppercase tracking-widest font-semibold">অথবা</span>
+          <span className="relative bg-slate-900 px-3 text-[11px] text-slate-400 uppercase tracking-widest font-semibold">à¦…à¦¥à¦¬à¦¾</span>
         </div>
 
         {errorMsg && (
@@ -294,10 +292,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           <form onSubmit={handleEmailPasswordSubmit} className="space-y-4">
             {isSignUpMode && (
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">আপনার নাম (Full Name)</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">à¦†à¦ªà¦¨à¦¾à¦° à¦¨à¦¾à¦® (Full Name)</label>
                 <input
                   type="text"
-                  placeholder="যেমন: তানভীর আহমেদ"
+                  placeholder="à¦¯à§‡à¦®à¦¨: à¦¤à¦¾à¦¨à¦­à§€à¦° à¦†à¦¹à¦®à§‡à¦¦"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
@@ -306,7 +304,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">ইমেইল এড্রেস</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">à¦‡à¦®à§‡à¦‡à¦² à¦à¦¡à§à¦°à§‡à¦¸</label>
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -317,10 +315,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">পাসওয়ার্ড</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡</label>
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -339,12 +337,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               ) : isSignUpMode ? (
                 <>
                   <UserPlus className="w-4 h-4" />
-                  <span>রেজিস্ট্রেশন সম্পন্ন করুন</span>
+                  <span>à¦°à§‡à¦œà¦¿à¦¸à§à¦Ÿà§à¦°à§‡à¦¶à¦¨ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à§à¦¨</span>
                 </>
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
-                  <span>লগইন করুন</span>
+                  <span>à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨</span>
                 </>
               )}
             </button>
@@ -361,8 +359,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 className="text-xs text-slate-400 hover:text-red-400 transition cursor-pointer underline underline-offset-4"
               >
                 {isSignUpMode
-                  ? 'ইতিমধ্যে অ্যাকাউন্ট আছে? এখানে লগইন করুন'
-                  : 'নতুন শিক্ষার্থী? নতুন অ্যাকাউন্ট খুলুন'}
+                  ? 'à¦‡à¦¤à¦¿à¦®à¦§à§à¦¯à§‡ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦†à¦›à§‡? à¦à¦–à¦¾à¦¨à§‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨'
+                  : 'à¦¨à¦¤à§à¦¨ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€? à¦¨à¦¤à§à¦¨ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦–à§à¦²à§à¦¨'}
               </button>
             </div>
           </form>
@@ -374,10 +372,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             {!otpSent ? (
               <form onSubmit={handleSendOtp} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">বাংলাদেশি মোবাইল নম্বর</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">à¦¬à¦¾à¦‚à¦²à¦¾à¦¦à§‡à¦¶à¦¿ à¦®à§‹à¦¬à¦¾à¦‡à¦² à¦¨à¦®à§à¦¬à¦°</label>
                   <div className="flex rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden focus-within:border-red-500 transition">
                     <span className="bg-slate-800/80 px-3.5 py-3 text-xs font-bold text-slate-300 flex items-center border-r border-slate-700">
-                      🇧🇩 +880
+                      ðŸ‡§ðŸ‡© +880
                     </span>
                     <input
                       type="tel"
@@ -393,7 +391,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   disabled={isLoading}
                   className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-2xl transition flex items-center justify-center space-x-2 text-sm shadow-lg shadow-red-600/20 cursor-pointer"
                 >
-                  {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>ওটিপি (OTP) পাঠান</span>}
+                  {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>à¦“à¦Ÿà¦¿à¦ªà¦¿ (OTP) à¦ªà¦¾à¦ à¦¾à¦¨</span>}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
@@ -401,7 +399,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               <form onSubmit={handleVerifyOtp} className="space-y-4">
                 <div className="text-center space-y-1">
                   <div className="text-xs text-slate-300">
-                    +880 {phoneNumber} নম্বরে ৬ ডিজিটের কোড পাঠানো হয়েছে
+                    +880 {phoneNumber} à¦¨à¦®à§à¦¬à¦°à§‡ à§¬ à¦¡à¦¿à¦œà¦¿à¦Ÿà§‡à¦° à¦•à§‹à¦¡ à¦ªà¦¾à¦ à¦¾à¦¨à§‹ à¦¹à§Ÿà§‡à¦›à§‡
                   </div>
                 </div>
 
@@ -432,7 +430,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   disabled={isLoading}
                   className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-2xl transition flex items-center justify-center space-x-2 text-sm shadow-lg shadow-emerald-600/20 cursor-pointer"
                 >
-                  {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>ভেরিফাই ও লগইন</span>}
+                  {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <span>à¦­à§‡à¦°à¦¿à¦«à¦¾à¦‡ à¦“ à¦²à¦—à¦‡à¦¨</span>}
                   <CheckCircle2 className="w-4 h-4" />
                 </button>
               </form>
@@ -445,3 +443,5 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 };
 
 export default AuthModal;
+
+

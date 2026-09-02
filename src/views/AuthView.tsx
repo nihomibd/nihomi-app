@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { JLPTLevel } from '../types.js';
 import { apiRequest, setStoredToken } from '../lib/api.js';
@@ -48,9 +48,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
     setErrorMsg(null);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+        provider: 'google', options: { queryParams: { prompt: 'select_account' }, redirectTo: window.location.origin }/auth/callback`,
         },
       });
 
@@ -119,7 +117,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-red-600 text-white font-bold font-serif text-2xl mx-auto shadow-sm">
-            日
+            æ—¥
           </div>
           <h2 className="text-2xl font-bold font-serif text-stone-900 tracking-tight">
             {mode === 'login' && 'Welcome Back to Nihomi'}
@@ -260,7 +258,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
                   id="auth-password"
                   type="password"
                   required
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl bg-stone-50 border border-stone-200 text-stone-900 placeholder-stone-400 focus:outline-none focus:border-red-500 focus:bg-white transition-colors"
@@ -333,7 +331,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   className="w-full px-3 py-2.5 text-xs rounded-xl bg-stone-50 border border-stone-200 text-stone-900"
                 />
               </div>
@@ -408,3 +406,5 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
     </div>
   );
 };
+
+
