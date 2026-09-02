@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { setStoredToken, apiRequest, getStoredToken } from '../lib/api';
 
@@ -104,7 +104,7 @@ export const PLAN_CONFIGS: Record<string, any> = {
     planName: 'Nihomi Free Basic',
     priceUSD: 0,
     priceBDT: 0,
-    features: ['Hiragana & Katakana Mastery', 'N5 Lessons 1–3 Access', 'Basic Spaced Repetition', 'Community Support'],
+    features: ['Hiragana & Katakana Mastery', 'N5 Lessons 1â€“3 Access', 'Basic Spaced Repetition', 'Community Support'],
   },
   starter: {
     planId: 'starter',
@@ -248,8 +248,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     speakingScore: 80,
     learningVelocity: 1.25,
     diagnosedWeaknesses: [
-      { category: 'Grammar', item: 'Particle に vs で', description: 'Action location vs destination context', frequency: 3 },
-      { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on 日 and 月', frequency: 2 }
+      { category: 'Grammar', item: 'Particle ã« vs ã§', description: 'Action location vs destination context', frequency: 3 },
+      { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on æ—¥ and æœˆ', frequency: 2 }
     ],
     lastPracticedAt: new Date().toISOString(),
   });
@@ -272,7 +272,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Listen to Supabase Session & extract Google Avatar
-  useEffect(() => {
+    useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      });
+    }
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         if (session.access_token) {

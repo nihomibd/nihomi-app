@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+﻿import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl =
   (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_SUPABASE_URL) ||
@@ -17,6 +17,13 @@ export const isSupabaseConfigured = (): boolean => Boolean(
 
 // 2. Export Supabase Client instance
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'implicit',
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined
+  },
   auth: {
     persistSession: true,
     autoRefreshToken: true,
