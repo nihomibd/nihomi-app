@@ -83,6 +83,7 @@ export interface VocabularyItem {
   exampleSentenceEn: string;
   exampleFurigana?: string;
   audioText?: string;
+  audioUrl?: string;
   notes?: string;
   sourceDerived?: boolean;
   sourcePage?: number;
@@ -943,6 +944,7 @@ export interface DatabaseSchema {
   contentDrafts: ContentDraft[];
   contentVersions: ContentVersion[];
   backgroundJobs?: BackgroundJob[];
+  publishingQueue?: PublishingQueueItem[];
 
   // MemoryOS™ & Ghost Mode SRS Tables
   ghostWeaknesses?: GhostWeaknessItem[];
@@ -1415,8 +1417,68 @@ export type BackgroundJobType =
   | 'audio_generation'
   | 'batch_media_sync'
   | 'database_backup_daily'
-  | 'database_backup_weekly';
+  | 'database_backup_weekly'
+  | 'live_lesson_publishing'
+  | 'batch_lesson_publish';
 export type BackgroundJobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled' | 'retrying';
+
+export type PublishingQueuePriority = 'CRITICAL' | 'HIGH' | 'NORMAL' | 'LOW';
+export type PublishingQueueStatus = 'queued' | 'validating' | 'snapshotting' | 'publishing' | 'completed' | 'failed' | 'cancelled';
+
+export interface PreflightCheckItem {
+  id: string;
+  name: string;
+  category: 'STRUCTURE' | 'VOCABULARY' | 'GRAMMAR' | 'KANJI' | 'QUIZ' | 'AUDIO' | 'CURRICULUM';
+  status: 'PASS' | 'WARN' | 'FAIL';
+  message: string;
+  details?: Record<string, any>;
+}
+
+export interface PublishingPreflightReport {
+  passed: boolean;
+  score: number; // 0 - 100
+  evaluatedAt: string;
+  totalChecks: number;
+  passedChecks: number;
+  warningsCount: number;
+  errorsCount: number;
+  checks: PreflightCheckItem[];
+}
+
+export interface PublishingQueueLogEntry {
+  timestamp: string;
+  stage: string;
+  level: 'info' | 'warn' | 'error';
+  message: string;
+  details?: Record<string, any>;
+}
+
+export interface PublishingQueueItem {
+  id: string;
+  draftId: string;
+  lessonId?: string;
+  title: string;
+  titleJa?: string;
+  level: JLPTLevel;
+  priority: PublishingQueuePriority;
+  status: PublishingQueueStatus;
+  progress: number; // 0 - 100
+  currentStage: string;
+  scheduledFor?: string; // ISO timestamp
+  changelog?: string;
+  enqueuedBy: string;
+  enqueuedAt: string;
+  startedAt?: string;
+  completedAt?: string;
+  publishedLessonId?: string;
+  createdVersionId?: string;
+  versionNumber?: number;
+  preflightReport?: PublishingPreflightReport;
+  error?: string;
+  retryCount: number;
+  maxRetries: number;
+  logs: PublishingQueueLogEntry[];
+}
 
 export interface BackgroundJob {
   id: string;

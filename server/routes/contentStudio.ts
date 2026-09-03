@@ -6,7 +6,9 @@ import { QAEngineService } from '../services/content-studio/qaEngineService.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 import { db } from '../db.js';
-import { StructuredEducationalContent, QuestionType } from '../types.js';
+import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, PublishingQueueStatus } from '../types.js';
+import { liveLessonPublishingQueueService } from '../services/liveLessonPublishingQueueService.js';
+import { PublishingPreflightService } from '../services/publishingPreflightService.js';
 
 export const contentStudioRouter = Router();
 
@@ -325,4 +327,101 @@ contentStudioRouter.post('/lessons/:id/diff', requireStaff, (req: AuthenticatedR
   }
 
   res.json({ success: true, diff: result.diff });
+});
+
+// 14. Evaluate Draft Pre-flight Readiness (Staff)
+contentStudioRouter.get('/drafts/:id/preflight', requireStaff, (req: AuthenticatedRequest, res) => {
+  const draft = db.getContentDraftById(req.params.id);
+  if (!draft) {
+    return res.status(404).json({ error: 'Content draft not found.' });
+  }
+
+  const report = PublishingPreflightService.evaluateDraft(draft);
+  res.json({ success: true, draftId: draft.id, report });
+});
+
+// 15. Enqueue Lesson for Live Publishing (Staff / Admin)
+contentStudioRouter.post('/publishing-queue/enqueue', requireStaff, (req: AuthenticatedRequest, res) => {
+  const { draftId, priority, scheduledFor, changelog, bypassPreflightErrors } = req.body;
+  if (!draftId) {
+    return res.status(400).json({ error: 'Missing draftId in request body.' });
+  }
+
+  const enqueuedBy = req.user?.email || req.user?.id || 'staff';
+  const result = liveLessonPublishingQueueService.enqueue({
+    draftId,
+    enqueuedBy,
+    priority: priority as PublishingQueuePriority,
+    scheduledFor,
+    changelog,
+    bypassPreflightErrors: Boolean(bypassPreflightErrors)
+  });
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  res.status(201).json({
+    success: true,
+    message: `Lesson draft ${draftId} enqueued for live publishing.`,
+    queueItem: result.queueItem
+  });
+});
+
+// 16. List Publishing Queue Items with Filtering (Staff)
+contentStudioRouter.get('/publishing-queue', requireStaff, (req: AuthenticatedRequest, res) => {
+  const { status, level, priority } = req.query;
+  const items = liveLessonPublishingQueueService.getQueue({
+    status: status as string,
+    level: level as string,
+    priority: priority as string
+  });
+  const stats = liveLessonPublishingQueueService.getStats();
+
+  res.json({
+    success: true,
+    count: items.length,
+    stats,
+    queue: items
+  });
+});
+
+// 17. Get Publishing Queue Statistics (Staff)
+contentStudioRouter.get('/publishing-queue/stats', requireStaff, (req: AuthenticatedRequest, res) => {
+  const stats = liveLessonPublishingQueueService.getStats();
+  res.json({ success: true, stats });
+});
+
+// 18. Get Single Publishing Queue Job (Staff)
+contentStudioRouter.get('/publishing-queue/:id', requireStaff, (req: AuthenticatedRequest, res) => {
+  const item = liveLessonPublishingQueueService.getQueueItemById(req.params.id);
+  if (!item) {
+    return res.status(404).json({ error: 'Publishing job not found.' });
+  }
+  res.json({ success: true, queueItem: item });
+});
+
+// 19. Cancel Pending / Scheduled Publishing Job (Staff)
+contentStudioRouter.post('/publishing-queue/:id/cancel', requireStaff, (req: AuthenticatedRequest, res) => {
+  const cancelledBy = req.user?.email || req.user?.id || 'staff';
+  const result = liveLessonPublishingQueueService.cancel(req.params.id, cancelledBy);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+  res.json({ success: true, message: `Job ${req.params.id} cancelled successfully.` });
+});
+
+// 20. Retry Failed Publishing Job (Staff)
+contentStudioRouter.post('/publishing-queue/:id/retry', requireStaff, (req: AuthenticatedRequest, res) => {
+  const result = liveLessonPublishingQueueService.retry(req.params.id);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+  res.json({ success: true, message: `Job ${req.params.id} re-enqueued for publishing.`, queueItem: result.queueItem });
+});
+
+// 21. Manually Process Next Ready Job / Flush Queue (Admin)
+contentStudioRouter.post('/publishing-queue/process-next', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  const result = await liveLessonPublishingQueueService.processNextReadyItem();
+  res.json({ success: true, result });
 });

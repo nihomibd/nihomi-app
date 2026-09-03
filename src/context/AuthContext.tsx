@@ -104,7 +104,7 @@ export const PLAN_CONFIGS: Record<string, any> = {
     planName: 'Nihomi Free Basic',
     priceUSD: 0,
     priceBDT: 0,
-    features: ['Hiragana & Katakana Mastery', 'N5 Lessons 1â€“3 Access', 'Basic Spaced Repetition', 'Community Support'],
+    features: ['Hiragana & Katakana Mastery', 'N5 Lessons 1–3 Access', 'Basic Spaced Repetition', 'Community Support'],
   },
   starter: {
     planId: 'starter',
@@ -249,7 +249,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     learningVelocity: 1.25,
     diagnosedWeaknesses: [
       { category: 'Grammar', item: 'Particle ã« vs ã§', description: 'Action location vs destination context', frequency: 3 },
-      { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on æ—¥ and æœˆ', frequency: 2 }
+      { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on 日 and 月', frequency: 2 }
     ],
     lastPracticedAt: new Date().toISOString(),
   });

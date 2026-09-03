@@ -360,7 +360,7 @@ export const SEED_COUPONS: Coupon[] = [
 ];
 
 class Database {
-  private data: DatabaseSchema = {
+  public data: DatabaseSchema = {
     users: [],
     profiles: [],
     progress: [],

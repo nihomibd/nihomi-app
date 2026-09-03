@@ -138,6 +138,29 @@ export class BackgroundJobQueueService {
       updateProgress(100, 'Weekly backup completed and archived.');
       return summary;
     });
+
+    // 6. Live Lesson Publishing Handler (P1-03)
+    this.registerHandler('live_lesson_publishing', async (job, updateProgress) => {
+      const draftId = job.targetId;
+      updateProgress(20, 'Evaluating pre-flight curriculum integrity...');
+      const draft = db.getContentDraftById(draftId);
+      if (!draft) {
+        throw new Error(`ContentDraft with ID ${draftId} not found`);
+      }
+
+      const adminUserId = job.metadata?.adminUserId || 'system';
+      const changelog = job.metadata?.changelog || `Live published via background queue (${job.id})`;
+
+      updateProgress(50, 'Archiving version snapshot...');
+      updateProgress(80, 'Atomic catalog commit...');
+      const publishResult = db.publishContentDraft(draftId, adminUserId, changelog);
+      if (!publishResult.success) {
+        throw new Error(publishResult.error || 'Live lesson publication failed');
+      }
+
+      updateProgress(100, `Published lesson ${publishResult.lesson?.id} at version v${publishResult.version?.versionNumber}`);
+      return publishResult;
+    });
   }
 
   public registerHandler(type: BackgroundJobType, handler: JobHandler): void {

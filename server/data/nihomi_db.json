@@ -2074,6 +2074,252 @@
       "id": "les-a56180",
       "createdAt": "2026-09-03T07:16:48.196Z",
       "updatedAt": "2026-09-03T07:16:48.233Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 12,
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v-p1-01",
+          "japanese": "せんせい",
+          "furigana": "せんせい",
+          "romaji": "sensei",
+          "english": "Teacher / Instructor",
+          "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+          "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+        },
+        {
+          "id": "v-p1-02",
+          "japanese": "ともだち",
+          "furigana": "ともだち",
+          "romaji": "tomodachi",
+          "english": "Friend",
+          "banglaMeaning": "বন্ধু",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "かれは わたしの ともだちです。",
+          "exampleSentenceEn": "He is my friend."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g-p1-01",
+          "title": "N1 も N2 です",
+          "titleJa": "助詞「も」",
+          "structure": "Noun1 も Noun2 です",
+          "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+          "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしも がくせいです。",
+              "english": "I am also a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k-p1-01",
+          "character": "友",
+          "onyomi": [
+            "ユウ"
+          ],
+          "kunyomi": [
+            "とも"
+          ],
+          "meaning": "Friend / Companion",
+          "strokeCount": 4,
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "ともだち",
+              "reading": "tomodachi",
+              "english": "friend"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [],
+      "quizId": "quiz-4f351a",
+      "id": "les-83d4f1",
+      "createdAt": "2026-09-03T07:35:26.980Z",
+      "updatedAt": "2026-09-03T07:35:27.094Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 13,
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v-p1-01",
+          "japanese": "せんせい",
+          "furigana": "せんせい",
+          "romaji": "sensei",
+          "english": "Teacher / Instructor",
+          "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+          "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+        },
+        {
+          "id": "v-p1-02",
+          "japanese": "ともだち",
+          "furigana": "ともだち",
+          "romaji": "tomodachi",
+          "english": "Friend",
+          "banglaMeaning": "বন্ধু",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "かれは わたしの ともだちです。",
+          "exampleSentenceEn": "He is my friend."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g-p1-01",
+          "title": "N1 も N2 です",
+          "titleJa": "助詞「も」",
+          "structure": "Noun1 も Noun2 です",
+          "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+          "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしも がくせいです。",
+              "english": "I am also a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k-p1-01",
+          "character": "友",
+          "onyomi": [
+            "ユウ"
+          ],
+          "kunyomi": [
+            "とも"
+          ],
+          "meaning": "Friend / Companion",
+          "strokeCount": 4,
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "ともだち",
+              "reading": "tomodachi",
+              "english": "friend"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [],
+      "quizId": "quiz-fa6165",
+      "id": "les-438a0b",
+      "createdAt": "2026-09-03T07:36:03.423Z",
+      "updatedAt": "2026-09-03T07:36:03.532Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 14,
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "summary": "Automated publishing test master draft for JLPT N5",
+      "explanation": "Detailed explanation for P1-03 lesson ingestion",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v-p1-01",
+          "japanese": "せんせい",
+          "furigana": "せんせい",
+          "romaji": "sensei",
+          "english": "Teacher / Instructor",
+          "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+          "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+        },
+        {
+          "id": "v-p1-02",
+          "japanese": "ともだち",
+          "furigana": "ともだち",
+          "romaji": "tomodachi",
+          "english": "Friend",
+          "banglaMeaning": "বন্ধু",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "かれは わたしの ともだちです。",
+          "exampleSentenceEn": "He is my friend."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g-p1-01",
+          "title": "N1 も N2 です",
+          "titleJa": "助詞「も」",
+          "structure": "Noun1 も Noun2 です",
+          "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+          "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしも がくせいです。",
+              "english": "I am also a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k-p1-01",
+          "character": "友",
+          "onyomi": [
+            "ユウ"
+          ],
+          "kunyomi": [
+            "とも"
+          ],
+          "meaning": "Friend / Companion",
+          "strokes": 4,
+          "radicals": "又",
+          "level": "N5",
+          "examples": [
+            {
+              "word": "ともだち",
+              "reading": "tomodachi",
+              "meaning": "friend"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [],
+      "quizId": "quiz-1bfb6a",
+      "id": "les-c965e6",
+      "createdAt": "2026-09-03T08:11:08.323Z",
+      "updatedAt": "2026-09-03T08:11:08.436Z"
     }
   ],
   "quizzes": [
@@ -2141,6 +2387,123 @@
       "createdAt": "2026-08-23T10:16:05.169+00:00",
       "updatedAt": "2026-08-23T10:16:05.177+00:00",
       "lessonId": null
+    },
+    {
+      "courseId": "course-n5",
+      "level": "N5",
+      "title": "Particle も & Vocabulary Mastery Quiz",
+      "description": "Comprehensive evaluation covering vocabulary, kanji, and grammar from P1-03 Autonomous Publishing Queue (Updated V2).",
+      "passingScore": 70,
+      "questions": [
+        {
+          "id": "q1",
+          "type": "MULTIPLE_CHOICE",
+          "question": "What is the correct meaning of 「せんせい」?",
+          "options": [
+            "Student",
+            "Teacher",
+            "Doctor",
+            "Engineer"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Sensei means teacher or instructor in Japanese."
+        },
+        {
+          "id": "q2",
+          "type": "MULTIPLE_CHOICE",
+          "question": "Which particle indicates \"also / too\"?",
+          "options": [
+            "は (wa)",
+            "の (no)",
+            "も (mo)",
+            "を (o)"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+        }
+      ],
+      "isPublished": true,
+      "id": "quiz-4f351a",
+      "createdAt": "2026-09-03T07:35:26.975Z",
+      "updatedAt": "2026-09-03T07:35:27.089Z"
+    },
+    {
+      "courseId": "course-n5",
+      "level": "N5",
+      "title": "Particle も & Vocabulary Mastery Quiz",
+      "description": "Comprehensive evaluation covering vocabulary, kanji, and grammar from P1-03 Autonomous Publishing Queue (Updated V2).",
+      "passingScore": 70,
+      "questions": [
+        {
+          "id": "q1",
+          "type": "MULTIPLE_CHOICE",
+          "question": "What is the correct meaning of 「せんせい」?",
+          "options": [
+            "Student",
+            "Teacher",
+            "Doctor",
+            "Engineer"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Sensei means teacher or instructor in Japanese."
+        },
+        {
+          "id": "q2",
+          "type": "MULTIPLE_CHOICE",
+          "question": "Which particle indicates \"also / too\"?",
+          "options": [
+            "は (wa)",
+            "の (no)",
+            "も (mo)",
+            "を (o)"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+        }
+      ],
+      "isPublished": true,
+      "id": "quiz-fa6165",
+      "createdAt": "2026-09-03T07:36:03.417Z",
+      "updatedAt": "2026-09-03T07:36:03.527Z"
+    },
+    {
+      "courseId": "course-n5",
+      "level": "N5",
+      "title": "Particle も & Vocabulary Mastery Quiz",
+      "description": "Comprehensive evaluation covering vocabulary, kanji, and grammar from P1-03 Autonomous Publishing Queue (Updated V2).",
+      "passingScore": 70,
+      "questions": [
+        {
+          "id": "q1",
+          "type": "MULTIPLE_CHOICE",
+          "question": "What is the correct meaning of 「せんせい」?",
+          "options": [
+            "Student",
+            "Teacher",
+            "Doctor",
+            "Engineer"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sensei means teacher or instructor in Japanese."
+        },
+        {
+          "id": "q2",
+          "type": "MULTIPLE_CHOICE",
+          "question": "Which particle indicates \"also / too\"?",
+          "options": [
+            "は (wa)",
+            "の (no)",
+            "も (mo)",
+            "を (o)"
+          ],
+          "correctIndex": 2,
+          "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+        }
+      ],
+      "isPublished": true,
+      "id": "quiz-1bfb6a",
+      "createdAt": "2026-09-03T08:11:08.317Z",
+      "updatedAt": "2026-09-03T08:11:08.429Z"
     }
   ],
   "quizAttempts": [],
@@ -4818,6 +5181,147 @@
       },
       "id": "log-e196dd50",
       "createdAt": "2026-09-03T07:16:48.244Z"
+    },
+    {
+      "adminUserId": "autonomous-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-83d4f1",
+      "details": {
+        "draftId": "draft-p1-03-1788420926948",
+        "version": 1,
+        "checksum": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson"
+      },
+      "id": "log-5cd9fa66",
+      "createdAt": "2026-09-03T07:35:26.991Z"
+    },
+    {
+      "adminUserId": "admin-v2",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-83d4f1",
+      "details": {
+        "draftId": "draft-p1-03-1788420926948",
+        "version": 2,
+        "checksum": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)"
+      },
+      "id": "log-28f25218",
+      "createdAt": "2026-09-03T07:35:27.079Z"
+    },
+    {
+      "adminUserId": "admin-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-p1-03-1788420926948",
+      "details": {
+        "draftId": "draft-p1-03-1788420926948",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-83d4f1",
+        "reason": "Testing P1-02 rollback interoperability on queue-published lesson"
+      },
+      "id": "log-e57a6cbe",
+      "createdAt": "2026-09-03T07:35:27.104Z"
+    },
+    {
+      "adminUserId": "autonomous-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-438a0b",
+      "details": {
+        "draftId": "draft-p1-03-1788420963386",
+        "version": 1,
+        "checksum": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson"
+      },
+      "id": "log-3133ca9d",
+      "createdAt": "2026-09-03T07:36:03.435Z"
+    },
+    {
+      "adminUserId": "admin-v2",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-438a0b",
+      "details": {
+        "draftId": "draft-p1-03-1788420963386",
+        "version": 2,
+        "checksum": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)"
+      },
+      "id": "log-04bb9406",
+      "createdAt": "2026-09-03T07:36:03.516Z"
+    },
+    {
+      "adminUserId": "admin-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-p1-03-1788420963386",
+      "details": {
+        "draftId": "draft-p1-03-1788420963386",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-438a0b",
+        "reason": "Testing P1-02 rollback interoperability on queue-published lesson"
+      },
+      "id": "log-94cec731",
+      "createdAt": "2026-09-03T07:36:03.544Z"
+    },
+    {
+      "adminUserId": "autonomous-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c965e6",
+      "details": {
+        "draftId": "draft-p1-03-1788423068287",
+        "version": 1,
+        "checksum": "55d3adbaf8a683dd1f6e1283de77b452b992164c4b0e57d44bc0250559e2b973",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson"
+      },
+      "id": "log-01d29653",
+      "createdAt": "2026-09-03T08:11:08.335Z"
+    },
+    {
+      "adminUserId": "admin-v2",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c965e6",
+      "details": {
+        "draftId": "draft-p1-03-1788423068287",
+        "version": 2,
+        "checksum": "55d3adbaf8a683dd1f6e1283de77b452b992164c4b0e57d44bc0250559e2b973",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)"
+      },
+      "id": "log-95462158",
+      "createdAt": "2026-09-03T08:11:08.417Z"
+    },
+    {
+      "adminUserId": "admin-tester",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-p1-03-1788423068287",
+      "details": {
+        "draftId": "draft-p1-03-1788423068287",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-c965e6",
+        "reason": "Testing P1-02 rollback interoperability on queue-published lesson"
+      },
+      "id": "log-7b271515",
+      "createdAt": "2026-09-03T08:11:08.448Z"
     }
   ],
   "contentSources": [
@@ -5085,6 +5589,713 @@
     }
   ],
   "contentDrafts": [
+    {
+      "id": "draft-future-1788423068349",
+      "sourceId": "src-future",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "summary": "Deferred test draft",
+      "explanation": "Scheduled publishing test",
+      "contentType": "lesson",
+      "level": "N5",
+      "status": "APPROVED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "radicals": "又",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "ともだち",
+                "reading": "tomodachi",
+                "meaning": "friend"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctIndex": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctIndex": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "createdBy": "admin-p1-03",
+      "courseId": "course-jlpt-n5",
+      "moduleId": "mod-jlpt-n5-01",
+      "generationMetadata": {
+        "modelUsed": "gemini-2.5-flash",
+        "sourceDerived": false,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-03T08:11:08.349Z",
+        "disclaimer": "Verified"
+      },
+      "createdAt": "2026-09-03T08:11:08.349Z",
+      "updatedAt": "2026-09-03T08:11:08.349Z"
+    },
+    {
+      "id": "draft-p1-03-1788423068287",
+      "sourceId": "src-p1-03",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "summary": "Automated publishing test master draft for JLPT N5",
+      "explanation": "Detailed explanation for P1-03 lesson ingestion",
+      "contentType": "lesson",
+      "level": "N5",
+      "status": "PUBLISHED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "radicals": "又",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "ともだち",
+                "reading": "tomodachi",
+                "meaning": "friend"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctIndex": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctIndex": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "createdBy": "admin-p1-03",
+      "courseId": "course-n5",
+      "moduleId": "mod-n5-1",
+      "generationMetadata": {
+        "modelUsed": "gemini-2.5-flash",
+        "sourceDerived": false,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-03T08:11:08.287Z",
+        "disclaimer": "Verified"
+      },
+      "createdAt": "2026-09-03T08:11:08.287Z",
+      "updatedAt": "2026-09-03T08:11:08.429Z",
+      "lessonId": "les-c965e6"
+    },
+    {
+      "id": "draft-future-1788420963449",
+      "sourceId": "src-future",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "level": "N5",
+      "status": "APPROVED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "authorUserId": "admin-p1-03",
+      "courseId": "course-jlpt-n5",
+      "moduleId": "mod-jlpt-n5-01",
+      "versionNumber": 1,
+      "createdAt": "2026-09-03T07:36:03.449Z",
+      "updatedAt": "2026-09-03T07:36:03.449Z"
+    },
+    {
+      "id": "draft-p1-03-1788420963386",
+      "sourceId": "src-p1-03",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "status": "PUBLISHED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "authorUserId": "admin-p1-03",
+      "courseId": "course-n5",
+      "moduleId": "mod-n5-1",
+      "versionNumber": 1,
+      "createdAt": "2026-09-03T07:36:03.386Z",
+      "updatedAt": "2026-09-03T07:36:03.527Z",
+      "lessonId": "les-438a0b"
+    },
+    {
+      "id": "draft-future-1788420927005",
+      "sourceId": "src-future",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "level": "N5",
+      "status": "APPROVED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "authorUserId": "admin-p1-03",
+      "courseId": "course-jlpt-n5",
+      "moduleId": "mod-jlpt-n5-01",
+      "versionNumber": 1,
+      "createdAt": "2026-09-03T07:35:27.005Z",
+      "updatedAt": "2026-09-03T07:35:27.005Z"
+    },
+    {
+      "id": "draft-p1-03-1788420926948",
+      "sourceId": "src-p1-03",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "status": "PUBLISHED",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "authorUserId": "admin-p1-03",
+      "courseId": "course-n5",
+      "moduleId": "mod-n5-1",
+      "versionNumber": 1,
+      "createdAt": "2026-09-03T07:35:26.948Z",
+      "updatedAt": "2026-09-03T07:35:27.089Z",
+      "lessonId": "les-83d4f1"
+    },
     {
       "title": "P1-02 Autonomous Test Draft",
       "titleJa": "P1-02 テスト下書き",
@@ -6172,6 +7383,1116 @@
     }
   ],
   "contentVersions": [
+    {
+      "id": "ver-c3eafb46",
+      "draftId": "draft-p1-03-1788423068287",
+      "sourceId": "src-p1-03",
+      "versionNumber": 3,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "radicals": "又",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "ともだち",
+                "reading": "tomodachi",
+                "meaning": "friend"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctIndex": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctIndex": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "summary": "Automated publishing test master draft for JLPT N5",
+        "explanation": "Detailed explanation for P1-03 lesson ingestion",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-c965e6",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Testing P1-02 rollback interoperability on queue-published lesson",
+      "checksumSha256": "55d3adbaf8a683dd1f6e1283de77b452b992164c4b0e57d44bc0250559e2b973",
+      "rollbackFromVersion": 1,
+      "approvedBy": "admin-tester",
+      "publishedBy": "admin-tester",
+      "approvedAt": "2026-09-03T08:11:08.442Z",
+      "publishedAt": "2026-09-03T08:11:08.442Z",
+      "createdAt": "2026-09-03T08:11:08.442Z"
+    },
+    {
+      "id": "ver-5f05ce10",
+      "draftId": "draft-p1-03-1788423068287",
+      "sourceId": "src-p1-03",
+      "versionNumber": 2,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "radicals": "又",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "ともだち",
+                "reading": "tomodachi",
+                "meaning": "friend"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctIndex": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctIndex": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "summary": "Automated publishing test master draft for JLPT N5",
+        "explanation": "Detailed explanation for P1-03 lesson ingestion",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-c965e6",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "55d3adbaf8a683dd1f6e1283de77b452b992164c4b0e57d44bc0250559e2b973",
+      "approvedBy": "admin-v2",
+      "publishedBy": "admin-v2",
+      "approvedAt": "2026-09-03T08:11:08.411Z",
+      "publishedAt": "2026-09-03T08:11:08.411Z",
+      "createdAt": "2026-09-03T08:11:08.411Z"
+    },
+    {
+      "id": "ver-961bbb97",
+      "draftId": "draft-p1-03-1788423068287",
+      "sourceId": "src-p1-03",
+      "versionNumber": 1,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "radicals": "又",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "ともだち",
+                "reading": "tomodachi",
+                "meaning": "friend"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctIndex": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctIndex": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "summary": "Automated publishing test master draft for JLPT N5",
+        "explanation": "Detailed explanation for P1-03 lesson ingestion",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-c965e6",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "55d3adbaf8a683dd1f6e1283de77b452b992164c4b0e57d44bc0250559e2b973",
+      "approvedBy": "autonomous-tester",
+      "publishedBy": "autonomous-tester",
+      "approvedAt": "2026-09-03T08:11:08.328Z",
+      "publishedAt": "2026-09-03T08:11:08.328Z",
+      "createdAt": "2026-09-03T08:11:08.328Z"
+    },
+    {
+      "id": "ver-dde4f611",
+      "draftId": "draft-p1-03-1788420963386",
+      "sourceId": "src-p1-03",
+      "versionNumber": 3,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-438a0b",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Testing P1-02 rollback interoperability on queue-published lesson",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "rollbackFromVersion": 1,
+      "approvedBy": "admin-tester",
+      "publishedBy": "admin-tester",
+      "approvedAt": "2026-09-03T07:36:03.537Z",
+      "publishedAt": "2026-09-03T07:36:03.537Z",
+      "createdAt": "2026-09-03T07:36:03.537Z"
+    },
+    {
+      "id": "ver-0dd8afa1",
+      "draftId": "draft-p1-03-1788420963386",
+      "sourceId": "src-p1-03",
+      "versionNumber": 2,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-438a0b",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "approvedBy": "admin-v2",
+      "publishedBy": "admin-v2",
+      "approvedAt": "2026-09-03T07:36:03.510Z",
+      "publishedAt": "2026-09-03T07:36:03.510Z",
+      "createdAt": "2026-09-03T07:36:03.510Z"
+    },
+    {
+      "id": "ver-30a17b1d",
+      "draftId": "draft-p1-03-1788420963386",
+      "sourceId": "src-p1-03",
+      "versionNumber": 1,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-438a0b",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "approvedBy": "autonomous-tester",
+      "publishedBy": "autonomous-tester",
+      "approvedAt": "2026-09-03T07:36:03.428Z",
+      "publishedAt": "2026-09-03T07:36:03.428Z",
+      "createdAt": "2026-09-03T07:36:03.428Z"
+    },
+    {
+      "id": "ver-d6361738",
+      "draftId": "draft-p1-03-1788420926948",
+      "sourceId": "src-p1-03",
+      "versionNumber": 3,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-83d4f1",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Testing P1-02 rollback interoperability on queue-published lesson",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "rollbackFromVersion": 1,
+      "approvedBy": "admin-tester",
+      "publishedBy": "admin-tester",
+      "approvedAt": "2026-09-03T07:35:27.099Z",
+      "publishedAt": "2026-09-03T07:35:27.099Z",
+      "createdAt": "2026-09-03T07:35:27.099Z"
+    },
+    {
+      "id": "ver-a711ce31",
+      "draftId": "draft-p1-03-1788420926948",
+      "sourceId": "src-p1-03",
+      "versionNumber": 2,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-83d4f1",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "approvedBy": "admin-v2",
+      "publishedBy": "admin-v2",
+      "approvedAt": "2026-09-03T07:35:27.074Z",
+      "publishedAt": "2026-09-03T07:35:27.074Z",
+      "createdAt": "2026-09-03T07:35:27.074Z"
+    },
+    {
+      "id": "ver-07f31f73",
+      "draftId": "draft-p1-03-1788420926948",
+      "sourceId": "src-p1-03",
+      "versionNumber": 1,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
+          },
+          {
+            "id": "v-p1-02",
+            "japanese": "ともだち",
+            "furigana": "ともだち",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "banglaMeaning": "বন্ধু",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "かれは わたしの ともだちです。",
+            "exampleSentenceEn": "He is my friend."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "title": "N1 も N2 です",
+            "titleJa": "助詞「も」",
+            "structure": "Noun1 も Noun2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしも がくせいです。",
+                "english": "I am also a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "character": "友",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokeCount": 4,
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "ともだち",
+                "reading": "tomodachi",
+                "english": "friend"
+              }
+            ]
+          }
+        ],
+        "quiz": {
+          "id": "quiz-p1-01",
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "passingScore": 70,
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "question": "What is the correct meaning of 「せんせい」?",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Sensei means teacher or instructor in Japanese."
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "question": "Which particle indicates \"also / too\"?",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
+            }
+          ]
+        }
+      },
+      "metadataJson": {
+        "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+        "titleJa": "P1-03 公開キュー自動テスト講義",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-83d4f1",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "c8cdcf9efcf057c196afeb681ea03f4f90a43d1aca16d8929f01fbb14a022b88",
+      "approvedBy": "autonomous-tester",
+      "publishedBy": "autonomous-tester",
+      "approvedAt": "2026-09-03T07:35:26.984Z",
+      "publishedAt": "2026-09-03T07:35:26.984Z",
+      "createdAt": "2026-09-03T07:35:26.984Z"
+    },
     {
       "id": "ver-507c7fa8",
       "draftId": "draft-e8e5f448",
@@ -11717,6 +14038,1442 @@
         "duration": 4.2
       },
       "completedAt": "2026-09-02T07:15:13.087Z"
+    }
+  ],
+  "publishingQueue": [
+    {
+      "id": "pub-1788423068377-o1dd9",
+      "draftId": "draft-p1-03-1788423068287",
+      "lessonId": "les-c965e6",
+      "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "CRITICAL",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Published V2 update",
+      "enqueuedBy": "admin-v2",
+      "enqueuedAt": "2026-09-03T08:11:08.377Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T08:11:08.389Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 1 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 1,
+              "latestVersionNumber": 1
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T08:11:08.377Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788423068377-o1dd9 enqueued for draft \"P1-03 Autonomous Publishing Queue (Updated V2)\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "CRITICAL"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.382Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.389Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.395Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.423Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" (les-c965e6)."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.423Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-c965e6, Version: v2. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T08:11:08.382Z",
+      "completedAt": "2026-09-03T08:11:08.423Z",
+      "publishedLessonId": "les-c965e6",
+      "createdVersionId": "ver-5f05ce10",
+      "versionNumber": 2
+    },
+    {
+      "id": "pub-1788423068355-bjjk9",
+      "draftId": "draft-future-1788423068349",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "level": "N5",
+      "priority": "NORMAL",
+      "status": "queued",
+      "progress": 0,
+      "currentStage": "RETRY_QUEUED",
+      "scheduledFor": "2026-09-03T09:11:08.355Z",
+      "changelog": "Live publication of P1-03 Future Scheduled Publishing Draft (JLPT N5)",
+      "enqueuedBy": "scheduler",
+      "enqueuedAt": "2026-09-03T08:11:08.355Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T08:11:08.355Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Future Scheduled Publishing Draft\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Future Scheduled Publishing Draft",
+              "level": "N5",
+              "titleJa": "P1-03 予約公開テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 予約公開テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 1,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T08:11:08.355Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788423068355-bjjk9 enqueued for draft \"P1-03 Future Scheduled Publishing Draft\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "NORMAL",
+            "scheduledFor": "2026-09-03T09:11:08.355Z"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.361Z",
+          "stage": "CANCELLED",
+          "level": "warn",
+          "message": "Publishing job cancelled by test-admin."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.366Z",
+          "stage": "RETRY_QUEUED",
+          "level": "info",
+          "message": "Job reset to queue for attempt #2."
+        }
+      ]
+    },
+    {
+      "id": "pub-1788423068294-ccc5d",
+      "draftId": "draft-p1-03-1788423068287",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "HIGH",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Initial automated live queue release",
+      "enqueuedBy": "autonomous-tester",
+      "enqueuedAt": "2026-09-03T08:11:08.294Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T08:11:08.306Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T08:11:08.294Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788423068294-ccc5d enqueued for draft \"P1-03 Autonomous Publishing Queue Master Lesson\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "HIGH"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.301Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.306Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.311Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.341Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" (les-c965e6)."
+        },
+        {
+          "timestamp": "2026-09-03T08:11:08.341Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-c965e6, Version: v1. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T08:11:08.301Z",
+      "completedAt": "2026-09-03T08:11:08.341Z",
+      "publishedLessonId": "les-c965e6",
+      "createdVersionId": "ver-961bbb97",
+      "versionNumber": 1
+    },
+    {
+      "id": "pub-1788420963475-mkn9x",
+      "draftId": "draft-p1-03-1788420963386",
+      "lessonId": "les-438a0b",
+      "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "CRITICAL",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Published V2 update",
+      "enqueuedBy": "admin-v2",
+      "enqueuedAt": "2026-09-03T07:36:03.475Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:36:03.485Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 1 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 1,
+              "latestVersionNumber": 1
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:36:03.475Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420963475-mkn9x enqueued for draft \"P1-03 Autonomous Publishing Queue (Updated V2)\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "CRITICAL"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.480Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.485Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.495Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.520Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" (les-438a0b)."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.520Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-438a0b, Version: v2. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T07:36:03.480Z",
+      "completedAt": "2026-09-03T07:36:03.520Z",
+      "publishedLessonId": "les-438a0b",
+      "createdVersionId": "ver-0dd8afa1",
+      "versionNumber": 2
+    },
+    {
+      "id": "pub-1788420963454-rps60",
+      "draftId": "draft-future-1788420963449",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "level": "N5",
+      "priority": "NORMAL",
+      "status": "queued",
+      "progress": 0,
+      "currentStage": "RETRY_QUEUED",
+      "scheduledFor": "2026-09-03T08:36:03.454Z",
+      "changelog": "Live publication of P1-03 Future Scheduled Publishing Draft (JLPT N5)",
+      "enqueuedBy": "scheduler",
+      "enqueuedAt": "2026-09-03T07:36:03.454Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:36:03.454Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Future Scheduled Publishing Draft\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Future Scheduled Publishing Draft",
+              "level": "N5",
+              "titleJa": "P1-03 予約公開テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 予約公開テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 1,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:36:03.454Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420963454-rps60 enqueued for draft \"P1-03 Future Scheduled Publishing Draft\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "NORMAL",
+            "scheduledFor": "2026-09-03T08:36:03.454Z"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.459Z",
+          "stage": "CANCELLED",
+          "level": "warn",
+          "message": "Publishing job cancelled by test-admin."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.465Z",
+          "stage": "RETRY_QUEUED",
+          "level": "info",
+          "message": "Job reset to queue for attempt #2."
+        }
+      ]
+    },
+    {
+      "id": "pub-1788420963393-6f9l8",
+      "draftId": "draft-p1-03-1788420963386",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "HIGH",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Initial automated live queue release",
+      "enqueuedBy": "autonomous-tester",
+      "enqueuedAt": "2026-09-03T07:36:03.393Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:36:03.407Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:36:03.393Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420963393-6f9l8 enqueued for draft \"P1-03 Autonomous Publishing Queue Master Lesson\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "HIGH"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.402Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.407Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.411Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.442Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" (les-438a0b)."
+        },
+        {
+          "timestamp": "2026-09-03T07:36:03.442Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-438a0b, Version: v1. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T07:36:03.402Z",
+      "completedAt": "2026-09-03T07:36:03.442Z",
+      "publishedLessonId": "les-438a0b",
+      "createdVersionId": "ver-30a17b1d",
+      "versionNumber": 1
+    },
+    {
+      "id": "pub-1788420927029-3ur80",
+      "draftId": "draft-p1-03-1788420926948",
+      "lessonId": "les-83d4f1",
+      "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "CRITICAL",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Published V2 update",
+      "enqueuedBy": "admin-v2",
+      "enqueuedAt": "2026-09-03T07:35:27.029Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:35:27.039Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue (Updated V2)",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 1 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 1,
+              "latestVersionNumber": 1
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:35:27.029Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420927029-3ur80 enqueued for draft \"P1-03 Autonomous Publishing Queue (Updated V2)\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "CRITICAL"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.034Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.039Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.043Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.083Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue (Updated V2)\" (les-83d4f1)."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.083Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-83d4f1, Version: v2. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T07:35:27.034Z",
+      "completedAt": "2026-09-03T07:35:27.083Z",
+      "publishedLessonId": "les-83d4f1",
+      "createdVersionId": "ver-a711ce31",
+      "versionNumber": 2
+    },
+    {
+      "id": "pub-1788420927009-u6e4l",
+      "draftId": "draft-future-1788420927005",
+      "title": "P1-03 Future Scheduled Publishing Draft",
+      "titleJa": "P1-03 予約公開テスト講義",
+      "level": "N5",
+      "priority": "NORMAL",
+      "status": "queued",
+      "progress": 0,
+      "currentStage": "RETRY_QUEUED",
+      "scheduledFor": "2026-09-03T08:35:27.009Z",
+      "changelog": "Live publication of P1-03 Future Scheduled Publishing Draft (JLPT N5)",
+      "enqueuedBy": "scheduler",
+      "enqueuedAt": "2026-09-03T07:35:27.009Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:35:27.009Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Future Scheduled Publishing Draft\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Future Scheduled Publishing Draft",
+              "level": "N5",
+              "titleJa": "P1-03 予約公開テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 予約公開テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 1,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:35:27.009Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420927009-u6e4l enqueued for draft \"P1-03 Future Scheduled Publishing Draft\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "NORMAL",
+            "scheduledFor": "2026-09-03T08:35:27.009Z"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.014Z",
+          "stage": "CANCELLED",
+          "level": "warn",
+          "message": "Publishing job cancelled by test-admin."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:27.020Z",
+          "stage": "RETRY_QUEUED",
+          "level": "info",
+          "message": "Job reset to queue for attempt #2."
+        }
+      ]
+    },
+    {
+      "id": "pub-1788420926955-8tded",
+      "draftId": "draft-p1-03-1788420926948",
+      "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+      "titleJa": "P1-03 公開キュー自動テスト講義",
+      "level": "N5",
+      "priority": "HIGH",
+      "status": "completed",
+      "progress": 100,
+      "currentStage": "COMPLETED",
+      "changelog": "Initial automated live queue release",
+      "enqueuedBy": "autonomous-tester",
+      "enqueuedAt": "2026-09-03T07:35:26.955Z",
+      "preflightReport": {
+        "passed": true,
+        "score": 94,
+        "evaluatedAt": "2026-09-03T07:35:26.965Z",
+        "totalChecks": 9,
+        "passedChecks": 8,
+        "warningsCount": 1,
+        "errorsCount": 0,
+        "checks": [
+          {
+            "id": "META_BASIC",
+            "name": "Lesson Identity & Level Classification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" correctly classified under JLPT N5.",
+            "details": {
+              "title": "P1-03 Autonomous Publishing Queue Master Lesson",
+              "level": "N5",
+              "titleJa": "P1-03 公開キュー自動テスト講義"
+            }
+          },
+          {
+            "id": "META_JAPANESE_TITLE",
+            "name": "Japanese Native Title Verification",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Native Japanese title present: \"P1-03 公開キュー自動テスト講義\"."
+          },
+          {
+            "id": "CURRICULUM_COURSE_LINK",
+            "name": "Curriculum Course & Level Hierarchy",
+            "category": "CURRICULUM",
+            "status": "PASS",
+            "message": "Matched to syllabus course \"JLPT N5: Beginner Japanese Foundations\" (course-n5).",
+            "details": {
+              "courseId": "course-n5",
+              "courseTitle": "JLPT N5: Beginner Japanese Foundations"
+            }
+          },
+          {
+            "id": "VOCAB_INTEGRITY",
+            "name": "Vocabulary Pedagogical Attributes",
+            "category": "VOCABULARY",
+            "status": "PASS",
+            "message": "All 2 vocabulary terms satisfy trilingual definitions (JA / EN / BN) and level tags.",
+            "details": {
+              "vocabCount": 2
+            }
+          },
+          {
+            "id": "GRAMMAR_INTEGRITY",
+            "name": "Grammar Formula & Example Sentence Check",
+            "category": "GRAMMAR",
+            "status": "PASS",
+            "message": "All 1 grammar points have structure, meaning, and contextual example sentences.",
+            "details": {
+              "grammarCount": 1
+            }
+          },
+          {
+            "id": "KANJI_INTEGRITY",
+            "name": "Kanji Radical & Glyph Check",
+            "category": "KANJI",
+            "status": "PASS",
+            "message": "1 kanji character(s) verified with readings and stroke definitions.",
+            "details": {
+              "kanjiCount": 1
+            }
+          },
+          {
+            "id": "QUIZ_INTEGRITY",
+            "name": "Interactive Mastery Quiz Evaluation",
+            "category": "QUIZ",
+            "status": "PASS",
+            "message": "Mastery quiz verified with 2 properly-indexed question(s).",
+            "details": {
+              "questionsCount": 2,
+              "passingScore": 70
+            }
+          },
+          {
+            "id": "MEDIA_AUDIO_COVERAGE",
+            "name": "Native Japanese Pronunciation Audio Coverage",
+            "category": "AUDIO",
+            "status": "WARN",
+            "message": "Audio coverage is 0%. Web Speech / AI Voice Synthesizer fallback will be engaged.",
+            "details": {
+              "coveragePercent": 0,
+              "totalVocab": 2
+            }
+          },
+          {
+            "id": "VERSION_HISTORY_STATUS",
+            "name": "Rollback Snapshot & Version Lineage",
+            "category": "STRUCTURE",
+            "status": "PASS",
+            "message": "Draft has 0 recorded version snapshot(s). Atomic snapshot will be generated on publish.",
+            "details": {
+              "versionCount": 0,
+              "latestVersionNumber": 0
+            }
+          }
+        ]
+      },
+      "retryCount": 0,
+      "maxRetries": 3,
+      "logs": [
+        {
+          "timestamp": "2026-09-03T07:35:26.955Z",
+          "stage": "ENQUEUED",
+          "level": "info",
+          "message": "Job pub-1788420926955-8tded enqueued for draft \"P1-03 Autonomous Publishing Queue Master Lesson\". Pre-flight score: 94/100.",
+          "details": {
+            "priority": "HIGH"
+          }
+        },
+        {
+          "timestamp": "2026-09-03T07:35:26.961Z",
+          "stage": "PREFLIGHT_VALIDATION",
+          "level": "info",
+          "message": "Re-evaluating pedagogical and technical pre-flight integrity..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:26.965Z",
+          "stage": "SNAPSHOT_ARCHIVAL",
+          "level": "info",
+          "message": "Generating immutable ContentVersion snapshot for P1-02 rollback compatibility..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:26.969Z",
+          "stage": "ATOMIC_CATALOG_COMMIT",
+          "level": "info",
+          "message": "Writing live lesson and module records to persistent storage..."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:26.998Z",
+          "stage": "CACHE_PURGE_AND_NOTIFY",
+          "level": "info",
+          "message": "Purging catalog edge cache keys and registering release event for Lesson \"P1-03 Autonomous Publishing Queue Master Lesson\" (les-83d4f1)."
+        },
+        {
+          "timestamp": "2026-09-03T07:35:26.998Z",
+          "stage": "COMPLETED",
+          "level": "info",
+          "message": "Live publication successful! Lesson ID: les-83d4f1, Version: v1. Full rollback snapshot registered."
+        }
+      ],
+      "startedAt": "2026-09-03T07:35:26.961Z",
+      "completedAt": "2026-09-03T07:35:26.998Z",
+      "publishedLessonId": "les-83d4f1",
+      "createdVersionId": "ver-07f31f73",
+      "versionNumber": 1
     }
   ]
 }
