@@ -6,6 +6,7 @@ import { QAEngineService } from '../services/content-studio/qaEngineService.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 import { db } from '../db.js';
+import { StructuredEducationalContent, QuestionType } from '../types.js';
 
 export const contentStudioRouter = Router();
 
@@ -146,20 +147,14 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
 
   // Synchronize to PostgreSQL persistent ContentDraft / ContentVersion
   let draft = db.getContentDraftById(lesson.id);
-  const structuredContent = {
-    title: published.title,
-    titleJa: published.titleJa,
-    summary: published.summary || published.introduction?.overviewEn || '',
-    explanation: published.grammarNotes || published.introduction?.overviewBn || '',
-    level: published.level,
-    courseId: `course-${published.level.toLowerCase()}`,
+  const structuredContent: StructuredEducationalContent = {
     vocabulary: (published.vocabulary || []).map((v) => ({
       id: v.id,
-      word: v.japanese,
-      reading: v.furigana || v.japanese,
+      japanese: v.japanese,
+      furigana: v.furigana || v.japanese,
       romaji: v.romaji,
-      meaningEn: v.english,
-      meaningBn: v.bengali,
+      english: v.english,
+      banglaMeaning: v.bengali,
       partOfSpeech: v.partOfSpeech,
       level: published.level,
       exampleSentenceJa: v.exampleSentenceJa,
@@ -167,61 +162,59 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
     })),
     grammar: (published.grammar || []).map((g) => ({
       id: g.id,
-      title: g.title,
-      titleJa: g.titleJa,
-      structure: g.structure,
+      title: g.pattern,
+      titleJa: g.pattern,
+      structure: g.structureFormula || g.pattern,
       meaning: g.meaningEn,
-      explanation: g.explanationEn,
+      explanation: g.detailedExplanationBn || g.meaningEn,
       level: published.level,
       examples: (g.examples || []).map((ex) => ({
         japanese: ex.japanese,
         english: ex.english,
-        furigana: ex.furigana
+        furigana: ex.japanese
       }))
     })),
     kanji: (published.kanji || []).map((k) => ({
       id: k.id,
-      character: k.character,
+      character: k.kanji,
       meaning: k.meaningEn,
       onyomi: k.onyomi,
       kunyomi: k.kunyomi,
       strokes: k.strokeCount,
       radicals: k.radical,
       level: published.level,
-      examples: (k.examples || []).map((ex) => ({
+      examples: (k.compounds || []).map((ex) => ({
         word: ex.word,
         reading: ex.reading,
-        meaning: ex.meaningEn
+        meaning: ex.meaningBn
       }))
     })),
     dialogue: published.dialogue?.lines ? (published.dialogue.lines || []).map((d) => ({
-      speaker: d.speakerName,
-      speakerRole: d.role,
+      speaker: d.speaker,
+      speakerRole: d.speakerRole,
       japanese: d.japanese,
-      furigana: d.furigana,
       english: d.english
     })) : [],
     practiceExercises: (published.exercises || []).map((ex) => ({
       id: ex.id,
-      instruction: ex.instructionEn,
-      questionJa: ex.promptJa,
-      hint: ex.hintEn,
-      type: ex.type === 'ORDER_WORDS' ? 'order_words' : ex.type === 'FILL_BLANK' ? 'fill_blank' : 'multiple_choice',
+      instruction: ex.questionBn || 'Practice Exercise',
+      questionJa: ex.questionJa,
+      type: ex.exerciseType === 'FILL_IN_BLANK' ? 'fill_blank' : ex.exerciseType === 'SENTENCE_SCRAMBLE' ? 'order_words' : 'multiple_choice',
       options: ex.options,
       correctAnswer: ex.correctAnswer,
-      explanation: ex.explanationEn
+      explanation: ex.explanationBn || ''
     })),
     quiz: published.quiz && published.quiz.length > 0 ? {
       title: `${published.title} Mastery Quiz`,
       passingScore: 70,
       questions: published.quiz.map((q) => ({
         id: q.id,
-        question: q.questionEn,
+        question: q.questionBn || q.questionJa,
         questionJa: q.questionJa,
-        type: 'multiple_choice',
+        type: 'multiple_choice' as QuestionType,
         options: q.options,
-        correctIndex: q.correctAnswerIndex,
-        explanation: q.explanationEn
+        correctIndex: (q as any).correctIndex ?? 0,
+        explanation: q.explanationBn || ''
       }))
     } : undefined
   };
@@ -230,13 +223,20 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
     draft = db.createContentDraft({
       title: published.title,
       titleJa: published.titleJa,
-      summary: published.summary || published.introduction?.overviewEn || '',
-      explanation: published.grammarNotes || published.introduction?.overviewBn || '',
+      summary: published.introduction?.overviewEn || '',
+      explanation: published.introduction?.overviewBn || '',
       level: published.level,
-      sourceId: published.sourceDocumentId || 'src-manual-studio',
+      sourceId: 'src-manual-studio',
       contentType: 'lesson',
-      rawText: JSON.stringify(published),
       structuredContent,
+      generationMetadata: {
+        modelUsed: 'studio-qa-engine',
+        sourceDerived: true,
+        aiEnriched: true,
+        generatedAt: new Date().toISOString(),
+        disclaimer: 'Curriculum verified.'
+      },
+      createdBy: adminId,
       status: 'APPROVED',
       reviewedBy: founderEmail,
       reviewedAt: new Date().toISOString(),
@@ -245,8 +245,8 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
   } else {
     draft.title = published.title;
     draft.titleJa = published.titleJa;
-    draft.summary = published.summary || published.introduction?.overviewEn || '';
-    draft.explanation = published.grammarNotes || published.introduction?.overviewBn || '';
+    draft.summary = published.introduction?.overviewEn || '';
+    draft.explanation = published.introduction?.overviewBn || '';
     draft.level = published.level;
     draft.structuredContent = structuredContent;
     draft.status = 'APPROVED';
@@ -297,7 +297,6 @@ contentStudioRouter.post('/lessons/:id/rollback', requireAdmin, (req: Authentica
     contentStudioDb.updateLesson(req.params.id, {
       title: rollbackResult.draft.title,
       titleJa: rollbackResult.draft.titleJa,
-      summary: rollbackResult.draft.summary,
       status: 'DRAFT',
       updatedAt: new Date().toISOString()
     });

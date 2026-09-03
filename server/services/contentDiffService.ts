@@ -63,9 +63,9 @@ export class ContentDiffService {
     const vocabularyDiff = this.diffList<VocabularyItem>(
       baseContent.vocabulary || [],
       targetContent.vocabulary || [],
-      (item) => item.id || `${item.word}-${item.reading}`,
-      (item) => `${item.word} (${item.reading})`,
-      ['word', 'reading', 'meaningEn', 'meaningBn', 'romaji', 'partOfSpeech', 'exampleSentenceJa', 'exampleSentenceEn', 'notes']
+      (item) => item.id || `${item.japanese || (item as any).word}-${item.furigana || (item as any).reading || ''}`,
+      (item) => `${item.japanese || (item as any).word} (${item.furigana || (item as any).reading || ''})`,
+      ['japanese', 'furigana', 'english', 'romaji', 'banglaMeaning', 'partOfSpeech', 'exampleSentenceJa', 'exampleSentenceEn', 'notes']
     );
 
     // 3. Compute Grammar Diff

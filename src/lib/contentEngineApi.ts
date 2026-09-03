@@ -1,4 +1,11 @@
-import { ContentSource, ContentDraft, ContentVersion, JLPTLevel, ContentDraftStatus } from '../types.js';
+import {
+  ContentSource,
+  ContentDraft,
+  ContentVersion,
+  ContentDifferentialDiff,
+  JLPTLevel,
+  ContentDraftStatus
+} from '../types.js';
 import { formatApiUrl } from './api.js';
 
 const getAuthHeaders = () => {
@@ -253,6 +260,71 @@ export const contentEngineApi = {
       return { success: true, versions: data.versions || [] };
     } catch (err: any) {
       return { success: false, versions: [], error: err.message };
+    }
+  },
+
+  async rollbackDraft(
+    id: string,
+    targetVersion: number | string,
+    reason?: string
+  ): Promise<{ success: boolean; message?: string; draft?: ContentDraft; lesson?: any; version?: ContentVersion; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/rollback`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders()
+        },
+        body: JSON.stringify({ targetVersion, reason })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to rollback draft');
+      return {
+        success: true,
+        message: data.message,
+        draft: data.draft,
+        lesson: data.lesson,
+        version: data.version
+      };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async diffDraftWithVersion(
+    id: string,
+    compareVersion: number | string
+  ): Promise<{ success: boolean; diff?: ContentDifferentialDiff; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/diff`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders()
+        },
+        body: JSON.stringify({ compareVersion })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to compute diff');
+      return { success: true, diff: data.diff };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async diffVersions(
+    v1: string,
+    v2: string
+  ): Promise<{ success: boolean; diff?: ContentDifferentialDiff; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/content/versions/${v1}/diff/${v2}`), {
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to compute versions diff');
+      return { success: true, diff: data.diff };
+    } catch (err: any) {
+      return { success: false, error: err.message };
     }
   },
 

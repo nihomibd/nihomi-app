@@ -26,20 +26,14 @@ async function runContentVersionRollbackDiffTests() {
     // ----------------------------------------------------
     console.log('\n--- 1. Testing Differential Diff Service ---');
     const baseContent: StructuredEducationalContent = {
-      title: 'Lesson 1: Greetings',
-      titleJa: '第１課：あいさつ',
-      summary: 'Basic Japanese greetings and introductions.',
-      explanation: 'Explanation of basic particles.',
-      level: 'N5',
-      courseId: 'course-n5',
       vocabulary: [
         {
           id: 'v1',
-          word: 'わたし',
-          reading: 'わたし',
+          japanese: 'わたし',
+          furigana: 'わたし',
           romaji: 'watashi',
-          meaningEn: 'I / Me',
-          meaningBn: 'আমি',
+          english: 'I / Me',
+          banglaMeaning: 'আমি',
           partOfSpeech: 'Pronoun',
           level: 'N5',
           exampleSentenceJa: 'わたしは たんびるです。',
@@ -47,11 +41,11 @@ async function runContentVersionRollbackDiffTests() {
         },
         {
           id: 'v2',
-          word: 'がくせい',
-          reading: 'がくせい',
+          japanese: 'がくせい',
+          furigana: 'がくせい',
           romaji: 'gakusei',
-          meaningEn: 'Student',
-          meaningBn: 'ছাত্র',
+          english: 'Student',
+          banglaMeaning: 'ছাত্র',
           partOfSpeech: 'Noun',
           level: 'N5',
           exampleSentenceJa: 'わたしは がくせいです。',
@@ -105,15 +99,14 @@ async function runContentVersionRollbackDiffTests() {
     // - 1 added grammar item
     const targetContent: StructuredEducationalContent = {
       ...baseContent,
-      title: 'Lesson 1: Greetings (Revised)',
       vocabulary: [
         {
           id: 'v1',
-          word: 'わたし',
-          reading: 'わたし',
+          japanese: 'わたし',
+          furigana: 'わたし',
           romaji: 'watashi',
-          meaningEn: 'I / Myself', // Modified
-          meaningBn: 'আমি',
+          english: 'I / Myself', // Modified
+          banglaMeaning: 'আমি',
           partOfSpeech: 'Pronoun',
           level: 'N5',
           exampleSentenceJa: 'わたしは たんびるです。',
@@ -121,11 +114,11 @@ async function runContentVersionRollbackDiffTests() {
         },
         {
           id: 'v3',
-          word: 'せんせい',
-          reading: 'せんせい',
+          japanese: 'せんせい',
+          furigana: 'せんせい',
           romaji: 'sensei',
-          meaningEn: 'Teacher',
-          meaningBn: 'শিক্ষক',
+          english: 'Teacher',
+          banglaMeaning: 'শিক্ষক',
           partOfSpeech: 'Noun',
           level: 'N5',
           exampleSentenceJa: 'たなかさんは せんせいです。',
@@ -153,8 +146,8 @@ async function runContentVersionRollbackDiffTests() {
       entityId: 'test-draft-01',
       baseContent,
       targetContent,
-      baseMetadata: { title: baseContent.title, level: 'N5' },
-      targetMetadata: { title: targetContent.title, level: 'N5' }
+      baseMetadata: { title: 'Lesson 1: Greetings', level: 'N5' },
+      targetMetadata: { title: 'Lesson 1: Greetings (Revised)', level: 'N5' }
     });
 
     assert(diffResult.metadataDiff.length === 1, 'Metadata diff detects title change', `Found ${diffResult.metadataDiff.length} changes`);
@@ -176,9 +169,17 @@ async function runContentVersionRollbackDiffTests() {
       explanation: 'Grammar and vocab explanation.',
       level: 'N5',
       sourceId: 'src-p1-test',
+      courseId: 'course-n5',
       contentType: 'lesson',
-      rawText: 'Test Raw text',
       structuredContent: baseContent,
+      generationMetadata: {
+        modelUsed: 'gemini-2.5-flash',
+        sourceDerived: true,
+        aiEnriched: true,
+        generatedAt: new Date().toISOString(),
+        disclaimer: 'Curriculum verified.'
+      },
+      createdBy: adminId,
       status: 'APPROVED',
       reviewedBy: 'admin@nihomi.com',
       reviewedAt: new Date().toISOString()

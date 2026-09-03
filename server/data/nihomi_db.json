@@ -1777,6 +1777,303 @@
       "id": "les-a6ad34",
       "createdAt": "2026-09-02T09:43:30.797Z",
       "updatedAt": "2026-09-02T09:43:30.825Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 9,
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v1",
+          "word": "わたし",
+          "reading": "わたし",
+          "romaji": "watashi",
+          "meaningEn": "I / Me",
+          "meaningBn": "আমি",
+          "partOfSpeech": "Pronoun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは たんびるです。",
+          "exampleSentenceEn": "I am Tanvir."
+        },
+        {
+          "id": "v2",
+          "word": "がくせい",
+          "reading": "がくせい",
+          "romaji": "gakusei",
+          "meaningEn": "Student",
+          "meaningBn": "ছাত্র",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは がくせいです。",
+          "exampleSentenceEn": "I am a student."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g1",
+          "title": "A は B です",
+          "titleJa": "A は B です",
+          "structure": "Noun1 は Noun2 です",
+          "meaning": "A is B",
+          "explanation": "Standard polite identity structure.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしは がくせいです。",
+              "english": "I am a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k1",
+          "character": "私",
+          "meaning": "I, Private",
+          "onyomi": [
+            "シ"
+          ],
+          "kunyomi": [
+            "わたし",
+            "わたくし"
+          ],
+          "strokes": 7,
+          "radicals": "禾",
+          "level": "N5",
+          "examples": [
+            {
+              "word": "私",
+              "reading": "わたし",
+              "meaning": "I"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [
+        {
+          "id": "ex1",
+          "instruction": "Select the correct particle",
+          "questionJa": "わたし ___ たんびるです。",
+          "type": "multiple_choice",
+          "options": [
+            "は",
+            "が",
+            "を",
+            "に"
+          ],
+          "correctAnswer": "は",
+          "explanation": "は marks the topic."
+        }
+      ],
+      "id": "les-60b17c",
+      "createdAt": "2026-09-03T07:06:25.183Z",
+      "updatedAt": "2026-09-03T07:06:25.214Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 10,
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v1",
+          "word": "わたし",
+          "reading": "わたし",
+          "romaji": "watashi",
+          "meaningEn": "I / Me",
+          "meaningBn": "আমি",
+          "partOfSpeech": "Pronoun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは たんびるです。",
+          "exampleSentenceEn": "I am Tanvir."
+        },
+        {
+          "id": "v2",
+          "word": "がくせい",
+          "reading": "がくせい",
+          "romaji": "gakusei",
+          "meaningEn": "Student",
+          "meaningBn": "ছাত্র",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは がくせいです。",
+          "exampleSentenceEn": "I am a student."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g1",
+          "title": "A は B です",
+          "titleJa": "A は B です",
+          "structure": "Noun1 は Noun2 です",
+          "meaning": "A is B",
+          "explanation": "Standard polite identity structure.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしは がくせいです。",
+              "english": "I am a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k1",
+          "character": "私",
+          "meaning": "I, Private",
+          "onyomi": [
+            "シ"
+          ],
+          "kunyomi": [
+            "わたし",
+            "わたくし"
+          ],
+          "strokes": 7,
+          "radicals": "禾",
+          "level": "N5",
+          "examples": [
+            {
+              "word": "私",
+              "reading": "わたし",
+              "meaning": "I"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [
+        {
+          "id": "ex1",
+          "instruction": "Select the correct particle",
+          "questionJa": "わたし ___ たんびるです。",
+          "type": "multiple_choice",
+          "options": [
+            "は",
+            "が",
+            "を",
+            "に"
+          ],
+          "correctAnswer": "は",
+          "explanation": "は marks the topic."
+        }
+      ],
+      "id": "les-d99a60",
+      "createdAt": "2026-09-03T07:07:37.165Z",
+      "updatedAt": "2026-09-03T07:07:37.202Z"
+    },
+    {
+      "moduleId": "mod-n5-1",
+      "courseId": "course-n5",
+      "level": "N5",
+      "lessonNumber": 11,
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "isPublished": true,
+      "estimatedMinutes": 15,
+      "vocabulary": [
+        {
+          "id": "v1",
+          "japanese": "わたし",
+          "furigana": "わたし",
+          "romaji": "watashi",
+          "english": "I / Me",
+          "banglaMeaning": "আমি",
+          "partOfSpeech": "Pronoun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは たんびるです。",
+          "exampleSentenceEn": "I am Tanvir."
+        },
+        {
+          "id": "v2",
+          "japanese": "がくせい",
+          "furigana": "がくせい",
+          "romaji": "gakusei",
+          "english": "Student",
+          "banglaMeaning": "ছাত্র",
+          "partOfSpeech": "Noun",
+          "level": "N5",
+          "exampleSentenceJa": "わたしは がくせいです。",
+          "exampleSentenceEn": "I am a student."
+        }
+      ],
+      "grammar": [
+        {
+          "id": "g1",
+          "title": "A は B です",
+          "titleJa": "A は B です",
+          "structure": "Noun1 は Noun2 です",
+          "meaning": "A is B",
+          "explanation": "Standard polite identity structure.",
+          "level": "N5",
+          "examples": [
+            {
+              "japanese": "わたしは がくせいです。",
+              "english": "I am a student."
+            }
+          ]
+        }
+      ],
+      "kanji": [
+        {
+          "id": "k1",
+          "character": "私",
+          "meaning": "I, Private",
+          "onyomi": [
+            "シ"
+          ],
+          "kunyomi": [
+            "わたし",
+            "わたくし"
+          ],
+          "strokes": 7,
+          "radicals": "禾",
+          "level": "N5",
+          "examples": [
+            {
+              "word": "私",
+              "reading": "わたし",
+              "meaning": "I"
+            }
+          ]
+        }
+      ],
+      "dialogue": [],
+      "practiceExercises": [
+        {
+          "id": "ex1",
+          "instruction": "Select the correct particle",
+          "questionJa": "わたし ___ たんびるです。",
+          "type": "multiple_choice",
+          "options": [
+            "は",
+            "が",
+            "を",
+            "に"
+          ],
+          "correctAnswer": "は",
+          "explanation": "は marks the topic."
+        }
+      ],
+      "id": "les-a56180",
+      "createdAt": "2026-09-03T07:16:48.196Z",
+      "updatedAt": "2026-09-03T07:16:48.233Z"
     }
   ],
   "quizzes": [
@@ -4382,20 +4679,145 @@
       "createdAt": "2026-09-02T09:43:30.832Z"
     },
     {
-      "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
-      "action": "database_backup_created",
-      "targetResource": "database_backups",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-60b17c",
       "details": {
-        "backupId": "bkp-daily-2026-09-02T18-45-42-787Z-7af398",
-        "filename": "nihomi_db_daily_2026-09-02T18-45-42-787Z_bkp-daily-2026-09-02T18-45-42-787Z-7af398.json",
-        "backupType": "daily",
-        "totalEntities": 360,
-        "sizeBytes": 379123,
-        "checksum": "1e5c100ac3d09578d82fc67f8da1c6f1f022da62be4fbdd14bc347ab2f484db7"
+        "draftId": "draft-42d9015b",
+        "version": 1,
+        "checksum": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft"
       },
-      "id": "log-2a9c60fe",
-      "createdAt": "2026-09-02T18:45:42.837Z"
+      "id": "log-53fd5afd",
+      "createdAt": "2026-09-03T07:06:25.192Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-60b17c",
+      "details": {
+        "draftId": "draft-42d9015b",
+        "version": 2,
+        "checksum": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft (Updated V2)"
+      },
+      "id": "log-50b858d7",
+      "createdAt": "2026-09-03T07:06:25.208Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-42d9015b",
+      "details": {
+        "draftId": "draft-42d9015b",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-60b17c",
+        "reason": "Rollback to stable V1 baseline"
+      },
+      "id": "log-64179d1a",
+      "createdAt": "2026-09-03T07:06:25.222Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d99a60",
+      "details": {
+        "draftId": "draft-d121c517",
+        "version": 1,
+        "checksum": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft"
+      },
+      "id": "log-c291d615",
+      "createdAt": "2026-09-03T07:07:37.175Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d99a60",
+      "details": {
+        "draftId": "draft-d121c517",
+        "version": 2,
+        "checksum": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft (Updated V2)"
+      },
+      "id": "log-43319149",
+      "createdAt": "2026-09-03T07:07:37.197Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-d121c517",
+      "details": {
+        "draftId": "draft-d121c517",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-d99a60",
+        "reason": "Rollback to stable V1 baseline"
+      },
+      "id": "log-34718a11",
+      "createdAt": "2026-09-03T07:07:37.212Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a56180",
+      "details": {
+        "draftId": "draft-e8e5f448",
+        "version": 1,
+        "checksum": "c61f4300b04091b8c29e81337e9d530b4aad3680a0b981aeb337f8f1633c95da",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft"
+      },
+      "id": "log-440b492a",
+      "createdAt": "2026-09-03T07:16:48.207Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a56180",
+      "details": {
+        "draftId": "draft-e8e5f448",
+        "version": 2,
+        "checksum": "4fad8724cac726f5dd3ec0c1ecb936b86da244188f43e3a125146372373b003b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "P1-02 Autonomous Test Draft (Updated V2)"
+      },
+      "id": "log-1f8bd63f",
+      "createdAt": "2026-09-03T07:16:48.227Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "admin@nihomi.com",
+      "action": "ROLLBACK_CONTENT_DRAFT",
+      "targetResource": "content_draft:draft-e8e5f448",
+      "details": {
+        "draftId": "draft-e8e5f448",
+        "targetVersionNumber": 1,
+        "newVersionNumber": 3,
+        "lessonId": "les-a56180",
+        "reason": "Rollback to stable V1 baseline"
+      },
+      "id": "log-e196dd50",
+      "createdAt": "2026-09-03T07:16:48.244Z"
     }
   ],
   "contentSources": [
@@ -4663,6 +5085,337 @@
     }
   ],
   "contentDrafts": [
+    {
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "level": "N5",
+      "sourceId": "src-p1-test",
+      "courseId": "course-n5",
+      "contentType": "lesson",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v1",
+            "japanese": "わたし",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I / Me",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "japanese": "がくせい",
+            "furigana": "がくせい",
+            "romaji": "gakusei",
+            "english": "Student",
+            "banglaMeaning": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "generationMetadata": {
+        "modelUsed": "gemini-2.5-flash",
+        "sourceDerived": true,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-03T07:16:48.190Z",
+        "disclaimer": "Curriculum verified."
+      },
+      "createdBy": "usr-admin-01",
+      "status": "PUBLISHED",
+      "reviewedBy": "admin@nihomi.com",
+      "reviewedAt": "2026-09-03T07:16:48.190Z",
+      "id": "draft-e8e5f448",
+      "createdAt": "2026-09-03T07:16:48.190Z",
+      "updatedAt": "2026-09-03T07:16:48.233Z",
+      "lessonId": "les-a56180",
+      "moduleId": "mod-n5-1"
+    },
+    {
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "level": "N5",
+      "sourceId": "src-p1-test",
+      "contentType": "lesson",
+      "rawText": "Test Raw text",
+      "structuredContent": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "status": "PUBLISHED",
+      "reviewedBy": "admin@nihomi.com",
+      "reviewedAt": "2026-09-03T07:07:37.158Z",
+      "id": "draft-d121c517",
+      "createdAt": "2026-09-03T07:07:37.159Z",
+      "updatedAt": "2026-09-03T07:07:37.202Z",
+      "lessonId": "les-d99a60",
+      "courseId": "course-n5",
+      "moduleId": "mod-n5-1"
+    },
+    {
+      "title": "P1-02 Autonomous Test Draft",
+      "titleJa": "P1-02 テスト下書き",
+      "summary": "Draft for validating atomic version history and rollback.",
+      "explanation": "Grammar and vocab explanation.",
+      "level": "N5",
+      "sourceId": "src-p1-test",
+      "contentType": "lesson",
+      "rawText": "Test Raw text",
+      "structuredContent": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "status": "PUBLISHED",
+      "reviewedBy": "admin@nihomi.com",
+      "reviewedAt": "2026-09-03T07:06:25.177Z",
+      "id": "draft-42d9015b",
+      "createdAt": "2026-09-03T07:06:25.178Z",
+      "updatedAt": "2026-09-03T07:06:25.214Z",
+      "lessonId": "les-60b17c",
+      "courseId": "course-n5",
+      "moduleId": "mod-n5-1"
+    },
     {
       "title": "P1-02 Autonomous Test Draft",
       "titleJa": "P1-02 テスト下書き",
@@ -5419,6 +6172,1071 @@
     }
   ],
   "contentVersions": [
+    {
+      "id": "ver-507c7fa8",
+      "draftId": "draft-e8e5f448",
+      "sourceId": "src-p1-test",
+      "versionNumber": 3,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v1",
+            "japanese": "わたし",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I / Me",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "japanese": "がくせい",
+            "furigana": "がくせい",
+            "romaji": "gakusei",
+            "english": "Student",
+            "banglaMeaning": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-a56180",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Rollback to stable V1 baseline",
+      "checksumSha256": "c61f4300b04091b8c29e81337e9d530b4aad3680a0b981aeb337f8f1633c95da",
+      "rollbackFromVersion": 1,
+      "approvedBy": "usr-admin-01",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:16:48.239Z",
+      "publishedAt": "2026-09-03T07:16:48.239Z",
+      "createdAt": "2026-09-03T07:16:48.239Z"
+    },
+    {
+      "id": "ver-e3202eb5",
+      "draftId": "draft-e8e5f448",
+      "sourceId": "src-p1-test",
+      "versionNumber": 2,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v1",
+            "japanese": "わたし",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I / Myself",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v3",
+            "japanese": "せんせい",
+            "furigana": "せんせい",
+            "romaji": "sensei",
+            "english": "Teacher",
+            "banglaMeaning": "শিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a teacher."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "title": "A は B じゃありません",
+            "titleJa": "A は B じゃありません",
+            "structure": "Noun1 は Noun2 じゃありません",
+            "meaning": "A is not B",
+            "explanation": "Polite negative identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは せんせいじゃありません。",
+                "english": "I am not a teacher."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft (Updated V2)",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-a56180",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "4fad8724cac726f5dd3ec0c1ecb936b86da244188f43e3a125146372373b003b",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:16:48.190Z",
+      "publishedAt": "2026-09-03T07:16:48.222Z",
+      "createdAt": "2026-09-03T07:16:48.222Z"
+    },
+    {
+      "id": "ver-e3d8c412",
+      "draftId": "draft-e8e5f448",
+      "sourceId": "src-p1-test",
+      "versionNumber": 1,
+      "contentJson": {
+        "vocabulary": [
+          {
+            "id": "v1",
+            "japanese": "わたし",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I / Me",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "japanese": "がくせい",
+            "furigana": "がくせい",
+            "romaji": "gakusei",
+            "english": "Student",
+            "banglaMeaning": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-a56180",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "c61f4300b04091b8c29e81337e9d530b4aad3680a0b981aeb337f8f1633c95da",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:16:48.190Z",
+      "publishedAt": "2026-09-03T07:16:48.201Z",
+      "createdAt": "2026-09-03T07:16:48.201Z"
+    },
+    {
+      "id": "ver-9b24a975",
+      "draftId": "draft-d121c517",
+      "sourceId": "src-p1-test",
+      "versionNumber": 3,
+      "contentJson": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-d99a60",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Rollback to stable V1 baseline",
+      "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+      "rollbackFromVersion": 1,
+      "approvedBy": "usr-admin-01",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:07:37.207Z",
+      "publishedAt": "2026-09-03T07:07:37.207Z",
+      "createdAt": "2026-09-03T07:07:37.207Z"
+    },
+    {
+      "id": "ver-74fc2539",
+      "draftId": "draft-d121c517",
+      "sourceId": "src-p1-test",
+      "versionNumber": 2,
+      "contentJson": {
+        "title": "Lesson 1: Greetings (Revised)",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Myself",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v3",
+            "word": "せんせい",
+            "reading": "せんせい",
+            "romaji": "sensei",
+            "meaningEn": "Teacher",
+            "meaningBn": "শিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a teacher."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "title": "A は B じゃありません",
+            "titleJa": "A は B じゃありません",
+            "structure": "Noun1 は Noun2 じゃありません",
+            "meaning": "A is not B",
+            "explanation": "Polite negative identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは せんせいじゃありません。",
+                "english": "I am not a teacher."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft (Updated V2)",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-d99a60",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:07:37.158Z",
+      "publishedAt": "2026-09-03T07:07:37.189Z",
+      "createdAt": "2026-09-03T07:07:37.189Z"
+    },
+    {
+      "id": "ver-ef099df9",
+      "draftId": "draft-d121c517",
+      "sourceId": "src-p1-test",
+      "versionNumber": 1,
+      "contentJson": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-d99a60",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:07:37.158Z",
+      "publishedAt": "2026-09-03T07:07:37.169Z",
+      "createdAt": "2026-09-03T07:07:37.169Z"
+    },
+    {
+      "id": "ver-cbf9d083",
+      "draftId": "draft-42d9015b",
+      "sourceId": "src-p1-test",
+      "versionNumber": 3,
+      "contentJson": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-60b17c",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Rollback to stable V1 baseline",
+      "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+      "rollbackFromVersion": 1,
+      "approvedBy": "usr-admin-01",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:06:25.218Z",
+      "publishedAt": "2026-09-03T07:06:25.218Z",
+      "createdAt": "2026-09-03T07:06:25.218Z"
+    },
+    {
+      "id": "ver-abee32f4",
+      "draftId": "draft-42d9015b",
+      "sourceId": "src-p1-test",
+      "versionNumber": 2,
+      "contentJson": {
+        "title": "Lesson 1: Greetings (Revised)",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Myself",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v3",
+            "word": "せんせい",
+            "reading": "せんせい",
+            "romaji": "sensei",
+            "meaningEn": "Teacher",
+            "meaningBn": "শিক্ষক",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "たなかさんは せんせいです。",
+            "exampleSentenceEn": "Mr. Tanaka is a teacher."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "title": "A は B じゃありません",
+            "titleJa": "A は B じゃありません",
+            "structure": "Noun1 は Noun2 じゃありません",
+            "meaning": "A is not B",
+            "explanation": "Polite negative identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは せんせいじゃありません。",
+                "english": "I am not a teacher."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft (Updated V2)",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-60b17c",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 2",
+      "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:06:25.177Z",
+      "publishedAt": "2026-09-03T07:06:25.204Z",
+      "createdAt": "2026-09-03T07:06:25.204Z"
+    },
+    {
+      "id": "ver-e804f5c8",
+      "draftId": "draft-42d9015b",
+      "sourceId": "src-p1-test",
+      "versionNumber": 1,
+      "contentJson": {
+        "title": "Lesson 1: Greetings",
+        "titleJa": "第１課：あいさつ",
+        "summary": "Basic Japanese greetings and introductions.",
+        "explanation": "Explanation of basic particles.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "vocabulary": [
+          {
+            "id": "v1",
+            "word": "わたし",
+            "reading": "わたし",
+            "romaji": "watashi",
+            "meaningEn": "I / Me",
+            "meaningBn": "আমি",
+            "partOfSpeech": "Pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは たんびるです。",
+            "exampleSentenceEn": "I am Tanvir."
+          },
+          {
+            "id": "v2",
+            "word": "がくせい",
+            "reading": "がくせい",
+            "romaji": "gakusei",
+            "meaningEn": "Student",
+            "meaningBn": "ছাত্র",
+            "partOfSpeech": "Noun",
+            "level": "N5",
+            "exampleSentenceJa": "わたしは がくせいです。",
+            "exampleSentenceEn": "I am a student."
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g1",
+            "title": "A は B です",
+            "titleJa": "A は B です",
+            "structure": "Noun1 は Noun2 です",
+            "meaning": "A is B",
+            "explanation": "Standard polite identity structure.",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "わたしは がくせいです。",
+                "english": "I am a student."
+              }
+            ]
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k1",
+            "character": "私",
+            "meaning": "I, Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ]
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex1",
+            "instruction": "Select the correct particle",
+            "questionJa": "わたし ___ たんびるです。",
+            "type": "multiple_choice",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "は marks the topic."
+          }
+        ]
+      },
+      "metadataJson": {
+        "title": "P1-02 Autonomous Test Draft",
+        "titleJa": "P1-02 テスト下書き",
+        "summary": "Draft for validating atomic version history and rollback.",
+        "explanation": "Grammar and vocab explanation.",
+        "level": "N5",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1"
+      },
+      "targetLessonId": "les-60b17c",
+      "targetCourseId": "course-n5",
+      "changelogSummary": "Published version 1",
+      "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
+      "approvedBy": "admin@nihomi.com",
+      "publishedBy": "usr-admin-01",
+      "approvedAt": "2026-09-03T07:06:25.177Z",
+      "publishedAt": "2026-09-03T07:06:25.187Z",
+      "createdAt": "2026-09-03T07:06:25.187Z"
+    },
     {
       "id": "ver-f1b5af4b",
       "draftId": "draft-2048c51f",

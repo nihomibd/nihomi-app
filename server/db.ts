@@ -4166,14 +4166,17 @@ class Database {
     this.save();
 
     // Persist to Supabase if available
-    const validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    let validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    if (!validSourceId && this.data.contentSources && this.data.contentSources.length > 0) {
+      validSourceId = this.data.contentSources[0].id;
+    }
     this.persistToSupabase('content_drafts', {
       id: draft.id,
       source_id: validSourceId,
       title: draft.title,
       level: draft.level,
       item_type: draft.contentType === 'grammar' ? 'GRAMMAR' : draft.contentType === 'kanji' ? 'KANJI' : 'VOCABULARY',
-      raw_text: draft.explanation || draft.rawText || '',
+      raw_text: draft.explanation || (draft as any).rawText || '',
       processed_json: draft.structuredContent,
       generation_metadata: draft.generationMetadata || { confidenceScore: 100 },
       status: draft.status,
@@ -4372,14 +4375,17 @@ class Database {
     this.save();
 
     // Persist to Supabase
-    const validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    let validSourceId = (draft.sourceId && this.getContentSourceById(draft.sourceId)) ? draft.sourceId : null;
+    if (!validSourceId && this.data.contentSources && this.data.contentSources.length > 0) {
+      validSourceId = this.data.contentSources[0].id;
+    }
     this.persistToSupabase('content_drafts', {
       id: draft.id,
       source_id: validSourceId,
       title: draft.title,
       level: draft.level,
       item_type: draft.contentType === 'grammar' ? 'GRAMMAR' : draft.contentType === 'kanji' ? 'KANJI' : 'VOCABULARY',
-      raw_text: draft.explanation || draft.rawText || '',
+      raw_text: draft.explanation || (draft as any).rawText || '',
       processed_json: draft.structuredContent,
       generation_metadata: draft.generationMetadata || { confidenceScore: 100 },
       created_by: '27fb8002-dbdd-4370-83d1-1d438ae9a055',

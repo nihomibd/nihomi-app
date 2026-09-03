@@ -20,11 +20,16 @@ import {
   ChevronRight,
   Plus,
   Trash2,
-  Edit3
+  Edit3,
+  GitCompare,
+  RotateCcw,
+  Hash,
+  FileCode
 } from 'lucide-react';
 import {
   ContentDraft,
   ContentVersion,
+  ContentDifferentialDiff,
   ContentSource,
   StructuredEducationalContent,
   VocabularyItem,
@@ -57,6 +62,18 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
   const [isSaving, setIsSaving] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+
+  // Versioning and Diffing State
+  const [localVersions, setLocalVersions] = useState<ContentVersion[]>(versions);
+  const [selectedDiff, setSelectedDiff] = useState<ContentDifferentialDiff | null>(null);
+  const [isDiffLoading, setIsDiffLoading] = useState(false);
+  const [diffTargetVersion, setDiffTargetVersion] = useState<number | null>(null);
+
+  // Rollback Modal State
+  const [isRollbackModalOpen, setIsRollbackModalOpen] = useState(false);
+  const [rollbackTargetVersion, setRollbackTargetVersion] = useState<number | null>(null);
+  const [rollbackReason, setRollbackReason] = useState('');
+  const [isRollingBack, setIsRollingBack] = useState(false);
 
   // Revision modal state
   const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
@@ -142,6 +159,13 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
     }
   };
 
+  const refreshVersions = async () => {
+    const res = await contentEngineApi.getDraftVersions(draft.id);
+    if (res.success) {
+      setLocalVersions(res.versions);
+    }
+  };
+
   const handlePublish = async () => {
     if (!confirm('Publish this educational curriculum to the live Nihomi student portal and course curriculum?')) return;
     setActionError(null);
@@ -149,9 +173,46 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
     if (res.success && res.draft) {
       setDraft(res.draft);
       setActionSuccess(`Published! Live Lesson ID: ${res.lesson?.id}. Version ${res.version?.versionNumber} recorded.`);
+      await refreshVersions();
       onUpdate();
     } else {
       setActionError(res.error || 'Failed to publish draft');
+    }
+  };
+
+  const handleOpenDiff = async (verNumber: number) => {
+    setIsDiffLoading(true);
+    setDiffTargetVersion(verNumber);
+    setActionError(null);
+    const res = await contentEngineApi.diffDraftWithVersion(draft.id, verNumber);
+    setIsDiffLoading(false);
+    if (res.success && res.diff) {
+      setSelectedDiff(res.diff);
+    } else {
+      setActionError(res.error || 'Failed to compute version diff');
+    }
+  };
+
+  const handleConfirmRollback = async () => {
+    if (rollbackTargetVersion === null) return;
+    setIsRollingBack(true);
+    setActionError(null);
+    const res = await contentEngineApi.rollbackDraft(draft.id, rollbackTargetVersion, rollbackReason);
+    setIsRollingBack(false);
+    setIsRollbackModalOpen(false);
+    if (res.success && res.draft) {
+      setDraft(res.draft);
+      setContent(JSON.parse(JSON.stringify(res.draft.structuredContent || { vocabulary: [], grammar: [], kanji: [], practiceExercises: [] })));
+      setTitle(res.draft.title);
+      setTitleJa(res.draft.titleJa || '');
+      setSummary(res.draft.summary || '');
+      setExplanation(res.draft.explanation || '');
+      setLevel(res.draft.level);
+      setActionSuccess(`Successfully rolled back to Version ${rollbackTargetVersion}! Audit version created.`);
+      await refreshVersions();
+      onUpdate();
+    } else {
+      setActionError(res.error || 'Failed to execute rollback');
     }
   };
 
@@ -731,35 +792,236 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
 
           {activeTab === 'versions' && (
             <div className="space-y-4">
-              <p className="text-xs text-zinc-500">
-                Immutable publication snapshots and approval audit history for compliance and syllabus integrity.
-              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                    <History className="w-4 h-4 text-red-500" />
+                    Immutable Publication Versions & Audit Lineage
+                  </h4>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    Snapshots created on every publish. Compare versions differentially or execute one-click atomic rollbacks.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={refreshVersions}
+                  className="px-2.5 py-1 text-xs rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 font-medium"
+                >
+                  Refresh Versions
+                </button>
+              </div>
+
               <div className="space-y-3">
-                {versions.map((ver) => (
+                {localVersions.map((ver) => (
                   <div
                     key={ver.id}
-                    className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50 space-y-2"
+                    className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50 space-y-3"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900">
                           Version {ver.versionNumber}
                         </span>
+                        {ver.rollbackFromVersion && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1">
+                            <RotateCcw className="w-3 h-3" />
+                            Restored from V{ver.rollbackFromVersion}
+                          </span>
+                        )}
+                        {ver.checksumSha256 && (
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center gap-1" title={ver.checksumSha256}>
+                            <Hash className="w-3 h-3 text-zinc-500" />
+                            {ver.checksumSha256.substring(0, 10)}...
+                          </span>
+                        )}
                         <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                          Published to Lesson: {ver.targetLessonId || 'N/A'}
+                          Lesson: {ver.targetLessonId || 'N/A'}
                         </span>
                       </div>
                       <span className="text-xs text-zinc-400">
-                        {new Date(ver.publishedAt).toLocaleString()}
+                        {new Date(ver.publishedAt || ver.createdAt).toLocaleString()}
                       </span>
                     </div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                      Approved By: <strong>{ver.approvedBy}</strong> &bull; Published By: <strong>{ver.publishedBy}</strong>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-zinc-200/50 dark:border-zinc-800/50">
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">
+                        Approved: <strong>{ver.approvedBy || 'System'}</strong> &bull; Published: <strong>{ver.publishedBy || 'System'}</strong>
+                        {ver.changelogSummary && (
+                          <span className="block text-[11px] text-zinc-500 mt-0.5 italic">
+                            Changelog: {ver.changelogSummary}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (selectedDiff && diffTargetVersion === ver.versionNumber) {
+                              setSelectedDiff(null);
+                              setDiffTargetVersion(null);
+                            } else {
+                              handleOpenDiff(ver.versionNumber);
+                            }
+                          }}
+                          disabled={isDiffLoading && diffTargetVersion === ver.versionNumber}
+                          className="px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                        >
+                          <GitCompare className="w-3.5 h-3.5 text-sky-500" />
+                          {isDiffLoading && diffTargetVersion === ver.versionNumber
+                            ? 'Diffing...'
+                            : selectedDiff && diffTargetVersion === ver.versionNumber
+                            ? 'Hide Diff'
+                            : 'Diff vs Current'}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setRollbackTargetVersion(ver.versionNumber);
+                            setRollbackReason(`Rollback to Version ${ver.versionNumber}`);
+                            setIsRollbackModalOpen(true);
+                          }}
+                          className="px-2.5 py-1.5 rounded-lg border border-amber-300 dark:border-amber-800/80 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          Rollback to V{ver.versionNumber}
+                        </button>
+                      </div>
                     </div>
+
+                    {/* Differential Diff Inspection Drawer */}
+                    {selectedDiff && diffTargetVersion === ver.versionNumber && (
+                      <div className="mt-3 p-4 rounded-xl border border-sky-200 dark:border-sky-900/60 bg-sky-50/50 dark:bg-sky-950/20 space-y-3 animate-in fade-in">
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sky-200 dark:border-sky-900/40 pb-2">
+                          <div className="flex items-center gap-2">
+                            <GitCompare className="w-4 h-4 text-sky-500" />
+                            <span className="text-xs font-bold text-sky-900 dark:text-sky-200">
+                              Differential Diff: Version {ver.versionNumber} vs Current Draft
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200">
+                              Total Changes: {selectedDiff.stats.totalChanges}
+                            </span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
+                              Vocab: +{selectedDiff.stats.vocabularyChanges.added} / -{selectedDiff.stats.vocabularyChanges.removed} / ~{selectedDiff.stats.vocabularyChanges.modified}
+                            </span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                              Grammar: +{selectedDiff.stats.grammarChanges.added} / -{selectedDiff.stats.grammarChanges.removed} / ~{selectedDiff.stats.grammarChanges.modified}
+                            </span>
+                          </div>
+                        </div>
+
+                        {selectedDiff.stats.totalChanges === 0 ? (
+                          <div className="text-xs text-zinc-500 py-2 italic text-center">
+                            No differences detected. Current draft structured content is identical to Version {ver.versionNumber}.
+                          </div>
+                        ) : (
+                          <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+                            {/* Metadata Changes */}
+                            {selectedDiff.metadataDiff.length > 0 && (
+                              <div className="space-y-1">
+                                <h5 className="text-[11px] font-extrabold uppercase text-zinc-500 tracking-wider">Metadata Changes</h5>
+                                {selectedDiff.metadataDiff.map((md, idx) => (
+                                  <div key={idx} className="text-xs p-2 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                                    <span className="font-mono text-zinc-600 dark:text-zinc-400">{md.field}:</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="line-through text-rose-600 dark:text-rose-400">{String(md.oldValue || '—')}</span>
+                                      <span>&rarr;</span>
+                                      <span className="font-bold text-emerald-600 dark:text-emerald-400">{String(md.newValue || '—')}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Vocabulary Diff */}
+                            {selectedDiff.vocabularyDiff.length > 0 && (
+                              <div className="space-y-1">
+                                <h5 className="text-[11px] font-extrabold uppercase text-zinc-500 tracking-wider">
+                                  Vocabulary ({selectedDiff.vocabularyDiff.length} changes)
+                                </h5>
+                                {selectedDiff.vocabularyDiff.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className={`text-xs p-2.5 rounded-lg border flex flex-col gap-1 ${
+                                      item.changeType === 'ADDED'
+                                        ? 'border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                                        : item.changeType === 'REMOVED'
+                                        ? 'border-rose-300 dark:border-rose-800/80 bg-rose-50/70 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
+                                        : 'border-amber-300 dark:border-amber-800/80 bg-amber-50/70 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between font-bold">
+                                      <span className="flex items-center gap-1.5">
+                                        <span className={`px-1.5 py-0.2 rounded text-[9px] uppercase font-black ${
+                                          item.changeType === 'ADDED' ? 'bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100' :
+                                          item.changeType === 'REMOVED' ? 'bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-100' :
+                                          'bg-amber-200 dark:bg-amber-900 text-amber-800 dark:text-amber-100'
+                                        }`}>
+                                          {item.changeType}
+                                        </span>
+                                        {item.title || (item.newItem?.japanese || item.oldItem?.japanese)}
+                                      </span>
+                                      <span className="text-[11px] opacity-80">
+                                        {item.newItem?.english || item.oldItem?.english}
+                                      </span>
+                                    </div>
+                                    {item.fieldChanges && item.fieldChanges.length > 0 && (
+                                      <div className="text-[11px] pt-1 space-y-0.5 border-t border-amber-200 dark:border-amber-800/50">
+                                        {item.fieldChanges.map((fc, idx) => (
+                                          <div key={idx} className="flex items-center gap-1">
+                                            <span className="font-mono text-zinc-500">{fc.field}:</span>
+                                            <span className="line-through text-rose-600 dark:text-rose-400">{String(fc.oldValue)}</span>
+                                            <span>&rarr;</span>
+                                            <span className="font-bold text-emerald-600 dark:text-emerald-400">{String(fc.newValue)}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Grammar Diff */}
+                            {selectedDiff.grammarDiff.length > 0 && (
+                              <div className="space-y-1">
+                                <h5 className="text-[11px] font-extrabold uppercase text-zinc-500 tracking-wider">
+                                  Grammar ({selectedDiff.grammarDiff.length} changes)
+                                </h5>
+                                {selectedDiff.grammarDiff.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className={`text-xs p-2.5 rounded-lg border flex flex-col gap-1 ${
+                                      item.changeType === 'ADDED'
+                                        ? 'border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-emerald-950/40'
+                                        : item.changeType === 'REMOVED'
+                                        ? 'border-rose-300 dark:border-rose-800/80 bg-rose-50/70 dark:bg-rose-950/40'
+                                        : 'border-amber-300 dark:border-amber-800/80 bg-amber-50/70 dark:bg-amber-950/40'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between font-bold">
+                                      <span>
+                                        [{item.changeType}] {item.title || item.newItem?.title || item.oldItem?.title || item.newItem?.structure || item.oldItem?.structure}
+                                      </span>
+                                      <span className="text-[11px] text-zinc-500">
+                                        {item.newItem?.meaning || item.oldItem?.meaning}
+                                      </span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                {versions.length === 0 && (
+                {localVersions.length === 0 && (
                   <div className="text-center py-8 text-xs text-zinc-500">
                     No publication versions recorded yet. Once approved and published, immutable audit snapshots will appear here.
                   </div>
@@ -886,6 +1148,61 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Rollback Confirmation Modal */}
+      {isRollbackModalOpen && rollbackTargetVersion !== null && (
+        <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 border border-amber-300 dark:border-amber-800 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl animate-in fade-in">
+            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <RotateCcw className="w-4 h-4 text-amber-500" />
+              Confirm Rollback to Version {rollbackTargetVersion}
+            </h4>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+              This will atomically restore this draft's structured curriculum (vocabulary, grammar points, and practice exercises) to <strong>Version {rollbackTargetVersion}</strong>. If this draft is currently published, the live PostgreSQL lesson will also be updated with zero student disruption.
+            </p>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[11px] font-bold text-zinc-500 mb-1">
+                  Rollback Reason / Audit Note (Optional):
+                </label>
+                <input
+                  type="text"
+                  value={rollbackReason}
+                  onChange={(e) => setRollbackReason(e.target.value)}
+                  placeholder="e.g. Revert vocabulary translation error introduced in V2"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsRollbackModalOpen(false)}
+                  disabled={isRollingBack}
+                  className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmRollback}
+                  disabled={isRollingBack}
+                  className="px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5"
+                >
+                  {isRollingBack ? (
+                    <>Rolling back...</>
+                  ) : (
+                    <>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Confirm & Rollback
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
