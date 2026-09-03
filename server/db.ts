@@ -83,9 +83,13 @@ import {
   SrsRatingGrade,
   SrsAlgorithmMode,
   SrsRetentionCurveReport,
-  SrsTelemetryStats
+  SrsTelemetryStats,
+  LearnerAnalyticsSummary,
+  LeaderboardRankItem,
+  PlatformCohortAnalytics
 } from './types.js';
 import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
+import { LearnerAnalyticsService } from './services/learnerAnalyticsService.js';
 import {
   INITIAL_COURSES,
   INITIAL_MODULES,
@@ -417,7 +421,12 @@ class Database {
     baitoScenarios: INITIAL_BAITO_SCENARIOS,
     conbiniProducts: INITIAL_CONBINI_PRODUCTS,
     conbiniOrders: INITIAL_CONBINI_ORDERS,
-    rirekishoProfiles: [INITIAL_DEFAULT_RIREKISHO]
+    rirekishoProfiles: [INITIAL_DEFAULT_RIREKISHO],
+
+    // Adaptive SRS & Learner Telemetry
+    srsCards: [],
+    srsLogs: [],
+    learnerAnalyticsSummaries: []
   };
 
   private isLoaded = false;
@@ -1357,7 +1366,8 @@ class Database {
       mockExams: INITIAL_MOCK_EXAMS,
       mockExamAttempts: [],
       srsCards: [],
-      srsLogs: []
+      srsLogs: [],
+      learnerAnalyticsSummaries: []
     };
     this.isLoaded = true;
   }
@@ -1553,6 +1563,10 @@ class Database {
     return this.data.profiles.find((p) => p.userId === userId);
   }
 
+  public getProfile(userId: string): UserProfile | undefined {
+    return this.getProfileByUserId(userId);
+  }
+
   public updateProfile(userId: string, updates: Partial<UserProfile>): UserProfile | null {
     const idx = this.data.profiles.findIndex((p) => p.userId === userId);
     if (idx === -1) return null;
@@ -1629,6 +1643,10 @@ class Database {
       this.save();
     }
     return p;
+  }
+
+  public getProgress(userId: string): UserProgress {
+    return this.getProgressByUserId(userId);
   }
 
   public completeLesson(userId: string, lessonId: string, studyMinutes = 15): UserProgress {
@@ -5984,6 +6002,54 @@ class Database {
     if (lesson2) this.syncLessonToSrsDeck(userId, lesson2.id);
 
     return this.data.srsCards.filter((c) => c.userId === userId);
+  }
+
+  // ==============================================================================
+  // P1-05: Materialized Learner Analytics & Real-Time Telemetry Methods
+  // ==============================================================================
+
+  public getLearnerAnalyticsSummary(userId: string, forceRefresh = false): LearnerAnalyticsSummary {
+    return LearnerAnalyticsService.getMaterializedSummary(userId, forceRefresh);
+  }
+
+  public saveLearnerAnalyticsSummary(summary: LearnerAnalyticsSummary): void {
+    if (!this.data.learnerAnalyticsSummaries) {
+      this.data.learnerAnalyticsSummaries = [];
+    }
+    const idx = this.data.learnerAnalyticsSummaries.findIndex((s) => s.userId === summary.userId);
+    if (idx >= 0) {
+      this.data.learnerAnalyticsSummaries[idx] = summary;
+    } else {
+      this.data.learnerAnalyticsSummaries.push(summary);
+    }
+    this.save();
+  }
+
+  public refreshAllMaterializedAnalytics(): number {
+    const users = this.data.users || [];
+    let count = 0;
+    users.forEach((u) => {
+      LearnerAnalyticsService.computeLearnerAnalytics(u.id);
+      count++;
+    });
+    return count;
+  }
+
+  public getLeaderboard(
+    timeframe: 'today' | 'week' | 'allTime' = 'allTime',
+    currentUserId?: string,
+    limit = 20
+  ): {
+    timeframe: string;
+    totalLearners: number;
+    rankings: LeaderboardRankItem[];
+    currentUserRank?: LeaderboardRankItem;
+  } {
+    return LearnerAnalyticsService.getLeaderboard(timeframe, currentUserId, limit);
+  }
+
+  public getCohortAnalytics(): PlatformCohortAnalytics {
+    return LearnerAnalyticsService.getCohortAnalytics();
   }
 
   // ==============================================================================

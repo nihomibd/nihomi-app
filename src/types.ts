@@ -1273,6 +1273,119 @@ export interface ConbiniCustomerOrder {
   tenderedCashAmount?: number;
 }
 
+// ==============================================================================
+// P1-05: Learner Analytics & Real-Time Telemetry Types
+// ==============================================================================
+
+export interface DailyRetentionDataPoint {
+  date: string; // YYYY-MM-DD
+  totalReviews: number;
+  successfulReviews: number;
+  againReviews: number;
+  accuracyRate: number; // 0 - 100%
+  averageResponseTimeMs: number;
+  averageRetrievability: number; // 0.0 - 1.0
+}
+
+export interface DailyActivityDataPoint {
+  date: string; // YYYY-MM-DD
+  studyMinutes: number;
+  srsReviews: number;
+  xpEarned: number;
+  quotaCompleted: boolean;
+}
+
+export interface MockExamSectionAverage {
+  sectionType: string;
+  sectionTitle: string;
+  averageRawPercent: number;
+  averageScaledScore: number;
+  maxScaledScore: number;
+  passRatePercent: number;
+}
+
+export interface MockExamAttemptSummary {
+  attemptId: string;
+  examId: string;
+  examCode: string;
+  level: JLPTLevel;
+  title: string;
+  submittedAt: string;
+  totalScaledScore: number;
+  overallPassingScore: number;
+  isPassed: boolean;
+  letterGrade: 'A' | 'B' | 'C' | 'F';
+  timeSpentSeconds: number;
+}
+
+export interface LeaderboardRankItem {
+  userId: string;
+  rank: number;
+  name: string;
+  nameJa?: string;
+  avatar?: string;
+  avatarText: string;
+  location?: string;
+  targetLevel: JLPTLevel;
+  badgeTitle: string;
+  xp: number;
+  streakDays: number;
+  isCurrentUser: boolean;
+}
+
+export interface LearnerAnalyticsSummary {
+  id: string;
+  userId: string;
+  computedAt: string;
+  targetLevel: JLPTLevel;
+  srsMetrics: {
+    totalCards: number;
+    dueCards: number;
+    retentionRate7d: number;
+    retentionRate30d: number;
+    overallAccuracyRate: number;
+    averageStabilityDays: number;
+    averageDifficulty: number;
+    averageResponseTimeMs: number;
+    masteryBreakdown: Record<string, number>;
+    dailyRetentionTrend: DailyRetentionDataPoint[];
+  };
+  streakMetrics: {
+    currentStreak: number;
+    longestStreak: number;
+    lastActiveDate: string;
+    totalStudyMinutes: number;
+    activeDaysLast30d: number;
+    consistencyScorePercent: number;
+    averageDailyMinutes: number;
+    recentDailyActivity: DailyActivityDataPoint[];
+  };
+  mockExamMetrics: {
+    targetLevel: JLPTLevel;
+    totalAttempts: number;
+    passedAttempts: number;
+    passRatePercent: number;
+    averageScaledScore: number;
+    highestScaledScore: number;
+    overallPassingScore: number;
+    readinessScorePercent: number;
+    sectionAverages: Record<string, MockExamSectionAverage>;
+    recentAttempts: MockExamAttemptSummary[];
+  };
+  leaderboardMetrics: {
+    currentXp: number;
+    allTimeRank: number;
+    weeklyRank: number;
+    dailyRank: number;
+    totalLearners: number;
+    topPercentile: number;
+    weeklyXpDelta: number;
+    rankDelta7d: number;
+  };
+  lastRefreshed: string;
+}
+
+
 
 
 

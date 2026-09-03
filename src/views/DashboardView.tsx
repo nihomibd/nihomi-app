@@ -48,6 +48,7 @@ import { LanguageProgressTracker } from '../components/LanguageProgressTracker.j
 import { RecentlyViewedLessons } from '../components/RecentlyViewedLessons.js';
 import { JlptMasteryHeatmap } from '../components/dashboard/JlptMasteryHeatmap';
 import { KanjiMasteryTrendChart } from '../components/dashboard/KanjiMasteryTrendChart';
+import { LearnerTelemetryDashboard } from '../components/dashboard/LearnerTelemetryDashboard.js';
 
 interface DashboardViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -315,6 +316,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         {/* Task 7: Personalized Daily Study Plan & Roadmap Countdown Widget */}
         <section id="dashboard-study-plan-roadmap-section">
           <StudyPlanRoadmapWidget onNavigate={onNavigate} />
+        </section>
+
+        {/* P1-05: Learner Analytics & Real-Time Telemetry Dashboard Engine */}
+        <section id="dashboard-learner-telemetry-engine-section">
+          <LearnerTelemetryDashboard onNavigate={onNavigate} />
         </section>
 
         {/* JLPT Mastery Activity Heatmap & Skill Density Matrix */}
