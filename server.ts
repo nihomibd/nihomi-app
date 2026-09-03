@@ -21,6 +21,7 @@ import { contentStudioRouter } from './server/routes/contentStudio.js';
 import { whiteLabelRouter } from './server/routes/whiteLabelRoutes.js';
 import { studyPlanRouter } from './server/routes/studyPlan.js';
 import { baitoSimulationRouter } from './server/routes/baitoSimulation.js';
+import { srsRouter } from './server/routes/srsRouter.js';
 import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
 import { stateIntegrityService } from './server/services/stateIntegrityService.js';
@@ -138,6 +139,7 @@ async function startServer() {
   app.use('/api/baito', baitoSimulationRouter);
   app.use('/api/simulation', baitoSimulationRouter);
   app.use('/api/baito-simulation', baitoSimulationRouter);
+  app.use('/api/srs', srsRouter);
 
 
   // Vite middleware for development vs Static files for production

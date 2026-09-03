@@ -484,4 +484,118 @@ export function getLessonSrsReviewSummary(
   };
 }
 
+/**
+ * P1-04 Server-Side Adaptive SRS (SM-2 / FSRS) Integration with Client Fallback
+ */
+
+export async function submitAdaptiveSrsReviewToServer(
+  cardId: string,
+  rating: SrsRating,
+  responseTimeMs?: number
+): Promise<{ success: boolean; card?: any; xpGained?: number; message?: string }> {
+  try {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const res = await fetch('/api/srs/review', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        cardId,
+        rating,
+        responseTimeMs,
+        algorithmMode: 'hybrid'
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch {
+    // Graceful fallback to client-side localStorage execution
+  }
+
+  const localState = saveSrsItemReview(cardId, rating);
+  return {
+    success: true,
+    card: localState,
+    xpGained: rating === 'again' ? 10 : 25,
+    message: 'Review saved locally.'
+  };
+}
+
+export async function fetchServerDueSrsCards(limit?: number): Promise<any[]> {
+  try {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const url = limit ? `/api/srs/due?limit=${limit}` : '/api/srs/due';
+    const res = await fetch(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && Array.isArray(data.dueCards)) {
+        return data.dueCards;
+      }
+    }
+  } catch {
+    // Fallback handled by caller
+  }
+  return [];
+}
+
+export async function fetchServerRetentionCurve(cardId?: string): Promise<any | null> {
+  try {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const url = cardId ? `/api/srs/retention-curve?cardId=${encodeURIComponent(cardId)}` : '/api/srs/retention-curve';
+    const res = await fetch(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.report) {
+        return data.report;
+      }
+    }
+  } catch {}
+  return null;
+}
+
+export async function fetchServerSrsTelemetry(): Promise<any | null> {
+  try {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const res = await fetch('/api/srs/telemetry', {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.stats) {
+        return data.stats;
+      }
+    }
+  } catch {}
+  return null;
+}
+
+export async function syncPublishedLessonToSrs(lessonId: string): Promise<boolean> {
+  try {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const res = await fetch(`/api/srs/sync-lesson/${encodeURIComponent(lessonId)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+
 

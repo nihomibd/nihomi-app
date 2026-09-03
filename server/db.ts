@@ -74,8 +74,18 @@ import {
   JisRirekishoData,
   ConbiniPosProduct,
   ConbiniCustomerOrder,
-  BaitoScenarioType
+  BaitoScenarioType,
+  SrsCardRecord,
+  SrsReviewLog,
+  SrsReviewSubmission,
+  SrsCardStage,
+  SrsItemType,
+  SrsRatingGrade,
+  SrsAlgorithmMode,
+  SrsRetentionCurveReport,
+  SrsTelemetryStats
 } from './types.js';
+import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
 import {
   INITIAL_COURSES,
   INITIAL_MODULES,
@@ -977,6 +987,9 @@ class Database {
         if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
         if (!this.data.studyPlans) this.data.studyPlans = [];
         if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
+        // Ensure Adaptive SRS collections are initialized
+        if (!this.data.srsCards) this.data.srsCards = [];
+        if (!this.data.srsLogs) this.data.srsLogs = [];
         this.save();
         this.isLoaded = true;
       } else {
@@ -1342,7 +1355,9 @@ class Database {
       })),
       studentErrorLogs: [],
       mockExams: INITIAL_MOCK_EXAMS,
-      mockExamAttempts: []
+      mockExamAttempts: [],
+      srsCards: [],
+      srsLogs: []
     };
     this.isLoaded = true;
   }
@@ -5577,21 +5592,398 @@ class Database {
   public getSrsReviewQueue(userId: string) {
     const studyPlan = this.getStudyPlan(userId);
     const activeGhosts = this.getGhostWeaknesses(userId, { resolved: false, dueOnly: true });
+    const dueSrsCards = this.getDueSrsCards(userId, { limit: studyPlan.dailyQuota.vocabSrsReviewTarget });
 
-    // Aggregate due vocabulary and kanji from lessons matching target level
+    // Aggregate due vocabulary and kanji from lessons matching target level (backwards-compatible)
     const targetLessons = this.data.lessons.filter((l) => l.level === studyPlan.targetLevel);
     const allVocab = targetLessons.flatMap((l) => l.vocabulary || []);
-    const dueVocab = allVocab.slice(0, studyPlan.dailyQuota.vocabSrsReviewTarget);
+    const dueVocab = dueSrsCards.length > 0
+      ? dueSrsCards.map((c) => ({
+          id: c.itemId,
+          word: c.front,
+          reading: c.reading,
+          meaning: c.meaning,
+          meaningBn: c.meaningBn
+        }))
+      : allVocab.slice(0, studyPlan.dailyQuota.vocabSrsReviewTarget);
 
     return {
       success: true,
       targetLevel: studyPlan.targetLevel,
       dailyQuota: studyPlan.dailyQuota,
       dueVocab,
+      dueSrsCards,
       dueGhosts: activeGhosts,
       totalDueCount: dueVocab.length + activeGhosts.length,
       daysRemaining: studyPlan.daysRemaining
     };
+  }
+
+  // ==============================================================================
+  // P1-04: Adaptive SRS (Spaced Repetition System) SuperMemo-2 / FSRS Database Hooks
+  // ==============================================================================
+
+  public getSrsCards(
+    userId: string,
+    filters?: {
+      itemType?: SrsItemType;
+      level?: JLPTLevel;
+      stage?: SrsCardStage;
+      dueOnly?: boolean;
+      search?: string;
+      lessonId?: string;
+    }
+  ): SrsCardRecord[] {
+    if (!this.data.srsCards) this.data.srsCards = [];
+    const now = new Date();
+
+    let list = this.data.srsCards.filter((c) => c.userId === userId);
+
+    // Auto-seed initial foundational deck if user has 0 cards
+    if (list.length === 0) {
+      this.seedInitialSrsCardsForUser(userId);
+      list = this.data.srsCards.filter((c) => c.userId === userId);
+    }
+
+    // Refresh retrievability and retentionScore dynamically on query
+    list.forEach((c) => {
+      c.retrievability = AdaptiveSrsService.calculateRetrievability(
+        c.lastReviewedAt ? Math.max(0, (now.getTime() - new Date(c.lastReviewedAt).getTime()) / (1000 * 60 * 60 * 24)) : 0,
+        c.stabilityDays || c.intervalDays || 1
+      );
+      c.retentionScore = Math.round(c.retrievability * 100);
+    });
+
+    if (filters?.itemType) {
+      list = list.filter((c) => c.itemType === filters.itemType);
+    }
+    if (filters?.level) {
+      list = list.filter((c) => c.level === filters.level);
+    }
+    if (filters?.stage) {
+      list = list.filter((c) => c.stage === filters.stage);
+    }
+    if (filters?.lessonId) {
+      list = list.filter((c) => c.lessonId === filters.lessonId);
+    }
+    if (filters?.dueOnly) {
+      list = list.filter((c) => AdaptiveSrsService.isCardDue(c, now));
+    }
+    if (filters?.search) {
+      const q = filters.search.toLowerCase().trim();
+      list = list.filter(
+        (c) =>
+          c.front.toLowerCase().includes(q) ||
+          c.reading.toLowerCase().includes(q) ||
+          c.meaning.toLowerCase().includes(q) ||
+          (c.meaningBn && c.meaningBn.includes(q))
+      );
+    }
+
+    return list;
+  }
+
+  public getSrsCardById(userId: string, cardId: string): SrsCardRecord | undefined {
+    if (!this.data.srsCards) this.data.srsCards = [];
+    return this.data.srsCards.find((c) => c.userId === userId && c.id === cardId);
+  }
+
+  public getDueSrsCards(
+    userId: string,
+    filters?: {
+      itemType?: SrsItemType;
+      level?: JLPTLevel;
+      limit?: number;
+    }
+  ): SrsCardRecord[] {
+    const dueCards = this.getSrsCards(userId, {
+      ...filters,
+      dueOnly: true
+    });
+
+    // Prioritize cards with lowest predicted retention (highest forgetting urgency), then earliest due date
+    dueCards.sort((a, b) => {
+      if (a.retentionScore !== b.retentionScore) {
+        return a.retentionScore - b.retentionScore; // Ascending retention: lowest retention first
+      }
+      const dateA = new Date(a.nextReviewAt).getTime();
+      const dateB = new Date(b.nextReviewAt).getTime();
+      return dateA - dateB;
+    });
+
+    if (filters?.limit && filters.limit > 0) {
+      return dueCards.slice(0, filters.limit);
+    }
+    return dueCards;
+  }
+
+  public saveSrsCard(card: SrsCardRecord): SrsCardRecord {
+    if (!this.data.srsCards) this.data.srsCards = [];
+    const index = this.data.srsCards.findIndex((c) => c.id === card.id && c.userId === card.userId);
+    card.updatedAt = new Date().toISOString();
+    if (index >= 0) {
+      this.data.srsCards[index] = card;
+    } else {
+      this.data.srsCards.push(card);
+    }
+    this.save();
+    return card;
+  }
+
+  public recordSrsReview(
+    userId: string,
+    submission: SrsReviewSubmission
+  ): {
+    success: boolean;
+    card?: SrsCardRecord;
+    reviewLog?: SrsReviewLog;
+    xpGained?: number;
+    message?: string;
+    error?: string;
+  } {
+    const card = this.getSrsCardById(userId, submission.cardId);
+    if (!card) {
+      return { success: false, error: `SRS card with ID "${submission.cardId}" not found.` };
+    }
+
+    const { updatedCard, reviewLog } = AdaptiveSrsService.executeReview(card, submission);
+
+    // Save updated card
+    this.saveSrsCard(updatedCard);
+
+    // Record review telemetry log
+    if (!this.data.srsLogs) this.data.srsLogs = [];
+    this.data.srsLogs.push(reviewLog);
+
+    // Award XP based on recall accuracy
+    const xpGained = submission.rating === 'again' ? 10 : submission.rating === 'easy' ? 35 : 25;
+    this.addStudyTime(userId, 1, xpGained);
+
+    // Update daily study plan task progress if active
+    try {
+      const session = this.getDailyStudySession(userId);
+      const srsTask = session.checklist.find(
+        (t) => (updatedCard.itemType === 'kanji' ? t.taskType === 'kanji_drill' : t.taskType === 'vocab_srs')
+      );
+      if (srsTask) {
+        this.updateDailyTaskCompletion(userId, srsTask.id, 1);
+      }
+    } catch {}
+
+    // Async Supabase Sync Hook
+    if (this.supabaseClient) {
+      Promise.resolve(
+        this.supabaseClient.from('student_srs_reviews').upsert({
+          user_id: userId,
+          card_id: updatedCard.id,
+          item_id: updatedCard.itemId,
+          item_type: updatedCard.itemType,
+          interval_days: updatedCard.intervalDays,
+          ease_factor: updatedCard.easeFactor,
+          stability_days: updatedCard.stabilityDays,
+          difficulty: updatedCard.difficulty,
+          stage: updatedCard.stage,
+          repetition: updatedCard.repetition,
+          lapses: updatedCard.lapses,
+          last_reviewed_at: updatedCard.lastReviewedAt,
+          next_review_at: updatedCard.nextReviewAt,
+          updated_at: updatedCard.updatedAt
+        })
+      ).catch((err) => console.warn('[Supabase Sync] SRS review sync warning:', err.message));
+
+      Promise.resolve(
+        this.supabaseClient.from('student_srs_telemetry_logs').insert({
+          user_id: userId,
+          card_id: reviewLog.cardId,
+          rating: reviewLog.rating,
+          algorithm_used: reviewLog.algorithmUsed,
+          scheduled_days: reviewLog.scheduledDays,
+          actual_elapsed_days: reviewLog.actualElapsedDays,
+          response_time_ms: reviewLog.responseTimeMs,
+          retention_before: reviewLog.retentionBeforeReview,
+          stage_before: reviewLog.stageBefore,
+          stage_after: reviewLog.stageAfter,
+          reviewed_at: reviewLog.reviewedAt
+        })
+      ).catch(() => {});
+    }
+
+    this.save();
+
+    const stageDesc = updatedCard.stage.toUpperCase();
+    const intervalMsg = `${updatedCard.intervalDays} day${updatedCard.intervalDays > 1 ? 's' : ''}`;
+    return {
+      success: true,
+      card: updatedCard,
+      reviewLog,
+      xpGained,
+      message:
+        submission.rating === 'again'
+          ? `⚠️ Lapsed item returned to Apprentice queue. Re-test scheduled in 1 day (+10 XP).`
+          : `✨ Recalled! Interval extended to ${intervalMsg} (Stage: ${stageDesc}, Retention: 100%, +${xpGained} XP).`
+    };
+  }
+
+  public getSrsRetentionCurve(userId: string, cardId?: string): SrsRetentionCurveReport {
+    const card = cardId ? this.getSrsCardById(userId, cardId) : undefined;
+    const userLogs = (this.data.srsLogs || []).filter((l) => l.userId === userId && (!cardId || l.cardId === cardId));
+    return AdaptiveSrsService.generateRetentionCurve(card, userLogs);
+  }
+
+  public getSrsTelemetryStats(userId: string): SrsTelemetryStats {
+    const cards = this.getSrsCards(userId);
+    const logs = (this.data.srsLogs || []).filter((l) => l.userId === userId);
+    return AdaptiveSrsService.calculateTelemetryStats(cards, logs);
+  }
+
+  /**
+   * P1-03 Live Lesson Publishing Queue Interoperability Hook:
+   * Ingests vocabulary and kanji from any live published lesson directly into the user's SRS deck
+   */
+  public syncLessonToSrsDeck(
+    userId: string,
+    lessonId: string,
+    options?: { level?: JLPTLevel }
+  ): {
+    success: boolean;
+    addedVocabCount: number;
+    addedKanjiCount: number;
+    totalCardsAdded: number;
+    totalDeckCount: number;
+    error?: string;
+  } {
+    const lesson = this.getLessonById(lessonId);
+    if (!lesson) {
+      return {
+        success: false,
+        addedVocabCount: 0,
+        addedKanjiCount: 0,
+        totalCardsAdded: 0,
+        totalDeckCount: 0,
+        error: `Lesson with ID "${lessonId}" not found.`
+      };
+    }
+
+    if (!this.data.srsCards) this.data.srsCards = [];
+    const now = new Date();
+    let addedVocab = 0;
+    let addedKanji = 0;
+
+    const level = options?.level || lesson.level || 'N5';
+
+    // 1. Ingest Vocabulary terms
+    (lesson.vocabulary || []).forEach((v: any, index: number) => {
+      const existing = this.data.srsCards!.find(
+        (c) => c.userId === userId && c.itemType === 'vocabulary' && (c.itemId === v.id || c.front === v.word)
+      );
+
+      if (!existing) {
+        const newCard: SrsCardRecord = {
+          id: `srs-voc-${lesson.id}-${index}-${Date.now().toString(36)}`,
+          userId,
+          itemType: 'vocabulary',
+          itemId: v.id || `voc-${lesson.id}-${index}`,
+          lessonId: lesson.id,
+          level,
+          front: v.word,
+          reading: v.reading || v.furigana || v.romaji || v.word,
+          meaning: v.meaning,
+          meaningBn: v.meaningBn,
+          audioText: v.word,
+          exampleSentenceJa: v.exampleJa,
+          exampleSentenceEn: v.exampleEn,
+          exampleSentenceBn: v.exampleBn,
+          repetition: 0,
+          intervalDays: 1,
+          easeFactor: 2.5,
+          stabilityDays: 1.0,
+          difficulty: 5.0,
+          retrievability: 1.0,
+          retentionScore: 100,
+          lapses: 0,
+          totalReviews: 0,
+          consecutiveCorrect: 0,
+          stage: 'apprentice',
+          lastReviewedAt: null,
+          nextReviewAt: now.toISOString(),
+          createdAt: now.toISOString(),
+          updatedAt: now.toISOString()
+        };
+        this.data.srsCards!.push(newCard);
+        addedVocab++;
+      }
+    });
+
+    // 2. Ingest Kanji items
+    (lesson.kanji || []).forEach((k: any, index: number) => {
+      const char = k.character || k.kanji;
+      const existing = this.data.srsCards!.find(
+        (c) => c.userId === userId && c.itemType === 'kanji' && (c.itemId === k.id || c.front === char)
+      );
+
+      if (!existing && char) {
+        const newCard: SrsCardRecord = {
+          id: `srs-kan-${lesson.id}-${index}-${Date.now().toString(36)}`,
+          userId,
+          itemType: 'kanji',
+          itemId: k.id || `kan-${lesson.id}-${index}`,
+          lessonId: lesson.id,
+          level,
+          front: char,
+          reading: (k.onyomi || []).concat(k.kunyomi || []).join(' / ') || k.meaning,
+          meaning: k.meaning,
+          meaningBn: k.meaningBn,
+          audioText: char,
+          kanjiStrokes: k.strokeCount || k.strokes,
+          kanjiRadicals: k.radical,
+          kanjiOnyomi: k.onyomi,
+          kanjiKunyomi: k.kunyomi,
+          repetition: 0,
+          intervalDays: 1,
+          easeFactor: 2.5,
+          stabilityDays: 1.0,
+          difficulty: 5.5,
+          retrievability: 1.0,
+          retentionScore: 100,
+          lapses: 0,
+          totalReviews: 0,
+          consecutiveCorrect: 0,
+          stage: 'apprentice',
+          lastReviewedAt: null,
+          nextReviewAt: now.toISOString(),
+          createdAt: now.toISOString(),
+          updatedAt: now.toISOString()
+        };
+        this.data.srsCards!.push(newCard);
+        addedKanji++;
+      }
+    });
+
+    this.save();
+
+    const totalUserCards = this.data.srsCards!.filter((c) => c.userId === userId).length;
+    return {
+      success: true,
+      addedVocabCount: addedVocab,
+      addedKanjiCount: addedKanji,
+      totalCardsAdded: addedVocab + addedKanji,
+      totalDeckCount: totalUserCards
+    };
+  }
+
+  public seedInitialSrsCardsForUser(userId: string): SrsCardRecord[] {
+    if (!this.data.srsCards) this.data.srsCards = [];
+    const existing = this.data.srsCards.filter((c) => c.userId === userId);
+    if (existing.length > 0) return existing;
+
+    // Ingest first 2 lessons into deck
+    const lesson1 = this.data.lessons.find((l) => l.id === 'les-n5-1-1' || l.id === 'lesson-1') || this.data.lessons[0];
+    const lesson2 = this.data.lessons.find((l) => l.id === 'les-n5-1-2' || l.id === 'lesson-2') || this.data.lessons[1];
+
+    if (lesson1) this.syncLessonToSrsDeck(userId, lesson1.id);
+    if (lesson2) this.syncLessonToSrsDeck(userId, lesson2.id);
+
+    return this.data.srsCards.filter((c) => c.userId === userId);
   }
 
   // ==============================================================================

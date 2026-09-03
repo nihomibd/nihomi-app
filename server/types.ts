@@ -963,6 +963,10 @@ export interface DatabaseSchema {
   conbiniProducts?: ConbiniPosProduct[];
   conbiniOrders?: ConbiniCustomerOrder[];
   rirekishoProfiles?: JisRirekishoData[];
+
+  // P1-04: Adaptive SRS (Spaced Repetition System) Engine Tables
+  srsCards?: SrsCardRecord[];
+  srsLogs?: SrsReviewLog[];
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';
@@ -1527,4 +1531,125 @@ export interface SystemAuditMetrics {
   queueDepth: number;
   uptimeSeconds: number;
   lastUpdated: string;
+}
+
+// ==============================================================================
+// P1-04: Adaptive SRS (Spaced Repetition System) SuperMemo-2 / FSRS Types
+// ==============================================================================
+
+export type SrsCardStage = 'apprentice' | 'guru' | 'master' | 'enlightened' | 'burned';
+export type SrsItemType = 'vocabulary' | 'kanji' | 'grammar';
+export type SrsRatingGrade = 'again' | 'hard' | 'good' | 'easy';
+export type SrsAlgorithmMode = 'sm2' | 'fsrs' | 'adaptive_hybrid';
+
+export interface SrsCardRecord {
+  id: string; // e.g. srs-vocab-123 or srs-kanji-日
+  userId: string;
+  itemType: SrsItemType;
+  itemId: string; // Original vocabulary item id or kanji character
+  lessonId?: string; // Sourced from published lesson (e.g. P1-03 live queue)
+  level: JLPTLevel;
+  front: string; // Word or Kanji character
+  reading: string; // Kana reading / furigana
+  meaning: string; // English definition
+  meaningBn?: string; // Bengali translation
+  partOfSpeech?: string;
+  audioText?: string;
+  audioUrl?: string;
+  exampleSentenceJa?: string;
+  exampleSentenceEn?: string;
+  exampleSentenceBn?: string;
+  // Kanji specific metadata
+  kanjiStrokes?: number;
+  kanjiRadicals?: string;
+  kanjiOnyomi?: string[];
+  kanjiKunyomi?: string[];
+
+  // SM-2 & FSRS Algorithmic State Variables
+  repetition: number; // Consecutive successful reviews
+  intervalDays: number; // Current scheduled interval in days
+  easeFactor: number; // SM-2 Ease Factor (min 1.3, standard default 2.5)
+  stabilityDays: number; // FSRS Memory Stability S (days until retention drops to 90%)
+  difficulty: number; // FSRS Memory Difficulty D (1.0 easiest - 10.0 hardest, standard default 5.0)
+  retrievability: number; // Current predicted probability of recall R(t) in [0..1]
+  retentionScore: number; // Current retention score percentage (0 - 100)
+  lapses: number; // Number of times forgotten ('again') after graduating from apprentice
+  totalReviews: number; // Lifetime review count
+  consecutiveCorrect: number; // Current winning streak
+  stage: SrsCardStage; // Apprentice -> Guru -> Master -> Enlightened -> Burned
+  lastReviewedAt: string | null; // ISO timestamp of last review
+  nextReviewAt: string; // ISO timestamp when card is due
+  suspended?: boolean; // If user suspended the card
+  metadata?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SrsReviewLog {
+  id: string;
+  userId: string;
+  cardId: string;
+  itemId: string;
+  itemType: SrsItemType;
+  rating: SrsRatingGrade;
+  algorithmUsed: SrsAlgorithmMode;
+  scheduledDays: number;
+  actualElapsedDays: number;
+  responseTimeMs: number; // Learner telemetry latency tracking
+  retentionBeforeReview: number;
+  stageBefore: SrsCardStage;
+  stageAfter: SrsCardStage;
+  intervalDaysBefore: number;
+  intervalDaysAfter: number;
+  easeFactorBefore: number;
+  easeFactorAfter: number;
+  stabilityBefore: number;
+  stabilityAfter: number;
+  difficultyBefore: number;
+  difficultyAfter: number;
+  reviewedAt: string;
+}
+
+export interface SrsReviewSubmission {
+  cardId: string;
+  rating: SrsRatingGrade;
+  responseTimeMs?: number;
+  algorithmMode?: SrsAlgorithmMode;
+  targetRetention?: number; // e.g. 0.90 (80% - 97%)
+}
+
+export interface SrsRetentionCurvePoint {
+  day: number;
+  theoreticalRetention: number; // Percentage 0 - 100 based on R(t) = exp(-t * ln(10/9) / S)
+  empiricalRetention?: number; // Observed recall percentage from telemetry logs
+  reviewCount?: number;
+}
+
+export interface SrsRetentionCurveReport {
+  cardId?: string;
+  itemTitle?: string;
+  stabilityDays: number;
+  halfLifeDays: number;
+  currentElapsedDays: number;
+  currentRetention: number;
+  recommendedReviewDay: number;
+  points: SrsRetentionCurvePoint[];
+}
+
+export interface SrsTelemetryStats {
+  totalCards: number;
+  dueCards: number;
+  cardsByStage: Record<SrsCardStage, number>;
+  cardsByType: Record<SrsItemType, number>;
+  cardsByLevel: Record<JLPTLevel, number>;
+  retentionRate7d: number;
+  retentionRate30d: number;
+  overallAccuracyRate: number;
+  averageEaseFactor: number;
+  averageStability: number;
+  averageDifficulty: number;
+  averageResponseTimeMs: number;
+  totalReviewsLifetime: number;
+  lapsesTotal: number;
+  dueForecast: { date: string; count: number }[];
 }

@@ -329,6 +329,27 @@ export class LiveLessonPublishingQueueService {
         message: `Purging catalog edge cache keys and registering release event for Lesson "${publishResult.lesson.title}" (${publishResult.lesson.id}).`
       });
 
+      // 4b. P1-04 Adaptive SRS Deck Notification & Ingestion Hook
+      try {
+        const rawData = db.getRawData();
+        const users = rawData.users || [];
+        let totalSyncedCards = 0;
+        for (const user of users) {
+          const syncRes = db.syncLessonToSrsDeck(user.id, publishResult.lesson.id, { level: publishResult.lesson.level });
+          if (syncRes.success) {
+            totalSyncedCards += syncRes.totalCardsAdded;
+          }
+        }
+        item.logs.push({
+          timestamp: new Date().toISOString(),
+          stage: 'SRS_DECK_SYNC',
+          level: 'info',
+          message: `Ingested ${publishResult.lesson.vocabulary?.length || 0} vocab terms & ${publishResult.lesson.kanji?.length || 0} kanji from Lesson "${publishResult.lesson.title}" into active learner SRS decks (${totalSyncedCards} total cards created).`
+        });
+      } catch (srsErr: any) {
+        logger.warn('SRS_SYNC_WARNING', `Could not auto-sync lesson to SRS decks: ${srsErr.message}`);
+      }
+
       // 5. Completion
       item.status = 'completed';
       item.progress = 100;
