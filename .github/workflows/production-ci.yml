@@ -1,0 +1,41 @@
+name: NIHOMI Production CI/CD Engine
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  production-audit:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: TypeScript Static Analysis (Linting)
+      run: npm run lint
+
+    - name: Execute Production Build (Vite + esbuild)
+      run: npm run build
+      env:
+        NODE_ENV: production
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    - name: Run Backend Architecture Tests
+      run: npx tsx server/tests/verify_p0_auth_persistence.ts
