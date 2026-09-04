@@ -35,24 +35,29 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
     <>
     <header className="pt-2 pb-4 border-b border-stone-200 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
       <div className="flex items-start justify-between gap-3">
-        <button type="button" onClick={() => setIsIdOpen(true)} className="space-y-0.5 text-left rounded-xl p-1 -m-1 transition-colors hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-rose-500">
+        <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold tracking-wide bg-stone-900 text-white">
               JLPT {student.jlptLevel} • Day {student.journeyDay}
             </span>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
-            おはよう, {student.name}
-          </h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
+              おはよう, {student.name}
+            </h1>
+            <button type="button" onClick={() => setIsIdOpen(true)} className="inline-flex items-center gap-1 rounded-lg bg-stone-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm transition-colors hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+              <span aria-hidden="true">🪪</span> Student ID
+            </button>
+          </div>
           <p className="text-xs sm:text-sm text-stone-600 font-medium">
             {student.learningStatusMessageBn || student.learningStatusMessage}
           </p>
-        </button>
+        </div>
 
         <div className="shrink-0 pt-1">
           <div className="flex items-center gap-2">
-            <button type="button" onClick={() => toggleFocusMode()} aria-pressed={isFocusMode} aria-label="Zen Focus Mode" title="Zen Focus Mode" className={`rounded-full border p-2 focus:outline-none focus:ring-2 focus:ring-rose-500 ${isFocusMode ? 'border-rose-300 bg-rose-100 text-rose-700' : 'border-stone-200 bg-white text-stone-500 hover:bg-rose-50'}`}><Flower2 size={16} aria-hidden="true" /></button>
+            <button type="button" onClick={() => toggleFocusMode()} aria-pressed={isFocusMode} aria-label="Zen Focus Mode" title="Zen Focus Mode" className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 ${isFocusMode ? 'border-rose-300 bg-rose-100 text-rose-700' : 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'}`}><Flower2 size={15} aria-hidden="true" /><span>{isFocusMode ? 'Zen Active' : 'Zen Focus'}</span></button>
             <button type="button" onClick={() => setAreBadgesOpen(true)} aria-label="View badges" title="View badges" className="rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-700 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"><Award size={16} aria-hidden="true" /></button>
             <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} onOpenStore={onOpenStore} />
           </div>

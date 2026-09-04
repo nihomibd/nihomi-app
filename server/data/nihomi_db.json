@@ -34894,7 +34894,7 @@
     {
       "id": "analytics-summary-cd941900-48df-44d9-bee9-9049a193c3bc",
       "userId": "cd941900-48df-44d9-bee9-9049a193c3bc",
-      "computedAt": "2026-09-04T16:39:30.616Z",
+      "computedAt": "2026-09-04T18:45:03.555Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -35046,8 +35046,8 @@
         "longestStreak": 1,
         "lastActiveDate": "2026-09-03",
         "totalStudyMinutes": 0,
-        "activeDaysLast30d": 1,
-        "consistencyScorePercent": 3,
+        "activeDaysLast30d": 2,
+        "consistencyScorePercent": 7,
         "averageDailyMinutes": 0,
         "recentDailyActivity": [
           {
@@ -35220,7 +35220,7 @@
         "weakPhonemes": [],
         "tokyoAccentReadinessRate": 0
       },
-      "lastRefreshed": "2026-09-04T16:39:30.617Z"
+      "lastRefreshed": "2026-09-04T18:45:03.555Z"
     },
     {
       "id": "analytics-summary-usr-91d2f404",
