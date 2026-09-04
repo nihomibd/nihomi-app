@@ -81,6 +81,16 @@ export const studentService = {
     return updated;
   },
 
+  async purchaseStorePackage(pack: { coins: number; credits: number }) {
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    const currentCredits = parseInt(localStorage.getItem('nihomi_ai_credits') || '85', 10);
+    const updatedCoins = currentCoins + pack.coins;
+    const updatedCredits = currentCredits + pack.credits;
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_ai_credits', updatedCredits.toString());
+    return { updatedCoins, updatedCredits };
+  },
+
   async completeKanjiPractice() {
     const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
     const updatedXp = currentXp + 10;

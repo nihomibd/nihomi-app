@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { DashboardApiResponse, DashboardViewState, TaskStatus } from './types';
 import { studentService } from './studentService';
 import { MockExamAttempt } from '../../types';
+import { StorePackage } from './components/NihomiStoreModal';
 
 export const useStudentDashboard = () => {
   const [data, setData] = useState<DashboardApiResponse | null>(null);
@@ -123,6 +124,13 @@ export const useStudentDashboard = () => {
     showToast('ভালো কাজ! Vocabulary SRS সম্পন্ন। +20 XP যোগ হয়েছে!');
   };
 
+  const handleStorePurchase = async (pack: StorePackage) => {
+    if (!data) return;
+    const result = await studentService.purchaseStorePackage(pack);
+    setData({ ...data, accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins, aiCreditsRemaining: result.updatedCredits } });
+    showToast(`bKash top-up সফল! +${pack.coins} Coins এবং +${pack.credits} AI Credits যোগ হয়েছে।`);
+  };
+
   return {
     data,
     viewState,
@@ -136,6 +144,7 @@ export const useStudentDashboard = () => {
     handleKanjiPracticeComplete,
     handleListeningComplete,
     handleVocabularyComplete,
+    handleStorePurchase,
     showToast,
   };
 };

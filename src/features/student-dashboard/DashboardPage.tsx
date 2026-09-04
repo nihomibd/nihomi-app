@@ -17,6 +17,8 @@ import { BaitoReadinessCard } from './components/BaitoReadinessCard';
 import { KanjiPracticeModal } from './components/KanjiPracticeModal';
 import { TokyoListeningModal } from './components/TokyoListeningModal';
 import { VocabFlashcardModal } from './components/VocabFlashcardModal';
+import { NihomiStoreModal, StorePackage } from './components/NihomiStoreModal';
+import { CommunityLeaderboardView } from '../../views/CommunityLeaderboardView';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -44,6 +46,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleKanjiPracticeComplete,
     handleListeningComplete,
     handleVocabularyComplete,
+    handleStorePurchase,
     showToast,
   } = useStudentDashboard();
 
@@ -54,6 +57,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isKanjiPracticeOpen, setIsKanjiPracticeOpen] = useState(false);
   const [isListeningOpen, setIsListeningOpen] = useState(false);
   const [isVocabularyOpen, setIsVocabularyOpen] = useState(false);
+  const [isStoreOpen, setIsStoreOpen] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
   const [celebrationShown, setCelebrationShown] = useState(false);
 
@@ -133,6 +138,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               student={data.student} 
               accountUsage={data.accountUsage} 
               onOpenAiTutor={() => setIsAiTutorOpen(true)}
+              onOpenStore={() => setIsStoreOpen(true)}
               activeStreak={data.streak.currentStreak}
             />
 
@@ -170,7 +176,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <BaitoReadinessCard onLaunch={() => onNavigate?.('baito-os')} />
 
             {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
-            <StreakCard streak={data.streak} />
+            <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
 
             {/* ৮. ভুলের খাতা (MemoryOS) */}
             <RecentMistakes
@@ -236,6 +242,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         onClose={() => setIsVocabularyOpen(false)}
         onComplete={handleVocabularyComplete}
       />
+      <NihomiStoreModal
+        isOpen={isStoreOpen}
+        onClose={() => setIsStoreOpen(false)}
+        onPurchase={async (pack: StorePackage) => { await handleStorePurchase(pack); }}
+      />
+      {isLeaderboardOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/70 p-2 sm:p-6" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setIsLeaderboardOpen(false); }}><section className="relative mx-auto max-w-5xl rounded-3xl bg-[#FAF9F6]" role="dialog" aria-modal="true" aria-labelledby="dashboard-leaderboard-title"><button type="button" aria-label="Leaderboard বন্ধ করুন" onClick={() => setIsLeaderboardOpen(false)} className="absolute right-3 top-3 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-amber-500">×</button><h2 id="dashboard-leaderboard-title" className="sr-only">Community Leaderboard</h2><CommunityLeaderboardView onNavigate={() => setIsLeaderboardOpen(false)} /></section></div>}
     </div>
   );
 };

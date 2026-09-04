@@ -15,6 +15,7 @@ export { BaitoReadinessCard } from './components/BaitoReadinessCard';
 export { KanjiPracticeModal } from './components/KanjiPracticeModal';
 export { TokyoListeningModal } from './components/TokyoListeningModal';
 export { VocabFlashcardModal } from './components/VocabFlashcardModal';
+export { NihomiStoreModal } from './components/NihomiStoreModal';
 export { JLPTProgress } from './components/JLPTProgress';
 export { StreakCard } from './components/StreakCard';
 export { RecentMistakes } from './components/RecentMistakes';

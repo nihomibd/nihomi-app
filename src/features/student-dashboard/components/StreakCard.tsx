@@ -1,11 +1,13 @@
 import React from 'react';
 import { StreakInfo } from '../types';
+import { Trophy } from 'lucide-react';
 
 interface StreakCardProps {
   streak: StreakInfo;
+  onOpenLeaderboard?: () => void;
 }
 
-export const StreakCard: React.FC<StreakCardProps> = ({ streak }) => {
+export const StreakCard: React.FC<StreakCardProps> = ({ streak, onOpenLeaderboard }) => {
   return (
     <section aria-labelledby="streak-heading" className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm">
       <div className="flex items-center justify-between gap-3 mb-3">
@@ -21,9 +23,9 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streak }) => {
           </div>
         </div>
 
-        <span className="text-[11px] font-medium text-stone-500 px-2.5 py-1 rounded-full bg-stone-100">
-          ধারাবাহিকতা
-        </span>
+        <button type="button" onClick={onOpenLeaderboard} className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800 transition-colors hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500" title="Open Dhaka community ranking">
+          <Trophy size={14} aria-hidden="true" /> Rank #7 • Dhaka Region
+        </button>
       </div>
 
       <div className="grid grid-cols-7 gap-1.5 pt-2 border-t border-stone-100">

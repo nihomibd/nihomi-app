@@ -10,10 +10,11 @@ interface StudentHeaderProps {
   student: StudentProfile;
   accountUsage: AccountUsage;
   onOpenAiTutor?: () => void;
+  onOpenStore?: () => void;
   activeStreak: number;
 }
 
-export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor, activeStreak }) => {
+export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor, onOpenStore, activeStreak }) => {
   const [isIdOpen, setIsIdOpen] = useState(false);
   const [areBadgesOpen, setAreBadgesOpen] = useState(false);
   const digitalStudent: DigitalStudentProfile = {
@@ -50,7 +51,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
         <div className="shrink-0 pt-1">
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => setAreBadgesOpen(true)} aria-label="View badges" title="View badges" className="rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-700 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"><Award size={16} aria-hidden="true" /></button>
-            <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} />
+            <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} onOpenStore={onOpenStore} />
           </div>
         </div>
       </div>
