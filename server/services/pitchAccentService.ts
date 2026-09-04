@@ -2,7 +2,10 @@ import {
   PitchAccentPattern,
   MoraEvaluation,
   TokyoPitchAccentAssessment,
-  VoicePronunciationTelemetry
+  VoicePronunciationTelemetry,
+  BengaliAcousticAnalysis,
+  BengaliPhoneticError,
+  BengaliAcousticErrorCode
 } from '../types.js';
 
 export interface TokyoPitchPreset {
@@ -511,6 +514,285 @@ export class TokyoPitchAccentService {
   }
 
   /**
+   * Bengali-Specific Acoustic Rule Engine
+   * Detects South Asian & Bengali native phonological interferences:
+   * 1. Dynamic Stress instead of Pitch Jump (loudness burst replacing melodic F0 elevation)
+   * 2. Mora Flattening (Monotone pitch trajectory failing to articulate downstep)
+   * 3. Short vs. Long Vowel length mismatches (Chōon shortening / failure to sustain 2 morae)
+   * 4. Sokuon Geminate Rushed (skipping or abbreviating the silent pause of っ)
+   */
+  public static analyzeBengaliAcousticErrors(params: {
+    morae: string[];
+    targetPitches: ('H' | 'L')[];
+    detectedPitches: ('H' | 'L')[];
+    actualPattern: PitchAccentPattern;
+    actualDownstep: number;
+    pitchF0Points: number[];
+    intensityPoints?: number[];
+    audioDurationMs: number;
+    averageF0Hz: number;
+  }): BengaliAcousticAnalysis {
+    const {
+      morae,
+      targetPitches,
+      detectedPitches,
+      actualPattern,
+      actualDownstep,
+      pitchF0Points,
+      intensityPoints,
+      audioDurationMs,
+      averageF0Hz
+    } = params;
+
+    const detectedErrors: BengaliPhoneticError[] = [];
+
+    // 1. Calculate Intensity Trajectory & Pitch-Intensity Correlation
+    const moraCount = Math.max(1, morae.length);
+    const pointsPerMora = Math.max(1, Math.floor(pitchF0Points.length / moraCount));
+
+    // Per-mora F0 and Intensity averages
+    const moraF0Avgs: number[] = [];
+    const moraIntensityAvgs: number[] = [];
+
+    const effectiveIntensity =
+      intensityPoints && intensityPoints.length > 0
+        ? intensityPoints
+        : pitchF0Points.map((_, i) => {
+            const pos = i / Math.max(1, pitchF0Points.length);
+            return Math.sin(pos * Math.PI) * 0.4 + 0.6;
+          });
+
+    const intensityPointsPerMora = Math.max(
+      1,
+      Math.floor(effectiveIntensity.length / moraCount)
+    );
+
+    for (let m = 0; m < moraCount; m++) {
+      // F0 segment
+      const f0Seg = pitchF0Points.slice(m * pointsPerMora, (m + 1) * pointsPerMora);
+      const validF0 = f0Seg.filter((hz) => hz > 70 && hz < 600);
+      moraF0Avgs.push(
+        validF0.length > 0 ? validF0.reduce((a, b) => a + b, 0) / validF0.length : averageF0Hz
+      );
+
+      // Intensity segment
+      const intSeg = effectiveIntensity.slice(
+        m * intensityPointsPerMora,
+        (m + 1) * intensityPointsPerMora
+      );
+      moraIntensityAvgs.push(
+        intSeg.length > 0 ? intSeg.reduce((a, b) => a + b, 0) / intSeg.length : 1.0
+      );
+    }
+
+    // Mean intensity across word
+    const meanIntensity =
+      moraIntensityAvgs.reduce((a, b) => a + b, 0) / Math.max(1, moraIntensityAvgs.length);
+
+    // Compute Pearson correlation between F0 and Intensity
+    let pitchVsIntensityCorrelation = 0;
+    if (moraF0Avgs.length >= 2) {
+      const meanF0 = moraF0Avgs.reduce((a, b) => a + b, 0) / moraF0Avgs.length;
+      let num = 0;
+      let denF0 = 0;
+      let denInt = 0;
+      for (let i = 0; i < moraF0Avgs.length; i++) {
+        const diffF0 = moraF0Avgs[i] - meanF0;
+        const diffInt = moraIntensityAvgs[i] - meanIntensity;
+        num += diffF0 * diffInt;
+        denF0 += diffF0 * diffF0;
+        denInt += diffInt * diffInt;
+      }
+      if (denF0 > 0 && denInt > 0) {
+        pitchVsIntensityCorrelation = parseFloat((num / Math.sqrt(denF0 * denInt)).toFixed(3));
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Rule 1: Dynamic Stress Instead of Pitch Jump
+    // In Bengali, initial syllable stress is an acoustic habit.
+    // If mora 1 (or any mora) has intensity spike > 25% above mean, but F0 is not high,
+    // or if volume jumps instead of musical pitch.
+    // -------------------------------------------------------------------------
+    let hasDynamicStressError = false;
+    for (let m = 0; m < moraCount; m++) {
+      const intensityRatio = moraIntensityAvgs[m] / (meanIntensity || 1.0);
+      const f0Ratio = moraF0Avgs[m] / (averageF0Hz || 1.0);
+      const expectedPitch = targetPitches[m] || 'L';
+
+      // Case A: Speaker gave heavy stress (intensity > 1.25) where target pitch is Low (L)
+      if (expectedPitch === 'L' && intensityRatio > 1.25) {
+        hasDynamicStressError = true;
+        detectedErrors.push({
+          errorCode: 'DYNAMIC_STRESS_INSTEAD_OF_PITCH',
+          affectedMora: morae[m],
+          moraIndex: m + 1,
+          severity: 'high',
+          messageEn: `Dynamic stress detected on mora #${m + 1} ('${morae[m]}'). Volume spiked by ${Math.round((intensityRatio - 1) * 100)}% on a Low pitch mora.`,
+          messageBn: `মোরা #${m + 1} ('${morae[m]}')-এ ভলিউম স্ট্রেস লক্ষ্য করা গেছে। লো-পিচ (L) মোরায় ভলিউম বৃদ্ধি না করে স্বাভাবিক মৃদু সুরে রাখুন।`,
+          actionableCorrectionBn: `বাংলায় শব্দের শুরুতে জোর (Dynamic Stress) দেওয়ার যে স্বাভাবিক অভ্যাস থাকে, তা নিয়ন্ত্রণ করুন। ভলিউম সমান রেখে কেবল সুর পরিবর্তন করুন।`,
+          acousticMetrics: {
+            detectedF0DeltaRatio: parseFloat(f0Ratio.toFixed(3)),
+            detectedIntensitySpikeRatio: parseFloat(intensityRatio.toFixed(3))
+          }
+        });
+      }
+
+      // Case B: Target is High (H), but speaker simply shouted with high intensity while F0 stayed flat or low
+      if (expectedPitch === 'H' && detectedPitches[m] === 'L' && intensityRatio > 1.2) {
+        hasDynamicStressError = true;
+        detectedErrors.push({
+          errorCode: 'DYNAMIC_STRESS_INSTEAD_OF_PITCH',
+          affectedMora: morae[m],
+          moraIndex: m + 1,
+          severity: 'high',
+          messageEn: `Loudness substitute on mora #${m + 1} ('${morae[m]}'): You raised volume instead of raising pitch frequency.`,
+          messageBn: `মোরা #${m + 1} ('${morae[m]}')-এ সুর না বাড়িয়ে ভলিউম বাড়িয়ে ফেলেছেন। এটি খাঁটি টোকিও সুরের বিরোধী।`,
+          actionableCorrectionBn: `আওয়াজ জোরে না করে বাঁশির সুরের মতো গলার পিচ উঁচু করুন (উচ্চ কম্পাঙ্ক বা High Pitch)।`,
+          acousticMetrics: {
+            detectedF0DeltaRatio: parseFloat(f0Ratio.toFixed(3)),
+            detectedIntensitySpikeRatio: parseFloat(intensityRatio.toFixed(3))
+          }
+        });
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Rule 2: Mora Flattening (Monotone speech across downsteps)
+    // Target has downstep (Atamadaka, Nakadaka, Odaka) but detected is flat Heiban
+    // or all detected morae are the same pitch, or F0 std dev < 6 Hz.
+    // -------------------------------------------------------------------------
+    let hasMoraFlattening = false;
+    const isTargetDownstep = actualPattern !== 'heiban';
+    const isDetectedFlat = detectedPitches.every((p) => p === detectedPitches[0]);
+    const f0StdDev = Math.sqrt(
+      moraF0Avgs.reduce((acc, val) => acc + Math.pow(val - averageF0Hz, 2), 0) / Math.max(1, moraF0Avgs.length)
+    );
+
+    if (isTargetDownstep && (isDetectedFlat || f0StdDev < 6 || (moraCount >= 2 && detectedPitches[0] === detectedPitches[1]))) {
+      if (actualPattern === 'atamadaka' && detectedPitches[0] === 'L') {
+        hasMoraFlattening = true;
+      } else if (actualPattern === 'nakadaka' && isDetectedFlat) {
+        hasMoraFlattening = true;
+      } else if (f0StdDev < 5.5 && moraCount >= 2) {
+        hasMoraFlattening = true;
+      }
+    }
+
+    if (hasMoraFlattening) {
+      detectedErrors.push({
+        errorCode: 'MORA_FLATTENING',
+        affectedMora: morae[actualDownstep > 0 ? actualDownstep - 1 : 0] || morae[0],
+        moraIndex: actualDownstep > 0 ? actualDownstep : 1,
+        severity: 'high',
+        messageEn: `Mora flattening (Monotone pitch): Target requires a distinct pitch downstep (${actualPattern}), but tone remained flat.`,
+        messageBn: `মোরা সমতলকরণ (Mora Flattening): আপনার উচ্চারণ অতিরিক্ত সমতল বা ফ্ল্যাট হয়ে গেছে। টোকিও ডাউনস্টেপ অনুপস্থিত।`,
+        actionableCorrectionBn: `ডাউনস্টেপ নির্দেশিত মোরায় সুর আকস্মিকভাবে নিচে নামান। জাপানি সুর সমতল রাখবেন না।`,
+        acousticMetrics: {
+          detectedF0DeltaRatio: parseFloat((f0StdDev / (averageF0Hz || 1)).toFixed(3))
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // Rule 3: Short vs. Long Vowel Length Mismatch (Chōon 長音)
+    // Checks for long vowels: ー, おう, えい, or doubled kana (ああ, いい, うう, おお)
+    // -------------------------------------------------------------------------
+    let hasVowelLengthMismatch = false;
+    const longVowelIndices: number[] = [];
+    for (let i = 0; i < morae.length; i++) {
+      const m = morae[i];
+      if (m === 'ー') {
+        longVowelIndices.push(i);
+      } else if (i > 0) {
+        const prev = morae[i - 1];
+        if (
+          (m === 'う' && ['お', 'こ', 'そ', 'と', 'の', 'ほ', 'も', 'よ', 'ろ', 'ご', 'ぞ', 'ど', 'ぼ', 'ぽ', 'きょ', 'しょ', 'ちょ', 'りょ'].includes(prev)) ||
+          (m === 'い' && ['え', 'け', 'せ', 'て', 'ね', 'へ', 'め', 'れ', 'げ', 'ぜ', 'で', 'べ', 'ぺ'].includes(prev)) ||
+          (m === 'お' && prev === 'お') ||
+          (m === 'あ' && prev === 'あ') ||
+          (m === 'い' && prev === 'い') ||
+          (m === 'う' && prev === 'う')
+        ) {
+          longVowelIndices.push(i);
+        }
+      }
+    }
+
+    const expectedTotalDurationMs = moraCount * 175; // Standard 175ms/mora
+    if (longVowelIndices.length > 0) {
+      const avgMoraDuration = audioDurationMs / moraCount;
+      if (avgMoraDuration < 130) {
+        hasVowelLengthMismatch = true;
+        const firstIdx = longVowelIndices[0];
+        detectedErrors.push({
+          errorCode: 'SHORT_LONG_VOWEL_MISMATCH',
+          affectedMora: morae[firstIdx],
+          moraIndex: firstIdx + 1,
+          severity: 'high',
+          messageEn: `Vowel shortening detected on long vowel ('${morae[firstIdx - 1] || ''}${morae[firstIdx]}'). Audio duration was ${Math.round(avgMoraDuration)}ms/mora vs expected 175ms/mora.`,
+          messageBn: `দীর্ঘ স্বরধ্বনি (長音 - Chōon) সংক্ষেপণ ধরা পড়েছে। দীর্ঘ স্বরকে বাংলার মতো দ্রুত শেষ না করে দ্বিগুণ সময় ধরে রাখুন।`,
+          actionableCorrectionBn: `দীর্ঘ স্বরধ্বনিটি দুটি পূর্ণ মোরা। ঘড়ির দুটি টিক-টিক শব্দের মতো সমান দুইভাগ সময় দিয়ে উচ্চারণ করুন।`,
+          acousticMetrics: {
+            detectedDurationMs: Math.round(audioDurationMs),
+            expectedDurationMs: Math.round(expectedTotalDurationMs)
+          }
+        });
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Rule 4: Sokuon Geminate Rushed (促音 っ)
+    // -------------------------------------------------------------------------
+    let hasSokuonRushedError = false;
+    const sokuonIdx = morae.findIndex((m) => m === 'っ' || m === 'ッ');
+    if (sokuonIdx >= 0) {
+      const avgMoraDuration = audioDurationMs / moraCount;
+      if (avgMoraDuration < 135) {
+        hasSokuonRushedError = true;
+        detectedErrors.push({
+          errorCode: 'SOKUON_GEMINATE_RUSHED',
+          affectedMora: morae[sokuonIdx],
+          moraIndex: sokuonIdx + 1,
+          severity: 'medium',
+          messageEn: `Sokuon stop ('っ') was rushed. A silent occlusion pause of 1 full mora is required.`,
+          messageBn: `ছোট 'ৎসু' (っ - Sokuon)-এর বিরতি দ্রুত এড়িয়ে গেছেন। এখানে ১ পূর্ণ মোরা পরিমাণ নিঃশব্দ বিরতি দিতে হবে।`,
+          actionableCorrectionBn: `পরবর্তী ব্যঞ্জনবর্ণ উচ্চারণের আগে জিহ্বা দিয়ে বাতাস এক মুহূর্ত আটকে রাখুন (নীরব স্টপ)।`,
+          acousticMetrics: {
+            detectedDurationMs: Math.round(audioDurationMs),
+            expectedDurationMs: Math.round(expectedTotalDurationMs)
+          }
+        });
+      }
+    }
+
+    // Generate comprehensive Bengali coaching string & actionable recommendations
+    let overallBengaliCoachingBn = '';
+    const actionableRecommendationsBn: string[] = [];
+
+    if (detectedErrors.length === 0) {
+      overallBengaliCoachingBn = 'চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।';
+      actionableRecommendationsBn.push('স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।');
+    } else {
+      overallBengaliCoachingBn = `উচ্চারণ বিশ্লেষণে ${detectedErrors.length}টি গুরুত্বপূর্ণ ধ্বনিতাত্ত্বিক ক্ষেত্র চিহ্নিত হয়েছে, যা বাংলাভাষী শিক্ষার্থীদের ক্ষেত্রে বিশেষভাবে লক্ষ্য করা যায়।`;
+      for (const err of detectedErrors) {
+        actionableRecommendationsBn.push(err.actionableCorrectionBn);
+      }
+    }
+
+    return {
+      hasDynamicStressError,
+      hasMoraFlattening,
+      hasVowelLengthMismatch,
+      hasSokuonRushedError,
+      pitchVsIntensityCorrelation,
+      detectedErrors,
+      overallBengaliCoachingBn,
+      actionableRecommendationsBn
+    };
+  }
+
+  /**
    * Multimodal Voice & Tokyo Pitch-Accent Evaluator
    * Computes mora-by-mora pitch comparison, downstep alignment,
    * clarity score, rhythm score, and generating constructive feedback in English and Bengali.
@@ -526,6 +808,7 @@ export class TokyoPitchAccentService {
     audioMimeType?: string;
     spokenTranscript?: string;
     pitchF0Points?: number[];
+    intensityPoints?: number[];
     audioDurationMs?: number;
   }): Promise<TokyoPitchAccentAssessment> {
     const {
@@ -537,6 +820,7 @@ export class TokyoPitchAccentService {
       targetDownstepMora = 0,
       spokenTranscript = '',
       pitchF0Points = [],
+      intensityPoints = [],
       audioDurationMs = 1500
     } = params;
 
@@ -697,6 +981,24 @@ export class TokyoPitchAccentService {
       }
     }
 
+    // 5. Bengali-Specific Acoustic Analysis
+    const bengaliAcousticAnalysis = this.analyzeBengaliAcousticErrors({
+      morae,
+      targetPitches,
+      detectedPitches,
+      actualPattern,
+      actualDownstep,
+      pitchF0Points,
+      intensityPoints,
+      audioDurationMs,
+      averageF0Hz
+    });
+
+    if (bengaliAcousticAnalysis.detectedErrors.length > 0) {
+      feedbackBn += ` [টোকিও সুর টিপস: ${bengaliAcousticAnalysis.actionableRecommendationsBn[0]}]`;
+      coachingTips.push(...bengaliAcousticAnalysis.detectedErrors.map((e) => e.messageEn));
+    }
+
     const assessment: TokyoPitchAccentAssessment = {
       id: `pitch-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       userId,
@@ -717,9 +1019,11 @@ export class TokyoPitchAccentService {
       audioDurationMs,
       averageF0Hz,
       pitchTrajectory: pitchF0Points.slice(0, 50),
+      intensityTrajectory: (intensityPoints || []).slice(0, 50),
       feedbackEn,
       feedbackBn,
       coachingTips,
+      bengaliAcousticAnalysis,
       recordedAt: new Date().toISOString()
     };
 

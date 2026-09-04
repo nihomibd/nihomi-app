@@ -973,6 +973,8 @@ export interface DatabaseSchema {
 
   // P1-06: Multimodal Voice & Tokyo Pitch-Accent Assessments
   voiceAssessments?: TokyoPitchAccentAssessment[];
+  pitchDrills?: TokyoPitchDrill[];
+  accentMasterySessions?: AccentMasterySession[];
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';
@@ -1832,10 +1834,87 @@ export interface TokyoPitchAccentAssessment {
   audioDurationMs?: number;
   averageF0Hz?: number;
   pitchTrajectory?: number[];
+  intensityTrajectory?: number[];
   feedbackEn: string;
   feedbackBn: string;
   coachingTips: string[];
+  bengaliAcousticAnalysis?: BengaliAcousticAnalysis;
   recordedAt: string;
+}
+
+export type BengaliAcousticErrorCode =
+  | 'DYNAMIC_STRESS_INSTEAD_OF_PITCH'
+  | 'MORA_FLATTENING'
+  | 'SHORT_LONG_VOWEL_MISMATCH'
+  | 'SOKUON_GEMINATE_RUSHED'
+  | 'NASAL_MORA_SHORTENED';
+
+export interface BengaliPhoneticError {
+  errorCode: BengaliAcousticErrorCode;
+  affectedMora: string;
+  moraIndex: number; // 1-indexed
+  severity: 'high' | 'medium' | 'low';
+  messageEn: string;
+  messageBn: string;
+  actionableCorrectionBn: string;
+  acousticMetrics?: {
+    detectedF0DeltaRatio?: number;
+    detectedIntensitySpikeRatio?: number;
+    detectedDurationMs?: number;
+    expectedDurationMs?: number;
+  };
+}
+
+export interface BengaliAcousticAnalysis {
+  hasDynamicStressError: boolean;
+  hasMoraFlattening: boolean;
+  hasVowelLengthMismatch: boolean;
+  hasSokuonRushedError: boolean;
+  pitchVsIntensityCorrelation: number; // -1.0 to 1.0
+  detectedErrors: BengaliPhoneticError[];
+  overallBengaliCoachingBn: string;
+  actionableRecommendationsBn: string[];
+}
+
+export interface TokyoPitchDrill {
+  id: string;
+  category: 'minimal_pair' | 'n5_essential' | 'n4_conversation' | 'n3_intermediate' | 'keigo_formula' | 'custom_input';
+  kanji: string;
+  readingKana: string;
+  romaji: string;
+  moraCount: number;
+  morae: string[];
+  pattern: PitchAccentPattern;
+  patternNameJa: string;
+  downstepMora: number; // 0 = Heiban, 1 = Atamadaka, 2..N-1 = Nakadaka, N = Odaka
+  targetPitches: ('H' | 'L')[];
+  relativeTargetContour: number[]; // Relative pitch factors (e.g. 1.0 for L, 1.28 for H)
+  standardHzContour: number[]; // Standard frequency in Hz (e.g. [180, 230, 230])
+  targetIntensityEnvelope: number[]; // Normalized expected intensity curve
+  meaningEn: string;
+  meaningBn: string;
+  contextNote?: string;
+  contrastGroup?: string;
+  jlptLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  createdAt?: string;
+}
+
+export interface DynamicDrillGenerationInput {
+  word: string;
+  readingKana?: string;
+  meaningEn?: string;
+  meaningBn?: string;
+  category?: 'minimal_pair' | 'n5_essential' | 'n4_conversation' | 'n3_intermediate' | 'keigo_formula' | 'custom_input';
+  jlptLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  overridePattern?: PitchAccentPattern;
+  overrideDownstepMora?: number;
+  contrastGroup?: string;
+  contextNote?: string;
+}
+
+export interface DynamicDrillGenerationResult {
+  totalProcessed: number;
+  drills: TokyoPitchDrill[];
 }
 
 export interface VoicePronunciationTelemetry {
@@ -1862,5 +1941,75 @@ export interface VoicePronunciationTelemetry {
   tokyoAccentReadinessRate: number; // 0 - 100%
   lastVoiceSessionDate?: string;
 }
+
+export type AdaptiveWeaknessType =
+  | 'dynamic_stress'
+  | 'mora_flattening'
+  | 'choon_shortening'
+  | 'sokuon_rushed'
+  | 'atamadaka_downstep'
+  | 'nakadaka_timing'
+  | 'heiban_elevation'
+  | 'general_intonation';
+
+export interface AdaptiveRecommendedPair {
+  contrastGroup: string;
+  targetRemediation: string;
+  remediationRationaleBn: string;
+  remediationRationaleEn: string;
+  drills: TokyoPitchDrill[];
+}
+
+export interface AdaptiveDrillRecommendation {
+  userId: string;
+  primaryWeakness: AdaptiveWeaknessType;
+  secondaryWeakness?: AdaptiveWeaknessType;
+  diagnosticSummaryBn: string;
+  diagnosticSummaryEn: string;
+  errorFrequency: {
+    dynamicStressCount: number;
+    moraFlatteningCount: number;
+    choonShorteningCount: number;
+    sokuonRushedCount: number;
+    patternFailures: Record<string, number>;
+    totalEvaluationsAnalyzed: number;
+  };
+  recommendedPairs: AdaptiveRecommendedPair[];
+  synthesizedDrillCount: number;
+  generatedAt: string;
+}
+
+export interface AccentMasteryStep {
+  stepIndex: number;
+  drillId: string;
+  kanji: string;
+  readingKana: string;
+  pattern: PitchAccentPattern;
+  targetPitches: ('H' | 'L')[];
+  userPitchAssessment?: TokyoPitchAccentAssessment;
+  bengaliCoachingTip?: string;
+  stepScore?: number;
+  passed?: boolean;
+  completedAt?: string;
+}
+
+export interface AccentMasterySession {
+  id: string;
+  userId: string;
+  title: string;
+  status: 'in_progress' | 'completed' | 'abandoned';
+  currentStepIndex: number;
+  totalSteps: number;
+  targetDrillIds: string[];
+  steps: AccentMasteryStep[];
+  masteryIndex: number; // 0 - 100 aggregate pronunciation score
+  bengaliAcousticFlagsDetected: string[];
+  summaryBn?: string;
+  summaryEn?: string;
+  startedAt: string;
+  completedAt?: string;
+  lastActivityAt: string;
+}
+
 
 

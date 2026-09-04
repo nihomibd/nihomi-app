@@ -22,6 +22,7 @@ import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { useAuth } from '../../context/AuthContext';
 import { evaluateTokyoPitchAccent } from '../../lib/voiceApi';
 import { TokyoPitchAccentLab } from '../voice/TokyoPitchAccentLab';
+import { TokyoPitchDojo } from '../voice/TokyoPitchDojo';
 import { TokyoPitchAccentAssessment } from '../../types';
 
 export interface VoiceSenseiPracticeProps {
@@ -140,6 +141,7 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
 }) => {
   const { user, token } = useAuth();
   const [isPitchLabOpen, setIsPitchLabOpen] = useState(false);
+  const [isPitchDojoOpen, setIsPitchDojoOpen] = useState(false);
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
@@ -481,13 +483,21 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
           </div>
           <div className="flex items-center space-x-2">
             <button
+              id="btn-open-pitch-dojo"
+              type="button"
+              onClick={() => setIsPitchDojoOpen(true)}
+              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-red-500/20 hover:from-amber-500/30 hover:to-red-500/30 text-amber-400 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer shadow-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>Pitch Dojo (ডোজো)</span>
+            </button>
+            <button
               id="btn-open-pitch-lab"
               type="button"
               onClick={() => setIsPitchLabOpen(true)}
               className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer shadow-xs"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              <span>Tokyo Pitch Lab (東京式)</span>
+              <span>Tokyo Lab</span>
             </button>
             <button
               id="btn-close-voice-sensei"
@@ -822,6 +832,12 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
       <TokyoPitchAccentLab
         isOpen={isPitchLabOpen}
         onClose={() => setIsPitchLabOpen(false)}
+      />
+
+      {/* Tokyo Pitch Dojo Interactive Session Modal */}
+      <TokyoPitchDojo
+        isOpen={isPitchDojoOpen}
+        onClose={() => setIsPitchDojoOpen(false)}
       />
     </div>
   );

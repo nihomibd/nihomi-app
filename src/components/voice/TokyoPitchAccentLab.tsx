@@ -32,6 +32,7 @@ import {
   playNativeTokyoSpeech,
   BrowserPitchTracker
 } from '../../lib/pitchAccentAudio';
+import { TokyoPitchDojo } from './TokyoPitchDojo';
 import { useAuth } from '../../context/AuthContext';
 
 export interface TokyoPitchAccentLabProps {
@@ -60,6 +61,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
   const [assessment, setAssessment] = useState<TokyoPitchAccentAssessment | null>(null);
   const [xpAwardBanner, setXpAwardBanner] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isDojoOpen, setIsDojoOpen] = useState(false);
 
   // Audio & Pitch Tracking Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -304,12 +306,23 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800/60 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              id="btn-open-pitch-dojo-modal"
+              type="button"
+              onClick={() => setIsDojoOpen(true)}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-red-500/20 hover:from-amber-500/30 hover:to-red-500/30 text-amber-400 border border-amber-500/40 text-xs font-bold transition-all shadow-sm active:scale-95"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>পিচ ডোজো সেশন (Dojo)</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800/60 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Body */}
@@ -658,6 +671,12 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Interactive Tokyo Pitch Dojo Modal */}
+      <TokyoPitchDojo
+        isOpen={isDojoOpen}
+        onClose={() => setIsDojoOpen(false)}
+      />
     </div>
   );
 };

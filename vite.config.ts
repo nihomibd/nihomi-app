@@ -10,6 +10,8 @@ export default defineConfig(() => {
     resolve: {
       dedupe: ['react', 'react-dom'],
       alias: [
+        { find: 'react', replacement: path.resolve(__dirname, 'node_modules/react') },
+        { find: 'react-dom', replacement: path.resolve(__dirname, 'node_modules/react-dom') },
         { find: /^@\/(.*)/, replacement: path.resolve(__dirname, 'src/$1') },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
       ],

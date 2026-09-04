@@ -4540,6 +4540,76 @@
       "updatedAt": "2026-09-03T09:55:39.924Z",
       "rateMinuteWindow": 29807155,
       "rateMinuteCount": 1
+    },
+    {
+      "id": "usg-4e73e5",
+      "userId": "test-learner-pitch-1788506669764",
+      "periodYearMonth": "2026-09",
+      "periodStart": "2026-09-01T00:00:00.000Z",
+      "periodEnd": "2026-09-30T23:59:59.000Z",
+      "aiCoachInteractions": 1,
+      "tokensUsed": 21000,
+      "featureKey": "ai_pronunciation",
+      "lastInteractionAt": "2026-09-04T07:24:29.819Z",
+      "updatedAt": "2026-09-04T07:24:29.819Z",
+      "rateMinuteWindow": 29808444,
+      "rateMinuteCount": 1
+    },
+    {
+      "id": "usg-4a96c3",
+      "userId": "test-learner-pitch-1788506688339",
+      "periodYearMonth": "2026-09",
+      "periodStart": "2026-09-01T00:00:00.000Z",
+      "periodEnd": "2026-09-30T23:59:59.000Z",
+      "aiCoachInteractions": 1,
+      "tokensUsed": 21000,
+      "featureKey": "ai_pronunciation",
+      "lastInteractionAt": "2026-09-04T07:24:48.407Z",
+      "updatedAt": "2026-09-04T07:24:48.407Z",
+      "rateMinuteWindow": 29808444,
+      "rateMinuteCount": 1
+    },
+    {
+      "id": "usg-cf8e32",
+      "userId": "test-learner-pitch-1788506853695",
+      "periodYearMonth": "2026-09",
+      "periodStart": "2026-09-01T00:00:00.000Z",
+      "periodEnd": "2026-09-30T23:59:59.000Z",
+      "aiCoachInteractions": 1,
+      "tokensUsed": 21000,
+      "featureKey": "ai_pronunciation",
+      "lastInteractionAt": "2026-09-04T07:27:33.767Z",
+      "updatedAt": "2026-09-04T07:27:33.767Z",
+      "rateMinuteWindow": 29808447,
+      "rateMinuteCount": 1
+    },
+    {
+      "id": "usg-922934",
+      "userId": "test-learner-pitch-1788507459653",
+      "periodYearMonth": "2026-09",
+      "periodStart": "2026-09-01T00:00:00.000Z",
+      "periodEnd": "2026-09-30T23:59:59.000Z",
+      "aiCoachInteractions": 1,
+      "tokensUsed": 21000,
+      "featureKey": "ai_pronunciation",
+      "lastInteractionAt": "2026-09-04T07:37:39.717Z",
+      "updatedAt": "2026-09-04T07:37:39.717Z",
+      "rateMinuteWindow": 29808457,
+      "rateMinuteCount": 1
+    },
+    {
+      "id": "usg-262790",
+      "userId": "test-learner-pitch-1788508474119",
+      "periodYearMonth": "2026-09",
+      "periodStart": "2026-09-01T00:00:00.000Z",
+      "periodEnd": "2026-09-30T23:59:59.000Z",
+      "aiCoachInteractions": 1,
+      "tokensUsed": 21000,
+      "featureKey": "ai_pronunciation",
+      "lastInteractionAt": "2026-09-04T07:54:34.214Z",
+      "updatedAt": "2026-09-04T07:54:34.214Z",
+      "rateMinuteWindow": 29808474,
+      "rateMinuteCount": 1
     }
   ],
   "coupons": [
@@ -35319,6 +35389,5952 @@
         "rankDelta7d": 3
       },
       "lastRefreshed": "2026-09-03T15:31:54.382Z"
+    }
+  ],
+  "voiceAssessments": [
+    {
+      "id": "assess-stress-0-1788508459410",
+      "userId": "test-user-stress-1788508459410",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "mora": "は",
+          "romaji": "ha",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "pitchHz": 190,
+          "targetHz": 230,
+          "intensityDb": 88,
+          "durationMs": 140,
+          "isDownstepLocus": true,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        },
+        {
+          "mora": "し",
+          "romaji": "shi",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "pitchHz": 220,
+          "targetHz": 180,
+          "intensityDb": 92,
+          "durationMs": 150,
+          "isDownstepLocus": false,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorType": "dynamic_stress",
+            "severity": "high",
+            "moraIndex": 0,
+            "phoneme": "ha",
+            "explanationBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "remediationBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:54:19.410Z"
+    },
+    {
+      "id": "assess-stress-1-1788508459429",
+      "userId": "test-user-stress-1788508459410",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "mora": "は",
+          "romaji": "ha",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "pitchHz": 190,
+          "targetHz": 230,
+          "intensityDb": 88,
+          "durationMs": 140,
+          "isDownstepLocus": true,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        },
+        {
+          "mora": "し",
+          "romaji": "shi",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "pitchHz": 220,
+          "targetHz": 180,
+          "intensityDb": 92,
+          "durationMs": 150,
+          "isDownstepLocus": false,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorType": "dynamic_stress",
+            "severity": "high",
+            "moraIndex": 0,
+            "phoneme": "ha",
+            "explanationBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "remediationBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:53:19.429Z"
+    },
+    {
+      "id": "assess-stress-2-1788508459451",
+      "userId": "test-user-stress-1788508459410",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "mora": "は",
+          "romaji": "ha",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "pitchHz": 190,
+          "targetHz": 230,
+          "intensityDb": 88,
+          "durationMs": 140,
+          "isDownstepLocus": true,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        },
+        {
+          "mora": "し",
+          "romaji": "shi",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "pitchHz": 220,
+          "targetHz": 180,
+          "intensityDb": 92,
+          "durationMs": 150,
+          "isDownstepLocus": false,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorType": "dynamic_stress",
+            "severity": "high",
+            "moraIndex": 0,
+            "phoneme": "ha",
+            "explanationBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "remediationBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:52:19.451Z"
+    },
+    {
+      "id": "assess-stress-3-1788508459473",
+      "userId": "test-user-stress-1788508459410",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "mora": "は",
+          "romaji": "ha",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "pitchHz": 190,
+          "targetHz": 230,
+          "intensityDb": 88,
+          "durationMs": 140,
+          "isDownstepLocus": true,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        },
+        {
+          "mora": "し",
+          "romaji": "shi",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "pitchHz": 220,
+          "targetHz": 180,
+          "intensityDb": 92,
+          "durationMs": 150,
+          "isDownstepLocus": false,
+          "isPitchMatch": false,
+          "isRhythmMatch": true
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorType": "dynamic_stress",
+            "severity": "high",
+            "moraIndex": 0,
+            "phoneme": "ha",
+            "explanationBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "remediationBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:51:19.473Z"
+    },
+    {
+      "id": "assess-choon-0-1788508459499",
+      "userId": "test-user-choon-1788508459410",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorType": "choon_shortening",
+            "severity": "high",
+            "moraIndex": 2,
+            "phoneme": "a",
+            "explanationBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "remediationBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:54:19.499Z"
+    },
+    {
+      "id": "assess-choon-1-1788508459520",
+      "userId": "test-user-choon-1788508459410",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorType": "choon_shortening",
+            "severity": "high",
+            "moraIndex": 2,
+            "phoneme": "a",
+            "explanationBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "remediationBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:53:19.520Z"
+    },
+    {
+      "id": "assess-choon-2-1788508459543",
+      "userId": "test-user-choon-1788508459410",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorType": "choon_shortening",
+            "severity": "high",
+            "moraIndex": 2,
+            "phoneme": "a",
+            "explanationBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "remediationBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:52:19.543Z"
+    },
+    {
+      "id": "assess-sokuon-0-1788508459708",
+      "userId": "test-user-sokuon-1788508459410",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorType": "sokuon_rushed",
+            "severity": "high",
+            "moraIndex": 1,
+            "phoneme": "っ",
+            "explanationBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "remediationBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:54:19.708Z"
+    },
+    {
+      "id": "assess-sokuon-1-1788508459730",
+      "userId": "test-user-sokuon-1788508459410",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorType": "sokuon_rushed",
+            "severity": "high",
+            "moraIndex": 1,
+            "phoneme": "っ",
+            "explanationBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "remediationBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:53:19.730Z"
+    },
+    {
+      "id": "assess-sokuon-2-1788508459753",
+      "userId": "test-user-sokuon-1788508459410",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorType": "sokuon_rushed",
+            "severity": "high",
+            "moraIndex": 1,
+            "phoneme": "っ",
+            "explanationBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "remediationBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:52:19.753Z"
+    },
+    {
+      "id": "assess-stress-0-1788508694434",
+      "userId": "test-user-stress-1788508694434",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:58:14.434Z"
+    },
+    {
+      "id": "assess-stress-1-1788508694454",
+      "userId": "test-user-stress-1788508694434",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:57:14.454Z"
+    },
+    {
+      "id": "assess-stress-2-1788508694476",
+      "userId": "test-user-stress-1788508694434",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:56:14.476Z"
+    },
+    {
+      "id": "assess-stress-3-1788508694498",
+      "userId": "test-user-stress-1788508694434",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:55:14.498Z"
+    },
+    {
+      "id": "assess-choon-0-1788508694526",
+      "userId": "test-user-choon-1788508694434",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:58:14.526Z"
+    },
+    {
+      "id": "assess-choon-1-1788508694548",
+      "userId": "test-user-choon-1788508694434",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:57:14.548Z"
+    },
+    {
+      "id": "assess-choon-2-1788508694570",
+      "userId": "test-user-choon-1788508694434",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:56:14.570Z"
+    },
+    {
+      "id": "assess-sokuon-0-1788508694593",
+      "userId": "test-user-sokuon-1788508694434",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:58:14.593Z"
+    },
+    {
+      "id": "assess-sokuon-1-1788508694615",
+      "userId": "test-user-sokuon-1788508694434",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:57:14.615Z"
+    },
+    {
+      "id": "assess-sokuon-2-1788508694638",
+      "userId": "test-user-sokuon-1788508694434",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T07:56:14.638Z"
+    },
+    {
+      "id": "assess-stress-0-1788509559320",
+      "userId": "test-user-stress-1788509559320",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:12:39.320Z"
+    },
+    {
+      "id": "assess-stress-1-1788509559339",
+      "userId": "test-user-stress-1788509559320",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:11:39.339Z"
+    },
+    {
+      "id": "assess-stress-2-1788509559355",
+      "userId": "test-user-stress-1788509559320",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:10:39.355Z"
+    },
+    {
+      "id": "assess-stress-3-1788509559373",
+      "userId": "test-user-stress-1788509559320",
+      "targetPhrase": "箸",
+      "targetRomaji": "hashi",
+      "targetMeaning": "Chopsticks",
+      "targetPattern": "atamadaka",
+      "targetDownstepMora": 1,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [
+        {
+          "moraIndex": 1,
+          "mora": "は",
+          "targetPitch": "H",
+          "detectedPitch": "L",
+          "isDropPoint": true,
+          "isMatch": false,
+          "estimatedHz": 190
+        },
+        {
+          "moraIndex": 2,
+          "mora": "し",
+          "targetPitch": "L",
+          "detectedPitch": "H",
+          "isDropPoint": false,
+          "isMatch": false,
+          "estimatedHz": 220
+        }
+      ],
+      "patternMatch": false,
+      "pitchAccuracyScore": 55,
+      "moraRhythmScore": 78,
+      "clarityScore": 82,
+      "overallScore": 66,
+      "passed": false,
+      "audioDurationMs": 650,
+      "averageF0Hz": 205,
+      "pitchTrajectory": [
+        190,
+        200,
+        215,
+        220
+      ],
+      "feedbackEn": "Dynamic stress detected.",
+      "feedbackBn": "ডাইনামিক স্ট্রেস ত্রুটি।",
+      "coachingTips": [
+        "Keep intensity flat."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": true,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.68,
+        "detectedErrors": [
+          {
+            "errorCode": "DYNAMIC_STRESS_INSTEAD_OF_PITCH",
+            "affectedMora": "は",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Dynamic stress detected.",
+            "messageBn": "ভলিউম বাড়িয়ে জোর দেওয়ার প্রবণতা।",
+            "actionableCorrectionBn": "ভলিউম সমতল রেখে পিচ পরিবর্তন করুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "ডাইনামিক স্ট্রেস দূর করতে ভলিউম সমান্তরাল রাখুন।",
+        "actionableRecommendationsBn": [
+          "ভলিউম ফ্ল্যাট রাখুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:09:39.373Z"
+    },
+    {
+      "id": "assess-choon-0-1788509559395",
+      "userId": "test-user-choon-1788509559320",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:12:39.395Z"
+    },
+    {
+      "id": "assess-choon-1-1788509559411",
+      "userId": "test-user-choon-1788509559320",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:11:39.411Z"
+    },
+    {
+      "id": "assess-choon-2-1788509559427",
+      "userId": "test-user-choon-1788509559320",
+      "targetPhrase": "おばあさん",
+      "targetRomaji": "obaasan",
+      "targetMeaning": "Grandmother",
+      "targetPattern": "nakadaka",
+      "targetDownstepMora": 2,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 50,
+      "moraRhythmScore": 40,
+      "clarityScore": 75,
+      "overallScore": 52,
+      "passed": false,
+      "audioDurationMs": 400,
+      "averageF0Hz": 210,
+      "pitchTrajectory": [],
+      "feedbackEn": "Vowel too short.",
+      "feedbackBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+      "coachingTips": [
+        "Hold vowel."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": true,
+        "hasSokuonRushedError": false,
+        "pitchVsIntensityCorrelation": 0.1,
+        "detectedErrors": [
+          {
+            "errorCode": "SHORT_LONG_VOWEL_MISMATCH",
+            "affectedMora": "あ",
+            "severity": "high",
+            "moraIndex": 2,
+            "messageEn": "Vowel too short.",
+            "messageBn": "দীর্ঘ স্বর ছোট হয়ে গেছে।",
+            "actionableCorrectionBn": "পূর্ণ ১ মোরা সময় দিন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "দীর্ঘ স্বর পূর্ণ ১ মোরা ধরে রাখুন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা সময় বাড়িয়ে দিন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:10:39.427Z"
+    },
+    {
+      "id": "assess-sokuon-0-1788509559447",
+      "userId": "test-user-sokuon-1788509559320",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:12:39.447Z"
+    },
+    {
+      "id": "assess-sokuon-1-1788509559463",
+      "userId": "test-user-sokuon-1788509559320",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:11:39.463Z"
+    },
+    {
+      "id": "assess-sokuon-2-1788509559479",
+      "userId": "test-user-sokuon-1788509559320",
+      "targetPhrase": "切手",
+      "targetRomaji": "kitte",
+      "targetMeaning": "Stamp",
+      "targetPattern": "heiban",
+      "targetDownstepMora": 0,
+      "detectedPattern": "heiban",
+      "detectedDownstepMora": 0,
+      "moraBreakdown": [],
+      "patternMatch": false,
+      "pitchAccuracyScore": 60,
+      "moraRhythmScore": 42,
+      "clarityScore": 70,
+      "overallScore": 56,
+      "passed": false,
+      "audioDurationMs": 380,
+      "averageF0Hz": 215,
+      "pitchTrajectory": [],
+      "feedbackEn": "Sokuon pause rushed.",
+      "feedbackBn": "সোকুওন বিরতি বাদ পড়েছে।",
+      "coachingTips": [
+        "Pause on small tsu."
+      ],
+      "bengaliAcousticAnalysis": {
+        "hasDynamicStressError": false,
+        "hasMoraFlattening": false,
+        "hasVowelLengthMismatch": false,
+        "hasSokuonRushedError": true,
+        "pitchVsIntensityCorrelation": 0.05,
+        "detectedErrors": [
+          {
+            "errorCode": "SOKUON_GEMINATE_RUSHED",
+            "affectedMora": "っ",
+            "severity": "high",
+            "moraIndex": 1,
+            "messageEn": "Sokuon pause rushed.",
+            "messageBn": "সোকুওন বিরতি তাড়াহুড়ো করা হয়েছে।",
+            "actionableCorrectionBn": "১ মোরা স্তব্ধ থাকুন।"
+          }
+        ],
+        "overallBengaliCoachingBn": "っ এর ক্ষেত্রে ১ মোরা নিঃশব্দ বিরতি দিন।",
+        "actionableRecommendationsBn": [
+          "১ মোরা স্তব্ধ থাকুন"
+        ]
+      },
+      "recordedAt": "2026-09-04T08:10:39.479Z"
+    }
+  ],
+  "pitchDrills": [
+    {
+      "id": "drill-箸-はし-mtmoew9n-ecp",
+      "category": "minimal_pair",
+      "kanji": "箸",
+      "readingKana": "はし",
+      "romaji": "hashi",
+      "moraCount": 2,
+      "morae": [
+        "は",
+        "し"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Chopsticks",
+      "meaningBn": "চপস্টিক",
+      "contextNote": "Mora 1 (ha) starts HIGH, drops on mora 2 (shi). Particle is LOW (はしが = H-L-L).",
+      "contrastGroup": "hashi",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-橋-はし-mtmoew9n-qck",
+      "category": "minimal_pair",
+      "kanji": "橋",
+      "readingKana": "はし",
+      "romaji": "hashi",
+      "moraCount": 2,
+      "morae": [
+        "は",
+        "し"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Bridge",
+      "meaningBn": "সেতু / ব্রিজ",
+      "contextNote": "Mora 1 is LOW, mora 2 is HIGH, followed by particle drop (はしが = L-H-L).",
+      "contrastGroup": "hashi",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-端-はし-mtmoew9n-cn8",
+      "category": "minimal_pair",
+      "kanji": "端",
+      "readingKana": "はし",
+      "romaji": "hashi",
+      "moraCount": 2,
+      "morae": [
+        "は",
+        "し"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Edge / Border",
+      "meaningBn": "প্রান্ত / কিনারা",
+      "contextNote": "Mora 1 is LOW, mora 2 is HIGH and stays HIGH into particle (はしが = L-H-H).",
+      "contrastGroup": "hashi",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-雨-あめ-mtmoew9n-g7f",
+      "category": "minimal_pair",
+      "kanji": "雨",
+      "readingKana": "あめ",
+      "romaji": "ame",
+      "moraCount": 2,
+      "morae": [
+        "あ",
+        "め"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Rain",
+      "meaningBn": "বৃষ্টি",
+      "contextNote": "Head-high: Starts HIGH on \"a\", drops to LOW on \"me\".",
+      "contrastGroup": "ame",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-飴-あめ-mtmoew9n-roh",
+      "category": "minimal_pair",
+      "kanji": "飴",
+      "readingKana": "あめ",
+      "romaji": "ame",
+      "moraCount": 2,
+      "morae": [
+        "あ",
+        "め"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Candy",
+      "meaningBn": "ক্যান্ডি / মিষ্টি",
+      "contextNote": "Flat: Starts LOW on \"a\", rises to HIGH on \"me\" and stays flat.",
+      "contrastGroup": "ame",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-牡蠣-かき-mtmoew9n-unt",
+      "category": "minimal_pair",
+      "kanji": "牡蠣",
+      "readingKana": "かき",
+      "romaji": "kaki",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "き"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Oyster",
+      "meaningBn": "ঝিনুক / অয়েস্টার",
+      "contextNote": "Head-high: Mora 1 (ka) is HIGH, mora 2 (ki) drops to LOW.",
+      "contrastGroup": "kaki",
+      "jlptLevel": "N3",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-柿-かき-mtmoew9n-f4k",
+      "category": "minimal_pair",
+      "kanji": "柿",
+      "readingKana": "かき",
+      "romaji": "kaki",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "き"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Persimmon fruit",
+      "meaningBn": "পার্সিমন ফল (গাব)",
+      "contextNote": "Tail-high: Mora 1 is LOW, mora 2 is HIGH, particle drops to LOW.",
+      "contrastGroup": "kaki",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-帰る-かえる-mtmmjha6-iw4",
+      "category": "minimal_pair",
+      "kanji": "帰る",
+      "readingKana": "かえる",
+      "romaji": "kaeru",
+      "moraCount": 3,
+      "morae": [
+        "か",
+        "え",
+        "る"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "To return / go home",
+      "meaningBn": "বাড়ি ফেরা",
+      "contextNote": "Head-high: ka (H) -> e-ru (L-L).",
+      "contrastGroup": "kaeru",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-蛙-かえる-mtmmjha6-6pi",
+      "category": "minimal_pair",
+      "kanji": "蛙",
+      "readingKana": "かえる",
+      "romaji": "kaeru",
+      "moraCount": 3,
+      "morae": [
+        "か",
+        "え",
+        "る"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Frog",
+      "meaningBn": "ব্যাঙ",
+      "contextNote": "Flat: ka (L) -> e-ru (H-H).",
+      "contrastGroup": "kaeru",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-変える-かえる-mtmmjha6-lyw",
+      "category": "minimal_pair",
+      "kanji": "変える",
+      "readingKana": "かえる",
+      "romaji": "kaeru",
+      "moraCount": 3,
+      "morae": [
+        "か",
+        "え",
+        "る"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "To change / alter",
+      "meaningBn": "পরিবর্তন করা",
+      "contextNote": "Flat transitive verb: ka (L) -> e-ru (H-H).",
+      "contrastGroup": "kaeru",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-日本-にほん-mtmoew9o-m4c",
+      "category": "n5_essential",
+      "kanji": "日本",
+      "readingKana": "にほん",
+      "romaji": "nihon",
+      "moraCount": 3,
+      "morae": [
+        "に",
+        "ほ",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Japan",
+      "meaningBn": "জাপান",
+      "contextNote": "Flat: ni (L) -> ho-n (H-H).",
+      "contrastGroup": "nihon",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-二本-にほん-mtmmjha6-rxi",
+      "category": "minimal_pair",
+      "kanji": "二本",
+      "readingKana": "にほん",
+      "romaji": "nihon",
+      "moraCount": 3,
+      "morae": [
+        "に",
+        "ほ",
+        "ん"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Two long cylindrical objects",
+      "meaningBn": "দুটি লম্বা জিনিস (কাঠি/বোতল)",
+      "contextNote": "Head-high counter: ni (H) -> ho-n (L-L).",
+      "contrastGroup": "nihon",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-白-しろ-mtmmjha6-qt2",
+      "category": "minimal_pair",
+      "kanji": "白",
+      "readingKana": "しろ",
+      "romaji": "shiro",
+      "moraCount": 2,
+      "morae": [
+        "し",
+        "ろ"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "White (noun)",
+      "meaningBn": "সাদা রঙ",
+      "contextNote": "Tail-high: shi (L) -> ro (H).",
+      "contrastGroup": "shiro",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-城-しろ-mtmmjha6-ge1",
+      "category": "minimal_pair",
+      "kanji": "城",
+      "readingKana": "しろ",
+      "romaji": "shiro",
+      "moraCount": 2,
+      "morae": [
+        "し",
+        "ろ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Castle",
+      "meaningBn": "দুর্গ / কেল্লা",
+      "contextNote": "Flat: shi (L) -> ro (H).",
+      "contrastGroup": "shiro",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.142Z"
+    },
+    {
+      "id": "drill-先生-せんせい-mtmoew9o-dzc",
+      "category": "n5_essential",
+      "kanji": "先生",
+      "readingKana": "せんせい",
+      "romaji": "sensei",
+      "moraCount": 4,
+      "morae": [
+        "せ",
+        "ん",
+        "せ",
+        "い"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (3)",
+      "downstepMora": 3,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Teacher / Master",
+      "meaningBn": "শিক্ষক",
+      "contextNote": "Nakadaka: se (L) -> n-se (H-H) -> downstep drop on i (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-学生-がくせい-mtmoew9o-ngb",
+      "category": "n5_essential",
+      "kanji": "学生",
+      "readingKana": "がくせい",
+      "romaji": "gakusei",
+      "moraCount": 4,
+      "morae": [
+        "が",
+        "く",
+        "せ",
+        "い"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Student",
+      "meaningBn": "শিক্ষার্থী",
+      "contextNote": "Heiban: ga (L) -> ku-se-i (H-H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-学校-がっこう-mtmmjha7-ole",
+      "category": "n5_essential",
+      "kanji": "学校",
+      "readingKana": "がっこう",
+      "romaji": "gakkou",
+      "moraCount": 4,
+      "morae": [
+        "が",
+        "っ",
+        "こ",
+        "う"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "School",
+      "meaningBn": "বিদ্যালয় / স্কুল",
+      "contextNote": "Heiban: ga (L) -> k-ko-u (H-H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-友達-ともだち-mtmmjha7-x70",
+      "category": "n5_essential",
+      "kanji": "友達",
+      "readingKana": "ともだち",
+      "romaji": "tomodachi",
+      "moraCount": 4,
+      "morae": [
+        "と",
+        "も",
+        "だ",
+        "ち"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Friend",
+      "meaningBn": "বন্ধু",
+      "contextNote": "Heiban: to (L) -> mo-da-chi (H-H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-水-みず-mtmoew9o-tsh",
+      "category": "n5_essential",
+      "kanji": "水",
+      "readingKana": "みず",
+      "romaji": "mizu",
+      "moraCount": 2,
+      "morae": [
+        "み",
+        "ず"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Water",
+      "meaningBn": "পানি",
+      "contextNote": "Heiban: mi (L) -> zu (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-お茶-おちゃ-mtmmjha7-rzf",
+      "category": "n5_essential",
+      "kanji": "お茶",
+      "readingKana": "おちゃ",
+      "romaji": "ocha",
+      "moraCount": 2,
+      "morae": [
+        "お",
+        "ちゃ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Green tea",
+      "meaningBn": "সবুজ চা / গ্রিন টি",
+      "contextNote": "Heiban: o (L) -> cha (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-ご飯-ごはん-mtmmjha7-i13",
+      "category": "n5_essential",
+      "kanji": "ご飯",
+      "readingKana": "ごはん",
+      "romaji": "gohan",
+      "moraCount": 3,
+      "morae": [
+        "ご",
+        "は",
+        "ん"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Cooked rice / Meal",
+      "meaningBn": "ভাত / খাবার",
+      "contextNote": "Atamadaka: go (H) -> ha-n (L-L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-卵-たまご-mtmoew9o-ji8",
+      "category": "n5_essential",
+      "kanji": "卵",
+      "readingKana": "たまご",
+      "romaji": "tamago",
+      "moraCount": 3,
+      "morae": [
+        "た",
+        "ま",
+        "ご"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Egg",
+      "meaningBn": "ডিম",
+      "contextNote": "Nakadaka: ta (L) -> ma (H) -> go (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-魚-さかな-mtmoew9o-4h3",
+      "category": "n5_essential",
+      "kanji": "魚",
+      "readingKana": "さかな",
+      "romaji": "sakana",
+      "moraCount": 3,
+      "morae": [
+        "さ",
+        "か",
+        "な"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Fish",
+      "meaningBn": "মাছ",
+      "contextNote": "Heiban: sa (L) -> ka-na (H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-肉-にく-mtmmjha7-62i",
+      "category": "n5_essential",
+      "kanji": "肉",
+      "readingKana": "にく",
+      "romaji": "niku",
+      "moraCount": 2,
+      "morae": [
+        "に",
+        "く"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Meat",
+      "meaningBn": "মাংস",
+      "contextNote": "Odaka/Nakadaka: ni (L) -> ku (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-車-くるま-mtmoew9o-loe",
+      "category": "n5_essential",
+      "kanji": "車",
+      "readingKana": "くるま",
+      "romaji": "kuruma",
+      "moraCount": 3,
+      "morae": [
+        "く",
+        "る",
+        "ま"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Car / Vehicle",
+      "meaningBn": "গাড়ি",
+      "contextNote": "Heiban: ku (L) -> ru-ma (H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-電車-でんしゃ-mtmmjha7-0g4",
+      "category": "n5_essential",
+      "kanji": "電車",
+      "readingKana": "でんしゃ",
+      "romaji": "densha",
+      "moraCount": 3,
+      "morae": [
+        "で",
+        "ん",
+        "しゃ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Train / Electric train",
+      "meaningBn": "রেলগাড়ি / ট্রেন",
+      "contextNote": "Heiban: de (L) -> n-sha (H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-飛行機-ひこうき-mtmmjha7-rmm",
+      "category": "n5_essential",
+      "kanji": "飛行機",
+      "readingKana": "ひこうき",
+      "romaji": "hikouki",
+      "moraCount": 4,
+      "morae": [
+        "ひ",
+        "こ",
+        "う",
+        "き"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Airplane",
+      "meaningBn": "উড়োজাহাজ / বিমান",
+      "contextNote": "Nakadaka: hi (L) -> ko (H) -> u-ki (L-L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-駅-えき-mtmmjha7-si7",
+      "category": "n5_essential",
+      "kanji": "駅",
+      "readingKana": "えき",
+      "romaji": "eki",
+      "moraCount": 2,
+      "morae": [
+        "え",
+        "き"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Train Station",
+      "meaningBn": "রেলওয়ে স্টেশন",
+      "contextNote": "Atamadaka: e (H) -> ki (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-本-ほん-mtmoew9o-j2q",
+      "category": "n5_essential",
+      "kanji": "本",
+      "readingKana": "ほん",
+      "romaji": "hon",
+      "moraCount": 2,
+      "morae": [
+        "ほ",
+        "ん"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Book",
+      "meaningBn": "বই",
+      "contextNote": "Atamadaka: ho (H) -> n (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-犬-いぬ-mtmoew9o-3mh",
+      "category": "n5_essential",
+      "kanji": "犬",
+      "readingKana": "いぬ",
+      "romaji": "inu",
+      "moraCount": 2,
+      "morae": [
+        "い",
+        "ぬ"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Dog",
+      "meaningBn": "কুকুর",
+      "contextNote": "Tail-high/Nakadaka: i (L) -> nu (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-猫-ねこ-mtmoew9o-0uq",
+      "category": "n5_essential",
+      "kanji": "猫",
+      "readingKana": "ねこ",
+      "romaji": "neko",
+      "moraCount": 2,
+      "morae": [
+        "ね",
+        "こ"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Cat",
+      "meaningBn": "বিড়াল",
+      "contextNote": "Atamadaka: ne (H) -> ko (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-山-やま-mtmmjha7-3lt",
+      "category": "n5_essential",
+      "kanji": "山",
+      "readingKana": "やま",
+      "romaji": "yama",
+      "moraCount": 2,
+      "morae": [
+        "や",
+        "ま"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Mountain",
+      "meaningBn": "পাহাড় / পর্বত",
+      "contextNote": "Odaka: ya (L) -> ma (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-川-かわ-mtmmjha7-4q0",
+      "category": "n5_essential",
+      "kanji": "川",
+      "readingKana": "かわ",
+      "romaji": "kawa",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "わ"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "River",
+      "meaningBn": "নদী",
+      "contextNote": "Odaka: ka (L) -> wa (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-花-はな-mtmoew9n-sx8",
+      "category": "minimal_pair",
+      "kanji": "花",
+      "readingKana": "はな",
+      "romaji": "hana",
+      "moraCount": 2,
+      "morae": [
+        "は",
+        "な"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Flower",
+      "meaningBn": "ফুল",
+      "contextNote": "Odaka: ha (L) -> na (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z",
+      "contrastGroup": "hana"
+    },
+    {
+      "id": "drill-鼻-はな-mtmoew9n-98a",
+      "category": "minimal_pair",
+      "kanji": "鼻",
+      "readingKana": "はな",
+      "romaji": "hana",
+      "moraCount": 2,
+      "morae": [
+        "は",
+        "な"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Nose",
+      "meaningBn": "নাক",
+      "contextNote": "Heiban: ha (L) -> na (H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z",
+      "contrastGroup": "hana"
+    },
+    {
+      "id": "drill-有難う-ありがとう-mtmmjha7-9rl",
+      "category": "n4_conversation",
+      "kanji": "有難う",
+      "readingKana": "ありがとう",
+      "romaji": "arigatou",
+      "moraCount": 5,
+      "morae": [
+        "あ",
+        "り",
+        "が",
+        "と",
+        "う"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Thank you",
+      "meaningBn": "আপনাকে ধন্যবাদ",
+      "contextNote": "Tokyo standard: a (L) -> ri (H) -> ga-to-u (L-L-L).",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-済みません-すみません-mtmmjha7-2tx",
+      "category": "n4_conversation",
+      "kanji": "済みません",
+      "readingKana": "すみません",
+      "romaji": "sumimasen",
+      "moraCount": 5,
+      "morae": [
+        "す",
+        "み",
+        "ま",
+        "せ",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Excuse me / Sorry",
+      "meaningBn": "মাফ করবেন / দুঃখিত",
+      "contextNote": "Heiban: su (L) -> mi-ma-se-n (H-H-H-H).",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-宜しく-よろしく-mtmmjha7-tbg",
+      "category": "n4_conversation",
+      "kanji": "宜しく",
+      "readingKana": "よろしく",
+      "romaji": "yoroshiku",
+      "moraCount": 4,
+      "morae": [
+        "よ",
+        "ろ",
+        "し",
+        "く"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Pleased to meet you / Best regards",
+      "meaningBn": "শুভকামনা রইল / অনুগ্রহ করে বিবেচনা করবেন",
+      "contextNote": "Nakadaka: yo (L) -> ro (H) -> shi-ku (L-L).",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-今日は-こんにちは-mtmmjha7-8vd",
+      "category": "n4_conversation",
+      "kanji": "今日は",
+      "readingKana": "こんにちは",
+      "romaji": "konnichiha",
+      "moraCount": 5,
+      "morae": [
+        "こ",
+        "ん",
+        "に",
+        "ち",
+        "は"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Good afternoon / Hello",
+      "meaningBn": "শুভ দুপুর / নমস্কার",
+      "contextNote": "Heiban: ko (L) -> n-ni-chi-wa (H-H-H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-今晩は-こんばんは-mtmmjha7-bjs",
+      "category": "n4_conversation",
+      "kanji": "今晩は",
+      "readingKana": "こんばんは",
+      "romaji": "konbanha",
+      "moraCount": 5,
+      "morae": [
+        "こ",
+        "ん",
+        "ば",
+        "ん",
+        "は"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Good evening",
+      "meaningBn": "শুভ সন্ধ্যা",
+      "contextNote": "Heiban: ko (L) -> n-ba-n-wa (H-H-H-H).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-お早う-おはよう-mtmmjha7-v4w",
+      "category": "n4_conversation",
+      "kanji": "お早う",
+      "readingKana": "おはよう",
+      "romaji": "ohayou",
+      "moraCount": 4,
+      "morae": [
+        "お",
+        "は",
+        "よ",
+        "う"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Good morning",
+      "meaningBn": "শুভ সকাল",
+      "contextNote": "Nakadaka: o (L) -> ha (H) -> yo-u (L-L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-左様なら-さようなら-mtmmjha7-42e",
+      "category": "n4_conversation",
+      "kanji": "左様なら",
+      "readingKana": "さようなら",
+      "romaji": "sayounara",
+      "moraCount": 5,
+      "morae": [
+        "さ",
+        "よ",
+        "う",
+        "な",
+        "ら"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (4)",
+      "downstepMora": 4,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Goodbye / Farewell",
+      "meaningBn": "বিদায়",
+      "contextNote": "Nakadaka: sa (L) -> yo-u-na (H-H-H) -> ra (L).",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-いらっしゃいませ-いらっしゃいませ-mtmmjha7-aa6",
+      "category": "keigo_formula",
+      "kanji": "いらっしゃいませ",
+      "readingKana": "いらっしゃいませ",
+      "romaji": "irasshaimase",
+      "moraCount": 7,
+      "morae": [
+        "い",
+        "ら",
+        "っ",
+        "しゃ",
+        "い",
+        "ま",
+        "せ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Welcome! (Store/Shop greeting)",
+      "meaningBn": "স্বাগতম! (দোকানের সম্ভাষণ)",
+      "contextNote": "Heiban: i (L) -> ra-s-sha-i-ma-se (H-H-H-H-H-H-H).",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-少々お待ちください-しょうしょうおまちください-mtmoew9o-jgg",
+      "category": "keigo_formula",
+      "kanji": "少々お待ちください",
+      "readingKana": "しょうしょうおまちください",
+      "romaji": "shoushouomachikudasai",
+      "moraCount": 11,
+      "morae": [
+        "しょ",
+        "う",
+        "しょ",
+        "う",
+        "お",
+        "ま",
+        "ち",
+        "く",
+        "だ",
+        "さ",
+        "い"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (7)",
+      "downstepMora": 7,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H",
+        "H",
+        "H",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        0.92,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237,
+        237,
+        237,
+        170,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Please wait a moment",
+      "meaningBn": "দয়া করে একটু অপেক্ষা করুন",
+      "contextNote": "Polite hospitality phrase with polite melodic cadence.",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-かしこまりました-かしこまりました-mtmoew9o-ylv",
+      "category": "keigo_formula",
+      "kanji": "かしこまりました",
+      "readingKana": "かしこまりました",
+      "romaji": "kashikomarimashita",
+      "moraCount": 8,
+      "morae": [
+        "か",
+        "し",
+        "こ",
+        "ま",
+        "り",
+        "ま",
+        "し",
+        "た"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (5)",
+      "downstepMora": 5,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Understood with pleasure",
+      "meaningBn": "নিশ্চয়ই, বুঝলাম (সম্মানসূচক)",
+      "contextNote": "Standard hospitality affirmative response in Tokyo service businesses.",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-お疲れ様でした-おつかれさまでした-mtmmjha7-htb",
+      "category": "keigo_formula",
+      "kanji": "お疲れ様でした",
+      "readingKana": "おつかれさまでした",
+      "romaji": "otsukaresamadeshita",
+      "moraCount": 9,
+      "morae": [
+        "お",
+        "つ",
+        "か",
+        "れ",
+        "さ",
+        "ま",
+        "で",
+        "し",
+        "た"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (5)",
+      "downstepMora": 5,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        0.92,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237,
+        170,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Thank you for your hard work",
+      "meaningBn": "কাজের জন্য ধন্যবাদ / শুভ সমাপ্তি",
+      "contextNote": "Tokyo workplace greeting when finishing shift or meeting.",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T07:20:14.143Z"
+    },
+    {
+      "id": "drill-叔母さん-おばさん-mtmoew9n-975",
+      "category": "minimal_pair",
+      "kanji": "叔母さん",
+      "readingKana": "おばさん",
+      "romaji": "obasan",
+      "moraCount": 4,
+      "morae": [
+        "お",
+        "ば",
+        "さ",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Aunt",
+      "meaningBn": "খালা / ফুফু / মাসি",
+      "contrastGroup": "obasan",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-お祖母さん-おばあさん-mtmoew9n-40e",
+      "category": "minimal_pair",
+      "kanji": "お祖母さん",
+      "readingKana": "おばあさん",
+      "romaji": "obaasan",
+      "moraCount": 5,
+      "morae": [
+        "お",
+        "ば",
+        "あ",
+        "さ",
+        "ん"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Grandmother",
+      "meaningBn": "দাদি / নানি",
+      "contrastGroup": "obasan",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-叔父さん-おじさん-mtmoew9n-ag9",
+      "category": "minimal_pair",
+      "kanji": "叔父さん",
+      "readingKana": "おじさん",
+      "romaji": "ojisan",
+      "moraCount": 4,
+      "morae": [
+        "お",
+        "じ",
+        "さ",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Uncle",
+      "meaningBn": "চাচা / মামা",
+      "contrastGroup": "ojisan",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-お祖父さん-おじいさん-mtmoew9n-ha2",
+      "category": "minimal_pair",
+      "kanji": "お祖父さん",
+      "readingKana": "おじいさん",
+      "romaji": "ojiisan",
+      "moraCount": 5,
+      "morae": [
+        "お",
+        "じ",
+        "い",
+        "さ",
+        "ん"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Grandfather",
+      "meaningBn": "দাদা / নানা",
+      "contrastGroup": "ojisan",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-雪-ゆき-mtmoew9n-ber",
+      "category": "minimal_pair",
+      "kanji": "雪",
+      "readingKana": "ゆき",
+      "romaji": "yuki",
+      "moraCount": 2,
+      "morae": [
+        "ゆ",
+        "き"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Snow",
+      "meaningBn": "তুষার / বরফ",
+      "contrastGroup": "yuki",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-勇気-ゆうき-mtmoew9n-304",
+      "category": "minimal_pair",
+      "kanji": "勇気",
+      "readingKana": "ゆうき",
+      "romaji": "yuuki",
+      "moraCount": 3,
+      "morae": [
+        "ゆ",
+        "う",
+        "き"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Courage",
+      "meaningBn": "সাহস",
+      "contrastGroup": "yuki",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-過去-かこ-mtmoew9n-ynr",
+      "category": "minimal_pair",
+      "kanji": "過去",
+      "readingKana": "かこ",
+      "romaji": "kako",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "こ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Past",
+      "meaningBn": "অতীত",
+      "contrastGroup": "kako",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-括弧-かっこ-mtmoew9n-y5v",
+      "category": "minimal_pair",
+      "kanji": "括弧",
+      "readingKana": "かっこ",
+      "romaji": "kakko",
+      "moraCount": 3,
+      "morae": [
+        "か",
+        "っ",
+        "こ"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Parenthesis",
+      "meaningBn": "বন্ধনী",
+      "contrastGroup": "kako",
+      "jlptLevel": "N3",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-来て-きて-mtmoew9n-al6",
+      "category": "minimal_pair",
+      "kanji": "来て",
+      "readingKana": "きて",
+      "romaji": "kite",
+      "moraCount": 2,
+      "morae": [
+        "き",
+        "て"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Come (te-form)",
+      "meaningBn": "আসুন",
+      "contrastGroup": "kite",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-切手-きって-mtmoew9o-rg9",
+      "category": "minimal_pair",
+      "kanji": "切手",
+      "readingKana": "きって",
+      "romaji": "kitte",
+      "moraCount": 3,
+      "morae": [
+        "き",
+        "っ",
+        "て"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Postage Stamp",
+      "meaningBn": "ডাকটিকিট",
+      "contrastGroup": "kite",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-音-おと-mtmoew9o-s2g",
+      "category": "minimal_pair",
+      "kanji": "音",
+      "readingKana": "おと",
+      "romaji": "oto",
+      "moraCount": 2,
+      "morae": [
+        "お",
+        "と"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Sound",
+      "meaningBn": "শব্দ",
+      "contrastGroup": "oto",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-夫-おっと-mtmoew9o-wil",
+      "category": "minimal_pair",
+      "kanji": "夫",
+      "readingKana": "おっと",
+      "romaji": "otto",
+      "moraCount": 3,
+      "morae": [
+        "お",
+        "っ",
+        "と"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Husband",
+      "meaningBn": "স্বামী",
+      "contrastGroup": "oto",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-垣-かき-mtmoew9n-wte",
+      "category": "minimal_pair",
+      "kanji": "垣",
+      "readingKana": "かき",
+      "romaji": "kaki",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "き"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Fence / Hedge",
+      "meaningBn": "বেড়া / সীমানা",
+      "contrastGroup": "kaki",
+      "jlptLevel": "N3",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-神-かみ-mtmoew9n-a7i",
+      "category": "minimal_pair",
+      "kanji": "神",
+      "readingKana": "かみ",
+      "romaji": "kami",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "み"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "God / Deity",
+      "meaningBn": "ঈশ্বর / দেবতা",
+      "contrastGroup": "kami",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-紙-かみ-mtmoew9n-sg3",
+      "category": "minimal_pair",
+      "kanji": "紙",
+      "readingKana": "かみ",
+      "romaji": "kami",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "み"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Paper",
+      "meaningBn": "কাগজ",
+      "contrastGroup": "kami",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-髪-かみ-mtmoew9n-mx5",
+      "category": "minimal_pair",
+      "kanji": "髪",
+      "readingKana": "かみ",
+      "romaji": "kami",
+      "moraCount": 2,
+      "morae": [
+        "か",
+        "み"
+      ],
+      "pattern": "odaka",
+      "patternNameJa": "尾高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Hair",
+      "meaningBn": "চুল",
+      "contrastGroup": "kami",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.515Z"
+    },
+    {
+      "id": "drill-朝-あさ-mtmoew9o-bg1",
+      "category": "n5_essential",
+      "kanji": "朝",
+      "readingKana": "あさ",
+      "romaji": "asa",
+      "moraCount": 2,
+      "morae": [
+        "あ",
+        "さ"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Morning",
+      "meaningBn": "সকাল",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-昼-ひる-mtmoew9o-9he",
+      "category": "n5_essential",
+      "kanji": "昼",
+      "readingKana": "ひる",
+      "romaji": "hiru",
+      "moraCount": 2,
+      "morae": [
+        "ひ",
+        "る"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Noon / Daytime",
+      "meaningBn": "দুপুর",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-夜-よる-mtmoew9o-qbe",
+      "category": "n5_essential",
+      "kanji": "夜",
+      "readingKana": "よる",
+      "romaji": "yoru",
+      "moraCount": 2,
+      "morae": [
+        "よ",
+        "る"
+      ],
+      "pattern": "atamadaka",
+      "patternNameJa": "頭高型 (①)",
+      "downstepMora": 1,
+      "targetPitches": [
+        "H",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1.28,
+        0.92
+      ],
+      "standardHzContour": [
+        237,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1
+      ],
+      "meaningEn": "Night",
+      "meaningBn": "রাত",
+      "jlptLevel": "N5",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-会社-かいしゃ-mtmoew9o-6hh",
+      "category": "n4_conversation",
+      "kanji": "会社",
+      "readingKana": "かいしゃ",
+      "romaji": "kaisha",
+      "moraCount": 3,
+      "morae": [
+        "か",
+        "い",
+        "しゃ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Company / Workplace",
+      "meaningBn": "কোম্পানি / অফিস",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-電話-でんわ-mtmoew9o-jno",
+      "category": "n4_conversation",
+      "kanji": "電話",
+      "readingKana": "でんわ",
+      "romaji": "denwa",
+      "moraCount": 3,
+      "morae": [
+        "で",
+        "ん",
+        "わ"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Telephone",
+      "meaningBn": "টেলিফোন / ফোন",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-時間-じかん-mtmoew9o-2x3",
+      "category": "n4_conversation",
+      "kanji": "時間",
+      "readingKana": "じかん",
+      "romaji": "jikan",
+      "moraCount": 3,
+      "morae": [
+        "じ",
+        "か",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Time / Hour",
+      "meaningBn": "সময়",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-約束-やくそく-mtmoew9o-atw",
+      "category": "n4_conversation",
+      "kanji": "約束",
+      "readingKana": "やくそく",
+      "romaji": "yakusoku",
+      "moraCount": 4,
+      "morae": [
+        "や",
+        "く",
+        "そ",
+        "く"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Promise / Appointment",
+      "meaningBn": "প্রতিশ্রুতি / অ্যাপয়েন্টমেন্ট",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-経験-けいけん-mtmoew9o-ihb",
+      "category": "n4_conversation",
+      "kanji": "経験",
+      "readingKana": "けいけん",
+      "romaji": "keiken",
+      "moraCount": 4,
+      "morae": [
+        "け",
+        "い",
+        "け",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Experience",
+      "meaningBn": "অভিজ্ঞতা",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-質問-しつもん-mtmoew9o-53b",
+      "category": "n4_conversation",
+      "kanji": "質問",
+      "readingKana": "しつもん",
+      "romaji": "shitsumon",
+      "moraCount": 4,
+      "morae": [
+        "し",
+        "つ",
+        "も",
+        "ん"
+      ],
+      "pattern": "heiban",
+      "patternNameJa": "平板型 (⓪)",
+      "downstepMora": 0,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Question",
+      "meaningBn": "প্রশ্ন",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-失礼します-しつれいします-mtmoew9o-fr0",
+      "category": "keigo_formula",
+      "kanji": "失礼します",
+      "readingKana": "しつれいします",
+      "romaji": "shitsureishimasu",
+      "moraCount": 7,
+      "morae": [
+        "し",
+        "つ",
+        "れ",
+        "い",
+        "し",
+        "ま",
+        "す"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (2)",
+      "downstepMora": 2,
+      "targetPitches": [
+        "L",
+        "H",
+        "L",
+        "L",
+        "L",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        0.92,
+        0.92,
+        0.92,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        170,
+        170,
+        170,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "Excuse me / Goodbye",
+      "meaningBn": "অনুমতি নিয়ে বিদায় / মাফ করবেন",
+      "jlptLevel": "N4",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    },
+    {
+      "id": "drill-恐れ入ります-おそれいります-mtmoew9o-5dn",
+      "category": "keigo_formula",
+      "kanji": "恐れ入ります",
+      "readingKana": "おそれいります",
+      "romaji": "osoreirimasu",
+      "moraCount": 7,
+      "morae": [
+        "お",
+        "そ",
+        "れ",
+        "い",
+        "り",
+        "ま",
+        "す"
+      ],
+      "pattern": "nakadaka",
+      "patternNameJa": "中高型 (5)",
+      "downstepMora": 5,
+      "targetPitches": [
+        "L",
+        "H",
+        "H",
+        "H",
+        "H",
+        "L",
+        "L"
+      ],
+      "relativeTargetContour": [
+        1,
+        1.28,
+        1.28,
+        1.28,
+        1.28,
+        0.92,
+        0.92
+      ],
+      "standardHzContour": [
+        185,
+        237,
+        237,
+        237,
+        237,
+        170,
+        170
+      ],
+      "targetIntensityEnvelope": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meaningEn": "I am deeply sorry / grateful",
+      "meaningBn": "আমি অত্যন্ত দুঃখিত / কৃতজ্ঞ",
+      "jlptLevel": "N3",
+      "createdAt": "2026-09-04T08:12:39.516Z"
+    }
+  ],
+  "accentMasterySessions": [
+    {
+      "id": "test-session-1788508459962",
+      "userId": "test-user-stress-1788508459410",
+      "title": "Adaptive Stress Reduction Mastery",
+      "status": "completed",
+      "currentStepIndex": 4,
+      "totalSteps": 4,
+      "targetDrillIds": [
+        "drill-箸-はし-mtmnrbtt-iqn",
+        "drill-橋-はし-mtmnrbtt-5g4",
+        "drill-雨-あめ-mtmnrbtt-poi",
+        "drill-飴-あめ-mtmnrbtt-l52"
+      ],
+      "steps": [
+        {
+          "stepIndex": 0,
+          "drillId": "drill-箸-はし-mtmnrbtt-iqn",
+          "kanji": "箸",
+          "readingKana": "はし",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508459990-eysfg",
+            "userId": "test-user-stress-1788508459410",
+            "targetPhrase": "箸",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Chopsticks",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 86,
+            "clarityScore": 100,
+            "overallScore": 97,
+            "passed": true,
+            "audioDurationMs": 500,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:54:19.990Z"
+          },
+          "stepScore": 97,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:54:19.990Z"
+        },
+        {
+          "stepIndex": 1,
+          "drillId": "drill-橋-はし-mtmnrbtt-5g4",
+          "kanji": "橋",
+          "readingKana": "はし",
+          "pattern": "odaka",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508460014-99qk5",
+            "userId": "test-user-stress-1788508459410",
+            "targetPhrase": "橋",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Bridge",
+            "targetPattern": "odaka",
+            "targetDownstepMora": 2,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": false,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Pitch mismatch detected: Spoke as Heiban (Flat ⓪), but Tokyo standard is Odaka (Tail-High N).",
+            "feedbackBn": "পিচের অমিল ধরা পড়েছে: আপনি হেইবান (সমতল প্যাটার্ন ⓪) বলেছেন, কিন্তু স্ট্যান্ডার্ড টোকিও প্যাটার্ন হলো ওদাকা (শেষ মোরা উচ্চ N)।",
+            "coachingTips": [
+              "For Odaka, the word stays HIGH until the final mora; only the following grammatical particle (が, を) drops to LOW."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:54:20.014Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:54:20.014Z"
+        },
+        {
+          "stepIndex": 2,
+          "drillId": "drill-雨-あめ-mtmnrbtt-poi",
+          "kanji": "雨",
+          "readingKana": "あめ",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508460014-ejaik",
+            "userId": "test-user-stress-1788508459410",
+            "targetPhrase": "雨",
+            "targetRomaji": "ame",
+            "targetMeaning": "Rain",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:54:20.014Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:54:20.014Z"
+        },
+        {
+          "stepIndex": 3,
+          "drillId": "drill-飴-あめ-mtmnrbtt-l52",
+          "kanji": "飴",
+          "readingKana": "あめ",
+          "pattern": "heiban",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508460014-rykl3",
+            "userId": "test-user-stress-1788508459410",
+            "targetPhrase": "飴",
+            "targetRomaji": "ame",
+            "targetMeaning": "Candy / Sweet",
+            "targetPattern": "heiban",
+            "targetDownstepMora": 0,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Heiban (Flat ⓪) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে হেইবান (সমতল প্যাটার্ন ⓪) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:54:20.014Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:54:20.014Z"
+        }
+      ],
+      "masteryIndex": 98,
+      "bengaliAcousticFlagsDetected": [],
+      "startedAt": "2026-09-04T07:54:19.962Z",
+      "lastActivityAt": "2026-09-04T07:54:19.990Z",
+      "completedAt": "2026-09-04T07:54:20.014Z",
+      "summaryBn": "সেশন সম্পন্ন হয়েছে (স্কোর: 98%)।",
+      "summaryEn": "Session completed with 98% score."
+    },
+    {
+      "id": "test-session-1788508694716",
+      "userId": "test-user-stress-1788508694434",
+      "title": "Adaptive Stress Reduction Mastery",
+      "status": "completed",
+      "currentStepIndex": 4,
+      "totalSteps": 4,
+      "targetDrillIds": [
+        "drill-箸-はし-mtmnwcyq-57w",
+        "drill-橋-はし-mtmnwcyr-lfd",
+        "drill-雨-あめ-mtmnwcyr-m79",
+        "drill-飴-あめ-mtmnwcyr-8rq"
+      ],
+      "steps": [
+        {
+          "stepIndex": 0,
+          "drillId": "drill-箸-はし-mtmnwcyq-57w",
+          "kanji": "箸",
+          "readingKana": "はし",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508694741-baxnl",
+            "userId": "test-user-stress-1788508694434",
+            "targetPhrase": "箸",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Chopsticks",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 86,
+            "clarityScore": 100,
+            "overallScore": 97,
+            "passed": true,
+            "audioDurationMs": 500,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:58:14.741Z"
+          },
+          "stepScore": 97,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:58:14.741Z"
+        },
+        {
+          "stepIndex": 1,
+          "drillId": "drill-橋-はし-mtmnwcyr-lfd",
+          "kanji": "橋",
+          "readingKana": "はし",
+          "pattern": "odaka",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508694763-edawi",
+            "userId": "test-user-stress-1788508694434",
+            "targetPhrase": "橋",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Bridge",
+            "targetPattern": "odaka",
+            "targetDownstepMora": 2,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": false,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Pitch mismatch detected: Spoke as Heiban (Flat ⓪), but Tokyo standard is Odaka (Tail-High N).",
+            "feedbackBn": "পিচের অমিল ধরা পড়েছে: আপনি হেইবান (সমতল প্যাটার্ন ⓪) বলেছেন, কিন্তু স্ট্যান্ডার্ড টোকিও প্যাটার্ন হলো ওদাকা (শেষ মোরা উচ্চ N)।",
+            "coachingTips": [
+              "For Odaka, the word stays HIGH until the final mora; only the following grammatical particle (が, を) drops to LOW."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:58:14.763Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:58:14.763Z"
+        },
+        {
+          "stepIndex": 2,
+          "drillId": "drill-雨-あめ-mtmnwcyr-m79",
+          "kanji": "雨",
+          "readingKana": "あめ",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508694763-aa88h",
+            "userId": "test-user-stress-1788508694434",
+            "targetPhrase": "雨",
+            "targetRomaji": "ame",
+            "targetMeaning": "Rain",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:58:14.763Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:58:14.763Z"
+        },
+        {
+          "stepIndex": 3,
+          "drillId": "drill-飴-あめ-mtmnwcyr-8rq",
+          "kanji": "飴",
+          "readingKana": "あめ",
+          "pattern": "heiban",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788508694763-9l6yv",
+            "userId": "test-user-stress-1788508694434",
+            "targetPhrase": "飴",
+            "targetRomaji": "ame",
+            "targetMeaning": "Candy / Sweet",
+            "targetPattern": "heiban",
+            "targetDownstepMora": 0,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Heiban (Flat ⓪) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে হেইবান (সমতল প্যাটার্ন ⓪) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T07:58:14.763Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T07:58:14.763Z"
+        }
+      ],
+      "masteryIndex": 98,
+      "bengaliAcousticFlagsDetected": [],
+      "startedAt": "2026-09-04T07:58:14.716Z",
+      "lastActivityAt": "2026-09-04T07:58:14.741Z",
+      "completedAt": "2026-09-04T07:58:14.763Z",
+      "summaryBn": "সেশন সম্পন্ন হয়েছে (স্কোর: 98%)।",
+      "summaryEn": "Session completed with 98% score."
+    },
+    {
+      "id": "test-session-1788509559533",
+      "userId": "test-user-stress-1788509559320",
+      "title": "Adaptive Stress Reduction Mastery",
+      "status": "completed",
+      "currentStepIndex": 4,
+      "totalSteps": 4,
+      "targetDrillIds": [
+        "drill-箸-はし-mtmoew9n-ecp",
+        "drill-橋-はし-mtmoew9n-qck",
+        "drill-雨-あめ-mtmoew9n-g7f",
+        "drill-飴-あめ-mtmoew9n-roh"
+      ],
+      "steps": [
+        {
+          "stepIndex": 0,
+          "drillId": "drill-箸-はし-mtmoew9n-ecp",
+          "kanji": "箸",
+          "readingKana": "はし",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788509559554-xxwyf",
+            "userId": "test-user-stress-1788509559320",
+            "targetPhrase": "箸",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Chopsticks",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 86,
+            "clarityScore": 100,
+            "overallScore": 97,
+            "passed": true,
+            "audioDurationMs": 500,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T08:12:39.554Z"
+          },
+          "stepScore": 97,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T08:12:39.554Z"
+        },
+        {
+          "stepIndex": 1,
+          "drillId": "drill-橋-はし-mtmoew9n-qck",
+          "kanji": "橋",
+          "readingKana": "はし",
+          "pattern": "odaka",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788509559570-y93j5",
+            "userId": "test-user-stress-1788509559320",
+            "targetPhrase": "橋",
+            "targetRomaji": "hashi",
+            "targetMeaning": "Bridge",
+            "targetPattern": "odaka",
+            "targetDownstepMora": 2,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "は",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "し",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": false,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Pitch mismatch detected: Spoke as Heiban (Flat ⓪), but Tokyo standard is Odaka (Tail-High N).",
+            "feedbackBn": "পিচের অমিল ধরা পড়েছে: আপনি হেইবান (সমতল প্যাটার্ন ⓪) বলেছেন, কিন্তু স্ট্যান্ডার্ড টোকিও প্যাটার্ন হলো ওদাকা (শেষ মোরা উচ্চ N)।",
+            "coachingTips": [
+              "For Odaka, the word stays HIGH until the final mora; only the following grammatical particle (が, を) drops to LOW."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T08:12:39.570Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T08:12:39.570Z"
+        },
+        {
+          "stepIndex": 2,
+          "drillId": "drill-雨-あめ-mtmoew9n-g7f",
+          "kanji": "雨",
+          "readingKana": "あめ",
+          "pattern": "atamadaka",
+          "targetPitches": [
+            "H",
+            "L"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788509559570-q9hy0",
+            "userId": "test-user-stress-1788509559320",
+            "targetPhrase": "雨",
+            "targetRomaji": "ame",
+            "targetMeaning": "Rain",
+            "targetPattern": "atamadaka",
+            "targetDownstepMora": 1,
+            "detectedPattern": "atamadaka",
+            "detectedDownstepMora": 1,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": true,
+                "isMatch": true,
+                "estimatedHz": 255
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 184
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 204,
+            "pitchTrajectory": [
+              237,
+              170
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Atamadaka (Head-High ①) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে আতাতামাদাকা (প্রথম মোরা উচ্চ ①) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T08:12:39.570Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T08:12:39.570Z"
+        },
+        {
+          "stepIndex": 3,
+          "drillId": "drill-飴-あめ-mtmoew9n-roh",
+          "kanji": "飴",
+          "readingKana": "あめ",
+          "pattern": "heiban",
+          "targetPitches": [
+            "L",
+            "H"
+          ],
+          "userPitchAssessment": {
+            "id": "pitch-1788509559570-ml53d",
+            "userId": "test-user-stress-1788509559320",
+            "targetPhrase": "飴",
+            "targetRomaji": "ame",
+            "targetMeaning": "Candy / Sweet",
+            "targetPattern": "heiban",
+            "targetDownstepMora": 0,
+            "detectedPattern": "heiban",
+            "detectedDownstepMora": 0,
+            "moraBreakdown": [
+              {
+                "moraIndex": 1,
+                "mora": "あ",
+                "targetPitch": "L",
+                "detectedPitch": "L",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 190
+              },
+              {
+                "moraIndex": 2,
+                "mora": "め",
+                "targetPitch": "H",
+                "detectedPitch": "H",
+                "isDropPoint": false,
+                "isMatch": true,
+                "estimatedHz": 264
+              }
+            ],
+            "patternMatch": true,
+            "pitchAccuracyScore": 100,
+            "moraRhythmScore": 91,
+            "clarityScore": 100,
+            "overallScore": 98,
+            "passed": true,
+            "audioDurationMs": 450,
+            "averageF0Hz": 211,
+            "pitchTrajectory": [
+              185,
+              237
+            ],
+            "intensityTrajectory": [
+              1,
+              1
+            ],
+            "feedbackEn": "Excellent Tokyo pitch-accent! You accurately reproduced the Heiban (Flat ⓪) contour with crisp mora rhythm.",
+            "feedbackBn": "অসাধারণ টোকিও পিচ-অ্যাকসেন্ট! আপনি নিখুঁতভাবে হেইবান (সমতল প্যাটার্ন ⓪) উচ্চারণ করেছেন এবং মোরার ছন্দ বজায় রেখেছেন।",
+            "coachingTips": [
+              "Your downstep pitch transition sounds completely natural to Tokyo native speakers.",
+              "Continue maintaining consistent mora timing without rushing long vowels or geminate stops (っ)."
+            ],
+            "bengaliAcousticAnalysis": {
+              "hasDynamicStressError": false,
+              "hasMoraFlattening": false,
+              "hasVowelLengthMismatch": false,
+              "hasSokuonRushedError": false,
+              "pitchVsIntensityCorrelation": 0,
+              "detectedErrors": [],
+              "overallBengaliCoachingBn": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+              "actionableRecommendationsBn": [
+                "স্বাভাবিক গতিতে একই স্পষ্ট সুর ও মোরা টাইমিং বজায় রাখুন।"
+              ]
+            },
+            "recordedAt": "2026-09-04T08:12:39.570Z"
+          },
+          "stepScore": 98,
+          "passed": true,
+          "bengaliCoachingTip": "চমৎকার! আপনার উচ্চারণে বাংলা ভাষার কোনো আঞ্চলিক স্ট্রেস বা সমতলকরণের ত্রুটি পাওয়া যায়নি। খাঁটি টোকিও সুর বজায় রয়েছে।",
+          "completedAt": "2026-09-04T08:12:39.570Z"
+        }
+      ],
+      "masteryIndex": 98,
+      "bengaliAcousticFlagsDetected": [],
+      "startedAt": "2026-09-04T08:12:39.533Z",
+      "lastActivityAt": "2026-09-04T08:12:39.554Z",
+      "completedAt": "2026-09-04T08:12:39.571Z",
+      "summaryBn": "সেশন সম্পন্ন হয়েছে (স্কোর: 98%)।",
+      "summaryEn": "Session completed with 98% score."
     }
   ],
   "savedPaymentMethods": [

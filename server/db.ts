@@ -87,7 +87,9 @@ import {
   LearnerAnalyticsSummary,
   LeaderboardRankItem,
   PlatformCohortAnalytics,
-  TokyoPitchAccentAssessment
+  TokyoPitchAccentAssessment,
+  TokyoPitchDrill,
+  AccentMasterySession
 } from './types.js';
 import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
 import { LearnerAnalyticsService } from './services/learnerAnalyticsService.js';
@@ -428,7 +430,9 @@ class Database {
     srsCards: [],
     srsLogs: [],
     learnerAnalyticsSummaries: [],
-    voiceAssessments: []
+    voiceAssessments: [],
+    pitchDrills: [],
+    accentMasterySessions: []
   };
 
   private isLoaded = false;
@@ -1370,7 +1374,9 @@ class Database {
       srsCards: [],
       srsLogs: [],
       learnerAnalyticsSummaries: [],
-      voiceAssessments: []
+      voiceAssessments: [],
+      pitchDrills: [],
+      accentMasterySessions: []
     };
     this.isLoaded = true;
   }
@@ -6092,6 +6098,7 @@ class Database {
           feedback_en: assessment.feedbackEn,
           feedback_bn: assessment.feedbackBn,
           coaching_tips: assessment.coachingTips,
+          bengali_acoustic_analysis: assessment.bengaliAcousticAnalysis,
           recorded_at: assessment.recordedAt
         })
       ).catch((err) => {
@@ -6108,6 +6115,129 @@ class Database {
       .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())
       .slice(0, limit);
   }
+
+  public createPitchDrill(drill: TokyoPitchDrill): TokyoPitchDrill {
+    if (!this.data.pitchDrills) {
+      this.data.pitchDrills = [];
+    }
+    const idx = this.data.pitchDrills.findIndex((d) => d.id === drill.id);
+    if (idx >= 0) {
+      this.data.pitchDrills[idx] = { ...this.data.pitchDrills[idx], ...drill };
+    } else {
+      this.data.pitchDrills.push(drill);
+    }
+    this.save();
+    return drill;
+  }
+
+  public bulkUpsertPitchDrills(drills: TokyoPitchDrill[]): { inserted: number; updated: number; total: number } {
+    if (!this.data.pitchDrills) {
+      this.data.pitchDrills = [];
+    }
+    let inserted = 0;
+    let updated = 0;
+    for (const drill of drills) {
+      const idx = this.data.pitchDrills.findIndex(
+        (d) => d.id === drill.id || (d.kanji === drill.kanji && d.readingKana === drill.readingKana)
+      );
+      if (idx >= 0) {
+        this.data.pitchDrills[idx] = { ...this.data.pitchDrills[idx], ...drill };
+        updated++;
+      } else {
+        this.data.pitchDrills.push(drill);
+        inserted++;
+      }
+    }
+    this.save();
+    return { inserted, updated, total: this.data.pitchDrills.length };
+  }
+
+  public getPitchDrills(filter?: {
+    category?: string;
+    jlptLevel?: string;
+    contrastGroup?: string;
+    pattern?: string;
+    limit?: number;
+    search?: string;
+  }): TokyoPitchDrill[] {
+    let list = this.data.pitchDrills || [];
+
+    if (filter) {
+      if (filter.category) {
+        list = list.filter((d) => d.category === filter.category);
+      }
+      if (filter.jlptLevel) {
+        list = list.filter((d) => d.jlptLevel === filter.jlptLevel);
+      }
+      if (filter.contrastGroup) {
+        list = list.filter((d) => d.contrastGroup === filter.contrastGroup);
+      }
+      if (filter.pattern) {
+        list = list.filter((d) => d.pattern === filter.pattern);
+      }
+      if (filter.search) {
+        const q = filter.search.toLowerCase();
+        list = list.filter(
+          (d) =>
+            d.kanji.toLowerCase().includes(q) ||
+            d.readingKana.toLowerCase().includes(q) ||
+            d.romaji.toLowerCase().includes(q) ||
+            d.meaningEn.toLowerCase().includes(q) ||
+            d.meaningBn.toLowerCase().includes(q)
+        );
+      }
+    }
+
+    const limit = filter?.limit || 100;
+    return list.slice(0, limit);
+  }
+
+  public getPitchDrillById(id: string): TokyoPitchDrill | null {
+    const list = this.data.pitchDrills || [];
+    return list.find((d) => d.id === id || d.kanji === id || d.readingKana === id) || null;
+  }
+
+  public createAccentMasterySession(session: AccentMasterySession): AccentMasterySession {
+    if (!this.data.accentMasterySessions) {
+      this.data.accentMasterySessions = [];
+    }
+    const idx = this.data.accentMasterySessions.findIndex((s) => s.id === session.id);
+    if (idx >= 0) {
+      this.data.accentMasterySessions[idx] = { ...this.data.accentMasterySessions[idx], ...session };
+    } else {
+      this.data.accentMasterySessions.push(session);
+    }
+    this.save();
+    return session;
+  }
+
+  public getAccentMasterySession(sessionId: string): AccentMasterySession | null {
+    const list = this.data.accentMasterySessions || [];
+    return list.find((s) => s.id === sessionId) || null;
+  }
+
+  public updateAccentMasterySession(session: AccentMasterySession): AccentMasterySession {
+    if (!this.data.accentMasterySessions) {
+      this.data.accentMasterySessions = [];
+    }
+    const idx = this.data.accentMasterySessions.findIndex((s) => s.id === session.id);
+    if (idx >= 0) {
+      this.data.accentMasterySessions[idx] = session;
+    } else {
+      this.data.accentMasterySessions.push(session);
+    }
+    this.save();
+    return session;
+  }
+
+  public getUserAccentMasterySessions(userId: string, limit = 20): AccentMasterySession[] {
+    const list = this.data.accentMasterySessions || [];
+    return list
+      .filter((s) => s.userId === userId)
+      .sort((a, b) => new Date(b.lastActivityAt).getTime() - new Date(a.lastActivityAt).getTime())
+      .slice(0, limit);
+  }
+
 
 
   // ==============================================================================
