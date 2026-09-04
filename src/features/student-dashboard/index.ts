@@ -1,5 +1,7 @@
 export * from './types';
 export * from './mockData';
+export * from './studentService';
+export * from './useStudentDashboard';
 export { DashboardPage } from './DashboardPage';
 export { StudentHeader } from './components/StudentHeader';
 export { ContinueLearningCard } from './components/ContinueLearningCard';
