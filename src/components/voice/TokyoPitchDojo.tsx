@@ -19,7 +19,8 @@ import {
   ArrowRight,
   RefreshCw,
   Zap,
-  Activity
+  Activity,
+  Music
 } from 'lucide-react';
 import {
   AccentMasterySession,
@@ -32,7 +33,8 @@ import {
 import {
   startAccentMasterySession,
   submitAccentSessionStep,
-  fetchAdaptiveRecommendations
+  fetchAdaptiveRecommendations,
+  fetchPhrasalPreview
 } from '../../lib/voiceApi';
 import {
   PitchAudioSynthesizer,
@@ -82,6 +84,7 @@ export const TokyoPitchDojo: React.FC<TokyoPitchDojoProps> = ({
 
   // Synthesizer State
   const [isPlayingNativeMelody, setIsPlayingNativeMelody] = useState<boolean>(false);
+  const [isPlayingPhrasal, setIsPlayingPhrasal] = useState<boolean>(false);
   const [synthSpeed, setSynthSpeed] = useState<0.75 | 1.0>(1.0);
   const [synthMode, setSynthMode] = useState<PitchSynthMode>('harmonic');
   const [activePlaybackMoraIndex, setActivePlaybackMoraIndex] = useState<number | null>(null);
@@ -215,6 +218,45 @@ export const TokyoPitchDojo: React.FC<TokyoPitchDojoProps> = ({
       console.error('[TokyoPitchDojo] Synthesizer playback failed:', err);
       setIsPlayingNativeMelody(false);
       setActivePlaybackMoraIndex(null);
+    }
+  };
+
+  // Play Phrasal Particle Sandhi Melody
+  const handlePlayPhrasalParticle = async (particle = 'が') => {
+    if (isPlayingPhrasal) {
+      PitchAudioSynthesizer.stop();
+      setIsPlayingPhrasal(false);
+      return;
+    }
+
+    const word = currentDrill?.readingKana || currentStep?.readingKana;
+    if (!word) return;
+
+    setIsPlayingPhrasal(true);
+    try {
+      const preview = await fetchPhrasalPreview(
+        {
+          word: currentDrill?.kanji || currentStep?.kanji || word,
+          readingKana: word,
+          romaji: currentDrill?.romaji || 'kotoba',
+          pattern: currentDrill?.pattern || 'heiban',
+          downstepMora: currentDrill?.downstepMora || 0,
+          particle
+        },
+        token || undefined
+      );
+
+      await PitchAudioSynthesizer.playContour({
+        morae: preview.morae,
+        targetPitches: preview.targetPitches,
+        downstepMora: preview.downstepMora,
+        speedMultiplier: synthSpeed,
+        pitchMode: synthMode,
+        onComplete: () => setIsPlayingPhrasal(false)
+      });
+    } catch (err) {
+      console.error('[TokyoPitchDojo] Phrasal particle playback failed:', err);
+      setIsPlayingPhrasal(false);
     }
   };
 
@@ -633,6 +675,21 @@ export const TokyoPitchDojo: React.FC<TokyoPitchDojoProps> = ({
                         <span>নমুনা সুর শুনুন</span>
                       </>
                     )}
+                  </button>
+
+                  <button
+                    id="btn-play-phrasal-particle"
+                    onClick={() => handlePlayPhrasalParticle('が')}
+                    disabled={isPlayingNativeMelody}
+                    className={`px-3 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all shadow-md ${
+                      isPlayingPhrasal
+                        ? 'bg-cyan-500 text-black animate-pulse'
+                        : 'bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30'
+                    }`}
+                    title="পার্টিকেল が যুক্ত করে সম্পূর্ণ বাক্যাংশের সুর শুনুন"
+                  >
+                    <Music className="w-3.5 h-3.5" />
+                    <span>{isPlayingPhrasal ? 'বাজছে...' : '+ が সংযোগ সুর'}</span>
                   </button>
 
                   <div className="flex items-center space-x-1.5 text-xs text-white/60">

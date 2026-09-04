@@ -11,12 +11,22 @@ import {
   DrillSeedGeneratorService
 } from '../services/drillSeedGeneratorService.js';
 import { AdaptiveDrillService } from '../services/adaptiveDrillService.js';
+import { PhrasalAccentService } from '../services/phrasalAccentService.js';
+import { AccentSRSService } from '../services/accentSRSService.js';
+import { SenseiAuditReportService } from '../services/senseiAuditReportService.js';
+import { SentenceProsodyService } from '../services/sentenceProsodyService.js';
+import { SpeakingReadinessCertService } from '../services/speakingReadinessCertService.js';
+import { ScenarioRoleplayService } from '../services/scenarioRoleplayService.js';
 import {
   PitchAccentPattern,
   DynamicDrillGenerationInput,
   TokyoPitchDrill,
   AccentMasterySession,
-  AccentMasteryStep
+  AccentMasteryStep,
+  PhrasalPreviewInput,
+  AccentSrsReviewSubmission,
+  SentenceProsodyAnalysisInput,
+  ShadowingSubmission
 } from '../types.js';
 
 export const voiceRouter = Router();
@@ -622,4 +632,416 @@ voiceRouter.get('/sessions', requireAuth, (req: AuthenticatedRequest, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
+
+// ==============================================================================
+// Step 5: Phrasal Sandhi, Accent SRS & Autonomous Sensei Audit Endpoints
+// ==============================================================================
+
+/**
+ * POST /api/voice/drills/phrasal-preview
+ * Computes unified pitch accent contour when grammatical particles attach to words.
+ */
+voiceRouter.post('/drills/phrasal-preview', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const input: PhrasalPreviewInput = req.body || {};
+    if (!input.word && !input.drillId && !input.readingKana) {
+      return res.status(400).json({
+        success: false,
+        error: 'Either word, readingKana, or drillId is required.'
+      });
+    }
+
+    const preview = PhrasalAccentService.computePhrasalPreview(input);
+
+    return res.json({
+      success: true,
+      preview
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error computing phrasal preview:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/drills/due-reviews
+ * Fetches spaced repetition due cards for Tokyo pitch-accent retention.
+ */
+voiceRouter.get('/drills/due-reviews', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest';
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 20;
+    const pattern = req.query.pattern ? (req.query.pattern as PitchAccentPattern) : undefined;
+
+    const { dueCards, summary } = AccentSRSService.getDueReviews(userId, limit, pattern);
+
+    return res.json({
+      success: true,
+      totalDue: summary.totalDue,
+      summary,
+      dueCards
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching due reviews:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/voice/drills/srs-review
+ * Processes an SRS review submission, adjusting stability, difficulty & penalizing dynamic stress.
+ */
+voiceRouter.post('/drills/srs-review', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest';
+    const submission: AccentSrsReviewSubmission = req.body || {};
+
+    if (!submission.cardId && !submission.drillId && !submission.assessment) {
+      return res.status(400).json({
+        success: false,
+        error: 'cardId, drillId, or assessment is required for SRS review.'
+      });
+    }
+
+    const result = AccentSRSService.processReview(userId, submission);
+
+    return res.json({
+      success: true,
+      card: result.card,
+      summary: result.summary
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error processing SRS review:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/student/diagnostic-report
+ * Returns the autonomous Sensei 30-day phonetics and acoustic audit report.
+ */
+voiceRouter.get('/student/diagnostic-report', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest';
+    const days = req.query.days ? parseInt(req.query.days as string, 10) : 30;
+
+    const report = SenseiAuditReportService.generateReport(userId, days);
+
+    return res.json({
+      success: true,
+      report
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error generating Sensei audit report:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ============================================================================
+// STEP 6: FULL-SENTENCE PROSODY, SHADOWING & CERTIFICATION ENDPOINTS
+// ============================================================================
+
+/**
+ * GET /api/voice/sentence/presets
+ * Returns curated authentic Tokyo sentences with validated Accentual Phrase boundaries.
+ */
+voiceRouter.get('/sentence/presets', (req, res) => {
+  try {
+    const presets = SentenceProsodyService.getPresetSentences();
+    return res.json({
+      success: true,
+      sentences: presets
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching preset sentences:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/voice/sentence/analyze-prosody
+ * Analyzes Japanese sentence macro-prosody, AP boundaries, BPM and target F0 declination.
+ */
+voiceRouter.post('/sentence/analyze-prosody', (req, res) => {
+  try {
+    const input: SentenceProsodyAnalysisInput = req.body;
+    if (!input || !input.sentenceText) {
+      return res.status(400).json({
+        success: false,
+        error: 'sentenceText string is required for prosody analysis.'
+      });
+    }
+
+    const model = SentenceProsodyService.analyzeSentenceProsody(input);
+    return res.json({
+      success: true,
+      prosodyModel: model
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error analyzing sentence prosody:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/voice/sentence/evaluate-shadowing
+ * Evaluates live continuous shadowing using Dynamic Time Warping (DTW) and AP Boundary Resets.
+ */
+voiceRouter.post('/sentence/evaluate-shadowing', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest';
+    const submission: ShadowingSubmission = req.body;
+
+    if (!submission || (!submission.sentenceId && !submission.sentenceText)) {
+      return res.status(400).json({
+        success: false,
+        error: 'sentenceId or sentenceText is required for shadowing evaluation.'
+      });
+    }
+
+    // Resolve sentence prosody model
+    let prosodyModel = submission.sentenceId
+      ? SentenceProsodyService.getSentenceById(submission.sentenceId)
+      : undefined;
+
+    if (!prosodyModel && submission.sentenceText) {
+      prosodyModel = SentenceProsodyService.analyzeSentenceProsody({
+        sentenceText: submission.sentenceText
+      });
+    }
+
+    if (!prosodyModel) {
+      return res.status(404).json({
+        success: false,
+        error: 'Sentence prosody model not found.'
+      });
+    }
+
+    const evaluation = SentenceProsodyService.evaluateShadowing(
+      userId,
+      submission,
+      prosodyModel
+    );
+
+    // Save as assessment record in db if authenticated or guest
+    try {
+      db.savePitchAccentAssessment({
+        id: evaluation.evaluationId,
+        userId,
+        targetPhrase: prosodyModel.sentenceText,
+        targetPattern: 'heiban',
+        targetDownstepMora: 0,
+        detectedPattern: evaluation.isPassed ? 'heiban' : 'nakadaka',
+        detectedDownstepMora: 0,
+        moraBreakdown: [],
+        patternMatch: evaluation.isPassed,
+        pitchAccuracyScore: evaluation.pitchContourScore,
+        moraRhythmScore: evaluation.rhythmIsochronyScore,
+        clarityScore: evaluation.pitchContourScore,
+        overallScore: evaluation.overallScore,
+        passed: evaluation.isPassed,
+        audioDurationMs: submission.audioDurationMs || prosodyModel.totalDurationMs,
+        pitchTrajectory: submission.userF0Trajectory || [],
+        feedbackEn: evaluation.feedbackEn,
+        feedbackBn: evaluation.feedbackBn,
+        coachingTips: evaluation.coachingTipsBn,
+        bengaliAcousticAnalysis: {
+          hasDynamicStressError: evaluation.bengaliPhoneticIssues.includes('DYNAMIC_STRESS_CORRUPTION'),
+          hasMoraFlattening: evaluation.bengaliPhoneticIssues.includes('INSUFFICIENT_AP_DECLINATION_RESET'),
+          hasVowelLengthMismatch: false,
+          hasSokuonRushedError: false,
+          pitchVsIntensityCorrelation: 0.2,
+          detectedErrors: [],
+          overallBengaliCoachingBn: evaluation.feedbackBn,
+          actionableRecommendationsBn: evaluation.coachingTipsBn
+        },
+        recordedAt: evaluation.evaluatedAt
+      });
+    } catch (saveErr) {
+      console.warn('[Voice API] Warning saving shadowing evaluation to db:', saveErr);
+    }
+
+    return res.json({
+      success: true,
+      evaluation
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error evaluating sentence shadowing:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/student/speaking-certificate
+ * Issues the Tokyo Fluency & Intonation Speaking Readiness Certificate.
+ */
+voiceRouter.get('/student/speaking-certificate', optionalAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest';
+    const studentName = typeof req.query.studentName === 'string' ? req.query.studentName : undefined;
+
+    const certificate = await SpeakingReadinessCertService.generateSpeakingCertificate(
+      userId,
+      studentName
+    );
+
+    return res.json({
+      success: true,
+      certificate
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error issuing speaking readiness certificate:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ==============================================================================
+// Step 7: Scenario Roleplay Simulator & Cohort Heatmap Endpoints
+// ==============================================================================
+
+/**
+ * GET /api/voice/roleplay/scenarios
+ * Returns all available interview and customer-service roleplay scenarios
+ */
+voiceRouter.get('/roleplay/scenarios', (_req, res) => {
+  try {
+    const scenarios = ScenarioRoleplayService.getScenarios();
+    return res.json({
+      success: true,
+      scenarios
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching roleplay scenarios:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/roleplay/scenarios/:scenarioId
+ * Returns a single scenario by ID
+ */
+voiceRouter.get('/roleplay/scenarios/:scenarioId', (req, res) => {
+  try {
+    const scenario = ScenarioRoleplayService.getScenarioById(req.params.scenarioId);
+    if (!scenario) {
+      return res.status(404).json({ success: false, error: 'Scenario not found' });
+    }
+    return res.json({
+      success: true,
+      scenario
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching scenario:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/voice/roleplay/session/start
+ * Starts a new multi-turn roleplay interview session
+ */
+voiceRouter.post('/roleplay/session/start', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || req.body.userId || 'guest-learner';
+    const { scenarioId } = req.body;
+    const session = ScenarioRoleplayService.startSession(userId, scenarioId);
+    return res.json({
+      success: true,
+      session
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error starting roleplay session:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/voice/roleplay/session/:sessionId/turn
+ * Evaluates learner's spoken turn (intent, keywords, pitch F0 contour)
+ */
+voiceRouter.post('/roleplay/session/:sessionId/turn', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const { sessionId } = req.params;
+    const { userTranscript, userF0Trajectory, audioDurationMs } = req.body;
+
+    if (!userTranscript && (!userF0Trajectory || userF0Trajectory.length === 0)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Either userTranscript or userF0Trajectory is required for turn evaluation.'
+      });
+    }
+
+    const evaluationResult = ScenarioRoleplayService.evaluateTurn(
+      sessionId,
+      userTranscript || '',
+      userF0Trajectory || [],
+      audioDurationMs || 2500
+    );
+
+    return res.json({
+      success: true,
+      ...evaluationResult
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error evaluating roleplay turn:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/roleplay/session/:sessionId
+ * Retrieves the state of an existing roleplay session
+ */
+voiceRouter.get('/roleplay/session/:sessionId', (req, res) => {
+  try {
+    const session = db.getRoleplaySessionById(req.params.sessionId);
+    if (!session) {
+      return res.status(404).json({ success: false, error: 'Roleplay session not found' });
+    }
+    return res.json({
+      success: true,
+      session
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching roleplay session:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/analytics/cohort-telemetry
+ * Returns aggregate cohort-wide phonetic interference hotspots & readiness distribution
+ */
+voiceRouter.get('/analytics/cohort-telemetry', (_req, res) => {
+  try {
+    const telemetry = ScenarioRoleplayService.getCohortAcousticTelemetry();
+    return res.json({
+      success: true,
+      telemetry
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error fetching cohort acoustic telemetry:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/voice/public/verify-certificate/:certId
+ * Institutional public certificate verification
+ */
+voiceRouter.get('/public/verify-certificate/:certId', (req, res) => {
+  try {
+    const { certId } = req.params;
+    const result = SpeakingReadinessCertService.verifyCertificate(certId);
+    return res.json({
+      success: true,
+      ...result
+    });
+  } catch (error: any) {
+    console.error('[Voice API] Error verifying certificate:', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+
 

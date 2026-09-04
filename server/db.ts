@@ -89,7 +89,10 @@ import {
   PlatformCohortAnalytics,
   TokyoPitchAccentAssessment,
   TokyoPitchDrill,
-  AccentMasterySession
+  AccentMasterySession,
+  AccentSrsCard,
+  SpeakingReadinessCertificate,
+  RoleplaySessionState
 } from './types.js';
 import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
 import { LearnerAnalyticsService } from './services/learnerAnalyticsService.js';
@@ -432,7 +435,10 @@ class Database {
     learnerAnalyticsSummaries: [],
     voiceAssessments: [],
     pitchDrills: [],
-    accentMasterySessions: []
+    accentMasterySessions: [],
+    accentSrsCards: [],
+    speakingCertificates: [],
+    roleplaySessions: []
   };
 
   private isLoaded = false;
@@ -1376,7 +1382,8 @@ class Database {
       learnerAnalyticsSummaries: [],
       voiceAssessments: [],
       pitchDrills: [],
-      accentMasterySessions: []
+      accentMasterySessions: [],
+      accentSrsCards: []
     };
     this.isLoaded = true;
   }
@@ -6116,6 +6123,14 @@ class Database {
       .slice(0, limit);
   }
 
+  public getVoiceAssessmentsByUser(userId: string, limit = 50): TokyoPitchAccentAssessment[] {
+    return this.getVoiceAssessments(userId, limit);
+  }
+
+  public savePitchAccentAssessment(assessment: TokyoPitchAccentAssessment): TokyoPitchAccentAssessment {
+    return this.createVoiceAssessment(assessment);
+  }
+
   public createPitchDrill(drill: TokyoPitchDrill): TokyoPitchDrill {
     if (!this.data.pitchDrills) {
       this.data.pitchDrills = [];
@@ -6235,6 +6250,116 @@ class Database {
     return list
       .filter((s) => s.userId === userId)
       .sort((a, b) => new Date(b.lastActivityAt).getTime() - new Date(a.lastActivityAt).getTime())
+      .slice(0, limit);
+  }
+
+  // Accent-Specific Spaced Repetition (SRS) Engine Persistence
+  public getAccentSrsCards(userId: string): AccentSrsCard[] {
+    if (!this.data.accentSrsCards) {
+      this.data.accentSrsCards = [];
+    }
+    return this.data.accentSrsCards.filter((c) => c.userId === userId);
+  }
+
+  public getAccentSrsCardById(userId: string, cardId: string): AccentSrsCard | null {
+    if (!this.data.accentSrsCards) {
+      this.data.accentSrsCards = [];
+    }
+    return this.data.accentSrsCards.find((c) => c.userId === userId && c.id === cardId) || null;
+  }
+
+  public saveAccentSrsCard(card: AccentSrsCard): AccentSrsCard {
+    if (!this.data.accentSrsCards) {
+      this.data.accentSrsCards = [];
+    }
+    const idx = this.data.accentSrsCards.findIndex((c) => c.id === card.id && c.userId === card.userId);
+    if (idx >= 0) {
+      this.data.accentSrsCards[idx] = { ...this.data.accentSrsCards[idx], ...card, updatedAt: new Date().toISOString() };
+    } else {
+      this.data.accentSrsCards.push(card);
+    }
+    this.save();
+    return card;
+  }
+
+  public deleteAccentSrsCard(userId: string, cardId: string): boolean {
+    if (!this.data.accentSrsCards) return false;
+    const initialLen = this.data.accentSrsCards.length;
+    this.data.accentSrsCards = this.data.accentSrsCards.filter((c) => !(c.userId === userId && c.id === cardId));
+    if (this.data.accentSrsCards.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // Speaking Readiness Certificate & Public Verification Persistence
+  public saveSpeakingCertificate(cert: SpeakingReadinessCertificate): SpeakingReadinessCertificate {
+    if (!this.data.speakingCertificates) {
+      this.data.speakingCertificates = [];
+    }
+    const idx = this.data.speakingCertificates.findIndex((c) => c.certificateId === cert.certificateId);
+    if (idx >= 0) {
+      this.data.speakingCertificates[idx] = cert;
+    } else {
+      this.data.speakingCertificates.push(cert);
+    }
+    this.save();
+    return cert;
+  }
+
+  public getSpeakingCertificateById(certificateId: string): SpeakingReadinessCertificate | null {
+    if (!this.data.speakingCertificates) {
+      this.data.speakingCertificates = [];
+    }
+    return this.data.speakingCertificates.find((c) => c.certificateId === certificateId) || null;
+  }
+
+  public getAllSpeakingCertificates(limit = 100): SpeakingReadinessCertificate[] {
+    if (!this.data.speakingCertificates) {
+      this.data.speakingCertificates = [];
+    }
+    return [...this.data.speakingCertificates]
+      .sort((a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime())
+      .slice(0, limit);
+  }
+
+  // Multi-Turn Scenario Roleplay Persistence
+  public saveRoleplaySession(session: RoleplaySessionState): RoleplaySessionState {
+    if (!this.data.roleplaySessions) {
+      this.data.roleplaySessions = [];
+    }
+    const idx = this.data.roleplaySessions.findIndex((s) => s.sessionId === session.sessionId);
+    if (idx >= 0) {
+      this.data.roleplaySessions[idx] = { ...session, updatedAt: new Date().toISOString() };
+    } else {
+      this.data.roleplaySessions.push(session);
+    }
+    this.save();
+    return session;
+  }
+
+  public getRoleplaySessionById(sessionId: string): RoleplaySessionState | null {
+    if (!this.data.roleplaySessions) {
+      this.data.roleplaySessions = [];
+    }
+    return this.data.roleplaySessions.find((s) => s.sessionId === sessionId) || null;
+  }
+
+  public getUserRoleplaySessions(userId: string, limit = 20): RoleplaySessionState[] {
+    if (!this.data.roleplaySessions) {
+      this.data.roleplaySessions = [];
+    }
+    return this.data.roleplaySessions
+      .filter((s) => s.userId === userId)
+      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      .slice(0, limit);
+  }
+
+  public getCohortVoiceAssessments(limit = 500): TokyoPitchAccentAssessment[] {
+    const list = this.data.voiceAssessments || [];
+    return [...list]
+      .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())
       .slice(0, limit);
   }
 

@@ -24,6 +24,7 @@ import { baitoSimulationRouter } from './server/routes/baitoSimulation.js';
 import { srsRouter } from './server/routes/srsRouter.js';
 import { analyticsRouter } from './server/routes/analytics.js';
 import { voiceRouter } from './server/routes/voice.js';
+import { SpeakingReadinessCertService } from './server/services/speakingReadinessCertService.js';
 import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
 import { stateIntegrityService } from './server/services/stateIntegrityService.js';
@@ -144,6 +145,20 @@ async function startServer() {
   app.use('/api/srs', srsRouter);
   app.use('/api/analytics', analyticsRouter);
   app.use('/api/voice', voiceRouter);
+
+  // Public Institutional Certificate Verification Endpoint
+  app.get('/api/public/verify-certificate/:certId', (req, res) => {
+    try {
+      const { certId } = req.params;
+      const result = SpeakingReadinessCertService.verifyCertificate(certId);
+      return res.json({
+        success: true,
+        ...result
+      });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  });
 
 
   // Vite middleware for development vs Static files for production

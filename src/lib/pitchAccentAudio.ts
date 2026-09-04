@@ -89,6 +89,72 @@ export async function playTokyoPitchMelody(
 }
 
 /**
+ * Play authentic full sentence Tokyo pitch contour melody using Web Audio API oscillator
+ */
+export async function playSentenceProsodyMelody(
+  f0Points: { timeMs: number; f0Hz: number }[],
+  speedMultiplier = 1.0,
+  onEnd?: () => void
+): Promise<void> {
+  if (typeof window === 'undefined' || !f0Points || f0Points.length === 0) {
+    if (onEnd) onEnd();
+    return;
+  }
+
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const ctx = new AudioContextClass();
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
+    }
+
+    const now = ctx.currentTime;
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.22, now);
+    masterGain.connect(ctx.destination);
+
+    const osc = ctx.createOscillator();
+    osc.type = 'triangle';
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(850, now);
+    filter.Q.setValueAtTime(2.5, now);
+
+    osc.connect(filter);
+    filter.connect(masterGain);
+
+    const startTime = now + 0.05;
+    const lastPoint = f0Points[f0Points.length - 1];
+    const totalDurationSec = (lastPoint.timeMs / 1000) / speedMultiplier;
+
+    osc.frequency.setValueAtTime(f0Points[0].f0Hz, startTime);
+
+    for (let i = 1; i < f0Points.length; i++) {
+      const p = f0Points[i];
+      const targetTime = startTime + (p.timeMs / 1000) / speedMultiplier;
+      osc.frequency.exponentialRampToValueAtTime(Math.max(60, Math.min(600, p.f0Hz)), targetTime);
+    }
+
+    masterGain.gain.setValueAtTime(0.22, startTime + totalDurationSec);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, startTime + totalDurationSec + 0.08);
+
+    osc.start(startTime);
+    osc.stop(startTime + totalDurationSec + 0.1);
+
+    setTimeout(() => {
+      if (ctx.state !== 'closed') {
+        ctx.close().catch(() => {});
+      }
+      if (onEnd) onEnd();
+    }, (totalDurationSec + 0.25) * 1000);
+  } catch (err) {
+    console.warn('[Pitch Audio] Sentence melody synthesis warning:', err);
+    if (onEnd) onEnd();
+  }
+}
+
+/**
  * Play Native Tokyo Japanese Speech using Web Speech API
  */
 export function playNativeTokyoSpeech(
@@ -144,16 +210,24 @@ export class BrowserPitchTracker {
   private onVolumeChange?: (volume: number) => void;
   private onPitchDetected?: (hz: number) => void;
 
+  private onDirectPitch?: (freq: number, confidence: number) => void;
+
   public async start(
     stream: MediaStream,
-    callbacks?: {
-      onVolumeChange?: (vol: number) => void;
-      onPitchDetected?: (hz: number) => void;
-    }
+    callbacks?:
+      | {
+          onVolumeChange?: (vol: number) => void;
+          onPitchDetected?: (hz: number) => void;
+        }
+      | ((freq: number, confidence: number) => void)
   ): Promise<void> {
     this.mediaStream = stream;
-    this.onVolumeChange = callbacks?.onVolumeChange;
-    this.onPitchDetected = callbacks?.onPitchDetected;
+    if (typeof callbacks === 'function') {
+      this.onDirectPitch = callbacks;
+    } else {
+      this.onVolumeChange = callbacks?.onVolumeChange;
+      this.onPitchDetected = callbacks?.onPitchDetected;
+    }
     this.collectedF0Points = [];
 
     const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -197,6 +271,9 @@ export class BrowserPitchTracker {
         this.collectedF0Points.push(Math.round(pitchHz));
         if (this.onPitchDetected) {
           this.onPitchDetected(Math.round(pitchHz));
+        }
+        if (this.onDirectPitch) {
+          this.onDirectPitch(Math.round(pitchHz), Math.min(1.0, rms * 10));
         }
       }
     }
@@ -266,6 +343,10 @@ export class BrowserPitchTracker {
     }
 
     return sampleRate / T0;
+  }
+
+  public getPitchTrajectory(): number[] {
+    return [...this.collectedF0Points];
   }
 
   public stop(): number[] {

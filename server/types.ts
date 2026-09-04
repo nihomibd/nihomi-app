@@ -975,6 +975,9 @@ export interface DatabaseSchema {
   voiceAssessments?: TokyoPitchAccentAssessment[];
   pitchDrills?: TokyoPitchDrill[];
   accentMasterySessions?: AccentMasterySession[];
+  accentSrsCards?: AccentSrsCard[];
+  speakingCertificates?: SpeakingReadinessCertificate[];
+  roleplaySessions?: RoleplaySessionState[];
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';
@@ -1870,6 +1873,7 @@ export interface BengaliAcousticAnalysis {
   hasMoraFlattening: boolean;
   hasVowelLengthMismatch: boolean;
   hasSokuonRushedError: boolean;
+  hasConsonantClusterEpenthesis?: boolean;
   pitchVsIntensityCorrelation: number; // -1.0 to 1.0
   detectedErrors: BengaliPhoneticError[];
   overallBengaliCoachingBn: string;
@@ -2010,6 +2014,374 @@ export interface AccentMasterySession {
   completedAt?: string;
   lastActivityAt: string;
 }
+
+// ==============================================================================
+// P1-07: Phrasal Particle Sandhi, Accent SRS & Autonomous Sensei Audit Types
+// ==============================================================================
+
+export type GrammaticalParticle = 'が' | 'は' | 'を' | 'に' | 'で' | 'の' | 'から' | 'まで';
+
+export type PhrasalSandhiRule =
+  | 'heiban_high_propagation'
+  | 'odaka_boundary_drop'
+  | 'atamadaka_catathesis_propagation'
+  | 'nakadaka_catathesis_propagation';
+
+export interface PhrasalPreviewInput {
+  word?: string;
+  drillId?: string;
+  readingKana?: string;
+  romaji?: string;
+  pattern?: PitchAccentPattern;
+  downstepMora?: number;
+  particle: string;
+  meaningEn?: string;
+  meaningBn?: string;
+}
+
+export interface PhrasalPitchPreview {
+  word: string;
+  readingKana: string;
+  romaji: string;
+  pattern: PitchAccentPattern;
+  wordDownstepMora: number;
+  particle: string;
+  particleRomaji: string;
+  particleMeaningBn: string;
+  particleFunctionEn: string;
+  phraseKanji: string;
+  phraseKana: string;
+  phraseRomaji: string;
+  wordMoraCount: number;
+  particleMoraCount: number;
+  totalMoraCount: number;
+  morae: string[];
+  targetPitches: ('H' | 'L')[];
+  downstepMora: number; // Downstep locus in combined phrase (0 = none)
+  hasDownstepAtParticleBoundary: boolean;
+  sandhiRule: PhrasalSandhiRule;
+  downstepExplanationBn: string;
+  downstepExplanationEn: string;
+  relativeContour: number[];
+  standardHzContour: number[];
+  targetIntensityEnvelope: number[];
+  contrastTipBn: string;
+}
+
+export interface AccentSrsCard {
+  id: string;
+  userId: string;
+  drillId: string;
+  targetPhrase: string;
+  readingKana: string;
+  romaji: string;
+  pattern: PitchAccentPattern;
+  downstepMora: number;
+  meaningBn: string;
+  meaningEn: string;
+  category: string;
+  stabilityDays: number;
+  difficulty: number; // 0.1 to 1.0 (higher = harder)
+  repetition: number;
+  lapses: number;
+  intervalHours: number;
+  nextReviewAt: string;
+  lastReviewedAt: string | null;
+  retentionRate: number; // 0 - 100%
+  stage: 'apprentice' | 'guru' | 'master' | 'enlightened' | 'burned';
+  acousticRiskLevel: 'low' | 'medium' | 'high';
+  chronicDynamicStressCount: number;
+  chronicMoraFlatteningCount: number;
+  chronicChoonShorteningCount: number;
+  lastOverallScore: number;
+  lastPitchAccuracyScore: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AccentSrsSummary {
+  totalDue: number;
+  heibanDue: number;
+  atamadakaDue: number;
+  nakadakaDue: number;
+  odakaDue: number;
+  highAcousticRiskCount: number;
+  upcomingNext24h: number;
+  totalTrackedCards: number;
+}
+
+export interface AccentSrsReviewSubmission {
+  cardId?: string;
+  drillId?: string;
+  assessment?: Partial<TokyoPitchAccentAssessment>;
+  userGrade?: 1 | 2 | 3 | 4; // 1 = Again, 2 = Hard, 3 = Good, 4 = Easy
+  hasDynamicStressError?: boolean;
+  hasMoraFlatteningError?: boolean;
+  hasChoonShorteningError?: boolean;
+}
+
+export interface SenseiDiagnosticArea {
+  area: string;
+  riskLevel: 'critical' | 'moderate' | 'mild';
+  detectedAcousticSymptomBn: string;
+  neuromuscularCorrectionActionBn: string;
+  recommendedDrills: string[];
+}
+
+export interface SenseiDiagnosticReport {
+  studentId: string;
+  generatedAt: string;
+  analysisPeriodDays: number;
+  evaluationsAnalyzed: number;
+  readinessGrade: 'S' | 'A' | 'B' | 'C' | 'D';
+  readinessGradeTitleBn: string;
+  readinessScore: number; // 0 - 100
+  moraConsistencyIndex: number; // 0 - 100
+  pitchVsIntensityCorrelation: number; // -1.0 to 1.0
+  chronicInterferenceMetrics: {
+    dynamicStressTransferRate: number; // 0 - 100%
+    moraFlatteningRate: number; // 0 - 100%
+    choonVowelRushingRate: number; // 0 - 100%
+    sokuonPauseOmissionRate: number; // 0 - 100%
+  };
+  patternMastery: Record<
+    PitchAccentPattern,
+    {
+      evaluationsCount: number;
+      accuracyRate: number;
+      passRate: number;
+      primaryStumblingBlockBn: string;
+    }
+  >;
+  highRiskInterferenceAreas: SenseiDiagnosticArea[];
+  institutionalTeacherSummaryBn: string;
+  institutionalTeacherSummaryEn: string;
+  srsRetentionForecast: {
+    projected7DayRetention: number;
+    projected30DayRetention: number;
+    activeCardsCount: number;
+    burnedCardsCount: number;
+  };
+}
+
+// ============================================================================
+// STEP 6: SENTENCE-LEVEL PROSODY, SHADOWING & SPEAKING READINESS TYPES
+// ============================================================================
+
+export interface MoraTimingPoint {
+  mora: string;
+  startMs: number;
+  endMs: number;
+  expectedHz: number;
+  targetPitch: 'H' | 'L';
+}
+
+export interface AccentualPhrase {
+  id: string;
+  phraseIndex: number;
+  text: string;
+  readingKana: string;
+  romaji: string;
+  morae: string[];
+  pattern: PitchAccentPattern;
+  downstepMora: number; // 0 for Heiban, 1..N for accented
+  targetPitches: ('H' | 'L')[];
+  boundaryPitchMovement: 'flat' | 'fall' | 'rise';
+  hasPauseAfter: boolean;
+  pauseDurationMs?: number;
+  baseF0Hz: number;
+  moraTimingsMs: MoraTimingPoint[];
+}
+
+export interface SentenceF0Point {
+  timeMs: number;
+  f0Hz: number;
+  mora: string;
+  apIndex: number;
+}
+
+export interface SentenceProsodyModel {
+  id: string;
+  sentenceText: string;
+  readingKana: string;
+  romaji: string;
+  meaningEn: string;
+  meaningBn: string;
+  jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  category: 'daily' | 'baito_interview' | 'keigo_business' | 'directions' | 'travel';
+  isQuestion: boolean;
+  accentualPhrases: AccentualPhrase[];
+  targetF0Contour: SentenceF0Point[];
+  totalDurationMs: number;
+  tempoMultiplier: number;
+}
+
+export interface SentenceProsodyAnalysisInput {
+  sentenceText: string;
+  readingKana?: string;
+  meaningEn?: string;
+  meaningBn?: string;
+  jlptLevel?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  category?: 'daily' | 'baito_interview' | 'keigo_business' | 'directions' | 'travel';
+}
+
+export interface ShadowingApResetEvaluation {
+  apIndex: number;
+  expectedReset: boolean;
+  detectedReset: boolean;
+  deltaF0: number;
+  feedbackBn: string;
+}
+
+export interface ShadowingEvaluationResult {
+  evaluationId: string;
+  sentenceId: string;
+  studentId: string;
+  overallScore: number; // 0 - 100
+  pitchContourScore: number; // 0 - 100
+  rhythmIsochronyScore: number; // 0 - 100
+  boundaryResetAccuracyScore: number; // 0 - 100
+  questionIntonationScore?: number; // 0 - 100
+  dtwDistance: number;
+  isPassed: boolean;
+  detectedApResets: ShadowingApResetEvaluation[];
+  bengaliPhoneticIssues: string[];
+  feedbackEn: string;
+  feedbackBn: string;
+  coachingTipsBn: string[];
+  evaluatedAt: string;
+}
+
+export interface ShadowingSubmission {
+  sentenceId?: string;
+  sentenceText?: string;
+  userF0Trajectory: number[];
+  audioDurationMs: number;
+  audioBase64?: string;
+  spokenTranscript?: string;
+}
+
+export interface SpeakingReadinessCertificate {
+  certificateId: string;
+  studentId: string;
+  studentName: string;
+  overallReadinessIndex: number; // 0 - 100%
+  certifiedLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' | 'Baito-Certified' | 'Business-Certified';
+  readinessGrade: 'S' | 'A' | 'B' | 'C' | 'D';
+  issueDate: string;
+  verificationHash: string;
+  evaluationsSampledCount: number;
+  subScores: {
+    pitchAccuracy: number;
+    moraIsochrony: number;
+    intonationResetAccuracy: number;
+    stressSuppressionScore: number;
+    conversationalPacing: number;
+  };
+  strengthsBn: string[];
+  growthAreasBn: string[];
+  institutionalSummaryBn: string;
+  institutionalSummaryEn: string;
+}
+
+// ==============================================================================
+// Step 7: Multi-Turn Scenario Roleplay & Institutional Credentialing Types
+// ==============================================================================
+
+export interface RoleplaySuggestedResponse {
+  ja: string;
+  romaji: string;
+  bn: string;
+  pitchPattern: 'heiban' | 'atamadaka' | 'nakadaka' | 'odaka';
+}
+
+export interface RoleplayTurnDefinition {
+  turnIndex: number;
+  speakerJa: string;
+  speakerRomaji: string;
+  speakerBn: string;
+  expectedIntent: string;
+  expectedKeywords: string[];
+  targetContourHint: string;
+  suggestedResponses: RoleplaySuggestedResponse[];
+}
+
+export interface RoleplayScenario {
+  id: string;
+  titleJa: string;
+  titleRomaji: string;
+  titleBn: string;
+  descriptionBn: string;
+  category: 'interview' | 'customer_service' | 'immigration' | 'daily_life';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  turnsCount: number;
+  interviewerPersona: {
+    name: string;
+    roleJa: string;
+    roleBn: string;
+    avatarIcon: string;
+  };
+  turns: RoleplayTurnDefinition[];
+}
+
+export interface RoleplayTurnEvaluation {
+  turnIndex: number;
+  userTranscript: string;
+  communicationScore: number; // 0 - 100 (Intent, Keigo & keywords)
+  acousticResonanceScore: number; // 0 - 100 (Pitch conformity & Bengali stress suppression)
+  overallTurnScore: number;
+  intentMatched: boolean;
+  detectedKeywords: string[];
+  missingKeywords: string[];
+  pitchContourScore: number;
+  stressSuppressionScore: number;
+  feedbackBn: string;
+  suggestedAlternativeJa: string;
+  suggestedAlternativeBn: string;
+}
+
+export interface RoleplaySessionState {
+  sessionId: string;
+  userId: string;
+  scenarioId: string;
+  currentTurnIndex: number;
+  completedTurns: RoleplayTurnEvaluation[];
+  isCompleted: boolean;
+  finalScores?: {
+    communicationScore: number;
+    acousticResonanceScore: number;
+    overallScore: number;
+    feedbackBn: string;
+    cefrSpeakingTier: 'A1' | 'A2' | 'B1' | 'B2';
+  };
+  startedAt: string;
+  updatedAt: string;
+}
+
+export interface CohortInterferenceHotspot {
+  phoneticRuleId: string;
+  ruleNameJa: string;
+  ruleNameBn: string;
+  failureRatePct: number;
+  sampleCount: number;
+  severity: 'critical' | 'moderate' | 'low';
+  averageStressSpikeRate: number;
+  remediationTipBn: string;
+}
+
+export interface CohortAcousticTelemetry {
+  totalLearnersSampled: number;
+  totalVoiceAssessmentsSampled: number;
+  heibanVsOdakaErrorRatio: number;
+  dynamicStressTransferRatePct: number;
+  moraFlatteningRatePct: number;
+  chōonShorteningRatePct: number;
+  hotspots: CohortInterferenceHotspot[];
+  tierDistribution: Record<string, number>;
+  generatedAt: string;
+}
+
+
 
 
 
