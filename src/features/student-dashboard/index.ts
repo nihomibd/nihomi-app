@@ -7,6 +7,7 @@ export { StudentHeader } from './components/StudentHeader';
 export { ContinueLearningCard } from './components/ContinueLearningCard';
 export { DailyPlan } from './components/DailyPlan';
 export { DailyChallengeCard } from './components/DailyChallengeCard';
+export { DailyChallengeModal } from './components/DailyChallengeModal';
 export { JLPTProgress } from './components/JLPTProgress';
 export { StreakCard } from './components/StreakCard';
 export { RecentMistakes } from './components/RecentMistakes';

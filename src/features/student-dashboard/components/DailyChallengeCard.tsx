@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DailyChallenge } from '../types';
+import { DailyChallengeModal } from './DailyChallengeModal';
 
 interface DailyChallengeCardProps {
   challenge: DailyChallenge | null;
-  onStartChallenge?: (challengeId: string) => void;
+  onCompleteChallenge?: (challengeId: string) => void | Promise<void>;
 }
 
 export const DailyChallengeCard: React.FC<DailyChallengeCardProps> = ({
   challenge,
-  onStartChallenge,
+  onCompleteChallenge,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   if (!challenge) {
     return (
       <section className="bg-stone-50 border border-stone-200 rounded-2xl p-4 text-center">
@@ -65,7 +68,7 @@ export const DailyChallengeCard: React.FC<DailyChallengeCardProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => onStartChallenge?.(challenge.id)}
+              onClick={() => setIsModalOpen(true)}
               className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-stone-950 text-xs font-bold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               Start Challenge
@@ -73,6 +76,13 @@ export const DailyChallengeCard: React.FC<DailyChallengeCardProps> = ({
           )}
         </div>
       </div>
+      <DailyChallengeModal
+        isOpen={isModalOpen}
+        xpReward={challenge.xpReward}
+        coinReward={challenge.coinReward}
+        onComplete={() => onCompleteChallenge?.(challenge.id)}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 };

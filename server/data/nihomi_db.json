@@ -16193,6 +16193,221 @@
       "createdAt": "2026-07-20T11:00:00.000Z",
       "updatedAt": "2026-08-29T10:00:00.000Z",
       "userId": "cd941900-48df-44d9-bee9-9049a193c3bc"
+    },
+    {
+      "id": "ghost-t-01-01",
+      "topic": "Particle は vs が in Subordinate / Dependent Clauses",
+      "conceptCode": "particle-wa-ga-subordinate",
+      "confusionType": "wa_vs_ga",
+      "level": "N5",
+      "targetJapanese": "田中さんが作ったケーキは美味しいです。",
+      "romaji": "Tanaka-san ga tsukutta keeki wa oishii desu.",
+      "bangla": "তানাকা সাহেবের তৈরি করা কেকটি অত্যন্ত সুস্বাদু।",
+      "failureCount": 14,
+      "successStreak": 2,
+      "masteryPercentage": 65,
+      "firstSeenAt": "2026-06-12T10:00:00.000Z",
+      "lastFailedAt": "2026-08-28T14:30:00.000Z",
+      "lastReviewedAt": "2026-08-30T09:15:00.000Z",
+      "nextReviewAt": "2026-09-04T12:34:04.368Z",
+      "srsStage": "guru",
+      "intervalDays": 3,
+      "easeFactor": 2.35,
+      "lastFailedContext": "Restaurant Ordering & Compliments (Quiz 4)",
+      "newContextChallenge": "Tokyo Workplace Meeting (打ち合わせ)",
+      "scenarioPrompt": "Meeting-এ আপনার বস জানতে চাইলেন: \"প্রজেক্টের ডিজাইন কে তৈরি করেছে?\" আপনি কীভাবে বলবেন যে \"তানাকা সাহেব যে ডিজাইন বানিয়েছেন সেটা ভালো\"?",
+      "options": [
+        {
+          "text": "田中さんが作ったデザインは素晴らしいです。",
+          "isCorrect": true,
+          "explanation": "সঠিক! Subordinate clause (যৌগিক বাক্যাংশ)-এর subject সবসময় が (ga) গ্রহণ করে, আর পুরো বাক্যের প্রধান topic হল デザイン (wa)!"
+        },
+        {
+          "text": "田中さんは作ったデザインが素晴らしいです。",
+          "isCorrect": false,
+          "explanation": "ভুল! Subordinate clause-এ は বসালে বাক্যের ফোকাস ও অর্থ পরিবর্তিত হয়ে যায়।"
+        },
+        {
+          "text": "田中さんで作ったデザインは素晴らしいです。",
+          "isCorrect": false,
+          "explanation": "ভুল! で (de) এখানে কোনো মাধ্যম বা স্থান নির্দেশ করতে ব্যবহৃত হতে পারে না।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-06-12T10:00:00.000Z",
+      "updatedAt": "2026-08-30T09:15:00.000Z",
+      "userId": "usr-student-01"
+    },
+    {
+      "id": "ghost-t-01-02",
+      "topic": "Particle に vs で (Existence vs Location of Action)",
+      "conceptCode": "particle-ni-de-location",
+      "confusionType": "ni_vs_de",
+      "level": "N5",
+      "targetJapanese": "図書館で本を読みます。教室に学生がいます。",
+      "romaji": "Toshokan de hon o yomimasu. Kyoushitsu ni gakusei ga imasu.",
+      "bangla": "লাইব্রেরিতে বই পড়ি। ক্লাসরুমে ছাত্রছাত্রী আছে।",
+      "failureCount": 11,
+      "successStreak": 1,
+      "masteryPercentage": 45,
+      "firstSeenAt": "2026-07-01T08:00:00.000Z",
+      "lastFailedAt": "2026-08-29T16:00:00.000Z",
+      "lastReviewedAt": "2026-08-30T11:00:00.000Z",
+      "nextReviewAt": "2026-09-04T11:34:04.368Z",
+      "srsStage": "apprentice",
+      "intervalDays": 1,
+      "easeFactor": 2.1,
+      "lastFailedContext": "Minna no Nihongo Lesson 10 Location Drills",
+      "newContextChallenge": "Tokyo Station Convenience Store Scenario",
+      "scenarioPrompt": "আপনি বলতে চান \"আমি কনভেনিয়েন্স স্টোরে ওনিগিরি কিনি।\" কোন পার্টিক্যালটি ক্রিয়ার স্থান হিসেবে বসবে?",
+      "options": [
+        {
+          "text": "コンビニで おにぎりを 買います。",
+          "isCorrect": true,
+          "explanation": "সঠিক! কোনো স্থানে কোনো কর্ম বা অ্যাকশন সম্পাদিত হলে (Action Location) で (de) বসে।"
+        },
+        {
+          "text": "コンビニに おにぎりを 買います。",
+          "isCorrect": false,
+          "explanation": "ভুল! に (ni) সাধারণত অস্তিত্ব (います/あります) বা গন্তব্যের ক্ষেত্রে বসে, অ্যাকশনের স্থানে নয়।"
+        },
+        {
+          "text": "コンビニを おにぎりで 買います。",
+          "isCorrect": false,
+          "explanation": "ভুল! পার্টিক্যালের স্থান উল্টো হয়ে গেছে।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-01T08:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "userId": "usr-student-01"
+    },
+    {
+      "id": "ghost-t-01-03",
+      "topic": "Te-Form Conjugation for ~Mu/Bu/Nu Verbs (〜んで)",
+      "conceptCode": "te-form-godan-mubunu",
+      "confusionType": "te_form",
+      "level": "N5",
+      "targetJapanese": "友達と遊んで、コーヒーを飲みました。",
+      "romaji": "Tomodachi to asonde, koohii o nomimashita.",
+      "bangla": "বন্ধুর সাথে আড্ডা দিয়ে কফি খেয়েছিলাম।",
+      "failureCount": 9,
+      "successStreak": 3,
+      "masteryPercentage": 75,
+      "firstSeenAt": "2026-07-04T12:00:00.000Z",
+      "lastFailedAt": "2026-08-25T10:00:00.000Z",
+      "lastReviewedAt": "2026-08-31T09:00:00.000Z",
+      "nextReviewAt": "2026-09-05T13:34:04.368Z",
+      "srsStage": "master",
+      "intervalDays": 7,
+      "easeFactor": 2.6,
+      "lastFailedContext": "Lesson 14 Verb Conjugation Drills",
+      "newContextChallenge": "Shinjuku Weekend Plan Discussion",
+      "scenarioPrompt": "Weekend-এর কাজের ধারা বর্ণনা করতে গিয়ে 遊ぶ (Asobu - আড্ডা দেওয়া/খেলা) এর সঠিক Te-form কী হবে?",
+      "options": [
+        {
+          "text": "遊んで (Asonde)",
+          "isCorrect": true,
+          "explanation": "সঠিক! ぶ (bu), む (mu), ぬ (nu) দিয়ে শেষ হওয়া Godan Verb-এর Te-form রূপান্তর んで (nde) হয়!"
+        },
+        {
+          "text": "遊びて (Asobite)",
+          "isCorrect": false,
+          "explanation": "ভুল! ぶ দিয়ে শেষ হওয়া ভার্ব কখনোই いて বা びて হয় না।"
+        },
+        {
+          "text": "遊って (Asotte)",
+          "isCorrect": false,
+          "explanation": "ভুল! って (tte) শুধুমাত্র う, つ, る এর ক্ষেত্রে ব্যবহৃত হয়।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-04T12:00:00.000Z",
+      "updatedAt": "2026-08-31T09:00:00.000Z",
+      "userId": "usr-student-01"
+    },
+    {
+      "id": "ghost-t-01-04",
+      "topic": "Particle を vs が with Potential Verbs & Likes (話せる / 好き)",
+      "conceptCode": "particle-o-ga-potential-state",
+      "confusionType": "o_vs_ga",
+      "level": "N5",
+      "targetJapanese": "日本語が少し話せます。寿司が好きです。",
+      "romaji": "Nihongo ga sukoshi hanasemasu. Sushi ga suki desu.",
+      "bangla": "আমি অল্প জাপানি বলতে পারি। আমি সুশি পছন্দ করি।",
+      "failureCount": 8,
+      "successStreak": 1,
+      "masteryPercentage": 50,
+      "firstSeenAt": "2026-07-15T09:00:00.000Z",
+      "lastFailedAt": "2026-08-27T17:00:00.000Z",
+      "lastReviewedAt": "2026-08-30T14:00:00.000Z",
+      "nextReviewAt": "2026-09-04T13:04:04.368Z",
+      "srsStage": "apprentice",
+      "intervalDays": 1,
+      "easeFactor": 2.2,
+      "lastFailedContext": "Lesson 9 & 27 Potential Forms",
+      "newContextChallenge": "Tokyo IT Job Interview Introduction",
+      "scenarioPrompt": "ইন্টারভিউতে বলতে চান: \"আমি পাইথন প্রোগ্রামিং বুঝি/পারি।\" সঠিক ব্যাকরণ কোনটি?",
+      "options": [
+        {
+          "text": "私は Pythonが 分かります / できます。",
+          "isCorrect": true,
+          "explanation": "সঠিক! 分かる (wakaru), できる (dekiru), 好き (suki) এবং Potential Form-এ অবজেক্ট নির্দেশ করতে が (ga) ব্যবহৃত হয়।"
+        },
+        {
+          "text": "私は Pythonを 分かります。",
+          "isCorrect": false,
+          "explanation": "ভুল! 分かる এবং できる কখনো を গ্রহণ করে না, সর্বদা が গ্রহণ করে।"
+        },
+        {
+          "text": "私は Pythonに 分かります。",
+          "isCorrect": false,
+          "explanation": "ভুল! に এখানে অপ্রাসঙ্গিক।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-15T09:00:00.000Z",
+      "updatedAt": "2026-08-30T14:00:00.000Z",
+      "userId": "usr-student-01"
+    },
+    {
+      "id": "ghost-t-01-05",
+      "topic": "Transitive vs Intransitive Verb Pairs (開ける vs 開く)",
+      "conceptCode": "transitive-intransitive-pairs",
+      "confusionType": "transitive_intransitive",
+      "level": "N4",
+      "targetJapanese": "風でドアが開きました。私がドアを開けました。",
+      "romaji": "Kaze de doa ga akimashita. Watashi ga doa o akemashita.",
+      "bangla": "বাতাসে দরজা খুলে গেল (অটোমেটিক)। আমি দরজা খুললাম (ইচ্ছাকৃত)।",
+      "failureCount": 6,
+      "successStreak": 2,
+      "masteryPercentage": 60,
+      "firstSeenAt": "2026-07-20T11:00:00.000Z",
+      "lastFailedAt": "2026-08-26T15:00:00.000Z",
+      "lastReviewedAt": "2026-08-29T10:00:00.000Z",
+      "nextReviewAt": "2026-09-04T12:34:04.368Z",
+      "srsStage": "guru",
+      "intervalDays": 3,
+      "easeFactor": 2.4,
+      "lastFailedContext": "Minna no Nihongo Lesson 29 State Expressions",
+      "newContextChallenge": "Office Air Conditioning Discussion",
+      "scenarioPrompt": "\"জানালাটি খোলা আছে (State/স্বাভাবিক অবস্থা)\" বোঝাতে কোনটি সঠিক?",
+      "options": [
+        {
+          "text": "窓が 開いています (Mado ga aite imasu)",
+          "isCorrect": true,
+          "explanation": "সঠিক! Intransitive verb (開く) + が + 〜ています কোনো বস্তুর স্বাভাবিক বা স্বতঃস্ফূর্ত অবস্থা প্রকাশ করে।"
+        },
+        {
+          "text": "窓を 開けています (Mado o akete imasu)",
+          "isCorrect": false,
+          "explanation": "ভুল! এটি বোঝায় কেউ একজন এখন সক্রিয়ভাবে জানালা খোলার কাজ করছে।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-20T11:00:00.000Z",
+      "updatedAt": "2026-08-29T10:00:00.000Z",
+      "userId": "usr-student-01"
     }
   ],
   "studentErrorLogs": [],
@@ -18869,6 +19084,248 @@
       "passProbability": 35,
       "createdAt": "2026-09-03T15:31:58.082Z",
       "updatedAt": "2026-09-03T15:31:58.082Z"
+    },
+    {
+      "id": "plan-usr-student-01-e8b873f7",
+      "userId": "usr-student-01",
+      "targetLevel": "N5",
+      "targetExamDate": "2026-12-06",
+      "examSessionName": "Official JLPT December 2026 Exam",
+      "targetScore": 140,
+      "dailyTimeMinutes": 20,
+      "learningPace": "relaxed",
+      "focusAreas": [
+        "vocabulary",
+        "grammar",
+        "particles",
+        "kanji",
+        "listening"
+      ],
+      "daysRemaining": 93,
+      "weeksRemaining": 14,
+      "currentSprintPhase": {
+        "phaseNumber": 1,
+        "totalPhases": 4,
+        "name": "Foundational Immersion & Kana/Kanji Strokes",
+        "nameJa": "第1期：基礎定着と漢字・語彙ビルド",
+        "goalDescription": "Build core hiragana/katakana fluency, master first 40 Essential Kanji, and solidify basic particles (は, が, を, に).",
+        "goalDescriptionBn": "প্রাথমিক হিরাগানা/কাতাকানা দক্ষতা অর্জন, প্রথম ৪০টি কাঞ্জি ও মূল পার্টিকেলগুলোর (は, が, を, に) শতভাগ ভিত্তি তৈরি।",
+        "startDate": "2026-09-04",
+        "endDate": "2026-09-27",
+        "progressPercent": 45,
+        "status": "active",
+        "keyMilestones": [
+          "Master Lessons 1-8 Vocab & Grammar",
+          "40 N5 Kanji 3D Stroke Animations",
+          "MemoryOS は vs が Zero-Error Baseline"
+        ]
+      },
+      "sprintPhases": [
+        {
+          "phaseNumber": 1,
+          "totalPhases": 4,
+          "name": "Foundational Immersion & Kana/Kanji Strokes",
+          "nameJa": "第1期：基礎定着と漢字・語彙ビルド",
+          "goalDescription": "Build core hiragana/katakana fluency, master first 40 Essential Kanji, and solidify basic particles (は, が, を, に).",
+          "goalDescriptionBn": "প্রাথমিক হিরাগানা/কাতাকানা দক্ষতা অর্জন, প্রথম ৪০টি কাঞ্জি ও মূল পার্টিকেলগুলোর (は, が, を, に) শতভাগ ভিত্তি তৈরি।",
+          "startDate": "2026-09-04",
+          "endDate": "2026-09-27",
+          "progressPercent": 45,
+          "status": "active",
+          "keyMilestones": [
+            "Master Lessons 1-8 Vocab & Grammar",
+            "40 N5 Kanji 3D Stroke Animations",
+            "MemoryOS は vs が Zero-Error Baseline"
+          ]
+        },
+        {
+          "phaseNumber": 2,
+          "totalPhases": 4,
+          "name": "Minna no Nihongo Curriculum Acceleration & Verb Conjugations",
+          "nameJa": "第2期：文法加速と動詞活用マスター",
+          "goalDescription": "Accelerate through Minna no Nihongo lessons 9-20. Master te-form, ta-form, nai-form conjugations and polite requests.",
+          "goalDescriptionBn": "মিন্না নো নিহোঙ্গো পাঠ ৯-২০ সম্পন্ন। তে-ফর্ম, তা-ফর্ম ও নাই-ফর্ম সহ প্রয়োজনীয় ব্যাকরণ স্ট্রাকচারে পূর্ণ দক্ষতা।",
+          "startDate": "2026-09-27",
+          "endDate": "2026-10-30",
+          "progressPercent": 15,
+          "status": "upcoming",
+          "keyMilestones": [
+            "Complete Lessons 9-20 Grammar Deck",
+            "120 Kanji Mastered in Flashcards",
+            "Verb Form Switching Speed Drills"
+          ]
+        },
+        {
+          "phaseNumber": 3,
+          "totalPhases": 4,
+          "name": "Deep Reading Passages & Tokyo Listening Comprehension",
+          "nameJa": "第3期：長文読解と東京リアル聴解ドリル",
+          "goalDescription": "Solve authentic JLPT reading passages (Dokkai) and train ear with authentic Tokyo multi-speaker speed audios.",
+          "goalDescriptionBn": "বাস্তবসম্মত রিডিং অনুচ্ছেদ পাঠ ও স্পিচ সিন্থেসাইজার যোগে দ্রুতগতির টোকিও অডিও লিসেনিং ড্রিল।",
+          "startDate": "2026-10-30",
+          "endDate": "2026-11-22",
+          "progressPercent": 0,
+          "status": "upcoming",
+          "keyMilestones": [
+            "10 Authentic Reading Passages (読解)",
+            "30 Tokyo Speed Listening Sessions (聴解)",
+            "Solve Star Sentence Scrambles (★)"
+          ]
+        },
+        {
+          "phaseNumber": 4,
+          "totalPhases": 4,
+          "name": "Official JLPT Mock Marathon & Ghost Weakness Eradication",
+          "nameJa": "第4期：公式模試マラソンと弱点克服",
+          "goalDescription": "Take 3 full-length timed mock exams under official condition. Eliminate all remaining particle errors in MemoryOS™ Ghost Mode.",
+          "goalDescriptionBn": "পূর্ণাঙ্গ অফিসিয়াল টাইমারযুক্ত ৩টি মক পরীক্ষা এবং মেমরি ওএস-এ সমস্ত দুর্বল পার্টিকেল ও কাঞ্জির ১০০% রিকভারি।",
+          "startDate": "2026-11-22",
+          "endDate": "2026-12-06",
+          "progressPercent": 0,
+          "status": "upcoming",
+          "keyMilestones": [
+            "Score 140+/180 on Full JLPT Mock Exam",
+            "Zero Ghost Weaknesses in Ghost Mode",
+            "Official Scaled Certificate Generation"
+          ]
+        }
+      ],
+      "dailyQuota": {
+        "newVocabTarget": 9,
+        "vocabSrsReviewTarget": 23,
+        "kanjiStrokeTarget": 3,
+        "grammarPatternsTarget": 1,
+        "particleWeakSpotsTarget": 3,
+        "listeningMinutesTarget": 6,
+        "totalDailyMinutes": 20
+      },
+      "weeklySchedule": [
+        {
+          "weekNumber": 1,
+          "weekRange": "Sep 4 – Sep 10",
+          "milestoneTitle": "Week 1: Lessons 1–2 & Kanji Sprint (12 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 1: পাঠ 1–2 এবং কাঞ্জি স্প্রিন্ট (12টি কাঞ্জি)",
+          "targetLessons": "Lessons 1–2",
+          "targetKanjiCount": 12,
+          "isCompleted": false,
+          "isCurrent": true
+        },
+        {
+          "weekNumber": 2,
+          "weekRange": "Sep 11 – Sep 17",
+          "milestoneTitle": "Week 2: Lessons 3–4 & Kanji Sprint (24 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 2: পাঠ 3–4 এবং কাঞ্জি স্প্রিন্ট (24টি কাঞ্জি)",
+          "targetLessons": "Lessons 3–4",
+          "targetKanjiCount": 24,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 3,
+          "weekRange": "Sep 18 – Sep 24",
+          "milestoneTitle": "Week 3: Lessons 5–6 & Kanji Sprint (36 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 3: পাঠ 5–6 এবং কাঞ্জি স্প্রিন্ট (36টি কাঞ্জি)",
+          "targetLessons": "Lessons 5–6",
+          "targetKanjiCount": 36,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 4,
+          "weekRange": "Sep 25 – Oct 1",
+          "milestoneTitle": "Week 4: Lessons 7–8 & Kanji Sprint (48 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 4: পাঠ 7–8 এবং কাঞ্জি স্প্রিন্ট (48টি কাঞ্জি)",
+          "targetLessons": "Lessons 7–8",
+          "targetKanjiCount": 48,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 5,
+          "weekRange": "Oct 2 – Oct 8",
+          "milestoneTitle": "Week 5: Lessons 9–10 & Kanji Sprint (60 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 5: পাঠ 9–10 এবং কাঞ্জি স্প্রিন্ট (60টি কাঞ্জি)",
+          "targetLessons": "Lessons 9–10",
+          "targetKanjiCount": 60,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 6,
+          "weekRange": "Oct 9 – Oct 15",
+          "milestoneTitle": "Week 6: Lessons 11–12 & Kanji Sprint (72 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 6: পাঠ 11–12 এবং কাঞ্জি স্প্রিন্ট (72টি কাঞ্জি)",
+          "targetLessons": "Lessons 11–12",
+          "targetKanjiCount": 72,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 7,
+          "weekRange": "Oct 16 – Oct 22",
+          "milestoneTitle": "Week 7: Lessons 13–14 & Kanji Sprint (84 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 7: পাঠ 13–14 এবং কাঞ্জি স্প্রিন্ট (84টি কাঞ্জি)",
+          "targetLessons": "Lessons 13–14",
+          "targetKanjiCount": 84,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 8,
+          "weekRange": "Oct 23 – Oct 29",
+          "milestoneTitle": "Week 8: Lessons 15–16 & Kanji Sprint (96 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 8: পাঠ 15–16 এবং কাঞ্জি স্প্রিন্ট (96টি কাঞ্জি)",
+          "targetLessons": "Lessons 15–16",
+          "targetKanjiCount": 96,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 9,
+          "weekRange": "Oct 30 – Nov 5",
+          "milestoneTitle": "Week 9: Lessons 17–18 & Kanji Sprint (108 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 9: পাঠ 17–18 এবং কাঞ্জি স্প্রিন্ট (108টি কাঞ্জি)",
+          "targetLessons": "Lessons 17–18",
+          "targetKanjiCount": 108,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 10,
+          "weekRange": "Nov 6 – Nov 12",
+          "milestoneTitle": "Week 10: Lessons 19–20 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 10: পাঠ 19–20 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 19–20",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 11,
+          "weekRange": "Nov 13 – Nov 19",
+          "milestoneTitle": "Week 11: Lessons 21–22 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 11: পাঠ 21–22 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 21–22",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 12,
+          "weekRange": "Nov 20 – Nov 26",
+          "milestoneTitle": "Week 12: Lessons 23–24 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 12: পাঠ 23–24 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 23–24",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        }
+      ],
+      "readinessScore": 32,
+      "projectedScore": 60,
+      "passProbability": 35,
+      "createdAt": "2026-09-04T13:34:43.002Z",
+      "updatedAt": "2026-09-04T13:34:43.002Z"
     }
   ],
   "dailyStudySessions": [
@@ -19571,6 +20028,106 @@
         }
       ],
       "updatedAt": "2026-09-03T15:31:58.140Z"
+    },
+    {
+      "id": "session-usr-student-01-2026-09-04",
+      "userId": "usr-student-01",
+      "date": "2026-09-04",
+      "completedItems": {
+        "vocabSrsDone": 0,
+        "kanjiDone": 0,
+        "grammarDone": 0,
+        "ghostsResolved": 0,
+        "listeningMinutesDone": 0,
+        "quizzesDone": 0
+      },
+      "totalMinutesSpent": 0,
+      "dailyQuotaMet": false,
+      "earnedXp": 0,
+      "checklist": [
+        {
+          "id": "task-vocab-2026-09-04",
+          "taskType": "vocab_srs",
+          "title": "Complete Vocabulary SRS Sprint (23 cards)",
+          "titleJa": "語彙SRS復習（23枚）",
+          "titleBn": "শব্দভাণ্ডার SRS ফ্ল্যাশকার্ড স্প্রিন্ট (23টি শব্দ)",
+          "targetCount": 23,
+          "completedCount": 0,
+          "estimatedMinutes": 10,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "vocabulary",
+          "linkParams": {
+            "filter": "due"
+          }
+        },
+        {
+          "id": "task-kanji-2026-09-04",
+          "taskType": "kanji_drill",
+          "title": "Practice 3 Essential Kanji 3D Stroke Flips",
+          "titleJa": "必須漢字3文字の書き順・読みドリル",
+          "titleBn": "3টি প্রয়োজনীয় কাঞ্জি স্ট্রোক ও ফ্লিপ ড্রিল",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 30,
+          "linkView": "curriculum",
+          "linkParams": {
+            "tab": "kanji"
+          }
+        },
+        {
+          "id": "task-grammar-2026-09-04",
+          "taskType": "grammar_lesson",
+          "title": "Master Lesson 2 Minna no Nihongo Grammar",
+          "titleJa": "みんなの日本語 第2課 文法マスター",
+          "titleBn": "মিন্না নো নিহোঙ্গো লেসন 2 ব্যাকরণ অধ্যায়ন",
+          "targetCount": 1,
+          "completedCount": 0,
+          "estimatedMinutes": 15,
+          "isCompleted": false,
+          "xpReward": 45,
+          "linkView": "curriculum",
+          "linkParams": {
+            "level": "N5",
+            "lessonNumber": 2
+          }
+        },
+        {
+          "id": "task-ghost-2026-09-04",
+          "taskType": "ghost_recovery",
+          "title": "Resolve 3 MemoryOS™ Ghost Weak-Spots (は vs が / に vs で)",
+          "titleJa": "MemoryOS 助詞弱点克服（3問）",
+          "titleBn": "মেমরি ওএস-এ 3টি ভুল হওয়া পার্টিকেল রিকভারি",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 40,
+          "linkView": "ghost-mode",
+          "linkParams": {
+            "autoStart": true
+          }
+        },
+        {
+          "id": "task-listening-2026-09-04",
+          "taskType": "listening_drill",
+          "title": "Tokyo Real-Audio Speed Listening Comprehension (6 min)",
+          "titleJa": "東京リアル音声 聴解トレーニング（6分）",
+          "titleBn": "টোকিও রিয়েল-অডিও স্পিচ লিসেনিং ড্রিল (6 মিনিট)",
+          "targetCount": 6,
+          "completedCount": 0,
+          "estimatedMinutes": 6,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "quizzes",
+          "linkParams": {
+            "tab": "mock"
+          }
+        }
+      ],
+      "updatedAt": "2026-09-04T13:34:43.114Z"
     }
   ],
   "baitoScenarios": [

@@ -92,7 +92,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             {/* ৪. রিয়েল ডেইলি চ্যালেঞ্জ ও কয়েন পুরষ্কার */}
             <DailyChallengeCard
               challenge={data.dailyChallenge}
-              onStartChallenge={handleStartChallenge}
+              onCompleteChallenge={() => handleStartChallenge()}
             />
 
             {/* ৫. শব্দ ও কাঞ্জি অগ্রগতি */}
