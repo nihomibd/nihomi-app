@@ -1,75 +1,69 @@
 import React, { useState } from 'react';
 import { DashboardPage } from '../features/student-dashboard';
 import { NavTab } from '../features/student-dashboard/components/MobileBottomNavigation';
-
-// নিহোমির আসল এক্সিস্টিং কম্পোনেন্টগুলো ইমপোর্ট
-import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
-import { FloatingAiSenseiWidget } from '../components/ai/FloatingAiSenseiWidget';
 import { MemoryOsView } from './MemoryOsView';
 
-export const DashboardView: React.FC = () => {
-  const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
-  const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
+interface DashboardViewProps {
+  onNavigate?: (view: string) => void;
+}
+
+export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
-  // ১. Continue Learning বাটনে ক্লিক করলে আসল লেসন প্লেয়ার ওপেন হবে
+  // ১. লেসন প্লেয়ারে নিয়ে যাওয়া
   const handleResumeLesson = (lessonId: string) => {
-    setActiveLessonId(lessonId);
-  };
-
-  // ২. AI বাটন বা ন্যাভিগেশন ক্লিক করলে AI Sensei ওপেন হবে
-  const handleNavigateTab = (tab: NavTab) => {
-    if (tab === 'ai') {
-      setIsAiSenseiOpen(true);
+    if (onNavigate) {
+      onNavigate(`lesson/${lessonId}`);
     }
   };
 
-  // ৩. Review Mistakes বাটনে ক্লিক করলে MemoryOS ওপেন হবে
-  const handleOpenMistakeBook = () => {
-    setShowMemoryOs(true);
+  // ২. মোবাইল বটম ট্যাবের মাধ্যমে নিহোমির অন্যান্য পেজে যাওয়া
+  const handleNavigateTab = (tab: NavTab) => {
+    if (tab === 'practice' && onNavigate) {
+      onNavigate('practice');
+    } else if (tab === 'learn' && onNavigate) {
+      onNavigate('courses');
+    } else if (tab === 'profile' && onNavigate) {
+      onNavigate('profile');
+    }
   };
 
-  // যদি শিক্ষার্থী ভুলের খাতা (MemoryOS) ওপেন করে
+  // ৩. মেমোরিওএস (ভুলের খাতা) খোলা
+  const handleOpenMistakeBook = () => {
+    if (onNavigate) {
+      onNavigate('memory-os');
+    } else {
+      setShowMemoryOs(true);
+    }
+  };
+
+  // যদি ভুলের খাতা খোলা হয়
   if (showMemoryOs) {
     return (
-      <div className="relative min-h-screen bg-stone-50">
-        <div className="p-4 max-w-4xl mx-auto">
+      <div className="relative min-h-screen bg-stone-50 pb-16">
+        <div className="p-4 max-w-5xl mx-auto">
           <button
+            type="button"
             onClick={() => setShowMemoryOs(false)}
             className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-xs font-semibold hover:bg-stone-800 transition-colors shadow-sm"
           >
             ← ড্যাশবোর্ডে ফিরে যান
           </button>
-          <MemoryOsView />
+          <MemoryOsView onNavigate={(view) => {
+            if (view === 'dashboard') setShowMemoryOs(false);
+            else if (onNavigate) onNavigate(view);
+          }} />
         </div>
       </div>
     );
   }
 
   return (
-    <>
-      {/* মূল স্টুডেন্ট ড্যাশবোর্ড */}
-      <DashboardPage
-        onResumeLesson={handleResumeLesson}
-        onNavigateTab={handleNavigateTab}
-        onOpenMistakeBook={handleOpenMistakeBook}
-      />
-
-      {/* আসল লেসন প্লেয়ার মডাল */}
-      {activeLessonId && (
-        <LessonPlayerModal
-          lessonId={activeLessonId}
-          isOpen={true}
-          onClose={() => setActiveLessonId(null)}
-        />
-      )}
-
-      {/* আসল AI Sensei টিউটর উইজেট */}
-      <FloatingAiSenseiWidget
-        isOpen={isAiSenseiOpen}
-        onToggle={() => setIsAiSenseiOpen(!isAiSenseiOpen)}
-      />
-    </>
+    <DashboardPage
+      onResumeLesson={handleResumeLesson}
+      onNavigateTab={handleNavigateTab}
+      onOpenMistakeBook={handleOpenMistakeBook}
+    />
   );
 };
 
