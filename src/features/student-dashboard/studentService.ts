@@ -91,6 +91,19 @@ export const studentService = {
     return { updatedCoins, updatedCredits };
   },
 
+  async completeFocusSession() {
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const updatedXp = currentXp + 30;
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 30, studyMinutesDelta: 25 });
+    } catch (error) {
+      console.warn('[Nihomi Service] Focus session sync deferred; local progress is saved:', error);
+    }
+    return { updatedXp };
+  },
+
   async completeKanjiPractice() {
     const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
     const updatedXp = currentXp + 10;

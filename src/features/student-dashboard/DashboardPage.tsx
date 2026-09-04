@@ -19,6 +19,9 @@ import { TokyoListeningModal } from './components/TokyoListeningModal';
 import { VocabFlashcardModal } from './components/VocabFlashcardModal';
 import { NihomiStoreModal, StorePackage } from './components/NihomiStoreModal';
 import { CommunityLeaderboardView } from '../../views/CommunityLeaderboardView';
+import { CoursesView } from '../../views/CoursesView';
+import { VocabularyView } from '../../views/VocabularyView';
+import { ProfileView } from '../../views/ProfileView';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -47,6 +50,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleListeningComplete,
     handleVocabularyComplete,
     handleStorePurchase,
+    handleFocusSessionComplete,
     showToast,
   } = useStudentDashboard();
 
@@ -61,6 +65,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
   const [celebrationShown, setCelebrationShown] = useState(false);
+
+  React.useEffect(() => {
+    const handleFocusComplete = () => { void handleFocusSessionComplete(); };
+    window.addEventListener('nihomi-focus-complete', handleFocusComplete);
+    return () => window.removeEventListener('nihomi-focus-complete', handleFocusComplete);
+  }, [handleFocusSessionComplete]);
 
   React.useEffect(() => {
     if (!data || celebrationShown) return;
@@ -78,12 +88,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       setIsAiTutorOpen(true);
       return;
     }
-    onNavigateTab?.(tab);
+    if (tab === 'learn' || tab === 'profile') return;
     if (tab === 'practice') {
       showToast('Practice মডিউলে স্বাগতম! কাঞ্জি ও ব্যাকরণ ড্রিল শুরু করুন');
-    } else if (tab !== 'home') {
-      showToast(`${tab.toUpperCase()} সেকশনে প্রবেশ করেছেন`);
+      return;
     }
+    onNavigateTab?.(tab);
+  };
+
+  const handleEmbeddedNavigate = (view: string) => {
+    if (view === 'dashboard' || view === 'home' || view === 'portal') setActiveTab('home');
+    else if (view === 'courses') setActiveTab('learn');
+    else if (view === 'profile' || view === 'portal-settings') setActiveTab('profile');
+    else if (view === 'practice' || view === 'quizzes') setActiveTab('practice');
+    else onNavigate?.(view);
+  };
+
+  const renderEmbeddedTab = () => {
+    if (activeTab === 'learn') return <CoursesView onNavigate={handleEmbeddedNavigate} />;
+    if (activeTab === 'practice') return <VocabularyView onNavigate={handleEmbeddedNavigate} />;
+    return <ProfileView onNavigate={handleEmbeddedNavigate} />;
   };
 
   const handleResume = (lessonId: string) => {
@@ -119,6 +143,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         />
       </div>
     );
+  }
+
+  if (activeTab !== 'home' && activeTab !== 'ai') {
+    return <div className="min-h-screen bg-stone-50 pb-20"><div className="sticky top-0 z-40 flex items-center justify-between border-b border-stone-200 bg-white/95 px-4 py-3 backdrop-blur"><button type="button" onClick={() => setActiveTab('home')} className="rounded-xl bg-stone-900 px-3 py-2 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-rose-500">← Home</button><span className="text-xs font-bold text-stone-500">Nihomi 学ぶ</span></div>{renderEmbeddedTab()}<MobileBottomNavigation currentTab={activeTab} onTabChange={handleTabChange} /></div>;
   }
 
   return (

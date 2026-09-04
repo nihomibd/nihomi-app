@@ -136,6 +136,7 @@ export const App: React.FC = () => {
           setSoundscapeMode={setSoundscapeMode}
           soundscapes={soundscapes}
           onExitFocus={() => toggleFocusMode(false)}
+          onFocusBlockComplete={() => window.dispatchEvent(new CustomEvent('nihomi-focus-complete'))}
         />
       )}
 

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Award, X } from 'lucide-react';
+import { Award, Flower2, X } from 'lucide-react';
 import { StudentProfile, AccountUsage } from '../types';
 import { AIUsageSummary } from './AIUsageSummary';
 import { AchievementBadges } from '../../../components/student/AchievementBadges';
 import { DigitalStudentIdCard } from '../../../components/student/DigitalStudentIdCard';
 import { StudentProfile as DigitalStudentProfile } from '../../../types/nihomi';
+import { useFocusMode } from '../../../context/FocusModeContext';
 
 interface StudentHeaderProps {
   student: StudentProfile;
@@ -15,6 +16,7 @@ interface StudentHeaderProps {
 }
 
 export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor, onOpenStore, activeStreak }) => {
+  const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [isIdOpen, setIsIdOpen] = useState(false);
   const [areBadgesOpen, setAreBadgesOpen] = useState(false);
   const digitalStudent: DigitalStudentProfile = {
@@ -50,6 +52,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
 
         <div className="shrink-0 pt-1">
           <div className="flex items-center gap-2">
+            <button type="button" onClick={() => toggleFocusMode()} aria-pressed={isFocusMode} aria-label="Zen Focus Mode" title="Zen Focus Mode" className={`rounded-full border p-2 focus:outline-none focus:ring-2 focus:ring-rose-500 ${isFocusMode ? 'border-rose-300 bg-rose-100 text-rose-700' : 'border-stone-200 bg-white text-stone-500 hover:bg-rose-50'}`}><Flower2 size={16} aria-hidden="true" /></button>
             <button type="button" onClick={() => setAreBadgesOpen(true)} aria-label="View badges" title="View badges" className="rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-700 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"><Award size={16} aria-hidden="true" /></button>
             <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} onOpenStore={onOpenStore} />
           </div>

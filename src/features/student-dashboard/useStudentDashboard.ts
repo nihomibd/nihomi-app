@@ -131,6 +131,12 @@ export const useStudentDashboard = () => {
     showToast(`bKash top-up সফল! +${pack.coins} Coins এবং +${pack.credits} AI Credits যোগ হয়েছে।`);
   };
 
+  const handleFocusSessionComplete = async () => {
+    if (!data) return;
+    await studentService.completeFocusSession();
+    showToast('Zen Focus block সম্পন্ন! +30 XP যোগ হয়েছে।');
+  };
+
   return {
     data,
     viewState,
@@ -145,6 +151,7 @@ export const useStudentDashboard = () => {
     handleListeningComplete,
     handleVocabularyComplete,
     handleStorePurchase,
+    handleFocusSessionComplete,
     showToast,
   };
 };

@@ -22,6 +22,7 @@ interface FocusPomodoroBarProps {
   setSoundscapeMode: (mode: ZenSoundscapeType) => void;
   soundscapes: ZenSoundscapeInfo[];
   onExitFocus: () => void;
+  onFocusBlockComplete?: () => void;
 }
 
 type PomodoroMode = '25' | '50' | 'break';
@@ -33,6 +34,7 @@ export const FocusPomodoroBar: React.FC<FocusPomodoroBarProps> = ({
   setSoundscapeMode,
   soundscapes,
   onExitFocus,
+  onFocusBlockComplete,
 }) => {
   const [selectedDuration, setSelectedDuration] = useState<PomodoroMode>('25');
   const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(25 * 60);
@@ -64,6 +66,7 @@ export const FocusPomodoroBar: React.FC<FocusPomodoroBarProps> = ({
       } catch {}
       if (selectedDuration !== 'break') {
         setCompletedCycles((prev) => prev + 1);
+        if (selectedDuration === '25') onFocusBlockComplete?.();
         setTimerMode('break');
       } else {
         setTimerMode('25');
