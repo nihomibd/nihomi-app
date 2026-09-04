@@ -3,6 +3,7 @@ import { WifiOff, RefreshCw, X, Database, ShieldCheck, CheckCircle, Cloud, Alert
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import { SrsVocabularyService } from '../../lib/srsService';
+import { studentService } from '../../features/student-dashboard/studentService';
 
 export const OfflineNotificationBanner: React.FC = () => {
   const [isOnline, setIsOnline] = useState<boolean>(
@@ -30,6 +31,7 @@ export const OfflineNotificationBanner: React.FC = () => {
       setIsSyncing(true);
       try {
         await SrsVocabularyService.syncPendingRecordsToSupabase(user?.id);
+        await studentService.syncOfflineProgress(user?.id);
         updateSyncTimestamp();
       } catch (err) {
         console.error('Auto sync error:', err);
@@ -150,7 +152,7 @@ export const OfflineNotificationBanner: React.FC = () => {
             <div>
               <span className="font-bold text-white">অফলাইন মোড সক্রিয় (Offline Mode Active):</span>{' '}
               <span className="text-amber-100">
-                লোকাল IndexedDB ও সার্ভিস ওয়ার্কার দিয়ে নিহোমি ফুল স্টাডি ও SRS ফ্ল্যাশ কার্ড নিরবচ্ছিন্নভাবে চলবে।
+                You are offline — Flashcards, Kanji Canvas, and saved Lessons remain fully accessible.
               </span>
             </div>
           </div>

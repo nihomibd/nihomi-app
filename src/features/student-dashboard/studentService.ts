@@ -104,6 +104,22 @@ export const studentService = {
     return { updatedXp };
   },
 
+  async syncOfflineProgress(userId?: string) {
+    if (!userId) return;
+    try {
+      const saved = localStorage.getItem('nihomi_completed_lessons');
+      const completedLessons = saved ? JSON.parse(saved) as string[] : [];
+      await Promise.all(completedLessons.map((lessonId) => syncLessonProgressToSupabase({
+        userId,
+        lessonId,
+        status: 'COMPLETED',
+        progressPercent: 100,
+      })));
+    } catch (error) {
+      console.warn('[Nihomi Service] Offline progress sync deferred:', error);
+    }
+  },
+
   async completeKanjiPractice() {
     const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
     const updatedXp = currentXp + 10;

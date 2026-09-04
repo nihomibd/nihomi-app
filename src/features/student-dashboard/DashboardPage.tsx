@@ -22,6 +22,8 @@ import { CommunityLeaderboardView } from '../../views/CommunityLeaderboardView';
 import { CoursesView } from '../../views/CoursesView';
 import { VocabularyView } from '../../views/VocabularyView';
 import { ProfileView } from '../../views/ProfileView';
+import { InstallPWA } from '../../components/common/InstallPWA';
+import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -151,6 +153,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 selection:bg-rose-100 selection:text-rose-900">
+      <OfflineNotificationBanner />
+      <InstallPWA />
       <main className="max-w-md mx-auto sm:max-w-lg md:max-w-xl lg:max-w-2xl px-4 sm:px-6 pt-3 space-y-4">
         
         {viewState === 'loading' && <DashboardLoadingSkeleton />}
