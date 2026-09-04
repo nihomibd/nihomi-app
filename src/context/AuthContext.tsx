@@ -195,6 +195,24 @@ const AuthContext = createContext<AuthContextType>({
   refreshAuth: async () => {},
 });
 
+const bootstrapDefaultLearningPath = (userId: string) => {
+  const pathKey = `nihomi_learning_path_${userId}`;
+  if (localStorage.getItem(pathKey)) return;
+  const phases = [
+    { days: [1, 2, 3, 4, 5, 6, 7], focus: 'Hiragana foundations' },
+    { days: [8, 9, 10, 11, 12, 13, 14], focus: 'Katakana foundations' },
+    { days: [15, 16, 17, 18, 19, 20, 21], focus: 'N5 vocabulary and particles' },
+    { days: [22, 23, 24, 25, 26, 27], focus: 'N5 conversation and review' },
+  ];
+  const learningPath = phases.flatMap((phase) => phase.days.map((day) => ({
+    day,
+    title: `Day ${day}: ${phase.focus}`,
+    status: day === 1 ? 'available' : 'upcoming',
+    completed: false,
+  })));
+  localStorage.setItem(pathKey, JSON.stringify({ userId, level: 'N5', learningPath, bootstrappedAt: new Date().toISOString() }));
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => getStoredToken());
   const [user, setUser] = useState<User | null>(() => {
@@ -310,6 +328,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           createdAt: u.created_at || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
+        bootstrapDefaultLearningPath(activeUser.id);
         setUserData(activeUser);
       }
     });
@@ -341,6 +360,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           createdAt: u.created_at || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
+        bootstrapDefaultLearningPath(activeUser.id);
         setUserData(activeUser);
       } else if (_event === 'SIGNED_OUT') {
         setUser(null);

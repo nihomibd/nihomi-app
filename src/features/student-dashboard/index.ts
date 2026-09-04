@@ -16,6 +16,8 @@ export { KanjiPracticeModal } from './components/KanjiPracticeModal';
 export { TokyoListeningModal } from './components/TokyoListeningModal';
 export { VocabFlashcardModal } from './components/VocabFlashcardModal';
 export { NihomiStoreModal } from './components/NihomiStoreModal';
+export { ConbiniSimulatorModal } from './components/ConbiniSimulatorModal';
+export { WritingPracticeModal } from './components/WritingPracticeModal';
 export { JLPTProgress } from './components/JLPTProgress';
 export { StreakCard } from './components/StreakCard';
 export { RecentMistakes } from './components/RecentMistakes';

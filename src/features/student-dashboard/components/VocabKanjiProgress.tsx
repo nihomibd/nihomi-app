@@ -6,6 +6,7 @@ interface VocabKanjiProgressProps {
   kanji: MasteryStat;
   onPracticeKanji?: () => void;
   onPracticeVocabulary?: () => void;
+  onPracticeWriting?: () => void;
 }
 
 export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
@@ -13,6 +14,7 @@ export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
   kanji,
   onPracticeKanji,
   onPracticeVocabulary,
+  onPracticeWriting,
 }) => {
   const vocabPercent = Math.round((vocabulary.completed / vocabulary.total) * 100);
   const kanjiPercent = Math.round((kanji.completed / kanji.total) * 100);
@@ -75,7 +77,9 @@ export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
           />
         </div>
         <p className="text-[10px] font-bold text-amber-700">Tap to Practice Kanji of the Day</p>
+        <span className="text-[10px] font-bold text-stone-500">✎ Kana + Kanji Writing Lab</span>
       </button>
+      <button type="button" onClick={onPracticeWriting} aria-label="Open Kana and Kanji writing practice" className="col-span-2 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-xs font-bold text-stone-700 hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500">Open Kana + Kanji Writing Canvas</button>
     </div>
   );
 };

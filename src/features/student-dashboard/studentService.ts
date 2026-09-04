@@ -104,6 +104,32 @@ export const studentService = {
     return { updatedXp };
   },
 
+  async completeBaitoTransaction() {
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const updatedCoins = currentCoins + 10;
+    const updatedXp = currentXp + 40;
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 40, studyMinutesDelta: 5 });
+    } catch (error) {
+      console.warn('[Nihomi Service] BaitoOS sync deferred; local progress is saved:', error);
+    }
+    return { updatedCoins, updatedXp };
+  },
+
+  async completeWritingPractice(character: string) {
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const learned = JSON.parse(localStorage.getItem('nihomi_learned_kanji_v1') || '[]') as string[];
+    const updatedLearned = Array.from(new Set([...learned, character]));
+    const updatedXp = currentXp + 10;
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    localStorage.setItem('nihomi_learned_kanji_v1', JSON.stringify(updatedLearned));
+    return { updatedXp, updatedLearned };
+  },
+
   async syncOfflineProgress(userId?: string) {
     if (!userId) return;
     try {

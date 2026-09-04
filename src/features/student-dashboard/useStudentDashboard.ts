@@ -137,6 +137,21 @@ export const useStudentDashboard = () => {
     showToast('Zen Focus block সম্পন্ন! +30 XP যোগ হয়েছে।');
   };
 
+  const handleBaitoTransactionComplete = async () => {
+    if (!data) return;
+    const result = await studentService.completeBaitoTransaction();
+    setData({ ...data, accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins } });
+    showToast('BaitoOS transaction সম্পন্ন! +40 XP এবং +10 Coins যোগ হয়েছে।');
+  };
+
+  const handleWritingPracticeComplete = async (character: string) => {
+    if (!data) return;
+    const result = await studentService.completeWritingPractice(character);
+    setData({ ...data, kanjiProgress: { ...data.kanjiProgress, completed: Math.min(data.kanjiProgress.total, data.kanjiProgress.completed + 1) } });
+    showToast(`কাঞ্জি ${character} অনুশীলন সম্পন্ন! +10 XP যোগ হয়েছে।`);
+    return result;
+  };
+
   return {
     data,
     viewState,
@@ -152,6 +167,8 @@ export const useStudentDashboard = () => {
     handleVocabularyComplete,
     handleStorePurchase,
     handleFocusSessionComplete,
+    handleBaitoTransactionComplete,
+    handleWritingPracticeComplete,
     showToast,
   };
 };

@@ -22,6 +22,8 @@ import { CommunityLeaderboardView } from '../../views/CommunityLeaderboardView';
 import { CoursesView } from '../../views/CoursesView';
 import { VocabularyView } from '../../views/VocabularyView';
 import { ProfileView } from '../../views/ProfileView';
+import { ConbiniSimulatorModal } from './components/ConbiniSimulatorModal';
+import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
 
@@ -53,6 +55,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleVocabularyComplete,
     handleStorePurchase,
     handleFocusSessionComplete,
+    handleBaitoTransactionComplete,
+    handleWritingPracticeComplete,
     showToast,
   } = useStudentDashboard();
 
@@ -67,6 +71,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
   const [celebrationShown, setCelebrationShown] = useState(false);
+  const [isConbiniOpen, setIsConbiniOpen] = useState(false);
+  const [isWritingOpen, setIsWritingOpen] = useState(false);
+  const [baitoReadinessScore, setBaitoReadinessScore] = useState(74);
 
   React.useEffect(() => {
     const handleFocusComplete = () => { void handleFocusSessionComplete(); };
@@ -200,12 +207,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               kanji={data.kanjiProgress}
               onPracticeKanji={() => setIsKanjiPracticeOpen(true)}
               onPracticeVocabulary={() => setIsVocabularyOpen(true)}
+              onPracticeWriting={() => setIsWritingOpen(true)}
             />
 
             {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
             <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
 
-            <BaitoReadinessCard onLaunch={() => onNavigate?.('baito-os')} />
+            <BaitoReadinessCard onLaunch={() => setIsConbiniOpen(true)} onLaunchConbini={() => setIsConbiniOpen(true)} readinessScore={baitoReadinessScore} />
 
             {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
             <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
@@ -273,6 +281,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         isOpen={isVocabularyOpen}
         onClose={() => setIsVocabularyOpen(false)}
         onComplete={handleVocabularyComplete}
+      />
+      <ConbiniSimulatorModal
+        isOpen={isConbiniOpen}
+        onClose={() => setIsConbiniOpen(false)}
+        onComplete={async (score) => { await handleBaitoTransactionComplete(); setBaitoReadinessScore((current) => Math.min(100, current + (score >= 80 ? 4 : 2))); }}
+      />
+      <WritingPracticeModal
+        isOpen={isWritingOpen}
+        onClose={() => setIsWritingOpen(false)}
+        onComplete={(character) => { void handleWritingPracticeComplete(character); setIsWritingOpen(false); }}
       />
       <NihomiStoreModal
         isOpen={isStoreOpen}
