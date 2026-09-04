@@ -94,6 +94,35 @@ export const studentService = {
     return { updatedXp };
   },
 
+  async completeListeningPractice() {
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const updatedCoins = currentCoins + 5;
+    const updatedXp = currentXp + 30;
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 30, studyMinutesDelta: 2 });
+    } catch (error) {
+      console.warn('[Nihomi Service] Listening sync deferred; local progress is saved:', error);
+    }
+    return { updatedCoins, updatedXp };
+  },
+
+  async completeVocabularyPractice(reviewed: number) {
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const updatedXp = currentXp + 20;
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 20, vocabMasteredDelta: reviewed, studyMinutesDelta: 5 });
+    } catch (error) {
+      console.warn('[Nihomi Service] Vocabulary sync deferred; local progress is saved:', error);
+    }
+    return { updatedXp, reviewed };
+  },
+
   async completeLesson(lessonId: string, coinReward = 10, xpReward = 50) {
     let completedLessons: string[] = [];
     try {

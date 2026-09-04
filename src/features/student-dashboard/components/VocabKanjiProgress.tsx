@@ -5,19 +5,21 @@ interface VocabKanjiProgressProps {
   vocabulary: MasteryStat;
   kanji: MasteryStat;
   onPracticeKanji?: () => void;
+  onPracticeVocabulary?: () => void;
 }
 
 export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
   vocabulary,
   kanji,
   onPracticeKanji,
+  onPracticeVocabulary,
 }) => {
   const vocabPercent = Math.round((vocabulary.completed / vocabulary.total) * 100);
   const kanjiPercent = Math.round((kanji.completed / kanji.total) * 100);
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2">
+      <button type="button" onClick={onPracticeVocabulary} aria-label="Review daily vocabulary flashcards" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2 text-left transition-all hover:border-rose-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-rose-500">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
             Vocabulary
@@ -43,7 +45,8 @@ export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
             style={{ width: `${vocabPercent}%` }}
           />
         </div>
-      </div>
+        <p className="text-[10px] font-bold text-rose-700">Tap to review daily action words</p>
+      </button>
 
       <button type="button" onClick={onPracticeKanji} aria-label="Tap to Practice Kanji of the Day" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2 text-left transition-all hover:border-amber-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500">
         <div className="flex items-center justify-between">

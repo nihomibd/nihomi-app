@@ -4,9 +4,11 @@ import { DailyPlanItem } from '../types';
 interface DailyPlanProps {
   planItems: DailyPlanItem[];
   onSelectTask?: (taskId: string) => void;
+  onOpenVocabulary?: () => void;
+  onOpenListening?: () => void;
 }
 
-export const DailyPlan: React.FC<DailyPlanProps> = ({ planItems, onSelectTask }) => {
+export const DailyPlan: React.FC<DailyPlanProps> = ({ planItems, onSelectTask, onOpenVocabulary, onOpenListening }) => {
   const completedCount = planItems.filter((i) => i.status === 'completed').length;
   const totalCount = planItems.length;
   const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
@@ -38,7 +40,21 @@ export const DailyPlan: React.FC<DailyPlanProps> = ({ planItems, onSelectTask })
           return (
             <li
               key={item.id}
-              onClick={() => onSelectTask?.(item.id)}
+              onClick={() => {
+                if (item.type === 'vocabulary') onOpenVocabulary?.();
+                else if (item.type === 'listening') onOpenListening?.();
+                else onSelectTask?.(item.id);
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  if (item.type === 'vocabulary') onOpenVocabulary?.();
+                  else if (item.type === 'listening') onOpenListening?.();
+                  else onSelectTask?.(item.id);
+                }
+              }}
               className={`group flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
                 isDone
                   ? 'bg-stone-50 border-stone-200 opacity-80'

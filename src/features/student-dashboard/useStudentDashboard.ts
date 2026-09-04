@@ -100,6 +100,29 @@ export const useStudentDashboard = () => {
     showToast('অসাধারণ! Kanji trace সম্পন্ন। +10 XP যোগ হয়েছে!');
   };
 
+  const handleListeningComplete = async () => {
+    if (!data) return;
+    const result = await studentService.completeListeningPractice();
+    setData({
+      ...data,
+      dailyPlan: data.dailyPlan.map((item) => item.type === 'listening' ? { ...item, status: 'completed', detail: 'Dialogue completed • +30 XP' } : item),
+      jlptProgress: { ...data.jlptProgress, modules: { ...data.jlptProgress.modules, listening: Math.min(100, data.jlptProgress.modules.listening + 5) } },
+      accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins },
+    });
+    showToast('অসাধারণ! Listening task সম্পন্ন। +30 XP এবং +5 Coins যোগ হয়েছে!');
+  };
+
+  const handleVocabularyComplete = async (reviewed: number) => {
+    if (!data) return;
+    await studentService.completeVocabularyPractice(reviewed);
+    setData({
+      ...data,
+      dailyPlan: data.dailyPlan.map((item) => item.type === 'vocabulary' ? { ...item, status: 'completed', detail: '10 flashcards reviewed • +20 XP' } : item),
+      vocabularyProgress: { ...data.vocabularyProgress, completed: Math.min(data.vocabularyProgress.total, data.vocabularyProgress.completed + reviewed) },
+    });
+    showToast('ভালো কাজ! Vocabulary SRS সম্পন্ন। +20 XP যোগ হয়েছে!');
+  };
+
   return {
     data,
     viewState,
@@ -111,6 +134,8 @@ export const useStudentDashboard = () => {
     handleCompleteLesson,
     handleMockExamCompleted,
     handleKanjiPracticeComplete,
+    handleListeningComplete,
+    handleVocabularyComplete,
     showToast,
   };
 };

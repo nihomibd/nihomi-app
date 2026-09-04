@@ -13,6 +13,8 @@ export { MistakeDrillModal } from './components/MistakeDrillModal';
 export { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 export { BaitoReadinessCard } from './components/BaitoReadinessCard';
 export { KanjiPracticeModal } from './components/KanjiPracticeModal';
+export { TokyoListeningModal } from './components/TokyoListeningModal';
+export { VocabFlashcardModal } from './components/VocabFlashcardModal';
 export { JLPTProgress } from './components/JLPTProgress';
 export { StreakCard } from './components/StreakCard';
 export { RecentMistakes } from './components/RecentMistakes';

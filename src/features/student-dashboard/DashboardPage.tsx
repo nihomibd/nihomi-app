@@ -15,6 +15,8 @@ import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
 import { BaitoReadinessCard } from './components/BaitoReadinessCard';
 import { KanjiPracticeModal } from './components/KanjiPracticeModal';
+import { TokyoListeningModal } from './components/TokyoListeningModal';
+import { VocabFlashcardModal } from './components/VocabFlashcardModal';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -40,6 +42,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleCompleteLesson,
     handleMockExamCompleted,
     handleKanjiPracticeComplete,
+    handleListeningComplete,
+    handleVocabularyComplete,
     showToast,
   } = useStudentDashboard();
 
@@ -48,6 +52,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isLessonOpen, setIsLessonOpen] = useState(false);
   const [isMockExamOpen, setIsMockExamOpen] = useState(false);
   const [isKanjiPracticeOpen, setIsKanjiPracticeOpen] = useState(false);
+  const [isListeningOpen, setIsListeningOpen] = useState(false);
+  const [isVocabularyOpen, setIsVocabularyOpen] = useState(false);
+  const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
+  const [celebrationShown, setCelebrationShown] = useState(false);
+
+  React.useEffect(() => {
+    if (!data || celebrationShown) return;
+    const goalTypes = new Set(['vocabulary', 'grammar', 'listening', 'challenge']);
+    const isComplete = data.dailyPlan.filter((item) => goalTypes.has(item.type)).every((item) => item.status === 'completed');
+    if (isComplete) {
+      setShowDailyGoalCelebration(true);
+      setCelebrationShown(true);
+    }
+  }, [data, celebrationShown]);
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
@@ -128,6 +146,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <DailyPlan
               planItems={data.dailyPlan}
               onSelectTask={(id) => toggleDailyTask(id)}
+              onOpenVocabulary={() => setIsVocabularyOpen(true)}
+              onOpenListening={() => setIsListeningOpen(true)}
             />
 
             {/* ৪. রিয়েল ডেইলি চ্যালেঞ্জ ও কয়েন পুরষ্কার */}
@@ -141,6 +161,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               vocabulary={data.vocabularyProgress}
               kanji={data.kanjiProgress}
               onPracticeKanji={() => setIsKanjiPracticeOpen(true)}
+              onPracticeVocabulary={() => setIsVocabularyOpen(true)}
             />
 
             {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
@@ -192,10 +213,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           setIsLessonOpen(false);
         }}
       />
+      {showDailyGoalCelebration && (
+        <div className="fixed inset-x-3 top-4 z-40 mx-auto max-w-md animate-in slide-in-from-top-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950 shadow-lg" role="status" aria-live="polite">
+          <div className="flex items-center justify-between gap-3">
+            <div><p className="text-sm font-extrabold">Today's Goal 100% Complete!</p><p className="text-xs font-semibold text-emerald-700">Streak +1 Day • আজকের সব লক্ষ্য শেষ</p></div>
+            <button type="button" aria-label="Celebration বন্ধ করুন" onClick={() => setShowDailyGoalCelebration(false)} className="rounded-full p-1 text-emerald-700 hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">×</button>
+          </div>
+        </div>
+      )}
       <KanjiPracticeModal
         isOpen={isKanjiPracticeOpen}
         onClose={() => setIsKanjiPracticeOpen(false)}
         onSuccessfulTrace={handleKanjiPracticeComplete}
+      />
+      <TokyoListeningModal
+        isOpen={isListeningOpen}
+        onClose={() => setIsListeningOpen(false)}
+        onComplete={handleListeningComplete}
+      />
+      <VocabFlashcardModal
+        isOpen={isVocabularyOpen}
+        onClose={() => setIsVocabularyOpen(false)}
+        onComplete={handleVocabularyComplete}
       />
     </div>
   );
