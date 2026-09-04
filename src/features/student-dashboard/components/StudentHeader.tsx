@@ -5,9 +5,10 @@ import { AIUsageSummary } from './AIUsageSummary';
 interface StudentHeaderProps {
   student: StudentProfile;
   accountUsage: AccountUsage;
+  onOpenAiTutor?: () => void;
 }
 
-export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage }) => {
+export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor }) => {
   return (
     <header className="pt-2 pb-4 border-b border-stone-200 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
       <div className="flex items-start justify-between gap-3">
@@ -30,7 +31,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
         </div>
 
         <div className="shrink-0 pt-1">
-          <AIUsageSummary usage={accountUsage} />
+          <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} />
         </div>
       </div>
     </header>

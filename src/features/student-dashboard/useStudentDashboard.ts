@@ -55,6 +55,16 @@ export const useStudentDashboard = () => {
     showToast(`অভিনন্দন! +${xpReward} XP এবং +${coinReward} Nihomi Coins যোগ হয়েছে! 🪙`);
   };
 
+  const handleUseAiCredit = async (): Promise<boolean> => {
+    if (!data || data.accountUsage.aiCreditsRemaining <= 0) return false;
+    const aiCreditsRemaining = await studentService.deductAiCredit();
+    setData({
+      ...data,
+      accountUsage: { ...data.accountUsage, aiCreditsRemaining },
+    });
+    return true;
+  };
+
   return {
     data,
     viewState,
@@ -62,6 +72,7 @@ export const useStudentDashboard = () => {
     refresh: loadData,
     toggleDailyTask,
     handleStartChallenge,
+    handleUseAiCredit,
     showToast,
   };
 };

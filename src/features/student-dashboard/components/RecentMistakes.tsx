@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ReviewMistake } from '../types';
+import { MistakeDrillModal } from './MistakeDrillModal';
 
 interface RecentMistakesProps {
   mistakes: ReviewMistake[];
@@ -11,8 +12,11 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
   onOpenMistakeBook,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [activeMistake, setActiveMistake] = useState<ReviewMistake | null>(null);
+  const [clearedIds, setClearedIds] = useState<string[]>([]);
+  const visibleMistakes = mistakes.filter((mistake) => !clearedIds.includes(mistake.id));
 
-  if (mistakes.length === 0) {
+  if (visibleMistakes.length === 0) {
     return (
       <section className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm">
         <h2 className="text-base font-bold text-stone-900 tracking-tight mb-1">
@@ -33,7 +37,7 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
             Review Your Mistakes <span className="text-xs font-medium text-stone-500 font-sans">| মেমোরি ও ভুলের খাতা</span>
           </h2>
           <p className="text-xs text-stone-500">
-            {mistakes.length} items flagged by NIHOMI MemoryOS
+            {visibleMistakes.length} items flagged by NIHOMI MemoryOS
           </p>
         </div>
 
@@ -43,7 +47,7 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
       </div>
 
       <div className="space-y-2 mt-2">
-        {mistakes.map((item) => {
+        {visibleMistakes.map((item) => {
           const isExpanded = selectedId === item.id;
           return (
             <div
@@ -84,6 +88,13 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
                   <p className="text-[11px] text-stone-400">
                     Last missed: {item.lastMissed}
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setActiveMistake(item)}
+                    className="mt-2 rounded-lg bg-rose-600 px-3 py-2 text-[11px] font-bold text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  >
+                    Practice This Rule
+                  </button>
                 </div>
               )}
             </div>
@@ -101,6 +112,18 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
           <span className="text-stone-400">→</span>
         </button>
       </div>
+      {activeMistake && (
+        <MistakeDrillModal
+          mistake={activeMistake}
+          isOpen
+          onClose={() => setActiveMistake(null)}
+          onCleared={(mistakeId) => {
+            setClearedIds((current) => [...current, mistakeId]);
+            setActiveMistake(null);
+            setSelectedId(null);
+          }}
+        />
+      )}
     </section>
   );
 };

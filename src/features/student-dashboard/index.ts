@@ -8,6 +8,8 @@ export { ContinueLearningCard } from './components/ContinueLearningCard';
 export { DailyPlan } from './components/DailyPlan';
 export { DailyChallengeCard } from './components/DailyChallengeCard';
 export { DailyChallengeModal } from './components/DailyChallengeModal';
+export { AiSenseiDrawer } from './components/AiSenseiDrawer';
+export { MistakeDrillModal } from './components/MistakeDrillModal';
 export { JLPTProgress } from './components/JLPTProgress';
 export { StreakCard } from './components/StreakCard';
 export { RecentMistakes } from './components/RecentMistakes';

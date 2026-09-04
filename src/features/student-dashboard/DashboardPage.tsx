@@ -10,6 +10,7 @@ import { RecentMistakes } from './components/RecentMistakes';
 import { VocabKanjiProgress } from './components/VocabKanjiProgress';
 import { MobileBottomNavigation, NavTab } from './components/MobileBottomNavigation';
 import { DashboardLoadingSkeleton, DashboardErrorView } from './components/UIStateViews';
+import { AiSenseiDrawer } from './components/AiSenseiDrawer';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -29,18 +30,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     refresh,
     toggleDailyTask,
     handleStartChallenge,
+    handleUseAiCredit,
     showToast,
   } = useStudentDashboard();
 
   const [activeTab, setActiveTab] = useState<NavTab>('home');
+  const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
+    if (tab === 'ai') {
+      setIsAiTutorOpen(true);
+      return;
+    }
     onNavigateTab?.(tab);
     if (tab === 'practice') {
       showToast('Practice মডিউলে স্বাগতম! কাঞ্জি ও ব্যাকরণ ড্রিল শুরু করুন');
-    } else if (tab === 'ai') {
-      showToast('AI Sensei সক্রিয় হচ্ছে...');
     } else if (tab !== 'home') {
       showToast(`${tab.toUpperCase()} সেকশনে প্রবেশ করেছেন`);
     }
@@ -75,6 +80,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <StudentHeader 
               student={data.student} 
               accountUsage={data.accountUsage} 
+              onOpenAiTutor={() => setIsAiTutorOpen(true)}
             />
 
             {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
@@ -132,6 +138,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         currentTab={activeTab}
         onTabChange={handleTabChange}
       />
+      {data && (
+        <AiSenseiDrawer
+          isOpen={isAiTutorOpen}
+          creditsRemaining={data.accountUsage.aiCreditsRemaining}
+          onUseCredit={handleUseAiCredit}
+          onClose={() => setIsAiTutorOpen(false)}
+        />
+      )}
     </div>
   );
 };
