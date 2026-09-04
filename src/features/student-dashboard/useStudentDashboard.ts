@@ -64,4 +64,3 @@ export const useStudentDashboard = () => {
     handleStartChallenge,
     showToast,
   };
-};
