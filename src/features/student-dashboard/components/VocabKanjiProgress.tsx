@@ -4,11 +4,13 @@ import { MasteryStat } from '../types';
 interface VocabKanjiProgressProps {
   vocabulary: MasteryStat;
   kanji: MasteryStat;
+  onPracticeKanji?: () => void;
 }
 
 export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
   vocabulary,
   kanji,
+  onPracticeKanji,
 }) => {
   const vocabPercent = Math.round((vocabulary.completed / vocabulary.total) * 100);
   const kanjiPercent = Math.round((kanji.completed / kanji.total) * 100);
@@ -43,7 +45,7 @@ export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2">
+      <button type="button" onClick={onPracticeKanji} aria-label="Tap to Practice Kanji of the Day" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2 text-left transition-all hover:border-amber-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
             Kanji
@@ -69,7 +71,8 @@ export const VocabKanjiProgress: React.FC<VocabKanjiProgressProps> = ({
             style={{ width: `${kanjiPercent}%` }}
           />
         </div>
-      </div>
+        <p className="text-[10px] font-bold text-amber-700">Tap to Practice Kanji of the Day</p>
+      </button>
     </div>
   );
 };

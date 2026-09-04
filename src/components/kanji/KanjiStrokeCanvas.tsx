@@ -153,6 +153,7 @@ interface KanjiStrokeCanvasProps {
   onClose?: () => void;
   onSelectKanji?: (kanji: string) => void;
   initialKanji?: string;
+  onVerified?: (score: number) => void;
 }
 
 export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
@@ -160,6 +161,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
   onClose,
   onSelectKanji,
   initialKanji = '日',
+  onVerified,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedKanji, setSelectedKanji] = useState<KanjiStrokeItem>(() => {
@@ -347,6 +349,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
     }
 
     setAccuracyFeedback({ score, message, messageBn });
+    onVerified?.(score);
   };
 
   const handleUseKanji = () => {

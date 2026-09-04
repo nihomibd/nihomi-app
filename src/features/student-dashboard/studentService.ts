@@ -81,6 +81,19 @@ export const studentService = {
     return updated;
   },
 
+  async completeKanjiPractice() {
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const updatedXp = currentXp + 10;
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 10, kanjiMasteredDelta: 1, studyMinutesDelta: 2 });
+    } catch (error) {
+      console.warn('[Nihomi Service] Kanji sync deferred; local progress is saved:', error);
+    }
+    return { updatedXp };
+  },
+
   async completeLesson(lessonId: string, coinReward = 10, xpReward = 50) {
     let completedLessons: string[] = [];
     try {

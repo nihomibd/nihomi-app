@@ -90,6 +90,16 @@ export const useStudentDashboard = () => {
     }
   };
 
+  const handleKanjiPracticeComplete = async () => {
+    if (!data) return;
+    await studentService.completeKanjiPractice();
+    setData({
+      ...data,
+      kanjiProgress: { ...data.kanjiProgress, completed: Math.min(data.kanjiProgress.total, data.kanjiProgress.completed + 1) },
+    });
+    showToast('অসাধারণ! Kanji trace সম্পন্ন। +10 XP যোগ হয়েছে!');
+  };
+
   return {
     data,
     viewState,
@@ -100,6 +110,7 @@ export const useStudentDashboard = () => {
     handleUseAiCredit,
     handleCompleteLesson,
     handleMockExamCompleted,
+    handleKanjiPracticeComplete,
     showToast,
   };
 };

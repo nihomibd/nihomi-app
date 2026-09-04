@@ -14,6 +14,7 @@ import { AiSenseiDrawer } from './components/AiSenseiDrawer';
 import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
 import { BaitoReadinessCard } from './components/BaitoReadinessCard';
+import { KanjiPracticeModal } from './components/KanjiPracticeModal';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -38,6 +39,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleUseAiCredit,
     handleCompleteLesson,
     handleMockExamCompleted,
+    handleKanjiPracticeComplete,
     showToast,
   } = useStudentDashboard();
 
@@ -45,6 +47,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
   const [isLessonOpen, setIsLessonOpen] = useState(false);
   const [isMockExamOpen, setIsMockExamOpen] = useState(false);
+  const [isKanjiPracticeOpen, setIsKanjiPracticeOpen] = useState(false);
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
@@ -137,6 +140,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <VocabKanjiProgress
               vocabulary={data.vocabularyProgress}
               kanji={data.kanjiProgress}
+              onPracticeKanji={() => setIsKanjiPracticeOpen(true)}
             />
 
             {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
@@ -187,6 +191,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           await handleCompleteLesson(data?.continueLesson?.lessonId || 'les_n5_012');
           setIsLessonOpen(false);
         }}
+      />
+      <KanjiPracticeModal
+        isOpen={isKanjiPracticeOpen}
+        onClose={() => setIsKanjiPracticeOpen(false)}
+        onSuccessfulTrace={handleKanjiPracticeComplete}
       />
     </div>
   );
