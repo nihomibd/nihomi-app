@@ -8,6 +8,17 @@ interface DailyPlanProps {
   onOpenListening?: () => void;
 }
 
+const handleTaskActivation = (
+  item: DailyPlanItem,
+  onSelectTask?: (taskId: string) => void,
+  onOpenVocabulary?: () => void,
+  onOpenListening?: () => void,
+) => {
+  if (item.type === 'vocabulary') onOpenVocabulary?.();
+  else if (item.type === 'listening') onOpenListening?.();
+  else onSelectTask?.(item.id);
+};
+
 export const DailyPlan: React.FC<DailyPlanProps> = ({ planItems, onSelectTask, onOpenVocabulary, onOpenListening }) => {
   const completedCount = planItems.filter((i) => i.status === 'completed').length;
   const totalCount = planItems.length;
@@ -40,19 +51,13 @@ export const DailyPlan: React.FC<DailyPlanProps> = ({ planItems, onSelectTask, o
           return (
             <li
               key={item.id}
-              onClick={() => {
-                if (item.type === 'vocabulary') onOpenVocabulary?.();
-                else if (item.type === 'listening') onOpenListening?.();
-                else onSelectTask?.(item.id);
-              }}
+              onClick={() => handleTaskActivation(item, onSelectTask, onOpenVocabulary, onOpenListening)}
               role="button"
               tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  if (item.type === 'vocabulary') onOpenVocabulary?.();
-                  else if (item.type === 'listening') onOpenListening?.();
-                  else onSelectTask?.(item.id);
+                  handleTaskActivation(item, onSelectTask, onOpenVocabulary, onOpenListening);
                 }
               }}
               className={`group flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
