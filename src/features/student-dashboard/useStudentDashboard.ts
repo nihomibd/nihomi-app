@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { DashboardApiResponse, DashboardViewState, TaskStatus } from './types';
 import { studentService } from './studentService';
+import { MockExamAttempt } from '../../types';
 
 export const useStudentDashboard = () => {
   const [data, setData] = useState<DashboardApiResponse | null>(null);
@@ -81,6 +82,14 @@ export const useStudentDashboard = () => {
     showToast('অভিনন্দন! Lesson 12 সম্পন্ন। +50 XP এবং +10 Nihomi Coins যোগ হয়েছে!');
   };
 
+  const handleMockExamCompleted = async (attempt: MockExamAttempt, reviewSections: any[]) => {
+    const result = await studentService.recordMockExamResult(attempt, reviewSections);
+    if (data && attempt.isPassed) {
+      setData({ ...data, accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins } });
+      showToast('অভিনন্দন! Mock Exam পাস। +100 XP এবং +25 Nihomi Coins যোগ হয়েছে!');
+    }
+  };
+
   return {
     data,
     viewState,
@@ -90,6 +99,7 @@ export const useStudentDashboard = () => {
     handleStartChallenge,
     handleUseAiCredit,
     handleCompleteLesson,
+    handleMockExamCompleted,
     showToast,
   };
 };

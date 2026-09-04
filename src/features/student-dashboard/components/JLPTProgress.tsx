@@ -3,9 +3,10 @@ import { JLPTProgressData } from '../types';
 
 interface JLPTProgressProps {
   progress: JLPTProgressData;
+  onTakeMockExam?: () => void;
 }
 
-export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress }) => {
+export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress, onTakeMockExam }) => {
   const modules = [
     { key: 'vocabulary', label: 'Vocabulary', labelJa: '語彙 (Goi)', percent: progress.modules.vocabulary, color: 'bg-rose-500' },
     { key: 'grammar', label: 'Grammar', labelJa: '文法 (Bunpou)', percent: progress.modules.grammar, color: 'bg-indigo-500' },
@@ -54,6 +55,15 @@ export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress }) => {
           </div>
         ))}
       </div>
+      <button
+        type="button"
+        onClick={onTakeMockExam}
+        aria-label="Take N5 Mock Exam"
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
+      >
+        <span>Take N5 Mock Exam</span>
+        <span className="text-xs font-medium text-stone-300">| পূর্ণ মক পরীক্ষা</span>
+      </button>
     </section>
   );
 };

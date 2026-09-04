@@ -30,9 +30,10 @@ import { stopJapaneseSpeech } from '../lib/tts';
 interface MockExamRunnerViewProps {
   examId: string;
   onNavigate: (view: string, params?: any) => void;
+  onAttemptCompleted?: (attempt: MockExamAttempt, reviewSections: any[]) => void | Promise<void>;
 }
 
-export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, onNavigate }) => {
+export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, onNavigate, onAttemptCompleted }) => {
   const [exam, setExam] = useState<MockExam | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [stage, setStage] = useState<'intro' | 'running' | 'submitting' | 'review'>('intro');
@@ -196,6 +197,10 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
       });
 
       setSubmissionResult(result);
+      if (result.attempt.isPassed) {
+        setReviewActiveTab('certificate');
+      }
+      await onAttemptCompleted?.(result.attempt, result.reviewSections);
       setStage('review');
     } catch (err: any) {
       console.error('Failed to submit exam:', err);

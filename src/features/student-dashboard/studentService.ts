@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabase';
 import { syncLearningProgressToSupabase, syncLessonProgressToSupabase } from '../../lib/supabaseService';
 import { DashboardApiResponse } from './types';
 import { mockDashboardData } from './mockData';
+import { MockExamAttempt } from '../../types';
 
 export const studentService = {
   // ১. আসল স্টুডেন্ট ও ড্যাশবোর্ড ডেটা ফেচ করা
@@ -113,5 +114,44 @@ export const studentService = {
     }
 
     return { updatedCoins, updatedXp, updatedLessons };
+  },
+
+  async recordMockExamResult(attempt: MockExamAttempt, reviewSections: any[]) {
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    const rewardKey = `nihomi_mock_exam_reward_${attempt.id}`;
+    const hasBeenRewarded = localStorage.getItem(rewardKey) === 'true';
+    const updatedCoins = hasBeenRewarded ? currentCoins : currentCoins + (attempt.isPassed ? 25 : 0);
+    const updatedXp = hasBeenRewarded ? currentXp : currentXp + (attempt.isPassed ? 100 : 0);
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+    if (attempt.isPassed) localStorage.setItem(rewardKey, 'true');
+
+    if (!attempt.isPassed) {
+      const failedCategories = reviewSections
+        .filter((section) => section.questions?.some((question: { isCorrect?: boolean }) => !question.isCorrect))
+        .map((section) => section.title || section.id);
+      const existing = JSON.parse(localStorage.getItem('nihomi_memory_mistakes') || '[]') as Array<Record<string, unknown>>;
+      const failedMistakes = failedCategories.map((category: string) => ({
+        id: `mock-exam-${attempt.id}-${category}`,
+        pattern: `Mock Exam: ${category}`,
+        category: category.toLowerCase().includes('listening') ? 'vocabulary' : category.toLowerCase().includes('grammar') ? 'particle' : 'vocabulary',
+        missedCount: 1,
+        lastMissed: 'আজ',
+        hintBn: 'এই মক পরীক্ষার বিভাগটি MemoryOS-এ আবার অনুশীলন করুন।',
+      }));
+      localStorage.setItem('nihomi_memory_mistakes', JSON.stringify([...failedMistakes, ...existing]));
+    }
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && attempt.isPassed && !hasBeenRewarded) {
+        await syncLearningProgressToSupabase({ userId: user.id, xpDelta: 100, studyMinutesDelta: Math.ceil(attempt.timeSpentSeconds / 60) });
+      }
+    } catch (error) {
+      console.warn('[Nihomi Service] Mock exam sync deferred; local result is saved:', error);
+    }
+
+    return { updatedCoins, updatedXp };
   }
 };

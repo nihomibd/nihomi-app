@@ -12,6 +12,7 @@ import { MobileBottomNavigation, NavTab } from './components/MobileBottomNavigat
 import { DashboardLoadingSkeleton, DashboardErrorView } from './components/UIStateViews';
 import { AiSenseiDrawer } from './components/AiSenseiDrawer';
 import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
+import { MockExamRunnerView } from '../../views/MockExamRunnerView';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -33,12 +34,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleStartChallenge,
     handleUseAiCredit,
     handleCompleteLesson,
+    handleMockExamCompleted,
     showToast,
   } = useStudentDashboard();
 
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
   const [isLessonOpen, setIsLessonOpen] = useState(false);
+  const [isMockExamOpen, setIsMockExamOpen] = useState(false);
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
@@ -70,6 +73,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       showToast('NIHOMI MemoryOS: ব্যক্তিগত ভুলের খাতা খোলা হচ্ছে...');
     }
   };
+
+  if (isMockExamOpen) {
+    return (
+      <div className="min-h-screen bg-[#0a0a12] text-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 pt-4">
+          <button type="button" onClick={() => setIsMockExamOpen(false)} className="rounded-xl border border-slate-700 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+            ← Dashboard
+          </button>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">N5 Mock Exam</span>
+        </div>
+        <MockExamRunnerView
+          examId="mock-exam-jlpt-n5-01"
+          onNavigate={() => setIsMockExamOpen(false)}
+          onAttemptCompleted={handleMockExamCompleted}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 selection:bg-rose-100 selection:text-rose-900">
@@ -115,7 +136,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             />
 
             {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
-            <JLPTProgress progress={data.jlptProgress} />
+            <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
 
             {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
             <StreakCard streak={data.streak} />
