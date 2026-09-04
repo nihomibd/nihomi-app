@@ -30,9 +30,16 @@ import {
   BookOpen,
   ArrowUpRight,
   Filter,
-  BarChart2
+  BarChart2,
+  Mic,
+  Radio,
+  Sparkles
 } from 'lucide-react';
 import { SrsVocabularyService, VocabSrsRecord } from '../../lib/srsService';
+import { TokyoPitchAccentLab } from '../voice/TokyoPitchAccentLab';
+import { fetchVoiceAssessmentHistory } from '../../lib/voiceApi';
+import { useAuth } from '../../context/AuthContext';
+import { VoicePronunciationTelemetry } from '../../types';
 
 interface LearningAnalyticsProps {
   studentName?: string;
@@ -49,14 +56,108 @@ export const LearningAnalyticsDashboard: React.FC<LearningAnalyticsProps> = ({
   studyStreakDays = 18,
   onLaunchSrsReview
 }) => {
+  const { token } = useAuth();
   const [timeRange, setTimeRange] = useState<'7d' | '14d' | '30d'>('14d');
   const [srsStats, setSrsStats] = useState(() => SrsVocabularyService.getRetentionAnalytics());
   const [dueVocab, setDueVocab] = useState<VocabSrsRecord[]>(() => SrsVocabularyService.getDueVocabItems());
+  const [isPitchLabOpen, setIsPitchLabOpen] = useState(false);
+  const [voiceTelemetry, setVoiceTelemetry] = useState<VoicePronunciationTelemetry>({
+    totalVoiceSessions: 3,
+    totalVoiceRecordings: 8,
+    averageClarityScore: 92,
+    averagePitchAccuracy: 89,
+    averageMoraRhythm: 86,
+    overallPronunciationScore: 89,
+    tokyoAccentReadinessRate: 88,
+    pitchPatternMastery: {
+      heibanAccuracy: 93,
+      atamadakaAccuracy: 90,
+      nakadakaAccuracy: 82,
+      odakaAccuracy: 78
+    },
+    patternsEvaluatedCount: {
+      heiban: 4,
+      atamadaka: 2,
+      nakadaka: 1,
+      odaka: 1
+    },
+    weakPhonemes: ['tsu', 'ryo', 'zu'],
+    recentEvaluations: []
+  });
 
   useEffect(() => {
     setSrsStats(SrsVocabularyService.getRetentionAnalytics());
     setDueVocab(SrsVocabularyService.getDueVocabItems());
-  }, []);
+
+    let isMounted = true;
+    async function loadVoiceTelemetry() {
+      try {
+        if (token) {
+          const res = await fetch('/api/analytics/voice-telemetry', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (isMounted && data.voiceTelemetry) {
+              setVoiceTelemetry(data.voiceTelemetry);
+              return;
+            }
+          }
+        }
+      } catch {}
+
+      // Local storage fallback
+      try {
+        const localHistory = await fetchVoiceAssessmentHistory();
+        if (isMounted && localHistory.length > 0) {
+          const total = localHistory.length;
+          const avgPitch = Math.round(localHistory.reduce((s, a) => s + a.pitchAccuracyScore, 0) / total);
+          const avgRhythm = Math.round(localHistory.reduce((s, a) => s + a.moraRhythmScore, 0) / total);
+          const avgClarity = Math.round(localHistory.reduce((s, a) => s + a.clarityScore, 0) / total);
+          const avgOverall = Math.round(localHistory.reduce((s, a) => s + a.overallScore, 0) / total);
+
+          const heibanList = localHistory.filter((a) => a.targetPattern === 'heiban');
+          const atamadakaList = localHistory.filter((a) => a.targetPattern === 'atamadaka');
+          const nakadakaList = localHistory.filter((a) => a.targetPattern === 'nakadaka');
+          const odakaList = localHistory.filter((a) => a.targetPattern === 'odaka');
+
+          const calcAcc = (list: typeof localHistory, fallback: number) =>
+            list.length > 0
+              ? Math.round(list.reduce((s, a) => s + a.pitchAccuracyScore, 0) / list.length)
+              : fallback;
+
+          setVoiceTelemetry((prev) => ({
+            ...prev,
+            totalVoiceRecordings: total,
+            totalVoiceSessions: Math.max(1, Math.ceil(total / 3)),
+            averagePitchAccuracy: avgPitch,
+            averageMoraRhythm: avgRhythm,
+            averageClarityScore: avgClarity,
+            overallPronunciationScore: avgOverall,
+            tokyoAccentReadinessRate: avgPitch,
+            pitchPatternMastery: {
+              heibanAccuracy: calcAcc(heibanList, prev.pitchPatternMastery.heibanAccuracy),
+              atamadakaAccuracy: calcAcc(atamadakaList, prev.pitchPatternMastery.atamadakaAccuracy),
+              nakadakaAccuracy: calcAcc(nakadakaList, prev.pitchPatternMastery.nakadakaAccuracy),
+              odakaAccuracy: calcAcc(odakaList, prev.pitchPatternMastery.odakaAccuracy)
+            },
+            patternsEvaluatedCount: {
+              heiban: heibanList.length,
+              atamadaka: atamadakaList.length,
+              nakadaka: nakadakaList.length,
+              odaka: odakaList.length
+            },
+            recentEvaluations: localHistory.slice(0, 5)
+          }));
+        }
+      } catch {}
+    }
+
+    loadVoiceTelemetry();
+    return () => {
+      isMounted = false;
+    };
+  }, [token]);
 
   // 1. Daily Study Time Data (minutes per day)
   const studyTime14Days = [
@@ -460,6 +561,162 @@ export const LearningAnalyticsDashboard: React.FC<LearningAnalyticsProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Row 5: Multimodal Tokyo Pitch-Accent & Voice Telemetry */}
+      <div className="p-6 bg-gradient-to-br from-stone-900 via-stone-950 to-stone-900 text-white border border-stone-800 rounded-3xl shadow-xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">
+                P1-06 MULTIMODAL VOICE TELEMETRY
+              </span>
+            </div>
+            <h3 className="text-lg font-bold flex items-center space-x-2">
+              <Mic className="w-5 h-5 text-amber-400" />
+              <span>Tokyo Pitch-Accent & Mora Rhythm Readiness</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono border border-amber-500/30">
+                東京式アクセント
+              </span>
+            </h3>
+            <p className="text-xs text-stone-400">
+              Evaluated fundamental frequency (F0) contours, downstep drop rates, and mora timing against standard NHK Tokyo acoustic benchmarks.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="btn-analytics-open-pitch-lab"
+            onClick={() => setIsPitchLabOpen(true)}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white text-xs font-bold flex items-center space-x-2 shadow-md transition-all cursor-pointer w-fit"
+          >
+            <Radio className="w-4 h-4 animate-pulse" />
+            <span>Open Pitch-Accent Lab</span>
+          </button>
+        </div>
+
+        {/* 4 Core Metrics */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-4 bg-stone-950/60 rounded-2xl border border-stone-800 space-y-1">
+            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+              Tokyo Readiness
+            </span>
+            <div className="text-2xl font-black text-amber-400">
+              {voiceTelemetry.tokyoAccentReadinessRate}%
+            </div>
+            <span className="text-[10px] text-stone-500">Native Tokyo baseline</span>
+          </div>
+
+          <div className="p-4 bg-stone-950/60 rounded-2xl border border-stone-800 space-y-1">
+            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+              Pitch Accuracy
+            </span>
+            <div className="text-2xl font-black text-emerald-400">
+              {voiceTelemetry.averagePitchAccuracy}%
+            </div>
+            <span className="text-[10px] text-stone-500">F0 contour alignment</span>
+          </div>
+
+          <div className="p-4 bg-stone-950/60 rounded-2xl border border-stone-800 space-y-1">
+            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+              Mora Rhythm
+            </span>
+            <div className="text-2xl font-black text-sky-400">
+              {voiceTelemetry.averageMoraRhythm}%
+            </div>
+            <span className="text-[10px] text-stone-500">Isochronous mora tempo</span>
+          </div>
+
+          <div className="p-4 bg-stone-950/60 rounded-2xl border border-stone-800 space-y-1">
+            <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+              Pronunciation ({voiceTelemetry.totalVoiceRecordings} Tests)
+            </span>
+            <div className="text-2xl font-black text-purple-400">
+              {voiceTelemetry.overallPronunciationScore}%
+            </div>
+            <span className="text-[10px] text-stone-500">{voiceTelemetry.totalVoiceSessions} active speech sessions</span>
+          </div>
+        </div>
+
+        {/* 4 Tokyo Accent Types Breakdown */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold text-stone-400">
+            <span>TOKYO 4-PATTERN MASTERY MATRIX</span>
+            <span className="text-[10px] font-mono text-stone-500">Odaka • Atamadaka • Nakadaka • Heiban</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div className="p-3 bg-stone-900/90 rounded-xl border border-stone-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-sky-400">平板 (Heiban)</span>
+                <span className="text-xs font-mono font-bold text-white">
+                  {voiceTelemetry.pitchPatternMastery.heibanAccuracy}%
+                </span>
+              </div>
+              <div className="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-sky-400 h-full rounded-full transition-all duration-500"
+                  style={{ width: `${voiceTelemetry.pitchPatternMastery.heibanAccuracy}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-stone-500 block">Low-High flat ({voiceTelemetry.patternsEvaluatedCount.heiban} tested)</span>
+            </div>
+
+            <div className="p-3 bg-stone-900/90 rounded-xl border border-stone-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-rose-400">頭高 (Atamadaka)</span>
+                <span className="text-xs font-mono font-bold text-white">
+                  {voiceTelemetry.pitchPatternMastery.atamadakaAccuracy}%
+                </span>
+              </div>
+              <div className="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-rose-400 h-full rounded-full transition-all duration-500"
+                  style={{ width: `${voiceTelemetry.pitchPatternMastery.atamadakaAccuracy}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-stone-500 block">High on 1st mora ({voiceTelemetry.patternsEvaluatedCount.atamadaka} tested)</span>
+            </div>
+
+            <div className="p-3 bg-stone-900/90 rounded-xl border border-stone-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400">中高 (Nakadaka)</span>
+                <span className="text-xs font-mono font-bold text-white">
+                  {voiceTelemetry.pitchPatternMastery.nakadakaAccuracy}%
+                </span>
+              </div>
+              <div className="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-amber-400 h-full rounded-full transition-all duration-500"
+                  style={{ width: `${voiceTelemetry.pitchPatternMastery.nakadakaAccuracy}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-stone-500 block">Peak in middle ({voiceTelemetry.patternsEvaluatedCount.nakadaka} tested)</span>
+            </div>
+
+            <div className="p-3 bg-stone-900/90 rounded-xl border border-stone-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-400">尾高 (Odaka)</span>
+                <span className="text-xs font-mono font-bold text-white">
+                  {voiceTelemetry.pitchPatternMastery.odakaAccuracy}%
+                </span>
+              </div>
+              <div className="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-emerald-400 h-full rounded-full transition-all duration-500"
+                  style={{ width: `${voiceTelemetry.pitchPatternMastery.odakaAccuracy}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-stone-500 block">Peak on last mora ({voiceTelemetry.patternsEvaluatedCount.odaka} tested)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tokyo Pitch Accent Lab Modal */}
+      <TokyoPitchAccentLab
+        isOpen={isPitchLabOpen}
+        onClose={() => setIsPitchLabOpen(false)}
+      />
 
     </div>
   );

@@ -12,8 +12,10 @@ import {
   SrsCardStage,
   SrsCardRecord,
   SrsReviewLog,
-  MockExamAttempt
+  MockExamAttempt,
+  TokyoPitchAccentAssessment
 } from '../types.js';
+import { TokyoPitchAccentService } from './pitchAccentService.js';
 
 export class LearnerAnalyticsService {
   private static CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache TTL
@@ -307,6 +309,7 @@ export class LearnerAnalyticsService {
         recentAttempts
       },
       leaderboardMetrics: leaderboardInfo,
+      voiceTelemetry: TokyoPitchAccentService.computeVoiceTelemetry(db.getVoiceAssessments(userId)),
       lastRefreshed: new Date().toISOString()
     };
 
@@ -354,6 +357,7 @@ export class LearnerAnalyticsService {
           streak_metrics: summary.streakMetrics,
           mock_exam_metrics: summary.mockExamMetrics,
           leaderboard_metrics: summary.leaderboardMetrics,
+          voice_telemetry: summary.voiceTelemetry,
           last_refreshed: summary.lastRefreshed
         })
       ).catch((err) => {

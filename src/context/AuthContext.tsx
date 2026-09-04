@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { setStoredToken, apiRequest, getStoredToken } from '../lib/api';
 
@@ -130,6 +130,7 @@ export const PLAN_CONFIGS: Record<string, any> = {
 };
 
 export interface AuthContextType {
+  token: string | null;
   user: User | null;
   profile: UserProfile | null;
   progress: UserProgress | null;
@@ -162,6 +163,7 @@ export interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
+  token: null,
   user: null,
   profile: null,
   progress: null,
@@ -194,6 +196,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(() => getStoredToken());
   const [user, setUser] = useState<User | null>(() => {
     try {
       const saved = localStorage.getItem('nihomi_user');
@@ -284,6 +287,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         if (session.access_token) {
           setStoredToken(session.access_token);
+          setToken(session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -314,6 +318,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         if (session.access_token) {
           setStoredToken(session.access_token);
+          setToken(session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -340,6 +345,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else if (_event === 'SIGNED_OUT') {
         setUser(null);
         setStoredToken(null);
+        setToken(null);
         localStorage.removeItem('nihomi_user');
       }
     });
@@ -384,6 +390,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       if (res.token) {
         setStoredToken(res.token);
+        setToken(res.token);
       }
       if (res.user) {
         setUserData(res.user);
@@ -408,6 +415,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch {}
     await supabase.auth.signOut().catch(() => {});
     setStoredToken(null);
+    setToken(null);
     setUser(null);
     setProfile(null);
     localStorage.removeItem('nihomi_user');
@@ -448,6 +456,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.token) {
         setStoredToken(data.token);
+        setToken(data.token);
       }
       if (data.user) {
         setUserData(data.user);
@@ -481,6 +490,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.token) {
         setStoredToken(data.token);
+        setToken(data.token);
       }
       if (data.user) {
         setUserData(data.user);
@@ -553,6 +563,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider
       value={{
+        token,
         user,
         profile,
         progress,

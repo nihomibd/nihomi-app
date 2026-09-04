@@ -96,6 +96,28 @@ analyticsRouter.get('/study-pulse', requireAuth, (req: AuthenticatedRequest, res
 });
 
 /**
+ * GET /api/analytics/voice-telemetry
+ * Returns Tokyo pitch-accent accuracy, mora rhythm, pattern mastery, and readiness rate.
+ */
+analyticsRouter.get('/voice-telemetry', requireAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const summary = db.getLearnerAnalyticsSummary(userId);
+
+    return res.json({
+      success: true,
+      voiceTelemetry: summary.voiceTelemetry
+    });
+  } catch (error: any) {
+    console.error('[Analytics] Error retrieving voice telemetry:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to retrieve voice telemetry'
+    });
+  }
+});
+
+/**
  * GET /api/analytics/leaderboard
  * Returns XP leaderboard for requested timeframe ('today' | 'week' | 'allTime')
  * along with the authenticated user's current rank position.

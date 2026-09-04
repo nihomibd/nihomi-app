@@ -15,13 +15,15 @@ import {
   Clock,
   Trophy,
   ShieldCheck,
-  Zap
+  Zap,
+  Radio
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
 import { VoiceSenseiPractice } from "../components/practice/VoiceSenseiPractice";
+import { TokyoPitchAccentLab } from '../components/voice/TokyoPitchAccentLab';
 import { SRSFlashcardSession } from '../components/practice/SRSFlashcardSession';
 import { BadgeSystem } from '../components/BadgeSystem';
 import { GhostModeSRSWidget } from '../components/practice/GhostModeSRSWidget';
@@ -76,6 +78,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const [isWritingActive, setIsWritingActive] = useState(false);
   const [activeKanjiToDraw, setActiveKanjiToDraw] = useState<{ kanji: string; hiragana: string; english: string; strokes: number } | null>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
+  const [isPitchAccentLabOpen, setIsPitchAccentLabOpen] = useState(false);
 
   // Dynamic metrics from user actions & local storage
   const completedLessonsCount = useMemo(() => {
@@ -243,6 +246,23 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
               </div>
               <h4 className="font-bold text-sm text-stone-900 dark:text-stone-100">Voice Sensei Practice</h4>
               <p className="text-xs text-stone-500">Real-time Tokyo pronunciation coaching</p>
+            </div>
+
+            <div
+              id="card-pitch-accent-lab"
+              onClick={() => setIsPitchAccentLabOpen(true)}
+              className="p-5 bg-gradient-to-br from-amber-500/5 to-red-500/5 dark:from-amber-950/20 dark:to-red-950/20 bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] border border-amber-500/30 dark:border-amber-500/20 rounded-2xl hover:border-amber-500 transition-all cursor-pointer space-y-2 group shadow-xs"
+            >
+              <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center font-bold text-xs">
+                <Radio className="w-4 h-4 animate-pulse" />
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <h4 className="font-bold text-sm text-stone-900 dark:text-stone-100">Tokyo Pitch-Accent Lab</h4>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
+                  東京式
+                </span>
+              </div>
+              <p className="text-xs text-stone-500">Master Odaka, Atamadaka, Nakadaka & Heiban minimal pairs</p>
             </div>
 
             <div
@@ -519,6 +539,13 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
         <VoiceSenseiPractice
           isOpen={isVoiceActive}
           onClose={() => setIsVoiceActive(false)}
+        />
+      )}
+
+      {isPitchAccentLabOpen && (
+        <TokyoPitchAccentLab
+          isOpen={isPitchAccentLabOpen}
+          onClose={() => setIsPitchAccentLabOpen(false)}
         />
       )}
 

@@ -20,6 +20,9 @@ import {
 } from 'lucide-react';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { useAuth } from '../../context/AuthContext';
+import { evaluateTokyoPitchAccent } from '../../lib/voiceApi';
+import { TokyoPitchAccentLab } from '../voice/TokyoPitchAccentLab';
+import { TokyoPitchAccentAssessment } from '../../types';
 
 export interface VoiceSenseiPracticeProps {
   isOpen: boolean;
@@ -135,7 +138,8 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
   onClose,
   initialScenarioId
 }) => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const [isPitchLabOpen, setIsPitchLabOpen] = useState(false);
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
@@ -339,24 +343,49 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
   const evaluateVoiceRecording = async (scenario: DialogueScenario, transcript: string) => {
     setIsEvaluating(true);
 
-    // Dynamic evaluation latency mimicking neural acoustic parsing
-    await new Promise((r) => setTimeout(r, 1300));
+    // Call dedicated Tokyo Pitch-Accent & Voice Telemetry Evaluator
+    let tokyoAssessment: TokyoPitchAccentAssessment | null = null;
+    try {
+      const resp = await evaluateTokyoPitchAccent(
+        {
+          targetPhrase: scenario.targetSentenceJa,
+          targetRomaji: scenario.targetSentenceRomaji,
+          targetMeaning: scenario.englishMeaning,
+          targetPattern:
+            scenario.id === 'sc-2'
+              ? 'heiban'
+              : scenario.id === 'sc-4'
+              ? 'atamadaka'
+              : scenario.id === 'sc-3'
+              ? 'nakadaka'
+              : 'heiban',
+          spokenTranscript: transcript
+        },
+        token || undefined
+      );
+      if (resp && resp.assessment) {
+        tokyoAssessment = resp.assessment;
+      }
+    } catch (err) {
+      console.warn('[Voice Sensei] Remote evaluation fallback:', err);
+    }
 
     // Calculate accuracy similarity
     const cleanedTarget = scenario.targetSentenceJa.replace(/[。、！？\s]/g, '');
     const cleanedTranscript = (transcript || '').replace(/[。、！？\s]/g, '');
 
-    let computedScore = 92;
-    if (cleanedTranscript.length > 0) {
-      let matches = 0;
-      for (const char of cleanedTranscript) {
-        if (cleanedTarget.includes(char)) matches++;
+    let computedScore = tokyoAssessment ? tokyoAssessment.overallScore : 92;
+    if (!tokyoAssessment) {
+      if (cleanedTranscript.length > 0) {
+        let matches = 0;
+        for (const char of cleanedTranscript) {
+          if (cleanedTarget.includes(char)) matches++;
+        }
+        const similarity = Math.min(1, matches / Math.max(1, cleanedTarget.length));
+        computedScore = Math.max(78, Math.round(75 + similarity * 24));
+      } else {
+        computedScore = Math.floor(Math.random() * 8) + 90;
       }
-      const similarity = Math.min(1, matches / Math.max(1, cleanedTarget.length));
-      computedScore = Math.max(78, Math.round(75 + similarity * 24));
-    } else {
-      // Natural randomized baseline for student engagement
-      computedScore = Math.floor(Math.random() * 8) + 90;
     }
 
     // Dynamic pitch contour detection based on scenario level
@@ -368,22 +397,24 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
     else pitch = 'Standard Tokyo';
 
     // Scenario-specific Bengali coaching tips
-    let bengaliTip = '';
-    if (scenario.id === 'sc-1') {
-      bengaliTip =
-        'আপনার উচ্চারণ চমৎকার হয়েছে! মনে রাখবেন「バングラデシュ」বলার সময়「シュ (shu)」ধ্বনিটি দীর্ঘ না করে স্বাভাবিক মোরা রিদমে সংক্ষেপে শেষ করতে হবে।「よろしくお願いします」-এর গতি বেশ সাবলীল ছিল।';
-    } else if (scenario.id === 'sc-2') {
-      bengaliTip =
-        '「ホットコーヒー (Hot coffee)」বলার সময় চোকুন (ー) দীর্ঘ স্বরধ্বনি ২ মোরা ধরে রাখুন।「お願いします」-এর শুরুতে「お」নরম করে শুরু করলে রেস্টুরেন্ট বা ক্যাফেতে একদম নেটিভ জাপানিদের মতো শোনাবে।';
-    } else if (scenario.id === 'sc-3') {
-      bengaliTip =
-        'রাস্তা বা দিক নির্দেশনার প্রশ্নে「すみません」দিয়ে দৃষ্টি আকর্ষণ করার সময় শেষ স্বর সামান্য উঁচুতে তুলুন (Rising intonation)।「乗り場 (noriba)」-র ক্ষেত্রে「ば (ba)」ধ্বনির ওপর অতিরিক্ত জোর না দিয়ে সমান ফ্লো বজায় রাখুন।';
-    } else if (scenario.id === 'sc-4') {
-      bengaliTip =
-        'কনভিনিয়েন্স স্টোরের কাস্টমার সার্ভিস বা আরুবাইতোতে「いらっしゃいませ」বলার সময় স্বর প্রফুল্ল ও উজ্জ্বল রাখুন।「お持ちですか」-র「ち (chi)」স্পষ্ট রাখুন।';
-    } else {
-      bengaliTip =
-        'এম্বাসি বা ভিসা ইন্টারভিউতে「考えております」বলার সময় নম্র ও স্থির কণ্ঠস্বর বজায় রাখুন।「高度な (koudo na)」-র「う」শব্দকে「ও-ও」ধ্বনি হিসেবে মসৃণভাবে উচ্চারণ করুন।';
+    let bengaliTip = tokyoAssessment?.feedbackBn || '';
+    if (!bengaliTip) {
+      if (scenario.id === 'sc-1') {
+        bengaliTip =
+          'আপনার উচ্চারণ চমৎকার হয়েছে! মনে রাখবেন「バングラデシュ」বলার সময়「シュ (shu)」ধ্বনিটি দীর্ঘ না করে স্বাভাবিক মোরা রিদমে সংক্ষেপে শেষ করতে হবে।「よろしくお願いします」-এর গতি বেশ সাবলীল ছিল।';
+      } else if (scenario.id === 'sc-2') {
+        bengaliTip =
+          '「ホットコーヒー (Hot coffee)」বলার সময় চোকুন (ー) দীর্ঘ স্বরধ্বনি ২ মোরা ধরে রাখুন।「お願いします」-এর শুরুতে「お」নরম করে শুরু করলে রেস্টুরেন্ট বা ক্যাফেতে একদম নেティブ জাপানিদের মতো শোনাবে।';
+      } else if (scenario.id === 'sc-3') {
+        bengaliTip =
+          'রাস্তা বা দিক নির্দেশনার প্রশ্নে「すみません」দিয়ে দৃষ্টি আকর্ষণ করার সময় শেষ স্বর সামান্য উঁচুতে তুলুন (Rising intonation)।「乗り場 (noriba)」-র ক্ষেত্রে「ば (ba)」ধ্বনির ওপর অতিরিক্ত জোর না দিয়ে সমান ফ্লো বজায় রাখুন।';
+      } else if (scenario.id === 'sc-4') {
+        bengaliTip =
+          'কনভিনিয়েন্স স্টোরের কাস্টমার সার্ভিস বা আরুবাইতোতে「いらっしゃいませ」বলার সময় স্বর প্রফুল্ল ও উজ্জ্বল রাখুন।「お持ちですか」-র「ち (chi)」স্পষ্ট রাখুন।';
+      } else {
+        bengaliTip =
+          'এম্বাসি বা ভিসা ইন্টারভিউতে「考えております」বলার সময় নম্র ও স্থির কণ্ঠস্বর বজায় রাখুন।「高度な (koudo na)」-র「う」শব্দকে「ও-ও」ধ্বনি হিসেবে মসৃণভাবে উচ্চারণ করুন।';
+      }
     }
 
     // Syllable/mora pitch feedback breakdown
@@ -404,9 +435,9 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
     setEvaluationResult({
       score: computedScore,
       pitchContour: pitch,
-      fluencyScore: Math.min(100, computedScore + 2),
-      moraRhythmScore: Math.min(100, computedScore - 1),
-      accuracyFeedback: `Crisp vowel clarity and accurate mora timing matching native Tokyo Japanese accent patterns (${scenario.pitchPattern}).`,
+      fluencyScore: tokyoAssessment ? tokyoAssessment.clarityScore : Math.min(100, computedScore + 2),
+      moraRhythmScore: tokyoAssessment ? tokyoAssessment.moraRhythmScore : Math.min(100, computedScore - 1),
+      accuracyFeedback: tokyoAssessment?.feedbackEn || `Crisp vowel clarity and accurate mora timing matching native Tokyo Japanese accent patterns (${scenario.pitchPattern}).`,
       bengaliTip,
       recognizedText: transcript || undefined,
       syllableBreakdown: sampleBreakdown
@@ -448,19 +479,30 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
               </p>
             </div>
           </div>
-          <button
-            id="btn-close-voice-sensei"
-            type="button"
-            onClick={() => {
-              stopRecording();
-              stopJapaneseSpeech();
-              onClose();
-            }}
-            className="p-2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
-            title="Close modal"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              id="btn-open-pitch-lab"
+              type="button"
+              onClick={() => setIsPitchLabOpen(true)}
+              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer shadow-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>Tokyo Pitch Lab (東京式)</span>
+            </button>
+            <button
+              id="btn-close-voice-sensei"
+              type="button"
+              onClick={() => {
+                stopRecording();
+                stopJapaneseSpeech();
+                onClose();
+              }}
+              className="p-2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+              title="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* ========================================================================= */}
@@ -775,6 +817,12 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Tokyo Pitch-Accent Lab Modal */}
+      <TokyoPitchAccentLab
+        isOpen={isPitchLabOpen}
+        onClose={() => setIsPitchLabOpen(false)}
+      />
     </div>
   );
 };

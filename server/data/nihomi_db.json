@@ -339,6 +339,15 @@
       "role": "user",
       "createdAt": "2026-09-03T12:14:25.925Z",
       "updatedAt": "2026-09-03T12:14:25.925Z"
+    },
+    {
+      "id": "usr-telemetry-test-1788449512393",
+      "email": "usr-telemetry-test-1788449512393@example.com",
+      "passwordHash": "dummy_hash",
+      "passwordSalt": "dummy_salt",
+      "role": "user",
+      "createdAt": "2026-09-03T15:31:52.393Z",
+      "updatedAt": "2026-09-03T15:31:52.393Z"
     }
   ],
   "profiles": [
@@ -642,6 +651,15 @@
       "dailyGoalMinutes": 30,
       "createdAt": "2026-09-03T12:14:25.925Z",
       "updatedAt": "2026-09-03T12:14:25.926Z"
+    },
+    {
+      "userId": "usr-telemetry-test-1788449512393",
+      "displayName": "Tanvir Analytics Tester",
+      "nativeLanguage": "en",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 30,
+      "createdAt": "2026-09-03T15:31:52.393Z",
+      "updatedAt": "2026-09-03T15:31:52.393Z"
     }
   ],
   "progress": [
@@ -1290,6 +1308,36 @@
       "lastActiveDate": "2026-09-03",
       "experiencePoints": 45,
       "updatedAt": "2026-09-03T12:14:53.222Z"
+    },
+    {
+      "userId": "usr-telemetry-test-1788449512393",
+      "currentLevel": "N5",
+      "completedLessonIds": [
+        "les-1",
+        "les-2",
+        "les-3",
+        "les-4"
+      ],
+      "experiencePoints": 1250,
+      "currentStreak": 8,
+      "longestStreak": 12,
+      "lastActiveDate": "2026-09-03",
+      "totalStudyMinutes": 360,
+      "updatedAt": "2026-09-03T15:31:52.393Z"
+    },
+    {
+      "userId": "usr-test-srs-1788449517994",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 11,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-03",
+      "experiencePoints": 45,
+      "updatedAt": "2026-09-03T15:31:58.154Z"
     }
   ],
   "courses": [
@@ -15631,6 +15679,221 @@
       "createdAt": "2026-07-20T11:00:00.000Z",
       "updatedAt": "2026-08-29T10:00:00.000Z",
       "userId": "usr-test-srs-1788437693068"
+    },
+    {
+      "id": "ghost-7994-01",
+      "topic": "Particle は vs が in Subordinate / Dependent Clauses",
+      "conceptCode": "particle-wa-ga-subordinate",
+      "confusionType": "wa_vs_ga",
+      "level": "N5",
+      "targetJapanese": "田中さんが作ったケーキは美味しいです。",
+      "romaji": "Tanaka-san ga tsukutta keeki wa oishii desu.",
+      "bangla": "তানাকা সাহেবের তৈরি করা কেকটি অত্যন্ত সুস্বাদু।",
+      "failureCount": 14,
+      "successStreak": 2,
+      "masteryPercentage": 65,
+      "firstSeenAt": "2026-06-12T10:00:00.000Z",
+      "lastFailedAt": "2026-08-28T14:30:00.000Z",
+      "lastReviewedAt": "2026-08-30T09:15:00.000Z",
+      "nextReviewAt": "2026-09-03T14:31:57.881Z",
+      "srsStage": "guru",
+      "intervalDays": 3,
+      "easeFactor": 2.35,
+      "lastFailedContext": "Restaurant Ordering & Compliments (Quiz 4)",
+      "newContextChallenge": "Tokyo Workplace Meeting (打ち合わせ)",
+      "scenarioPrompt": "Meeting-এ আপনার বস জানতে চাইলেন: \"প্রজেক্টের ডিজাইন কে তৈরি করেছে?\" আপনি কীভাবে বলবেন যে \"তানাকা সাহেব যে ডিজাইন বানিয়েছেন সেটা ভালো\"?",
+      "options": [
+        {
+          "text": "田中さんが作ったデザインは素晴らしいです。",
+          "isCorrect": true,
+          "explanation": "সঠিক! Subordinate clause (যৌগিক বাক্যাংশ)-এর subject সবসময় が (ga) গ্রহণ করে, আর পুরো বাক্যের প্রধান topic হল デザイン (wa)!"
+        },
+        {
+          "text": "田中さんは作ったデザインが素晴らしいです。",
+          "isCorrect": false,
+          "explanation": "ভুল! Subordinate clause-এ は বসালে বাক্যের ফোকাস ও অর্থ পরিবর্তিত হয়ে যায়।"
+        },
+        {
+          "text": "田中さんで作ったデザインは素晴らしいです。",
+          "isCorrect": false,
+          "explanation": "ভুল! で (de) এখানে কোনো মাধ্যম বা স্থান নির্দেশ করতে ব্যবহৃত হতে পারে না।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-06-12T10:00:00.000Z",
+      "updatedAt": "2026-08-30T09:15:00.000Z",
+      "userId": "usr-test-srs-1788449517994"
+    },
+    {
+      "id": "ghost-7994-02",
+      "topic": "Particle に vs で (Existence vs Location of Action)",
+      "conceptCode": "particle-ni-de-location",
+      "confusionType": "ni_vs_de",
+      "level": "N5",
+      "targetJapanese": "図書館で本を読みます。教室に学生がいます。",
+      "romaji": "Toshokan de hon o yomimasu. Kyoushitsu ni gakusei ga imasu.",
+      "bangla": "লাইব্রেরিতে বই পড়ি। ক্লাসরুমে ছাত্রছাত্রী আছে।",
+      "failureCount": 11,
+      "successStreak": 1,
+      "masteryPercentage": 45,
+      "firstSeenAt": "2026-07-01T08:00:00.000Z",
+      "lastFailedAt": "2026-08-29T16:00:00.000Z",
+      "lastReviewedAt": "2026-08-30T11:00:00.000Z",
+      "nextReviewAt": "2026-09-03T13:31:57.881Z",
+      "srsStage": "apprentice",
+      "intervalDays": 1,
+      "easeFactor": 2.1,
+      "lastFailedContext": "Minna no Nihongo Lesson 10 Location Drills",
+      "newContextChallenge": "Tokyo Station Convenience Store Scenario",
+      "scenarioPrompt": "আপনি বলতে চান \"আমি কনভেনিয়েন্স স্টোরে ওনিগিরি কিনি।\" কোন পার্টিক্যালটি ক্রিয়ার স্থান হিসেবে বসবে?",
+      "options": [
+        {
+          "text": "コンビニで おにぎりを 買います。",
+          "isCorrect": true,
+          "explanation": "সঠিক! কোনো স্থানে কোনো কর্ম বা অ্যাকশন সম্পাদিত হলে (Action Location) で (de) বসে।"
+        },
+        {
+          "text": "コンビニに おにぎりを 買います。",
+          "isCorrect": false,
+          "explanation": "ভুল! に (ni) সাধারণত অস্তিত্ব (います/あります) বা গন্তব্যের ক্ষেত্রে বসে, অ্যাকশনের স্থানে নয়।"
+        },
+        {
+          "text": "コンビニを おにぎりで 買います。",
+          "isCorrect": false,
+          "explanation": "ভুল! পার্টিক্যালের স্থান উল্টো হয়ে গেছে।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-01T08:00:00.000Z",
+      "updatedAt": "2026-08-30T11:00:00.000Z",
+      "userId": "usr-test-srs-1788449517994"
+    },
+    {
+      "id": "ghost-7994-03",
+      "topic": "Te-Form Conjugation for ~Mu/Bu/Nu Verbs (〜んで)",
+      "conceptCode": "te-form-godan-mubunu",
+      "confusionType": "te_form",
+      "level": "N5",
+      "targetJapanese": "友達と遊んで、コーヒーを飲みました。",
+      "romaji": "Tomodachi to asonde, koohii o nomimashita.",
+      "bangla": "বন্ধুর সাথে আড্ডা দিয়ে কফি খেয়েছিলাম।",
+      "failureCount": 9,
+      "successStreak": 3,
+      "masteryPercentage": 75,
+      "firstSeenAt": "2026-07-04T12:00:00.000Z",
+      "lastFailedAt": "2026-08-25T10:00:00.000Z",
+      "lastReviewedAt": "2026-08-31T09:00:00.000Z",
+      "nextReviewAt": "2026-09-04T15:31:57.881Z",
+      "srsStage": "master",
+      "intervalDays": 7,
+      "easeFactor": 2.6,
+      "lastFailedContext": "Lesson 14 Verb Conjugation Drills",
+      "newContextChallenge": "Shinjuku Weekend Plan Discussion",
+      "scenarioPrompt": "Weekend-এর কাজের ধারা বর্ণনা করতে গিয়ে 遊ぶ (Asobu - আড্ডা দেওয়া/খেলা) এর সঠিক Te-form কী হবে?",
+      "options": [
+        {
+          "text": "遊んで (Asonde)",
+          "isCorrect": true,
+          "explanation": "সঠিক! ぶ (bu), む (mu), ぬ (nu) দিয়ে শেষ হওয়া Godan Verb-এর Te-form রূপান্তর んで (nde) হয়!"
+        },
+        {
+          "text": "遊びて (Asobite)",
+          "isCorrect": false,
+          "explanation": "ভুল! ぶ দিয়ে শেষ হওয়া ভার্ব কখনোই いて বা びて হয় না।"
+        },
+        {
+          "text": "遊って (Asotte)",
+          "isCorrect": false,
+          "explanation": "ভুল! って (tte) শুধুমাত্র う, つ, る এর ক্ষেত্রে ব্যবহৃত হয়।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-04T12:00:00.000Z",
+      "updatedAt": "2026-08-31T09:00:00.000Z",
+      "userId": "usr-test-srs-1788449517994"
+    },
+    {
+      "id": "ghost-7994-04",
+      "topic": "Particle を vs が with Potential Verbs & Likes (話せる / 好き)",
+      "conceptCode": "particle-o-ga-potential-state",
+      "confusionType": "o_vs_ga",
+      "level": "N5",
+      "targetJapanese": "日本語が少し話せます。寿司が好きです。",
+      "romaji": "Nihongo ga sukoshi hanasemasu. Sushi ga suki desu.",
+      "bangla": "আমি অল্প জাপানি বলতে পারি। আমি সুশি পছন্দ করি।",
+      "failureCount": 8,
+      "successStreak": 1,
+      "masteryPercentage": 50,
+      "firstSeenAt": "2026-07-15T09:00:00.000Z",
+      "lastFailedAt": "2026-08-27T17:00:00.000Z",
+      "lastReviewedAt": "2026-08-30T14:00:00.000Z",
+      "nextReviewAt": "2026-09-03T15:01:57.881Z",
+      "srsStage": "apprentice",
+      "intervalDays": 1,
+      "easeFactor": 2.2,
+      "lastFailedContext": "Lesson 9 & 27 Potential Forms",
+      "newContextChallenge": "Tokyo IT Job Interview Introduction",
+      "scenarioPrompt": "ইন্টারভিউতে বলতে চান: \"আমি পাইথন প্রোগ্রামিং বুঝি/পারি।\" সঠিক ব্যাকরণ কোনটি?",
+      "options": [
+        {
+          "text": "私は Pythonが 分かります / できます。",
+          "isCorrect": true,
+          "explanation": "সঠিক! 分かる (wakaru), できる (dekiru), 好き (suki) এবং Potential Form-এ অবজেক্ট নির্দেশ করতে が (ga) ব্যবহৃত হয়।"
+        },
+        {
+          "text": "私は Pythonを 分かります。",
+          "isCorrect": false,
+          "explanation": "ভুল! 分かる এবং できる কখনো を গ্রহণ করে না, সর্বদা が গ্রহণ করে।"
+        },
+        {
+          "text": "私は Pythonに 分かります。",
+          "isCorrect": false,
+          "explanation": "ভুল! に এখানে অপ্রাসঙ্গিক।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-15T09:00:00.000Z",
+      "updatedAt": "2026-08-30T14:00:00.000Z",
+      "userId": "usr-test-srs-1788449517994"
+    },
+    {
+      "id": "ghost-7994-05",
+      "topic": "Transitive vs Intransitive Verb Pairs (開ける vs 開く)",
+      "conceptCode": "transitive-intransitive-pairs",
+      "confusionType": "transitive_intransitive",
+      "level": "N4",
+      "targetJapanese": "風でドアが開きました。私がドアを開けました。",
+      "romaji": "Kaze de doa ga akimashita. Watashi ga doa o akemashita.",
+      "bangla": "বাতাসে দরজা খুলে গেল (অটোমেটিক)। আমি দরজা খুললাম (ইচ্ছাকৃত)।",
+      "failureCount": 6,
+      "successStreak": 2,
+      "masteryPercentage": 60,
+      "firstSeenAt": "2026-07-20T11:00:00.000Z",
+      "lastFailedAt": "2026-08-26T15:00:00.000Z",
+      "lastReviewedAt": "2026-08-29T10:00:00.000Z",
+      "nextReviewAt": "2026-09-03T14:31:57.881Z",
+      "srsStage": "guru",
+      "intervalDays": 3,
+      "easeFactor": 2.4,
+      "lastFailedContext": "Minna no Nihongo Lesson 29 State Expressions",
+      "newContextChallenge": "Office Air Conditioning Discussion",
+      "scenarioPrompt": "\"জানালাটি খোলা আছে (State/স্বাভাবিক অবস্থা)\" বোঝাতে কোনটি সঠিক?",
+      "options": [
+        {
+          "text": "窓が 開いています (Mado ga aite imasu)",
+          "isCorrect": true,
+          "explanation": "সঠিক! Intransitive verb (開く) + が + 〜ています কোনো বস্তুর স্বাভাবিক বা স্বতঃস্ফূর্ত অবস্থা প্রকাশ করে।"
+        },
+        {
+          "text": "窓を 開けています (Mado o akete imasu)",
+          "isCorrect": false,
+          "explanation": "ভুল! এটি বোঝায় কেউ একজন এখন সক্রিয়ভাবে জানালা খোলার কাজ করছে।"
+        }
+      ],
+      "isResolved": false,
+      "createdAt": "2026-07-20T11:00:00.000Z",
+      "updatedAt": "2026-08-29T10:00:00.000Z",
+      "userId": "usr-test-srs-1788449517994"
     }
   ],
   "studentErrorLogs": [],
@@ -16498,6 +16761,67 @@
       "level": "N5",
       "startedAt": "2026-09-03T11:14:26.005Z",
       "submittedAt": "2026-09-03T12:14:26.005Z",
+      "timeSpentSeconds": 3400,
+      "sectionTimesSpentSeconds": {
+        "vocabulary": 1200,
+        "grammar_reading": 1400,
+        "listening": 800
+      },
+      "sectionScores": {
+        "vocabulary": {
+          "sectionType": "vocabulary",
+          "sectionTitle": "Language Knowledge (Vocabulary)",
+          "totalQuestions": 25,
+          "correctQuestions": 22,
+          "rawScorePercent": 88,
+          "scaledScore": 53,
+          "maxScaledScore": 60,
+          "passingThreshold": 19,
+          "isSectionPassed": true
+        },
+        "grammar_reading": {
+          "sectionType": "grammar_reading",
+          "sectionTitle": "Language Knowledge (Grammar) & Reading",
+          "totalQuestions": 25,
+          "correctQuestions": 20,
+          "rawScorePercent": 80,
+          "scaledScore": 48,
+          "maxScaledScore": 60,
+          "passingThreshold": 19,
+          "isSectionPassed": true
+        },
+        "listening": {
+          "sectionType": "listening",
+          "sectionTitle": "Listening Comprehension",
+          "totalQuestions": 20,
+          "correctQuestions": 17,
+          "rawScorePercent": 85,
+          "scaledScore": 51,
+          "maxScaledScore": 60,
+          "passingThreshold": 19,
+          "isSectionPassed": true
+        }
+      },
+      "totalScaledScore": 152,
+      "overallPassingScore": 80,
+      "isPassed": true,
+      "letterGrade": "A",
+      "certificateId": "cert-mock-test-1",
+      "userAnswers": [],
+      "strengthSummaryBn": "শব্দার্থ ও ব্যাকরণে চমৎকার দক্ষতা।",
+      "weaknessSummaryBn": "শ্রবণ দক্ষতায় আরো সামান্য উন্নতি সম্ভব।",
+      "actionableStudyPlanBn": [
+        "অডিও ট্র্যাক শুনুন"
+      ]
+    },
+    {
+      "id": "mock-att-test-1",
+      "userId": "usr-telemetry-test-1788449512393",
+      "mockExamId": "mock-jlpt-n5-01",
+      "examCode": "JLPT-N5-2026-MOCK1",
+      "level": "N5",
+      "startedAt": "2026-09-03T14:31:52.481Z",
+      "submittedAt": "2026-09-03T15:31:52.481Z",
       "timeSpentSeconds": 3400,
       "sectionTimesSpentSeconds": {
         "vocabulary": 1200,
@@ -18004,6 +18328,248 @@
       "passProbability": 35,
       "createdAt": "2026-09-03T12:14:53.153Z",
       "updatedAt": "2026-09-03T12:14:53.153Z"
+    },
+    {
+      "id": "plan-usr-test-srs-1788449517994-318aa79d",
+      "userId": "usr-test-srs-1788449517994",
+      "targetLevel": "N5",
+      "targetExamDate": "2026-12-06",
+      "examSessionName": "Official JLPT December 2026 Exam",
+      "targetScore": 140,
+      "dailyTimeMinutes": 30,
+      "learningPace": "relaxed",
+      "focusAreas": [
+        "vocabulary",
+        "grammar",
+        "particles",
+        "kanji",
+        "listening"
+      ],
+      "daysRemaining": 94,
+      "weeksRemaining": 14,
+      "currentSprintPhase": {
+        "phaseNumber": 1,
+        "totalPhases": 4,
+        "name": "Foundational Immersion & Kana/Kanji Strokes",
+        "nameJa": "第1期：基礎定着と漢字・語彙ビルド",
+        "goalDescription": "Build core hiragana/katakana fluency, master first 40 Essential Kanji, and solidify basic particles (は, が, を, に).",
+        "goalDescriptionBn": "প্রাথমিক হিরাগানা/কাতাকানা দক্ষতা অর্জন, প্রথম ৪০টি কাঞ্জি ও মূল পার্টিকেলগুলোর (は, が, を, に) শতভাগ ভিত্তি তৈরি।",
+        "startDate": "2026-09-03",
+        "endDate": "2026-09-27",
+        "progressPercent": 45,
+        "status": "active",
+        "keyMilestones": [
+          "Master Lessons 1-8 Vocab & Grammar",
+          "40 N5 Kanji 3D Stroke Animations",
+          "MemoryOS は vs が Zero-Error Baseline"
+        ]
+      },
+      "sprintPhases": [
+        {
+          "phaseNumber": 1,
+          "totalPhases": 4,
+          "name": "Foundational Immersion & Kana/Kanji Strokes",
+          "nameJa": "第1期：基礎定着と漢字・語彙ビルド",
+          "goalDescription": "Build core hiragana/katakana fluency, master first 40 Essential Kanji, and solidify basic particles (は, が, を, に).",
+          "goalDescriptionBn": "প্রাথমিক হিরাগানা/কাতাকানা দক্ষতা অর্জন, প্রথম ৪০টি কাঞ্জি ও মূল পার্টিকেলগুলোর (は, が, を, に) শতভাগ ভিত্তি তৈরি।",
+          "startDate": "2026-09-03",
+          "endDate": "2026-09-27",
+          "progressPercent": 45,
+          "status": "active",
+          "keyMilestones": [
+            "Master Lessons 1-8 Vocab & Grammar",
+            "40 N5 Kanji 3D Stroke Animations",
+            "MemoryOS は vs が Zero-Error Baseline"
+          ]
+        },
+        {
+          "phaseNumber": 2,
+          "totalPhases": 4,
+          "name": "Minna no Nihongo Curriculum Acceleration & Verb Conjugations",
+          "nameJa": "第2期：文法加速と動詞活用マスター",
+          "goalDescription": "Accelerate through Minna no Nihongo lessons 9-20. Master te-form, ta-form, nai-form conjugations and polite requests.",
+          "goalDescriptionBn": "মিন্না নো নিহোঙ্গো পাঠ ৯-২০ সম্পন্ন। তে-ফর্ম, তা-ফর্ম ও নাই-ফর্ম সহ প্রয়োজনীয় ব্যাকরণ স্ট্রাকচারে পূর্ণ দক্ষতা।",
+          "startDate": "2026-09-27",
+          "endDate": "2026-10-30",
+          "progressPercent": 15,
+          "status": "upcoming",
+          "keyMilestones": [
+            "Complete Lessons 9-20 Grammar Deck",
+            "120 Kanji Mastered in Flashcards",
+            "Verb Form Switching Speed Drills"
+          ]
+        },
+        {
+          "phaseNumber": 3,
+          "totalPhases": 4,
+          "name": "Deep Reading Passages & Tokyo Listening Comprehension",
+          "nameJa": "第3期：長文読解と東京リアル聴解ドリル",
+          "goalDescription": "Solve authentic JLPT reading passages (Dokkai) and train ear with authentic Tokyo multi-speaker speed audios.",
+          "goalDescriptionBn": "বাস্তবসম্মত রিডিং অনুচ্ছেদ পাঠ ও স্পিচ সিন্থেসাইজার যোগে দ্রুতগতির টোকিও অডিও লিসেনিং ড্রিল।",
+          "startDate": "2026-10-30",
+          "endDate": "2026-11-22",
+          "progressPercent": 0,
+          "status": "upcoming",
+          "keyMilestones": [
+            "10 Authentic Reading Passages (読解)",
+            "30 Tokyo Speed Listening Sessions (聴解)",
+            "Solve Star Sentence Scrambles (★)"
+          ]
+        },
+        {
+          "phaseNumber": 4,
+          "totalPhases": 4,
+          "name": "Official JLPT Mock Marathon & Ghost Weakness Eradication",
+          "nameJa": "第4期：公式模試マラソンと弱点克服",
+          "goalDescription": "Take 3 full-length timed mock exams under official condition. Eliminate all remaining particle errors in MemoryOS™ Ghost Mode.",
+          "goalDescriptionBn": "পূর্ণাঙ্গ অফিসিয়াল টাইমারযুক্ত ৩টি মক পরীক্ষা এবং মেমরি ওএস-এ সমস্ত দুর্বল পার্টিকেল ও কাঞ্জির ১০০% রিকভারি।",
+          "startDate": "2026-11-22",
+          "endDate": "2026-12-06",
+          "progressPercent": 0,
+          "status": "upcoming",
+          "keyMilestones": [
+            "Score 140+/180 on Full JLPT Mock Exam",
+            "Zero Ghost Weaknesses in Ghost Mode",
+            "Official Scaled Certificate Generation"
+          ]
+        }
+      ],
+      "dailyQuota": {
+        "newVocabTarget": 9,
+        "vocabSrsReviewTarget": 23,
+        "kanjiStrokeTarget": 3,
+        "grammarPatternsTarget": 1,
+        "particleWeakSpotsTarget": 3,
+        "listeningMinutesTarget": 9,
+        "totalDailyMinutes": 30
+      },
+      "weeklySchedule": [
+        {
+          "weekNumber": 1,
+          "weekRange": "Sep 3 – Sep 9",
+          "milestoneTitle": "Week 1: Lessons 1–2 & Kanji Sprint (12 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 1: পাঠ 1–2 এবং কাঞ্জি স্প্রিন্ট (12টি কাঞ্জি)",
+          "targetLessons": "Lessons 1–2",
+          "targetKanjiCount": 12,
+          "isCompleted": false,
+          "isCurrent": true
+        },
+        {
+          "weekNumber": 2,
+          "weekRange": "Sep 10 – Sep 16",
+          "milestoneTitle": "Week 2: Lessons 3–4 & Kanji Sprint (24 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 2: পাঠ 3–4 এবং কাঞ্জি স্প্রিন্ট (24টি কাঞ্জি)",
+          "targetLessons": "Lessons 3–4",
+          "targetKanjiCount": 24,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 3,
+          "weekRange": "Sep 17 – Sep 23",
+          "milestoneTitle": "Week 3: Lessons 5–6 & Kanji Sprint (36 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 3: পাঠ 5–6 এবং কাঞ্জি স্প্রিন্ট (36টি কাঞ্জি)",
+          "targetLessons": "Lessons 5–6",
+          "targetKanjiCount": 36,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 4,
+          "weekRange": "Sep 24 – Sep 30",
+          "milestoneTitle": "Week 4: Lessons 7–8 & Kanji Sprint (48 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 4: পাঠ 7–8 এবং কাঞ্জি স্প্রিন্ট (48টি কাঞ্জি)",
+          "targetLessons": "Lessons 7–8",
+          "targetKanjiCount": 48,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 5,
+          "weekRange": "Oct 1 – Oct 7",
+          "milestoneTitle": "Week 5: Lessons 9–10 & Kanji Sprint (60 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 5: পাঠ 9–10 এবং কাঞ্জি স্প্রিন্ট (60টি কাঞ্জি)",
+          "targetLessons": "Lessons 9–10",
+          "targetKanjiCount": 60,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 6,
+          "weekRange": "Oct 8 – Oct 14",
+          "milestoneTitle": "Week 6: Lessons 11–12 & Kanji Sprint (72 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 6: পাঠ 11–12 এবং কাঞ্জি স্প্রিন্ট (72টি কাঞ্জি)",
+          "targetLessons": "Lessons 11–12",
+          "targetKanjiCount": 72,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 7,
+          "weekRange": "Oct 15 – Oct 21",
+          "milestoneTitle": "Week 7: Lessons 13–14 & Kanji Sprint (84 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 7: পাঠ 13–14 এবং কাঞ্জি স্প্রিন্ট (84টি কাঞ্জি)",
+          "targetLessons": "Lessons 13–14",
+          "targetKanjiCount": 84,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 8,
+          "weekRange": "Oct 22 – Oct 28",
+          "milestoneTitle": "Week 8: Lessons 15–16 & Kanji Sprint (96 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 8: পাঠ 15–16 এবং কাঞ্জি স্প্রিন্ট (96টি কাঞ্জি)",
+          "targetLessons": "Lessons 15–16",
+          "targetKanjiCount": 96,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 9,
+          "weekRange": "Oct 29 – Nov 4",
+          "milestoneTitle": "Week 9: Lessons 17–18 & Kanji Sprint (108 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 9: পাঠ 17–18 এবং কাঞ্জি স্প্রিন্ট (108টি কাঞ্জি)",
+          "targetLessons": "Lessons 17–18",
+          "targetKanjiCount": 108,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 10,
+          "weekRange": "Nov 5 – Nov 11",
+          "milestoneTitle": "Week 10: Lessons 19–20 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 10: পাঠ 19–20 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 19–20",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 11,
+          "weekRange": "Nov 12 – Nov 18",
+          "milestoneTitle": "Week 11: Lessons 21–22 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 11: পাঠ 21–22 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 21–22",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        },
+        {
+          "weekNumber": 12,
+          "weekRange": "Nov 19 – Nov 25",
+          "milestoneTitle": "Week 12: Lessons 23–24 & Kanji Sprint (120 Kanji)",
+          "milestoneTitleBn": "সপ্তাহ 12: পাঠ 23–24 এবং কাঞ্জি স্প্রিন্ট (120টি কাঞ্জি)",
+          "targetLessons": "Lessons 23–24",
+          "targetKanjiCount": 120,
+          "isCompleted": false,
+          "isCurrent": false
+        }
+      ],
+      "readinessScore": 28,
+      "projectedScore": 60,
+      "passProbability": 35,
+      "createdAt": "2026-09-03T15:31:58.082Z",
+      "updatedAt": "2026-09-03T15:31:58.082Z"
     }
   ],
   "dailyStudySessions": [
@@ -18606,6 +19172,106 @@
         }
       ],
       "updatedAt": "2026-09-03T12:14:53.209Z"
+    },
+    {
+      "id": "session-usr-test-srs-1788449517994-2026-09-03",
+      "userId": "usr-test-srs-1788449517994",
+      "date": "2026-09-03",
+      "completedItems": {
+        "vocabSrsDone": 0,
+        "kanjiDone": 0,
+        "grammarDone": 0,
+        "ghostsResolved": 0,
+        "listeningMinutesDone": 0,
+        "quizzesDone": 0
+      },
+      "totalMinutesSpent": 0,
+      "dailyQuotaMet": false,
+      "earnedXp": 0,
+      "checklist": [
+        {
+          "id": "task-vocab-2026-09-03",
+          "taskType": "vocab_srs",
+          "title": "Complete Vocabulary SRS Sprint (23 cards)",
+          "titleJa": "語彙SRS復習（23枚）",
+          "titleBn": "শব্দভাণ্ডার SRS ফ্ল্যাশকার্ড স্প্রিন্ট (23টি শব্দ)",
+          "targetCount": 23,
+          "completedCount": 1,
+          "estimatedMinutes": 10,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "vocabulary",
+          "linkParams": {
+            "filter": "due"
+          }
+        },
+        {
+          "id": "task-kanji-2026-09-03",
+          "taskType": "kanji_drill",
+          "title": "Practice 3 Essential Kanji 3D Stroke Flips",
+          "titleJa": "必須漢字3文字の書き順・読みドリル",
+          "titleBn": "3টি প্রয়োজনীয় কাঞ্জি স্ট্রোক ও ফ্লিপ ড্রিল",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 30,
+          "linkView": "curriculum",
+          "linkParams": {
+            "tab": "kanji"
+          }
+        },
+        {
+          "id": "task-grammar-2026-09-03",
+          "taskType": "grammar_lesson",
+          "title": "Master Lesson 1 Minna no Nihongo Grammar",
+          "titleJa": "みんなの日本語 第1課 文法マスター",
+          "titleBn": "মিন্না নো নিহোঙ্গো লেসন 1 ব্যাকরণ অধ্যায়ন",
+          "targetCount": 1,
+          "completedCount": 0,
+          "estimatedMinutes": 15,
+          "isCompleted": false,
+          "xpReward": 45,
+          "linkView": "curriculum",
+          "linkParams": {
+            "level": "N5",
+            "lessonNumber": 1
+          }
+        },
+        {
+          "id": "task-ghost-2026-09-03",
+          "taskType": "ghost_recovery",
+          "title": "Resolve 3 MemoryOS™ Ghost Weak-Spots (は vs が / に vs で)",
+          "titleJa": "MemoryOS 助詞弱点克服（3問）",
+          "titleBn": "মেমরি ওএস-এ 3টি ভুল হওয়া পার্টিকেল রিকভারি",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 40,
+          "linkView": "ghost-mode",
+          "linkParams": {
+            "autoStart": true
+          }
+        },
+        {
+          "id": "task-listening-2026-09-03",
+          "taskType": "listening_drill",
+          "title": "Tokyo Real-Audio Speed Listening Comprehension (9 min)",
+          "titleJa": "東京リアル音声 聴解トレーニング（9分）",
+          "titleBn": "টোকিও রিয়েল-অডিও স্পিচ লিসেনিং ড্রিল (9 মিনিট)",
+          "targetCount": 9,
+          "completedCount": 0,
+          "estimatedMinutes": 9,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "quizzes",
+          "linkParams": {
+            "tab": "mock"
+          }
+        }
+      ],
+      "updatedAt": "2026-09-03T15:31:58.140Z"
     }
   ],
   "baitoScenarios": [
@@ -21572,14 +22238,14 @@
       "easeFactor": 2.5,
       "stabilityDays": 2,
       "difficulty": 4.5,
-      "retrievability": 0.9957928058198777,
+      "retrievability": 0.988625955054284,
       "consecutiveCorrect": 1,
       "stage": "apprentice",
       "lastReviewedAt": "2026-09-03T10:19:12.966Z",
       "nextReviewAt": "2026-09-04T10:19:12.966Z",
       "createdAt": "2026-09-03T10:19:12.966Z",
       "updatedAt": "2026-09-03T10:19:12.966Z",
-      "retentionScore": 100
+      "retentionScore": 99
     },
     {
       "id": "card-srs-2-usr-telemetry-test-1788430752957",
@@ -21595,7 +22261,7 @@
       "easeFactor": 2.6,
       "stabilityDays": 8,
       "difficulty": 4.2,
-      "retrievability": 0.9989465379503399,
+      "retrievability": 0.9971442793248866,
       "consecutiveCorrect": 4,
       "stage": "guru",
       "lastReviewedAt": "2026-09-03T10:19:12.966Z",
@@ -21618,7 +22284,7 @@
       "easeFactor": 2.7,
       "stabilityDays": 24,
       "difficulty": 3.8,
-      "retrievability": 0.999648722602085,
+      "retrievability": 0.9990471855412419,
       "consecutiveCorrect": 7,
       "stage": "master",
       "lastReviewedAt": "2026-09-03T10:19:12.966Z",
@@ -21832,8 +22498,8 @@
       "easeFactor": 2.5,
       "stabilityDays": 2,
       "difficulty": 4.5,
-      "retrievability": 0.9999988927396383,
-      "retentionScore": 100,
+      "retrievability": 0.9928017690069535,
+      "retentionScore": 99,
       "lapses": 0,
       "totalReviews": 1,
       "consecutiveCorrect": 1,
@@ -21857,7 +22523,7 @@
       "easeFactor": 2.6,
       "stabilityDays": 8,
       "difficulty": 4.2,
-      "retrievability": 0.9999997231847946,
+      "retrievability": 0.9981955641411578,
       "retentionScore": 100,
       "lapses": 0,
       "totalReviews": 4,
@@ -21882,7 +22548,7 @@
       "easeFactor": 2.7,
       "stabilityDays": 24,
       "difficulty": 3.8,
-      "retrievability": 0.9999999077282563,
+      "retrievability": 0.9993981592407511,
       "retentionScore": 100,
       "lapses": 0,
       "totalReviews": 7,
@@ -21967,6 +22633,156 @@
       "nextReviewAt": "2026-09-02T12:14:53.263Z",
       "createdAt": "2026-09-03T12:14:53.070Z",
       "updatedAt": "2026-09-03T12:14:53.275Z"
+    },
+    {
+      "id": "card-srs-1-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "itemType": "vocabulary",
+      "itemId": "voc-1",
+      "level": "N5",
+      "front": "犬",
+      "reading": "いぬ",
+      "meaning": "dog",
+      "repetition": 1,
+      "intervalDays": 1,
+      "easeFactor": 2.5,
+      "stabilityDays": 2,
+      "difficulty": 4.5,
+      "retrievability": 0.9999988012809627,
+      "retentionScore": 100,
+      "lapses": 0,
+      "totalReviews": 1,
+      "consecutiveCorrect": 1,
+      "stage": "apprentice",
+      "lastReviewedAt": "2026-09-03T15:31:52.405Z",
+      "nextReviewAt": "2026-09-04T15:31:52.405Z",
+      "createdAt": "2026-09-03T15:31:52.405Z",
+      "updatedAt": "2026-09-03T15:31:52.405Z"
+    },
+    {
+      "id": "card-srs-2-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "itemType": "vocabulary",
+      "itemId": "voc-2",
+      "level": "N5",
+      "front": "猫",
+      "reading": "ねこ",
+      "meaning": "cat",
+      "repetition": 4,
+      "intervalDays": 7,
+      "easeFactor": 2.6,
+      "stabilityDays": 8,
+      "difficulty": 4.2,
+      "retrievability": 0.999999700320106,
+      "retentionScore": 100,
+      "lapses": 0,
+      "totalReviews": 4,
+      "consecutiveCorrect": 4,
+      "stage": "guru",
+      "lastReviewedAt": "2026-09-03T15:31:52.405Z",
+      "nextReviewAt": "2026-09-10T15:31:52.405Z",
+      "createdAt": "2026-09-03T15:31:52.405Z",
+      "updatedAt": "2026-09-03T15:31:52.405Z"
+    },
+    {
+      "id": "card-srs-3-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "itemType": "kanji",
+      "itemId": "kan-1",
+      "level": "N5",
+      "front": "日",
+      "reading": "にち / ひ",
+      "meaning": "day / sun",
+      "repetition": 7,
+      "intervalDays": 21,
+      "easeFactor": 2.7,
+      "stabilityDays": 24,
+      "difficulty": 3.8,
+      "retrievability": 0.999999900106692,
+      "retentionScore": 100,
+      "lapses": 0,
+      "totalReviews": 7,
+      "consecutiveCorrect": 7,
+      "stage": "master",
+      "lastReviewedAt": "2026-09-03T15:31:52.405Z",
+      "nextReviewAt": "2026-09-24T15:31:52.405Z",
+      "createdAt": "2026-09-03T15:31:52.405Z",
+      "updatedAt": "2026-09-03T15:31:52.405Z"
+    },
+    {
+      "id": "card-1788449517995",
+      "userId": "usr-test-srs-1788449517994",
+      "itemType": "vocabulary",
+      "itemId": "voc-hybrid-1",
+      "level": "N5",
+      "front": "本",
+      "reading": "ほん",
+      "meaning": "book",
+      "repetition": 4,
+      "intervalDays": 428,
+      "easeFactor": 3.25,
+      "stabilityDays": 463.63,
+      "difficulty": 2.61,
+      "retrievability": 0.9999999994450229,
+      "retentionScore": 100,
+      "lapses": 0,
+      "totalReviews": 4,
+      "consecutiveCorrect": 4,
+      "stage": "burned",
+      "lastReviewedAt": "2026-09-03T15:31:58.016Z",
+      "nextReviewAt": "2027-11-05T15:31:58.016Z",
+      "createdAt": "2026-09-03T15:31:57.995Z",
+      "updatedAt": "2026-09-03T15:31:58.016Z"
+    },
+    {
+      "id": "card-urg-1-1788449518197",
+      "userId": "usr-test-srs-1788449517994",
+      "itemType": "vocabulary",
+      "itemId": "voc-hybrid-1",
+      "level": "N5",
+      "front": "猫",
+      "reading": "ほん",
+      "meaning": "cat",
+      "repetition": 3,
+      "intervalDays": 1,
+      "easeFactor": 3.25,
+      "stabilityDays": 1,
+      "difficulty": 2.48,
+      "retrievability": 0.348678427344118,
+      "retentionScore": 35,
+      "lapses": 0,
+      "totalReviews": 3,
+      "consecutiveCorrect": 3,
+      "stage": "burned",
+      "lastReviewedAt": "2026-08-24T15:31:58.197Z",
+      "nextReviewAt": "2026-08-29T15:31:58.197Z",
+      "createdAt": "2026-09-03T15:31:57.995Z",
+      "updatedAt": "2026-09-03T15:31:58.197Z"
+    },
+    {
+      "id": "card-urg-2-1788449518197",
+      "userId": "usr-test-srs-1788449517994",
+      "itemType": "vocabulary",
+      "itemId": "voc-hybrid-1",
+      "level": "N5",
+      "front": "犬",
+      "reading": "ほん",
+      "meaning": "dog",
+      "repetition": 3,
+      "intervalDays": 2,
+      "easeFactor": 3.25,
+      "stabilityDays": 10,
+      "difficulty": 2.48,
+      "retrievability": 0.9791483587789082,
+      "retentionScore": 98,
+      "lapses": 0,
+      "totalReviews": 3,
+      "consecutiveCorrect": 3,
+      "stage": "burned",
+      "lastReviewedAt": "2026-09-01T15:31:58.197Z",
+      "nextReviewAt": "2026-09-02T15:31:58.197Z",
+      "createdAt": "2026-09-03T15:31:57.995Z",
+      "updatedAt": "2026-09-03T15:31:58.211Z"
     }
   ],
   "srsLogs": [
@@ -22303,13 +23119,157 @@
       "difficultyBefore": 2.48,
       "difficultyAfter": 2.61,
       "reviewedAt": "2026-09-03T12:14:53.089Z"
+    },
+    {
+      "id": "log-1-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "cardId": "card-srs-1-usr-telemetry-test-1788449512393",
+      "itemId": "voc-1",
+      "itemType": "vocabulary",
+      "rating": "good",
+      "algorithmUsed": "sm2",
+      "scheduledDays": 1,
+      "actualElapsedDays": 1,
+      "responseTimeMs": 1100,
+      "retentionBeforeReview": 0.92,
+      "stageBefore": "apprentice",
+      "stageAfter": "apprentice",
+      "intervalDaysBefore": 1,
+      "intervalDaysAfter": 1,
+      "easeFactorBefore": 2.5,
+      "easeFactorAfter": 2.5,
+      "stabilityBefore": 2,
+      "stabilityAfter": 2,
+      "difficultyBefore": 4.5,
+      "difficultyAfter": 4.5,
+      "reviewedAt": "2026-09-03T15:31:52.405Z"
+    },
+    {
+      "id": "log-2-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "cardId": "card-srs-2-usr-telemetry-test-1788449512393",
+      "itemId": "voc-2",
+      "itemType": "vocabulary",
+      "rating": "easy",
+      "algorithmUsed": "fsrs",
+      "scheduledDays": 6,
+      "actualElapsedDays": 6,
+      "responseTimeMs": 850,
+      "retentionBeforeReview": 0.95,
+      "stageBefore": "guru",
+      "stageAfter": "guru",
+      "intervalDaysBefore": 6,
+      "intervalDaysAfter": 12,
+      "easeFactorBefore": 2.6,
+      "easeFactorAfter": 2.7,
+      "stabilityBefore": 8,
+      "stabilityAfter": 14,
+      "difficultyBefore": 4.2,
+      "difficultyAfter": 3.9,
+      "reviewedAt": "2026-09-02T15:31:52.405Z"
+    },
+    {
+      "id": "log-3-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "cardId": "card-srs-3-usr-telemetry-test-1788449512393",
+      "itemId": "kan-1",
+      "itemType": "kanji",
+      "rating": "good",
+      "algorithmUsed": "adaptive_hybrid",
+      "scheduledDays": 14,
+      "actualElapsedDays": 14,
+      "responseTimeMs": 1400,
+      "retentionBeforeReview": 0.9,
+      "stageBefore": "master",
+      "stageAfter": "master",
+      "intervalDaysBefore": 14,
+      "intervalDaysAfter": 28,
+      "easeFactorBefore": 2.7,
+      "easeFactorAfter": 2.7,
+      "stabilityBefore": 24,
+      "stabilityAfter": 38,
+      "difficultyBefore": 3.8,
+      "difficultyAfter": 3.8,
+      "reviewedAt": "2026-09-01T15:31:52.405Z"
+    },
+    {
+      "id": "log-4-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "cardId": "card-srs-1-usr-telemetry-test-1788449512393",
+      "itemId": "voc-1",
+      "itemType": "vocabulary",
+      "rating": "again",
+      "algorithmUsed": "sm2",
+      "scheduledDays": 3,
+      "actualElapsedDays": 4,
+      "responseTimeMs": 2500,
+      "retentionBeforeReview": 0.75,
+      "stageBefore": "guru",
+      "stageAfter": "apprentice",
+      "intervalDaysBefore": 7,
+      "intervalDaysAfter": 1,
+      "easeFactorBefore": 2.5,
+      "easeFactorAfter": 2.3,
+      "stabilityBefore": 6,
+      "stabilityAfter": 1.5,
+      "difficultyBefore": 4.5,
+      "difficultyAfter": 5.5,
+      "reviewedAt": "2026-08-31T15:31:52.405Z"
+    },
+    {
+      "id": "log-5-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "cardId": "card-srs-2-usr-telemetry-test-1788449512393",
+      "itemId": "voc-2",
+      "itemType": "vocabulary",
+      "rating": "good",
+      "algorithmUsed": "fsrs",
+      "scheduledDays": 2,
+      "actualElapsedDays": 2,
+      "responseTimeMs": 950,
+      "retentionBeforeReview": 0.93,
+      "stageBefore": "apprentice",
+      "stageAfter": "guru",
+      "intervalDaysBefore": 2,
+      "intervalDaysAfter": 5,
+      "easeFactorBefore": 2.5,
+      "easeFactorAfter": 2.6,
+      "stabilityBefore": 3,
+      "stabilityAfter": 7,
+      "difficultyBefore": 4.5,
+      "difficultyAfter": 4.3,
+      "reviewedAt": "2026-08-30T15:31:52.405Z"
+    },
+    {
+      "id": "srs-log-1788449518016-cs6hy",
+      "userId": "usr-test-srs-1788449517994",
+      "cardId": "card-1788449517995",
+      "itemId": "voc-hybrid-1",
+      "itemType": "vocabulary",
+      "rating": "good",
+      "algorithmUsed": "adaptive_hybrid",
+      "scheduledDays": 115,
+      "actualElapsedDays": 0,
+      "responseTimeMs": 1450,
+      "retentionBeforeReview": 100,
+      "stageBefore": "burned",
+      "stageAfter": "burned",
+      "intervalDaysBefore": 115,
+      "intervalDaysAfter": 428,
+      "easeFactorBefore": 3.25,
+      "easeFactorAfter": 3.25,
+      "stabilityBefore": 138.43,
+      "stabilityAfter": 463.63,
+      "difficultyBefore": 2.48,
+      "difficultyAfter": 2.61,
+      "reviewedAt": "2026-09-03T15:31:58.016Z"
     }
   ],
   "learnerAnalyticsSummaries": [
     {
       "id": "analytics-summary-usr-telemetry-test-1788430752957",
       "userId": "usr-telemetry-test-1788430752957",
-      "computedAt": "2026-09-03T12:14:27.680Z",
+      "computedAt": "2026-09-03T15:31:54.255Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 5,
@@ -22621,17 +23581,17 @@
         "allTimeRank": 1,
         "weeklyRank": 1,
         "dailyRank": 1,
-        "totalLearners": 38,
+        "totalLearners": 39,
         "topPercentile": 3,
         "weeklyXpDelta": 713,
         "rankDelta7d": 3
       },
-      "lastRefreshed": "2026-09-03T12:14:27.680Z"
+      "lastRefreshed": "2026-09-03T15:31:54.255Z"
     },
     {
       "id": "analytics-summary-usr-admin-01",
       "userId": "usr-admin-01",
-      "computedAt": "2026-09-03T12:14:26.191Z",
+      "computedAt": "2026-09-03T15:31:52.697Z",
       "targetLevel": "N3",
       "srsMetrics": {
         "totalCards": 2,
@@ -22926,20 +23886,20 @@
       },
       "leaderboardMetrics": {
         "currentXp": 450,
-        "allTimeRank": 4,
-        "weeklyRank": 4,
-        "dailyRank": 4,
-        "totalLearners": 38,
-        "topPercentile": 11,
+        "allTimeRank": 5,
+        "weeklyRank": 5,
+        "dailyRank": 5,
+        "totalLearners": 39,
+        "topPercentile": 13,
         "weeklyXpDelta": 363,
         "rankDelta7d": 3
       },
-      "lastRefreshed": "2026-09-03T12:14:26.191Z"
+      "lastRefreshed": "2026-09-03T15:31:52.697Z"
     },
     {
       "id": "analytics-summary-usr-student-01",
       "userId": "usr-student-01",
-      "computedAt": "2026-09-03T12:14:26.234Z",
+      "computedAt": "2026-09-03T15:31:52.743Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -23234,20 +24194,20 @@
       },
       "leaderboardMetrics": {
         "currentXp": 120,
-        "allTimeRank": 5,
-        "weeklyRank": 5,
-        "dailyRank": 5,
-        "totalLearners": 38,
-        "topPercentile": 13,
+        "allTimeRank": 6,
+        "weeklyRank": 6,
+        "dailyRank": 6,
+        "totalLearners": 39,
+        "topPercentile": 15,
         "weeklyXpDelta": 180,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.234Z"
+      "lastRefreshed": "2026-09-03T15:31:52.743Z"
     },
     {
       "id": "analytics-summary-usr-b9b7c394",
       "userId": "usr-b9b7c394",
-      "computedAt": "2026-09-03T12:14:26.275Z",
+      "computedAt": "2026-09-03T15:31:52.785Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -23542,328 +24502,20 @@
       },
       "leaderboardMetrics": {
         "currentXp": 450,
-        "allTimeRank": 6,
-        "weeklyRank": 6,
-        "dailyRank": 6,
-        "totalLearners": 38,
-        "topPercentile": 16,
-        "weeklyXpDelta": 163,
-        "rankDelta7d": 0
-      },
-      "lastRefreshed": "2026-09-03T12:14:26.275Z"
-    },
-    {
-      "id": "analytics-summary-usr-test-student-99",
-      "userId": "usr-test-student-99",
-      "computedAt": "2026-09-03T12:14:26.318Z",
-      "targetLevel": "N5",
-      "srsMetrics": {
-        "totalCards": 2,
-        "dueCards": 2,
-        "retentionRate7d": 100,
-        "retentionRate30d": 100,
-        "overallAccuracyRate": 100,
-        "averageStabilityDays": 1,
-        "averageDifficulty": 5.25,
-        "averageResponseTimeMs": 1200,
-        "masteryBreakdown": {
-          "apprentice": 2,
-          "guru": 0,
-          "master": 0,
-          "enlightened": 0,
-          "burned": 0
-        },
-        "dailyRetentionTrend": [
-          {
-            "date": "2026-08-21",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-22",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-23",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-24",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-25",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-26",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-27",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-28",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-29",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-30",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-31",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-01",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-02",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-03",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          }
-        ]
-      },
-      "streakMetrics": {
-        "currentStreak": 1,
-        "longestStreak": 1,
-        "lastActiveDate": "2026-09-01",
-        "totalStudyMinutes": 0,
-        "activeDaysLast30d": 1,
-        "consistencyScorePercent": 3,
-        "averageDailyMinutes": 0,
-        "recentDailyActivity": [
-          {
-            "date": "2026-08-21",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-22",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-23",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-24",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-25",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-26",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-27",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-28",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-29",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-30",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-31",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-01",
-            "studyMinutes": 15,
-            "srsReviews": 0,
-            "xpEarned": 75,
-            "quotaCompleted": true
-          },
-          {
-            "date": "2026-09-02",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-03",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          }
-        ]
-      },
-      "mockExamMetrics": {
-        "targetLevel": "N5",
-        "totalAttempts": 0,
-        "passedAttempts": 0,
-        "passRatePercent": 0,
-        "averageScaledScore": 0,
-        "highestScaledScore": 0,
-        "overallPassingScore": 80,
-        "readinessScorePercent": 30,
-        "sectionAverages": {
-          "vocabulary": {
-            "sectionType": "vocabulary",
-            "sectionTitle": "Language Knowledge (Vocabulary)",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          },
-          "grammar_reading": {
-            "sectionType": "grammar_reading",
-            "sectionTitle": "Language Knowledge (Grammar) & Reading",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          },
-          "listening": {
-            "sectionType": "listening",
-            "sectionTitle": "Listening Comprehension",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          }
-        },
-        "recentAttempts": []
-      },
-      "leaderboardMetrics": {
-        "currentXp": 450,
         "allTimeRank": 7,
         "weeklyRank": 7,
         "dailyRank": 7,
-        "totalLearners": 38,
+        "totalLearners": 39,
         "topPercentile": 18,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.318Z"
+      "lastRefreshed": "2026-09-03T15:31:52.785Z"
     },
     {
-      "id": "analytics-summary-usr-test-admin-99",
-      "userId": "usr-test-admin-99",
-      "computedAt": "2026-09-03T12:14:26.360Z",
+      "id": "analytics-summary-usr-test-student-99",
+      "userId": "usr-test-student-99",
+      "computedAt": "2026-09-03T15:31:52.831Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -24161,17 +24813,17 @@
         "allTimeRank": 8,
         "weeklyRank": 8,
         "dailyRank": 8,
-        "totalLearners": 38,
+        "totalLearners": 39,
         "topPercentile": 21,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.360Z"
+      "lastRefreshed": "2026-09-03T15:31:52.831Z"
     },
     {
-      "id": "analytics-summary-usr-04f55475",
-      "userId": "usr-04f55475",
-      "computedAt": "2026-09-03T12:14:26.400Z",
+      "id": "analytics-summary-usr-test-admin-99",
+      "userId": "usr-test-admin-99",
+      "computedAt": "2026-09-03T15:31:52.878Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -24469,17 +25121,17 @@
         "allTimeRank": 9,
         "weeklyRank": 9,
         "dailyRank": 9,
-        "totalLearners": 38,
-        "topPercentile": 24,
+        "totalLearners": 39,
+        "topPercentile": 23,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.400Z"
+      "lastRefreshed": "2026-09-03T15:31:52.878Z"
     },
     {
-      "id": "analytics-summary-27fb8002-dbdd-4370-83d1-1d438ae9a055",
-      "userId": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
-      "computedAt": "2026-09-03T12:14:26.445Z",
+      "id": "analytics-summary-usr-04f55475",
+      "userId": "usr-04f55475",
+      "computedAt": "2026-09-03T15:31:52.920Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -24629,7 +25281,7 @@
       "streakMetrics": {
         "currentStreak": 1,
         "longestStreak": 1,
-        "lastActiveDate": "2026-09-02",
+        "lastActiveDate": "2026-09-01",
         "totalStudyMinutes": 0,
         "activeDaysLast30d": 1,
         "consistencyScorePercent": 3,
@@ -24714,17 +25366,17 @@
           },
           {
             "date": "2026-09-01",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-02",
             "studyMinutes": 15,
             "srsReviews": 0,
             "xpEarned": 75,
             "quotaCompleted": true
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
           },
           {
             "date": "2026-09-03",
@@ -24777,17 +25429,17 @@
         "allTimeRank": 10,
         "weeklyRank": 10,
         "dailyRank": 10,
-        "totalLearners": 38,
+        "totalLearners": 39,
         "topPercentile": 26,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.445Z"
+      "lastRefreshed": "2026-09-03T15:31:52.920Z"
     },
     {
-      "id": "analytics-summary-47e312ad-1da5-4b62-90fd-785b052ce35f",
-      "userId": "47e312ad-1da5-4b62-90fd-785b052ce35f",
-      "computedAt": "2026-09-03T12:14:26.490Z",
+      "id": "analytics-summary-27fb8002-dbdd-4370-83d1-1d438ae9a055",
+      "userId": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
+      "computedAt": "2026-09-03T15:31:52.961Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -25085,17 +25737,17 @@
         "allTimeRank": 11,
         "weeklyRank": 11,
         "dailyRank": 11,
-        "totalLearners": 38,
-        "topPercentile": 29,
+        "totalLearners": 39,
+        "topPercentile": 28,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.490Z"
+      "lastRefreshed": "2026-09-03T15:31:52.961Z"
     },
     {
-      "id": "analytics-summary-f7c46837-647c-475d-9653-9081697bb1af",
-      "userId": "f7c46837-647c-475d-9653-9081697bb1af",
-      "computedAt": "2026-09-03T12:14:26.531Z",
+      "id": "analytics-summary-47e312ad-1da5-4b62-90fd-785b052ce35f",
+      "userId": "47e312ad-1da5-4b62-90fd-785b052ce35f",
+      "computedAt": "2026-09-03T15:31:53.004Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -25393,17 +26045,17 @@
         "allTimeRank": 12,
         "weeklyRank": 12,
         "dailyRank": 12,
-        "totalLearners": 38,
-        "topPercentile": 32,
+        "totalLearners": 39,
+        "topPercentile": 31,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.531Z"
+      "lastRefreshed": "2026-09-03T15:31:53.004Z"
     },
     {
-      "id": "analytics-summary-624b2a9c-ad18-445e-94a2-4aef66187d9b",
-      "userId": "624b2a9c-ad18-445e-94a2-4aef66187d9b",
-      "computedAt": "2026-09-03T12:14:26.574Z",
+      "id": "analytics-summary-f7c46837-647c-475d-9653-9081697bb1af",
+      "userId": "f7c46837-647c-475d-9653-9081697bb1af",
+      "computedAt": "2026-09-03T15:31:53.047Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -25701,17 +26353,17 @@
         "allTimeRank": 13,
         "weeklyRank": 13,
         "dailyRank": 13,
-        "totalLearners": 38,
-        "topPercentile": 34,
+        "totalLearners": 39,
+        "topPercentile": 33,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.574Z"
+      "lastRefreshed": "2026-09-03T15:31:53.047Z"
     },
     {
-      "id": "analytics-summary-cfd783dd-db65-4bee-973c-99055ec70ebc",
-      "userId": "cfd783dd-db65-4bee-973c-99055ec70ebc",
-      "computedAt": "2026-09-03T12:14:26.616Z",
+      "id": "analytics-summary-624b2a9c-ad18-445e-94a2-4aef66187d9b",
+      "userId": "624b2a9c-ad18-445e-94a2-4aef66187d9b",
+      "computedAt": "2026-09-03T15:31:53.089Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -26009,17 +26661,17 @@
         "allTimeRank": 14,
         "weeklyRank": 14,
         "dailyRank": 14,
-        "totalLearners": 38,
-        "topPercentile": 37,
+        "totalLearners": 39,
+        "topPercentile": 36,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.616Z"
+      "lastRefreshed": "2026-09-03T15:31:53.089Z"
     },
     {
-      "id": "analytics-summary-f2e8ab1d-a8a0-4e57-bf95-a6740b0ae53b",
-      "userId": "f2e8ab1d-a8a0-4e57-bf95-a6740b0ae53b",
-      "computedAt": "2026-09-03T12:14:26.657Z",
+      "id": "analytics-summary-cfd783dd-db65-4bee-973c-99055ec70ebc",
+      "userId": "cfd783dd-db65-4bee-973c-99055ec70ebc",
+      "computedAt": "2026-09-03T15:31:53.133Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -26317,17 +26969,17 @@
         "allTimeRank": 15,
         "weeklyRank": 15,
         "dailyRank": 15,
-        "totalLearners": 38,
-        "topPercentile": 39,
+        "totalLearners": 39,
+        "topPercentile": 38,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.657Z"
+      "lastRefreshed": "2026-09-03T15:31:53.133Z"
     },
     {
-      "id": "analytics-summary-2c98df93-ffbc-42e6-9378-3cf5055e2416",
-      "userId": "2c98df93-ffbc-42e6-9378-3cf5055e2416",
-      "computedAt": "2026-09-03T12:14:26.704Z",
+      "id": "analytics-summary-f2e8ab1d-a8a0-4e57-bf95-a6740b0ae53b",
+      "userId": "f2e8ab1d-a8a0-4e57-bf95-a6740b0ae53b",
+      "computedAt": "2026-09-03T15:31:53.178Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -26625,17 +27277,17 @@
         "allTimeRank": 16,
         "weeklyRank": 16,
         "dailyRank": 16,
-        "totalLearners": 38,
-        "topPercentile": 42,
+        "totalLearners": 39,
+        "topPercentile": 41,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.704Z"
+      "lastRefreshed": "2026-09-03T15:31:53.178Z"
     },
     {
-      "id": "analytics-summary-usr-c0fcf3eb",
-      "userId": "usr-c0fcf3eb",
-      "computedAt": "2026-09-03T12:14:26.748Z",
+      "id": "analytics-summary-2c98df93-ffbc-42e6-9378-3cf5055e2416",
+      "userId": "2c98df93-ffbc-42e6-9378-3cf5055e2416",
+      "computedAt": "2026-09-03T15:31:53.220Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -26785,7 +27437,7 @@
       "streakMetrics": {
         "currentStreak": 1,
         "longestStreak": 1,
-        "lastActiveDate": "2026-09-01",
+        "lastActiveDate": "2026-09-02",
         "totalStudyMinutes": 0,
         "activeDaysLast30d": 1,
         "consistencyScorePercent": 3,
@@ -26870,17 +27522,17 @@
           },
           {
             "date": "2026-09-01",
-            "studyMinutes": 15,
-            "srsReviews": 0,
-            "xpEarned": 75,
-            "quotaCompleted": true
-          },
-          {
-            "date": "2026-09-02",
             "studyMinutes": 0,
             "srsReviews": 0,
             "xpEarned": 0,
             "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 15,
+            "srsReviews": 0,
+            "xpEarned": 75,
+            "quotaCompleted": true
           },
           {
             "date": "2026-09-03",
@@ -26933,17 +27585,17 @@
         "allTimeRank": 17,
         "weeklyRank": 17,
         "dailyRank": 17,
-        "totalLearners": 38,
-        "topPercentile": 45,
+        "totalLearners": 39,
+        "topPercentile": 44,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.748Z"
+      "lastRefreshed": "2026-09-03T15:31:53.220Z"
     },
     {
-      "id": "analytics-summary-usr-33e1989a",
-      "userId": "usr-33e1989a",
-      "computedAt": "2026-09-03T12:14:26.790Z",
+      "id": "analytics-summary-usr-c0fcf3eb",
+      "userId": "usr-c0fcf3eb",
+      "computedAt": "2026-09-03T15:31:53.265Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -27241,17 +27893,17 @@
         "allTimeRank": 18,
         "weeklyRank": 18,
         "dailyRank": 18,
-        "totalLearners": 38,
-        "topPercentile": 47,
+        "totalLearners": 39,
+        "topPercentile": 46,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.790Z"
+      "lastRefreshed": "2026-09-03T15:31:53.265Z"
     },
     {
-      "id": "analytics-summary-usr-cf0277e9",
-      "userId": "usr-cf0277e9",
-      "computedAt": "2026-09-03T12:14:26.831Z",
+      "id": "analytics-summary-usr-33e1989a",
+      "userId": "usr-33e1989a",
+      "computedAt": "2026-09-03T15:31:53.307Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -27401,7 +28053,7 @@
       "streakMetrics": {
         "currentStreak": 1,
         "longestStreak": 1,
-        "lastActiveDate": "2026-09-02",
+        "lastActiveDate": "2026-09-01",
         "totalStudyMinutes": 0,
         "activeDaysLast30d": 1,
         "consistencyScorePercent": 3,
@@ -27486,17 +28138,17 @@
           },
           {
             "date": "2026-09-01",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-02",
             "studyMinutes": 15,
             "srsReviews": 0,
             "xpEarned": 75,
             "quotaCompleted": true
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
           },
           {
             "date": "2026-09-03",
@@ -27549,17 +28201,17 @@
         "allTimeRank": 19,
         "weeklyRank": 19,
         "dailyRank": 19,
-        "totalLearners": 38,
-        "topPercentile": 50,
+        "totalLearners": 39,
+        "topPercentile": 49,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.831Z"
+      "lastRefreshed": "2026-09-03T15:31:53.307Z"
     },
     {
-      "id": "analytics-summary-usr-1cd2c4f5",
-      "userId": "usr-1cd2c4f5",
-      "computedAt": "2026-09-03T12:14:26.874Z",
+      "id": "analytics-summary-usr-cf0277e9",
+      "userId": "usr-cf0277e9",
+      "computedAt": "2026-09-03T15:31:53.350Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -27857,325 +28509,17 @@
         "allTimeRank": 20,
         "weeklyRank": 20,
         "dailyRank": 20,
-        "totalLearners": 38,
-        "topPercentile": 53,
+        "totalLearners": 39,
+        "topPercentile": 51,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.874Z"
+      "lastRefreshed": "2026-09-03T15:31:53.350Z"
     },
     {
-      "id": "analytics-summary-usr-a8718b39",
-      "userId": "usr-a8718b39",
-      "computedAt": "2026-09-03T12:14:26.914Z",
-      "targetLevel": "N4",
-      "srsMetrics": {
-        "totalCards": 2,
-        "dueCards": 2,
-        "retentionRate7d": 100,
-        "retentionRate30d": 100,
-        "overallAccuracyRate": 100,
-        "averageStabilityDays": 1,
-        "averageDifficulty": 5.25,
-        "averageResponseTimeMs": 1200,
-        "masteryBreakdown": {
-          "apprentice": 2,
-          "guru": 0,
-          "master": 0,
-          "enlightened": 0,
-          "burned": 0
-        },
-        "dailyRetentionTrend": [
-          {
-            "date": "2026-08-21",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-22",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-23",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-24",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-25",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-26",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-27",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-28",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-29",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-30",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-08-31",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-01",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-02",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          },
-          {
-            "date": "2026-09-03",
-            "totalReviews": 0,
-            "successfulReviews": 0,
-            "againReviews": 0,
-            "accuracyRate": 100,
-            "averageResponseTimeMs": 1200,
-            "averageRetrievability": 0.95
-          }
-        ]
-      },
-      "streakMetrics": {
-        "currentStreak": 1,
-        "longestStreak": 1,
-        "lastActiveDate": "2026-09-02",
-        "totalStudyMinutes": 0,
-        "activeDaysLast30d": 1,
-        "consistencyScorePercent": 3,
-        "averageDailyMinutes": 0,
-        "recentDailyActivity": [
-          {
-            "date": "2026-08-21",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-22",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-23",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-24",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-25",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-26",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-27",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-28",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-29",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-30",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-08-31",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-01",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-02",
-            "studyMinutes": 15,
-            "srsReviews": 0,
-            "xpEarned": 75,
-            "quotaCompleted": true
-          },
-          {
-            "date": "2026-09-03",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          }
-        ]
-      },
-      "mockExamMetrics": {
-        "targetLevel": "N4",
-        "totalAttempts": 0,
-        "passedAttempts": 0,
-        "passRatePercent": 0,
-        "averageScaledScore": 0,
-        "highestScaledScore": 0,
-        "overallPassingScore": 80,
-        "readinessScorePercent": 30,
-        "sectionAverages": {
-          "vocabulary": {
-            "sectionType": "vocabulary",
-            "sectionTitle": "Language Knowledge (Vocabulary)",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          },
-          "grammar_reading": {
-            "sectionType": "grammar_reading",
-            "sectionTitle": "Language Knowledge (Grammar) & Reading",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          },
-          "listening": {
-            "sectionType": "listening",
-            "sectionTitle": "Listening Comprehension",
-            "averageRawPercent": 45,
-            "averageScaledScore": 27,
-            "maxScaledScore": 60,
-            "passRatePercent": 0
-          }
-        },
-        "recentAttempts": []
-      },
-      "leaderboardMetrics": {
-        "currentXp": 450,
-        "allTimeRank": 21,
-        "weeklyRank": 21,
-        "dailyRank": 21,
-        "totalLearners": 38,
-        "topPercentile": 55,
-        "weeklyXpDelta": 163,
-        "rankDelta7d": 0
-      },
-      "lastRefreshed": "2026-09-03T12:14:26.914Z"
-    },
-    {
-      "id": "analytics-summary-usr-266235e6",
-      "userId": "usr-266235e6",
-      "computedAt": "2026-09-03T12:14:26.955Z",
+      "id": "analytics-summary-usr-1cd2c4f5",
+      "userId": "usr-1cd2c4f5",
+      "computedAt": "2026-09-03T15:31:53.393Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -28470,20 +28814,328 @@
       },
       "leaderboardMetrics": {
         "currentXp": 450,
-        "allTimeRank": 22,
-        "weeklyRank": 22,
-        "dailyRank": 22,
-        "totalLearners": 38,
-        "topPercentile": 58,
+        "allTimeRank": 21,
+        "weeklyRank": 21,
+        "dailyRank": 21,
+        "totalLearners": 39,
+        "topPercentile": 54,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.955Z"
+      "lastRefreshed": "2026-09-03T15:31:53.393Z"
     },
     {
-      "id": "analytics-summary-usr-a2c89b98",
-      "userId": "usr-a2c89b98",
-      "computedAt": "2026-09-03T12:14:26.997Z",
+      "id": "analytics-summary-usr-a8718b39",
+      "userId": "usr-a8718b39",
+      "computedAt": "2026-09-03T15:31:53.434Z",
+      "targetLevel": "N4",
+      "srsMetrics": {
+        "totalCards": 2,
+        "dueCards": 2,
+        "retentionRate7d": 100,
+        "retentionRate30d": 100,
+        "overallAccuracyRate": 100,
+        "averageStabilityDays": 1,
+        "averageDifficulty": 5.25,
+        "averageResponseTimeMs": 1200,
+        "masteryBreakdown": {
+          "apprentice": 2,
+          "guru": 0,
+          "master": 0,
+          "enlightened": 0,
+          "burned": 0
+        },
+        "dailyRetentionTrend": [
+          {
+            "date": "2026-08-21",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-22",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-23",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-24",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-25",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-26",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-27",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-28",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-29",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-30",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-31",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-01",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-02",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-03",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          }
+        ]
+      },
+      "streakMetrics": {
+        "currentStreak": 1,
+        "longestStreak": 1,
+        "lastActiveDate": "2026-09-02",
+        "totalStudyMinutes": 0,
+        "activeDaysLast30d": 1,
+        "consistencyScorePercent": 3,
+        "averageDailyMinutes": 0,
+        "recentDailyActivity": [
+          {
+            "date": "2026-08-21",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-22",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-23",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-24",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-25",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-26",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-27",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-28",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-29",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-30",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-31",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-01",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 15,
+            "srsReviews": 0,
+            "xpEarned": 75,
+            "quotaCompleted": true
+          },
+          {
+            "date": "2026-09-03",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          }
+        ]
+      },
+      "mockExamMetrics": {
+        "targetLevel": "N4",
+        "totalAttempts": 0,
+        "passedAttempts": 0,
+        "passRatePercent": 0,
+        "averageScaledScore": 0,
+        "highestScaledScore": 0,
+        "overallPassingScore": 80,
+        "readinessScorePercent": 30,
+        "sectionAverages": {
+          "vocabulary": {
+            "sectionType": "vocabulary",
+            "sectionTitle": "Language Knowledge (Vocabulary)",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          },
+          "grammar_reading": {
+            "sectionType": "grammar_reading",
+            "sectionTitle": "Language Knowledge (Grammar) & Reading",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          },
+          "listening": {
+            "sectionType": "listening",
+            "sectionTitle": "Listening Comprehension",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          }
+        },
+        "recentAttempts": []
+      },
+      "leaderboardMetrics": {
+        "currentXp": 450,
+        "allTimeRank": 22,
+        "weeklyRank": 22,
+        "dailyRank": 22,
+        "totalLearners": 39,
+        "topPercentile": 56,
+        "weeklyXpDelta": 163,
+        "rankDelta7d": 0
+      },
+      "lastRefreshed": "2026-09-03T15:31:53.434Z"
+    },
+    {
+      "id": "analytics-summary-usr-266235e6",
+      "userId": "usr-266235e6",
+      "computedAt": "2026-09-03T15:31:53.479Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -28781,17 +29433,17 @@
         "allTimeRank": 23,
         "weeklyRank": 23,
         "dailyRank": 23,
-        "totalLearners": 38,
-        "topPercentile": 61,
+        "totalLearners": 39,
+        "topPercentile": 59,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:26.997Z"
+      "lastRefreshed": "2026-09-03T15:31:53.479Z"
     },
     {
-      "id": "analytics-summary-usr-dfc28af7",
-      "userId": "usr-dfc28af7",
-      "computedAt": "2026-09-03T12:14:27.039Z",
+      "id": "analytics-summary-usr-a2c89b98",
+      "userId": "usr-a2c89b98",
+      "computedAt": "2026-09-03T15:31:53.521Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -29089,17 +29741,17 @@
         "allTimeRank": 24,
         "weeklyRank": 24,
         "dailyRank": 24,
-        "totalLearners": 38,
-        "topPercentile": 63,
+        "totalLearners": 39,
+        "topPercentile": 62,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.039Z"
+      "lastRefreshed": "2026-09-03T15:31:53.521Z"
     },
     {
-      "id": "analytics-summary-usr-3e57a5cd",
-      "userId": "usr-3e57a5cd",
-      "computedAt": "2026-09-03T12:14:27.080Z",
+      "id": "analytics-summary-usr-dfc28af7",
+      "userId": "usr-dfc28af7",
+      "computedAt": "2026-09-03T15:31:53.565Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -29397,17 +30049,17 @@
         "allTimeRank": 25,
         "weeklyRank": 25,
         "dailyRank": 25,
-        "totalLearners": 38,
-        "topPercentile": 66,
+        "totalLearners": 39,
+        "topPercentile": 64,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.080Z"
+      "lastRefreshed": "2026-09-03T15:31:53.565Z"
     },
     {
-      "id": "analytics-summary-usr-cc1981b9",
-      "userId": "usr-cc1981b9",
-      "computedAt": "2026-09-03T12:14:27.122Z",
+      "id": "analytics-summary-usr-3e57a5cd",
+      "userId": "usr-3e57a5cd",
+      "computedAt": "2026-09-03T15:31:53.607Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -29705,17 +30357,17 @@
         "allTimeRank": 26,
         "weeklyRank": 26,
         "dailyRank": 26,
-        "totalLearners": 38,
-        "topPercentile": 68,
+        "totalLearners": 39,
+        "topPercentile": 67,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.122Z"
+      "lastRefreshed": "2026-09-03T15:31:53.607Z"
     },
     {
-      "id": "analytics-summary-usr-b38c3d71",
-      "userId": "usr-b38c3d71",
-      "computedAt": "2026-09-03T12:14:27.162Z",
+      "id": "analytics-summary-usr-cc1981b9",
+      "userId": "usr-cc1981b9",
+      "computedAt": "2026-09-03T15:31:53.654Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -30013,17 +30665,17 @@
         "allTimeRank": 27,
         "weeklyRank": 27,
         "dailyRank": 27,
-        "totalLearners": 38,
-        "topPercentile": 71,
+        "totalLearners": 39,
+        "topPercentile": 69,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.162Z"
+      "lastRefreshed": "2026-09-03T15:31:53.654Z"
     },
     {
-      "id": "analytics-summary-usr-d830e4b3",
-      "userId": "usr-d830e4b3",
-      "computedAt": "2026-09-03T12:14:27.202Z",
+      "id": "analytics-summary-usr-b38c3d71",
+      "userId": "usr-b38c3d71",
+      "computedAt": "2026-09-03T15:31:53.698Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -30321,17 +30973,17 @@
         "allTimeRank": 28,
         "weeklyRank": 28,
         "dailyRank": 28,
-        "totalLearners": 38,
-        "topPercentile": 74,
+        "totalLearners": 39,
+        "topPercentile": 72,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.202Z"
+      "lastRefreshed": "2026-09-03T15:31:53.698Z"
     },
     {
-      "id": "analytics-summary-usr-4d9fa1ea",
-      "userId": "usr-4d9fa1ea",
-      "computedAt": "2026-09-03T12:14:27.252Z",
+      "id": "analytics-summary-usr-d830e4b3",
+      "userId": "usr-d830e4b3",
+      "computedAt": "2026-09-03T15:31:53.744Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -30629,17 +31281,17 @@
         "allTimeRank": 29,
         "weeklyRank": 29,
         "dailyRank": 29,
-        "totalLearners": 38,
-        "topPercentile": 76,
+        "totalLearners": 39,
+        "topPercentile": 74,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.252Z"
+      "lastRefreshed": "2026-09-03T15:31:53.744Z"
     },
     {
-      "id": "analytics-summary-usr-46dacd29",
-      "userId": "usr-46dacd29",
-      "computedAt": "2026-09-03T12:14:27.298Z",
+      "id": "analytics-summary-usr-4d9fa1ea",
+      "userId": "usr-4d9fa1ea",
+      "computedAt": "2026-09-03T15:31:53.791Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -30937,17 +31589,17 @@
         "allTimeRank": 30,
         "weeklyRank": 30,
         "dailyRank": 30,
-        "totalLearners": 38,
-        "topPercentile": 79,
+        "totalLearners": 39,
+        "topPercentile": 77,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.298Z"
+      "lastRefreshed": "2026-09-03T15:31:53.791Z"
     },
     {
-      "id": "analytics-summary-usr-a3b046f1",
-      "userId": "usr-a3b046f1",
-      "computedAt": "2026-09-03T12:14:27.342Z",
+      "id": "analytics-summary-usr-46dacd29",
+      "userId": "usr-46dacd29",
+      "computedAt": "2026-09-03T15:31:53.836Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -31245,17 +31897,17 @@
         "allTimeRank": 31,
         "weeklyRank": 31,
         "dailyRank": 31,
-        "totalLearners": 38,
-        "topPercentile": 82,
+        "totalLearners": 39,
+        "topPercentile": 79,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.342Z"
+      "lastRefreshed": "2026-09-03T15:31:53.836Z"
     },
     {
-      "id": "analytics-summary-usr-7d5b3b71",
-      "userId": "usr-7d5b3b71",
-      "computedAt": "2026-09-03T12:14:27.395Z",
+      "id": "analytics-summary-usr-a3b046f1",
+      "userId": "usr-a3b046f1",
+      "computedAt": "2026-09-03T15:31:53.881Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -31553,17 +32205,17 @@
         "allTimeRank": 32,
         "weeklyRank": 32,
         "dailyRank": 32,
-        "totalLearners": 38,
-        "topPercentile": 84,
+        "totalLearners": 39,
+        "topPercentile": 82,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.395Z"
+      "lastRefreshed": "2026-09-03T15:31:53.881Z"
     },
     {
-      "id": "analytics-summary-usr-21050f14",
-      "userId": "usr-21050f14",
-      "computedAt": "2026-09-03T12:14:27.436Z",
+      "id": "analytics-summary-usr-7d5b3b71",
+      "userId": "usr-7d5b3b71",
+      "computedAt": "2026-09-03T15:31:53.926Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -31861,17 +32513,17 @@
         "allTimeRank": 33,
         "weeklyRank": 33,
         "dailyRank": 33,
-        "totalLearners": 38,
-        "topPercentile": 87,
+        "totalLearners": 39,
+        "topPercentile": 85,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.436Z"
+      "lastRefreshed": "2026-09-03T15:31:53.926Z"
     },
     {
-      "id": "analytics-summary-c8f3a0c3-34e5-4d3f-8382-444ca349422b",
-      "userId": "c8f3a0c3-34e5-4d3f-8382-444ca349422b",
-      "computedAt": "2026-09-03T12:14:27.475Z",
+      "id": "analytics-summary-usr-21050f14",
+      "userId": "usr-21050f14",
+      "computedAt": "2026-09-03T15:31:53.972Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -32021,7 +32673,7 @@
       "streakMetrics": {
         "currentStreak": 1,
         "longestStreak": 1,
-        "lastActiveDate": "2026-09-03",
+        "lastActiveDate": "2026-09-02",
         "totalStudyMinutes": 0,
         "activeDaysLast30d": 1,
         "consistencyScorePercent": 3,
@@ -32113,17 +32765,17 @@
           },
           {
             "date": "2026-09-02",
-            "studyMinutes": 0,
-            "srsReviews": 0,
-            "xpEarned": 0,
-            "quotaCompleted": false
-          },
-          {
-            "date": "2026-09-03",
             "studyMinutes": 15,
             "srsReviews": 0,
             "xpEarned": 75,
             "quotaCompleted": true
+          },
+          {
+            "date": "2026-09-03",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
           }
         ]
       },
@@ -32169,17 +32821,17 @@
         "allTimeRank": 34,
         "weeklyRank": 34,
         "dailyRank": 34,
-        "totalLearners": 38,
-        "topPercentile": 89,
+        "totalLearners": 39,
+        "topPercentile": 87,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.475Z"
+      "lastRefreshed": "2026-09-03T15:31:53.972Z"
     },
     {
-      "id": "analytics-summary-cd941900-48df-44d9-bee9-9049a193c3bc",
-      "userId": "cd941900-48df-44d9-bee9-9049a193c3bc",
-      "computedAt": "2026-09-03T12:14:27.517Z",
+      "id": "analytics-summary-c8f3a0c3-34e5-4d3f-8382-444ca349422b",
+      "userId": "c8f3a0c3-34e5-4d3f-8382-444ca349422b",
+      "computedAt": "2026-09-03T15:31:54.015Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -32477,17 +33129,17 @@
         "allTimeRank": 35,
         "weeklyRank": 35,
         "dailyRank": 35,
-        "totalLearners": 38,
-        "topPercentile": 92,
+        "totalLearners": 39,
+        "topPercentile": 90,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.517Z"
+      "lastRefreshed": "2026-09-03T15:31:54.015Z"
     },
     {
-      "id": "analytics-summary-usr-91d2f404",
-      "userId": "usr-91d2f404",
-      "computedAt": "2026-09-03T12:14:27.557Z",
+      "id": "analytics-summary-cd941900-48df-44d9-bee9-9049a193c3bc",
+      "userId": "cd941900-48df-44d9-bee9-9049a193c3bc",
+      "computedAt": "2026-09-03T15:31:54.063Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -32785,17 +33437,17 @@
         "allTimeRank": 36,
         "weeklyRank": 36,
         "dailyRank": 36,
-        "totalLearners": 38,
-        "topPercentile": 95,
+        "totalLearners": 39,
+        "topPercentile": 92,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.557Z"
+      "lastRefreshed": "2026-09-03T15:31:54.063Z"
     },
     {
-      "id": "analytics-summary-usr-e42126c2",
-      "userId": "usr-e42126c2",
-      "computedAt": "2026-09-03T12:14:27.596Z",
+      "id": "analytics-summary-usr-91d2f404",
+      "userId": "usr-91d2f404",
+      "computedAt": "2026-09-03T15:31:54.114Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -33093,17 +33745,17 @@
         "allTimeRank": 37,
         "weeklyRank": 37,
         "dailyRank": 37,
-        "totalLearners": 38,
-        "topPercentile": 97,
+        "totalLearners": 39,
+        "topPercentile": 95,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.596Z"
+      "lastRefreshed": "2026-09-03T15:31:54.114Z"
     },
     {
-      "id": "analytics-summary-usr-fd6e3165",
-      "userId": "usr-fd6e3165",
-      "computedAt": "2026-09-03T12:14:27.640Z",
+      "id": "analytics-summary-usr-e42126c2",
+      "userId": "usr-e42126c2",
+      "computedAt": "2026-09-03T15:31:54.164Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -33401,17 +34053,325 @@
         "allTimeRank": 38,
         "weeklyRank": 38,
         "dailyRank": 38,
-        "totalLearners": 38,
+        "totalLearners": 39,
+        "topPercentile": 97,
+        "weeklyXpDelta": 163,
+        "rankDelta7d": 0
+      },
+      "lastRefreshed": "2026-09-03T15:31:54.164Z"
+    },
+    {
+      "id": "analytics-summary-usr-fd6e3165",
+      "userId": "usr-fd6e3165",
+      "computedAt": "2026-09-03T15:31:54.213Z",
+      "targetLevel": "N5",
+      "srsMetrics": {
+        "totalCards": 2,
+        "dueCards": 2,
+        "retentionRate7d": 100,
+        "retentionRate30d": 100,
+        "overallAccuracyRate": 100,
+        "averageStabilityDays": 1,
+        "averageDifficulty": 5.25,
+        "averageResponseTimeMs": 1200,
+        "masteryBreakdown": {
+          "apprentice": 2,
+          "guru": 0,
+          "master": 0,
+          "enlightened": 0,
+          "burned": 0
+        },
+        "dailyRetentionTrend": [
+          {
+            "date": "2026-08-21",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-22",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-23",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-24",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-25",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-26",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-27",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-28",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-29",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-30",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-31",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-01",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-02",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-03",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          }
+        ]
+      },
+      "streakMetrics": {
+        "currentStreak": 1,
+        "longestStreak": 1,
+        "lastActiveDate": "2026-09-03",
+        "totalStudyMinutes": 0,
+        "activeDaysLast30d": 1,
+        "consistencyScorePercent": 3,
+        "averageDailyMinutes": 0,
+        "recentDailyActivity": [
+          {
+            "date": "2026-08-21",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-22",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-23",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-24",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-25",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-26",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-27",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-28",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-29",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-30",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-31",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-01",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-03",
+            "studyMinutes": 15,
+            "srsReviews": 0,
+            "xpEarned": 75,
+            "quotaCompleted": true
+          }
+        ]
+      },
+      "mockExamMetrics": {
+        "targetLevel": "N5",
+        "totalAttempts": 0,
+        "passedAttempts": 0,
+        "passRatePercent": 0,
+        "averageScaledScore": 0,
+        "highestScaledScore": 0,
+        "overallPassingScore": 80,
+        "readinessScorePercent": 30,
+        "sectionAverages": {
+          "vocabulary": {
+            "sectionType": "vocabulary",
+            "sectionTitle": "Language Knowledge (Vocabulary)",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          },
+          "grammar_reading": {
+            "sectionType": "grammar_reading",
+            "sectionTitle": "Language Knowledge (Grammar) & Reading",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          },
+          "listening": {
+            "sectionType": "listening",
+            "sectionTitle": "Listening Comprehension",
+            "averageRawPercent": 45,
+            "averageScaledScore": 27,
+            "maxScaledScore": 60,
+            "passRatePercent": 0
+          }
+        },
+        "recentAttempts": []
+      },
+      "leaderboardMetrics": {
+        "currentXp": 450,
+        "allTimeRank": 39,
+        "weeklyRank": 39,
+        "dailyRank": 39,
+        "totalLearners": 39,
         "topPercentile": 100,
         "weeklyXpDelta": 163,
         "rankDelta7d": 0
       },
-      "lastRefreshed": "2026-09-03T12:14:27.640Z"
+      "lastRefreshed": "2026-09-03T15:31:54.213Z"
     },
     {
       "id": "analytics-summary-usr-telemetry-test-1788437665925",
       "userId": "usr-telemetry-test-1788437665925",
-      "computedAt": "2026-09-03T12:14:27.764Z",
+      "computedAt": "2026-09-03T15:31:54.340Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 3,
@@ -33723,17 +34683,17 @@
         "allTimeRank": 2,
         "weeklyRank": 1,
         "dailyRank": 1,
-        "totalLearners": 38,
+        "totalLearners": 39,
         "topPercentile": 5,
         "weeklyXpDelta": 713,
         "rankDelta7d": 3
       },
-      "lastRefreshed": "2026-09-03T12:14:27.764Z"
+      "lastRefreshed": "2026-09-03T15:31:54.340Z"
     },
     {
       "id": "analytics-summary-usr-api-test-1788430784137",
       "userId": "usr-api-test-1788430784137",
-      "computedAt": "2026-09-03T12:14:27.719Z",
+      "computedAt": "2026-09-03T15:31:54.296Z",
       "targetLevel": "N5",
       "srsMetrics": {
         "totalCards": 2,
@@ -34028,15 +34988,337 @@
       },
       "leaderboardMetrics": {
         "currentXp": 950,
-        "allTimeRank": 3,
-        "weeklyRank": 3,
-        "dailyRank": 3,
-        "totalLearners": 38,
-        "topPercentile": 8,
+        "allTimeRank": 4,
+        "weeklyRank": 4,
+        "dailyRank": 4,
+        "totalLearners": 39,
+        "topPercentile": 10,
         "weeklyXpDelta": 488,
         "rankDelta7d": 3
       },
-      "lastRefreshed": "2026-09-03T12:14:27.719Z"
+      "lastRefreshed": "2026-09-03T15:31:54.296Z"
+    },
+    {
+      "id": "analytics-summary-usr-telemetry-test-1788449512393",
+      "userId": "usr-telemetry-test-1788449512393",
+      "computedAt": "2026-09-03T15:31:54.382Z",
+      "targetLevel": "N5",
+      "srsMetrics": {
+        "totalCards": 3,
+        "dueCards": 0,
+        "retentionRate7d": 80,
+        "retentionRate30d": 80,
+        "overallAccuracyRate": 80,
+        "averageStabilityDays": 11.33,
+        "averageDifficulty": 4.17,
+        "averageResponseTimeMs": 1360,
+        "masteryBreakdown": {
+          "apprentice": 1,
+          "guru": 1,
+          "master": 1,
+          "enlightened": 0,
+          "burned": 0
+        },
+        "dailyRetentionTrend": [
+          {
+            "date": "2026-08-21",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-22",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-23",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-24",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-25",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-26",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-27",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-28",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-29",
+            "totalReviews": 0,
+            "successfulReviews": 0,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1200,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-08-30",
+            "totalReviews": 1,
+            "successfulReviews": 1,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 950,
+            "averageRetrievability": 0.93
+          },
+          {
+            "date": "2026-08-31",
+            "totalReviews": 1,
+            "successfulReviews": 0,
+            "againReviews": 1,
+            "accuracyRate": 0,
+            "averageResponseTimeMs": 2500,
+            "averageRetrievability": 0.75
+          },
+          {
+            "date": "2026-09-01",
+            "totalReviews": 1,
+            "successfulReviews": 1,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1400,
+            "averageRetrievability": 0.9
+          },
+          {
+            "date": "2026-09-02",
+            "totalReviews": 1,
+            "successfulReviews": 1,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 850,
+            "averageRetrievability": 0.95
+          },
+          {
+            "date": "2026-09-03",
+            "totalReviews": 1,
+            "successfulReviews": 1,
+            "againReviews": 0,
+            "accuracyRate": 100,
+            "averageResponseTimeMs": 1100,
+            "averageRetrievability": 0.92
+          }
+        ]
+      },
+      "streakMetrics": {
+        "currentStreak": 8,
+        "longestStreak": 12,
+        "lastActiveDate": "2026-09-03",
+        "totalStudyMinutes": 360,
+        "activeDaysLast30d": 5,
+        "consistencyScorePercent": 17,
+        "averageDailyMinutes": 72,
+        "recentDailyActivity": [
+          {
+            "date": "2026-08-21",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-22",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-23",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-24",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-25",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-26",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-27",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-28",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-29",
+            "studyMinutes": 0,
+            "srsReviews": 0,
+            "xpEarned": 0,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-30",
+            "studyMinutes": 1,
+            "srsReviews": 1,
+            "xpEarned": 15,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-08-31",
+            "studyMinutes": 1,
+            "srsReviews": 1,
+            "xpEarned": 15,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-01",
+            "studyMinutes": 1,
+            "srsReviews": 1,
+            "xpEarned": 15,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-02",
+            "studyMinutes": 1,
+            "srsReviews": 1,
+            "xpEarned": 15,
+            "quotaCompleted": false
+          },
+          {
+            "date": "2026-09-03",
+            "studyMinutes": 1,
+            "srsReviews": 1,
+            "xpEarned": 15,
+            "quotaCompleted": false
+          }
+        ]
+      },
+      "mockExamMetrics": {
+        "targetLevel": "N5",
+        "totalAttempts": 1,
+        "passedAttempts": 1,
+        "passRatePercent": 100,
+        "averageScaledScore": 152,
+        "highestScaledScore": 152,
+        "overallPassingScore": 80,
+        "readinessScorePercent": 89,
+        "sectionAverages": {
+          "vocabulary": {
+            "sectionType": "vocabulary",
+            "sectionTitle": "Language Knowledge (Vocabulary)",
+            "averageRawPercent": 88,
+            "averageScaledScore": 53,
+            "maxScaledScore": 60,
+            "passRatePercent": 100
+          },
+          "grammar_reading": {
+            "sectionType": "grammar_reading",
+            "sectionTitle": "Language Knowledge (Grammar) & Reading",
+            "averageRawPercent": 80,
+            "averageScaledScore": 48,
+            "maxScaledScore": 60,
+            "passRatePercent": 100
+          },
+          "listening": {
+            "sectionType": "listening",
+            "sectionTitle": "Listening Comprehension",
+            "averageRawPercent": 85,
+            "averageScaledScore": 51,
+            "maxScaledScore": 60,
+            "passRatePercent": 100
+          }
+        },
+        "recentAttempts": [
+          {
+            "attemptId": "mock-att-test-1",
+            "examId": "mock-jlpt-n5-01",
+            "examCode": "JLPT-N5-2026-MOCK1",
+            "level": "N5",
+            "title": "JLPT N5 Official Mock Exam",
+            "submittedAt": "2026-09-03T15:31:52.481Z",
+            "totalScaledScore": 152,
+            "overallPassingScore": 80,
+            "isPassed": true,
+            "letterGrade": "A",
+            "timeSpentSeconds": 3400
+          }
+        ]
+      },
+      "leaderboardMetrics": {
+        "currentXp": 1250,
+        "allTimeRank": 3,
+        "weeklyRank": 1,
+        "dailyRank": 1,
+        "totalLearners": 39,
+        "topPercentile": 8,
+        "weeklyXpDelta": 713,
+        "rankDelta7d": 3
+      },
+      "lastRefreshed": "2026-09-03T15:31:54.382Z"
     }
   ],
   "savedPaymentMethods": [

@@ -1382,8 +1382,77 @@ export interface LearnerAnalyticsSummary {
     weeklyXpDelta: number;
     rankDelta7d: number;
   };
+  voiceTelemetry?: VoicePronunciationTelemetry;
   lastRefreshed: string;
 }
+
+// ==============================================================================
+// P1-06: Multimodal Voice & Tokyo Pitch-Accent Telemetry Types
+// ==============================================================================
+
+export type PitchAccentPattern = 'heiban' | 'atamadaka' | 'nakadaka' | 'odaka';
+
+export interface MoraEvaluation {
+  moraIndex: number;
+  mora: string;
+  targetPitch: 'H' | 'L';
+  detectedPitch: 'H' | 'L';
+  isDropPoint?: boolean;
+  isMatch: boolean;
+  estimatedHz?: number;
+}
+
+export interface TokyoPitchAccentAssessment {
+  id: string;
+  userId: string;
+  targetPhrase: string;
+  targetRomaji?: string;
+  targetMeaning?: string;
+  targetPattern: PitchAccentPattern;
+  targetDownstepMora: number; // 0 for Heiban, 1 for Atamadaka, 2..N-1 for Nakadaka, N for Odaka
+  detectedPattern: PitchAccentPattern;
+  detectedDownstepMora: number;
+  moraBreakdown: MoraEvaluation[];
+  patternMatch: boolean;
+  pitchAccuracyScore: number; // 0 - 100
+  moraRhythmScore: number; // 0 - 100
+  clarityScore: number; // 0 - 100
+  overallScore: number; // 0 - 100
+  passed: boolean;
+  audioDurationMs?: number;
+  averageF0Hz?: number;
+  pitchTrajectory?: number[];
+  feedbackEn: string;
+  feedbackBn: string;
+  coachingTips: string[];
+  recordedAt: string;
+}
+
+export interface VoicePronunciationTelemetry {
+  totalVoiceSessions: number;
+  totalVoiceRecordings: number;
+  averageClarityScore: number;
+  averagePitchAccuracy: number;
+  averageMoraRhythm: number;
+  overallPronunciationScore: number;
+  pitchPatternMastery: {
+    heibanAccuracy: number;
+    atamadakaAccuracy: number;
+    nakadakaAccuracy: number;
+    odakaAccuracy: number;
+  };
+  patternsEvaluatedCount: {
+    heiban: number;
+    atamadaka: number;
+    nakadaka: number;
+    odaka: number;
+  };
+  recentEvaluations: TokyoPitchAccentAssessment[];
+  weakPhonemes: string[];
+  tokyoAccentReadinessRate: number; // 0 - 100%
+  lastVoiceSessionDate?: string;
+}
+
 
 
 

@@ -86,7 +86,8 @@ import {
   SrsTelemetryStats,
   LearnerAnalyticsSummary,
   LeaderboardRankItem,
-  PlatformCohortAnalytics
+  PlatformCohortAnalytics,
+  TokyoPitchAccentAssessment
 } from './types.js';
 import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
 import { LearnerAnalyticsService } from './services/learnerAnalyticsService.js';
@@ -426,7 +427,8 @@ class Database {
     // Adaptive SRS & Learner Telemetry
     srsCards: [],
     srsLogs: [],
-    learnerAnalyticsSummaries: []
+    learnerAnalyticsSummaries: [],
+    voiceAssessments: []
   };
 
   private isLoaded = false;
@@ -1367,7 +1369,8 @@ class Database {
       mockExamAttempts: [],
       srsCards: [],
       srsLogs: [],
-      learnerAnalyticsSummaries: []
+      learnerAnalyticsSummaries: [],
+      voiceAssessments: []
     };
     this.isLoaded = true;
   }
@@ -6051,6 +6054,61 @@ class Database {
   public getCohortAnalytics(): PlatformCohortAnalytics {
     return LearnerAnalyticsService.getCohortAnalytics();
   }
+
+  // ==============================================================================
+  // P1-06: Multimodal Voice & Tokyo Pitch-Accent Assessment Methods
+  // ==============================================================================
+
+  public createVoiceAssessment(assessment: TokyoPitchAccentAssessment): TokyoPitchAccentAssessment {
+    if (!this.data.voiceAssessments) {
+      this.data.voiceAssessments = [];
+    }
+    this.data.voiceAssessments.push(assessment);
+    this.save();
+
+    // Sync to Supabase if configured
+    if (this.supabaseClient) {
+      Promise.resolve(
+        this.supabaseClient.from('tokyo_pitch_assessments').insert({
+          id: assessment.id,
+          user_id: assessment.userId,
+          target_phrase: assessment.targetPhrase,
+          target_romaji: assessment.targetRomaji,
+          target_meaning: assessment.targetMeaning,
+          target_pattern: assessment.targetPattern,
+          target_downstep_mora: assessment.targetDownstepMora,
+          detected_pattern: assessment.detectedPattern,
+          detected_downstep_mora: assessment.detectedDownstepMora,
+          mora_breakdown: assessment.moraBreakdown,
+          pattern_match: assessment.patternMatch,
+          pitch_accuracy_score: assessment.pitchAccuracyScore,
+          mora_rhythm_score: assessment.moraRhythmScore,
+          clarity_score: assessment.clarityScore,
+          overall_score: assessment.overallScore,
+          passed: assessment.passed,
+          audio_duration_ms: assessment.audioDurationMs,
+          average_f0_hz: assessment.averageF0Hz,
+          pitch_trajectory: assessment.pitchTrajectory,
+          feedback_en: assessment.feedbackEn,
+          feedback_bn: assessment.feedbackBn,
+          coaching_tips: assessment.coachingTips,
+          recorded_at: assessment.recordedAt
+        })
+      ).catch((err) => {
+        console.warn('[Supabase Voice] Warning inserting assessment:', err.message);
+      });
+    }
+
+    return assessment;
+  }
+
+  public getVoiceAssessments(userId: string, limit = 50): TokyoPitchAccentAssessment[] {
+    const list = (this.data.voiceAssessments || []).filter((a) => a.userId === userId);
+    return list
+      .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())
+      .slice(0, limit);
+  }
+
 
   // ==============================================================================
   // Task 8: BaitoOS™ 2.0 & Tokyo Relocation Simulation Engine Methods
