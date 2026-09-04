@@ -3,6 +3,7 @@
  * Connects Supabase Auth, MemoryOS (SRS), and Gamification
  */
 import { supabase } from '../../lib/supabase';
+import { syncLearningProgressToSupabase, syncLessonProgressToSupabase } from '../../lib/supabaseService';
 import { DashboardApiResponse } from './types';
 import { mockDashboardData } from './mockData';
 
@@ -24,6 +25,8 @@ export const studentService = {
       // LocalStorage বা MemoryOS থেকে সংরক্ষিত ভুলগুলো চেক
       const storedMistakes = localStorage.getItem('nihomi_memory_mistakes');
       const realMistakes = storedMistakes ? JSON.parse(storedMistakes) : mockDashboardData.recentMistakes;
+      const completedLessons = JSON.parse(localStorage.getItem('nihomi_completed_lessons') || '[]') as string[];
+      const lesson12Completed = completedLessons.includes('les_n5_012') || completedLessons.includes('lesson-12');
 
       // সংরক্ষিত কয়েন ও AI ক্রেডিট চেক
       const savedCoins = localStorage.getItem('nihomi_student_coins');
@@ -31,6 +34,15 @@ export const studentService = {
 
       return {
         ...mockDashboardData,
+        continueLesson: mockDashboardData.continueLesson
+          ? { ...mockDashboardData.continueLesson, progressPercent: lesson12Completed ? 100 : mockDashboardData.continueLesson.progressPercent, estimatedMinutesLeft: lesson12Completed ? 0 : mockDashboardData.continueLesson.estimatedMinutesLeft }
+          : null,
+        dailyPlan: mockDashboardData.dailyPlan.map((item) => item.title.includes('Particle') && lesson12Completed
+          ? { ...item, status: 'completed', detail: 'Lesson completed • +50 XP' }
+          : item),
+        jlptProgress: lesson12Completed
+          ? { ...mockDashboardData.jlptProgress, modules: { ...mockDashboardData.jlptProgress.modules, grammar: Math.min(100, mockDashboardData.jlptProgress.modules.grammar + 5) } }
+          : mockDashboardData.jlptProgress,
         student: {
           ...mockDashboardData.student,
           name: studentName,
@@ -66,5 +78,40 @@ export const studentService = {
     const updated = Math.max(0, current - 1);
     localStorage.setItem('nihomi_ai_credits', updated.toString());
     return updated;
+  },
+
+  async completeLesson(lessonId: string, coinReward = 10, xpReward = 50) {
+    let completedLessons: string[] = [];
+    try {
+      completedLessons = JSON.parse(localStorage.getItem('nihomi_completed_lessons') || '[]') as string[];
+    } catch {
+      completedLessons = [];
+    }
+    const updatedLessons = Array.from(new Set([...completedLessons, lessonId]));
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+    if (completedLessons.includes(lessonId)) {
+      return { updatedCoins: currentCoins, updatedXp: currentXp, updatedLessons };
+    }
+    const updatedCoins = currentCoins + coinReward;
+    const updatedXp = currentXp + xpReward;
+
+    localStorage.setItem('nihomi_completed_lessons', JSON.stringify(updatedLessons));
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_student_xp', updatedXp.toString());
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await Promise.all([
+          syncLessonProgressToSupabase({ userId: user.id, lessonId, status: 'COMPLETED', progressPercent: 100, timeSpentSeconds: 300 }),
+          syncLearningProgressToSupabase({ userId: user.id, xpDelta: xpReward, grammarMasteredDelta: 1, studyMinutesDelta: 5 }),
+        ]);
+      }
+    } catch (error) {
+      console.warn('[Nihomi Service] Lesson sync deferred; local progress is saved:', error);
+    }
+
+    return { updatedCoins, updatedXp, updatedLessons };
   }
 };

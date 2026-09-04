@@ -65,6 +65,22 @@ export const useStudentDashboard = () => {
     return true;
   };
 
+  const handleCompleteLesson = async (lessonId: string) => {
+    if (!data || !data.continueLesson) return;
+    const result = await studentService.completeLesson(lessonId);
+    setData({
+      ...data,
+      continueLesson: { ...data.continueLesson, progressPercent: 100, estimatedMinutesLeft: 0 },
+      dailyPlan: data.dailyPlan.map((item) => item.title.includes('Particle') ? { ...item, status: 'completed', detail: 'Lesson completed • +50 XP' } : item),
+      jlptProgress: {
+        ...data.jlptProgress,
+        modules: { ...data.jlptProgress.modules, grammar: Math.min(100, data.jlptProgress.modules.grammar + 5) },
+      },
+      accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins },
+    });
+    showToast('অভিনন্দন! Lesson 12 সম্পন্ন। +50 XP এবং +10 Nihomi Coins যোগ হয়েছে!');
+  };
+
   return {
     data,
     viewState,
@@ -73,6 +89,7 @@ export const useStudentDashboard = () => {
     toggleDailyTask,
     handleStartChallenge,
     handleUseAiCredit,
+    handleCompleteLesson,
     showToast,
   };
 };

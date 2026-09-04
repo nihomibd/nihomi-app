@@ -11,6 +11,7 @@ import { VocabKanjiProgress } from './components/VocabKanjiProgress';
 import { MobileBottomNavigation, NavTab } from './components/MobileBottomNavigation';
 import { DashboardLoadingSkeleton, DashboardErrorView } from './components/UIStateViews';
 import { AiSenseiDrawer } from './components/AiSenseiDrawer';
+import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -31,11 +32,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     toggleDailyTask,
     handleStartChallenge,
     handleUseAiCredit,
+    handleCompleteLesson,
     showToast,
   } = useStudentDashboard();
 
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
+  const [isLessonOpen, setIsLessonOpen] = useState(false);
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
@@ -52,8 +55,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   };
 
   const handleResume = (lessonId: string) => {
-    onResumeLesson?.(lessonId);
-    showToast(`লেসন ${lessonId} চালু হচ্ছে...`);
+    if (lessonId === 'les_n5_012' || lessonId === 'lesson-12') {
+      setIsLessonOpen(true);
+    } else {
+      onResumeLesson?.(lessonId);
+      showToast(`লেসন ${lessonId} চালু হচ্ছে...`);
+    }
   };
 
   const handleOpenMistakeBookClick = () => {
@@ -146,6 +153,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           onClose={() => setIsAiTutorOpen(false)}
         />
       )}
+      <Lesson12PlayerModal
+        isOpen={isLessonOpen}
+        onClose={() => setIsLessonOpen(false)}
+        onComplete={async () => {
+          await handleCompleteLesson(data?.continueLesson?.lessonId || 'les_n5_012');
+          setIsLessonOpen(false);
+        }}
+      />
     </div>
   );
 };
