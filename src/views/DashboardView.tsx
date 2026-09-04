@@ -10,14 +10,12 @@ interface DashboardViewProps {
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
-  // ১. লেসন প্লেয়ারে নিয়ে যাওয়া
   const handleResumeLesson = (lessonId: string) => {
     if (onNavigate) {
       onNavigate(`lesson/${lessonId}`);
     }
   };
 
-  // ২. মোবাইল বটম ট্যাবের মাধ্যমে নিহোমির অন্যান্য পেজে যাওয়া
   const handleNavigateTab = (tab: NavTab) => {
     if (tab === 'practice' && onNavigate) {
       onNavigate('practice');
@@ -28,7 +26,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     }
   };
 
-  // ৩. মেমোরিওএস (ভুলের খাতা) খোলা
   const handleOpenMistakeBook = () => {
     if (onNavigate) {
       onNavigate('memory-os');
@@ -37,7 +34,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     }
   };
 
-  // যদি ভুলের খাতা খোলা হয়
+  const handleMemoryNavigate = (view: string) => {
+    if (view === 'dashboard') {
+      setShowMemoryOs(false);
+    } else {
+      onNavigate?.(view);
+    }
+  };
+
   if (showMemoryOs) {
     return (
       <div className="relative min-h-screen bg-stone-50 pb-16">
@@ -49,10 +53,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           >
             ← ড্যাশবোর্ডে ফিরে যান
           </button>
-          <MemoryOsView onNavigate={(view) => {
-            if (view === 'dashboard') setShowMemoryOs(false);
-            else if (onNavigate) onNavigate(view);
-          }} />
+          <MemoryOsView onNavigate={handleMemoryNavigate} />
         </div>
       </div>
     );

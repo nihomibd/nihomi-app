@@ -126,10 +126,10 @@ export const TokyoScenarioRoleplayStudio: React.FC = () => {
 
       // Browser pitch tracker
       const tracker = new BrowserPitchTracker();
-      await tracker.start(stream, (pitchData) => {
-        setMicVolume(Math.min(100, Math.round(pitchData.volume * 250)));
-        if (pitchData.f0 > 75 && pitchData.f0 < 450) {
-          recordedF0Ref.current.push(pitchData.f0);
+      await tracker.start(stream, (freq, confidence) => {
+        setMicVolume(Math.min(100, Math.round(confidence * 100)));
+        if (freq > 75 && freq < 450) {
+          recordedF0Ref.current.push(freq);
         }
       });
       pitchTrackerRef.current = tracker;
