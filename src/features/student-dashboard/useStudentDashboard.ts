@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { DashboardApiResponse, DashboardViewState } from './types';
+import { DashboardApiResponse, DashboardViewState, TaskStatus } from './types';
 import { studentService } from './studentService';
 
 export const useStudentDashboard = () => {
@@ -31,7 +31,7 @@ export const useStudentDashboard = () => {
     if (!data) return;
     const updatedPlan = data.dailyPlan.map((t) => {
       if (t.id === taskId) {
-        const nextStatus = t.status === 'completed' ? 'pending' : 'completed';
+        const nextStatus: TaskStatus = t.status === 'completed' ? 'pending' : 'completed';
         return { ...t, status: nextStatus };
       }
       return t;
@@ -64,3 +64,4 @@ export const useStudentDashboard = () => {
     handleStartChallenge,
     showToast,
   };
+};
