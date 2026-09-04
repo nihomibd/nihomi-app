@@ -63,6 +63,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     <DashboardPage
       onResumeLesson={handleResumeLesson}
       onNavigateTab={handleNavigateTab}
+      onNavigate={onNavigate}
       onOpenMistakeBook={handleOpenMistakeBook}
     />
   );

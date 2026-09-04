@@ -13,15 +13,18 @@ import { DashboardLoadingSkeleton, DashboardErrorView } from './components/UISta
 import { AiSenseiDrawer } from './components/AiSenseiDrawer';
 import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
+import { BaitoReadinessCard } from './components/BaitoReadinessCard';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
+  onNavigate?: (view: string) => void;
   onResumeLesson?: (lessonId: string) => void;
   onOpenMistakeBook?: () => void;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({
   onNavigateTab,
+  onNavigate,
   onResumeLesson,
   onOpenMistakeBook,
 }) => {
@@ -109,6 +112,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               student={data.student} 
               accountUsage={data.accountUsage} 
               onOpenAiTutor={() => setIsAiTutorOpen(true)}
+              activeStreak={data.streak.currentStreak}
             />
 
             {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
@@ -137,6 +141,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
             {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
             <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
+
+            <BaitoReadinessCard onLaunch={() => onNavigate?.('baito-os')} />
 
             {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
             <StreakCard streak={data.streak} />
