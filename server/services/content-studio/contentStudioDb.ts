@@ -1,9 +1,55 @@
+import fs from 'fs';
+import path from 'path';
 import {
   StudioLesson,
   ContentStudioStats,
   ContentStatus,
   LessonSourceFile
 } from '../../../src/core/content-studio/types.js';
+
+export interface SourceDocumentRecord {
+  id: string;
+  title: string;
+  filename: string;
+  fileType: string;
+  fileSizeBytes: number;
+  checksumSha256: string;
+  storageUrl: string;
+  pageCount: number;
+  extractedText?: string;
+  ocrApplied: boolean;
+  ocrConfidence: number;
+  targetJlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  copyrightStatus: string;
+  metadata?: Record<string, any>;
+  uploadedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeNodeRecord {
+  id: string;
+  nodeCode: string;
+  nodeType: 'VOCABULARY' | 'GRAMMAR' | 'KANJI' | 'EXPRESSION' | 'CULTURE';
+  jlptLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+  sourceDocumentId?: string;
+  sourcePage?: number;
+  sourceSnippet?: string;
+  sourceHash?: string;
+  trilingualData: {
+    japanese: string;
+    furigana?: string;
+    romaji?: string;
+    english: string;
+    bangla: string;
+    notes?: string;
+  };
+  qaScore: number;
+  qaDimensions?: Record<string, any>;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export const GOLDEN_LESSON_N5_01: StudioLesson = {
   id: 'n5-l01',
@@ -608,8 +654,21 @@ export const GOLDEN_LESSON_N5_01: StudioLesson = {
   updatedAt: '2026-08-20T10:45:00.000Z'
 };
 
+const STUDIO_DATA_DIR = path.join(process.cwd(), 'server', 'data');
+const LESSONS_FILE = path.join(STUDIO_DATA_DIR, 'content_studio_lessons.json');
+const SOURCES_FILE = path.join(STUDIO_DATA_DIR, 'content_sources_meta.json');
+const KNOWLEDGE_FILE = path.join(STUDIO_DATA_DIR, 'knowledge_nodes.json');
+
+function ensureDataDir() {
+  if (!fs.existsSync(STUDIO_DATA_DIR)) {
+    fs.mkdirSync(STUDIO_DATA_DIR, { recursive: true });
+  }
+}
+
 class ContentStudioDatabase {
   private lessons: Map<string, StudioLesson> = new Map();
+  private sourceDocuments: Map<string, SourceDocumentRecord> = new Map();
+  private knowledgeNodes: Map<string, KnowledgeNodeRecord> = new Map();
   private auditLogs: Array<{
     timestamp: string;
     action: string;
@@ -619,8 +678,79 @@ class ContentStudioDatabase {
   }> = [];
 
   constructor() {
-    this.lessons.set(GOLDEN_LESSON_N5_01.id, GOLDEN_LESSON_N5_01);
+    ensureDataDir();
+    this.loadFromDisk();
   }
+
+  private loadFromDisk() {
+    try {
+      if (fs.existsSync(LESSONS_FILE)) {
+        const raw = fs.readFileSync(LESSONS_FILE, 'utf8');
+        const list: StudioLesson[] = JSON.parse(raw);
+        list.forEach((l) => this.lessons.set(l.id, l));
+      }
+    } catch (err) {
+      console.warn('[ContentStudioDb] Error reading lessons from disk:', err);
+    }
+
+    // Always ensure Golden Lesson exists
+    if (!this.lessons.has(GOLDEN_LESSON_N5_01.id)) {
+      this.lessons.set(GOLDEN_LESSON_N5_01.id, GOLDEN_LESSON_N5_01);
+      this.saveLessonsToDisk();
+    }
+
+    try {
+      if (fs.existsSync(SOURCES_FILE)) {
+        const raw = fs.readFileSync(SOURCES_FILE, 'utf8');
+        const list: SourceDocumentRecord[] = JSON.parse(raw);
+        list.forEach((s) => this.sourceDocuments.set(s.id, s));
+      }
+    } catch (err) {
+      console.warn('[ContentStudioDb] Error reading source documents from disk:', err);
+    }
+
+    try {
+      if (fs.existsSync(KNOWLEDGE_FILE)) {
+        const raw = fs.readFileSync(KNOWLEDGE_FILE, 'utf8');
+        const list: KnowledgeNodeRecord[] = JSON.parse(raw);
+        list.forEach((k) => this.knowledgeNodes.set(k.nodeCode || k.id, k));
+      }
+    } catch (err) {
+      console.warn('[ContentStudioDb] Error reading knowledge nodes from disk:', err);
+    }
+  }
+
+  private saveLessonsToDisk() {
+    try {
+      ensureDataDir();
+      const list = Array.from(this.lessons.values());
+      fs.writeFileSync(LESSONS_FILE, JSON.stringify(list, null, 2), 'utf8');
+    } catch (err) {
+      console.error('[ContentStudioDb] Error saving lessons to disk:', err);
+    }
+  }
+
+  private saveSourcesToDisk() {
+    try {
+      ensureDataDir();
+      const list = Array.from(this.sourceDocuments.values());
+      fs.writeFileSync(SOURCES_FILE, JSON.stringify(list, null, 2), 'utf8');
+    } catch (err) {
+      console.error('[ContentStudioDb] Error saving source documents to disk:', err);
+    }
+  }
+
+  private saveKnowledgeToDisk() {
+    try {
+      ensureDataDir();
+      const list = Array.from(this.knowledgeNodes.values());
+      fs.writeFileSync(KNOWLEDGE_FILE, JSON.stringify(list, null, 2), 'utf8');
+    } catch (err) {
+      console.error('[ContentStudioDb] Error saving knowledge nodes to disk:', err);
+    }
+  }
+
+  // --- LESSON CRUD (DURABLE) ---
 
   getLessons(filter?: { level?: string; status?: string }): StudioLesson[] {
     let result = Array.from(this.lessons.values());
@@ -667,6 +797,7 @@ class ContentStudioDatabase {
     };
 
     this.lessons.set(id, newLesson);
+    this.saveLessonsToDisk();
     this.logAudit('CREATE_LESSON', id, 'admin@nihomi.com', { title: newLesson.title });
     return newLesson;
   }
@@ -684,6 +815,7 @@ class ContentStudioDatabase {
     };
 
     this.lessons.set(id, updated);
+    this.saveLessonsToDisk();
     this.logAudit('UPDATE_LESSON', id, 'admin@nihomi.com', { fieldsUpdated: Object.keys(updates) });
     return updated;
   }
@@ -705,6 +837,7 @@ class ContentStudioDatabase {
     };
 
     this.lessons.set(id, published);
+    this.saveLessonsToDisk();
     this.logAudit('APPROVE_PUBLISH_LESSON', id, founderEmail, { title: published.title, publishedAt: now });
     return published;
   }
@@ -712,9 +845,64 @@ class ContentStudioDatabase {
   deleteLesson(id: string): boolean {
     const deleted = this.lessons.delete(id);
     if (deleted) {
+      this.saveLessonsToDisk();
       this.logAudit('DELETE_LESSON', id, 'admin@nihomi.com', {});
     }
     return deleted;
+  }
+
+  // --- SOURCE DOCUMENTS (DURABLE) ---
+
+  getSourceDocuments(filter?: { level?: string }): SourceDocumentRecord[] {
+    let result = Array.from(this.sourceDocuments.values());
+    if (filter?.level) {
+      result = result.filter((s) => s.targetJlptLevel === filter.level);
+    }
+    return result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  getSourceDocumentById(id: string): SourceDocumentRecord | undefined {
+    return this.sourceDocuments.get(id);
+  }
+
+  getSourceDocumentByHash(hash: string): SourceDocumentRecord | undefined {
+    return Array.from(this.sourceDocuments.values()).find((s) => s.checksumSha256 === hash);
+  }
+
+  saveSourceDocument(record: SourceDocumentRecord): SourceDocumentRecord {
+    this.sourceDocuments.set(record.id, record);
+    this.saveSourcesToDisk();
+    this.logAudit('SAVE_SOURCE_DOCUMENT', record.id, record.uploadedBy || 'admin', { filename: record.filename });
+    return record;
+  }
+
+  // --- KNOWLEDGE NODES (DURABLE) ---
+
+  getKnowledgeNodes(filter?: { level?: string; type?: string }): KnowledgeNodeRecord[] {
+    let result = Array.from(this.knowledgeNodes.values());
+    if (filter?.level) {
+      result = result.filter((k) => k.jlptLevel === filter.level);
+    }
+    if (filter?.type) {
+      result = result.filter((k) => k.nodeType === filter.type);
+    }
+    return result;
+  }
+
+  getKnowledgeNodeByCode(code: string): KnowledgeNodeRecord | undefined {
+    return this.knowledgeNodes.get(code);
+  }
+
+  saveKnowledgeNode(node: KnowledgeNodeRecord): KnowledgeNodeRecord {
+    this.knowledgeNodes.set(node.nodeCode, node);
+    this.saveKnowledgeToDisk();
+    return node;
+  }
+
+  saveKnowledgeNodesBatch(nodes: KnowledgeNodeRecord[]): number {
+    nodes.forEach((n) => this.knowledgeNodes.set(n.nodeCode, n));
+    this.saveKnowledgeToDisk();
+    return nodes.length;
   }
 
   getStats(): ContentStudioStats {

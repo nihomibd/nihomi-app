@@ -1,0 +1,88 @@
+[
+  {
+    "id": "kn-voc-src-d1-1",
+    "nodeCode": "N5-V-v-001",
+    "nodeType": "VOCABULARY",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-d1407cce",
+    "sourcePage": 1,
+    "sourceSnippet": "私はニホミです。",
+    "sourceHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+    "trilingualData": {
+      "japanese": "私",
+      "furigana": "わたし",
+      "romaji": "watashi",
+      "english": "I",
+      "bangla": "আমি"
+    },
+    "qaScore": 98,
+    "isVerified": true,
+    "createdAt": "2026-09-06T07:17:08.758Z",
+    "updatedAt": "2026-09-06T07:17:08.758Z"
+  },
+  {
+    "id": "kn-voc-src-d1-2",
+    "nodeCode": "N5-V-v-002",
+    "nodeType": "VOCABULARY",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-d1407cce",
+    "sourcePage": 1,
+    "sourceSnippet": "初めまして。ニホミです。",
+    "sourceHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+    "trilingualData": {
+      "japanese": "初めまして",
+      "furigana": "はじめまして",
+      "romaji": "hajimemashite",
+      "english": "Nice to meet you",
+      "bangla": "আপনার সাথে দেখা হয়ে ভালো লাগল"
+    },
+    "qaScore": 98,
+    "isVerified": true,
+    "createdAt": "2026-09-06T07:17:08.758Z",
+    "updatedAt": "2026-09-06T07:17:08.758Z"
+  },
+  {
+    "id": "kn-grm-src-d1-1",
+    "nodeCode": "N5-G-g-001",
+    "nodeType": "GRAMMAR",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-d1407cce",
+    "sourcePage": 1,
+    "sourceSnippet": "Noun 1 + は + Noun 2 + です",
+    "sourceHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+    "trilingualData": {
+      "japanese": "AはBです",
+      "furigana": "Noun 1 + は + Noun 2 + です",
+      "romaji": "",
+      "english": "Noun 1 is Noun 2",
+      "bangla": "এখানে 'wa' পার্টিকেলটি বাক্যের বিষয়বস্তু নির্দেশ করে। 'Desu' বাক্যটিকে বিনয়ী বা নম্র করে তোলে।",
+      "notes": "Do not forget the 'desu' at the end of the sentence in formal speech."
+    },
+    "qaScore": 98,
+    "isVerified": true,
+    "createdAt": "2026-09-06T07:17:08.758Z",
+    "updatedAt": "2026-09-06T07:17:08.758Z"
+  },
+  {
+    "id": "kn-kan-src-d1-1",
+    "nodeCode": "N5-K-私",
+    "nodeType": "KANJI",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-d1407cce",
+    "sourcePage": 1,
+    "sourceSnippet": "私",
+    "sourceHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+    "trilingualData": {
+      "japanese": "私",
+      "furigana": "シ",
+      "romaji": "わたし / わたくし",
+      "english": "I / Private",
+      "bangla": "",
+      "notes": "Strokes: 7, Radicals: 禾 (grain)"
+    },
+    "qaScore": 98,
+    "isVerified": true,
+    "createdAt": "2026-09-06T07:17:08.758Z",
+    "updatedAt": "2026-09-06T07:17:08.758Z"
+  }
+]

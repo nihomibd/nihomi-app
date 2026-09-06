@@ -430,3 +430,92 @@ CREATE POLICY "Users can view their activity logs" ON public.activity_logs
 
 CREATE POLICY "System and users can insert activity logs" ON public.activity_logs 
     FOR INSERT WITH CHECK (true);
+
+-- ==============================================================================
+-- 9. NIHOMI CONTENT ENGINE™ (PHASE 1) — DURABLE INGESTION & KNOWLEDGE LAYER
+-- ==============================================================================
+
+-- 9.1 Source Documents Table (Durable Raw Ingested Asset Records)
+CREATE TABLE IF NOT EXISTS public.source_documents (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    title TEXT NOT NULL,
+    filename TEXT NOT NULL,
+    file_type TEXT NOT NULL DEFAULT 'PDF',
+    file_size_bytes BIGINT NOT NULL,
+    checksum_sha256 TEXT NOT NULL,
+    storage_url TEXT NOT NULL,
+    page_count INT DEFAULT 1,
+    extracted_text TEXT,
+    ocr_applied BOOLEAN DEFAULT false,
+    ocr_confidence NUMERIC(5,2) DEFAULT 100.0,
+    target_jlpt_level jlpt_level DEFAULT 'N5',
+    copyright_status TEXT DEFAULT 'ACADEMIC_FAIR_USE',
+    metadata JSONB DEFAULT '{}'::jsonb,
+    uploaded_by TEXT REFERENCES public.users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_source_documents_checksum ON public.source_documents(checksum_sha256);
+CREATE INDEX IF NOT EXISTS idx_source_documents_level ON public.source_documents(target_jlpt_level);
+CREATE INDEX IF NOT EXISTS idx_source_documents_uploaded_by ON public.source_documents(uploaded_by);
+
+-- 9.2 Knowledge Nodes Table (Atomic Traceable Linguistic & Pedagogical Units)
+CREATE TABLE IF NOT EXISTS public.knowledge_nodes (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    node_code TEXT UNIQUE NOT NULL,
+    node_type TEXT NOT NULL, -- 'VOCABULARY' | 'GRAMMAR' | 'KANJI' | 'EXPRESSION' | 'CULTURE'
+    jlpt_level jlpt_level NOT NULL,
+    source_document_id TEXT REFERENCES public.source_documents(id) ON DELETE SET NULL,
+    source_page INT,
+    source_snippet TEXT,
+    source_hash TEXT,
+    trilingual_data JSONB NOT NULL, -- { ja: {...}, en: {...}, bn: {...}, furigana: '...', romaji: '...' }
+    qa_score INT DEFAULT 0,
+    qa_dimensions JSONB DEFAULT '{}'::jsonb,
+    is_verified BOOLEAN DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_nodes_code ON public.knowledge_nodes(node_code);
+CREATE INDEX IF NOT EXISTS idx_knowledge_nodes_level ON public.knowledge_nodes(jlpt_level);
+CREATE INDEX IF NOT EXISTS idx_knowledge_nodes_type ON public.knowledge_nodes(node_type);
+CREATE INDEX IF NOT EXISTS idx_knowledge_nodes_source ON public.knowledge_nodes(source_document_id);
+
+-- 9.3 Content Drafts Table (Durable Lesson Draft Engine)
+CREATE TABLE IF NOT EXISTS public.content_drafts (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    lesson_id TEXT REFERENCES public.lessons(id) ON DELETE SET NULL,
+    course_id TEXT REFERENCES public.courses(id) ON DELETE SET NULL,
+    level jlpt_level NOT NULL DEFAULT 'N5',
+    unit_number INT DEFAULT 1,
+    lesson_number INT DEFAULT 1,
+    title TEXT NOT NULL,
+    title_ja TEXT,
+    title_bn TEXT,
+    version INT DEFAULT 1,
+    status content_status DEFAULT 'DRAFT',
+    curriculum_map JSONB DEFAULT '{}'::jsonb,
+    sections_content JSONB DEFAULT '{}'::jsonb, -- 14 structured educational sections
+    nihomi_standard_eval JSONB DEFAULT '{}'::jsonb,
+    created_by TEXT REFERENCES public.users(id) ON DELETE SET NULL,
+    reviewed_by TEXT REFERENCES public.users(id) ON DELETE SET NULL,
+    published_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_content_drafts_lesson ON public.content_drafts(lesson_id);
+CREATE INDEX IF NOT EXISTS idx_content_drafts_level ON public.content_drafts(level);
+CREATE INDEX IF NOT EXISTS idx_content_drafts_status ON public.content_drafts(status);
+
+-- RLS for Phase 1 Tables
+ALTER TABLE public.source_documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.knowledge_nodes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_drafts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admin and staff can manage source documents" ON public.source_documents FOR ALL USING (true);
+CREATE POLICY "Public read for verified knowledge nodes" ON public.knowledge_nodes FOR SELECT USING (true);
+CREATE POLICY "Admin and staff can manage knowledge nodes" ON public.knowledge_nodes FOR ALL USING (true);
+CREATE POLICY "Admin and staff can manage content drafts" ON public.content_drafts FOR ALL USING (true);

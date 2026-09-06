@@ -6645,6 +6645,27 @@
   ],
   "contentSources": [
     {
+      "title": "Minna no Nihongo Chapter 1",
+      "originalFilename": "test_lesson.pdf",
+      "storagePath": "/app/applet/server/data/content_sources/sources_n5_731daf51-9981-4a39-908a-2fc3922aa056_test_lesson.pdf",
+      "storageUrl": "/api/content/media/sources%2Fn5%2F731daf51-9981-4a39-908a-2fc3922aa056_test_lesson.pdf",
+      "cloudStorageKey": "sources/n5/731daf51-9981-4a39-908a-2fc3922aa056_test_lesson.pdf",
+      "storageBucket": "nihomi-content-sources",
+      "mimeType": "application/pdf",
+      "fileSize": 492,
+      "sourceLanguage": "Japanese",
+      "targetJlptLevel": "N5",
+      "processingStatus": "COMPLETED",
+      "contentHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+      "uploadedBy": "usr-admin-01",
+      "uploadedByEmail": "admin@nihomi.com",
+      "id": "src-d1407cce",
+      "createdAt": "2026-09-06T07:16:47.933Z",
+      "updatedAt": "2026-09-06T07:17:08.759Z",
+      "pageCount": 1,
+      "extractedText": "Minna no Nihongo Lesson 1: Hajimemashite Watashi wa Nihomi desu\n\n-- 1 of 1 --"
+    },
+    {
       "title": "Async Minna N5 Lesson Verification",
       "originalFilename": "Async Minna N5 Lesson Verification",
       "storagePath": "/api/content/media/sources%2Fn5%2Fa2388e6b-29c3-443c-9a4b-457219076190_Async_Minna_N5_Test.pdf",
@@ -6909,6 +6930,161 @@
   ],
   "contentDrafts": [
     {
+      "sourceId": "src-d1407cce",
+      "courseId": "course-n5",
+      "contentType": "lesson",
+      "title": "Minna no Nihongo Chapter 1",
+      "titleJa": "N5 第1課: Minna no Nihongo Chapter 1",
+      "summary": "Structured educational curriculum for JLPT N5 extracted from test_lesson.pdf. Includes vocabulary, grammar, kanji, and practice assessments.",
+      "explanation": "Comprehensive lesson extracted and structured via Nihomi Content Engine. Source fidelity: test_lesson.pdf (1 pages).",
+      "level": "N5",
+      "structuredContent": {
+        "vocabulary": [
+          {
+            "id": "v-001",
+            "japanese": "私",
+            "furigana": "わたし",
+            "romaji": "watashi",
+            "english": "I",
+            "banglaMeaning": "আমি",
+            "partOfSpeech": "pronoun",
+            "level": "N5",
+            "exampleSentenceJa": "私はニホミです。",
+            "exampleSentenceEn": "I am Nihomi.",
+            "exampleFurigana": "わたしはニホミです。",
+            "audioText": "Watashi wa Nihomi desu.",
+            "sourcePage": 1,
+            "sourceDerived": true
+          },
+          {
+            "id": "v-002",
+            "japanese": "初めまして",
+            "furigana": "はじめまして",
+            "romaji": "hajimemashite",
+            "english": "Nice to meet you",
+            "banglaMeaning": "আপনার সাথে দেখা হয়ে ভালো লাগল",
+            "partOfSpeech": "expression",
+            "level": "N5",
+            "exampleSentenceJa": "初めまして。ニホミです。",
+            "exampleSentenceEn": "Nice to meet you. I am Nihomi.",
+            "exampleFurigana": "はじめまして。ニホミです。",
+            "audioText": "Hajimemashite. Nihomi desu.",
+            "sourcePage": 1,
+            "sourceDerived": true
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-001",
+            "title": "A is B",
+            "titleJa": "AはBです",
+            "structure": "Noun 1 + は + Noun 2 + です",
+            "meaning": "Noun 1 is Noun 2",
+            "explanation": "The particle 'wa' marks the topic of the sentence. 'Desu' is a polite copula used at the end of the sentence.",
+            "explanationBn": "এখানে 'wa' পার্টিকেলটি বাক্যের বিষয়বস্তু নির্দেশ করে। 'Desu' বাক্যটিকে বিনয়ী বা নম্র করে তোলে।",
+            "level": "N5",
+            "examples": [
+              {
+                "japanese": "私はニホミです。",
+                "english": "I am Nihomi.",
+                "furigana": "わたしはニホミです。",
+                "breakdown": "Watashi (I) + wa (topic) + Nihomi (name) + desu (is)."
+              }
+            ],
+            "cautionNotes": "Do not forget the 'desu' at the end of the sentence in formal speech.",
+            "sourcePage": 1
+          }
+        ],
+        "kanji": [
+          {
+            "id": "k-001",
+            "character": "私",
+            "meaning": "I / Private",
+            "onyomi": [
+              "シ"
+            ],
+            "kunyomi": [
+              "わたし",
+              "わたくし"
+            ],
+            "strokes": 7,
+            "radicals": "禾 (grain)",
+            "level": "N5",
+            "examples": [
+              {
+                "word": "私",
+                "reading": "わたし",
+                "meaning": "I"
+              }
+            ],
+            "sourcePage": 1
+          }
+        ],
+        "dialogue": [
+          {
+            "speaker": "Nihomi",
+            "speakerRole": "Speaker",
+            "japanese": "初めまして。私はニホミです。",
+            "furigana": "はじめまして。わたしはニホミです。",
+            "english": "Nice to meet you. I am Nihomi."
+          }
+        ],
+        "practiceExercises": [
+          {
+            "id": "ex-001",
+            "instruction": "Fill in the blank with the correct particle.",
+            "questionJa": "私＿ニホミです。",
+            "type": "fill_blank",
+            "options": [
+              "は",
+              "が",
+              "を",
+              "に"
+            ],
+            "correctAnswer": "は",
+            "explanation": "The particle 'wa' is used to mark the topic 'Watashi'."
+          }
+        ],
+        "readingPassages": [],
+        "quiz": {
+          "title": "Minna no Nihongo Chapter 1 Basics",
+          "passingScore": 75,
+          "questions": [
+            {
+              "id": "q-001",
+              "question": "How do you say 'I am Nihomi' in Japanese?",
+              "questionJa": "「I am Nihomi」を日本語で何と言いますか？",
+              "type": "multiple_choice",
+              "options": [
+                "私はニホミです。",
+                "ニホミは私です。",
+                "ニホミです私。",
+                "私ニホミです。"
+              ],
+              "correctIndex": 0,
+              "explanation": "The structure is Noun 1 (Watashi) + wa + Noun 2 (Nihomi) + desu."
+            }
+          ]
+        }
+      },
+      "status": "AI_GENERATED",
+      "generationMetadata": {
+        "modelUsed": "gemini-3.1-flash-lite",
+        "sourceDerived": true,
+        "aiEnriched": true,
+        "generatedAt": "2026-09-06T07:17:08.739Z",
+        "confidenceScore": 100,
+        "sourcePageReferences": [
+          1
+        ],
+        "disclaimer": "AI-generated content — Human review required."
+      },
+      "createdBy": "usr-admin-01",
+      "id": "draft-ec7192aa",
+      "createdAt": "2026-09-06T07:17:08.740Z",
+      "updatedAt": "2026-09-06T07:17:08.740Z"
+    },
+    {
       "title": "P1-02 Autonomous Test Draft",
       "titleJa": "",
       "summary": "",
@@ -7023,62 +7199,51 @@
     },
     {
       "id": "draft-future-1788429150971",
-      "sourceId": "src-future",
+      "sourceId": "src-e1dcf165",
       "title": "P1-03 Future Scheduled Publishing Draft",
-      "titleJa": "P1-03 予約公開テスト講義",
-      "summary": "Deferred test draft",
+      "titleJa": "",
+      "summary": "",
       "explanation": "Scheduled publishing test",
       "contentType": "lesson",
       "level": "N5",
       "status": "PUBLISHED",
       "structuredContent": {
-        "vocabulary": [
-          {
-            "id": "v-p1-01",
-            "japanese": "せんせい",
-            "furigana": "せんせい",
-            "romaji": "sensei",
-            "english": "Teacher / Instructor",
-            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
-            "partOfSpeech": "Noun",
-            "level": "N5",
-            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。",
-            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher."
-          },
-          {
-            "id": "v-p1-02",
-            "japanese": "ともだち",
-            "furigana": "ともだち",
-            "romaji": "tomodachi",
-            "english": "Friend",
-            "banglaMeaning": "বন্ধু",
-            "partOfSpeech": "Noun",
-            "level": "N5",
-            "exampleSentenceJa": "かれは わたしの ともだちです。",
-            "exampleSentenceEn": "He is my friend."
-          }
-        ],
-        "grammar": [
-          {
-            "id": "g-p1-01",
-            "title": "N1 も N2 です",
-            "titleJa": "助詞「も」",
-            "structure": "Noun1 も Noun2 です",
-            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
-            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too.",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "わたしも がくせいです。",
-                "english": "I am also a student."
-              }
-            ]
-          }
-        ],
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "question": "What is the correct meaning of 「せんせい」?",
+              "explanation": "Sensei means teacher or instructor in Japanese.",
+              "correctIndex": 1
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "question": "Which particle indicates \"also / too\"?",
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\".",
+              "correctIndex": 2
+            }
+          ],
+          "passingScore": 70
+        },
         "kanji": [
           {
             "id": "k-p1-01",
-            "character": "友",
+            "level": "N5",
             "onyomi": [
               "ユウ"
             ],
@@ -7087,64 +7252,77 @@
             ],
             "meaning": "Friend / Companion",
             "strokes": 4,
-            "radicals": "又",
-            "level": "N5",
             "examples": [
               {
                 "word": "ともだち",
-                "reading": "tomodachi",
-                "meaning": "friend"
+                "meaning": "friend",
+                "reading": "tomodachi"
               }
-            ]
+            ],
+            "radicals": "又",
+            "character": "友"
           }
         ],
-        "practiceExercises": [],
-        "quiz": {
-          "title": "Particle も & Vocabulary Mastery Quiz",
-          "passingScore": 70,
-          "questions": [
-            {
-              "id": "q1",
-              "type": "MULTIPLE_CHOICE",
-              "question": "What is the correct meaning of 「せんせい」?",
-              "options": [
-                "Student",
-                "Teacher",
-                "Doctor",
-                "Engineer"
-              ],
-              "correctIndex": 1,
-              "explanation": "Sensei means teacher or instructor in Japanese."
-            },
-            {
-              "id": "q2",
-              "type": "MULTIPLE_CHOICE",
-              "question": "Which particle indicates \"also / too\"?",
-              "options": [
-                "は (wa)",
-                "の (no)",
-                "も (mo)",
-                "を (o)"
-              ],
-              "correctIndex": 2,
-              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\"."
-            }
-          ]
-        }
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "level": "N5",
+            "title": "N1 も N2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "titleJa": "助詞「も」",
+            "examples": [
+              {
+                "english": "I am also a student.",
+                "japanese": "わたしも がくせいです。"
+              }
+            ],
+            "structure": "Noun1 も Noun2 です",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too."
+          }
+        ],
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "level": "N5",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "furigana": "せんせい",
+            "japanese": "せんせい",
+            "partOfSpeech": "Noun",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher.",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。"
+          },
+          {
+            "id": "v-p1-02",
+            "level": "N5",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "furigana": "ともだち",
+            "japanese": "ともだち",
+            "partOfSpeech": "Noun",
+            "banglaMeaning": "বন্ধু",
+            "exampleSentenceEn": "He is my friend.",
+            "exampleSentenceJa": "かれは わたしの ともだちです。"
+          }
+        ],
+        "practiceExercises": []
       },
-      "createdBy": "admin-p1-03",
+      "createdBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
       "courseId": "course-n5",
       "moduleId": "mod-n5-1",
       "generationMetadata": {
-        "modelUsed": "gemini-2.5-flash",
-        "sourceDerived": false,
+        "modelUsed": "gemini-1.5-flash",
+        "sourceDerived": true,
         "aiEnriched": true,
-        "generatedAt": "2026-09-03T09:52:30.971Z",
-        "disclaimer": "Verified"
+        "generatedAt": "2026-09-03T10:52:35.811586+00:00",
+        "confidenceScore": 95,
+        "disclaimer": "Generated educational curriculum"
       },
-      "createdAt": "2026-09-03T09:52:30.971Z",
-      "updatedAt": "2026-09-03T10:52:34.279Z",
-      "lessonId": "les-37c3d7"
+      "createdAt": "2026-09-03T10:52:35.811586+00:00",
+      "updatedAt": "2026-09-03T10:52:33.768+00:00",
+      "lessonId": "les-37c3d7",
+      "reviewNotes": ""
     },
     {
       "id": "draft-p1-03-1788429150621",
@@ -14471,6 +14649,120 @@
       "approvedAt": "2026-08-23T10:16:05.172+00:00",
       "publishedAt": "2026-08-23T10:16:05.172+00:00",
       "createdAt": "2026-08-23T10:16:05.172+00:00"
+    },
+    {
+      "id": "ver-2f311592",
+      "draftId": "draft-future-1788429150971",
+      "sourceId": "src-future",
+      "versionNumber": 1,
+      "contentJson": {
+        "quiz": {
+          "title": "Particle も & Vocabulary Mastery Quiz",
+          "questions": [
+            {
+              "id": "q1",
+              "type": "MULTIPLE_CHOICE",
+              "options": [
+                "Student",
+                "Teacher",
+                "Doctor",
+                "Engineer"
+              ],
+              "question": "What is the correct meaning of 「せんせい」?",
+              "explanation": "Sensei means teacher or instructor in Japanese.",
+              "correctIndex": 1
+            },
+            {
+              "id": "q2",
+              "type": "MULTIPLE_CHOICE",
+              "options": [
+                "は (wa)",
+                "の (no)",
+                "も (mo)",
+                "を (o)"
+              ],
+              "question": "Which particle indicates \"also / too\"?",
+              "explanation": "Particle も (mo) is the inclusive particle meaning \"also\".",
+              "correctIndex": 2
+            }
+          ],
+          "passingScore": 70
+        },
+        "kanji": [
+          {
+            "id": "k-p1-01",
+            "level": "N5",
+            "onyomi": [
+              "ユウ"
+            ],
+            "kunyomi": [
+              "とも"
+            ],
+            "meaning": "Friend / Companion",
+            "strokes": 4,
+            "examples": [
+              {
+                "word": "ともだち",
+                "meaning": "friend",
+                "reading": "tomodachi"
+              }
+            ],
+            "radicals": "又",
+            "character": "友"
+          }
+        ],
+        "grammar": [
+          {
+            "id": "g-p1-01",
+            "level": "N5",
+            "title": "N1 も N2 です",
+            "meaning": "Noun1 is also Noun2 (Inclusive marker)",
+            "titleJa": "助詞「も」",
+            "examples": [
+              {
+                "english": "I am also a student.",
+                "japanese": "わたしも がくせいです。"
+              }
+            ],
+            "structure": "Noun1 も Noun2 です",
+            "explanation": "Particle \"mo\" replaces \"wa\" to denote also / too."
+          }
+        ],
+        "vocabulary": [
+          {
+            "id": "v-p1-01",
+            "level": "N5",
+            "romaji": "sensei",
+            "english": "Teacher / Instructor",
+            "furigana": "せんせい",
+            "japanese": "せんせい",
+            "partOfSpeech": "Noun",
+            "banglaMeaning": "শিক্ষক / প্রশিক্ষক",
+            "exampleSentenceEn": "Mr. Tanaka is a Japanese teacher.",
+            "exampleSentenceJa": "たなかさんは にほんごの せんせいです。"
+          },
+          {
+            "id": "v-p1-02",
+            "level": "N5",
+            "romaji": "tomodachi",
+            "english": "Friend",
+            "furigana": "ともだち",
+            "japanese": "ともだち",
+            "partOfSpeech": "Noun",
+            "banglaMeaning": "বন্ধু",
+            "exampleSentenceEn": "He is my friend.",
+            "exampleSentenceJa": "かれは わたしの ともだちです。"
+          }
+        ],
+        "practiceExercises": []
+      },
+      "targetLessonId": "les-b7562f",
+      "targetCourseId": "course-n5",
+      "publishedBy": "scheduler",
+      "publishedAt": "2026-09-03T10:52:33.768+00:00",
+      "approvedBy": "scheduler",
+      "approvedAt": "2026-09-03T10:52:33.768+00:00",
+      "createdAt": "2026-09-03T10:52:33.768+00:00"
     }
   ],
   "ghostWeaknesses": [

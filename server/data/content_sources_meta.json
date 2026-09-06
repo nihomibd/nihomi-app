@@ -1,0 +1,20 @@
+[
+  {
+    "id": "src-d1407cce",
+    "title": "Minna no Nihongo Chapter 1",
+    "filename": "test_lesson.pdf",
+    "fileType": "application/pdf",
+    "fileSizeBytes": 492,
+    "checksumSha256": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
+    "storageUrl": "/api/content/media/sources%2Fn5%2F731daf51-9981-4a39-908a-2fc3922aa056_test_lesson.pdf",
+    "pageCount": 1,
+    "ocrApplied": false,
+    "ocrConfidence": 100,
+    "targetJlptLevel": "N5",
+    "copyrightStatus": "ORIGINAL_PROPRIETARY",
+    "uploadedBy": "admin@nihomi.com",
+    "createdAt": "2026-09-06T07:16:47.953Z",
+    "updatedAt": "2026-09-06T07:17:01.881Z",
+    "extractedText": "Minna no Nihongo Lesson 1: Hajimemashite Watashi wa Nihomi desu\n\n-- 1 of 1 --"
+  }
+]

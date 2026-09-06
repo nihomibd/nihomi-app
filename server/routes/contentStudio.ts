@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import multer from 'multer';
+import crypto from 'crypto';
 import { contentStudioDb } from '../services/content-studio/contentStudioDb.js';
 import { SourceExtractionService } from '../services/content-studio/sourceExtractionService.js';
 import { ContentGeneratorService } from '../services/content-studio/contentGeneratorService.js';
@@ -6,11 +8,29 @@ import { QAEngineService } from '../services/content-studio/qaEngineService.js';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 import { db } from '../db.js';
-import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, PublishingQueueStatus } from '../types.js';
+import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, PublishingQueueStatus, JLPTLevel } from '../types.js';
 import { liveLessonPublishingQueueService } from '../services/liveLessonPublishingQueueService.js';
 import { PublishingPreflightService } from '../services/publishingPreflightService.js';
+import { contentEngineService } from '../services/contentEngineService.js';
 
 export const contentStudioRouter = Router();
+
+// Configure Multer for secure memory upload handling of PDFs
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 25 * 1024 * 1024 // 25 MB max limit
+  },
+  fileFilter: (req, file, cb) => {
+    const isPdfMime = file.mimetype === 'application/pdf' || file.mimetype === 'application/x-pdf';
+    const isPdfExt = file.originalname.toLowerCase().endsWith('.pdf');
+    if (isPdfMime || isPdfExt) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF documents (.pdf) are permitted.'));
+    }
+  }
+});
 
 // 1. Dashboard Stats & Content Health (Requires Staff: Admin or Instructor)
 contentStudioRouter.get('/stats', requireStaff, (req: AuthenticatedRequest, res) => {
@@ -49,33 +69,140 @@ contentStudioRouter.patch('/lessons/:id', requireStaff, (req: AuthenticatedReque
   }
 });
 
-// 6. Attach Source File (Staff)
-contentStudioRouter.post('/lessons/:id/sources', requireStaff, (req: AuthenticatedRequest, res) => {
+// 6. Attach Source File (Staff - supports both file upload & structured JSON body)
+contentStudioRouter.post('/lessons/:id/sources', requireStaff, upload.single('file'), async (req: AuthenticatedRequest, res) => {
   const { id } = req.params;
-  const { filename, fileType, fileSizeBytes, rawText } = req.body;
   const lesson = contentStudioDb.getLessonById(id);
   if (!lesson) return res.status(404).json({ error: `Lesson ${id} not found` });
 
-  const sourceFile = {
-    sourceId: `src-${Date.now()}`,
-    filename: filename || 'Source.pdf',
-    fileType: fileType || 'PDF',
-    fileSizeBytes: fileSizeBytes || 2500000,
-    storagePath: `/storage/sources/${lesson.level?.toLowerCase()}/${lesson.id}/${filename || 'Source.pdf'}`,
-    uploadedBy: req.user?.email || 'admin@nihomi.com',
-    uploadedAt: new Date().toISOString(),
-    courseId: lesson.courseId,
-    level: lesson.level,
-    lessonId: lesson.id,
-    checksumSha256: `sha256:${Date.now()}`,
-    processingStatus: 'EXTRACTED' as const,
-    copyrightStatus: 'ACADEMIC_FAIR_USE' as const,
-    extractedRawText: rawText || 'Extracted raw Japanese text and Minna no Nihongo curriculum context.',
-  };
+  try {
+    if (req.file) {
+      // Direct binary PDF upload
+      const source = await contentEngineService.saveUploadedPdf(
+        req.file.buffer,
+        req.file.originalname,
+        req.file.mimetype,
+        (lesson.level as JLPTLevel) || 'N5',
+        lesson.title || req.file.originalname.replace(/\.[^/.]+$/, ''),
+        req.user?.id || 'admin',
+        req.user?.email || 'admin@nihomi.com',
+        lesson.courseId,
+        undefined,
+        lesson.id
+      );
 
-  const sources = [...(lesson.sources || []), sourceFile];
-  const updated = contentStudioDb.updateLesson(id, { sources });
-  res.json({ success: true, sourceFile, lesson: updated });
+      const sourceFile = {
+        sourceId: source.id,
+        filename: source.originalFilename,
+        fileType: 'PDF' as const,
+        fileSizeBytes: source.fileSize,
+        storagePath: source.storagePath,
+        uploadedBy: req.user?.email || 'admin@nihomi.com',
+        uploadedAt: source.createdAt,
+        courseId: lesson.courseId,
+        level: lesson.level,
+        lessonId: lesson.id,
+        checksumSha256: source.contentHash,
+        processingStatus: 'UPLOADED' as const,
+        copyrightStatus: 'ORIGINAL_PROPRIETARY' as const,
+        extractedRawText: ''
+      };
+
+      const sources = [...(lesson.sources || []), sourceFile];
+      const updated = contentStudioDb.updateLesson(id, { sources });
+      return res.json({ success: true, sourceFile, lesson: updated });
+    } else {
+      // JSON payload
+      const { filename, fileType, fileSizeBytes, rawText } = req.body;
+      const sourceFile = {
+        sourceId: `src-${Date.now()}`,
+        filename: filename || 'Source.pdf',
+        fileType: fileType || 'PDF',
+        fileSizeBytes: fileSizeBytes || 2500000,
+        storagePath: `/storage/sources/${lesson.level?.toLowerCase()}/${lesson.id}/${filename || 'Source.pdf'}`,
+        uploadedBy: req.user?.email || 'admin@nihomi.com',
+        uploadedAt: new Date().toISOString(),
+        courseId: lesson.courseId,
+        level: lesson.level,
+        lessonId: lesson.id,
+        checksumSha256: `sha256:${Date.now()}`,
+        processingStatus: 'EXTRACTED' as const,
+        copyrightStatus: 'ACADEMIC_FAIR_USE' as const,
+        extractedRawText: rawText || 'Extracted raw Japanese text and Minna no Nihongo curriculum context.',
+      };
+
+      const sources = [...(lesson.sources || []), sourceFile];
+      const updated = contentStudioDb.updateLesson(id, { sources });
+      return res.json({ success: true, sourceFile, lesson: updated });
+    }
+  } catch (err: any) {
+    console.error('[ContentStudio] Attach source failed:', err);
+    return res.status(500).json({ error: err.message || 'Failed to attach source' });
+  }
+});
+
+// 6b. Direct Ingestion Source Document Upload (Unified with Content Engine)
+contentStudioRouter.post('/sources/upload', requireStaff, upload.single('pdfFile'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const file = req.file || (req as any).files?.[0];
+    if (!file) {
+      return res.status(400).json({ error: 'No PDF file uploaded. Please attach a valid PDF document.' });
+    }
+
+    const { title, targetJlptLevel, courseId, moduleId, lessonId, autoProcess } = req.body;
+    const level: JLPTLevel = (['N5', 'N4', 'N3', 'N2', 'N1'].includes(targetJlptLevel) ? targetJlptLevel : 'N5') as JLPTLevel;
+
+    const source = await contentEngineService.saveUploadedPdf(
+      file.buffer,
+      file.originalname,
+      file.mimetype,
+      level,
+      title || file.originalname.replace(/\.[^/.]+$/, ''),
+      req.user?.id || 'admin',
+      req.user?.email || 'admin@nihomi.com',
+      courseId,
+      moduleId,
+      lessonId
+    );
+
+    if (autoProcess === 'true' || autoProcess === true) {
+      contentEngineService.processSource(source.id).catch((err) => {
+        console.error(`[ContentStudio] Async processing error for ${source.id}:`, err);
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      source,
+      message: 'PDF uploaded successfully and registered in durable pipeline.'
+    });
+  } catch (err: any) {
+    console.error('[ContentStudio] Upload failed:', err);
+    return res.status(500).json({ error: err.message || 'Failed to upload source document' });
+  }
+});
+
+// 6c. Get All Durable Source Documents
+contentStudioRouter.get('/source-documents', requireStaff, (req: AuthenticatedRequest, res) => {
+  const sources = contentStudioDb.getSourceDocuments();
+  res.json({ success: true, count: sources.length, sourceDocuments: sources });
+});
+
+// 6d. Get Single Source Document
+contentStudioRouter.get('/source-documents/:id', requireStaff, (req: AuthenticatedRequest, res) => {
+  const source = contentStudioDb.getSourceDocumentById(req.params.id);
+  if (!source) return res.status(404).json({ error: 'Source document not found' });
+  res.json({ success: true, sourceDocument: source });
+});
+
+// 6e. Get Atomic Knowledge Nodes
+contentStudioRouter.get('/knowledge-nodes', requireStaff, (req: AuthenticatedRequest, res) => {
+  const { level, type } = req.query;
+  const nodes = contentStudioDb.getKnowledgeNodes({
+    level: level as any,
+    type: type as any
+  });
+  res.json({ success: true, count: nodes.length, knowledgeNodes: nodes });
 });
 
 // 7. Analyze Sources & Extract Curriculum Map (Staff)
