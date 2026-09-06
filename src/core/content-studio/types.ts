@@ -88,6 +88,8 @@ export interface StudioVocabItem {
   bengali: string;
   partOfSpeech: string;
   audioUrl?: string;
+  pitchAccent?: 'HEIBAN' | 'ATAMADAKA' | 'NAKADAKA' | 'ODAKA' | string;
+  pitchPattern?: string;
   exampleSentenceJa: string;
   exampleSentenceEn: string;
   exampleSentenceBn: string;
@@ -262,6 +264,49 @@ export interface StudioAITutorContext {
   suggestedPromptsBn: string[];
 }
 
+export interface StudioBaitoSimulation {
+  workplaceType: 'CONVENIENCE_STORE' | 'RESTAURANT' | 'HOTEL_FRONT' | 'TECH_OFFICE';
+  scenarioBn: string;
+  keigoPhrases: Array<{
+    phraseJa: string;
+    reading: string;
+    meaningBn: string;
+    formality: 'TEINEIGO' | 'SONKEIGO' | 'KENJOUGO';
+    customerContextBn: string;
+  }>;
+  drillPromptBn: string;
+  expectedResponseJa: string;
+}
+
+export interface StudioSrsCard {
+  id: string;
+  itemType: 'VOCABULARY' | 'KANJI' | 'GRAMMAR';
+  frontJa: string;
+  furigana: string;
+  romaji: string;
+  backBn: string;
+  backEn: string;
+  pitchAccent?: string;
+  sampleSentenceJa?: string;
+  sampleSentenceBn?: string;
+  leitnerBox: number;
+}
+
+export interface StudioHomeworkTask {
+  id: string;
+  titleBn: string;
+  instructionBn: string;
+  taskType: 'SHADOWING' | 'SENTENCE_WRITING' | 'VOCAB_DRILL' | 'SITUATIONAL_RECORDING';
+  estimatedMinutes: number;
+  memoryOsSync: boolean;
+}
+
+export interface StudioMasteryChecklist {
+  canDoChecklist: Array<{ id: string; statementBn: string; verified: boolean }>;
+  jlptQuestionTypesCovered: string[];
+  recommendedReviewDayIntervals: number[];
+}
+
 export interface StudioQACheckItem {
   checkId: string;
   name: string;
@@ -279,6 +324,13 @@ export interface StudioQAReport {
   failureCount: number;
   canPublish: boolean;
   checks: StudioQACheckItem[];
+  dimensions?: Record<string, number>;
+  violations?: Array<{
+    dimension: string;
+    severity: 'INFO' | 'WARNING' | 'CRITICAL';
+    message: string;
+    suggestedFix?: string;
+  }>;
   evaluatedAt: string;
 }
 
@@ -313,6 +365,10 @@ export interface StudioLesson {
   quiz: StudioQuizQuestion[];
   assessment?: StudioAssessment;
   aiTutorContext?: StudioAITutorContext;
+  baitoSimulation?: StudioBaitoSimulation;
+  srsFlashcardPayload?: StudioSrsCard[];
+  homeworkTasks?: StudioHomeworkTask[];
+  masteryChecklist?: StudioMasteryChecklist;
 
   qaReport?: StudioQAReport;
   approvedBy?: string;

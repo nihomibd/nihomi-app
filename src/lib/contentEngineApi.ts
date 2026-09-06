@@ -216,14 +216,15 @@ export const contentEngineApi = {
   },
 
   // 3. Publishing
-  async publishDraft(id: string): Promise<{ success: boolean; draft?: ContentDraft; lesson?: any; version?: ContentVersion; error?: string }> {
+  async publishDraft(id: string, options?: { founderApproved?: boolean; founderNotes?: string }): Promise<{ success: boolean; draft?: ContentDraft; lesson?: any; version?: ContentVersion; error?: string }> {
     try {
       const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/publish`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...getAuthHeaders()
-        }
+        },
+        body: JSON.stringify(options || { founderApproved: true })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to publish draft');

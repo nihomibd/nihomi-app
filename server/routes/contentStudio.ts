@@ -260,16 +260,29 @@ contentStudioRouter.post('/lessons/:id/qa', requireStaff, (req: AuthenticatedReq
   res.json({ success: true, qaReport, lesson: updated });
 });
 
-// 10. Approve & Publish (Strict Admin Authorization with Zero-Downtime DB Sync)
+// 10. Approve & Publish (Strict Admin Authorization with Zero-Downtime DB Sync & Founder Review Gate)
 contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: AuthenticatedRequest, res) => {
   const founderEmail = req.user?.email || 'admin@nihomi.com';
   const adminId = req.user?.id || 'admin';
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
 
+  // Founder Review Gate Check: Must be approved or explicitly signed off
+  const { founderApproved } = req.body || {};
+  if (!founderApproved && lesson.status !== 'APPROVED') {
+    return res.status(403).json({
+      error: 'FOUNDER_GATE_LOCKED',
+      message: 'Explicit Founder Review Gate authorization is required to publish live to students. Please review and sign off in the QA Scorecard.'
+    });
+  }
+
   const qaReport = QAEngineService.runAutomatedQAPass(lesson);
   if (!qaReport.canPublish) {
-    return res.status(400).json({ error: 'QA check failed', qaReport });
+    return res.status(400).json({
+      error: 'QA_CHECK_FAILED',
+      message: 'Lesson failed Nihomi Standard™ QA Audit threshold (Minimum score 80 required with 0 P0 blockers).',
+      qaReport
+    });
   }
 
   const published = contentStudioDb.approveAndPublishLesson(lesson.id, founderEmail);
@@ -286,6 +299,8 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
       banglaMeaning: v.bengali,
       partOfSpeech: v.partOfSpeech,
       level: published.level,
+      pitchAccent: v.pitchAccent,
+      pitchPattern: v.pitchPattern,
       exampleSentenceJa: v.exampleSentenceJa,
       exampleSentenceEn: v.exampleSentenceEn
     })),
@@ -345,7 +360,11 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
         correctIndex: (q as any).correctIndex ?? 0,
         explanation: q.explanationBn || ''
       }))
-    } : undefined
+    } : undefined,
+    baitoSimulation: published.baitoSimulation,
+    srsFlashcardPayload: published.srsFlashcardPayload,
+    homeworkTasks: published.homeworkTasks,
+    masteryChecklist: published.masteryChecklist
   };
 
   if (!draft) {

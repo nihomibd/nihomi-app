@@ -512,6 +512,23 @@ contentEngineRouter.post('/drafts/:id/revision', requireAdmin, (req: Authenticat
 // ==========================================
 
 contentEngineRouter.post('/drafts/:id/publish', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  const draft = db.getContentDraftById(req.params.id);
+  if (!draft) return res.status(404).json({ error: 'Draft not found' });
+
+  // Strict Founder Review Gate Enforcement
+  const { founderApproved } = req.body || {};
+  if (draft.status !== 'APPROVED' && !founderApproved) {
+    return res.status(403).json({
+      error: 'FOUNDER_GATE_LOCKED',
+      message: 'Draft has not received Founder Review Gate sign-off. Please approve the draft before live publication.'
+    });
+  }
+
+  // If approved on-the-fly via Founder Review Gate, transition status first
+  if (draft.status !== 'APPROVED' && founderApproved) {
+    db.approveContentDraft(draft.id, req.user?.id || 'admin', 'Approved via Founder Review Gate sign-off.');
+  }
+
   const result = db.publishContentDraft(req.params.id, req.user?.id || 'admin');
   if (!result.success) {
     return res.status(400).json({ error: result.error });

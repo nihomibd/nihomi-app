@@ -799,6 +799,45 @@ export interface StructuredEducationalContent {
   readingPassages?: ReadingPassageItem[];
   listeningScripts?: ListeningScriptItem[];
   speakingScenarios?: SpeakingScenarioItem[];
+  baitoSimulation?: {
+    workplaceType: string;
+    scenarioBn: string;
+    keigoPhrases: Array<{
+      phraseJa: string;
+      reading: string;
+      meaningBn: string;
+      formality: string;
+      customerContextBn: string;
+    }>;
+    drillPromptBn: string;
+    expectedResponseJa: string;
+  };
+  srsFlashcardPayload?: Array<{
+    id: string;
+    itemType: string;
+    frontJa: string;
+    furigana: string;
+    romaji: string;
+    backBn: string;
+    backEn: string;
+    pitchAccent?: string;
+    sampleSentenceJa?: string;
+    sampleSentenceBn?: string;
+    leitnerBox: number;
+  }>;
+  homeworkTasks?: Array<{
+    id: string;
+    titleBn: string;
+    instructionBn: string;
+    taskType: string;
+    estimatedMinutes: number;
+    memoryOsSync: boolean;
+  }>;
+  masteryChecklist?: {
+    canDoChecklist: Array<{ id: string; statementBn: string; verified: boolean }>;
+    jlptQuestionTypesCovered: string[];
+    recommendedReviewDayIntervals: number[];
+  };
   quiz?: {
     title: string;
     passingScore: number;
