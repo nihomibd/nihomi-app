@@ -1792,6 +1792,13 @@ class Database {
       .sort((a, b) => a.lessonNumber - b.lessonNumber);
   }
 
+  public getLessons(includeUnpublished = false, level?: JLPTLevel): Lesson[] {
+    return (this.data.lessons || [])
+      .filter((l) => (includeUnpublished ? true : l.isPublished))
+      .filter((l) => (level ? l.level === level : true))
+      .sort((a, b) => a.lessonNumber - b.lessonNumber);
+  }
+
   public getLessonById(id: string): Lesson | undefined {
     return this.data.lessons.find((l) => l.id === id);
   }

@@ -67,6 +67,13 @@ learningRouter.get('/courses/:id', optionalAuth, (req: AuthenticatedRequest, res
   });
 });
 
+// Get all published lessons
+learningRouter.get('/lessons', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const level = req.query.level as JLPTLevel | undefined;
+  const lessons = db.getLessons(false, level);
+  return res.json({ lessons });
+});
+
 // Get Lesson by ID (Full content)
 learningRouter.get('/lessons/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
   const lesson = db.getLessonById(req.params.id);

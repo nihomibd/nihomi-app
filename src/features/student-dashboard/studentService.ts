@@ -33,11 +33,44 @@ export const studentService = {
       const savedCoins = localStorage.getItem('nihomi_student_coins');
       const savedCredits = localStorage.getItem('nihomi_ai_credits');
 
+      // চেক করুন কোনো সদ্য পাবলিশ হওয়া লাইভ লেসন আছে কিনা
+      let activeContinueLesson = mockDashboardData.continueLesson
+        ? {
+            ...mockDashboardData.continueLesson,
+            progressPercent: lesson12Completed ? 100 : mockDashboardData.continueLesson.progressPercent,
+            estimatedMinutesLeft: lesson12Completed ? 0 : mockDashboardData.continueLesson.estimatedMinutesLeft
+          }
+        : null;
+
+      try {
+        const res = await fetch('/api/lessons');
+        if (res.ok) {
+          const payload = await res.json();
+          const lessonList = Array.isArray(payload) ? payload : (payload.lessons || []);
+          if (lessonList.length > 0) {
+            const latest = lessonList[lessonList.length - 1];
+            if (latest) {
+              const isCompleted = completedLessons.includes(latest.id);
+              activeContinueLesson = {
+                lessonId: latest.id,
+                lessonNumber: latest.lessonNumber || 1,
+                title: latest.title || 'Japanese Lesson',
+                topic: latest.summary || latest.title || 'পরিচয় ও অভিবাদন (Greetings & Identity)',
+                topicJapanese: latest.titleJa || 'はじめまして・あいさつ',
+                jlptLevel: (latest.level as any) || 'N5',
+                progressPercent: isCompleted ? 100 : 25,
+                estimatedMinutesLeft: isCompleted ? 0 : Math.max(10, latest.estimatedMinutes || 20)
+              };
+            }
+          }
+        }
+      } catch {
+        // quiet fallback
+      }
+
       return {
         ...mockDashboardData,
-        continueLesson: mockDashboardData.continueLesson
-          ? { ...mockDashboardData.continueLesson, progressPercent: lesson12Completed ? 100 : mockDashboardData.continueLesson.progressPercent, estimatedMinutesLeft: lesson12Completed ? 0 : mockDashboardData.continueLesson.estimatedMinutesLeft }
-          : null,
+        continueLesson: activeContinueLesson,
         dailyPlan: mockDashboardData.dailyPlan.map((item) => item.title.includes('Particle') && lesson12Completed
           ? { ...item, status: 'completed', detail: 'Lesson completed • +50 XP' }
           : item),

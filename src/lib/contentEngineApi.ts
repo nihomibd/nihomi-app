@@ -470,5 +470,19 @@ export const contentEngineApi = {
     } catch (err: any) {
       return { success: false, error: err.message };
     }
+  },
+
+  // 8. Founder Command Telemetry
+  async getTelemetry(): Promise<{ success: boolean; telemetry?: any; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl('/api/content-studio/telemetry'), {
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch telemetry');
+      return { success: true, telemetry: data.telemetry };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
   }
 };
