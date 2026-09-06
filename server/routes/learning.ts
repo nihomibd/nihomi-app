@@ -422,3 +422,20 @@ learningRouter.get('/n5-lessons', async (_req, res) => {
   return res.json({ success: true, lessons: fullN5Lessons });
 });
 
+// Student Dashboard Notifications (Newly published lessons, SRS deck provisioning)
+learningRouter.get('/notifications', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 20;
+  const notifications = db.getStudentNotifications(limit);
+  const unreadCount = notifications.filter((n) => !n.read).length;
+  return res.json({
+    success: true,
+    notifications,
+    unreadCount
+  });
+});
+
+learningRouter.post('/notifications/:id/read', optionalAuth, (req: AuthenticatedRequest, res) => {
+  db.markNotificationAsRead(req.params.id);
+  return res.json({ success: true, message: 'Notification marked as read.' });
+});
+

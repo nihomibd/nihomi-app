@@ -1017,6 +1017,19 @@ export interface DatabaseSchema {
   accentSrsCards?: AccentSrsCard[];
   speakingCertificates?: SpeakingReadinessCertificate[];
   roleplaySessions?: RoleplaySessionState[];
+  studentNotifications?: Array<{
+    id: string;
+    type: string;
+    title: string;
+    titleBn?: string;
+    message: string;
+    messageBn?: string;
+    lessonId?: string;
+    courseId?: string;
+    level?: string;
+    createdAt: string;
+    read: boolean;
+  }>;
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';

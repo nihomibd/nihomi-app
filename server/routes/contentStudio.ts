@@ -12,6 +12,8 @@ import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, Pu
 import { liveLessonPublishingQueueService } from '../services/liveLessonPublishingQueueService.js';
 import { PublishingPreflightService } from '../services/publishingPreflightService.js';
 import { contentEngineService } from '../services/contentEngineService.js';
+import { batchIngestionQueue } from '../services/batchIngestionQueue.js';
+import { testPipelineRunnerService } from '../services/testPipelineRunnerService.js';
 
 export const contentStudioRouter = Router();
 
@@ -570,4 +572,107 @@ contentStudioRouter.post('/publishing-queue/:id/retry', requireStaff, (req: Auth
 contentStudioRouter.post('/publishing-queue/process-next', requireAdmin, async (req: AuthenticatedRequest, res) => {
   const result = await liveLessonPublishingQueueService.processNextReadyItem();
   res.json({ success: true, result });
+});
+
+// ==============================================================================
+// 22. Controlled Test Pipeline Runner (Minna no Nihongo Lesson 1 corpus)
+// ==============================================================================
+contentStudioRouter.post('/test-pipeline', requireStaff, async (req: AuthenticatedRequest, res) => {
+  try {
+    const { autoPublish } = req.body || {};
+    const adminUserId = req.user?.id || '27fb8002-dbdd-4370-83d1-1d438ae9a055';
+    const adminEmail = req.user?.email || 'admin@nihomi.com';
+
+    const telemetry = await testPipelineRunnerService.runMinnaL1Pipeline({
+      autoPublish: Boolean(autoPublish),
+      adminUserId,
+      adminEmail
+    });
+
+    res.json({
+      success: true,
+      message: `Minna no Nihongo L1 Test Pipeline completed successfully in ${telemetry.timings.totalDurationMs}ms.`,
+      telemetry
+    });
+  } catch (err: any) {
+    console.error('[ContentStudio] Test pipeline execution failed:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message || 'Failed to execute Minna no Nihongo test pipeline.'
+    });
+  }
+});
+
+// ==============================================================================
+// 23. Batch Ingestion Queue Management Endpoints
+// ==============================================================================
+
+// Enqueue a document for batch processing
+contentStudioRouter.post('/batch/enqueue', requireStaff, (req: AuthenticatedRequest, res) => {
+  try {
+    const { documentId, totalPages, maxTokenBudget, priority } = req.body;
+    if (!documentId) {
+      return res.status(400).json({ error: 'documentId is required.' });
+    }
+
+    const job = batchIngestionQueue.enqueueJob({
+      document_id: documentId,
+      total_pages: totalPages || 1,
+      max_token_budget: maxTokenBudget,
+      priority: priority || 'NORMAL'
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Document ${documentId} enqueued for batch processing.`,
+      job
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Failed to enqueue batch job.' });
+  }
+});
+
+// Get all batch ingestion jobs
+contentStudioRouter.get('/batch/jobs', requireStaff, (req: AuthenticatedRequest, res) => {
+  const jobs = batchIngestionQueue.getAllJobs();
+  const activeCount = jobs.filter(j => j.current_stage !== 'REVIEW_READY' && j.current_stage !== 'PUBLISHED' && j.current_stage !== 'FAILED' && j.current_stage !== 'CANCELLED').length;
+  res.json({
+    success: true,
+    total: jobs.length,
+    activeCount,
+    jobs
+  });
+});
+
+// Get single batch ingestion job
+contentStudioRouter.get('/batch/jobs/:id', requireStaff, (req: AuthenticatedRequest, res) => {
+  const job = batchIngestionQueue.getJob(req.params.id);
+  if (!job) {
+    return res.status(404).json({ error: 'Batch job not found.' });
+  }
+  res.json({ success: true, job });
+});
+
+// Cancel batch ingestion job
+contentStudioRouter.post('/batch/jobs/:id/cancel', requireStaff, (req: AuthenticatedRequest, res) => {
+  const result = batchIngestionQueue.cancelJob(req.params.id);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error || 'Could not cancel job (it may have already completed or failed).' });
+  }
+  res.json({ success: true, message: `Batch job ${req.params.id} cancelled.` });
+});
+
+// Retry failed batch ingestion job
+contentStudioRouter.post('/batch/jobs/:id/retry', requireStaff, (req: AuthenticatedRequest, res) => {
+  const result = batchIngestionQueue.retryJob(req.params.id);
+  if (!result.success || !result.job) {
+    return res.status(400).json({ error: result.error || 'Could not retry job. Only failed or cancelled jobs can be retried.' });
+  }
+  res.json({ success: true, message: `Batch job ${req.params.id} re-enqueued.`, job: result.job });
+});
+
+// Clear completed batch ingestion jobs
+contentStudioRouter.delete('/batch/jobs/completed', requireStaff, (req: AuthenticatedRequest, res) => {
+  const removed = batchIngestionQueue.clearCompletedJobs();
+  res.json({ success: true, message: `Cleared ${removed} completed jobs.` });
 });

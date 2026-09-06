@@ -216,7 +216,7 @@ export const contentEngineApi = {
   },
 
   // 3. Publishing
-  async publishDraft(id: string, options?: { founderApproved?: boolean; founderNotes?: string }): Promise<{ success: boolean; draft?: ContentDraft; lesson?: any; version?: ContentVersion; error?: string }> {
+  async publishDraft(id: string, options?: { founderApproved?: boolean; founderNotes?: string }): Promise<{ success: boolean; draft?: ContentDraft; lesson?: any; version?: ContentVersion; srsCardsProvisioned?: number; notification?: any; error?: string }> {
     try {
       const res = await fetch(formatApiUrl(`/api/content/drafts/${id}/publish`), {
         method: 'POST',
@@ -228,7 +228,14 @@ export const contentEngineApi = {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to publish draft');
-      return { success: true, draft: data.draft, lesson: data.lesson, version: data.version };
+      return {
+        success: true,
+        draft: data.draft,
+        lesson: data.lesson,
+        version: data.version,
+        srsCardsProvisioned: data.srsCardsProvisioned,
+        notification: data.notification
+      };
     } catch (err: any) {
       return { success: false, error: err.message };
     }
@@ -341,6 +348,127 @@ export const contentEngineApi = {
       return { success: true, lessons: data.lessons || [], drafts: data.drafts || [] };
     } catch (err: any) {
       return { success: false, lessons: [], drafts: [], error: err.message };
+    }
+  },
+
+  // 5. Test Pipeline Runner (Minna no Nihongo Lesson 1 corpus)
+  async runTestPipeline(options?: { autoPublish?: boolean }): Promise<{ success: boolean; message?: string; telemetry?: any; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl('/api/content-studio/test-pipeline'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders()
+        },
+        body: JSON.stringify(options || {})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Test pipeline execution failed');
+      return { success: true, message: data.message, telemetry: data.telemetry };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  // 6. Asynchronous Batch Ingestion Queue
+  async getBatchJobs(): Promise<{ success: boolean; total: number; activeCount: number; jobs: any[]; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl('/api/content-studio/batch/jobs'), {
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch batch jobs');
+      return { success: true, total: data.total || 0, activeCount: data.activeCount || 0, jobs: data.jobs || [] };
+    } catch (err: any) {
+      return { success: false, total: 0, activeCount: 0, jobs: [], error: err.message };
+    }
+  },
+
+  async enqueueBatchJob(params: { documentId: string; totalPages?: number; maxTokenBudget?: number; priority?: string }): Promise<{ success: boolean; job?: any; message?: string; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl('/api/content-studio/batch/enqueue'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders()
+        },
+        body: JSON.stringify(params)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to enqueue batch job');
+      return { success: true, job: data.job, message: data.message };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async cancelBatchJob(jobId: string): Promise<{ success: boolean; message?: string; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/content-studio/batch/jobs/${jobId}/cancel`), {
+        method: 'POST',
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to cancel job');
+      return { success: true, message: data.message };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async retryBatchJob(jobId: string): Promise<{ success: boolean; job?: any; message?: string; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/content-studio/batch/jobs/${jobId}/retry`), {
+        method: 'POST',
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to retry job');
+      return { success: true, job: data.job, message: data.message };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  async clearCompletedBatchJobs(): Promise<{ success: boolean; message?: string; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl('/api/content-studio/batch/jobs/completed'), {
+        method: 'DELETE',
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to clear completed jobs');
+      return { success: true, message: data.message };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  // 7. Student Dashboard Notifications
+  async getStudentNotifications(limit = 10): Promise<{ success: boolean; notifications: any[]; unreadCount: number; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/learning/notifications?limit=${limit}`), {
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch student notifications');
+      return { success: true, notifications: data.notifications || [], unreadCount: data.unreadCount || 0 };
+    } catch (err: any) {
+      return { success: false, notifications: [], unreadCount: 0, error: err.message };
+    }
+  },
+
+  async markNotificationRead(id: string): Promise<{ success: boolean; error?: string }> {
+    try {
+      const res = await fetch(formatApiUrl(`/api/learning/notifications/${id}/read`), {
+        method: 'POST',
+        headers: { ...getAuthHeaders() }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to mark notification as read');
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message };
     }
   }
 };

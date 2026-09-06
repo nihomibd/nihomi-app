@@ -4069,7 +4069,15 @@ class Database {
     return { success: true, draft };
   }
 
-  public publishContentDraft(id: string, adminUserId: string, changelog?: string): { success: boolean; draft?: ContentDraft; lesson?: Lesson; version?: ContentVersion; error?: string } {
+  public publishContentDraft(id: string, adminUserId: string, changelog?: string): {
+    success: boolean;
+    draft?: ContentDraft;
+    lesson?: Lesson;
+    version?: ContentVersion;
+    srsCardsProvisioned?: number;
+    notification?: any;
+    error?: string;
+  } {
     const draft = this.getContentDraftById(id);
     if (!draft) return { success: false, error: 'Draft not found' };
     if (draft.status !== 'APPROVED' && draft.status !== 'PUBLISHED') {
@@ -4266,7 +4274,49 @@ class Database {
       }
     });
 
-    return { success: true, draft, lesson: targetLesson, version: newVersion };
+    // 1. Provision SRS Leitner Box 1 cards for all active students
+    let srsCardsProvisioned = 0;
+    const allUsers = this.data.users && this.data.users.length > 0 ? this.data.users : [];
+    allUsers.forEach((student) => {
+      try {
+        const syncRes = this.syncLessonToSrsDeck(student.id, targetLesson.id, { level: targetLesson.level });
+        if (syncRes.success) {
+          srsCardsProvisioned += syncRes.totalCardsAdded;
+        }
+      } catch (e) {
+        console.warn(`[SRS Sync] Failed to sync lesson to user ${student.id}:`, e);
+      }
+    });
+
+    // 2. Emit real-time notification to the Student Dashboard ("New Lesson Published!")
+    if (!this.data.studentNotifications) this.data.studentNotifications = [];
+    const notification = {
+      id: `notif-pub-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
+      type: 'NEW_LESSON_PUBLISHED',
+      title: 'New Lesson Published!',
+      titleBn: 'নতুন পাঠ প্রকাশিত হয়েছে!',
+      message: `"${targetLesson.title}" (JLPT ${targetLesson.level}) is now live. New SRS Leitner Box 1 cards added to your deck!`,
+      messageBn: `"${targetLesson.title}" (JLPT ${targetLesson.level}) লাইভ প্রকাশিত হয়েছে। আপনার ডেক-এ নতুন SRS কার্ড যুক্ত হয়েছে!`,
+      lessonId: targetLesson.id,
+      courseId: targetCourse.id,
+      level: targetLesson.level,
+      createdAt: new Date().toISOString(),
+      read: false
+    };
+    this.data.studentNotifications.unshift(notification);
+    if (this.data.studentNotifications.length > 50) {
+      this.data.studentNotifications = this.data.studentNotifications.slice(0, 50);
+    }
+    this.save();
+
+    return {
+      success: true,
+      draft,
+      lesson: targetLesson,
+      version: newVersion,
+      srsCardsProvisioned,
+      notification
+    };
   }
 
   public unpublishContentDraft(id: string, adminUserId: string): { success: boolean; draft?: ContentDraft; error?: string } {
@@ -5907,8 +5957,15 @@ class Database {
 
     // 1. Ingest Vocabulary terms
     (lesson.vocabulary || []).forEach((v: any, index: number) => {
+      const frontWord = v.word || v.japanese || v.term || '';
+      if (!frontWord) return;
+
+      const readingWord = v.reading || v.furigana || v.romaji || frontWord;
+      const meaningWord = v.meaning || v.english || v.meaningEn || '';
+      const meaningBnWord = v.meaningBn || v.banglaMeaning || v.meaningBengali || '';
+
       const existing = this.data.srsCards!.find(
-        (c) => c.userId === userId && c.itemType === 'vocabulary' && (c.itemId === v.id || c.front === v.word)
+        (c) => c.userId === userId && c.itemType === 'vocabulary' && (c.itemId === v.id || c.front === frontWord)
       );
 
       if (!existing) {
@@ -5919,14 +5976,14 @@ class Database {
           itemId: v.id || `voc-${lesson.id}-${index}`,
           lessonId: lesson.id,
           level,
-          front: v.word,
-          reading: v.reading || v.furigana || v.romaji || v.word,
-          meaning: v.meaning,
-          meaningBn: v.meaningBn,
-          audioText: v.word,
-          exampleSentenceJa: v.exampleJa,
-          exampleSentenceEn: v.exampleEn,
-          exampleSentenceBn: v.exampleBn,
+          front: frontWord,
+          reading: readingWord,
+          meaning: meaningWord,
+          meaningBn: meaningBnWord,
+          audioText: frontWord,
+          exampleSentenceJa: v.exampleJa || v.exampleSentenceJa || '',
+          exampleSentenceEn: v.exampleEn || v.exampleSentenceEn || '',
+          exampleSentenceBn: v.exampleBn || v.exampleSentenceBn || '',
           repetition: 0,
           intervalDays: 1,
           easeFactor: 2.5,
@@ -6018,6 +6075,21 @@ class Database {
     if (lesson2) this.syncLessonToSrsDeck(userId, lesson2.id);
 
     return this.data.srsCards.filter((c) => c.userId === userId);
+  }
+
+  public getStudentNotifications(limit: number = 20) {
+    if (!this.data.studentNotifications) this.data.studentNotifications = [];
+    return this.data.studentNotifications.slice(0, limit);
+  }
+
+  public markNotificationAsRead(id: string) {
+    if (!this.data.studentNotifications) this.data.studentNotifications = [];
+    const item = this.data.studentNotifications.find((n) => n.id === id);
+    if (item) {
+      item.read = true;
+      this.save();
+    }
+    return { success: true };
   }
 
   // ==============================================================================

@@ -43,12 +43,14 @@ import {
   Check,
   Keyboard,
   GraduationCap,
-  LayoutDashboard
+  LayoutDashboard,
+  Bell
 } from 'lucide-react';
 import { DualTimeWeatherHeader } from './DualTimeWeatherHeader.js';
 import { VisionSenseiModal } from '../VisionSenseiModal.js';
 import { QuickDictionaryOverlay } from '../QuickDictionaryOverlay.js';
 import { supabase } from '../../lib/supabase.js';
+import { contentEngineApi } from '../../lib/contentEngineApi.js';
 
 interface NavbarProps {
   currentView: string;
@@ -129,6 +131,38 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
       ? navigator.onLine
       : true;
   });
+
+  // Real-time Student Notifications (Atomic Lesson Publishing & SRS decks)
+  const [studentNotifs, setStudentNotifs] = useState<any[]>([]);
+  const [unreadNotifCount, setUnreadNotifCount] = useState<number>(0);
+  const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+
+  const fetchStudentNotifications = async () => {
+    try {
+      const res = await contentEngineApi.getStudentNotifications(10);
+      if (res.success) {
+        setStudentNotifs(res.notifications || []);
+        setUnreadNotifCount(res.unreadCount || 0);
+      }
+    } catch {
+      // quiet poll
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentNotifications();
+    const interval = setInterval(fetchStudentNotifications, 12000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleMarkNotifRead = async (notifId: string, lessonId?: string) => {
+    await contentEngineApi.markNotificationRead(notifId);
+    fetchStudentNotifications();
+    if (lessonId) {
+      setNotifDropdownOpen(false);
+      handleNav('lesson', { lessonId });
+    }
+  };
 
   // Connectivity Listener
   useEffect(() => {
@@ -544,6 +578,83 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                         {language === opt.id && <CheckCircle2 className="w-3.5 h-3.5 text-red-600" />}
                       </button>
                     ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Real-time Student Notifications Bell */}
+              <div className="relative">
+                <button
+                  type="button"
+                  id="btn-nav-student-notifications"
+                  onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
+                  className="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition cursor-pointer border border-stone-200 flex items-center justify-center relative text-xs font-bold"
+                  title="Curriculum & Lesson Notifications"
+                >
+                  <Bell className="w-4 h-4 text-stone-600" />
+                  {unreadNotifCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white font-bold text-[9px] rounded-full flex items-center justify-center shadow-xs animate-bounce">
+                      {unreadNotifCount > 9 ? '9+' : unreadNotifCount}
+                    </span>
+                  )}
+                </button>
+
+                {notifDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-xl p-3 z-50 animate-in fade-in space-y-2">
+                    <div className="flex items-center justify-between border-b border-stone-100 dark:border-zinc-800 pb-2">
+                      <div className="flex items-center gap-1.5">
+                        <Bell className="w-3.5 h-3.5 text-red-600" />
+                        <span className="text-xs font-black text-stone-900 dark:text-zinc-100">
+                          Student Notifications
+                        </span>
+                      </div>
+                      {unreadNotifCount > 0 && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300">
+                          {unreadNotifCount} new
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="max-h-72 overflow-y-auto divide-y divide-stone-100 dark:divide-zinc-800 space-y-1">
+                      {studentNotifs.length === 0 ? (
+                        <div className="py-6 text-center text-xs text-stone-400 dark:text-zinc-500">
+                          No notifications yet. Newly published lessons and Leitner deck updates will appear here in real-time.
+                        </div>
+                      ) : (
+                        studentNotifs.map((notif) => (
+                          <div
+                            key={notif.id}
+                            onClick={() => handleMarkNotifRead(notif.id, notif.lessonId)}
+                            className={`p-2.5 rounded-xl transition cursor-pointer flex items-start gap-2.5 ${
+                              !notif.read
+                                ? 'bg-red-50/60 dark:bg-red-950/30 hover:bg-red-50 dark:hover:bg-red-950/50'
+                                : 'hover:bg-stone-50 dark:hover:bg-zinc-800/50'
+                            }`}
+                          >
+                            <div className="w-2 h-2 rounded-full bg-red-600 shrink-0 mt-1.5" style={{ opacity: notif.read ? 0.2 : 1 }} />
+                            <div className="flex-1 min-w-0 space-y-0.5">
+                              <div className="flex items-center justify-between">
+                                <h5 className="text-xs font-bold text-stone-900 dark:text-zinc-100 truncate">
+                                  {notif.title}
+                                </h5>
+                                <span className="text-[9px] text-stone-400 font-mono shrink-0 ml-1">
+                                  {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-snug">
+                                {notif.message}
+                              </p>
+                              {notif.srsProvisioned && (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                                  <Layers className="w-3 h-3" />
+                                  <span>{notif.srsProvisioned} SRS cards ready for study</span>
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

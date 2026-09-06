@@ -216,7 +216,8 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
     if (res.success && res.draft) {
       setDraft(res.draft);
       setFounderGateConfirmed(true);
-      setActionSuccess(`Published! Live Lesson ID: ${res.lesson?.id || 'live'}. Version ${res.version?.versionNumber || 1} recorded in immutable audit ledger.`);
+      const srsDetail = res.srsCardsProvisioned ? ` • ${res.srsCardsProvisioned} SRS cards provisioned into student Leitner decks` : '';
+      setActionSuccess(`Published! Live Lesson ID: ${res.lesson?.id || 'live'}. Version ${res.version?.versionNumber || 1} recorded in immutable audit ledger${srsDetail}. Real-time student notification broadcasted.`);
       await refreshVersions();
       onUpdate();
     } else {
