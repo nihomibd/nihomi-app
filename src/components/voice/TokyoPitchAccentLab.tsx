@@ -53,6 +53,7 @@ import {
 } from '../../lib/pitchAccentAudio';
 import { TokyoPitchDojo } from './TokyoPitchDojo';
 import { TokyoSentenceShadowingStudio } from './TokyoSentenceShadowingStudio';
+import { TokyoScenarioRoleplayStudio } from './TokyoScenarioRoleplayStudio';
 import { useAuth } from '../../context/AuthContext';
 
 export interface TokyoPitchAccentLabProps {
@@ -71,7 +72,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
   const { user, token } = useAuth();
 
   // Navigation State
-  const [activeTab, setActiveTab] = useState<'drill' | 'sandhi' | 'shadowing' | 'srs' | 'sensei'>('drill');
+  const [activeTab, setActiveTab] = useState<'drill' | 'sandhi' | 'shadowing' | 'roleplay' | 'srs' | 'sensei'>('drill');
 
   // Single Drill State
   const [presets, setPresets] = useState<any[]>([]);
@@ -548,6 +549,22 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
             <span>পূর্ণাঙ্গ বাক্য শ্যাডোয়িং (Shadowing Studio)</span>
             <span className="text-[10px] font-mono px-1 rounded bg-amber-500/30 text-amber-200">
               PROSODY
+            </span>
+          </button>
+
+          <button
+            id="tab-btn-scenario-roleplay"
+            onClick={() => setActiveTab('roleplay')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl transition-all ${
+              activeTab === 'roleplay'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shadow-sm'
+                : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900/60'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>AI ইন্টারভিউ রোলপ্লে (Scenario Roleplay)</span>
+            <span className="text-[10px] font-mono px-1 rounded bg-amber-500/30 text-amber-200">
+              STEP 7
             </span>
           </button>
 
@@ -1438,6 +1455,15 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
                   </div>
                 </div>
               ) : null}
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB: AUTONOMOUS SCENARIO ROLEPLAY STUDIO (STEP 7)                          */}
+          {/* ========================================================================= */}
+          {activeTab === 'roleplay' && (
+            <div className="py-2">
+              <TokyoScenarioRoleplayStudio />
             </div>
           )}
         </div>

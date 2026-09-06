@@ -484,23 +484,26 @@ export class ScenarioRoleplayService {
       if (a.targetPattern === 'odaka' && isFailed) odakaFailCount++;
 
       // Analyze acoustic diagnostic symptoms
-      const acousticAnalysis = a.bengaliAcousticAnalysis;
+      const symptoms = a.bengaliAcousticAnalysis?.acousticSymptoms || [];
       if (
-        acousticAnalysis?.hasDynamicStressError ||
+        a.bengaliAcousticAnalysis?.hasDynamicStressError ||
+        symptoms.includes('DYNAMIC_STRESS_SPIKE') ||
         (a.coachingTips && a.coachingTips.some((t) => t.includes('স্ট্রেস')))
       ) {
         stressTransferCount++;
       }
 
       if (
-        acousticAnalysis?.hasMoraFlattening ||
+        a.bengaliAcousticAnalysis?.hasMoraFlattening ||
+        symptoms.includes('PITCH_FLATTENING_CATATHESIS') ||
         (a.coachingTips && a.coachingTips.some((t) => t.includes('ফ্ল্যাট') || t.includes('ড্রপ')))
       ) {
         moraFlatteningCount++;
       }
 
       if (
-        acousticAnalysis?.hasVowelLengthMismatch ||
+        a.bengaliAcousticAnalysis?.hasVowelLengthMismatch ||
+        symptoms.includes('CHOON_DURATION_SHORTENED') ||
         (a.coachingTips && a.coachingTips.some((t) => t.includes('দীর্ঘ')))
       ) {
         choonShorteningCount++;

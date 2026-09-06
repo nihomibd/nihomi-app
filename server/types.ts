@@ -1878,6 +1878,7 @@ export interface BengaliAcousticAnalysis {
   detectedErrors: BengaliPhoneticError[];
   overallBengaliCoachingBn: string;
   actionableRecommendationsBn: string[];
+  acousticSymptoms?: string[];
 }
 
 export interface TokyoPitchDrill {

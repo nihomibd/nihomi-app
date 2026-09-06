@@ -26,6 +26,7 @@ import { MockExamRunnerView } from './views/MockExamRunnerView';
 import { StudyPlanRoadmapView } from './views/StudyPlanRoadmapView';
 import { BaitoOsView } from './views/BaitoOsView';
 import { InterviewLabView } from './views/InterviewLabView';
+import { CertificateVerificationPage } from './pages/CertificateVerificationPage';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
@@ -69,6 +70,23 @@ export const App: React.FC = () => {
     setViewParams(params);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // URL Deep Link / Verification Route Listener
+  useEffect(() => {
+    try {
+      const path = window.location.pathname;
+      const search = new URLSearchParams(window.location.search);
+      const queryCert = search.get('certId') || search.get('id');
+      if (path.startsWith('/verify') || queryCert) {
+        const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
+        const targetCert = certFromPath || queryCert;
+        setCurrentView('verify-cert');
+        if (targetCert) {
+          setViewParams({ certId: decodeURIComponent(targetCert) });
+        }
+      }
+    } catch (e) {}
+  }, []);
 
   // Global Keyboard Shortcut Listener (Cmd+K, ?, Escape, and Ctrl/Cmd helper)
   useEffect(() => {
@@ -234,6 +252,12 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'interview' || currentView === 'interview-lab' || currentView === 'visa-defense') && (
           <BaitoOsView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'verify-cert' || currentView === 'verify' || currentView === 'certificate-verification') && (
+          <CertificateVerificationPage
+            initialCertId={viewParams.certId}
+            onNavigate={handleNavigate}
+          />
         )}
       </main>
 
