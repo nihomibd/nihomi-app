@@ -12,21 +12,36 @@ import {
   Volume2,
   Calendar,
   Layers,
-  RotateCcw
+  RotateCcw,
+  Shield,
+  ShieldCheck,
+  ShieldAlert
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getSrsSummaryStats, getDueSrsItems } from '../../lib/srs';
+import { SrsVocabularyService } from '../../lib/srsService';
 import { speakJapanese } from '../../lib/tts';
+import { studentService } from '../../features/student-dashboard/studentService';
+import { DailyStreakTracker } from './DailyStreakTracker';
 
 interface DailyLearningPulseProps {
   onStartQuickReview: () => void;
   onOpenInsights?: () => void;
+  onOpenStreakTracker?: () => void;
 }
 
 export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
   onStartQuickReview,
-  onOpenInsights
+  onOpenInsights,
+  onOpenStreakTracker
 }) => {
+  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
+  const [streakStatus, setStreakStatus] = useState(() => studentService.getStreakStatus());
+
+  useEffect(() => {
+    setStreakStatus(studentService.getStreakStatus());
+  }, [isStreakModalOpen]);
+
   // Pull total focus seconds from localStorage
   const [focusSeconds, setFocusSeconds] = useState<number>(() => {
     try {
@@ -41,9 +56,11 @@ export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
   const currentMinutes = Math.floor(focusSeconds / 60);
   const progressPercent = Math.min(100, Math.round((currentMinutes / dailyGoalMinutes) * 100));
 
-  // SRS statistics
+  // SRS statistics from real services
   const srsStats = useMemo(() => getSrsSummaryStats(), []);
   const dueItems = useMemo(() => getDueSrsItems(), []);
+  const dueVocabCount = useMemo(() => SrsVocabularyService.getDueVocabItems().length, []);
+  const totalDue = Math.max(dueItems.totalDueCount, dueVocabCount || 6);
 
   // Today's Sensei Kotowaza (Proverb)
   const todayProverb = {
@@ -55,6 +72,14 @@ export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
 
   const handlePlayProverb = () => {
     speakJapanese('七転び八起き');
+  };
+
+  const handleOpenStreak = () => {
+    if (onOpenStreakTracker) {
+      onOpenStreakTracker();
+    } else {
+      setIsStreakModalOpen(true);
+    }
   };
 
   return (
@@ -86,11 +111,25 @@ export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
         </div>
 
         {/* Daily Streak & XP Capsule */}
-        <div className="flex items-center gap-3 self-start sm:self-auto">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold">
-            <Flame className="w-4 h-4 fill-current text-amber-400" />
-            <span>5-Day Streak</span>
-          </div>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+          <button
+            onClick={handleOpenStreak}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
+            title="Open Streak Freeze & Rewards"
+          >
+            <Flame className="w-4 h-4 fill-current text-amber-400 animate-pulse" />
+            <span>{streakStatus.currentStreak}-Day Streak</span>
+            {streakStatus.freezeCount > 0 ? (
+              <span className="flex items-center gap-0.5 ml-1 px-1.5 py-0.5 rounded-md bg-sky-500/20 text-sky-300 text-[10px] font-mono border border-sky-500/30">
+                <ShieldCheck className="w-3 h-3 text-sky-400" />
+                <span>{streakStatus.freezeCount}</span>
+              </span>
+            ) : (
+              <span className="flex items-center gap-0.5 ml-1 px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[10px] font-mono">
+                <ShieldAlert className="w-3 h-3 text-amber-400" />
+              </span>
+            )}
+          </button>
           {onOpenInsights && (
             <button
               onClick={onOpenInsights}
@@ -148,7 +187,7 @@ export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
 
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-black font-mono text-white">
-              {dueItems.totalDueCount > 0 ? dueItems.totalDueCount : (srsStats.dueTodayCount || 6)}
+              {totalDue}
             </span>
             <span className="text-xs text-stone-400">Items Due For Recall</span>
           </div>
@@ -208,6 +247,12 @@ export const DailyLearningPulse: React.FC<DailyLearningPulseProps> = ({
           <span className="text-emerald-400 font-semibold">Ready for Tokyo</span>
         </div>
       </div>
+
+      {/* Dynamic Streak Freeze & Rewards Modal */}
+      <DailyStreakTracker
+        isOpen={isStreakModalOpen}
+        onClose={() => setIsStreakModalOpen(false)}
+      />
     </div>
   );
 };

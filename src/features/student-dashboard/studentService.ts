@@ -260,5 +260,96 @@ export const studentService = {
     }
 
     return { updatedCoins, updatedXp };
+  },
+
+  getStudentCoins(): number {
+    return parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+  },
+
+  getStreakStatus() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    let currentStreak = parseInt(localStorage.getItem('nihomi_current_streak_days_v1') || '7', 10);
+    let longestStreak = parseInt(localStorage.getItem('nihomi_longest_streak_days_v1') || '14', 10);
+    let freezeCount = parseInt(localStorage.getItem('nihomi_streak_freeze_count') || '1', 10);
+    const claimedMilestones = JSON.parse(localStorage.getItem('nihomi_claimed_streak_milestones_v1') || '[3]') as number[];
+    const frozenDates = JSON.parse(localStorage.getItem('nihomi_frozen_dates_v1') || '[]') as string[];
+    const lastActiveDate = localStorage.getItem('nihomi_last_active_date_v1') || todayStr;
+
+    let freezeSavedNotice: string | null = null;
+
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (lastActiveDate !== todayStr && lastActiveDate !== yesterdayStr) {
+      const daysDiff = Math.floor((today.getTime() - new Date(lastActiveDate).getTime()) / (1000 * 60 * 60 * 24));
+      if (daysDiff === 2 && freezeCount > 0) {
+        freezeCount -= 1;
+        frozenDates.push(yesterdayStr);
+        localStorage.setItem('nihomi_streak_freeze_count', freezeCount.toString());
+        localStorage.setItem('nihomi_frozen_dates_v1', JSON.stringify(frozenDates));
+        localStorage.setItem('nihomi_last_active_date_v1', yesterdayStr);
+        freezeSavedNotice = `🛡️ আপনার স্ট্রিক ফ্রিজ শিল্ড সক্রিয় হয়ে ${yesterdayStr} তারিখের জন্য ${currentStreak} দিনের স্ট্রিক রক্ষা করেছে!`;
+      } else if (daysDiff > 2 && freezeCount === 0) {
+        currentStreak = 1;
+        localStorage.setItem('nihomi_current_streak_days_v1', '1');
+      }
+    }
+
+    return {
+      currentStreak,
+      longestStreak,
+      freezeCount,
+      claimedMilestones,
+      frozenDates,
+      lastActiveDate,
+      freezeSavedNotice
+    };
+  },
+
+  async purchaseStreakFreeze(costCoins = 50) {
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10);
+    if (currentCoins < costCoins) {
+      return { success: false, updatedCoins: currentCoins, updatedFreezeCount: 0 };
+    }
+    const updatedCoins = currentCoins - costCoins;
+    const currentFreezes = parseInt(localStorage.getItem('nihomi_streak_freeze_count') || '1', 10);
+    const updatedFreezeCount = currentFreezes + 1;
+
+    localStorage.setItem('nihomi_student_coins', updatedCoins.toString());
+    localStorage.setItem('nihomi_streak_freeze_count', updatedFreezeCount.toString());
+
+    return { success: true, updatedCoins, updatedFreezeCount };
+  },
+
+  async claimStreakMilestone(days: number, rewards: { gems: number; coins: number; xp: number; freezes: number }) {
+    const claimed = JSON.parse(localStorage.getItem('nihomi_claimed_streak_milestones_v1') || '[3]') as number[];
+    if (claimed.includes(days)) {
+      return { success: false };
+    }
+
+    const updatedClaimed = [...claimed, days];
+    const currentCoins = parseInt(localStorage.getItem('nihomi_student_coins') || '420', 10) + rewards.coins;
+    const currentGems = parseInt(localStorage.getItem('nihomi_user_gems_v1') || '320', 10) + rewards.gems;
+    const currentXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10) + rewards.xp;
+    const currentFreezes = parseInt(localStorage.getItem('nihomi_streak_freeze_count') || '1', 10) + rewards.freezes;
+
+    localStorage.setItem('nihomi_claimed_streak_milestones_v1', JSON.stringify(updatedClaimed));
+    localStorage.setItem('nihomi_student_coins', currentCoins.toString());
+    localStorage.setItem('nihomi_user_gems_v1', currentGems.toString());
+    localStorage.setItem('nihomi_student_xp', currentXp.toString());
+    localStorage.setItem('nihomi_streak_freeze_count', currentFreezes.toString());
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await syncLearningProgressToSupabase({ userId: user.id, xpDelta: rewards.xp, studyMinutesDelta: 5 });
+      }
+    } catch (err) {
+      console.warn('[studentService] Milestone sync deferred:', err);
+    }
+
+    return { success: true, currentCoins, currentGems, currentXp, currentFreezes };
   }
 };

@@ -40,6 +40,8 @@ import {
   isItemDue,
   getDueItemsCount
 } from '../lib/srs.js';
+import { TokyoPitchWaveform } from '../components/voice/TokyoPitchWaveform';
+import { TokyoPitchAccentLab } from '../components/voice/TokyoPitchAccentLab';
 
 export interface FlashcardItem {
   id: string;
@@ -219,6 +221,8 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
   const [folderDesc, setFolderDesc] = useState('');
   const [isAssignFolderModalOpen, setIsAssignFolderModalOpen] = useState(false);
   const [cardToAssign, setCardToAssign] = useState<FlashcardItem | null>(null);
+  const [isPitchLabOpen, setIsPitchLabOpen] = useState(false);
+  const [pitchLabWord, setPitchLabWord] = useState('箸');
 
   const refreshFolders = () => {
     setFolders(VocabFolderService.getFolders());
@@ -803,6 +807,20 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                               {card.exampleSentence}
                             </div>
                           )}
+
+                          {/* Tokyo Pitch Accent Waveform & Melody Integration */}
+                          <div className="pt-2 text-left" onClick={(e) => e.stopPropagation()}>
+                            <TokyoPitchWaveform
+                              word={card.kanji}
+                              reading={card.reading}
+                              compact={true}
+                              showControls={true}
+                              onOpenPitchLab={(w) => {
+                                setPitchLabWord(w);
+                                setIsPitchLabOpen(true);
+                              }}
+                            />
+                          </div>
                         </div>
 
                         <div className="text-center text-[11px] text-stone-400">
@@ -985,6 +1003,16 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                               title="Listen"
                             >
                               <Volume2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setPitchLabWord(card.kanji);
+                                setIsPitchLabOpen(true);
+                              }}
+                              className="p-1.5 text-stone-500 hover:text-rose-600 rounded-lg hover:bg-stone-200"
+                              title="Test Tokyo Pitch Accent in Lab"
+                            >
+                              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                             </button>
                             <button
                               onClick={() => togglePin(card.id)}
@@ -1415,6 +1443,13 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
             </div>
           </div>
         )}
+
+        {/* Tokyo Pitch Accent Lab Modal */}
+        <TokyoPitchAccentLab
+          isOpen={isPitchLabOpen}
+          onClose={() => setIsPitchLabOpen(false)}
+          initialPresetId={pitchLabWord}
+        />
       </div>
     </div>
   );
