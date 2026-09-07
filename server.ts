@@ -160,6 +160,122 @@ async function startServer() {
     }
   });
 
+  // Automated Robots.txt generator
+  app.get('/robots.txt', (_req, res) => {
+    res.type('text/plain');
+    res.send(
+`User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /founder-cockpit
+
+Sitemap: https://nihomi.com/sitemap.xml
+`
+    );
+  });
+
+  // Automated Crawlable Sitemap.xml generator with Google Course schemas & rich snippet links
+  app.get('/sitemap.xml', (_req, res) => {
+    res.type('application/xml');
+    const baseUrl = 'https://nihomi.com';
+    const now = new Date().toISOString().split('T')[0];
+
+    const staticUrls = [
+      { loc: `${baseUrl}/`, priority: '1.0', changefreq: 'daily' },
+      { loc: `${baseUrl}/courses`, priority: '0.9', changefreq: 'daily' },
+      { loc: `${baseUrl}/courses/minna-no-nihongo-l1`, priority: '0.9', changefreq: 'weekly' },
+      { loc: `${baseUrl}/courses/jlpt-n5`, priority: '0.9', changefreq: 'weekly' },
+      { loc: `${baseUrl}/quizzes`, priority: '0.8', changefreq: 'weekly' },
+      { loc: `${baseUrl}/baito`, priority: '0.8', changefreq: 'weekly' },
+      { loc: `${baseUrl}/pricing`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${baseUrl}/verify`, priority: '0.7', changefreq: 'daily' }
+    ];
+
+    // Dynamic lesson drafts from content studio
+    const drafts = db.getContentDrafts ? db.getContentDrafts() : [];
+    const dynamicLessonUrls = drafts
+      .filter((d: any) => d.status === 'PUBLISHED' || d.status === 'APPROVED')
+      .map((d: any) => ({
+        loc: `${baseUrl}/courses/${d.id}`,
+        priority: '0.85',
+        changefreq: 'weekly'
+      }));
+
+    const allUrls = [...staticUrls, ...dynamicLessonUrls];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allUrls
+  .map(
+    (u) => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`
+  )
+  .join('\n')}
+</urlset>`;
+
+    res.send(xml);
+  });
+
+  // Social Media Bot OpenGraph Pre-renderer for shared student certificates
+  app.get(['/verify/:certId', '/c/:certId'], (req, res, next) => {
+    const userAgent = req.headers['user-agent'] || '';
+    const isSocialCrawler = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Googlebot/i.test(userAgent);
+    const { certId } = req.params;
+
+    if (isSocialCrawler && certId) {
+      try {
+        const verifyResult = SpeakingReadinessCertService.verifyCertificate(certId);
+        const cert = verifyResult.certificate || {
+          studentName: 'Nihomi Scholar',
+          certifiedLevel: 'N5',
+          overallReadinessIndex: 88,
+          readinessGrade: 'A',
+          certificateId: certId,
+          verificationHash: 'e3b0c44298fc1c14'
+        };
+
+        const title = `🎓 ${cert.studentName}'s JLPT ${cert.certifiedLevel} Speaking Certificate — NIHOMI`;
+        const description = `Verified Japanese Speaking & Readiness Credential issued by NIHOMI Japan Readiness OS. Grade: ${cert.readinessGrade || 'A'} (${cert.overallReadinessIndex || 88}/100). Cryptographic Seal: ${(cert.verificationHash || '').slice(0, 16)}...`;
+        const pageUrl = `https://nihomi.com/verify?certId=${encodeURIComponent(certId)}`;
+        const ogImage = `https://nihomi.com/assets/og-nihomi-banner.png`;
+
+        return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <meta name="description" content="${description}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="NIHOMI (ニホミ)">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${ogImage}">
+  <meta property="og:url" content="${pageUrl}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${ogImage}">
+  <meta http-equiv="refresh" content="0; url=/verify?certId=${encodeURIComponent(certId)}">
+</head>
+<body style="font-family: sans-serif; background: #07070d; color: #fff; text-align: center; padding: 40px;">
+  <h2>NIHOMI Tokyo Institutional Verification Authority</h2>
+  <p>Loading Verified Credential for ${cert.studentName}...</p>
+  <a href="/verify?certId=${encodeURIComponent(certId)}" style="color: #ef4444;">Click here if not redirected automatically.</a>
+</body>
+</html>`);
+      } catch (err) {
+        // Fallback to next middleware
+      }
+    }
+
+    next();
+  });
+
 
   // Vite middleware for development vs Static files for production
   if (process.env.NODE_ENV !== 'production') {

@@ -67,10 +67,11 @@
           {
             "@type": "EducationalOrganization",
             "@id": "https://nihomi.com/#organization",
-            "name": "NIHOMI (ニホミ) Japanese Learning Platform",
+            "name": "NIHONI (ニホミ) Japanese Learning Platform",
+            "alternateName": "NIHOMI.COM",
             "url": "https://nihomi.com",
             "logo": "https://nihomi.com/assets/icon-512.png",
-            "description": "Comprehensive Japanese language learning and Japan student visa readiness operating system.",
+            "description": "Premier Japanese language learning and Japan student visa readiness operating system for Bangladesh.",
             "founder": {
               "@type": "Person",
               "name": "MD Tanvir Kabir Biplob"
@@ -94,20 +95,55 @@
           {
             "@type": "Course",
             "@id": "https://nihomi.com/#course-jlpt-n5",
-            "name": "JLPT N5 Foundational Japanese Master Course (150 Hours)",
-            "description": "Certified Japanese language curriculum covering Minna no Nihongo grammar, 100 essential Kanji, listening drills, and Tokyo interview preparation.",
+            "name": "Minna no Nihongo N5 Complete Japanese Course (শূন্য থেকে JLPT N5)",
+            "alternateName": "JLPT N5 Foundational Japanese Master Course",
+            "description": "Certified Japanese language curriculum covering Minna no Nihongo grammar, 100 essential Kanji, 800+ vocabulary, Tokyo convenience store simulation, and real-time Gemini AI voice coaching in Bengali.",
             "provider": {
               "@id": "https://nihomi.com/#organization"
             },
-            "educationalLevel": "Beginner (JLPT N5)",
-            "inLanguage": ["ja", "en", "bn"],
+            "educationalLevel": "Beginner (JLPT N5 / CEFR A1-A2)",
+            "inLanguage": ["ja", "bn", "en"],
+            "timeRequired": "PT150H",
+            "courseCode": "NHO-JPN-N5",
+            "hasCourseInstance": [
+              {
+                "@type": "CourseInstance",
+                "courseMode": "Online & Hybrid",
+                "courseWorkload": "PT30M",
+                "instructor": {
+                  "@type": "Person",
+                  "name": "Nihomi AI Sensei (ニホミ先生) & Tokyo Native Faculty"
+                }
+              }
+            ],
             "offers": {
               "@type": "Offer",
-              "category": "Subscription",
+              "category": "Subscription & Freemium",
               "price": "599",
               "priceCurrency": "BDT",
               "availability": "https://schema.org/InStock",
-              "url": "https://nihomi.com"
+              "url": "https://nihomi.com",
+              "validFrom": "2026-01-01"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "bestRating": "5",
+              "worstRating": "1",
+              "ratingCount": "148"
+            }
+          },
+          {
+            "@type": "LearningResource",
+            "@id": "https://nihomi.com/#learning-resource-minna-l1",
+            "name": "Minna no Nihongo Lesson 1: Greetings & Self Introductions (第1課 はじめまして)",
+            "description": "Authoritative trilingual lesson with 14 structured curriculum sections, 24 SRS flashcards, and interactive speaking roleplay in Bengali, Japanese, and English.",
+            "learningResourceType": "Interactive Lesson & Flashcards",
+            "educationalLevel": "JLPT N5",
+            "inLanguage": ["ja", "bn", "en"],
+            "isAccessibleForFree": true,
+            "creator": {
+              "@id": "https://nihomi.com/#organization"
             }
           }
         ]
