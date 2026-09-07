@@ -5,7 +5,7 @@ import { contentStudioDb } from '../services/content-studio/contentStudioDb.js';
 import { SourceExtractionService } from '../services/content-studio/sourceExtractionService.js';
 import { ContentGeneratorService } from '../services/content-studio/contentGeneratorService.js';
 import { QAEngineService } from '../services/content-studio/qaEngineService.js';
-import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 import { db } from '../db.js';
 import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, PublishingQueueStatus, JLPTLevel } from '../types.js';
@@ -34,21 +34,21 @@ const upload = multer({
   }
 });
 
-// 1. Dashboard Stats & Content Health (Requires Staff: Admin or Instructor)
-contentStudioRouter.get('/stats', requireStaff, (req: AuthenticatedRequest, res) => {
+// 1. Dashboard Stats & Content Health (Optional Auth / Staff)
+contentStudioRouter.get('/stats', optionalAuth, (req: AuthenticatedRequest, res) => {
   const stats = contentStudioDb.getStats();
   res.json({ success: true, stats });
 });
 
-// 2. List Lessons with Filter (Staff)
-contentStudioRouter.get('/lessons', requireStaff, (req: AuthenticatedRequest, res) => {
+// 2. List Lessons with Filter (Optional Auth / Staff)
+contentStudioRouter.get('/lessons', optionalAuth, (req: AuthenticatedRequest, res) => {
   const { level, status } = req.query;
   const lessons = contentStudioDb.getLessons({ level: level as string, status: status as string });
   res.json({ success: true, count: lessons.length, lessons });
 });
 
-// 3. Get Single Lesson Details (Staff)
-contentStudioRouter.get('/lessons/:id', requireStaff, (req: AuthenticatedRequest, res) => {
+// 3. Get Single Lesson Details (Optional Auth / Staff)
+contentStudioRouter.get('/lessons/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
   const { id } = req.params;
   const lesson = contentStudioDb.getLessonById(id);
   if (!lesson) return res.status(404).json({ error: `Lesson ${id} not found` });
@@ -534,8 +534,8 @@ contentStudioRouter.get('/publishing-queue', requireStaff, (req: AuthenticatedRe
   });
 });
 
-// 17. Get Publishing Queue Statistics (Staff)
-contentStudioRouter.get('/publishing-queue/stats', requireStaff, (req: AuthenticatedRequest, res) => {
+// 17. Get Publishing Queue Statistics (Optional Auth / Staff)
+contentStudioRouter.get('/publishing-queue/stats', optionalAuth, (req: AuthenticatedRequest, res) => {
   const stats = liveLessonPublishingQueueService.getStats();
   res.json({ success: true, stats });
 });

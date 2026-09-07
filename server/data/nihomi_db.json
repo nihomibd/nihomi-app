@@ -11171,544 +11171,43 @@
       "sourceId": "src-3797b81b",
       "versionNumber": 1,
       "contentJson": {
-        "vocabulary": [
-          {
-            "id": "voc-l1-1",
-            "japanese": "わたし",
-            "furigana": "わたし",
-            "romaji": "watashi",
-            "english": "I, me",
-            "banglaMeaning": "আমি",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしはわたしです。",
-            "exampleSentenceEn": "I am I, me.",
-            "exampleSentenceBn": "আমি আমি।",
-            "audioText": "わたし"
-          },
-          {
-            "id": "voc-l1-2",
-            "japanese": "あなた",
-            "furigana": "あなた",
-            "romaji": "anata",
-            "english": "you",
-            "banglaMeaning": "আপনি / তুমি",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしはあなたです。",
-            "exampleSentenceEn": "I am you.",
-            "exampleSentenceBn": "আমি আপনি / তুমি।",
-            "audioText": "あなた"
-          },
-          {
-            "id": "voc-l1-3",
-            "japanese": "あの人",
-            "furigana": "あのひと",
-            "romaji": "ano hito",
-            "english": "that person",
-            "banglaMeaning": "ঐ ব্যক্তি",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしはあの人です。",
-            "exampleSentenceEn": "I am that person.",
-            "exampleSentenceBn": "আমি ঐ ব্যক্তি।",
-            "audioText": "あの人"
-          },
-          {
-            "id": "voc-l1-4",
-            "japanese": "あの方",
-            "furigana": "あのかた",
-            "romaji": "ano kata",
-            "english": "that person (polite)",
-            "banglaMeaning": "ঐ সম্মানিত ব্যক্তি",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしはあの方です。",
-            "exampleSentenceEn": "I am that person (polite).",
-            "exampleSentenceBn": "আমি ঐ সম্মানিত ব্যক্তি।",
-            "audioText": "あの方"
-          },
-          {
-            "id": "voc-l1-5",
-            "japanese": "〜さん",
-            "furigana": "〜さん",
-            "romaji": "~san",
-            "english": "Mr. / Ms. (honorific)",
-            "banglaMeaning": "জনাব / বেগম",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは〜さんです。",
-            "exampleSentenceEn": "I am Mr. / Ms. (honorific).",
-            "exampleSentenceBn": "আমি জনাব / বেগম।",
-            "audioText": "〜さん"
-          },
-          {
-            "id": "voc-l1-6",
-            "japanese": "〜ちゃん",
-            "furigana": "〜ちゃん",
-            "romaji": "~chan",
-            "english": "suffix for children",
-            "banglaMeaning": "স্নেহের সম্বোধন",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは〜ちゃんです。",
-            "exampleSentenceEn": "I am suffix for children.",
-            "exampleSentenceBn": "আমি স্নেহের সম্বোধন।",
-            "audioText": "〜ちゃん"
-          },
-          {
-            "id": "voc-l1-7",
-            "japanese": "〜人",
-            "furigana": "〜じん",
-            "romaji": "~jin",
-            "english": "nationality suffix (e.g., アメリカ人)",
-            "banglaMeaning": "জাতীয়তা নির্দেশক",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは〜人です。",
-            "exampleSentenceEn": "I am nationality suffix (e.g., アメリカ人).",
-            "exampleSentenceBn": "আমি জাতীয়তা নির্দেশক।",
-            "audioText": "〜人"
-          },
-          {
-            "id": "voc-l1-8",
-            "japanese": "先生",
-            "furigana": "せんせい",
-            "romaji": "sensei",
-            "english": "teacher, instructor",
-            "banglaMeaning": "শিক্ষক / গুরু",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは先生です。",
-            "exampleSentenceEn": "I am teacher, instructor.",
-            "exampleSentenceBn": "আমি শিক্ষক / গুরু।",
-            "audioText": "先生"
-          },
-          {
-            "id": "voc-l1-9",
-            "japanese": "教師",
-            "furigana": "きょうし",
-            "romaji": "kyoushi",
-            "english": "teacher (profession)",
-            "banglaMeaning": "শিক্ষক (পেশা হিসেবে)",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは教師です。",
-            "exampleSentenceEn": "I am teacher (profession).",
-            "exampleSentenceBn": "আমি শিক্ষক (পেশা হিসেবে)।",
-            "audioText": "教師"
-          },
-          {
-            "id": "voc-l1-10",
-            "japanese": "学生",
-            "furigana": "がくせい",
-            "romaji": "gakusei",
-            "english": "student",
-            "banglaMeaning": "ছাত্র / ছাত্রী",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは学生です。",
-            "exampleSentenceEn": "I am student.",
-            "exampleSentenceBn": "আমি ছাত্র / ছাত্রী।",
-            "audioText": "学生"
-          },
-          {
-            "id": "voc-l1-11",
-            "japanese": "会社員",
-            "furigana": "かいしゃいん",
-            "romaji": "kaishain",
-            "english": "company employee",
-            "banglaMeaning": "কোম্পানি চাকুরিজীবী",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは会社員です。",
-            "exampleSentenceEn": "I am company employee.",
-            "exampleSentenceBn": "আমি কোম্পানি চাকুরিজীবী।",
-            "audioText": "会社員"
-          },
-          {
-            "id": "voc-l1-12",
-            "japanese": "社員",
-            "furigana": "しゃいん",
-            "romaji": "shain",
-            "english": "employee of ~ company",
-            "banglaMeaning": "নির্দিষ্ট প্রতিষ্ঠানের কর্মী",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは社員です。",
-            "exampleSentenceEn": "I am employee of ~ company.",
-            "exampleSentenceBn": "আমি নির্দিষ্ট প্রতিষ্ঠানের কর্মী।",
-            "audioText": "社員"
-          },
-          {
-            "id": "voc-l1-13",
-            "japanese": "銀行員",
-            "furigana": "ぎんこういん",
-            "romaji": "ginkouin",
-            "english": "bank clerk",
-            "banglaMeaning": "ব্যাংক কর্মকর্তা",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは銀行員です。",
-            "exampleSentenceEn": "I am bank clerk.",
-            "exampleSentenceBn": "আমি ব্যাংক কর্মকর্তা।",
-            "audioText": "銀行員"
-          },
-          {
-            "id": "voc-l1-14",
-            "japanese": "医者",
-            "furigana": "いしゃ",
-            "romaji": "isha",
-            "english": "medical doctor",
-            "banglaMeaning": "ডাক্তার",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは医者です。",
-            "exampleSentenceEn": "I am medical doctor.",
-            "exampleSentenceBn": "আমি ডাক্তার।",
-            "audioText": "医者"
-          },
-          {
-            "id": "voc-l1-15",
-            "japanese": "研究者",
-            "furigana": "けんきゅうしゃ",
-            "romaji": "kenkyuusha",
-            "english": "researcher",
-            "banglaMeaning": "গবেষক",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは研究者です。",
-            "exampleSentenceEn": "I am researcher.",
-            "exampleSentenceBn": "আমি গবেষক।",
-            "audioText": "研究者"
-          },
-          {
-            "id": "voc-l1-16",
-            "japanese": "大学",
-            "furigana": "だいがく",
-            "romaji": "daigaku",
-            "english": "university",
-            "banglaMeaning": "বিশ্ববিদ্যালয়",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは大学です。",
-            "exampleSentenceEn": "I am university.",
-            "exampleSentenceBn": "আমি বিশ্ববিদ্যালয়।",
-            "audioText": "大学"
-          },
-          {
-            "id": "voc-l1-17",
-            "japanese": "病院",
-            "furigana": "びょういん",
-            "romaji": "byouin",
-            "english": "hospital",
-            "banglaMeaning": "হাসপাতাল",
-            "partOfSpeech": "noun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは病院です。",
-            "exampleSentenceEn": "I am hospital.",
-            "exampleSentenceBn": "আমি হাসপাতাল।",
-            "audioText": "病院"
-          },
-          {
-            "id": "voc-l1-18",
-            "japanese": "誰",
-            "furigana": "だれ",
-            "romaji": "dare",
-            "english": "who",
-            "banglaMeaning": "কে",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは誰です。",
-            "exampleSentenceEn": "I am who.",
-            "exampleSentenceBn": "আমি কে।",
-            "audioText": "誰"
-          },
-          {
-            "id": "voc-l1-19",
-            "japanese": "どなた",
-            "furigana": "どなた",
-            "romaji": "donata",
-            "english": "who (polite)",
-            "banglaMeaning": "কে (ভদ্র রূপ)",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしはどなたです。",
-            "exampleSentenceEn": "I am who (polite).",
-            "exampleSentenceBn": "আমি কে (ভদ্র রূপ)।",
-            "audioText": "どなた"
-          },
-          {
-            "id": "voc-l1-20",
-            "japanese": "〜歳",
-            "furigana": "〜さい",
-            "romaji": "~sai",
-            "english": "years old",
-            "banglaMeaning": "বয়স",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは〜歳です。",
-            "exampleSentenceEn": "I am years old.",
-            "exampleSentenceBn": "আমি বয়স।",
-            "audioText": "〜歳"
-          },
-          {
-            "id": "voc-l1-21",
-            "japanese": "何歳",
-            "furigana": "なんさい",
-            "romaji": "nansai",
-            "english": "how old",
-            "banglaMeaning": "কত বয়স",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは何歳です。",
-            "exampleSentenceEn": "I am how old.",
-            "exampleSentenceBn": "আমি কত বয়স।",
-            "audioText": "何歳"
-          },
-          {
-            "id": "voc-l1-22",
-            "japanese": "おいくつ",
-            "furigana": "おいくつ",
-            "romaji": "oikutsu",
-            "english": "how old (polite)",
-            "banglaMeaning": "বয়স কত (ভদ্র রূপ)",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしはおいくつです。",
-            "exampleSentenceEn": "I am how old (polite).",
-            "exampleSentenceBn": "আমি বয়স কত (ভদ্র রূপ)।",
-            "audioText": "おいくつ"
-          },
-          {
-            "id": "voc-l1-23",
-            "japanese": "はい",
-            "furigana": "はい",
-            "romaji": "hai",
-            "english": "yes",
-            "banglaMeaning": "হ্যাঁ / জি",
-            "partOfSpeech": "pronoun",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしははいです。",
-            "exampleSentenceEn": "I am yes.",
-            "exampleSentenceBn": "আমি হ্যাঁ / জি।",
-            "audioText": "はい"
-          },
-          {
-            "id": "voc-l1-24",
-            "japanese": "いいえ",
-            "furigana": "いいえ",
-            "romaji": "iie",
-            "english": "no",
-            "banglaMeaning": "না",
-            "partOfSpeech": "phrase",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしはいいえです。",
-            "exampleSentenceEn": "I am no.",
-            "exampleSentenceBn": "আমি না।",
-            "audioText": "いいえ"
-          },
-          {
-            "id": "voc-l1-25",
-            "japanese": "初めまして",
-            "furigana": "はじめまして",
-            "romaji": "hajimemashite",
-            "english": "Nice to meet you",
-            "banglaMeaning": "প্রথম দেখায় শুভেচ্ছা",
-            "partOfSpeech": "phrase",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしは初めましてです。",
-            "exampleSentenceEn": "I am Nice to meet you.",
-            "exampleSentenceBn": "আমি প্রথম দেখায় শুভেচ্ছা।",
-            "audioText": "初めまして"
-          },
-          {
-            "id": "voc-l1-26",
-            "japanese": "〜から来ました",
-            "furigana": "〜からきました",
-            "romaji": "~kara kimashita",
-            "english": "I came from ~",
-            "banglaMeaning": "~ থেকে এসেছি",
-            "partOfSpeech": "phrase",
-            "level": "N5",
-            "pitchAccent": "Atamadaka (頭高 - 1)",
-            "pitchPattern": "1",
-            "exampleSentenceJa": "わたしは〜から来ましたです。",
-            "exampleSentenceEn": "I am I came from ~.",
-            "exampleSentenceBn": "আমি ~ থেকে এসেছি।",
-            "audioText": "〜から来ました"
-          },
-          {
-            "id": "voc-l1-27",
-            "japanese": "どうぞよろしく",
-            "furigana": "どうぞよろしく",
-            "romaji": "douzo yoroshiku",
-            "english": "Pleased to meet you",
-            "banglaMeaning": "আপনার সহযোগিতা কাম্য",
-            "partOfSpeech": "phrase",
-            "level": "N5",
-            "pitchAccent": "Heiban (平板 - 0)",
-            "pitchPattern": "0",
-            "exampleSentenceJa": "わたしはどうぞよろしくです。",
-            "exampleSentenceEn": "I am Pleased to meet you.",
-            "exampleSentenceBn": "আমি আপনার সহযোগিতা কাম্য।",
-            "audioText": "どうぞよろしく"
-          }
-        ],
-        "grammar": [
-          {
-            "id": "gram-l1-1",
-            "title": "Noun 1 は Noun 2 です (Affirmation)",
-            "titleJa": "N1 は N2 です",
-            "structure": "N1 [Topic] + は (wa) + N2 [Predicate] + です (desu)",
-            "meaning": "N1 is N2",
-            "explanation": "The particle は indicates that N1 is the topic of the sentence. です is the polite copula meaning \"is/am/are\". Note that the particle は is pronounced as \"wa\". In Bengali, this parallels subject marking like \"আমি অমুক\" বা \"তিনি অমুক হন\"।",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "わたしは マイク・ミラーです。",
-                "english": "I am Mike Miller. (আমি মাইক মিলার।)",
-                "breakdown": "Watashi wa Maiku Miraa desu."
-              },
-              {
-                "japanese": "サントスさんは ブラジル人です。",
-                "english": "Mr. Santos is Brazilian. (জনাব সান্তোস ব্রাজিলিয়ান।)",
-                "breakdown": "Santosu-san wa Burajiru-jin desu."
-              }
-            ]
-          },
-          {
-            "id": "gram-l1-2",
-            "title": "Noun 1 は Noun 2 じゃありません / ではありません (Negation)",
-            "titleJa": "N1 は N2 じゃありません",
-            "structure": "N1 + は + N2 + じゃありません / ではありません",
-            "meaning": "N1 is not N2",
-            "explanation": "じゃありません is the polite negative form of です used in daily spoken Japanese. ではありません is more formal and commonly used in written or official speech. In Bengali, this functions exactly like \"না\" বা \"নন\"।",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "サントスさんは 学生じゃありません。",
-                "english": "Mr. Santos is not a student. (জনাব সান্তোস ছাত্র নন।)",
-                "breakdown": "Santosu-san wa gakusei ja arimasen."
-              },
-              {
-                "japanese": "ミラーさんは 医者ではありません。",
-                "english": "Mr. Miller is not a doctor. (মিস্টার মিলার ডাক্তার নন।)",
-                "breakdown": "Miraa-san wa isha dewa arimasen."
-              }
-            ]
-          },
-          {
-            "id": "gram-l1-3",
-            "title": "Noun 1 は Noun 2 ですか (Question Particle か)",
-            "titleJa": "N1 は N2 ですか",
-            "structure": "Statement + か (ka)",
-            "meaning": "Is N1 N2?",
-            "explanation": "The particle か at the end of a sentence turns it into a polite question with rising intonation. It functions identically to the English question mark or the Bengali interrogative \"কি\"।",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "ミラーさんは 会社員ですか。…はい、会社員です。",
-                "english": "Is Mr. Miller a company employee? ...Yes, he is. (মিস্টার মিলার কি চাকুরিজীবী? ...হ্যাঁ, তিনি চাকুরিজীবী।)",
-                "breakdown": "Miraa-san wa kaishain desu ka. ...Hai, kaishain desu."
-              },
-              {
-                "japanese": "ミラーさんは 銀行員ですか。…いいえ、銀行員じゃありません。",
-                "english": "Is Mr. Miller a bank employee? ...No, he is not. (মিস্টার মিলার কি ব্যাংক কর্মকর্তা? ...না, তিনি ব্যাংক কর্মকর্তা নন।)",
-                "breakdown": "Miraa-san wa ginkouin desu ka. ...Iie, ginkouin ja arimasen."
-              }
-            ]
-          },
-          {
-            "id": "gram-l1-4",
-            "title": "Noun も (Inclusive Particle: Also / Too)",
-            "titleJa": "N も",
-            "structure": "N + も (mo)",
-            "meaning": "Also / Too / Even",
-            "explanation": "The particle も replaces は when stating that the same condition applies to another topic. Corresponds to Bengali \"ও\" (যেমন: আমিও, তিনিও)।",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "グプタさんも 会社員です。",
-                "english": "Mr. Gupta is also a company employee. (জনাব গুপ্তাও চাকুরিজীবী।)",
-                "breakdown": "Guputa-san mo kaishain desu."
-              }
-            ]
-          },
-          {
-            "id": "gram-l1-5",
-            "title": "Noun 1 の Noun 2 (Subordination / Possessive Particle)",
-            "titleJa": "N1 の N2",
-            "structure": "N1 + の (no) + N2",
-            "meaning": "N1's N2 / N2 of N1",
-            "explanation": "The particle の connects two nouns. N1 modifies or qualifies N2, expressing possession, affiliation, or category. Corresponds to Bengali \"র\" বা \"এর\" বিভক্তি (যেমন: কোম্পানির কর্মী, আমেরিকার নাগরিক)।",
-            "level": "N5",
-            "examples": [
-              {
-                "japanese": "ミラーさんは IMCの 社員です。",
-                "english": "Mr. Miller is an employee of IMC. (মিস্টার মিলার আইএমসি কোম্পানির কর্মী।)",
-                "breakdown": "Miraa-san wa IMC no shain desu."
-              }
-            ]
-          }
-        ],
+        "quiz": {
+          "title": "Minna no Nihongo Lesson 1 Mastery Quiz (JLPT N5)",
+          "questions": [
+            {
+              "id": "q-l1-1",
+              "type": "multiple_choice",
+              "options": [
+                "は",
+                "が",
+                "を",
+                "に"
+              ],
+              "question": "わたし (　) マイク・ミラーです。শূন্যস্থানে সঠিক পার্টিকেল নির্বাচন করুন:",
+              "questionJa": "わたし (　) マイク・ミラーです。",
+              "explanation": "文の主題を表す助詞「は」を使います。(বাক্যের বিষয় নির্দেশ করতে পার্টিকেল \"は\" ব্যবহৃত হয়।)",
+              "correctIndex": 0
+            },
+            {
+              "id": "q-l1-2",
+              "type": "multiple_choice",
+              "options": [
+                "じゃありません",
+                "でした",
+                "あります",
+                "です"
+              ],
+              "question": "サントスさんは 学生 (　)。সান্তোস-সান ছাত্র নন — শূন্যস্থানে কোনটি বসবে?",
+              "questionJa": "サントスさんは 学生 (　)。",
+              "explanation": "ですの否定形は「じゃありません」です。(বর্তমান কালের ভদ্র নেতিবাচক রূপ হলো \"じゃありません\"।)",
+              "correctIndex": 0
+            }
+          ],
+          "passingScore": 80
+        },
         "kanji": [
           {
             "id": "kan-l1-1",
-            "character": "日",
-            "meaning": "day, sun, Japan (দিন, সূর্য, জাপান)",
-            "strokes": 4,
-            "radicals": "日 (sun)",
             "level": "N5",
             "onyomi": [
               "ニチ",
@@ -11719,25 +11218,25 @@
               "-び",
               "-か"
             ],
+            "meaning": "day, sun, Japan (দিন, সূর্য, জাপান)",
+            "strokes": 4,
             "examples": [
               {
                 "word": "日本",
-                "reading": "にほん",
-                "meaning": "Japan"
+                "meaning": "Japan",
+                "reading": "にほん"
               },
               {
                 "word": "日曜日",
-                "reading": "にちようび",
-                "meaning": "Sunday"
+                "meaning": "Sunday",
+                "reading": "にちようび"
               }
-            ]
+            ],
+            "radicals": "日 (sun)",
+            "character": "日"
           },
           {
             "id": "kan-l1-2",
-            "character": "本",
-            "meaning": "book, origin, main (বই, উৎস, মূল)",
-            "strokes": 5,
-            "radicals": "木 (tree)",
             "level": "N5",
             "onyomi": [
               "ホン"
@@ -11745,25 +11244,25 @@
             "kunyomi": [
               "もと"
             ],
+            "meaning": "book, origin, main (বই, উৎস, মূল)",
+            "strokes": 5,
             "examples": [
               {
                 "word": "本",
-                "reading": "ほん",
-                "meaning": "book"
+                "meaning": "book",
+                "reading": "ほん"
               },
               {
                 "word": "日本語",
-                "reading": "にほんご",
-                "meaning": "Japanese language"
+                "meaning": "Japanese language",
+                "reading": "にほんご"
               }
-            ]
+            ],
+            "radicals": "木 (tree)",
+            "character": "本"
           },
           {
             "id": "kan-l1-3",
-            "character": "人",
-            "meaning": "person, human (মানুষ, ব্যক্তি)",
-            "strokes": 2,
-            "radicals": "人 (person)",
             "level": "N5",
             "onyomi": [
               "ジン",
@@ -11772,25 +11271,25 @@
             "kunyomi": [
               "ひと"
             ],
+            "meaning": "person, human (মানুষ, ব্যক্তি)",
+            "strokes": 2,
             "examples": [
               {
                 "word": "日本人",
-                "reading": "にほんじん",
-                "meaning": "Japanese person"
+                "meaning": "Japanese person",
+                "reading": "にほんじん"
               },
               {
                 "word": "あの人",
-                "reading": "あのひと",
-                "meaning": "that person"
+                "meaning": "that person",
+                "reading": "あのひと"
               }
-            ]
+            ],
+            "radicals": "人 (person)",
+            "character": "人"
           },
           {
             "id": "kan-l1-4",
-            "character": "学",
-            "meaning": "study, learning, science (অধ্যয়ন, শিক্ষা)",
-            "strokes": 8,
-            "radicals": "子 (child)",
             "level": "N5",
             "onyomi": [
               "ガク"
@@ -11798,25 +11297,25 @@
             "kunyomi": [
               "まな・ぶ"
             ],
+            "meaning": "study, learning, science (অধ্যয়ন, শিক্ষা)",
+            "strokes": 8,
             "examples": [
               {
                 "word": "学生",
-                "reading": "がくせい",
-                "meaning": "student"
+                "meaning": "student",
+                "reading": "がくせい"
               },
               {
                 "word": "大学",
-                "reading": "だいがく",
-                "meaning": "university"
+                "meaning": "university",
+                "reading": "だいがく"
               }
-            ]
+            ],
+            "radicals": "子 (child)",
+            "character": "学"
           },
           {
             "id": "kan-l1-5",
-            "character": "生",
-            "meaning": "life, birth, student (জীবন, জন্ম, শিক্ষার্থী)",
-            "strokes": 5,
-            "radicals": "生 (life)",
             "level": "N5",
             "onyomi": [
               "セイ",
@@ -11826,25 +11325,25 @@
               "い・きる",
               "う・まれる"
             ],
+            "meaning": "life, birth, student (জীবন, জন্ম, শিক্ষার্থী)",
+            "strokes": 5,
             "examples": [
               {
                 "word": "先生",
-                "reading": "せんせい",
-                "meaning": "teacher"
+                "meaning": "teacher",
+                "reading": "せんせい"
               },
               {
                 "word": "学生",
-                "reading": "がくせい",
-                "meaning": "student"
+                "meaning": "student",
+                "reading": "がくせい"
               }
-            ]
+            ],
+            "radicals": "生 (life)",
+            "character": "生"
           },
           {
             "id": "kan-l1-6",
-            "character": "先",
-            "meaning": "before, ahead, previous (আগে, পূর্ববর্তী)",
-            "strokes": 6,
-            "radicals": "儿 (legs)",
             "level": "N5",
             "onyomi": [
               "セン"
@@ -11852,120 +11351,621 @@
             "kunyomi": [
               "さき"
             ],
+            "meaning": "before, ahead, previous (আগে, পূর্ববর্তী)",
+            "strokes": 6,
             "examples": [
               {
                 "word": "先生",
-                "reading": "せんせい",
-                "meaning": "teacher"
+                "meaning": "teacher",
+                "reading": "せんせい"
               },
               {
                 "word": "先月",
-                "reading": "せんげつ",
-                "meaning": "last month"
+                "meaning": "last month",
+                "reading": "せんげつ"
               }
-            ]
+            ],
+            "radicals": "儿 (legs)",
+            "character": "先"
+          }
+        ],
+        "grammar": [
+          {
+            "id": "gram-l1-1",
+            "level": "N5",
+            "title": "Noun 1 は Noun 2 です (Affirmation)",
+            "meaning": "N1 is N2",
+            "titleJa": "N1 は N2 です",
+            "examples": [
+              {
+                "english": "I am Mike Miller. (আমি মাইক মিলার।)",
+                "japanese": "わたしは マイク・ミラーです。",
+                "breakdown": "Watashi wa Maiku Miraa desu."
+              },
+              {
+                "english": "Mr. Santos is Brazilian. (জনাব সান্তোস ব্রাজিলিয়ান।)",
+                "japanese": "サントスさんは ブラジル人です。",
+                "breakdown": "Santosu-san wa Burajiru-jin desu."
+              }
+            ],
+            "structure": "N1 [Topic] + は (wa) + N2 [Predicate] + です (desu)",
+            "explanation": "The particle は indicates that N1 is the topic of the sentence. です is the polite copula meaning \"is/am/are\". Note that the particle は is pronounced as \"wa\". In Bengali, this parallels subject marking like \"আমি অমুক\" বা \"তিনি অমুক হন\"।"
+          },
+          {
+            "id": "gram-l1-2",
+            "level": "N5",
+            "title": "Noun 1 は Noun 2 じゃありません / ではありません (Negation)",
+            "meaning": "N1 is not N2",
+            "titleJa": "N1 は N2 じゃありません",
+            "examples": [
+              {
+                "english": "Mr. Santos is not a student. (জনাব সান্তোস ছাত্র নন।)",
+                "japanese": "サントスさんは 学生じゃありません。",
+                "breakdown": "Santosu-san wa gakusei ja arimasen."
+              },
+              {
+                "english": "Mr. Miller is not a doctor. (মিস্টার মিলার ডাক্তার নন।)",
+                "japanese": "ミラーさんは 医者ではありません。",
+                "breakdown": "Miraa-san wa isha dewa arimasen."
+              }
+            ],
+            "structure": "N1 + は + N2 + じゃありません / ではありません",
+            "explanation": "じゃありません is the polite negative form of です used in daily spoken Japanese. ではありません is more formal and commonly used in written or official speech. In Bengali, this functions exactly like \"না\" বা \"নন\"।"
+          },
+          {
+            "id": "gram-l1-3",
+            "level": "N5",
+            "title": "Noun 1 は Noun 2 ですか (Question Particle か)",
+            "meaning": "Is N1 N2?",
+            "titleJa": "N1 は N2 ですか",
+            "examples": [
+              {
+                "english": "Is Mr. Miller a company employee? ...Yes, he is. (মিস্টার মিলার কি চাকুরিজীবী? ...হ্যাঁ, তিনি চাকুরিজীবী।)",
+                "japanese": "ミラーさんは 会社員ですか。…はい、会社員です。",
+                "breakdown": "Miraa-san wa kaishain desu ka. ...Hai, kaishain desu."
+              },
+              {
+                "english": "Is Mr. Miller a bank employee? ...No, he is not. (মিস্টার মিলার কি ব্যাংক কর্মকর্তা? ...না, তিনি ব্যাংক কর্মকর্তা নন।)",
+                "japanese": "ミラーさんは 銀行員ですか。…いいえ、銀行員じゃありません。",
+                "breakdown": "Miraa-san wa ginkouin desu ka. ...Iie, ginkouin ja arimasen."
+              }
+            ],
+            "structure": "Statement + か (ka)",
+            "explanation": "The particle か at the end of a sentence turns it into a polite question with rising intonation. It functions identically to the English question mark or the Bengali interrogative \"কি\"।"
+          },
+          {
+            "id": "gram-l1-4",
+            "level": "N5",
+            "title": "Noun も (Inclusive Particle: Also / Too)",
+            "meaning": "Also / Too / Even",
+            "titleJa": "N も",
+            "examples": [
+              {
+                "english": "Mr. Gupta is also a company employee. (জনাব গুপ্তাও চাকুরিজীবী।)",
+                "japanese": "グプタさんも 会社員です。",
+                "breakdown": "Guputa-san mo kaishain desu."
+              }
+            ],
+            "structure": "N + も (mo)",
+            "explanation": "The particle も replaces は when stating that the same condition applies to another topic. Corresponds to Bengali \"ও\" (যেমন: আমিও, তিনিও)।"
+          },
+          {
+            "id": "gram-l1-5",
+            "level": "N5",
+            "title": "Noun 1 の Noun 2 (Subordination / Possessive Particle)",
+            "meaning": "N1's N2 / N2 of N1",
+            "titleJa": "N1 の N2",
+            "examples": [
+              {
+                "english": "Mr. Miller is an employee of IMC. (মিস্টার মিলার আইএমসি কোম্পানির কর্মী।)",
+                "japanese": "ミラーさんは IMCの 社員です。",
+                "breakdown": "Miraa-san wa IMC no shain desu."
+              }
+            ],
+            "structure": "N1 + の (no) + N2",
+            "explanation": "The particle の connects two nouns. N1 modifies or qualifies N2, expressing possession, affiliation, or category. Corresponds to Bengali \"র\" বা \"এর\" বিভক্তি (যেমন: কোম্পানির কর্মী, আমেরিকার নাগরিক)।"
           }
         ],
         "dialogue": [
           {
+            "english": "Good morning. (শুভ সকাল।)",
             "speaker": "佐藤 (Sato)",
-            "japanese": "おはようございます。",
             "furigana": "おはようございます。",
-            "english": "Good morning. (শুভ সকাল।)"
+            "japanese": "おはようございます。"
           },
           {
+            "english": "Good morning. Sato-san, this is Mr. Mike Miller. (শুভ সকাল। সাতো-সান, ইনি হলেন মিস্টার মাইক মিলার।)",
             "speaker": "山田 (Yamada)",
-            "japanese": "おはようございます。佐藤さん、こちらは マイク・ミラーさんです。",
             "furigana": "おはようございます。さとうさん、こちらは マイク・ミラーさんです。",
-            "english": "Good morning. Sato-san, this is Mr. Mike Miller. (শুভ সকাল। সাতো-সান, ইনি হলেন মিস্টার মাইক মিলার।)"
+            "japanese": "おはようございます。佐藤さん、こちらは マイク・ミラーさんです。"
           },
           {
+            "english": "How do you do? I am Mike Miller. I came from the USA. Pleased to meet you. (প্রথম দেখায় শুভেচ্ছা। আমি মাইক মিলার। আমেরিকা থেকে এসেছি।)",
             "speaker": "ミラー (Miller)",
-            "japanese": "初めまして。マイク・ミラーです。アメリカから 来ました。どうぞ よろしく。",
             "furigana": "はじめまして。マイク・ミラーです。アメリカから きました。どうぞ よろしく。",
-            "english": "How do you do? I am Mike Miller. I came from the USA. Pleased to meet you. (প্রথম দেখায় শুভেচ্ছা। আমি মাইক মিলার। আমেরিকা থেকে এসেছি।)"
+            "japanese": "初めまして。マイク・ミラーです。アメリカから 来ました。どうぞ よろしく。"
           },
           {
+            "english": "I am Keiko Sato. Pleased to meet you too. (আমি কেইকো সাতো। আপনার সাথেও পরিচিত হয়ে খুশি হলাম।)",
             "speaker": "佐藤 (Sato)",
-            "japanese": "佐藤けいこです。どうぞ よろしく。",
             "furigana": "さとうけいこです。どうぞ よろしく。",
-            "english": "I am Keiko Sato. Pleased to meet you too. (আমি কেইকো সাতো। আপনার সাথেও পরিচিত হয়ে খুশি হলাম।)"
+            "japanese": "佐藤けいこです。どうぞ よろしく。"
+          }
+        ],
+        "vocabulary": [
+          {
+            "id": "voc-l1-1",
+            "level": "N5",
+            "romaji": "watashi",
+            "english": "I, me",
+            "furigana": "わたし",
+            "japanese": "わたし",
+            "audioText": "わたし",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "আমি",
+            "exampleSentenceBn": "আমি আমি।",
+            "exampleSentenceEn": "I am I, me.",
+            "exampleSentenceJa": "わたしはわたしです。"
+          },
+          {
+            "id": "voc-l1-2",
+            "level": "N5",
+            "romaji": "anata",
+            "english": "you",
+            "furigana": "あなた",
+            "japanese": "あなた",
+            "audioText": "あなた",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "আপনি / তুমি",
+            "exampleSentenceBn": "আমি আপনি / তুমি।",
+            "exampleSentenceEn": "I am you.",
+            "exampleSentenceJa": "わたしはあなたです。"
+          },
+          {
+            "id": "voc-l1-3",
+            "level": "N5",
+            "romaji": "ano hito",
+            "english": "that person",
+            "furigana": "あのひと",
+            "japanese": "あの人",
+            "audioText": "あの人",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "ঐ ব্যক্তি",
+            "exampleSentenceBn": "আমি ঐ ব্যক্তি।",
+            "exampleSentenceEn": "I am that person.",
+            "exampleSentenceJa": "わたしはあの人です。"
+          },
+          {
+            "id": "voc-l1-4",
+            "level": "N5",
+            "romaji": "ano kata",
+            "english": "that person (polite)",
+            "furigana": "あのかた",
+            "japanese": "あの方",
+            "audioText": "あの方",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "ঐ সম্মানিত ব্যক্তি",
+            "exampleSentenceBn": "আমি ঐ সম্মানিত ব্যক্তি।",
+            "exampleSentenceEn": "I am that person (polite).",
+            "exampleSentenceJa": "わたしはあの方です。"
+          },
+          {
+            "id": "voc-l1-5",
+            "level": "N5",
+            "romaji": "~san",
+            "english": "Mr. / Ms. (honorific)",
+            "furigana": "〜さん",
+            "japanese": "〜さん",
+            "audioText": "〜さん",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "জনাব / বেগম",
+            "exampleSentenceBn": "আমি জনাব / বেগম।",
+            "exampleSentenceEn": "I am Mr. / Ms. (honorific).",
+            "exampleSentenceJa": "わたしは〜さんです。"
+          },
+          {
+            "id": "voc-l1-6",
+            "level": "N5",
+            "romaji": "~chan",
+            "english": "suffix for children",
+            "furigana": "〜ちゃん",
+            "japanese": "〜ちゃん",
+            "audioText": "〜ちゃん",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "স্নেহের সম্বোধন",
+            "exampleSentenceBn": "আমি স্নেহের সম্বোধন।",
+            "exampleSentenceEn": "I am suffix for children.",
+            "exampleSentenceJa": "わたしは〜ちゃんです。"
+          },
+          {
+            "id": "voc-l1-7",
+            "level": "N5",
+            "romaji": "~jin",
+            "english": "nationality suffix (e.g., アメリカ人)",
+            "furigana": "〜じん",
+            "japanese": "〜人",
+            "audioText": "〜人",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "জাতীয়তা নির্দেশক",
+            "exampleSentenceBn": "আমি জাতীয়তা নির্দেশক।",
+            "exampleSentenceEn": "I am nationality suffix (e.g., アメリカ人).",
+            "exampleSentenceJa": "わたしは〜人です。"
+          },
+          {
+            "id": "voc-l1-8",
+            "level": "N5",
+            "romaji": "sensei",
+            "english": "teacher, instructor",
+            "furigana": "せんせい",
+            "japanese": "先生",
+            "audioText": "先生",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "1",
+            "banglaMeaning": "শিক্ষক / গুরু",
+            "exampleSentenceBn": "আমি শিক্ষক / গুরু।",
+            "exampleSentenceEn": "I am teacher, instructor.",
+            "exampleSentenceJa": "わたしは先生です。"
+          },
+          {
+            "id": "voc-l1-9",
+            "level": "N5",
+            "romaji": "kyoushi",
+            "english": "teacher (profession)",
+            "furigana": "きょうし",
+            "japanese": "教師",
+            "audioText": "教師",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "শিক্ষক (পেশা হিসেবে)",
+            "exampleSentenceBn": "আমি শিক্ষক (পেশা হিসেবে)।",
+            "exampleSentenceEn": "I am teacher (profession).",
+            "exampleSentenceJa": "わたしは教師です。"
+          },
+          {
+            "id": "voc-l1-10",
+            "level": "N5",
+            "romaji": "gakusei",
+            "english": "student",
+            "furigana": "がくせい",
+            "japanese": "学生",
+            "audioText": "学生",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "1",
+            "banglaMeaning": "ছাত্র / ছাত্রী",
+            "exampleSentenceBn": "আমি ছাত্র / ছাত্রী।",
+            "exampleSentenceEn": "I am student.",
+            "exampleSentenceJa": "わたしは学生です。"
+          },
+          {
+            "id": "voc-l1-11",
+            "level": "N5",
+            "romaji": "kaishain",
+            "english": "company employee",
+            "furigana": "かいしゃいん",
+            "japanese": "会社員",
+            "audioText": "会社員",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "কোম্পানি চাকুরিজীবী",
+            "exampleSentenceBn": "আমি কোম্পানি চাকুরিজীবী।",
+            "exampleSentenceEn": "I am company employee.",
+            "exampleSentenceJa": "わたしは会社員です。"
+          },
+          {
+            "id": "voc-l1-12",
+            "level": "N5",
+            "romaji": "shain",
+            "english": "employee of ~ company",
+            "furigana": "しゃいん",
+            "japanese": "社員",
+            "audioText": "社員",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "1",
+            "banglaMeaning": "নির্দিষ্ট প্রতিষ্ঠানের কর্মী",
+            "exampleSentenceBn": "আমি নির্দিষ্ট প্রতিষ্ঠানের কর্মী।",
+            "exampleSentenceEn": "I am employee of ~ company.",
+            "exampleSentenceJa": "わたしは社員です。"
+          },
+          {
+            "id": "voc-l1-13",
+            "level": "N5",
+            "romaji": "ginkouin",
+            "english": "bank clerk",
+            "furigana": "ぎんこういん",
+            "japanese": "銀行員",
+            "audioText": "銀行員",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "ব্যাংক কর্মকর্তা",
+            "exampleSentenceBn": "আমি ব্যাংক কর্মকর্তা।",
+            "exampleSentenceEn": "I am bank clerk.",
+            "exampleSentenceJa": "わたしは銀行員です。"
+          },
+          {
+            "id": "voc-l1-14",
+            "level": "N5",
+            "romaji": "isha",
+            "english": "medical doctor",
+            "furigana": "いしゃ",
+            "japanese": "医者",
+            "audioText": "医者",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "1",
+            "banglaMeaning": "ডাক্তার",
+            "exampleSentenceBn": "আমি ডাক্তার।",
+            "exampleSentenceEn": "I am medical doctor.",
+            "exampleSentenceJa": "わたしは医者です。"
+          },
+          {
+            "id": "voc-l1-15",
+            "level": "N5",
+            "romaji": "kenkyuusha",
+            "english": "researcher",
+            "furigana": "けんきゅうしゃ",
+            "japanese": "研究者",
+            "audioText": "研究者",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "গবেষক",
+            "exampleSentenceBn": "আমি গবেষক।",
+            "exampleSentenceEn": "I am researcher.",
+            "exampleSentenceJa": "わたしは研究者です。"
+          },
+          {
+            "id": "voc-l1-16",
+            "level": "N5",
+            "romaji": "daigaku",
+            "english": "university",
+            "furigana": "だいがく",
+            "japanese": "大学",
+            "audioText": "大学",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "1",
+            "banglaMeaning": "বিশ্ববিদ্যালয়",
+            "exampleSentenceBn": "আমি বিশ্ববিদ্যালয়।",
+            "exampleSentenceEn": "I am university.",
+            "exampleSentenceJa": "わたしは大学です。"
+          },
+          {
+            "id": "voc-l1-17",
+            "level": "N5",
+            "romaji": "byouin",
+            "english": "hospital",
+            "furigana": "びょういん",
+            "japanese": "病院",
+            "audioText": "病院",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "noun",
+            "pitchPattern": "0",
+            "banglaMeaning": "হাসপাতাল",
+            "exampleSentenceBn": "আমি হাসপাতাল।",
+            "exampleSentenceEn": "I am hospital.",
+            "exampleSentenceJa": "わたしは病院です。"
+          },
+          {
+            "id": "voc-l1-18",
+            "level": "N5",
+            "romaji": "dare",
+            "english": "who",
+            "furigana": "だれ",
+            "japanese": "誰",
+            "audioText": "誰",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "কে",
+            "exampleSentenceBn": "আমি কে।",
+            "exampleSentenceEn": "I am who.",
+            "exampleSentenceJa": "わたしは誰です。"
+          },
+          {
+            "id": "voc-l1-19",
+            "level": "N5",
+            "romaji": "donata",
+            "english": "who (polite)",
+            "furigana": "どなた",
+            "japanese": "どなた",
+            "audioText": "どなた",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "কে (ভদ্র রূপ)",
+            "exampleSentenceBn": "আমি কে (ভদ্র রূপ)।",
+            "exampleSentenceEn": "I am who (polite).",
+            "exampleSentenceJa": "わたしはどなたです。"
+          },
+          {
+            "id": "voc-l1-20",
+            "level": "N5",
+            "romaji": "~sai",
+            "english": "years old",
+            "furigana": "〜さい",
+            "japanese": "〜歳",
+            "audioText": "〜歳",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "বয়স",
+            "exampleSentenceBn": "আমি বয়স।",
+            "exampleSentenceEn": "I am years old.",
+            "exampleSentenceJa": "わたしは〜歳です。"
+          },
+          {
+            "id": "voc-l1-21",
+            "level": "N5",
+            "romaji": "nansai",
+            "english": "how old",
+            "furigana": "なんさい",
+            "japanese": "何歳",
+            "audioText": "何歳",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "কত বয়স",
+            "exampleSentenceBn": "আমি কত বয়স।",
+            "exampleSentenceEn": "I am how old.",
+            "exampleSentenceJa": "わたしは何歳です。"
+          },
+          {
+            "id": "voc-l1-22",
+            "level": "N5",
+            "romaji": "oikutsu",
+            "english": "how old (polite)",
+            "furigana": "おいくつ",
+            "japanese": "おいくつ",
+            "audioText": "おいくつ",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "1",
+            "banglaMeaning": "বয়স কত (ভদ্র রূপ)",
+            "exampleSentenceBn": "আমি বয়স কত (ভদ্র রূপ)।",
+            "exampleSentenceEn": "I am how old (polite).",
+            "exampleSentenceJa": "わたしはおいくつです。"
+          },
+          {
+            "id": "voc-l1-23",
+            "level": "N5",
+            "romaji": "hai",
+            "english": "yes",
+            "furigana": "はい",
+            "japanese": "はい",
+            "audioText": "はい",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "pronoun",
+            "pitchPattern": "0",
+            "banglaMeaning": "হ্যাঁ / জি",
+            "exampleSentenceBn": "আমি হ্যাঁ / জি।",
+            "exampleSentenceEn": "I am yes.",
+            "exampleSentenceJa": "わたしははいです。"
+          },
+          {
+            "id": "voc-l1-24",
+            "level": "N5",
+            "romaji": "iie",
+            "english": "no",
+            "furigana": "いいえ",
+            "japanese": "いいえ",
+            "audioText": "いいえ",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "phrase",
+            "pitchPattern": "1",
+            "banglaMeaning": "না",
+            "exampleSentenceBn": "আমি না।",
+            "exampleSentenceEn": "I am no.",
+            "exampleSentenceJa": "わたしはいいえです。"
+          },
+          {
+            "id": "voc-l1-25",
+            "level": "N5",
+            "romaji": "hajimemashite",
+            "english": "Nice to meet you",
+            "furigana": "はじめまして",
+            "japanese": "初めまして",
+            "audioText": "初めまして",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "phrase",
+            "pitchPattern": "0",
+            "banglaMeaning": "প্রথম দেখায় শুভেচ্ছা",
+            "exampleSentenceBn": "আমি প্রথম দেখায় শুভেচ্ছা।",
+            "exampleSentenceEn": "I am Nice to meet you.",
+            "exampleSentenceJa": "わたしは初めましてです。"
+          },
+          {
+            "id": "voc-l1-26",
+            "level": "N5",
+            "romaji": "~kara kimashita",
+            "english": "I came from ~",
+            "furigana": "〜からきました",
+            "japanese": "〜から来ました",
+            "audioText": "〜から来ました",
+            "pitchAccent": "Atamadaka (頭高 - 1)",
+            "partOfSpeech": "phrase",
+            "pitchPattern": "1",
+            "banglaMeaning": "~ থেকে এসেছি",
+            "exampleSentenceBn": "আমি ~ থেকে এসেছি।",
+            "exampleSentenceEn": "I am I came from ~.",
+            "exampleSentenceJa": "わたしは〜から来ましたです。"
+          },
+          {
+            "id": "voc-l1-27",
+            "level": "N5",
+            "romaji": "douzo yoroshiku",
+            "english": "Pleased to meet you",
+            "furigana": "どうぞよろしく",
+            "japanese": "どうぞよろしく",
+            "audioText": "どうぞよろしく",
+            "pitchAccent": "Heiban (平板 - 0)",
+            "partOfSpeech": "phrase",
+            "pitchPattern": "0",
+            "banglaMeaning": "আপনার সহযোগিতা কাম্য",
+            "exampleSentenceBn": "আমি আপনার সহযোগিতা কাম্য।",
+            "exampleSentenceEn": "I am Pleased to meet you.",
+            "exampleSentenceJa": "わたしはどうぞよろしくです。"
           }
         ],
         "baitoSimulation": {
-          "workplaceType": "7-Eleven Conbini (Convenience Store / コンビニ)",
           "scenarioBn": "প্রথম কর্মদিবসে কনবিনি ম্যানেজার (店長 - てんちょう) এর সাথে প্রথম পরিচয় ও শিフト অভিবাদন।",
           "keigoPhrases": [
             {
-              "phraseJa": "初めまして。本日からお世話になりますラヒムと申します。",
               "reading": "はじめまして。ほんじつからおせわになりますラヒムともうします。",
-              "meaningBn": "প্রথম সাক্ষাতে শুভেচ্ছা। আজ থেকে আপনাদের তত্ত্বাবধানে কাজ করব, আমার নাম রাহিম।",
+              "phraseJa": "初めまして。本日からお世話になりますラヒムと申します。",
               "formality": "Kenjougo (Humble)",
+              "meaningBn": "প্রথম সাক্ষাতে শুভেচ্ছা। আজ থেকে আপনাদের তত্ত্বাবধানে কাজ করব, আমার নাম রাহিম।",
               "customerContextBn": "স্টোর ম্যানেজারের সামনে বিনীত আত্মপরিচয়"
             },
             {
-              "phraseJa": "一生懸命頑張りますので、ご指導よろしくお願いいたします。",
               "reading": "いっしょうけんめいがんばりますので、ごしどうよろしくおねがいいたします。",
-              "meaningBn": "আমি নিষ্ঠার সাথে কাজ করব, দয়া করে আমাকে প্রয়োজনীয় দিকনির্দেশনা প্রদান করবেন।",
+              "phraseJa": "一生懸命頑張りますので、ご指導よろしくお願いいたします。",
               "formality": "Teineigo (Polite)",
+              "meaningBn": "আমি নিষ্ঠার সাথে কাজ করব, দয়া করে আমাকে প্রয়োজনীয় দিকনির্দেশনা প্রদান করবেন।",
               "customerContextBn": "কাজে নিষ্ঠা প্রদর্শনের জাপানি ঐতিহ্যবাহী বিনীত বাক্য"
             }
           ],
           "drillPromptBn": "ম্যানেজার যখন বলবেন \"よろしくね\", তখন নম্রভাবে উত্তর দিন।",
+          "workplaceType": "7-Eleven Conbini (Convenience Store / コンビニ)",
           "expectedResponseJa": "はい！よろしくお願いいたします！"
         },
         "practiceExercises": [
           {
             "id": "ex-l1-1",
-            "instruction": "例のように文を作ってください。(সঠিক পার্টিকেল বসিয়ে বাক্য সম্পূর্ণ করুন)",
-            "questionJa": "サントスさん (　) ブラジル人です。マリアさん (　) ブラジル人です。",
             "type": "fill_blank",
-            "correctAnswer": "サントスさんはブラジル人です。マリアさんもブラジル人です。",
-            "explanation": "প্রথম বাক্যে বিষয় নির্দেশ করতে \"は\" এবং দ্বিতীয় বাক্যে \"ও\" বোঝাতে \"も\" বসবে।"
+            "questionJa": "サントスさん (　) ブラジル人です。マリアさん (　) ブラジル人です。",
+            "explanation": "প্রথম বাক্যে বিষয় নির্দেশ করতে \"は\" এবং দ্বিতীয় বাক্যে \"ও\" বোঝাতে \"も\" বসবে।",
+            "instruction": "例のように文を作ってください。(সঠিক পার্টিকেল বসিয়ে বাক্য সম্পূর্ণ করুন)",
+            "correctAnswer": "サントスさんはブラジル人です。マリアさんもブラジル人です。"
           },
           {
             "id": "ex-l1-2",
-            "instruction": "質問に答えてください。(হ্যাঁ অথবা না দিয়ে প্রশ্নের উত্তর দিন)",
-            "questionJa": "ミラーさんは 医者ですか。(いいえ) →",
             "type": "fill_blank",
-            "correctAnswer": "いいえ、医者じゃありません。",
-            "explanation": "নেতিবাচক উত্তরে \"いいえ\" এবং \"じゃありません\" ব্যবহার করতে হবে।"
+            "questionJa": "ミラーさんは 医者ですか。(いいえ) →",
+            "explanation": "নেতিবাচক উত্তরে \"いいえ\" এবং \"じゃありません\" ব্যবহার করতে হবে।",
+            "instruction": "質問に答えてください。(হ্যাঁ অথবা না দিয়ে প্রশ্নের উত্তর দিন)",
+            "correctAnswer": "いいえ、医者じゃありません。"
           }
-        ],
-        "quiz": {
-          "title": "Minna no Nihongo Lesson 1 Mastery Quiz (JLPT N5)",
-          "passingScore": 80,
-          "questions": [
-            {
-              "id": "q-l1-1",
-              "type": "multiple_choice",
-              "question": "わたし (　) マイク・ミラーです。শূন্যস্থানে সঠিক পার্টিকেল নির্বাচন করুন:",
-              "questionJa": "わたし (　) マイク・ミラーです。",
-              "options": [
-                "は",
-                "が",
-                "を",
-                "に"
-              ],
-              "correctIndex": 0,
-              "explanation": "文の主題を表す助詞「は」を使います。(বাক্যের বিষয় নির্দেশ করতে পার্টিকেল \"は\" ব্যবহৃত হয়।)"
-            },
-            {
-              "id": "q-l1-2",
-              "type": "multiple_choice",
-              "question": "サントスさんは 学生 (　)。সান্তোস-সান ছাত্র নন — শূন্যস্থানে কোনটি বসবে?",
-              "questionJa": "サントスさんは 学生 (　)。",
-              "options": [
-                "じゃありません",
-                "でした",
-                "あります",
-                "です"
-              ],
-              "correctIndex": 0,
-              "explanation": "ですの否定形は「じゃありません」です。(বর্তমান কালের ভদ্র নেতিবাচক রূপ হলো \"じゃありません\"।)"
-            }
-          ]
-        }
+        ]
       },
       "metadataJson": {
         "title": "Lesson 1: Greetings & Self Introductions (第1課 はじめまして)",
@@ -11982,9 +11982,9 @@
       "checksumSha256": "2f4381afac3a85072b2fd34de9b8a72668565a903043d9f39d69f8a841fbd8b9",
       "approvedBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
       "publishedBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
-      "approvedAt": "2026-09-07T12:25:38.566Z",
-      "publishedAt": "2026-09-07T12:25:38.655Z",
-      "createdAt": "2026-09-07T12:25:38.655Z"
+      "approvedAt": "2026-09-07T12:25:38.655+00:00",
+      "publishedAt": "2026-09-07T12:25:38.655+00:00",
+      "createdAt": "2026-09-07T12:25:38.655+00:00"
     },
     {
       "id": "ver-4c6e1d18",
@@ -23991,6 +23991,106 @@
         }
       ],
       "updatedAt": "2026-09-04T16:39:35.108Z"
+    },
+    {
+      "id": "session-usr-student-01-2026-09-07",
+      "userId": "usr-student-01",
+      "date": "2026-09-07",
+      "completedItems": {
+        "vocabSrsDone": 0,
+        "kanjiDone": 0,
+        "grammarDone": 0,
+        "ghostsResolved": 0,
+        "listeningMinutesDone": 0,
+        "quizzesDone": 0
+      },
+      "totalMinutesSpent": 0,
+      "dailyQuotaMet": false,
+      "earnedXp": 0,
+      "checklist": [
+        {
+          "id": "task-vocab-2026-09-07",
+          "taskType": "vocab_srs",
+          "title": "Complete Vocabulary SRS Sprint (23 cards)",
+          "titleJa": "語彙SRS復習（23枚）",
+          "titleBn": "শব্দভাণ্ডার SRS ফ্ল্যাশকার্ড স্প্রিন্ট (23টি শব্দ)",
+          "targetCount": 23,
+          "completedCount": 0,
+          "estimatedMinutes": 10,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "vocabulary",
+          "linkParams": {
+            "filter": "due"
+          }
+        },
+        {
+          "id": "task-kanji-2026-09-07",
+          "taskType": "kanji_drill",
+          "title": "Practice 3 Essential Kanji 3D Stroke Flips",
+          "titleJa": "必須漢字3文字の書き順・読みドリル",
+          "titleBn": "3টি প্রয়োজনীয় কাঞ্জি স্ট্রোক ও ফ্লিপ ড্রিল",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 30,
+          "linkView": "curriculum",
+          "linkParams": {
+            "tab": "kanji"
+          }
+        },
+        {
+          "id": "task-grammar-2026-09-07",
+          "taskType": "grammar_lesson",
+          "title": "Master Lesson 2 Minna no Nihongo Grammar",
+          "titleJa": "みんなの日本語 第2課 文法マスター",
+          "titleBn": "মিন্না নো নিহোঙ্গো লেসন 2 ব্যাকরণ অধ্যায়ন",
+          "targetCount": 1,
+          "completedCount": 0,
+          "estimatedMinutes": 15,
+          "isCompleted": false,
+          "xpReward": 45,
+          "linkView": "curriculum",
+          "linkParams": {
+            "level": "N5",
+            "lessonNumber": 2
+          }
+        },
+        {
+          "id": "task-ghost-2026-09-07",
+          "taskType": "ghost_recovery",
+          "title": "Resolve 3 MemoryOS™ Ghost Weak-Spots (は vs が / に vs で)",
+          "titleJa": "MemoryOS 助詞弱点克服（3問）",
+          "titleBn": "মেমরি ওএস-এ 3টি ভুল হওয়া পার্টিকেল রিকভারি",
+          "targetCount": 3,
+          "completedCount": 0,
+          "estimatedMinutes": 8,
+          "isCompleted": false,
+          "xpReward": 40,
+          "linkView": "ghost-mode",
+          "linkParams": {
+            "autoStart": true
+          }
+        },
+        {
+          "id": "task-listening-2026-09-07",
+          "taskType": "listening_drill",
+          "title": "Tokyo Real-Audio Speed Listening Comprehension (6 min)",
+          "titleJa": "東京リアル音声 聴解トレーニング（6分）",
+          "titleBn": "টোকিও রিয়েল-অডিও স্পিচ লিসেনিং ড্রিল (6 মিনিট)",
+          "targetCount": 6,
+          "completedCount": 0,
+          "estimatedMinutes": 6,
+          "isCompleted": false,
+          "xpReward": 35,
+          "linkView": "quizzes",
+          "linkParams": {
+            "tab": "mock"
+          }
+        }
+      ],
+      "updatedAt": "2026-09-07T18:39:48.801Z"
     }
   ],
   "baitoScenarios": [

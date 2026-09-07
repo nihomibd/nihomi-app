@@ -33,15 +33,120 @@ import { JisRirekishoStudio } from '../components/simulation/JisRirekishoStudio'
 import { VoiceTwinPitchLab } from '../components/simulation/VoiceTwinPitchLab';
 import { soundEffects } from '../lib/soundEffects';
 
+// Built-in Tokyo Relocation Simulation Scenarios (Zero-lag Hydration & Edge Compatible)
+export const DEFAULT_BAITO_SCENARIOS: BaitoScenarioItem[] = [
+  {
+    id: 'sc-conbini-pos',
+    type: 'conbini_pos',
+    title: '7-Eleven & Lawson POS Cashier Roleplay',
+    titleJa: 'コンビニPOSレジ接客・スキャンと袋詰め演習',
+    titleBn: 'কনবিনি ক্যাশ রেজিস্টার ও কাস্টমার সার্ভিস সিমুলেশন',
+    subtitle: 'Master fast-paced conbini Keigo, bento heating, point cards, and payment processing.',
+    difficulty: 'N5',
+    location: '7-Eleven Shinjuku Takadanobaba Ekimae Store',
+    interlocutorName: 'Yamamoto-san (Store Manager / Customer)',
+    interlocutorRole: 'Tokyo Store Manager & Regular Customers',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'いらっしゃいませ！温かいお弁当と緑茶をお願いします。あとレジ袋も1枚いただけますか？',
+      romaji: 'Irasshaimase! Atatakai obentou to ryokucha o onegai shimasu. Ato rejibukuro mo ichimai itadakemasu ka?',
+      bn: 'স্বাগতম! একটি ওবেন্তো (গরম করে দেবেন) ও গ্রিন টি দিন। সাথে একটা শপিং ব্যাগও দিন।',
+      en: 'Welcome! Please heat up this bento and I will take this green tea. Also one plastic bag please.'
+    },
+    objectives: [
+      'Scan barcodes & greet with Irasshaimase (いらっしゃいませ)',
+      'Confirm bento heating (お弁当温めますか？)',
+      'Ask for Point Card (ポイントカードはお持ちですか？)',
+      'Confirm plastic bag & chopsticks (お袋とお箸はお付けしますか？)',
+      'Process exact payment & receipt handover (お釣り500円とレシートでございます)'
+    ],
+    contextDescription: 'Conbini shifts are the #1 entry-level student job in Tokyo (28 hrs/week). Accuracy and swift polite Japanese are essential to keep customer lines moving.',
+    keyVocabulary: [
+      { ja: 'いらっしゃいませ', kana: 'いらっしゃいませ', meaningBn: 'স্বাগতম', meaningEn: 'Welcome' },
+      { ja: '温める', kana: 'あたためる', meaningBn: 'গরম করা (মাইক্রোওয়েভ)', meaningEn: 'To heat up' },
+      { ja: 'ポイントカード', kana: 'ぽいんとかーど', meaningBn: 'পয়েন্ট কার্ড', meaningEn: 'Point Card' },
+      { ja: '袋', kana: 'ふくろ', meaningBn: 'প্লাস্টিক ব্যাগ', meaningEn: 'Plastic Bag' },
+      { ja: 'お箸', kana: 'おはし', meaningBn: 'চপস্টিকস', meaningEn: 'Chopsticks' },
+      { ja: '少々お待ちください', kana: 'しょうしょうおまちください', meaningBn: 'একটু অপেক্ষা করুন', meaningEn: 'Please wait a moment' },
+      { ja: 'お預かりいたします', kana: 'おあずかりいたします', meaningBn: 'টাকা গ্রহণ করছি', meaningEn: 'I receive (money)' },
+      { ja: 'ありがとうございました', kana: 'ありがとうございました', meaningBn: 'ধন্যবাদ (বিদায়)', meaningEn: 'Thank you very much' }
+    ]
+  },
+  {
+    id: 'sc-school-principal',
+    type: 'school_principal',
+    title: 'Japanese Language School Admission Defense',
+    titleJa: '日本語学校・校長面接（入学・奨学金選抜）',
+    titleBn: 'জাপানিজ ল্যাঙ্গুয়েজ স্কুল অধ্যক্ষের ইন্টারভিউ',
+    subtitle: 'Simulate high-stakes admissions and scholarship interviews with Tokyo School Principals.',
+    difficulty: 'N5',
+    location: 'Tokyo International Academy (Shinjuku)',
+    interlocutorName: 'Yamada Principal (山田校長)',
+    interlocutorRole: 'Principal of Tokyo Japanese Language Institute',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'それでは面接を始めます。まず、あなたのお名前と、日本に留学したい理由を教えていただけますか？',
+      romaji: 'Soredewa mensetsu o hajimemasu. Mazu, anata no onamae to, Nihon ni ryuugaku shitai riyuu o oshiete itadakemasu ka?',
+      bn: 'তাহলে ইন্টারভিউ শুরু করা যাক। প্রথমে আপনার নাম এবং জাপানে পড়াশোনা করতে আসার কারণ বলুন।',
+      en: 'Let us begin the interview. First, could you tell me your name and your reason for wanting to study in Japan?'
+    },
+    objectives: [
+      'Self-introduction using Sonkeigo/Kenjougo basics (〜と申します)',
+      'Articulate concrete career plans in Tokyo (IT, engineering, or higher education)',
+      'Explain financial stability and sponsorship respectfully',
+      'Demonstrate motivation to achieve JLPT N2 within 18 months'
+    ],
+    contextDescription: 'Language school admission panels look for sincere motivation, discipline, clear financial guarantees, and polite posture.',
+    keyVocabulary: [
+      { ja: '志望動機', kana: 'しぼうどうき', meaningBn: 'আবেদনের কারণ/উদ্দেশ্য', meaningEn: 'Motivation for applying' },
+      { ja: '専門分野', kana: 'せんもんぶんや', meaningBn: 'বিশেষায়িত ক্ষেত্র', meaningEn: 'Specialized field' },
+      { ja: '将来の夢', kana: 'しょうらいのゆめ', meaningBn: 'ভবিষ্যতের স্বপ্ন', meaningEn: 'Future dream' },
+      { ja: '学費', kana: 'がくひ', meaningBn: 'পড়াশোনার খরচ', meaningEn: 'Tuition fees' }
+    ]
+  },
+  {
+    id: 'sc-restaurant-izakaya',
+    type: 'restaurant_izakaya',
+    title: 'Izakaya & Ramen Shop Hall Staff',
+    titleJa: '居酒屋・ラーメン店ホール接客・オーダー取り',
+    titleBn: 'ইজাকায়া ও রেস্তোরাঁ হল স্টাফ সার্ভিস',
+    subtitle: 'Master loud, energetic Japanese greetings, beer serving, and special dietary requests.',
+    difficulty: 'N4',
+    location: 'Torikizoku Shibuya Hachiko-mae Store',
+    interlocutorName: 'Sato Store Leader (佐藤店長)',
+    interlocutorRole: 'Izakaya Shift Leader & Regular Patrons',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'すみません！生ビール2つと焼き鳥盛り合わせ、あと枝豆をお願いします！',
+      romaji: 'Sumimasen! Namabiiru futatsu to yakitori moriawase, ato edamame o onegai shimasu!',
+      bn: 'এক্সকিউজ মি! দুটি ড্রাফট বেভারেজ, ইয়াকিতোরি প্ল্যাটার এবং এদামামে দিন!',
+      en: 'Excuse me! Two draft beers, an assortment of yakitori skewers, and edamame please!'
+    },
+    objectives: [
+      'Respond instantly with Yorokonde! (喜んで！)',
+      'Repeat table orders accurately (ご注文を繰り返します)',
+      'Deliver dishes safely with Keigo (お待たせいたしました)',
+      'Handle bill splitting (お会計は別々になさいますか？)'
+    ],
+    contextDescription: 'Izakaya dining is fast and lively. Staff must speak with brisk clarity, smile, and handle rapid drink orders.',
+    keyVocabulary: [
+      { ja: '喜んで', kana: 'よろこんで', meaningBn: 'আনন্দের সাথে (অবশ্যই)', meaningEn: 'With pleasure / Right away!' },
+      { ja: 'ご注文', kana: 'ごちゅうもん', meaningBn: 'অর্ডার', meaningEn: 'Your order' },
+      { ja: 'お待たせいたしました', kana: 'おまたせいたしました', meaningBn: 'অপেক্ষা করানোর জন্য দুঃখিত', meaningEn: 'Sorry to keep you waiting' },
+      { ja: 'お会計', kana: 'おかいけい', meaningBn: 'বিল/হিসাব', meaningEn: 'Bill / Check' }
+    ]
+  }
+];
+
 interface BaitoOsViewProps {
   onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
 export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab'>('pos_terminal');
-  const [scenarios, setScenarios] = useState<BaitoScenarioItem[]>([]);
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>('sc-conbini-cashier');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [scenarios, setScenarios] = useState<BaitoScenarioItem[]>(() => DEFAULT_BAITO_SCENARIOS);
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>('sc-conbini-pos');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userReadinessStats, setUserReadinessStats] = useState({
     conbiniPassed: 12,
     interviewPassed: 4,
@@ -49,17 +154,34 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate }) => {
     pitchAccentMastery: 88
   });
 
-  // Fetch scenarios from API
+  // Fetch scenarios from API with 250ms hard failsafe timer
   useEffect(() => {
+    let isMounted = true;
+    const failsafeTimer = setTimeout(() => {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }, 250);
+
     fetch('/api/baito/scenarios')
       .then((res) => res.json())
       .then((data) => {
-        if (data.scenarios && data.scenarios.length > 0) {
+        if (isMounted && data.scenarios && data.scenarios.length > 0) {
           setScenarios(data.scenarios);
         }
       })
-      .catch((err) => console.error('Failed to load simulation scenarios:', err))
-      .finally(() => setIsLoading(false));
+      .catch((err) => console.warn('[BaitoOsView] Using built-in simulation scenarios:', err))
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+          clearTimeout(failsafeTimer);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(failsafeTimer);
+    };
   }, []);
 
   const currentScenario = scenarios.find((s) => s.id === selectedScenarioId) || scenarios[0];

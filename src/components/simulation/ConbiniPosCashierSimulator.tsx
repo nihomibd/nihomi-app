@@ -23,6 +23,125 @@ import { ConbiniPosProduct, ConbiniCustomerOrder } from '../../types';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 
+// Built-in Tokyo Conbini Customer Orders Queue (Failsafe & Edge / Cloudflare Pages Compatible)
+export const DEFAULT_CONBINI_ORDERS: ConbiniCustomerOrder[] = [
+  {
+    id: 'ord-default-1',
+    customerName: 'Tanaka Salaryman (田中さん)',
+    customerType: 'salaryman',
+    customerSpeechJa: 'これ温めてください。袋は大丈夫です。PayPayで払います。',
+    customerSpeechRomaji: 'Kore atatamete kudasai. Fukuro wa daijoubu desu. PayPay de haraimasu.',
+    customerSpeechBn: 'এটা একটু ওভেনে গরম করে দিন। ব্যাগ লাগবে না। পেপে (PayPay) দিয়ে পেমেন্ট করবো।',
+    items: [
+      {
+        id: 'prod-bento-karage',
+        barcode: '4901234567890',
+        nameJa: '特製から揚げ弁当',
+        nameRomaji: 'Tokusei Karaage Bento',
+        nameBn: 'স্পেশাল জাপানিজ ফ্রাইড চিকেন বেন্টো',
+        priceYen: 580,
+        category: 'bento',
+        needsHeating: true,
+        imageIcon: '🍱'
+      },
+      {
+        id: 'prod-drink-tea',
+        barcode: '4901234567891',
+        nameJa: 'お〜いお茶 緑茶 500ml',
+        nameRomaji: 'Oi Ocha Ryokucha 500ml',
+        nameBn: 'গ্রিন টি ৫০০ মি.লি.',
+        priceYen: 160,
+        category: 'drink',
+        needsHeating: false,
+        imageIcon: '🍵'
+      }
+    ],
+    hasPointCard: true,
+    pointCardName: 'd-Point',
+    needsBag: false,
+    needsChopsticks: true,
+    wantsBentoHeated: true,
+    paymentMethod: 'paypay'
+  },
+  {
+    id: 'ord-default-2',
+    customerName: 'Kenji College Student (ケンジくん)',
+    customerType: 'student',
+    customerSpeechJa: 'おにぎりとチキン、あとレジ袋小を1枚お願いします。Suicaでタッチします。',
+    customerSpeechRomaji: 'Onigiri to chikin, ato rejibukuro shou o ichimai onegai shimasu. Suica de tacchi shimasu.',
+    customerSpeechBn: 'ওনিগিরি এবং চিকেন দিন, সাথে ১টি ছোট প্লাস্টিক ব্যাগ দিন। সুইকা কার্ড দিয়ে পে করবো।',
+    items: [
+      {
+        id: 'prod-onigiri-salmon',
+        barcode: '4901234567892',
+        nameJa: '手巻おにぎり 熟成紅鮭',
+        nameRomaji: 'Temaki Onigiri Benisake',
+        nameBn: 'স্যামন ফিশ ওনিগিরি',
+        priceYen: 180,
+        category: 'onigiri',
+        needsHeating: false,
+        imageIcon: '🍙'
+      },
+      {
+        id: 'prod-hot-famichiki',
+        barcode: '4901234567893',
+        nameJa: 'ファミチキ (ホットスナック)',
+        nameRomaji: 'Famichiki Hot Snack',
+        nameBn: 'হট স্পাইসি ফ্রাইড চিকেন',
+        priceYen: 220,
+        category: 'hot_snack',
+        needsHeating: false,
+        imageIcon: '🍗'
+      }
+    ],
+    hasPointCard: false,
+    needsBag: true,
+    needsChopsticks: false,
+    wantsBentoHeated: false,
+    paymentMethod: 'suica'
+  },
+  {
+    id: 'ord-default-3',
+    customerName: 'Yamamoto-san (山本さん)',
+    customerType: 'salaryman',
+    customerSpeechJa: 'ビールとシュークリーム。袋はいりません。千円札でお願いします。',
+    customerSpeechRomaji: "Biiru to shuu-kuriimu. Fukuro wa irimasen. Sen'ensatsu de onegai shimasu.",
+    customerSpeechBn: 'কোল্ড ড্রিংক আর শু-ক্রিম দিন। ব্যাগ লাগবে না। ১০০০ ইয়েনের নোটে ক্যাশ দেবো।',
+    items: [
+      {
+        id: 'prod-asahi-beer',
+        barcode: '4901234567894',
+        nameJa: 'スーパードライ 生ビール 350ml',
+        nameRomaji: 'Asahi Super Dry 350ml',
+        nameBn: 'অ্যাসাহি বেভারেজ ক্যান ৩৫০ মি.লি.',
+        priceYen: 240,
+        category: 'alcohol_tobacco',
+        needsAgeVerification: true,
+        needsHeating: false,
+        imageIcon: '🍺'
+      },
+      {
+        id: 'prod-choux-cream',
+        barcode: '4901234567895',
+        nameJa: 'カスタードたっぷりシュークリーム',
+        nameRomaji: 'Custard Choux Cream',
+        nameBn: 'কাস্টার্ড শু-ক্রিম ডেজার্ট',
+        priceYen: 150,
+        category: 'dessert',
+        needsHeating: false,
+        imageIcon: '🧁'
+      }
+    ],
+    hasPointCard: true,
+    pointCardName: 'Ponta',
+    needsBag: false,
+    needsChopsticks: false,
+    wantsBentoHeated: false,
+    paymentMethod: 'cash',
+    tenderedCashAmount: 1000
+  }
+];
+
 interface ConbiniPosCashierSimulatorProps {
   onCompleteOrder?: (score: number, yenTotal: number) => void;
 }
@@ -30,7 +149,8 @@ interface ConbiniPosCashierSimulatorProps {
 export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProps> = ({
   onCompleteOrder
 }) => {
-  const [orders, setOrders] = useState<ConbiniCustomerOrder[]>([]);
+  // Instant zero-lag hydration with built-in Tokyo Conbini queue
+  const [orders, setOrders] = useState<ConbiniCustomerOrder[]>(() => DEFAULT_CONBINI_ORDERS);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(0);
   const [scannedItems, setScannedItems] = useState<ConbiniPosProduct[]>([]);
   const [isBentoHeated, setIsBentoHeated] = useState(false);
@@ -51,21 +171,39 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   const [activePromptSpeech, setActivePromptSpeech] = useState<string | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<{ text: string; type: 'success' | 'warn' | 'info' } | null>(null);
 
-  // Fetch initial orders
+  // Fetch initial orders with hard 250ms boot timer failsafe
   useEffect(() => {
+    let isMounted = true;
+    const bootTimer = setTimeout(() => {
+      if (isMounted && orders.length === 0) {
+        setOrders(DEFAULT_CONBINI_ORDERS);
+      }
+    }, 250);
+
     fetch('/api/baito/conbini/orders')
       .then((res) => res.json())
       .then((data) => {
-        if (data.orders && data.orders.length > 0) {
+        if (isMounted && data.orders && data.orders.length > 0) {
           setOrders(data.orders);
         }
       })
-      .catch(() => {
-        // Fallback default
+      .catch((err) => {
+        console.warn('[ConbiniSimulator] Network fetch failed, running with built-in Conbini orders:', err);
+        if (isMounted && orders.length === 0) {
+          setOrders(DEFAULT_CONBINI_ORDERS);
+        }
+      })
+      .finally(() => {
+        clearTimeout(bootTimer);
       });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(bootTimer);
+    };
   }, []);
 
-  const currentOrder = orders[currentOrderIndex];
+  const currentOrder = orders[currentOrderIndex] || DEFAULT_CONBINI_ORDERS[0];
 
   // Play customer dialogue when current order changes
   useEffect(() => {
@@ -217,12 +355,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   };
 
   if (!currentOrder) {
-    return (
-      <div className="p-8 text-center text-slate-400">
-        <Clock className="w-8 h-8 animate-spin mx-auto mb-3 text-amber-400" />
-        <p>コンビニPOS端末を起動中... (Booting Conbini POS)</p>
-      </div>
-    );
+    return null;
   }
 
   const needsAgeCheck = currentOrder.items.some((i) => i.needsAgeVerification);

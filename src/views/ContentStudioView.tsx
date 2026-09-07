@@ -48,6 +48,7 @@ import {
   StudioQAReport,
   SupportedSourceFileType
 } from '../core/content-studio/types';
+import { DEFAULT_STUDIO_LESSONS } from '../core/content-studio/defaultLessons';
 import { JLPTLevel } from '../types/nihomi';
 import { ContentDesignSystem } from '../core/content-engine/contentDesignSystem';
 
@@ -57,8 +58,9 @@ interface ContentStudioViewProps {
 
 export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate }) => {
   const [stats, setStats] = useState<ContentStudioStats | null>(null);
-  const [lessons, setLessons] = useState<StudioLesson[]>([]);
-  const [selectedLesson, setSelectedLesson] = useState<StudioLesson | null>(null);
+  const [lessons, setLessons] = useState<StudioLesson[]>(() => DEFAULT_STUDIO_LESSONS);
+  const [selectedLesson, setSelectedLesson] = useState<StudioLesson | null>(() => DEFAULT_STUDIO_LESSONS[0]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLevelFilter, setSelectedLevelFilter] = useState<string>('ALL');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('ALL');
   const [activeSectionTab, setActiveSectionTab] = useState<string>('introduction');
@@ -101,32 +103,48 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
   const fetchStudioData = async () => {
     setIsLoading(true);
     try {
-      const statsRes = await fetch('/api/content-studio/stats');
-      if (statsRes.ok) {
-        const statsData = await statsRes.json();
-        setStats(statsData.stats);
+      const token = localStorage.getItem('nihomi_auth_token') || localStorage.getItem('token');
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const lessonsRes = await fetch('/api/content-studio/lessons');
+      const statsRes = await fetch('/api/content-studio/stats', { headers });
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        if (statsData.stats) setStats(statsData.stats);
+      }
+
+      const lessonsRes = await fetch('/api/content-studio/lessons', { headers });
       if (lessonsRes.ok) {
         const lessonsData = await lessonsRes.json();
-        setLessons(lessonsData.lessons || []);
-        if (!selectedLesson && lessonsData.lessons?.length > 0) {
-          setSelectedLesson(lessonsData.lessons[0]);
-        } else if (selectedLesson) {
-          const fresh = lessonsData.lessons.find((l: StudioLesson) => l.id === selectedLesson.id);
-          if (fresh) setSelectedLesson(fresh);
+        if (lessonsData.lessons && lessonsData.lessons.length > 0) {
+          // Merge lessons: ensure les-c49255 is kept if missing
+          const apiLessons: StudioLesson[] = lessonsData.lessons;
+          const hasL1 = apiLessons.some((l) => l.id === 'les-c49255');
+          const mergedLessons = hasL1 ? apiLessons : [...DEFAULT_STUDIO_LESSONS.filter((dl) => dl.id === 'les-c49255'), ...apiLessons];
+
+          setLessons(mergedLessons);
+          if (!selectedLesson) {
+            const defaultSelection = mergedLessons.find((l: StudioLesson) => l.id === 'les-c49255') || mergedLessons[0];
+            setSelectedLesson(defaultSelection);
+          } else {
+            const fresh = mergedLessons.find((l: StudioLesson) => l.id === selectedLesson.id);
+            if (fresh) setSelectedLesson(fresh);
+          }
         }
       }
 
       // Fetch queue stats
-      const qStatsRes = await fetch('/api/content-studio/publishing-queue/stats');
+      const qStatsRes = await fetch('/api/content-studio/publishing-queue/stats', { headers });
       if (qStatsRes.ok) {
         const qData = await qStatsRes.json();
-        setQueueStats(qData.stats);
+        if (qData.stats) setQueueStats(qData.stats);
       }
     } catch (err) {
-      console.error('Error fetching Content Studio data:', err);
+      console.warn('[ContentStudioView] Error fetching Content Studio data, using loaded fallback lessons:', err);
     } finally {
       setIsLoading(false);
     }
@@ -393,9 +411,21 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
   };
 
   const filteredLessons = lessons.filter((l) => {
-    const levelMatch = selectedLevelFilter === 'ALL' || l.level === selectedLevelFilter;
-    const statusMatch = selectedStatusFilter === 'ALL' || l.status === selectedStatusFilter;
-    return levelMatch && statusMatch;
+    const levelMatch =
+      selectedLevelFilter === 'ALL' ||
+      (l.level && l.level.toUpperCase() === selectedLevelFilter.toUpperCase());
+    const statusMatch =
+      selectedStatusFilter === 'ALL' ||
+      (l.status && l.status.toUpperCase() === selectedStatusFilter.toUpperCase());
+    const q = searchQuery.trim().toLowerCase();
+    const searchMatch =
+      !q ||
+      l.title?.toLowerCase().includes(q) ||
+      l.titleJa?.toLowerCase().includes(q) ||
+      l.titleBn?.toLowerCase().includes(q) ||
+      l.id?.toLowerCase().includes(q) ||
+      l.theme?.toLowerCase().includes(q);
+    return levelMatch && statusMatch && searchMatch;
   });
 
   return (
@@ -527,33 +557,64 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-red-400" /> Lesson Repository
                 </h3>
-                <span className="text-xs text-slate-400 font-mono">{filteredLessons.length} items</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-400 font-mono">{filteredLessons.length} items</span>
+                  <button
+                    onClick={() => setShowNewLessonModal(true)}
+                    className="px-2 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white text-[11px] font-bold flex items-center gap-1 transition"
+                    title="Ingest New Textbook / Chapter"
+                  >
+                    <Plus className="w-3 h-3" /> Ingest
+                  </button>
+                </div>
               </div>
 
-              {/* Filters */}
-              <div className="grid grid-cols-2 gap-2">
-                <select
-                  value={selectedLevelFilter}
-                  onChange={(e) => setSelectedLevelFilter(e.target.value)}
-                  className="bg-stone-950 border border-stone-800 text-xs text-slate-300 rounded-xl px-2.5 py-2"
-                >
-                  <option value="ALL">All Levels</option>
-                  <option value="N5">JLPT N5</option>
-                  <option value="N4">JLPT N4</option>
-                  <option value="N3">JLPT N3</option>
-                </select>
+              {/* Search & Filters */}
+              <div className="space-y-2">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by title, Japanese, or ID..."
+                    className="w-full bg-stone-950 border border-stone-800 text-xs text-slate-200 rounded-xl pl-8 pr-7 py-2 focus:outline-none focus:border-red-500/50"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs px-1"
+                      title="Clear search"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
 
-                <select
-                  value={selectedStatusFilter}
-                  onChange={(e) => setSelectedStatusFilter(e.target.value)}
-                  className="bg-stone-950 border border-stone-800 text-xs text-slate-300 rounded-xl px-2.5 py-2"
-                >
-                  <option value="ALL">All Statuses</option>
-                  <option value="PUBLISHED">Published</option>
-                  <option value="DRAFT">Draft</option>
-                  <option value="AI_GENERATED">AI Generated</option>
-                  <option value="NEEDS_REVIEW">Needs Review</option>
-                </select>
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    value={selectedLevelFilter}
+                    onChange={(e) => setSelectedLevelFilter(e.target.value)}
+                    className="bg-stone-950 border border-stone-800 text-xs text-slate-300 rounded-xl px-2.5 py-2"
+                  >
+                    <option value="ALL">All Levels</option>
+                    <option value="N5">JLPT N5</option>
+                    <option value="N4">JLPT N4</option>
+                    <option value="N3">JLPT N3</option>
+                  </select>
+
+                  <select
+                    value={selectedStatusFilter}
+                    onChange={(e) => setSelectedStatusFilter(e.target.value)}
+                    className="bg-stone-950 border border-stone-800 text-xs text-slate-300 rounded-xl px-2.5 py-2"
+                  >
+                    <option value="ALL">All Statuses</option>
+                    <option value="PUBLISHED">Published</option>
+                    <option value="DRAFT">Draft</option>
+                    <option value="AI_GENERATED">AI Generated</option>
+                    <option value="NEEDS_REVIEW">Needs Review</option>
+                  </select>
+                </div>
               </div>
 
               {/* Lesson List */}
@@ -591,17 +652,75 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
                       </div>
                       <p className="text-xs text-slate-300 font-medium line-clamp-1">{l.title}</p>
                       <p className="text-[11px] text-slate-500 line-clamp-1">{l.titleBn}</p>
-                      <div className="mt-2 pt-2 border-t border-stone-800/60 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>{l.vocabulary?.length || 0} Vocab • {l.grammar?.length || 0} Grammar</span>
-                        {l.qaReport && (
-                          <span className="flex items-center gap-1 font-mono text-emerald-400">
-                            <ShieldCheck className="w-3 h-3" /> QA {l.qaReport.score}%
-                          </span>
-                        )}
+                      
+                      {/* Action Buttons and Metadata */}
+                      <div className="mt-2.5 pt-2 border-t border-stone-800/60 flex items-center justify-between gap-1">
+                        <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                          <span>{l.vocabulary?.length || 0} Vocab • {l.grammar?.length || 0} Gr</span>
+                          {l.qaReport && (
+                            <span className="hidden sm:inline font-mono text-emerald-400">
+                              QA {l.qaReport.score}%
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            title="Edit Lesson Content"
+                            onClick={() => {
+                              setSelectedLesson(l);
+                              setActiveSectionTab('introduction');
+                            }}
+                            className="px-2 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-[10px] font-semibold text-slate-200 transition"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            title="Preview Student View"
+                            onClick={() => {
+                              setSelectedLesson(l);
+                              setShowStudentPreviewModal(true);
+                            }}
+                            className="px-2 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-[10px] font-semibold text-amber-300 transition flex items-center gap-0.5"
+                          >
+                            <Eye className="w-2.5 h-2.5" /> Preview
+                          </button>
+                          <button
+                            title={l.status === 'PUBLISHED' ? 'Re-publish Lesson' : 'Publish Lesson'}
+                            onClick={() => {
+                              setSelectedLesson(l);
+                              setEnqueueTargetLesson(l);
+                              setShowEnqueueModal(true);
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-semibold transition flex items-center gap-0.5 ${
+                              l.status === 'PUBLISHED'
+                                ? 'bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-400 border border-emerald-800/50'
+                                : 'bg-red-950/60 hover:bg-red-900/80 text-red-300 border border-red-800/50'
+                            }`}
+                          >
+                            <Send className="w-2.5 h-2.5" /> {l.status === 'PUBLISHED' ? 'Published' : 'Publish'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+
+                {filteredLessons.length === 0 && (
+                  <div className="p-6 text-center text-slate-400 space-y-2">
+                    <p className="text-xs">No lessons match the selected filters or search.</p>
+                    <button
+                      onClick={() => {
+                        setSelectedLevelFilter('ALL');
+                        setSelectedStatusFilter('ALL');
+                        setSearchQuery('');
+                      }}
+                      className="text-xs text-red-400 hover:underline"
+                    >
+                      Reset Filters & Search
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
