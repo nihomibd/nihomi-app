@@ -95,6 +95,44 @@ export class BkashPaymentProvider implements PaymentProvider {
   }
 
   /**
+   * Queries bKash payment status via Nihomi secure billing API
+   */
+  async queryPayment(paymentID: string): Promise<PaymentVerificationResult> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const res = await fetch(`/api/billing/bkash/query?paymentId=${encodeURIComponent(paymentID)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      return {
+        isVerified: false,
+        status: 'failed',
+        providerTransactionId: paymentID,
+        amount: 0,
+        currency: 'BDT',
+        paymentMethod: 'bKash MFS',
+        rawResponse: data,
+        errorMessage: data.error || 'bKash payment query failed'
+      };
+    }
+
+    return {
+      isVerified: data.status === 'paid',
+      status: data.status || 'paid',
+      providerTransactionId: data.providerTransactionId || paymentID,
+      amount: data.amount || 0,
+      currency: 'BDT',
+      paymentMethod: data.paymentMethodDetails?.type || 'bKash MFS (Tokenized)',
+      rawResponse: data
+    };
+  }
+
+  /**
    * Webhook processing (delegated to backend /api/billing/webhook/bkash)
    */
   async handleWebhook(

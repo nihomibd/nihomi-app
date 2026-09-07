@@ -512,6 +512,33 @@ async function handleBkashCallback(req: Request, res: Response) {
       invoiceId: invoice.id
     });
 
+    // Atomically credit Nihomi Coins & AI Credits
+    let coinsToAdd = 0;
+    let aiCreditsToAdd = 0;
+    if (payment.amount === 99) {
+      coinsToAdd = 100;
+      aiCreditsToAdd = 200;
+    } else if (payment.amount === 249) {
+      coinsToAdd = 300;
+      aiCreditsToAdd = 500;
+    } else if (payment.amount === 499) {
+      coinsToAdd = 1000;
+      aiCreditsToAdd = 1500;
+    } else if (payment.planId === 'starter') {
+      coinsToAdd = 500;
+      aiCreditsToAdd = 1000;
+    } else if (payment.planId === 'pro') {
+      coinsToAdd = 1500;
+      aiCreditsToAdd = 3000;
+    } else if (payment.planId === 'japan_ready') {
+      coinsToAdd = 5000;
+      aiCreditsToAdd = 10000;
+    } else {
+      coinsToAdd = Math.round(payment.amount * 1.5);
+      aiCreditsToAdd = Math.round(payment.amount * 3);
+    }
+    db.creditUserCoinsAndAI(payment.userId, coinsToAdd, aiCreditsToAdd, `bKash Payment ${payment.id} Callback Verified`);
+
     res.redirect(`${appUrl}/dashboard?payment=success&paymentId=${encodeURIComponent(payment.id)}&plan=${encodeURIComponent(payment.planId)}`);
   } catch (err: any) {
     console.error('Error handling bKash callback:', err);
@@ -522,6 +549,149 @@ async function handleBkashCallback(req: Request, res: Response) {
 
 billingRouter.get('/bkash/callback', handleBkashCallback);
 billingRouter.post('/bkash/callback', handleBkashCallback);
+
+// ==========================================
+// 5b. bKASH QUERY & SANDBOX TEST API
+// ==========================================
+billingRouter.get('/bkash/query', async (req: Request, res: Response) => {
+  try {
+    const paymentId = (req.query.paymentId as string) || (req.query.paymentID as string);
+    if (!paymentId) {
+      return res.status(400).json({ error: 'Missing paymentId parameter' });
+    }
+
+    const payment = db.getPaymentById(paymentId) ||
+      (db.data.payments || []).find((p) => p.providerTransactionId === paymentId || p.providerReference === paymentId);
+
+    const providerAdapter = PaymentProviderFactory.getProvider('bkash') as any;
+    const queryResult = await providerAdapter.queryPayment(payment?.providerReference || paymentId, payment);
+
+    return res.json({
+      success: true,
+      status: queryResult.status,
+      providerTransactionId: queryResult.providerTransactionId,
+      amount: queryResult.amount,
+      paymentMethodDetails: queryResult.paymentMethodDetails,
+      queryResult,
+      payment
+    });
+  } catch (err: any) {
+    console.error('Error in bKash query API:', err);
+    return res.status(500).json({ error: err.message || 'Failed to query bKash payment.' });
+  }
+});
+
+billingRouter.post('/bkash/simulate', async (req: Request, res: Response) => {
+  try {
+    const { userId, planId = 'starter', amount = 249, billingInterval = 'monthly' } = req.body;
+    const targetUserId = userId || 'user-sandbox-student';
+
+    // 1. Create payment record
+    const payment = db.createPayment({
+      userId: targetUserId,
+      planId: planId as any,
+      planName: planId === 'starter' ? 'Nihomi Starter' : planId === 'pro' ? 'Nihomi Pro' : 'Nihomi Japan Ready',
+      billingInterval: billingInterval as any,
+      amount: Number(amount),
+      originalAmount: Number(amount),
+      discountAmount: 0,
+      provider: 'bkash'
+    });
+
+    // 2. Mark as paid
+    const trxID = `TRX_BKASH_SIM_${Date.now()}`;
+    const paidAt = new Date().toISOString();
+    db.updatePayment(payment.id, {
+      status: 'paid',
+      providerTransactionId: trxID,
+      paymentMethodDetails: {
+        type: 'bKash MFS (Sandbox Simulated)',
+        accountNumberMasked: '017••••••89',
+        gatewayName: 'bKash Sandbox Gateway'
+      },
+      paidAt
+    });
+
+    // 3. Setup/Extend subscription
+    let sub = db.getUserActiveSubscription(targetUserId);
+    if (!sub || sub.planId !== planId) {
+      if (sub) db.cancelSubscription(sub.id, true);
+      sub = db.createSubscription({
+        userId: targetUserId,
+        planId: planId as any,
+        billingInterval: billingInterval as any,
+        status: 'active',
+        paymentMethod: 'bKash MFS (Sandbox)',
+        lastPaymentId: payment.id
+      });
+    }
+
+    // 4. Create official invoice
+    const user = db.findUserById(targetUserId);
+    const profile = db.getProfileByUserId(targetUserId);
+    const invoice = db.createInvoice({
+      userId: targetUserId,
+      subscriptionId: sub.id,
+      planId: planId as any,
+      planName: payment.planName,
+      amount: Number(amount),
+      billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
+      paymentId: payment.id,
+      customerName: profile?.displayName || user?.email?.split('@')[0] || 'QA Student',
+      customerEmail: user?.email || 'student@nihomi.com',
+      subtotal: Number(amount),
+      discount: 0,
+      tax: 0,
+      paymentMethodName: 'bKash MFS (Sandbox Verified)'
+    });
+
+    db.updatePayment(payment.id, { invoiceId: invoice.id, subscriptionId: sub.id });
+
+    // 5. Credit coins and AI credits atomically
+    let coinsToAdd = 0;
+    let aiCreditsToAdd = 0;
+    if (amount === 99) {
+      coinsToAdd = 100;
+      aiCreditsToAdd = 200;
+    } else if (amount === 249) {
+      coinsToAdd = 300;
+      aiCreditsToAdd = 500;
+    } else if (amount === 499) {
+      coinsToAdd = 1000;
+      aiCreditsToAdd = 1500;
+    } else {
+      coinsToAdd = 500;
+      aiCreditsToAdd = 1000;
+    }
+    const wallet = db.creditUserCoinsAndAI(targetUserId, coinsToAdd, aiCreditsToAdd, 'bKash Sandbox Simulation');
+
+    return res.json({
+      success: true,
+      simulated: true,
+      payment,
+      subscription: sub,
+      invoice,
+      wallet,
+      message: `Simulated bKash transaction completed: ৳${amount} settled, invoice ${invoice.id} issued, ${coinsToAdd} coins and ${aiCreditsToAdd} AI credits credited.`
+    });
+  } catch (err: any) {
+    console.error('Error simulating bKash payment:', err);
+    return res.status(500).json({ error: err.message || 'Simulation error' });
+  }
+});
+
+billingRouter.get('/wallet', authenticateUser, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const wallet = db.getUserWallet(userId);
+    res.json({
+      success: true,
+      wallet
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve wallet balance.' });
+  }
+});
 
 // ==========================================
 // 5c. SSLCOMMERZ REDIRECT CALLBACK ROUTES

@@ -288,6 +288,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
   const setUserData = (newUser: User) => {
+    // Ensure Digital Student ID and Nihomi Account ID
+    if (!newUser.studentId) {
+      newUser.studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
+    }
+    if (!newUser.nihomiAccountId) {
+      newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
+    }
+    // Allocate starter 50 Coins + 100 AI Credits for all new students
+    if (!localStorage.getItem('nihomi_student_coins')) {
+      localStorage.setItem('nihomi_student_coins', '50');
+    }
+    if (!localStorage.getItem('nihomi_ai_credits')) {
+      localStorage.setItem('nihomi_ai_credits', '100');
+    }
     setUser(newUser);
     localStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };

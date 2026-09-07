@@ -3284,6 +3284,34 @@ class Database {
               status: 'paid'
             });
           }
+
+          // 5b. Atomically credit Nihomi Coins & AI Credits based on payment amount
+          let coinsToAdd = 0;
+          let aiCreditsToAdd = 0;
+          if (payment.amount === 99) {
+            coinsToAdd = 100;
+            aiCreditsToAdd = 200;
+          } else if (payment.amount === 249) {
+            coinsToAdd = 300;
+            aiCreditsToAdd = 500;
+          } else if (payment.amount === 499) {
+            coinsToAdd = 1000;
+            aiCreditsToAdd = 1500;
+          } else if (payment.planId === 'starter') {
+            coinsToAdd = 500;
+            aiCreditsToAdd = 1000;
+          } else if (payment.planId === 'pro') {
+            coinsToAdd = 1500;
+            aiCreditsToAdd = 3000;
+          } else if (payment.planId === 'japan_ready') {
+            coinsToAdd = 5000;
+            aiCreditsToAdd = 10000;
+          } else {
+            coinsToAdd = Math.round(payment.amount * 1.5);
+            aiCreditsToAdd = Math.round(payment.amount * 3);
+          }
+
+          this.creditUserCoinsAndAI(user.id, coinsToAdd, aiCreditsToAdd, `${options.provider.toUpperCase()} Payment ${payment.id} verified`);
         }
 
         // 6. Complete webhook event
@@ -3381,6 +3409,65 @@ class Database {
     event.processed = true;
     this.save();
     return { success: true, event, message: 'Webhook event status marked as retried and resolved.' };
+  }
+
+  public creditUserCoinsAndAI(
+    userId: string,
+    coins: number,
+    aiCredits: number,
+    reason = 'Payment settled'
+  ): { coinBalance: number; aiCredits: number } {
+    if (!(this.data as any).coinWallets) {
+      (this.data as any).coinWallets = [];
+    }
+    let wallet = (this.data as any).coinWallets.find((w: any) => w.userId === userId);
+    const now = new Date().toISOString();
+    if (!wallet) {
+      wallet = {
+        userId,
+        coinBalance: 50 + Math.max(0, coins),
+        aiCredits: 100 + Math.max(0, aiCredits),
+        lifetimeEarned: 50 + Math.max(0, coins),
+        lifetimeSpent: 0,
+        updatedAt: now
+      };
+      (this.data as any).coinWallets.push(wallet);
+    } else {
+      wallet.coinBalance = (wallet.coinBalance || 0) + Math.max(0, coins);
+      wallet.aiCredits = (wallet.aiCredits || 0) + Math.max(0, aiCredits);
+      wallet.lifetimeEarned = (wallet.lifetimeEarned || 0) + Math.max(0, coins);
+      wallet.updatedAt = now;
+    }
+
+    this.save();
+    return {
+      coinBalance: wallet.coinBalance,
+      aiCredits: wallet.aiCredits
+    };
+  }
+
+  public getUserWallet(userId: string): { userId: string; coinBalance: number; aiCredits: number } {
+    if (!(this.data as any).coinWallets) {
+      (this.data as any).coinWallets = [];
+    }
+    let wallet = (this.data as any).coinWallets.find((w: any) => w.userId === userId);
+    if (!wallet) {
+      wallet = {
+        userId,
+        coinBalance: 50,
+        aiCredits: 100,
+        lifetimeEarned: 50,
+        lifetimeSpent: 0,
+        updatedAt: new Date().toISOString()
+      };
+      (this.data as any).coinWallets.push(wallet);
+      this.save();
+    }
+    return {
+      userId,
+      coinBalance: wallet.coinBalance,
+      aiCredits: wallet.aiCredits
+    };
   }
 
   public getRevenueTrends(): RevenueTrends {

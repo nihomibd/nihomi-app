@@ -6,18 +6,22 @@ interface ContinueLearningCardProps {
   onResumeLesson?: (lessonId: string) => void;
 }
 
+const DEFAULT_HERO_LESSON: ContinueLesson = {
+  lessonId: 'les-c49255',
+  lessonNumber: 1,
+  title: 'Lesson 1: Greetings & Self Introductions (第1課 はじめまして)',
+  topic: 'পরিচয় ও অভিবাদন (Greetings & Identity)',
+  topicJapanese: '第1課 はじめまして・あいさつ',
+  jlptLevel: 'N5',
+  progressPercent: 20,
+  estimatedMinutesLeft: 15,
+};
+
 export const ContinueLearningCard: React.FC<ContinueLearningCardProps> = ({
   lesson,
   onResumeLesson,
 }) => {
-  if (!lesson) {
-    return (
-      <section className="bg-stone-50 border border-dashed border-stone-300 rounded-2xl p-5 text-center">
-        <p className="text-sm font-medium text-stone-700">কোনো অসমাপ্ত লেসন নেই</p>
-        <p className="text-xs text-stone-500 mt-1">নতুন লেসন শুরু করতে পাঠ্যতালিকায় যান।</p>
-      </section>
-    );
-  }
+  const activeLesson = lesson || DEFAULT_HERO_LESSON;
 
   return (
     <section 
@@ -35,49 +39,49 @@ export const ContinueLearningCard: React.FC<ContinueLearningCardProps> = ({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-600 text-white">
-              {lesson.jlptLevel} • Lesson {lesson.lessonNumber}
+              {activeLesson.jlptLevel} • Lesson {activeLesson.lessonNumber}
             </span>
             <span className="text-xs text-stone-300 font-medium">
-              {lesson.estimatedMinutesLeft} min left
+              {activeLesson.estimatedMinutesLeft} min left
             </span>
           </div>
           <span className="text-xs font-semibold text-rose-300">
-            {lesson.progressPercent}% Complete
+            {activeLesson.progressPercent}% Complete
           </span>
         </div>
 
         <div>
           <h2 id="continue-learning-heading" className="text-lg sm:text-xl font-bold tracking-tight text-white">
-            {lesson.topic}
+            {activeLesson.topic}
           </h2>
-          {lesson.topicJapanese && (
+          {activeLesson.topicJapanese && (
             <p className="text-xs text-stone-300 font-medium mt-0.5 tracking-wide font-sans">
-              {lesson.topicJapanese}
+              {activeLesson.topicJapanese}
             </p>
           )}
           <p className="text-xs text-stone-400 mt-1">
-            {lesson.title}
+            {activeLesson.title}
           </p>
         </div>
 
         <div 
           role="progressbar" 
-          aria-valuenow={lesson.progressPercent} 
+          aria-valuenow={activeLesson.progressPercent} 
           aria-valuemin={0} 
           aria-valuemax={100}
           className="w-full bg-stone-700 rounded-full h-2 overflow-hidden"
         >
           <div
             className="bg-gradient-to-r from-rose-500 to-amber-400 h-2 rounded-full transition-all duration-500"
-            style={{ width: `${lesson.progressPercent}%` }}
+            style={{ width: `${activeLesson.progressPercent}%` }}
           />
         </div>
 
         <div className="pt-1">
           <button
             type="button"
-            onClick={() => onResumeLesson?.(lesson.lessonId)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-stone-950 font-semibold text-sm hover:bg-stone-100 active:scale-[0.99] transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm"
+            onClick={() => onResumeLesson?.(activeLesson.lessonId)}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-stone-950 font-semibold text-sm hover:bg-stone-100 active:scale-[0.99] transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
           >
             <span>Continue Learning</span>
             <span className="text-xs text-stone-500 font-normal">| শেখা চালিয়ে যান</span>

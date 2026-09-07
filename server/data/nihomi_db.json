@@ -4807,6 +4807,47 @@
       "paidAt": "2026-08-08T07:12:51.501Z",
       "createdAt": "2026-08-08T07:12:51.501+00:00",
       "updatedAt": "2026-08-08T07:12:51.501+00:00"
+    },
+    {
+      "id": "pay-7a4bdb8f",
+      "userId": "smoke-test-user-1788785018282",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-07T12:43:38.283Z",
+      "updatedAt": "2026-09-07T12:43:38.283Z"
+    },
+    {
+      "id": "pay-eb6e5119",
+      "userId": "smoke-test-user-1788785032648",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-07T12:43:52.649Z",
+      "updatedAt": "2026-09-07T12:43:52.649Z"
+    },
+    {
+      "id": "pay-37d2b1a4",
+      "userId": "smoke-test-user-1788785193105",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "originalAmount": 249,
+      "discountAmount": 0,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-07T12:46:33.106Z",
+      "updatedAt": "2026-09-07T12:46:33.106Z"
     }
   ],
   "paymentAttempts": [],
@@ -5270,6 +5311,102 @@
       "issuedAt": "2026-09-02T09:00:05.368+00:00",
       "paidAt": "2026-09-02T09:00:05.368+00:00",
       "createdAt": "2026-09-02T09:00:05.368+00:00"
+    },
+    {
+      "id": "inv-5f9d5ac2",
+      "userId": "smoke-test-user-1788785018282",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-7a4bdb8f",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "qa-student@nihomi.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-6ccb30",
+          "invoiceId": "inv-5f9d5ac2",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-07T12:43:38.369Z",
+      "paidAt": "2026-09-07T12:43:38.369Z",
+      "createdAt": "2026-09-07T12:43:38.369Z"
+    },
+    {
+      "id": "inv-f48b7b8b",
+      "userId": "smoke-test-user-1788785032648",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-eb6e5119",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "qa-student@nihomi.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-c9071d",
+          "invoiceId": "inv-f48b7b8b",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-07T12:43:52.734Z",
+      "paidAt": "2026-09-07T12:43:52.734Z",
+      "createdAt": "2026-09-07T12:43:52.734Z"
+    },
+    {
+      "id": "inv-020abd95",
+      "userId": "smoke-test-user-1788785193105",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-37d2b1a4",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "qa-student@nihomi.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-c99983",
+          "invoiceId": "inv-020abd95",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-07T12:46:33.193Z",
+      "paidAt": "2026-09-07T12:46:33.193Z",
+      "createdAt": "2026-09-07T12:46:33.193Z"
     }
   ],
   "invoiceItems": [],
@@ -95535,6 +95672,32 @@
       "level": "N5",
       "createdAt": "2026-09-07T12:25:39.934Z",
       "read": false
+    }
+  ],
+  "coinWallets": [
+    {
+      "userId": "smoke-test-user-1788785018282",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-07T12:43:38.328Z"
+    },
+    {
+      "userId": "smoke-test-user-1788785032648",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-07T12:43:52.693Z"
+    },
+    {
+      "userId": "smoke-test-user-1788785193105",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-07T12:46:33.150Z"
     }
   ]
 }

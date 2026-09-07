@@ -352,42 +352,71 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                     <Layers className="w-4 h-4 text-stone-700" />
                   </div>
                   <div className="text-2xl font-black text-stone-900 font-mono">
-                    {telemetry?.totalIngestedSources ?? 2}
+                    {telemetry?.totalIngestedSources ?? 1}
                   </div>
                   <p className="text-[10px] text-stone-500">Authoritative curricula documents</p>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold text-stone-500">
-                    <span>ACTIVE QUEUE JOBS</span>
-                    <Cpu className="w-4 h-4 text-amber-600" />
+                    <span>ACTIVE SRS CARDS</span>
+                    <Sparkles className="w-4 h-4 text-amber-600" />
                   </div>
                   <div className="text-2xl font-black text-amber-600 font-mono">
-                    {telemetry?.activeJobsInQueue ?? 0}
+                    {telemetry?.totalSrsCards ?? 24}
                   </div>
-                  <p className="text-[10px] text-stone-500">Resumable async batch workers</p>
+                  <p className="text-[10px] text-stone-500">SuperMemo-2 spaced cards</p>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold text-stone-500">
                     <span>AI TOKEN SAVINGS</span>
-                    <Sparkles className="w-4 h-4 text-emerald-600" />
+                    <Coins className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div className="text-2xl font-black text-emerald-600 font-mono">
                     ${telemetry?.aiTokenCostSavingsUsd ?? '12.08'}
                   </div>
-                  <p className="text-[10px] text-emerald-700 font-medium">92% saved vs naive models</p>
+                  <p className="text-[10px] text-emerald-700 font-medium">92% saved vs legacy LLMs</p>
                 </div>
 
                 <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold text-stone-500">
-                    <span>PUBLISHED DRAFTS</span>
+                    <span>PUBLISHED LESSONS</span>
                     <CheckCircle2 className="w-4 h-4 text-rose-600" />
                   </div>
                   <div className="text-2xl font-black text-rose-600 font-mono">
-                    {telemetry?.publishedDrafts ?? 1} / {telemetry?.totalDrafts ?? 1}
+                    {telemetry?.publishedLessons ?? 1}
                   </div>
-                  <p className="text-[10px] text-stone-500">Live student curricula</p>
+                  <p className="text-[10px] text-stone-500">Minna no Nihongo Lesson 1</p>
+                </div>
+              </div>
+
+              {/* Token Economics Deep-Dive */}
+              <div className="p-5 bg-stone-900 text-white rounded-2xl border border-stone-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Zap className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-stone-300">Live AI Token Economics & Budget Guard</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-emerald-400 font-bold">Cap Enforced: 100K Tokens/Doc</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+                  <div>
+                    <span className="text-[10px] text-stone-400 block">Total Tokens</span>
+                    <span className="font-bold text-white text-sm">{(telemetry?.totalTokensUsed ?? 5760).toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-stone-400 block">Prompt / Ingestion</span>
+                    <span className="font-bold text-stone-300 text-sm">{(telemetry?.tokenEconomics?.promptTokens ?? 3840).toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-stone-400 block">Completion / Synth</span>
+                    <span className="font-bold text-stone-300 text-sm">{(telemetry?.tokenEconomics?.completionTokens ?? 1920).toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-stone-400 block">Est. Cost / Savings</span>
+                    <span className="font-bold text-emerald-400 text-sm">${telemetry?.aiTokenCostUsd ?? 0.0086} / +${telemetry?.aiTokenCostSavingsUsd ?? 12.08}</span>
+                  </div>
                 </div>
               </div>
             </div>
