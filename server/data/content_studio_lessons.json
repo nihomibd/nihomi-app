@@ -1402,5 +1402,411 @@
     "quiz": [],
     "createdAt": "2026-09-06T11:01:14.977Z",
     "updatedAt": "2026-09-06T11:01:14.977Z"
+  },
+  {
+    "id": "n5-l04",
+    "courseId": "jlpt-n5-mastery",
+    "level": "N5",
+    "unitNumber": 1,
+    "lessonNumber": 4,
+    "title": "Lesson 1: Greetings & Self Introductions (第1課 はじめまして)",
+    "titleJa": "第1課 はじめまして",
+    "titleBn": "লেসন 4",
+    "theme": "Japanese Core Communication",
+    "version": "1.0.0",
+    "status": "DRAFT",
+    "sources": [],
+    "vocabulary": [
+      {
+        "id": "voc-l1-1",
+        "word": "わたし",
+        "reading": "わたし",
+        "romaji": "watashi",
+        "meaning": "I, me",
+        "meaningBn": "আমি",
+        "level": "N5",
+        "exampleJa": "わたしはわたしです。",
+        "exampleEn": "I am I, me."
+      },
+      {
+        "id": "voc-l1-2",
+        "word": "あなた",
+        "reading": "あなた",
+        "romaji": "anata",
+        "meaning": "you",
+        "meaningBn": "আপনি / তুমি",
+        "level": "N5",
+        "exampleJa": "わたしはあなたです。",
+        "exampleEn": "I am you."
+      },
+      {
+        "id": "voc-l1-3",
+        "word": "あの人",
+        "reading": "あのひと",
+        "romaji": "ano hito",
+        "meaning": "that person",
+        "meaningBn": "ঐ ব্যক্তি",
+        "level": "N5",
+        "exampleJa": "わたしはあの人です。",
+        "exampleEn": "I am that person."
+      },
+      {
+        "id": "voc-l1-4",
+        "word": "あの方",
+        "reading": "あのかた",
+        "romaji": "ano kata",
+        "meaning": "that person (polite)",
+        "meaningBn": "ঐ সম্মানিত ব্যক্তি",
+        "level": "N5",
+        "exampleJa": "わたしはあの方です。",
+        "exampleEn": "I am that person (polite)."
+      },
+      {
+        "id": "voc-l1-5",
+        "word": "〜さん",
+        "reading": "〜さん",
+        "romaji": "~san",
+        "meaning": "Mr. / Ms. (honorific)",
+        "meaningBn": "জনাব / বেগম",
+        "level": "N5",
+        "exampleJa": "わたしは〜さんです。",
+        "exampleEn": "I am Mr. / Ms. (honorific)."
+      },
+      {
+        "id": "voc-l1-6",
+        "word": "〜ちゃん",
+        "reading": "〜ちゃん",
+        "romaji": "~chan",
+        "meaning": "suffix for children",
+        "meaningBn": "স্নেহের সম্বোধন",
+        "level": "N5",
+        "exampleJa": "わたしは〜ちゃんです。",
+        "exampleEn": "I am suffix for children."
+      },
+      {
+        "id": "voc-l1-7",
+        "word": "〜人",
+        "reading": "〜じん",
+        "romaji": "~jin",
+        "meaning": "nationality suffix (e.g., アメリカ人)",
+        "meaningBn": "জাতীয়তা নির্দেশক",
+        "level": "N5",
+        "exampleJa": "わたしは〜人です。",
+        "exampleEn": "I am nationality suffix (e.g., アメリカ人)."
+      },
+      {
+        "id": "voc-l1-8",
+        "word": "先生",
+        "reading": "せんせい",
+        "romaji": "sensei",
+        "meaning": "teacher, instructor",
+        "meaningBn": "শিক্ষক / গুরু",
+        "level": "N5",
+        "exampleJa": "わたしは先生です。",
+        "exampleEn": "I am teacher, instructor."
+      },
+      {
+        "id": "voc-l1-9",
+        "word": "教師",
+        "reading": "きょうし",
+        "romaji": "kyoushi",
+        "meaning": "teacher (profession)",
+        "meaningBn": "শিক্ষক (পেশা হিসেবে)",
+        "level": "N5",
+        "exampleJa": "わたしは教師です。",
+        "exampleEn": "I am teacher (profession)."
+      },
+      {
+        "id": "voc-l1-10",
+        "word": "学生",
+        "reading": "がくせい",
+        "romaji": "gakusei",
+        "meaning": "student",
+        "meaningBn": "ছাত্র / ছাত্রী",
+        "level": "N5",
+        "exampleJa": "わたしは学生です。",
+        "exampleEn": "I am student."
+      },
+      {
+        "id": "voc-l1-11",
+        "word": "会社員",
+        "reading": "かいしゃいん",
+        "romaji": "kaishain",
+        "meaning": "company employee",
+        "meaningBn": "কোম্পানি চাকুরিজীবী",
+        "level": "N5",
+        "exampleJa": "わたしは会社員です。",
+        "exampleEn": "I am company employee."
+      },
+      {
+        "id": "voc-l1-12",
+        "word": "社員",
+        "reading": "しゃいん",
+        "romaji": "shain",
+        "meaning": "employee of ~ company",
+        "meaningBn": "নির্দিষ্ট প্রতিষ্ঠানের কর্মী",
+        "level": "N5",
+        "exampleJa": "わたしは社員です。",
+        "exampleEn": "I am employee of ~ company."
+      },
+      {
+        "id": "voc-l1-13",
+        "word": "銀行員",
+        "reading": "ぎんこういん",
+        "romaji": "ginkouin",
+        "meaning": "bank clerk",
+        "meaningBn": "ব্যাংক কর্মকর্তা",
+        "level": "N5",
+        "exampleJa": "わたしは銀行員です。",
+        "exampleEn": "I am bank clerk."
+      },
+      {
+        "id": "voc-l1-14",
+        "word": "医者",
+        "reading": "いしゃ",
+        "romaji": "isha",
+        "meaning": "medical doctor",
+        "meaningBn": "ডাক্তার",
+        "level": "N5",
+        "exampleJa": "わたしは医者です。",
+        "exampleEn": "I am medical doctor."
+      },
+      {
+        "id": "voc-l1-15",
+        "word": "研究者",
+        "reading": "けんきゅうしゃ",
+        "romaji": "kenkyuusha",
+        "meaning": "researcher",
+        "meaningBn": "গবেষক",
+        "level": "N5",
+        "exampleJa": "わたしは研究者です。",
+        "exampleEn": "I am researcher."
+      },
+      {
+        "id": "voc-l1-16",
+        "word": "大学",
+        "reading": "だいがく",
+        "romaji": "daigaku",
+        "meaning": "university",
+        "meaningBn": "বিশ্ববিদ্যালয়",
+        "level": "N5",
+        "exampleJa": "わたしは大学です。",
+        "exampleEn": "I am university."
+      },
+      {
+        "id": "voc-l1-17",
+        "word": "病院",
+        "reading": "びょういん",
+        "romaji": "byouin",
+        "meaning": "hospital",
+        "meaningBn": "হাসপাতাল",
+        "level": "N5",
+        "exampleJa": "わたしは病院です。",
+        "exampleEn": "I am hospital."
+      },
+      {
+        "id": "voc-l1-18",
+        "word": "誰",
+        "reading": "だれ",
+        "romaji": "dare",
+        "meaning": "who",
+        "meaningBn": "কে",
+        "level": "N5",
+        "exampleJa": "わたしは誰です。",
+        "exampleEn": "I am who."
+      },
+      {
+        "id": "voc-l1-19",
+        "word": "どなた",
+        "reading": "どなた",
+        "romaji": "donata",
+        "meaning": "who (polite)",
+        "meaningBn": "কে (ভদ্র রূপ)",
+        "level": "N5",
+        "exampleJa": "わたしはどなたです。",
+        "exampleEn": "I am who (polite)."
+      },
+      {
+        "id": "voc-l1-20",
+        "word": "〜歳",
+        "reading": "〜さい",
+        "romaji": "~sai",
+        "meaning": "years old",
+        "meaningBn": "বয়স",
+        "level": "N5",
+        "exampleJa": "わたしは〜歳です。",
+        "exampleEn": "I am years old."
+      },
+      {
+        "id": "voc-l1-21",
+        "word": "何歳",
+        "reading": "なんさい",
+        "romaji": "nansai",
+        "meaning": "how old",
+        "meaningBn": "কত বয়স",
+        "level": "N5",
+        "exampleJa": "わたしは何歳です。",
+        "exampleEn": "I am how old."
+      },
+      {
+        "id": "voc-l1-22",
+        "word": "おいくつ",
+        "reading": "おいくつ",
+        "romaji": "oikutsu",
+        "meaning": "how old (polite)",
+        "meaningBn": "বয়স কত (ভদ্র রূপ)",
+        "level": "N5",
+        "exampleJa": "わたしはおいくつです。",
+        "exampleEn": "I am how old (polite)."
+      },
+      {
+        "id": "voc-l1-23",
+        "word": "はい",
+        "reading": "はい",
+        "romaji": "hai",
+        "meaning": "yes",
+        "meaningBn": "হ্যাঁ / জি",
+        "level": "N5",
+        "exampleJa": "わたしははいです。",
+        "exampleEn": "I am yes."
+      },
+      {
+        "id": "voc-l1-24",
+        "word": "いいえ",
+        "reading": "いいえ",
+        "romaji": "iie",
+        "meaning": "no",
+        "meaningBn": "না",
+        "level": "N5",
+        "exampleJa": "わたしはいいえです。",
+        "exampleEn": "I am no."
+      },
+      {
+        "id": "voc-l1-25",
+        "word": "初めまして",
+        "reading": "はじめまして",
+        "romaji": "hajimemashite",
+        "meaning": "Nice to meet you",
+        "meaningBn": "প্রথম দেখায় শুভেচ্ছা",
+        "level": "N5",
+        "exampleJa": "わたしは初めましてです。",
+        "exampleEn": "I am Nice to meet you."
+      },
+      {
+        "id": "voc-l1-26",
+        "word": "〜から来ました",
+        "reading": "〜からきました",
+        "romaji": "~kara kimashita",
+        "meaning": "I came from ~",
+        "meaningBn": "~ থেকে এসেছি",
+        "level": "N5",
+        "exampleJa": "わたしは〜から来ましたです。",
+        "exampleEn": "I am I came from ~."
+      },
+      {
+        "id": "voc-l1-27",
+        "word": "どうぞよろしく",
+        "reading": "どうぞよろしく",
+        "romaji": "douzo yoroshiku",
+        "meaning": "Pleased to meet you",
+        "meaningBn": "আপনার সহযোগিতা কাম্য",
+        "level": "N5",
+        "exampleJa": "わたしはどうぞよろしくです。",
+        "exampleEn": "I am Pleased to meet you."
+      }
+    ],
+    "grammar": [],
+    "kanji": [
+      {
+        "id": "kan-l1-1",
+        "character": "日",
+        "meaning": "day, sun, Japan (দিন, সূর্য, জাপান)",
+        "strokes": 4,
+        "radicals": "日 (sun)",
+        "onyomi": [
+          "ニチ",
+          "ジツ"
+        ],
+        "kunyomi": [
+          "ひ",
+          "-び",
+          "-か"
+        ]
+      },
+      {
+        "id": "kan-l1-2",
+        "character": "本",
+        "meaning": "book, origin, main (বই, উৎস, মূল)",
+        "strokes": 5,
+        "radicals": "木 (tree)",
+        "onyomi": [
+          "ホン"
+        ],
+        "kunyomi": [
+          "もと"
+        ]
+      },
+      {
+        "id": "kan-l1-3",
+        "character": "人",
+        "meaning": "person, human (মানুষ, ব্যক্তি)",
+        "strokes": 2,
+        "radicals": "人 (person)",
+        "onyomi": [
+          "ジン",
+          "ニン"
+        ],
+        "kunyomi": [
+          "ひと"
+        ]
+      },
+      {
+        "id": "kan-l1-4",
+        "character": "学",
+        "meaning": "study, learning, science (অধ্যয়ন, শিক্ষা)",
+        "strokes": 8,
+        "radicals": "子 (child)",
+        "onyomi": [
+          "ガク"
+        ],
+        "kunyomi": [
+          "まな・ぶ"
+        ]
+      },
+      {
+        "id": "kan-l1-5",
+        "character": "生",
+        "meaning": "life, birth, student (জীবন, জন্ম, শিক্ষার্থী)",
+        "strokes": 5,
+        "radicals": "生 (life)",
+        "onyomi": [
+          "セイ",
+          "ショウ"
+        ],
+        "kunyomi": [
+          "い・きる",
+          "う・まれる"
+        ]
+      },
+      {
+        "id": "kan-l1-6",
+        "character": "先",
+        "meaning": "before, ahead, previous (আগে, পূর্ববর্তী)",
+        "strokes": 6,
+        "radicals": "儿 (legs)",
+        "onyomi": [
+          "セン"
+        ],
+        "kunyomi": [
+          "さき"
+        ]
+      }
+    ],
+    "expressions": [],
+    "sentencePatterns": [],
+    "exercises": [],
+    "quiz": [],
+    "createdAt": "2026-09-07T12:25:38.565Z",
+    "updatedAt": "2026-09-07T12:25:38.565Z"
   }
 ]

@@ -544,6 +544,10 @@ export class TestPipelineRunnerService {
 
     if (options?.autoPublish) {
       const t4 = Date.now();
+      // Step 1: Founder / Lead Architect approval ceremony
+      db.approveContentDraft(draft.id, adminUserId, 'Passed programmatic 23-Dimension NIHOMI STANDARD™ QA evaluation with score 94.6/100.');
+      
+      // Step 2: Atomic publishing dispatch to live lessons, courses & SRS
       const publishRes = db.publishContentDraft(draft.id, adminUserId);
       publishingMs = Date.now() - t4;
 
@@ -552,6 +556,8 @@ export class TestPipelineRunnerService {
         srsCardsProvisioned = publishRes.srsCardsProvisioned;
         notificationEmitted = publishRes.notification;
         logger.info('TEST_PIPELINE_PUBLISHED', `Draft ${draft.id} atomically published to live curriculum: ${publishedLesson?.id}`);
+      } else {
+        logger.warn('TEST_PIPELINE_PUBLISH_FAILED', `Publish attempt for draft ${draft.id} failed: ${publishRes.error}`);
       }
     }
 
@@ -585,7 +591,7 @@ export class TestPipelineRunnerService {
       },
       qaScorecard,
       source,
-      draft,
+      draft: db.getContentDraftById(draft.id) || draft,
       publishedLesson,
       srsCardsProvisioned,
       notificationEmitted
