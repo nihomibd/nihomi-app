@@ -99,12 +99,12 @@ aiRouter.post(
 // 2. Vision Sensei: Camera Snapshot & Photo OCR — Secured with AI Cost Guard
 aiRouter.post(
   '/vision-sensei',
-  requireAuth,
-  aiCostGuard({ operationType: 'vision', estimatedTokens: 1500 }),
+  optionalAuth,
+  aiCostGuard({ operationType: 'vision', estimatedTokens: 1500, allowGuest: true }),
   async (req: AuthenticatedRequest, res) => {
     try {
       const { imageBase64, mimeType, userPrompt } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user?.id || 'guest-learner';
 
       if (!imageBase64) {
         return res.status(400).json({ error: 'imageBase64 is required. Capture or upload a photo.' });
@@ -113,8 +113,8 @@ aiRouter.post(
       const cleanMimeType = mimeType || 'image/jpeg';
       const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
 
-      const profile = db.getProfileByUserId(userId);
-      const progress = db.getProgressByUserId(userId);
+      const profile = req.user ? db.getProfileByUserId(userId) : null;
+      const progress = req.user ? db.getProgressByUserId(userId) : null;
       const userLevel = profile?.targetLevel || progress?.currentLevel || 'N5';
 
       const analysis = await processVisionSenseiRequest({
@@ -124,7 +124,9 @@ aiRouter.post(
         userLevel
       });
 
-      recordAiCostUsage(userId, 1200, 'vision');
+      if (req.user) {
+        recordAiCostUsage(userId, 1200, 'vision');
+      }
 
       return res.json({
         success: true,
@@ -279,8 +281,8 @@ aiRouter.post('/explain-mistake', optionalAuth, async (req: AuthenticatedRequest
 // 9. AI-Powered Pronunciation Clarity & Pitch Assessment
 aiRouter.post(
   '/pronunciation-assessment',
-  requireAuth,
-  aiCostGuard({ operationType: 'pronunciation', estimatedTokens: 800 }),
+  optionalAuth,
+  aiCostGuard({ operationType: 'pronunciation', estimatedTokens: 800, allowGuest: true }),
   async (req: AuthenticatedRequest, res) => {
     try {
       const { targetPhrase, targetRomaji, spokenTranscript, audioBase64, audioMimeType, userLevel } = req.body;
@@ -288,7 +290,7 @@ aiRouter.post(
         return res.status(400).json({ error: 'targetPhrase is required.' });
       }
 
-      const userId = req.user!.id;
+      const userId = req.user?.id || 'guest-learner';
       const assessment = await processPronunciationAssessmentRequest({
         targetPhrase: targetPhrase.trim(),
         targetRomaji: typeof targetRomaji === 'string' ? targetRomaji.trim() : undefined,
@@ -298,7 +300,9 @@ aiRouter.post(
         userLevel: typeof userLevel === 'string' ? userLevel : 'N5'
       });
 
-      recordAiCostUsage(userId, 600, 'pronunciation');
+      if (req.user) {
+        recordAiCostUsage(userId, 600, 'pronunciation');
+      }
 
       return res.json({ success: true, assessment });
     } catch (err: any) {

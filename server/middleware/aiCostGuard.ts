@@ -6,6 +6,7 @@ export interface AiCostGuardOptions {
   estimatedTokens?: number;
   operationType?: 'coach' | 'vision' | 'dna' | 'drill' | 'pronunciation' | 'explainer';
   maxRatePerMinute?: number;
+  allowGuest?: boolean;
 }
 
 /**
@@ -25,6 +26,9 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const user = req.user;
     if (!user || !user.id) {
+      if (options.allowGuest) {
+        return next();
+      }
       return res.status(401).json({
         error: 'Authentication required to access AI Sensei services.',
         code: 'AUTH_REQUIRED'

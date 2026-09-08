@@ -282,6 +282,10 @@ export const VoiceSenseiPractice: React.FC<VoiceSenseiPracticeProps> = ({
     audioChunksRef.current = [];
 
     try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Microphone access is not supported in this browser or environment.');
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,

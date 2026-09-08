@@ -66,16 +66,33 @@ export const VisionSenseiModal: React.FC<VisionSenseiModalProps> = ({ isOpen, on
   const startCamera = async () => {
     setErrorMessage(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera access not supported in this browser. Please upload or take a photo with the file selector.');
+      }
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
+        });
+      } catch {
+        // Fallback for laptops / devices without back-facing camera
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true
+        });
+      }
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setIsCameraActive(true);
       }
     } catch (err: any) {
       console.warn('Camera access error:', err);
-      setErrorMessage('Could not open device camera. Please upload an image file instead.');
+      const isPermissionDenied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+      setErrorMessage(
+        isPermissionDenied
+          ? 'Camera permission was denied. Please allow camera access in your browser settings or select an image file.'
+          : 'Could not open camera on this device. Please select an image file instead.'
+      );
       setActiveMode('upload');
     }
   };

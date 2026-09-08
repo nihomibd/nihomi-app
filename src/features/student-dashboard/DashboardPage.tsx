@@ -26,6 +26,9 @@ import { ConbiniSimulatorModal } from './components/ConbiniSimulatorModal';
 import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
+import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { VisionSenseiModal } from '../../components/VisionSenseiModal';
+import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -74,6 +77,39 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isConbiniOpen, setIsConbiniOpen] = useState(false);
   const [isWritingOpen, setIsWritingOpen] = useState(false);
   const [baitoReadinessScore, setBaitoReadinessScore] = useState(74);
+  const [isVisionOpen, setIsVisionOpen] = useState(false);
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [dashboardQuery, setDashboardQuery] = useState('');
+  const [isSearchingSensei, setIsSearchingSensei] = useState(false);
+  const [senseiSearchResult, setSenseiSearchResult] = useState<string | null>(null);
+
+  const handleSenseiSearch = async (q?: string) => {
+    const textToSearch = q !== undefined ? q : dashboardQuery;
+    if (!textToSearch.trim() || isSearchingSensei) return;
+
+    setIsSearchingSensei(true);
+    setSenseiSearchResult(null);
+    try {
+      const res = await fetch('/api/ai/coach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: textToSearch,
+          context: 'Student dashboard quick inquiry. Explain concisely in Bengali with Joyo furigana and Japanese examples.'
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setSenseiSearchResult(json.reply || json.response || json.text || 'Sensei is ready to guide you!');
+      } else {
+        setSenseiSearchResult('Sensei answers: ' + textToSearch + ' — Open AI Tutor drawer for personalized drill.');
+      }
+    } catch {
+      setSenseiSearchResult('Sensei answers: ' + textToSearch + ' — Connect with AI Tutor for full discussion.');
+    } finally {
+      setIsSearchingSensei(false);
+    }
+  };
 
   React.useEffect(() => {
     const handleFocusComplete = () => { void handleFocusSessionComplete(); };
@@ -180,6 +216,97 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               onOpenStore={() => setIsStoreOpen(true)}
               activeStreak={data.streak.currentStreak}
             />
+
+            {/* Quick Sensei Search & Sensor Actions: Voice Coach, Photo OCR & Kanji */}
+            <section className="bg-white rounded-2xl p-3.5 sm:p-4 border border-stone-200/90 shadow-xs space-y-3" aria-label="Nihomi Sensei Tools">
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    id="input-dashboard-sensei-search"
+                    type="text"
+                    value={dashboardQuery}
+                    onChange={(e) => setDashboardQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSenseiSearch();
+                    }}
+                    placeholder="Ask Sensei in English, বাংলা, or 日本語..."
+                    className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-900 placeholder:text-stone-400 focus:outline-hidden focus:border-stone-900 transition-colors"
+                  />
+                </div>
+                <button
+                  id="btn-dashboard-sensei-search"
+                  type="button"
+                  onClick={() => handleSenseiSearch()}
+                  disabled={isSearchingSensei || !dashboardQuery.trim()}
+                  className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
+                  aria-label="Send Query"
+                >
+                  {isSearchingSensei ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+                </button>
+              </div>
+
+              {/* Action Buttons: [Voice], [Photo OCR], [Kanji Canvas] */}
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 flex-wrap sm:flex-nowrap">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <button
+                    id="btn-dashboard-voice"
+                    type="button"
+                    onClick={() => setIsVoiceOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  >
+                    <Mic className="w-3.5 h-3.5 text-red-600" />
+                    <span>Voice</span>
+                  </button>
+
+                  <button
+                    id="btn-dashboard-photo-ocr"
+                    type="button"
+                    onClick={() => setIsVisionOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Photo OCR</span>
+                  </button>
+
+                  <button
+                    id="btn-dashboard-kanji-canvas"
+                    type="button"
+                    onClick={() => setIsWritingOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  >
+                    <PenTool className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Kanji Canvas</span>
+                  </button>
+                </div>
+
+                <button
+                  id="btn-dashboard-open-ai-tutor"
+                  type="button"
+                  onClick={() => setIsAiTutorOpen(true)}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>AI Tutor</span>
+                </button>
+              </div>
+
+              {senseiSearchResult && (
+                <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs text-stone-800 space-y-1 animate-in fade-in">
+                  <div className="flex items-center justify-between font-bold text-[10px] text-stone-500 uppercase tracking-wider">
+                    <span>Nihomi Sensei Advice</span>
+                    <button
+                      type="button"
+                      onClick={() => setSenseiSearchResult(null)}
+                      className="text-stone-400 hover:text-stone-600 cursor-pointer"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <p className="leading-relaxed whitespace-pre-line">{senseiSearchResult}</p>
+                </div>
+              )}
+            </section>
 
             {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
             <ContinueLearningCard
@@ -297,6 +424,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         onClose={() => setIsStoreOpen(false)}
         onPurchase={async (pack: StorePackage) => { await handleStorePurchase(pack); }}
       />
+      {isVisionOpen && (
+        <VisionSenseiModal
+          isOpen={isVisionOpen}
+          onClose={() => setIsVisionOpen(false)}
+        />
+      )}
+      {isVoiceOpen && (
+        <VoiceSenseiPractice
+          isOpen={isVoiceOpen}
+          onClose={() => setIsVoiceOpen(false)}
+        />
+      )}
       {isLeaderboardOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/70 p-2 sm:p-6" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setIsLeaderboardOpen(false); }}><section className="relative mx-auto max-w-5xl rounded-3xl bg-[#FAF9F6]" role="dialog" aria-modal="true" aria-labelledby="dashboard-leaderboard-title"><button type="button" aria-label="Leaderboard বন্ধ করুন" onClick={() => setIsLeaderboardOpen(false)} className="absolute right-3 top-3 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-amber-500">×</button><h2 id="dashboard-leaderboard-title" className="sr-only">Community Leaderboard</h2><CommunityLeaderboardView onNavigate={() => setIsLeaderboardOpen(false)} /></section></div>}
     </div>
   );
