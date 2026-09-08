@@ -1,8 +1,9 @@
-// NIHOMI PWA SERVICE WORKER — CACHE & OFFLINE ENGINE V3
-const CACHE_VERSION = 'v3';
+// NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V4
+// Designed for high reliability on 3G/4G mobile networks in Bangladesh
+const CACHE_VERSION = 'v4';
 const CURRENT_CACHE_NAME = `nihomi-pwa-cache-${CACHE_VERSION}`;
 
-// Critical Static & Offline UI Assets
+// Core Shell & Offline Assets
 const OFFLINE_ASSETS = [
   '/',
   '/index.html',
@@ -16,7 +17,7 @@ const OFFLINE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap'
 ];
 
-// Key Offline Curriculum API Routes to Pre-Cache & Support Unstable Networks
+// Key Offline Curriculum API Routes to Pre-Cache
 const OFFLINE_CURRICULUM_ROUTES = [
   '/api/learning/modules',
   '/api/learning/lessons/1',
@@ -26,24 +27,24 @@ const OFFLINE_CURRICULUM_ROUTES = [
   '/api/work-japanese/modules'
 ];
 
-// 1. Install Phase — Precache Offline Shell & Core Curriculum Assets
+// 1. Install Phase — Precache Static Shell & Core Curriculum Assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CURRENT_CACHE_NAME).then(async (cache) => {
-      // 1.1 Cache Static Shell Assets
+      // Precache Static Shell Assets
       await Promise.allSettled(
         OFFLINE_ASSETS.map((asset) =>
           cache.add(asset).catch((err) => {
-            console.warn(`SW: Non-fatal precache skip for static ${asset}:`, err);
+            console.warn(`SW: Non-fatal precache skip for ${asset}:`, err);
           })
         )
       );
 
-      // 1.2 Attempt background pre-fetch for core curriculum JSON endpoints
+      // Precache core curriculum JSON endpoints for offline study
       await Promise.allSettled(
         OFFLINE_CURRICULUM_ROUTES.map(async (route) => {
           try {
-            const resp = await fetch(route, { headers: { 'Accept': 'application/json' } });
+            const resp = await fetch(route, { headers: { Accept: 'application/json' } });
             if (resp && resp.ok) {
               await cache.put(route, resp);
             }
@@ -64,7 +65,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CURRENT_CACHE_NAME && cacheName.startsWith('nihomi-pwa-cache-')) {
-            console.log(`SW: Evicting deprecated stale cache [${cacheName}]`);
+            console.log(`SW: Evicting deprecated cache [${cacheName}]`);
             return caches.delete(cacheName);
           }
           return null;
@@ -75,7 +76,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Notification Click Handler for Browser-Based Push Alerts
+// 3. Push & Notification Click Handler
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
@@ -92,85 +93,98 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// 4. Fetch Phase — Cache-First with Stale-While-Revalidate & Seamless Offline Fallback
+// 4. Fetch Phase:
+// - Static assets (JS, CSS, fonts, images): Cache-First with Stale-While-Revalidate
+// - API routes (/api/*): Network-First with Cache Fallback & offline JSON fallback
+// - Dynamic / Auth / Payment / Referral: Network-Only (no caching)
 self.addEventListener('fetch', (event) => {
-  // Only intercept GET requests
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // Skip caching for sensitive auth callbacks or payment gateways
-  if (url.pathname.startsWith('/api/auth') || url.pathname.startsWith('/api/billing/webhook') || url.pathname.startsWith('/api/payments')) {
+  // Network-Only for dynamic user mutations, payment gateways, auth sessions, and referral claiming
+  if (
+    url.pathname.startsWith('/api/auth') ||
+    url.pathname.startsWith('/api/billing') ||
+    url.pathname.startsWith('/api/payments') ||
+    url.pathname.startsWith('/api/referral/claim')
+  ) {
     return;
   }
 
+  // API Routes: Network-First with Cache Fallback
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CURRENT_CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          const cached = await caches.match(event.request);
+          if (cached) return cached;
+
+          return new Response(
+            JSON.stringify({
+              offline: true,
+              message: 'Offline-Only Mode: You are currently offline. Loaded from Nihomi offline cache.',
+              timestamp: new Date().toISOString()
+            }),
+            {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        })
+    );
+    return;
+  }
+
+  // Static Assets & Web App Shell: Cache-First with Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // If we have a cached version, return it immediately while fetching fresh data in the background
-      if (cachedResponse) {
-        if (url.origin === self.location.origin) {
-          fetch(event.request)
-            .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-                const responseClone = networkResponse.clone();
-                caches.open(CURRENT_CACHE_NAME).then((cache) => {
-                  cache.put(event.request, responseClone);
-                });
-              }
-            })
-            .catch(() => {
-              // Ignore background sync errors when offline
-            });
-        }
-        return cachedResponse;
-      }
-
-      // Network Fallback: Fetch from network and cache curriculum/static data
-      return fetch(event.request)
+      // Revalidate in background
+      const fetchPromise = fetch(event.request)
         .then((networkResponse) => {
-          if (!networkResponse || networkResponse.status !== 200) {
-            return networkResponse;
-          }
-
-          // Cache same-origin assets, curriculum APIs, or font stylesheets
-          if (
-            networkResponse.type === 'basic' ||
-            url.pathname.startsWith('/api/learning') ||
-            url.pathname.startsWith('/api/quizzes') ||
-            url.hostname.includes('fonts.googleapis.com') ||
-            url.hostname.includes('fonts.gstatic.com')
-          ) {
-            const responseToCache = networkResponse.clone();
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            const responseClone = networkResponse.clone();
             caches.open(CURRENT_CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put(event.request, responseClone);
             });
           }
-
           return networkResponse;
         })
         .catch(() => {
-          // If offline and navigating to an app route, serve cached SPA index.html
+          // Network failure during background revalidation is ignored
+        });
+
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // If not in cache, wait for network
+      return fetchPromise
+        .then((response) => response)
+        .catch(async () => {
+          // Navigation fallback to /index.html for SPA routes
           if (
             event.request.mode === 'navigate' ||
             (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'))
           ) {
-            return caches.match('/index.html');
+            const indexCached = await caches.match('/index.html');
+            if (indexCached) return indexCached;
           }
 
-          // If requesting an API while offline and not in cache, return an offline JSON fallback
-          if (url.pathname.startsWith('/api/')) {
-            return new Response(
-              JSON.stringify({
-                offline: true,
-                message: 'Offline-Only Mode active. Loaded from Nihomi offline cache.',
-                timestamp: new Date().toISOString()
-              }),
-              {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' }
-              }
-            );
-          }
+          // Return basic offline indicator
+          return new Response('Nihomi Offline. Please reconnect to internet.', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+          });
         });
     })
   );

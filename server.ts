@@ -24,6 +24,7 @@ import { baitoSimulationRouter } from './server/routes/baitoSimulation.js';
 import { srsRouter } from './server/routes/srsRouter.js';
 import { analyticsRouter } from './server/routes/analytics.js';
 import { voiceRouter } from './server/routes/voice.js';
+import { referralRouter } from './server/routes/referral.js';
 import { SpeakingReadinessCertService } from './server/services/speakingReadinessCertService.js';
 import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
@@ -184,6 +185,7 @@ async function startServer() {
   app.use('/api/srs', srsRouter);
   app.use('/api/analytics', analyticsRouter);
   app.use('/api/voice', voiceRouter);
+  app.use('/api/referral', referralRouter);
 
   // Public Institutional Certificate Verification Endpoint
   app.get('/api/public/verify-certificate/:certId', (req, res) => {

@@ -3541,5 +3541,107 @@ export const NIHOMI_JLPT_N5_CURRICULUM: LessonCurriculum[] = [
   }
 ];
 
+import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } from '../../types';
+
+export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | null {
+  let num: number = 1;
+  if (typeof lessonIdOrNum === 'number') {
+    num = lessonIdOrNum;
+  } else {
+    const match = String(lessonIdOrNum).match(/\d+/);
+    if (match) num = parseInt(match[0], 10);
+  }
+  if (num < 1) num = 1;
+  if (num > 25) num = 25;
+
+  const item = NIHOMI_JLPT_N5_CURRICULUM.find((l) => l.lessonNumber === num) || NIHOMI_JLPT_N5_CURRICULUM[0];
+  if (!item) return null;
+
+  return {
+    id: `les-n5-${item.lessonNumber}`,
+    moduleId: `mod-n5-${Math.ceil(item.lessonNumber / 5)}`,
+    courseId: 'course-n5',
+    level: 'N5',
+    lessonNumber: item.lessonNumber,
+    title: item.titleEnglish,
+    titleJa: item.titleJapanese,
+    summary: `${item.topic} — Complete Minna no Nihongo Lesson ${item.lessonNumber} with core vocabulary, Bengali grammar notes, Kanji drills, and quizzes.`,
+    explanation: `Lesson ${item.lessonNumber} focuses on ${item.topic}. Study the vocabulary, listen to native pronunciation, review the Bengali grammar notes, and test your knowledge.`,
+    isPublished: true,
+    estimatedMinutes: 25,
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    vocabulary: item.vocabularies.map((v, i): VocabularyItem => ({
+      id: `voc-${item.lessonNumber}-${i + 1}`,
+      japanese: v.kanji || v.hiragana,
+      furigana: v.hiragana,
+      romaji: v.romaji,
+      english: v.meaningEnglish,
+      banglaMeaning: v.meaningBengali,
+      partOfSpeech: v.partOfSpeech || 'noun',
+      level: 'N5',
+      exampleSentenceJa: v.example?.japanese || v.kanji,
+      exampleSentenceEn: v.example?.english || v.meaningEnglish,
+      exampleSentenceBn: v.example?.bengali || v.meaningBengali,
+      exampleFurigana: v.example?.romaji || v.romaji
+    })),
+    grammar: item.grammarPatterns.map((g, i): GrammarItem => ({
+      id: g.id || `gram-${item.lessonNumber}-${i + 1}`,
+      title: g.pattern,
+      titleJa: g.topic,
+      structure: g.pattern,
+      meaning: g.explanationEnglish,
+      explanation: g.explanationBengali,
+      level: 'N5',
+      examples: [
+        {
+          japanese: g.dialogue?.speakerA || '',
+          english: g.dialogue?.english || '',
+          breakdown: g.dialogue?.bengali || ''
+        },
+        {
+          japanese: g.dialogue?.speakerB || '',
+          english: g.dialogue?.english || '',
+          breakdown: g.dialogue?.bengali || ''
+        }
+      ]
+    })),
+    kanji: item.kanjiList.map((k, i): KanjiItem => ({
+      id: `kanji-${item.lessonNumber}-${i + 1}`,
+      character: k.kanji,
+      meaning: `${k.meaningEnglish} (${k.meaningBengali})`,
+      onyomi: k.onyomi,
+      kunyomi: k.kunyomi,
+      strokes: k.strokeCount,
+      radicals: k.kanji,
+      level: 'N5',
+      examples: k.compounds.map((c) => ({
+        word: c.word,
+        reading: c.reading,
+        meaning: `${c.meaningEnglish} / ${c.meaningBengali}`
+      }))
+    })),
+    dialogue: item.grammarPatterns.map((g): LessonDialogue => ({
+      speaker: '田中 (Tanaka)',
+      speakerRole: 'Student',
+      japanese: g.dialogue?.speakerA || '',
+      english: `${g.dialogue?.english} (${g.dialogue?.bengali})`
+    })),
+    practiceExercises: [
+      {
+        id: `prac-${item.lessonNumber}-1`,
+        instruction: 'Choose the grammatically correct Japanese sentence structure:',
+        questionJa: item.practiceQuiz.question,
+        hint: item.practiceQuiz.questionRomaji,
+        type: 'multiple_choice',
+        options: item.practiceQuiz.options,
+        correctAnswer: item.practiceQuiz.correctAnswer,
+        explanation: `${item.practiceQuiz.explanationEnglish} ${item.practiceQuiz.explanationBengali}`
+      }
+    ],
+    quizId: item.practiceQuiz.id
+  };
+}
+
 
 

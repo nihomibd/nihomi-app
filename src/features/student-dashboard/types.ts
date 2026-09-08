@@ -12,6 +12,7 @@ export interface StudentProfile {
   journeyDay: number;
   learningStatusMessage: string;
   learningStatusMessageBn?: string;
+  nihomiAccountId?: string;
 }
 
 export interface ContinueLesson {

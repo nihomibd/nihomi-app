@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { trackNihomiEvent } from '../../utils/analytics';
+import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
@@ -41,9 +42,13 @@ export const AuthModal: React.FC = () => {
           method: 'google_fallback',
           studentId
         });
+        const ref = getStoredReferralCode();
+        if (ref) claimReferralReward(ref, userId).catch(() => {});
         closeAuthModal();
       } else {
         trackNihomiEvent('signup_completed', { method: 'google' });
+        const ref = getStoredReferralCode();
+        if (ref) claimReferralReward(ref).catch(() => {});
       }
     } finally {
       setIsProcessing(false);
@@ -70,6 +75,8 @@ export const AuthModal: React.FC = () => {
       method: 'quick_student',
       studentId
     });
+    const ref = getStoredReferralCode();
+    if (ref) claimReferralReward(ref, userId).catch(() => {});
     closeAuthModal();
   };
 

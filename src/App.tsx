@@ -38,6 +38,7 @@ import { QuickDictionaryOverlay } from './components/QuickDictionaryOverlay';
 import { CommandPaletteModal } from './components/CommandPaletteModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
+import { captureReferralFromUrl } from './utils/referral';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
@@ -84,6 +85,7 @@ export const App: React.FC = () => {
   // URL Deep Link / Verification & Legal Route Listener
   useEffect(() => {
     try {
+      captureReferralFromUrl();
       const path = window.location.pathname.toLowerCase();
       const search = new URLSearchParams(window.location.search);
       const queryCert = search.get('certId') || search.get('id');

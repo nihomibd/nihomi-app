@@ -20,6 +20,7 @@ import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { updatePageMetaTags } from '../lib/seo';
 import { trackNihomiEvent } from '../utils/analytics';
+import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
 
 interface LandingViewProps {
   onNavigate: (view: string) => void;
@@ -89,6 +90,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       const ok = await loginWithGoogle();
       if (ok) {
         trackNihomiEvent('signup_completed', { method: 'google' });
+        // Check and claim any pending referral reward
+        const storedRef = getStoredReferralCode();
+        if (storedRef) {
+          claimReferralReward(storedRef).catch(() => {});
+        }
         onNavigate('dashboard');
       } else {
         openAuthModal('register');
@@ -114,6 +120,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
   // Dynamic OpenGraph SEO & JSON-LD updates on landing
   useEffect(() => {
+    // Capture viral referral from query param ?ref=...
+    captureReferralFromUrl();
+
     trackNihomiEvent('landing_page_view', {
       pagePath: '/',
       source: 'landing_hero'

@@ -24,6 +24,7 @@ import { VocabularyView } from '../../views/VocabularyView';
 import { ProfileView } from '../../views/ProfileView';
 import { ConbiniSimulatorModal } from './components/ConbiniSimulatorModal';
 import { WritingPracticeModal } from './components/WritingPracticeModal';
+import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
 import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
@@ -345,7 +346,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
             <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
 
-            {/* ৮. ভুলের খাতা (MemoryOS) */}
+            {/* ৮. ভাইরাল রেফারেল ও রিওয়ার্ড লুপ (Invite Friends) */}
+            <InviteFriendsCard
+              studentId={data.student?.id}
+              studentName={data.student?.name}
+              nihomiAccountId={data.student?.nihomiAccountId}
+            />
+
+            {/* ৯. ভুলের খাতা (MemoryOS) */}
             <RecentMistakes
               mistakes={data.recentMistakes}
               onOpenMistakeBook={handleOpenMistakeBookClick}

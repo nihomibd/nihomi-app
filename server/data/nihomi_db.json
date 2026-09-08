@@ -225182,6 +225182,46 @@
       "lifetimeEarned": 350,
       "lifetimeSpent": 0,
       "updatedAt": "2026-09-07T19:35:03.761Z"
+    },
+    {
+      "userId": "usr-rc-1788867697707",
+      "coinBalance": 150,
+      "aiCredits": 150,
+      "lifetimeEarned": 150,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T11:41:37.707Z"
+    },
+    {
+      "userId": "usr_ambassador_test",
+      "coinBalance": 200,
+      "aiCredits": 250,
+      "lifetimeEarned": 200,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T11:49:13.144Z"
+    },
+    {
+      "userId": "usr_new_student_test",
+      "coinBalance": 200,
+      "aiCredits": 250,
+      "lifetimeEarned": 200,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T11:49:13.227Z"
+    },
+    {
+      "userId": "usr-rc-1788867797165",
+      "coinBalance": 150,
+      "aiCredits": 150,
+      "lifetimeEarned": 150,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T11:43:17.165Z"
+    },
+    {
+      "userId": "usr-rc-1788868153045",
+      "coinBalance": 150,
+      "aiCredits": 150,
+      "lifetimeEarned": 150,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T11:49:13.045Z"
     }
   ]
 }

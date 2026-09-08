@@ -4,6 +4,7 @@ import { useProgressSync } from '../hooks/useProgressSync.js';
 import { apiRequest } from '../lib/api.js';
 import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
 import { getSrsState, saveSrsItemReview, formatNextReviewBadge, SrsItemState, SrsRating } from '../lib/srs.js';
+import { getCurriculumLesson } from '../data/lessons/n5MasterCurriculum.js';
 import { Lesson } from '../types.js';
 import {
   BookOpen,
@@ -196,6 +197,20 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             }
           }
         }
+        // Direct resilient fallback to Master Minna no Nihongo N5 Curriculum
+        setLessonData((current) => {
+          if (current) return current;
+          const fallbackLesson = getCurriculumLesson(lessonId);
+          if (fallbackLesson) {
+            return {
+              lesson: fallbackLesson,
+              courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
+              moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
+              isCompleted: false
+            };
+          }
+          return null;
+        });
       } finally {
         setIsLoading(false);
       }
