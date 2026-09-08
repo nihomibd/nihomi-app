@@ -225193,19 +225193,19 @@
     },
     {
       "userId": "usr_ambassador_test",
-      "coinBalance": 200,
-      "aiCredits": 250,
-      "lifetimeEarned": 200,
+      "coinBalance": 250,
+      "aiCredits": 300,
+      "lifetimeEarned": 250,
       "lifetimeSpent": 0,
-      "updatedAt": "2026-09-08T11:49:13.144Z"
+      "updatedAt": "2026-09-08T19:01:53.107Z"
     },
     {
       "userId": "usr_new_student_test",
-      "coinBalance": 200,
-      "aiCredits": 250,
-      "lifetimeEarned": 200,
+      "coinBalance": 250,
+      "aiCredits": 300,
+      "lifetimeEarned": 250,
       "lifetimeSpent": 0,
-      "updatedAt": "2026-09-08T11:49:13.227Z"
+      "updatedAt": "2026-09-08T19:01:53.192Z"
     },
     {
       "userId": "usr-rc-1788867797165",
@@ -225222,6 +225222,14 @@
       "lifetimeEarned": 150,
       "lifetimeSpent": 0,
       "updatedAt": "2026-09-08T11:49:13.045Z"
+    },
+    {
+      "userId": "usr-rc-1788894113003",
+      "coinBalance": 150,
+      "aiCredits": 150,
+      "lifetimeEarned": 150,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-08T19:01:53.003Z"
     }
   ]
 }
