@@ -4863,6 +4863,21 @@
       "status": "initiated",
       "createdAt": "2026-09-07T13:01:33.090Z",
       "updatedAt": "2026-09-07T13:01:33.090Z"
+    },
+    {
+      "id": "pay-238dad6a",
+      "userId": "smoke-test-user-1788809703715",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "originalAmount": 249,
+      "discountAmount": 0,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-07T19:35:03.716Z",
+      "updatedAt": "2026-09-07T19:35:03.716Z"
     }
   ],
   "paymentAttempts": [],
@@ -5454,6 +5469,38 @@
       "issuedAt": "2026-09-07T13:01:33.174Z",
       "paidAt": "2026-09-07T13:01:33.174Z",
       "createdAt": "2026-09-07T13:01:33.174Z"
+    },
+    {
+      "id": "inv-6e73dd25",
+      "userId": "smoke-test-user-1788809703715",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-238dad6a",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "qa-student@nihomi.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-75665e",
+          "invoiceId": "inv-6e73dd25",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-07T19:35:03.792Z",
+      "paidAt": "2026-09-07T19:35:03.792Z",
+      "createdAt": "2026-09-07T19:35:03.792Z"
     }
   ],
   "invoiceItems": [],
@@ -95853,6 +95900,14 @@
       "lifetimeEarned": 350,
       "lifetimeSpent": 0,
       "updatedAt": "2026-09-07T13:01:33.138Z"
+    },
+    {
+      "userId": "smoke-test-user-1788809703715",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-07T19:35:03.761Z"
     }
   ]
 }
