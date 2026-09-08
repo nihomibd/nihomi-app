@@ -19,6 +19,7 @@ import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice'
 import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { updatePageMetaTags } from '../lib/seo';
+import { trackNihomiEvent } from '../utils/analytics';
 
 interface LandingViewProps {
   onNavigate: (view: string) => void;
@@ -82,10 +83,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       onNavigate('dashboard');
       return;
     }
+    trackNihomiEvent('signup_started', { method: 'google' });
     setIsGoogleSigningIn(true);
     try {
       const ok = await loginWithGoogle();
       if (ok) {
+        trackNihomiEvent('signup_completed', { method: 'google' });
         onNavigate('dashboard');
       } else {
         openAuthModal('register');
@@ -111,6 +114,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
   // Dynamic OpenGraph SEO & JSON-LD updates on landing
   useEffect(() => {
+    trackNihomiEvent('landing_page_view', {
+      pagePath: '/',
+      source: 'landing_hero'
+    });
+
     updatePageMetaTags({
       title: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI (ニホミ)',
       description: 'Master JLPT N5 with 24/7 Gemini 2.5 AI Sensei in Bengali. Minna no Nihongo curriculum, Tokyo Conbini simulation, and verified digital credentials.',

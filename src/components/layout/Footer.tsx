@@ -39,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Quick Clean Navigation Links */}
-          <div className="flex items-center space-x-6 text-xs font-semibold text-stone-600">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-semibold text-stone-600">
             <button
               onClick={() => onNavigate?.('courses')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
@@ -53,11 +53,39 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Dashboard
             </button>
             <button
-              onClick={() => onNavigate?.('documents')}
+              onClick={() => onNavigate?.('terms')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
             >
-              Resources
+              Terms of Service
             </button>
+            <button
+              onClick={() => onNavigate?.('privacy')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => onNavigate?.('refund-policy')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              Refund Policy
+            </button>
+            <button
+              onClick={() => onNavigate?.('contact')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              Contact Support
+            </button>
+          </div>
+        </div>
+
+        {/* Institutional Backing Notice */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-stone-400 border-b border-stone-200/60 pb-6">
+          <p className="text-center sm:text-left">
+            Institutional Partner: Dhaka International Language School (DILS) • bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215
+          </p>
+          <div className="flex items-center gap-3">
+            <span className="text-emerald-600 font-medium">bKash & SSLCommerz Merchant Verified</span>
           </div>
         </div>
 

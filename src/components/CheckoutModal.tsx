@@ -22,6 +22,7 @@ import {
 import { Plan, PlanId, BillingInterval, PaymentProviderType } from '../types';
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
+import { trackNihomiEvent } from '../utils/analytics';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -119,6 +120,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setIsInitiating(true);
     setErrorMessage(null);
     try {
+      trackNihomiEvent('subscription_checkout_started', {
+        planId: activePlan.id,
+        billingInterval: interval,
+        amount: finalPrice,
+        provider,
+        couponCode: appliedCoupon?.code || null
+      });
+
       const initRes = await billingApi.initiateCheckout({
         planId: activePlan.id,
         billingInterval: interval,
@@ -153,6 +162,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       });
 
       if (verifyRes.success) {
+        trackNihomiEvent('payment_success', {
+          planId: activePlan.id,
+          billingInterval: interval,
+          amount: finalPrice,
+          provider,
+          paymentId: paymentInitiationData.paymentId,
+          invoiceId: verifyRes.invoice?.id
+        });
+
         setCompletedInvoice(verifyRes.invoice);
         await refreshSubscription();
         setStep('success');

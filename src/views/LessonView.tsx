@@ -56,6 +56,7 @@ import { LessonFocusTimerTracker } from '../components/reading/LessonFocusTimerT
 import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator.js';
 import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
 import { PronunciationCoach } from '../components/PronunciationCoach.js';
+import { trackNihomiEvent } from '../utils/analytics.js';
 
 interface LessonViewProps {
   lessonId: string;
@@ -135,6 +136,14 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           `/api/lessons/${lessonId}`
         );
         setLessonData(data);
+
+        if (data?.lesson) {
+          trackNihomiEvent('first_lesson_started', {
+            lessonId: data.lesson.id,
+            title: data.lesson.title,
+            level: data.lesson.level || 'N5'
+          });
+        }
 
         // Cache automatically into IndexedDB for offline study
         if (data?.lesson) {
@@ -309,6 +318,12 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
         (lessonData.lesson.estimatedMinutes || 15) * 60,
         lessonData.lesson.xpReward || 50
       );
+      trackNihomiEvent('first_lesson_completed', {
+        lessonId: lessonData.lesson.id,
+        title: lessonData.lesson.title,
+        studyMinutes: lessonData.lesson.estimatedMinutes || 15,
+        xpReward: lessonData.lesson.xpReward || 50
+      });
       setCompletedSuccess(true);
       soundEffects.playLessonCelebration();
       await refreshProgress();

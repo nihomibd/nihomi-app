@@ -923,8 +923,7 @@ class Database {
   public async syncUserToSupabase(user: User, profile?: UserProfile, progress?: UserProgress) {
     if (!this.supabaseClient) return;
     try {
-      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
-
+      // 1. Sync User
       await this.supabaseClient.from('users').upsert({
         id: user.id,
         email: user.email,
@@ -934,34 +933,38 @@ class Database {
         updated_at: user.updatedAt || new Date().toISOString()
       }, { onConflict: 'id' });
 
-      if (profile && isUUID) {
+      // 2. Sync Profile
+      if (profile) {
         await this.supabaseClient.from('profiles').upsert({
           id: user.id,
           email: user.email,
-          full_name: profile.displayName || '',
-          target_jlpt_level: profile.targetLevel || 'N5',
+          full_name: profile.displayName || user.email.split('@')[0],
+          target_jlpt_level: (profile.targetLevel || 'N5') as any,
           preferred_language: profile.nativeLanguage === 'Bengali' ? 'bn' : 'en',
           daily_goal_minutes: profile.dailyGoalMinutes || 20,
+          target_visa_type: 'student_visa',
+          country: 'Bangladesh',
           bio: profile.bio || '',
           updated_at: profile.updatedAt || new Date().toISOString()
         }, { onConflict: 'id' });
       }
 
-      if (progress && isUUID) {
+      // 3. Sync Learning Progress
+      if (progress) {
         await this.supabaseClient.from('learning_progress').upsert({
-          id: user.id,
+          id: `prog-${user.id}`,
           user_id: user.id,
-          current_jlpt_level: progress.currentLevel || 'N5',
+          current_jlpt_level: (progress.currentLevel || 'N5') as any,
           total_xp: progress.experiencePoints || 0,
           current_streak_days: progress.currentStreak || 0,
           longest_streak_days: progress.longestStreak || 0,
           last_study_date: progress.lastActiveDate ? new Date(progress.lastActiveDate).toISOString() : null,
           total_study_minutes: progress.totalStudyMinutes || 0,
           updated_at: progress.updatedAt || new Date().toISOString()
-        }, { onConflict: 'id' });
+        }, { onConflict: 'user_id' });
       }
     } catch (e) {
-      // Gracefully handle network/schema warnings
+      // Gracefully handle network/schema warnings in local offline dev
     }
   }
 
@@ -2860,6 +2863,17 @@ class Database {
     }
 
     this.save();
+
+    this.persistToSupabase('usage_records', {
+      id: usage.id,
+      user_id: usage.userId,
+      feature_key: featureKey,
+      used_units: usage.aiCoachInteractions || 0,
+      period_start: usage.periodStart,
+      period_end: usage.periodEnd,
+      updated_at: usage.updatedAt
+    }, 'id');
+
     return usage;
   }
 
@@ -3120,6 +3134,27 @@ class Database {
       event.processedAt = new Date().toISOString();
     }
     this.save();
+
+    this.persistToSupabase('webhook_events', {
+      id: event.id,
+      provider: event.provider,
+      event_type: event.eventType,
+      payload: {
+        eventId: event.eventId,
+        transactionId: event.transactionId,
+        rawHeaders: event.rawHeaders,
+        rawPayload: event.rawPayload,
+        signature: event.signature,
+        signatureVerified: event.signatureVerified,
+        errorMessage: event.errorMessage,
+        ipAddress: event.ipAddress,
+        payloadReference: event.payloadReference,
+        processedAt: event.processedAt
+      },
+      processed: event.processed || false,
+      created_at: event.createdAt
+    }, 'id');
+
     return event;
   }
 
@@ -3159,6 +3194,27 @@ class Database {
     };
     this.data.webhookEvents.push(event);
     this.save();
+
+    this.persistToSupabase('webhook_events', {
+      id: event.id,
+      provider: event.provider,
+      event_type: event.eventType,
+      payload: {
+        eventId: event.eventId,
+        transactionId: event.transactionId,
+        rawHeaders: event.rawHeaders,
+        rawPayload: event.rawPayload,
+        signature: event.signature,
+        signatureVerified: event.signatureVerified,
+        errorMessage: event.errorMessage,
+        ipAddress: event.ipAddress,
+        payloadReference: event.payloadReference,
+        processedAt: event.processedAt
+      },
+      processed: event.processed || false,
+      created_at: event.createdAt
+    }, 'id');
+
     return event;
   }
 

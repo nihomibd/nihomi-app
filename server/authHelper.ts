@@ -29,6 +29,37 @@ function base64UrlDecode(str: string): string {
   return Buffer.from(base64, 'base64').toString('utf-8');
 }
 
+// Timing-safe constant-time signature comparison helper
+function safeCompareSignatures(receivedSig: string, expectedSig: string): boolean {
+  try {
+    const cleanReceived = receivedSig.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_').trim();
+    const cleanExpected = expectedSig.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_').trim();
+
+    const bufReceived = Buffer.from(cleanReceived, 'utf-8');
+    const bufExpected = Buffer.from(cleanExpected, 'utf-8');
+
+    if (bufReceived.length !== bufExpected.length) {
+      return false;
+    }
+    return crypto.timingSafeEqual(bufReceived, bufExpected);
+  } catch {
+    return false;
+  }
+}
+
+function verifyHmacSha256(dataToSign: string, signature: string, secret: string): boolean {
+  try {
+    if (!secret || typeof secret !== 'string') return false;
+    const expected = crypto
+      .createHmac('sha256', secret)
+      .update(dataToSign)
+      .digest('base64');
+    return safeCompareSignatures(signature, expected);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Sign a stateless, cryptographically secure HMAC-SHA256 JWT
  */
@@ -61,7 +92,9 @@ export function signStatelessJwt(
 }
 
 /**
- * Statelessly verify an HMAC-SHA256 JWT or decode a valid Supabase Auth JWT
+ * Statelessly verify an HMAC-SHA256 JWT (Nihomi application tokens and Supabase Auth tokens).
+ * Strictly requires timing-safe cryptographic signature validation.
+ * Unverified payloads are ALWAYS rejected to prevent authentication bypass.
  */
 export function verifyStatelessJwt(token: string): TokenPayload | null {
   if (!token || typeof token !== 'string') return null;
@@ -72,51 +105,53 @@ export function verifyStatelessJwt(token: string): TokenPayload | null {
   const [encodedHeader, encodedPayload, signature] = parts;
 
   try {
-    const jwtSecret = getRequiredJwtSecret();
     const dataToSign = `${encodedHeader}.${encodedPayload}`;
-    const expectedSignature = crypto
-      .createHmac('sha256', jwtSecret)
-      .update(dataToSign)
-      .digest('base64')
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
+    const jwtSecret = getRequiredJwtSecret();
+    const supabaseSecret = (process.env.SUPABASE_JWT_SECRET || '').trim();
 
     // 1. Primary: Verify Nihomi HMAC-SHA256 signature
-    const sigBuffer = Buffer.from(signature);
-    const expectedSigBuffer = Buffer.from(expectedSignature);
+    let isSignatureValid = verifyHmacSha256(dataToSign, signature, jwtSecret);
 
-    if (
-      sigBuffer.length === expectedSigBuffer.length &&
-      crypto.timingSafeEqual(sigBuffer, expectedSigBuffer)
-    ) {
-      const payloadStr = base64UrlDecode(encodedPayload);
-      const payload: TokenPayload = JSON.parse(payloadStr);
-
-      const now = Math.floor(Date.now() / 1000);
-      if (payload.exp && payload.exp < now) {
-        return null; // Expired token
-      }
-
-      return payload;
+    // 2. Secondary: If not signed by JWT_SECRET, verify against SUPABASE_JWT_SECRET if configured
+    let isSupabaseToken = false;
+    if (!isSignatureValid && supabaseSecret) {
+      isSignatureValid = verifyHmacSha256(dataToSign, signature, supabaseSecret);
+      isSupabaseToken = isSignatureValid;
     }
 
-    // 2. Secondary: Verify Supabase Auth JWT (for Google OAuth / direct Supabase tokens)
+    // STRICT SECURITY GATE: If signature cannot be cryptographically verified, REJECT IMMEDIATELY!
+    if (!isSignatureValid) {
+      return null;
+    }
+
     const payloadStr = base64UrlDecode(encodedPayload);
     const rawPayload = JSON.parse(payloadStr);
 
     const now = Math.floor(Date.now() / 1000);
     if (rawPayload.exp && rawPayload.exp < now) {
-      return null; // Expired
+      return null; // Expired token
     }
 
+    // A. Standard Nihomi Token Format
+    if (rawPayload.userId && rawPayload.email && rawPayload.role) {
+      return {
+        userId: rawPayload.userId,
+        email: rawPayload.email,
+        role: rawPayload.role,
+        iat: rawPayload.iat || now,
+        exp: rawPayload.exp
+      };
+    }
+
+    // B. Verified Supabase Auth JWT Format (HS256 signed with SUPABASE_JWT_SECRET or JWT_SECRET)
     if (rawPayload.sub && (rawPayload.aud === 'authenticated' || rawPayload.role === 'authenticated' || rawPayload.email)) {
-      const isFounder = rawPayload.email === 'mdtanvirkabirbiplob@gmail.com';
+      const email = rawPayload.email || rawPayload.user_metadata?.email || `user-${rawPayload.sub.slice(0, 8)}@nihomi.com`;
+      const isFounder = email.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
       const role: UserRole = (rawPayload.user_metadata?.role as UserRole) || (isFounder ? 'admin' : 'user');
 
       return {
         userId: rawPayload.sub,
-        email: rawPayload.email || rawPayload.user_metadata?.email || `user-${rawPayload.sub.slice(0, 8)}@nihomi.com`,
+        email,
         role,
         iat: rawPayload.iat || now,
         exp: rawPayload.exp || now + 3600

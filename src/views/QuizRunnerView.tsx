@@ -9,6 +9,7 @@ import { haptic } from '../lib/haptic.js';
 import { QuizQuestion } from '../types.js';
 import { ContentAnalyticsService } from '../core/content-engine/contentAnalyticsService';
 import { LearningFeedbackLoopService } from '../core/content-engine/learningFeedbackLoopService';
+import { trackNihomiEvent } from '../utils/analytics';
 import {
   Award,
   ArrowLeft,
@@ -259,6 +260,14 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
 
       // Synchronize quiz attempt to Supabase database (quiz_attempts + learning_progress + activity_logs)
       if (res?.attempt) {
+        trackNihomiEvent('first_quiz_completed', {
+          quizId: quiz.id,
+          score: res.attempt.score ?? 0,
+          totalQuestions: res.attempt.totalQuestions ?? quiz.questions.length,
+          correctAnswers: res.attempt.correctAnswers ?? 0,
+          passed: Boolean(res.attempt.passed)
+        });
+
         await syncQuizCompletion({
           quizId: quiz.id,
           score: res.attempt.score ?? 0,

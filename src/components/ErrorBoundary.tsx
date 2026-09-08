@@ -25,6 +25,24 @@ export class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('[Nihomi Error Boundary caught an unhandled exception]:', error, errorInfo);
     this.setState({ errorInfo });
+
+    try {
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'frontend_exception',
+          properties: {
+            message: error?.message || 'Unknown error',
+            name: error?.name,
+            stack: error?.stack?.slice(0, 500),
+            componentStack: errorInfo?.componentStack?.slice(0, 500),
+            url: window.location.href,
+            userAgent: navigator.userAgent
+          }
+        })
+      }).catch(() => {});
+    } catch {}
   }
 
   private handleReload = () => {

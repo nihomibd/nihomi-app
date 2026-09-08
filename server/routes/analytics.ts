@@ -169,21 +169,47 @@ analyticsRouter.post('/refresh', requireAuth, (req: AuthenticatedRequest, res) =
 });
 
 /**
- * GET /api/analytics/cohort
- * Returns aggregate platform cohort statistics.
+ * POST /api/analytics/track
+ * Ingests client-side marketing conversion & usage telemetry safely.
  */
-analyticsRouter.get('/cohort', optionalAuth, (_req: AuthenticatedRequest, res) => {
+analyticsRouter.post('/track', optionalAuth, (req: AuthenticatedRequest, res) => {
   try {
-    const cohort = db.getCohortAnalytics();
+    const { event, properties } = req.body || {};
+    if (!event || typeof event !== 'string') {
+      return res.status(400).json({ success: false, error: 'Event name is required' });
+    }
+
+    // Sanitize event payload to prevent sensitive data logging
+    const sanitizedProps = { ...(properties || {}) };
+    delete sanitizedProps.password;
+    delete sanitizedProps.token;
+    delete sanitizedProps.cardNumber;
+    delete sanitizedProps.cardCvv;
+    delete sanitizedProps.pin;
+    delete sanitizedProps.otp;
+
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      type: 'marketing_telemetry',
+      event,
+      userId: req.user?.id || sanitizedProps.userId || 'anonymous',
+      properties: sanitizedProps,
+      ip: req.ip || req.headers['x-forwarded-for'] || 'unknown'
+    };
+
+    console.log(JSON.stringify(logEntry));
+
     return res.json({
       success: true,
-      cohort
+      event,
+      receivedAt: logEntry.timestamp
     });
   } catch (error: any) {
-    console.error('[Analytics] Error retrieving cohort analytics:', error);
+    console.error('[Analytics] Error tracking event:', error);
     return res.status(500).json({
       success: false,
-      error: error.message || 'Failed to retrieve cohort analytics'
+      error: 'Failed to record event'
     });
   }
 });
+

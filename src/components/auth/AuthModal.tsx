@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Sparkles, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { trackNihomiEvent } from '../../utils/analytics';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      trackNihomiEvent('signup_started', { method: 'modal_prompt' });
+    }
+  }, [isAuthModalOpen]);
+
   if (!isAuthModalOpen) return null;
 
   const handleGoogleClick = async () => {
+    trackNihomiEvent('signup_started', { method: 'google' });
     setIsProcessing(true);
     try {
       const ok = await loginWithGoogle();
       if (!ok) {
         // Frictionless Google One-Tap fallback in sandbox/dev mode
         const studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
+        const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
         setUserData({
-          id: 'usr_student_' + Math.random().toString(36).substring(2, 9),
+          id: userId,
           email: 'student@nihomi.com',
           name: 'Nihomi Japanese Learner',
           role: 'student',
@@ -27,7 +36,14 @@ export const AuthModal: React.FC = () => {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
+        trackNihomiEvent('signup_completed', {
+          userId,
+          method: 'google_fallback',
+          studentId
+        });
         closeAuthModal();
+      } else {
+        trackNihomiEvent('signup_completed', { method: 'google' });
       }
     } finally {
       setIsProcessing(false);
@@ -36,8 +52,9 @@ export const AuthModal: React.FC = () => {
 
   const handleStudentQuick = () => {
     const studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
+    const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
     setUserData({
-      id: 'usr_student_' + Math.random().toString(36).substring(2, 9),
+      id: userId,
       email: 'student@nihomi.com',
       name: 'Nihomi Japanese Learner',
       role: 'student',
@@ -47,6 +64,11 @@ export const AuthModal: React.FC = () => {
       nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+    });
+    trackNihomiEvent('signup_completed', {
+      userId,
+      method: 'quick_student',
+      studentId
     });
     closeAuthModal();
   };
@@ -63,6 +85,11 @@ export const AuthModal: React.FC = () => {
       nihomiAccountId: 'ACC-8888',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+    });
+    trackNihomiEvent('signup_completed', {
+      userId: 'usr_founder_001',
+      method: 'quick_founder',
+      studentId: 'NHO-FND-001'
     });
     closeAuthModal();
   };

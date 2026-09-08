@@ -59,6 +59,38 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+    <!-- Google Analytics & Meta Pixel Initialization (Ad-Campaign Ready) -->
+    <script>
+      // Graceful queue initialization for Google Analytics 4 (gtag)
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // If GA ID is injected via meta or env, initialize it
+      const gaId = '%VITE_GA_MEASUREMENT_ID%';
+      if (gaId && !gaId.startsWith('%')) {
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+        document.head.appendChild(gaScript);
+        gtag('config', gaId, { send_page_view: false });
+      }
+
+      // Graceful queue initialization for Meta Pixel (fbq)
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      const pixelId = '%VITE_META_PIXEL_ID%';
+      if (pixelId && !pixelId.startsWith('%')) {
+        s.parentNode.insertBefore(t,s);
+        fbq('init', pixelId);
+      }}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    </script>
+
     <!-- Schema.org JSON-LD Structured Data for Google Search Rich Results -->
     <script type="application/ld+json">
       {
@@ -67,7 +99,7 @@
           {
             "@type": "EducationalOrganization",
             "@id": "https://nihomi.com/#organization",
-            "name": "NIHONI (ニホミ) Japanese Learning Platform",
+            "name": "NIHOMI (ニホミ) Japanese Learning Platform",
             "alternateName": "NIHOMI.COM",
             "url": "https://nihomi.com",
             "logo": "https://nihomi.com/assets/icon-512.png",

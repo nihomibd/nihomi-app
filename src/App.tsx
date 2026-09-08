@@ -27,6 +27,10 @@ import { StudyPlanRoadmapView } from './views/StudyPlanRoadmapView';
 import { BaitoOsView } from './views/BaitoOsView';
 import { InterviewLabView } from './views/InterviewLabView';
 import { CertificateVerificationPage } from './pages/CertificateVerificationPage';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { RefundPolicyPage } from './pages/RefundPolicyPage';
+import { ContactPage } from './pages/ContactPage';
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
@@ -69,15 +73,30 @@ export const App: React.FC = () => {
     setCurrentView(view);
     setViewParams(params);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      const targetPath = view === 'landing' ? '/' : `/${view}`;
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({}, '', targetPath);
+      }
+    } catch {}
   };
 
-  // URL Deep Link / Verification Route Listener
+  // URL Deep Link / Verification & Legal Route Listener
   useEffect(() => {
     try {
-      const path = window.location.pathname;
+      const path = window.location.pathname.toLowerCase();
       const search = new URLSearchParams(window.location.search);
       const queryCert = search.get('certId') || search.get('id');
-      if (path.startsWith('/verify') || queryCert) {
+
+      if (path === '/terms' || path === '/terms-of-service') {
+        setCurrentView('terms');
+      } else if (path === '/privacy' || path === '/privacy-policy') {
+        setCurrentView('privacy');
+      } else if (path === '/refund-policy' || path === '/refund' || path === '/refunds') {
+        setCurrentView('refund-policy');
+      } else if (path === '/contact' || path === '/support') {
+        setCurrentView('contact');
+      } else if (path.startsWith('/verify') || queryCert) {
         const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
         const targetCert = certFromPath || queryCert;
         setCurrentView('verify-cert');
@@ -86,6 +105,17 @@ export const App: React.FC = () => {
         }
       }
     } catch (e) {}
+
+    const handlePopState = () => {
+      const path = window.location.pathname.toLowerCase();
+      if (path === '/terms') setCurrentView('terms');
+      else if (path === '/privacy') setCurrentView('privacy');
+      else if (path === '/refund-policy') setCurrentView('refund-policy');
+      else if (path === '/contact') setCurrentView('contact');
+      else if (path === '/' || path === '') setCurrentView('landing');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   // Global Keyboard Shortcut Listener (Cmd+K, ?, Escape, and Ctrl/Cmd helper)
@@ -199,7 +229,19 @@ export const App: React.FC = () => {
         {currentView === 'documents' && (
           <DocumentsView />
         )}
-        {(currentView === 'contact' || currentView === 'signature' || currentView === 'email-signature') && (
+        {currentView === 'terms' && (
+          <TermsPage onNavigate={handleNavigate} />
+        )}
+        {currentView === 'privacy' && (
+          <PrivacyPage onNavigate={handleNavigate} />
+        )}
+        {currentView === 'refund-policy' && (
+          <RefundPolicyPage onNavigate={handleNavigate} />
+        )}
+        {currentView === 'contact' && (
+          <ContactPage onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'signature' || currentView === 'email-signature') && (
           <EmailSignatureView />
         )}
         {currentView === 'quizzes' && (

@@ -269,8 +269,17 @@ export class BKashPaymentProvider implements PaymentProvider {
 
   private tokenCache: { token: string; expiresAt: number } | null = null;
 
+  public get isSandbox(): boolean {
+    return process.env.BKASH_SANDBOX !== 'false' && process.env.BKASH_MODE !== 'live';
+  }
+
   private get baseUrl(): string {
-    return (process.env.BKASH_BASE_URL || 'https://tokenized.sandbox.bka.sh/v1.2.0-beta').replace(/\/+$/, '');
+    if (process.env.BKASH_BASE_URL) {
+      return process.env.BKASH_BASE_URL.replace(/\/+$/, '');
+    }
+    return this.isSandbox
+      ? 'https://tokenized.sandbox.bka.sh/v1.2.0-beta'
+      : 'https://tokenized.pay.bka.sh/v1.2.0-beta';
   }
 
   private get appKey(): string {
@@ -725,8 +734,8 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
     return process.env.SSLCOMMERZ_STORE_PASSWORD || '';
   }
 
-  private get isSandbox(): boolean {
-    return process.env.SSLCOMMERZ_IS_SANDBOX !== 'false';
+  public get isSandbox(): boolean {
+    return process.env.SSLCOMMERZ_IS_SANDBOX !== 'false' && process.env.SSLCOMMERZ_MODE !== 'live';
   }
 
   private get baseUrl(): string {

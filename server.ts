@@ -108,6 +108,45 @@ async function startServer() {
     }
   }));
 
+  // Structured JSON Observability & Request Logger
+  app.use((req, res, next) => {
+    const startTime = Date.now();
+    const requestId = 'req_' + Math.random().toString(36).substring(2, 9);
+    (req as any).id = requestId;
+    res.setHeader('X-Request-Id', requestId);
+
+    res.on('finish', () => {
+      // Avoid spamming logs with vite internal dev assets
+      if (
+        req.path.startsWith('/@') ||
+        req.path.startsWith('/node_modules') ||
+        req.path.startsWith('/src/') ||
+        req.path.endsWith('.map')
+      ) {
+        return;
+      }
+      const latencyMs = Date.now() - startTime;
+      const logData = {
+        timestamp: new Date().toISOString(),
+        requestId,
+        method: req.method,
+        path: req.path,
+        status: res.statusCode,
+        latencyMs,
+        ip: req.ip || req.headers['x-forwarded-for'] || 'unknown',
+        userAgent: req.get('user-agent') || 'unknown'
+      };
+      if (res.statusCode >= 500) {
+        console.error(JSON.stringify({ level: 'ERROR', ...logData }));
+      } else if (res.statusCode >= 400) {
+        console.warn(JSON.stringify({ level: 'WARN', ...logData }));
+      } else {
+        console.log(JSON.stringify({ level: 'INFO', ...logData }));
+      }
+    });
+    next();
+  });
+
   // API Routes
   app.get('/api/health', (req, res) => {
     res.json({
@@ -189,7 +228,11 @@ Sitemap: https://nihomi.com/sitemap.xml
       { loc: `${baseUrl}/quizzes`, priority: '0.8', changefreq: 'weekly' },
       { loc: `${baseUrl}/baito`, priority: '0.8', changefreq: 'weekly' },
       { loc: `${baseUrl}/pricing`, priority: '0.8', changefreq: 'monthly' },
-      { loc: `${baseUrl}/verify`, priority: '0.7', changefreq: 'daily' }
+      { loc: `${baseUrl}/verify`, priority: '0.7', changefreq: 'daily' },
+      { loc: `${baseUrl}/terms`, priority: '0.6', changefreq: 'monthly' },
+      { loc: `${baseUrl}/privacy`, priority: '0.6', changefreq: 'monthly' },
+      { loc: `${baseUrl}/refund-policy`, priority: '0.6', changefreq: 'monthly' },
+      { loc: `${baseUrl}/contact`, priority: '0.8', changefreq: 'monthly' }
     ];
 
     // Dynamic lesson drafts from content studio
@@ -291,6 +334,35 @@ ${allUrls
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
+
+  // Global Error Handling Middleware
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (res.headersSent) {
+      return next(err);
+    }
+    const statusCode = err.status || err.statusCode || 500;
+    const errorPayload = {
+      level: 'ERROR',
+      timestamp: new Date().toISOString(),
+      requestId: (req as any).id || 'unknown',
+      method: req.method,
+      path: req.path,
+      statusCode,
+      message: err.message || 'Internal Server Error'
+    };
+    console.error(JSON.stringify(errorPayload));
+
+    if (req.path.startsWith('/api')) {
+      return res.status(statusCode).json({
+        success: false,
+        error: process.env.NODE_ENV === 'production' && statusCode >= 500
+          ? 'An internal server error occurred.'
+          : err.message || 'Internal server error',
+        requestId: (req as any).id
+      });
+    }
+    next(err);
+  });
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Nihomi] Server running on http://0.0.0.0:${PORT}`);
