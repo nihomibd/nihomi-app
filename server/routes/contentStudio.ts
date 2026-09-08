@@ -9,6 +9,8 @@ import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.j
 import { requireStaff, requireAdmin } from '../middleware/rbac.js';
 import { db } from '../db.js';
 import { StructuredEducationalContent, QuestionType, PublishingQueuePriority, PublishingQueueStatus, JLPTLevel } from '../types.js';
+import { ALL_DEFAULT_LESSONS } from '../../src/core/content-studio/lessons/index.js';
+import { StudioLesson } from '../../src/core/content-studio/types.js';
 import { liveLessonPublishingQueueService } from '../services/liveLessonPublishingQueueService.js';
 import { PublishingPreflightService } from '../services/publishingPreflightService.js';
 import { contentEngineService } from '../services/contentEngineService.js';
@@ -288,9 +290,23 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
   }
 
   const published = contentStudioDb.approveAndPublishLesson(lesson.id, founderEmail);
+  const { publishResult, draft } = syncStudioLessonToLiveCatalog(published, founderEmail, adminId);
 
-  // Synchronize to PostgreSQL persistent ContentDraft / ContentVersion
-  let draft = db.getContentDraftById(lesson.id);
+  res.json({
+    success: true,
+    message: `Lesson "${published.title}" published with version history.`,
+    lesson: published,
+    version: publishResult.version,
+    draft: publishResult.draft
+  });
+});
+
+// Helper: Synchronize any StudioLesson to PostgreSQL persistent ContentDraft, live Lesson catalog, and SRS Decks
+export function syncStudioLessonToLiveCatalog(
+  published: StudioLesson,
+  founderEmail = 'admin@nihomi.com',
+  adminId = 'usr-admin-01'
+) {
   const structuredContent: StructuredEducationalContent = {
     vocabulary: (published.vocabulary || []).map((v) => ({
       id: v.id,
@@ -369,6 +385,7 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
     masteryChecklist: published.masteryChecklist
   };
 
+  let draft = db.getContentDraftById(published.id);
   if (!draft) {
     draft = db.createContentDraft({
       title: published.title,
@@ -406,15 +423,45 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
   }
 
   const publishResult = db.publishContentDraft(draft.id, adminId, `Published via Studio by ${founderEmail}`);
+  return { publishResult, draft };
+}
 
+// Batch Sync Default Lessons (Lessons 1-5) into Public Catalog & Leitner SRS Decks
+export function syncAllDefaultLessonsToLiveCatalog(): { count: number; titles: string[] } {
+  const publishedTitles: string[] = [];
+  try {
+    const existingLessons = db.getLessons();
+    for (const defLesson of ALL_DEFAULT_LESSONS) {
+      const alreadyPublished = existingLessons.some(
+        (l) => l.title === defLesson.title || l.titleJa === defLesson.titleJa
+      );
+      if (!alreadyPublished) {
+        contentStudioDb.approveAndPublishLesson(defLesson.id, 'admin@nihomi.com');
+        syncStudioLessonToLiveCatalog(defLesson);
+        publishedTitles.push(defLesson.title);
+      }
+    }
+  } catch (err) {
+    console.error('[ContentStudio] Error syncing default lessons to live catalog:', err);
+  }
+  return { count: publishedTitles.length, titles: publishedTitles };
+}
+
+// 10b. Batch Publish Default Curriculum Lessons 1-5
+contentStudioRouter.post('/lessons/batch-publish-defaults', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const result = syncAllDefaultLessonsToLiveCatalog();
   res.json({
     success: true,
-    message: `Lesson "${published.title}" published with version history.`,
-    lesson: published,
-    version: publishResult.version,
-    draft: publishResult.draft
+    message: `Batch published ${result.count} default curriculum lessons to public catalog.`,
+    syncedLessons: result.titles,
+    totalAvailable: ALL_DEFAULT_LESSONS.length
   });
 });
+
+// Auto-seed default curriculum lessons on module initialization
+setTimeout(() => {
+  syncAllDefaultLessonsToLiveCatalog();
+}, 1000);
 
 // 11. Get Version History for Studio Lesson (Staff)
 contentStudioRouter.get('/lessons/:id/versions', requireStaff, (req: AuthenticatedRequest, res) => {

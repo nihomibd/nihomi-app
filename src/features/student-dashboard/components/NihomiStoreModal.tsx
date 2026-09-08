@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Coins, CreditCard, Sparkles, X } from 'lucide-react';
+import { trackPurchase } from '../../../lib/analytics';
 
 export interface StorePackage {
   id: 'starter' | 'intensive' | 'unlimited';
@@ -43,7 +44,13 @@ export const NihomiStoreModal: React.FC<NihomiStoreModalProps> = ({ isOpen, onCl
     if (!selectedPack) return;
     setIsProcessing(true);
     await onPurchase(selectedPack);
-    setReceipt(`BKASH-SIM-${Date.now().toString().slice(-8)}`);
+    const receiptId = `BKASH-SIM-${Date.now().toString().slice(-8)}`;
+    setReceipt(receiptId);
+    trackPurchase(selectedPack.price, selectedPack.name, {
+      transactionId: receiptId,
+      currency: 'BDT',
+      provider: 'bKash'
+    });
     setIsProcessing(false);
   };
 

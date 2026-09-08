@@ -224,3 +224,242 @@ function generateClientFallbackAnalytics(): LearnerAnalyticsSummary {
     lastRefreshed: new Date().toISOString()
   };
 }
+
+// -------------------------------------------------------------
+// ADS CONVERSION & MARKETING PIXEL ENGINE (Meta, Google Ads, TikTok)
+// -------------------------------------------------------------
+
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+    gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
+    ttq?: {
+      track: (eventName: string, params?: Record<string, any>) => void;
+      page?: () => void;
+      identify?: (params?: Record<string, any>) => void;
+    };
+  }
+}
+
+export interface PurchaseEventParams {
+  transactionId?: string;
+  currency?: string;
+  provider?: string;
+  items?: Array<{ id?: string; name: string; price: number; quantity?: number }>;
+}
+
+export interface CompleteRegistrationParams {
+  method?: string;
+  email?: string;
+  userId?: string;
+  status?: boolean;
+}
+
+export interface StartTrialParams {
+  trialDays?: number;
+  planId?: string;
+  value?: number;
+  currency?: string;
+}
+
+/**
+ * Track Complete Registration conversion event (Meta Pixel, Google Ads / GA4, TikTok Pixel)
+ */
+export function trackCompleteRegistration(params?: CompleteRegistrationParams): void {
+  const method = params?.method || 'Email';
+  const status = params?.status ?? true;
+
+  if (typeof window !== 'undefined') {
+    // 1. Meta Pixel
+    try {
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'CompleteRegistration', {
+          content_name: method,
+          status: status,
+          currency: 'BDT',
+          value: 0
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Meta trackCompleteRegistration error:', e);
+    }
+
+    // 2. Google Ads / GA4
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'sign_up', {
+          method: method
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Google trackCompleteRegistration error:', e);
+    }
+
+    // 3. TikTok Pixel
+    try {
+      if (window.ttq && typeof window.ttq.track === 'function') {
+        window.ttq.track('CompleteRegistration', {
+          content_name: method
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] TikTok trackCompleteRegistration error:', e);
+    }
+
+    // 4. Client Telemetry Log
+    trackTelemetryEvent('complete_registration', { method, userId: params?.userId });
+  }
+}
+
+/**
+ * Track Start Trial conversion event (Meta Pixel, Google Ads / GA4, TikTok Pixel)
+ */
+export function trackStartTrial(params?: StartTrialParams): void {
+  const planId = params?.planId || 'n5_trial';
+  const trialDays = params?.trialDays || 7;
+  const value = params?.value || 0;
+  const currency = params?.currency || 'BDT';
+
+  if (typeof window !== 'undefined') {
+    // 1. Meta Pixel
+    try {
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'StartTrial', {
+          value: value,
+          currency: currency,
+          predicted_ltv: 249,
+          content_name: planId
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Meta trackStartTrial error:', e);
+    }
+
+    // 2. Google Ads / GA4
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'start_trial', {
+          plan_id: planId,
+          trial_days: trialDays,
+          value: value,
+          currency: currency
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Google trackStartTrial error:', e);
+    }
+
+    // 3. TikTok Pixel
+    try {
+      if (window.ttq && typeof window.ttq.track === 'function') {
+        window.ttq.track('StartTrial', {
+          content_name: planId,
+          value: value,
+          currency: currency
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] TikTok trackStartTrial error:', e);
+    }
+
+    // 4. Client Telemetry Log
+    trackTelemetryEvent('start_trial', { planId, trialDays, value, currency });
+  }
+}
+
+/**
+ * Track Purchase conversion event (Meta Pixel, Google Ads / GA4, TikTok Pixel)
+ * Optimized for BDT currency (৳99, ৳249, ৳499 pricing packs)
+ */
+export function trackPurchase(amount: number, pack: string, params?: PurchaseEventParams): void {
+  const currency = params?.currency || 'BDT';
+  const transactionId = params?.transactionId || `tx_${Date.now()}`;
+  const provider = params?.provider || 'bKash';
+
+  if (typeof window !== 'undefined') {
+    // 1. Meta Pixel
+    try {
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Purchase', {
+          value: amount,
+          currency: currency,
+          content_name: pack,
+          content_type: 'product',
+          contents: [{ id: pack, quantity: 1, item_price: amount }],
+          transaction_id: transactionId
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Meta trackPurchase error:', e);
+    }
+
+    // 2. Google Ads / GA4
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'purchase', {
+          transaction_id: transactionId,
+          value: amount,
+          currency: currency,
+          items: [
+            {
+              item_name: pack,
+              item_id: pack,
+              price: amount,
+              quantity: 1
+            }
+          ]
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] Google trackPurchase error:', e);
+    }
+
+    // 3. TikTok Pixel
+    try {
+      if (window.ttq && typeof window.ttq.track === 'function') {
+        window.ttq.track('PlaceAnOrder', {
+          content_name: pack,
+          value: amount,
+          currency: currency
+        });
+        window.ttq.track('CompletePayment', {
+          content_name: pack,
+          value: amount,
+          currency: currency
+        });
+      }
+    } catch (e) {
+      console.debug('[Analytics] TikTok trackPurchase error:', e);
+    }
+
+    // 4. Client Telemetry Log
+    trackTelemetryEvent('purchase', { amount, pack, currency, transactionId, provider });
+  }
+}
+
+/**
+ * Non-blocking internal telemetry logger
+ */
+export function trackTelemetryEvent(eventName: string, properties?: Record<string, any>): void {
+  try {
+    const token = getAuthToken();
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        event: eventName,
+        properties: properties || {},
+        timestamp: new Date().toISOString()
+      }),
+      keepalive: true
+    }).catch(() => {
+      // Non-blocking telemetry
+    });
+  } catch {
+    // Ignore network or execution failures in background telemetry
+  }
+}

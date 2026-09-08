@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext.js';
 import { JLPTLevel } from '../types.js';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
+import { trackCompleteRegistration, trackStartTrial } from '../lib/analytics.js';
 import {
   ArrowRight,
   CheckCircle2,
@@ -83,6 +84,8 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
           targetLevel,
           nativeLanguage
         });
+        trackCompleteRegistration({ method: 'Email', email });
+        trackStartTrial({ trialDays: 7, planId: 'n5_trial' });
         onNavigate('dashboard');
       } else if (mode === 'forgot') {
         const res = await apiRequest<{ success: boolean; message: string; resetToken?: string }>(

@@ -6,6 +6,7 @@ import {
   ContentStatus,
   LessonSourceFile
 } from '../../../src/core/content-studio/types.js';
+import { ALL_DEFAULT_LESSONS } from '../../../src/core/content-studio/lessons/index.js';
 
 export interface SourceDocumentRecord {
   id: string;
@@ -693,9 +694,15 @@ class ContentStudioDatabase {
       console.warn('[ContentStudioDb] Error reading lessons from disk:', err);
     }
 
-    // Always ensure Golden Lesson exists
-    if (!this.lessons.has(GOLDEN_LESSON_N5_01.id)) {
-      this.lessons.set(GOLDEN_LESSON_N5_01.id, GOLDEN_LESSON_N5_01);
+    // Always ensure all default Minna no Nihongo N5 lessons (Lessons 1-5) exist
+    let newLessonsAdded = false;
+    for (const defLesson of ALL_DEFAULT_LESSONS) {
+      if (!this.lessons.has(defLesson.id)) {
+        this.lessons.set(defLesson.id, defLesson);
+        newLessonsAdded = true;
+      }
+    }
+    if (newLessonsAdded) {
       this.saveLessonsToDisk();
     }
 

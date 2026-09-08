@@ -136,6 +136,7 @@ export interface StudioExpressionItem {
   id: string;
   phrase: string;
   reading: string;
+  romaji?: string;
   meaningEn: string;
   meaningBn: string;
   contextSituation: string;
@@ -296,7 +297,7 @@ export interface StudioHomeworkTask {
   id: string;
   titleBn: string;
   instructionBn: string;
-  taskType: 'SHADOWING' | 'SENTENCE_WRITING' | 'VOCAB_DRILL' | 'SITUATIONAL_RECORDING';
+  taskType: 'SHADOWING' | 'SENTENCE_WRITING' | 'VOCAB_DRILL' | 'SITUATIONAL_RECORDING' | 'FREE_WRITING';
   estimatedMinutes: number;
   memoryOsSync: boolean;
 }
