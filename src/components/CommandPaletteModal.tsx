@@ -20,7 +20,8 @@ import {
   Keyboard,
   CreditCard,
   Briefcase,
-  Target
+  Target,
+  TrendingUp
 } from 'lucide-react';
 
 export interface CommandItem {
@@ -312,6 +313,28 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         icon: HelpCircle,
         action: () => onNavigate('quiz-runner', { quizId: 'quiz-n4-01' }),
         keywords: ['quiz n4', 'n4 quiz', 'passive', 'conditionals', 'quiz-n4-01']
+      },
+
+      // Marketing & Growth Engine
+      {
+        id: 'growth-command-center',
+        title: 'Founder Growth Command Center (/admin/growth)',
+        subtitle: 'Real-time 100 students campaign metrics, UTM breakdown & live registrations',
+        category: 'Navigation',
+        icon: TrendingUp,
+        badge: 'Founder',
+        action: () => onNavigate('growth'),
+        keywords: ['growth', 'analytics', 'marketing', 'campaign', 'utm', 'founder', 'metrics', 'ad']
+      },
+      {
+        id: 'ad-campaign-landing',
+        title: 'Mobile Ad Campaign Landing Page (/start)',
+        subtitle: 'High-converting 60-second micro-quiz & instant Google enrollment',
+        category: 'Navigation',
+        icon: Sparkles,
+        badge: 'Campaign',
+        action: () => onNavigate('start'),
+        keywords: ['start', 'ad', 'campaign', 'facebook', 'instagram', 'reels', 'landing']
       }
     ];
 

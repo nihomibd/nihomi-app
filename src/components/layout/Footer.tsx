@@ -53,6 +53,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Dashboard
             </button>
             <button
+              onClick={() => onNavigate?.('start')}
+              className="hover:text-stone-950 transition-colors cursor-pointer text-red-600 font-semibold"
+            >
+              N5 Free Trial (/start)
+            </button>
+            <button
+              onClick={() => onNavigate?.('growth')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              Growth Center
+            </button>
+            <button
               onClick={() => onNavigate?.('terms')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
             >

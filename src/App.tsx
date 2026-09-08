@@ -39,6 +39,9 @@ import { CommandPaletteModal } from './components/CommandPaletteModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
 import { captureReferralFromUrl } from './utils/referral';
+import { captureUtmFromUrl } from './utils/utm';
+import { AdCampaignView } from './views/AdCampaignView';
+import { AdminGrowthView } from './views/AdminGrowthView';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
@@ -86,11 +89,16 @@ export const App: React.FC = () => {
   useEffect(() => {
     try {
       captureReferralFromUrl();
+      captureUtmFromUrl();
       const path = window.location.pathname.toLowerCase();
       const search = new URLSearchParams(window.location.search);
       const queryCert = search.get('certId') || search.get('id');
 
-      if (path === '/terms' || path === '/terms-of-service') {
+      if (path === '/start' || path === '/campaign' || path === '/ad') {
+        setCurrentView('start');
+      } else if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
+        setCurrentView('growth');
+      } else if (path === '/terms' || path === '/terms-of-service') {
         setCurrentView('terms');
       } else if (path === '/privacy' || path === '/privacy-policy') {
         setCurrentView('privacy');
@@ -110,7 +118,9 @@ export const App: React.FC = () => {
 
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase();
-      if (path === '/terms') setCurrentView('terms');
+      if (path === '/start' || path === '/campaign') setCurrentView('start');
+      else if (path === '/admin/growth' || path === '/growth') setCurrentView('growth');
+      else if (path === '/terms') setCurrentView('terms');
       else if (path === '/privacy') setCurrentView('privacy');
       else if (path === '/refund-policy') setCurrentView('refund-policy');
       else if (path === '/contact') setCurrentView('contact');
@@ -164,11 +174,12 @@ export const App: React.FC = () => {
   }, []);
 
   const activeSoundscape = soundscapes.find((s) => s.id === soundscapeMode) || soundscapes[0];
+  const isAdLanding = currentView === 'start' || currentView === 'ad-campaign';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
       {/* Offline Feedback & Service Worker Resilience Banner */}
-      {!isFocusMode && <OfflineNotificationBanner />}
+      {!isFocusMode && !isAdLanding && <OfflineNotificationBanner />}
 
       {/* Focus Mode Sakura Ambient Canvas Background */}
       <FocusSakuraBackground
@@ -194,7 +205,7 @@ export const App: React.FC = () => {
       <ExportToastNotification />
 
       {/* Main Header */}
-      {!isFocusMode && (
+      {!isFocusMode && !isAdLanding && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
@@ -203,7 +214,13 @@ export const App: React.FC = () => {
         />
       )}
       
-      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} pb-16 md:pb-0`}>
+      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
+        {(currentView === 'start' || currentView === 'ad-campaign') && (
+          <AdCampaignView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'growth' || currentView === 'admin-growth' || currentView === 'founder/growth') && (
+          <AdminGrowthView onNavigate={handleNavigate} />
+        )}
         {(currentView === 'landing' || currentView === 'home') && (
           <LandingView onNavigate={handleNavigate} />
         )}
@@ -305,10 +322,10 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {!isFocusMode && <Footer onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && <Footer onNavigate={handleNavigate} />}
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
-      {!isFocusMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
 
       {/* Global Command Palette (Triggered from Header search bar or ⌘K) */}
       <CommandPaletteModal

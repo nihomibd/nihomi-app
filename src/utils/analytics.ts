@@ -5,6 +5,8 @@
  * Privacy-safe: Never captures sensitive financial credentials or raw passwords.
  */
 
+import { appendUtmToPayload } from './utm';
+
 declare global {
   interface Window {
     gtag?: (...args: any[]) => void;
@@ -172,7 +174,8 @@ export function trackNihomiEvent<T extends NihomiEventType>(
   eventType: T,
   payload: EventPayloadMap[T]
 ): void {
-  const cleanPayload = sanitizePayload(payload as Record<string, any>);
+  const baseSanitized = sanitizePayload(payload as Record<string, any>);
+  const cleanPayload = appendUtmToPayload(baseSanitized);
 
   if (import.meta.env?.DEV) {
     console.log(`[Nihomi Analytics] 📊 Event: ${eventType}`, cleanPayload);
