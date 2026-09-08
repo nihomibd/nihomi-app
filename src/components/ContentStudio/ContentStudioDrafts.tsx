@@ -130,7 +130,7 @@ export const ContentStudioDrafts: React.FC<ContentStudioDraftsProps> = ({
           <button
             onClick={onRefresh}
             disabled={isLoading}
-            className="self-start sm:self-auto p-1.5 rounded-xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 text-xs font-bold"
+            className="self-start sm:self-auto px-3 py-1.5 rounded-xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 text-xs font-bold whitespace-nowrap shrink-0"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             <span>Refresh Queue</span>
@@ -151,7 +151,7 @@ export const ContentStudioDrafts: React.FC<ContentStudioDraftsProps> = ({
             <button
               key={tab.id}
               onClick={() => setSelectedStatus(tab.id)}
-              className={`px-3 py-1.5 rounded-xl font-bold transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl font-bold transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
                 selectedStatus === tab.id
                   ? 'bg-red-600 text-white shadow-xs'
                   : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
@@ -283,10 +283,10 @@ export const ContentStudioDrafts: React.FC<ContentStudioDraftsProps> = ({
                       e.stopPropagation();
                       onSelectDraft(draft);
                     }}
-                    className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1 hover:underline"
+                    className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1 hover:underline whitespace-nowrap shrink-0"
                   >
                     <span>Inspect & Review</span>
-                    <Eye className="w-3.5 h-3.5" />
+                    <Eye className="w-3.5 h-3.5 shrink-0" />
                   </button>
                 </div>
               </div>

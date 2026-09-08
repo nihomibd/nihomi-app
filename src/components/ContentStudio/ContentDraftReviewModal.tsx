@@ -418,7 +418,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
         <div className="px-5 pt-3 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-1 overflow-x-auto text-xs font-bold">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'overview'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -429,7 +429,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('vocabulary')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'vocabulary'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -440,7 +440,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('grammar')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'grammar'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -451,7 +451,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('kanji')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'kanji'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -462,7 +462,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('dialogue')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'dialogue'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -473,7 +473,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('baito')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'baito'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -484,7 +484,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('srs')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'srs'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -495,7 +495,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('exercises')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'exercises'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -506,7 +506,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('scorecard')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'scorecard'
                 ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -517,7 +517,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
           </button>
           <button
             onClick={() => setActiveTab('versions')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+            className={`pb-2.5 px-3 border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
               activeTab === 'versions'
                 ? 'border-red-600 text-red-600 dark:text-red-400'
                 : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -1716,7 +1716,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
                 <button
                   type="button"
                   onClick={() => setIsRevisionModalOpen(true)}
-                  className="px-3 py-1.5 rounded-xl border border-amber-300 dark:border-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-center gap-1"
+                  className="px-3.5 py-2 rounded-xl border border-amber-300 dark:border-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition cursor-pointer"
                 >
                   <AlertCircle className="w-3.5 h-3.5" />
                   Request Revision
@@ -1725,7 +1725,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
                 <button
                   type="button"
                   onClick={handleReject}
-                  className="px-3 py-1.5 rounded-xl border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center gap-1"
+                  className="px-3.5 py-2 rounded-xl border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition cursor-pointer"
                 >
                   <XCircle className="w-3.5 h-3.5" />
                   Reject
@@ -1734,7 +1734,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
                 <button
                   type="button"
                   onClick={handleApprove}
-                  className="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold flex items-center gap-1 shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs whitespace-nowrap shrink-0 transition cursor-pointer"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Approve Curriculum
@@ -1746,7 +1746,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
               <button
                 type="button"
                 onClick={handlePublish}
-                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-md animate-pulse hover:animate-none"
+                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-md whitespace-nowrap shrink-0 transition cursor-pointer animate-pulse hover:animate-none"
                 id="btn-publish-draft"
               >
                 <Send className="w-3.5 h-3.5" />
@@ -1758,7 +1758,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
               <button
                 type="button"
                 onClick={handleUnpublish}
-                className="px-3 py-1.5 rounded-xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-bold"
+                className="px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-bold whitespace-nowrap shrink-0 transition cursor-pointer"
               >
                 Unpublish
               </button>

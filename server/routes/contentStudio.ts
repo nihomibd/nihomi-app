@@ -301,6 +301,20 @@ contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: Authenticat
   });
 });
 
+// 10a. Unpublish Lesson (Atomic Toggle for Content Studio)
+contentStudioRouter.post('/lessons/:id/unpublish', requireAdmin, (req: AuthenticatedRequest, res) => {
+  const lesson = contentStudioDb.getLessonById(req.params.id);
+  if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
+  lesson.status = 'DRAFT';
+  contentStudioDb.updateLesson(lesson.id, { status: 'DRAFT', updatedAt: new Date().toISOString() });
+  const draft = db.getContentDraftById(lesson.id);
+  if (draft) {
+    draft.status = 'APPROVED';
+    db.updateContentDraft(draft.id, draft);
+  }
+  res.json({ success: true, message: `Lesson "${lesson.title}" unpublished.`, lesson });
+});
+
 // Helper: Synchronize any StudioLesson to PostgreSQL persistent ContentDraft, live Lesson catalog, and SRS Decks
 export function syncStudioLessonToLiveCatalog(
   published: StudioLesson,
