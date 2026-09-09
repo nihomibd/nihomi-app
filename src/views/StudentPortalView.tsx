@@ -17,7 +17,8 @@ import {
   ShieldCheck,
   Zap,
   Radio,
-  Crown
+  Crown,
+  Brain
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
@@ -379,6 +380,45 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
       {/* 3. TAB 2: PRACTICE (KANJI & MEMORY) */}
       {activeTab === 'practice' && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+          {/* SRS Flashcard Memory Deck Quick Access Hero */}
+          <div
+            id="srs-deck-practice-hero"
+            onClick={() => setIsSRSFlashcardsActive(true)}
+            className="p-6 bg-gradient-to-r from-blue-900/30 via-slate-900 to-indigo-900/30 border-2 border-blue-500/30 hover:border-blue-500 rounded-3xl cursor-pointer shadow-xl transition-all group flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center font-bold text-base shadow-md group-hover:scale-105 transition-transform">
+                <Brain className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 border border-blue-500/40 text-blue-300">
+                    SRS SM-2 Memory Engine
+                  </span>
+                  <span className="text-xs text-stone-400 font-mono">Leitner 5-Box Deck</span>
+                </div>
+                <h3 className="text-lg font-black text-white group-hover:text-blue-300 transition-colors mt-0.5">
+                  Flashcard SRS Memory Deck (স্পেসড রিপিটিশন ফ্ল্যাশ কার্ড)
+                </h3>
+                <p className="text-xs text-stone-400">
+                  Interactive flip cards (Kanji/Hiragana front &bull; Bengali meaning & Tokyo pitch back &bull; Easy/Hard rating)
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsSRSFlashcardsActive(true);
+              }}
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-2 shrink-0 group-hover:shadow-blue-500/25 cursor-pointer"
+            >
+              <span>Launch Flashcard Deck</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
           {/* Dedicated Ghost Mode SRS Drill Section */}
           <GhostModeSRSWidget />
 
