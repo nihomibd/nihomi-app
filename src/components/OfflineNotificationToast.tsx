@@ -48,7 +48,7 @@ export const OfflineNotificationToast: React.FC<OfflineNotificationToastProps> =
   return (
     <div
       id="connectivity-notification-toast"
-      className="fixed bottom-6 right-6 z-50 max-w-md w-full animate-in slide-in-from-bottom-5 duration-300 pointer-events-auto"
+      className="fixed bottom-20 md:bottom-6 right-6 z-50 max-w-md w-full animate-in slide-in-from-bottom-5 duration-300 pointer-events-auto"
     >
       {toastType === 'offline' ? (
         <div className="bg-stone-900/95 border-2 border-amber-500/80 text-white rounded-3xl p-4.5 shadow-2xl backdrop-blur-md space-y-3">

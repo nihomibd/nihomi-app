@@ -92,7 +92,7 @@ export const InstallPWA: React.FC = () => {
   return (
     <div
       id="nihomi-pwa-install-banner"
-      className="fixed bottom-4 right-4 sm:right-6 z-50 max-w-md w-[calc(100%-2rem)] sm:w-auto bg-[#0C0A09]/95 dark:bg-[#0C0A09]/95 sepia:bg-[#2b1f14]/95 text-white backdrop-blur-md rounded-2xl p-4 shadow-2xl border border-stone-800 sepia:border-amber-900/60 animate-in slide-in-from-bottom-5 duration-300"
+      className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 max-w-md w-[calc(100%-2rem)] sm:w-auto bg-[#0C0A09]/95 dark:bg-[#0C0A09]/95 sepia:bg-[#2b1f14]/95 text-white backdrop-blur-md rounded-2xl p-4 shadow-2xl border border-stone-800 sepia:border-amber-900/60 animate-in slide-in-from-bottom-5 duration-300"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start space-x-3">

@@ -108,7 +108,7 @@ export const OfflineNotificationBanner: React.FC = () => {
     return (
       <div
         id="online-restored-toast"
-        className="fixed bottom-4 right-4 z-50 max-w-md bg-stone-900 text-stone-100 border border-emerald-500/50 rounded-2xl shadow-2xl p-4 flex items-center space-x-3.5 animate-in fade-in slide-in-from-bottom-4 duration-300"
+        className="fixed bottom-20 md:bottom-6 right-4 z-50 max-w-md bg-stone-900 text-stone-100 border border-emerald-500/50 rounded-2xl shadow-2xl p-4 flex items-center space-x-3.5 animate-in fade-in slide-in-from-bottom-4 duration-300"
       >
         <div className="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center shrink-0">
           <ShieldCheck className="w-5 h-5 text-emerald-400" />

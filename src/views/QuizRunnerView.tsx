@@ -924,7 +924,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
         {smartRemediationToast && smartRemediationToast.show && (
           <div
             id="smart-correction-toast"
-            className="fixed bottom-6 right-6 max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl border border-amber-500/40 z-50 animate-in slide-in-from-bottom-5 duration-200"
+            className="fixed bottom-20 md:bottom-6 right-6 max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl border border-amber-500/40 z-50 animate-in slide-in-from-bottom-5 duration-200"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">

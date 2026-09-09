@@ -437,7 +437,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-20 md:bottom-6 right-6 z-40">
       {/* Minimized Trigger Button */}
       {!isOpen && (
         <button

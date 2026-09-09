@@ -64,7 +64,7 @@ export const ExportToastNotification: React.FC = () => {
   return (
     <div
       id="nihomi-export-toast"
-      className="fixed bottom-6 right-6 z-50 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 dark:bg-stone-950/95 text-white p-4 rounded-2xl border border-stone-700 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-5 text-left transition-all"
+      className="fixed bottom-20 md:bottom-6 right-6 z-50 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 dark:bg-stone-950/95 text-white p-4 rounded-2xl border border-stone-700 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-5 text-left transition-all"
     >
       <div className="flex items-start justify-between gap-3">
         

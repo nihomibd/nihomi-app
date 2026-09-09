@@ -154,7 +154,7 @@ export const FloatingMiniTimer: React.FC<FloatingMiniTimerProps> = ({
       className={`transition-all duration-300 z-40 ${
         isPinned
           ? 'relative w-full'
-          : 'fixed bottom-5 right-5 shadow-2xl max-w-sm sm:max-w-md'
+          : 'fixed bottom-20 md:bottom-6 right-5 shadow-2xl max-w-sm sm:max-w-md'
       }`}
     >
       <AnimatePresence>

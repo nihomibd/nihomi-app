@@ -95,9 +95,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     <div className="bg-[#FAF9F6] text-stone-900 min-h-screen pb-20 font-sans antialiased text-left selection:bg-red-500 selection:text-white">
       
       {/* Header Banner */}
-      <div className="bg-stone-900 text-white border-b border-stone-800 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-stone-900 text-white border-b border-stone-800 py-12 px-4 sm:px-6 lg:px-8 whitespace-nowrap shrink-0">
         <div className="max-w-6xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-500/20 text-red-300 text-xs font-bold rounded-full border border-red-500/30">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-500/20 text-red-300 text-xs font-bold rounded-full border border-red-500/30 whitespace-nowrap shrink-0">
             <Sparkles className="w-3.5 h-3.5 text-red-400" />
             <span>CANONICAL JAPANESE CURRICULUM</span>
           </div>
@@ -112,10 +112,10 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
       </div>
 
       {/* Main Container */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8 whitespace-nowrap shrink-0">
         
         {/* Filters Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs whitespace-nowrap shrink-0">
           
           {/* Level Filter */}
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
@@ -140,7 +140,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-stone-50 border border-stone-200 px-3 py-1.5 rounded-xl text-stone-800 focus:outline-hidden font-medium cursor-pointer"
+              className="bg-stone-50 border border-stone-200 px-3 py-1.5 rounded-xl text-stone-800 focus:outline-hidden font-medium cursor-pointer whitespace-nowrap shrink-0"
             >
               <option value="ALL">All Categories</option>
               <option value="GRAMMAR">Grammar & Patterns</option>
@@ -157,13 +157,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
           {filteredCourses.map((course) => (
             <div
               key={course.id}
-              className="bg-white rounded-3xl p-6 border border-stone-200 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
+              className="bg-white rounded-3xl p-6 border border-stone-200 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5 whitespace-nowrap shrink-0"
             >
               <div className="space-y-3">
                 
                 {/* Level & Category Badge */}
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 bg-stone-900 text-white text-[10px] font-bold rounded-md uppercase font-mono">
+                  <span className="px-2.5 py-0.5 bg-stone-900 text-white text-[10px] font-bold rounded-md uppercase font-mono whitespace-nowrap shrink-0">
                     JLPT {course.level}
                   </span>
                   <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">
@@ -182,14 +182,14 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 </div>
 
                 {/* Progress / Lesson stats */}
-                <div className="p-3 bg-stone-50 rounded-xl space-y-1.5 text-xs">
+                <div className="p-3 bg-stone-50 rounded-xl space-y-1.5 text-xs whitespace-nowrap shrink-0">
                   <div className="flex items-center justify-between text-[11px] text-stone-500">
                     <span>{course.completedLessons}/{course.totalLessons} Lessons</span>
                     <span className="font-bold text-stone-900">{course.progressPercent}%</span>
                   </div>
-                  <div className="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden whitespace-nowrap shrink-0">
                     <div
-                      className="bg-stone-900 h-1.5 rounded-full transition-all duration-300"
+                      className="bg-stone-900 h-1.5 rounded-full transition-all duration-300 whitespace-nowrap shrink-0"
                       style={{ width: `${course.progressPercent}%` }}
                     ></div>
                   </div>
@@ -203,7 +203,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               {/* Action Button */}
               <button
                 onClick={() => setActiveCourseToPlay(course)}
-                className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"
+                className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Play className="w-3.5 h-3.5 text-red-400 fill-red-400" />
                 <span>{course.progressPercent > 0 ? 'Resume Lesson' : 'Start Curriculum'}</span>
