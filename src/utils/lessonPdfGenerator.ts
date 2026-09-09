@@ -118,7 +118,7 @@ export async function generateLessonStudyGuidePdf(
 
     doc.setTextColor(15, 23, 42);
     doc.setFontSize(7.5);
-    doc.text(`${v.kanji || v.hiragana} (${v.hiragana})`, margin + 3, y + 3);
+    doc.text(`${v?.kanji || v.hiragana} (${v.hiragana})`, margin + 3, y + 3);
     doc.text(v.romaji || '-', margin + 70, y + 3);
     doc.text(v.meaningEnglish.length > 24 ? v.meaningEnglish.substring(0, 24) + '...' : v.meaningEnglish, margin + 110, y + 3);
     doc.text(v.meaningBengali.length > 20 ? v.meaningBengali.substring(0, 20) + '...' : v.meaningBengali, margin + 150, y + 3);
@@ -193,7 +193,7 @@ export async function generateLessonStudyGuidePdf(
       doc.setTextColor(15, 23, 42);
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
-      doc.text(k.kanji, margin + 5, y + 9);
+      doc.text(k?.kanji, margin + 5, y + 9);
 
       doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');

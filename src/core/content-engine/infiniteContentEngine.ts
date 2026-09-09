@@ -121,28 +121,28 @@ export const InfiniteContentEngine = {
       const k = obj as KanjiObject;
       return {
         objectId: k.id,
-        title: k.kanji,
+        title: k?.kanji,
         titleJa: k.trilingual.ja.text,
         level: k.level,
         domain: 'KANJI',
         formats: {
           microLesson: {
-            formula: `漢字「${k.kanji}」 [音: ${k.onyomi.join(', ')} / 訓: ${k.kunyomi.join(', ')}]`,
+            formula: `漢字「${k?.kanji}」 [音: ${k.onyomi.join(', ')} / 訓: ${k.kunyomi.join(', ')}]`,
             explanationBn: `${k.trilingual.bn.meaning} — মোট ${k.strokes}টি স্ট্রোক। মূল রুট বা বুশু (Radical): ${k.radical} (${k.radicalMeaning})।`,
             tipJa: `書き順を意識して、上から下、左から右へ書きましょう。`,
             mnemonicBn: `সূর্য বা দিনের গোলকের প্রতীক হিসেবে চৌকো চারপাশ ও মধ্যরেখা দিয়ে গঠিত।`
           },
           mcqQuiz: {
-            question: `「${k.kanji}」কাঞ্জিটির সঠিক ওন-ইয়োমি (Onyomi) রিডিং কোনটি?`,
+            question: `「${k?.kanji}」কাঞ্জিটির সঠিক ওন-ইয়োমি (Onyomi) রিডিং কোনটি?`,
             options: [
               { id: '1', textJa: k.onyomi[0] || 'NICHI', textBn: 'ওন-ইয়োমি রিডিং', isCorrect: true },
               { id: '2', textJa: 'GETSU', textBn: 'অন্য কাঞ্জির রিডিং', isCorrect: false },
               { id: '3', textJa: 'KAA', textBn: 'ভুল রিডিং', isCorrect: false }
             ],
-            explanationBn: `「${k.kanji}」কাঞ্জির ওন-ইয়োমি হলো ${k.onyomi.join(', ')} এবং কুন-ইয়োমি হলো ${k.kunyomi.join(', ')}।`
+            explanationBn: `「${k?.kanji}」কাঞ্জির ওন-ইয়োমি হলো ${k.onyomi.join(', ')} এবং কুন-ইয়োমি হলো ${k.kunyomi.join(', ')}।`
           },
           flashcard: {
-            front: k.kanji,
+            front: k?.kanji,
             back: `${k.trilingual.bn.meaning} (${k.trilingual.en.meaning})`,
             furigana: k.kunyomi[0] || k.onyomi[0],
             audioPhrase: k.compounds[0]?.reading || k.trilingual.ja.text
@@ -161,12 +161,12 @@ export const InfiniteContentEngine = {
           },
           fillInBlank: {
             sentenceTemplate: `明日は [___]曜日です。`,
-            correctAnswer: k.kanji,
+            correctAnswer: k?.kanji,
             hintBn: `সঠিক কাঞ্জিটি বসান`
           },
           speedRecognition: {
             timeLimitSec: 4,
-            targetWord: k.kanji,
+            targetWord: k?.kanji,
             distractors: ['目', '月', '田', '白']
           },
           particleDiscrimination: {
@@ -176,10 +176,10 @@ export const InfiniteContentEngine = {
             whyCorrectBn: 'রবিবার বোঝাতে কাঞ্জি 日 ব্যবহৃত হয়।'
           },
           keigoTransformation: {
-            plainForm: `${k.kanji}を見る`,
-            teineigo: `${k.kanji}を見ます`,
-            sonkeigo: `${k.kanji}をご覧になります`,
-            kenjougo: `${k.kanji}を拝見します`
+            plainForm: `${k?.kanji}を見る`,
+            teineigo: `${k?.kanji}を見ます`,
+            sonkeigo: `${k?.kanji}をご覧になります`,
+            kenjougo: `${k?.kanji}を拝見します`
           },
           nativeListening: {
             audioTranscriptJa: `A: 日本語の漢字は何文字覚えましたか？ B: 今はN5の漢字を100字覚えました。`,
@@ -206,7 +206,7 @@ export const InfiniteContentEngine = {
             translationBn: 'আমি প্রতিদিন জাপানি ভাষা চর্চা করি।'
           },
           collocationMatch: {
-            targetWord: k.kanji,
+            targetWord: k?.kanji,
             naturalPair: '日本 (にほん)',
             meaningBn: 'জাপান দেশ',
             unnaturalPairWarning: '日本 (ひぼん - incorrect)'

@@ -300,7 +300,7 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                   <div className="grid grid-cols-3 gap-2 text-[11px] text-stone-600 font-mono">
                     <div>Structure: <strong>{c.lessons}</strong></div>
                     <div>Vocab: <strong>{c.vocab}</strong></div>
-                    <div>Target: <strong>{c.kanji}</strong></div>
+                    <div>Target: <strong>{c?.kanji}</strong></div>
                   </div>
                 </div>
               ))}

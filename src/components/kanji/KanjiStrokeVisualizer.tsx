@@ -301,7 +301,7 @@ export const KanjiStrokeVisualizer: React.FC<KanjiStrokeVisualizerProps> = ({
     if (!searchTerm) return true;
     const item = KANJI_DICTIONARY[k];
     return (
-      item.kanji.includes(searchTerm) ||
+      item?.kanji.includes(searchTerm) ||
       item.meaningEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.meaningBn.includes(searchTerm) ||
       item.onyomi.some((o) => o.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -588,7 +588,7 @@ export const KanjiStrokeVisualizer: React.FC<KanjiStrokeVisualizerProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <span className="text-4xl sm:text-5xl font-serif font-bold text-stone-900">
-                  {currentData.kanji}
+                  {currentData?.kanji}
                 </span>
                 <p className="text-base font-bold text-red-600 mt-1">{currentData.meaningEn}</p>
                 <p className="text-xs text-stone-600 font-sans">{currentData.meaningBn}</p>
@@ -596,7 +596,7 @@ export const KanjiStrokeVisualizer: React.FC<KanjiStrokeVisualizerProps> = ({
 
               <button
                 type="button"
-                onClick={() => speakJapanese(currentData.kanji)}
+                onClick={() => speakJapanese(currentData?.kanji)}
                 className="p-2.5 rounded-2xl bg-white border border-stone-200 hover:bg-red-50 text-stone-600 hover:text-red-600 transition shadow-xs"
                 title="Pronounce Character"
               >

@@ -3573,14 +3573,14 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     updatedAt: '2025-01-01T00:00:00.000Z',
     vocabulary: item.vocabularies.map((v, i): VocabularyItem => ({
       id: `voc-${item.lessonNumber}-${i + 1}`,
-      japanese: v.kanji || v.hiragana,
+      japanese: v?.kanji || v.hiragana,
       furigana: v.hiragana,
       romaji: v.romaji,
       english: v.meaningEnglish,
       banglaMeaning: v.meaningBengali,
       partOfSpeech: v.partOfSpeech || 'noun',
       level: 'N5',
-      exampleSentenceJa: v.example?.japanese || v.kanji,
+      exampleSentenceJa: v.example?.japanese || v?.kanji,
       exampleSentenceEn: v.example?.english || v.meaningEnglish,
       exampleSentenceBn: v.example?.bengali || v.meaningBengali,
       exampleFurigana: v.example?.romaji || v.romaji
@@ -3608,12 +3608,12 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     })),
     kanji: item.kanjiList.map((k, i): KanjiItem => ({
       id: `kanji-${item.lessonNumber}-${i + 1}`,
-      character: k.kanji,
+      character: k?.kanji,
       meaning: `${k.meaningEnglish} (${k.meaningBengali})`,
       onyomi: k.onyomi,
       kunyomi: k.kunyomi,
       strokes: k.strokeCount,
-      radicals: k.kanji,
+      radicals: k?.kanji,
       level: 'N5',
       examples: k.compounds.map((c) => ({
         word: c.word,

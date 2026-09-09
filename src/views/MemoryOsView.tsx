@@ -419,7 +419,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          speakJapanese(activeCard.kanji);
+                          speakJapanese(activeCard?.kanji);
                         }}
                         className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition"
                       >
@@ -429,7 +429,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
                     <div className="text-center space-y-2">
                       <h2 className="text-5xl sm:text-6xl font-bold font-serif text-stone-900">
-                        {activeCard.kanji}
+                        {activeCard?.kanji}
                       </h2>
                       <p className="text-sm text-stone-500 font-medium">{activeCard.reading}</p>
                     </div>
@@ -448,7 +448,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          speakJapanese(activeCard.kanji);
+                          speakJapanese(activeCard?.kanji);
                         }}
                         className="p-1.5 text-stone-300 hover:text-white"
                       >

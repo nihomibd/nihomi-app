@@ -303,7 +303,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
     if (!q) return DICTIONARY_DATABASE;
     return DICTIONARY_DATABASE.filter(
       (e) =>
-        e.kanji.toLowerCase().includes(q) ||
+        e?.kanji.toLowerCase().includes(q) ||
         e.reading.toLowerCase().includes(q) ||
         e.romaji.toLowerCase().includes(q) ||
         e.english.toLowerCase().includes(q) ||
@@ -322,7 +322,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
   useEffect(() => {
     setGeneratedExample(null);
     if (selectedEntry) {
-      recordSearch(selectedEntry.kanji);
+      recordSearch(selectedEntry?.kanji);
     }
   }, [selectedEntry?.id]);
 
@@ -341,7 +341,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
   const kanjiCharsInEntry = useMemo(() => {
     if (!selectedEntry) return [];
     const kanjiRegex = /[\u4e00-\u9faf]/g;
-    const matches = selectedEntry.kanji.match(kanjiRegex);
+    const matches = selectedEntry?.kanji.match(kanjiRegex);
     return matches ? Array.from(new Set(matches)) : [];
   }, [selectedEntry]);
 
@@ -365,7 +365,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          word: selectedEntry.kanji,
+          word: selectedEntry?.kanji,
           reading: selectedEntry.reading,
           jlptLevel: selectedEntry.jlpt
         })
@@ -379,9 +379,9 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
       } else {
         // Fallback simulated response
         setGeneratedExample({
-          word: selectedEntry.kanji,
+          word: selectedEntry?.kanji,
           reading: selectedEntry.reading,
-          sentenceJa: `私は毎日${selectedEntry.kanji}を使って日本語を勉強します。`,
+          sentenceJa: `私は毎日${selectedEntry?.kanji}を使って日本語を勉強します。`,
           sentenceFurigana: `わたしはまいにち${selectedEntry.reading}をつかってにほんごをべんきょうします。`,
           romaji: `Watashi wa mainichi ${selectedEntry.romaji} o tsukatte nihongo o benkyou shimasu.`,
           meaningEn: `I study Japanese every day using ${selectedEntry.english.toLowerCase()}.`,
@@ -392,9 +392,9 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
       }
     } catch {
       setGeneratedExample({
-        word: selectedEntry.kanji,
+        word: selectedEntry?.kanji,
         reading: selectedEntry.reading,
-        sentenceJa: `${selectedEntry.kanji}はとても役に立ちます。`,
+        sentenceJa: `${selectedEntry?.kanji}はとても役に立ちます。`,
         sentenceFurigana: `${selectedEntry.reading}はとてもやくにたちます。`,
         romaji: `${selectedEntry.romaji} wa totemo yaku ni tachimasu.`,
         meaningEn: `${selectedEntry.english} is very useful.`,
@@ -495,7 +495,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
                   key={entry.id}
                   onClick={() => {
                     setSelectedEntry(entry);
-                    recordSearch(entry.kanji);
+                    recordSearch(entry?.kanji);
                   }}
                   className={`p-3 rounded-2xl cursor-pointer transition flex items-center justify-between gap-3 ${
                     isSelected
@@ -506,7 +506,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
                   <div className="space-y-0.5 overflow-hidden">
                     <div className="flex items-baseline gap-2">
                       <span className="font-serif font-bold text-base text-stone-900 dark:text-white">
-                        {entry.kanji}
+                        {entry?.kanji}
                       </span>
                       <span className="text-xs text-red-600 dark:text-red-400 font-sans font-medium">
                         {entry.reading}
@@ -576,7 +576,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
                             </span>
                           </div>
                           <h2 className="text-3xl sm:text-4xl font-bold font-serif text-stone-900 dark:text-white mt-2">
-                            {selectedEntry.kanji}
+                            {selectedEntry?.kanji}
                           </h2>
                           <p className="text-lg text-red-600 dark:text-red-400 font-sans font-medium mt-1">
                             {selectedEntry.reading}{' '}
@@ -587,7 +587,7 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
                         {/* Audio Pronunciation Button & Pin */}
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={() => speakJapanese(selectedEntry.kanji)}
+                            onClick={() => speakJapanese(selectedEntry?.kanji)}
                             className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 hover:bg-red-100 border border-red-200 dark:border-red-900 transition cursor-pointer active:scale-95 shadow-xs"
                             title="উচ্চারণ শুনুন (Listen with Web Speech TTS)"
                           >

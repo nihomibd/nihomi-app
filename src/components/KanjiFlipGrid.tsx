@@ -226,7 +226,7 @@ export const KanjiFlipGrid: React.FC = () => {
       // Category match
       let matchesCategory = true;
       if (selectedCategory === 'favorites') {
-        matchesCategory = favoriteKanji.includes(k.kanji);
+        matchesCategory = favoriteKanji.includes(k?.kanji);
       } else if (selectedCategory !== 'all') {
         matchesCategory = k.category === selectedCategory;
       }
@@ -237,7 +237,7 @@ export const KanjiFlipGrid: React.FC = () => {
       if (!searchQuery.trim()) return true;
       const query = searchQuery.trim().toLowerCase();
       return (
-        k.kanji.includes(query) ||
+        k?.kanji.includes(query) ||
         k.onyomi.toLowerCase().includes(query) ||
         k.kunyomi.toLowerCase().includes(query) ||
         k.bangla.toLowerCase().includes(query) ||
@@ -340,7 +340,7 @@ export const KanjiFlipGrid: React.FC = () => {
         // Check if category completed
         if (selectedCategory !== 'all' && selectedCategory !== 'favorites') {
           const catCards = all120Kanji.filter(k => k.category === selectedCategory);
-          const allCatLearned = catCards.every(k => nextLearned.includes(k.kanji));
+          const allCatLearned = catCards.every(k => nextLearned.includes(k?.kanji));
           if (allCatLearned) {
             fireConfetti();
           }
@@ -426,13 +426,13 @@ export const KanjiFlipGrid: React.FC = () => {
           const currentItem = filteredKanji[nextIndex];
           if (currentItem) {
             // Flip the card
-            setFlippedCards(f => ({ ...f, [currentItem.kanji]: true }));
+            setFlippedCards(f => ({ ...f, [currentItem?.kanji]: true }));
             // Play native pronunciation
-            speakJapanese(currentItem.kanji);
+            speakJapanese(currentItem?.kanji);
             // Save to learned
             setLearnedKanji(l => {
-              if (!l.includes(currentItem.kanji)) {
-                const updated = [...l, currentItem.kanji];
+              if (!l.includes(currentItem?.kanji)) {
+                const updated = [...l, currentItem?.kanji];
                 try {
                   localStorage.setItem('nihomi_learned_kanji_v1', JSON.stringify(updated));
                 } catch {}
@@ -462,7 +462,7 @@ export const KanjiFlipGrid: React.FC = () => {
     const pool = [...all120Kanji].sort(() => 0.5 - Math.random()).slice(0, 10);
     return pool.map(target => {
       const wrongOptions = all120Kanji
-        .filter(k => k.kanji !== target.kanji)
+        .filter(k => k?.kanji !== target?.kanji)
         .sort(() => 0.5 - Math.random())
         .slice(0, 3);
       const allChoices = [target, ...wrongOptions].sort(() => 0.5 - Math.random());
@@ -479,10 +479,10 @@ export const KanjiFlipGrid: React.FC = () => {
     if (selectedQuizChoice) return;
     setSelectedQuizChoice(choiceKanji);
 
-    const isCorrect = choiceKanji === currentQuizQuestion.target.kanji;
+    const isCorrect = choiceKanji === currentQuizQuestion.target?.kanji;
     if (isCorrect) {
       setQuizScore(s => s + 1);
-      speakJapanese(currentQuizQuestion.target.kanji);
+      speakJapanese(currentQuizQuestion.target?.kanji);
     }
 
     setQuizAnswers(prev => ({
@@ -519,11 +519,11 @@ export const KanjiFlipGrid: React.FC = () => {
 
   const flipAllCards = () => {
     const allFlipped: Record<string, boolean> = {};
-    filteredKanji.forEach(k => (allFlipped[k.kanji] = true));
+    filteredKanji.forEach(k => (allFlipped[k?.kanji] = true));
     setFlippedCards(allFlipped);
 
     // Add all to learned
-    const newLearned = Array.from(new Set([...learnedKanji, ...filteredKanji.map(k => k.kanji)]));
+    const newLearned = Array.from(new Set([...learnedKanji, ...filteredKanji.map(k => k?.kanji)]));
     setLearnedKanji(newLearned);
     try {
       localStorage.setItem('nihomi_learned_kanji_v1', JSON.stringify(newLearned));
@@ -570,7 +570,7 @@ export const KanjiFlipGrid: React.FC = () => {
               <div className="space-y-2">
                 <span className="text-xs text-slate-400 font-mono">নিচের কাঞ্জিটির সঠিক বাংলা ও ইংরেজি অর্থ নির্বাচন করুন:</span>
                 <div className="text-7xl sm:text-8xl font-black font-serif text-transparent bg-clip-text bg-gradient-to-br from-red-400 via-amber-200 to-rose-400 drop-shadow-md py-4">
-                  {currentQuizQuestion.target.kanji}
+                  {currentQuizQuestion.target?.kanji}
                 </div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-900 border border-slate-800 rounded-full text-xs text-slate-300">
                   <PenTool className="w-3.5 h-3.5 text-red-400" />
@@ -581,8 +581,8 @@ export const KanjiFlipGrid: React.FC = () => {
               {/* 4 Choices */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {currentQuizQuestion.choices.map((choice, cIdx) => {
-                  const isSelected = selectedQuizChoice === choice.kanji;
-                  const isCorrect = choice.kanji === currentQuizQuestion.target.kanji;
+                  const isSelected = selectedQuizChoice === choice?.kanji;
+                  const isCorrect = choice?.kanji === currentQuizQuestion.target?.kanji;
 
                   let btnStyle = "bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700 hover:bg-slate-850";
                   if (selectedQuizChoice) {
@@ -599,7 +599,7 @@ export const KanjiFlipGrid: React.FC = () => {
                     <button
                       key={cIdx}
                       disabled={Boolean(selectedQuizChoice)}
-                      onClick={() => handleQuizAnswer(choice.kanji)}
+                      onClick={() => handleQuizAnswer(choice?.kanji)}
                       className={`p-4 rounded-2xl border text-left transition duration-200 flex items-center justify-between cursor-pointer ${btnStyle}`}
                     >
                       <div>
@@ -853,17 +853,17 @@ export const KanjiFlipGrid: React.FC = () => {
       {filteredKanji.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
           {filteredKanji.map((item) => {
-            const isFlipped = Boolean(flippedCards[item.kanji]);
-            const isFav = favoriteKanji.includes(item.kanji);
-            const isLearned = learnedKanji.includes(item.kanji);
-            const isRevealed = Boolean(revealedCards[item.kanji]);
-            const isIdentifiedCorrectly = correctlyIdentified.includes(item.kanji);
+            const isFlipped = Boolean(flippedCards[item?.kanji]);
+            const isFav = favoriteKanji.includes(item?.kanji);
+            const isLearned = learnedKanji.includes(item?.kanji);
+            const isRevealed = Boolean(revealedCards[item?.kanji]);
+            const isIdentifiedCorrectly = correctlyIdentified.includes(item?.kanji);
 
             // In Quiz/Memory Test Mode
             if (isMemoryQuizMode) {
               return (
                 <div
-                  key={item.kanji}
+                  key={item?.kanji}
                   className={`h-40 rounded-2xl p-2.5 flex flex-col justify-between border transition duration-200 ${
                     isIdentifiedCorrectly
                       ? 'bg-emerald-950/40 border-emerald-500/50 shadow-lg shadow-emerald-950/20'
@@ -875,7 +875,7 @@ export const KanjiFlipGrid: React.FC = () => {
                   <div className="w-full flex items-center justify-between">
                     <span className="text-[9px] text-slate-400 font-mono">{item.strokeCount}画</span>
                     <button
-                      onClick={(e) => toggleFavorite(item.kanji, e)}
+                      onClick={(e) => toggleFavorite(item?.kanji, e)}
                       className={`p-0.5 rounded transition cursor-pointer ${isFav ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'}`}
                     >
                       <Star className={`w-3 h-3 ${isFav ? 'fill-amber-400' : ''}`} />
@@ -883,7 +883,7 @@ export const KanjiFlipGrid: React.FC = () => {
                   </div>
 
                   <div className="text-center my-auto">
-                    <span className="text-3xl font-bold font-serif text-white block">{item.kanji}</span>
+                    <span className="text-3xl font-bold font-serif text-white block">{item?.kanji}</span>
                     {isRevealed && (
                       <div className="mt-1 space-y-0.5 text-[9px] text-slate-300 animate-in fade-in">
                         <p className="font-bold text-amber-300">{item.bangla}</p>
@@ -895,7 +895,7 @@ export const KanjiFlipGrid: React.FC = () => {
                   <div className="w-full pt-1 border-t border-slate-750 flex items-center justify-between gap-1">
                     {!isRevealed ? (
                       <button
-                        onClick={(e) => toggleReveal(item.kanji, e)}
+                        onClick={(e) => toggleReveal(item?.kanji, e)}
                         className="w-full py-1 bg-rose-600/80 hover:bg-rose-600 text-white rounded-lg text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer"
                       >
                         <Eye className="w-2.5 h-2.5" />
@@ -904,21 +904,21 @@ export const KanjiFlipGrid: React.FC = () => {
                     ) : (
                       <div className="w-full flex gap-1">
                         <button
-                          onClick={(e) => markIdentified(item.kanji, true, e)}
+                          onClick={(e) => markIdentified(item?.kanji, true, e)}
                           className="flex-1 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[9px] font-bold transition flex items-center justify-center cursor-pointer"
                           title="পেরেছি"
                         >
                           <Check className="w-3 h-3" />
                         </button>
                         <button
-                          onClick={(e) => playSpeech(item.kanji, e)}
+                          onClick={(e) => playSpeech(item?.kanji, e)}
                           className="p-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-[9px] cursor-pointer"
                           title="উচ্চারণ"
                         >
                           <Volume2 className="w-3 h-3" />
                         </button>
                         <button
-                          onClick={(e) => markIdentified(item.kanji, false, e)}
+                          onClick={(e) => markIdentified(item?.kanji, false, e)}
                           className="flex-1 py-1 bg-slate-700 hover:bg-rose-700 text-slate-300 rounded-lg text-[9px] font-bold transition flex items-center justify-center cursor-pointer"
                           title="ভুল হয়েছে"
                         >
@@ -934,8 +934,8 @@ export const KanjiFlipGrid: React.FC = () => {
             // Normal Flashcard Mode
             return (
               <div
-                key={item.kanji}
-                onClick={() => toggleFlip(item.kanji)}
+                key={item?.kanji}
+                onClick={() => toggleFlip(item?.kanji)}
                 className="relative h-36 cursor-pointer select-none perspective-1000 group"
               >
                 <div
@@ -952,7 +952,7 @@ export const KanjiFlipGrid: React.FC = () => {
                     <div className="w-full flex items-center justify-between">
                       <span className="text-[10px] text-red-400 font-bold">JLPT N5</span>
                       <button
-                        onClick={(e) => toggleFavorite(item.kanji, e)}
+                        onClick={(e) => toggleFavorite(item?.kanji, e)}
                         className={`p-1 rounded-md transition cursor-pointer ${
                           isFav ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'
                         }`}
@@ -963,7 +963,7 @@ export const KanjiFlipGrid: React.FC = () => {
                     </div>
 
                     <span className="text-4xl font-bold text-white group-hover:scale-110 transition duration-300 font-serif my-auto">
-                      {item.kanji}
+                      {item?.kanji}
                     </span>
 
                     <div className="w-full flex items-center justify-between text-[10px] text-slate-400">
@@ -980,20 +980,20 @@ export const KanjiFlipGrid: React.FC = () => {
                   <div className={`absolute inset-0 p-2.5 flex flex-col justify-between rotate-y-180 backface-hidden ${!isFlipped ? 'hidden' : 'flex'}`}>
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-1">
-                        <span className="text-xs font-bold text-red-400 font-serif">{item.kanji}</span>
+                        <span className="text-xs font-bold text-red-400 font-serif">{item?.kanji}</span>
                         <span className="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-mono">
                           {item.strokeCount}画
                         </span>
                       </div>
                       <div className="flex items-center">
                         <button
-                          onClick={(e) => toggleFavorite(item.kanji, e)}
+                          onClick={(e) => toggleFavorite(item?.kanji, e)}
                           className={`p-1 rounded transition cursor-pointer ${isFav ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'}`}
                         >
                           <Star className={`w-3 h-3 ${isFav ? 'fill-amber-400' : ''}`} />
                         </button>
                         <button
-                          onClick={(e) => playSpeech(item.kanji, e)}
+                          onClick={(e) => playSpeech(item?.kanji, e)}
                           className="p-1 rounded text-slate-300 hover:text-white transition cursor-pointer"
                           title="অডিও শুনুন"
                         >

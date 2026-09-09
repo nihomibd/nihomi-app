@@ -10,7 +10,7 @@ export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress, onTakeMock
   const modules = [
     { key: 'vocabulary', label: 'Vocabulary', labelJa: '語彙 (Goi)', percent: progress.modules.vocabulary, color: 'bg-rose-500' },
     { key: 'grammar', label: 'Grammar', labelJa: '文法 (Bunpou)', percent: progress.modules.grammar, color: 'bg-indigo-500' },
-    { key: 'kanji', label: 'Kanji', labelJa: '漢字 (Kanji)', percent: progress.modules.kanji, color: 'bg-amber-500' },
+    { key: 'kanji', label: 'Kanji', labelJa: '漢字 (Kanji)', percent: progress.modules?.kanji, color: 'bg-amber-500' },
     { key: 'listening', label: 'Listening', labelJa: '聴解 (Choukai)', percent: progress.modules.listening, color: 'bg-emerald-500' },
     { key: 'reading', label: 'Reading', labelJa: '読解 (Dokkai)', percent: progress.modules.reading, color: 'bg-sky-500' },
   ];

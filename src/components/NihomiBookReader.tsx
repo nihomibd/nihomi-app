@@ -146,7 +146,7 @@ export const NihomiBookReader: React.FC<NihomiBookReaderProps> = ({
   const filteredVocab = vocabList.filter(v => 
     v.romaji.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.kana.includes(searchTerm) ||
-    v.kanji.includes(searchTerm) ||
+    v?.kanji.includes(searchTerm) ||
     v.bangla.includes(searchTerm)
   );
 
@@ -247,9 +247,9 @@ export const NihomiBookReader: React.FC<NihomiBookReaderProps> = ({
                       <span className={`font-bold text-slate-950 ${fontSize === 'large' ? 'text-lg' : 'text-base'}`}>
                         {word.kana}
                       </span>
-                      {word.kanji && word.kanji !== word.kana && (
+                      {word?.kanji && word?.kanji !== word.kana && (
                         <span className="text-xs bg-red-100/80 text-red-800 font-semibold px-2 py-0.5 rounded">
-                          {word.kanji}
+                          {word?.kanji}
                         </span>
                       )}
                     </div>

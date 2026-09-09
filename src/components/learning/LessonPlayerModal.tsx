@@ -446,7 +446,7 @@ export const LessonPlayerModal: React.FC<LessonPlayerModalProps> = ({
                     <div className="flex items-center justify-between">
                       <div className="flex items-baseline space-x-2">
                         <span className="text-xl font-bold text-stone-900 dark:text-white font-japanese">
-                          {vocab.kanji}
+                          {vocab?.kanji}
                         </span>
                         {showFurigana && (
                           <span className="text-xs font-medium text-red-600 dark:text-rose-400 font-japanese">
@@ -456,7 +456,7 @@ export const LessonPlayerModal: React.FC<LessonPlayerModalProps> = ({
                       </div>
                       <button
                         type="button"
-                        onClick={() => handlePlayAudio(vocab.kanji)}
+                        onClick={() => handlePlayAudio(vocab?.kanji)}
                         className="p-1.5 rounded-lg bg-stone-200/70 dark:bg-stone-800 hover:bg-red-100 dark:hover:bg-rose-950 text-stone-700 dark:text-stone-200 hover:text-red-600 dark:hover:text-rose-400 transition-colors"
                         title="Listen Audio"
                       >

@@ -202,7 +202,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
 
     let progressPoints = 0;
     // 1. Kanji Mastery (up to 40%)
-    const lessonKanjiChars = lesson.kanjiList.map(k => k.kanji);
+    const lessonKanjiChars = lesson.kanjiList.map(k => k?.kanji);
     if (lessonKanjiChars.length > 0) {
       const masteredInLesson = lessonKanjiChars.filter(k => masteredKanji.includes(k)).length;
       progressPoints += Math.round((masteredInLesson / lessonKanjiChars.length) * 40);
@@ -310,7 +310,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
         {
           id: 1,
           question: `Complete the sentence with appropriate particle: 「${vocab1.hiragana || 'わたし'} ___ ${vocab2.hiragana || 'がくせい'} です。」`,
-          questionJa: `「${vocab1.kanji || '私'} ___ ${vocab2.kanji || '学生'} です。」`,
+          questionJa: `「${vocab1?.kanji || '私'} ___ ${vocab2?.kanji || '学生'} です。」`,
           options: ['は (wa)', 'が (ga)', 'に (ni)', 'で (de)'],
           correctIndex: 0,
           explanationEn: `The particle は (pronounced 'wa') marks the topic of the sentence (${vocab1.meaningEnglish}).`,
@@ -319,8 +319,8 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
         },
         {
           id: 2,
-          question: `What is the correct English & Bengali meaning of 「${vocab1.kanji || vocab1.hiragana}」?`,
-          questionJa: `「${vocab1.kanji || vocab1.hiragana}」の意味は何ですか？`,
+          question: `What is the correct English & Bengali meaning of 「${vocab1?.kanji || vocab1.hiragana}」?`,
+          questionJa: `「${vocab1?.kanji || vocab1.hiragana}」の意味は何ですか？`,
           options: [
             `${vocab1.meaningEnglish} (${vocab1.meaningBengali})`,
             `Teacher (শিক্ষক)`,
@@ -328,13 +328,13 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
             `Japan (জাপান)`
           ],
           correctIndex: 0,
-          explanationEn: `「${vocab1.kanji || vocab1.hiragana}」 translates to "${vocab1.meaningEnglish}".`,
-          explanationBn: `「${vocab1.kanji || vocab1.hiragana}」 এর বাংলা অর্থ হলো "${vocab1.meaningBengali}"।`,
-          targetTerm: vocab1.kanji || vocab1.hiragana
+          explanationEn: `「${vocab1?.kanji || vocab1.hiragana}」 translates to "${vocab1.meaningEnglish}".`,
+          explanationBn: `「${vocab1?.kanji || vocab1.hiragana}」 এর বাংলা অর্থ হলো "${vocab1.meaningBengali}"।`,
+          targetTerm: vocab1?.kanji || vocab1.hiragana
         },
         {
           id: 3,
-          question: `Select the correct negative formulation for: 「${vocab1.kanji || '田中さん'} は 医者 (doctor) ___。」`,
+          question: `Select the correct negative formulation for: 「${vocab1?.kanji || '田中さん'} は 医者 (doctor) ___。」`,
           questionJa: `「田中さんは 医者 ___。」`,
           options: [
             'じゃありません (ja arimasen)',
@@ -418,7 +418,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
     let fileContent = `#separator:tab\n#html:true\n#deck:Nihomi Japanese::JLPT N5::Lesson ${lesson.lessonNumber} - ${lesson.titleEnglish}\n#tags:nihomi jlpt-n5 lesson-${lesson.lessonNumber}\n`;
 
     lesson.vocabularies.forEach(v => {
-      const front = `<div style="text-align:center;font-size:26px;font-weight:bold;color:#1e293b;">${v.kanji}</div><div style="text-align:center;font-size:16px;color:#64748b;">【${v.hiragana}】</div>`;
+      const front = `<div style="text-align:center;font-size:26px;font-weight:bold;color:#1e293b;">${v?.kanji}</div><div style="text-align:center;font-size:16px;color:#64748b;">【${v.hiragana}】</div>`;
       const back = `<div style="text-align:center;font-size:18px;font-weight:bold;color:#0f172a;">${v.meaningEnglish}</div><div style="text-align:center;font-size:15px;color:#4f46e5;margin-top:4px;">${v.meaningBengali}</div><div style="text-align:center;font-size:13px;color:#94a3b8;font-family:monospace;margin-top:2px;">[${v.romaji}]</div><hr style="border:none;border-top:1px solid #e2e8f0;margin:12px 0;"><div style="font-size:14px;color:#334155;"><strong>Ex:</strong> ${v.example.japanese}</div><div style="font-size:12px;color:#64748b;">${v.example.english} / ${v.example.bengali}</div>`;
       fileContent += `${front}\t${back}\n`;
     });
@@ -488,7 +488,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
       const matchLessonNumber = lesson.lessonNumber.toString().includes(q);
       const matchTitle = lesson.titleEnglish.toLowerCase().includes(q) || lesson.titleJapanese.includes(q) || lesson.topic.toLowerCase().includes(q);
       const matchVocab = lesson.vocabularies.some(
-        v => v.kanji.toLowerCase().includes(q) ||
+        v => v?.kanji.toLowerCase().includes(q) ||
              v.hiragana.toLowerCase().includes(q) ||
              v.meaningEnglish.toLowerCase().includes(q) ||
              v.meaningBengali.includes(q)
@@ -499,7 +499,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
              g.explanationEnglish.toLowerCase().includes(q)
       );
       const matchKanji = lesson.kanjiList.some(
-        k => k.kanji.includes(q) ||
+        k => k?.kanji.includes(q) ||
              k.meaningEnglish.toLowerCase().includes(q) ||
              k.meaningBengali.includes(q)
       );
@@ -513,8 +513,8 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
     const kanjiMap = new Map<string, CurriculumKanji & { lessonNumber: number }>();
     NIHOMI_JLPT_N5_CURRICULUM.forEach(lesson => {
       lesson.kanjiList.forEach(k => {
-        if (!kanjiMap.has(k.kanji)) {
-          kanjiMap.set(k.kanji, { ...k, lessonNumber: lesson.lessonNumber });
+        if (!kanjiMap.has(k?.kanji)) {
+          kanjiMap.set(k?.kanji, { ...k, lessonNumber: lesson.lessonNumber });
         }
       });
     });
@@ -522,7 +522,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
   }, []);
 
   const totalCurriculumKanjiCount = allCurriculumKanji.length;
-  const masteredCurriculumKanjiCount = allCurriculumKanji.filter(k => masteredKanji.includes(k.kanji)).length;
+  const masteredCurriculumKanjiCount = allCurriculumKanji.filter(k => masteredKanji.includes(k?.kanji)).length;
   const kanjiMasteryPercentage = Math.round((masteredCurriculumKanjiCount / (totalCurriculumKanjiCount || 1)) * 100);
 
   const totalLessonsCount = 25;
@@ -777,12 +777,12 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
             {/* Kanji Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
               {allCurriculumKanji.map((k) => {
-                const isMastered = masteredKanji.includes(k.kanji);
-                const isSelectedForStroke = activeStrokeKanji === k.kanji;
+                const isMastered = masteredKanji.includes(k?.kanji);
+                const isSelectedForStroke = activeStrokeKanji === k?.kanji;
 
                 return (
                   <div
-                    key={k.kanji}
+                    key={k?.kanji}
                     className={`p-4 rounded-2xl border transition-all duration-200 relative select-none ${
                       isSelectedForStroke
                         ? 'ring-2 ring-amber-500 bg-amber-50/40 dark:bg-amber-950/20 border-amber-400'
@@ -793,22 +793,22 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                   >
                     <div className="flex items-start justify-between">
                       <span
-                        onClick={() => setActiveStrokeKanji(isSelectedForStroke ? null : k.kanji)}
+                        onClick={() => setActiveStrokeKanji(isSelectedForStroke ? null : k?.kanji)}
                         className="text-3xl font-black text-stone-900 dark:text-white font-japanese cursor-pointer hover:scale-105 transition-transform"
                         title="Click to view Stroke Order animation"
                       >
-                        {k.kanji}
+                        {k?.kanji}
                       </span>
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => setActiveStrokeKanji(isSelectedForStroke ? null : k.kanji)}
+                          onClick={() => setActiveStrokeKanji(isSelectedForStroke ? null : k?.kanji)}
                           className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 cursor-pointer"
                           title="Animate Stroke Order"
                         >
                           筆順
                         </button>
                         <span
-                          onClick={() => toggleKanjiMastery(k.kanji)}
+                          onClick={() => toggleKanjiMastery(k?.kanji)}
                           className={`text-[10px] font-bold px-1.5 py-0.5 rounded cursor-pointer ${
                             isMastered
                               ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300'
@@ -1124,7 +1124,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                       <div>
                                         <div className="flex items-baseline gap-2">
                                           <span className="text-xl font-black text-stone-900 dark:text-white font-japanese">
-                                            {v.kanji}
+                                            {v?.kanji}
                                           </span>
                                           <span className="text-sm text-stone-500 dark:text-stone-400 font-japanese">
                                             【{v.hiragana}】
@@ -1254,7 +1254,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                           {activeTab === 'kanji' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {lesson.kanjiList.map((k, kIdx) => {
-                                const isMastered = masteredKanji.includes(k.kanji);
+                                const isMastered = masteredKanji.includes(k?.kanji);
                                 return (
                                   <div
                                     key={kIdx}
@@ -1267,7 +1267,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-4">
                                         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-600 to-amber-600 text-white flex items-center justify-center text-3xl font-black shadow-md font-japanese">
-                                          {k.kanji}
+                                          {k?.kanji}
                                         </div>
                                         <div className="space-y-1">
                                           <div className="flex items-center gap-2">
@@ -1287,9 +1287,9 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                       <div className="flex flex-col items-end gap-2">
                                         <div className="flex items-center gap-1.5">
                                           <button
-                                            onClick={() => setActiveStrokeKanji(activeStrokeKanji === k.kanji ? null : k.kanji)}
+                                            onClick={() => setActiveStrokeKanji(activeStrokeKanji === k?.kanji ? null : k?.kanji)}
                                             className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1 cursor-pointer ${
-                                              activeStrokeKanji === k.kanji
+                                              activeStrokeKanji === k?.kanji
                                                 ? 'bg-amber-500 text-stone-950 border-amber-600 shadow-sm'
                                                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-stone-400'
                                             }`}
@@ -1299,7 +1299,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                           </button>
 
                                           <button
-                                            onClick={() => toggleKanjiMastery(k.kanji)}
+                                            onClick={() => toggleKanjiMastery(k?.kanji)}
                                             className={`px-3 py-1 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
                                               isMastered
                                                 ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700'
@@ -1311,7 +1311,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                         </div>
 
                                         <button
-                                          onClick={() => playJapaneseAudio(k.kanji, `kanji-${lesson.lessonNumber}-${kIdx}`)}
+                                          onClick={() => playJapaneseAudio(k?.kanji, `kanji-${lesson.lessonNumber}-${kIdx}`)}
                                           className="p-1.5 rounded-lg text-stone-400 hover:text-stone-800 dark:hover:text-white cursor-pointer"
                                           title="Pronounce"
                                         >
@@ -1321,9 +1321,9 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
                                     </div>
 
                                     {/* Stroke Order Interactive Animator Component */}
-                                    {activeStrokeKanji === k.kanji && (
+                                    {activeStrokeKanji === k?.kanji && (
                                       <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
-                                        <KanjiStrokeAnimator kanji={k.kanji} onClose={() => setActiveStrokeKanji(null)} />
+                                        <KanjiStrokeAnimator kanji={k?.kanji} onClose={() => setActiveStrokeKanji(null)} />
                                       </div>
                                     )}
 

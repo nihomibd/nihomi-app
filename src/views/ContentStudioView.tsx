@@ -792,7 +792,7 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
                 <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-stone-800/80 scrollbar-none text-xs">
                   {[
                     { id: 'overview', label: '📖 Overview', count: null },
-                    { id: 'vocab_kanji', label: '🔤 Vocab & Kanji', count: (selectedLesson.vocabulary?.length || 0) + (selectedLesson.kanji?.length || 0) },
+                    { id: 'vocab_kanji', label: '🔤 Vocab & Kanji', count: (selectedLesson.vocabulary?.length || 0) + (selectedLesson?.kanji?.length || 0) },
                     { id: 'grammar', label: '📐 Grammar', count: selectedLesson.grammar?.length || 0 },
                     { id: 'dialogue_baito', label: '💬 Dialogue & Baito', count: selectedLesson.dialogue?.lines?.length || null },
                     { id: 'exercises_quiz', label: '🎯 Exercises & Quiz', count: (selectedLesson.exercises?.length || 0) + (selectedLesson.quiz?.length || 0) },
@@ -930,17 +930,17 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
                         <div className="flex items-center justify-between">
                           <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                             <Award className="w-3.5 h-3.5 text-amber-400" />
-                            Lesson Kanji ({selectedLesson.kanji?.length || 0} characters)
+                            Lesson Kanji ({selectedLesson?.kanji?.length || 0} characters)
                           </h4>
                           <span className="text-[11px] text-slate-400">Strokes, Radicals & Compounds</span>
                         </div>
 
-                        {selectedLesson.kanji && selectedLesson.kanji.length > 0 ? (
+                        {selectedLesson?.kanji && selectedLesson?.kanji.length > 0 ? (
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            {selectedLesson.kanji.map((k) => (
+                            {(selectedLesson?.kanji || []).map((k) => (
                               <div key={k.id} className="p-3.5 rounded-xl bg-stone-950 border border-stone-800 space-y-2">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-2xl font-black text-amber-400 font-japanese">{k.kanji}</span>
+                                  <span className="text-2xl font-black text-amber-400 font-japanese">{k?.kanji}</span>
                                   <span className="text-[10px] px-2 py-0.5 rounded bg-stone-800 text-slate-400 font-mono">
                                     {k.strokeCount} strokes
                                   </span>

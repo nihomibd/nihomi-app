@@ -522,7 +522,7 @@ export const TokyoPitchDojo: React.FC<TokyoPitchDojoProps> = ({
                       ? 'w-2 bg-red-500'
                       : 'w-2 bg-white/20'
                   }`}
-                  title={`Step ${idx + 1}: ${step.kanji}`}
+                  title={`Step ${idx + 1}: ${step?.kanji}`}
                 />
               ))}
             </div>

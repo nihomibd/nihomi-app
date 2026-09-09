@@ -52,7 +52,7 @@ export const ReviewQueueStudio: React.FC = () => {
   // Form State for Editing active object
   const [editPattern, setEditPattern] = useState(() => {
     if (!activeObject) return '';
-    return activeObject.type === 'GRAMMAR' ? (activeObject as GrammarObject).pattern : (activeObject as any).word || (activeObject as any).kanji;
+    return activeObject.type === 'GRAMMAR' ? (activeObject as GrammarObject).pattern : (activeObject as any).word || (activeObject as any)?.kanji;
   });
   const [editFormula, setEditFormula] = useState(() => {
     if (!activeObject) return '';
@@ -85,7 +85,7 @@ export const ReviewQueueStudio: React.FC = () => {
       setEditFormula(v.reading || '');
     } else if (obj.type === 'KANJI') {
       const k = obj as KanjiObject;
-      setEditPattern(k.kanji || '');
+      setEditPattern(k?.kanji || '');
       setEditFormula(k.onyomi.join(', ') || '');
     }
     setEditMeaningEn(obj.trilingual?.en?.meaning || '');
@@ -109,7 +109,7 @@ export const ReviewQueueStudio: React.FC = () => {
       v.reading = editFormula;
     } else if (updated.type === 'KANJI') {
       const k = updated as KanjiObject;
-      k.kanji = editPattern;
+      k?.kanji = editPattern;
     }
 
     updated.trilingual = {
@@ -196,7 +196,7 @@ export const ReviewQueueStudio: React.FC = () => {
       const violations = evaluation.violations || [];
       const criticalCount = violations.filter((v) => v.severity === 'CRITICAL').length;
       const warningCount = violations.filter((v) => v.severity === 'WARNING').length;
-      const pattern = item.type === 'GRAMMAR' ? (item as GrammarObject).pattern : (item as any).word || (item as any).kanji || '';
+      const pattern = item.type === 'GRAMMAR' ? (item as GrammarObject).pattern : (item as any).word || (item as any)?.kanji || '';
       const violationSummary = violations.map((v) => `[${v.severity}] ${v.ruleId}: ${v.message}`).join(' | ');
 
       const escapeCSV = (str: string) => `"${(str || '').replace(/"/g, '""')}"`;
@@ -402,7 +402,7 @@ export const ReviewQueueStudio: React.FC = () => {
                         ? (obj as GrammarObject).pattern
                         : obj.type === 'VOCABULARY'
                         ? (obj as VocabularyObject).word
-                        : (obj as KanjiObject).kanji}
+                        : (obj as KanjiObject)?.kanji}
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-stone-400 font-sans">

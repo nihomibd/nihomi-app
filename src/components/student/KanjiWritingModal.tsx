@@ -127,7 +127,7 @@ export const KanjiWritingModal: React.FC<KanjiWritingModalProps> = ({
               Kanji Stroke Canvas (漢字書き取り)
             </span>
             <h3 className="text-base font-bold text-stone-900">
-              Practice Character: <span className="text-xl font-black text-red-600 font-japanese">{kanjiData.kanji}</span>
+              Practice Character: <span className="text-xl font-black text-red-600 font-japanese">{kanjiData?.kanji}</span>
             </h3>
           </div>
           <button
@@ -159,7 +159,7 @@ export const KanjiWritingModal: React.FC<KanjiWritingModalProps> = ({
           <div className="relative border-2 border-stone-300 rounded-2xl overflow-hidden shadow-inner bg-white">
             {/* Faint Background Reference Character */}
             <div className="absolute inset-0 flex items-center justify-center text-[180px] font-black text-stone-200 select-none pointer-events-none opacity-40 font-japanese">
-              {kanjiData.kanji}
+              {kanjiData?.kanji}
             </div>
 
             <canvas

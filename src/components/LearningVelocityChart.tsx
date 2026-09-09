@@ -69,7 +69,7 @@ export const LearningVelocityChart: React.FC<LearningVelocityChartProps> = ({
 
   const skillTotals = useMemo(() => {
     return {
-      kanji: thirtyDayData.reduce((acc, curr) => acc + curr.kanji, 0),
+      kanji: thirtyDayData.reduce((acc, curr) => acc + curr?.kanji, 0),
       grammar: thirtyDayData.reduce((acc, curr) => acc + curr.grammar, 0),
       vocabulary: thirtyDayData.reduce((acc, curr) => acc + curr.vocabulary, 0),
       listening: thirtyDayData.reduce((acc, curr) => acc + curr.listening, 0)
@@ -148,10 +148,10 @@ export const LearningVelocityChart: React.FC<LearningVelocityChartProps> = ({
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
           </div>
           <p className="text-xl font-bold font-serif text-stone-900 mt-1">
-            {skillTotals.kanji} <span className="text-xs font-normal text-stone-500">mins</span>
+            {skillTotals?.kanji} <span className="text-xs font-normal text-stone-500">mins</span>
           </p>
           <p className="text-[10px] text-stone-400 font-medium">
-            {Math.round((skillTotals.kanji / total30DayMins) * 100)}% of total study
+            {Math.round((skillTotals?.kanji / total30DayMins) * 100)}% of total study
           </p>
         </button>
 

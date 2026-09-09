@@ -165,7 +165,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
       try {
         const preview = await fetchPhrasalPreview(
           {
-            word: currentPreset.kanji,
+            word: currentPreset?.kanji,
             readingKana: currentPreset.readingKana,
             romaji: currentPreset.romaji,
             pattern: currentPreset.pattern,
@@ -259,7 +259,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
     if (!currentPreset || isPlayingSpeech) return;
     setIsPlayingSpeech(true);
     playNativeTokyoSpeech(
-      currentPreset.readingKana || currentPreset.kanji,
+      currentPreset.readingKana || currentPreset?.kanji,
       speechRate,
       undefined,
       () => setIsPlayingSpeech(false)
@@ -376,7 +376,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
     try {
       const response = await evaluateTokyoPitchAccent(
         {
-          targetPhrase: currentPreset.kanji || currentPreset.readingKana,
+          targetPhrase: currentPreset?.kanji || currentPreset.readingKana,
           targetRomaji: currentPreset.romaji,
           targetMeaning: currentPreset.meaningEn,
           targetPattern: currentPreset.pattern,
@@ -648,7 +648,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-sm tracking-wide">{p.kanji}</span>
+                        <span className="font-bold text-sm tracking-wide">{p?.kanji}</span>
                         <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-800 text-amber-300">
                           {p.patternNameJa.split(' ')[0]}
                         </span>
@@ -668,7 +668,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
                     <div className="space-y-1">
                       <div className="flex items-center space-x-3">
                         <h2 className="text-3xl font-black text-white tracking-wider">
-                          {currentPreset.kanji}
+                          {currentPreset?.kanji}
                         </h2>
                         <span className="text-lg font-mono text-stone-400">
                           ({currentPreset.readingKana} / {currentPreset.romaji})
@@ -934,7 +934,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
                           }`}
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-sm">{p.kanji}</span>
+                            <span className="text-sm">{p?.kanji}</span>
                             <span className="text-[10px] font-mono text-amber-300">
                               {p.patternNameJa.split(' ')[0]}
                             </span>

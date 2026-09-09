@@ -389,7 +389,7 @@ export async function startAccentMasterySession(
   const step: AccentMasteryStep = {
     stepIndex: 0,
     drillId: fallbackDrill.id,
-    kanji: fallbackDrill.kanji,
+    kanji: fallbackDrill?.kanji,
     readingKana: fallbackDrill.readingKana,
     pattern: fallbackDrill.pattern,
     targetPitches: fallbackDrill.targetPitches

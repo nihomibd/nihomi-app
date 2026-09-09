@@ -458,7 +458,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
             }`}
           >
             <Award className="w-3.5 h-3.5" />
-            Kanji ({content.kanji?.length || 0})
+            Kanji ({content?.kanji?.length || 0})
           </button>
           <button
             onClick={() => setActiveTab('dialogue')}
@@ -748,7 +748,7 @@ export const ContentDraftReviewModal: React.FC<ContentDraftReviewModalProps> = (
                 Kanji radicals, readings (onyomi/kunyomi), stroke orders, and compound words.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {content.kanji.map((kan, idx) => (
+                {(content?.kanji || []).map((kan, idx) => (
                   <div
                     key={kan.id || idx}
                     className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50 space-y-2"

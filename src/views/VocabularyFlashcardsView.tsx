@@ -739,7 +739,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                speakJapanese(card.kanji);
+                                speakJapanese(card?.kanji);
                               }}
                               className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition"
                               title="Listen"
@@ -762,7 +762,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
 
                         <div className="text-center space-y-2">
                           <h2 className="text-5xl sm:text-6xl font-bold font-serif text-stone-900">
-                            {card.kanji}
+                            {card?.kanji}
                           </h2>
                           <p className="text-sm font-medium text-stone-500">{card.reading}</p>
                         </div>
@@ -788,7 +788,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              speakJapanese(card.kanji);
+                              speakJapanese(card?.kanji);
                             }}
                             className="p-1.5 text-stone-300 hover:text-white"
                           >
@@ -811,7 +811,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                           {/* Tokyo Pitch Accent Waveform & Melody Integration */}
                           <div className="pt-2 text-left" onClick={(e) => e.stopPropagation()}>
                             <TokyoPitchWaveform
-                              word={card.kanji}
+                              word={card?.kanji}
                               reading={card.reading}
                               compact={true}
                               showControls={true}
@@ -985,7 +985,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                     >
                       <div className="space-y-1">
                         <div className="flex items-baseline justify-between">
-                          <span className="text-2xl font-bold font-serif text-stone-900">{card.kanji}</span>
+                          <span className="text-2xl font-bold font-serif text-stone-900">{card?.kanji}</span>
                           <div className="flex items-center gap-1">
                             <button
                               onClick={() => {
@@ -998,7 +998,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                               <Folder className="w-3.5 h-3.5" />
                             </button>
                             <button
-                              onClick={() => speakJapanese(card.kanji)}
+                              onClick={() => speakJapanese(card?.kanji)}
                               className="p-1.5 text-stone-500 hover:text-red-600 rounded-lg hover:bg-stone-200"
                               title="Listen"
                             >
@@ -1006,7 +1006,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                             </button>
                             <button
                               onClick={() => {
-                                setPitchLabWord(card.kanji);
+                                setPitchLabWord(card?.kanji);
                                 setIsPitchLabOpen(true);
                               }}
                               className="p-1.5 text-stone-500 hover:text-rose-600 rounded-lg hover:bg-stone-200"
@@ -1363,7 +1363,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                 <div>
                   <h3 className="text-lg font-bold font-serif text-stone-900">Assign to Vocabulary Folders</h3>
                   <p className="text-xs text-stone-500">
-                    Organize <span className="font-bold text-stone-900">"{cardToAssign.kanji}"</span> into your custom study folders
+                    Organize <span className="font-bold text-stone-900">"{cardToAssign?.kanji}"</span> into your custom study folders
                   </p>
                 </div>
                 <button

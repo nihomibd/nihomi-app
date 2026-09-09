@@ -41,7 +41,7 @@ export const VersionHistorySidebar: React.FC<VersionHistorySidebarProps> = ({
   const getTargetPattern = (obj: KnowledgeObject) => {
     if (obj.type === 'GRAMMAR') return (obj as GrammarObject).pattern;
     if (obj.type === 'VOCABULARY') return (obj as VocabularyObject).word;
-    if (obj.type === 'KANJI') return (obj as KanjiObject).kanji;
+    if (obj.type === 'KANJI') return (obj as KanjiObject)?.kanji;
     return (obj as any).code || '';
   };
 

@@ -631,7 +631,7 @@ export const ContentIngestionService = {
         level: obj.level,
         status: obj.status,
         lifecycleStage: obj.lifecycleStage,
-        patternOrWord: obj.type === 'GRAMMAR' ? (obj as GrammarObject).pattern : obj.type === 'VOCABULARY' ? (obj as VocabularyObject).word : (obj as KanjiObject).kanji,
+        patternOrWord: obj.type === 'GRAMMAR' ? (obj as GrammarObject).pattern : obj.type === 'VOCABULARY' ? (obj as VocabularyObject).word : (obj as KanjiObject)?.kanji,
         formulaOrReading: obj.type === 'GRAMMAR' ? (obj as GrammarObject).formula : obj.type === 'VOCABULARY' ? (obj as VocabularyObject).reading : (obj as KanjiObject).onyomi.join('/'),
         trilingual: obj.trilingual,
         qualityScore: obj.qualityEvaluation?.overallScore ?? 95

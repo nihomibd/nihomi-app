@@ -165,7 +165,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedKanji, setSelectedKanji] = useState<KanjiStrokeItem>(() => {
-    const found = ESSENTIAL_KANJI_BANK.find((k) => k.kanji === initialKanji);
+    const found = ESSENTIAL_KANJI_BANK.find((k) => k?.kanji === initialKanji);
     return found || ESSENTIAL_KANJI_BANK[0];
   });
 
@@ -245,7 +245,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
       ctx.font = '200px "Noto Serif JP", "Yu Mincho", serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(selectedKanji.kanji, width / 2, height / 2 + 8);
+      ctx.fillText(selectedKanji?.kanji, width / 2, height / 2 + 8);
       ctx.restore();
     }
   };
@@ -330,7 +330,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
   };
 
   const handleVerify = () => {
-    speakJapanese(selectedKanji.kanji);
+    speakJapanese(selectedKanji?.kanji);
     const targetStrokes = selectedKanji.strokes;
     const diff = Math.abs(strokeCount - targetStrokes);
 
@@ -354,7 +354,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
 
   const handleUseKanji = () => {
     if (onSelectKanji) {
-      onSelectKanji(selectedKanji.kanji);
+      onSelectKanji(selectedKanji?.kanji);
     }
     if (onClose) {
       onClose();
@@ -386,7 +386,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
 
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => speakJapanese(selectedKanji.kanji)}
+            onClick={() => speakJapanese(selectedKanji?.kanji)}
             className="p-2 rounded-xl bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 border border-stone-200 text-xs transition cursor-pointer"
             title="Tokyo Native Audio"
           >
@@ -411,10 +411,10 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
         </span>
         <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
           {ESSENTIAL_KANJI_BANK.map((item) => {
-            const isSelected = selectedKanji.kanji === item.kanji;
+            const isSelected = selectedKanji?.kanji === item?.kanji;
             return (
               <button
-                key={item.kanji}
+                key={item?.kanji}
                 onClick={() => setSelectedKanji(item)}
                 className={`w-9 h-9 shrink-0 rounded-xl font-serif text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${
                   isSelected
@@ -422,7 +422,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
                     : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200'
                 }`}
               >
-                {item.kanji}
+                {item?.kanji}
               </button>
             );
           })}
@@ -491,7 +491,7 @@ export const KanjiStrokeCanvas: React.FC<KanjiStrokeCanvasProps> = ({
           <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-2 text-xs">
             <div className="flex items-baseline justify-between">
               <span className="text-3xl font-bold font-serif text-stone-900">
-                {selectedKanji.kanji}
+                {selectedKanji?.kanji}
               </span>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-stone-200 text-stone-700">
                 {selectedKanji.strokes} Strokes

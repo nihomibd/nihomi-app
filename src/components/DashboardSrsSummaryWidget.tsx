@@ -174,14 +174,14 @@ export const DashboardSrsSummaryWidget: React.FC<DashboardSrsSummaryWidgetProps>
               >
                 <div className="min-w-0">
                   <p className="font-serif font-bold text-stone-900 dark:text-white text-base truncate">
-                    {card.kanji}
+                    {card?.kanji}
                   </p>
                   <p className="text-[11px] text-stone-400 font-mono truncate">{card.reading}</p>
                   <p className="text-[11px] text-stone-600 dark:text-stone-300 truncate">{card.english}</p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => speakJapanese(card.kanji)}
+                  onClick={() => speakJapanese(card?.kanji)}
                   className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-red-50 text-stone-600 hover:text-red-600 transition cursor-pointer shrink-0"
                   title="Listen Native Audio"
                 >

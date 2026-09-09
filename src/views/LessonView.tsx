@@ -415,8 +415,8 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
   const { lesson, courseTitle, moduleTitle, quizSummary, isCompleted } = lessonData;
 
   // Character list for Canvas Writing Practice
-  const kanjiTraceList = lesson.kanji?.length
-    ? lesson.kanji.map((k: any) => ({
+  const kanjiTraceList = lesson?.kanji?.length
+    ? (lesson?.kanji || []).map((k: any) => ({
         char: k.character,
         reading: k.onyomi?.[0] || k.kunyomi?.[0] || '',
         meaning: k.meaning || '',
@@ -913,7 +913,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Kanji SRS ({lesson.kanji?.length || 0})</span>
+            <span>Kanji SRS ({lesson?.kanji?.length || 0})</span>
           </button>
           <button
             onClick={() => setActiveTab('canvas-trace')}
@@ -1174,7 +1174,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {lesson.kanji?.map((k: any) => {
+              {lesson?.kanji?.map((k: any) => {
                 const srsItem = srsDeck[k.character];
                 const badge = formatNextReviewBadge(srsItem);
 
@@ -1428,7 +1428,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             category: moduleTitle || 'JLPT Curriculum',
             durationSeconds: Math.max(60, Math.floor((Date.now() - sessionStartTime) / 1000)),
             vocabCount: lesson.vocabulary?.length || 12,
-            kanjiCount: lesson.kanji?.length || 5,
+            kanjiCount: lesson?.kanji?.length || 5,
             grammarPoints: lesson.grammarNotes?.length || 3,
             xpEarned: lesson.xpReward || 50,
             jlptLevel: lesson.level || 'N5',

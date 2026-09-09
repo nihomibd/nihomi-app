@@ -144,7 +144,7 @@ export const NihomiStandardService = {
       }
     } else if (obj.type === 'KANJI') {
       const k = obj as KanjiObject;
-      if (!k.kanji || k.kanji.trim() === '') {
+      if (!k?.kanji || k?.kanji.trim() === '') {
         violations.push({
           ruleId: 'NS-11-KANJI-MISSING',
           dimension: 'kanjiCorrectness',

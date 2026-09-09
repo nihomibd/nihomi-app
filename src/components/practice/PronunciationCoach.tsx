@@ -179,7 +179,7 @@ export const PronunciationCoach: React.FC = () => {
     }
   };
 
-  const currentJapaneseText = customText.trim() || selectedWord.kanji;
+  const currentJapaneseText = customText.trim() || selectedWord?.kanji;
 
   return (
     <div
@@ -247,7 +247,7 @@ export const PronunciationCoach: React.FC = () => {
                   : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200'
               }`}
             >
-              <span className="font-serif">{w.kanji}</span>
+              <span className="font-serif">{w?.kanji}</span>
               <span className="text-[11px] opacity-80">({w.romaji})</span>
             </button>
           ))}
@@ -292,7 +292,7 @@ export const PronunciationCoach: React.FC = () => {
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-serif font-bold text-stone-900 tracking-tight">
-            {customText || selectedWord.kanji}
+            {customText || selectedWord?.kanji}
           </h2>
 
           <p className="text-base font-semibold text-stone-600 font-mono">

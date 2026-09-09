@@ -435,15 +435,15 @@ export function getLessonSrsReviewSummary(
 
   if (vocabList) {
     vocabList.forEach((v) => {
-      checkItem(`voc-n5-l${lessonNumber}-${v.kanji || v.hiragana}`, v.kanji || v.hiragana);
-      checkItem(v.kanji || v.hiragana, v.kanji || v.hiragana);
+      checkItem(`voc-n5-l${lessonNumber}-${v?.kanji || v.hiragana}`, v?.kanji || v.hiragana);
+      checkItem(v?.kanji || v.hiragana, v?.kanji || v.hiragana);
     });
   }
 
   if (kanjiList) {
     kanjiList.forEach((k) => {
-      checkItem(k.kanji, k.kanji);
-      checkItem(`kanji-${k.kanji}`, k.kanji);
+      checkItem(k?.kanji, k?.kanji);
+      checkItem(`kanji-${k?.kanji}`, k?.kanji);
     });
   }
 

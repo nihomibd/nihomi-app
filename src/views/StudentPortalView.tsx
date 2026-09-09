@@ -430,15 +430,15 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {KANJI_CARDS.map((k) => (
               <div
-                key={k.kanji}
-                id={`kanji-card-${k.kanji}`}
+                key={k?.kanji}
+                id={`kanji-card-${k?.kanji}`}
                 onClick={() => {
-                  setActiveKanjiToDraw({ kanji: k.kanji, hiragana: k.reading, english: k.meaning, strokes: 4 });
+                  setActiveKanjiToDraw({ kanji: k?.kanji, hiragana: k.reading, english: k.meaning, strokes: 4 });
                   setIsWritingActive(true);
                 }}
                 className="bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 hover:border-stone-400 text-center cursor-pointer transition-all shadow-2xs hover:scale-102 space-y-1"
               >
-                <div className="text-3xl font-black text-stone-900 dark:text-white font-japanese">{k.kanji}</div>
+                <div className="text-3xl font-black text-stone-900 dark:text-white font-japanese">{k?.kanji}</div>
                 <div className="text-[10px] text-stone-500 font-japanese truncate">{k.reading}</div>
                 <div className="text-[10px] font-bold text-stone-800 dark:text-stone-200 truncate">{k.meaning}</div>
               </div>
