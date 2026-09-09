@@ -211,7 +211,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 selection:bg-rose-100 selection:text-rose-900">
       <OfflineNotificationBanner />
-      <InstallPWA />
       <main className="max-w-md mx-auto sm:max-w-lg md:max-w-xl lg:max-w-2xl px-4 sm:px-6 pt-3 space-y-4">
         
         {viewState === 'loading' && <DashboardLoadingSkeleton />}
