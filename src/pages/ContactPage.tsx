@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, MapPin, Mail, Phone, Clock, Send, CheckCircle2, MessageSquare, Building2, Sparkles, AlertCircle } from 'lucide-react';
+import { NIHOMI_CONTACT } from '../config/contact';
 
 interface ContactPageProps {
   onNavigate?: (view: string) => void;
@@ -128,7 +129,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       href="mailto:mdtanvirkabirbiplob@gmail.com"
                       className="text-xs font-mono text-slate-300 hover:text-white transition-colors"
                     >
-                      mdtanvirkabirbiplob@gmail.com
+                      {NIHOMI_CONTACT.email}
                     </a>
                   </div>
                 </div>
@@ -138,10 +139,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   <div>
                     <p className="font-semibold text-white">হোয়াটসঅ্যাপ ও সরাসরি হেল্পলাইন</p>
                     <p className="text-xs font-mono text-emerald-400 mt-0.5">
-                      +8801834-348966 (WhatsApp Support)
+                      {NIHOMI_CONTACT.phoneFormatted} (Official Helpline)
                     </p>
                     <p className="text-xs font-mono text-slate-400">
-                      +8801834-348966 (Office Desk)
+                      bKash: {NIHOMI_CONTACT.bkashNumberFormatted}
                     </p>
                   </div>
                 </div>
@@ -162,7 +163,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
               {/* Direct WhatsApp Action Button */}
               <a
-                href="https://wa.me/8801834348966?text=Hello%20Nihomi%20Sensei,%20I%20want%20to%20learn%20Japanese!"
+                href={NIHOMI_CONTACT.getWhatsAppSupportUrl()}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"

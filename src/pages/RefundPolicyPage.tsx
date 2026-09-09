@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, RotateCcw, CheckCircle2, AlertCircle, Clock, ShieldCheck, HelpCircle, PhoneCall, Mail } from 'lucide-react';
+import { NIHOMI_CONTACT } from '../config/contact';
 
 interface RefundPolicyPageProps {
   onNavigate?: (view: string) => void;
@@ -97,8 +98,8 @@ export const RefundPolicyPage: React.FC<RefundPolicyPageProps> = ({ onNavigate }
               <p className="text-xs text-slate-400">
                 আপনার স্টুডেন্ট আইডি ও bKash/কার্ড ট্রানজেকশন আইডি লিখে ইমেইল করুন:
               </p>
-              <a href="mailto:mdtanvirkabirbiplob@gmail.com" className="text-xs font-mono text-amber-400 hover:underline block pt-1">
-                mdtanvirkabirbiplob@gmail.com
+              <a href={`mailto:${NIHOMI_CONTACT.email}`} className="text-xs font-mono text-amber-400 hover:underline block pt-1">
+                {NIHOMI_CONTACT.email}
               </a>
             </div>
             <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-2">
@@ -109,8 +110,8 @@ export const RefundPolicyPage: React.FC<RefundPolicyPageProps> = ({ onNavigate }
               <p className="text-xs text-slate-400">
                 দ্রুত সমাধানের জন্য আমাদের সাপোর্ট নম্বরে মেসেজ দিন (সকাল ১০টা - সন্ধ্যা ৭টা):
               </p>
-              <a href="https://wa.me/8801834348966" target="_blank" rel="noreferrer" className="text-xs font-mono text-emerald-400 hover:underline block pt-1">
-                +8801834-348966 (WhatsApp Support)
+              <a href={NIHOMI_CONTACT.getWhatsAppSupportUrl('Hello Nihomi, I have a query regarding refund policy.')} target="_blank" rel="noreferrer" className="text-xs font-mono text-emerald-400 hover:underline block pt-1">
+                {NIHOMI_CONTACT.phoneFormatted} (WhatsApp Helpline)
               </a>
             </div>
           </div>

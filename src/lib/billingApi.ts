@@ -291,5 +291,27 @@ export const billingApi = {
       method: 'POST',
       body: JSON.stringify({ invoiceIds, reason })
     });
+  },
+
+  // Submit manual bKash TrxID with instant activation
+  async submitBkashTrxId(params: {
+    trxId: string;
+    planId?: 'pro' | 'starter' | 'japan_ready';
+    billingInterval?: 'monthly' | 'yearly';
+    studentName?: string;
+    studentPhone?: string;
+    userId?: string;
+  }): Promise<{
+    success: boolean;
+    message: string;
+    paymentId?: string;
+    subscription?: any;
+    invoice?: Invoice;
+    trxId?: string;
+  }> {
+    return apiRequest('/api/billing/bkash/submit-manual-trxid', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    });
   }
 };

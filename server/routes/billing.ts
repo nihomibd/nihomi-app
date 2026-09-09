@@ -680,6 +680,120 @@ billingRouter.post('/bkash/simulate', async (req: Request, res: Response) => {
   }
 });
 
+// ==========================================
+// 5c. bKASH MANUAL TrxID SUBMISSION & ACTIVATION
+// ==========================================
+billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Response) => {
+  try {
+    const {
+      userId: bodyUserId,
+      planId = 'pro',
+      billingInterval = 'monthly',
+      trxId,
+      studentName,
+      studentPhone
+    } = req.body;
+
+    if (!trxId || typeof trxId !== 'string') {
+      return res.status(400).json({ success: false, error: 'bKash TrxID is required.' });
+    }
+
+    const cleanTrx = trxId.trim().toUpperCase();
+    if (cleanTrx.length < 8) {
+      return res.status(400).json({ success: false, error: 'অনুগ্রহ করে সঠিক bKash ট্রানজেকশন আইডি (TrxID) দিন।' });
+    }
+
+    // Determine user ID
+    let targetUserId = (req as any).user?.id || bodyUserId;
+    if (!targetUserId) {
+      const users = (db as any).getUsers ? (db as any).getUsers() : (db.data.users || []);
+      targetUserId = users[0]?.id || 'user-bdtrip24-student';
+    }
+
+    const amount = billingInterval === 'yearly' ? 4990 : 599;
+    const planName = billingInterval === 'yearly' ? 'Nihomi Pro Yearly' : 'Nihomi Pro Monthly';
+
+    // 1. Create Payment record
+    const payment = db.createPayment({
+      userId: targetUserId,
+      planId: planId as any,
+      planName,
+      billingInterval: billingInterval as any,
+      amount,
+      originalAmount: amount,
+      discountAmount: 0,
+      provider: 'bkash'
+    });
+
+    const paidAt = new Date().toISOString();
+    db.updatePayment(payment.id, {
+      status: 'paid',
+      providerTransactionId: cleanTrx,
+      paymentMethodDetails: {
+        type: 'bKash MFS (Manual Verification)',
+        accountNumberMasked: studentPhone ? studentPhone.slice(-4).padStart(11, '•') : '018••••••66',
+        gatewayName: 'bKash Direct Manual Verification'
+      },
+      paidAt
+    });
+
+    // 2. Setup or extend subscription
+    let sub = db.getUserActiveSubscription(targetUserId);
+    if (!sub || sub.planId !== planId) {
+      if (sub) db.cancelSubscription(sub.id, true);
+      sub = db.createSubscription({
+        userId: targetUserId,
+        planId: planId as any,
+        billingInterval: billingInterval as any,
+        status: 'active',
+        paymentMethod: 'bKash MFS',
+        lastPaymentId: payment.id
+      });
+    } else {
+      const months = billingInterval === 'yearly' ? 12 : 1;
+      sub = db.extendSubscriptionPeriod(sub.id, months)!;
+    }
+
+    // 3. Create invoice
+    const user = db.findUserById(targetUserId);
+    const profile = db.getProfileByUserId(targetUserId);
+    const invoice = db.createInvoice({
+      userId: targetUserId,
+      subscriptionId: sub.id,
+      planId: planId as any,
+      planName,
+      amount,
+      billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
+      paymentId: payment.id,
+      customerName: studentName || profile?.displayName || user?.email?.split('@')[0] || 'Nihomi Student',
+      customerEmail: user?.email || 'student@nihomi.com',
+      subtotal: amount,
+      discount: 0,
+      tax: 0,
+      paymentMethodName: `bKash MFS (TrxID: ${cleanTrx})`
+    });
+
+    db.updatePayment(payment.id, { invoiceId: invoice.id, subscriptionId: sub.id });
+
+    // 4. Credit user coins & AI credits
+    const coinsToAdd = billingInterval === 'yearly' ? 1200 : 300;
+    const aiCreditsToAdd = billingInterval === 'yearly' ? 2500 : 500;
+    db.creditUserCoinsAndAI(targetUserId, coinsToAdd, aiCreditsToAdd, `bKash TrxID ${cleanTrx} Activation`);
+
+    return res.json({
+      success: true,
+      message: 'bKash TrxID সফলভাবে জমা হয়েছে এবং Pro প্ল্যান অ্যাক্টিভ করা হয়েছে!',
+      paymentId: payment.id,
+      subscription: sub,
+      invoice,
+      trxId: cleanTrx
+    });
+  } catch (err: any) {
+    console.error('Error submitting manual bKash TrxID:', err);
+    return res.status(500).json({ success: false, error: err.message || 'TrxID submission failed' });
+  }
+});
+
 billingRouter.get('/wallet', authenticateUser, (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user!.id;

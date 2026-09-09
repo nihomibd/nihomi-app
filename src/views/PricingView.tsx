@@ -22,6 +22,7 @@ import { Plan, BillingInterval, PlanId } from '../types';
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { CheckoutModal } from '../components/CheckoutModal';
+import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
 
 interface PricingViewProps {
   onSelectPlan?: (planId: PlanId) => void;
@@ -34,6 +35,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
   const [interval, setInterval] = useState<BillingInterval>('yearly');
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<Plan | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isBkashProModalOpen, setIsBkashProModalOpen] = useState(false);
   const [trialLoading, setTrialLoading] = useState(false);
   const [trialMessage, setTrialMessage] = useState<string | null>(null);
   const [trialError, setTrialError] = useState<string | null>(null);
@@ -99,6 +101,17 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           }}
         />
       )}
+
+      {/* Direct bKash Pro Upgrade Modal with WhatsApp Verification */}
+      <ProUpgradeModal
+        isOpen={isBkashProModalOpen}
+        onClose={() => setIsBkashProModalOpen(false)}
+        defaultPlanInterval={interval}
+        onSuccess={() => {
+          setIsBkashProModalOpen(false);
+          if (onNavigate) onNavigate('dashboard');
+        }}
+      />
 
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Hero Section */}
@@ -256,6 +269,19 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                     {!isCurrent && <ArrowRight className="w-3.5 h-3.5" />}
                   </button>
 
+                  {/* Direct bKash Send Money & WhatsApp verification button for Pro */}
+                  {plan.id === 'pro' && !isCurrent && (
+                    <button
+                      type="button"
+                      onClick={() => setIsBkashProModalOpen(true)}
+                      className="w-full py-2 px-3 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                      id="btn-bkash-direct-pro"
+                    >
+                      <Smartphone className="w-3.5 h-3.5" />
+                      <span>সরাসরি bKash পেমেন্ট ও WhatsApp ভেরিফিকেশন</span>
+                    </button>
+                  )}
+
                   {/* Free Trial Button for Pro */}
                   {plan.id === 'pro' && activePlanId === 'free' && (
                     <button
@@ -287,9 +313,14 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <div className="px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300 font-bold text-xs">
-              bKash MFS
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsBkashProModalOpen(true)}
+              className="px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300 font-bold text-xs hover:bg-pink-100 transition-colors flex items-center gap-1"
+            >
+              <Smartphone className="w-3 h-3" />
+              bKash MFS (সরাসরি পেমেন্ট)
+            </button>
             <div className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold text-xs">
               SSLCommerz (Cards & NetBanking)
             </div>

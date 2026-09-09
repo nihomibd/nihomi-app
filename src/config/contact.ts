@@ -1,33 +1,44 @@
 /**
- * NIHOMI.COM — OFFICIAL PRODUCTION CONTACT CONFIGURATION
- * Single Source of Truth for all contact, support, and founder credentials.
- * LOCKED BY FOUNDER: Tanvir Kabir Biplob
+ * NIHOMI.COM — Centralized Contact & Ecosystem Configuration
+ * Official bKash MFS & WhatsApp Verification Gateway
  */
 
 export const NIHOMI_CONTACT = {
-  phone: {
-    raw: "+8801834-348966",
-    display: "+880 1834-348966",
-    tel: "+8801834348966",
+  // Official Contact Numbers
+  phone: '+880 1834-348966',
+  phoneFormatted: '+880 1834-348966',
+  phoneRaw: '+8801834348966',
+  
+  // Official bKash Payment Details
+  bkashNumber: '01834348966',
+  bkashNumberFormatted: '+8801834-348966',
+  bkashAccountType: 'Personal / Merchant Send Money',
+  
+  // Official WhatsApp Business Bridge
+  whatsappNumber: '8801834348966',
+  whatsappFormatted: '+880 1834-348966',
+  
+  // Emails
+  email: 'support@nihomi.com',
+  admissionsEmail: 'admissions@nihomi.com',
+  corporateEmail: 'b2b@nihomi.com',
+  
+  // Locations & Ecosystem
+  locationBn: 'বনানী রোড ১১, ঢাকা, বাংলাদেশ এবং শিঞ্জুকু, টোকিও, জাপান',
+  locationEn: 'Banani Road 11, Dhaka, Bangladesh & Shinjuku, Tokyo, Japan',
+  partnerEcosystem: 'bdTrip24 Ecosystem',
+  
+  // 1-Click WhatsApp Verification Generator
+  getWhatsAppTrxVerificationUrl: (trxId: string, planName: string = 'Pro'): string => {
+    const cleanTrx = trxId ? trxId.trim().toUpperCase() : '[USER_TRXID]';
+    return `https://wa.me/8801834348966?text=Hello%20Nihomi%2C%20I%20have%20paid%20via%20bKash.%20My%20TrxID%20is:%20${encodeURIComponent(cleanTrx)}`;
   },
-  whatsapp: {
-    number: "+8801834-348966",
-    cleanNumber: "8801834348966",
-    url: "https://wa.me/8801834348966",
-    supportUrl: "https://wa.me/8801834348966?text=Hello%20Nihomi%20Support%2C%20I%20need%20assistance",
-    cohortUrl: "https://wa.me/8801834348966?text=Hello%20Nihomi%2C%20I%20want%20to%20join%20the%20N5%20Cohort",
-  },
-  supportEmail: "nihomibd@gmail.com",
-  supportMailto: "mailto:nihomibd@gmail.com",
-  founderEmail: "mdtanvirkabirbiplob@gmail.com",
-  founderMailto: "mailto:mdtanvirkabirbiplob@gmail.com",
-  brand: {
-    name: "NIHOMI.COM",
-    legalName: "Nihomi Japanese Learning Platform",
-    parentEcosystem: "bdTrip24.com",
-    address: "Dhaka, Bangladesh",
-    supportHours: "24/7 Student & WhatsApp Helpdesk",
+
+  // General Support URL
+  getWhatsAppSupportUrl: (customMessage?: string): string => {
+    const message = customMessage || 'Hello Nihomi Sensei, I want to learn Japanese and prepare for JLPT N5!';
+    return `https://wa.me/8801834348966?text=${encodeURIComponent(message)}`;
   }
-} as const;
+};
 
 export default NIHOMI_CONTACT;
