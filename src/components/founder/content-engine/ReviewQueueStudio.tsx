@@ -109,7 +109,7 @@ export const ReviewQueueStudio: React.FC = () => {
       v.reading = editFormula;
     } else if (updated.type === 'KANJI') {
       const k = updated as KanjiObject;
-      k?.kanji = editPattern;
+      k.kanji = editPattern;
     }
 
     updated.trilingual = {

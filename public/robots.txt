@@ -1,17 +1,23 @@
-# NIHOMI™ (nihomi.com) — Robots Configuration
+# NIHOMI™ (nihomi.com) — Robots Configuration & Search Engine Directives
 User-agent: *
 Allow: /
+Allow: /start
 Allow: /courses
+Allow: /portal
+Allow: /baito
+Allow: /pricing
 Allow: /coordination
 Allow: /documents
-Allow: /portal
 Allow: /credits
 Allow: /verify
 
-# Disallow Private Executive & Internal API Endpoints
+# Disallow Private Executive & Internal Admin Endpoints
+Disallow: /admin/*
+Disallow: /admin
+Disallow: /founder/*
 Disallow: /founder
-Disallow: /api/admin
-Disallow: /api/content-engine/jobs
+Disallow: /api/admin/*
+Disallow: /api/content-engine/*
 Disallow: /api/billing/webhook
 
 # Sitemap Index

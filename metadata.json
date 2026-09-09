@@ -1,6 +1,6 @@
 {
   "name": "Nihomi - Japanese Learning Platform",
-  "description": "Production Japanese learning platform and subscription engine featuring JLPT N5-N1 courses, Nihomi AI Content Engine for textbook PDF ingestion, interactive quizzes, AI Japanese Coach, and localized Bangladesh recurring billing (bKash & SSLCommerz).",
+  "description": "Nihomi.com — শূন্য থেকে JLPT N5 জাপানিজ ভাষা শেখার AI প্ল্যাটফর্ম। বাংলায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসি, অথেনটিক মিন্না নো নিহোঙ্গো ২৫ লেসন ও টোকিও জব সিমুলেশন।",
   "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

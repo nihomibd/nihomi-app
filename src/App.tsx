@@ -96,6 +96,20 @@ export const App: React.FC = () => {
 
       if (path === '/start' || path === '/campaign' || path === '/ad') {
         setCurrentView('start');
+      } else if (path === '/courses' || path === '/curriculum') {
+        setCurrentView('courses');
+      } else if (path === '/portal' || path === '/dashboard') {
+        setCurrentView('portal');
+      } else if (path === '/baito' || path === '/baito-os' || path === '/simulation') {
+        setCurrentView('baito');
+      } else if (path === '/pricing' || path === '/plans') {
+        setCurrentView('pricing');
+      } else if (path === '/coordination') {
+        setCurrentView('coordination');
+      } else if (path === '/documents') {
+        setCurrentView('documents');
+      } else if (path === '/credits') {
+        setCurrentView('credits');
       } else if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
         setCurrentView('growth');
       } else if (path === '/terms' || path === '/terms-of-service') {
@@ -119,6 +133,13 @@ export const App: React.FC = () => {
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase();
       if (path === '/start' || path === '/campaign') setCurrentView('start');
+      else if (path === '/courses' || path === '/curriculum') setCurrentView('courses');
+      else if (path === '/portal' || path === '/dashboard') setCurrentView('portal');
+      else if (path === '/baito' || path === '/baito-os') setCurrentView('baito');
+      else if (path === '/pricing' || path === '/plans') setCurrentView('pricing');
+      else if (path === '/coordination') setCurrentView('coordination');
+      else if (path === '/documents') setCurrentView('documents');
+      else if (path === '/credits') setCurrentView('credits');
       else if (path === '/admin/growth' || path === '/growth') setCurrentView('growth');
       else if (path === '/terms') setCurrentView('terms');
       else if (path === '/privacy') setCurrentView('privacy');
