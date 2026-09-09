@@ -27,9 +27,11 @@ import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
-import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown } from 'lucide-react';
 import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
+import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
+import { useAuth } from '../../context/AuthContext';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -63,9 +65,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     handleWritingPracticeComplete,
     showToast,
   } = useStudentDashboard();
+  const { user, refreshSubscription, refreshProgress } = useAuth();
 
   const [activeTab, setActiveTab] = useState<NavTab>('home');
+  const [isProModalOpen, setIsProModalOpen] = useState(false);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
+
+  const isPro =
+    user?.role === 'founder' ||
+    user?.role === 'admin' ||
+    user?.planId === 'pro' ||
+    user?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.planId === 'pro' ||
+    (user as any)?.subscription?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.status === 'active';
   const [isLessonOpen, setIsLessonOpen] = useState(false);
   const [isMockExamOpen, setIsMockExamOpen] = useState(false);
   const [isKanjiPracticeOpen, setIsKanjiPracticeOpen] = useState(false);
@@ -215,6 +228,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               accountUsage={data.accountUsage} 
               onOpenAiTutor={() => setIsAiTutorOpen(true)}
               onOpenStore={() => setIsStoreOpen(true)}
+              onOpenUpgradePro={() => setIsProModalOpen(true)}
+              isPro={isPro}
               activeStreak={data.streak.currentStreak}
             />
 
@@ -308,6 +323,43 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 </div>
               )}
             </section>
+
+            {/* ১.৫. Nihomi Pro™ সাবস্ক্রিপশন কার্ড (Unlock All 25 Lessons) */}
+            {!isPro && (
+              <section
+                id="dashboard-pro-upgrade-card"
+                aria-label="Nihomi Pro Upgrade"
+                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/50 p-5 sm:p-6 shadow-xl text-white"
+              >
+                <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5 max-w-md">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold uppercase tracking-wide">
+                      <Crown className="w-3 h-3 text-amber-400" />
+                      <span>Nihomi Pro™ • সম্পূর্ণ আনলক</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
+                      ২৫টি সম্পূর্ণ JLPT N5 লেসন ও AI Sensei ভয়েস কোচ আনলক করুন
+                    </h3>
+                    <p className="text-xs text-stone-300 leading-relaxed">
+                      লেসন ০৬–২৫ এর সম্পূর্ণ ব্যাকরণ, আনলিমিটেড স্পিচ প্র্যাকটিস ও কাঞ্জি ড্রয়িং ক্যানভাস পেতে Pro নিন। মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর (bKash তাৎক্ষণিক অ্যাক্টিভেশন)।
+                    </p>
+                  </div>
+
+                  <div className="shrink-0 w-full sm:w-auto">
+                    <button
+                      id="btn-dashboard-upgrade-pro"
+                      type="button"
+                      onClick={() => setIsProModalOpen(true)}
+                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+                    >
+                      <Crown className="w-4 h-4 text-stone-950 fill-stone-950" />
+                      <span>Upgrade to PRO</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
 
             {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
             <ContinueLearningCard
@@ -445,6 +497,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         />
       )}
       {isLeaderboardOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/70 p-2 sm:p-6" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setIsLeaderboardOpen(false); }}><section className="relative mx-auto max-w-5xl rounded-3xl bg-[#FAF9F6]" role="dialog" aria-modal="true" aria-labelledby="dashboard-leaderboard-title"><button type="button" aria-label="Leaderboard বন্ধ করুন" onClick={() => setIsLeaderboardOpen(false)} className="absolute right-3 top-3 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-amber-500">×</button><h2 id="dashboard-leaderboard-title" className="sr-only">Community Leaderboard</h2><CommunityLeaderboardView onNavigate={() => setIsLeaderboardOpen(false)} /></section></div>}
+
+      {/* Global Pro Upgrade Modal for Student Dashboard */}
+      <ProUpgradeModal
+        isOpen={isProModalOpen}
+        onClose={() => setIsProModalOpen(false)}
+        defaultPlanInterval="monthly"
+        onSuccess={() => {
+          setIsProModalOpen(false);
+          refresh();
+          refreshProgress();
+          refreshSubscription();
+        }}
+      />
     </div>
   );
 };

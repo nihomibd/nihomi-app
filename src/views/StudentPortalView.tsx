@@ -16,7 +16,8 @@ import {
   Trophy,
   ShieldCheck,
   Zap,
-  Radio
+  Radio,
+  Crown
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
@@ -30,6 +31,7 @@ import { GhostModeSRSWidget } from '../components/practice/GhostModeSRSWidget';
 import { Course, StudentProfile, NextBestAction } from '../types/nihomi';
 import { useAuth } from '../context/AuthContext';
 import { Ghost } from 'lucide-react';
+import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
 
 interface StudentPortalViewProps {
   initialTab?: 'learn' | 'practice' | 'assess' | 'progress' | 'profile' | 'badges' | 'dashboard' | 'settings' | 'subscription';
@@ -71,6 +73,17 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
     return 'learn';
   };
   const [activeTab, setActiveTab] = useState<'learn' | 'practice' | 'assess' | 'progress' | 'badges' | 'profile'>(() => resolveTab(initialTab));
+
+  // Pro status & upgrade modal
+  const [isProModalOpen, setIsProModalOpen] = useState(false);
+  const isPro =
+    user?.role === 'founder' ||
+    user?.role === 'admin' ||
+    user?.planId === 'pro' ||
+    user?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.planId === 'pro' ||
+    (user as any)?.subscription?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.status === 'active';
 
   // Modals state
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
@@ -184,9 +197,23 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <Clock className="w-3.5 h-3.5 text-blue-500" />
                 <span>{studentProfile.totalStudyHours}h Focus</span>
               </div>
-              <span className="px-2.5 py-1 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-mono font-bold rounded-full">
-                {user?.planId?.toUpperCase() || 'PREMIUM'}
-              </span>
+              {!isPro ? (
+                <button
+                  id="btn-portal-header-upgrade-pro"
+                  type="button"
+                  onClick={() => setIsProModalOpen(true)}
+                  className="px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-stone-950 text-xs font-black rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
+                  title="Nihomi Pro — Unlock All Lessons"
+                >
+                  <Crown className="w-3.5 h-3.5 fill-stone-950" />
+                  <span>Upgrade to PRO</span>
+                </button>
+              ) : (
+                <span className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 text-xs font-mono font-bold rounded-full flex items-center gap-1">
+                  <Crown className="w-3 h-3 fill-current" />
+                  <span>PRO</span>
+                </span>
+              )}
             </div>
 
           </div>
@@ -197,6 +224,36 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
       {activeTab === 'learn' && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
           
+          {/* Nihomi Pro™ Unlock Banner for Non-Pro students */}
+          {!isPro && (
+            <div
+              id="portal-pro-banner"
+              className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/40 p-6 shadow-xl text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+            >
+              <div className="space-y-2 max-w-xl">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold uppercase tracking-wide">
+                  <Crown className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Nihomi Pro™ Exclusive</span>
+                </div>
+                <h3 className="text-xl font-black text-white">
+                  সম্পূর্ণ JLPT N5 এর ২৫টি লেসন ও AI ভয়েস টিউটর আনলক করুন
+                </h3>
+                <p className="text-xs text-stone-300 leading-relaxed">
+                  লেসন ০১–০৫ সম্পূর্ণ ফ্রি। লেসন ০৬–২৫ এর অ্যাডভান্সড ব্যাকরণ, কানজি ড্রয়িং এবং টোকিও অ্যাকসেন্ট ফিডব্যাক পেতে Pro নিন মাত্র ৳৫৯৯/মাসে।
+                </p>
+              </div>
+              <button
+                id="btn-portal-upgrade-cta"
+                type="button"
+                onClick={() => setIsProModalOpen(true)}
+                className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-stone-950 font-black text-xs rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
+              >
+                <Crown className="w-4 h-4 fill-stone-950" />
+                <span>Upgrade to PRO — আনলক করুন</span>
+              </button>
+            </div>
+          )}
+
           {/* Next Best Action Card */}
           <div className="bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] rounded-3xl p-6 sm:p-8 border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="space-y-2">
@@ -548,6 +605,14 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           onClose={() => setIsPitchAccentLabOpen(false)}
         />
       )}
+
+      {/* Global Pro Upgrade Modal for Student Portal */}
+      <ProUpgradeModal
+        isOpen={isProModalOpen}
+        onClose={() => setIsProModalOpen(false)}
+        defaultPlanInterval="monthly"
+        onSuccess={() => setIsProModalOpen(false)}
+      />
 
     </div>
   );

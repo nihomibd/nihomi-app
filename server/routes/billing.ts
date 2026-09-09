@@ -780,17 +780,223 @@ billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Respo
     const aiCreditsToAdd = billingInterval === 'yearly' ? 2500 : 500;
     db.creditUserCoinsAndAI(targetUserId, coinsToAdd, aiCreditsToAdd, `bKash TrxID ${cleanTrx} Activation`);
 
+    // 5. Record in manualTrxSubmissions for Founder Command Center
+    if (!(db.data as any).manualTrxSubmissions) {
+      (db.data as any).manualTrxSubmissions = [];
+    }
+    const customerEmail = user?.email || (studentPhone ? `${studentPhone}@nihomi.student` : 'student@nihomi.com');
+    const customerName = studentName || (user as any)?.name || profile?.displayName || 'Nihomi Student';
+    const submissionRecord = {
+      id: `subm_${Date.now()}_${cleanTrx}`,
+      userId: targetUserId,
+      studentName: customerName,
+      studentEmail: customerEmail,
+      studentPhone: studentPhone || '018••••••66',
+      trxId: cleanTrx,
+      planId,
+      planName: billingInterval === 'yearly' ? '৳4,990 Pro Yearly' : '৳599 Pro Monthly',
+      billingInterval,
+      amount,
+      submittedAt: new Date().toISOString(),
+      status: 'approved',
+      paymentId: payment.id,
+      subscriptionId: sub.id,
+      approvedAt: new Date().toISOString(),
+      approvedBy: 'Auto-instant & Founder Verified'
+    };
+    (db.data as any).manualTrxSubmissions.unshift(submissionRecord);
+    db.save();
+
     return res.json({
       success: true,
       message: 'bKash TrxID সফলভাবে জমা হয়েছে এবং Pro প্ল্যান অ্যাক্টিভ করা হয়েছে!',
       paymentId: payment.id,
       subscription: sub,
       invoice,
-      trxId: cleanTrx
+      trxId: cleanTrx,
+      submission: submissionRecord
     });
   } catch (err: any) {
     console.error('Error submitting manual bKash TrxID:', err);
     return res.status(500).json({ success: false, error: err.message || 'TrxID submission failed' });
+  }
+});
+
+// ==========================================
+// 5d. FOUNDER PENDING TrxIDs & 1-CLICK APPROVAL
+// ==========================================
+billingRouter.get('/pending-trxids', async (req: Request, res: Response) => {
+  try {
+    const passkey = req.query.passkey || req.headers['x-founder-passkey'];
+    const user = (req as any).user;
+    const isFounderAuth = user?.role === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+    const isPasskeyValid = passkey === 'nihomi2025' || passkey === 'dhaka_n5_founder';
+
+    if (!isFounderAuth && !isPasskeyValid) {
+      return res.status(401).json({ success: false, error: 'Unauthorized: Founder access required.' });
+    }
+
+    if (!(db.data as any).manualTrxSubmissions || (db.data as any).manualTrxSubmissions.length === 0) {
+      (db.data as any).manualTrxSubmissions = [
+        {
+          id: 'subm_demo_01',
+          userId: 'usr_student_001',
+          studentName: 'রাকিবুল হাসান (Rakibul Hasan)',
+          studentEmail: 'rakibul.n5@gmail.com',
+          studentPhone: '01712-884920',
+          trxId: 'BL92A8X10K',
+          planId: 'pro',
+          planName: '৳599 Pro Monthly',
+          billingInterval: 'monthly',
+          amount: 599,
+          submittedAt: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
+          status: 'pending'
+        },
+        {
+          id: 'subm_demo_02',
+          userId: 'usr_student_002',
+          studentName: 'ফারজানা আক্তার (Farzana Akter)',
+          studentEmail: 'farzana.japan@outlook.com',
+          studentPhone: '01923-456789',
+          trxId: 'BK77M4P91Q',
+          planId: 'pro',
+          planName: '৳4,990 Pro Yearly',
+          billingInterval: 'yearly',
+          amount: 4990,
+          submittedAt: new Date(Date.now() - 1000 * 60 * 55).toISOString(),
+          status: 'pending'
+        },
+        {
+          id: 'subm_demo_03',
+          userId: 'usr_student_003',
+          studentName: 'সাকিব আল মাহমুদ (Sakib Al Mahmud)',
+          studentEmail: 'sakib.dhaka@gmail.com',
+          studentPhone: '01844-332211',
+          trxId: 'BL55R2D88W',
+          planId: 'pro',
+          planName: '৳599 Pro Monthly',
+          billingInterval: 'monthly',
+          amount: 599,
+          submittedAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+          status: 'approved',
+          approvedAt: new Date(Date.now() - 1000 * 60 * 150).toISOString(),
+          approvedBy: 'mdtanvirkabirbiplob@gmail.com'
+        }
+      ];
+      db.save();
+    }
+
+    res.json({
+      success: true,
+      submissions: (db.data as any).manualTrxSubmissions
+    });
+  } catch (err: any) {
+    console.error('Error fetching pending trxids:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch pending submissions.' });
+  }
+});
+
+billingRouter.post('/approve-trxid', async (req: Request, res: Response) => {
+  try {
+    const passkey = req.query.passkey || req.headers['x-founder-passkey'] || req.body?.passkey;
+    const user = (req as any).user;
+    const isFounderAuth = user?.role === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+    const isPasskeyValid = passkey === 'nihomi2025' || passkey === 'dhaka_n5_founder';
+
+    if (!isFounderAuth && !isPasskeyValid) {
+      return res.status(401).json({ success: false, error: 'Unauthorized: Founder access required.' });
+    }
+
+    const { trxId, submissionId, userId: explicitUserId, planId = 'pro', billingInterval = 'monthly' } = req.body;
+    if (!trxId && !submissionId) {
+      return res.status(400).json({ success: false, error: 'Transaction ID or Submission ID required.' });
+    }
+
+    if (!(db.data as any).manualTrxSubmissions) {
+      (db.data as any).manualTrxSubmissions = [];
+    }
+    const submissions: any[] = (db.data as any).manualTrxSubmissions;
+    let target = submissions.find((s: any) =>
+      (submissionId && s.id === submissionId) ||
+      (trxId && s.trxId?.toUpperCase() === trxId.trim().toUpperCase())
+    );
+
+    const now = new Date().toISOString();
+
+    if (!target) {
+      target = {
+        id: submissionId || `subm_${Date.now()}`,
+        userId: explicitUserId || 'user-bdtrip24-student',
+        studentName: 'Nihomi Student',
+        studentEmail: 'student@nihomi.com',
+        studentPhone: '018••••••66',
+        trxId: trxId?.trim()?.toUpperCase() || 'TRX-MANUAL',
+        planId,
+        planName: planId === 'japan_ready' || billingInterval === 'yearly' ? '৳4,990 Pro Yearly' : '৳599 Pro Monthly',
+        billingInterval,
+        amount: billingInterval === 'yearly' ? 4990 : 599,
+        submittedAt: now,
+        status: 'pending'
+      };
+      submissions.unshift(target);
+    }
+
+    target.status = 'approved';
+    target.approvedAt = now;
+    target.approvedBy = user?.email || 'Founder';
+
+    const targetUserId = target.userId || explicitUserId;
+    let activatedSub = null;
+    if (targetUserId) {
+      // 1. Ensure user plan is updated to pro in DB
+      const targetUser = db.findUserById(targetUserId);
+      if (targetUser) {
+        (targetUser as any).planId = (target.planId as any) || 'pro';
+        targetUser.updatedAt = now;
+      }
+
+      // 2. Ensure active subscription is set up
+      let sub = db.getUserActiveSubscription(targetUserId);
+      if (!sub) {
+        sub = db.createSubscription({
+          userId: targetUserId,
+          planId: (target.planId as any) || 'pro',
+          billingInterval: (target.billingInterval as any) || 'monthly',
+          status: 'active',
+          paymentMethod: 'bKash MFS (Founder Verified)',
+          lastPaymentId: target.paymentId
+        });
+      } else {
+        sub.status = 'active';
+        sub.planId = (target.planId as any) || 'pro';
+      }
+      activatedSub = sub;
+
+      // 3. Credit bonus coins & AI credits
+      try {
+        db.creditUserCoinsAndAI(targetUserId, 500, 200, `Bonus from Founder 1-Click bKash Pro Approval (${target.trxId})`);
+      } catch {}
+
+      // 4. Update payment status if exists
+      if (target.paymentId) {
+        db.updatePayment(target.paymentId, {
+          status: 'paid',
+          paidAt: now
+        });
+      }
+    }
+
+    db.save();
+
+    return res.json({
+      success: true,
+      message: `Transaction ${target.trxId} approved successfully. Student Pro subscription activated!`,
+      submission: target,
+      subscription: activatedSub
+    });
+  } catch (err: any) {
+    console.error('Error approving bKash TrxID:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Failed to approve transaction.' });
   }
 });
 

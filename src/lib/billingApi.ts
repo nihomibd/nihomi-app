@@ -308,9 +308,59 @@ export const billingApi = {
     subscription?: any;
     invoice?: Invoice;
     trxId?: string;
+    submission?: any;
   }> {
     return apiRequest('/api/billing/bkash/submit-manual-trxid', {
       method: 'POST',
+      body: JSON.stringify(params)
+    });
+  },
+
+  // Founder: Get pending manual bKash TrxID submissions
+  async getPendingTrxSubmissions(passkey?: string): Promise<{
+    success: boolean;
+    submissions: Array<{
+      id: string;
+      userId?: string;
+      studentName: string;
+      studentEmail: string;
+      studentPhone: string;
+      trxId: string;
+      planId: string;
+      planName: string;
+      billingInterval: string;
+      amount: number;
+      submittedAt: string;
+      status: 'pending' | 'approved';
+      approvedAt?: string;
+      approvedBy?: string;
+    }>;
+  }> {
+    const query = passkey ? `?passkey=${encodeURIComponent(passkey)}` : '';
+    return apiRequest(`/api/billing/pending-trxids${query}`);
+  },
+
+  // Founder: 1-Click Approve TrxID and activate student Pro
+  async approveTrxId(params: {
+    trxId?: string;
+    submissionId?: string;
+    userId?: string;
+    planId?: string;
+    billingInterval?: string;
+    passkey?: string;
+  }): Promise<{
+    success: boolean;
+    message: string;
+    submission?: any;
+    subscription?: any;
+  }> {
+    const headers: Record<string, string> = {};
+    if (params.passkey) {
+      headers['x-founder-passkey'] = params.passkey;
+    }
+    return apiRequest('/api/billing/approve-trxid', {
+      method: 'POST',
+      headers,
       body: JSON.stringify(params)
     });
   }

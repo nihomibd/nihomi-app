@@ -35,8 +35,12 @@ import {
   Bot,
   Maximize2,
   Minimize2,
-  Eye
+  Eye,
+  Crown,
+  Lock,
+  ArrowRight
 } from 'lucide-react';
+import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
 import { SentenceDnaModal } from '../components/SentenceDnaModal.js';
 import { LessonQuickNotes } from '../components/LessonQuickNotes.js';
 import { CanvasWritingPractice } from '../components/CanvasWritingPractice.js';
@@ -128,6 +132,34 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
 
   // Zen Breathing Prompt Modal state
   const [isZenBreathingOpen, setIsZenBreathingOpen] = useState<boolean>(false);
+
+  // Pro Subscription and Lesson Locking Logic
+  const isPro =
+    user?.role === 'founder' ||
+    user?.role === 'admin' ||
+    user?.planId === 'pro' ||
+    user?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.planId === 'pro' ||
+    (user as any)?.subscription?.planId === 'japan_ready' ||
+    (user as any)?.subscription?.status === 'active';
+
+  const lessonNumMatch = lessonId.match(/(\d+)/);
+  const parsedNumFromId = lessonNumMatch ? parseInt(lessonNumMatch[1], 10) : 1;
+  const lessonNum = lessonData?.lesson?.lessonNumber || parsedNumFromId;
+
+  const isLockedForNonPro = lessonNum >= 6 && !isPro;
+  const [isProModalOpen, setIsProModalOpen] = useState(false);
+  const [hasAutoOpenedModal, setHasAutoOpenedModal] = useState(false);
+
+  useEffect(() => {
+    if (isLockedForNonPro && !hasAutoOpenedModal) {
+      setHasAutoOpenedModal(true);
+      const timer = setTimeout(() => {
+        setIsProModalOpen(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLockedForNonPro, hasAutoOpenedModal]);
 
   useEffect(() => {
     async function loadLesson() {
@@ -561,6 +593,17 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
               </button>
             )}
 
+            {!isPro && (
+              <button
+                id="btn-lesson-upgrade-pro"
+                onClick={() => setIsProModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <Crown className="w-4 h-4 text-stone-950" />
+                <span>Upgrade to PRO</span>
+              </button>
+            )}
+
             {user && (
               <button
                 onClick={handleCompleteLesson}
@@ -623,11 +666,152 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
         )}
 
         {/* Lesson Reading Focus Timer & Immersion Session Tracker */}
-        <LessonFocusTimerTracker
-          lessonTitle={lesson.title}
-          jlptLevel={lesson.level}
-          charCount={lesson.content ? lesson.content.length : 350}
-        />
+        {isLockedForNonPro ? (
+          /* HIGH CONVERTING PRO UPGRADE TEASER FOR LESSONS 06 TO 25 */
+          <div id="lesson-pro-lock-teaser" className="space-y-6 animate-in fade-in duration-300">
+            <div className="bg-gradient-to-br from-stone-900 via-stone-900 to-stone-950 border-2 border-amber-500/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden text-stone-100">
+              {/* Decorative Hanabi & Amber Glow */}
+              <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-600/10 blur-3xl pointer-events-none rounded-full" />
+
+              <div className="relative z-10 space-y-6">
+                {/* Header Tag */}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-extrabold tracking-wide uppercase shadow-inner">
+                    <Crown className="w-4 h-4 text-amber-400" />
+                    <span>Nihomi Pro™ Exclusive (লেসন ০৬–২৫ লক করা)</span>
+                  </div>
+                  <div className="inline-flex items-center space-x-1.5 text-xs text-stone-400 font-mono bg-stone-950/70 px-3 py-1 rounded-lg border border-stone-800">
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>লেসন {lessonNum < 10 ? `০${lessonNum}` : lessonNum} / ২৫</span>
+                  </div>
+                </div>
+
+                {/* Main Headline */}
+                <div className="space-y-2">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-serif">
+                    মাস্টার লেসন {lessonNum < 10 ? `০${lessonNum}` : lessonNum}: {lesson.title}
+                  </h2>
+                  <p className="text-sm sm:text-base text-stone-300 max-w-3xl leading-relaxed">
+                    লেসন ০১ থেকে ০৫ সবার জন্য আজীবন উন্মুক্ত ও ফ্রি। লেসন ০৬ থেকে ২৫ সহ সম্পূর্ণ JLPT N5 কারিকুলাম, Tokyo Accent AI Sensei ও মাস্টার প্রশ্নব্যাংক আনলক করতে Pro সাবস্ক্রিপশন চালু করুন।
+                  </p>
+                </div>
+
+                {/* Lesson Syllabus Teaser Box */}
+                <div className="p-5 rounded-2xl bg-stone-950/70 border border-stone-800 space-y-3">
+                  <div className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>এই লেসনের এক্সক্লুসিভ সিলেবাস প্রিভিউ:</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
+                      <div className="text-[11px] font-bold text-stone-400">📖 ব্যাকরণ কাঠামো</div>
+                      <div className="text-xs font-semibold text-white truncate">
+                        {lesson.grammarNotes?.[0]?.pattern || 'উন্নত ভার্ব ফর্ম ও পার্টিকল'}
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
+                      <div className="text-[11px] font-bold text-stone-400">🗣️ ভোকাবুলারি ও অডিও</div>
+                      <div className="text-xs font-semibold text-white">
+                        {lesson.vocabulary?.length || 30}+ টি শব্দ ও টোকিও উচ্চারণ
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
+                      <div className="text-[11px] font-bold text-stone-400">✍️ কাঞ্জি ও ক্যানভাস</div>
+                      <div className="text-xs font-semibold text-white">
+                        {lesson.kanjiList?.length || 10}+ টি কাঞ্জি স্ট্রোক ল্যাব
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
+                      <div className="text-[11px] font-bold text-stone-400">🎯 রিয়েল JLPT N5 এক্সাম</div>
+                      <div className="text-xs font-semibold text-white">
+                        মক টেস্ট ও তাৎক্ষণিক স্কোরিং
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4 Value Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0 mt-0.5">
+                      <Layers className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">লেসন ০৬–২৫ সম্পূর্ণ আনলক</h4>
+                      <p className="text-[11px] text-stone-400 mt-0.5">
+                        পুরো মিন্না নো নিহোঙ্গো ১–২৫ এর প্রতিটি অধ্যায়ের নোটস, অডিও এবং ড্রিলস
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-pink-500/20 text-pink-400 shrink-0 mt-0.5">
+                      <Bot className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">Tokyo Accent AI Sensei ও ভয়েস অডিট</h4>
+                      <p className="text-[11px] text-stone-400 mt-0.5">
+                        সরাসরি টোকিও অ্যাকসেন্টে কথা বলুন এবং এআই থেকে ভুল সংশোধন পান
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 shrink-0 mt-0.5">
+                      <PenTool className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">ক্যানভাস হ্যান্ডরাইটিং ও Anki SRS</h4>
+                      <p className="text-[11px] text-stone-400 mt-0.5">
+                        ব্রেইনে কাঞ্জি ও ভোকাবুলারি আজীবন মনে রাখার স্মার্ট অ্যালগরিদম
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">bKash তাৎক্ষণিক ভেরিফিকেশন</h4>
+                      <p className="text-[11px] text-stone-400 mt-0.5">
+                        মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর — কোনো হিডেন চার্জ নেই, ১-ক্লিকে চালু
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Primary CTA Buttons */}
+                <div className="pt-3 flex flex-col sm:flex-row items-center gap-3">
+                  <button
+                    id="btn-unlock-pro-lesson"
+                    onClick={() => setIsProModalOpen(true)}
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-stone-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer"
+                  >
+                    <Crown className="w-5 h-5 text-stone-950" />
+                    <span>Upgrade to PRO — আনলক করুন (৳৫৯৯/মাস)</span>
+                    <ArrowRight className="w-4 h-4 text-stone-950" />
+                  </button>
+
+                  <button
+                    id="btn-read-free-lessons"
+                    onClick={() => onNavigate('lesson', { lessonId: 'n5-l1' })}
+                    className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-bold text-xs transition-colors cursor-pointer text-center"
+                  >
+                    ফ্রি লেসন ০১ পড়ুন
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <LessonFocusTimerTracker
+              lessonTitle={lesson.title}
+              jlptLevel={lesson.level}
+              charCount={lesson.content ? lesson.content.length : 350}
+            />
 
         {/* Lesson Header Banner */}
         <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
@@ -1259,7 +1443,20 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             onNavigate('portal');
           }}
         />
+        </>
+        )}
       </div>
+
+      {/* Global Pro Upgrade Modal inside LessonView */}
+      <ProUpgradeModal
+        isOpen={isProModalOpen}
+        onClose={() => setIsProModalOpen(false)}
+        onSuccess={() => {
+          setIsProModalOpen(false);
+          refreshProgress();
+        }}
+        defaultPlanInterval="monthly"
+      />
     </div>
   );
 };

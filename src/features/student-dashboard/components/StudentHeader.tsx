@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, Flower2, X } from 'lucide-react';
+import { Award, Crown, Flower2, X } from 'lucide-react';
 import { StudentProfile, AccountUsage } from '../types';
 import { AIUsageSummary } from './AIUsageSummary';
 import { AchievementBadges } from '../../../components/student/AchievementBadges';
@@ -12,10 +12,12 @@ interface StudentHeaderProps {
   accountUsage: AccountUsage;
   onOpenAiTutor?: () => void;
   onOpenStore?: () => void;
+  onOpenUpgradePro?: () => void;
+  isPro?: boolean;
   activeStreak: number;
 }
 
-export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor, onOpenStore, activeStreak }) => {
+export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUsage, onOpenAiTutor, onOpenStore, onOpenUpgradePro, isPro = false, activeStreak }) => {
   const { isFocusMode, toggleFocusMode } = useFocusMode();
   const [isIdOpen, setIsIdOpen] = useState(false);
   const [areBadgesOpen, setAreBadgesOpen] = useState(false);
@@ -57,6 +59,19 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
 
         <div className="shrink-0 pt-1">
           <div className="flex items-center gap-2">
+            {!isPro && (
+              <button
+                id="btn-header-upgrade-pro"
+                type="button"
+                onClick={onOpenUpgradePro}
+                aria-label="Upgrade to Pro"
+                title="Nihomi Pro — Unlock All Lessons"
+                className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 px-3 py-1 text-xs font-black shadow-sm transition-all active:scale-95 cursor-pointer"
+              >
+                <Crown size={13} className="text-stone-950 fill-stone-950" />
+                <span>PRO</span>
+              </button>
+            )}
             <button type="button" onClick={() => toggleFocusMode()} aria-pressed={isFocusMode} aria-label="Zen Focus Mode" title="Zen Focus Mode" className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 ${isFocusMode ? 'border-rose-300 bg-rose-100 text-rose-700' : 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'}`}><Flower2 size={15} aria-hidden="true" /><span>{isFocusMode ? 'Zen Active' : 'Zen Focus'}</span></button>
             <button type="button" onClick={() => setAreBadgesOpen(true)} aria-label="View badges" title="View badges" className="rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-700 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"><Award size={16} aria-hidden="true" /></button>
             <AIUsageSummary usage={accountUsage} onOpenAiTutor={onOpenAiTutor} onOpenStore={onOpenStore} />

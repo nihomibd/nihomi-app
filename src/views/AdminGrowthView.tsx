@@ -20,13 +20,34 @@ import {
   Link,
   Flame,
   Clock,
-  Award
+  Award,
+  Zap,
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { generateCampaignUrl } from '../utils/utm';
+import { billingApi } from '../lib/billingApi';
 
 interface AdminGrowthViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
+}
+
+interface PendingBkashSubmission {
+  id: string;
+  userId?: string;
+  studentName: string;
+  studentEmail: string;
+  studentPhone: string;
+  trxId: string;
+  planId: string;
+  planName: string;
+  billingInterval: string;
+  amount: number;
+  submittedAt: string;
+  status: 'pending' | 'approved';
+  approvedAt?: string;
+  approvedBy?: string;
 }
 
 interface GrowthSummary {
@@ -81,6 +102,13 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const [recentRegistrations, setRecentRegistrations] = useState<RecentRegistration[]>([]);
   const [lastRefreshedAt, setLastRefreshedAt] = useState<string>('');
 
+  // Pending bKash Submissions State
+  const [pendingSubmissions, setPendingSubmissions] = useState<PendingBkashSubmission[]>([]);
+  const [isLoadingSubmissions, setIsLoadingSubmissions] = useState(false);
+  const [approvingTrxId, setApprovingTrxId] = useState<string | null>(null);
+  const [approvalToast, setApprovalToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [copiedTrxId, setCopiedTrxId] = useState<string | null>(null);
+
   // UTM Generator State
   const [genCampaign, setGenCampaign] = useState('fb_reels_n5_intro');
   const [genSource, setGenSource] = useState('facebook');
@@ -99,6 +127,21 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
       setIsUnlocked(true);
     }
   }, [isFounderUser]);
+
+  const fetchPendingSubmissions = async (overridePasskey?: string) => {
+    setIsLoadingSubmissions(true);
+    try {
+      const activeKey = overridePasskey || passkey || (isFounderUser ? 'nihomi2025' : '');
+      const res = await billingApi.getPendingTrxSubmissions(activeKey);
+      if (res.success && res.submissions) {
+        setPendingSubmissions(res.submissions);
+      }
+    } catch (err) {
+      console.error('Failed to load pending submissions:', err);
+    } finally {
+      setIsLoadingSubmissions(false);
+    }
+  };
 
   const fetchGrowthMetrics = async (overridePasskey?: string) => {
     setIsLoading(true);
@@ -130,8 +173,63 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   useEffect(() => {
     if (isUnlocked || isFounderUser) {
       fetchGrowthMetrics();
+      fetchPendingSubmissions();
     }
   }, [isUnlocked, isFounderUser]);
+
+  const handleApproveTrxId = async (sub: PendingBkashSubmission) => {
+    setApprovingTrxId(sub.trxId);
+    try {
+      const activeKey = passkey || (isFounderUser ? 'nihomi2025' : '');
+      const res = await billingApi.approveTrxId({
+        trxId: sub.trxId,
+        submissionId: sub.id,
+        userId: sub.userId,
+        planId: sub.planId,
+        billingInterval: sub.billingInterval,
+        passkey: activeKey
+      });
+
+      if (res.success) {
+        setPendingSubmissions((prev) =>
+          prev.map((item) =>
+            item.id === sub.id || item.trxId === sub.trxId
+              ? {
+                  ...item,
+                  status: 'approved',
+                  approvedAt: new Date().toISOString(),
+                  approvedBy: user?.email || 'mdtanvirkabirbiplob@gmail.com'
+                }
+              : item
+          )
+        );
+        setApprovalToast({
+          message: `✓ TrxID ${sub.trxId} সফলভাবে ভেরিফাই ও অ্যাক্টিভ হয়েছে! ${sub.studentName}-এর Pro চালু।`,
+          type: 'success'
+        });
+        setTimeout(() => setApprovalToast(null), 4500);
+        if (summary) {
+          setSummary((prev) => (prev ? { ...prev, activePaidSubscribers: prev.activePaidSubscribers + 1 } : null));
+        }
+      } else {
+        setApprovalToast({ message: res.message || 'অ্যাপ্রুভ করতে ব্যর্থ হয়েছে।', type: 'error' });
+        setTimeout(() => setApprovalToast(null), 4500);
+      }
+    } catch (err: any) {
+      setApprovalToast({ message: err.message || 'অ্যাপ্রুভ করতে ব্যর্থ হয়েছে।', type: 'error' });
+      setTimeout(() => setApprovalToast(null), 4500);
+    } finally {
+      setApprovingTrxId(null);
+    }
+  };
+
+  const handleCopyTrx = async (trx: string) => {
+    try {
+      await navigator.clipboard.writeText(trx);
+      setCopiedTrxId(trx);
+      setTimeout(() => setCopiedTrxId(null), 2000);
+    } catch {}
+  };
 
   const handlePasskeySubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -457,6 +555,199 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* PENDING BKASH SUBSCRIPTIONS (MANUAL VERIFICATION) & 1-CLICK APPROVAL */}
+        <div id="section-pending-bkash" className="bg-stone-900 rounded-3xl border border-pink-900/40 overflow-hidden shadow-2xl p-6 space-y-4 relative">
+          {/* Subtle Pink/Red Glow for bKash Brand */}
+          <div className="absolute top-0 right-0 w-80 h-32 bg-pink-600/10 blur-3xl pointer-events-none rounded-full" />
+
+          {/* Toast notification inside card if action completed */}
+          {approvalToast && (
+            <div
+              className={`p-3 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all ${
+                approvalToast.type === 'success'
+                  ? 'bg-emerald-950/80 border border-emerald-800 text-emerald-300'
+                  : 'bg-red-950/80 border border-red-800 text-red-300'
+              }`}
+            >
+              {approvalToast.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              )}
+              <span>{approvalToast.message}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-600 to-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-pink-600/20 shrink-0">
+                ৳
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <h3 className="text-base font-bold text-white">
+                    Pending bKash Subscriptions (ম্যানুয়াল ভেরিফিকেশন)
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-pink-950/80 text-pink-400 border border-pink-800/50">
+                    {pendingSubmissions.filter((s) => s.status === 'pending').length} টি অপেক্ষমাণ
+                  </span>
+                </div>
+                <p className="text-xs text-stone-400">
+                  শিক্ষার্থীদের জমা দেওয়া TrxID মিলিয়ে ১-ক্লিকে Pro প্ল্যান ও বোনাস কয়েন অ্যাক্টিভ করুন
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2 self-end sm:self-auto">
+              <button
+                type="button"
+                onClick={() => fetchPendingSubmissions()}
+                disabled={isLoadingSubmissions}
+                className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-semibold flex items-center space-x-1.5 transition-colors"
+                title="রিফ্রেশ করুন"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoadingSubmissions ? 'animate-spin' : ''}`} />
+                <span>রিফ্রেশ</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-stone-800 text-stone-400">
+                  <th className="pb-3 font-semibold">শিক্ষার্থী নাম</th>
+                  <th className="pb-3 font-semibold">ইমেইল / ফোন</th>
+                  <th className="pb-3 font-semibold">bKash TrxID</th>
+                  <th className="pb-3 font-semibold">প্ল্যান / ফি</th>
+                  <th className="pb-3 font-semibold">জমার সময়</th>
+                  <th className="pb-3 font-semibold text-center">স্ট্যাটাস</th>
+                  <th className="pb-3 font-semibold text-right">১-ক্লিক অ্যাকশন</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-800/60">
+                {pendingSubmissions.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-stone-500 text-xs">
+                      কোনো অপেক্ষমাণ bKash সাবস্ক্রিপশন নেই। সব ট্রানজেকশন ভেরিফাইড।
+                    </td>
+                  </tr>
+                ) : (
+                  pendingSubmissions.map((sub) => {
+                    const isPending = sub.status === 'pending';
+                    const isApproving = approvingTrxId === sub.trxId;
+                    const dateFormatted = new Date(sub.submittedAt).toLocaleString('bn-BD', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
+
+                    return (
+                      <tr key={sub.id || sub.trxId} className="hover:bg-stone-800/30 transition-colors">
+                        {/* 1. Student Name */}
+                        <td className="py-3.5 text-stone-200">
+                          <div className="font-bold text-white flex items-center space-x-1.5">
+                            <span>{sub.studentName}</span>
+                          </div>
+                        </td>
+
+                        {/* 2. Email / Phone */}
+                        <td className="py-3.5 text-stone-300">
+                          <div className="text-xs text-stone-200 font-medium">{sub.studentPhone || 'N/A'}</div>
+                          <div className="text-[11px] text-stone-500 font-mono">{sub.studentEmail}</div>
+                        </td>
+
+                        {/* 3. TrxID */}
+                        <td className="py-3.5">
+                          <div className="inline-flex items-center space-x-1.5 px-2 py-1 bg-stone-950 border border-stone-800 rounded-lg">
+                            <span className="font-mono font-bold text-amber-300 text-xs tracking-wider">
+                              {sub.trxId}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopyTrx(sub.trxId)}
+                              className="text-stone-400 hover:text-white transition-colors"
+                              title="কপি করুন"
+                            >
+                              {copiedTrxId === sub.trxId ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          </div>
+                        </td>
+
+                        {/* 4. Plan & Amount */}
+                        <td className="py-3.5">
+                          <div className="font-bold text-white flex items-center space-x-1">
+                            <Crown className="w-3 h-3 text-amber-400" />
+                            <span>{sub.amount === 4990 ? '৳৪,৯৯০ / বছর' : '৳৫৯৯ / মাস'}</span>
+                          </div>
+                          <span className="text-[10px] text-stone-400">
+                            {sub.planName || (sub.amount === 4990 ? 'Pro Yearly' : 'Pro Monthly')}
+                          </span>
+                        </td>
+
+                        {/* 5. Submission Time */}
+                        <td className="py-3.5 text-stone-400 text-[11px] whitespace-nowrap font-mono">
+                          {dateFormatted}
+                        </td>
+
+                        {/* 6. Status Badge */}
+                        <td className="py-3.5 text-center whitespace-nowrap">
+                          {isPending ? (
+                            <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 text-amber-400 border border-amber-800/60">
+                              <Clock className="w-3 h-3 text-amber-400" />
+                              <span>অপেক্ষমাণ</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              <span>ভেরিফাইড</span>
+                            </span>
+                          )}
+                        </td>
+
+                        {/* 7. 1-Click Action */}
+                        <td className="py-3.5 text-right whitespace-nowrap">
+                          {isPending ? (
+                            <button
+                              id={`btn-approve-trxid-${sub.trxId}`}
+                              type="button"
+                              onClick={() => handleApproveTrxId(sub)}
+                              disabled={isApproving}
+                              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-50"
+                            >
+                              {isApproving ? (
+                                <>
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  <span>অ্যাক্টিভ হচ্ছে...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Zap className="w-3.5 h-3.5 text-amber-300" />
+                                  <span>Approve & Activate Pro</span>
+                                </>
+                              )}
+                            </button>
+                          ) : (
+                            <span className="inline-flex items-center space-x-1 text-emerald-400 text-xs font-semibold px-2 py-1">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Pro Active ✓</span>
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
