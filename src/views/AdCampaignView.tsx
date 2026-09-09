@@ -14,7 +14,9 @@ import {
   HelpCircle,
   Trophy,
   Loader2,
-  ChevronRight
+  ChevronRight,
+  Flame,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { trackNihomiEvent } from '../utils/analytics';
@@ -34,6 +36,25 @@ interface QuizQuestion {
   options: { textBn: string; isCorrect: boolean }[];
   audioText: string;
 }
+
+interface SocialProofItem {
+  id: number;
+  name: string;
+  city: string;
+  action: string;
+  timeAgo: string;
+  badge: string;
+}
+
+const SOCIAL_PROOF_EVENTS: SocialProofItem[] = [
+  { id: 1, name: 'সাকিব', city: 'ঢাকা', action: 'এইমাত্র Lesson 1 শুরু করেছেন', timeAgo: '২ মিনিট আগে', badge: 'মিন্না নো নিহোঙ্গো' },
+  { id: 2, name: 'তানভীর', city: 'চট্টগ্রাম', action: 'N5 কুইজে ১০০% স্কোর করেছেন', timeAgo: '৪ মিনিট আগে', badge: 'কুইজ স্টার' },
+  { id: 3, name: 'নুসরাত', city: 'সিলেট', action: 'প্রো ব্যাচে এনরোল করেছেন', timeAgo: '৬ মিনিট আগে', badge: '৬০% ছাড়' },
+  { id: 4, name: 'রাফি', city: 'রাজশাহী', action: 'এইমাত্র Lesson 1 শুরু করেছেন', timeAgo: '৮ মিনিট আগে', badge: 'অ্যাক্টিভ' },
+  { id: 5, name: 'মেহেদী', city: 'ঢাকা', action: '৫০টি ফ্রি কয়েন ক্লেইম করেছেন', timeAgo: '১১ মিনিট আগে', badge: 'ওয়েলকাম' },
+  { id: 6, name: 'ফারহানা', city: 'খুলনা', action: 'কাঞ্জি ড্রিল কমপ্লিট করেছেন', timeAgo: '১৫ মিনিট আগে', badge: 'কাঞ্জি ল্যাব' },
+  { id: 7, name: 'আরিফ আহমেদ', city: 'মিরপুর', action: 'AI সেনসির সাথে কনভারসেশন শুরু করেছেন', timeAgo: '১৮ মিনিট আগে', badge: 'AI Sensei' }
+];
 
 const MICRO_QUIZ_DATA: QuizQuestion[] = [
   {
@@ -98,6 +119,34 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
   const [registeredStudentName, setRegisteredStudentName] = useState('');
   const [registeredStudentId, setRegisteredStudentId] = useState('');
+
+  // Live Social Proof Notification periodic state
+  const [socialProofIndex, setSocialProofIndex] = useState(0);
+  const [isSocialProofVisible, setIsSocialProofVisible] = useState(true);
+  const [isSocialProofDismissed, setIsSocialProofDismissed] = useState(false);
+
+  useEffect(() => {
+    if (isSocialProofDismissed) return;
+
+    const interval = setInterval(() => {
+      setIsSocialProofVisible(false);
+      setTimeout(() => {
+        setSocialProofIndex((prev) => (prev + 1) % SOCIAL_PROOF_EVENTS.length);
+        setIsSocialProofVisible(true);
+      }, 400);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [isSocialProofDismissed]);
+
+  const scrollToRegistration = () => {
+    const el = document.getElementById('registration-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      const input = document.getElementById('input-ad-contact');
+      if (input) input.focus();
+    }
+  };
 
   // Capture UTM parameters on initial landing
   useEffect(() => {
@@ -253,10 +302,25 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
   return (
     <div className="min-h-screen bg-[#0d0d16] text-stone-100 font-sans antialiased text-left selection:bg-red-600 selection:text-white pb-20">
       
-      {/* 1. TOP ANNOUNCEMENT BAR */}
-      <div className="bg-red-600 text-white text-xs font-bold py-2.5 px-4 text-center tracking-wide flex items-center justify-center space-x-2 shadow-sm">
-        <Sparkles className="w-3.5 h-3.5" />
-        <span>প্রথম ১০০ জন শিক্ষার্থীর জন্য সম্পূর্ণ বিনামূল্যে N5 ১ম অধ্যায় + ৫০ কয়েন উপহার!</span>
+      {/* 1. HIGH-CONVERTING STICKY TOP URGENCY BANNER */}
+      <div className="sticky top-0 z-40 bg-gradient-to-r from-red-700 via-red-600 to-rose-700 text-white py-2.5 px-3 sm:px-4 text-xs sm:text-sm font-bold shadow-lg shadow-red-950/50 border-b border-red-500/30 flex items-center justify-between">
+        <div className="flex items-center space-x-2 mx-auto sm:mx-0">
+          <span className="flex h-2.5 w-2.5 relative shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+          </span>
+          <span className="tracking-wide">
+            🔥 ১ম ব্যাচে স্পেশাল ৬০% ছাড় — আর মাত্র ৭টি সিট বাকি! (৳৫৯৯/মাস)
+          </span>
+        </div>
+
+        <button
+          onClick={scrollToRegistration}
+          className="hidden sm:inline-flex items-center space-x-1.5 bg-white hover:bg-stone-100 text-red-700 px-3.5 py-1 rounded-full text-xs font-black shadow-sm transition-transform active:scale-95 cursor-pointer"
+        >
+          <span>সিট বুক করুন</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
       </div>
 
       {/* 2. MINIMALIST LOGO BAR */}
@@ -281,10 +345,11 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
       </header>
 
       {/* 3. HERO HEADLINE SECTION */}
-      <section className="max-w-3xl mx-auto px-4 pt-8 sm:pt-12 pb-6 text-center space-y-4">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-stone-800/90 text-amber-400 rounded-full text-xs font-bold border border-amber-500/30 shadow-xs">
-          <Star className="w-3.5 h-3.5 fill-amber-400" />
-          <span>বাংলা মাধ্যমে সবচেয়ে সহজ জাপানি শিক্ষা</span>
+      <section className="max-w-3xl mx-auto px-4 pt-7 sm:pt-10 pb-4 text-center space-y-4">
+        {/* Hero Urgency Badge */}
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 bg-gradient-to-r from-red-950/80 via-stone-900 to-red-950/80 text-amber-300 rounded-full text-xs sm:text-sm font-extrabold border border-red-500/50 shadow-lg shadow-red-900/20">
+          <Flame className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
+          <span>🔥 ১ম ব্যাচে স্পেশাল ৬০% ছাড় — আর মাত্র ৭টি সিট বাকি! (৳৫৯৯/মাস)</span>
         </div>
 
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight sm:leading-snug">
@@ -294,6 +359,63 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
         <p className="text-sm sm:text-base text-stone-300 max-w-xl mx-auto leading-relaxed">
           কোনো পূর্ব অভিজ্ঞতা ছাড়াই আজই শুরু করুন। দেশসেরা মিন্না নো নিহোঙ্গো কারিকুলাম, নেটিভ অডিও উচ্চারণ এবং সহজ বাংলা ব্যাকরণ নোটস।
         </p>
+      </section>
+
+      {/* DYNAMIC COHORT PROGRESS & LIVE SEAT COUNTER */}
+      <section className="max-w-xl mx-auto px-4 mb-8">
+        <div className="bg-gradient-to-br from-[#161626] via-[#12121d] to-[#161626] border border-stone-800/90 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+          {/* Subtle decorative glow */}
+          <div className="absolute top-0 right-0 w-36 h-36 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+            <div className="flex items-center space-x-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+              </span>
+              <span className="text-xs font-bold text-stone-300">
+                লাইভ কোহোর্ট ব্যাচ ০১ (JLPT N5 টার্গেট ২০২৬)
+              </span>
+            </div>
+
+            <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-700/60 text-[11px] font-extrabold text-red-300 animate-pulse">
+              <Flame className="w-3 h-3 text-red-400 fill-red-400" />
+              <span>আর মাত্র ৭টি সিট বাকি!</span>
+            </span>
+          </div>
+
+          {/* Counter Text */}
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="text-sm sm:text-base font-extrabold text-white">
+              ৪৪/১০০ শিক্ষার্থী ইতিমধ্যে ভর্তি হয়েছেন
+            </span>
+            <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/50">
+              ৪৪% সিট পূর্ণ
+            </span>
+          </div>
+
+          {/* Sleek Progress Bar */}
+          <div className="h-3.5 w-full bg-stone-950 rounded-full overflow-hidden p-0.5 border border-stone-800 shadow-inner">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 shadow-md shadow-red-600/40 transition-all duration-1000 relative overflow-hidden"
+              style={{ width: '44%' }}
+            >
+              <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full" />
+            </div>
+          </div>
+
+          {/* Trust Guarantees */}
+          <div className="mt-3 pt-2.5 border-t border-stone-800/70 flex flex-wrap items-center justify-between text-[11px] text-stone-400 gap-2">
+            <span className="flex items-center space-x-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>লাইভ মেন্টরশিপ ও ২৪/৭ AI সেনসি</span>
+            </span>
+            <span className="flex items-center space-x-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>টোকিও স্টুডেন্ট ভিসা ও জব সাপোর্ট</span>
+            </span>
+          </div>
+        </div>
       </section>
 
       {/* 4. INTERACTIVE 60-SECOND MICRO-QUIZ (Proven to boost conversion 3x) */}
@@ -408,7 +530,7 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
       </section>
 
       {/* 5. INSTANT FAST REGISTRATION / ONBOARDING */}
-      <section className="max-w-xl mx-auto px-4 mb-12">
+      <section id="registration-section" className="max-w-xl mx-auto px-4 mb-12">
         <div className="bg-stone-900 rounded-3xl border border-stone-800 p-6 sm:p-8 space-y-5 shadow-2xl">
           <div className="text-center space-y-1">
             <h2 className="text-xl font-bold text-white">
@@ -565,6 +687,62 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
         studentName={registeredStudentName}
         studentId={registeredStudentId}
       />
+
+      {/* 8. PERIODIC SOCIAL PROOF TOAST (Bottom-Left) */}
+      {!isSocialProofDismissed && (
+        <div
+          className={`fixed bottom-4 sm:bottom-6 left-4 sm:left-6 z-50 transition-all duration-500 ease-out transform ${
+            isSocialProofVisible
+              ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+              : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+          }`}
+        >
+          <div
+            onClick={scrollToRegistration}
+            className="bg-[#141420]/95 backdrop-blur-md border border-stone-700/80 rounded-2xl p-3 sm:p-3.5 shadow-2xl shadow-black/80 flex items-center space-x-3 text-left max-w-[320px] sm:max-w-sm hover:border-red-500/60 transition-colors cursor-pointer group"
+          >
+            {/* Student Initial Icon with Active Pulse */}
+            <div className="relative shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-600 via-rose-500 to-amber-500 text-white font-black text-sm flex items-center justify-center shadow-md">
+                {SOCIAL_PROOF_EVENTS[socialProofIndex].name[0]}
+              </div>
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border-2 border-[#141420]"></span>
+              </span>
+            </div>
+
+            {/* Notification Content */}
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-white leading-snug truncate">
+                {SOCIAL_PROOF_EVENTS[socialProofIndex].name} ({SOCIAL_PROOF_EVENTS[socialProofIndex].city}) {SOCIAL_PROOF_EVENTS[socialProofIndex].action} • {SOCIAL_PROOF_EVENTS[socialProofIndex].timeAgo}
+              </p>
+              <div className="flex items-center space-x-2 mt-0.5 text-[10px] text-stone-400">
+                <span className="text-emerald-400 font-medium flex items-center">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400 inline mr-1 shrink-0" />
+                  ভেরিফাইড শিক্ষার্থী
+                </span>
+                <span className="bg-stone-800 px-1.5 py-0.5 rounded text-[9px] text-amber-300 font-semibold border border-stone-700">
+                  {SOCIAL_PROOF_EVENTS[socialProofIndex].badge}
+                </span>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsSocialProofDismissed(true);
+              }}
+              className="text-stone-500 hover:text-stone-300 p-1 rounded-lg hover:bg-stone-800 transition-colors shrink-0"
+              title="বন্ধ করুন"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

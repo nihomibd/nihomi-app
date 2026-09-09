@@ -195,7 +195,7 @@ export const App: React.FC = () => {
   }, []);
 
   const activeSoundscape = soundscapes.find((s) => s.id === soundscapeMode) || soundscapes[0];
-  const isAdLanding = currentView === 'start' || currentView === 'ad-campaign';
+  const isAdLanding = currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
@@ -236,7 +236,7 @@ export const App: React.FC = () => {
       )}
       
       <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
-        {(currentView === 'start' || currentView === 'ad-campaign') && (
+        {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
           <AdCampaignView onNavigate={handleNavigate} />
         )}
         {(currentView === 'growth' || currentView === 'admin-growth' || currentView === 'founder/growth') && (
