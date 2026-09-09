@@ -26,6 +26,7 @@ import { TokyoListeningAudioPlayer } from '../components/mockExam/TokyoListening
 import { SentenceStarComposer } from '../components/mockExam/SentenceStarComposer';
 import { MockExamOfficialCertificate } from '../components/mockExam/MockExamOfficialCertificate';
 import { stopJapaneseSpeech } from '../lib/tts';
+import { useAuth } from '../context/AuthContext';
 
 interface MockExamRunnerViewProps {
   examId: string;
@@ -34,6 +35,7 @@ interface MockExamRunnerViewProps {
 }
 
 export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, onNavigate, onAttemptCompleted }) => {
+  const { user } = useAuth();
   const [exam, setExam] = useState<MockExam | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [stage, setStage] = useState<'intro' | 'running' | 'submitting' | 'review'>('intro');
@@ -776,20 +778,18 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
             Question by Question Review ({attempt.userAnswers.length} Qs)
           </button>
 
-          {attempt.isPassed && (
-            <button
-              type="button"
-              onClick={() => setReviewActiveTab('certificate')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                reviewActiveTab === 'certificate'
-                  ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
-                  : 'bg-slate-900 text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <Award className="w-4 h-4 text-amber-300" />
-              <span>Official Digital Certificate</span>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setReviewActiveTab('certificate')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              reviewActiveTab === 'certificate'
+                ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
+                : 'bg-slate-900 text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Award className="w-4 h-4 text-amber-300" />
+            <span>Official Evaluation Certificate</span>
+          </button>
 
           <button
             type="button"
@@ -802,8 +802,11 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         </div>
 
         {/* Certificate View */}
-        {reviewActiveTab === 'certificate' && attempt.isPassed && (
-          <MockExamOfficialCertificate attempt={attempt} />
+        {reviewActiveTab === 'certificate' && (
+          <MockExamOfficialCertificate
+            attempt={attempt}
+            studentName={user?.name || user?.email?.split('@')[0] || 'Tanvir Hossain'}
+          />
         )}
 
         {/* Detailed Question Review List */}

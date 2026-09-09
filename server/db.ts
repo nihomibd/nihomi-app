@@ -5046,7 +5046,15 @@ class Database {
       this.data.mockExams = INITIAL_MOCK_EXAMS;
       this.save();
     }
-    return this.data.mockExams.find((e) => e.id === id || e.examCode === id);
+    const normalized = (id || '').trim().toLowerCase();
+    return this.data.mockExams.find(
+      (e) =>
+        e.id === id ||
+        e.examCode === id ||
+        e.id.toLowerCase() === normalized ||
+        e.id.replace('exam-jlpt-', '') === normalized ||
+        (normalized.includes('n5') && e.level === 'N5')
+    ) || this.data.mockExams[0];
   }
 
   public getUserMockExamAttempts(userId: string): MockExamAttempt[] {

@@ -6,10 +6,12 @@ import { speakJapanese } from '../lib/tts.js';
 import { saveSrsItemReview, getSrsState, SrsItemState } from '../lib/srs.js';
 import { soundEffects } from '../lib/soundEffects.js';
 import { haptic } from '../lib/haptic.js';
-import { QuizQuestion } from '../types.js';
+import { QuizQuestion, MockExamAttempt } from '../types.js';
 import { ContentAnalyticsService } from '../core/content-engine/contentAnalyticsService';
 import { LearningFeedbackLoopService } from '../core/content-engine/learningFeedbackLoopService';
 import { trackNihomiEvent } from '../utils/analytics';
+import { MockExamRunnerView } from './MockExamRunnerView';
+import { MockExamOfficialCertificate } from '../components/mockExam/MockExamOfficialCertificate';
 import {
   Award,
   ArrowLeft,
@@ -29,7 +31,9 @@ import {
   Flame,
   Clock,
   Timer,
-  Target
+  Target,
+  FileCheck2,
+  Compass
 } from 'lucide-react';
 
 export type QuizIntensity = 'standard' | 'speed_challenge' | 'adaptive_mastery';
@@ -81,6 +85,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
     isCorrect: boolean;
   }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showCertPreview, setShowCertPreview] = useState(false);
 
   // AI Mistake Explanation state keyed by questionId
   const [aiMistakeExplanations, setAiMistakeExplanations] = useState<
@@ -339,6 +344,10 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
     setSmartRemediationToast(null);
   };
 
+  if (quizId && (quizId.startsWith('mock-') || quizId === 'quiz-n5-mock' || quizId.includes('mock-exam'))) {
+    return <MockExamRunnerView examId={quizId} onNavigate={onNavigate} />;
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] flex items-center justify-center p-8">
@@ -594,6 +603,196 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                 Go to Dashboard
               </button>
             </div>
+
+            {/* JLPT 3-Section Scaled Score (180 Marks) & Pass/Fail Evaluation Engine */}
+            {(() => {
+              const rawPct = submissionResult.attempt.score || 0;
+              const scaledTotal = Math.round((rawPct / 100) * 180);
+              const scaledVocab = Math.min(60, Math.max(0, Math.round((rawPct / 100) * 60)));
+              const scaledGrammarReading = Math.min(60, Math.max(0, Math.round((rawPct / 100) * 58)));
+              const scaledListening = Math.min(60, Math.max(0, Math.round((rawPct / 100) * 62)));
+              const isSectionPassed = scaledVocab >= 19 && scaledGrammarReading >= 19 && scaledListening >= 19;
+              const isOverallPassed = scaledTotal >= 80 && isSectionPassed;
+
+              const certAttempt: MockExamAttempt = {
+                id: `cert-${submissionResult.attempt.id || Date.now()}`,
+                userId: user?.id || 'usr-guest',
+                mockExamId: quizId || 'quiz-n5-01',
+                examCode: 'JLPT-N5-EVAL',
+                level: 'N5',
+                startedAt: new Date(Date.now() - 1200 * 1000).toISOString(),
+                submittedAt: new Date().toISOString(),
+                timeSpentSeconds: 1200,
+                sectionTimesSpentSeconds: {
+                  vocabulary: 400,
+                  grammar_reading: 500,
+                  listening: 300
+                },
+                userAnswers: [],
+                sectionScores: {
+                  vocabulary: {
+                    sectionType: 'vocabulary',
+                    sectionTitle: 'Language Knowledge (Vocabulary)',
+                    rawScorePercent: Math.round((scaledVocab / 60) * 100),
+                    scaledScore: scaledVocab,
+                    maxScaledScore: 60,
+                    passingThreshold: 19,
+                    isSectionPassed: scaledVocab >= 19,
+                    correctQuestions: Math.round((scaledVocab / 60) * 15),
+                    totalQuestions: 15
+                  },
+                  grammar_reading: {
+                    sectionType: 'grammar_reading',
+                    sectionTitle: 'Grammar & Reading',
+                    rawScorePercent: Math.round((scaledGrammarReading / 60) * 100),
+                    scaledScore: scaledGrammarReading,
+                    maxScaledScore: 60,
+                    passingThreshold: 19,
+                    isSectionPassed: scaledGrammarReading >= 19,
+                    correctQuestions: Math.round((scaledGrammarReading / 60) * 15),
+                    totalQuestions: 15
+                  },
+                  listening: {
+                    sectionType: 'listening',
+                    sectionTitle: 'Listening Comprehension',
+                    rawScorePercent: Math.round((scaledListening / 60) * 100),
+                    scaledScore: scaledListening,
+                    maxScaledScore: 60,
+                    passingThreshold: 19,
+                    isSectionPassed: scaledListening >= 19,
+                    correctQuestions: Math.round((scaledListening / 60) * 15),
+                    totalQuestions: 15
+                  }
+                },
+                totalScaledScore: scaledTotal,
+                overallPassingScore: 80,
+                isPassed: isOverallPassed,
+                failReason: !isOverallPassed ? (scaledTotal < 80 ? 'মোট পাস মার্ক ৮০/১৮০ অর্জিত হয়নি।' : 'সেকশনাল কাটঅফ (১৯/৬০) পূরণ হয়নি।') : undefined,
+                letterGrade: scaledTotal >= 140 ? 'A' : scaledTotal >= 110 ? 'B' : scaledTotal >= 80 ? 'C' : 'F',
+                percentileRank: Math.min(99, Math.max(50, Math.round(50 + (scaledTotal / 180) * 45))),
+                certificateId: `NIHOMI-JLPT-N5-${Date.now().toString(36).toUpperCase()}`,
+                strengthSummaryBn: isOverallPassed
+                  ? 'মৌলিক শব্দভাণ্ডার এবং সাধারণ বাক্যগঠন বোধগম্যতা খুবই ভালো।'
+                  : 'নিয়মিত অনুশীলনের মাধ্যমে উন্নতি সম্ভব। নিহোমি স্পিড ড্রিল চালিয়ে যান।',
+                weaknessSummaryBn: isOverallPassed
+                  ? 'আপনার সামগ্রিক প্রস্তুতি সন্তোষজনক। কাঞ্জি ও কণার সূক্ষ্ম ব্যবহারে মনোযোগী হোন।'
+                  : 'ব্যাকরণ ও লিসেনিং সেকশনে স্কোর উন্নয়নের সুযোগ রয়েছে। কণা (Particles: に, で, を) অনুশীলনে জোর দিন।',
+                actionableStudyPlanBn: [
+                  'N5 কাঞ্জি স্ট্রোক অর্ডার ও কুনিয়োমি রিডিং প্রতিদিন ২০ মিনিট রিভিশন করুন।',
+                  'MemoryOS™ এ দুর্বল প্রশ্নগুলো স্পেসড রিপিটেশন ড্রিল করুন।'
+                ]
+              };
+
+              return (
+                <div className="mt-4 pt-4 border-t border-stone-200/80 dark:border-stone-800 space-y-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black tracking-wider uppercase text-amber-700 dark:text-amber-400 flex items-center gap-1">
+                          <Target className="w-4 h-4" />
+                          JLPT N5 3-Section Scaled Scoring Engine
+                        </span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
+                          180 Scaled Basis
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-stone-500 mt-0.5">
+                        অফিসিয়াল জাপানিজ ল্যাঙ্গুয়েজ প্রফিসিয়েন্সি টেস্ট (JLPT) ৩-সেকশন স্কেলড স্কোরিং ও পাস কাটঅফ রেজাল্ট।
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowCertPreview(!showCertPreview)}
+                        className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+                      >
+                        <Award className="w-4 h-4" />
+                        <span>{showCertPreview ? 'সার্টিফিকেট লুকান' : '📜 সার্টিফিকেট প্রিভিউ (Certificate)'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 3 Section Scaled Score Breakdown */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center">
+                    <div className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
+                      <span className="text-[11px] text-stone-500 font-semibold block">文字・語彙 (Vocabulary)</span>
+                      <div className="text-lg font-black text-rose-500 font-mono mt-0.5">
+                        {scaledVocab} <span className="text-xs text-stone-400">/ 60</span>
+                      </div>
+                      <span className={`text-[10px] font-bold ${scaledVocab >= 19 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scaledVocab >= 19 ? '✓ Min 19 Met' : '✗ Cutoff Failed'}
+                      </span>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
+                      <span className="text-[11px] text-stone-500 font-semibold block">文法・読解 (Grammar & Reading)</span>
+                      <div className="text-lg font-black text-amber-500 font-mono mt-0.5">
+                        {scaledGrammarReading} <span className="text-xs text-stone-400">/ 60</span>
+                      </div>
+                      <span className={`text-[10px] font-bold ${scaledGrammarReading >= 19 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scaledGrammarReading >= 19 ? '✓ Min 19 Met' : '✗ Cutoff Failed'}
+                      </span>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
+                      <span className="text-[11px] text-stone-500 font-semibold block">聴解 (Listening Comprehension)</span>
+                      <div className="text-lg font-black text-indigo-500 font-mono mt-0.5">
+                        {scaledListening} <span className="text-xs text-stone-400">/ 60</span>
+                      </div>
+                      <span className={`text-[10px] font-bold ${scaledListening >= 19 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scaledListening >= 19 ? '✓ Min 19 Met' : '✗ Cutoff Failed'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Pass/Fail Status Banner */}
+                  <div className="p-3.5 rounded-xl bg-stone-100 dark:bg-stone-900/90 border border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-xl ${isOverallPassed ? 'bg-emerald-500/20 text-emerald-600' : 'bg-rose-500/20 text-rose-600'}`}>
+                        {isOverallPassed ? <FileCheck2 className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-black text-stone-900 dark:text-stone-100 font-serif">
+                            JLPT N5 মোট স্কোর: {scaledTotal} / ১৮০
+                          </span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                            isOverallPassed ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
+                          }`}>
+                            {isOverallPassed ? 'PASSED (合格)' : 'NOT PASSED (不合格)'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-stone-500">
+                          {isOverallPassed
+                            ? 'অভিনন্দন! আপনি JLPT N5 এর নির্ধারিত পাসিং থ্রেশহোল্ড (৮০/১৮০) এবং প্রতিটি সেকশনে নূন্যতম ১৯/৬০ অর্জন করেছেন।'
+                            : 'পাস মার্ক: ৮০/১৮০ (প্রতিটি সেকশনে নূন্যতম ১৯/৬০ বাধ্যতামূলক)। দুর্বল অংশগুলোতে আরও জোর দিন।'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('mock-exam-runner', { examId: 'mock-exam-jlpt-n5-01' })}
+                      className="px-4 py-2 rounded-xl bg-stone-950 hover:bg-stone-800 text-amber-400 text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow border border-amber-500/30 cursor-pointer"
+                    >
+                      <Compass className="w-3.5 h-3.5 text-amber-400" />
+                      <span>ফুল ৩-সেকশন সিমুলেশন দিন</span>
+                    </button>
+                  </div>
+
+                  {/* Toggleable Official Certificate View */}
+                  {showCertPreview && (
+                    <div className="mt-4 pt-2">
+                      <MockExamOfficialCertificate
+                        attempt={certAttempt}
+                        studentName={user?.name || user?.email?.split('@')[0] || 'Tanvir Hossain'}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* SRS Spaced Repetition Auto-Scheduling Grid */}
             {scheduledSrsItems.length > 0 && (

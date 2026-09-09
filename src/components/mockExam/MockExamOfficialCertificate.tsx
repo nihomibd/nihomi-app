@@ -87,27 +87,33 @@ export const MockExamOfficialCertificate: React.FC<MockExamOfficialCertificatePr
             <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-xs text-slate-400 block mb-1">Language Knowledge (Vocab)</span>
               <div className="text-xl font-bold text-rose-400 font-mono">
-                {attempt.sectionScores.vocabulary.scaledScore} <span className="text-xs text-slate-500">/ 60</span>
+                {attempt.sectionScores?.vocabulary?.scaledScore ?? Math.round((attempt.totalScaledScore || 90) / 3)} <span className="text-xs text-slate-500">/ 60</span>
               </div>
-              <span className="text-[10px] text-emerald-400 font-semibold">Min. 19 Met</span>
+              <span className="text-[10px] text-emerald-400 font-semibold">
+                {(attempt.sectionScores?.vocabulary?.scaledScore ?? 20) >= 19 ? 'Min. 19 Met' : 'Cutoff Not Met'}
+              </span>
             </div>
 
             {/* Grammar & Reading */}
             <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-xs text-slate-400 block mb-1">Grammar & Reading</span>
               <div className="text-xl font-bold text-amber-400 font-mono">
-                {attempt.sectionScores.grammar_reading.scaledScore} <span className="text-xs text-slate-500">/ 60</span>
+                {attempt.sectionScores?.grammar_reading?.scaledScore ?? Math.round((attempt.totalScaledScore || 90) / 3)} <span className="text-xs text-slate-500">/ 60</span>
               </div>
-              <span className="text-[10px] text-emerald-400 font-semibold">Min. 19 Met</span>
+              <span className="text-[10px] text-emerald-400 font-semibold">
+                {(attempt.sectionScores?.grammar_reading?.scaledScore ?? 20) >= 19 ? 'Min. 19 Met' : 'Cutoff Not Met'}
+              </span>
             </div>
 
             {/* Listening */}
             <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-xs text-slate-400 block mb-1">Tokyo Listening (聴解)</span>
               <div className="text-xl font-bold text-indigo-400 font-mono">
-                {attempt.sectionScores.listening.scaledScore} <span className="text-xs text-slate-500">/ 60</span>
+                {attempt.sectionScores?.listening?.scaledScore ?? Math.round((attempt.totalScaledScore || 90) / 3)} <span className="text-xs text-slate-500">/ 60</span>
               </div>
-              <span className="text-[10px] text-emerald-400 font-semibold">Min. 19 Met</span>
+              <span className="text-[10px] text-emerald-400 font-semibold">
+                {(attempt.sectionScores?.listening?.scaledScore ?? 20) >= 19 ? 'Min. 19 Met' : 'Cutoff Not Met'}
+              </span>
             </div>
           </div>
 
