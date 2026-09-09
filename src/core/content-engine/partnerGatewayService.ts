@@ -25,19 +25,19 @@ export interface PartnerAcademyTenant {
 
 export const VERIFIED_PARTNER_TENANTS: PartnerAcademyTenant[] = [
   {
-    tenantId: 'dils',
-    subdomain: 'dils.nihomi.com',
-    institutionName: 'Dhaka International Language School',
-    institutionNameJa: 'ダッカ国際語学学校',
+    tenantId: 'bdtrip24-academy',
+    subdomain: 'academy.bdtrip24.com',
+    institutionName: 'bdTrip24 Global Academy',
+    institutionNameJa: 'bdTrip24グローバルアカデミー',
     campuses: ['Farmgate Main Campus, Dhaka', 'Banani Executive Desk, Dhaka'],
     customBranding: {
       primaryColor: '#0F172A',
       accentColor: '#2563EB',
-      logoUrl: 'https://nihomi.com/assets/partners/dils-logo.svg',
-      certificateHeader: 'DILS Japanese Language Division in Academic Partnership with NIHOMI™',
-      campusFooterText: 'DILS Campus, Dhaka • Academic Council Certified',
+      logoUrl: 'https://nihomi.com/assets/partners/bdtrip24-logo.svg',
+      certificateHeader: 'bdTrip24 Global Learning Division in Academic Partnership with NIHOMI™',
+      campusFooterText: 'bdTrip24 Campus, Dhaka • Academic Council Certified',
     },
-    contactEmail: 'contact@dils.edu.bd',
+    contactEmail: 'support@bdtrip24.com',
     verifiedAt: '2026-08-01T00:00:00Z',
     totalSeatsPurchased: 200,
     allocatedSeatsCount: 142,

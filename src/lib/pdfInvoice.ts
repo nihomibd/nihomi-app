@@ -289,7 +289,7 @@ export function generateNbrTaxCertificatePDF(invoice: Invoice): jsPDF {
   doc.setFontSize(9.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(17, 24, 39);
-  doc.text('Nihomi Academy Ltd. (DILS Japanese Wing)', 15, y);
+  doc.text('Nihomi Academy Ltd. (Powered by bdTrip24)', 15, y);
   doc.setTextColor(6, 78, 59);
   doc.text('004928192-0101', 105, y);
 
@@ -439,7 +439,7 @@ export function generateAnnualTaxSummaryPDF(invoices: Invoice[], year?: number):
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(203, 213, 225);
   doc.text(`Statutory Tax Assessment & Mushak-6.3 Expenditure Record (${fiscalYearLabel})`, 15, 25);
-  doc.text('Issued by Nihomi Academy Ltd. &bull; DILS Japanese Language & Relocation Wing', 15, 31);
+  doc.text('Issued by Nihomi Academy Ltd. • Japanese Language & Relocation Wing (Powered by bdTrip24)', 15, 31);
   doc.text(`BIN: 004928192-0101 | Generated On: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 15, 37);
 
   // Summary Metrics Box

@@ -23,7 +23,7 @@ import {
   RefreshCw,
   FileSpreadsheet
 } from 'lucide-react';
-import { InstitutionService, DILS_INSTITUTION_LICENSE, DILS_STUDENT_ROSTER } from '../core/b2b/institutionService';
+import { InstitutionService } from '../core/b2b/institutionService';
 import { StudentSeat } from '../types/institution';
 
 interface InstitutionPortalViewProps {

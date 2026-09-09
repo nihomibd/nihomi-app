@@ -100,7 +100,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="font-semibold text-[11px]">DILS Japan Visa Wing</span>
+                  <span className="font-semibold text-[11px]">bdTrip24 Ecosystem Verified</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -205,9 +205,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold font-serif text-stone-900">3. NIHOMI IN-PERSON (DILS)</h3>
+                <h3 className="text-lg font-bold font-serif text-stone-900">3. NIHOMI IN-PERSON & VISA</h3>
                 <p className="text-xs text-stone-600 leading-relaxed">
-                  Physical Banani/Dhanmondi campus + 6-stage COE (Certificate of Eligibility) and Japan student visa filing.
+                  Physical admissions center + 6-stage COE (Certificate of Eligibility) and Japan student visa filing.
                 </p>
               </div>
               <button

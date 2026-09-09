@@ -203,7 +203,7 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
               নিবন্ধিত সরবরাহকারীর বিবরণ (Registered Supplier):
             </p>
             <p className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100">NIHOMI JAPANESE ACADEMY</p>
-            <p className="text-zinc-600 dark:text-zinc-400">Dhaka International Language School Partner Wing</p>
+            <p className="text-zinc-600 dark:text-zinc-400">bdTrip24 Ecosystem Verified Wing</p>
             <p className="text-zinc-600 dark:text-zinc-400">House 42, Road 11, Banani / Dhanmondi, Dhaka-1213, Bangladesh</p>
             <p className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
               ব্যবসায়ী সনাক্তকরণ সংখ্যা (BIN): 004928192-0101

@@ -1,7 +1,7 @@
 /**
  * NIHOMI MARKETING UTM ATTRIBUTION & AD CAMPAIGN TRACKER
  * Captures, persists, and links UTM campaign parameters for Bangladesh learner acquisition.
- * Designed for Facebook Ads, Instagram Reels, TikTok, and DILS partner referrals.
+ * Designed for Facebook Ads, Instagram Reels, TikTok, and bdTrip24 partner referrals.
  */
 
 export interface UtmParams {

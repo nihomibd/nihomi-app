@@ -45,7 +45,7 @@ export class ContentExportService {
   static exportToMarkdown(level: string = 'N5'): string {
     const objects = ContentIngestionService.getKnowledgeObjects({ level });
     let md = `# NIHOMI STANDARD™ JLPT ${level} MASTER CHEAT SHEET\n\n`;
-    md += `*Generated for Dhaka International Language School & Nihomi Academic Council*\n\n---\n\n`;
+    md += `*Generated for bdTrip24 Ecosystem & Nihomi Academic Council*\n\n---\n\n`;
 
     for (const o of objects) {
       md += `### ${o.code}: ${o.type === 'GRAMMAR' ? (o as any).pattern : (o as any).word}\n`;
@@ -117,7 +117,7 @@ export class ContentExportService {
             <div class="card"><div class="label">Total Study Logged</div><div class="val">${studentData.totalStudyHours || 124} Hours (${studentData.studyStreakDays || 18} Day Streak)</div></div>
           </div>
           <div class="footer">
-            Verified by Nihomi Standard™ Multi-Agent Certification Engine • Dhaka International Language School & Tokyo Academic Desk
+            Verified by Nihomi Standard™ Multi-Agent Certification Engine • bdTrip24 Ecosystem & Tokyo Academic Desk
           </div>
         </body>
       </html>

@@ -94,7 +94,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Institutional Backing Notice */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-stone-400 border-b border-stone-200/60 pb-6">
           <p className="text-center sm:text-left">
-            Institutional Partner: Dhaka International Language School (DILS) • bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215
+            Ecosystem Partner: bdTrip24 Global Relocation & Travel Logistics • bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215
           </p>
           <div className="flex items-center gap-3">
             <span className="text-emerald-600 font-medium">bKash & SSLCommerz Merchant Verified</span>

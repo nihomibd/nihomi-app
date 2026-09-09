@@ -123,7 +123,7 @@ export const NihomiStandardDashboard: React.FC<NihomiStandardDashboardProps> = (
         kanjiMastered: 100,
         vocabMastered: 480,
         grammarRulesMastered: 28,
-        institutionName: 'Dhaka International Language School (DILS)',
+        institutionName: 'bdTrip24 Global Learning Ecosystem',
         assignedTeacher: studentData.assignedTeacher,
         overallMasteryScore: overallMasteryScore,
         masteredConcepts: [

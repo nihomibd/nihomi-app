@@ -76,7 +76,7 @@ export async function syncUserProfileToSupabase(user: {
         name: user.name || user.fullName || user.email.split('@')[0],
         full_name: user.fullName || user.name || user.email.split('@')[0],
         avatar_url: user.avatarUrl || '',
-        student_id: user.studentId || `DILS-2026-${user.id.slice(-4)}`,
+        student_id: user.studentId || `NHM-2026-${user.id.slice(-4)}`,
         nihomi_account_id: user.nihomiAccountId || `NHM-${user.id.slice(-6)}`,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'id' });

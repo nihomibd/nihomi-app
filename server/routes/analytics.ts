@@ -282,7 +282,7 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
     // Baseline ad campaigns
     const defaultCampaigns = [
       { campaign: 'fb_reels_n5_intro', source: 'facebook', medium: 'reels', visitors: 142, signups: 19 },
-      { campaign: 'fb_group_dils_cohort', source: 'facebook_group', medium: 'community', visitors: 98, signups: 14 },
+      { campaign: 'fb_group_tokyo_cohort', source: 'facebook_group', medium: 'community', visitors: 98, signups: 14 },
       { campaign: 'ig_story_kanji_hacks', source: 'instagram', medium: 'story', visitors: 65, signups: 6 },
       { campaign: 'organic_direct', source: 'direct', medium: 'organic', visitors: 37, signups: 2 }
     ];
@@ -326,7 +326,7 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
         const hasReferral = referralRecords.some((r: any) => r.refereeUserId === u.id || r.referrerUserId === u.id);
 
         // Assign a mock campaign tag to earlier seeded users if none
-        const campaignTags = ['fb_reels_n5_intro', 'fb_group_dils_cohort', 'ig_story_kanji_hacks', 'referral_invite'];
+        const campaignTags = ['fb_reels_n5_intro', 'fb_group_tokyo_cohort', 'ig_story_kanji_hacks', 'referral_invite'];
         const campaignTag = campaignTags[index % campaignTags.length];
 
         return {

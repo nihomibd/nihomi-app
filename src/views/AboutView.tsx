@@ -61,9 +61,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate }) => {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200 font-bold">
               <Building2 className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-stone-900 font-serif">Dhaka Int'l Language School (DILS)</h3>
+            <h3 className="text-xl font-bold text-stone-900 font-serif">bdTrip24 Ecosystem Verified</h3>
             <p className="text-xs text-stone-600 leading-relaxed">
-              ধানমন্ডি ও বনানী ক্যাম্পাসে সরাসরি ফিজিক্যাল ক্লাস, টোকিও ইমিগ্রেশনে COE (Certificate of Eligibility) প্রসেসিং এবং VFS ভিসা ফাইল সাবমিশন।
+              টোকিও ইমিগ্রেশনে COE (Certificate of Eligibility) প্রসেসিং গাইডেন্স, ভিসা ফাইল সহায়তা এবং জাপানে উচ্চশিক্ষার প্রস্তুতি।
             </p>
           </div>
 

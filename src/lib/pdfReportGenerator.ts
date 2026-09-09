@@ -49,7 +49,7 @@ export function generateStudentSummaryPdf(data: StudentReportData): void {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(203, 213, 225); // slate-300
-  doc.text('Dhaka International Language School × Nihomi EdTech Platform', 14, 25);
+  doc.text('bdTrip24 Ecosystem × Nihomi EdTech Platform', 14, 25);
   doc.text(`Official Student Proficiency & Progress Summary • Generated: ${today}`, 14, 31);
 
   // Top right badge
@@ -189,8 +189,8 @@ export function generateStudentSummaryPdf(data: StudentReportData): void {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(71, 85, 105);
-  doc.text(`Affiliated Center: ${data.institutionName || "Dhaka International Language School (DILS)"}`, 20, y + 17);
-  doc.text(`Assigned Head Instructor: ${data.assignedTeacher || "Sensei Abdur Razzak, DILS Academic Dean"}`, 20, y + 23);
+  doc.text(`Affiliated Center: ${data.institutionName || "bdTrip24 Global Learning Ecosystem"}`, 20, y + 17);
+  doc.text(`Assigned Head Instructor: ${data.assignedTeacher || "Sensei Tanaka Kenji, Nihomi Academic Lead"}`, 20, y + 23);
   doc.text('Verification Portal: https://nihomi.com/verify/student-record', 20, y + 29);
 
   // Decorative Seal Box
@@ -201,7 +201,7 @@ export function generateStudentSummaryPdf(data: StudentReportData): void {
   doc.setTextColor(220, 38, 38);
   doc.setFont('helvetica', 'bold');
   doc.text('OFFICIAL SEAL', pageWidth - 46, y + 17);
-  doc.text('NIHOMI DILS', pageWidth - 45, y + 21);
+  doc.text('NIHOMI BD24', pageWidth - 45, y + 21);
 
   // Footer
   doc.setFontSize(7.5);

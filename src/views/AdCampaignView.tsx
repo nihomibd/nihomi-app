@@ -276,7 +276,7 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
 
         <div className="flex items-center space-x-2 text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1 rounded-full">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>DILS সার্টিফাইড</span>
+          <span>bdTrip24 Ecosystem Verified</span>
         </div>
       </header>
 
@@ -510,14 +510,14 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
         </div>
       </section>
 
-      {/* 6. DHAKA INTERNATIONAL LANGUAGE SCHOOL (DILS) & TRUST BADGES */}
+      {/* 6. BDTRIP24 ECOSYSTEM & TRUST BADGES */}
       <section className="max-w-3xl mx-auto px-4 py-8 border-t border-stone-800/80 text-center space-y-6">
         <div className="space-y-1">
           <div className="text-xs font-bold text-stone-400 uppercase tracking-wider">
             বিশ্বস্ত পার্টনার ও অনুমোদন
           </div>
           <h3 className="text-lg font-bold text-white">
-            ঢাকা ইন্টারন্যাশনাল ল্যাঙ্গুয়েজ স্কুল (DILS) ও নিহোমি কোলাবোরেশন
+            bdTrip24.com অনুমোদিত জাপানিজ লার্নিং প্ল্যাটফর্ম
           </h3>
         </div>
 

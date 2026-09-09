@@ -302,7 +302,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
       doc.setTextColor(148, 163, 184);
       doc.setFontSize(7);
-      doc.text('Certified by Dhaka International Language School & Nihomi Academic Council', pageWidth / 2, 202, { align: 'center' });
+      doc.text('Certified by bdTrip24 Ecosystem & Nihomi Academic Council', pageWidth / 2, 202, { align: 'center' });
 
       doc.save(`Nihomi-MemoryOS-${studentName.replace(/\s+/g, '_')}-${targetLevel}.pdf`);
     } catch (err) {

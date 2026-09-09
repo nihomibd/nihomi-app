@@ -148,9 +148,9 @@ export class CertificateDesignService {
       qrCodeUrl: `https://nihomi.com/api/qr/${studentId}`,
       signatories: {
         academicDirector: {
-          name: 'Sensei Md. Abdur Razzak',
+          name: 'Academic Curriculum Director',
           title: 'Principal & Academic Director',
-          organization: 'Dhaka International Language School (ダッカ国際言語学校)',
+          organization: 'NIHOMI Academic Council (Powered by bdTrip24)',
         },
         founder: {
           name: 'MD Tanvir Kabir Biplob',
@@ -161,7 +161,7 @@ export class CertificateDesignService {
       standardsAudit: {
         standardName: NIHOMI_CORE_DESIGN_SYSTEM.certifiedSealText,
         auditStatus: 'VERIFIED & REGISTERED',
-        accreditationCode: 'NHM-STD-2026-DILS',
+        accreditationCode: 'NHM-STD-2026-BD24',
       },
     };
   }

@@ -34,23 +34,23 @@ export const EmailSignatureView: React.FC = () => {
     switch (selectedPersona) {
       case 'academic':
         return {
-          name: 'Sensei Md. Abdur Razzak',
-          nameJa: 'アブドゥル・ラッザク 先生',
-          title: 'Principal & Academic Director',
-          org: 'Dhaka International Language School (ダッカ国際言語学校)',
-          phone: '+880 1300-634046',
-          email: 'care.dils2014@gmail.com',
+          name: 'Academic Desk Director',
+          nameJa: '教育監修ディレクター',
+          title: 'Japanese Curriculum & Academic Director',
+          org: 'NIHOMI.COM (Powered by bdTrip24)',
+          phone: '+880 17555-34997',
+          email: 'academic@nihomi.com',
           location: 'bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215',
         };
       case 'admissions':
         return {
-          name: 'DILS Japan Admissions & Visa Desk',
+          name: 'Nihomi Japan Admissions & Visa Desk',
           nameJa: '日本留学・ビザ相談窓口',
           title: 'Admissions & COE Processing Coordinator',
-          org: 'Dhaka International Language School & Nihomi',
+          org: 'NIHOMI.COM (Powered by bdTrip24)',
           phone: '+880 17555-34997',
           email: 'admissions@nihomi.com',
-          location: 'House 42, Road 11, Block D, Banani & Farmgate, Dhaka',
+          location: 'bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215',
         };
       default:
         return {

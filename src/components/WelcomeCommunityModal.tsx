@@ -142,7 +142,7 @@ export const WelcomeCommunityModal: React.FC<WelcomeCommunityModalProps> = ({
                   <span>অফিসিয়াল স্টুডেন্ট নেটওয়ার্ক</span>
                 </div>
                 <h4 className="text-base font-bold text-stone-900 dark:text-white">
-                  Nihomi N5 Tokyo Cohort (হোয়াটসঅ্যাপ গ্রুপ)
+                  Nihomi Official Student Cohort (Powered by bdTrip24)
                 </h4>
                 <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
                   অন্যান্য বাংলাদেশি শিক্ষার্থীদের সাথে দৈনিক প্র্যাকটিস, লেকচার নোটস, কুইজ সল্যুশন এবং জাপানের ভিসা সহায়তার লাইভ আপডেট পান।
@@ -203,7 +203,7 @@ export const WelcomeCommunityModal: React.FC<WelcomeCommunityModalProps> = ({
 
             <div className="flex items-center justify-center space-x-1.5 text-[11px] text-stone-500 dark:text-stone-400">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>ঢাকা ইন্টারন্যাশনাল ল্যাঙ্গুয়েজ স্কুল (DILS) দ্বারা অনুমোদিত পাঠ্যক্রম</span>
+              <span>bdTrip24 Ecosystem Verified • অনুমোদিত জাপানিজ লার্নিং প্ল্যাটফর্ম</span>
             </div>
           </div>
         </div>

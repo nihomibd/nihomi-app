@@ -1,23 +1,23 @@
 import { StudentSeat, InstitutionLicense, InstitutionAnalytics } from '../../types/institution';
 
-export const DILS_INSTITUTION_LICENSE: InstitutionLicense = {
-  licenseId: 'LIC-DILS-2026-BD',
-  institutionName: 'Dhaka International Language School (DILS)',
-  institutionCode: 'DILS-DHAKA',
+export const BDTRIP24_INSTITUTION_LICENSE: InstitutionLicense = {
+  licenseId: 'LIC-BDTRIP24-2026-BD',
+  institutionName: 'bdTrip24 Global Academy',
+  institutionCode: 'BDTRIP24-DHAKA',
   mushakBinNumber: '003892183-0101',
   totalSeatsPurchased: 200,
   allocatedSeatsCount: 142,
   contractStart: '2026-01-01',
   contractEnd: '2027-01-01',
   campusLocations: ['bti Central Plaza, Farmgate, Dhaka', 'Road 11, Banani, Dhaka'],
-  contactEmail: 'admissions@dils.edu.bd',
+  contactEmail: 'admissions@bdtrip24.com',
   status: 'ACTIVE'
 };
 
-export const DILS_STUDENT_ROSTER: StudentSeat[] = [
+export const BDTRIP24_STUDENT_ROSTER: StudentSeat[] = [
   {
-    seatId: 'SEAT-DILS-001',
-    studentId: 'DILS-2026-N5042',
+    seatId: 'SEAT-NHM-001',
+    studentId: 'NHM-2026-N5042',
     studentName: 'Md. Tanvir Kabir Biplob',
     studentEmail: 'mdtanvirkabirbiplob@gmail.com',
     currentLevel: 'N5',
@@ -30,10 +30,10 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 98
   },
   {
-    seatId: 'SEAT-DILS-002',
-    studentId: 'DILS-2026-N5043',
+    seatId: 'SEAT-NHM-002',
+    studentId: 'NHM-2026-N5043',
     studentName: 'Rahimul Hasan',
-    studentEmail: 'rahim.hasan@dils.edu.bd',
+    studentEmail: 'rahim.hasan@bdtrip24.com',
     currentLevel: 'N5',
     allocatedAt: '2026-02-01',
     streakDays: 19,
@@ -44,8 +44,8 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 88
   },
   {
-    seatId: 'SEAT-DILS-003',
-    studentId: 'DILS-2026-N4011',
+    seatId: 'SEAT-NHM-003',
+    studentId: 'NHM-2026-N4011',
     studentName: 'Nusrat Jahan Shimu',
     studentEmail: 'nusrat.jahan@gmail.com',
     currentLevel: 'N4',
@@ -58,8 +58,8 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 92
   },
   {
-    seatId: 'SEAT-DILS-004',
-    studentId: 'DILS-2026-N3005',
+    seatId: 'SEAT-NHM-004',
+    studentId: 'NHM-2026-N3005',
     studentName: 'Farhan Chowdhury',
     studentEmail: 'farhan.japan@outlook.com',
     currentLevel: 'N3',
@@ -72,10 +72,10 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 96
   },
   {
-    seatId: 'SEAT-DILS-005',
-    studentId: 'DILS-2026-N5088',
+    seatId: 'SEAT-NHM-005',
+    studentId: 'NHM-2026-N5088',
     studentName: 'Sadia Akter',
-    studentEmail: 'sadia.akter@dils.edu.bd',
+    studentEmail: 'sadia.akter@bdtrip24.com',
     currentLevel: 'N5',
     allocatedAt: '2026-03-01',
     streakDays: 7,
@@ -86,10 +86,10 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 81
   },
   {
-    seatId: 'SEAT-DILS-006',
-    studentId: 'DILS-2026-N5102',
+    seatId: 'SEAT-NHM-006',
+    studentId: 'NHM-2026-N5102',
     studentName: 'Mohammad Al-Amin',
-    studentEmail: 'alamin.dils@gmail.com',
+    studentEmail: 'alamin.nhm@gmail.com',
     currentLevel: 'N5',
     allocatedAt: '2026-03-12',
     streakDays: 0,
@@ -100,8 +100,8 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
     examReadinessScore: 54
   },
   {
-    seatId: 'SEAT-DILS-007',
-    studentId: 'DILS-2026-N4022',
+    seatId: 'SEAT-NHM-007',
+    studentId: 'NHM-2026-N4022',
     studentName: 'Kazi Tanzeem Ahmed',
     studentEmail: 'tanzeem.ahmed@yahoo.com',
     currentLevel: 'N4',
@@ -116,8 +116,8 @@ export const DILS_STUDENT_ROSTER: StudentSeat[] = [
 ];
 
 class InstitutionServiceImpl {
-  private license: InstitutionLicense = { ...DILS_INSTITUTION_LICENSE };
-  private roster: StudentSeat[] = [...DILS_STUDENT_ROSTER];
+  private license: InstitutionLicense = { ...BDTRIP24_INSTITUTION_LICENSE };
+  private roster: StudentSeat[] = [...BDTRIP24_STUDENT_ROSTER];
 
   getLicense(): InstitutionLicense {
     return { ...this.license };
@@ -149,9 +149,9 @@ class InstitutionServiceImpl {
 
   allocateNewSeat(name: string, email: string, level: 'N5' | 'N4' | 'N3'): StudentSeat {
     const newSeq = this.roster.length + 1;
-    const studentId = `DILS-2026-${level}${String(newSeq).padStart(3, '0')}`;
+    const studentId = `NHM-2026-${level}${String(newSeq).padStart(3, '0')}`;
     const newSeat: StudentSeat = {
-      seatId: `SEAT-DILS-${String(newSeq).padStart(3, '0')}`,
+      seatId: `SEAT-NHM-${String(newSeq).padStart(3, '0')}`,
       studentId,
       studentName: name,
       studentEmail: email,

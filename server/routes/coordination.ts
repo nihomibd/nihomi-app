@@ -27,7 +27,7 @@ coordinationRouter.get('/live-cohorts', optionalAuth, (req: AuthenticatedRequest
         'Live interactive Kanji stroke & pronunciation drills',
         'Weekly recorded lecture archive with lifetime access',
         'Private Telegram & Discord coordination group',
-        'Direct admission credit for Dhaka International Language School'
+        'Direct admission credit for Tokyo Partner Institutions'
       ],
       priceBDT: 3490,
       proDiscountBDT: 2490
@@ -57,13 +57,13 @@ coordinationRouter.get('/live-cohorts', optionalAuth, (req: AuthenticatedRequest
 });
 
 // ==========================================
-// 2. DHAKA INTERNATIONAL LANGUAGE SCHOOL (CLASSROOM & VISA/COE)
+// 2. NIHOMI ADMISSIONS & VISA DESK (POWERED BY BDTRIP24)
 // ==========================================
 coordinationRouter.get('/dhaka-campus/programs', optionalAuth, (req: AuthenticatedRequest, res) => {
   const programs = {
-    campusName: 'Dhaka International Language School (Official Bangladesh Partner of Nihomi)',
+    campusName: 'NIHOMI Admissions & Visa Desk (Powered by bdTrip24)',
     address: 'House 42, Road 11, Block E, Banani / Dhanmondi Campus, Dhaka, Bangladesh',
-    contactPhone: '+880 1700-NIHOMI / +880 1800-DILS',
+    contactPhone: '+880 1700-NIHOMI / +880 1800-BDTRIP24',
     admissionStatus: 'Open for July & October Intake Sessions',
     programs: [
       {
@@ -126,14 +126,14 @@ coordinationRouter.post('/dhaka-campus/apply-visa', requireAuth, (req: Authentic
     passportNumber,
     notes,
     status: 'application_received',
-    coordinationDesk: 'Dhaka International Language School - Japan Visa Wing',
+    coordinationDesk: 'NIHOMI & bdTrip24 - Japan Visa Wing',
     assignedCounselor: 'Tanvir Kabir Biplob (Founder Lead Desk)',
     createdAt: new Date().toISOString()
   };
 
   return res.json({
     success: true,
-    message: 'Your Japan Language School & Student Visa application has been received! Our senior counselor at Dhaka International Language School will contact you within 24 hours.',
+    message: 'Your Japan Language School & Student Visa application has been received! Our senior counselor at NIHOMI Visa Desk will contact you within 24 hours.',
     application: applicationRecord
   });
 });

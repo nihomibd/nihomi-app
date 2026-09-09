@@ -72,9 +72,9 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
           notes,
         }),
       });
-      setVisaSuccessMessage(res.message || 'আপনার ভিসা আবেদন তথ্য ঢাকা ইন্টারন্যাশনাল ল্যাঙ্গুয়েজ স্কুল ও নিহোমি ভিসা ডেস্কে জমা হয়েছে। দ্রুত যোগাযোগ করা হবে।');
+      setVisaSuccessMessage(res.message || 'আপনার ভিসা আবেদন তথ্য নিহোমি ও bdTrip24 ভিসা ডেস্কে জমা হয়েছে। দ্রুত যোগাযোগ করা হবে।');
     } catch (err: any) {
-      setVisaSuccessMessage('তথ্য গ্রহণ করা হয়েছে। DILS ভিসা এডভাইজর আপনার সাথে যোগাযোগ করবেন।');
+      setVisaSuccessMessage('তথ্য গ্রহণ করা হয়েছে। ভিসা এডভাইজর আপনার সাথে যোগাযোগ করবেন।');
     } finally {
       setIsSubmittingVisa(false);
     }
@@ -133,14 +133,14 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
             Nihomi Coordination Hub
           </h1>
           <p className="text-xs sm:text-sm text-stone-300 max-w-2xl leading-relaxed">
-            Bridging online Japanese mastery with Dhaka International Language School physical classrooms, Tokyo Immigration COE processing, and bdTrip24 student flight logistics.
+            Bridging online Japanese mastery with Tokyo Immigration COE processing and bdTrip24 student flight logistics.
           </p>
 
           {/* Sub Navigation */}
           <div className="flex items-center space-x-2 pt-4 overflow-x-auto pb-1">
             {[
               { id: '3paths', label: '1. The 3 Connected Pathways', icon: Compass },
-              { id: 'dhaka_school', label: '2. DILS Campus & Visa Desk', icon: Building2 },
+              { id: 'dhaka_school', label: '2. Japan Visa & Admissions Desk', icon: Building2 },
               { id: 'bdtrip24', label: '3. bdTrip24 Student Flight Desk', icon: Plane },
             ].map((tab) => {
               const Icon = tab.icon;
@@ -262,11 +262,11 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Pathway 03</span>
-                    <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">DILS Campus & Visa Desk</h3>
+                    <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">Japan Visa & Admissions Desk</h3>
                     <p className="text-xs text-stone-400 dark:text-stone-500 font-japanese">ダッカ対面・ビザ申請</p>
                   </div>
                   <p className="text-xs text-stone-600 dark:text-stone-300 sepia:text-stone-800 leading-relaxed">
-                    Dhaka International Language School physical multimedia classrooms in Farmgate & Banani + 6-stage end-to-end Japan Student Visa & COE processing.
+                    Physical admissions center in Dhaka + 6-stage end-to-end Japan Student Visa & COE processing.
                   </p>
                   <ul className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 sepia:text-stone-800">
                     <li className="flex items-center space-x-2">
@@ -305,14 +305,14 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                     <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">Official DILS Pathway</span>
+                    <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">Official Nihomi Pathway</span>
                     <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">6-Stage Japan Student Visa Process</h3>
                   </div>
                 </div>
 
                 <div className="space-y-3 text-xs text-stone-700 dark:text-stone-300 sepia:text-stone-800">
                   {[
-                    { step: '01', title: 'N5–N4 Foundational Study (150 Hours)', desc: 'Complete Minna no Nihongo coursework and earn verifiable DILS certificate.' },
+                    { step: '01', title: 'N5–N4 Foundational Study (150 Hours)', desc: 'Complete Minna no Nihongo coursework and earn verifiable Nihomi certificate.' },
                     { step: '02', title: 'Japanese Language School Selection', desc: 'Choose certified institutions in Tokyo, Osaka, Kyoto, Nagoya, or Fukuoka.' },
                     { step: '03', title: 'Skype Admission Interview', desc: 'Pass online interview simulation with school principal & academic board.' },
                     { step: '04', title: 'Tokyo Immigration COE Application', desc: 'Sponsorship documents, financial capability proof & Japanese translation.' },
@@ -456,7 +456,7 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                 </div>
 
                 <p className="text-xs text-stone-600 dark:text-stone-300 sepia:text-stone-800 leading-relaxed">
-                  Through BD24 Group's official travel agency <strong className="text-stone-900 dark:text-white">bdTrip24.com</strong>, all Nihomi and DILS students receive special student airfare with 46 KG baggage allowance on flights from Dhaka to Tokyo Narita, Haneda, Kansai, or Fukuoka.
+                  Through BD24 Group's official travel agency <strong className="text-stone-900 dark:text-white">bdTrip24.com</strong>, all Nihomi students receive special student airfare with 46 KG baggage allowance on flights from Dhaka to Tokyo Narita, Haneda, Kansai, or Fukuoka.
                 </p>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">

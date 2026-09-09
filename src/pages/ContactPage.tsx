@@ -110,7 +110,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">ঢাকা ইন্টারন্যাশনাল ল্যাঙ্গুয়েজ স্কুল (DILS)</p>
+                    <p className="font-semibold text-white">NIHOMI লার্নিং সেন্টার ও bdTrip24 হাব</p>
                     <p className="text-slate-400 text-xs mt-1 leading-relaxed">
                       bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215, Bangladesh.
                     </p>
@@ -267,7 +267,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-hidden focus:border-red-500 transition-colors cursor-pointer"
                       >
                         <option value="jlpt_n5_admission">JLPT N5 কোর্স ও অ্যাডমিশন</option>
-                        <option value="tokyo_visa_prep">টোকিও স্টুডেন্ট ভিসা ও DILS ক্যাম্পাস</option>
+                        <option value="tokyo_visa_prep">টোকিও স্টুডেন্ট ভিসা ও bdTrip24 স্টাডি ডেস্ক</option>
                         <option value="bKash_payment">bKash / কার্ড পেমেন্ট সমস্যা</option>
                         <option value="ai_sensei_feedback">AI সেনসি ও অ্যাপ ফিচার সংক্রান্ত</option>
                         <option value="other">অন্যান্য সাধারণ প্রশ্ন</option>

@@ -64,7 +64,7 @@ export const PassportVerificationView: React.FC<PassportVerificationViewProps> =
               </div>
               <div>
                 <h2 className="text-xl font-bold font-serif text-stone-900">NIHOMI ACADEMY</h2>
-                <p className="text-xs text-stone-500 font-sans">Dhaka International Language School Partner Wing</p>
+                <p className="text-xs text-stone-500 font-sans">bdTrip24 Ecosystem Verified Wing</p>
               </div>
             </div>
             <div className="text-right">
@@ -103,7 +103,7 @@ export const PassportVerificationView: React.FC<PassportVerificationViewProps> =
               </div>
               <div className="flex items-center gap-2 text-stone-700">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>DILS COE Visa File Preparation: <strong>Eligible</strong></span>
+                <span>Japan COE Visa File Preparation: <strong>Eligible</strong></span>
               </div>
               <div className="flex items-center gap-2 text-stone-700">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
