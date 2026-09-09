@@ -6747,29 +6747,39 @@ class Database {
     let nextDialogueRomaji = 'Shouchi itashimashita. Arigatou gozaimasu. Dewa, tsugi no shitsumon desu.';
     let nextDialogueBn = 'বুঝতে পেরেছি। ধন্যবাদ। এবার পরের প্রশ্ন।';
     let nextDialogueEn = 'Understood. Thank you very much. Now for the next question.';
-    let isFinished = turnCount >= 4;
+    let isFinished = turnCount >= 5;
 
-    if (scenario.type === 'school_principal') {
+    if (scenario.type === 'school_principal' || scenario.type === 'embassy_visa') {
       if (turnCount === 1) {
-        nextDialogueJa = '素晴らしい自己紹介ですね。日本で勉強したあと、どのような進路（大学・専門学校・就職）を考えていますか？';
-        nextDialogueRomaji = 'Subarashii jikoshoukai desu ne. Nihon de benkyou shita ato, dono you na shinro o kangaete imasu ka?';
-        nextDialogueBn = 'চমৎকার আত্মপরিচয়। জাপানে পড়াশোনা শেষ করার পর আপনি কী করতে চান (বিশ্ববিদ্যালয়/চাকরি)?';
-        nextDialogueEn = 'Wonderful self-introduction. After your studies in Japan, what post-graduation pathway are you considering?';
+        // Question 2: Study Motivation
+        nextDialogueJa = 'なぜ日本に留学したいのですか？日本を選んだ理由を具体的に教えてください。';
+        nextDialogueRomaji = 'Naze Nihon ni ryuugaku shitai no desu ka? Nihon o eranda riyuu o gutaiteki ni oshiete kudasai.';
+        nextDialogueBn = 'কেন জাপানে পড়তে যেতে চান? জাপান বেছে নেওয়ার সুনির্দিষ্ট কারণ বলুন।';
+        nextDialogueEn = 'Why do you want to study in Japan? Please tell me specific reasons for choosing Japan.';
       } else if (turnCount === 2) {
-        nextDialogueJa = '学費や東京での生活費の準備状況はいかがですか？経費支弁者について教えてください。';
-        nextDialogueRomaji = 'Gakuhi ya Tokyo de no seikatsuhi no junbi joukyou wa ikaga desu ka? Keihi shibensha ni tsuite oshiete kudasai.';
-        nextDialogueBn = 'টিউশন ফি এবং টোকিওতে থাকা-খাওয়ার খরচের প্রস্তুতি কেমন? আপনার স্পন্সর সম্পর্কে বলুন।';
-        nextDialogueEn = 'How prepared are you for tuition and Tokyo living expenses? Please tell me about your financial sponsor.';
+        // Question 3: Japanese Study Duration & Testing
+        nextDialogueJa = '日本語の勉強はどれくらいしましたか？これまでの学習期間や試験の準備について教えてください。';
+        nextDialogueRomaji = 'Nihongo no benkyou wa dore kurai shimashita ka? Kore made no gakushuu kikan ya shiken no junbi ni tsuite oshiete kudasai.';
+        nextDialogueBn = 'কতদিন জাপানি শিখেছেন? আপনার অধ্যয়নের সময়কাল ও JLPT/NAT পরীক্ষার প্রস্তুতি বলুন।';
+        nextDialogueEn = 'How long have you been studying Japanese? Please tell me about your study duration and exam prep.';
       } else if (turnCount === 3) {
-        nextDialogueJa = '最後に、当校に入学したら一番頑張りたいことは何ですか？';
-        nextDialogueRomaji = 'Saigo ni, toukou ni nyuugaku shitara ichiban gambaritai koto wa nan desu ka?';
-        nextDialogueBn = 'সবশেষে, আমাদের একাডেমিতে ভর্তির পর আপনার সবচেয়ে প্রধান লক্ষ্য কী হবে?';
-        nextDialogueEn = 'Lastly, what do you hope to dedicate yourself to most once enrolled in our school?';
+        // Question 4: Post-graduation career plans
+        nextDialogueJa = '卒業後の進路はどう考えていますか？大学進学や将来の就職計画を教えてください。';
+        nextDialogueRomaji = 'Sotsugyou go no shinro wa dou kangaete imasu ka? Daigaku shingaku ya shourai no shuushoku keikaku o oshiete kudasai.';
+        nextDialogueBn = 'পড়ার পর ভবিষ্যৎ পরিকল্পনা কী? উচ্চশিক্ষা বা ক্যারিয়ার পরিকল্পনা কীভাবে ভেবেছেন?';
+        nextDialogueEn = 'What are your post-graduation career plans? Please tell me about advancing to university or working in Japan.';
+      } else if (turnCount === 4) {
+        // Question 5: Financial Sponsorship & Living Expenses
+        nextDialogueJa = '学費や生活費の支弁者は誰ですか？日本滞在費用の準備状況を教えてください。';
+        nextDialogueRomaji = 'Gakuhi ya seikatsuhi no shibensha wa dare desu ka? Nihon taizai hiyou no junbi joukyou o oshiete kudasai.';
+        nextDialogueBn = 'টিউশন ফি ও জীবনযাত্রার খরচের স্পন্সর কে? জাপানে খরচের অর্থনৈতিক প্রস্তুতি কেমন?';
+        nextDialogueEn = 'Who is sponsoring your tuition and living expenses? How are your finances prepared?';
       } else {
-        nextDialogueJa = '面接は以上です。日本語に対する真摯な熱意が大変よく伝わりました。合格の可能性は極めて高いです！';
-        nextDialogueRomaji = 'Mensetsu wa ijou desu. Nihongo ni taisuru shinshi na netsui ga taihen yoku tsutawarimashita. Goukaku no kanousei wa kiwamete takai desu!';
-        nextDialogueBn = 'ইন্টারভিউ সমাপ্ত। জাপানিজ ভাষার প্রতি আপনার একাগ্রতা ও শ্রদ্ধা সত্যিই প্রশংসনীয়। আপনার চান্স পাওয়ার সম্ভাবনা খুবই প্রবল!';
-        nextDialogueEn = 'The interview is concluded. Your sincere enthusiasm for Japanese came through brilliantly!';
+        // Concluded
+        nextDialogueJa = '面接は以上となります。5つの重要質問に対し、大変明確で敬語の行き届いた素晴らしい受け答えでした！合格基準を十分に満たしています。';
+        nextDialogueRomaji = 'Mensetsu wa ijou to narimasu. Itsutsu no juuyou shitsumon ni taishi, taihen meikaku de keigo no yukitodoita subarashii uke-kotae deshita!';
+        nextDialogueBn = 'ইন্টারভিউ সমাপ্ত! ৫টি গুরুত্বপূর্ণ প্রশ্নের প্রতিটিতেই আপনার মার্জিত কেইগো ও সুনির্দিষ্ট পরিকল্পনা প্রশংসনীয়। ভিসা ও অধ্যক্ষের অনুমোদনের সম্ভাবনা অত্যন্ত প্রবল!';
+        nextDialogueEn = 'The interview is concluded! Your answers to all 5 high-stakes questions showed exceptional Keigo and clarity.';
         isFinished = true;
       }
     } else if (scenario.type === 'conbini_pos') {
@@ -6788,24 +6798,6 @@ class Database {
         nextDialogueRomaji = 'Sumuuzu na reji taiou arigatou gozaimashita! Gochisousama desu.';
         nextDialogueBn = 'চমৎকার ক্যাশিয়ার সার্ভিস দেওয়ার জন্য ধন্যবাদ!';
         nextDialogueEn = 'Thank you for the smooth checkout service!';
-        isFinished = true;
-      }
-    } else if (scenario.type === 'embassy_visa') {
-      if (turnCount === 1) {
-        nextDialogueJa = 'これまでに受けた日本語の試験（JLPTやNAT-TESTなど）の結果と、現在のスコアを教えてください。';
-        nextDialogueRomaji = 'Kore made ni uketa nihongo no shiken no kekka to, genzai no sukoa o oshiete kudasai.';
-        nextDialogueBn = 'এখন পর্যন্ত কোনো জাপানিজ ভাষার পরীক্ষা (যেমন JLPT/NAT-TEST) দিয়েছেন কি না এবং বর্তমান স্কোর কত?';
-        nextDialogueEn = 'Please tell me about any Japanese proficiency exams you have taken so far and your current scores.';
-      } else if (turnCount === 2) {
-        nextDialogueJa = '留学中のアルバイトは週28時間以内と定められていますが、このルールについて理解していますか？';
-        nextDialogueRomaji = 'Ryuugakuchuu no arubaito wa shuu nijuuhachijikan inai to sadamerarete imasu ga, kono ruuru ni tsuite rikai shite imasu ka?';
-        nextDialogueBn = 'স্টাডি ভিসায় খণ্ডকালীন কাজের সর্বোচ্চ সীমা সপ্তাহে ২৮ ঘণ্টা — এই নিয়ম সম্পর্কে আপনি পুরোপুরি অবগত কি?';
-        nextDialogueEn = 'Part-time work is strictly capped at 28 hours per week during your studies. Do you understand this rule?';
-      } else {
-        nextDialogueJa = '質問は以上です。在留資格審査の手続きを進めます。結果は後日通知いたします。';
-        nextDialogueRomaji = 'Shitsumon wa ijou desu. Zairyuu shikaku shinsa no tetsuduki o susumemasu.';
-        nextDialogueBn = 'প্রশ্ন সমাপ্ত। আমরা ভিসা পরীক্ষা প্রক্রিয়া সম্পন্ন করবো। ফলাফল পরে জানানো হবে।';
-        nextDialogueEn = 'No further questions. We will process your visa verification. Results will follow.';
         isFinished = true;
       }
     }

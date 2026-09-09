@@ -23,7 +23,9 @@ import {
   Award,
   Zap,
   AlertCircle,
-  Loader2
+  Loader2,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { generateCampaignUrl } from '../utils/utm';
@@ -275,6 +277,129 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
     }
   };
 
+  // Helper to trigger browser CSV file download with UTF-8 BOM for Bangla and Excel support
+  const downloadCsvFile = (filename: string, csvContent: string) => {
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // 1-Click Founder Export Students CSV
+  const handleExportStudentsCSV = () => {
+    const headers = [
+      'Student Name',
+      'Phone',
+      'Email',
+      'bKash TrxID',
+      'Plan',
+      'Registration Date',
+      'Student ID',
+      'JLPT Level',
+      'Streak (Days)',
+      'Campaign'
+    ];
+
+    const rows = recentRegistrations.map((reg) => {
+      // Cross-reference with pending or approved bKash submissions
+      const matchingPayment = pendingSubmissions.find(
+        (p) =>
+          (p.studentEmail && p.studentEmail.toLowerCase() === reg.email.toLowerCase()) ||
+          (p.userId && p.userId === reg.id)
+      );
+
+      const phone = matchingPayment?.studentPhone || '017XXXXXXXX';
+      const trxId = matchingPayment?.trxId || 'N/A';
+      const formattedDate = new Date(reg.createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      return [
+        `"${reg.name.replace(/"/g, '""')}"`,
+        `"${phone}"`,
+        `"${reg.email}"`,
+        `"${trxId}"`,
+        `"${reg.plan}"`,
+        `"${formattedDate}"`,
+        `"${reg.studentId}"`,
+        `"${reg.level}"`,
+        `"${reg.streak}"`,
+        `"${reg.campaign}"`
+      ];
+    });
+
+    const csvString = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const timestamp = new Date().toISOString().slice(0, 10);
+    downloadCsvFile(`nihomi_students_${timestamp}.csv`, csvString);
+
+    setApprovalToast({
+      message: `✓ Students CSV সফলভাবে ডাউনলোড হয়েছে (${rows.length} জন শিক্ষার্থী)!`,
+      type: 'success'
+    });
+    setTimeout(() => setApprovalToast(null), 3500);
+  };
+
+  // 1-Click Founder Export Transactions CSV
+  const handleExportTransactionsCSV = () => {
+    const headers = [
+      'bKash TrxID',
+      'Student Name',
+      'Phone',
+      'Email',
+      'Plan',
+      'Amount (BDT)',
+      'Status',
+      'Submission Date',
+      'Approved Date',
+      'Approved By'
+    ];
+
+    const rows = pendingSubmissions.map((sub) => {
+      const submittedDate = new Date(sub.submittedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      const approvedDate = sub.approvedAt
+        ? new Date(sub.approvedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })
+        : 'N/A';
+
+      return [
+        `"${sub.trxId}"`,
+        `"${sub.studentName.replace(/"/g, '""')}"`,
+        `"${sub.studentPhone}"`,
+        `"${sub.studentEmail}"`,
+        `"${sub.planName}"`,
+        `"${sub.amount}"`,
+        `"${sub.status}"`,
+        `"${submittedDate}"`,
+        `"${approvedDate}"`,
+        `"${sub.approvedBy || 'N/A'}"`
+      ];
+    });
+
+    const csvString = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const timestamp = new Date().toISOString().slice(0, 10);
+    downloadCsvFile(`nihomi_bkash_transactions_${timestamp}.csv`, csvString);
+
+    setApprovalToast({
+      message: `✓ Transactions CSV সফলভাবে ডাউনলোড হয়েছে (${rows.length} টি ট্রানজ্যাকশন)!`,
+      type: 'success'
+    });
+    setTimeout(() => setApprovalToast(null), 3500);
+  };
+
   // 1. Password Gate for Founder Protection
   if (!isUnlocked && !isFounderUser) {
     return (
@@ -362,13 +487,34 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
             </p>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {lastRefreshedAt && (
-              <span className="text-[11px] text-stone-400 flex items-center space-x-1">
+              <span className="text-[11px] text-stone-400 flex items-center space-x-1 mr-1">
                 <Clock className="w-3 h-3 text-stone-500" />
                 <span>রিফ্রেশ: {lastRefreshedAt}</span>
               </span>
             )}
+
+            <button
+              id="btn-export-students-csv"
+              onClick={handleExportStudentsCSV}
+              className="py-2 px-3.5 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-stone-950 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95"
+              title="সকল শিক্ষার্থীর বিস্তারিত তথ্য CSV আকারে ডাউনলোড করুন"
+            >
+              <Download className="w-3.5 h-3.5 text-stone-950" />
+              <span>Export Students CSV</span>
+            </button>
+
+            <button
+              id="btn-export-transactions-csv"
+              onClick={handleExportTransactionsCSV}
+              className="py-2 px-3.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-pink-600/20 active:scale-95"
+              title="সকল bKash পেমেন্ট ট্রানজ্যাকশন CSV ডাউনলোড করুন"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <span>Export Transactions CSV</span>
+            </button>
+
             <button
               id="btn-refresh-growth-metrics"
               onClick={() => fetchGrowthMetrics()}

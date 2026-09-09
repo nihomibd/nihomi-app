@@ -20,6 +20,7 @@ import {
 import { BaitoScenarioItem, BaitoInterviewMessage, BaitoEvaluationResponse } from '../../types';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
+import { TokyoPrincipalVisaInterviewDrill } from './TokyoPrincipalVisaInterviewDrill';
 
 interface InterviewVoiceTwinLabProps {
   scenario: BaitoScenarioItem;
@@ -30,12 +31,15 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
   scenario,
   onFinished
 }) => {
+  const isHighStakesScenario = scenario.type === 'school_principal' || scenario.type === 'embassy_visa';
   const [messages, setMessages] = useState<BaitoInterviewMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(true);
-  const [activeTab, setActiveTab] = useState<'interview' | 'vocabulary' | 'objectives'>('interview');
+  const [activeTab, setActiveTab] = useState<'high_stakes_drill' | 'interview' | 'vocabulary' | 'objectives'>(
+    isHighStakesScenario ? 'high_stakes_drill' : 'interview'
+  );
   const [finalReadiness, setFinalReadiness] = useState<number | null>(null);
 
   const recognitionRef = useRef<any>(null);
@@ -287,7 +291,21 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800 text-xs">
+        <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-800 text-xs">
+          {isHighStakesScenario && (
+            <button
+              onClick={() => setActiveTab('high_stakes_drill')}
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+                activeTab === 'high_stakes_drill'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
+                  : 'text-amber-400/90 hover:text-amber-300 bg-amber-500/10 border border-amber-500/20'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>5大必須面接質問ドリル (5 High-Stakes Questions)</span>
+            </button>
+          )}
+
           <button
             onClick={() => setActiveTab('interview')}
             className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
@@ -325,6 +343,11 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
           </button>
         </div>
       </div>
+
+      {/* High-Stakes 5-Question Drill View */}
+      {activeTab === 'high_stakes_drill' && (
+        <TokyoPrincipalVisaInterviewDrill onAllCompleted={onFinished} />
+      )}
 
       {/* Main Terminal View */}
       {activeTab === 'interview' && (

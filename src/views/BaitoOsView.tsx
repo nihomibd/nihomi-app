@@ -105,6 +105,38 @@ export const DEFAULT_BAITO_SCENARIOS: BaitoScenarioItem[] = [
     ]
   },
   {
+    id: 'sc-embassy-visa',
+    type: 'embassy_visa',
+    title: 'Embassy of Japan & Immigration Visa Screening',
+    titleJa: '日本大使館・出入国在留管理局ビザ審査面接',
+    titleBn: 'জাপান দূতাবাস ও ইমিগ্রেশন ভিসা ইন্টারভিউ',
+    subtitle: 'Practice answering tough questions about your Japanese study history, sponsor, and visa rules.',
+    difficulty: 'N4',
+    location: 'Embassy of Japan / Tokyo Regional Immigration Bureau',
+    interlocutorName: 'Tanaka Immigration Officer (田中審査官)',
+    interlocutorRole: 'Senior Visa Examination Officer',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'こんにちは。在留資格「留学」の申請に関する確認を行います。現在までの日本語学習歴と、日本で勉強したい理由を説明してください。',
+      romaji: 'Konnichiwa. Zairyuu shikaku "Ryuugaku" no shinsei ni kansuru kakunin o okonaimasu. Genzai made no nihongo gakushuu-reki to, Nihon de benkyou shitai riyuu o setsumei shite kudasai.',
+      bn: 'নমস্কার। "স্টাডি" ভিসার আবেদনের যাচাই-বাছাই করা হচ্ছে। এখন পর্যন্ত কত ঘণ্টা জাপানিজ ভাষা পড়েছেন এবং জাপানে পড়ার কারণ বলুন।',
+      en: 'Hello. We are conducting verification for your Student Visa application. Please explain your Japanese study background and reasons for choosing Japan.'
+    },
+    objectives: [
+      'Accurately state Japanese study hours (150+ hours certificate)',
+      'Confirm JLPT N5/N4 score and kanji proficiency',
+      'Explain financial sponsor income source and bank solvency',
+      'Affirm strict compliance with 28 hrs/week baito work limits'
+    ],
+    contextDescription: 'Immigration officers test whether your Japanese proficiency is genuine and if you intend to return or follow study laws strictly.',
+    keyVocabulary: [
+      { ja: '在留資格', kana: 'ざいりゅうしかく', meaningBn: 'রেসিডেন্স স্ট্যাটাস / ভিসা', meaningEn: 'Residence status' },
+      { ja: '資格外活動許可', kana: 'しかくがいかつどうきょか', meaningBn: 'খন্ডকালীন কাজের অনুমতি (২৮ ঘণ্টা)', meaningEn: 'Part-time work permit' },
+      { ja: '学習時間', kana: 'がくしゅうじかん', meaningBn: 'অধ্যয়নের মোট ঘণ্টা', meaningEn: 'Study hours' },
+      { ja: '送金', kana: 'そうきん', meaningBn: 'রেমিট্যান্স / টাকা পাঠানো', meaningEn: 'Remittance' }
+    ]
+  },
+  {
     id: 'sc-restaurant-izakaya',
     type: 'restaurant_izakaya',
     title: 'Izakaya & Ramen Shop Hall Staff',
