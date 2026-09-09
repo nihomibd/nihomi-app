@@ -37,7 +37,7 @@ export const WelcomeCommunityModal: React.FC<WelcomeCommunityModalProps> = ({
 
   const displayName = studentName || profile?.displayName || user?.displayName || user?.name || 'শিক্ষার্থী';
   const displayId = studentId || profile?.nihomiAccountId || user?.studentId || 'NHO-100294';
-  const whatsappInviteLink = 'https://chat.whatsapp.com/nihomi-n5-cohort-dhaka';
+  const whatsappInviteLink = 'https://wa.me/8801834348966';
 
   const handleCopyWhatsappLink = async () => {
     try {

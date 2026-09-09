@@ -27,7 +27,7 @@ export const AuthModal: React.FC = () => {
         const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
         setUserData({
           id: userId,
-          email: 'student@nihomi.com',
+          email: 'nihomibd@gmail.com',
           name: 'Nihomi Japanese Learner',
           role: 'student',
           planId: 'starter',
@@ -60,7 +60,7 @@ export const AuthModal: React.FC = () => {
     const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
     setUserData({
       id: userId,
-      email: 'student@nihomi.com',
+      email: 'nihomibd@gmail.com',
       name: 'Nihomi Japanese Learner',
       role: 'student',
       planId: 'starter',

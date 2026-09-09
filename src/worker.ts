@@ -9,7 +9,7 @@ export interface Env {
 const USERS_DB = [
   {
     id: "usr-admin-01",
-    email: "admin@nihomi.com",
+    email: "nihomibd@gmail.com",
     password: "nihomiAdmin2026!",
     role: "admin",
     displayName: "Sensei Admin",
@@ -18,7 +18,7 @@ const USERS_DB = [
   },
   {
     id: "usr-student-01",
-    email: "student@nihomi.com",
+    email: "nihomibd@gmail.com",
     password: "nihomiStudent2026!",
     role: "user",
     displayName: "Kenji Explorer",
@@ -47,7 +47,7 @@ const INITIAL_SOURCES = [
     pageCount: 14,
     status: "PROCESSED",
     uploadedBy: "usr-admin-01",
-    uploadedByEmail: "admin@nihomi.com",
+    uploadedByEmail: "nihomibd@gmail.com",
     uploadedAt: "2026-08-23T07:12:51.501Z",
     processedAt: "2026-08-23T07:13:20.000Z",
   }
@@ -321,7 +321,7 @@ export default {
 
       if (url.pathname === "/api/auth/google" && request.method === "POST") {
         const body: any = await request.json().catch(() => ({}));
-        const email = (body.email || "student@nihomi.com").trim().toLowerCase();
+        const email = (body.email || "nihomibd@gmail.com").trim().toLowerCase();
         const existing = USERS_DB.find((u) => u.email.toLowerCase() === email);
         const role = existing ? existing.role : "user";
         const userId = existing ? existing.id : `usr-google-${Date.now()}`;

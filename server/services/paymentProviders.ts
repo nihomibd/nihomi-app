@@ -483,7 +483,7 @@ export class BKashPaymentProvider implements PaymentProvider {
 
     // Sandbox / Mock QA execution path
     if (this.isMockMode() || paymentID?.startsWith('BKASH_MOCK_') || (originalPayment as any)?.metadata?.isSandbox) {
-      const rawMsisdn = (params.accountNumber || '01712345678').trim();
+      const rawMsisdn = (params.accountNumber || '+8801834-348966').trim();
       const masked = `${rawMsisdn.slice(0, 3)}•••••${rawMsisdn.slice(-3)}`;
       return {
         success: true,
@@ -771,11 +771,11 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
     formData.append('cancel_url', `${appUrl}/api/billing/sslcommerz/cancel?paymentId=${encodeURIComponent(params.paymentId)}`);
     formData.append('ipn_url', `${appUrl}/api/billing/webhook/sslcommerz`);
     formData.append('cus_name', params.userName || 'Nihomi Student');
-    formData.append('cus_email', params.userEmail || 'student@nihomi.com');
+    formData.append('cus_email', params.userEmail || 'nihomibd@gmail.com');
     formData.append('cus_add1', 'Dhaka, Bangladesh');
     formData.append('cus_city', 'Dhaka');
     formData.append('cus_country', 'Bangladesh');
-    formData.append('cus_phone', '01700000000');
+    formData.append('cus_phone', '+8801834-348966');
     formData.append('shipping_method', 'NO');
     formData.append('num_of_item', '1');
     formData.append('product_name', params.planName || 'Nihomi Learning Subscription');

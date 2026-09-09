@@ -58,7 +58,7 @@ export class TestPipelineRunnerService {
     const runId = `run-l1-${Date.now().toString(36)}-${crypto.randomBytes(3).toString('hex')}`;
     const startTime = Date.now();
     const adminUserId = options?.adminUserId || '27fb8002-dbdd-4370-83d1-1d438ae9a055';
-    const adminEmail = options?.adminEmail || 'admin@nihomi.com';
+    const adminEmail = options?.adminEmail || 'nihomibd@gmail.com';
 
     logger.info('TEST_PIPELINE_START', `Starting Minna no Nihongo L1 E2E Pipeline Run: ${runId}`);
 

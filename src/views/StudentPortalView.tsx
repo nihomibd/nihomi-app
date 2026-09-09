@@ -114,7 +114,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
     id: user?.studentId || 'NHO-100294',
     name: user?.name || 'Md. Tanvir Kabir Biplob',
     nameJa: 'タヌビル・カビル',
-    email: user?.email || 'student@nihomi.com',
+    email: user?.email || 'nihomibd@gmail.com',
     avatarUrl: user?.avatarUrl || '',
     currentLevel: 'N5',
     targetLevel: 'N4',

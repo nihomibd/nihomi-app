@@ -332,7 +332,7 @@ export const INITIAL_DEFAULT_RIREKISHO: JisRirekishoData = {
   japaneseEraBirth: '平成12年10月1日',
   age: 25,
   phone: '080-1234-5678',
-  email: 'tanvir.nihomi@example.com',
+  email: 'nihomibd@gmail.com',
   postalCode: '169-0075',
   currentAddress: '東京都新宿区高田馬場 2-14-8 メゾン早稲田 302号室',
   currentAddressKana: 'トウキョウトシンジュククタカダノババ 2-14-8 メゾンワセダ 302ゴウシツ',

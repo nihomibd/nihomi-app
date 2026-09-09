@@ -165,7 +165,7 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
         // Frictionless instant registration in dev/demo
         const studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
         const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
-        const userEmail = contactInfo.includes('@') ? contactInfo : 'student.dhaka@nihomi.com';
+        const userEmail = contactInfo.includes('@') ? contactInfo : 'nihomibd@gmail.com';
         const name = fullName.trim() || 'জাপানি শিক্ষার্থী';
 
         setUserData({
@@ -474,7 +474,7 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
                 required
                 value={contactInfo}
                 onChange={(e) => setContactInfo(e.target.value)}
-                placeholder="017xxxxxxxx বা name@example.com"
+                placeholder="017xxxxxxxx বা nihomibd@gmail.com"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-stone-950 border border-stone-800 text-stone-100 text-xs focus:outline-none focus:border-red-500 transition-colors"
               />
             </div>

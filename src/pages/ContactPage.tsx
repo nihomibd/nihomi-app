@@ -138,10 +138,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   <div>
                     <p className="font-semibold text-white">হোয়াটসঅ্যাপ ও সরাসরি হেল্পলাইন</p>
                     <p className="text-xs font-mono text-emerald-400 mt-0.5">
-                      +880 1812-345678 (WhatsApp Support)
+                      +8801834-348966 (WhatsApp Support)
                     </p>
                     <p className="text-xs font-mono text-slate-400">
-                      +880 1711-000000 (Office Desk)
+                      +8801834-348966 (Office Desk)
                     </p>
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
               {/* Direct WhatsApp Action Button */}
               <a
-                href="https://wa.me/8801812345678?text=Hello%20Nihomi%20Sensei,%20I%20want%20to%20learn%20Japanese!"
+                href="https://wa.me/8801834348966?text=Hello%20Nihomi%20Sensei,%20I%20want%20to%20learn%20Japanese!"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"

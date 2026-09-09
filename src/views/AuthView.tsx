@@ -229,7 +229,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
                   id="auth-email"
                   type="email"
                   required
-                  placeholder="you@example.com"
+                  placeholder="nihomibd@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl bg-stone-50 border border-stone-200 text-stone-900 placeholder-stone-400 focus:outline-none focus:border-red-500 focus:bg-white transition-colors"

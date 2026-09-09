@@ -331,7 +331,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const activeUser: User = {
           id: u.id,
-          email: u.email || 'student@nihomi.com',
+          email: u.email || 'nihomibd@gmail.com',
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
           avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',
@@ -363,7 +363,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const activeUser: User = {
           id: u.id,
-          email: u.email || 'student@nihomi.com',
+          email: u.email || 'nihomibd@gmail.com',
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
           avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',

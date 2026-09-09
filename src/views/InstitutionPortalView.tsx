@@ -353,7 +353,7 @@ export const InstitutionPortalView: React.FC<InstitutionPortalViewProps> = ({ on
                   required
                   value={newStudentEmail}
                   onChange={(e) => setNewStudentEmail(e.target.value)}
-                  placeholder="student@example.com"
+                  placeholder="nihomibd@gmail.com"
                   className="w-full px-3.5 py-2.5 bg-stone-50 dark:bg-stone-800 sepia:bg-[#f0e4cc] border border-stone-200 dark:border-stone-700 sepia:border-[#d9cbaf] rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-hidden focus:border-stone-900"
                 />
               </div>

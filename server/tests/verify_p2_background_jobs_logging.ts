@@ -183,7 +183,7 @@ async function runBackgroundJobsAndLoggingTests() {
     'N5',
     'Async Minna N5 Lesson Verification',
     'usr-admin-01',
-    'admin@nihomi.com'
+    'nihomibd@gmail.com'
   );
 
   assert(typeof source.id === 'string', '27. Test content source created for async processing');

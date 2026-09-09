@@ -705,7 +705,7 @@ class Database {
             paymentMethodName: 'Digital Gateway',
             status: inv.status === 'PAID' ? 'paid' : 'open',
             customerName: 'Student Member',
-            customerEmail: 'student@nihomi.com',
+            customerEmail: 'nihomibd@gmail.com',
             items: [
               {
                 id: `item-${inv.id}`,
@@ -1033,7 +1033,7 @@ class Database {
 
     const adminUser: User = {
       id: 'usr-admin-01',
-      email: 'admin@nihomi.com',
+      email: 'nihomibd@gmail.com',
       passwordHash: adminPass.hash,
       passwordSalt: adminPass.salt,
       role: 'admin',
@@ -1069,7 +1069,7 @@ class Database {
 
     const studentUser: User = {
       id: 'usr-student-01',
-      email: 'student@nihomi.com',
+      email: 'nihomibd@gmail.com',
       passwordHash: studentPass.hash,
       passwordSalt: studentPass.salt,
       role: 'user',
@@ -1161,7 +1161,7 @@ class Database {
       paymentId: 'pay-seed-01',
       status: 'paid',
       customerName: 'Kenji Explorer',
-      customerEmail: 'student@nihomi.com',
+      customerEmail: 'nihomibd@gmail.com',
       subtotal: 4990,
       discount: 0,
       tax: 0,
@@ -1198,7 +1198,7 @@ class Database {
       paymentId: 'pay-topup-01',
       status: 'paid',
       customerName: 'Kenji Explorer',
-      customerEmail: 'student@nihomi.com',
+      customerEmail: 'nihomibd@gmail.com',
       subtotal: 499,
       discount: 0,
       tax: 0,
@@ -1235,7 +1235,7 @@ class Database {
       paymentId: 'pay-topup-02',
       status: 'paid',
       customerName: 'Kenji Explorer',
-      customerEmail: 'student@nihomi.com',
+      customerEmail: 'nihomibd@gmail.com',
       subtotal: 899,
       discount: 0,
       tax: 0,
@@ -1272,7 +1272,7 @@ class Database {
       paymentId: 'pay-starter-01',
       status: 'paid',
       customerName: 'Kenji Explorer',
-      customerEmail: 'student@nihomi.com',
+      customerEmail: 'nihomibd@gmail.com',
       subtotal: 299,
       discount: 0,
       tax: 0,
@@ -1362,7 +1362,7 @@ class Database {
         {
           id: 'log-seed-01',
           adminUserId: 'usr-admin-01',
-          adminEmail: 'admin@nihomi.com',
+          adminEmail: 'nihomibd@gmail.com',
           action: 'system_initialized',
           targetResource: 'billing_engine',
           details: { message: 'Production subscription engine initialized with BDT pricing tiers.' },
@@ -2476,7 +2476,7 @@ class Database {
       paymentId: params.paymentId || `pay-${invoiceId}`,
       status: params.status || 'paid',
       customerName: params.customerName || 'Student Member',
-      customerEmail: params.customerEmail || 'student@nihomi.com',
+      customerEmail: params.customerEmail || 'nihomibd@gmail.com',
       subtotal: params.subtotal ?? params.amount,
       discount: params.discount || 0,
       tax: params.tax || 0,
@@ -4166,7 +4166,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'APPROVE_CONTENT_DRAFT',
       targetResource: `content_draft:${id}`,
       details: { title: draft.title, level: draft.level, sourceId: draft.sourceId }
@@ -4188,7 +4188,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'REJECT_CONTENT_DRAFT',
       targetResource: `content_draft:${id}`,
       details: { title: draft.title, notes }
@@ -4210,7 +4210,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'REVISION_REQUESTED_CONTENT_DRAFT',
       targetResource: `content_draft:${id}`,
       details: { title: draft.title, notes }
@@ -4411,7 +4411,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'PUBLISH_CONTENT_DRAFT',
       targetResource: `lesson:${targetLesson.id}`,
       details: {
@@ -4489,7 +4489,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'UNPUBLISH_CONTENT_DRAFT',
       targetResource: `content_draft:${id}`,
       details: { draftId: draft.id, lessonId: draft.lessonId }
@@ -4658,7 +4658,7 @@ class Database {
 
     this.logAdminAction({
       adminUserId,
-      adminEmail: this.findUserById(adminUserId)?.email || 'admin@nihomi.com',
+      adminEmail: this.findUserById(adminUserId)?.email || 'nihomibd@gmail.com',
       action: 'ROLLBACK_CONTENT_DRAFT',
       targetResource: `content_draft:${draft.id}`,
       details: {

@@ -161,7 +161,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onNavigate }) => {
               </div>
             </div>
             <a
-              href="mailto:mdtanvirkabirbiplob@gmail.com?subject=Data%20Privacy%20Request%20-%20Nihomi"
+              href="mailto:mdtanvirkabirbiplob@gmail.com"
               className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium transition-colors"
             >
               ইমেইল পাঠান

@@ -46,7 +46,7 @@ async function runAuthSecurityVerification() {
   console.log('\n--- 2. Testing Cryptographic Token Signing & Tamper Resistance ---');
   const testUser = {
     userId: 'usr-security-test-01',
-    email: 'learner.test@nihomi.com',
+    email: 'nihomibd@gmail.com',
     role: 'user' as const
   };
 
@@ -91,7 +91,7 @@ async function runAuthSecurityVerification() {
   // Test Admin Token
   const adminToken = signStatelessJwt({
     userId: 'usr-admin-01',
-    email: 'admin@nihomi.com',
+    email: 'nihomibd@gmail.com',
     role: 'admin'
   });
   const adminUser = getUserFromToken(`Bearer ${adminToken}`);
@@ -100,7 +100,7 @@ async function runAuthSecurityVerification() {
   // Test Student Token
   const studentToken = signStatelessJwt({
     userId: 'usr-student-01',
-    email: 'student@nihomi.com',
+    email: 'nihomibd@gmail.com',
     role: 'user'
   });
   const studentUser = getUserFromToken(`Bearer ${studentToken}`);

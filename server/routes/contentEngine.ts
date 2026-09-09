@@ -82,7 +82,7 @@ contentEngineRouter.post(
         level,
         title || req.file.originalname.replace(/\.[^/.]+$/, ''),
         req.user?.id || 'admin',
-        req.user?.email || 'admin@nihomi.com',
+        req.user?.email || 'nihomibd@gmail.com',
         courseId,
         moduleId,
         lessonId
@@ -690,7 +690,7 @@ contentEngineRouter.post(
         targetLevel,
         req.body.title || originalName.replace(/\.[^/.]+$/, ''),
         'batch-ingestion-worker',
-        'content-pipeline@nihomi.com'
+        'nihomibd@gmail.com'
       );
 
       // 4. Process extraction

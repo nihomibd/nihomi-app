@@ -38,7 +38,7 @@ export function generateInvoicePdfBuffer(data: InvoicePdfData): Promise<Buffer> 
     // Header Logo & Branding
     doc.fillColor(brandRed).fontSize(22).font('Helvetica-Bold').text('Nihomi.com', 40, 45);
     doc.fillColor(textGray).fontSize(9).font('Helvetica').text('にほみ • Learn & Work in Japan', 40, 70);
-    doc.text('Dhaka, Bangladesh | billing@nihomi.com', 40, 82);
+    doc.text('Dhaka, Bangladesh | nihomibd@gmail.com', 40, 82);
 
     // Invoice Meta
     doc.fillColor(darkSlate).fontSize(16).font('Helvetica-Bold').text('TAX INVOICE', 380, 45, { align: 'right' });

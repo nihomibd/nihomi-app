@@ -212,7 +212,7 @@ export class DatabaseBackupService {
 
       db.logAdminAction({
         adminUserId: triggeredBy.startsWith('usr-') ? triggeredBy : 'usr-system-backup',
-        adminEmail: triggeredBy.includes('@') ? triggeredBy : 'system@nihomi.com',
+        adminEmail: triggeredBy.includes('@') ? triggeredBy : 'nihomibd@gmail.com',
         action: 'database_backup_created',
         targetResource: 'database_backups',
         details: {
@@ -381,7 +381,7 @@ export class DatabaseBackupService {
       // 5. Record admin audit log
       db.logAdminAction({
         adminUserId: requestedBy.startsWith('usr-') ? requestedBy : 'usr-admin-restore',
-        adminEmail: requestedBy.includes('@') ? requestedBy : 'admin@nihomi.com',
+        adminEmail: requestedBy.includes('@') ? requestedBy : 'nihomibd@gmail.com',
         action: 'database_restored_from_backup',
         targetResource: 'database_backups',
         details: {

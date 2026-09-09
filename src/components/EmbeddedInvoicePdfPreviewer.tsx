@@ -90,7 +90,7 @@ export const EmbeddedInvoicePdfPreviewer: React.FC<EmbeddedInvoicePdfPreviewerPr
     try {
       setIsSendingEmail(true);
       setEmailStatus(null);
-      const res = await billingApi.sendInvoiceEmail(invoice.id, invoice.customerEmail || 'student@nihomi.com');
+      const res = await billingApi.sendInvoiceEmail(invoice.id, invoice.customerEmail || 'nihomibd@gmail.com');
       setEmailStatus(`✓ Invoice dispatched to ${res.sentTo || invoice.customerEmail}!`);
       setTimeout(() => setEmailStatus(null), 4500);
     } catch (err: any) {
@@ -301,7 +301,7 @@ export const EmbeddedInvoicePdfPreviewer: React.FC<EmbeddedInvoicePdfPreviewerPr
                   <p className="font-semibold text-zinc-700 dark:text-zinc-300">
                     NBR BIN (VAT Reg): <span className="font-mono text-red-600 dark:text-red-400">004928192-0101</span>
                   </p>
-                  <p>Tax Jurisdiction: Circle-04, LTU Dhaka | support@nihomi.com</p>
+                  <p>Tax Jurisdiction: Circle-04, LTU Dhaka | nihomibd@gmail.com</p>
                 </div>
               </div>
 
@@ -320,7 +320,7 @@ export const EmbeddedInvoicePdfPreviewer: React.FC<EmbeddedInvoicePdfPreviewerPr
               <div className="space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Bill To / গ্রহীতার বিবরণ</span>
                 <p className="font-bold text-zinc-900 dark:text-zinc-100">{invoice.customerName || 'Kenji Explorer'}</p>
-                <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">{invoice.customerEmail || 'student@nihomi.com'}</p>
+                <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">{invoice.customerEmail || 'nihomibd@gmail.com'}</p>
                 <p className="text-zinc-500 text-[11px]">{invoice.billingAddress || 'Banani Road 11, Dhaka-1213, Bangladesh'}</p>
               </div>
               <div className="space-y-1 sm:text-right">

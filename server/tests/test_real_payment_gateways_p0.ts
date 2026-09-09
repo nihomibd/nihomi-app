@@ -169,7 +169,7 @@ async function runRealPaymentGatewayTests() {
           amount: '1499.00',
           currency: 'BDT',
           intent: 'sale',
-          customerMsisdn: '01711223344'
+          customerMsisdn: '+8801834-348966'
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
@@ -223,7 +223,7 @@ async function runRealPaymentGatewayTests() {
     const bkashCheckout = await bkashProvider.createCheckout({
       paymentId: 'pay-test-bkash-001',
       userId: 'usr-student-01',
-      userEmail: 'student@nihomi.com',
+      userEmail: 'nihomibd@gmail.com',
       userName: 'Tanvir Kabir',
       planId: 'japan_ready',
       planName: 'Japan Ready Pro (Monthly)',
@@ -260,7 +260,7 @@ async function runRealPaymentGatewayTests() {
       {
         paymentId: testBkashPayment.id,
         providerTransactionId: testBkashPayment.providerReference,
-        accountNumber: '01711223344'
+        accountNumber: '+8801834-348966'
       },
       testBkashPayment
     );
@@ -278,7 +278,7 @@ async function runRealPaymentGatewayTests() {
     const sslCheckout = await sslProvider.createCheckout({
       paymentId: 'pay-test-ssl-001',
       userId: 'usr-student-01',
-      userEmail: 'student@nihomi.com',
+      userEmail: 'nihomibd@gmail.com',
       userName: 'Tanvir Kabir',
       planId: 'japan_ready',
       planName: 'Japan Ready Pro',
@@ -335,7 +335,7 @@ async function runRealPaymentGatewayTests() {
     assert(couponValidation.finalAmount < testPlan.monthlyPrice, '23. Coupon discount applied against trusted DB price');
 
     // Verify atomic subscription activation
-    const testUser = db.findUserByEmail('demo@nihomi.com') || db.getAllUsers()[0];
+    const testUser = db.findUserByEmail('nihomibd@gmail.com') || db.getAllUsers()[0];
 
     const newSub = db.createSubscription({
       userId: testUser.id,

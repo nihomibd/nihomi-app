@@ -181,7 +181,7 @@ async function runContentVersionRollbackDiffTests() {
       },
       createdBy: adminId,
       status: 'APPROVED',
-      reviewedBy: 'admin@nihomi.com',
+      reviewedBy: 'nihomibd@gmail.com',
       reviewedAt: new Date().toISOString()
     });
 

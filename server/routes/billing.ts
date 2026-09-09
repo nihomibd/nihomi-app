@@ -492,7 +492,7 @@ async function handleBkashCallback(req: Request, res: Response) {
       billingPeriod: `${activeSub.currentPeriodStart.split('T')[0]} to ${activeSub.currentPeriodEnd.split('T')[0]}`,
       paymentId: payment.id,
       customerName: profile?.displayName || 'Nihomi Student',
-      customerEmail: user?.email || 'student@nihomi.com',
+      customerEmail: user?.email || 'nihomibd@gmail.com',
       subtotal: payment.originalAmount,
       discount: payment.discountAmount,
       tax: 0,
@@ -638,7 +638,7 @@ billingRouter.post('/bkash/simulate', async (req: Request, res: Response) => {
       billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
       paymentId: payment.id,
       customerName: profile?.displayName || user?.email?.split('@')[0] || 'QA Student',
-      customerEmail: user?.email || 'student@nihomi.com',
+      customerEmail: user?.email || 'nihomibd@gmail.com',
       subtotal: Number(amount),
       discount: 0,
       tax: 0,
@@ -779,7 +779,7 @@ billingRouter.post('/sslcommerz/success', async (req: Request, res: Response) =>
       billingPeriod: `${activeSub.currentPeriodStart.split('T')[0]} to ${activeSub.currentPeriodEnd.split('T')[0]}`,
       paymentId: payment.id,
       customerName: profile?.displayName || 'Nihomi Student',
-      customerEmail: user?.email || 'student@nihomi.com',
+      customerEmail: user?.email || 'nihomibd@gmail.com',
       subtotal: payment.originalAmount,
       discount: payment.discountAmount,
       tax: 0,
@@ -1243,7 +1243,7 @@ billingRouter.post('/payment-methods', authenticateUser, (req: AuthenticatedRequ
     if (type === 'bkash') {
       const cleanBkash = (bKashNumber || '').replace(/\D/g, '');
       if (!cleanBkash || cleanBkash.length !== 11 || !cleanBkash.startsWith('01')) {
-        return res.status(400).json({ error: 'Please enter a valid 11-digit Bangladesh bKash mobile number (e.g. 01712345678).' });
+        return res.status(400).json({ error: 'Please enter a valid 11-digit Bangladesh bKash mobile number (e.g. +8801834-348966).' });
       }
 
       const masked = `${cleanBkash.slice(0, 3)}*****${cleanBkash.slice(8)}`;

@@ -37,7 +37,7 @@ export function generateInvoicePDF(invoice: Invoice): jsPDF {
   doc.setTextColor(113, 113, 122);
   doc.text('Japanese Language & Career Intelligence Platform', 28, 21);
   doc.text('House 42, Road 11, Banani, Dhaka, Bangladesh | BIN: 004819201-0101', 28, 25.5);
-  doc.text('support@nihomi.com | https://nihomi.com', 28, 30);
+  doc.text('nihomibd@gmail.com | https://nihomi.com', 28, 30);
 
   // Invoice Title & Status Badge
   doc.setFontSize(16);
@@ -189,7 +189,7 @@ export function generateInvoicePDF(invoice: Invoice): jsPDF {
   doc.setTextColor(113, 113, 122);
   doc.text('This invoice was electronically generated and authenticated by Nihomi Recurring Revenue Engine v1.1.', 20, y + 13);
   doc.text(`Security Hash: SHA256-${(invoice.id + invoice.paymentId).slice(0, 24)}... | Verification Timestamp: ${new Date().toISOString()}`, 20, y + 18);
-  doc.text('For institutional inquiries, tax filings, or corporate reimbursement, contact billing@nihomi.com', 20, y + 23);
+  doc.text('For institutional inquiries, tax filings, or corporate reimbursement, contact nihomibd@gmail.com', 20, y + 23);
 
   return doc;
 }

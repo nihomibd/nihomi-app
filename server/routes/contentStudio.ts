@@ -89,7 +89,7 @@ contentStudioRouter.post('/lessons/:id/sources', requireStaff, upload.single('fi
         (lesson.level as JLPTLevel) || 'N5',
         lesson.title || req.file.originalname.replace(/\.[^/.]+$/, ''),
         req.user?.id || 'admin',
-        req.user?.email || 'admin@nihomi.com',
+        req.user?.email || 'nihomibd@gmail.com',
         lesson.courseId,
         undefined,
         lesson.id
@@ -101,7 +101,7 @@ contentStudioRouter.post('/lessons/:id/sources', requireStaff, upload.single('fi
         fileType: 'PDF' as const,
         fileSizeBytes: source.fileSize,
         storagePath: source.storagePath,
-        uploadedBy: req.user?.email || 'admin@nihomi.com',
+        uploadedBy: req.user?.email || 'nihomibd@gmail.com',
         uploadedAt: source.createdAt,
         courseId: lesson.courseId,
         level: lesson.level,
@@ -124,7 +124,7 @@ contentStudioRouter.post('/lessons/:id/sources', requireStaff, upload.single('fi
         fileType: fileType || 'PDF',
         fileSizeBytes: fileSizeBytes || 2500000,
         storagePath: `/storage/sources/${lesson.level?.toLowerCase()}/${lesson.id}/${filename || 'Source.pdf'}`,
-        uploadedBy: req.user?.email || 'admin@nihomi.com',
+        uploadedBy: req.user?.email || 'nihomibd@gmail.com',
         uploadedAt: new Date().toISOString(),
         courseId: lesson.courseId,
         level: lesson.level,
@@ -163,7 +163,7 @@ contentStudioRouter.post('/sources/upload', requireStaff, upload.single('pdfFile
       level,
       title || file.originalname.replace(/\.[^/.]+$/, ''),
       req.user?.id || 'admin',
-      req.user?.email || 'admin@nihomi.com',
+      req.user?.email || 'nihomibd@gmail.com',
       courseId,
       moduleId,
       lessonId
@@ -266,7 +266,7 @@ contentStudioRouter.post('/lessons/:id/qa', requireStaff, (req: AuthenticatedReq
 
 // 10. Approve & Publish (Strict Admin Authorization with Zero-Downtime DB Sync & Founder Review Gate)
 contentStudioRouter.post('/lessons/:id/publish', requireAdmin, (req: AuthenticatedRequest, res) => {
-  const founderEmail = req.user?.email || 'admin@nihomi.com';
+  const founderEmail = req.user?.email || 'mdtanvirkabirbiplob@gmail.com';
   const adminId = req.user?.id || 'admin';
   const lesson = contentStudioDb.getLessonById(req.params.id);
   if (!lesson) return res.status(404).json({ error: 'Lesson not found' });
@@ -318,7 +318,7 @@ contentStudioRouter.post('/lessons/:id/unpublish', requireAdmin, (req: Authentic
 // Helper: Synchronize any StudioLesson to PostgreSQL persistent ContentDraft, live Lesson catalog, and SRS Decks
 export function syncStudioLessonToLiveCatalog(
   published: StudioLesson,
-  founderEmail = 'admin@nihomi.com',
+  founderEmail = 'mdtanvirkabirbiplob@gmail.com',
   adminId = 'usr-admin-01'
 ) {
   const structuredContent: StructuredEducationalContent = {
@@ -450,7 +450,7 @@ export function syncAllDefaultLessonsToLiveCatalog(): { count: number; titles: s
         (l) => l.title === defLesson.title || l.titleJa === defLesson.titleJa
       );
       if (!alreadyPublished) {
-        contentStudioDb.approveAndPublishLesson(defLesson.id, 'admin@nihomi.com');
+        contentStudioDb.approveAndPublishLesson(defLesson.id, 'nihomibd@gmail.com');
         syncStudioLessonToLiveCatalog(defLesson);
         publishedTitles.push(defLesson.title);
       }
@@ -642,7 +642,7 @@ contentStudioRouter.post(['/test-pipeline', '/test-pipeline/run'], async (req: A
   try {
     const { autoPublish } = req.body || {};
     const adminUserId = req.user?.id || '27fb8002-dbdd-4370-83d1-1d438ae9a055';
-    const adminEmail = req.user?.email || 'admin@nihomi.com';
+    const adminEmail = req.user?.email || 'nihomibd@gmail.com';
 
     const telemetry = await testPipelineRunnerService.runMinnaL1Pipeline({
       autoPublish: Boolean(autoPublish),

@@ -109,7 +109,7 @@ async function executeSmokeSuite() {
     const checkout = await bkash.createCheckout({
       paymentId: testPaymentId,
       userId: testUserId,
-      userEmail: 'qa-student@nihomi.com',
+      userEmail: 'nihomibd@gmail.com',
       userName: 'QA Verification Student',
       planId: 'starter',
       planName: 'Nihomi Starter Plan',
@@ -139,7 +139,7 @@ async function executeSmokeSuite() {
       {
         paymentId: payment.id,
         providerTransactionId: checkout.providerReference,
-        accountNumber: '01712345678'
+        accountNumber: '+8801834-348966'
       },
       payment
     );
@@ -164,7 +164,7 @@ async function executeSmokeSuite() {
       billingPeriod: '2026-09-01 to 2026-10-01',
       paymentId: payment.id,
       customerName: 'QA Verification Student',
-      customerEmail: 'qa-student@nihomi.com',
+      customerEmail: 'nihomibd@gmail.com',
       subtotal: 216.52,
       discount: 0,
       tax: 32.48,

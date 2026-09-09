@@ -39,7 +39,7 @@ export const EmailSignatureView: React.FC = () => {
           title: 'Japanese Curriculum & Academic Director',
           org: 'NIHOMI.COM (Powered by bdTrip24)',
           phone: '+880 17555-34997',
-          email: 'academic@nihomi.com',
+          email: 'nihomibd@gmail.com',
           location: 'bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215',
         };
       case 'admissions':
@@ -49,7 +49,7 @@ export const EmailSignatureView: React.FC = () => {
           title: 'Admissions & COE Processing Coordinator',
           org: 'NIHOMI.COM (Powered by bdTrip24)',
           phone: '+880 17555-34997',
-          email: 'admissions@nihomi.com',
+          email: 'nihomibd@gmail.com',
           location: 'bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215',
         };
       default:
@@ -82,7 +82,7 @@ export const EmailSignatureView: React.FC = () => {
         ${sig.title} <span style="font-weight: 500; color: #78716c;">• ${sig.org}</span>
       </div>
       <div style="font-size: 12px; color: #44403c; margin-bottom: 4px;">
-        <strong>Phone:</strong> <a href="tel:${sig.phone.replace(/[^0-9+]/g, '')}" style="color: #0c0a09; text-decoration: none; font-weight: 600;">${sig.phone}</a> &nbsp;|&nbsp; <strong>Email:</strong> <a href="mailto:${sig.email}" style="color: #dc2626; text-decoration: none; font-weight: 600;">${sig.email}</a>
+        <strong>Phone:</strong> <a href="tel:+8801834348966"')}" style="color: #0c0a09; text-decoration: none; font-weight: 600;">${sig.phone}</a> &nbsp;|&nbsp; <strong>Email:</strong> <a href="mailto:nihomibd@gmail.com" style="color: #dc2626; text-decoration: none; font-weight: 600;">${sig.email}</a>
       </div>
       <div style="font-size: 11px; color: #78716c; margin-bottom: 8px;">
         <strong>Campus Desk:</strong> ${sig.location}

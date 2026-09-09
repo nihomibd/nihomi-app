@@ -403,7 +403,7 @@ export class StateIntegrityService {
 
     db.logAdminAction({
       adminUserId: requestedBy.startsWith('usr-') ? requestedBy : 'usr-admin-repair',
-      adminEmail: requestedBy.includes('@') ? requestedBy : 'admin@nihomi.com',
+      adminEmail: requestedBy.includes('@') ? requestedBy : 'nihomibd@gmail.com',
       action: 'database_orphans_repaired',
       targetResource: 'database_integrity',
       details: {

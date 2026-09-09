@@ -109,8 +109,8 @@ export const RefundPolicyPage: React.FC<RefundPolicyPageProps> = ({ onNavigate }
               <p className="text-xs text-slate-400">
                 দ্রুত সমাধানের জন্য আমাদের সাপোর্ট নম্বরে মেসেজ দিন (সকাল ১০টা - সন্ধ্যা ৭টা):
               </p>
-              <a href="https://wa.me/8801812345678" target="_blank" rel="noreferrer" className="text-xs font-mono text-emerald-400 hover:underline block pt-1">
-                +880 1812-345678 (WhatsApp Support)
+              <a href="https://wa.me/8801834348966" target="_blank" rel="noreferrer" className="text-xs font-mono text-emerald-400 hover:underline block pt-1">
+                +8801834-348966 (WhatsApp Support)
               </a>
             </div>
           </div>

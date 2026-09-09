@@ -805,7 +805,7 @@ class ContentStudioDatabase {
 
     this.lessons.set(id, newLesson);
     this.saveLessonsToDisk();
-    this.logAudit('CREATE_LESSON', id, 'admin@nihomi.com', { title: newLesson.title });
+    this.logAudit('CREATE_LESSON', id, 'nihomibd@gmail.com', { title: newLesson.title });
     return newLesson;
   }
 
@@ -823,7 +823,7 @@ class ContentStudioDatabase {
 
     this.lessons.set(id, updated);
     this.saveLessonsToDisk();
-    this.logAudit('UPDATE_LESSON', id, 'admin@nihomi.com', { fieldsUpdated: Object.keys(updates) });
+    this.logAudit('UPDATE_LESSON', id, 'nihomibd@gmail.com', { fieldsUpdated: Object.keys(updates) });
     return updated;
   }
 
@@ -853,7 +853,7 @@ class ContentStudioDatabase {
     const deleted = this.lessons.delete(id);
     if (deleted) {
       this.saveLessonsToDisk();
-      this.logAudit('DELETE_LESSON', id, 'admin@nihomi.com', {});
+      this.logAudit('DELETE_LESSON', id, 'nihomibd@gmail.com', {});
     }
     return deleted;
   }

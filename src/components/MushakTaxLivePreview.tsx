@@ -215,7 +215,7 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
               ক্রেতার বিবরণ (Registered Purchaser / Student):
             </p>
             <p className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100">{name || 'Enrolled Student'}</p>
-            <p className="text-zinc-600 dark:text-zinc-400">{email || 'student@nihomi.com'}</p>
+            <p className="text-zinc-600 dark:text-zinc-400">{email || 'nihomibd@gmail.com'}</p>
             <p className="text-zinc-600 dark:text-zinc-400">Dhaka, Bangladesh</p>
             <p className="font-mono text-zinc-500 text-[11px]">
               চালান নম্বর (Challan No): <strong className="text-zinc-900 dark:text-zinc-100">{challanNumber}</strong>

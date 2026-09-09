@@ -71,7 +71,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     if (methodType === 'bkash') {
       const clean = bKashNumber.replace(/\D/g, '');
       if (clean.length !== 11 || !clean.startsWith('01')) {
-        setErrorMessage('Please enter a valid 11-digit Bangladesh bKash number starting with 01 (e.g. 01712345678).');
+        setErrorMessage('Please enter a valid 11-digit Bangladesh bKash number starting with 01 (e.g. +8801834-348966).');
         return;
       }
       if (!bKashAgreed) {
@@ -254,7 +254,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                     type="tel"
                     value={bKashNumber}
                     onChange={handleBkashChange}
-                    placeholder="01712345678"
+                    placeholder="+8801834-348966"
                     maxLength={11}
                     required
                     className="w-full pl-3 pr-10 py-2.5 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono focus:outline-none focus:ring-2 focus:ring-red-500"

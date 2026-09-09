@@ -92,7 +92,7 @@ async function runStoragePipelineTests() {
     'N5',
     'Minna N5 Kanji Bank Chapter 1',
     'usr-admin-01',
-    'admin@nihomi.com'
+    'nihomibd@gmail.com'
   );
 
   assert(typeof source.id === 'string' && source.id.length > 0, '16. Content source created with valid ID');

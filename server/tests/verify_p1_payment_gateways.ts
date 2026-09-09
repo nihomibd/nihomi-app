@@ -69,7 +69,7 @@ async function runPaymentTests() {
           paymentID: parsed.paymentID,
           trxID: 'BKX_TRX_99228811',
           amount: '1499.00',
-          customerMsisdn: '01812345678'
+          customerMsisdn: '+8801834-348966'
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
@@ -121,7 +121,7 @@ async function runPaymentTests() {
   const bkashCheckout = await bkash.createCheckout({
     paymentId: 'pay-test-bkash-001',
     userId: 'usr-student-01',
-    userEmail: 'student@nihomi.com',
+    userEmail: 'nihomibd@gmail.com',
     userName: 'Tanvir Kabir',
     planId: 'japan_ready',
     planName: 'Japan Ready Pro (Monthly)',
@@ -156,7 +156,7 @@ async function runPaymentTests() {
 
   const validVerification = await bkash.verifyPayment({
     paymentId: testPayment.id,
-    accountNumber: '01812345678',
+    accountNumber: '+8801834-348966',
     otp: '123456',
     pin: '12345'
   }, testPayment);
@@ -211,7 +211,7 @@ async function runPaymentTests() {
   const sslCheckout = await ssl.createCheckout({
     paymentId: 'pay-test-ssl-002',
     userId: 'usr-student-02',
-    userEmail: 'student2@nihomi.com',
+    userEmail: 'nihomibd@gmail.com',
     userName: 'Akira Tanaka',
     planId: 'starter',
     planName: 'Starter (Monthly)',

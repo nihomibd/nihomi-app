@@ -68,7 +68,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [paymentInitiationData, setPaymentInitiationData] = useState<any>(null);
 
   // Gateway form fields
-  const [accountNumber, setAccountNumber] = useState('01812345678');
+  const [accountNumber, setAccountNumber] = useState('+8801834-348966');
   const [otp, setOtp] = useState('123456');
   const [pin, setPin] = useState('12345');
   const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
@@ -783,7 +783,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>100% Secure Transaction & Instant Activation</span>
             </div>
-            <span>Questions? support@nihomi.com</span>
+            <span>Questions? nihomibd@gmail.com</span>
           </div>
         )}
       </motion.div>

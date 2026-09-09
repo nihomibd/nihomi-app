@@ -2,7 +2,7 @@
   "users": [
     {
       "id": "usr-admin-01",
-      "email": "admin@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "admin",
@@ -11,7 +11,7 @@
     },
     {
       "id": "usr-student-01",
-      "email": "student@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -29,7 +29,7 @@
     },
     {
       "id": "usr-test-student-99",
-      "email": "test.student@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -38,7 +38,7 @@
     },
     {
       "id": "usr-test-admin-99",
-      "email": "admin.verify@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "admin",
@@ -47,7 +47,7 @@
     },
     {
       "id": "usr-04f55475",
-      "email": "student.iso.1788288166612@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -119,7 +119,7 @@
     },
     {
       "id": "usr-c0fcf3eb",
-      "email": "student.iso.1788292917268@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -128,7 +128,7 @@
     },
     {
       "id": "usr-33e1989a",
-      "email": "student.iso.1788293570817@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -137,7 +137,7 @@
     },
     {
       "id": "usr-cf0277e9",
-      "email": "student.iso.1788333595662@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -146,7 +146,7 @@
     },
     {
       "id": "usr-1cd2c4f5",
-      "email": "student.iso.1788333657537@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -155,7 +155,7 @@
     },
     {
       "id": "usr-a8718b39",
-      "email": "test.persistence.1788336810587@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -164,7 +164,7 @@
     },
     {
       "id": "usr-266235e6",
-      "email": "test.persistence.1788336882462@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -173,7 +173,7 @@
     },
     {
       "id": "usr-a2c89b98",
-      "email": "test.persistence.1788336944525@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -182,7 +182,7 @@
     },
     {
       "id": "usr-dfc28af7",
-      "email": "test.persistence.1788336994275@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -191,7 +191,7 @@
     },
     {
       "id": "usr-3e57a5cd",
-      "email": "test.persistence.1788337043438@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -200,7 +200,7 @@
     },
     {
       "id": "usr-cc1981b9",
-      "email": "test.persistence.1788337083809@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -209,7 +209,7 @@
     },
     {
       "id": "usr-b38c3d71",
-      "email": "test.persistence.1788337109286@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "240aa59a9b2c16926d149feb39f24205bdc14bdaf8949bacd9f2197bd4c1f158138d0b9388af21d259ca2cbd2eb0520895772634cf1f2b4b89a7f8f01a52ec84",
       "passwordSalt": "3d195dad0ec5fb5cc1aca9b778c46a7a",
       "role": "user",
@@ -218,7 +218,7 @@
     },
     {
       "id": "usr-d830e4b3",
-      "email": "test.persistence.1788337631406@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "bcebfbb69a9f8dab754295b953536fd191db11d03449ae965fbcee76143557984bea5f45c6ac2dc6312c254dcbbc79dbf5dfd6cae9e297a9f7d8b2d8a37c035e",
       "passwordSalt": "56a07373bd0016a3fc94c3ce6c857aea",
       "role": "user",
@@ -227,7 +227,7 @@
     },
     {
       "id": "usr-4d9fa1ea",
-      "email": "test.persistence.1788337641274@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "e4baccac3ea3b866bfe4c749f09b5546d18c827cbbdd5d7abf98ecd63fa9bfd29cb4cd6179a1918dcb0111074f95add9559acfb1fc597c19836140c66ccd7bcc",
       "passwordSalt": "244a3145eb680187297d548ee543e909",
       "role": "user",
@@ -236,7 +236,7 @@
     },
     {
       "id": "usr-46dacd29",
-      "email": "test.persistence.1788338067044@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "3ed5f9bf34bead0f6baef9d125d34db2d4ba72168c74ab1cf63bdf1d40daf36b4b181221a0cce176bc2cd4f4d0c57cbfc3617faab070bb359fcbd96861bd8003",
       "passwordSalt": "d8bcaa27dea1a21b18f112dca7bf839d",
       "role": "user",
@@ -245,7 +245,7 @@
     },
     {
       "id": "usr-a3b046f1",
-      "email": "temp-test-1788338646546@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -254,7 +254,7 @@
     },
     {
       "id": "usr-7d5b3b71",
-      "email": "temp-test-1788338698400@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -263,7 +263,7 @@
     },
     {
       "id": "usr-21050f14",
-      "email": "temp-test-1788338802444@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -290,7 +290,7 @@
     },
     {
       "id": "usr-91d2f404",
-      "email": "temp-test-1788339603442@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -299,7 +299,7 @@
     },
     {
       "id": "usr-e42126c2",
-      "email": "student.1788356197658@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -308,7 +308,7 @@
     },
     {
       "id": "usr-fd6e3165",
-      "email": "student.1788356250376@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "",
       "passwordSalt": "",
       "role": "user",
@@ -317,7 +317,7 @@
     },
     {
       "id": "usr-telemetry-test-1788430752957",
-      "email": "usr-telemetry-test-1788430752957@example.com",
+      "email": "nihomibd@gmail.com",
       "name": "Tanvir Analytics Tester",
       "role": "student",
       "createdAt": "2026-09-03T10:19:12.957Z",
@@ -325,7 +325,7 @@
     },
     {
       "id": "usr-api-test-1788430784137",
-      "email": "usr-api-test-1788430784137@example.com",
+      "email": "nihomibd@gmail.com",
       "name": "API Test Student",
       "role": "student",
       "createdAt": "2026-09-03T10:19:44.151Z",
@@ -333,7 +333,7 @@
     },
     {
       "id": "usr-telemetry-test-1788437665925",
-      "email": "usr-telemetry-test-1788437665925@example.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "dummy_hash",
       "passwordSalt": "dummy_salt",
       "role": "user",
@@ -342,7 +342,7 @@
     },
     {
       "id": "usr-telemetry-test-1788449512393",
-      "email": "usr-telemetry-test-1788449512393@example.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "dummy_hash",
       "passwordSalt": "dummy_salt",
       "role": "user",
@@ -351,7 +351,7 @@
     },
     {
       "id": "usr-1118fa86",
-      "email": "student.iso.1788864732596@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "9a7f4fc0710c04f12b620aa2aea329e4e0426c113c3bf173bf8e1c4d2296e24c2a62b6cd5dbf76f0497ece82e1352385027de7aa42b9e670dcc144a98caca9c8",
       "passwordSalt": "cc3ba3c275c300337bfb187a9f99c164",
       "role": "user",
@@ -360,7 +360,7 @@
     },
     {
       "id": "usr-2fa1021e",
-      "email": "student.iso.1788865024712@nihomi.com",
+      "email": "nihomibd@gmail.com",
       "passwordHash": "016d1da74b2fe447eb0d666eef64e9986abcfaeb5c4f133ec6ffa1b12a7c095fab59099afce0bffd465a16a143c9c892c19a4e21ff2edb566fa59f0caffd1791",
       "passwordSalt": "f6e6c088eb622cdb793fe697e50e3153",
       "role": "user",
@@ -7768,7 +7768,7 @@
       "paymentId": "pay-inv-seed-01",
       "status": "open",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -7803,7 +7803,7 @@
       "paymentId": "pay-inv-topup-01",
       "status": "open",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 499,
       "discount": 0,
       "tax": 0,
@@ -7838,7 +7838,7 @@
       "paymentId": "pay-inv-topup-02",
       "status": "open",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 899,
       "discount": 0,
       "tax": 0,
@@ -7873,7 +7873,7 @@
       "paymentId": "pay-inv-starter-01",
       "status": "open",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 299,
       "discount": 0,
       "tax": 0,
@@ -7908,7 +7908,7 @@
       "paymentId": "pay-sub-33477345",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -7940,7 +7940,7 @@
       "paymentId": "pay-sub-8406175f",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -7972,7 +7972,7 @@
       "paymentId": "pay-sub-72bfe250",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -8004,7 +8004,7 @@
       "paymentId": "pay-sub-5f98333c",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -8036,7 +8036,7 @@
       "paymentId": "pay-sub-775533f5",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -8068,7 +8068,7 @@
       "paymentId": "pay-sub-53dc69a8",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -8100,7 +8100,7 @@
       "paymentId": "pay-sub-9ece5eec",
       "status": "paid",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 4990,
       "discount": 0,
       "tax": 0,
@@ -8132,7 +8132,7 @@
       "paymentId": "pay-test-bkash-001",
       "status": "paid",
       "customerName": "Test Student",
-      "customerEmail": "admin@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 1499,
       "discount": 0,
       "tax": 0,
@@ -8164,7 +8164,7 @@
       "paymentId": "pay-test-bkash-001",
       "status": "paid",
       "customerName": "Test Student",
-      "customerEmail": "admin@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 999,
       "discount": 0,
       "tax": 0,
@@ -8196,7 +8196,7 @@
       "paymentId": "pay-inv-8fd64d9d",
       "status": "open",
       "customerName": "Student Member",
-      "customerEmail": "student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 999,
       "discount": 0,
       "tax": 0,
@@ -8228,7 +8228,7 @@
       "paymentId": "pay-7a4bdb8f",
       "status": "paid",
       "customerName": "QA Verification Student",
-      "customerEmail": "qa-student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 216.52,
       "discount": 0,
       "tax": 32.48,
@@ -8260,7 +8260,7 @@
       "paymentId": "pay-eb6e5119",
       "status": "paid",
       "customerName": "QA Verification Student",
-      "customerEmail": "qa-student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 216.52,
       "discount": 0,
       "tax": 32.48,
@@ -8292,7 +8292,7 @@
       "paymentId": "pay-37d2b1a4",
       "status": "paid",
       "customerName": "QA Verification Student",
-      "customerEmail": "qa-student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 216.52,
       "discount": 0,
       "tax": 32.48,
@@ -8324,7 +8324,7 @@
       "paymentId": "pay-1bb699f8",
       "status": "paid",
       "customerName": "QA Verification Student",
-      "customerEmail": "qa-student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 216.52,
       "discount": 0,
       "tax": 32.48,
@@ -8356,7 +8356,7 @@
       "paymentId": "pay-238dad6a",
       "status": "paid",
       "customerName": "QA Verification Student",
-      "customerEmail": "qa-student@nihomi.com",
+      "customerEmail": "nihomibd@gmail.com",
       "subtotal": 216.52,
       "discount": 0,
       "tax": 32.48,
@@ -8866,7 +8866,7 @@
       "userId": "usr-04f55475",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788288166612@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-01T18:42:46.614Z"
     },
@@ -8875,7 +8875,7 @@
       "userId": "usr-c0fcf3eb",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788292917268@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-01T20:01:57.270Z"
     },
@@ -8884,7 +8884,7 @@
       "userId": "usr-33e1989a",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788293570817@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-01T20:12:50.819Z"
     },
@@ -8893,7 +8893,7 @@
       "userId": "usr-cf0277e9",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788333595662@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T07:19:55.663Z"
     },
@@ -8902,7 +8902,7 @@
       "userId": "usr-1cd2c4f5",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788333657537@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T07:20:57.539Z"
     },
@@ -8911,7 +8911,7 @@
       "userId": "usr-a8718b39",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788336810587@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:13:30.589Z"
     },
@@ -8920,7 +8920,7 @@
       "userId": "usr-266235e6",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788336882462@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:14:42.464Z"
     },
@@ -8940,7 +8940,7 @@
       "userId": "usr-a2c89b98",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788336944525@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:15:44.527Z"
     },
@@ -8960,7 +8960,7 @@
       "userId": "usr-dfc28af7",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788336994275@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:16:34.277Z"
     },
@@ -8980,7 +8980,7 @@
       "userId": "usr-3e57a5cd",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788337043438@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:17:23.440Z"
     },
@@ -9000,7 +9000,7 @@
       "userId": "usr-cc1981b9",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788337083809@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:18:03.810Z"
     },
@@ -9020,7 +9020,7 @@
       "userId": "usr-b38c3d71",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788337109286@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:18:29.288Z"
     },
@@ -9040,7 +9040,7 @@
       "userId": "usr-d830e4b3",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788337631406@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:27:11.408Z"
     },
@@ -9060,7 +9060,7 @@
       "userId": "usr-4d9fa1ea",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788337641274@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:27:21.275Z"
     },
@@ -9080,7 +9080,7 @@
       "userId": "usr-46dacd29",
       "eventType": "signup",
       "metadata": {
-        "email": "test.persistence.1788338067044@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-02T08:34:27.045Z"
     },
@@ -9133,7 +9133,7 @@
       "userId": "usr-1118fa86",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788864732596@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-08T10:52:12.598Z"
     },
@@ -9142,7 +9142,7 @@
       "userId": "usr-2fa1021e",
       "eventType": "signup",
       "metadata": {
-        "email": "student.iso.1788865024712@nihomi.com"
+        "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-08T10:57:04.714Z"
     }
@@ -9151,7 +9151,7 @@
     {
       "id": "log-seed-01",
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "system_initialized",
       "targetResource": "billing_engine",
       "details": {
@@ -9161,7 +9161,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "APPROVE_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-3250ba61",
       "details": {
@@ -9174,7 +9174,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-75932e",
       "details": {
@@ -9189,7 +9189,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "UNPUBLISH_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-3250ba61",
       "details": {
@@ -9201,7 +9201,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-75932e",
       "details": {
@@ -9216,7 +9216,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9232,7 +9232,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9248,7 +9248,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9264,7 +9264,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9280,7 +9280,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9296,7 +9296,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9312,7 +9312,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9328,7 +9328,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9344,7 +9344,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9360,7 +9360,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9376,7 +9376,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9392,7 +9392,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9408,7 +9408,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9424,7 +9424,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9440,7 +9440,7 @@
     },
     {
       "adminUserId": "usr-admin-restore",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_restored_from_backup",
       "targetResource": "database_backups",
       "details": {
@@ -9496,7 +9496,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9512,7 +9512,7 @@
     },
     {
       "adminUserId": "usr-admin-repair",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_orphans_repaired",
       "targetResource": "database_integrity",
       "details": {
@@ -9532,7 +9532,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9548,7 +9548,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9564,7 +9564,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9580,7 +9580,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9596,7 +9596,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9612,7 +9612,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9628,7 +9628,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9644,7 +9644,7 @@
     },
     {
       "adminUserId": "usr-admin-restore",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_restored_from_backup",
       "targetResource": "database_backups",
       "details": {
@@ -9700,7 +9700,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9716,7 +9716,7 @@
     },
     {
       "adminUserId": "usr-admin-repair",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_orphans_repaired",
       "targetResource": "database_integrity",
       "details": {
@@ -9736,7 +9736,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9752,7 +9752,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9768,7 +9768,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9784,7 +9784,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9800,7 +9800,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9816,7 +9816,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9832,7 +9832,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9848,7 +9848,7 @@
     },
     {
       "adminUserId": "usr-admin-restore",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_restored_from_backup",
       "targetResource": "database_backups",
       "details": {
@@ -9904,7 +9904,7 @@
     },
     {
       "adminUserId": "usr-system-backup",
-      "adminEmail": "system@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_backup_created",
       "targetResource": "database_backups",
       "details": {
@@ -9920,7 +9920,7 @@
     },
     {
       "adminUserId": "usr-admin-repair",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "database_orphans_repaired",
       "targetResource": "database_integrity",
       "details": {
@@ -9940,7 +9940,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-55fe75",
       "details": {
@@ -9956,7 +9956,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-710a38",
       "details": {
@@ -9972,7 +9972,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-710a38",
       "details": {
@@ -9988,7 +9988,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-cd38bbd1",
       "details": {
@@ -10003,7 +10003,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-25da73",
       "details": {
@@ -10019,7 +10019,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-25da73",
       "details": {
@@ -10035,7 +10035,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-4a150284",
       "details": {
@@ -10050,7 +10050,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-8322fc",
       "details": {
@@ -10066,7 +10066,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-8322fc",
       "details": {
@@ -10082,7 +10082,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-ffb2de9d",
       "details": {
@@ -10097,7 +10097,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-6ccc44",
       "details": {
@@ -10113,7 +10113,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-6ccc44",
       "details": {
@@ -10129,7 +10129,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-ebdc52e5",
       "details": {
@@ -10144,7 +10144,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-a6ad34",
       "details": {
@@ -10160,7 +10160,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-a6ad34",
       "details": {
@@ -10176,7 +10176,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-2048c51f",
       "details": {
@@ -10191,7 +10191,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-60b17c",
       "details": {
@@ -10207,7 +10207,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-60b17c",
       "details": {
@@ -10223,7 +10223,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-42d9015b",
       "details": {
@@ -10238,7 +10238,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-d99a60",
       "details": {
@@ -10254,7 +10254,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-d99a60",
       "details": {
@@ -10270,7 +10270,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-d121c517",
       "details": {
@@ -10285,7 +10285,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-a56180",
       "details": {
@@ -10301,7 +10301,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-a56180",
       "details": {
@@ -10317,7 +10317,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-e8e5f448",
       "details": {
@@ -10332,7 +10332,7 @@
     },
     {
       "adminUserId": "autonomous-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-83d4f1",
       "details": {
@@ -10348,7 +10348,7 @@
     },
     {
       "adminUserId": "admin-v2",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-83d4f1",
       "details": {
@@ -10364,7 +10364,7 @@
     },
     {
       "adminUserId": "admin-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-p1-03-1788420926948",
       "details": {
@@ -10379,7 +10379,7 @@
     },
     {
       "adminUserId": "autonomous-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-438a0b",
       "details": {
@@ -10395,7 +10395,7 @@
     },
     {
       "adminUserId": "admin-v2",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-438a0b",
       "details": {
@@ -10411,7 +10411,7 @@
     },
     {
       "adminUserId": "admin-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-p1-03-1788420963386",
       "details": {
@@ -10426,7 +10426,7 @@
     },
     {
       "adminUserId": "autonomous-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-c965e6",
       "details": {
@@ -10442,7 +10442,7 @@
     },
     {
       "adminUserId": "admin-v2",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-c965e6",
       "details": {
@@ -10458,7 +10458,7 @@
     },
     {
       "adminUserId": "admin-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-p1-03-1788423068287",
       "details": {
@@ -10473,7 +10473,7 @@
     },
     {
       "adminUserId": "scheduler",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-289b96",
       "details": {
@@ -10489,7 +10489,7 @@
     },
     {
       "adminUserId": "scheduler",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-464724",
       "details": {
@@ -10505,7 +10505,7 @@
     },
     {
       "adminUserId": "scheduler",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-0b1972",
       "details": {
@@ -10521,7 +10521,7 @@
     },
     {
       "adminUserId": "autonomous-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-6aef4c",
       "details": {
@@ -10537,7 +10537,7 @@
     },
     {
       "adminUserId": "admin-v2",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-6aef4c",
       "details": {
@@ -10553,7 +10553,7 @@
     },
     {
       "adminUserId": "admin-tester",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-p1-03-1788429150621",
       "details": {
@@ -10568,7 +10568,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-9fa760",
       "details": {
@@ -10584,7 +10584,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-9fa760",
       "details": {
@@ -10600,7 +10600,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "ROLLBACK_CONTENT_DRAFT",
       "targetResource": "content_draft:draft-c60d92f1",
       "details": {
@@ -10615,7 +10615,7 @@
     },
     {
       "adminUserId": "scheduler",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-37c3d7",
       "details": {
@@ -10660,7 +10660,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-e3a74e",
       "details": {
@@ -10676,7 +10676,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-ddfb0b",
       "details": {
@@ -10692,7 +10692,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-de053e",
       "details": {
@@ -10708,7 +10708,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-0fce12",
       "details": {
@@ -10724,7 +10724,7 @@
     },
     {
       "adminUserId": "usr-admin-01",
-      "adminEmail": "admin@nihomi.com",
+      "adminEmail": "nihomibd@gmail.com",
       "action": "PUBLISH_CONTENT_DRAFT",
       "targetResource": "lesson:les-a47d50",
       "details": {
@@ -10750,7 +10750,7 @@
       "sourceLanguage": "ja",
       "targetJlptLevel": "N5",
       "uploadedBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "processingStatus": "COMPLETED",
       "extractedText": "第1課 はじめまして。わたしはマイク・ミラーです。IMCの社員です。",
       "id": "src-3797b81b",
@@ -10771,7 +10771,7 @@
       "processingStatus": "COMPLETED",
       "contentHash": "cf795b8da6c00780d3910d8eaa58167008837fddaf91543bccb44ef94d20b7c5",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-d1407cce",
       "createdAt": "2026-09-06T07:16:47.933Z",
       "updatedAt": "2026-09-06T07:17:08.759Z",
@@ -10792,7 +10792,7 @@
       "processingStatus": "COMPLETED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-e1dcf165",
       "createdAt": "2026-09-02T07:23:01.848+00:00",
       "updatedAt": "2026-09-02T07:23:13.112+00:00",
@@ -10813,7 +10813,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-303b3817",
       "createdAt": "2026-09-02T07:21:48.644+00:00",
       "updatedAt": "2026-09-02T07:21:50.058+00:00",
@@ -10834,7 +10834,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-99a838bb",
       "createdAt": "2026-09-02T07:21:05.336+00:00",
       "updatedAt": "2026-09-02T07:21:06.724+00:00",
@@ -10855,7 +10855,7 @@
       "processingStatus": "UPLOADED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-ed31292c",
       "createdAt": "2026-09-02T07:21:02.446+00:00",
       "updatedAt": "2026-09-02T07:21:02.446+00:00"
@@ -10874,7 +10874,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-444c0bf5",
       "createdAt": "2026-09-02T07:20:03.517+00:00",
       "updatedAt": "2026-09-02T07:20:04.92+00:00",
@@ -10895,7 +10895,7 @@
       "processingStatus": "UPLOADED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-d090e096",
       "createdAt": "2026-09-02T07:20:00.735+00:00",
       "updatedAt": "2026-09-02T07:20:00.736+00:00"
@@ -10914,7 +10914,7 @@
       "processingStatus": "COMPLETED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-121c00ac",
       "createdAt": "2026-09-02T07:19:27.167+00:00",
       "updatedAt": "2026-09-02T07:19:40.894+00:00",
@@ -10935,7 +10935,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-968746a9",
       "createdAt": "2026-09-02T07:19:00.964+00:00",
       "updatedAt": "2026-09-02T07:19:02.331+00:00",
@@ -10956,7 +10956,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-1fd114b6",
       "createdAt": "2026-09-02T07:17:54.047+00:00",
       "updatedAt": "2026-09-02T07:17:55.439+00:00",
@@ -10977,7 +10977,7 @@
       "processingStatus": "AI_PROCESSING",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-e8f03498",
       "createdAt": "2026-09-02T07:15:13.644+00:00",
       "updatedAt": "2026-09-02T07:15:14.982+00:00",
@@ -10998,7 +10998,7 @@
       "processingStatus": "UPLOADED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-8feeb452",
       "createdAt": "2026-09-01T20:12:44.752+00:00",
       "updatedAt": "2026-09-01T20:12:44.752+00:00"
@@ -11014,7 +11014,7 @@
       "processingStatus": "COMPLETED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-099ac52f",
       "createdAt": "2026-08-23T10:15:55.694+00:00",
       "updatedAt": "2026-08-23T10:16:05.163+00:00",
@@ -11033,7 +11033,7 @@
       "processingStatus": "FAILED",
       "contentHash": "",
       "uploadedBy": "usr-admin-01",
-      "uploadedByEmail": "admin@nihomi.com",
+      "uploadedByEmail": "nihomibd@gmail.com",
       "id": "src-e3a4896a",
       "createdAt": "2026-08-23T10:14:49.213+00:00",
       "updatedAt": "2026-08-23T10:14:49.219+00:00",
@@ -11887,7 +11887,7 @@
       },
       "createdBy": "usr-admin-01",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-08T10:00:21.751Z",
       "courseId": "course-n5",
       "id": "draft-67487f46",
@@ -12719,7 +12719,7 @@
       },
       "createdBy": "usr-admin-01",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-08T10:00:18.852Z",
       "courseId": "course-n5",
       "id": "draft-4894c5dd",
@@ -13527,7 +13527,7 @@
       },
       "createdBy": "usr-admin-01",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-08T10:00:16.573Z",
       "courseId": "course-n5",
       "id": "draft-de32d6dd",
@@ -14005,7 +14005,7 @@
       },
       "createdBy": "usr-admin-01",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-08T10:00:14.831Z",
       "courseId": "course-n5",
       "id": "draft-5fcc15bd",
@@ -14472,7 +14472,7 @@
       },
       "createdBy": "usr-admin-01",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-08T10:00:12.816Z",
       "courseId": "course-n5",
       "id": "draft-280963df",
@@ -15565,7 +15565,7 @@
       },
       "createdBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-03T09:55:30.866Z",
       "id": "draft-c60d92f1",
       "createdAt": "2026-09-03T09:55:32.332939+00:00",
@@ -16696,7 +16696,7 @@
       },
       "createdBy": "27fb8002-dbdd-4370-83d1-1d438ae9a055",
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-03T07:16:48.190Z",
       "id": "draft-e8e5f448",
       "createdAt": "2026-09-03T07:16:49.105983+00:00",
@@ -16806,7 +16806,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-03T07:07:37.158Z",
       "id": "draft-d121c517",
       "createdAt": "2026-09-03T07:07:37.334336+00:00",
@@ -16926,7 +16926,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-03T07:06:25.177Z",
       "id": "draft-42d9015b",
       "createdAt": "2026-09-03T07:06:25.178Z",
@@ -17036,7 +17036,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:43:30.792Z",
       "id": "draft-2048c51f",
       "createdAt": "2026-09-02T09:43:30.792Z",
@@ -17146,7 +17146,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:42:56.724Z",
       "id": "draft-ebdc52e5",
       "createdAt": "2026-09-02T09:42:56.724Z",
@@ -17256,7 +17256,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:41:50.106Z",
       "id": "draft-ffb2de9d",
       "createdAt": "2026-09-02T09:41:50.106Z",
@@ -17366,7 +17366,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:40:42.758Z",
       "id": "draft-4a150284",
       "createdAt": "2026-09-02T09:40:42.758Z",
@@ -17476,7 +17476,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:40:15.330Z",
       "id": "draft-cd38bbd1",
       "createdAt": "2026-09-02T09:40:15.330Z",
@@ -17601,7 +17601,7 @@
         ]
       },
       "status": "PUBLISHED",
-      "reviewedBy": "admin@nihomi.com",
+      "reviewedBy": "nihomibd@gmail.com",
       "reviewedAt": "2026-09-02T09:39:38.171Z",
       "id": "draft-d8016d09",
       "createdAt": "2026-09-02T09:39:38.172Z",
@@ -18537,7 +18537,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-08T10:00:21.751Z",
       "publishedAt": "2026-09-08T10:00:21.947Z",
@@ -19367,7 +19367,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-08T10:00:18.852Z",
       "publishedAt": "2026-09-08T10:00:19.012Z",
@@ -20173,7 +20173,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-08T10:00:16.573Z",
       "publishedAt": "2026-09-08T10:00:16.696Z",
@@ -20649,7 +20649,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-08T10:00:14.831Z",
       "publishedAt": "2026-09-08T10:00:14.941Z",
@@ -21114,7 +21114,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-08T10:00:12.816Z",
       "publishedAt": "2026-09-08T10:00:13.092Z",
@@ -22294,7 +22294,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "4fad8724cac726f5dd3ec0c1ecb936b86da244188f43e3a125146372373b003b",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T09:55:30.932+00:00",
       "publishedAt": "2026-09-03T09:55:30.932+00:00",
@@ -22403,7 +22403,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "c61f4300b04091b8c29e81337e9d530b4aad3680a0b981aeb337f8f1633c95da",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T09:55:30.889+00:00",
       "publishedAt": "2026-09-03T09:55:30.889+00:00",
@@ -24492,7 +24492,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "4fad8724cac726f5dd3ec0c1ecb936b86da244188f43e3a125146372373b003b",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:16:48.222+00:00",
       "publishedAt": "2026-09-03T07:16:48.222+00:00",
@@ -24601,7 +24601,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "c61f4300b04091b8c29e81337e9d530b4aad3680a0b981aeb337f8f1633c95da",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:16:48.201+00:00",
       "publishedAt": "2026-09-03T07:16:48.201+00:00",
@@ -24847,7 +24847,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:07:37.189+00:00",
       "publishedAt": "2026-09-03T07:07:37.189+00:00",
@@ -24962,7 +24962,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:07:37.169+00:00",
       "publishedAt": "2026-09-03T07:07:37.169+00:00",
@@ -25208,7 +25208,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:06:25.204+00:00",
       "publishedAt": "2026-09-03T07:06:25.204+00:00",
@@ -25323,7 +25323,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-03T07:06:25.187+00:00",
       "publishedAt": "2026-09-03T07:06:25.187+00:00",
@@ -25569,7 +25569,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:43:30.816+00:00",
       "publishedAt": "2026-09-02T09:43:30.816+00:00",
@@ -25684,7 +25684,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:43:30.8+00:00",
       "publishedAt": "2026-09-02T09:43:30.8+00:00",
@@ -25930,7 +25930,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:42:56.752+00:00",
       "publishedAt": "2026-09-02T09:42:56.752+00:00",
@@ -26045,7 +26045,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:42:56.735+00:00",
       "publishedAt": "2026-09-02T09:42:56.735+00:00",
@@ -26291,7 +26291,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:41:50.128+00:00",
       "publishedAt": "2026-09-02T09:41:50.128+00:00",
@@ -26406,7 +26406,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:41:50.114+00:00",
       "publishedAt": "2026-09-02T09:41:50.114+00:00",
@@ -26652,7 +26652,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:40:42.781+00:00",
       "publishedAt": "2026-09-02T09:40:42.781+00:00",
@@ -26767,7 +26767,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:40:42.767+00:00",
       "publishedAt": "2026-09-02T09:40:42.767+00:00",
@@ -27013,7 +27013,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 2",
       "checksumSha256": "2f1083bca0a62f276ff413ce0b5c8710e802a7cb87d0afe995697dc4184e38ea",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:40:15.330Z",
       "publishedAt": "2026-09-02T09:40:15.349Z",
@@ -27128,7 +27128,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:40:15.330Z",
       "publishedAt": "2026-09-02T09:40:15.337Z",
@@ -27243,7 +27243,7 @@
       "targetCourseId": "course-n5",
       "changelogSummary": "Published version 1",
       "checksumSha256": "a43b5bb3483ba4ec9a774428efa51caae66ffda8aed5555f3043e143e1b9aa76",
-      "approvedBy": "admin@nihomi.com",
+      "approvedBy": "nihomibd@gmail.com",
       "publishedBy": "usr-admin-01",
       "approvedAt": "2026-09-02T09:39:38.171Z",
       "publishedAt": "2026-09-02T09:39:38.179Z",
@@ -34603,7 +34603,7 @@
       "japaneseEraBirth": "平成12年10月1日",
       "age": 25,
       "phone": "080-1234-5678",
-      "email": "tanvir.nihomi@example.com",
+      "email": "nihomibd@gmail.com",
       "postalCode": "169-0075",
       "currentAddress": "東京都新宿区高田馬場 2-14-8 メゾン早稲田 302号室",
       "currentAddressKana": "トウキョウトシンジュククタカダノババ 2-14-8 メゾンワセダ 302ゴウシツ",
@@ -222137,7 +222137,7 @@
           "processingStatus": "COMPLETED",
           "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
           "uploadedBy": "usr-admin-01",
-          "uploadedByEmail": "admin@nihomi.com",
+          "uploadedByEmail": "nihomibd@gmail.com",
           "id": "src-e1dcf165",
           "createdAt": "2026-09-02T07:23:01.848Z",
           "updatedAt": "2026-09-02T07:23:13.112Z",
@@ -222660,7 +222660,7 @@
           "processingStatus": "COMPLETED",
           "contentHash": "c71d0d92e29415e5051b267255a1419f390d7ddf5d6d745003903cd69245f460",
           "uploadedBy": "usr-admin-01",
-          "uploadedByEmail": "admin@nihomi.com",
+          "uploadedByEmail": "nihomibd@gmail.com",
           "id": "src-121c00ac",
           "createdAt": "2026-09-02T07:19:27.167Z",
           "updatedAt": "2026-09-02T07:19:40.894Z",

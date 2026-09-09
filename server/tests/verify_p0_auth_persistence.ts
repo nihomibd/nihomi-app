@@ -23,7 +23,7 @@ async function runAuditTests() {
   // TEST 1: Stateless JWT generation and structure
   const testStudent: User = {
     id: 'usr-test-student-99',
-    email: 'test.student@nihomi.com',
+    email: 'nihomibd@gmail.com',
     passwordHash: 'hash',
     passwordSalt: 'salt',
     role: 'user',
@@ -82,7 +82,7 @@ async function runAuditTests() {
   // TEST 9: Admin Role Gate Protection
   const adminUser: User = {
     id: 'usr-test-admin-99',
-    email: 'admin.verify@nihomi.com',
+    email: 'nihomibd@gmail.com',
     passwordHash: 'hash',
     passwordSalt: 'salt',
     role: 'admin',

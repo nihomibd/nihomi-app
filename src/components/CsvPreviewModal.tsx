@@ -64,7 +64,7 @@ export const CsvPreviewModal: React.FC<CsvPreviewModalProps> = ({
       '004928192-0101',
       mushakRef,
       inv.customerName || 'Nihomi Student',
-      inv.customerEmail || 'student@nihomi.com'
+      inv.customerEmail || 'nihomibd@gmail.com'
     ];
   });
 
