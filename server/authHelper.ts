@@ -210,7 +210,7 @@ export function getUserFromToken(token?: string): User | null {
 }
 
 export interface AuthenticatedRequest extends Request {
-  user?: User;
+  user?: any;
   file?: Express.Multer.File | any;
   files?: Express.Multer.File[] | any;
 }
