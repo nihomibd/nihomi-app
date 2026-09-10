@@ -73,7 +73,14 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  self.clients.claim();
+  self.clients.claim().then(() => {
+    // Notify all open window clients that Nihomi offline cache is armed
+    self.clients.matchAll({ type: 'window' }).then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({ type: 'NIHOMI_CACHE_READY', version: CURRENT_CACHE_NAME });
+      });
+    });
+  });
 });
 
 // 3. Push & Notification Click Handler

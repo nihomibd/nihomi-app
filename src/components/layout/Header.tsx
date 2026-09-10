@@ -12,7 +12,9 @@ import {
   Laptop,
   BookOpen,
   Trophy,
-  Check
+  Check,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme, AppTheme } from '../../context/ThemeContext';
@@ -81,6 +83,39 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Service Worker Offline Readiness Detection
+  const [isOfflineReady, setIsOfflineReady] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Check if Service Worker is active and cache exists
+    const checkOfflineReadiness = async () => {
+      try {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          const cacheKeys = await caches.keys();
+          const hasNihomiCache = cacheKeys.some((key) => key.startsWith('nihomi-pwa-cache-'));
+          if (hasNihomiCache) {
+            setIsOfflineReady(true);
+          }
+        }
+      } catch (err) {
+        // Non-fatal
+      }
+    };
+
+    checkOfflineReadiness();
+
+    // Re-check when controller changes or on activation message
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', checkOfflineReadiness);
+      navigator.serviceWorker.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'NIHOMI_CACHE_READY') {
+          setIsOfflineReady(true);
+        }
+      });
+    }
+  }, []);
+
   const ActiveThemeIcon = theme === 'system' ? Laptop : theme === 'dark' ? Moon : theme === 'sepia' ? BookOpen : Sun;
 
   return (
@@ -126,6 +161,19 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
           {/* RIGHT CONTROLS: THEME SWITCHER + GOOGLE AVATAR PILL */}
           <div className="hidden md:flex items-center space-x-2.5">
+            {/* OFFLINE READY INDICATOR (PWA Cache Confirmation) */}
+            {isOfflineReady && (
+              <div
+                id="header-offline-ready-badge"
+                className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold shadow-2xs animate-in fade-in"
+                title="Service Worker Cached: Lessons, Kanji & Flashcards available offline without internet"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <Wifi className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="whitespace-nowrap">Offline Ready</span>
+              </div>
+            )}
+
             {/* PERSISTENT UI THEME TOGGLE (System / Light / Dark / Sepia) */}
             <div className="relative" ref={themeDropdownRef}>
               <button
@@ -303,7 +351,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
           </div>
 
           {/* MOBILE TOGGLE */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="md:hidden flex items-center space-x-1.5">
+            {/* Mobile Offline Ready Indicator */}
+            {isOfflineReady && (
+              <div
+                className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                title="Offline Ready: Cached"
+              >
+                <Wifi className="w-3.5 h-3.5" />
+              </div>
+            )}
+
             {/* Quick theme cycle for mobile */}
             <button
               onClick={() => {

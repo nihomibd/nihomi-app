@@ -42,6 +42,22 @@
       "sizes": "any"
     }
   ],
+  "screenshots": [
+    {
+      "src": "/assets/og-nihomi-launch.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "NIHOMI — AI Japanese Learning Platform & JLPT N5 Master Deck"
+    },
+    {
+      "src": "/assets/og-nihomi-banner.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NIHOMI — Minna no Nihongo Interactive Curriculum & 24/7 AI Sensei"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Curriculum Lessons",
