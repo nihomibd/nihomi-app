@@ -312,3 +312,22 @@ export function trackNihomiEvent<T extends NihomiEventType>(
   // 2. Internal telemetry dispatch
   sendInternalTelemetry(eventType, cleanPayload);
 }
+
+/**
+ * PWA Install Event Tracking
+ */
+export function trackPwaInstallPrompt(source: string = 'web'): void {
+  dispatchToGA4('pwa_install_prompt_shown', { prompt_source: source });
+  dispatchToMeta('trackCustom', 'PWAInstallPromptShown', { prompt_source: source });
+}
+
+export function trackPwaInstallAccepted(platform: string = 'android'): void {
+  dispatchToGA4('pwa_install_accepted', { platform });
+  dispatchToMeta('trackCustom', 'PWAInstallAccepted', { platform });
+}
+
+export function trackPwaInstallDismissed(reason: string = 'user_cancelled'): void {
+  dispatchToGA4('pwa_install_dismissed', { reason });
+  dispatchToMeta('trackCustom', 'PWAInstallDismissed', { reason });
+}
+

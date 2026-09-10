@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Download,
   X,
@@ -8,6 +8,7 @@ import {
   PlusSquare,
   Sparkles
 } from 'lucide-react';
+import { trackPwaInstallPrompt, trackPwaInstallAccepted, trackPwaInstallDismissed } from '../../utils/analytics';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -46,11 +47,11 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({ delayMs = 15000 }) => {
       (typeof navigator !== 'undefined' && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     setIsIOS(isIOSDevice);
 
-    // 3. Check dismissal memory (3 days cooling period)
+    // 3. Check dismissal memory (7 days cooling period)
     const dismissedTimestamp = localStorage.getItem('nihomi_pwa_install_dismissed_at');
     if (dismissedTimestamp) {
       const daysSinceDismiss = (Date.now() - parseInt(dismissedTimestamp, 10)) / (1000 * 60 * 60 * 24);
-      if (daysSinceDismiss < 3) {
+      if (daysSinceDismiss < 7) {
         setIsDismissed(true);
       }
     }
@@ -90,10 +91,20 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({ delayMs = 15000 }) => {
     };
   }, [delayMs]);
 
+  // Track when prompt becomes visible to user
+  const hasLoggedShown = useRef(false);
+  useEffect(() => {
+    if (!isInstalled && !isDismissed && isTimeTriggered && !hasLoggedShown.current) {
+      hasLoggedShown.current = true;
+      trackPwaInstallPrompt(isIOS ? 'ios_safari' : deferredPrompt ? 'android_chrome' : 'generic_web');
+    }
+  }, [isInstalled, isDismissed, isTimeTriggered, isIOS, deferredPrompt]);
+
   const handleInstallClick = async () => {
     // If on iOS or no beforeinstallprompt, show the 2-step iOS/Safari instructions
     if (isIOS || !deferredPrompt) {
       setShowIosGuide(true);
+      trackPwaInstallPrompt('ios_safari_guide_opened');
       return;
     }
 
@@ -104,6 +115,9 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({ delayMs = 15000 }) => {
       const choiceResult = await deferredPrompt.userChoice;
       if (choiceResult.outcome === 'accepted') {
         setIsInstalled(true);
+        trackPwaInstallAccepted('android_chrome');
+      } else {
+        trackPwaInstallDismissed('browser_dialog_cancelled');
       }
     } catch (err) {
       console.warn('PWA install prompt error:', err);
@@ -116,6 +130,7 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({ delayMs = 15000 }) => {
   const handleDismiss = () => {
     setIsDismissed(true);
     localStorage.setItem('nihomi_pwa_install_dismissed_at', Date.now().toString());
+    trackPwaInstallDismissed(showIosGuide ? 'ios_guide_dismissed' : 'banner_later_button');
   };
 
   // Do not show if already installed, dismissed, or 15s timer has not elapsed yet
