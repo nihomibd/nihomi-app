@@ -40,15 +40,27 @@ function playFallbackAudio(
       activeFallbackAudio = null;
     }
 
+    // Check if network is offline on mobile to prevent failed fetch stalls
+    if (typeof navigator !== 'undefined' && 'onLine' in navigator && !navigator.onLine) {
+      activeFallbackAudio = null;
+      options?.onError?.();
+      return;
+    }
+
     // Google Translate low-latency lightweight Japanese audio stream
     const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encodeURIComponent(
       cleanText
     )}`;
 
-    const audio = new Audio(audioUrl);
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = audioUrl;
     activeFallbackAudio = audio;
+
     if (options?.rate && options.rate !== 1.0) {
-      audio.playbackRate = options.rate;
+      try {
+        audio.playbackRate = options.rate;
+      } catch {}
     }
 
     audio.onended = () => {
@@ -57,21 +69,23 @@ function playFallbackAudio(
     };
 
     audio.onerror = (e) => {
-      console.warn('[TTS] Audio stream fallback error:', e);
+      console.warn('[TTS] Audio stream fallback error caught cleanly:', e);
       activeFallbackAudio = null;
       options?.onError?.();
     };
 
     const playPromise = audio.play();
-    if (playPromise !== undefined) {
+    if (playPromise !== undefined && typeof playPromise.catch === 'function') {
       playPromise.catch((err) => {
-        console.warn('[TTS] Audio play promise failed:', err);
+        // Defensively suppress unhandled promise rejection (e.g. AbortError or NotAllowedError)
+        console.warn('[TTS] Audio play promise handled cleanly without freezing UI:', err);
         activeFallbackAudio = null;
         options?.onError?.();
       });
     }
   } catch (err) {
-    console.warn('[TTS] Fallback audio exception:', err);
+    console.warn('[TTS] Fallback audio exception handled cleanly:', err);
+    activeFallbackAudio = null;
     options?.onError?.();
   }
 }
@@ -167,6 +181,12 @@ export function speakJapanese(
     setTimeout(() => {
       if (activeUtterances.has(utterance)) {
         activeUtterances.delete(utterance);
+        if (!completed) {
+          completed = true;
+          try {
+            options?.onEnd?.();
+          } catch {}
+        }
       }
     }, estimatedDurationMs + 4000);
   } catch (err) {

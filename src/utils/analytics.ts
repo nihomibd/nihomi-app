@@ -23,7 +23,10 @@ export type NihomiEventType =
   | 'first_lesson_completed'
   | 'first_quiz_completed'
   | 'subscription_checkout_started'
-  | 'payment_success';
+  | 'payment_success'
+  | 'scorecard_shared_facebook'
+  | 'scorecard_shared_whatsapp'
+  | 'scorecard_link_copied';
 
 export interface LandingPageViewPayload {
   pagePath?: string;
@@ -87,6 +90,16 @@ export interface PaymentSuccessPayload {
   currency?: string;
 }
 
+export interface ScorecardSharedPayload {
+  score: number;
+  grade?: string;
+  studentName?: string;
+}
+
+export interface ScorecardLinkCopiedPayload {
+  score?: number;
+}
+
 export type EventPayloadMap = {
   landing_page_view: LandingPageViewPayload;
   signup_started: SignupStartedPayload;
@@ -96,6 +109,9 @@ export type EventPayloadMap = {
   first_quiz_completed: FirstQuizCompletedPayload;
   subscription_checkout_started: SubscriptionCheckoutStartedPayload;
   payment_success: PaymentSuccessPayload;
+  scorecard_shared_facebook: ScorecardSharedPayload;
+  scorecard_shared_whatsapp: ScorecardSharedPayload;
+  scorecard_link_copied: ScorecardLinkCopiedPayload;
 };
 
 /**

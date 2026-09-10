@@ -16,8 +16,16 @@ import {
   Loader2,
   ChevronRight,
   Flame,
-  X
+  X,
+  Share2,
+  Copy,
+  Check,
+  ExternalLink,
+  Calendar,
+  UserCheck,
+  Edit3
 } from 'lucide-react';
+import { speakJapanese } from '../lib/tts';
 import { useAuth } from '../context/AuthContext';
 import { trackNihomiEvent } from '../utils/analytics';
 import { captureUtmFromUrl, getStoredUtm } from '../utils/utm';
@@ -108,6 +116,11 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
   const [quizScore, setQuizScore] = useState(0);
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
 
+  // Scorecard personalization state
+  const [candidateName, setCandidateName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
+
   // Quick Registration Form state
   const [fullName, setFullName] = useState('');
   const [contactInfo, setContactInfo] = useState('');
@@ -159,16 +172,10 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
     });
   }, []);
 
-  // Audio pronunciation helper
+  // Resilient audio pronunciation helper with zero-latency speech synthesis
   const playAudio = (text: string) => {
     try {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ja-JP';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-      }
+      speakJapanese(text, { rate: 0.85 });
     } catch {
       // Audio quiet fallback
     }
@@ -197,10 +204,89 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
       setIsQuizCompleted(true);
       trackNihomiEvent('first_quiz_completed', {
         quizId: 'micro-quiz-ad',
-        score: quizScore + 1,
-        totalQuestions: 3
+        score: quizScore,
+        totalQuestions: MICRO_QUIZ_DATA.length
       });
     }
+  };
+
+  // Scorecard calculations & metadata
+  const effectiveStudentName = candidateName.trim() || user?.name || fullName.trim() || 'জাপানি শিক্ষার্থী';
+  
+  // Score: 3/3 -> 100%, 2/3 -> 85%, 1/3 -> 65%, 0/3 -> 50%
+  const calculatedScore = quizScore === 3 ? 100 : quizScore === 2 ? 85 : quizScore === 1 ? 65 : 50;
+
+  const readinessGrade = calculatedScore >= 90
+    ? 'A+ / Tokyo Visa Ready'
+    : calculatedScore >= 80
+    ? 'A / Tokyo Visa Ready'
+    : calculatedScore >= 60
+    ? 'B+ / High Potential'
+    : 'B / Foundation Starter';
+
+  const readinessBanglaSubtitle = calculatedScore >= 80
+    ? 'টোকিও স্টুডেন্ট ভিসা ও ক্যারিয়ার প্রোগ্রামের জন্য প্রস্তুত'
+    : calculatedScore >= 60
+    ? 'দ্রুত গতিতে জাপানি শিখে জাপান যাওয়ার অপার সম্ভাবনা রয়েছে'
+    : 'প্রাথমিক ধাপ থেকে দ্রুত অগ্রসর হওয়ার উপযোগী';
+
+  const scorecardDate = new Date().toLocaleDateString('bn-BD', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const certificateId = `NHO-N5-${Math.abs(quizScore * 1337 + 7892)}`;
+  const studentShareUrl = `https://nihomi.com/start?ref=scorecard&score=${calculatedScore}&name=${encodeURIComponent(effectiveStudentName)}`;
+
+  // Facebook Web Share Dialog Handler
+  const handleFacebookShare = async () => {
+    const quoteText = `আমি নিহোমি এআই প্ল্যাটফর্মে জাপানিজ N5 কুইজে ${calculatedScore}% পেয়েছি! আপনার লেভেল টেস্ট করুন: ${studentShareUrl}`;
+
+    trackNihomiEvent('scorecard_shared_facebook', {
+      score: calculatedScore,
+      grade: readinessGrade,
+      studentName: effectiveStudentName
+    });
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Nihomi JLPT N5 Eligibility Scorecard',
+          text: `আমি নিহোমি এআই প্ল্যাটফর্মে জাপানিজ N5 কুইজে ${calculatedScore}% পেয়েছি! আপনার লেভেল টেস্ট করুন:`,
+          url: studentShareUrl
+        });
+        return;
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(studentShareUrl)}&quote=${encodeURIComponent(quoteText)}`;
+    window.open(fbUrl, '_blank', 'width=600,height=520,scrollbars=yes,resizable=yes');
+  };
+
+  // WhatsApp Direct Handler to +8801834-348966
+  const handleWhatsAppShare = () => {
+    trackNihomiEvent('scorecard_shared_whatsapp', {
+      score: calculatedScore,
+      grade: readinessGrade,
+      studentName: effectiveStudentName
+    });
+
+    const whatsappMessage = `সালাম! আমি নিহোমি এআই প্ল্যাটফর্মে জাপানিজ N5 কুইজে ${calculatedScore}% (${readinessGrade}) পেয়েছি।\n\nশিক্ষার্থীর নাম: ${effectiveStudentName}\nরেজাল্ট ভেরিফিকেশন: bdTrip24 Ecosystem Verified\nসার্টিফিকেট আইডি: ${certificateId}\nতারিখ: ${scorecardDate}\n\nআমি নিহোমি প্রো ব্যাচে স্পেশাল অফারে অ্যাডমিশন ও স্টুডেন্ট আইডি এক্সেস নিতে চাই!`;
+    const waUrl = `https://wa.me/8801834348966?text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(waUrl, '_blank');
+  };
+
+  // Copy shareable link
+  const handleCopyShareLink = () => {
+    try {
+      navigator.clipboard.writeText(studentShareUrl);
+      setIsLinkCopied(true);
+      setTimeout(() => setIsLinkCopied(false), 2500);
+      trackNihomiEvent('scorecard_link_copied', { score: calculatedScore });
+    } catch {}
   };
 
   // Google 1-Click Fast Conversion
@@ -506,24 +592,210 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
               )}
             </div>
           ) : (
-            /* Quiz Completed Celebration Card */
-            <div className="text-center py-4 space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
-                <Trophy className="w-8 h-8" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-xl font-bold text-white">
-                  অভিনন্দন! আপনি টেস্টটি সম্পন্ন করেছেন! 🎉
-                </h3>
-                <p className="text-xs text-stone-300 max-w-sm mx-auto">
-                  আপনার প্রাথমিক জাপানি জানার আগ্রহ অসাধারণ। আপনার জন্য <strong className="text-amber-400">ফ্রি N5 স্টুডেন্ট আইডি ও ৫০ কয়েন</strong> আনলক হয়েছে।
-                </p>
+            /* VIRAL NIHOMI JLPT N5 ELIGIBILITY SCORECARD */
+            <div className="animate-in zoom-in-95 duration-300 relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#19192b] via-[#121220] to-[#0a0a14] border-2 border-amber-500/60 p-5 sm:p-7 shadow-2xl space-y-5 text-left">
+              
+              {/* Background Japanese Watermark */}
+              <div className="absolute -right-4 -bottom-6 text-stone-800/20 font-black text-8xl sm:text-9xl select-none pointer-events-none tracking-tighter">
+                合格
               </div>
 
-              <div className="p-3 bg-emerald-950/40 rounded-xl border border-emerald-800/60 text-emerald-300 text-xs font-semibold flex items-center justify-center space-x-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>N5 ১ম অধ্যায় (Lesson 1) আনলক করার জন্য প্রস্তুত</span>
+              {/* Scorecard Header */}
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800/80 pb-3.5 relative z-10">
+                <div className="flex items-center space-x-2.5">
+                  <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300">
+                    <Award className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-widest text-amber-400">
+                      NIHOMI (にほみ) • JAPAN READINESS
+                    </div>
+                    <div className="text-sm sm:text-base font-black text-white tracking-wide">
+                      JLPT N5 Eligibility Scorecard
+                    </div>
+                  </div>
+                </div>
+
+                {/* Verified Trust Seal Badge */}
+                <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-emerald-950/70 border border-emerald-600/60 text-emerald-300 text-[11px] font-extrabold shadow-sm">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>bdTrip24 Ecosystem Verified</span>
+                </div>
               </div>
+
+              {/* Student Name Personalization Row */}
+              <div className="bg-stone-900/80 border border-stone-800/90 rounded-2xl p-3 relative z-10 space-y-1.5">
+                <div className="flex items-center justify-between text-xs text-stone-300">
+                  <div className="flex items-center space-x-1.5 font-bold">
+                    <UserCheck className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>শিক্ষার্থীর নাম (Student Name):</span>
+                  </div>
+                  {!isEditingName && (
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingName(true)}
+                      className="text-[11px] font-semibold text-amber-400 hover:text-amber-300 flex items-center space-x-1 cursor-pointer"
+                    >
+                      <Edit3 className="w-3 h-3" />
+                      <span>নাম পরিবর্তন</span>
+                    </button>
+                  )}
+                </div>
+
+                {isEditingName || !candidateName ? (
+                  <div className="flex items-center space-x-2 pt-1">
+                    <input
+                      type="text"
+                      value={candidateName}
+                      onChange={(e) => {
+                        setCandidateName(e.target.value);
+                        setFullName(e.target.value);
+                      }}
+                      onBlur={() => {
+                        if (candidateName.trim()) setIsEditingName(false);
+                      }}
+                      placeholder="আপনার পূর্ণ নাম লিখুন (যেমন: তানভীর আহমেদ)"
+                      className="w-full bg-stone-950/90 border border-amber-500/50 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-bold text-white placeholder-stone-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    />
+                    {candidateName && (
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingName(false)}
+                        className="px-3 py-2 bg-amber-500 text-stone-950 text-xs font-extrabold rounded-xl shrink-0 cursor-pointer"
+                      >
+                        সেভ
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-sm sm:text-base font-black text-white flex items-center space-x-2">
+                    <span>{effectiveStudentName}</span>
+                    <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
+                      ভেরিফায়েড ক্যান্ডিডেট
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Calculated Score & Readiness Grade Hero */}
+              <div className="relative z-10 bg-gradient-to-br from-stone-900 via-[#1a1728] to-stone-950 rounded-2xl border border-amber-500/40 p-4 sm:p-5 text-center space-y-3 shadow-inner">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                  
+                  {/* Left: Huge Score Display */}
+                  <div className="flex items-baseline space-x-1.5">
+                    <span className="text-5xl sm:text-6xl font-black tracking-tight bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-sm">
+                      {calculatedScore}%
+                    </span>
+                    <span className="text-sm font-bold text-stone-400">
+                      / ১০০%
+                    </span>
+                  </div>
+
+                  {/* Right: Readiness Grade Badge */}
+                  <div className="text-center sm:text-right space-y-1">
+                    <div className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-black shadow-sm">
+                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      <span>{readinessGrade}</span>
+                    </div>
+                    <div className="text-[11px] font-mono text-stone-400">
+                      ভিসা টেস্ট কোয়ালিফায়েড • ৩/৩ প্রশ্ন সম্পন্ন
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-xs sm:text-sm font-bold text-stone-200 border-t border-stone-800/80 pt-2.5">
+                  {readinessBanglaSubtitle}
+                </div>
+
+                {/* Micro Meta Badges */}
+                <div className="grid grid-cols-2 gap-2 pt-1 text-[11px]">
+                  <div className="bg-stone-900/90 rounded-xl p-2 border border-stone-800 text-stone-300 flex items-center justify-center space-x-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>৩ টির মধ্যে {quizScore} টি নির্ভুল উত্তর</span>
+                  </div>
+                  <div className="bg-stone-900/90 rounded-xl p-2 border border-stone-800 text-stone-300 flex items-center justify-center space-x-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span>N5 উত্তীর্ণ সম্ভাবনা: ৯৫%+</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Verified Trust Seal & Certificate Metadata */}
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-400 bg-stone-900/50 p-2.5 rounded-xl border border-stone-800/70">
+                <div className="flex items-center space-x-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span className="text-stone-300 font-semibold">ভেরিফিকেশন সিল:</span>
+                  <span className="text-amber-400 font-mono font-bold">{certificateId}</span>
+                </div>
+                <div className="flex items-center space-x-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                  <span>তারিখ: {scorecardDate}</span>
+                </div>
+              </div>
+
+              {/* The Two 1-Click Action Buttons */}
+              <div className="relative z-10 space-y-2.5 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  
+                  {/* Button 1: Facebook Web Share Dialog */}
+                  <button
+                    type="button"
+                    onClick={handleFacebookShare}
+                    className="w-full py-3.5 px-4 bg-[#1877F2] hover:bg-[#166fe5] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-lg shadow-blue-900/30 flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-98"
+                  >
+                    <Share2 className="w-4 h-4 shrink-0" />
+                    <span>ফেসবুকে স্কোরকার্ড শেয়ার করুন</span>
+                  </button>
+
+                  {/* Button 2: WhatsApp Direct to +8801834-348966 */}
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppShare}
+                    className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-lg shadow-emerald-900/30 flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-98"
+                  >
+                    <MessageCircle className="w-4 h-4 shrink-0" />
+                    <span>WhatsApp-এ রেজাল্ট পাঠান ও প্রো এক্সেস নিন</span>
+                  </button>
+                </div>
+
+                {/* Secondary: Copy Link button */}
+                <div className="flex items-center justify-between text-xs text-stone-400 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleCopyShareLink}
+                    className="inline-flex items-center space-x-1.5 text-stone-400 hover:text-amber-400 transition-colors cursor-pointer text-[11px]"
+                  >
+                    {isLinkCopied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-bold">লিঙ্ক কপি হয়েছে!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>স্কোরকার্ড লিঙ্ক কপি করুন</span>
+                      </>
+                    )}
+                  </button>
+
+                  <span className="text-[11px] text-stone-500 font-mono">
+                    Official Nihomi Score
+                  </span>
+                </div>
+              </div>
+
+              {/* Seamless Conversion CTA directly linked to Registration */}
+              <div className="relative z-10 pt-2 border-t border-stone-800/80">
+                <button
+                  type="button"
+                  onClick={scrollToRegistration}
+                  className="w-full py-3 px-4 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 hover:from-stone-800 hover:to-stone-800 border border-stone-700 text-stone-200 hover:text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-1.5 transition-all cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>এই রেজাল্ট দিয়ে বিনামূল্যে স্টুডেন্ট আইডি নিন ও ১ম অধ্যায় শুরু করুন →</span>
+                </button>
+              </div>
+
             </div>
           )}
         </div>

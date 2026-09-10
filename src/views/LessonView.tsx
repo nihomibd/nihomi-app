@@ -325,21 +325,29 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
     const currentVocab = vocabList[currentWordIndex];
 
     if (currentVocab) {
-      speakJapanese(currentVocab.japanese, {
-        rate: playbackSpeed,
-        onEnd: () => {
-          listenTimerRef.current = setTimeout(() => {
-            if (currentWordIndex + 1 < vocabList.length) {
-              setCurrentWordIndex((idx) => idx + 1);
-            } else if (isLooping) {
-              setCurrentWordIndex(0);
-            } else {
-              setIsListenOnlyActive(false);
-              setCurrentWordIndex(0);
-            }
-          }, 1800);
-        }
-      });
+      const advanceSequence = () => {
+        listenTimerRef.current = setTimeout(() => {
+          if (currentWordIndex + 1 < vocabList.length) {
+            setCurrentWordIndex((idx) => idx + 1);
+          } else if (isLooping) {
+            setCurrentWordIndex(0);
+          } else {
+            setIsListenOnlyActive(false);
+            setCurrentWordIndex(0);
+          }
+        }, 1800);
+      };
+
+      try {
+        speakJapanese(currentVocab.japanese, {
+          rate: playbackSpeed,
+          onEnd: advanceSequence,
+          onError: advanceSequence
+        });
+      } catch (err) {
+        console.warn('[LessonAudio] Audio playback exception safely bypassed:', err);
+        advanceSequence();
+      }
     }
 
     return () => {
