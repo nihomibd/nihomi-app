@@ -43,4 +43,32 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.pgPool = pool;
 }
 
+/**
+ * Detects whether an error is a database connection timeout or pool failure.
+ */
+export function isPrismaConnectionError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const err = error as Record<string, any>;
+
+  // Check Prisma error codes
+  // P1001: Can't reach database server
+  // P1002: The database server was reached but timed out
+  // P1008: Operations timed out
+  // P1017: Server has closed the connection
+  if (err.code && ['P1001', 'P1002', 'P1008', 'P1017'].includes(err.code)) {
+    return true;
+  }
+
+  const message = String(err.message || '').toLowerCase();
+  return (
+    message.includes('timeout') ||
+    message.includes('connection refused') ||
+    message.includes('terminating connection') ||
+    message.includes('closed the connection') ||
+    message.includes('etimedout') ||
+    message.includes('econnrefused') ||
+    message.includes('econnreset')
+  );
+}
+
 export default prisma;

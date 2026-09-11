@@ -968,6 +968,73 @@ class Database {
     }
   }
 
+  public async syncLessonProgressToSupabase(
+    userId: string,
+    lessonId: string,
+    progress: UserProgress,
+    isCompleted = true,
+    studyMinutes = 15
+  ): Promise<void> {
+    if (!this.supabaseClient) return;
+    try {
+      await this.supabaseClient.from('lesson_progress').upsert({
+        user_id: userId,
+        lesson_id: lessonId,
+        status: isCompleted ? 'COMPLETED' : 'IN_PROGRESS',
+        progress_percent: isCompleted ? 100 : 50,
+        time_spent_seconds: Math.round(studyMinutes * 60),
+        completed_at: isCompleted ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,lesson_id' });
+
+      await this.supabaseClient.from('learning_progress').upsert({
+        user_id: userId,
+        current_jlpt_level: (progress.currentLevel || 'N5') as any,
+        total_xp: progress.experiencePoints || 0,
+        current_streak_days: progress.currentStreak || 0,
+        longest_streak_days: progress.longestStreak || 0,
+        last_study_date: progress.lastActiveDate ? new Date(progress.lastActiveDate).toISOString() : new Date().toISOString(),
+        total_study_minutes: progress.totalStudyMinutes || 0,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+    } catch (err) {
+      // Gracefully handle network/schema warnings in local offline dev
+    }
+  }
+
+  public async syncQuizAttemptToSupabase(attempt: QuizAttempt, progress?: UserProgress): Promise<void> {
+    if (!this.supabaseClient) return;
+    try {
+      await this.supabaseClient.from('quiz_attempts').insert({
+        user_id: attempt.userId,
+        quiz_id: attempt.quizId,
+        score: attempt.score,
+        total_questions: attempt.totalQuestions,
+        correct_answers: attempt.correctCount,
+        passed: attempt.passed,
+        time_spent_seconds: 60,
+        answers_json: attempt.answers || [],
+        status: 'COMPLETED',
+        completed_at: attempt.createdAt || new Date().toISOString()
+      });
+
+      if (progress) {
+        await this.supabaseClient.from('learning_progress').upsert({
+          user_id: attempt.userId,
+          current_jlpt_level: (progress.currentLevel || 'N5') as any,
+          total_xp: progress.experiencePoints || 0,
+          current_streak_days: progress.currentStreak || 0,
+          longest_streak_days: progress.longestStreak || 0,
+          last_study_date: new Date().toISOString(),
+          total_study_minutes: progress.totalStudyMinutes || 0,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+      }
+    } catch (err) {
+      // Gracefully handle network/schema warnings in local offline dev
+    }
+  }
+
   public async syncAllEntitiesToSupabase(): Promise<void> {
     if (!this.supabaseClient) return;
     try {
@@ -1711,6 +1778,7 @@ class Database {
 
     p.updatedAt = new Date().toISOString();
     this.save();
+    this.syncLessonProgressToSupabase(userId, lessonId, p, true, studyMinutes).catch(() => {});
     return p;
   }
 
@@ -1745,6 +1813,10 @@ class Database {
     }
     p.updatedAt = new Date().toISOString();
     this.save();
+    const user = this.findUserById(userId);
+    if (user) {
+      this.syncUserToSupabase(user, this.getProfile(userId), p).catch(() => {});
+    }
     return p;
   }
 
@@ -1758,6 +1830,7 @@ class Database {
       p.currentLevel = lesson.level;
       p.updatedAt = new Date().toISOString();
       this.save();
+      this.syncLessonProgressToSupabase(userId, lessonId, p, false, 0).catch(() => {});
     }
     return p;
   }
@@ -1911,6 +1984,7 @@ class Database {
     progress.updatedAt = new Date().toISOString();
 
     this.save();
+    this.syncQuizAttemptToSupabase(attempt, progress).catch(() => {});
     return { attempt, quiz };
   }
 
