@@ -96,7 +96,7 @@ export const App: React.FC = () => {
 
       if (path === '/start' || path === '/campaign' || path === '/ad') {
         setCurrentView('start');
-      } else if (path === '/courses' || path === '/curriculum') {
+      } else if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
         setCurrentView('courses');
       } else if (path === '/portal' || path === '/dashboard') {
         setCurrentView('portal');
@@ -133,7 +133,7 @@ export const App: React.FC = () => {
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase();
       if (path === '/start' || path === '/campaign') setCurrentView('start');
-      else if (path === '/courses' || path === '/curriculum') setCurrentView('courses');
+      else if (path === '/courses' || path === '/curriculum' || path === '/pathways') setCurrentView('courses');
       else if (path === '/portal' || path === '/dashboard') setCurrentView('portal');
       else if (path === '/baito' || path === '/baito-os') setCurrentView('baito');
       else if (path === '/pricing' || path === '/plans') setCurrentView('pricing');

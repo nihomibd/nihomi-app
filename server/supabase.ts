@@ -1,23 +1,39 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
 
-dotenv.config();
+// Canonical NIHOMI Production Supabase Endpoint
+export const SUPABASE_URL = 'https://aiychtkhktwsjrieeaha.supabase.co';
 
-const supabaseUrl =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  'https://aiychtkhktwsjrieeaha.supabase.co';
+// Fallback anonymous key for public client queries
+export const SUPABASE_ANON_KEY =
+  (process.env.SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t').trim();
 
-const supabaseAnonKey =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpeWNodGtoa3R3c2pyaWVlYWhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0MjczMjYsImV4cCI6MjA0MTAwMzMyNn0.Vz-69sT5K5j2n1...';
+// Service Role Key for administrative backend operations
+export const SUPABASE_SERVICE_ROLE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
 
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
+let serverSupabaseClient: SupabaseClient | null = null;
 
-export const supabaseServer: SupabaseClient = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
+/**
+ * Returns the singleton backend Supabase Client instance.
+ * Strictly configured to point to https://aiychtkhktwsjrieeaha.supabase.co.
+ */
+export function getSupabase(): SupabaseClient {
+  if (serverSupabaseClient) {
+    return serverSupabaseClient;
   }
-});
+
+  const activeKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+
+  serverSupabaseClient = createClient(SUPABASE_URL, activeKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+
+  return serverSupabaseClient;
+}
+
+export const supabase = getSupabase();

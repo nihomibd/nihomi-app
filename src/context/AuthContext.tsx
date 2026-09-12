@@ -307,19 +307,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Listen to Supabase Session & extract Google Avatar
-    useEffect(() => {
+  useEffect(() => {
+    // Check initial stored token and verify with /api/auth/me
+    const initialToken = getStoredToken();
+    if (initialToken) {
+      apiRequest('/api/auth/me')
+        .then((res) => {
+          if (res?.authenticated && res.user) {
+            setUserData(res.user);
+            if (res.profile) setProfile(res.profile);
+            if (res.progress) setProgress(res.progress);
+          }
+        })
+        .catch(() => {});
+    }
+
     if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
       supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user) {
+        if (session?.user && session.access_token) {
+          setStoredToken(session.access_token);
+          setToken(session.access_token);
+          localStorage.setItem('nihomi_auth_token', session.access_token);
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       });
     }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         if (session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
+          localStorage.setItem('nihomi_auth_token', session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -344,6 +363,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
         bootstrapDefaultLearningPath(activeUser.id);
         setUserData(activeUser);
+
+        // Sync with backend /api/auth/me to populate verified profile & progress
+        apiRequest('/api/auth/me').then((res) => {
+          if (res?.authenticated && res.user) {
+            if (res.profile) setProfile(res.profile);
+            if (res.progress) setProgress(res.progress);
+          }
+        }).catch(() => {});
       }
     });
 
@@ -352,6 +379,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
+          localStorage.setItem('nihomi_auth_token', session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -376,11 +404,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
         bootstrapDefaultLearningPath(activeUser.id);
         setUserData(activeUser);
+
+        // Sync with backend /api/auth/me
+        apiRequest('/api/auth/me').then((res) => {
+          if (res?.authenticated && res.user) {
+            if (res.profile) setProfile(res.profile);
+            if (res.progress) setProgress(res.progress);
+          }
+        }).catch(() => {});
       } else if (_event === 'SIGNED_OUT') {
         setUser(null);
         setStoredToken(null);
         setToken(null);
         localStorage.removeItem('nihomi_user');
+        localStorage.removeItem('nihomi_auth_token');
       }
     });
 

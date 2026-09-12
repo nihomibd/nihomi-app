@@ -26,7 +26,7 @@ import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
 
 interface LandingViewProps {
-  onNavigate: (view: string) => void;
+  onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
 // Built-in resilient Gemini AI Sensei caller
@@ -501,11 +501,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
         <ZeroJapaneseGatewayModal
           isOpen={isZeroGatewayOpen}
           onClose={() => setIsZeroGatewayOpen(false)}
-          onComplete={(goal) => {
-            if (user) {
-              onNavigate('courses');
+          onComplete={(action) => {
+            setIsZeroGatewayOpen(false);
+            if (action === 'lesson-01') {
+              onNavigate('lesson', { lessonId: 'n5-l1' });
             } else {
-              handleGoogleCTA();
+              onNavigate('courses');
             }
           }}
         />

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db, verifyPassword, hashPassword } from '../db.js';
-import { createSessionToken, revokeSessionToken, requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, AuthenticatedRequest } from '../authHelper.js';
 import { verifyGoogleIdToken } from '../services/googleAuth.js';
 import crypto from 'crypto';
 
@@ -185,16 +185,31 @@ authRouter.post('/switch-view-mode', requireAuth, (req: AuthenticatedRequest, re
 });
 
 // Get Current User / Verify Session
-authRouter.get('/me', requireAuth, (req: AuthenticatedRequest, res) => {
-  const user = req.user!;
+authRouter.get('/me', (req: AuthenticatedRequest, res) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader || (req.query.token as string);
+  const user = getUserFromToken(token);
+
+  if (!user) {
+    return res.status(200).json({
+      authenticated: false,
+      user: null,
+      message: 'Unauthenticated session'
+    });
+  }
+
   const profile = db.getProfileByUserId(user.id);
   const progress = db.getProgressByUserId(user.id);
 
   return res.json({
+    authenticated: true,
     user: {
       id: user.id,
       email: user.email,
-      role: user.role
+      name: profile?.displayName || user.email.split('@')[0],
+      role: user.role,
+      planId: 'starter',
+      studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
     },
     profile,
     progress
