@@ -140,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
           </button>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center space-x-1 overflow-x-auto no-scrollbar">
             {navItems.map((item) => {
               const isActive = currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'));
               return (
@@ -165,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             {isOfflineReady && (
               <div
                 id="header-offline-ready-badge"
-                className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold shadow-2xs animate-in fade-in"
+                className="flex items-center space-x-1 overflow-x-auto no-scrollbar.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold shadow-2xs animate-in fade-in"
                 title="Service Worker Cached: Lessons, Kanji & Flashcards available offline without internet"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -179,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <button
                 id="header-theme-toggle-btn"
                 onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
-                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-full bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbb2] text-stone-700 dark:text-stone-300 text-xs font-medium hover:border-stone-400 dark:hover:border-stone-600 transition-all cursor-pointer shadow-2xs"
+                className="flex items-center space-x-1 overflow-x-auto no-scrollbar.5 px-2.5 py-1.5 rounded-full bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] border border-stone-200 dark:border-stone-800 sepia:border-[#d9cbb2] text-stone-700 dark:text-stone-300 text-xs font-medium hover:border-stone-400 dark:hover:border-stone-600 transition-all cursor-pointer shadow-2xs"
                 title={`Theme: ${theme.toUpperCase()} (Click to change)`}
               >
                 <ActiveThemeIcon className="w-3.5 h-3.5 text-stone-600 dark:text-amber-400" />
@@ -224,7 +224,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             {isFounder && (
               <button
                 onClick={() => onNavigate('founder')}
-                className="inline-flex items-center space-x-1.5 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold transition-all cursor-pointer"
+                className="inline-flex items-center space-x-1 overflow-x-auto no-scrollbar.5 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold transition-all cursor-pointer"
                 title="Founder Command Center"
               >
                 <Crown className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
@@ -351,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
           </div>
 
           {/* MOBILE TOGGLE */}
-          <div className="md:hidden flex items-center space-x-1.5">
+          <div className="md:hidden flex items-center space-x-1 overflow-x-auto no-scrollbar.5">
             {/* Mobile Offline Ready Indicator */}
             {isOfflineReady && (
               <div
@@ -439,7 +439,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   <button
                     key={opt.id}
                     onClick={() => setTheme(opt.id)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold flex items-center space-x-1 ${
+                    className={`px-2 py-1 rounded-lg text-[10px] font-bold flex items-center space-x-1 overflow-x-auto no-scrollbar ${
                       isSelected
                         ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900'
                         : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
