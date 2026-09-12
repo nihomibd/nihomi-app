@@ -11,13 +11,16 @@ import {
   Loader2,
   X,
   Gift,
-  ShieldCheck
+  ShieldCheck,
+  Target
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { speakJapanese } from '../lib/tts';
 import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
 import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
+import { ZeroJapaneseGatewayModal } from '../components/onboarding/ZeroJapaneseGatewayModal';
+import { JLPTDiagnosticExamModal } from '../components/assessment/JLPTDiagnosticExamModal';
 import { updatePageMetaTags } from '../lib/seo';
 import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
@@ -159,6 +162,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isWritingActive, setIsWritingActive] = useState(false);
+  const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
+  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
 
   const handleSearch = async (text: string) => {
     if (!text.trim()) return;
@@ -195,39 +200,62 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসি, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
         </p>
 
-        {/* Frictionless Primary CTA & Secondary Action */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+        {/* 3 Distinct Unmissable Entry Triggers */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 mb-5 max-w-3xl mx-auto">
+          {/* 1. Primary CTA: Start Japanese Zero Journey */}
           <button
-            onClick={handleGoogleCTA}
-            disabled={isGoogleSigningIn}
-            className="w-full sm:w-auto px-7 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/25 hover:shadow-xl transition-all flex items-center justify-center space-x-3 cursor-pointer active:scale-95 group disabled:opacity-80"
+            onClick={() => {
+              trackNihomiEvent('zero_gateway_clicked', { source: 'landing_hero' });
+              setIsZeroGatewayOpen(true);
+            }}
+            className="flex-1 px-6 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/25 hover:shadow-xl transition-all flex items-center justify-center space-x-2.5 cursor-pointer active:scale-95 group"
           >
-            {isGoogleSigningIn ? (
-              <Loader2 className="w-5 h-5 animate-spin text-white" />
-            ) : (
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#FFFFFF" />
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#FFFFFF" opacity="0.9" />
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FFFFFF" opacity="0.8" />
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#FFFFFF" />
-              </svg>
-            )}
-            <span>
-              {isGoogleSigningIn
-                ? 'গুগল সাইন-ইন হচ্ছে...'
-                : user
-                ? 'ড্যাশবোর্ডে প্রবেশ করুন'
-                : 'গুগল দিয়ে ১ ক্লিকে শুরু করুন (ফ্রি ৫০ কয়েন সহ)'}
-            </span>
+            <Sparkles className="w-5 h-5 text-red-200 animate-pulse" />
+            <span>Start Japanese Zero Journey (শুরু থেকে শিখুন)</span>
             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
           </button>
 
+          {/* 2. Secondary CTA: Take 2-Min Level Check */}
+          <button
+            onClick={() => {
+              trackNihomiEvent('diagnostic_exam_clicked', { source: 'landing_hero' });
+              setIsDiagnosticOpen(true);
+            }}
+            className="flex-1 px-6 py-4 bg-white hover:bg-stone-50 border-2 border-stone-300 text-stone-900 rounded-2xl text-sm sm:text-base font-bold shadow-xs hover:border-red-500 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95"
+          >
+            <Target className="w-5 h-5 text-amber-500" />
+            <span>Take 2-Min Level Check (লেভেল যাচাই)</span>
+          </button>
+        </div>
+
+        {/* 3. Tertiary CTA & Frictionless 1-Click Google Sign-In */}
+        <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-stone-600 mb-8">
           <button
             onClick={() => onNavigate('courses')}
-            className="w-full sm:w-auto px-6 py-4 bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 rounded-2xl text-sm font-bold shadow-2xs hover:border-stone-300 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-stone-700 hover:text-red-600 font-bold transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-white border border-stone-200 hover:border-red-400 shadow-2xs"
           >
-            <Compass className="w-4 h-4 text-stone-400" />
-            <span>কোর্স ও লেসন দেখুন</span>
+            <Compass className="w-4 h-4 text-stone-500" />
+            <span>Already Know Kana? Jump to N5 Track →</span>
+          </button>
+
+          <span className="text-stone-300 hidden sm:inline">•</span>
+
+          <button
+            onClick={handleGoogleCTA}
+            disabled={isGoogleSigningIn}
+            className="inline-flex items-center space-x-1.5 text-stone-600 hover:text-stone-900 transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-white border border-stone-200 hover:border-stone-300 shadow-2xs disabled:opacity-75"
+          >
+            {isGoogleSigningIn ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-red-600" />
+            ) : (
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+              </svg>
+            )}
+            <span>{user ? 'ড্যাশবোর্ডে প্রবেশ করুন' : 'গুগল দিয়ে ১ ক্লিকে শুরু করুন (ফ্রি ৫০ কয়েন)'}</span>
           </button>
         </div>
 
@@ -466,6 +494,28 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           isOpen={isWritingActive}
           onClose={() => setIsWritingActive(false)}
           targetKanji={{ kanji: '日', hiragana: 'にち・ひ', english: 'Sun, Day, Japan', strokes: 4 }}
+        />
+      )}
+
+      {isZeroGatewayOpen && (
+        <ZeroJapaneseGatewayModal
+          isOpen={isZeroGatewayOpen}
+          onClose={() => setIsZeroGatewayOpen(false)}
+          onComplete={(goal) => {
+            if (user) {
+              onNavigate('courses');
+            } else {
+              handleGoogleCTA();
+            }
+          }}
+        />
+      )}
+
+      {isDiagnosticOpen && (
+        <JLPTDiagnosticExamModal
+          isOpen={isDiagnosticOpen}
+          onClose={() => setIsDiagnosticOpen(false)}
+          onStartTrack={(trackId) => onNavigate(trackId)}
         />
       )}
 

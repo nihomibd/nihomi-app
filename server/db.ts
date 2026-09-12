@@ -92,7 +92,9 @@ import {
   AccentMasterySession,
   AccentSrsCard,
   SpeakingReadinessCertificate,
-  RoleplaySessionState
+  RoleplaySessionState,
+  MistakeRecord,
+  WeakAreaRecommendation
 } from './types.js';
 import { AdaptiveSrsService } from './services/adaptiveSrsService.js';
 import { LearnerAnalyticsService } from './services/learnerAnalyticsService.js';
@@ -112,6 +114,7 @@ import {
   INITIAL_DEFAULT_RIREKISHO
 } from './baitoSeedData.js';
 import { ContentDiffService } from './services/contentDiffService.js';
+import { prisma } from './prisma.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -438,7 +441,8 @@ class Database {
     accentMasterySessions: [],
     accentSrsCards: [],
     speakingCertificates: [],
-    roleplaySessions: []
+    roleplaySessions: [],
+    mistakeRecords: []
   };
 
   private isLoaded = false;
@@ -1833,6 +1837,383 @@ class Database {
       this.syncLessonProgressToSupabase(userId, lessonId, p, false, 0).catch(() => {});
     }
     return p;
+  }
+
+  // --- MEMORYOS™ MISTAKE MEMORY & TARGETED REVIEW ENGINE ---
+  public recordMistake(input: {
+    userId: string;
+    itemType: 'KANA' | 'VOCAB' | 'GRAMMAR' | 'KANJI' | 'PARTICLE' | string;
+    conceptId: string;
+    studentAnswer: string;
+    correctAnswer: string;
+    notes?: string;
+  }): { mistake: MistakeRecord; weakness: WeakAreaRecommendation } {
+    if (!this.data.mistakeRecords) {
+      this.data.mistakeRecords = [];
+    }
+
+    const { userId, itemType, conceptId, studentAnswer, correctAnswer, notes } = input;
+    const now = new Date().toISOString();
+
+    // Analyze confusion pattern
+    const patternAnalysis = this.analyzeMistakePattern(conceptId, studentAnswer, correctAnswer, itemType);
+
+    // Find existing mistake record
+    let record = this.data.mistakeRecords.find(
+      (m) => m.userId === userId && m.conceptId === conceptId && !m.resolved
+    );
+
+    if (record) {
+      record.mistakeCount += 1;
+      record.studentAnswer = studentAnswer;
+      record.correctAnswer = correctAnswer;
+      record.notes = notes || record.notes;
+      record.confusionTag = patternAnalysis.confusionTag;
+      record.updatedAt = now;
+    } else {
+      record = {
+        id: `mst-${crypto.randomUUID()}`,
+        userId,
+        itemType,
+        conceptId,
+        studentAnswer,
+        correctAnswer,
+        notes,
+        confusionTag: patternAnalysis.confusionTag,
+        mistakeCount: 1,
+        resolved: false,
+        createdAt: now,
+        updatedAt: now
+      };
+      this.data.mistakeRecords.push(record);
+    }
+
+    this.save();
+
+    // Sync to PostgreSQL via Prisma & Supabase in background
+    this.syncMistakeToDatabase(record).catch(() => {});
+
+    // Construct recommendation
+    const weakness = this.buildWeakAreaRecommendation(record, patternAnalysis);
+
+    return { mistake: record, weakness };
+  }
+
+  private analyzeMistakePattern(
+    conceptId: string,
+    studentAnswer: string,
+    correctAnswer: string,
+    itemType: string
+  ): { confusionTag: string; pattern: string; explanationBn: string } {
+    const sAns = (studentAnswer || '').trim();
+    const cAns = (correctAnswer || '').trim();
+    const sLow = sAns.toLowerCase();
+    const cLow = cAns.toLowerCase();
+    const cId = (conceptId || '').toLowerCase();
+
+    // Katakana Shi (シ) vs Tsu (ツ)
+    if (
+      (sAns === 'シ' && cAns === 'ツ') || (sAns === 'ツ' && cAns === 'シ') ||
+      (sLow.includes('shi') && cLow.includes('tsu')) || (sLow.includes('tsu') && cLow.includes('shi')) ||
+      cId.includes('shi-tsu') || (cId.includes('shi') && cId.includes('tsu'))
+    ) {
+      return {
+        confusionTag: 'KANA_CONFUSION_SHI_TSU',
+        pattern: 'Katakana Shi (シ) vs Tsu (ツ)',
+        explanationBn: 'কাতাকানা "シ" (শি) এর স্ট্রোকগুলো নিচ থেকে ওপরে আনুভূমিকভাবে ওঠে; আর "ツ" (ৎসু) এর স্ট্রোকগুলো ওপর থেকে নিচে উল্লম্বভাবে আঁকা হয়।'
+      };
+    }
+
+    // Katakana So (ソ) vs N (ン)
+    if (
+      (sAns === 'ソ' && cAns === 'ン') || (sAns === 'ン' && cAns === 'ソ') ||
+      (sLow.includes('so') && cLow.includes('n')) || cId.includes('so-n')
+    ) {
+      return {
+        confusionTag: 'KANA_CONFUSION_SO_N',
+        pattern: 'Katakana So (ソ) vs N (ン)',
+        explanationBn: 'কাতাকানা "ン" (ন) এর মূল দাগ নিচ থেকে ওপরের দিকে যায়; কিন্তু "ソ" (সো) এর স্ট্রোক ওপর থেকে নিচে দ্রুত নেমে আসে।'
+      };
+    }
+
+    // Hiragana Sa (さ) vs Chi (ち)
+    if (
+      (sAns === 'さ' && cAns === 'ち') || (sAns === 'ち' && cAns === 'さ') ||
+      (sLow.includes('sa') && cLow.includes('chi')) || cId.includes('sa-chi')
+    ) {
+      return {
+        confusionTag: 'KANA_CONFUSION_SA_CHI',
+        pattern: 'Hiragana Sa (さ) vs Chi (ち)',
+        explanationBn: 'হিরাগানা "さ" (সা) এর লুপ ডান দিকে মুখ করে থাকে, আর "ち" (চি) এর লুপ বাম দিকে মুখ করে থাকে।'
+      };
+    }
+
+    // Particle は (wa) vs が (ga)
+    if (
+      (sAns === 'は' && cAns === 'が') || (sAns === 'が' && cAns === 'は') ||
+      (sLow === 'wa' && cLow === 'ga') || (sLow === 'ga' && cLow === 'wa') ||
+      (sLow === 'ha' && cLow === 'ga') || cId.includes('wa-ga') || cId.includes('ha-ga')
+    ) {
+      return {
+        confusionTag: 'PARTICLE_CONFUSION_WA_GA',
+        pattern: 'Particle は (Topic Marker) vs が (Subject Marker)',
+        explanationBn: 'পার্টিকেল "は" (wa) পুরো বাক্যের মূল বিষয় (Topic) বা জ্ঞাত বিষয় বোঝাতে বসে; আর "が" (ga) নতুন তথ্য বা নির্দিষ্ট ব্যাকরণগত কর্তাকে (Subject) চিহ্নিত করে।'
+      };
+    }
+
+    // Particle に (ni) vs で (de)
+    if (
+      (sAns === 'に' && cAns === 'で') || (sAns === 'で' && cAns === 'に') ||
+      (sLow === 'ni' && cLow === 'de') || (sLow === 'de' && cLow === 'ni') ||
+      cId.includes('ni-de')
+    ) {
+      return {
+        confusionTag: 'PARTICLE_CONFUSION_NI_DE',
+        pattern: 'Particle に (Existence/Destination) vs で (Action Location)',
+        explanationBn: 'পার্টিকেল "に" (ni) থাকার স্থান (います/あります) বা গন্তব্য নির্দেশ করে; আর "で" (de) যেখানে কোনো কাজ সংঘটিত হয় সেই স্থান নির্দেশ করে।'
+      };
+    }
+
+    // Particle を (o) vs は (wa)
+    if (
+      (sAns === 'を' && cAns === 'は') || (sAns === 'は' && cAns === 'কে') ||
+      (sLow === 'o' && cLow === 'wa') || (sLow === 'wo' && cLow === 'wa') ||
+      cId.includes('wo-wa') || cId.includes('o-wa')
+    ) {
+      return {
+        confusionTag: 'PARTICLE_CONFUSION_WO_WA',
+        pattern: 'Particle を (Direct Object) vs は (Topic)',
+        explanationBn: 'পার্টিকেল "を" (o) সরাসরি সকর্মক ক্রিয়ার কর্ম (Object) চিহ্নিত করে (যেমন: みず を のみます)।'
+      };
+    }
+
+    return {
+      confusionTag: `${(itemType || 'CONCEPT').toUpperCase()}_CONFUSION_PATTERN`,
+      pattern: `${itemType || 'Japanese'} Concept Review`,
+      explanationBn: `এই বিষয়টি সঠিকভাবে মনে রাখতে মেমোরি ফ্ল্যাশকার্ড ও রিভিউ সেশন সম্পন্ন করুন।`
+    };
+  }
+
+  private buildWeakAreaRecommendation(
+    record: MistakeRecord,
+    analysis?: { confusionTag: string; pattern: string; explanationBn: string }
+  ): WeakAreaRecommendation {
+    const p = analysis || this.analyzeMistakePattern(record.conceptId, record.studentAnswer, record.correctAnswer, record.itemType);
+
+    let lessonId = 'lesson-1';
+    let drillType: 'KANA_DRILL' | 'PARTICLE_DRILL' | 'GRAMMAR_DRILL' | 'VOCAB_DRILL' | 'KANJI_DRILL' = 'GRAMMAR_DRILL';
+    let title = `Targeted Review: ${p.pattern}`;
+
+    if (record.itemType === 'KANA' || p.confusionTag.startsWith('KANA_')) {
+      lessonId = 'lesson-0-kana';
+      drillType = 'KANA_DRILL';
+      title = p.confusionTag === 'KANA_CONFUSION_SHI_TSU'
+        ? 'Targeted Review: Confusing Kana (シ vs ツ)'
+        : p.confusionTag === 'KANA_CONFUSION_SO_N'
+        ? 'Targeted Review: Confusing Kana (ソ vs ン)'
+        : 'Targeted Review: Essential Kana Master';
+    } else if (record.itemType === 'PARTICLE' || p.confusionTag.startsWith('PARTICLE_')) {
+      lessonId = 'lesson-1';
+      drillType = 'PARTICLE_DRILL';
+      title = p.confusionTag === 'PARTICLE_CONFUSION_WA_GA'
+        ? 'Targeted Review: Particles (は vs が)'
+        : 'Targeted Review: Essential Particles Mastery';
+    } else if (record.itemType === 'KANJI') {
+      lessonId = 'lesson-1';
+      drillType = 'KANJI_DRILL';
+      title = `Targeted Review: Kanji Stroke & Reading (${record.correctAnswer})`;
+    } else if (record.itemType === 'VOCAB') {
+      lessonId = 'lesson-1';
+      drillType = 'VOCAB_DRILL';
+      title = `Targeted Review: Core Vocab (${record.correctAnswer})`;
+    }
+
+    return {
+      id: `weak-${record.id}`,
+      conceptId: record.conceptId,
+      topic: p.pattern,
+      itemType: record.itemType,
+      mistakeCount: record.mistakeCount,
+      confusionPattern: p.pattern,
+      confusionExplanationBn: p.explanationBn,
+      recommendedLessonId: lessonId,
+      recommendationTitle: title,
+      recommendationAction: 'Resolve Weakness (সংশোধন করুন)',
+      recommendedDrillType: drillType
+    };
+  }
+
+  public getWeakAreas(userId: string): { weaknesses: WeakAreaRecommendation[]; memoryOsHealthScore: number } {
+    if (!this.data.mistakeRecords) {
+      this.data.mistakeRecords = [];
+    }
+
+    const userMistakes = this.data.mistakeRecords
+      .filter((m) => m.userId === userId && !m.resolved)
+      .sort((a, b) => b.mistakeCount - a.mistakeCount);
+
+    if (userMistakes.length > 0) {
+      const top3 = userMistakes.slice(0, 3).map((m) => this.buildWeakAreaRecommendation(m));
+      const totalMistakes = userMistakes.reduce((acc, curr) => acc + curr.mistakeCount, 0);
+      const healthScore = Math.max(40, Math.min(100, 100 - totalMistakes * 5));
+
+      return {
+        weaknesses: top3,
+        memoryOsHealthScore: healthScore
+      };
+    }
+
+    // If student has no recorded mistakes, return foundational guidance based on student's current state
+    const progress = this.getProgressByUserId(userId);
+    const hasCompletedAny = (progress.completedLessonIds || []).length > 0;
+
+    if (!hasCompletedAny) {
+      // Absolute Zero Japanese Learner
+      return {
+        weaknesses: [
+          {
+            id: 'weak-zero-1',
+            conceptId: 'kana-five-vowels',
+            topic: 'Essential Hiragana Foundation',
+            itemType: 'KANA',
+            mistakeCount: 0,
+            confusionPattern: 'Japanese Zero Starting Milestone',
+            confusionExplanationBn: 'জাপানিজ ভাষার প্রথম ৫টি স্বরবর্ণ (あ, い, う, え, お) এর সঠিক উচ্চারণ ও স্ট্রোক অর্ডার শিখুন।',
+            recommendedLessonId: 'lesson-0-kana',
+            recommendationTitle: 'Practice 5 Essential Hiragana (あ, い, う, え, お)',
+            recommendationAction: 'Start 5 Hiragana Drill',
+            recommendedDrillType: 'KANA_DRILL'
+          },
+          {
+            id: 'weak-zero-2',
+            conceptId: 'grammar-intro-minna-1',
+            topic: 'Self Introduction & Polite Forms',
+            itemType: 'GRAMMAR',
+            mistakeCount: 0,
+            confusionPattern: 'First Japanese Sentence Structure',
+            confusionExplanationBn: 'আমি অমুক: "わたし は 〜 です" দিয়ে নিজের পরিচয় দেওয়া শিখুন।',
+            recommendedLessonId: 'lesson-1',
+            recommendationTitle: 'Continue Minna no Nihongo Lesson 01',
+            recommendationAction: 'Start Lesson 01',
+            recommendedDrillType: 'GRAMMAR_DRILL'
+          },
+          {
+            id: 'weak-zero-3',
+            conceptId: 'particle-wa-ga-intro',
+            topic: 'Essential Particle Overview',
+            itemType: 'PARTICLE',
+            mistakeCount: 0,
+            confusionPattern: 'Topic Marker は (wa)',
+            confusionExplanationBn: 'জাপানিজ বাক্যের প্রাণ পার্টিকেল "は" এর ব্যবহার পদ্ধতি।',
+            recommendedLessonId: 'lesson-1',
+            recommendationTitle: 'Core Particle Drill: は (wa)',
+            recommendationAction: 'Practice Particles',
+            recommendedDrillType: 'PARTICLE_DRILL'
+          }
+        ],
+        memoryOsHealthScore: 100
+      };
+    }
+
+    // Has completed Kana / beginner
+    return {
+      weaknesses: [
+        {
+          id: 'weak-n5-1',
+          conceptId: 'minna-lesson-continue',
+          topic: 'Minna no Nihongo Core Track',
+          itemType: 'GRAMMAR',
+          mistakeCount: 0,
+          confusionPattern: 'Linear Curriculum Progress',
+          confusionExplanationBn: 'আপনার পরবর্তী মিন্না নো নিহোঙ্গো পাঠ সম্পন্ন করে JLPT N5 এ এগিয়ে যান।',
+          recommendedLessonId: progress.currentLessonId || 'lesson-1',
+          recommendationTitle: 'Continue Minna no Nihongo Lesson 01',
+          recommendationAction: 'Resume Lesson',
+          recommendedDrillType: 'GRAMMAR_DRILL'
+        },
+        {
+          id: 'weak-n5-2',
+          conceptId: 'particle-wa-ga-mastery',
+          topic: 'Particle は vs が Distinction',
+          itemType: 'PARTICLE',
+          mistakeCount: 0,
+          confusionPattern: 'Topic vs Subject Focus',
+          confusionExplanationBn: 'সবচেয়ে গুরুত্বপূর্ণ পার্টিকেল পার্থক্যের রিভিশন ড্রিল।',
+          recommendedLessonId: 'lesson-1',
+          recommendationTitle: 'Targeted Review: Particles (は vs が)',
+          recommendationAction: 'Review Particles',
+          recommendedDrillType: 'PARTICLE_DRILL'
+        },
+        {
+          id: 'weak-n5-3',
+          conceptId: 'kana-katakana-review',
+          topic: 'Katakana Loanwords & Confusing Characters',
+          itemType: 'KANA',
+          mistakeCount: 0,
+          confusionPattern: 'シ vs ツ and ソ vs ン Distinction',
+          confusionExplanationBn: 'কাতাকানার বিভ্রান্তিকর অক্ষরগুলোর নিয়মিত অনুশীলন।',
+          recommendedLessonId: 'lesson-0-kana',
+          recommendationTitle: 'Targeted Review: Confusing Kana (シ vs ツ)',
+          recommendationAction: 'Review Kana',
+          recommendedDrillType: 'KANA_DRILL'
+        }
+      ],
+      memoryOsHealthScore: 98
+    };
+  }
+
+  private async syncMistakeToDatabase(record: MistakeRecord): Promise<void> {
+    try {
+      await prisma.mistakeRecord.upsert({
+        where: { id: record.id },
+        update: {
+          mistakeCount: record.mistakeCount,
+          studentAnswer: record.studentAnswer,
+          correctAnswer: record.correctAnswer,
+          notes: record.notes,
+          confusionTag: record.confusionTag,
+          resolved: record.resolved,
+          updatedAt: new Date(record.updatedAt)
+        },
+        create: {
+          id: record.id,
+          userId: record.userId,
+          itemType: record.itemType,
+          conceptId: record.conceptId,
+          studentAnswer: record.studentAnswer,
+          correctAnswer: record.correctAnswer,
+          notes: record.notes,
+          confusionTag: record.confusionTag,
+          mistakeCount: record.mistakeCount,
+          resolved: record.resolved,
+          createdAt: new Date(record.createdAt),
+          updatedAt: new Date(record.updatedAt)
+        }
+      });
+    } catch {
+      // Offline/local DB fallback
+    }
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('mistake_records').upsert({
+          id: record.id,
+          user_id: record.userId,
+          item_type: record.itemType,
+          concept_id: record.conceptId,
+          student_answer: record.studentAnswer,
+          correct_answer: record.correctAnswer,
+          notes: record.notes,
+          confusion_tag: record.confusionTag,
+          mistake_count: record.mistakeCount,
+          resolved: record.resolved,
+          created_at: record.createdAt,
+          updated_at: record.updatedAt
+        }, { onConflict: 'id' });
+      } catch {
+        // Safe fallback
+      }
+    }
   }
 
   // --- COURSES & LESSONS ---

@@ -26,7 +26,15 @@ export type NihomiEventType =
   | 'payment_success'
   | 'scorecard_shared_facebook'
   | 'scorecard_shared_whatsapp'
-  | 'scorecard_link_copied';
+  | 'scorecard_link_copied'
+  | 'zero_gateway_clicked'
+  | 'zero_gateway_quiz_success'
+  | 'zero_gateway_completed'
+  | 'diagnostic_exam_clicked'
+  | 'diagnostic_exam_completed'
+  | 'nba_zero_kana_clicked'
+  | 'nba_targeted_review_clicked'
+  | 'nba_lesson_launched';
 
 export interface LandingPageViewPayload {
   pagePath?: string;
@@ -112,6 +120,14 @@ export type EventPayloadMap = {
   scorecard_shared_facebook: ScorecardSharedPayload;
   scorecard_shared_whatsapp: ScorecardSharedPayload;
   scorecard_link_copied: ScorecardLinkCopiedPayload;
+  zero_gateway_clicked: Record<string, any>;
+  zero_gateway_quiz_success: Record<string, any>;
+  zero_gateway_completed: Record<string, any>;
+  diagnostic_exam_clicked: Record<string, any>;
+  diagnostic_exam_completed: Record<string, any>;
+  nba_zero_kana_clicked: Record<string, any>;
+  nba_targeted_review_clicked: Record<string, any>;
+  nba_lesson_launched: Record<string, any>;
 };
 
 /**

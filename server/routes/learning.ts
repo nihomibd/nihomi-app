@@ -446,3 +446,133 @@ learningRouter.post('/notifications/:id/read', optionalAuth, (req: Authenticated
   return res.json({ success: true, message: 'Notification marked as read.' });
 });
 
+// ---------------------------------------------------------------------------
+// NIHOMI MEMORYOS™ — MISTAKE MEMORY & WEAK-AREA RETENTION ENGINE
+// ---------------------------------------------------------------------------
+
+/**
+ * Record a mistake into student's persistent memory ledger.
+ * Automatically identifies repeated confusion pairs (e.g. シ vs ツ, は vs が).
+ */
+learningRouter.post('/progress/record-mistake', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const { userId: bodyUserId, itemType, conceptId, studentAnswer, correctAnswer, notes } = req.body;
+
+    const targetUserId = bodyUserId || req.user?.id;
+    if (!targetUserId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required parameter: userId'
+      });
+    }
+
+    if (!conceptId || !correctAnswer) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required parameters: conceptId and correctAnswer are mandatory'
+      });
+    }
+
+    const result = db.recordMistake({
+      userId: targetUserId,
+      itemType: (itemType || 'CONCEPT').toUpperCase(),
+      conceptId,
+      studentAnswer: studentAnswer || '',
+      correctAnswer,
+      notes
+    });
+
+    return res.json({
+      success: true,
+      message: 'Mistake safely tracked in NIHOMI MEMORYOS™',
+      mistake: result.mistake,
+      weakness: result.weakness
+    });
+  } catch (err: any) {
+    console.error('Error recording mistake in MEMORYOS:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to record learning mistake'
+    });
+  }
+});
+
+/**
+ * Fetch top weak areas & targeted review recommendations for a student.
+ */
+learningRouter.get('/progress/weak-areas/:userId', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const targetUserId = req.params.userId || req.user?.id || 'usr-demo';
+    const data = db.getWeakAreas(targetUserId);
+
+    const recommendations = data.weaknesses.map((w) => ({
+      concept: w.topic,
+      itemType: w.itemType,
+      mistakeCount: w.mistakeCount,
+      patternDetected: w.confusionPattern,
+      recommendedAction: w.recommendationAction,
+      guidanceBn: w.confusionExplanationBn,
+      drillUrl: `/practice/${w.recommendedLessonId || 'drill'}`
+    }));
+
+    return res.json({
+      success: true,
+      userId: targetUserId,
+      weaknesses: data.weaknesses,
+      recommendations,
+      memoryOsHealthScore: data.memoryOsHealthScore,
+      summary: {
+        totalMistakesRecorded: data.weaknesses.reduce((sum, item) => sum + item.mistakeCount, 0),
+        unresolvedCount: data.weaknesses.filter((w) => w.mistakeCount > 0).length,
+        topConfusionPattern: data.weaknesses[0]?.confusionPattern || null,
+        absoluteZeroLearner: data.weaknesses.every((w) => w.mistakeCount === 0)
+      }
+    });
+  } catch (err: any) {
+    console.error('Error fetching weak areas from MEMORYOS:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve student weak areas'
+    });
+  }
+});
+
+// Direct alias for authenticated user without param
+learningRouter.get('/progress/weak-areas', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const targetUserId = req.user?.id || 'usr-demo';
+    const data = db.getWeakAreas(targetUserId);
+
+    const recommendations = data.weaknesses.map((w) => ({
+      concept: w.topic,
+      itemType: w.itemType,
+      mistakeCount: w.mistakeCount,
+      patternDetected: w.confusionPattern,
+      recommendedAction: w.recommendationAction,
+      guidanceBn: w.confusionExplanationBn,
+      drillUrl: `/practice/${w.recommendedLessonId || 'drill'}`
+    }));
+
+    return res.json({
+      success: true,
+      userId: targetUserId,
+      weaknesses: data.weaknesses,
+      recommendations,
+      memoryOsHealthScore: data.memoryOsHealthScore,
+      summary: {
+        totalMistakesRecorded: data.weaknesses.reduce((sum, item) => sum + item.mistakeCount, 0),
+        unresolvedCount: data.weaknesses.filter((w) => w.mistakeCount > 0).length,
+        topConfusionPattern: data.weaknesses[0]?.confusionPattern || null,
+        absoluteZeroLearner: data.weaknesses.every((w) => w.mistakeCount === 0)
+      }
+    });
+  } catch (err: any) {
+    console.error('Error fetching weak areas:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve weak areas'
+    });
+  }
+});
+
+

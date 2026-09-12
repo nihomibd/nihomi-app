@@ -988,6 +988,7 @@ export interface DatabaseSchema {
   // MemoryOS™ & Ghost Mode SRS Tables
   ghostWeaknesses?: GhostWeaknessItem[];
   studentErrorLogs?: StudentErrorLog[];
+  mistakeRecords?: MistakeRecord[];
 
   // JLPT Mock Exam Engine Tables
   mockExams?: MockExam[];
@@ -2432,6 +2433,35 @@ export interface CohortAcousticTelemetry {
   hotspots: CohortInterferenceHotspot[];
   tierDistribution: Record<string, number>;
   generatedAt: string;
+}
+
+export interface MistakeRecord {
+  id: string;
+  userId: string;
+  itemType: 'KANA' | 'VOCAB' | 'GRAMMAR' | 'KANJI' | 'PARTICLE' | string;
+  conceptId: string;
+  studentAnswer: string;
+  correctAnswer: string;
+  notes?: string;
+  confusionTag?: string;
+  mistakeCount: number;
+  resolved: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WeakAreaRecommendation {
+  id: string;
+  conceptId: string;
+  topic: string;
+  itemType: string;
+  mistakeCount: number;
+  confusionPattern: string;
+  confusionExplanationBn: string;
+  recommendedLessonId: string;
+  recommendationTitle: string;
+  recommendationAction: string;
+  recommendedDrillType: 'KANA_DRILL' | 'PARTICLE_DRILL' | 'GRAMMAR_DRILL' | 'VOCAB_DRILL' | 'KANJI_DRILL';
 }
 
 

@@ -120,6 +120,7 @@ model User {
   learningProgress LearningProgress?
   lessonProgresses LessonProgress[]
   quizAttempts     QuizAttempt[]
+  mistakeRecords   MistakeRecord[]
 
   // Billing Relations
   subscriptions Subscription[]
@@ -439,6 +440,30 @@ model LearningProgress {
   user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, currentJLPTLevel])
+}
+
+// ----------------------------------------------------
+// MEMORYOS™ MISTAKE MEMORY & WEAK-AREA RETENTION ENGINE
+// ----------------------------------------------------
+
+model MistakeRecord {
+  id            String   @id @default(cuid())
+  userId        String
+  itemType      String   // 'KANA' | 'VOCAB' | 'GRAMMAR' | 'KANJI' | 'PARTICLE'
+  conceptId     String   // e.g. 'kana-shi-tsu', 'particle-wa-ga', 'vocab-101'
+  studentAnswer String
+  correctAnswer String
+  notes         String?  @db.Text
+  confusionTag  String?  // e.g. 'KANA_CONFUSION_SHI_TSU', 'PARTICLE_CONFUSION_WA_GA'
+  mistakeCount  Int      @default(1)
+  resolved      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, conceptId])
+  @@index([userId, resolved])
 }
 
 // ----------------------------------------------------

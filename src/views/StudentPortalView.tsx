@@ -29,6 +29,7 @@ import { TokyoPitchAccentLab } from '../components/voice/TokyoPitchAccentLab';
 import { SRSFlashcardSession } from '../components/practice/SRSFlashcardSession';
 import { BadgeSystem } from '../components/BadgeSystem';
 import { GhostModeSRSWidget } from '../components/practice/GhostModeSRSWidget';
+import { NextBestActionCard } from '../components/student/NextBestActionCard';
 import { Course, StudentProfile, NextBestAction } from '../types/nihomi';
 import { useAuth } from '../context/AuthContext';
 import { Ghost } from 'lucide-react';
@@ -255,30 +256,28 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             </div>
           )}
 
-          {/* Next Best Action Card */}
-          <div className="bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] rounded-3xl p-6 sm:p-8 border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-bold rounded-full">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>RECOMMENDED NEXT LESSON</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-stone-950 dark:text-white">
-                {nextAction.title}
-              </h2>
-              <p className="text-xs text-stone-600 dark:text-stone-400 font-medium">{nextAction.subtitle}</p>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <button
-                id="btn-launch-lesson"
-                onClick={() => onNavigate ? onNavigate('curriculum') : setIsLessonModalOpen(true)}
-                className="px-6 py-3 bg-stone-950 dark:bg-white text-white dark:text-stone-950 text-xs font-bold rounded-2xl shadow-md transition-all flex items-center space-x-2 cursor-pointer active:scale-95 shrink-0"
-              >
-                <Play className="w-4 h-4 fill-current" />
-                <span>Launch Interactive Lesson (12 min)</span>
-              </button>
-            </div>
-          </div>
+          {/* Dynamic Next Best Learning Action Card (MemoryOS Driven) */}
+          <NextBestActionCard
+            userId={user?.id}
+            completedLessonsCount={completedLessonsCount}
+            onLaunchLesson={(lessonId) => {
+              if (onNavigate) {
+                onNavigate('curriculum');
+              } else {
+                setIsLessonModalOpen(true);
+              }
+            }}
+            onLaunchReview={(concept) => {
+              setIsSRSFlashcardsActive(true);
+            }}
+            onOpenZeroGateway={() => {
+              if (onNavigate) {
+                onNavigate('courses');
+              } else {
+                setIsLessonModalOpen(true);
+              }
+            }}
+          />
 
           {/* Quick AI Practice Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">

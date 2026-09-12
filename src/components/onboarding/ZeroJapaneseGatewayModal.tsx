@@ -1,373 +1,344 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { 
-  X, 
-  Sparkles, 
-  Volume2, 
-  RotateCcw, 
-  CheckCircle2, 
-  ArrowRight, 
-  Compass
+import React, { useState } from 'react';
+import {
+  X,
+  Volume2,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  Target,
+  Compass,
+  Zap,
+  BookOpen,
+  ChevronRight
 } from 'lucide-react';
+import { speakJapanese } from '../../lib/tts';
+import { trackNihomiEvent } from '../../utils/analytics';
 
 interface ZeroJapaneseGatewayModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (view: string) => void;
-  onOpenLevelCheck?: () => void;
+  onComplete: (goal: string) => void;
 }
+
+interface KanaVowel {
+  char: string;
+  romaji: string;
+  bn: string;
+  exampleWord: string;
+  exampleMeaningBn: string;
+}
+
+const FIVE_VOWELS: KanaVowel[] = [
+  { char: 'あ', romaji: 'a', bn: 'আ', exampleWord: 'あさ (Asa)', exampleMeaningBn: 'সকাল' },
+  { char: 'い', romaji: 'i', bn: 'ই', exampleWord: 'いぬ (Inu)', exampleMeaningBn: 'কুকুর' },
+  { char: 'う', romaji: 'u', bn: 'উ', exampleWord: 'うみ (Umi)', exampleMeaningBn: 'সমুদ্র' },
+  { char: 'え', romaji: 'e', bn: 'এ', exampleWord: 'えき (Eki)', exampleMeaningBn: 'রেলওয়ে স্টেশন' },
+  { char: 'お', romaji: 'o', bn: 'ও', exampleWord: 'おかね (Okane)', exampleMeaningBn: 'টাকা / অর্থ' }
+];
 
 export const ZeroJapaneseGatewayModal: React.FC<ZeroJapaneseGatewayModalProps> = ({
   isOpen,
   onClose,
-  onNavigate,
-  onOpenLevelCheck,
+  onComplete
 }) => {
-  const [step, setStep] = useState<'welcome' | 'first-character' | 'choose-path'>('welcome');
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [hasDrawn, setHasDrawn] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [step, setStep] = useState<'vowels' | 'interactive' | 'goal'>('vowels');
+  const [selectedVowelIndex, setSelectedVowelIndex] = useState(0);
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
 
-  const playSound = (text: string) => {
-    try {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ja-JP';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-      }
-    } catch {}
-  };
+  // Interactive step state
+  const [quizSelection, setQuizSelection] = useState<string | null>(null);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    if (step === 'first-character' && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.lineWidth = 14;
-        ctx.strokeStyle = '#dc2626';
-      }
-    }
-  }, [step]);
-
-  const clearCanvas = () => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        setHasDrawn(false);
-        setIsVerified(false);
-      }
-    }
-  };
-
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    setIsDrawing(true);
-    draw(e);
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
-    if (hasDrawn) {
-      setIsVerified(true);
-    }
-  };
-
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing && e.type !== 'mousedown' && e.type !== 'touchstart') return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    let clientX = 0;
-    let clientY = 0;
-    if ('touches' in e && e.touches.length > 0) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else if ('clientX' in e) {
-      clientX = (e as React.MouseEvent).clientX;
-      clientY = (e as React.MouseEvent).clientY;
-    }
-
-    const x = (clientX - rect.left) * scaleX;
-    const y = (clientY - rect.top) * scaleY;
-
-    if (e.type === 'mousedown' || e.type === 'touchstart') {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      setHasDrawn(true);
-    }
-  };
+  // Goal step state
+  const [selectedGoal, setSelectedGoal] = useState('jlpt_n5_6months');
 
   if (!isOpen) return null;
 
+  const currentVowel = FIVE_VOWELS[selectedVowelIndex];
+
+  const handlePlayVowel = (vowel: KanaVowel) => {
+    speakJapanese(vowel.char);
+    setHasPlayedAudio(true);
+  };
+
+  const handleQuizAnswer = (char: string) => {
+    setQuizSelection(char);
+    if (char === 'あ') {
+      setIsCorrect(true);
+      speakJapanese('あ');
+      trackNihomiEvent('zero_gateway_quiz_success', { character: 'あ' });
+    } else {
+      setIsCorrect(false);
+      speakJapanese(char);
+    }
+  };
+
+  const handleFinish = () => {
+    trackNihomiEvent('zero_gateway_completed', { goal: selectedGoal });
+    onComplete(selectedGoal);
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/70 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-xl bg-white rounded-3xl border border-stone-200 shadow-2xl overflow-hidden text-left flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl bg-[#0F0F17] border border-white/10 text-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         
-        <div className="flex items-center justify-between px-6 py-4 border-b border-stone-100 bg-[#FAF9F6]">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-900">
-              Nihomi Japanese Zero Gateway
-            </span>
-          </div>
+        {/* Top Japanese Aesthetic Glow & Header */}
+        <div className="relative p-6 pb-4 border-b border-white/5 bg-gradient-to-b from-red-500/10 via-transparent to-transparent">
           <button
             onClick={onClose}
-            className="p-1.5 text-stone-400 hover:text-stone-700 rounded-full hover:bg-stone-200/60 transition-colors"
+            className="absolute top-5 right-5 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white transition-colors cursor-pointer"
+            aria-label="Close"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
+
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-bold font-mono tracking-wider">
+              ZERO JAPANESE GATEWAY
+            </span>
+            <span className="text-xs text-stone-400">ধাপ {step === 'vowels' ? '১/৩' : step === 'interactive' ? '২/৩' : '৩/৩'}</span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+            {step === 'vowels' && 'প্রথম ৫টি জাপানিজ স্বরবর্ণ শিখুন'}
+            {step === 'interactive' && 'দ্রুত সাউন্ড ম্যাচ টেস্ট'}
+            {step === 'goal' && 'আপনার জাপানিজ শেখার লক্ষ্য নির্ধারণ করুন'}
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-400 mt-1">
+            {step === 'vowels' && 'জাপানিজ ভাষা শুরু হয় এই ৫টি স্বরবর্ণ দিয়ে (あ, い, う, え, お)'}
+            {step === 'interactive' && 'সঠিক অক্ষরটি ট্যাপ করে আপনার কানকে অভ্যস্ত করুন'}
+            {step === 'goal' && 'আপনার উদ্দেশ্যের উপর ভিত্তি করে Nihomi OS আপনার রুট তৈরি করবে'}
+          </p>
+
+          {/* Stepper progress indicator */}
+          <div className="grid grid-cols-3 gap-2 mt-4">
+            <div className={`h-1.5 rounded-full ${step === 'vowels' || step === 'interactive' || step === 'goal' ? 'bg-red-500' : 'bg-white/10'}`} />
+            <div className={`h-1.5 rounded-full ${step === 'interactive' || step === 'goal' ? 'bg-red-500' : 'bg-white/10'}`} />
+            <div className={`h-1.5 rounded-full ${step === 'goal' ? 'bg-red-500' : 'bg-white/10'}`} />
+          </div>
         </div>
 
-        <div className="p-6 overflow-y-auto space-y-6">
-          {step === 'welcome' && (
-            <div className="space-y-6 animate-in fade-in">
-              <div className="space-y-2 text-center sm:text-left">
-                <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-red-50 text-red-700 text-xs font-bold rounded-full border border-red-200">
-                  <Sparkles className="w-3.5 h-3.5 text-red-600" />
-                  <span>জাপানিজ ভাষা শুরু করতে চান? কোনো সমস্যা নেই!</span>
-                </div>
-                <h3 className="text-2xl font-black text-stone-950 tracking-tight">
-                  Japanese Zero — No Problem.
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-                  জাপানিজ ভাষা দেখে অনেকেই ভয় পান কারণ এতে ৩ রকমের হরফ থাকে। কিন্তু নিহোমিতে এটি একদম সহজ লজিক্যাল অর্ডারে সাজানো:
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1.5">
-                  <div className="text-lg font-black text-red-600 font-japanese">あ ひらがな</div>
-                  <div className="text-xs font-bold text-stone-900">1. Hiragana (হিরাগানা)</div>
-                  <p className="text-[11px] text-stone-500 leading-relaxed">
-                    জাপানিজ ব্যাকরণ ও নিজস্ব মৌলিক শব্দের ৪৬টি মূল বর্ণ।
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1.5">
-                  <div className="text-lg font-black text-blue-600 font-japanese">ア カタカナ</div>
-                  <div className="text-xs font-bold text-stone-900">2. Katakana (কাতাকানা)</div>
-                  <p className="text-[11px] text-stone-500 leading-relaxed">
-                    বিদেশি ও আধুনিক শব্দ লেখার জন্য (যেমন: কফি, ক্যামেরা, বাংলাদেশ)।
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1.5">
-                  <div className="text-lg font-black text-emerald-700 font-japanese">日 漢字</div>
-                  <div className="text-xs font-bold text-stone-900">3. Kanji (কাঞ্জি)</div>
-                  <p className="text-[11px] text-stone-500 leading-relaxed">
-                    অর্থ বহনকারী চিত্রলিপি (যেমন: 日 = সূর্য/দিন)।
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-red-50/60 border border-red-200/60 text-xs text-red-950 flex items-start space-x-3">
-                <span className="text-lg">💡</span>
-                <p className="leading-relaxed">
-                  <strong>নিহোমি প্রিন্সিপাল:</strong> আপনাকে একদিনে সব মুখস্থ করতে হবে না। আমরা এখনই আপনাকে জীবনের প্রথম জাপানিজ অক্ষরটি আঁকা ও উচ্চারণ করা শেখাব!
-                </p>
-              </div>
-
-              <button
-                onClick={() => {
-                  setStep('first-character');
-                  playSound('あ');
-                }}
-                className="w-full py-3.5 bg-stone-950 hover:bg-stone-900 text-white font-bold text-sm rounded-2xl shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer"
-              >
-                <span>আপনার ১ম অক্ষর আঁকা শুরু করুন (Try Character あ)</span>
-                <ArrowRight className="w-4 h-4 text-red-400" />
-              </button>
-            </div>
-          )}
-
-          {step === 'first-character' && (
-            <div className="space-y-5 animate-in fade-in">
-              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-                <div>
-                  <span className="text-[10px] font-bold text-red-600 uppercase tracking-wider">
-                    Character #1 • Hiragana
-                  </span>
-                  <h4 className="text-lg font-black text-stone-950">
-                    প্রথম অক্ষর: <span className="text-red-600 font-japanese text-xl">あ</span> (A)
-                  </h4>
-                </div>
-                <button
-                  onClick={() => playSound('あ')}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl border border-red-200 transition-colors cursor-pointer"
-                >
-                  <Volume2 className="w-3.5 h-3.5 text-red-600" />
-                  <span>শুনুন (Listen)</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                <div className="p-5 rounded-3xl bg-[#FAF9F6] border border-stone-200 flex flex-col items-center justify-center text-center space-y-3 relative overflow-hidden">
-                  <div className="text-7xl font-black text-stone-900 font-japanese select-none tracking-tight">
-                    あ
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-bold text-stone-800">উচ্চারণ: 'আ' (Romaji: a)</div>
-                    <div className="text-[11px] text-stone-500">মোট ৩টি স্ট্রোক (3 Strokes)</div>
-                  </div>
-                  <div className="text-[10px] text-stone-400 font-medium px-2 py-1 bg-white rounded-lg border border-stone-200/60">
-                    ডানের সাদা বক্সে মাউস বা আঙুল দিয়ে আঁকুন ➔
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="relative w-full aspect-square max-w-[220px] rounded-3xl border-2 border-dashed border-stone-300 bg-white shadow-inner flex items-center justify-center overflow-hidden touch-none">
-                    <div className="absolute inset-0 flex items-center justify-center text-7xl font-japanese text-stone-100 select-none pointer-events-none">
-                      あ
-                    </div>
-                    <canvas
-                      ref={canvasRef}
-                      width={220}
-                      height={220}
-                      onMouseDown={startDrawing}
-                      onMouseUp={stopDrawing}
-                      onMouseMove={draw}
-                      onTouchStart={startDrawing}
-                      onTouchEnd={stopDrawing}
-                      onTouchMove={draw}
-                      className="relative z-10 w-full h-full cursor-crosshair"
-                    />
-                  </div>
-
-                  <div className="flex items-center space-x-2 w-full max-w-[220px]">
-                    <button
-                      onClick={clearCanvas}
-                      className="flex-1 py-1.5 px-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-xl flex items-center justify-center space-x-1 transition-colors cursor-pointer"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      <span>মুছুন (Clear)</span>
-                    </button>
-                    <button
-                      onClick={() => playSound('あ')}
-                      className="py-1.5 px-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
-                    >
-                      <Volume2 className="w-3.5 h-3.5 text-red-600" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {isVerified && (
-                <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-center space-x-2.5 animate-in fade-in">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>
-                    <strong>অসাধারণ!</strong> আপনি জীবনের প্রথম জাপানিজ অক্ষর <strong>'あ'</strong> লিখে ফেলেছেন।
-                  </span>
-                </div>
-              )}
-
-              <button
-                onClick={() => setStep('choose-path')}
-                className="w-full py-3.5 bg-stone-950 hover:bg-stone-900 text-white font-bold text-sm rounded-2xl shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer"
-              >
-                <span>পরবর্তী ধাপে যান (Choose Your Learning Path)</span>
-                <ArrowRight className="w-4 h-4 text-red-400" />
-              </button>
-            </div>
-          )}
-
-          {step === 'choose-path' && (
-            <div className="space-y-5 animate-in fade-in text-left">
-              <div className="space-y-1 text-center sm:text-left">
-                <span className="text-[10px] font-bold text-red-600 uppercase tracking-wider">
-                  Nihomi Personal Pathway
-                </span>
-                <h4 className="text-xl font-black text-stone-950">
-                  আপনার জন্য কোন পথটি সেরা?
-                </h4>
-                <p className="text-xs text-stone-500">
-                  আপনার বর্তমান অবস্থা অনুযায়ী শুরু করুন—নিহোমি আপনার সব অগ্রগতি ট্র্যাক করবে:
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    onClose();
-                    onNavigate('portal-practice');
-                  }}
-                  className="w-full p-4 rounded-2xl bg-white hover:bg-stone-50 border-2 border-stone-200 hover:border-red-600 transition-all text-left flex items-start space-x-3.5 group cursor-pointer shadow-xs"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-base font-japanese shrink-0 group-hover:scale-105 transition-transform">
-                    あ
-                  </div>
-                  <div className="flex-1 space-y-0.5">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-stone-950">
-                        Stage 0: Japanese Foundation
-                      </span>
-                      <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded-full">
-                        ১০০% ফ্রি
-                      </span>
-                    </div>
-                    <p className="text-xs text-stone-500 leading-relaxed">
-                      হিরাগানা ও কাতাকানার সব অক্ষরের স্ট্রোক ড্রয়িং, উচ্চারণ ও রিকল কুইজ প্র্যাকটিস।
-                    </p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-red-600 self-center shrink-0" />
-                </button>
-
-                <button
-                  onClick={() => {
-                    onClose();
-                    onNavigate('courses');
-                  }}
-                  className="w-full p-4 rounded-2xl bg-white hover:bg-stone-50 border-2 border-stone-200 hover:border-stone-900 transition-all text-left flex items-start space-x-3.5 group cursor-pointer shadow-xs"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-stone-100 text-stone-900 flex items-center justify-center font-bold text-base font-japanese shrink-0 group-hover:scale-105 transition-transform">
-                    N5
-                  </div>
-                  <div className="flex-1 space-y-0.5">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-stone-950">
-                        Minna no Nihongo JLPT N5 Master
-                      </span>
-                    </div>
-                    <p className="text-xs text-stone-500 leading-relaxed">
-                      বর্ণমালা জানা থাকলে সরাসরি লেসন ০১ থেকে ব্যাকরণ, শব্দভাণ্ডার ও লিসেনিং শুরু করুন।
-                    </p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-stone-950 self-center shrink-0" />
-                </button>
-
-                {onOpenLevelCheck && (
+        {/* Content Body */}
+        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+          {step === 'vowels' && (
+            <div className="space-y-6">
+              {/* Active Character Showcase Card */}
+              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 text-center relative overflow-hidden group">
+                <div className="absolute top-3 right-3">
                   <button
-                    onClick={() => {
-                      onClose();
-                      onOpenLevelCheck();
-                    }}
-                    className="w-full p-3.5 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200 transition-all text-left flex items-center justify-between cursor-pointer"
+                    onClick={() => handlePlayVowel(currentVowel)}
+                    className="p-2.5 rounded-xl bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white transition-all flex items-center space-x-1.5 cursor-pointer text-xs font-semibold"
                   >
-                    <div className="flex items-center space-x-2.5">
-                      <Compass className="w-4 h-4 text-stone-600" />
-                      <span className="text-xs font-bold text-stone-800">
-                        নিশ্চিত নন কোন লেভেলে আছেন? ২ মিনিটের দ্রুত লেভেল চেক দিন ➔
-                      </span>
-                    </div>
+                    <Volume2 className="w-4 h-4" />
+                    <span>উচ্চারণ শুনুন</span>
                   </button>
+                </div>
+
+                <span className="text-xs font-bold uppercase tracking-widest text-stone-400">
+                  হিরাগানা ভাওয়েল #{selectedVowelIndex + 1}
+                </span>
+
+                <div className="my-4">
+                  <span className="text-7xl sm:text-8xl font-black text-white font-japanese block drop-shadow-md">
+                    {currentVowel.char}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-center space-x-4 text-stone-300 text-sm">
+                  <div className="px-3 py-1 rounded-lg bg-white/5 border border-white/10">
+                    <span className="text-stone-400 text-xs mr-1">Romaji:</span>
+                    <span className="font-bold text-white font-mono">{currentVowel.romaji}</span>
+                  </div>
+                  <div className="px-3 py-1 rounded-lg bg-white/5 border border-white/10">
+                    <span className="text-stone-400 text-xs mr-1">বাংলা:</span>
+                    <span className="font-bold text-red-400">{currentVowel.bn}</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-white/5 text-xs text-stone-400">
+                  উদাহরণ শব্দ: <span className="font-japanese font-bold text-stone-200">{currentVowel.exampleWord}</span> — {currentVowel.exampleMeaningBn}
+                </div>
+              </div>
+
+              {/* 5 Vowel Selector Buttons */}
+              <div className="grid grid-cols-5 gap-2 sm:gap-3">
+                {FIVE_VOWELS.map((v, idx) => (
+                  <button
+                    key={v.char}
+                    onClick={() => {
+                      setSelectedVowelIndex(idx);
+                      handlePlayVowel(v);
+                    }}
+                    className={`p-3 rounded-2xl border text-center transition-all cursor-pointer ${
+                      selectedVowelIndex === idx
+                        ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/20 scale-105'
+                        : 'bg-white/5 border-white/10 text-stone-300 hover:bg-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <span className="text-2xl font-black font-japanese block">{v.char}</span>
+                    <span className="text-[11px] font-mono opacity-80 block mt-0.5">{v.romaji}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 'interactive' && (
+            <div className="space-y-6">
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-semibold mb-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>কুইজ চ্যালেঞ্জ</span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  নিচের কোন অক্ষরটির উচ্চারণ "আ" (A)?
+                </h3>
+                <p className="text-xs text-stone-400 mb-4">
+                  অক্ষরে ক্লিক করে সঠিক উত্তর বাছাই করুন:
+                </p>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {['い', 'あ', 'お'].map((char) => {
+                    const isChosen = quizSelection === char;
+                    let btnStyle = 'bg-white/5 border-white/10 text-white hover:bg-white/10';
+                    if (isChosen) {
+                      btnStyle = char === 'あ'
+                        ? 'bg-emerald-600/30 border-emerald-500 text-emerald-300'
+                        : 'bg-rose-600/30 border-rose-500 text-rose-300';
+                    }
+
+                    return (
+                      <button
+                        key={char}
+                        onClick={() => handleQuizAnswer(char)}
+                        className={`p-5 rounded-2xl border text-center transition-all cursor-pointer ${btnStyle}`}
+                      >
+                        <span className="text-4xl font-black font-japanese block mb-1">{char}</span>
+                        <span className="text-xs font-mono text-stone-400">ট্যাপ করুন</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {quizSelection && (
+                  <div className={`mt-4 p-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 ${
+                    isCorrect ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                  }`}>
+                    {isCorrect ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        <span>অসাধারণ! "あ" হচ্ছে হিরাগানার প্রথম অক্ষর "আ"।</span>
+                      </>
+                    ) : (
+                      <span>সঠিক হয়নি, পুনরায় চেষ্টা করুন। (あ = আ)</span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
           )}
+
+          {step === 'goal' && (
+            <div className="space-y-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-400 block">
+                আপনার প্রাথমিক লক্ষ্য কী?
+              </span>
+
+              {[
+                {
+                  id: 'jlpt_n5_6months',
+                  title: 'JLPT N5 পাস (৬ মাসের টার্গেট)',
+                  desc: 'মিন্না নো নিহোঙ্গো ১-২৫ লেসন ও অফিসিয়াল ভোকাবুলারি মাস্টার করা।',
+                  icon: Target,
+                  tag: 'জনপ্রিয়'
+                },
+                {
+                  id: 'tokyo_job_ssw',
+                  title: 'টোকিও জব ও স্টুডেন্ট ভিসা প্রস্তুতি',
+                  desc: 'কনবিনি পার্ট-টাইম ইন্টারভিউ ও দৈনন্দিন কর্মক্ষেত্র জাপানিজ।',
+                  icon: Compass,
+                  tag: 'ক্যারিয়ার'
+                },
+                {
+                  id: 'hobby_culture',
+                  title: 'জাপানিজ ভাষা ও সংস্কৃতি ভালোবাসা',
+                  desc: 'অ্যানিমে, গান ও সাবলীল কথোপকথন উপভোগ করার জন্য।',
+                  icon: Zap,
+                  tag: 'ফাউন্ডেশন'
+                }
+              ].map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => setSelectedGoal(item.id)}
+                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start space-x-3.5 ${
+                    selectedGoal === item.id
+                      ? 'bg-red-600/10 border-red-500 text-white'
+                      : 'bg-white/5 border-white/10 text-stone-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div className={`p-2.5 rounded-xl ${selectedGoal === item.id ? 'bg-red-600 text-white' : 'bg-white/5 text-stone-400'}`}>
+                    <item.icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-bold text-white">{item.title}</h4>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-stone-300 font-mono">
+                        {item.tag}
+                      </span>
+                    </div>
+                    <p className="text-xs text-stone-400 mt-1">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Footer Navigation CTA */}
+        <div className="p-4 sm:p-6 border-t border-white/5 bg-white/5 flex items-center justify-between">
+          {step !== 'vowels' ? (
+            <button
+              onClick={() => setStep(step === 'goal' ? 'interactive' : 'vowels')}
+              className="px-4 py-2 text-xs font-semibold text-stone-400 hover:text-white transition-colors cursor-pointer"
+            >
+              পেছনে যান
+            </button>
+          ) : (
+            <div className="text-xs text-stone-500">শুরু থেকে শিখুন</div>
+          )}
+
+          {step === 'vowels' && (
+            <button
+              onClick={() => setStep('interactive')}
+              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-red-600/20 transition-all flex items-center space-x-2 cursor-pointer group"
+            >
+              <span>পরবর্তী ধাপ: কুইজ টেস্ট</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
+          {step === 'interactive' && (
+            <button
+              onClick={() => setStep('goal')}
+              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-red-600/20 transition-all flex items-center space-x-2 cursor-pointer group"
+            >
+              <span>পরবর্তী ধাপ: লক্ষ্য নির্বাচন</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
+          {step === 'goal' && (
+            <button
+              onClick={handleFinish}
+              className="px-7 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/25 transition-all flex items-center space-x-2 cursor-pointer group"
+            >
+              <span>যাত্রা শুরু করুন (কোর্স খুলুন)</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+        </div>
+
       </div>
     </div>
   );
