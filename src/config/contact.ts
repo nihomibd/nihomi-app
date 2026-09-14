@@ -3,20 +3,45 @@
  * Official bKash MFS & WhatsApp Verification Gateway
  */
 
-export const NIHOMI_CONTACT = {
-  // Official Contact Numbers
-  phone: '+880 1834-348966',
-  phoneFormatted: '+880 1834-348966',
-  phoneRaw: '+8801834348966',
+export interface ContactConfig {
+  phone: string;
+  phoneFormatted: string;
+  phoneRaw: string;
+  helpline: string;
+  bkashNumber: string;
+  bkashNumberFormatted: string;
+  bkashAccountType: string;
+  whatsappNumber: string;
+  whatsappFormatted: string;
+  whatsappDefaultMessage: string;
+  email: string;
+  admissionsEmail: string;
+  corporateEmail: string;
+  officeLocationBn: string;
+  officeLocationEn: string;
+  locationBn: string;
+  locationEn: string;
+  partnerEcosystem: string;
+  getWhatsAppTrxVerificationUrl: (trxId?: string, planName?: string) => string;
+  getWhatsAppSupportUrl: (customMessage?: string) => string;
+}
+
+export const NIHOMI_CONTACT: ContactConfig = {
+  // Official Contact Numbers & 24/7 Helpline
+  phone: '+880 1800-644664',
+  phoneFormatted: '+880 1800-644664',
+  phoneRaw: '01800644664',
+  helpline: '01800644664',
   
   // Official bKash Payment Details
-  bkashNumber: '01834348966',
-  bkashNumberFormatted: '+8801834-348966',
+  bkashNumber: '01800644664',
+  bkashNumberFormatted: '+880 1800-644664',
   bkashAccountType: 'Personal / Merchant Send Money',
   
   // Official WhatsApp Business Bridge
-  whatsappNumber: '8801834348966',
-  whatsappFormatted: '+880 1834-348966',
+  whatsappNumber: '8801800644664',
+  whatsappFormatted: '+880 1800-644664',
+  whatsappDefaultMessage: 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।',
   
   // Emails
   email: 'support@nihomi.com',
@@ -24,20 +49,22 @@ export const NIHOMI_CONTACT = {
   corporateEmail: 'b2b@nihomi.com',
   
   // Locations & Ecosystem
-  locationBn: 'বনানী রোড ১১, ঢাকা, বাংলাদেশ এবং শিঞ্জুকু, টোকিও, জাপান',
-  locationEn: 'Banani Road 11, Dhaka, Bangladesh & Shinjuku, Tokyo, Japan',
-  partnerEcosystem: 'bdTrip24 Ecosystem',
+  officeLocationBn: 'বিটিআই সেন্ট্রাল প্লাজা, ফার্মগেট, ঢাকা - ১২১৫',
+  officeLocationEn: 'BTI Central Plaza, Farmgate, Dhaka - 1215',
+  locationBn: 'বিটিআই সেন্ট্রাল প্লাজা, ফার্মগেট, ঢাকা এবং শিঞ্জুকু, টোকিও, জাপান',
+  locationEn: 'BTI Central Plaza, Farmgate, Dhaka & Shinjuku, Tokyo, Japan',
+  partnerEcosystem: 'Nihomi Japan Learning Ecosystem',
   
   // 1-Click WhatsApp Verification Generator
-  getWhatsAppTrxVerificationUrl: (trxId: string, planName: string = 'Pro'): string => {
-    const cleanTrx = trxId ? trxId.trim().toUpperCase() : '[USER_TRXID]';
-    return `https://wa.me/8801834348966?text=Hello%20Nihomi%2C%20I%20have%20paid%20via%20bKash.%20My%20TrxID%20is:%20${encodeURIComponent(cleanTrx)}`;
+  getWhatsAppTrxVerificationUrl: (trxId?: string, _planName: string = 'Pro'): string => {
+    const cleanTrx = trxId && typeof trxId === 'string' ? trxId.trim().toUpperCase() : '[USER_TRXID]';
+    return `https://wa.me/8801800644664?text=Hello%20Nihomi%2C%20I%20have%20paid%20via%20bKash.%20My%20TrxID%20is:%20${encodeURIComponent(cleanTrx)}`;
   },
 
   // General Support URL
   getWhatsAppSupportUrl: (customMessage?: string): string => {
-    const message = customMessage || 'Hello Nihomi Sensei, I want to learn Japanese and prepare for JLPT N5!';
-    return `https://wa.me/8801834348966?text=${encodeURIComponent(message)}`;
+    const message = customMessage || 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।';
+    return `https://wa.me/8801800644664?text=${encodeURIComponent(message)}`;
   }
 };
 

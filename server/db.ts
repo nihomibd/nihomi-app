@@ -1851,6 +1851,54 @@ class Database {
     return p;
   }
 
+  public recordRetentionActivity(userId: string, activityType: string, xpGained: number): {
+    currentStreak: number;
+    longestStreak: number;
+    totalXp: number;
+    lastActiveDate: string;
+    isStreakExtendedToday: boolean;
+  } {
+    const p = this.getProgressByUserId(userId);
+    const today = new Date().toISOString().split('T')[0];
+    let isStreakExtendedToday = false;
+
+    if (p.lastActiveDate !== today) {
+      const lastDate = new Date(p.lastActiveDate);
+      const currentDate = new Date(today);
+      const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        p.currentStreak += 1;
+        isStreakExtendedToday = true;
+        if (p.currentStreak > p.longestStreak) {
+          p.longestStreak = p.currentStreak;
+        }
+      } else if (diffDays > 1) {
+        p.currentStreak = 1;
+        isStreakExtendedToday = true;
+      }
+      p.lastActiveDate = today;
+    }
+
+    p.experiencePoints += Math.max(5, xpGained);
+    p.updatedAt = new Date().toISOString();
+    this.save();
+
+    const user = this.findUserById(userId);
+    if (user) {
+      this.syncUserToSupabase(user, this.getProfile(userId), p).catch(() => {});
+    }
+
+    return {
+      currentStreak: p.currentStreak,
+      longestStreak: p.longestStreak,
+      totalXp: p.experiencePoints,
+      lastActiveDate: p.lastActiveDate,
+      isStreakExtendedToday
+    };
+  }
+
   // --- MEMORYOS™ MISTAKE MEMORY & TARGETED REVIEW ENGINE ---
   public recordMistake(input: {
     userId: string;

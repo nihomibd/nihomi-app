@@ -603,4 +603,48 @@ learningRouter.get('/progress/weak-areas', optionalAuth, (req: AuthenticatedRequ
   }
 });
 
+// Record retention activity (Kana, Listening, Quiz, AI Chat) and calculate streak/XP
+learningRouter.post('/progress/record-activity', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'usr-demo';
+    const { activity, xpGained } = req.body || {};
+    const effectiveXp = typeof xpGained === 'number' && xpGained > 0 ? xpGained : 15;
+
+    const result = db.recordRetentionActivity(userId, activity || 'GENERAL', effectiveXp);
+    return res.json({
+      success: true,
+      data: result
+    });
+  } catch (err: any) {
+    console.error('Error recording retention activity:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to record retention activity'
+    });
+  }
+});
+
+// Get current streak status
+learningRouter.get('/progress/streak', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'usr-demo';
+    const progress = db.getProgress(userId);
+    return res.json({
+      success: true,
+      currentStreak: progress.currentStreak,
+      longestStreak: progress.longestStreak,
+      totalXp: progress.experiencePoints,
+      lastActiveDate: progress.lastActiveDate,
+      totalStudyMinutes: progress.totalStudyMinutes
+    });
+  } catch (err: any) {
+    console.error('Error getting streak status:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to get streak status'
+    });
+  }
+});
+
+
 

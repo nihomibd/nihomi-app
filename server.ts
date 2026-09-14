@@ -17,6 +17,7 @@ import { japanTwinRouter } from './server/routes/japanTwin.js';
 import { ghostModeRouter } from './server/routes/ghostMode.js';
 import { mockExamsRouter } from './server/routes/mockExams.js';
 import { systemHealthRouter } from './server/routes/systemHealth.js';
+import { healthRouter } from './server/routes/health.js';
 import { contentEngineRouter } from './server/routes/contentEngine.js';
 import { contentStudioRouter } from './server/routes/contentStudio.js';
 import { whiteLabelRouter } from './server/routes/whiteLabelRoutes.js';
@@ -150,15 +151,8 @@ async function startServer() {
     next();
   });
 
-  // API Routes
-  app.get('/api/health', (req, res) => {
-    res.json({
-      status: 'ok',
-      service: 'Nihomi.com API',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development'
-    });
-  });
+  // API Routes & Production Health Check
+  app.use('/api/health', healthRouter);
 
   app.use('/api/auth', authRouter);
   app.use('/api/payment', paymentRouter);

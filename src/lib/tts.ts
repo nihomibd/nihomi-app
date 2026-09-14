@@ -1,7 +1,7 @@
 /**
- * NIHOMI RESILIENT JAPANESE AUDIO & TTS ENGINE
- * Provides high-fidelity Web Speech API synthesis with seamless HTML5 Audio fallback
- * optimized for budget Android devices and iOS Safari on 3G/4G networks.
+ * NIHOMI RESILIENT TOKYO NATIVE JAPANESE AUDIO & TTS ENGINE
+ * Provides high-fidelity Web Speech API synthesis strictly prioritizing authentic Tokyo voices:
+ * Google 日本語, Kyoko, Otoya, Nanami with automatic HTML5 streaming audio fallback.
  */
 
 // Active utterance retention pool to prevent Chromium/Android GC bug
@@ -23,7 +23,43 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
 }
 
 /**
- * Fallback to HTML5 audio using lightweight TTS streaming when Web Speech is unavailable
+ * Selects the highest fidelity Tokyo native Japanese voice available on the platform.
+ * Priority: Google 日本語 > Kyoko > Otoya > Nanami > Ayumi / Haruka > ja-JP
+ */
+export function selectTokyoNativeVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  if (!voices || voices.length === 0) return null;
+
+  // Strict priority ranking for authentic Tokyo native articulation
+  const priorityPatterns = [
+    /google\s*日本語/i,
+    /google\s*japanese/i,
+    /kyoko/i,
+    /otoya/i,
+    /nanami/i,
+    /ayumi/i,
+    /haruka/i,
+    /sayaka/i,
+    /ichiro/i,
+    /shizuka/i,
+  ];
+
+  for (const pattern of priorityPatterns) {
+    const matched = voices.find(
+      (v) => pattern.test(v.name) && (v.lang.startsWith('ja') || v.lang.includes('JP'))
+    );
+    if (matched) return matched;
+  }
+
+  // Exact ja-JP match
+  const exactJa = voices.find((v) => v.lang === 'ja-JP' || v.lang === 'ja_JP');
+  if (exactJa) return exactJa;
+
+  // Generic Japanese fallback
+  return voices.find((v) => v.lang.startsWith('ja') || v.name.toLowerCase().includes('japanese')) || null;
+}
+
+/**
+ * Fallback to HTML5 audio using lightweight Google TTS streaming when Web Speech is unavailable
  */
 function playFallbackAudio(
   cleanText: string,
@@ -47,7 +83,7 @@ function playFallbackAudio(
       return;
     }
 
-    // Google Translate low-latency lightweight Japanese audio stream
+    // Google Translate low-latency lightweight Tokyo Japanese audio stream
     const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encodeURIComponent(
       cleanText
     )}`;
@@ -77,7 +113,6 @@ function playFallbackAudio(
     const playPromise = audio.play();
     if (playPromise !== undefined && typeof playPromise.catch === 'function') {
       playPromise.catch((err) => {
-        // Defensively suppress unhandled promise rejection (e.g. AbortError or NotAllowedError)
         console.warn('[TTS] Audio play promise handled cleanly without freezing UI:', err);
         activeFallbackAudio = null;
         options?.onError?.();
@@ -92,6 +127,7 @@ function playFallbackAudio(
 
 /**
  * Speaks Japanese text using Web Speech API with automatic HTML5 fallback.
+ * Tuning: default rate: 0.9 (optimal for beginners), pitch: 1.0 (natural pitch).
  */
 export function speakJapanese(
   text: string,
@@ -134,21 +170,12 @@ export function speakJapanese(
     utterance.rate = options?.rate ?? 0.9;
     utterance.pitch = options?.pitch ?? 1.0;
 
-    // Select the best Japanese voice
+    // Strictly select the best Tokyo native Japanese voice
     const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
-    const jaVoice = voices.find(
-      (v) =>
-        v.lang === 'ja-JP' ||
-        v.lang === 'ja_JP' ||
-        v.lang.startsWith('ja') ||
-        v.name.toLowerCase().includes('kyoko') ||
-        v.name.toLowerCase().includes('otoya') ||
-        v.name.toLowerCase().includes('sayaka') ||
-        v.name.toLowerCase().includes('japanese')
-    );
+    const nativeVoice = selectTokyoNativeVoice(voices);
 
-    if (jaVoice) {
-      utterance.voice = jaVoice;
+    if (nativeVoice) {
+      utterance.voice = nativeVoice;
     }
 
     let completed = false;
@@ -168,15 +195,14 @@ export function speakJapanese(
       activeUtterances.delete(utterance);
       if (!completed) {
         completed = true;
-        console.warn('[TTS] Web Speech error, trying fallback audio:', e);
-        // Fallback to HTML5 audio stream seamlessly
+        console.warn('[TTS] Web Speech error, falling back seamlessly to Google TTS audio proxy:', e);
         playFallbackAudio(cleanText, options);
       }
     };
 
     window.speechSynthesis.speak(utterance);
 
-    // Timeout safety fallback: If speech synthesis hangs on mobile (never fires onend)
+    // Timeout safety fallback: If speech synthesis hangs on mobile without firing onend
     const estimatedDurationMs = Math.max(1500, (cleanText.length / 4) * 1000 * (1 / (options?.rate || 0.9)));
     setTimeout(() => {
       if (activeUtterances.has(utterance)) {
@@ -190,7 +216,7 @@ export function speakJapanese(
       }
     }, estimatedDurationMs + 4000);
   } catch (err) {
-    console.warn('[TTS] Web Speech exception, switching to audio stream:', err);
+    console.warn('[TTS] Web Speech exception, switching to Google TTS audio stream proxy:', err);
     playFallbackAudio(cleanText, options);
   }
 }
@@ -223,4 +249,3 @@ export function extractJapanesePhrases(text: string): string[] {
   const matches = text.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\u3000-\u303f]+/g);
   return matches || [];
 }
-

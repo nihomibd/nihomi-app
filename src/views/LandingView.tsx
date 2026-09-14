@@ -12,8 +12,20 @@ import {
   X,
   Gift,
   ShieldCheck,
-  Target
+  Target,
+  Headphones,
+  Award,
+  CheckCircle2,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  MapPin,
+  Phone,
+  CreditCard,
+  BookOpen
 } from 'lucide-react';
+import { NIHOMI_CONTACT } from '../config/contact';
 import { useAuth } from '../context/AuthContext';
 import { speakJapanese } from '../lib/tts';
 import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice';
@@ -164,6 +176,34 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [isWritingActive, setIsWritingActive] = useState(false);
   const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      question: 'আমি একদম শূন্য থেকে শুরু করতে পারব?',
+      answer: 'হ্যাঁ, সম্পূর্ণ শূন্য থেকে! জাপানিজ ভাষার কোনো পূর্ব ধারণা না থাকলেও নিহোমির "Zero Japanese Gateway" এবং "Kana Lab" দিয়ে আপনি খুব সহজে ৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক এবং বাংলা উচ্চারণসহ আয়ত্ত করতে পারবেন। এরপর মিন্না নো নিহোঙ্গো ১–২৫ পাঠের মাধ্যমে N5 প্রস্তুতি সম্পন্ন করবেন।'
+    },
+    {
+      question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
+      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। আপনি সরাসরি অটোমেটেড গেটওয়ে দিয়ে অথবা আমাদের অফিশিয়াল নম্বরে সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) দিলে সাথে সাথে সম্পূর্ণ কোর্স, লিসেনিং অডিও ল্যাব ও আনলিমিটেড AI সেনসি ফিচার আনলক হয়ে যাবে। কোনো আন্তর্জাতিক কার্ডের প্রয়োজন নেই।'
+    },
+    {
+      question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
+      answer: 'নিয়মিত প্রতিদিন ৪৫ মিনিট থেকে ১ ঘণ্টা নিহোমির গাইডেড রোডম্যাপ, মিন্না নো নিহোঙ্গো ১–২৫ লেসন এবং লিসেনিং অডিও ল্যাব অনুসরণ করলে মাত্র ৬০ থেকে ৯০ দিনের মধ্যে আপনি অফিশিয়াল JLPT N5 পরীক্ষার জন্য ১০০% প্রস্তুত হবেন।'
+    },
+    {
+      question: 'কোর্স ও প্র্যাকটিস ল্যাবের অ্যাক্সেস কি আজীবন থাকবে?',
+      answer: 'হ্যাঁ! একবার এনরোল করার পর আপনি লাইফটাইম যেকোনো ডিভাইস (স্মার্টফোন, ট্যাবলেট, ল্যাপটপ) থেকে সব পাঠ, তোশিবা নেটিভ অডিও ডায়ালগ, কানজি ক্যানভাস এবং ১৮০ মার্কসের অফিশিয়াল মক টেস্ট প্র্যাকটিস করতে পারবেন।'
+    },
+    {
+      question: 'ক্লাস কি নির্দিষ্ট সময়ে লাইভ হবে নাকি নিজের সুবিধাজনক সময়ে?',
+      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর।'
+    },
+    {
+      question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
+      answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
+    }
+  ];
 
   const handleSearch = async (text: string) => {
     if (!text.trim()) return;
@@ -470,6 +510,279 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. CORE FEATURES GRID SHOWCASE */}
+      <section className="py-16 bg-[#FAF9F6] border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold mb-3 border border-red-200">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>নিহোমি সম্পূর্ণ লার্নিং ইকোসিস্টেম</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-stone-950 tracking-tight">
+              JLPT N5 পাসের জন্য প্রয়োজনীয় <span className="text-red-600">সবকিছু এক জায়গায়</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-stone-600 mt-2">
+              জাপানিজ বর্ণমালা থেকে শুরু করে তোশিবা নেটিভ অডিও, এআই সেনসি ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Feature 1: ৪৬ হিরাগানা-কাতাকানা ও কানজি স্ট্রোক ল্যাব */}
+            <div
+              id="feature-card-kana-kanji"
+              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-japanese font-bold text-xl shadow-xs">
+                    あ/日
+                  </div>
+                  <span className="px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-bold font-mono">
+                    কানা ও কানজি ল্যাব
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-red-600 transition-colors">
+                  ৪৬ হিরাগানা-কাতাকানা ও কানজি স্ট্রোক ল্যাব
+                </h3>
+                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
+                  অ্যানিমেটেড স্ট্রোক অর্ডার নির্দেশিকা, বাংলা উচ্চারণ ধ্বনি এবং টাচ ক্যানভাসে আঙুল দিয়ে ড্রয়িং প্র্যাকটিস। সাথে পাচ্ছেন N5 পরীক্ষার জন্য ১০০টি মৌলিক কানজি ও ফ্লাশকার্ড সিস্টেম।
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
+                <button
+                  onClick={() => onNavigate('kana')}
+                  className="flex-1 py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
+                >
+                  <PenTool className="w-3.5 h-3.5" />
+                  <span>কানা ল্যাব খুলুন</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('kanji')}
+                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  <span>কানজি ১০০ ড্রিল →</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Feature 2: মিন্না নো নিহোঙ্গো ১–২৫ লেসন ও লিসেনিং অডিও ল্যাব */}
+            <div
+              id="feature-card-listening-lab"
+              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl shadow-xs">
+                    <Headphones className="w-6 h-6" />
+                  </div>
+                  <span className="px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold font-mono">
+                    অডিও ল্যাব 第1-25課
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-amber-600 transition-colors">
+                  মিন্না নো নিহোঙ্গো ১–২৫ লেসন ও লিসেনিং অডিও ল্যাব
+                </h3>
+                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
+                  টোকিও নেটিভ স্পিকারদের খাঁটি উচ্চারণে ১ থেকে ২৫টি লেসনের সম্পূর্ণ কথপোকথন। ফুরিগানা ও রোমাজি ফিল্টার, ০.৭৫x–১.২৫x স্পিড এবং অফিশিয়াল Choukai অডিও কুইজ।
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
+                <button
+                  onClick={() => onNavigate('listening-lab')}
+                  className="flex-1 py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
+                >
+                  <Headphones className="w-3.5 h-3.5" />
+                  <span>লিসেনিং অডিও ল্যাব</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('curriculum')}
+                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  <span>১–২৫ কারিকুলাম →</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Feature 3: ২৪/৭ এআই সেনসি (তানাকা সেনসি) লাইভ টিউটর */}
+            <div
+              id="feature-card-ai-sensei"
+              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xl shadow-xs">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold font-mono">
+                    Gemini AI Sensei
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-indigo-600 transition-colors">
+                  ২৪/৭ এআই সেনসি (তানাকা সেনসি) লাইভ টিউটর
+                </h3>
+                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
+                  যেকোনো জটিল গ্রামার বা কণা (は vs が, に vs で) নিয়ে বিভ্রান্ত? বাংলায় সহজভাবে বুঝিয়ে দেবেন তানাকা সেনসি। মুখে কথা বলে উচ্চারণ ও টোকিও কনবিনি জব ইন্টারভিউ প্রস্তুতি নিন।
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
+                <button
+                  onClick={() => setIsVoiceActive(true)}
+                  className="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
+                >
+                  <Mic className="w-3.5 h-3.5" />
+                  <span>তানাকা সেনসির সাথে কথা বলুন</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('baito')}
+                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  <span>বাইতো সিমুলেটর →</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Feature 4: ১৮০ মার্কসের অফিশিয়াল জেএলপিটি এন৫ মক টেস্ট ও ভেরিফাইড সার্টিফিকেট */}
+            <div
+              id="feature-card-mock-exam"
+              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl shadow-xs">
+                    <Award className="w-6 h-6" />
+                  </div>
+                  <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold font-mono">
+                    ১৮০ মার্কস ফুল টেস্ট
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-emerald-600 transition-colors">
+                  ১৮০ মার্কসের অফিশিয়াল জেএলপিটি এন৫ মক টেস্ট ও ভেরিফাইড সার্টিফিকেট
+                </h3>
+                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
+                  আসল JLPT পরীক্ষার হুবহু ৩টি সেকশন (মোজী-গোই, বুনপো, চৌকাই)। লাইভ টাইমার, নেগেটিভ নেই, তাৎক্ষণিক রেজাল্ট এবং আন্তর্জাতিকভাবে শেয়ারযোগ্য SHA-256 ভেরিফাইড সনদ।
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
+                <button
+                  onClick={() => onNavigate('mock-exams')}
+                  className="flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>মক টেস্ট দিন (১৮০ মার্কস)</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('courses')}
+                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  <span>ভর্তি অফার দেখুন →</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. HIGH-VALUE FAQ ACCORDION (BENGALI) */}
+      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-bold mb-3 border border-stone-200">
+              <HelpCircle className="w-3.5 h-3.5 text-red-500" />
+              <span>সাধারণ জিজ্ঞাসাসমূহ</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-stone-950 tracking-tight">
+              সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
+            </h2>
+            <p className="text-xs sm:text-sm text-stone-500 mt-2">
+              নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে বিস্তারিত তথ্য
+            </p>
+          </div>
+
+          {/* Accordion Container */}
+          <div className="space-y-3">
+            {faqs.map((faq, index) => {
+              const isExpanded = openFaqIndex === index;
+              return (
+                <div
+                  key={index}
+                  className="border border-stone-200 rounded-2xl overflow-hidden bg-stone-50/50 transition-all"
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isExpanded ? null : index)}
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between space-x-4 cursor-pointer hover:bg-stone-100/60 transition-colors"
+                    aria-expanded={isExpanded}
+                  >
+                    <span className="font-bold text-sm sm:text-base text-stone-900 flex items-center gap-2.5">
+                      <span className="w-6 h-6 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center font-mono font-bold shrink-0">
+                        {index + 1}
+                      </span>
+                      <span>{faq.question}</span>
+                    </span>
+                    {isExpanded ? (
+                      <ChevronUp className="w-5 h-5 text-stone-400 shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-stone-400 shrink-0" />
+                    )}
+                  </button>
+
+                  {isExpanded && (
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-stone-600 leading-relaxed border-t border-stone-200/60 animate-in fade-in duration-200">
+                      <p className="pl-8 sm:pl-8.5">{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. COMMERCIAL TRUST & DIRECT WHATSAPP ADMISSION BANNER */}
+      <section className="py-12 bg-gradient-to-br from-stone-900 via-stone-950 to-red-950 text-white px-4 sm:px-6 lg:px-8 border-t border-stone-800">
+        <div className="max-w-5xl mx-auto rounded-3xl p-6 sm:p-10 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-red-600/30 border border-red-500/40 text-red-300 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>সরাসরি কাউন্সেলিং ও ভর্তি সহায়তা</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              জাপান যাত্রার প্রস্তুতি শুরু হোক আজ থেকেই
+            </h3>
+            <p className="text-xs sm:text-sm text-stone-300 max-w-xl">
+              কোর্সে ভর্তি সংক্রান্ত যেকোনো তথ্য জানতে আমাদের হটলাইনে কল দিন, হোয়াটসঅ্যাপে নক দিন অথবা সরাসরি ফার্মগেট অফিসে আসুন।
+            </p>
+            <p className="text-xs text-stone-400 flex items-center justify-center md:justify-start gap-1.5 pt-1">
+              <MapPin className="w-3.5 h-3.5 text-red-400 shrink-0" />
+              <span>ঢাকা অফিস: {NIHOMI_CONTACT.officeLocationBn}</span>
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
+            <a
+              href="https://wa.me/8801800644664?text=%E0%A6%B9%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%B2%E0%A7%8B%20%E0%A6%A8%E0%A6%BF%E0%A6%B9%E0%A7%8B%E0%A6%AE%E0%A6%BF!%20%E0%A6%86%E0%A6%AE%E0%A6%BF%20JLPT%20N5%20%E0%A6%95%E0%A7%8B%E0%A6%B0%E0%A7%8D%E0%A6%B8%E0%A7%87%20%E0%A6%AD%E0%A6%B0%E0%A7%8D%E0%A6%A4%E0%A6%BF%20%E0%A6%B9%E0%A6%A4%E0%A7%87%20%E0%A6%9A%E0%A6%BE%E0%A6%87%20/%20%E0%A6%AA%E0%A7%87%E0%A6%AE%E0%A7%87%E0%A6%A8%E0%A7%8D%E0%A6%9F%20%E0%A6%B8%E0%A6%82%E0%A6%95%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4%20%E0%A6%A4%E0%A6%A5%E0%A7%8D%E0%A6%AF%20%E0%A6%9C%E0%A6%BE%E0%A6%A8%E0%A6%A4%E0%A7%87%20%E0%A6%9A%E0%A6%BE%E0%A6%87%E0%A7%84"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4 fill-current" />
+              <span>WhatsApp: 01800-644664</span>
+            </a>
+
+            <a
+              href="tel:+8801800644664"
+              className="py-3 px-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all cursor-pointer"
+            >
+              <Phone className="w-4 h-4 text-stone-300" />
+              <span>হটলাইন কল</span>
+            </a>
           </div>
         </div>
       </section>

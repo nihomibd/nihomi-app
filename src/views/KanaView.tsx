@@ -31,6 +31,7 @@ import {
 import { StrokeOrderGuide } from '../components/kana/StrokeOrderGuide';
 import { KanaDrawingCanvas } from '../components/kana/KanaDrawingCanvas';
 import { speakJapanese } from '../lib/tts';
+import { retentionEngine } from '../lib/retentionEngine';
 
 const ROWS_ORDER = ['a', 'ka', 'sa', 'ta', 'na', 'ha', 'ma', 'ya', 'ra', 'wa', 'n'] as const;
 const ROW_LABELS_BN: Record<string, string> = {
@@ -112,6 +113,9 @@ export const KanaView: React.FC = () => {
 
   const handleMasteryToggle = (isMastered: boolean) => {
     setMasteredList(getMasteredKanaList());
+    if (isMastered) {
+      retentionEngine.recordActivity('KANA').catch(() => {});
+    }
   };
 
   return (

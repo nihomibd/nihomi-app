@@ -18,7 +18,8 @@ import {
   Zap,
   Radio,
   Crown,
-  Brain
+  Brain,
+  Headphones
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
@@ -30,6 +31,7 @@ import { SRSFlashcardSession } from '../components/practice/SRSFlashcardSession'
 import { BadgeSystem } from '../components/BadgeSystem';
 import { GhostModeSRSWidget } from '../components/practice/GhostModeSRSWidget';
 import { NextBestActionCard } from '../components/student/NextBestActionCard';
+import { StreakWidget } from '../features/student-dashboard/components/StreakWidget';
 import { Course, StudentProfile, NextBestAction } from '../types/nihomi';
 import { useAuth } from '../context/AuthContext';
 import { Ghost } from 'lucide-react';
@@ -279,8 +281,43 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             }}
           />
 
+          {/* Daily Streak & Gamification Retention Widget */}
+          <StreakWidget
+            onActivityClick={(type) => {
+              if (type === 'KANA') {
+                onNavigate?.('kana');
+              } else if (type === 'LISTENING') {
+                onNavigate?.('listening-lab');
+              } else if (type === 'QUIZ') {
+                if (onNavigate) onNavigate('quizzes');
+                else setActiveTab('assess');
+              } else if (type === 'AI_CHAT') {
+                setIsVoiceActive(true);
+              }
+            }}
+          />
+
           {/* Quick AI Practice Strip */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+              id="card-listening-lab"
+              onClick={() => (onNavigate ? onNavigate('listening-lab') : null)}
+              className="p-5 bg-gradient-to-br from-red-500/10 to-amber-500/5 bg-white dark:bg-[#12121e] sepia:bg-[#f6ebd4] border border-red-500/30 rounded-2xl hover:border-red-500 transition-all cursor-pointer space-y-2 group shadow-xs"
+            >
+              <div className="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-xs">
+                <Headphones className="w-4 h-4" />
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <h4 className="font-bold text-sm text-stone-900 dark:text-stone-100 group-hover:text-red-400 transition-colors">
+                  লিসেনিং অডিও ল্যাব
+                </h4>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 font-bold">
+                  第1-25課
+                </span>
+              </div>
+              <p className="text-xs text-stone-500">মিন্না নো নিহোঙ্গো ১–২৫ এর খাঁটি অডিও ও Choukai কুইজ</p>
+            </div>
+
             <div
               id="card-srs-deck"
               onClick={() => setIsSRSFlashcardsActive(true)}

@@ -41,6 +41,7 @@ const ResetPasswordView = lazy(() => import('./views/ResetPasswordView').then(m 
 const AuthView = lazy(() => import('./views/AuthView').then(m => ({ default: m.AuthView })));
 const KanaView = lazy(() => import('./views/KanaView').then(m => ({ default: m.KanaView })));
 const KanjiView = lazy(() => import('./views/KanjiView').then(m => ({ default: m.KanjiView })));
+const ListeningLabView = lazy(() => import('./views/ListeningLabView').then(m => ({ default: m.ListeningLabView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -63,6 +64,8 @@ import { captureUtmFromUrl } from './utils/utm';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
+import { WhatsAppHelpline } from './components/support/WhatsAppHelpline';
+import { GlobalErrorBoundary } from './components/ErrorBoundary';
 import {
   Sparkles,
   Volume2,
@@ -266,7 +269,8 @@ export const App: React.FC = () => {
       )}
       
       <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
-        <Suspense fallback={<ViewLoadingFallback />}>
+        <GlobalErrorBoundary>
+          <Suspense fallback={<ViewLoadingFallback />}>
           {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
           <AdCampaignView onNavigate={handleNavigate} />
         )}
@@ -393,7 +397,11 @@ export const App: React.FC = () => {
         {(currentView === 'kanji' || currentView === 'kanji-lab' || currentView === 'kanji-100' || currentView === 'n5-kanji') && (
           <KanjiView />
         )}
+        {(currentView === 'listening' || currentView === 'listening-lab' || currentView === 'kaiwa' || currentView === 'choukai') && (
+          <ListeningLabView onNavigate={handleNavigate} />
+        )}
         </Suspense>
+        </GlobalErrorBoundary>
       </main>
 
       {!isFocusMode && !isAdLanding && <Footer onNavigate={handleNavigate} />}
@@ -427,6 +435,9 @@ export const App: React.FC = () => {
 
       {/* Persistent AI Sensei Instant Grammar Floating Coach */}
       <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />
+
+      {/* Official WhatsApp & Student Admission Helpline Widget */}
+      {!isFocusMode && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && <InstallPWA />}
