@@ -11,8 +11,13 @@ export const AuthModal: React.FC = () => {
   useEffect(() => {
     if (isAuthModalOpen) {
       trackNihomiEvent('signup_started', { method: 'modal_prompt' });
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') closeAuthModal();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
     }
-  }, [isAuthModalOpen]);
+  }, [isAuthModalOpen, closeAuthModal]);
 
   if (!isAuthModalOpen) return null;
 

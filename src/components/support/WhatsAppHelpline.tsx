@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MessageCircle,
   Phone,
@@ -20,6 +20,13 @@ interface WhatsAppHelplineProps {
 
 export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDismissed, setIsDismissed] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('nihomi_support_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [showLocationDetails, setShowLocationDetails] = useState(false);
   const [copiedLocation, setCopiedLocation] = useState(false);
 
@@ -37,8 +44,27 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     { label: 'ভর্তি ও কোর্স ফি', msg: 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তির ফি ও ডিসকাউন্ট অফার সম্পর্কে জানতে চাই।' },
     { label: 'বিকাশ পেমেন্ট', msg: 'হ্যালো নিহোমি! আমি bKash / Nagad এর মাধ্যমে ফি পরিশোধ করেছি, ভেরিফিকেশন চাই।' },
     { label: 'অফিস ভিজিট', msg: `হ্যালো নিহোমি! আমি ${safeAddressBn} অফিসে সরাসরি এসে কথা বলতে চাই।` },
-    { label: 'AI সেনসি ডেমো', msg: 'হ্যালো নিহোমি! ২৪/৭ AI সেনসি এবং লিসেনিং অডিও ল্যাব কীভাবে কাজ করে?' }
+    { label: 'AI সেনসেই ডেমো', msg: 'হ্যালো নিহোমি! ২৪/৭ AI সেনসেই এবং লিসেনিং অডিও ল্যাব কীভাবে কাজ করে?' }
   ];
+
+  // Close popup on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  const handleDismiss = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDismissed(true);
+    try {
+      sessionStorage.setItem('nihomi_support_dismissed', 'true');
+    } catch {}
+  };
 
   const handleCopyLocation = () => {
     try {
@@ -58,41 +84,50 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     }
   };
 
+  // If dismissed by student for this session, smoothly hide so it never obstructs screen
+  if (isDismissed) {
+    return null;
+  }
+
   return (
     <div
       id="nihomi-whatsapp-helpline-container"
-      className={`fixed bottom-[96px] md:bottom-24 right-5 sm:right-6 z-40 select-none ${className}`}
+      className={`fixed bottom-[96px] md:bottom-24 right-4 sm:right-6 z-40 select-none ${className}`}
     >
-      {/* Floating Minimized Widget Button */}
+      {/* Floating Minimized Compact Pill Widget */}
       {!isOpen && (
-        <div className="relative group">
+        <div className="relative group flex items-center">
           <button
             id="btn-open-whatsapp-helpline"
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label="Open Nihomi WhatsApp & Helpline Support"
-            className="flex items-center space-x-2.5 px-3.5 sm:px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 cursor-pointer active:scale-95 border-2 border-emerald-400/40"
+            className="flex items-center space-x-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-emerald-400/40 group"
           >
-            {/* Pulsing indicator & WhatsApp Icon */}
-            <div className="relative">
-              <span className="absolute -inset-1 rounded-full bg-white/30 animate-ping" />
-              <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white text-emerald-600 flex items-center justify-center font-bold">
-                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-              </div>
+            {/* Pulsing WhatsApp Icon */}
+            <div className="relative w-6 h-6 rounded-full bg-white text-emerald-600 flex items-center justify-center font-bold shrink-0">
+              <MessageCircle className="w-4 h-4 fill-current" />
             </div>
 
-            {/* Label and Japanese Kanji Badge */}
-            <div className="text-left leading-tight hidden xs:block sm:block pr-1">
-              <div className="flex items-center space-x-1.5">
-                <span className="text-xs font-bold font-sans">হেল্পলাইন</span>
-                <span className="text-[9px] px-1.5 py-0.2 bg-emerald-800/70 text-emerald-100 rounded-md font-japanese font-semibold">
-                  サポート
-                </span>
-              </div>
-              <span className="text-[10px] text-emerald-100 font-mono tracking-tight block">
-                {safePhoneDisplay}
-              </span>
-            </div>
+            {/* Compact Label: Just Support */}
+            <span className="text-xs font-bold font-sans tracking-wide">
+              সাপোর্ট
+            </span>
+            <span className="text-[9px] px-1.5 py-0.5 bg-emerald-800/60 text-emerald-100 rounded-md font-japanese font-medium hidden xs:inline">
+              サポート
+            </span>
+          </button>
+
+          {/* Dismissible ✕ Close Button */}
+          <button
+            id="btn-dismiss-whatsapp-helpline"
+            type="button"
+            onClick={handleDismiss}
+            title="সাপোর্ট বাটন লুকান (Dismiss for this session)"
+            aria-label="Dismiss support widget"
+            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-stone-900/90 hover:bg-stone-950 text-white/70 hover:text-white border border-white/20 flex items-center justify-center shadow-md transition-transform hover:scale-110 cursor-pointer z-10"
+          >
+            <X className="w-3 h-3" />
           </button>
         </div>
       )}
@@ -132,7 +167,8 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
                 type="button"
                 onClick={() => setIsOpen(false)}
                 className="p-1 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-                aria-label="Close helpline window"
+                aria-label="Close helpline window (Escape)"
+                title="বন্ধ করুন (Esc)"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -147,7 +183,7 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 কোন্ বিষয়ে জানতে চান?
               </p>
-              ভর্তি, বিকাশ পেমেন্ট বা ফার্মগেট অফিসে কাউন্সেলিংয়ের জন্য সরাসরি আমাদের অফিশিয়াল হোয়াটসঅ্যাপ বা হটলাইনে যুক্ত হোন।
+              ভর্তি, বিকাশ পেমেন্ট বা ফার্মগেট অফিসে সরাসরি যোগাযোগের জন্য আমাদের অফিশিয়াল হোয়াটসঅ্যাপ বা হটলাইনে যুক্ত হোন।
             </div>
 
             {/* Quick Prompts */}
@@ -251,7 +287,7 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
           {/* Footer Note */}
           <div className="px-4 py-2.5 bg-stone-50 dark:bg-stone-950/60 border-t border-stone-100 dark:border-stone-800/60 flex items-center justify-between text-[10px] text-stone-400 font-mono">
             <span>NIHOMI OFFICIAL HELPLINE</span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-bold">SECURE & DIRECT</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">01834-348966</span>
           </div>
         </div>
       )}

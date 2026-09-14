@@ -1,7 +1,7 @@
-// NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V4
+// NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V3
 // Designed for high reliability on 3G/4G mobile networks in Bangladesh
-const CACHE_VERSION = 'v4';
-const CURRENT_CACHE_NAME = `nihomi-pwa-cache-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v3';
+const CURRENT_CACHE_NAME = `nihomi-${CACHE_VERSION}`;
 
 // Core Shell & Offline Assets
 const OFFLINE_ASSETS = [
@@ -64,7 +64,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CURRENT_CACHE_NAME && cacheName.startsWith('nihomi-pwa-cache-')) {
+          if (cacheName !== CURRENT_CACHE_NAME && (cacheName.startsWith('nihomi-') || cacheName.startsWith('nihomi-pwa-cache-'))) {
             console.log(`SW: Evicting deprecated cache [${cacheName}]`);
             return caches.delete(cacheName);
           }
@@ -101,14 +101,39 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 // 4. Fetch Phase:
-// - Static assets (JS, CSS, fonts, images): Cache-First with Stale-While-Revalidate
+// - Telemetry & Analytics: Silent error suppression with graceful fallback
+// - Static assets (JS, CSS, fonts, images): Cache-First with Stale-While-Revalidate & 500 fallback
 // - API routes (/api/*): STRICT Network-Only (No caching whatsoever to prevent stale billing, auth, or learning states)
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-
   const url = new URL(event.request.url);
 
-  // STRICT NETWORK-ONLY: Exclude ALL /api/ endpoints from service worker caching.
+  // SAFE TELEMETRY / ANALYTICS ERROR SUPPRESSION
+  // Never allow unhandled telemetry failures to surface as 500s or uncaught errors in the client
+  if (url.pathname.includes('/analytics/track') || url.pathname.includes('/content-studio/telemetry')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((resp) => {
+          if (!resp.ok) {
+            return new Response(JSON.stringify({ success: true, suppressed: true, status: resp.status }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+          return resp;
+        })
+        .catch(() => {
+          return new Response(JSON.stringify({ success: true, offline: true }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        })
+    );
+    return;
+  }
+
+  if (event.request.method !== 'GET') return;
+
+  // STRICT NETWORK-ONLY: Exclude all other /api/ endpoints from service worker caching.
   // Dynamic API requests must always fetch directly from the network to preserve security,
   // real-time authentication, idempotent payments, and fresh database states.
   if (url.pathname.startsWith('/api/')) {
@@ -121,6 +146,10 @@ self.addEventListener('fetch', (event) => {
       // Revalidate in background
       const fetchPromise = fetch(event.request)
         .then((networkResponse) => {
+          // If server throws 500 for a static asset, fallback to cache if available
+          if (networkResponse.status >= 500 && cachedResponse) {
+            return cachedResponse;
+          }
           if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseClone = networkResponse.clone();
             caches.open(CURRENT_CACHE_NAME).then((cache) => {
@@ -131,6 +160,7 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => {
           // Network failure during background revalidation is ignored
+          return cachedResponse;
         });
 
       if (cachedResponse) {

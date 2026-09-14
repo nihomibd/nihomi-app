@@ -59,7 +59,7 @@ async function askSensei(query: string): Promise<string> {
     if (qLower.includes('baito') || qLower.includes('interview') || query.includes('バイト')) {
       return `【Tokyo Baito Interview Key Phrases】\n1. はじめまして、よろしくお願いいたします。(Nice to meet you.)\n2. 週に３日入れます。(I can work 3 days a week.)\n3. 一生懸命頑張ります。(I will do my very best.)\nবাংলা অর্থ: "টোকিওতে পার্ট-টাইম জবের জন্য ৩টি গোল্ডেন বাক্য।"`;
     }
-    return `【নিহোমি AI সেনসি বিশ্লেষণ: "${query}"】\nজাপানিজ গ্রামার ও ব্যাকরণ নিয়ম আপনার লার্নিং ডিএনএ-তে যুক্ত করা হয়েছে।`;
+    return `【নিহোমি AI সেনসেই বিশ্লেষণ: "${query}"】\nজাপানিজ গ্রামার ও ব্যাকরণ নিয়ম আপনার লার্নিং ডিএনএ-তে যুক্ত করা হয়েছে।`;
   }
 
   try {
@@ -87,7 +87,7 @@ Keep answers concise, structured, and practical.`;
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sensei is analyzing... Please ask again.';
   } catch (err: any) {
-    return `【নিহোমি AI সেনসি উত্তর】\n"${query}" এর বিশ্লেষণ সম্পন্ন হয়েছে। (AI কানেকশন সক্রিয়)`;
+    return `【নিহোমি AI সেনসেই উত্তর】\n"${query}" এর বিশ্লেষণ সম্পন্ন হয়েছে। (AI কানেকশন সক্রিয়)`;
   }
 }
 
@@ -110,7 +110,7 @@ const N5_PRO_PLAN: Plan = {
     'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
     'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
     '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
-    '২৪/৭ আনলিমিটেড তানাকা এআই সেনসি লাইভ টিউটর',
+    '২৪/৭ আনলিমিটেড তানাকা এআই সেনসেই লাইভ টিউটর',
     'আজীবন অ্যাক্সেস — মোবাইল, ট্যাবলেট ও ল্যাপটপ'
   ],
   aiMonthlyLimit: 500,
@@ -198,7 +198,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     },
     {
       question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
-      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। আপনি সরাসরি কার্ড বা অটোমেটেড গেটওয়ে দিয়ে অথবা আমাদের পার্সোনাল নম্বরে (01834348966) সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) দিলে সাথে সাথে সম্পূর্ণ N5 কোর্স, লিসেনিং অডিও ল্যাব ও আনলিমিটেড AI সেনসি ফিচার আনলক হয়ে যাবে।'
+      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। আপনি সরাসরি কার্ড বা অটোমেটেড গেটওয়ে দিয়ে অথবা আমাদের পার্সোনাল নম্বরে (01834348966) সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) দিলে সাথে সাথে সম্পূর্ণ N5 কোর্স, লিসেনিং অডিও ল্যাব ও আনলিমিটেড AI সেনসেই ফিচার আনলক হয়ে যাবে।'
     },
     {
       question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
@@ -210,7 +210,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     },
     {
       question: 'ক্লাস কি নির্দিষ্ট সময়ে লাইভ হবে নাকি নিজের সুবিধাজনক সময়ে?',
-      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর।'
+      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসেই লাইভ টিউটর।'
     },
     {
       question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
@@ -304,7 +304,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
         {/* Subtitle */}
         <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
-          বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসি, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+          বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসেই, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
         </p>
 
         {/* 2 Primary CTAs: Start Zero Journey + Take Level Check */}
@@ -458,7 +458,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     日
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-stone-900 block">নিহোমি AI সেনসি</span>
+                    <span className="text-xs font-bold text-stone-900 block">নিহোমি AI সেনসেই</span>
                     <span className="text-[10px] text-stone-400 font-mono">লাইভ ব্যাকরণ সমাধান</span>
                   </div>
                 </div>
@@ -605,7 +605,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     '৪৬টি হিরাগানা ও কাতাকানা স্ট্রোক ল্যাব',
                     'মিন্না নো নিহোঙ্গো প্রথম ৩টি বেসিক পাঠ',
                     'প্রাথমিক প্র্যাকটিস কুইজ ও স্কোরকার্ড',
-                    '১০টি এআই সেনসি প্রশ্ন প্রতি মাসে',
+                    '১০টি এআই সেনসেই প্রশ্ন প্রতি মাসে',
                     'ফ্রি ৫০ নিহোমি কয়েন সাইন-আপ বোনাস'
                   ].map((feat, idx) => (
                     <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-700">
@@ -651,10 +651,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   {[
                     'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
                     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
-                    'টোকিও নেティブ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
+                    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
                     'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
                     '১৮০ মার্কসের অফিশিয়াল মক টেস্ট ও ভেরিফাইড সনদ',
-                    '২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর',
+                    '২৪/৭ তানাকা এআই সেনসেই লাইভ টিউটর',
                     'দেশীয় bKash ও Nagad এ ইনস্ট্যান্ট অটোমেটেড ভেরিফিকেশন'
                   ].map((feat, idx) => (
                     <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-900 font-medium">

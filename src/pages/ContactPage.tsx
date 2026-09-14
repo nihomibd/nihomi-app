@@ -155,7 +155,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – সন্ধ্যা ৭:০০ (BST)
                     </p>
                     <p className="text-[11px] text-slate-500">
-                      (শুক্রবার সাপ্তাহিক বন্ধ — তবে অনলাইন AI সেনসি ২৪/৭ সচল)
+                      (শুক্রবার সাপ্তাহিক বন্ধ — তবে অনলাইন AI সেনসেই ২৪/৭ সচল)
                     </p>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         <option value="jlpt_n5_admission">JLPT N5 কোর্স ও অ্যাডমিশন</option>
                         <option value="tokyo_visa_prep">টোকিও স্টুডেন্ট ভিসা ও bdTrip24 স্টাডি ডেস্ক</option>
                         <option value="bKash_payment">bKash / কার্ড পেমেন্ট সমস্যা</option>
-                        <option value="ai_sensei_feedback">AI সেনসি ও অ্যাপ ফিচার সংক্রান্ত</option>
+                        <option value="ai_sensei_feedback">AI সেনসেই ও অ্যাপ ফিচার সংক্রান্ত</option>
                         <option value="other">অন্যান্য সাধারণ প্রশ্ন</option>
                       </select>
                     </div>

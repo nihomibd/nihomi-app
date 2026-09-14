@@ -61,7 +61,7 @@ const SOCIAL_PROOF_EVENTS: SocialProofItem[] = [
   { id: 4, name: 'রাফি', city: 'রাজশাহী', action: 'এইমাত্র Lesson 1 শুরু করেছেন', timeAgo: '৮ মিনিট আগে', badge: 'অ্যাক্টিভ' },
   { id: 5, name: 'মেহেদী', city: 'ঢাকা', action: '৫০টি ফ্রি কয়েন ক্লেইম করেছেন', timeAgo: '১১ মিনিট আগে', badge: 'ওয়েলকাম' },
   { id: 6, name: 'ফারহানা', city: 'খুলনা', action: 'কাঞ্জি ড্রিল কমপ্লিট করেছেন', timeAgo: '১৫ মিনিট আগে', badge: 'কাঞ্জি ল্যাব' },
-  { id: 7, name: 'আরিফ আহমেদ', city: 'মিরপুর', action: 'AI সেনসির সাথে কনভারসেশন শুরু করেছেন', timeAgo: '১৮ মিনিট আগে', badge: 'AI Sensei' }
+  { id: 7, name: 'আরিফ আহমেদ', city: 'মিরপুর', action: 'AI সেনসেইয়ের সাথে কনভারসেশন শুরু করেছেন', timeAgo: '১৮ মিনিট আগে', badge: 'AI Sensei' }
 ];
 
 const MICRO_QUIZ_DATA: QuizQuestion[] = [
@@ -494,7 +494,7 @@ export const AdCampaignView: React.FC<AdCampaignViewProps> = ({ onNavigate }) =>
           <div className="mt-3 pt-2.5 border-t border-stone-800/70 flex flex-wrap items-center justify-between text-[11px] text-stone-400 gap-2">
             <span className="flex items-center space-x-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span>লাইভ মেন্টরশিপ ও ২৪/৭ AI সেনসি</span>
+              <span>লাইভ মেন্টরশিপ ও ২৪/৭ AI সেনসেই</span>
             </span>
             <span className="flex items-center space-x-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />

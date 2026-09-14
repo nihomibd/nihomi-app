@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
@@ -44,6 +44,18 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
   const [submittedTrxId, setSubmittedTrxId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -140,7 +152,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 সহজ bKash পেমেন্টে প্রো অ্যাক্টিভেশন
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                মডেল টেস্ট, এআই সেনসি টিউটরিং এবং ফুল ২৫ লেসন আনলক করুন সরাসরি bKash-এ পেমেন্ট করে।
+                মডেল টেস্ট, এআই সেনসেই টিউটরিং এবং ফুল ২৫ লেসন আনলক করুন সরাসরি bKash-এ পেমেন্ট করে।
               </p>
             </div>
 
