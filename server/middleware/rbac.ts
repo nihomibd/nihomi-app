@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { AuthenticatedRequest, getUserFromToken } from '../authHelper.js';
+import { AuthenticatedRequest, getUserFromToken, extractBearerToken } from '../authHelper.js';
 import { UserRole } from '../types.js';
 
 export interface RbacOptions {
@@ -22,9 +22,8 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
   const rolesArray: UserRole[] = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader || (req.query.token as string);
-    const user = req.user || getUserFromToken(token);
+    const token = extractBearerToken(req);
+    const user = req.user || (token ? getUserFromToken(token) : null);
 
     if (!user) {
       return res.status(401).json({
@@ -81,9 +80,8 @@ export const requireStaff = requireRole(['admin', 'instructor'], {
  */
 export function requireOwnerOrAdmin(paramKey = 'userId') {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader || (req.query.token as string);
-    const user = req.user || getUserFromToken(token);
+    const token = extractBearerToken(req);
+    const user = req.user || (token ? getUserFromToken(token) : null);
 
     if (!user) {
       return res.status(401).json({

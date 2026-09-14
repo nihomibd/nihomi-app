@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db, verifyPassword, hashPassword } from '../db.js';
-import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, AuthenticatedRequest } from '../authHelper.js';
+import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, extractBearerToken, AuthenticatedRequest } from '../authHelper.js';
 import { verifyGoogleIdToken } from '../services/googleAuth.js';
 import crypto from 'crypto';
 
@@ -186,9 +186,8 @@ authRouter.post('/switch-view-mode', requireAuth, (req: AuthenticatedRequest, re
 
 // Get Current User / Verify Session
 authRouter.get('/me', (req: AuthenticatedRequest, res) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader || (req.query.token as string);
-  const user = getUserFromToken(token);
+  const token = extractBearerToken(req);
+  const user = token ? getUserFromToken(token) : null;
 
   if (!user) {
     return res.status(200).json({

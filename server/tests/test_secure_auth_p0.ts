@@ -110,9 +110,44 @@ async function runAuthSecurityVerification() {
   const invalidUser = getUserFromToken('Bearer invalid.fake.token');
   assert(invalidUser === null, 'Invalid token returns null user identity');
 
+  // 5. P0 HARDENING: Elimination of Supabase Bypass Logic & Email Backdoors
+  console.log('\n--- 5. Testing P0 Hardening & Elimination of All Bypass Flaws ---');
+
+  // Attempt to exploit former Supabase session bypass with arbitrary unverified token
+  const fakeSupabaseHeader = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+  const fakeSupabasePayload = Buffer.from(JSON.stringify({
+    sub: 'attacker-uuid-9999',
+    aud: 'authenticated',
+    role: 'authenticated',
+    iss: 'https://aiychtkhktwsjrieeaha.supabase.co/auth/v1',
+    email: 'attacker@evil.com',
+    exp: Math.floor(Date.now() / 1000) + 3600
+  })).toString('base64url');
+  const fakeSupabaseToken = `${fakeSupabaseHeader}.${fakeSupabasePayload}.forged_invalid_signature_bytes`;
+
+  const forgedSupabaseResult = verifyStatelessJwt(fakeSupabaseToken);
+  assert(forgedSupabaseResult === null, 'Forged Supabase token with fake claims and invalid signature is REJECTED (Zero bypass)');
+
+  // Verify that former hardcoded email backdoor is completely removed
+  // An account with email mdtanvirkabirbiplob@gmail.com with role: 'user' MUST resolve as 'user'
+  const founderStudentToken = signStatelessJwt({
+    userId: 'usr-founder-student',
+    email: 'mdtanvirkabirbiplob@gmail.com',
+    role: 'user'
+  });
+  const founderStudentUser = getUserFromToken(`Bearer ${founderStudentToken}`);
+  assert(founderStudentUser !== null && founderStudentUser.role === 'user', 'Founder email with user role claims strictly resolves to "user" (No hardcoded email admin backdoor)');
+
+  // Test Algorithm Confusion Protection: alg 'none' must be rejected
+  const noneAlgHeader = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url');
+  const noneAlgToken = `${noneAlgHeader}.${fakeSupabasePayload}.`;
+  const noneAlgResult = verifyStatelessJwt(noneAlgToken);
+  assert(noneAlgResult === null, 'Token with alg: "none" is strictly REJECTED');
+
   console.log(`\n======================================================`);
   console.log(`ALL ${passedTests}/${totalTests} SECURITY TESTS PASSED SUCCESSFULLY!`);
   console.log(`======================================================`);
+  process.exit(0);
 }
 
 runAuthSecurityVerification().catch((err) => {

@@ -375,6 +375,42 @@
       "role": "admin",
       "createdAt": "2026-08-23T07:12:51.501+00:00",
       "updatedAt": "2026-08-23T07:12:51.501+00:00"
+    },
+    {
+      "id": "usr-f2034370",
+      "email": "student.iso.1789358550251@nihomi.com",
+      "passwordHash": "e83db45ac05739da0951878460cd2bf0d38e14542c8801c093c49aa7066b4e9798fee196914a7badee42d85071d7595497e1e15eec02ededea635df2e02b8ab3",
+      "passwordSalt": "9b90f87e3c1e9410a4c3da80812e5e3d",
+      "role": "user",
+      "createdAt": "2026-09-14T04:02:30.252Z",
+      "updatedAt": "2026-09-14T04:02:30.252Z"
+    },
+    {
+      "id": "usr-847da61a",
+      "email": "student.iso.1789358589063@nihomi.com",
+      "passwordHash": "299f158b42587d7d5a7300427fc318f9a18f5ec9f34934f38ab598eb2feec7bb0790682c86539e5da70a3960b9b2454282094e4500bad5b77259e4192bf9e45b",
+      "passwordSalt": "78ce40d4685c272c65dde1ab35e67164",
+      "role": "user",
+      "createdAt": "2026-09-14T04:03:09.065Z",
+      "updatedAt": "2026-09-14T04:03:09.065Z"
+    },
+    {
+      "id": "usr-594bfb80",
+      "email": "student.iso.1789358616939@nihomi.com",
+      "passwordHash": "dfae6f1f086c116acb6afdf87ce146436491fc4e49eba97b8bd8323a5dd21a383bf2d53f90e7b24328d2a8e91357fd52e29056006d4e39100c61a24702c8a97d",
+      "passwordSalt": "7f4b969a2bd367639a6cc9ebf103114f",
+      "role": "user",
+      "createdAt": "2026-09-14T04:03:36.940Z",
+      "updatedAt": "2026-09-14T04:03:36.940Z"
+    },
+    {
+      "id": "usr-876c5b70",
+      "email": "student.iso.1789358775933@nihomi.com",
+      "passwordHash": "4a46d90e616475883c87c2ccfe5d895569044ca7f78948ea565e28b89f1181d2a77e8bb34b475cc0cf999b627d7652d4b8e415b3878c37d69c26e941e0460c79",
+      "passwordSalt": "998df526a77df42b01e487163783405b",
+      "role": "user",
+      "createdAt": "2026-09-14T04:06:15.934Z",
+      "updatedAt": "2026-09-14T04:06:15.934Z"
     }
   ],
   "profiles": [
@@ -705,6 +741,42 @@
       "dailyGoalMinutes": 20,
       "createdAt": "2026-09-08T10:57:04.713Z",
       "updatedAt": "2026-09-08T10:57:04.713Z"
+    },
+    {
+      "userId": "usr-f2034370",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-14T04:02:30.252Z",
+      "updatedAt": "2026-09-14T04:02:30.252Z"
+    },
+    {
+      "userId": "usr-847da61a",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-14T04:03:09.065Z",
+      "updatedAt": "2026-09-14T04:03:09.065Z"
+    },
+    {
+      "userId": "usr-594bfb80",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-14T04:03:36.940Z",
+      "updatedAt": "2026-09-14T04:03:36.940Z"
+    },
+    {
+      "userId": "usr-876c5b70",
+      "displayName": "Isolated Student",
+      "nativeLanguage": "English",
+      "targetLevel": "N5",
+      "dailyGoalMinutes": 20,
+      "createdAt": "2026-09-14T04:06:15.934Z",
+      "updatedAt": "2026-09-14T04:06:15.934Z"
     }
   ],
   "progress": [
@@ -1425,6 +1497,62 @@
       "lastActiveDate": "2026-09-12",
       "experiencePoints": 0,
       "updatedAt": "2026-09-12T11:16:44.765Z"
+    },
+    {
+      "userId": "usr-f2034370",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-14",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-14T04:02:30.252Z"
+    },
+    {
+      "userId": "usr-847da61a",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-14",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-14T04:03:09.065Z"
+    },
+    {
+      "userId": "usr-594bfb80",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-14",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-14T04:03:36.940Z"
+    },
+    {
+      "userId": "usr-876c5b70",
+      "currentLevel": "N5",
+      "currentCourseId": "course-n5",
+      "currentModuleId": "mod-n5-1",
+      "currentLessonId": "les-n5-1-1",
+      "completedLessonIds": [],
+      "totalStudyMinutes": 0,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "lastActiveDate": "2026-09-14",
+      "experiencePoints": 0,
+      "updatedAt": "2026-09-14T04:06:15.934Z"
     }
   ],
   "courses": [
@@ -12999,6 +13127,36 @@
       "status": "initiated",
       "createdAt": "2026-09-11T14:47:07.482Z",
       "updatedAt": "2026-09-11T14:47:07.482Z"
+    },
+    {
+      "id": "pay-b9f6a07b",
+      "userId": "smoke-test-user-1789358636592",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "originalAmount": 249,
+      "discountAmount": 0,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-14T04:03:56.593Z",
+      "updatedAt": "2026-09-14T04:03:56.593Z"
+    },
+    {
+      "id": "pay-01faf96c",
+      "userId": "smoke-test-user-1789358784021",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "billingInterval": "monthly",
+      "amount": 249,
+      "originalAmount": 249,
+      "discountAmount": 0,
+      "currency": "BDT",
+      "provider": "bkash",
+      "status": "initiated",
+      "createdAt": "2026-09-14T04:06:24.022Z",
+      "updatedAt": "2026-09-14T04:06:24.022Z"
     }
   ],
   "paymentAttempts": [],
@@ -13654,6 +13812,70 @@
       "issuedAt": "2026-09-11T14:47:07.913Z",
       "paidAt": "2026-09-11T14:47:07.913Z",
       "createdAt": "2026-09-11T14:47:07.913Z"
+    },
+    {
+      "id": "inv-1e0b88a6",
+      "userId": "smoke-test-user-1789358636592",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-b9f6a07b",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "nihomibd@gmail.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-01a0f8",
+          "invoiceId": "inv-1e0b88a6",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-14T04:03:57.104Z",
+      "paidAt": "2026-09-14T04:03:57.104Z",
+      "createdAt": "2026-09-14T04:03:57.104Z"
+    },
+    {
+      "id": "inv-b08065a8",
+      "userId": "smoke-test-user-1789358784021",
+      "subscriptionId": "sub-smoke-test",
+      "planId": "starter",
+      "planName": "Nihomi Starter Plan",
+      "invoiceType": "subscription",
+      "amount": 249,
+      "currency": "BDT",
+      "billingPeriod": "2026-09-01 to 2026-10-01",
+      "paymentId": "pay-01faf96c",
+      "status": "paid",
+      "customerName": "QA Verification Student",
+      "customerEmail": "nihomibd@gmail.com",
+      "subtotal": 216.52,
+      "discount": 0,
+      "tax": 32.48,
+      "items": [
+        {
+          "id": "item-04d30d",
+          "invoiceId": "inv-b08065a8",
+          "description": "Nihomi Starter Plan Subscription",
+          "amount": 249,
+          "quantity": 1,
+          "unitPrice": 249
+        }
+      ],
+      "paymentMethodName": "bKash MFS (Tokenized Sandbox)",
+      "issuedAt": "2026-09-14T04:06:24.520Z",
+      "paidAt": "2026-09-14T04:06:24.520Z",
+      "createdAt": "2026-09-14T04:06:24.520Z"
     }
   ],
   "invoiceItems": [],
@@ -14425,6 +14647,42 @@
         "email": "nihomibd@gmail.com"
       },
       "createdAt": "2026-09-08T10:57:04.714Z"
+    },
+    {
+      "id": "sev-aec87d3a",
+      "userId": "usr-f2034370",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1789358550251@nihomi.com"
+      },
+      "createdAt": "2026-09-14T04:02:30.252Z"
+    },
+    {
+      "id": "sev-8f740e3f",
+      "userId": "usr-847da61a",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1789358589063@nihomi.com"
+      },
+      "createdAt": "2026-09-14T04:03:09.065Z"
+    },
+    {
+      "id": "sev-54dcffd4",
+      "userId": "usr-594bfb80",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1789358616939@nihomi.com"
+      },
+      "createdAt": "2026-09-14T04:03:36.940Z"
+    },
+    {
+      "id": "sev-a3f6c2ec",
+      "userId": "usr-876c5b70",
+      "eventType": "signup",
+      "metadata": {
+        "email": "student.iso.1789358775933@nihomi.com"
+      },
+      "createdAt": "2026-09-14T04:06:15.934Z"
     }
   ],
   "adminAuditLogs": [
@@ -520722,6 +520980,22 @@
       "lifetimeEarned": 350,
       "lifetimeSpent": 0,
       "updatedAt": "2026-09-11T14:47:07.667Z"
+    },
+    {
+      "userId": "smoke-test-user-1789358636592",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-14T04:03:56.818Z"
+    },
+    {
+      "userId": "smoke-test-user-1789358784021",
+      "coinBalance": 350,
+      "aiCredits": 600,
+      "lifetimeEarned": 350,
+      "lifetimeSpent": 0,
+      "updatedAt": "2026-09-14T04:06:24.250Z"
     }
   ]
 }
