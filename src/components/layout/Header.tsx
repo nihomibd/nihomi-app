@@ -59,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     { id: 'courses', label: 'Pathways' },
     { id: 'curriculum', label: 'Curriculum' },
     { id: 'study-plan', label: 'Roadmap & SRS' },
+    { id: 'mock-exams', label: 'JLPT Mocks' },
     { id: 'baito', label: 'BaitoOS™' },
     { id: 'leaderboard', label: 'Leaderboard' },
     { id: 'portal', label: 'Dashboard' },

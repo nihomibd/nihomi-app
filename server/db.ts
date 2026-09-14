@@ -5673,24 +5673,25 @@ class Database {
       sectionScores.grammar_reading.scaledScore +
       sectionScores.listening.scaledScore;
 
-    const meetOverallThreshold = totalScaledScore >= exam.overallPassingScore;
-    const allSectionsPassed =
-      sectionScores.vocabulary.isSectionPassed &&
-      sectionScores.grammar_reading.isSectionPassed &&
-      sectionScores.listening.isSectionPassed;
+    // Official JLPT Scoring Matrix:
+    // Language Knowledge (Vocab 60 + Grammar/Reading 60 = 120 marks) Sectional Pass Cutoff: 38/120
+    // Listening (60 marks) Sectional Pass Cutoff: 19/60
+    // Overall Pass Cutoff: 90 / 180
+    const languageKnowledgeScaled = sectionScores.vocabulary.scaledScore + sectionScores.grammar_reading.scaledScore;
+    const isLanguageKnowledgePassed = languageKnowledgeScaled >= 38;
+    const isListeningPassed = sectionScores.listening.scaledScore >= 19;
+    const meetOverallThreshold = totalScaledScore >= (exam.overallPassingScore || 90);
 
-    const isPassed = meetOverallThreshold && allSectionsPassed;
+    const isPassed = meetOverallThreshold && isLanguageKnowledgePassed && isListeningPassed;
 
     let failReason: string | undefined = undefined;
     if (!isPassed) {
       if (!meetOverallThreshold) {
-        failReason = `মোট স্কেলড স্কোর ${totalScaledScore}/১৮০ (পাস মার্ক ${exam.overallPassingScore}) এর নিচে রয়েছে।`;
-      } else if (!sectionScores.vocabulary.isSectionPassed) {
-        failReason = `শব্দভাণ্ডার (Vocabulary) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.vocabulary.scaledScore}/৬০)।`;
-      } else if (!sectionScores.grammar_reading.isSectionPassed) {
-        failReason = `ব্যাকরণ ও পঠন (Grammar/Reading) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.grammar_reading.scaledScore}/৬০)।`;
-      } else if (!sectionScores.listening.isSectionPassed) {
-        failReason = `লিসেনিং (Listening) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.listening.scaledScore}/৬০)।`;
+        failReason = `মোট স্কেলড স্কোর ${totalScaledScore}/১৮০ (অফিসিয়াল পাসিং মার্ক ৯০/১৮০) এর নিচে রয়েছে।`;
+      } else if (!isLanguageKnowledgePassed) {
+        failReason = `ভাষা জ্ঞান (শব্দভাণ্ডার, ব্যাকরণ ও পঠন) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (৩৮/১২০) পূরণ হয়নি (স্কোর: ${languageKnowledgeScaled}/১২০)।`;
+      } else if (!isListeningPassed) {
+        failReason = `লিসেনিং (Listening - 聴解) সেকশনে ন্যূনতম পাসিং থ্রেশহোল্ড (১৯/৬০) পূরণ হয়নি (স্কোর: ${sectionScores.listening.scaledScore}/৬০)।`;
       }
     }
 
@@ -5710,6 +5711,9 @@ class Database {
     }
 
     const certificateId = `NIH-JLPT-${exam.level}-${Date.now().toString(36).toUpperCase()}`;
+    const submittedAt = new Date().toISOString();
+    const rawPayload = `${certificateId}:${params.userId}:${exam.examCode}:${totalScaledScore}:${submittedAt}:nihomi_jlpt_n5_official_verify`;
+    const verificationHash = crypto.createHash('sha256').update(rawPayload).digest('hex').substring(0, 32);
 
     // Generate diagnostic feedback
     const strongSections = Object.values(sectionScores).filter((s) => s.scaledScore >= 45).map((s) => s.sectionTitle);
@@ -5724,13 +5728,10 @@ class Database {
       : `সবগুলো সেকশনেই সন্তোষজনক ব্যালেন্স বজায় রয়েছে।`;
 
     const actionableStudyPlanBn: string[] = [];
-    if (sectionScores.vocabulary.scaledScore < 38) {
-      actionableStudyPlanBn.push('প্রতিদিন ১০টি কাঞ্জি স্ট্রোক ড্রিল ও অর্থোগ্রাফি ফ্ল্যাশউইজেট অনুশীলন করুন।');
+    if (languageKnowledgeScaled < 38) {
+      actionableStudyPlanBn.push('প্রতিদিন ১০টি কাঞ্জি স্ট্রোক ড্রিল ও অর্থোগ্রাফি ফ্ল্যাশউইজেট এবং N5 পার্টিকল রুলস অনুশীলন করুন।');
     }
-    if (sectionScores.grammar_reading.scaledScore < 38) {
-      actionableStudyPlanBn.push('MemoryOS™ Ghost Mode-এ は vs が এবং に vs で এর সাব-ক্লজ ড্রিলগুলো ১০০% আয়ত্ত করুন।');
-    }
-    if (sectionScores.listening.scaledScore < 38) {
+    if (sectionScores.listening.scaledScore < 19) {
       actionableStudyPlanBn.push('টোকিও রিয়েল-অডিও স্পিচ ট্রেইনারে ০.৮x ও ১.০x গতিতে নিয়মিত কথোপকথন শুনুন।');
     }
     if (actionableStudyPlanBn.length === 0) {
@@ -5744,17 +5745,18 @@ class Database {
       examCode: exam.examCode,
       level: exam.level,
       startedAt: new Date(Date.now() - params.totalTimeSpentSeconds * 1000).toISOString(),
-      submittedAt: new Date().toISOString(),
+      submittedAt,
       timeSpentSeconds: params.totalTimeSpentSeconds,
       sectionTimesSpentSeconds: params.sectionTimesSpentSeconds,
       sectionScores,
       totalScaledScore,
-      overallPassingScore: exam.overallPassingScore,
+      overallPassingScore: exam.overallPassingScore || 90,
       isPassed,
       failReason,
       percentileRank,
       letterGrade,
       certificateId,
+      verificationHash,
       userAnswers: processedUserAnswers,
       strengthSummaryBn,
       weaknessSummaryBn,

@@ -3,8 +3,23 @@ import { db } from '../db.js';
 import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { JLPTLevel } from '../types.js';
 import { requireSubscription } from '../middleware/subscriptionGate.js';
+import { MockExamPersistenceService } from '../services/mockExamPersistenceService.js';
+import { subscriptionService } from '../services/subscriptionService.js';
 
 export const mockExamsRouter = Router();
+
+// Public Certificate Verification Endpoint (Tamper-Proof Verification)
+mockExamsRouter.get('/verify-certificate/:certificateId', async (req, res) => {
+  try {
+    const cert = await MockExamPersistenceService.verifyCertificate(req.params.certificateId);
+    if (!cert.found) {
+      return res.status(404).json({ success: false, error: 'Certificate not found or invalid' });
+    }
+    return res.json({ success: true, certificate: cert });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // 1. List all available JLPT Mock Exams
 mockExamsRouter.get('/', optionalAuth, (req: AuthenticatedRequest, res) => {
@@ -128,7 +143,7 @@ mockExamsRouter.get('/:id', optionalAuth, requireSubscription('n5_pro'), (req: A
 });
 
 // 3. Submit Mock Exam Attempt (Paywalled)
-mockExamsRouter.post('/:id/submit', requireAuth, requireSubscription('n5_pro'), (req: AuthenticatedRequest, res) => {
+mockExamsRouter.post('/:id/submit', requireAuth, requireSubscription('n5_pro'), async (req: AuthenticatedRequest, res) => {
   try {
     const { answers, sectionTimesSpentSeconds, totalTimeSpentSeconds } = req.body;
 
@@ -147,6 +162,18 @@ mockExamsRouter.post('/:id/submit', requireAuth, requireSubscription('n5_pro'), 
       },
       totalTimeSpentSeconds: totalTimeSpentSeconds || 60
     });
+
+    // Check if user is Pro for certificate entitlement
+    const userSub = await subscriptionService.getUserSubscription(req.user!.id);
+    const isPro =
+      userSub.tier === 'n5_pro' ||
+      userSub.tier === 'n5_lifetime' ||
+      req.user!.role === 'admin' ||
+      req.user!.role === 'founder';
+    result.attempt.isPro = isPro;
+
+    // Persist attempt to PostgreSQL / Supabase
+    await MockExamPersistenceService.persistAttempt(result.attempt);
 
     const exam = db.getMockExamById(req.params.id);
 

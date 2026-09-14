@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Bot, Send, Sparkles, X } from 'lucide-react';
+import { Bot, Send, Sparkles, X, Volume2 } from 'lucide-react';
 import { apiRequest } from '../../../lib/api';
+import { speakJapanese } from '../../../lib/tts';
 
 interface AiMessage {
   id: string;
@@ -145,7 +146,18 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
                 ? 'ml-auto rounded-br-sm bg-stone-900 text-white'
                 : 'rounded-bl-sm border border-stone-200 bg-stone-50 text-stone-800'}`}
             >
-              {message.content}
+              <div>{message.content}</div>
+              {message.role === 'assistant' && (
+                <button
+                  type="button"
+                  onClick={() => speakJapanese(message.content)}
+                  className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800"
+                  aria-label="উচ্চারণ শুনুন"
+                >
+                  <Volume2 size={14} />
+                  <span>উচ্চারণ শুনুন</span>
+                </button>
+              )}
             </div>
           ))}
           {isLoading && <p className="text-xs font-semibold text-indigo-600">Sensei ভাবছে...</p>}

@@ -10,7 +10,7 @@ import { RecentMistakes } from './components/RecentMistakes';
 import { VocabKanjiProgress } from './components/VocabKanjiProgress';
 import { MobileBottomNavigation, NavTab } from './components/MobileBottomNavigation';
 import { DashboardLoadingSkeleton, DashboardErrorView } from './components/UIStateViews';
-import { AiSenseiDrawer } from './components/AiSenseiDrawer';
+import { AiSenseiModal } from './components/AiSenseiModal';
 import { Lesson12PlayerModal } from './components/Lesson12PlayerModal';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
 import { BaitoReadinessCard } from './components/BaitoReadinessCard';
@@ -483,14 +483,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         currentTab={activeTab}
         onTabChange={handleTabChange}
       />
-      {data && (
-        <AiSenseiDrawer
-          isOpen={isAiTutorOpen}
-          creditsRemaining={data.accountUsage.aiCreditsRemaining}
-          onUseCredit={handleUseAiCredit}
-          onClose={() => setIsAiTutorOpen(false)}
-        />
-      )}
+      <AiSenseiModal
+        isOpen={isAiTutorOpen}
+        onClose={() => setIsAiTutorOpen(false)}
+        onNavigateSubscription={() => onNavigate?.('pricing')}
+      />
       <Lesson12PlayerModal
         isOpen={isLessonOpen}
         onClose={() => setIsLessonOpen(false)}

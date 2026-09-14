@@ -24,6 +24,7 @@ const InstitutionPortalView = lazy(() => import('./views/InstitutionPortalView')
 const CurriculumExplorerView = lazy(() => import('./views/CurriculumExplorerView').then(m => ({ default: m.CurriculumExplorerView })));
 const CommunityLeaderboardView = lazy(() => import('./views/CommunityLeaderboardView').then(m => ({ default: m.CommunityLeaderboardView })));
 const GhostModeView = lazy(() => import('./views/GhostModeView').then(m => ({ default: m.GhostModeView })));
+const MockExamsView = lazy(() => import('./views/MockExamsView').then(m => ({ default: m.MockExamsView })));
 const MockExamRunnerView = lazy(() => import('./views/MockExamRunnerView').then(m => ({ default: m.MockExamRunnerView })));
 const StudyPlanRoadmapView = lazy(() => import('./views/StudyPlanRoadmapView').then(m => ({ default: m.StudyPlanRoadmapView })));
 const BaitoOsView = lazy(() => import('./views/BaitoOsView').then(m => ({ default: m.BaitoOsView })));
@@ -356,6 +357,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'ghost-mode' || currentView === 'ghost') && (
           <GhostModeView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'mock-exams' || currentView === 'mock-exam-hub' || currentView === 'mock-tests') && (
+          <MockExamsView onNavigate={handleNavigate} />
         )}
         {(currentView === 'mock-exam-runner' || currentView === 'mock-exam') && (
           <MockExamRunnerView

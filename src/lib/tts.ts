@@ -214,3 +214,13 @@ export function stopJapaneseSpeech(): void {
     activeFallbackAudio = null;
   }
 }
+
+/**
+ * Extracts Japanese segments (Kanji, Hiragana, Katakana) from mixed Bengali/English text.
+ */
+export function extractJapanesePhrases(text: string): string[] {
+  if (!text) return [];
+  const matches = text.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\u3000-\u303f]+/g);
+  return matches || [];
+}
+

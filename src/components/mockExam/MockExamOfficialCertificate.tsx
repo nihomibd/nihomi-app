@@ -147,6 +147,19 @@ export const MockExamOfficialCertificate: React.FC<MockExamOfficialCertificatePr
           </div>
         </div>
 
+        {/* Verification Hash Badge */}
+        {attempt.verificationHash && (
+          <div className="mt-4 p-3 rounded-xl bg-slate-950/90 border border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-400 font-bold uppercase text-[10px] tracking-wider">Tamper-Proof Hash:</span>
+              <span className="text-slate-300 select-all">{attempt.verificationHash}</span>
+            </div>
+            <span className="text-[10px] text-emerald-400 font-sans font-bold flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Integrity Validated
+            </span>
+          </div>
+        )}
+
         {/* Actions (Hidden during print) */}
         <div className="mt-8 flex items-center justify-center gap-3 print:hidden">
           <button

@@ -1045,6 +1045,8 @@ export interface MockExamAttempt {
   percentileRank?: number;
   letterGrade: 'A' | 'B' | 'C' | 'F';
   certificateId: string;
+  verificationHash?: string;
+  isPro?: boolean;
   userAnswers: {
     questionId: string;
     sectionType: MockExamSectionType;
