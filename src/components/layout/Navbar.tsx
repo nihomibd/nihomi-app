@@ -344,11 +344,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
 
             {/* Desktop Nav Items */}
             {user ? (
-              <div className="hidden md:flex items-center space-x-1">
+              <div className="hidden md:flex flex-row items-center whitespace-nowrap space-x-1.5 lg:space-x-2 shrink-0">
                 <button
                   id="nav-btn-dashboard"
                   onClick={() => handleNav('dashboard')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'dashboard'
                       ? 'bg-stone-100 text-red-600 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
@@ -359,73 +359,73 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 <button
                   id="nav-btn-courses"
                   onClick={() => handleNav('courses')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'courses' || currentView === 'lesson'
                       ? 'bg-stone-100 text-red-600 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <BookOpen className="w-3.5 h-3.5" />
+                  <BookOpen className="w-3.5 h-3.5 shrink-0" />
                   <span>{t('courses')}</span>
                 </button>
                 <button
                   id="nav-btn-flashcards"
                   onClick={() => handleNav('flashcards')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'flashcards'
                       ? 'bg-stone-100 text-red-600 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Layers className="w-3.5 h-3.5" />
+                  <Layers className="w-3.5 h-3.5 shrink-0" />
                   <span>Flashcards</span>
                 </button>
                 <button
                   id="nav-btn-quizzes"
                   onClick={() => handleNav('quizzes')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'quizzes' || currentView === 'quiz-runner'
                       ? 'bg-stone-100 text-red-600 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Award className="w-3.5 h-3.5" />
+                  <Award className="w-3.5 h-3.5 shrink-0" />
                   <span>{t('quizzes')}</span>
                 </button>
                 <button
                   id="nav-btn-coordination"
                   onClick={() => handleNav('coordination-hub')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'coordination-hub'
                       ? 'bg-red-50 text-red-700 border border-red-200'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Compass className="w-3.5 h-3.5 text-red-600" />
+                  <Compass className="w-3.5 h-3.5 text-red-600 shrink-0" />
                   <span>{t('coordination_hub')}</span>
                 </button>
                 <button
                   id="nav-btn-ai-coach"
                   onClick={() => handleNav('ai-coach')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'ai-coach'
                       ? 'bg-red-50 text-red-700 border border-red-200'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Bot className="w-3.5 h-3.5 text-red-600" />
+                  <Bot className="w-3.5 h-3.5 text-red-600 shrink-0" />
                   <span>{t('ai_sensei')}</span>
                 </button>
                 <button
                   id="nav-btn-memory-os"
                   onClick={() => handleNav('memory-os')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                     currentView === 'memory-os'
                       ? 'bg-purple-50 text-purple-700 border border-purple-200'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                   <span>{t('memory_os')}</span>
                 </button>
 
@@ -433,25 +433,25 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   <button
                     id="nav-btn-admin-portal"
                     onClick={() => handleNav('admin')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex flex-row items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
                       currentView === 'admin'
                         ? 'bg-red-600 text-white shadow-xs'
                         : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
                     }`}
                     title="Founder & Content Engine Command Center"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-red-600 shrink-0" />
                     <span>Founder Command</span>
                   </button>
                 )}
               </div>
             ) : (
-              <div className="hidden md:flex items-center space-x-6">
-                <button onClick={() => handleNav('home')} className="text-xs font-bold text-stone-600 hover:text-stone-900 cursor-pointer">Home</button>
-                <button onClick={() => handleNav('coordination-hub')} className="text-xs font-bold text-stone-600 hover:text-stone-900 cursor-pointer">3 Learning Paths</button>
-                <button onClick={() => handleNav('flashcards')} className="text-xs font-bold text-stone-600 hover:text-stone-900 cursor-pointer">Flashcards</button>
-                <button onClick={() => handleNav('pricing')} className="text-xs font-bold text-stone-600 hover:text-stone-900 cursor-pointer">{t('pricing')}</button>
-                <button onClick={() => handleNav('work-japanese')} className="text-xs font-bold text-stone-600 hover:text-stone-900 cursor-pointer">Work Japanese</button>
+              <div className="hidden md:flex flex-row items-center whitespace-nowrap space-x-4 lg:space-x-6 shrink-0">
+                <button onClick={() => handleNav('home')} className="text-xs font-bold text-stone-600 hover:text-stone-900 whitespace-nowrap shrink-0 cursor-pointer">Home</button>
+                <button onClick={() => handleNav('coordination-hub')} className="text-xs font-bold text-stone-600 hover:text-stone-900 whitespace-nowrap shrink-0 cursor-pointer">3 Learning Paths</button>
+                <button onClick={() => handleNav('flashcards')} className="text-xs font-bold text-stone-600 hover:text-stone-900 whitespace-nowrap shrink-0 cursor-pointer">Flashcards</button>
+                <button onClick={() => handleNav('pricing')} className="text-xs font-bold text-stone-600 hover:text-stone-900 whitespace-nowrap shrink-0 cursor-pointer">{t('pricing')}</button>
+                <button onClick={() => handleNav('work-japanese')} className="text-xs font-bold text-stone-600 hover:text-stone-900 whitespace-nowrap shrink-0 cursor-pointer">Work Japanese</button>
               </div>
             )}
 

@@ -102,53 +102,16 @@ self.addEventListener('notificationclick', (event) => {
 
 // 4. Fetch Phase:
 // - Static assets (JS, CSS, fonts, images): Cache-First with Stale-While-Revalidate
-// - API routes (/api/*): Network-First with Cache Fallback & offline JSON fallback
-// - Dynamic / Auth / Payment / Referral: Network-Only (no caching)
+// - API routes (/api/*): STRICT Network-Only (No caching whatsoever to prevent stale billing, auth, or learning states)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // Network-Only for dynamic user mutations, payment gateways, auth sessions, and referral claiming
-  if (
-    url.pathname.startsWith('/api/auth') ||
-    url.pathname.startsWith('/api/billing') ||
-    url.pathname.startsWith('/api/payments') ||
-    url.pathname.startsWith('/api/referral/claim')
-  ) {
-    return;
-  }
-
-  // API Routes: Network-First with Cache Fallback
+  // STRICT NETWORK-ONLY: Exclude ALL /api/ endpoints from service worker caching.
+  // Dynamic API requests must always fetch directly from the network to preserve security,
+  // real-time authentication, idempotent payments, and fresh database states.
   if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CURRENT_CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(async () => {
-          const cached = await caches.match(event.request);
-          if (cached) return cached;
-
-          return new Response(
-            JSON.stringify({
-              offline: true,
-              message: 'Offline-Only Mode: You are currently offline. Loaded from Nihomi offline cache.',
-              timestamp: new Date().toISOString()
-            }),
-            {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' }
-            }
-          );
-        })
-    );
     return;
   }
 

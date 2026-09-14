@@ -71,4 +71,65 @@ export function isPrismaConnectionError(error: unknown): boolean {
   );
 }
 
+/**
+ * Asserts that PostgreSQL / Supabase connection is active.
+ * Throws an error with status 503 if unreachable.
+ */
+export async function assertDatabaseConnection(): Promise<void> {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+  } catch (err: any) {
+    const error: any = new Error(
+      `PostgreSQL database is currently unreachable: ${err?.message || 'Connection failed'}`
+    );
+    error.status = 503;
+    error.code = 'DB_UNAVAILABLE';
+    throw error;
+  }
+}
+
+/**
+ * Performs a lightweight health check against PostgreSQL / Supabase
+ */
+export async function checkDatabaseHealth(): Promise<{
+  healthy: boolean;
+  latencyMs?: number;
+  error?: string;
+}> {
+  const start = Date.now();
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return { healthy: true, latencyMs: Date.now() - start };
+  } catch (err: any) {
+    return {
+      healthy: false,
+      latencyMs: Date.now() - start,
+      error: err?.message || 'PostgreSQL connection failed'
+    };
+  }
+}
+
+/**
+ * Express middleware to enforce strict PostgreSQL availability for stateful endpoints.
+ * Rejects requests with HTTP 503 instead of creating diverging local state.
+ */
+export const requireDatabaseConnection = async (
+  _req: any,
+  res: any,
+  next: any
+) => {
+  try {
+    await assertDatabaseConnection();
+    next();
+  } catch (err: any) {
+    return res.status(503).json({
+      success: false,
+      error: 'Database Unavailable',
+      message:
+        'PostgreSQL persistence is required but currently unreachable. Action halted to prevent data divergence.',
+      code: 'DB_UNAVAILABLE'
+    });
+  }
+};
+
 export default prisma;

@@ -140,14 +140,14 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
           </button>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden md:flex items-center space-x-1 overflow-x-auto no-scrollbar">
+          <nav className="hidden md:flex flex-row items-center whitespace-nowrap space-x-1 lg:space-x-2 overflow-x-auto no-scrollbar shrink-0">
             {navItems.map((item) => {
               const isActive = currentView === item.id || (item.id === 'portal' && currentView.startsWith('portal'));
               return (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                     isActive
                       ? 'bg-stone-950 dark:bg-white text-white dark:text-stone-950 shadow-2xs'
                       : 'text-stone-600 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800/60'

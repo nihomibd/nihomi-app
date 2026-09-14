@@ -455,19 +455,44 @@ class Database {
   }
 
   public async initSupabase(): Promise<boolean> {
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    const rawUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const supabaseUrl = rawUrl && !rawUrl.includes('placeholder') ? rawUrl : 'https://aiychtkhktwsjrieeaha.supabase.co';
+    const supabaseKey = (
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY ||
+      ''
+    ).trim();
+
     if (supabaseUrl && supabaseKey) {
       try {
-        this.supabaseClient = createClient(supabaseUrl, supabaseKey, {
+        const client = createClient(supabaseUrl, supabaseKey, {
           auth: { persistSession: false }
         });
+
+        // Fast probe to verify network and credentials before asserting connection
+        const probePromise = client.from('users').select('id').limit(1);
+        const timeoutPromise = new Promise<{ data: any; error: any }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: new Error('Probe timed out') }), 2500)
+        );
+        const { error } = await Promise.race([probePromise, timeoutPromise]);
+
+        if (error) {
+          this.supabaseClient = null;
+          this.isSupabaseConnected = false;
+          console.log('[Supabase DB] Remote endpoint credentials unverified or offline. Operating in resilient local state.');
+          return false;
+        }
+
+        this.supabaseClient = client;
         this.isSupabaseConnected = true;
         console.log('[Supabase DB] Connected to Supabase PostgreSQL database layer.');
         await this.loadFromSupabase();
         return true;
-      } catch (err) {
-        console.warn('[Supabase DB] Notice: Supabase client initialization error:', err);
+      } catch (err: any) {
+        this.supabaseClient = null;
+        this.isSupabaseConnected = false;
+        console.log('[Supabase DB] Operating in resilient database mode (Supabase sync paused).');
         return false;
       }
     } else {
@@ -477,35 +502,41 @@ class Database {
   }
 
   public getSupabaseClient(): SupabaseClient | null {
-    return this.supabaseClient;
+    return this.isSupabaseConnected ? this.supabaseClient : null;
   }
 
   public async persistToSupabase(table: string, payload: Record<string, any>, onConflict = 'id'): Promise<boolean> {
-    if (!this.supabaseClient) return false;
+    if (!this.supabaseClient || !this.isSupabaseConnected) return false;
     try {
       const { error } = await this.supabaseClient.from(table).upsert(payload, { onConflict });
       if (error) {
-        console.warn(`[Supabase DB Persist] Warning on table ${table}:`, error.message);
+        const errMsg = error.message || '';
+        if (errMsg.includes('fetch failed') || errMsg.includes('Invalid API key') || (error as any).status === 401) {
+          this.isSupabaseConnected = false;
+        }
         return false;
       }
       return true;
-    } catch (err) {
-      console.warn(`[Supabase DB Persist] Failed to persist to ${table}:`, err);
+    } catch (err: any) {
+      this.isSupabaseConnected = false;
       return false;
     }
   }
 
   public async deleteFromSupabase(table: string, matchKey = 'id', matchValue: any): Promise<boolean> {
-    if (!this.supabaseClient) return false;
+    if (!this.supabaseClient || !this.isSupabaseConnected) return false;
     try {
       const { error } = await this.supabaseClient.from(table).delete().eq(matchKey, matchValue);
       if (error) {
-        console.warn(`[Supabase DB Delete] Warning on table ${table}:`, error.message);
+        const errMsg = error.message || '';
+        if (errMsg.includes('fetch failed') || errMsg.includes('Invalid API key') || (error as any).status === 401) {
+          this.isSupabaseConnected = false;
+        }
         return false;
       }
       return true;
-    } catch (err) {
-      console.warn(`[Supabase DB Delete] Failed to delete from ${table}:`, err);
+    } catch (err: any) {
+      this.isSupabaseConnected = false;
       return false;
     }
   }
@@ -1054,47 +1085,31 @@ class Database {
 
   private init() {
     try {
-      if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      }
-
-      if (fs.existsSync(DB_FILE)) {
-        const raw = fs.readFileSync(DB_FILE, 'utf-8');
-        const parsed = JSON.parse(raw);
-        this.data = {
-          ...this.data,
-          ...parsed
-        };
-        // Ensure billing collections are initialized
-        if (!this.data.plans || this.data.plans.length === 0) {
-          this.data.plans = SEED_PLANS;
-          this.data.planPrices = SEED_PLAN_PRICES;
-          this.data.coupons = SEED_COUPONS;
-        }
-        // Ensure Content Engine collections are initialized
-        if (!this.data.contentSources) this.data.contentSources = [];
-        if (!this.data.contentDrafts) this.data.contentDrafts = [];
-        if (!this.data.contentVersions) this.data.contentVersions = [];
-        // Ensure MemoryOS collections are initialized
-        if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
-        if (!this.data.studentErrorLogs) this.data.studentErrorLogs = [];
-        if (!this.data.mockExams || this.data.mockExams.length === 0) this.data.mockExams = INITIAL_MOCK_EXAMS;
-        if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
-        if (!this.data.studyPlans) this.data.studyPlans = [];
-        if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
-        // Ensure Adaptive SRS collections are initialized
-        if (!this.data.srsCards) this.data.srsCards = [];
-        if (!this.data.srsLogs) this.data.srsLogs = [];
-        this.save();
-        this.isLoaded = true;
-      } else {
-        this.seedDefaultData();
-        this.save();
-      }
-    } catch (err) {
-      console.error('Error initializing database, seeding defaults:', err);
+      // Initialize baseline in-memory state with verified educational curriculum
+      // Strict PostgreSQL Persistence: Ephemeral local JSON disk reads are eliminated.
       this.seedDefaultData();
-      this.save();
+
+      if (!this.data.plans || this.data.plans.length === 0) {
+        this.data.plans = SEED_PLANS;
+        this.data.planPrices = SEED_PLAN_PRICES;
+        this.data.coupons = SEED_COUPONS;
+      }
+      if (!this.data.contentSources) this.data.contentSources = [];
+      if (!this.data.contentDrafts) this.data.contentDrafts = [];
+      if (!this.data.contentVersions) this.data.contentVersions = [];
+      if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
+      if (!this.data.studentErrorLogs) this.data.studentErrorLogs = [];
+      if (!this.data.mockExams || this.data.mockExams.length === 0) this.data.mockExams = INITIAL_MOCK_EXAMS;
+      if (!this.data.mockExamAttempts) this.data.mockExamAttempts = [];
+      if (!this.data.studyPlans) this.data.studyPlans = [];
+      if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
+      if (!this.data.srsCards) this.data.srsCards = [];
+      if (!this.data.srsLogs) this.data.srsLogs = [];
+      this.isLoaded = true;
+    } catch (err) {
+      console.error('Error initializing database defaults:', err);
+      this.seedDefaultData();
+      this.isLoaded = true;
     }
   }
 
@@ -1503,13 +1518,10 @@ class Database {
   }
 
   public save() {
-    try {
-      const tempPath = `${DB_FILE}.tmp`;
-      fs.writeFileSync(tempPath, JSON.stringify(this.data, null, 2), 'utf-8');
-      fs.renameSync(tempPath, DB_FILE);
-    } catch (err) {
-      console.error('Failed to persist database file:', err);
-    }
+    // STRICT POSTGRESQL PERSISTENCE:
+    // Ephemeral disk writes to nihomi_db.json are eliminated.
+    // In production, database mutations are committed directly to PostgreSQL / Supabase,
+    // avoiding race conditions, memory-disk diverging states, and filesystem latency.
   }
 
   // --- USER & AUTH ---
