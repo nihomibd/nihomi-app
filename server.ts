@@ -86,7 +86,7 @@ setInterval(async () => {
 
 async function startServer() {
   const app = express();
-  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const PORT = 3000;
 
   // Enable CORS for web, mobile, and edge proxy environments
   app.use(cors({
