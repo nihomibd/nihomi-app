@@ -39,6 +39,8 @@ const PaymentCallbackView = lazy(() => import('./views/PaymentCallbackView').the
 const LoginView = lazy(() => import('./views/LoginView').then(m => ({ default: m.LoginView })));
 const ResetPasswordView = lazy(() => import('./views/ResetPasswordView').then(m => ({ default: m.ResetPasswordView })));
 const AuthView = lazy(() => import('./views/AuthView').then(m => ({ default: m.AuthView })));
+const KanaView = lazy(() => import('./views/KanaView').then(m => ({ default: m.KanaView })));
+const KanjiView = lazy(() => import('./views/KanjiView').then(m => ({ default: m.KanjiView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -384,6 +386,12 @@ export const App: React.FC = () => {
             initialCertId={viewParams.certId}
             onNavigate={handleNavigate}
           />
+        )}
+        {(currentView === 'kana' || currentView === 'hiragana' || currentView === 'katakana' || currentView === 'kana-lab') && (
+          <KanaView />
+        )}
+        {(currentView === 'kanji' || currentView === 'kanji-lab' || currentView === 'kanji-100' || currentView === 'n5-kanji') && (
+          <KanjiView />
         )}
         </Suspense>
       </main>

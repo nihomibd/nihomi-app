@@ -56,6 +56,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
   const navItems = [
     { id: 'landing', label: 'Home' },
+    { id: 'kana', label: 'Kana Lab' },
+    { id: 'kanji', label: 'Kanji 100' },
     { id: 'courses', label: 'Pathways' },
     { id: 'curriculum', label: 'Curriculum' },
     { id: 'study-plan', label: 'Roadmap & SRS' },
