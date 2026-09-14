@@ -88,6 +88,17 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
         trackStartTrial({ trialDays: 7, planId: 'n5_trial' });
         onNavigate('dashboard');
       } else if (mode === 'forgot') {
+        const origin = window.location.origin;
+        const redirectTo = `${origin}/reset-password`;
+
+        try {
+          await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo
+          });
+        } catch (sErr) {
+          console.warn('[AuthView] Supabase resetPasswordForEmail note:', sErr);
+        }
+
         const res = await apiRequest<{ success: boolean; message: string; resetToken?: string }>(
           '/api/auth/reset-password-request',
           {
@@ -98,9 +109,9 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
         if (res.resetToken) {
           setResetToken(res.resetToken);
           setMode('reset-confirm');
-          setSuccessMsg('Reset code generated. Enter your new password below.');
+          setSuccessMsg('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে। নিচে নতুন পাসওয়ার্ডও প্রবেশ করাতে পারেন।');
         } else {
-          setSuccessMsg(res.message);
+          setSuccessMsg(res.message || 'পাসওয়ার্ড রিসেট নির্দেশনা আপনার ইমেইলে পাঠানো হয়েছে।');
         }
       } else if (mode === 'reset-confirm') {
         await apiRequest('/api/auth/reset-password-confirm', {

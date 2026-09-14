@@ -422,6 +422,32 @@ paymentRouter.post('/manual/submit', optionalAuth, async (req: AuthenticatedRequ
   }
 });
 
+// Student: Check own pending manual submission status
+paymentRouter.get('/manual/my-pending', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+    const email = user?.email || (req.query.email as string);
+    const userId = user?.id || (req.query.userId as string);
+    if (!email && !userId) {
+      return res.json({ success: true, pending: null });
+    }
+
+    const memSubmissions: any[] = (db.data as any).manualTrxSubmissions || [];
+    const pending = memSubmissions.find(
+      (s: any) =>
+        s.status === 'pending' &&
+        ((userId && s.userId === userId) || (email && s.studentEmail?.toLowerCase() === (email || '').toLowerCase()))
+    );
+
+    return res.json({
+      success: true,
+      pending: pending || null,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: 'Failed to query pending submission.' });
+  }
+});
+
 // ========================================================
 // 8. ADMIN PAYMENT VERIFICATION & 1-CLICK ACCESS GRANT
 // ========================================================

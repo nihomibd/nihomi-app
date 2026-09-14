@@ -27,7 +27,7 @@ import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
-import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown } from 'lucide-react';
+import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2 } from 'lucide-react';
 import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
@@ -96,6 +96,40 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [dashboardQuery, setDashboardQuery] = useState('');
   const [isSearchingSensei, setIsSearchingSensei] = useState(false);
   const [senseiSearchResult, setSenseiSearchResult] = useState<string | null>(null);
+  const [pendingTrx, setPendingTrx] = useState<any | null>(null);
+
+  // Poll for pending manual bKash/Nagad submission verification
+  React.useEffect(() => {
+    let isMounted = true;
+    const checkPendingSubmission = async () => {
+      try {
+        const queryParams = new URLSearchParams();
+        if (user?.id) queryParams.set('userId', user.id);
+        if (user?.email) queryParams.set('email', user.email);
+
+        const res = await fetch(`/api/payment/manual/my-pending?${queryParams.toString()}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted) {
+            if (json.pending) {
+              setPendingTrx(json.pending);
+            } else {
+              setPendingTrx(null);
+            }
+          }
+        }
+      } catch {
+        // silent
+      }
+    };
+
+    checkPendingSubmission();
+    const interval = setInterval(checkPendingSubmission, 15000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [user?.id, user?.email]);
 
   const handleSenseiSearch = async (q?: string) => {
     const textToSearch = q !== undefined ? q : dashboardQuery;
@@ -231,6 +265,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               isPro={isPro}
               activeStreak={data.streak.currentStreak}
             />
+
+            {/* Manual Payment (bKash/Nagad) Verification in Progress Alert */}
+            {pendingTrx && !isPro && (
+              <div id="banner-manual-payment-verifying" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 flex items-start gap-3 shadow-xs">
+                <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5 animate-pulse" />
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-amber-950">
+                      পেমেন্ট ভেরিফিকেশন চলছে (Verification Pending)
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900">
+                      TrxID: {pendingTrx.trxID || pendingTrx.id}
+                    </span>
+                  </div>
+                  <p className="text-stone-700 leading-relaxed">
+                    আপনার ম্যানুয়াল বিকাশ/নগদ পেমেন্টটি অ্যাডমিন প্যানেলে যাচাই করা হচ্ছে (সাধারণত ৫-১৫ মিনিটের মধ্যে অনুমোদিত হয়)। অনুমোদনের সাথে সাথে প্রো অ্যাক্সেস স্বয়ংক্রিয়ভাবে চালু হয়ে যাবে।
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Quick Sensei Search & Sensor Actions: Voice Coach, Photo OCR & Kanji */}
             <section className="bg-white rounded-2xl p-3.5 sm:p-4 border border-stone-200/90 shadow-xs space-y-3" aria-label="Nihomi Sensei Tools">

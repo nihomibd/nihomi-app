@@ -695,6 +695,75 @@ export class SubscriptionService {
       },
     };
   }
+
+  /**
+   * ADMIN BOOTSTRAP & RBAC SEEDING:
+   * Asserts and persists user with email `mdtanvirkabirbiplob@gmail.com` as 'admin'
+   * both in the native database and directly in Supabase PostgreSQL (users & profiles).
+   */
+  public async bootstrapAdminUser(email: string = 'mdtanvirkabirbiplob@gmail.com') {
+    const targetEmail = email.trim().toLowerCase();
+    let user = db.findUserByEmail(targetEmail);
+
+    if (!user) {
+      const created = db.createUser({
+        email: targetEmail,
+        password: 'AdminPassword#2026',
+        displayName: 'Tanvir Kabir (Founder)',
+        role: 'admin',
+        targetLevel: 'N5',
+        nativeLanguage: 'Bengali',
+      });
+      user = created.user;
+    } else if (user.role !== 'admin') {
+      user.role = 'admin';
+      db.save();
+    }
+
+    // Persist and verify in Supabase PostgreSQL
+    try {
+      const { getSupabase } = await import('../supabase.js');
+      const supabase = getSupabase();
+      if (supabase) {
+        await supabase.from('users').upsert({
+          id: user.id,
+          email: user.email,
+          name: 'Tanvir Kabir (Founder)',
+          full_name: 'Tanvir Kabir (Founder)',
+          role: 'ADMIN',
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+
+        await supabase.from('profiles').upsert({
+          id: user.id,
+          email: user.email,
+          full_name: 'Tanvir Kabir (Founder)',
+          target_jlpt_level: 'N5',
+          preferred_language: 'bn',
+          country: 'Bangladesh',
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+      }
+    } catch (err: any) {
+      console.warn('[SubscriptionService] Supabase admin sync note:', err.message);
+    }
+
+    console.log(`[SubscriptionService] Verified admin RBAC for: ${targetEmail}`);
+    return user;
+  }
+
+  /**
+   * Retrieves pending manual submission for a student
+   */
+  public getPendingManualSubmission(userIdOrEmail: string) {
+    const submissions: any[] = (db.data as any).manualTrxSubmissions || [];
+    const clean = userIdOrEmail.trim().toLowerCase();
+    return submissions.find(
+      (s: any) =>
+        s.status === 'pending' &&
+        (s.userId === userIdOrEmail || s.studentEmail?.toLowerCase() === clean)
+    ) || null;
+  }
 }
 
 export const subscriptionService = SubscriptionService.getInstance();

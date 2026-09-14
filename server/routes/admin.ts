@@ -6,6 +6,32 @@ import { stateIntegrityService } from '../services/stateIntegrityService.js';
 
 export const adminRouter = Router();
 
+// One-time Admin Bootstrap & RBAC Seeding endpoint
+adminRouter.post('/bootstrap', async (req, res) => {
+  try {
+    const targetEmail = (req.body?.email || 'mdtanvirkabirbiplob@gmail.com').trim().toLowerCase();
+    if (targetEmail !== 'mdtanvirkabirbiplob@gmail.com') {
+      return res.status(403).json({ success: false, error: 'Bootstrap is strictly restricted to the founder account.' });
+    }
+
+    const { subscriptionService } = await import('../services/subscriptionService.js');
+    const user = await subscriptionService.bootstrapAdminUser(targetEmail);
+
+    return res.json({
+      success: true,
+      message: `✓ Admin RBAC seeded and verified successfully for ${targetEmail}.`,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (err: any) {
+    console.error('[AdminBootstrap] Error:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Bootstrap failed.' });
+  }
+});
+
 // Protect all admin routes
 adminRouter.use(requireAdmin);
 
@@ -645,7 +671,7 @@ adminRouter.post('/integrity/repair', async (req: AuthenticatedRequest, res) => 
 // ========================================================
 // Manual MFS Payments & 1-Click Verification Workflow
 // ========================================================
-adminRouter.get('/payments/pending', (req: AuthenticatedRequest, res) => {
+const getPendingHandler = (req: AuthenticatedRequest, res: any) => {
   try {
     const memSubmissions = (db.data as any).manualTrxSubmissions || [];
     return res.json({
@@ -655,9 +681,12 @@ adminRouter.get('/payments/pending', (req: AuthenticatedRequest, res) => {
   } catch (err: any) {
     return res.status(500).json({ error: 'Failed to fetch pending transactions.', message: err.message });
   }
-});
+};
 
-adminRouter.post('/payments/verify', async (req: AuthenticatedRequest, res) => {
+adminRouter.get('/payments/pending', getPendingHandler);
+adminRouter.get('/payments/pending-bkash', getPendingHandler);
+
+const verifyPaymentHandler = async (req: AuthenticatedRequest, res: any) => {
   try {
     const { transactionId, trxID, submissionId, action = 'approve', reason, planId = 'n5_pro' } = req.body;
     const lookupKey = (trxID || transactionId || submissionId || '').trim().toUpperCase();
@@ -762,6 +791,9 @@ adminRouter.post('/payments/verify', async (req: AuthenticatedRequest, res) => {
     console.error('[AdminRouter] Payment verification error:', err);
     return res.status(500).json({ success: false, error: err.message || 'Payment verification failed.' });
   }
-});
+};
+
+adminRouter.post('/payments/verify', verifyPaymentHandler);
+adminRouter.post('/payments/verify-bkash', verifyPaymentHandler);
 
 

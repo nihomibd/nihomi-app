@@ -35,6 +35,9 @@ const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ defaul
 const AdCampaignView = lazy(() => import('./views/AdCampaignView').then(m => ({ default: m.AdCampaignView })));
 const AdminGrowthView = lazy(() => import('./views/AdminGrowthView').then(m => ({ default: m.AdminGrowthView })));
 const PaymentCallbackView = lazy(() => import('./views/PaymentCallbackView').then(m => ({ default: m.PaymentCallbackView })));
+const LoginView = lazy(() => import('./views/LoginView').then(m => ({ default: m.LoginView })));
+const ResetPasswordView = lazy(() => import('./views/ResetPasswordView').then(m => ({ default: m.ResetPasswordView })));
+const AuthView = lazy(() => import('./views/AuthView').then(m => ({ default: m.AuthView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -134,6 +137,12 @@ export const App: React.FC = () => {
         setCurrentView('contact');
       } else if (path === '/payment/callback' || path === '/billing/callback') {
         setCurrentView('payment-callback');
+      } else if (path === '/login' || path === '/signin') {
+        setCurrentView('login');
+      } else if (path === '/auth' || path === '/signup' || path === '/register') {
+        setCurrentView('auth');
+      } else if (path === '/reset-password' || path === '/auth/reset-password') {
+        setCurrentView('reset-password');
       } else if (path.startsWith('/verify') || queryCert) {
         const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
         const targetCert = certFromPath || queryCert;
@@ -160,6 +169,9 @@ export const App: React.FC = () => {
       else if (path === '/refund-policy') setCurrentView('refund-policy');
       else if (path === '/contact') setCurrentView('contact');
       else if (path === '/payment/callback' || path === '/billing/callback') setCurrentView('payment-callback');
+      else if (path === '/login' || path === '/signin') setCurrentView('login');
+      else if (path === '/auth' || path === '/signup') setCurrentView('auth');
+      else if (path === '/reset-password') setCurrentView('reset-password');
       else if (path === '/' || path === '') setCurrentView('landing');
     };
     window.addEventListener('popstate', handlePopState);
@@ -311,6 +323,15 @@ export const App: React.FC = () => {
         )}
         {currentView === 'payment-callback' && (
           <PaymentCallbackView onNavigate={handleNavigate} />
+        )}
+        {currentView === 'login' && (
+          <LoginView onNavigate={handleNavigate} initialLevel={viewParams.level || 'N5'} />
+        )}
+        {currentView === 'auth' && (
+          <AuthView onNavigate={handleNavigate} initialMode={viewParams.mode || 'login'} initialLevel={viewParams.level || 'N5'} />
+        )}
+        {currentView === 'reset-password' && (
+          <ResetPasswordView onNavigate={handleNavigate} />
         )}
         {currentView === 'subscription' && (
           <SubscriptionManagementView onNavigate={handleNavigate} />

