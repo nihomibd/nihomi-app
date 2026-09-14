@@ -303,22 +303,9 @@ export class BKashPaymentProvider implements PaymentProvider {
   }
 
   /**
-   * Checks if sandbox / mock mode is active for safe test transactions
-   */
-  public isMockMode(): boolean {
-    return (
-      process.env.BKASH_SANDBOX_MOCK === 'true' ||
-      process.env.BKASH_MOCK_TEST === 'true' ||
-      !this.appKey ||
-      this.appKey.startsWith('mock_')
-    );
-  }
-
-  /**
    * Enforces fail-fast configuration verification
    */
   public ensureConfigured(): void {
-    if (this.isMockMode()) return;
     if (!this.appKey || !this.appSecret || !this.username || !this.password) {
       throw new Error(
         'bKash gateway credentials missing. Required environment variables: BKASH_APP_KEY, BKASH_APP_SECRET, BKASH_USERNAME, BKASH_PASSWORD.'
@@ -385,26 +372,6 @@ export class BKashPaymentProvider implements PaymentProvider {
    */
   async createCheckout(params: CheckoutParams): Promise<CheckoutResult> {
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
-
-    // Safe sandbox / mock toggle for pre-launch QA verification
-    if (this.isMockMode() || params.metadata?.isSandbox) {
-      const mockPaymentId = `BKASH_MOCK_${Date.now()}`;
-      return {
-        paymentId: params.paymentId,
-        provider: 'bkash',
-        providerReference: mockPaymentId,
-        redirectUrl: `${appUrl}/api/billing/bkash/callback?paymentId=${encodeURIComponent(params.paymentId)}&status=success&paymentID=${mockPaymentId}`,
-        instructions: 'Sandbox Mode: Click to simulate instant bKash MFS PIN authorization.',
-        fieldsNeeded: ['accountNumber', 'otp', 'pin'],
-        metadata: {
-          paymentID: mockPaymentId,
-          isSandbox: true,
-          orgName: 'Nihomi EdTech Ltd (bKash Sandbox)',
-          gateway: 'bKash Tokenized Checkout Sandbox v1.2',
-          apiVersion: 'v1.2.0-beta'
-        }
-      };
-    }
 
     this.ensureConfigured();
     const token = await this.getGrantToken();
@@ -480,24 +447,6 @@ export class BKashPaymentProvider implements PaymentProvider {
    */
   async verifyPayment(params: VerifyParams, originalPayment: Payment): Promise<VerificationResult> {
     const paymentID = params.providerTransactionId || originalPayment.providerReference || params.paymentId;
-
-    // Sandbox / Mock QA execution path
-    if (this.isMockMode() || paymentID?.startsWith('BKASH_MOCK_') || (originalPayment as any)?.metadata?.isSandbox) {
-      const rawMsisdn = (params.accountNumber || '+8801834-348966').trim();
-      const masked = `${rawMsisdn.slice(0, 3)}•••••${rawMsisdn.slice(-3)}`;
-      return {
-        success: true,
-        status: 'paid',
-        providerTransactionId: `TRX_BKASH_${Date.now().toString().slice(-8)}`,
-        amount: originalPayment.amount,
-        currency: 'BDT',
-        paymentMethodDetails: {
-          type: 'bKash MFS (Sandbox Verified)',
-          accountNumberMasked: masked,
-          gatewayName: 'bKash Tokenized Sandbox API'
-        }
-      };
-    }
 
     this.ensureConfigured();
     const token = await this.getGrantToken();
@@ -586,22 +535,7 @@ export class BKashPaymentProvider implements PaymentProvider {
   /**
    * Queries payment status with bKash API (Query API)
    */
-  async queryPayment(paymentID: string, originalPayment?: Payment): Promise<VerificationResult> {
-    if (this.isMockMode() || paymentID.startsWith('BKASH_MOCK_') || (originalPayment as any)?.metadata?.isSandbox) {
-      return {
-        success: true,
-        status: 'paid',
-        providerTransactionId: `TRX_BKASH_QUERY_${Date.now().toString().slice(-8)}`,
-        amount: originalPayment?.amount || 249,
-        currency: 'BDT',
-        paymentMethodDetails: {
-          type: 'bKash MFS (Sandbox Queried)',
-          accountNumberMasked: '017•••••89',
-          gatewayName: 'bKash Sandbox Direct API'
-        }
-      };
-    }
-
+  async queryPayment(paymentID: string, _originalPayment?: Payment): Promise<VerificationResult> {
     this.ensureConfigured();
     const token = await this.getGrantToken();
     const res = await fetch(`${this.baseUrl}/tokenized/checkout/payment/status`, {
@@ -620,7 +554,7 @@ export class BKashPaymentProvider implements PaymentProvider {
         success: false,
         status: 'failed',
         providerTransactionId: paymentID,
-        amount: originalPayment?.amount || 0,
+        amount: _originalPayment?.amount || 0,
         currency: 'BDT',
         paymentMethodDetails: { type: 'bKash MFS' },
         errorMessage: `bKash query HTTP ${res.status}: ${errText || 'Query status failed'}`
@@ -633,7 +567,7 @@ export class BKashPaymentProvider implements PaymentProvider {
       success: isSuccess,
       status: data.transactionStatus === 'Completed' ? 'paid' : 'pending',
       providerTransactionId: data.trxID || paymentID,
-      amount: parseFloat(data.amount || `${originalPayment?.amount || 0}`),
+      amount: parseFloat(data.amount || `${_originalPayment?.amount || 0}`),
       currency: 'BDT',
       paymentMethodDetails: {
         type: 'bKash MFS (Tokenized)',
@@ -654,9 +588,7 @@ export class BKashPaymentProvider implements PaymentProvider {
     const secret = this.webhookSecret || this.appSecret;
 
     let isSignatureValid = false;
-    if (this.isMockMode() || headerSig === 'sandbox_mock_signature') {
-      isSignatureValid = true;
-    } else if (secret && headerSig) {
+    if (secret && headerSig) {
       if (rawBody) {
         isSignatureValid = verifyHmacSignature(rawBody, headerSig, secret, 'sha256');
       }

@@ -1787,11 +1787,11 @@
         }
       ]
     },
-    "approvedBy": "mdtanvirkabirbiplob@gmail.com",
-    "approvedAt": "2026-08-20T10:45:00.000Z",
-    "publishedAt": "2026-08-20T10:45:00.000Z",
+    "approvedBy": "nihomibd@gmail.com",
+    "approvedAt": "2026-09-14T05:25:35.934Z",
+    "publishedAt": "2026-09-14T05:25:35.934Z",
     "createdAt": "2026-08-20T09:30:00.000Z",
-    "updatedAt": "2026-08-20T10:45:00.000Z"
+    "updatedAt": "2026-09-14T05:25:35.934Z"
   },
   {
     "id": "studio-lesson-src-d1407cce",
@@ -1907,7 +1907,7 @@
     "titleBn": "লেসন 3",
     "theme": "Japanese Core Communication",
     "version": "1.0.0",
-    "status": "DRAFT",
+    "status": "PUBLISHED",
     "sources": [],
     "vocabulary": [
       {
@@ -2300,7 +2300,10 @@
     "exercises": [],
     "quiz": [],
     "createdAt": "2026-09-06T11:01:14.977Z",
-    "updatedAt": "2026-09-06T11:01:14.977Z"
+    "updatedAt": "2026-09-14T05:25:35.953Z",
+    "approvedBy": "nihomibd@gmail.com",
+    "approvedAt": "2026-09-14T05:25:35.953Z",
+    "publishedAt": "2026-09-14T05:25:35.953Z"
   },
   {
     "id": "n5-l04",
@@ -2313,7 +2316,7 @@
     "titleBn": "লেসন 4",
     "theme": "Japanese Core Communication",
     "version": "1.0.0",
-    "status": "DRAFT",
+    "status": "PUBLISHED",
     "sources": [],
     "vocabulary": [
       {
@@ -2706,7 +2709,10 @@
     "exercises": [],
     "quiz": [],
     "createdAt": "2026-09-07T12:25:38.565Z",
-    "updatedAt": "2026-09-07T12:25:38.565Z"
+    "updatedAt": "2026-09-14T05:25:35.971Z",
+    "approvedBy": "nihomibd@gmail.com",
+    "approvedAt": "2026-09-14T05:25:35.971Z",
+    "publishedAt": "2026-09-14T05:25:35.971Z"
   },
   {
     "id": "n5-l02",
@@ -3471,11 +3477,11 @@
       ],
       "evaluatedAt": "2026-09-02T00:00:00.000Z"
     },
-    "approvedBy": "mdtanvirkabirbiplob@gmail.com",
-    "approvedAt": "2026-09-02T00:00:00.000Z",
-    "publishedAt": "2026-09-02T00:00:00.000Z",
+    "approvedBy": "nihomibd@gmail.com",
+    "approvedAt": "2026-09-14T05:25:35.945Z",
+    "publishedAt": "2026-09-14T05:25:35.945Z",
     "createdAt": "2026-09-02T00:00:00.000Z",
-    "updatedAt": "2026-09-02T00:00:00.000Z"
+    "updatedAt": "2026-09-14T05:25:35.945Z"
   },
   {
     "id": "n5-l05",
@@ -4671,11 +4677,11 @@
       ],
       "evaluatedAt": "2026-09-05T00:00:00.000Z"
     },
-    "approvedBy": "mdtanvirkabirbiplob@gmail.com",
-    "approvedAt": "2026-09-05T00:00:00.000Z",
-    "publishedAt": "2026-09-05T00:00:00.000Z",
+    "approvedBy": "nihomibd@gmail.com",
+    "approvedAt": "2026-09-14T05:25:35.999Z",
+    "publishedAt": "2026-09-14T05:25:35.999Z",
     "createdAt": "2026-09-05T00:00:00.000Z",
-    "updatedAt": "2026-09-05T00:00:00.000Z"
+    "updatedAt": "2026-09-14T05:25:35.999Z"
   },
   {
     "id": "n5-l06",
@@ -5021,10 +5027,10 @@
       }
     ],
     "createdAt": "2026-09-06T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:07:59.351Z",
+    "updatedAt": "2026-09-14T05:25:36.044Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:07:59.351Z",
-    "publishedAt": "2026-09-09T08:07:59.351Z"
+    "approvedAt": "2026-09-14T05:25:36.044Z",
+    "publishedAt": "2026-09-14T05:25:36.044Z"
   },
   {
     "id": "n5-l07",
@@ -5369,10 +5375,10 @@
       }
     ],
     "createdAt": "2026-09-07T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:08:05.830Z",
+    "updatedAt": "2026-09-14T05:25:36.059Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:08:05.830Z",
-    "publishedAt": "2026-09-09T08:08:05.830Z"
+    "approvedAt": "2026-09-14T05:25:36.059Z",
+    "publishedAt": "2026-09-14T05:25:36.059Z"
   },
   {
     "id": "n5-l08",
@@ -5718,10 +5724,10 @@
       }
     ],
     "createdAt": "2026-09-08T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:08:12.974Z",
+    "updatedAt": "2026-09-14T05:25:36.073Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:08:12.974Z",
-    "publishedAt": "2026-09-09T08:08:12.974Z"
+    "approvedAt": "2026-09-14T05:25:36.073Z",
+    "publishedAt": "2026-09-14T05:25:36.073Z"
   },
   {
     "id": "n5-l09",
@@ -6075,10 +6081,10 @@
       }
     ],
     "createdAt": "2026-09-09T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:08:21.147Z",
+    "updatedAt": "2026-09-14T05:25:36.088Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:08:21.147Z",
-    "publishedAt": "2026-09-09T08:08:21.147Z"
+    "approvedAt": "2026-09-14T05:25:36.088Z",
+    "publishedAt": "2026-09-14T05:25:36.088Z"
   },
   {
     "id": "n5-l10",
@@ -6423,10 +6429,10 @@
       }
     ],
     "createdAt": "2026-09-10T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:08:39.671Z",
+    "updatedAt": "2026-09-14T05:25:36.103Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:08:39.671Z",
-    "publishedAt": "2026-09-09T08:08:39.671Z"
+    "approvedAt": "2026-09-14T05:25:36.103Z",
+    "publishedAt": "2026-09-14T05:25:36.103Z"
   },
   {
     "id": "n5-l11",
@@ -6772,10 +6778,10 @@
       }
     ],
     "createdAt": "2026-09-11T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:08:53.112Z",
+    "updatedAt": "2026-09-14T05:25:36.119Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:08:53.112Z",
-    "publishedAt": "2026-09-09T08:08:53.112Z"
+    "approvedAt": "2026-09-14T05:25:36.119Z",
+    "publishedAt": "2026-09-14T05:25:36.119Z"
   },
   {
     "id": "n5-l12",
@@ -7132,10 +7138,10 @@
       }
     ],
     "createdAt": "2026-09-12T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:03.714Z",
+    "updatedAt": "2026-09-14T05:25:36.135Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:03.714Z",
-    "publishedAt": "2026-09-09T08:09:03.714Z"
+    "approvedAt": "2026-09-14T05:25:36.135Z",
+    "publishedAt": "2026-09-14T05:25:36.135Z"
   },
   {
     "id": "n5-l13",
@@ -7482,10 +7488,10 @@
       }
     ],
     "createdAt": "2026-09-13T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:13.265Z",
+    "updatedAt": "2026-09-14T05:25:36.151Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:13.265Z",
-    "publishedAt": "2026-09-09T08:09:13.265Z"
+    "approvedAt": "2026-09-14T05:25:36.151Z",
+    "publishedAt": "2026-09-14T05:25:36.151Z"
   },
   {
     "id": "n5-l14",
@@ -7829,10 +7835,10 @@
       }
     ],
     "createdAt": "2026-09-14T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:22.690Z",
+    "updatedAt": "2026-09-14T05:25:36.172Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:22.690Z",
-    "publishedAt": "2026-09-09T08:09:22.690Z"
+    "approvedAt": "2026-09-14T05:25:36.172Z",
+    "publishedAt": "2026-09-14T05:25:36.172Z"
   },
   {
     "id": "n5-l15",
@@ -8176,10 +8182,10 @@
       }
     ],
     "createdAt": "2026-09-15T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:34.344Z",
+    "updatedAt": "2026-09-14T05:25:36.191Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:34.344Z",
-    "publishedAt": "2026-09-09T08:09:34.344Z"
+    "approvedAt": "2026-09-14T05:25:36.191Z",
+    "publishedAt": "2026-09-14T05:25:36.191Z"
   },
   {
     "id": "n5-l16",
@@ -8525,10 +8531,10 @@
       }
     ],
     "createdAt": "2026-09-16T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:48.444Z",
+    "updatedAt": "2026-09-14T05:25:36.211Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:48.444Z",
-    "publishedAt": "2026-09-09T08:09:48.444Z"
+    "approvedAt": "2026-09-14T05:25:36.211Z",
+    "publishedAt": "2026-09-14T05:25:36.211Z"
   },
   {
     "id": "n5-l17",
@@ -8874,10 +8880,10 @@
       }
     ],
     "createdAt": "2026-09-17T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:09:58.653Z",
+    "updatedAt": "2026-09-14T05:25:36.232Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:09:58.653Z",
-    "publishedAt": "2026-09-09T08:09:58.653Z"
+    "approvedAt": "2026-09-14T05:25:36.232Z",
+    "publishedAt": "2026-09-14T05:25:36.232Z"
   },
   {
     "id": "n5-l18",
@@ -9233,10 +9239,10 @@
       }
     ],
     "createdAt": "2026-09-18T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:10:12.609Z",
+    "updatedAt": "2026-09-14T05:25:36.273Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:10:12.609Z",
-    "publishedAt": "2026-09-09T08:10:12.609Z"
+    "approvedAt": "2026-09-14T05:25:36.273Z",
+    "publishedAt": "2026-09-14T05:25:36.273Z"
   },
   {
     "id": "n5-l19",
@@ -9590,10 +9596,10 @@
       }
     ],
     "createdAt": "2026-09-19T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:10:29.636Z",
+    "updatedAt": "2026-09-14T05:25:36.318Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:10:29.636Z",
-    "publishedAt": "2026-09-09T08:10:29.636Z"
+    "approvedAt": "2026-09-14T05:25:36.318Z",
+    "publishedAt": "2026-09-14T05:25:36.318Z"
   },
   {
     "id": "n5-l20",
@@ -9947,10 +9953,10 @@
       }
     ],
     "createdAt": "2026-09-20T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:10:45.153Z",
+    "updatedAt": "2026-09-14T05:25:36.369Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:10:45.153Z",
-    "publishedAt": "2026-09-09T08:10:45.153Z"
+    "approvedAt": "2026-09-14T05:25:36.369Z",
+    "publishedAt": "2026-09-14T05:25:36.369Z"
   },
   {
     "id": "n5-l21",
@@ -10295,10 +10301,10 @@
       }
     ],
     "createdAt": "2026-09-21T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:11:05.082Z",
+    "updatedAt": "2026-09-14T05:25:36.404Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:11:05.082Z",
-    "publishedAt": "2026-09-09T08:11:05.082Z"
+    "approvedAt": "2026-09-14T05:25:36.404Z",
+    "publishedAt": "2026-09-14T05:25:36.404Z"
   },
   {
     "id": "n5-l22",
@@ -10643,10 +10649,10 @@
       }
     ],
     "createdAt": "2026-09-22T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:11:20.549Z",
+    "updatedAt": "2026-09-14T05:25:36.427Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:11:20.549Z",
-    "publishedAt": "2026-09-09T08:11:20.549Z"
+    "approvedAt": "2026-09-14T05:25:36.427Z",
+    "publishedAt": "2026-09-14T05:25:36.427Z"
   },
   {
     "id": "n5-l23",
@@ -10992,10 +10998,10 @@
       }
     ],
     "createdAt": "2026-09-23T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:11:43.179Z",
+    "updatedAt": "2026-09-14T05:25:36.457Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:11:43.179Z",
-    "publishedAt": "2026-09-09T08:11:43.179Z"
+    "approvedAt": "2026-09-14T05:25:36.457Z",
+    "publishedAt": "2026-09-14T05:25:36.457Z"
   },
   {
     "id": "n5-l24",
@@ -11341,10 +11347,10 @@
       }
     ],
     "createdAt": "2026-09-24T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:11:58.645Z",
+    "updatedAt": "2026-09-14T05:25:36.495Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:11:58.645Z",
-    "publishedAt": "2026-09-09T08:11:58.645Z"
+    "approvedAt": "2026-09-14T05:25:36.495Z",
+    "publishedAt": "2026-09-14T05:25:36.495Z"
   },
   {
     "id": "n5-l25",
@@ -11690,9 +11696,9 @@
       }
     ],
     "createdAt": "2026-09-25T00:00:00.000Z",
-    "updatedAt": "2026-09-09T08:12:11.009Z",
+    "updatedAt": "2026-09-14T05:25:36.518Z",
     "approvedBy": "nihomibd@gmail.com",
-    "approvedAt": "2026-09-09T08:12:11.009Z",
-    "publishedAt": "2026-09-09T08:12:11.009Z"
+    "approvedAt": "2026-09-14T05:25:36.518Z",
+    "publishedAt": "2026-09-14T05:25:36.518Z"
   }
 ]

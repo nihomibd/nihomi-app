@@ -11,11 +11,12 @@ import {
   processStudyScheduleRequest
 } from '../gemini.js';
 import { aiCostGuard, recordAiCostUsage } from '../middleware/aiCostGuard.js';
+import { subscriptionService } from '../services/subscriptionService.js';
 import crypto from 'crypto';
 
 export const aiRouter = Router();
 
-// 1. Text & Voice AI Coach — Secured with AI Cost Guard
+// 1. Text & Voice AI Coach — Secured with AI Cost Guard & Daily Tier Quota
 aiRouter.post(
   '/coach',
   requireAuth,
@@ -27,6 +28,22 @@ aiRouter.post(
 
       if (!message || typeof message !== 'string') {
         return res.status(400).json({ error: 'message is required' });
+      }
+
+      // Check daily conversation quota: Free capped at 3 turns, N5 Pro / Lifetime unlimited
+      const quota = await subscriptionService.checkDailyAiChatQuota(userId);
+      if (!quota.allowed) {
+        return res.status(402).json({
+          success: false,
+          paywall: true,
+          code: 'AI_QUOTA_EXCEEDED',
+          error: 'দৈনিক ফ্রি ৩টি AI সেনসেই চ্যাট সীমা পূর্ণ হয়েছে। আনলিমিটেড ২৪/৭ AI কোচ পেতে N5 Pro প্ল্যানে আপগ্রেড করুন!',
+          messageBn: 'আপনার আজকের ৩টি ফ্রি AI সেনসেই কথোপকথন শেষ হয়েছে। আনলিমিটেড শিখতে N5 Pro প্ল্যানে আপগ্রেড করুন।',
+          tier: quota.tier,
+          usedToday: quota.currentTurnsToday,
+          dailyQuota: quota.maxDailyTurns,
+          upgradeRequired: true,
+        });
       }
 
       const validModes = ['conversation', 'grammar_explanation', 'vocabulary_explanation', 'correction', 'translation', 'voice_chat'];
@@ -45,6 +62,9 @@ aiRouter.post(
         audioBase64,
         audioMimeType
       });
+
+      // Record daily turn consumed
+      subscriptionService.recordDailyAiChatTurn(userId);
 
       // Atomic Token & Query Deduction via Cost Guard
       const updatedUsage = recordAiCostUsage(userId, 850, 'coach');

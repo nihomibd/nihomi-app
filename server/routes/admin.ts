@@ -642,3 +642,126 @@ adminRouter.post('/integrity/repair', async (req: AuthenticatedRequest, res) => 
   }
 });
 
+// ========================================================
+// Manual MFS Payments & 1-Click Verification Workflow
+// ========================================================
+adminRouter.get('/payments/pending', (req: AuthenticatedRequest, res) => {
+  try {
+    const memSubmissions = (db.data as any).manualTrxSubmissions || [];
+    return res.json({
+      success: true,
+      submissions: memSubmissions,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Failed to fetch pending transactions.', message: err.message });
+  }
+});
+
+adminRouter.post('/payments/verify', async (req: AuthenticatedRequest, res) => {
+  try {
+    const { transactionId, trxID, submissionId, action = 'approve', reason, planId = 'n5_pro' } = req.body;
+    const lookupKey = (trxID || transactionId || submissionId || '').trim().toUpperCase();
+
+    if (!lookupKey) {
+      return res.status(400).json({ success: false, error: 'Transaction ID or TrxID is required.' });
+    }
+
+    if (action !== 'approve' && action !== 'reject') {
+      return res.status(400).json({ success: false, error: 'Action must be "approve" or "reject".' });
+    }
+
+    if (!(db.data as any).manualTrxSubmissions) {
+      (db.data as any).manualTrxSubmissions = [];
+    }
+    const submissions: any[] = (db.data as any).manualTrxSubmissions;
+    let target = submissions.find(
+      (s: any) =>
+        s.id === transactionId ||
+        s.id === submissionId ||
+        s.trxId?.toUpperCase() === lookupKey
+    );
+
+    if (action === 'approve') {
+      const selectedTier = (target?.planId === 'n5_lifetime' || planId === 'n5_lifetime') ? 'n5_lifetime' : 'n5_pro';
+      const targetUserId = target?.userId || req.body.userId || 'usr_student';
+      const targetEmail = target?.studentEmail || req.body.email || `${target?.studentPhone || 'student'}@nihomi.com`;
+      const finalTrxID = target?.trxId || lookupKey;
+      const amount = target?.amount || (selectedTier === 'n5_lifetime' ? 1499 : 499);
+
+      // Lazy import or use subscriptionService
+      const { subscriptionService, SUBSCRIPTION_TIERS } = await import('../services/subscriptionService.js');
+      const activation = await subscriptionService.activateSubscription({
+        userId: targetUserId,
+        userEmail: targetEmail,
+        tier: selectedTier,
+        trxID: finalTrxID,
+        amount,
+        paymentMethod: 'Manual MFS (Admin 1-Click Approved)',
+      });
+
+      if (target) {
+        target.status = 'approved';
+        target.approvedAt = new Date().toISOString();
+        target.approvedBy = req.user?.email || 'admin';
+      } else {
+        submissions.unshift({
+          id: `subm_${Date.now()}_${finalTrxID}`,
+          userId: targetUserId,
+          studentName: req.body.studentName || 'Student',
+          studentEmail: targetEmail,
+          studentPhone: req.body.senderPhone || '018••••••66',
+          trxId: finalTrxID,
+          planId: selectedTier,
+          planName: SUBSCRIPTION_TIERS[selectedTier].nameBn,
+          amount,
+          submittedAt: new Date().toISOString(),
+          status: 'approved',
+          approvedAt: new Date().toISOString(),
+          approvedBy: req.user?.email || 'admin',
+        });
+      }
+
+      // Notify student
+      try {
+        db.createNotification({
+          userId: targetUserId,
+          type: 'achievement',
+          title: '🎉 N5 Pro অ্যাক্সেস অনুমোদিত!',
+          message: `আপনার পেমেন্ট (TrxID: ${finalTrxID}) ভেরিফাই সম্পন্ন হয়েছে। সকল লেসন ও ফুল মক টেস্ট এখন আনলক।`,
+          link: '/study',
+          priority: 'high',
+        });
+      } catch (e) {
+        // quiet notification catch
+      }
+
+      db.save();
+
+      return res.json({
+        success: true,
+        message: `✓ TrxID ${finalTrxID} সফলভাবে ভেরিফাই ও অ্যাক্টিভ করা হয়েছে!`,
+        activation,
+        submission: target,
+      });
+    } else {
+      if (target) {
+        target.status = 'rejected';
+        target.rejectedAt = new Date().toISOString();
+        target.rejectedBy = req.user?.email || 'admin';
+        target.rejectionReason = reason || 'অসঠিক বা অসম্পূর্ণ TrxID তথ্য।';
+      }
+      db.save();
+
+      return res.json({
+        success: true,
+        message: `TrxID ${lookupKey} বাতিল করা হয়েছে।`,
+        submission: target,
+      });
+    }
+  } catch (err: any) {
+    console.error('[AdminRouter] Payment verification error:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Payment verification failed.' });
+  }
+});
+
+

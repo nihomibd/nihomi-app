@@ -13,7 +13,10 @@ export const PLAN_LIMITS: Record<PlanId, { aiMonthlyQuota: number; maxLevel: str
   free: { aiMonthlyQuota: 10, maxLevel: 'N5' },
   starter: { aiMonthlyQuota: 100, maxLevel: 'N4' },
   pro: { aiMonthlyQuota: 1000, maxLevel: 'N3' },
-  japan_ready: { aiMonthlyQuota: 3000, maxLevel: 'N1' }
+  japan_ready: { aiMonthlyQuota: 3000, maxLevel: 'N1' },
+  n5_pro: { aiMonthlyQuota: 5000, maxLevel: 'N5' },
+  n5_lifetime: { aiMonthlyQuota: 99999, maxLevel: 'N5' },
+  lifetime: { aiMonthlyQuota: 99999, maxLevel: 'N1' }
 };
 
 export const FEATURE_TIER_MATRIX: Record<FeatureKey, RequiredTier | 'FREE'> = {
@@ -101,6 +104,52 @@ export const PLAN_ENTITLEMENTS: Record<PlanId, FeatureKey[]> = {
     'priority_ai',
     'quizzes',
     'ai_coach'
+  ],
+  n5_pro: [
+    'n5_basic',
+    'n5',
+    'n5_full',
+    'grammar_bank',
+    'kanji_master',
+    'jlpt_mock_exams',
+    'jlpt_pro',
+    'quizzes',
+    'ai_coach'
+  ],
+  n5_lifetime: [
+    'n5_basic',
+    'n5',
+    'n5_full',
+    'grammar_bank',
+    'kanji_master',
+    'jlpt_mock_exams',
+    'jlpt_pro',
+    'certificates',
+    'quizzes',
+    'ai_coach'
+  ],
+  lifetime: [
+    'n5_basic',
+    'n5',
+    'n5_full',
+    'n4',
+    'n4_full',
+    'grammar_bank',
+    'kanji_master',
+    'n3',
+    'n3_full',
+    'jlpt_mock_exams',
+    'jlpt_pro',
+    'keigo_mastery',
+    'business_japanese',
+    'japan_readiness',
+    'japan_ready',
+    'interview_prep',
+    'living_in_japan',
+    'certificates',
+    'priority_ai',
+    'quizzes',
+    'ai_coach'
   ]
 };
 
@@ -108,7 +157,10 @@ const TIER_ORDER: Record<PlanId, number> = {
   free: 0,
   starter: 1,
   pro: 2,
-  japan_ready: 3
+  n5_pro: 2,
+  japan_ready: 3,
+  n5_lifetime: 3,
+  lifetime: 4
 };
 
 const REQUIRED_TIER_TO_PLAN_ID: Record<RequiredTier, PlanId> = {

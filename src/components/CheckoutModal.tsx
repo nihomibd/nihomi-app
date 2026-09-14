@@ -17,7 +17,12 @@ import {
   Building2,
   Calendar,
   Gift,
-  ExternalLink
+  ExternalLink,
+  Copy,
+  Clock,
+  Crown,
+  MessageCircle,
+  Zap
 } from 'lucide-react';
 import { Plan, PlanId, BillingInterval, PaymentProviderType } from '../types';
 import { billingApi } from '../lib/billingApi';
@@ -30,6 +35,7 @@ interface CheckoutModalProps {
   selectedPlan?: Plan | null;
   plan?: Plan | null;
   initialInterval?: BillingInterval;
+  defaultTab?: 'manual' | 'automated';
   onSuccess?: () => void;
 }
 
@@ -41,6 +47,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   selectedPlan,
   plan,
   initialInterval = 'yearly',
+  defaultTab = 'manual',
   onSuccess
 }) => {
   const activePlan = selectedPlan || plan;
@@ -49,6 +56,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [interval, setInterval] = useState<BillingInterval>(initialInterval);
   const [provider, setProvider] = useState<PaymentProviderType>('bkash');
   
+  // Checkout mode: 'manual' (Send Money) vs 'automated' (PGW Instant)
+  const [checkoutMode, setCheckoutMode] = useState<'automated' | 'manual'>(defaultTab);
+
+  // Manual payment state
+  const [manualPhone, setManualPhone] = useState('');
+  const [manualTrxId, setManualTrxId] = useState('');
+  const [manualPlan, setManualPlan] = useState<'n5_pro' | 'n5_lifetime'>(
+    (activePlan?.id as string) === 'lifetime' || (activePlan?.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro'
+  );
+  const [manualMethod, setManualMethod] = useState<'bkash' | 'nagad'>('bkash');
+  const [manualStudentName, setManualStudentName] = useState(user?.name || '');
+  const [manualNote, setManualNote] = useState('');
+  const [isSubmittingManual, setIsSubmittingManual] = useState(false);
+  const [manualError, setManualError] = useState<string | null>(null);
+  const [manualSuccessData, setManualSuccessData] = useState<any>(null);
+  const [copiedNumber, setCopiedNumber] = useState(false);
+  const [copiedTrxSlip, setCopiedTrxSlip] = useState(false);
+
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
@@ -116,6 +141,73 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setCouponError(null);
   };
 
+  const handleCopyNumber = async (num: string) => {
+    try {
+      await navigator.clipboard.writeText(num);
+      setCopiedNumber(true);
+      setTimeout(() => setCopiedNumber(false), 2500);
+    } catch {
+      // quiet fallback
+    }
+  };
+
+  const handleCopyTrxSlip = async (trx: string) => {
+    try {
+      await navigator.clipboard.writeText(trx);
+      setCopiedTrxSlip(true);
+      setTimeout(() => setCopiedTrxSlip(false), 2500);
+    } catch {
+      // quiet fallback
+    }
+  };
+
+  const handleManualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setManualError(null);
+
+    const cleanPhone = manualPhone.replace(/[\s-]/g, '');
+    if (!/^01[3-9]\d{8}$/.test(cleanPhone)) {
+      setManualError('অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশী মোবাইল নম্বর দিন (যেমন: 01712345678)।');
+      return;
+    }
+
+    const cleanTrx = manualTrxId.trim().toUpperCase();
+    if (cleanTrx.length < 8 || cleanTrx.length > 14) {
+      setManualError('সঠিক ৮-১৪ অক্ষরের TrxID লিখুন (যেমন: BL92A8X10K)।');
+      return;
+    }
+
+    setIsSubmittingManual(true);
+    try {
+      const res = await billingApi.submitManualPayment({
+        senderPhone: cleanPhone,
+        trxID: cleanTrx,
+        selectedPlan: manualPlan,
+        paymentMethod: manualMethod,
+        studentName: manualStudentName || user?.name || user?.email?.split('@')[0] || 'Student',
+        note: manualNote
+      });
+
+      if (res.success && res.transaction) {
+        setManualSuccessData(res.transaction);
+        trackNihomiEvent('manual_payment_submitted', {
+          plan: manualPlan,
+          method: manualMethod,
+          trxID: cleanTrx
+        });
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else {
+        setManualError(res.error || 'পেমেন্ট সাবমিশন ব্যর্থ হয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+      }
+    } catch (err: any) {
+      setManualError(err.message || 'সার্ভার যোগাযোগে ত্রুটি হয়েছে।');
+    } finally {
+      setIsSubmittingManual(false);
+    }
+  };
+
   const handleProceedToPayment = async () => {
     setIsInitiating(true);
     setErrorMessage(null);
@@ -127,6 +219,22 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         provider,
         couponCode: appliedCoupon?.code || null
       });
+
+      // Real bKash Tokenized PGW Redirect
+      if (provider === 'bkash') {
+        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
+        const bkashRes = await billingApi.createBkashPayment({
+          tier,
+          couponCode: appliedCoupon?.code
+        });
+        if (bkashRes.success && bkashRes.bkashURL) {
+          window.location.href = bkashRes.bkashURL;
+          return;
+        }
+        if (!bkashRes.success && bkashRes.error) {
+          throw new Error(bkashRes.error);
+        }
+      }
 
       const initRes = await billingApi.initiateCheckout({
         planId: activePlan.id,
@@ -227,8 +335,358 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
           )}
 
-          <AnimatePresence mode="wait">
-            {step === 'configure' && (
+          {/* Mode Switch Tabs (Manual vs Automated) */}
+          <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-800/80 p-1 border border-zinc-200 dark:border-zinc-700/80 mb-6">
+            <button
+              type="button"
+              onClick={() => {
+                setCheckoutMode('manual');
+                setErrorMessage(null);
+              }}
+              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                checkoutMode === 'manual'
+                  ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-sm'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+              }`}
+              id="tab-manual-pay"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>ম্যানুয়াল বিকাশ / নগদ (Send Money)</span>
+              <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wider font-extrabold hidden sm:inline">
+                তাৎক্ষণিক
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setCheckoutMode('automated');
+                setErrorMessage(null);
+              }}
+              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                checkoutMode === 'automated'
+                  ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-sm'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+              }`}
+              id="tab-automated-pay"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>অটোমেটেড গেটওয়ে (PGW Instant)</span>
+            </button>
+          </div>
+
+          {checkoutMode === 'manual' ? (
+            manualSuccessData ? (
+              <div className="space-y-6 py-2">
+                <div className="text-center space-y-2">
+                  <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                    ট্রানজেকশন সফলভাবে জমা হয়েছে!
+                  </h3>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                    <Clock className="w-3.5 h-3.5 animate-spin" />
+                    <span>অপেক্ষমাণ যাচাইকরণ (PENDING_VERIFICATION)</span>
+                  </div>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
+                    আপনার TrxID আমাদের সিস্টেমে নিরাপদে নথিভুক্ত হয়েছে। অ্যাডমিন সাধারণত ৫-১৫ মিনিটের মধ্যে যাচাই করে Pro এক্সেস চালু করে দেবে।
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 space-y-3 font-mono text-xs">
+                  <div className="flex justify-between items-center pb-2 border-b border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 font-sans">ট্রানজেকশন আইডি (TrxID)</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-amber-600 dark:text-amber-400 tracking-wider text-sm">
+                        {manualSuccessData.trxID}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyTrxSlip(manualSuccessData.trxID)}
+                        className="p-1 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-300"
+                        title="Copy TrxID"
+                      >
+                        {copiedTrxSlip ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 font-sans">প্রেরক ফোন নম্বর</span>
+                    <span className="font-bold text-zinc-900 dark:text-zinc-100">{manualSuccessData.senderPhone}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 font-sans">পেমেন্ট মেথড</span>
+                    <span className="font-bold uppercase text-pink-600 dark:text-pink-400">{manualSuccessData.paymentMethod}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 font-sans">নির্বাচিত প্ল্যান</span>
+                    <span className="font-bold text-zinc-900 dark:text-zinc-100">{manualSuccessData.planName}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 font-sans">পরিশোধিত ফি</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">
+                      ৳{manualSuccessData.amount?.toLocaleString('en-BD')}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2 border-t border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 font-sans">জমাদানের সময়</span>
+                    <span className="text-zinc-400 text-[11px]">
+                      {new Date(manualSuccessData.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-xl flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <MessageCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <div>
+                      <p className="text-xs font-bold text-emerald-950 dark:text-emerald-200">দ্রুত এক্সেস চান?</p>
+                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400">হোয়াটসঅ্যাপে TrxID মেসেজ দিয়ে দ্রুত ভেরিফাই করুন</p>
+                    </div>
+                  </div>
+                  <a
+                    href={`https://wa.me/8801800644664?text=${encodeURIComponent(`Assalamu Alaikum! I submitted manual payment for Nihomi. TrxID: ${manualSuccessData.trxID}, Phone: ${manualSuccessData.senderPhone}, Plan: ${manualSuccessData.planName}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
+                  >
+                    <span>WhatsApp</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setManualSuccessData(null);
+                      onClose();
+                    }}
+                    className="flex-1 py-3 px-6 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold text-sm shadow-md hover:bg-zinc-800 transition-all cursor-pointer"
+                  >
+                    ড্যাশবোর্ডে ফিরে যান (Close)
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleManualSubmit} className="space-y-5">
+                <div className="p-4 rounded-2xl bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-800/40 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-pink-600 text-white font-bold text-xs flex items-center justify-center">
+                        ৳
+                      </div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-pink-700 dark:text-pink-300">
+                        বিকাশ / নগদ Send Money নির্দেশিকা
+                      </h4>
+                    </div>
+                    <span className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                      Personal / Merchant
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-pink-100 dark:border-pink-900/30 flex items-center justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">প্রাপক নম্বর (Nihomi Official)</span>
+                      <span className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 tracking-wider">
+                        01800-644664 <span className="text-xs font-normal text-pink-600 dark:text-pink-400">(01800NIHOMI)</span>
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyNumber('01800644664')}
+                      className="px-2.5 py-1.5 rounded-lg bg-pink-100 dark:bg-pink-950/60 hover:bg-pink-200 text-pink-700 dark:text-pink-300 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                      id="btn-copy-nihomi-number"
+                    >
+                      {copiedNumber ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>কপি হয়েছে</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>নম্বর কপি</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <ol className="text-xs text-zinc-600 dark:text-zinc-400 space-y-1.5 pl-4 list-decimal marker:text-pink-600 marker:font-bold">
+                    <li>আপনার বিকাশ অথবা নগদ অ্যাপ ওপেন করে <strong>Send Money</strong> সিলেক্ট করুন।</li>
+                    <li>প্রাপক নম্বরে <strong>01800-644664</strong> দিন।</li>
+                    <li>
+                      টাকার পরিমাণ: {manualPlan === 'n5_lifetime' ? '৳১,৪৯৯ (লাইফটাইম পাস)' : '৳৪৯৯ (N5 Pro মাসিক)'}।
+                    </li>
+                    <li>লেনদেন সম্পন্ন করার পর প্রাপ্ত <strong>TrxID</strong> এবং আপনার প্রেরক নম্বরটি নিচে দিন।</li>
+                  </ol>
+                </div>
+
+                {manualError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl flex items-start gap-2.5 text-rose-700 dark:text-rose-300 text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <span>{manualError}</span>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
+                    প্যাকেজ নির্বাচন করুন (Select Plan)
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setManualPlan('n5_pro')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        manualPlan === 'n5_pro'
+                          ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-500/20'
+                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
+                      }`}
+                      id="plan-n5-pro"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">N5 Pro</span>
+                        <span className="text-[11px] font-bold text-pink-600 dark:text-pink-400">৳৪৯৯ / মাস</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-500 mt-1">সব লেসন ও কুইজ আনলক</p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setManualPlan('n5_lifetime')}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        manualPlan === 'n5_lifetime'
+                          ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-500/20'
+                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
+                      }`}
+                      id="plan-n5-lifetime"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
+                          <span>N5 Lifetime</span>
+                          <Crown className="w-3 h-3 text-amber-500" />
+                        </span>
+                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">৳১,৪৯৯</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-500 mt-1">আজীবন পূর্ণাঙ্গ অ্যাক্সেস</p>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
+                    পেমেন্ট মাধ্যম (Method)
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setManualMethod('bkash')}
+                      className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
+                        manualMethod === 'bkash'
+                          ? 'border-pink-500 bg-pink-500/10 ring-2 ring-pink-500/20 text-pink-600 dark:text-pink-400 font-bold'
+                          : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded bg-pink-600 text-white text-xs font-black flex items-center justify-center shrink-0">
+                        bK
+                      </div>
+                      <span className="text-xs">bKash Send Money</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setManualMethod('nagad')}
+                      className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
+                        manualMethod === 'nagad'
+                          ? 'border-orange-500 bg-orange-500/10 ring-2 ring-orange-500/20 text-orange-600 dark:text-orange-400 font-bold'
+                          : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded bg-orange-600 text-white text-xs font-black flex items-center justify-center shrink-0">
+                        N
+                      </div>
+                      <span className="text-xs">Nagad Send Money</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      যে নম্বর থেকে পাঠিয়েছেন (Sender Phone) *
+                    </label>
+                    <input
+                      type="tel"
+                      value={manualPhone}
+                      onChange={(e) => setManualPhone(e.target.value)}
+                      placeholder="01XXXXXXXXX"
+                      maxLength={11}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/30"
+                      required
+                      id="input-manual-phone"
+                    />
+                    <span className="text-[10px] text-zinc-500 mt-1 block">১১ ডিজিটের নম্বর দিন</span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                      ট্রানজেকশন আইডি (TrxID) *
+                    </label>
+                    <input
+                      type="text"
+                      value={manualTrxId}
+                      onChange={(e) => setManualTrxId(e.target.value.toUpperCase())}
+                      placeholder="যেমন: BL92A8X10K"
+                      maxLength={14}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono text-sm uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-pink-500/30"
+                      required
+                      id="input-manual-trxid"
+                    />
+                    <span className="text-[10px] text-zinc-500 mt-1 block">এসএমএস-এ প্রাপ্ত TrxID লিখুন</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    শিক্ষার্থীর নাম (ঐচ্ছিক)
+                  </label>
+                  <input
+                    type="text"
+                    value={manualStudentName}
+                    onChange={(e) => setManualStudentName(e.target.value)}
+                    placeholder="আপনার নাম"
+                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-pink-500/30"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmittingManual || !manualPhone || !manualTrxId}
+                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 active:scale-[0.99] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  id="btn-submit-manual-pay"
+                >
+                  {isSubmittingManual ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>যাচাইয়ের জন্য পাঠানো হচ্ছে...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>পেমেন্ট তথ্য জমা দিন (Submit for Verification)</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )
+          ) : (
+            <AnimatePresence mode="wait">
+              {step === 'configure' && (
               <motion.div
                 key="step-configure"
                 initial={{ opacity: 0, x: -10 }}
@@ -774,6 +1232,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </motion.div>
             )}
           </AnimatePresence>
+          )}
         </div>
 
         {/* Modal Footer Trust Messaging */}

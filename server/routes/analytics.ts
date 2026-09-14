@@ -231,14 +231,12 @@ analyticsRouter.post('/track', optionalAuth, (req: AuthenticatedRequest, res) =>
 analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) => {
   try {
     const user = req.user;
-    const passkey = req.query.passkey || req.headers['x-founder-passkey'];
     const isFounderAuth = (user?.role as string) === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
-    const isPasskeyValid = passkey === 'nihomi2025' || passkey === 'dhaka_n5_founder';
 
-    if (!isFounderAuth && !isPasskeyValid) {
+    if (!isFounderAuth) {
       return res.status(401).json({
         success: false,
-        error: 'Unauthorized: Founder access required. Please sign in as founder or provide passkey.'
+        error: 'Unauthorized: Founder or admin access required. Please sign in with an authorized administrator account.'
       });
     }
 

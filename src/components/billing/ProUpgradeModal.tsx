@@ -96,11 +96,8 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
         setErrorMessage(res.message || 'যাচাইকরণ সফল হয়নি। আবার চেষ্টা করুন।');
       }
     } catch (err: any) {
-      // Graceful fallback for offline / simulated verification
-      console.warn('Backend verification fallback:', err);
-      setSubmittedTrxId(cleanTrx);
-      setIsSuccess(true);
-      if (onSuccess) onSuccess();
+      console.error('Backend verification error:', err);
+      setErrorMessage(err?.message || 'সার্ভার কানেকশন এরর। অনুগ্রহ করে আপনার ইন্টারনেট কানেকশন চেক করে আবার চেষ্টা করুন।');
     } finally {
       setIsSubmitting(false);
     }

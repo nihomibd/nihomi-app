@@ -1,36 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { LandingView } from './views/LandingView';
-import { StudentPortalView } from './views/StudentPortalView';
-import { DocumentsView } from './views/DocumentsView';
-import { EmailSignatureView } from './views/EmailSignatureView';
-import { CoordinationHubView } from './views/CoordinationHubView';
-import { AICreditsView } from './views/AICreditsView';
 import { AuthModal } from './components/auth/AuthModal';
-import { CoursesView } from './views/CoursesView';
-import { LessonView } from './views/LessonView';
-import { QuizzesView } from './views/QuizzesView';
-import { QuizRunnerView } from './views/QuizRunnerView';
-import { SubscriptionManagementView } from './views/SubscriptionManagementView';
-import { PricingView } from './views/PricingView';
-import { PassportVerificationView } from './views/PassportVerificationView';
-import { FounderCommandCenterView } from './views/FounderCommandCenterView';
-import { ContentStudioView } from './views/ContentStudioView';
-import { InstitutionPortalView } from './views/InstitutionPortalView';
-import { CurriculumExplorerView } from './views/CurriculumExplorerView';
-import { CommunityLeaderboardView } from './views/CommunityLeaderboardView';
-import { GhostModeView } from './views/GhostModeView';
-import { MockExamRunnerView } from './views/MockExamRunnerView';
-import { StudyPlanRoadmapView } from './views/StudyPlanRoadmapView';
-import { BaitoOsView } from './views/BaitoOsView';
-import { InterviewLabView } from './views/InterviewLabView';
-import { CertificateVerificationPage } from './pages/CertificateVerificationPage';
-import { TermsPage } from './pages/TermsPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import { RefundPolicyPage } from './pages/RefundPolicyPage';
-import { ContactPage } from './pages/ContactPage';
+
+// Code-split / Lazy-loaded views to optimize bundle sizes
+const StudentPortalView = lazy(() => import('./views/StudentPortalView').then(m => ({ default: m.StudentPortalView })));
+const DocumentsView = lazy(() => import('./views/DocumentsView').then(m => ({ default: m.DocumentsView })));
+const EmailSignatureView = lazy(() => import('./views/EmailSignatureView').then(m => ({ default: m.EmailSignatureView })));
+const CoordinationHubView = lazy(() => import('./views/CoordinationHubView').then(m => ({ default: m.CoordinationHubView })));
+const AICreditsView = lazy(() => import('./views/AICreditsView').then(m => ({ default: m.AICreditsView })));
+const CoursesView = lazy(() => import('./views/CoursesView').then(m => ({ default: m.CoursesView })));
+const LessonView = lazy(() => import('./views/LessonView').then(m => ({ default: m.LessonView })));
+const QuizzesView = lazy(() => import('./views/QuizzesView').then(m => ({ default: m.QuizzesView })));
+const QuizRunnerView = lazy(() => import('./views/QuizRunnerView').then(m => ({ default: m.QuizRunnerView })));
+const SubscriptionManagementView = lazy(() => import('./views/SubscriptionManagementView').then(m => ({ default: m.SubscriptionManagementView })));
+const PricingView = lazy(() => import('./views/PricingView').then(m => ({ default: m.PricingView })));
+const PassportVerificationView = lazy(() => import('./views/PassportVerificationView').then(m => ({ default: m.PassportVerificationView })));
+const FounderCommandCenterView = lazy(() => import('./views/FounderCommandCenterView').then(m => ({ default: m.FounderCommandCenterView })));
+const ContentStudioView = lazy(() => import('./views/ContentStudioView').then(m => ({ default: m.ContentStudioView })));
+const InstitutionPortalView = lazy(() => import('./views/InstitutionPortalView').then(m => ({ default: m.InstitutionPortalView })));
+const CurriculumExplorerView = lazy(() => import('./views/CurriculumExplorerView').then(m => ({ default: m.CurriculumExplorerView })));
+const CommunityLeaderboardView = lazy(() => import('./views/CommunityLeaderboardView').then(m => ({ default: m.CommunityLeaderboardView })));
+const GhostModeView = lazy(() => import('./views/GhostModeView').then(m => ({ default: m.GhostModeView })));
+const MockExamRunnerView = lazy(() => import('./views/MockExamRunnerView').then(m => ({ default: m.MockExamRunnerView })));
+const StudyPlanRoadmapView = lazy(() => import('./views/StudyPlanRoadmapView').then(m => ({ default: m.StudyPlanRoadmapView })));
+const BaitoOsView = lazy(() => import('./views/BaitoOsView').then(m => ({ default: m.BaitoOsView })));
+const CertificateVerificationPage = lazy(() => import('./pages/CertificateVerificationPage').then(m => ({ default: m.CertificateVerificationPage })));
+const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
+const RefundPolicyPage = lazy(() => import('./pages/RefundPolicyPage').then(m => ({ default: m.RefundPolicyPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const AdCampaignView = lazy(() => import('./views/AdCampaignView').then(m => ({ default: m.AdCampaignView })));
+const AdminGrowthView = lazy(() => import('./views/AdminGrowthView').then(m => ({ default: m.AdminGrowthView })));
+const PaymentCallbackView = lazy(() => import('./views/PaymentCallbackView').then(m => ({ default: m.PaymentCallbackView })));
+
+const ViewLoadingFallback: React.FC = () => (
+  <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
+    <div className="w-9 h-9 border-3 border-pink-500/20 border-t-pink-500 rounded-full animate-spin mb-3" />
+    <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider uppercase">
+      লোড হচ্ছে... (Loading Nihomi)
+    </span>
+  </div>
+);
+
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
@@ -40,8 +54,6 @@ import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { FocusPomodoroBar } from './components/focus/FocusPomodoroBar';
 import { captureReferralFromUrl } from './utils/referral';
 import { captureUtmFromUrl } from './utils/utm';
-import { AdCampaignView } from './views/AdCampaignView';
-import { AdminGrowthView } from './views/AdminGrowthView';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
@@ -120,6 +132,8 @@ export const App: React.FC = () => {
         setCurrentView('refund-policy');
       } else if (path === '/contact' || path === '/support') {
         setCurrentView('contact');
+      } else if (path === '/payment/callback' || path === '/billing/callback') {
+        setCurrentView('payment-callback');
       } else if (path.startsWith('/verify') || queryCert) {
         const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
         const targetCert = certFromPath || queryCert;
@@ -145,6 +159,7 @@ export const App: React.FC = () => {
       else if (path === '/privacy') setCurrentView('privacy');
       else if (path === '/refund-policy') setCurrentView('refund-policy');
       else if (path === '/contact') setCurrentView('contact');
+      else if (path === '/payment/callback' || path === '/billing/callback') setCurrentView('payment-callback');
       else if (path === '/' || path === '') setCurrentView('landing');
     };
     window.addEventListener('popstate', handlePopState);
@@ -236,7 +251,8 @@ export const App: React.FC = () => {
       )}
       
       <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
-        {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
+        <Suspense fallback={<ViewLoadingFallback />}>
+          {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
           <AdCampaignView onNavigate={handleNavigate} />
         )}
         {(currentView === 'growth' || currentView === 'admin-growth' || currentView === 'founder/growth') && (
@@ -293,6 +309,9 @@ export const App: React.FC = () => {
         {currentView === 'pricing' && (
           <PricingView onNavigate={handleNavigate} />
         )}
+        {currentView === 'payment-callback' && (
+          <PaymentCallbackView onNavigate={handleNavigate} />
+        )}
         {currentView === 'subscription' && (
           <SubscriptionManagementView onNavigate={handleNavigate} />
         )}
@@ -341,6 +360,7 @@ export const App: React.FC = () => {
             onNavigate={handleNavigate}
           />
         )}
+        </Suspense>
       </main>
 
       {!isFocusMode && !isAdLanding && <Footer onNavigate={handleNavigate} />}

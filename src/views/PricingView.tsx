@@ -39,6 +39,30 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
   const [trialLoading, setTrialLoading] = useState(false);
   const [trialMessage, setTrialMessage] = useState<string | null>(null);
   const [trialError, setTrialError] = useState<string | null>(null);
+  const [bkashLoadingPlan, setBkashLoadingPlan] = useState<string | null>(null);
+  const [bkashError, setBkashError] = useState<string | null>(null);
+
+  const handleDirectBkashCheckout = async (planId: string) => {
+    if (!user) {
+      if (onNavigate) onNavigate('auth');
+      return;
+    }
+    setBkashLoadingPlan(planId);
+    setBkashError(null);
+    try {
+      const tier = (planId === 'lifetime' || planId === 'n5_lifetime') ? 'n5_lifetime' : 'n5_pro';
+      const res = await billingApi.createBkashPayment({ tier });
+      if (res.success && res.bkashURL) {
+        window.location.href = res.bkashURL;
+      } else {
+        setBkashError(res.error || 'bKash পেমেন্ট ইনিশিয়ালাইজেশন ব্যর্থ হয়েছে।');
+      }
+    } catch (err: any) {
+      setBkashError(err.message || 'সার্ভার যোগাযোগ ব্যর্থ হয়েছে।');
+    } finally {
+      setBkashLoadingPlan(null);
+    }
+  };
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -171,6 +195,11 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
               {trialError}
             </div>
           )}
+          {bkashError && (
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl text-xs text-red-800 dark:text-red-300 font-medium">
+              {bkashError}
+            </div>
+          )}
         </div>
 
         {/* Pricing Cards Grid */}
@@ -252,6 +281,20 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
 
                 {/* Card CTA */}
                 <div className="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+                  {/* Official bKash Tokenized Checkout Button */}
+                  {(plan.id === 'pro' || (plan.id as string) === 'lifetime' || (plan.id as string) === 'n5_pro' || (plan.id as string) === 'n5_lifetime') && !isCurrent && (
+                    <button
+                      type="button"
+                      onClick={() => handleDirectBkashCheckout(plan.id)}
+                      disabled={bkashLoadingPlan === plan.id}
+                      className="w-full py-2.5 px-3 rounded-xl bg-[#e2136e] hover:bg-[#c90f61] text-white text-xs font-bold shadow-md shadow-pink-900/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                      id={`btn-bkash-pgw-${plan.id}`}
+                    >
+                      <Smartphone className="w-3.5 h-3.5" />
+                      <span>{bkashLoadingPlan === plan.id ? 'bKash গেটওয়ে লোড হচ্ছে...' : 'bKash দিয়ে সরাসরি পে করুন'}</span>
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => handleStartCheckout(plan)}

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { JLPTLevel } from '../types.js';
+import { subscriptionService } from '../services/subscriptionService.js';
 
 export const learningRouter = Router();
 
@@ -75,10 +76,37 @@ learningRouter.get('/lessons', optionalAuth, (req: AuthenticatedRequest, res) =>
 });
 
 // Get Lesson by ID (Full content)
-learningRouter.get('/lessons/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
+learningRouter.get('/lessons/:id', optionalAuth, async (req: AuthenticatedRequest, res) => {
   const lesson = db.getLessonById(req.params.id);
   if (!lesson || !lesson.isPublished) {
     return res.status(404).json({ error: 'Lesson not found' });
+  }
+
+  // Paywall check: Free trial allows Lesson 1. Lessons 2-25 require N5 Pro or Lifetime pass
+  if (lesson.lessonNumber > 1) {
+    const identifier = req.user?.id || req.user?.email || (req.headers['x-user-id'] as string) || (req.query.userId as string);
+    if (!identifier) {
+      return res.status(402).json({
+        success: false,
+        paywall: true,
+        error: 'Subscription Required',
+        requiredTier: 'n5_pro',
+        currentTier: 'free',
+        message: 'মিন্না নো নিহোঙ্গো লেসন ২ থেকে ২৫ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন।'
+      });
+    }
+
+    const access = await subscriptionService.canAccess(identifier, 'n5_pro');
+    if (!access.allowed) {
+      return res.status(402).json({
+        success: false,
+        paywall: true,
+        error: 'Subscription Required',
+        requiredTier: 'n5_pro',
+        currentTier: access.currentTier,
+        message: access.reason || 'মিন্না নো নিহোঙ্গো পূর্ণাঙ্গ ব্যাকরণ ব্যাংক ও পাঠসমূহ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন।'
+      });
+    }
   }
 
   const course = db.getCourseById(lesson.courseId);

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { JLPTLevel } from '../types.js';
+import { requireSubscription } from '../middleware/subscriptionGate.js';
 
 export const mockExamsRouter = Router();
 
@@ -61,8 +62,8 @@ mockExamsRouter.get('/', optionalAuth, (req: AuthenticatedRequest, res) => {
   }
 });
 
-// 2. Get specific Mock Exam with full questions for active runner
-mockExamsRouter.get('/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
+// 2. Get specific Mock Exam with full questions for active runner (Paywalled)
+mockExamsRouter.get('/:id', optionalAuth, requireSubscription('n5_pro'), (req: AuthenticatedRequest, res) => {
   try {
     const exam = db.getMockExamById(req.params.id);
     if (!exam) {
@@ -126,8 +127,8 @@ mockExamsRouter.get('/:id', optionalAuth, (req: AuthenticatedRequest, res) => {
   }
 });
 
-// 3. Submit Mock Exam Attempt
-mockExamsRouter.post('/:id/submit', requireAuth, (req: AuthenticatedRequest, res) => {
+// 3. Submit Mock Exam Attempt (Paywalled)
+mockExamsRouter.post('/:id/submit', requireAuth, requireSubscription('n5_pro'), (req: AuthenticatedRequest, res) => {
   try {
     const { answers, sectionTimesSpentSeconds, totalTimeSpentSeconds } = req.body;
 

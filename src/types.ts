@@ -290,7 +290,7 @@ export interface AISession {
 // RECURRING REVENUE & SUBSCRIPTION ENGINE
 // ==========================================
 
-export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready';
+export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready' | 'n5_pro' | 'n5_lifetime' | 'lifetime';
 
 export type BillingInterval = 'monthly' | 'yearly';
 
@@ -310,7 +310,7 @@ export type PaymentStatus =
   | 'cancelled'
   | 'refunded';
 
-export type PaymentProviderType = 'bkash' | 'sslcommerz' | 'shurjopay' | 'stripe' | 'apple_pay' | 'google_pay' | 'manual';
+export type PaymentProviderType = 'bkash' | 'nagad' | 'sslcommerz' | 'shurjopay' | 'stripe' | 'apple_pay' | 'google_pay' | 'manual';
 
 export type InvoiceStatus = 'paid' | 'open' | 'void' | 'uncollectible';
 
@@ -400,10 +400,13 @@ export interface Payment {
     cardBrand?: string;
     bankName?: string;
     gatewayName?: string;
+    senderPhone?: string;
+    verificationStatus?: string;
   };
   paidAt?: string;
   failedAt?: string;
   failureReason?: string;
+  metadata?: Record<string, any>;
   createdAt: string;
   updatedAt: string;
 }

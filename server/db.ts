@@ -3167,7 +3167,7 @@ class Database {
         aiMonthlyLimit: 10
       };
 
-      const monthlyQuota = plan.aiMonthlyLimit || (planId === 'free' ? 10 : planId === 'starter' ? 100 : planId === 'pro' ? 1000 : 3000);
+      const monthlyQuota = plan.aiMonthlyLimit || (planId === 'n5_pro' || planId === 'n5_lifetime' ? 99999 : planId === 'free' ? 10 : planId === 'starter' ? 100 : planId === 'pro' ? 1000 : 3000);
       const tokenCap = monthlyQuota * 1200; // Estimated 1,200 token budget per interaction
 
       // 2. Fetch or initialize atomic Usage Record
@@ -6715,6 +6715,28 @@ class Database {
       this.save();
     }
     return { success: true };
+  }
+
+  public createNotification(data: { userId?: string; type: string; title: string; message: string; link?: string; priority?: string; metadata?: any }) {
+    if (!this.data.studentNotifications) this.data.studentNotifications = [];
+    const notification = {
+      id: `notif-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
+      type: data.type,
+      title: data.title,
+      message: data.message,
+      link: data.link,
+      priority: data.priority,
+      metadata: data.metadata,
+      userId: data.userId,
+      createdAt: new Date().toISOString(),
+      read: false
+    };
+    this.data.studentNotifications.unshift(notification);
+    if (this.data.studentNotifications.length > 50) {
+      this.data.studentNotifications = this.data.studentNotifications.slice(0, 50);
+    }
+    this.save();
+    return notification;
   }
 
   // ==============================================================================

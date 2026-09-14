@@ -25,7 +25,9 @@ import {
   AlertCircle,
   Loader2,
   Download,
-  FileSpreadsheet
+  FileSpreadsheet,
+  XCircle,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { generateCampaignUrl } from '../utils/utm';
@@ -47,7 +49,7 @@ interface PendingBkashSubmission {
   billingInterval: string;
   amount: number;
   submittedAt: string;
-  status: 'pending' | 'approved';
+  status: 'pending' | 'approved' | 'rejected';
   approvedAt?: string;
   approvedBy?: string;
 }
@@ -88,9 +90,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const { user, setUserData } = useAuth();
 
   // Founder Gate State
-  const [passkey, setPasskey] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [passkeyError, setPasskeyError] = useState('');
 
   // Growth Data State
   const [isLoading, setIsLoading] = useState(false);
@@ -130,13 +130,17 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
     }
   }, [isFounderUser]);
 
-  const fetchPendingSubmissions = async (overridePasskey?: string) => {
+  const fetchPendingSubmissions = async () => {
     setIsLoadingSubmissions(true);
     try {
-      const activeKey = overridePasskey || passkey || (isFounderUser ? 'nihomi2025' : '');
-      const res = await billingApi.getPendingTrxSubmissions(activeKey);
-      if (res.success && res.submissions) {
-        setPendingSubmissions(res.submissions);
+      const res = await billingApi.getAdminPendingPayments().catch(() => null);
+      if (res && res.success && res.submissions) {
+        setPendingSubmissions(res.submissions as any);
+      } else {
+        const legacyRes = await billingApi.getPendingTrxSubmissions();
+        if (legacyRes.success && legacyRes.submissions) {
+          setPendingSubmissions(legacyRes.submissions);
+        }
       }
     } catch (err) {
       console.error('Failed to load pending submissions:', err);
@@ -145,11 +149,10 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
     }
   };
 
-  const fetchGrowthMetrics = async (overridePasskey?: string) => {
+  const fetchGrowthMetrics = async () => {
     setIsLoading(true);
     try {
-      const activeKey = overridePasskey || passkey || (isFounderUser ? 'nihomi2025' : '');
-      const res = await fetch(`/api/analytics/growth?passkey=${encodeURIComponent(activeKey)}`);
+      const res = await fetch('/api/analytics/growth');
       const data = await res.json();
 
       if (data.success) {
@@ -159,11 +162,6 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
         if (data.recentRegistrations) setRecentRegistrations(data.recentRegistrations);
         setLastRefreshedAt(new Date().toLocaleTimeString());
         setIsUnlocked(true);
-        setPasskeyError('');
-      } else {
-        if (!isFounderUser) {
-          setPasskeyError('ভুল পাসকি। দয়া করে সঠিক ফাউন্ডার পাসকি লিখুন।');
-        }
       }
     } catch {
       // quiet fallback
@@ -182,14 +180,20 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const handleApproveTrxId = async (sub: PendingBkashSubmission) => {
     setApprovingTrxId(sub.trxId);
     try {
-      const activeKey = passkey || (isFounderUser ? 'nihomi2025' : '');
-      const res = await billingApi.approveTrxId({
-        trxId: sub.trxId,
+      const res = await billingApi.verifyAdminPayment({
+        transactionId: sub.id,
+        trxID: sub.trxId,
         submissionId: sub.id,
-        userId: sub.userId,
-        planId: sub.planId,
-        billingInterval: sub.billingInterval,
-        passkey: activeKey
+        action: 'approve',
+        planId: sub.planId
+      }).catch(async () => {
+        return await billingApi.approveTrxId({
+          trxId: sub.trxId,
+          submissionId: sub.id,
+          userId: sub.userId,
+          planId: sub.planId,
+          billingInterval: sub.billingInterval
+        });
       });
 
       if (res.success) {
@@ -225,39 +229,41 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
     }
   };
 
+  const handleRejectTrxId = async (sub: PendingBkashSubmission) => {
+    setApprovingTrxId(sub.trxId);
+    try {
+      const res = await billingApi.verifyAdminPayment({
+        transactionId: sub.id,
+        trxID: sub.trxId,
+        submissionId: sub.id,
+        action: 'reject',
+        reason: 'অসঠিক বা অসম্পূর্ণ TrxID তথ্য।'
+      });
+      if (res.success) {
+        setPendingSubmissions((prev) =>
+          prev.map((item) =>
+            item.id === sub.id || item.trxId === sub.trxId
+              ? { ...item, status: 'rejected' }
+              : item
+          )
+        );
+        setApprovalToast({ message: `TrxID ${sub.trxId} বাতিল করা হয়েছে।`, type: 'error' });
+        setTimeout(() => setApprovalToast(null), 3500);
+      }
+    } catch (err: any) {
+      setApprovalToast({ message: err.message || 'বাতিল করতে সমস্যা হয়েছে।', type: 'error' });
+      setTimeout(() => setApprovalToast(null), 3500);
+    } finally {
+      setApprovingTrxId(null);
+    }
+  };
+
   const handleCopyTrx = async (trx: string) => {
     try {
       await navigator.clipboard.writeText(trx);
       setCopiedTrxId(trx);
       setTimeout(() => setCopiedTrxId(null), 2000);
     } catch {}
-  };
-
-  const handlePasskeySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passkey.trim() === 'nihomi2025' || passkey.trim() === 'dhaka_n5_founder') {
-      setIsUnlocked(true);
-      fetchGrowthMetrics(passkey.trim());
-    } else {
-      setPasskeyError('ভুল পাসকি। আবার চেষ্টা করুন।');
-    }
-  };
-
-  const handleQuickFounderLogin = () => {
-    setUserData({
-      id: 'usr_founder_001',
-      email: 'mdtanvirkabirbiplob@gmail.com',
-      name: 'Tanvir Kabir (Founder)',
-      role: 'founder',
-      planId: 'japan_ready',
-      status: 'ACTIVE',
-      studentId: 'NHO-FND-001',
-      nihomiAccountId: 'ACC-8888',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
-    setIsUnlocked(true);
-    fetchGrowthMetrics('nihomi2025');
   };
 
   const generatedUrl = generateCampaignUrl({
@@ -400,68 +406,30 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
     setTimeout(() => setApprovalToast(null), 3500);
   };
 
-  // 1. Password Gate for Founder Protection
+  // 1. Gate for Founder Protection
   if (!isUnlocked && !isFounderUser) {
     return (
       <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex items-center justify-center p-4 font-sans text-left">
-        <div className="max-w-md w-full bg-stone-900 border border-stone-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-          <div className="text-center space-y-2">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30 shadow-md">
-              <Lock className="w-7 h-7" />
-            </div>
+        <div className="max-w-md w-full bg-stone-900 border border-stone-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30 shadow-md">
+            <Lock className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
             <h2 className="text-xl font-bold text-white">
               Nihomi Growth Command Center
             </h2>
             <p className="text-xs text-stone-400">
-              ফাউন্ডার ও অ্যাডমিন সুরক্ষিত ড্যাশবোর্ড
+              ফাউন্ডার ও অ্যাডমিন সুরক্ষিত ড্যাশবোর্ড। এই পেইজটি ব্যবহারের জন্য অনুমোদিত ফাউন্ডার অ্যাকাউন্টে সাইন-ইন করুন।
             </p>
           </div>
 
-          <form onSubmit={handlePasskeySubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-stone-300 mb-1.5">
-                ফাউন্ডার অ্যাক্সেস পাসকি
-              </label>
-              <input
-                id="input-founder-passkey"
-                type="password"
-                value={passkey}
-                onChange={(e) => setPasskey(e.target.value)}
-                placeholder="পাসকি লিখুন..."
-                className="w-full px-4 py-3 rounded-xl bg-stone-950 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
-              />
-            </div>
-
-            {passkeyError && (
-              <div className="text-xs text-rose-400 bg-rose-950/40 p-2.5 rounded-xl border border-rose-800">
-                {passkeyError}
-              </div>
-            )}
-
-            <button
-              id="btn-submit-passkey"
-              type="submit"
-              className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span>ড্যাশবোর্ড আনলক করুন</span>
-            </button>
-          </form>
-
-          <div className="relative flex items-center justify-center my-2">
-            <div className="border-t border-stone-800 w-full" />
-            <span className="bg-stone-900 px-3 text-[10px] font-bold text-stone-500 uppercase tracking-widest">
-              অথবা
-            </span>
-          </div>
-
           <button
-            id="btn-quick-founder-access"
-            onClick={handleQuickFounderLogin}
-            className="w-full py-2.5 px-4 bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold text-xs rounded-xl border border-stone-700 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+            id="btn-goto-signin"
+            onClick={() => onNavigate?.('profile')}
+            className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg"
           >
-            <Crown className="w-4 h-4 text-amber-400" />
-            <span>Tanvir Kabir (Founder 1-ক্লিক লগইন)</span>
+            <ShieldCheck className="w-4 h-4" />
+            <span>প্রোফাইল বা অ্যাকাউন্টে যান</span>
           </button>
         </div>
       </div>
@@ -834,10 +802,10 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
                         <td className="py-3.5">
                           <div className="font-bold text-white flex items-center space-x-1">
                             <Crown className="w-3 h-3 text-amber-400" />
-                            <span>{sub.amount === 4990 ? '৳৪,৯৯০ / বছর' : '৳৫৯৯ / মাস'}</span>
+                            <span>৳{sub.amount?.toLocaleString('en-BD') || '৪৯৯'}</span>
                           </div>
                           <span className="text-[10px] text-stone-400">
-                            {sub.planName || (sub.amount === 4990 ? 'Pro Yearly' : 'Pro Monthly')}
+                            {sub.planName || (sub.planId === 'n5_lifetime' ? 'N5 Lifetime Pass' : 'N5 Pro Monthly')}
                           </span>
                         </td>
 
@@ -853,6 +821,11 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
                               <Clock className="w-3 h-3 text-amber-400" />
                               <span>অপেক্ষমাণ</span>
                             </span>
+                          ) : sub.status === 'rejected' ? (
+                            <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-950/60 text-rose-400 border border-rose-800/60">
+                              <X className="w-3 h-3 text-rose-400" />
+                              <span>বাতিল</span>
+                            </span>
                           ) : (
                             <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
                               <CheckCircle2 className="w-3 h-3 text-emerald-400" />
@@ -864,25 +837,42 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
                         {/* 7. 1-Click Action */}
                         <td className="py-3.5 text-right whitespace-nowrap">
                           {isPending ? (
-                            <button
-                              id={`btn-approve-trxid-${sub.trxId}`}
-                              type="button"
-                              onClick={() => handleApproveTrxId(sub)}
-                              disabled={isApproving}
-                              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-50"
-                            >
-                              {isApproving ? (
-                                <>
-                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                  <span>অ্যাক্টিভ হচ্ছে...</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Zap className="w-3.5 h-3.5 text-amber-300" />
-                                  <span>Approve & Activate Pro</span>
-                                </>
-                              )}
-                            </button>
+                            <div className="inline-flex items-center space-x-2">
+                              <button
+                                id={`btn-approve-trxid-${sub.trxId}`}
+                                type="button"
+                                onClick={() => handleApproveTrxId(sub)}
+                                disabled={isApproving}
+                                className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-50"
+                              >
+                                {isApproving ? (
+                                  <>
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                    <span>ভেরিফাই হচ্ছে...</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Zap className="w-3.5 h-3.5 text-amber-300" />
+                                    <span>Approve Pro</span>
+                                  </>
+                                )}
+                              </button>
+
+                              <button
+                                id={`btn-reject-trxid-${sub.trxId}`}
+                                type="button"
+                                onClick={() => handleRejectTrxId(sub)}
+                                disabled={isApproving}
+                                className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-stone-800 hover:bg-rose-900/60 text-stone-300 hover:text-rose-200 border border-stone-700 text-xs font-semibold rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                                title="Reject transaction"
+                              >
+                                <span>Reject</span>
+                              </button>
+                            </div>
+                          ) : sub.status === 'rejected' ? (
+                            <span className="inline-flex items-center space-x-1 text-rose-400 text-xs font-semibold px-2 py-1">
+                              <span>Rejected</span>
+                            </span>
                           ) : (
                             <span className="inline-flex items-center space-x-1 text-emerald-400 text-xs font-semibold px-2 py-1">
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />

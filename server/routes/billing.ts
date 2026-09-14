@@ -581,103 +581,12 @@ billingRouter.get('/bkash/query', async (req: Request, res: Response) => {
   }
 });
 
-billingRouter.post('/bkash/simulate', async (req: Request, res: Response) => {
-  try {
-    const { userId, planId = 'starter', amount = 249, billingInterval = 'monthly' } = req.body;
-    const targetUserId = userId || 'user-sandbox-student';
-
-    // 1. Create payment record
-    const payment = db.createPayment({
-      userId: targetUserId,
-      planId: planId as any,
-      planName: planId === 'starter' ? 'Nihomi Starter' : planId === 'pro' ? 'Nihomi Pro' : 'Nihomi Japan Ready',
-      billingInterval: billingInterval as any,
-      amount: Number(amount),
-      originalAmount: Number(amount),
-      discountAmount: 0,
-      provider: 'bkash'
-    });
-
-    // 2. Mark as paid
-    const trxID = `TRX_BKASH_SIM_${Date.now()}`;
-    const paidAt = new Date().toISOString();
-    db.updatePayment(payment.id, {
-      status: 'paid',
-      providerTransactionId: trxID,
-      paymentMethodDetails: {
-        type: 'bKash MFS (Sandbox Simulated)',
-        accountNumberMasked: '017••••••89',
-        gatewayName: 'bKash Sandbox Gateway'
-      },
-      paidAt
-    });
-
-    // 3. Setup/Extend subscription
-    let sub = db.getUserActiveSubscription(targetUserId);
-    if (!sub || sub.planId !== planId) {
-      if (sub) db.cancelSubscription(sub.id, true);
-      sub = db.createSubscription({
-        userId: targetUserId,
-        planId: planId as any,
-        billingInterval: billingInterval as any,
-        status: 'active',
-        paymentMethod: 'bKash MFS (Sandbox)',
-        lastPaymentId: payment.id
-      });
-    }
-
-    // 4. Create official invoice
-    const user = db.findUserById(targetUserId);
-    const profile = db.getProfileByUserId(targetUserId);
-    const invoice = db.createInvoice({
-      userId: targetUserId,
-      subscriptionId: sub.id,
-      planId: planId as any,
-      planName: payment.planName,
-      amount: Number(amount),
-      billingPeriod: `${sub.currentPeriodStart.split('T')[0]} to ${sub.currentPeriodEnd.split('T')[0]}`,
-      paymentId: payment.id,
-      customerName: profile?.displayName || user?.email?.split('@')[0] || 'QA Student',
-      customerEmail: user?.email || 'nihomibd@gmail.com',
-      subtotal: Number(amount),
-      discount: 0,
-      tax: 0,
-      paymentMethodName: 'bKash MFS (Sandbox Verified)'
-    });
-
-    db.updatePayment(payment.id, { invoiceId: invoice.id, subscriptionId: sub.id });
-
-    // 5. Credit coins and AI credits atomically
-    let coinsToAdd = 0;
-    let aiCreditsToAdd = 0;
-    if (amount === 99) {
-      coinsToAdd = 100;
-      aiCreditsToAdd = 200;
-    } else if (amount === 249) {
-      coinsToAdd = 300;
-      aiCreditsToAdd = 500;
-    } else if (amount === 499) {
-      coinsToAdd = 1000;
-      aiCreditsToAdd = 1500;
-    } else {
-      coinsToAdd = 500;
-      aiCreditsToAdd = 1000;
-    }
-    const wallet = db.creditUserCoinsAndAI(targetUserId, coinsToAdd, aiCreditsToAdd, 'bKash Sandbox Simulation');
-
-    return res.json({
-      success: true,
-      simulated: true,
-      payment,
-      subscription: sub,
-      invoice,
-      wallet,
-      message: `Simulated bKash transaction completed: ৳${amount} settled, invoice ${invoice.id} issued, ${coinsToAdd} coins and ${aiCreditsToAdd} AI credits credited.`
-    });
-  } catch (err: any) {
-    console.error('Error simulating bKash payment:', err);
-    return res.status(500).json({ error: err.message || 'Simulation error' });
-  }
+// Simulated backdoors purged for production integrity
+billingRouter.post('/bkash/simulate', (_req: Request, res: Response) => {
+  return res.status(403).json({
+    success: false,
+    error: 'Simulated payment backdoors are disabled in production. Use real bKash PGW checkout.'
+  });
 });
 
 // ==========================================
@@ -825,15 +734,13 @@ billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Respo
 // ==========================================
 // 5d. FOUNDER PENDING TrxIDs & 1-CLICK APPROVAL
 // ==========================================
-billingRouter.get('/pending-trxids', async (req: Request, res: Response) => {
+billingRouter.get('/pending-trxids', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const passkey = req.query.passkey || req.headers['x-founder-passkey'];
-    const user = (req as any).user;
+    const user = req.user;
     const isFounderAuth = user?.role === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
-    const isPasskeyValid = passkey === 'nihomi2025' || passkey === 'dhaka_n5_founder';
 
-    if (!isFounderAuth && !isPasskeyValid) {
-      return res.status(401).json({ success: false, error: 'Unauthorized: Founder access required.' });
+    if (!isFounderAuth) {
+      return res.status(401).json({ success: false, error: 'Unauthorized: Founder or admin access required.' });
     }
 
     if (!(db.data as any).manualTrxSubmissions || (db.data as any).manualTrxSubmissions.length === 0) {
@@ -896,15 +803,13 @@ billingRouter.get('/pending-trxids', async (req: Request, res: Response) => {
   }
 });
 
-billingRouter.post('/approve-trxid', async (req: Request, res: Response) => {
+billingRouter.post('/approve-trxid', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const passkey = req.query.passkey || req.headers['x-founder-passkey'] || req.body?.passkey;
-    const user = (req as any).user;
+    const user = req.user;
     const isFounderAuth = user?.role === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
-    const isPasskeyValid = passkey === 'nihomi2025' || passkey === 'dhaka_n5_founder';
 
-    if (!isFounderAuth && !isPasskeyValid) {
-      return res.status(401).json({ success: false, error: 'Unauthorized: Founder access required.' });
+    if (!isFounderAuth) {
+      return res.status(401).json({ success: false, error: 'Unauthorized: Founder or admin access required.' });
     }
 
     const { trxId, submissionId, userId: explicitUserId, planId = 'pro', billingInterval = 'monthly' } = req.body;

@@ -11,6 +11,7 @@ import { workRouter } from './server/routes/work.js';
 import { aiRouter } from './server/routes/ai.js';
 import { adminRouter } from './server/routes/admin.js';
 import { billingRouter } from './server/routes/billing.js';
+import { paymentRouter } from './server/routes/payment.js';
 import { coordinationRouter } from './server/routes/coordination.js';
 import { japanTwinRouter } from './server/routes/japanTwin.js';
 import { ghostModeRouter } from './server/routes/ghostMode.js';
@@ -160,6 +161,7 @@ async function startServer() {
   });
 
   app.use('/api/auth', authRouter);
+  app.use('/api/payment', paymentRouter);
   app.use('/api/billing', billingRouter);
   app.use('/api/learning', learningRouter);
   app.use('/api', learningRouter);

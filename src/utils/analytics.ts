@@ -24,6 +24,7 @@ export type NihomiEventType =
   | 'first_quiz_completed'
   | 'subscription_checkout_started'
   | 'payment_success'
+  | 'manual_payment_submitted'
   | 'scorecard_shared_facebook'
   | 'scorecard_shared_whatsapp'
   | 'scorecard_link_copied'
@@ -117,6 +118,7 @@ export type EventPayloadMap = {
   first_quiz_completed: FirstQuizCompletedPayload;
   subscription_checkout_started: SubscriptionCheckoutStartedPayload;
   payment_success: PaymentSuccessPayload;
+  manual_payment_submitted: Record<string, any>;
   scorecard_shared_facebook: ScorecardSharedPayload;
   scorecard_shared_whatsapp: ScorecardSharedPayload;
   scorecard_link_copied: ScorecardLinkCopiedPayload;

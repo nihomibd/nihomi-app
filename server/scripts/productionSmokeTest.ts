@@ -4,6 +4,7 @@
 
 import { db } from '../db.js';
 import { PaymentProviderFactory } from '../services/paymentProviders.js';
+import { subscriptionService } from '../services/subscriptionService.js';
 import crypto from 'crypto';
 
 interface TestResult {
@@ -66,7 +67,7 @@ async function executeSmokeSuite() {
     const drafts = db.getContentDrafts();
     const minnaDraft = drafts.find((d) => d.id.includes('minna') || d.title.includes('Lesson 1') || d.id === 'minna-no-nihongo-l1');
     const courses = db.getCourses();
-    const minnaCourse = courses.find((c) => c.id.includes('minna') || c.id === 'course-n5-foundation');
+    const minnaCourse = courses.find((c) => c.id.includes('minna') || c.id === 'course-n5-foundation' || c.id === 'course-n5');
 
     if (!minnaDraft && !minnaCourse) {
       throw new Error('Minna no Nihongo Lesson 1 not found in content studio or course database.');
@@ -98,54 +99,73 @@ async function executeSmokeSuite() {
   });
 
   // --------------------------------------------------------------------------
-  // TEST 4: bKASH PAYMENT GATEWAY (Checkout -> Verify -> Crediting -> NBR Tax Invoice)
+  // TEST 4: bKASH & HYBRID MONETIZATION ENGINE (Manual/Instant + Crediting + Tax Invoice)
   // --------------------------------------------------------------------------
-  await runTest('MONETIZATION', 'bKash MFS Tokenized Payment & Atomic Crediting', async () => {
-    const bkash = PaymentProviderFactory.getProvider('bkash') as any;
+  await runTest('MONETIZATION', 'bKash MFS & Hybrid Monetization Engine', async () => {
     const testUserId = `smoke-test-user-${Date.now()}`;
     const testPaymentId = `SMOKE_PAY_${Date.now()}`;
+    let paymentId = testPaymentId;
+    let methodUsed = 'Manual bKash / Nagad Engine';
 
-    // 1. Initiate Checkout
-    const checkout = await bkash.createCheckout({
-      paymentId: testPaymentId,
-      userId: testUserId,
-      userEmail: 'nihomibd@gmail.com',
-      userName: 'QA Verification Student',
-      planId: 'starter',
-      planName: 'Nihomi Starter Plan',
-      billingInterval: 'monthly',
-      amount: 249,
-      currency: 'BDT',
-      metadata: { isSandbox: true }
-    });
+    if (process.env.BKASH_APP_KEY && process.env.BKASH_APP_SECRET) {
+      const bkash = PaymentProviderFactory.getProvider('bkash') as any;
+      const checkout = await bkash.createCheckout({
+        paymentId: testPaymentId,
+        userId: testUserId,
+        userEmail: 'nihomibd@gmail.com',
+        userName: 'QA Verification Student',
+        planId: 'starter',
+        planName: 'Nihomi Starter Plan',
+        billingInterval: 'monthly',
+        amount: 249,
+        currency: 'BDT',
+        metadata: { isSandbox: true }
+      });
 
-    if (!checkout.providerReference || !checkout.redirectUrl) {
-      throw new Error('bKash checkout did not return a valid provider reference or redirect URL.');
-    }
+      if (!checkout.providerReference || !checkout.redirectUrl) {
+        throw new Error('bKash checkout did not return a valid provider reference or redirect URL.');
+      }
 
-    // 2. Simulate Payment Record & Execution
-    const payment = db.createPayment({
-      userId: testUserId,
-      planId: 'starter',
-      planName: 'Nihomi Starter Plan',
-      billingInterval: 'monthly',
-      amount: 249,
-      originalAmount: 249,
-      discountAmount: 0,
-      provider: 'bkash'
-    });
+      const payment = db.createPayment({
+        userId: testUserId,
+        planId: 'starter',
+        planName: 'Nihomi Starter Plan',
+        billingInterval: 'monthly',
+        amount: 249,
+        originalAmount: 249,
+        discountAmount: 0,
+        provider: 'bkash'
+      });
 
-    const verification = await bkash.verifyPayment(
-      {
-        paymentId: payment.id,
-        providerTransactionId: checkout.providerReference,
-        accountNumber: '+8801834-348966'
-      },
-      payment
-    );
+      const verification = await bkash.verifyPayment(
+        {
+          paymentId: payment.id,
+          providerTransactionId: checkout.providerReference,
+          accountNumber: '+8801834-348966'
+        },
+        payment
+      );
 
-    if (!verification.success || verification.status !== 'paid') {
-      throw new Error(`bKash verification failed: ${verification.errorMessage || 'Verification unconfirmed'}`);
+      if (!verification.success || verification.status !== 'paid') {
+        throw new Error(`bKash verification failed: ${verification.errorMessage || 'Verification unconfirmed'}`);
+      }
+      paymentId = payment.id;
+      methodUsed = 'bKash PGW Sandbox';
+    } else {
+      // Test Hybrid Manual Payment System Engine
+      const manualRes = await subscriptionService.submitManualPayment({
+        senderPhone: '01834348966',
+        trxID: `BL92${Date.now().toString().slice(-6)}`,
+        selectedPlan: 'n5_pro',
+        paymentMethod: 'bkash',
+        userId: testUserId,
+        userEmail: 'nihomibd@gmail.com',
+        studentName: 'QA Verification Student'
+      });
+      if (!manualRes.success || !manualRes.transaction?.id) {
+        throw new Error('Manual payment submission failed in smoke test.');
+      }
+      paymentId = manualRes.transaction.id;
     }
 
     // 3. Atomically Credit Coins and AI Credits
@@ -162,20 +182,20 @@ async function executeSmokeSuite() {
       planName: 'Nihomi Starter Plan',
       amount: 249,
       billingPeriod: '2026-09-01 to 2026-10-01',
-      paymentId: payment.id,
+      paymentId,
       customerName: 'QA Verification Student',
       customerEmail: 'nihomibd@gmail.com',
       subtotal: 216.52,
       discount: 0,
       tax: 32.48,
-      paymentMethodName: 'bKash MFS (Tokenized Sandbox)'
+      paymentMethodName: methodUsed
     });
 
     if (!invoice.id) {
       throw new Error('Invoice creation failed.');
     }
 
-    return `Checkout created (${checkout.providerReference}), verified (${verification.providerTransactionId}), wallet credited (${wallet.coinBalance} coins, ${wallet.aiCredits} AI credits), NBR tax invoice generated (${invoice.id}).`;
+    return `Payment verified (${methodUsed}), wallet credited (${wallet.coinBalance} coins, ${wallet.aiCredits} AI credits), NBR tax invoice generated (${invoice.id}).`;
   });
 
   // --------------------------------------------------------------------------

@@ -317,7 +317,7 @@ export const billingApi = {
   },
 
   // Founder: Get pending manual bKash TrxID submissions
-  async getPendingTrxSubmissions(passkey?: string): Promise<{
+  async getPendingTrxSubmissions(): Promise<{
     success: boolean;
     submissions: Array<{
       id: string;
@@ -336,8 +336,7 @@ export const billingApi = {
       approvedBy?: string;
     }>;
   }> {
-    const query = passkey ? `?passkey=${encodeURIComponent(passkey)}` : '';
-    return apiRequest(`/api/billing/pending-trxids${query}`);
+    return apiRequest('/api/billing/pending-trxids');
   },
 
   // Founder: 1-Click Approve TrxID and activate student Pro
@@ -347,21 +346,141 @@ export const billingApi = {
     userId?: string;
     planId?: string;
     billingInterval?: string;
-    passkey?: string;
   }): Promise<{
     success: boolean;
     message: string;
     submission?: any;
     subscription?: any;
   }> {
-    const headers: Record<string, string> = {};
-    if (params.passkey) {
-      headers['x-founder-passkey'] = params.passkey;
-    }
     return apiRequest('/api/billing/approve-trxid', {
       method: 'POST',
-      headers,
       body: JSON.stringify(params)
     });
+  },
+
+  // Real bKash Tokenized Checkout Create
+  async createBkashPayment(params: {
+    tier: 'n5_pro' | 'n5_lifetime';
+    couponCode?: string;
+  }): Promise<{
+    success: boolean;
+    paymentID?: string;
+    bkashURL?: string;
+    amount?: number;
+    currency?: string;
+    invoiceNumber?: string;
+    error?: string;
+  }> {
+    return apiRequest('/api/payment/create', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    });
+  },
+
+  // Real bKash Payment Me / Entitlements
+  async getPaymentSubscription(): Promise<{
+    success: boolean;
+    subscription: any;
+  }> {
+    return apiRequest('/api/payment/me');
+  },
+
+  // Manual bKash / Nagad Send Money Payment Instructions
+  async getManualPaymentInstructions(): Promise<{
+    success: boolean;
+    accountInfo: {
+      bkashNumber: string;
+      bkashNumberDisplay: string;
+      bkashAccountType: string;
+      nagadNumber: string;
+      nagadNumberDisplay: string;
+      nagadAccountType: string;
+      helplinePhone: string;
+      whatsappUrl: string;
+    };
+    plans: Array<{
+      id: 'n5_pro' | 'n5_lifetime';
+      nameBn: string;
+      amountBdt: number;
+      interval: string;
+    }>;
+    stepsBn: string[];
+  }> {
+    return apiRequest('/api/payment/manual/instructions');
+  },
+
+  // Student: Submit Manual Payment TrxID
+  async submitManualPayment(params: {
+    senderPhone: string;
+    trxID: string;
+    selectedPlan: 'n5_pro' | 'n5_lifetime';
+    paymentMethod?: 'bkash' | 'nagad' | string;
+    studentName?: string;
+    note?: string;
+  }): Promise<{
+    success: boolean;
+    duplicate?: boolean;
+    error?: string;
+    status?: string;
+    transaction?: {
+      id: string;
+      trxID: string;
+      senderPhone: string;
+      amount: number;
+      selectedPlan: 'n5_pro' | 'n5_lifetime';
+      planName: string;
+      paymentMethod: string;
+      submittedAt: string;
+      helplinePhone: string;
+    };
+  }> {
+    return apiRequest('/api/payment/manual/submit', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+
+  // Admin / Founder: 1-Click Verify Manual Payment
+  async verifyAdminPayment(params: {
+    transactionId?: string;
+    trxID?: string;
+    submissionId?: string;
+    action: 'approve' | 'reject';
+    reason?: string;
+    planId?: string;
+  }): Promise<{
+    success: boolean;
+    message: string;
+    activation?: any;
+    submission?: any;
+    error?: string;
+  }> {
+    return apiRequest('/api/admin/payments/verify', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+
+  // Admin / Founder: Get Pending Manual Payments
+  async getAdminPendingPayments(): Promise<{
+    success: boolean;
+    submissions: Array<{
+      id: string;
+      userId: string;
+      studentName: string;
+      studentEmail: string;
+      studentPhone: string;
+      trxId: string;
+      planId: string;
+      planName: string;
+      amount: number;
+      submittedAt: string;
+      status: 'pending' | 'approved' | 'rejected';
+      paymentMethod: string;
+      note?: string;
+    }>;
+  }> {
+    return apiRequest('/api/admin/payments/pending');
   }
 };
+
