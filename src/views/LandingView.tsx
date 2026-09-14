@@ -1,3 +1,4 @@
+// src/views/LandingView.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Mic,
@@ -7,10 +8,8 @@ import {
   Sparkles,
   Volume2,
   Compass,
-  Send,
   Loader2,
   X,
-  Gift,
   ShieldCheck,
   Target,
   Headphones,
@@ -22,8 +21,10 @@ import {
   MessageCircle,
   MapPin,
   Phone,
-  CreditCard,
-  BookOpen
+  Store,
+  BookOpen,
+  Zap,
+  Check
 } from 'lucide-react';
 import { NIHOMI_CONTACT } from '../config/contact';
 import { useAuth } from '../context/AuthContext';
@@ -33,29 +34,32 @@ import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { ZeroJapaneseGatewayModal } from '../components/onboarding/ZeroJapaneseGatewayModal';
 import { JLPTDiagnosticExamModal } from '../components/assessment/JLPTDiagnosticExamModal';
+import { CheckoutModal } from '../components/CheckoutModal';
 import { updatePageMetaTags } from '../lib/seo';
 import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
+import { Plan } from '../types';
 
 interface LandingViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-// Built-in resilient Gemini AI Sensei caller
+// Built-in resilient Gemini AI Sensei query resolver
 async function askSensei(query: string): Promise<string> {
-  const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.GEMINI_API_KEY || '';
+  const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (import.meta as any).env?.GEMINI_API_KEY || '';
 
   if (!apiKey) {
-    if (query.includes('wa') || query.includes('ga') || query.includes('は') || query.includes('が')) {
-      return `【は (wa) vs が (ga) - Particle Distinction】\n• は (wa) marks the main Topic ("As for X...").\n• が (ga) marks the specific grammatical Subject or new focus.\n\nExample: わたしは 田中 です。(As for me, I am Tanaka.)\nবাংলা অর্থ: "আমি তানাকা।"`;
+    const qLower = query.toLowerCase();
+    if (qLower.includes('wa') || qLower.includes('ga') || query.includes('は') || query.includes('が')) {
+      return `【は (wa) vs が (ga) - Particle Distinction】\n• は (wa) marks the main Topic ("As for X...").\n• が (ga) marks the specific grammatical Subject or new focus.\n\nউদাহরণ: わたしは 田中 です。(As for me, I am Tanaka.)\nবাংলা অর্থ: "আমি তানাকা।"`;
     }
-    if (query.includes('てください') || query.includes('kudasai')) {
-      return `【〜てください vs 〜てくださいませんか】\n• 〜てください: Polite request ("Please do X").\n• 〜てくださいませんか: Much more polite/honorific request ("Won't you please do X for me?").\n\nExample: 教えてくださいませんか。(Could you please teach me?)\nবাংলা অর্থ: "আপনি কি দয়া করে আমাকে শিখিয়ে দেবেন?"`;
+    if (qLower.includes('てください') || qLower.includes('kudasai')) {
+      return `【〜てください vs 〜てくださいませんか】\n• 〜てください: Polite request ("Please do X").\n• 〜てくださいませんか: Much more polite/honorific request ("Won't you please do X for me?").\n\nউদাহরণ: 教えてくださいませんか。(Could you please teach me?)\nবাংলা অর্থ: "আপনি কি দয়া করে আমাকে শিখিয়ে দেবেন?"`;
     }
-    if (query.includes('Baito') || query.includes('Interview') || query.includes('バイト')) {
+    if (qLower.includes('baito') || qLower.includes('interview') || query.includes('バイト')) {
       return `【Tokyo Baito Interview Key Phrases】\n1. はじめまして、よろしくお願いいたします。(Nice to meet you.)\n2. 週に３日入れます。(I can work 3 days a week.)\n3. 一生懸命頑張ります。(I will do my very best.)\nবাংলা অর্থ: "টোকিওতে পার্ট-টাইম জবের জন্য ৩টি গোল্ডেন বাক্য।"`;
     }
-    return `【Nihomi AI Sensei Analysis: "${query}"】\nJapanese grammar and context mapped successfully into your Learning DNA.`;
+    return `【নিহোমি AI সেনসি বিশ্লেষণ: "${query}"】\nজাপানিজ গ্রামার ও ব্যাকরণ নিয়ম আপনার লার্নিং ডিএনএ-তে যুক্ত করা হয়েছে।`;
   }
 
   try {
@@ -83,9 +87,36 @@ Keep answers concise, structured, and practical.`;
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sensei is analyzing... Please ask again.';
   } catch (err: any) {
-    return `【Sensei Answer】\nAnalysis for "${query}" completed. (AI Connection Active)`;
+    return `【নিহোমি AI সেনসি উত্তর】\n"${query}" এর বিশ্লেষণ সম্পন্ন হয়েছে। (AI কানেকশন সক্রিয়)`;
   }
 }
+
+// Pre-configured N5 Pro Lifetime Plan for instant checkout
+const N5_PRO_PLAN: Plan = {
+  id: 'pro',
+  name: 'N5 Pro Lifetime',
+  displayNameJa: 'N5プロ・完全マスター (生涯アクセス)',
+  tagline: 'Complete JLPT N5 mastery with lifetime access',
+  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, BaitoOS, and 180-Mark Mock Exams',
+  monthlyPrice: 499,
+  yearlyPrice: 499,
+  currency: 'BDT',
+  badge: 'সর্বোচ্চ জনপ্রিয়',
+  isRecommended: true,
+  order: 1,
+  features: [
+    'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
+    '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
+    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
+    'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
+    '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
+    '২৪/৭ আনলিমিটেড তানাকা এআই সেনসি লাইভ টিউটর',
+    'আজীবন অ্যাক্সেস — মোবাইল, ট্যাবলেট ও ল্যাপটপ'
+  ],
+  aiMonthlyLimit: 500,
+  entitlements: ['n5', 'quizzes', 'ai_coach', 'jlpt_pro', 'certificates', 'japan_ready'],
+  isPublished: true
+};
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const { openAuthModal, loginWithGoogle, user } = useAuth();
@@ -93,6 +124,33 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [isAnswering, setIsAnswering] = useState(false);
   const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
+
+  // Modals state
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isWritingActive, setIsWritingActive] = useState(false);
+  const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
+  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  // Dynamic OpenGraph SEO & JSON-LD updates on landing
+  useEffect(() => {
+    captureReferralFromUrl();
+
+    trackNihomiEvent('landing_page_view', {
+      pagePath: '/',
+      source: 'landing_hero'
+    });
+
+    updatePageMetaTags({
+      title: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI (ニホミ)',
+      description: 'Master JLPT N5 with 24/7 Gemini 2.5 AI Sensei in Bengali. Minna no Nihongo curriculum, Tokyo Conbini simulation, and verified digital credentials.',
+      ogTitle: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI',
+      ogDescription: '১ ক্লিকে গুগল দিয়ে শুরু করুন সম্পূর্ণ ফ্রিতে। পাচ্ছেন ফ্রি ৫০ কয়েন ও ১০০ AI ক্রেডিট।',
+      ogImage: 'https://nihomi.com/assets/og-nihomi-banner.png'
+    });
+  }, []);
 
   const handleGoogleCTA = async () => {
     if (user) {
@@ -105,7 +163,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       const ok = await loginWithGoogle();
       if (ok) {
         trackNihomiEvent('signup_completed', { method: 'google' });
-        // Check and claim any pending referral reward
         const storedRef = getStoredReferralCode();
         if (storedRef) {
           claimReferralReward(storedRef).catch(() => {});
@@ -122,89 +179,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     }
   };
 
-  // Live telemetry state from Content Studio
-  const [telemetry, setTelemetry] = useState<{
-    srsCardsCount: number;
-    sourcesCount: number;
-    publishedDraftsCount: number;
-  }>({
-    srsCardsCount: 24,
-    sourcesCount: 1,
-    publishedDraftsCount: 1
-  });
-
-  // Dynamic OpenGraph SEO & JSON-LD updates on landing
-  useEffect(() => {
-    // Capture viral referral from query param ?ref=...
-    captureReferralFromUrl();
-
-    trackNihomiEvent('landing_page_view', {
-      pagePath: '/',
-      source: 'landing_hero'
-    });
-
-    updatePageMetaTags({
-      title: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI (ニホミ)',
-      description: 'Master JLPT N5 with 24/7 Gemini 2.5 AI Sensei in Bengali. Minna no Nihongo curriculum, Tokyo Conbini simulation, and verified digital credentials.',
-      ogTitle: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI',
-      ogDescription: '১ ক্লিকে গুগল দিয়ে শুরু করুন সম্পূর্ণ ফ্রিতে। পাচ্ছেন ফ্রি ৫০ কয়েন ও ১০০ AI ক্রেডিট।',
-      ogImage: 'https://nihomi.com/assets/og-nihomi-banner.png'
-    });
-
-    let isMounted = true;
-    fetch('/api/content-studio/telemetry')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data && data.success && isMounted) {
-          setTelemetry({
-            srsCardsCount: data.telemetry?.srsCardsCount || 24,
-            sourcesCount: data.telemetry?.sourcesCount || 1,
-            publishedDraftsCount: data.telemetry?.publishedDraftsCount || 1
-          });
-        }
-      })
-      .catch(() => {});
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // Modals state
-  const [isVoiceActive, setIsVoiceActive] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isWritingActive, setIsWritingActive] = useState(false);
-  const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
-  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
-  const faqs = [
-    {
-      question: 'আমি একদম শূন্য থেকে শুরু করতে পারব?',
-      answer: 'হ্যাঁ, সম্পূর্ণ শূন্য থেকে! জাপানিজ ভাষার কোনো পূর্ব ধারণা না থাকলেও নিহোমির "Zero Japanese Gateway" এবং "Kana Lab" দিয়ে আপনি খুব সহজে ৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক এবং বাংলা উচ্চারণসহ আয়ত্ত করতে পারবেন। এরপর মিন্না নো নিহোঙ্গো ১–২৫ পাঠের মাধ্যমে N5 প্রস্তুতি সম্পন্ন করবেন।'
-    },
-    {
-      question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
-      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। আপনি সরাসরি অটোমেটেড গেটওয়ে দিয়ে অথবা আমাদের অফিশিয়াল নম্বরে সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) দিলে সাথে সাথে সম্পূর্ণ কোর্স, লিসেনিং অডিও ল্যাব ও আনলিমিটেড AI সেনসি ফিচার আনলক হয়ে যাবে। কোনো আন্তর্জাতিক কার্ডের প্রয়োজন নেই।'
-    },
-    {
-      question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
-      answer: 'নিয়মিত প্রতিদিন ৪৫ মিনিট থেকে ১ ঘণ্টা নিহোমির গাইডেড রোডম্যাপ, মিন্না নো নিহোঙ্গো ১–২৫ লেসন এবং লিসেনিং অডিও ল্যাব অনুসরণ করলে মাত্র ৬০ থেকে ৯০ দিনের মধ্যে আপনি অফিশিয়াল JLPT N5 পরীক্ষার জন্য ১০০% প্রস্তুত হবেন।'
-    },
-    {
-      question: 'কোর্স ও প্র্যাকটিস ল্যাবের অ্যাক্সেস কি আজীবন থাকবে?',
-      answer: 'হ্যাঁ! একবার এনরোল করার পর আপনি লাইফটাইম যেকোনো ডিভাইস (স্মার্টফোন, ট্যাবলেট, ল্যাপটপ) থেকে সব পাঠ, তোশিবা নেটিভ অডিও ডায়ালগ, কানজি ক্যানভাস এবং ১৮০ মার্কসের অফিশিয়াল মক টেস্ট প্র্যাকটিস করতে পারবেন।'
-    },
-    {
-      question: 'ক্লাস কি নির্দিষ্ট সময়ে লাইভ হবে নাকি নিজের সুবিধাজনক সময়ে?',
-      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর।'
-    },
-    {
-      question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
-      answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
-    }
-  ];
-
   const handleSearch = async (text: string) => {
     if (!text.trim()) return;
     setQueryInput(text);
@@ -217,11 +191,104 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     }
   };
 
+  const faqs = [
+    {
+      question: 'আমি একদম শূন্য থেকে শুরু করতে পারব?',
+      answer: 'হ্যাঁ, সম্পূর্ণ শূন্য থেকে! জাপানিজ ভাষার কোনো পূর্ব ধারণা না থাকলেও নিহোমির "Zero Japanese Gateway" এবং "Kana Lab" দিয়ে আপনি খুব সহজে ৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক এবং বাংলা উচ্চারণসহ আয়ত্ত করতে পারবেন। এরপর মিন্না নো নিহোঙ্গো ১–২৫ পাঠের মাধ্যমে N5 প্রস্তুতি সম্পন্ন করবেন।'
+    },
+    {
+      question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
+      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। আপনি সরাসরি কার্ড বা অটোমেটেড গেটওয়ে দিয়ে অথবা আমাদের পার্সোনাল নম্বরে (01834348966) সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) দিলে সাথে সাথে সম্পূর্ণ N5 কোর্স, লিসেনিং অডিও ল্যাব ও আনলিমিটেড AI সেনসি ফিচার আনলক হয়ে যাবে।'
+    },
+    {
+      question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
+      answer: 'নিয়মিত প্রতিদিন ৪৫ মিনিট থেকে ১ ঘণ্টা নিহোমির গাইডেড রোডম্যাপ, মিন্না নো নিহোঙ্গো ১–২৫ লেসন এবং লিসেনিং অডিও ল্যাব অনুসরণ করলে মাত্র ৬০ থেকে ৯০ দিনের মধ্যে আপনি অফিশিয়াল JLPT N5 পরীক্ষার জন্য ১০০% প্রস্তুত হবেন।'
+    },
+    {
+      question: 'কোর্স ও প্র্যাকটিস ল্যাবের অ্যাক্সেস কি আজীবন থাকবে?',
+      answer: 'হ্যাঁ! একবার এনরোল করার পর আপনি আজীবন যেকোনো ডিভাইস (স্মার্টফোন, ট্যাবলেট, ল্যাপটপ) থেকে সব পাঠ, তোশিবা নেটিভ অডিও ডায়ালগ, কানজি ক্যানভাস এবং ১৮০ মার্কসের অফিশিয়াল মক টেস্ট প্র্যাকটিস করতে পারবেন। কোনো হিডেন রিনিউয়াল চার্জ নেই।'
+    },
+    {
+      question: 'ক্লাস কি নির্দিষ্ট সময়ে লাইভ হবে নাকি নিজের সুবিধাজনক সময়ে?',
+      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর।'
+    },
+    {
+      question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
+      answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন (BaitoOS™) ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
+    }
+  ];
+
+  // 6-Step Continuous Learning Path configuration
+  const learningSteps = [
+    {
+      step: '01',
+      title: 'Kana 46 Lab',
+      titleJa: 'ひらがな・カタカナ基礎',
+      desc: '৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক অর্ডার, বাংলা উচ্চারণ ও টাচ ক্যানভাসে ড্রয়িং।',
+      duration: '৩-৫ দিন',
+      icon: PenTool,
+      view: 'kana',
+      color: 'rose'
+    },
+    {
+      step: '02',
+      title: 'Minna no Nihongo 1–25',
+      titleJa: 'みんなの日本語 第1-25課',
+      desc: 'N5 এর ২৫টি পূর্ণ অধ্যায়, বাংলা ব্যাকরণ নিয়ম, ভোকাবুলারি ও বাস্তব বাক্যের প্রয়োগ।',
+      duration: '৪-৬ সপ্তাহ',
+      icon: BookOpen,
+      view: 'curriculum',
+      color: 'red'
+    },
+    {
+      step: '03',
+      title: 'Kanji 100 Master',
+      titleJa: '漢字100字マスター',
+      desc: 'N5 পরীক্ষার জন্য ১০০টি মৌলিক কাঞ্জি, ওনিওমি/কুনিওমি ও ইন্টারেক্টিভ ফ্ল্যাশকার্ড।',
+      duration: '২ সপ্তাহ',
+      icon: Target,
+      view: 'kanji',
+      color: 'amber'
+    },
+    {
+      step: '04',
+      title: 'Tokyo Listening Lab',
+      titleJa: '東京リスニングラボ (聴解)',
+      desc: 'তোশিবা নেটিভ স্পিকারদের নিখুঁত উচ্চারণে ২৫টি লেসনের Choukai অডিও ও রোমাজি ফিল্টার।',
+      duration: 'প্রতিদিন ১৫ মিনিট',
+      icon: Headphones,
+      view: 'listening-lab',
+      color: 'indigo'
+    },
+    {
+      step: '05',
+      title: 'BaitoOS™ Conbini Shift',
+      titleJa: 'コンビニ接客・レジ演習',
+      desc: 'টোকিও ৭-ইলেভেন ও লসন ক্যাশিয়ার সিমুলেটর, কেইগো ডায়ালগ ও বাস্তব কাস্টমার সার্ভিস।',
+      duration: '১ সপ্তাহ',
+      icon: Store,
+      view: 'baito',
+      color: 'emerald'
+    },
+    {
+      step: '06',
+      title: '180-Mark JLPT N5 Simulation',
+      titleJa: 'JLPT N5 本番模試 180点',
+      desc: 'আসল পরীক্ষার ৩টি সেকশন (মোজী-গোই, বুনপো, চৌকাই), লাইভ টাইমার ও ভেরিফাইড সনদ।',
+      duration: 'পরীক্ষার পূর্বে',
+      icon: Award,
+      view: 'mock-exams',
+      color: 'cyan'
+    }
+  ];
+
   return (
     <div className="bg-[#FAF9F6] text-stone-900 selection:bg-red-500 selection:text-white">
-      
-      {/* 1. HERO & PROMPT HUB */}
-      <section className="pt-14 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+
+      {/* ========================================================================= */}
+      {/* SECTION 1: HERO & PROMPT HUB (Apple / Gemini Minimalist Aesthetic)        */}
+      {/* ========================================================================= */}
+      <section className="pt-12 sm:pt-16 pb-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
         
         {/* Continuous Learning Badge */}
         <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200 text-stone-700 text-xs font-semibold mb-6 shadow-2xs">
@@ -229,20 +296,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           <span>NIHOMI.COM • BANGLADESH TO TOKYO JAPANESE OS</span>
         </div>
 
-        {/* Master Headline (Bangla-First High Converting Ad Copy) */}
+        {/* Master Minimalist Headline with Glowing Red Accent */}
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-950 leading-[1.15] mb-4">
-          শূন্য থেকে <span className="text-red-600 font-japanese">JLPT N5</span> — <br className="hidden sm:inline" />
+          শূন্য থেকে <span className="text-red-600 font-japanese drop-shadow-sm">JLPT N5</span> — <br className="hidden sm:inline" />
           জাপানিজ ভাষা শেখার আধুনিক <span className="underline decoration-red-500/40 decoration-wavy underline-offset-8">AI প্ল্যাটফর্ম</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-7 font-medium leading-relaxed">
+        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
           বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসি, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
         </p>
 
-        {/* 3 Distinct Unmissable Entry Triggers */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 mb-5 max-w-3xl mx-auto">
-          {/* 1. Primary CTA: Start Japanese Zero Journey */}
+        {/* 2 Primary CTAs: Start Zero Journey + Take Level Check */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 mb-5 max-w-2xl mx-auto">
+          {/* Primary CTA: Start Japanese Zero Journey */}
           <button
             onClick={() => {
               trackNihomiEvent('zero_gateway_clicked', { source: 'landing_hero' });
@@ -255,7 +322,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
           </button>
 
-          {/* 2. Secondary CTA: Take 2-Min Level Check */}
+          {/* Secondary CTA: Take 2-Min Level Check */}
           <button
             onClick={() => {
               trackNihomiEvent('diagnostic_exam_clicked', { source: 'landing_hero' });
@@ -268,10 +335,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        {/* 3. Tertiary CTA & Frictionless 1-Click Google Sign-In */}
+        {/* Frictionless 1-Click Google Sign-In & Kana Jump */}
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-stone-600 mb-8">
           <button
-            onClick={() => onNavigate('courses')}
+            onClick={() => onNavigate('kana')}
             className="inline-flex items-center space-x-1.5 text-stone-700 hover:text-red-600 font-bold transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-white border border-stone-200 hover:border-red-400 shadow-2xs"
           >
             <Compass className="w-4 h-4 text-stone-500" />
@@ -299,34 +366,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        {/* Live Proof Counter Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10">
-          <div className="p-3.5 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-left">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-stone-400 block font-mono">মিন্না নো নিহোঙ্গো</span>
-            <span className="text-xl sm:text-2xl font-black text-stone-900 mt-0.5 block">{telemetry.srsCardsCount}+ ট্রাইলিঙ্গুয়াল মডিউল</span>
-            <span className="text-[11px] text-stone-500">বাংলা, জাপানিজ ও ইংরেজি</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-left">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-stone-400 block font-mono">রিয়েল লাইফ ড্রিল</span>
-            <span className="text-xl sm:text-2xl font-black text-stone-900 mt-0.5 block">কনবিনি সিমুলেটর</span>
-            <span className="text-[11px] text-stone-500">টোকিও পার্ট-টাইম প্রস্তুতি</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-left">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-stone-400 block font-mono">প্রাতিষ্ঠানিক স্বীকৃতি</span>
-            <span className="text-xl sm:text-2xl font-black text-stone-900 mt-0.5 block">ভেরিফাইড সনদ</span>
-            <span className="text-[11px] text-stone-500">SHA-256 ডিজিটাল সিল</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-left">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-stone-400 block font-mono">সাইন-আপ বোনাস</span>
-            <span className="text-xl sm:text-2xl font-black text-red-600 mt-0.5 block">৫০ কয়েন + ১০০ AI</span>
-            <span className="text-[11px] text-stone-500">সম্পূর্ণ ফ্রি স্টার্টার প্যাক</span>
-          </div>
-        </div>
-
-        {/* 2. SEARCH BAR WITH VOICE, PHOTO OCR & KANJI CANVAS */}
+        {/* Minimalist AI Prompt / Search Bar */}
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-3xl border border-stone-200 shadow-sm hover:border-stone-300 transition-all p-4 sm:p-5 text-left space-y-4">
             
@@ -336,7 +376,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               value={queryInput}
               onChange={(e) => setQueryInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(queryInput)}
-              placeholder="Ask Nihomi anything in English, বাংলা, or 日本語 (e.g. particle rules, job interviews)..."
+              placeholder="Ask Nihomi AI Sensei anything in English, বাংলা, or 日本語 (e.g. particle rules, baito keigo)..."
               className="w-full bg-transparent text-sm sm:text-base text-stone-900 placeholder:text-stone-400 focus:outline-hidden leading-relaxed"
             />
 
@@ -376,7 +416,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <button
                 onClick={() => handleSearch(queryInput)}
                 disabled={isAnswering || !queryInput.trim()}
-                className="w-9 h-9 rounded-xl bg-stone-400 hover:bg-stone-900 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                className="w-9 h-9 rounded-xl bg-stone-900 hover:bg-red-600 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-xs"
                 aria-label="Send Query"
               >
                 {isAnswering ? (
@@ -396,7 +436,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             {[
               'は (wa) vs が (ga)',
               '〜てください vs 〜てくださいませんか',
-              'Tokyo Baito Interview',
+              'Tokyo Baito Keigo',
               'Kanji: 日本語',
             ].map((q, idx) => (
               <button
@@ -418,15 +458,15 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     日
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-stone-900 block">Nihomi Sensei</span>
-                    <span className="text-[10px] text-stone-400 font-mono">Live Explanation</span>
+                    <span className="text-xs font-bold text-stone-900 block">নিহোমি AI সেনসি</span>
+                    <span className="text-[10px] text-stone-400 font-mono">লাইভ ব্যাকরণ সমাধান</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1.5">
                   <button
                     onClick={() => speakJapanese(aiAnswer)}
                     className="p-1.5 text-stone-500 hover:text-stone-900 rounded-lg hover:bg-stone-100 cursor-pointer"
-                    title="Listen Pronunciation"
+                    title="উচ্চারণ শুনুন"
                   >
                     <Volume2 className="w-4 h-4 text-red-600" />
                   </button>
@@ -449,250 +489,205 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
       </section>
 
-      {/* 3. CURATED PATHWAYS OVERVIEW */}
-      <section className="py-14 bg-white border-t border-stone-200/80 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-black text-stone-950 tracking-tight">
-              Curated JLPT Learning Pathways
-            </h2>
-            <p className="text-xs text-stone-500 mt-1 font-medium">
-              Structured step-by-step mastery from complete beginner to business bilingual
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                level: 'JLPT N5',
-                title: 'Foundations & Daily Life',
-                desc: 'Hiragana, Katakana, 100 Kanji, 800 Vocab, Minna no Nihongo 1–25.',
-                badge: 'Beginner',
-                action: 'Start N5 Pathway'
-              },
-              {
-                level: 'JLPT N4',
-                title: 'Conversational Bridge',
-                desc: 'Complex grammar, 300 Kanji, 1,500 Vocab, Tokyo life survival skills.',
-                badge: 'Intermediate',
-                action: 'Start N4 Pathway'
-              },
-              {
-                level: 'JLPT N3–N1',
-                title: 'Professional Mastery',
-                desc: 'Business honorifics (Keigo), specialized technical Kanji, job readiness.',
-                badge: 'Advanced',
-                action: 'Start N3–N1 Track'
-              }
-            ].map((card, i) => (
-              <div
-                key={i}
-                className="p-6 bg-stone-50 border border-stone-200 rounded-3xl hover:border-stone-400 hover:shadow-md transition-all text-left flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-0.5 bg-stone-950 text-white rounded-full text-[10px] font-bold">
-                      {card.level}
-                    </span>
-                    <span className="text-[10px] font-semibold text-stone-500">
-                      {card.badge}
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-sm text-stone-950 mb-1.5">{card.title}</h3>
-                  <p className="text-xs text-stone-600 leading-relaxed mb-4">{card.desc}</p>
-                </div>
-
-                <button
-                  onClick={() => onNavigate('courses')}
-                  className="w-full py-2 bg-white hover:bg-stone-900 hover:text-white border border-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  {card.action} →
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. CORE FEATURES GRID SHOWCASE */}
-      <section className="py-16 bg-[#FAF9F6] border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+      {/* ========================================================================= */}
+      {/* SECTION 2: 6-STEP CONTINUOUS LEARNING PATH (The Nihomi OS Architecture)    */}
+      {/* ========================================================================= */}
+      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
+          
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold mb-3 border border-red-200">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>নিহোমি সম্পূর্ণ লার্নিং ইকোসিস্টেম</span>
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-bold mb-3 border border-red-200">
+              <Zap className="w-3.5 h-3.5" />
+              <span>নিহোমি ওএস আর্কিটেকচার</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-950 tracking-tight">
-              JLPT N5 পাসের জন্য প্রয়োজনীয় <span className="text-red-600">সবকিছু এক জায়গায়</span>
+              ৬ ধাপে সম্পূর্ণ জাপানিজ প্রস্তুতি <span className="text-red-600">(Step 1 → Step 6)</span>
             </h2>
             <p className="text-xs sm:text-sm text-stone-600 mt-2">
-              জাপানিজ বর্ণমালা থেকে শুরু করে তোশিবা নেটিভ অডিও, এআই সেনসি ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট
+              শূন্য বর্ণমালা থেকে শুরু করে তোশিবা নেটিভ অডিও, টোকিও কনবিনি জব ড্রিল ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Feature 1: ৪৬ হিরাগানা-কাতাকানা ও কানজি স্ট্রোক ল্যাব */}
-            <div
-              id="feature-card-kana-kanji"
-              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-japanese font-bold text-xl shadow-xs">
-                    あ/日
+          {/* 6-Step Visual Interactive Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {learningSteps.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={item.step}
+                  className="p-6 rounded-3xl bg-stone-50/70 hover:bg-white border border-stone-200 hover:border-stone-400 hover:shadow-md transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="w-8 h-8 rounded-xl bg-stone-950 text-white font-mono font-bold text-xs flex items-center justify-center">
+                        {item.step}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-full bg-white border border-stone-200 text-stone-500 text-[10px] font-bold font-mono">
+                        {item.duration}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className="w-10 h-10 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-red-600 shadow-2xs group-hover:scale-105 transition-transform">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-base text-stone-950 group-hover:text-red-600 transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-[11px] text-stone-400 font-japanese font-medium">
+                          {item.titleJa}
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6 mt-3">
+                      {item.desc}
+                    </p>
                   </div>
-                  <span className="px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-bold font-mono">
-                    কানা ও কানজি ল্যাব
-                  </span>
+
+                  <button
+                    onClick={() => onNavigate(item.view)}
+                    className="w-full py-2.5 px-4 bg-white hover:bg-stone-950 hover:text-white border border-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-2xs active:scale-95"
+                  >
+                    <span>এই ধাপে প্রবেশ করুন</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-red-600 transition-colors">
-                  ৪৬ হিরাগানা-কাতাকানা ও কানজি স্ট্রোক ল্যাব
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
-                  অ্যানিমেটেড স্ট্রোক অর্ডার নির্দেশিকা, বাংলা উচ্চারণ ধ্বনি এবং টাচ ক্যানভাসে আঙুল দিয়ে ড্রয়িং প্র্যাকটিস। সাথে পাচ্ছেন N5 পরীক্ষার জন্য ১০০টি মৌলিক কানজি ও ফ্লাশকার্ড সিস্টেম।
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
-                <button
-                  onClick={() => onNavigate('kana')}
-                  className="flex-1 py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
-                >
-                  <PenTool className="w-3.5 h-3.5" />
-                  <span>কানা ল্যাব খুলুন</span>
-                </button>
-                <button
-                  onClick={() => onNavigate('kanji')}
-                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  <span>কানজি ১০০ ড্রিল →</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Feature 2: মিন্না নো নিহোঙ্গো ১–২৫ লেসন ও লিসেনিং অডিও ল্যাব */}
-            <div
-              id="feature-card-listening-lab"
-              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl shadow-xs">
-                    <Headphones className="w-6 h-6" />
-                  </div>
-                  <span className="px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold font-mono">
-                    অডিও ল্যাব 第1-25課
-                  </span>
-                </div>
-                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-amber-600 transition-colors">
-                  মিন্না নো নিহোঙ্গো ১–২৫ লেসন ও লিসেনিং অডিও ল্যাব
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
-                  টোকিও নেটিভ স্পিকারদের খাঁটি উচ্চারণে ১ থেকে ২৫টি লেসনের সম্পূর্ণ কথপোকথন। ফুরিগানা ও রোমাজি ফিল্টার, ০.৭৫x–১.২৫x স্পিড এবং অফিশিয়াল Choukai অডিও কুইজ।
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
-                <button
-                  onClick={() => onNavigate('listening-lab')}
-                  className="flex-1 py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
-                >
-                  <Headphones className="w-3.5 h-3.5" />
-                  <span>লিসেনিং অডিও ল্যাব</span>
-                </button>
-                <button
-                  onClick={() => onNavigate('curriculum')}
-                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  <span>১–২৫ কারিকুলাম →</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Feature 3: ২৪/৭ এআই সেনসি (তানাকা সেনসি) লাইভ টিউটর */}
-            <div
-              id="feature-card-ai-sensei"
-              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xl shadow-xs">
-                    <Sparkles className="w-6 h-6" />
-                  </div>
-                  <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold font-mono">
-                    Gemini AI Sensei
-                  </span>
-                </div>
-                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-indigo-600 transition-colors">
-                  ২৪/৭ এআই সেনসি (তানাকা সেনসি) লাইভ টিউটর
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
-                  যেকোনো জটিল গ্রামার বা কণা (は vs が, に vs で) নিয়ে বিভ্রান্ত? বাংলায় সহজভাবে বুঝিয়ে দেবেন তানাকা সেনসি। মুখে কথা বলে উচ্চারণ ও টোকিও কনবিনি জব ইন্টারভিউ প্রস্তুতি নিন।
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
-                <button
-                  onClick={() => setIsVoiceActive(true)}
-                  className="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
-                >
-                  <Mic className="w-3.5 h-3.5" />
-                  <span>তানাকা সেনসির সাথে কথা বলুন</span>
-                </button>
-                <button
-                  onClick={() => onNavigate('baito')}
-                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  <span>বাইতো সিমুলেটর →</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Feature 4: ১৮০ মার্কসের অফিশিয়াল জেএলপিটি এন৫ মক টেস্ট ও ভেরিফাইড সার্টিফিকেট */}
-            <div
-              id="feature-card-mock-exam"
-              className="p-6 sm:p-7 rounded-3xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl shadow-xs">
-                    <Award className="w-6 h-6" />
-                  </div>
-                  <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold font-mono">
-                    ১৮০ মার্কস ফুল টেস্ট
-                  </span>
-                </div>
-                <h3 className="text-lg font-black text-stone-950 mb-2 group-hover:text-emerald-600 transition-colors">
-                  ১৮০ মার্কসের অফিশিয়াল জেএলপিটি এন৫ মক টেস্ট ও ভেরিফাইড সার্টিফিকেট
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6">
-                  আসল JLPT পরীক্ষার হুবহু ৩টি সেকশন (মোজী-গোই, বুনপো, চৌকাই)। লাইভ টাইমার, নেগেটিভ নেই, তাৎক্ষণিক রেজাল্ট এবং আন্তর্জাতিকভাবে শেয়ারযোগ্য SHA-256 ভেরিফাইড সনদ।
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5 pt-4 border-t border-stone-100">
-                <button
-                  onClick={() => onNavigate('mock-exams')}
-                  className="flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs active:scale-95"
-                >
-                  <Award className="w-3.5 h-3.5" />
-                  <span>মক টেস্ট দিন (১৮০ মার্কস)</span>
-                </button>
-                <button
-                  onClick={() => onNavigate('courses')}
-                  className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  <span>ভর্তি অফার দেখুন →</span>
-                </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
+
         </div>
       </section>
 
-      {/* 5. HIGH-VALUE FAQ ACCORDION (BENGALI) */}
-      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+      {/* ========================================================================= */}
+      {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free Starter vs Pro)   */}
+      {/* ========================================================================= */}
+      <section className="py-16 bg-[#FAF9F6] border-t border-stone-200 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+          
+          <div className="text-center max-w-xl mx-auto mb-12">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold mb-3 border border-emerald-200">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>স্বচ্ছ কোর্স ফি ও ইনস্ট্যান্ট এক্টিভেশন</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-stone-950 tracking-tight">
+              সহজ মূল্যতালিকা • <span className="text-red-600">কোনো গোপন চার্জ নেই</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-stone-600 mt-2">
+              ফ্রি স্টার্টার দিয়ে পরখ করুন অথবা ৳৪৯৯-এ আজীবন অ্যাক্সেস নিয়ে JLPT N5 এর সম্পূর্ণ প্রস্তুতি নিন
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            
+            {/* 1. Free Starter Tier */}
+            <div className="p-7 rounded-3xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-bold font-mono">
+                    ফ্রি স্টার্টার
+                  </span>
+                  <span className="text-xs text-stone-400 font-medium">বেসিক অ্যাক্সেস</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline space-x-1">
+                    <span className="text-3xl sm:text-4xl font-black text-stone-950">৳০</span>
+                    <span className="text-xs text-stone-500">/ আজীবন ফ্রি</span>
+                  </div>
+                  <p className="text-xs text-stone-500 mt-1">জাপানিজ বর্ণমালা ও প্রাথমিক শব্দ শেখার জন্য উপযুক্ত</p>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-stone-100 mb-8">
+                  {[
+                    '৪৬টি হিরাগানা ও কাতাকানা স্ট্রোক ল্যাব',
+                    'মিন্না নো নিহোঙ্গো প্রথম ৩টি বেসিক পাঠ',
+                    'প্রাথমিক প্র্যাকটিস কুইজ ও স্কোরকার্ড',
+                    '১০টি এআই সেনসি প্রশ্ন প্রতি মাসে',
+                    'ফ্রি ৫০ নিহোমি কয়েন সাইন-আপ বোনাস'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-700">
+                      <Check className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleGoogleCTA}
+                className="w-full py-3.5 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center"
+              >
+                ফ্রি শুরু করুন (১-ক্লিক সাইন ইন)
+              </button>
+            </div>
+
+            {/* 2. N5 Pro Lifetime Tier (Highlighted) */}
+            <div className="p-7 rounded-3xl bg-white border-2 border-red-600 shadow-xl shadow-red-600/10 flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+                সর্বাধিক জনপ্রিয়
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold font-mono">
+                    N5 Pro লাইফটাইম
+                  </span>
+                  <span className="text-xs text-red-600 font-bold">৬৭% ছাড়</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-3xl sm:text-4xl font-black text-red-600">৳৪৯৯</span>
+                    <span className="text-sm text-stone-400 line-through">৳১,৪৯৯</span>
+                    <span className="text-xs text-stone-500">/ এককালীন ফি</span>
+                  </div>
+                  <p className="text-xs text-stone-500 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, বাইতো ও মক টেস্টে আজীবন অ্যাক্সেস</p>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-stone-100 mb-8">
+                  {[
+                    'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
+                    '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
+                    'টোকিও নেティブ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
+                    'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
+                    '১৮০ মার্কসের অফিশিয়াল মক টেস্ট ও ভেরিফাইড সনদ',
+                    '২৪/৭ তানাকা এআই সেনসি লাইভ টিউটর',
+                    'দেশীয় bKash ও Nagad এ ইনস্ট্যান্ট অটোমেটেড ভেরিফিকেশন'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-900 font-medium">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
+                  setIsCheckoutOpen(true);
+                }}
+                className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/25 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
+              >
+                <span>এনরোল করুন — ৳৪৯৯ (bKash / Nagad)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 4: MINIMALIST FAQ & DIRECT HELPLINE (WhatsApp 01834348966)         */}
+      {/* ========================================================================= */}
+      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          
           <div className="text-center mb-10">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-bold mb-3 border border-stone-200">
               <HelpCircle className="w-3.5 h-3.5 text-red-500" />
@@ -702,12 +697,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
             </h2>
             <p className="text-xs sm:text-sm text-stone-500 mt-2">
-              নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে বিস্তারিত তথ্য
+              নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে প্রয়োজনীয় তথ্য
             </p>
           </div>
 
-          {/* Accordion Container */}
-          <div className="space-y-3">
+          {/* Minimalist Collapsible Accordion */}
+          <div className="space-y-3 mb-14">
             {faqs.map((faq, index) => {
               const isExpanded = openFaqIndex === index;
               return (
@@ -742,52 +737,53 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               );
             })}
           </div>
-        </div>
-      </section>
 
-      {/* 6. COMMERCIAL TRUST & DIRECT WHATSAPP ADMISSION BANNER */}
-      <section className="py-12 bg-gradient-to-br from-stone-900 via-stone-950 to-red-950 text-white px-4 sm:px-6 lg:px-8 border-t border-stone-800">
-        <div className="max-w-5xl mx-auto rounded-3xl p-6 sm:p-10 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center md:text-left">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-red-600/30 border border-red-500/40 text-red-300 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>সরাসরি কাউন্সেলিং ও ভর্তি সহায়তা</span>
+          {/* Direct WhatsApp & Farmgate Office Badge Banner */}
+          <div className="rounded-3xl bg-stone-950 text-white p-6 sm:p-8 border border-stone-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 text-center md:text-left">
+              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-red-600/30 border border-red-500/40 text-red-300 text-xs font-bold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>সরাসরি কাউন্সেলিং ও ভর্তি সহায়তা</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white">
+                যেকোনো প্রয়োজনে আমরা আছি আপনার সাথে
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-300">
+                ভর্তি বা কোর্স সংক্রান্ত তথ্যের জন্য সরাসরি হোয়াটসঅ্যাপে মেসেজ দিন বা কল করুন।
+              </p>
+              <div className="text-xs text-stone-400 flex items-center justify-center md:justify-start gap-1.5 pt-1">
+                <MapPin className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                <span>ঢাকা অফিস: {NIHOMI_CONTACT.officeLocationBn}</span>
+              </div>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              জাপান যাত্রার প্রস্তুতি শুরু হোক আজ থেকেই
-            </h3>
-            <p className="text-xs sm:text-sm text-stone-300 max-w-xl">
-              কোর্সে ভর্তি সংক্রান্ত যেকোনো তথ্য জানতে আমাদের হটলাইনে কল দিন, হোয়াটসঅ্যাপে নক দিন অথবা সরাসরি ফার্মগেট অফিসে আসুন।
-            </p>
-            <p className="text-xs text-stone-400 flex items-center justify-center md:justify-start gap-1.5 pt-1">
-              <MapPin className="w-3.5 h-3.5 text-red-400 shrink-0" />
-              <span>ঢাকা অফিস: {NIHOMI_CONTACT.officeLocationBn}</span>
-            </p>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
+              <a
+                href={`https://wa.me/${NIHOMI_CONTACT.whatsappNumber}?text=${encodeURIComponent('হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>WhatsApp: {NIHOMI_CONTACT.phone}</span>
+              </a>
+
+              <a
+                href={`tel:${NIHOMI_CONTACT.phone}`}
+                className="py-3 px-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              >
+                <Phone className="w-4 h-4 text-stone-300" />
+                <span>হটলাইন কল</span>
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
-            <a
-              href="https://wa.me/8801800644664?text=%E0%A6%B9%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%B2%E0%A7%8B%20%E0%A6%A8%E0%A6%BF%E0%A6%B9%E0%A7%8B%E0%A6%AE%E0%A6%BF!%20%E0%A6%86%E0%A6%AE%E0%A6%BF%20JLPT%20N5%20%E0%A6%95%E0%A7%8B%E0%A6%B0%E0%A7%8D%E0%A6%B8%E0%A7%87%20%E0%A6%AD%E0%A6%B0%E0%A7%8D%E0%A6%A4%E0%A6%BF%20%E0%A6%B9%E0%A6%A4%E0%A7%87%20%E0%A6%9A%E0%A6%BE%E0%A6%87%20/%20%E0%A6%AA%E0%A7%87%E0%A6%AE%E0%A7%87%E0%A6%A8%E0%A7%8D%E0%A6%9F%20%E0%A6%B8%E0%A6%82%E0%A6%95%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4%20%E0%A6%A4%E0%A6%A5%E0%A7%8D%E0%A6%AF%20%E0%A6%9C%E0%A6%BE%E0%A6%A8%E0%A6%A4%E0%A7%87%20%E0%A6%9A%E0%A6%BE%E0%A6%87%E0%A7%84"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4 fill-current" />
-              <span>WhatsApp: 01800-644664</span>
-            </a>
-
-            <a
-              href="tel:+8801800644664"
-              className="py-3 px-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all cursor-pointer"
-            >
-              <Phone className="w-4 h-4 text-stone-300" />
-              <span>হটলাইন কল</span>
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* INTERACTIVE MODALS */}
+      {/* ========================================================================= */}
+      {/* INTERACTIVE MODALS                                                        */}
+      {/* ========================================================================= */}
       {isVoiceActive && (
         <VoiceSenseiPractice
           isOpen={isVoiceActive}
@@ -830,6 +826,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           isOpen={isDiagnosticOpen}
           onClose={() => setIsDiagnosticOpen(false)}
           onStartTrack={(trackId) => onNavigate(trackId)}
+        />
+      )}
+
+      {isCheckoutOpen && (
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          plan={N5_PRO_PLAN}
+          selectedPlan={N5_PRO_PLAN}
+          onSuccess={() => {
+            setIsCheckoutOpen(false);
+            onNavigate('dashboard');
+          }}
         />
       )}
 

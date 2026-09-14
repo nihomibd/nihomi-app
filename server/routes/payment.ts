@@ -360,14 +360,14 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
   return res.json({
     success: true,
     accountInfo: {
-      bkashNumber: process.env.MANUAL_PAY_BKASH_NUMBER || '01800644664',
-      bkashNumberDisplay: '01800-NIHOMI (01800-644664)',
+      bkashNumber: process.env.MANUAL_PAY_BKASH_NUMBER || '01834348966',
+      bkashNumberDisplay: '01834-348966',
       bkashAccountType: 'Personal / Send Money',
-      nagadNumber: process.env.MANUAL_PAY_NAGAD_NUMBER || '01800644664',
-      nagadNumberDisplay: '01800-NIHOMI (01800-644664)',
+      nagadNumber: process.env.MANUAL_PAY_NAGAD_NUMBER || '01834348966',
+      nagadNumberDisplay: '01834-348966',
       nagadAccountType: 'Personal / Send Money',
-      helplinePhone: '01800-NIHOMI (01800-644664)',
-      whatsappUrl: 'https://wa.me/8801800644664',
+      helplinePhone: '01834348966',
+      whatsappUrl: 'https://wa.me/8801834348966',
     },
     plans: [
       {
@@ -385,7 +385,7 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
     ],
     stepsBn: [
       'আপনার bKash বা Nagad অ্যাপে যান এবং "Send Money" নির্বাচন করুন।',
-      'আমাদের অফিসিয়াল নম্বরে কাঙ্ক্ষিত প্ল্যানের সমপরিমাণ টাকা পাঠান (01800-644664)।',
+      'আমাদের অফিসিয়াল নম্বরে কাঙ্ক্ষিত প্ল্যানের সমপরিমাণ টাকা পাঠান (01834348966)।',
       'সফলভাবে টাকা পাঠানোর পর প্রাপ্ত এসএমএস থেকে TrxID এবং আপনার প্রেরক নম্বর নিচে দিয়ে সাবমিট করুন।',
       'অ্যাডমিন যাচাই করার সাথে সাথেই আপনার ড্যাশবোর্ডে Pro কোর্স আনলক হয়ে যাবে (সর্বোচ্চ ৫-১৫ মিনিট)।',
     ],

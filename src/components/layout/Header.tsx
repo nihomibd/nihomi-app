@@ -25,6 +25,10 @@ import {
   ChevronRight,
   Clock,
   TrendingUp,
+  MapPin,
+  Phone,
+  MessageSquare,
+  Store
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme, AppTheme } from '../../context/ThemeContext';
@@ -36,7 +40,7 @@ interface HeaderProps {
   onOpenShortcuts?: () => void;
 }
 
-type DropdownId = 'curriculum' | 'practice' | 'mocks' | 'career' | 'theme' | 'user' | null;
+type DropdownId = 'curriculum' | 'readiness' | 'career' | 'pricing' | 'theme' | 'user' | null;
 
 export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const { user, progress, openAuthModal, logout } = useAuth();
@@ -45,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   // Dropdown States
   const [activeDropdown, setActiveDropdown] = useState<DropdownId>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<'curriculum' | 'practice' | 'mocks' | 'career' | null>('curriculum');
+  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<'curriculum' | 'readiness' | 'career' | 'pricing' | null>('curriculum');
 
   const navContainerRef = useRef<HTMLDivElement>(null);
   const themeDropdownRef = useRef<HTMLDivElement>(null);
@@ -55,11 +59,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const isFounder = user?.role === 'founder' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
   const streak = progress?.streakDays || progress?.currentStreak || user?.streakDays || 1;
 
-  // Active Category Detection
-  const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'listening-lab', 'listening', 'kaiwa', 'choukai', 'study-plan', 'roadmap'].includes(currentView);
-  const isPracticeActive = ['kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab'].includes(currentView);
-  const isMockActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests'].includes(currentView);
-  const isCareerActive = ['baito', 'baito-os', 'interview', 'leaderboard', 'community'].includes(currentView);
+  // Active Category Detection for the 4 core pillars
+  const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
+  const isReadinessActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests', 'baito', 'baito-os', 'study-plan', 'roadmap', 'quizzes', 'quiz-runner'].includes(currentView);
+  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community'].includes(currentView);
+  const isPricingActive = ['pricing', 'plans', 'contact', 'credits', 'subscription'].includes(currentView);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -176,12 +180,12 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             </div>
           </button>
 
-          {/* 2. DESKTOP NAVIGATION: 4 SLEEK PILL TABS WITH GENTLE CHEVRONS & STRIPE MEGA-DROPDOWNS */}
+          {/* 2. DESKTOP NAVIGATION: STRICT 4-TAB APPLE MINIMALIST HEADER */}
           <nav
             ref={navContainerRef}
             className="hidden md:flex items-center space-x-1 lg:space-x-2"
           >
-            {/* TAB 1: কারিকুলাম */}
+            {/* TAB 1: কারিকুলাম ও শিক্ষা */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('curriculum')}
@@ -197,7 +201,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
-                <span>কারিকুলাম</span>
+                <span>কারিকুলাম ও শিক্ষা</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
                     activeDropdown === 'curriculum' ? 'rotate-180 text-white' : ''
@@ -212,10 +216,35 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    কোর্স ও স্টাডি মেটেরিয়াল
+                    কারিকুলাম ও ফাউন্ডেশন
                   </div>
 
-                  {/* Tile 1: Minna no Nihongo 1-25 */}
+                  {/* 1. বর্ণমালা (Kana) */}
+                  <button
+                    id="nav-item-kana-lab"
+                    type="button"
+                    onClick={() => handleDropdownSelect('kana')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 border border-rose-500/20 group-hover/item:scale-105 transition-transform">
+                      <PenTool className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          বর্ণমালা (Kana Lab)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-rose-500/10 text-rose-400 font-mono font-semibold">
+                          ৪৬+৪৬ বর্ণ
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        হিরাগানা ও কাতাকানা স্ট্রোক অর্ডার ক্যানভাস
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* 2. পাঠ্যক্রম (Minna no Nihongo 1-25) */}
                   <button
                     id="nav-item-minna-lessons"
                     type="button"
@@ -228,7 +257,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          Minna no Nihongo ১–২৫
+                          পাঠ্যক্রম (Minna no Nihongo ১–২৫)
                         </span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
                           ২৫ লেসন
@@ -240,144 +269,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     </div>
                   </button>
 
-                  {/* Tile 2: Listening Lab */}
-                  <button
-                    id="nav-item-listening-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('listening-lab')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <Volume2 className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          লিসেনিং অডিও ল্যাব
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          Choukai
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টোকিও নেটিভ ভয়েস ও কাইওয়া ডায়ালগ
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* Tile 3: Syllabus Roadmap */}
-                  <button
-                    id="nav-item-n5-roadmap"
-                    type="button"
-                    onClick={() => handleDropdownSelect('study-plan')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
-                      <Compass className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          এন৫ সিলেবাস রোডম্যাপ
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
-                          ৬০-৯০ দিন
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ৬০-৯০ দিনের কমপ্লিট স্টাডি প্ল্যান
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* TAB 2: প্র্যাকটিস ল্যাব */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('practice')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                id="nav-tab-practice"
-                type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'practice' ? null : 'practice')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isPracticeActive || activeDropdown === 'practice'
-                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
-                }`}
-              >
-                <span>প্র্যাকটিস ল্যাব</span>
-                <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'practice' ? 'rotate-180 text-white' : ''
-                  }`}
-                />
-              </button>
-
-              {activeDropdown === 'practice' && (
-                <div
-                  className="absolute left-0 mt-2.5 w-84 sm:w-92 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('practice')}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    রাইটিং ক্যানভাস ও মেমোরি সিস্টেম
-                  </div>
-
-                  {/* Tile 1: Hiragana Lab */}
-                  <button
-                    id="nav-item-hiragana-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('kana')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 border border-rose-500/20 group-hover/item:scale-105 transition-transform">
-                      <PenTool className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ৪৬ হিরাগানা ল্যাব
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-rose-500/10 text-rose-400 font-mono font-semibold">
-                          Canvas
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        অ্যানিমেটেড স্ট্রোক অর্ডার ও ক্যানভাস
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* Tile 2: Katakana Lab */}
-                  <button
-                    id="nav-item-katakana-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('kana')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 mt-0.5 border border-sky-500/20 group-hover/item:scale-105 transition-transform">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ৪৬ কাতাকানা ল্যাব
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-sky-500/10 text-sky-400 font-mono font-semibold">
-                          Vector
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ভেক্টর গাইড ও রাইটিং টেস্ট
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* Tile 3: 100 Kanji Lab */}
+                  {/* 3. কাঞ্জি ল্যাব (Kanji Lab) */}
                   <button
                     id="nav-item-kanji-lab"
                     type="button"
@@ -390,39 +282,39 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ১০০ কানজি ল্যাব
+                          কাঞ্জি ল্যাব (Kanji Lab)
                         </span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          ১০০ কানজি
+                          ১০০ কাঞ্জি
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ওন-কুনিওমি ও স্টক ডিরেকশন
+                        ওন-কুনিওমি ও স্টক ডিরেকশন ক্যানভাস
                       </p>
                     </div>
                   </button>
 
-                  {/* Tile 4: SRS Flashcards */}
+                  {/* 4. লিসেনিং ও উচ্চারণ (Listening Lab) */}
                   <button
-                    id="nav-item-srs-flashcards"
+                    id="nav-item-listening-lab"
                     type="button"
-                    onClick={() => handleDropdownSelect('study-plan')}
+                    onClick={() => handleDropdownSelect('listening-lab')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0 mt-0.5 border border-purple-500/20 group-hover/item:scale-105 transition-transform">
-                      <Layers className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0 mt-0.5 border border-blue-500/20 group-hover/item:scale-105 transition-transform">
+                      <Volume2 className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          এসআরএস ফ্ল্যাশকার্ড
+                          লিসেনিং ও উচ্চারণ (Listening Lab)
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-purple-500/10 text-purple-400 font-mono font-semibold">
-                          Spaced
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-blue-500/10 text-blue-400 font-mono font-semibold">
+                          Choukai
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        স্মার্ট মেমোরি রিটেনশন
+                        টোকিও নেটিভ ভয়েস ও কাইওয়া ডায়ালগ
                       </p>
                     </div>
                   </button>
@@ -430,43 +322,43 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* TAB 3: জেএলপিটি মক টেস্ট */}
+            {/* TAB 2: পরীক্ষা ও প্রস্তুতি */}
             <div
               className="relative"
-              onMouseEnter={() => handleMouseEnter('mocks')}
+              onMouseEnter={() => handleMouseEnter('readiness')}
               onMouseLeave={handleMouseLeave}
             >
               <button
-                id="nav-tab-mock-exams"
+                id="nav-tab-readiness"
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'mocks' ? null : 'mocks')}
+                onClick={() => setActiveDropdown(activeDropdown === 'readiness' ? null : 'readiness')}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isMockActive || activeDropdown === 'mocks'
+                  isReadinessActive || activeDropdown === 'readiness'
                     ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
                     : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
-                <span>জেএলপিটি মক টেস্ট</span>
+                <span>পরীক্ষা ও প্রস্তুতি</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'mocks' ? 'rotate-180 text-white' : ''
+                    activeDropdown === 'readiness' ? 'rotate-180 text-white' : ''
                   }`}
                 />
               </button>
 
-              {activeDropdown === 'mocks' && (
+              {activeDropdown === 'readiness' && (
                 <div
                   className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('mocks')}
+                  onMouseEnter={() => handleMouseEnter('readiness')}
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    অফিশিয়াল ফরম্যাট ও সিমুলেটর
+                    মক পরীক্ষা ও সিমুলেটর
                   </div>
 
-                  {/* Tile 1: 180 Marks Official Mock */}
+                  {/* 1. মক টেস্ট ও কুইজ */}
                   <button
-                    id="nav-item-full-mock"
+                    id="nav-item-mock-exams"
                     type="button"
                     onClick={() => handleDropdownSelect('mock-exams')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
@@ -477,64 +369,64 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ১৮০ মার্কস অফিশিয়াল মক টেস্ট
+                          মক টেস্ট ও কুইজ (Mock Tests)
                         </span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
-                          সার্টিফিকেট
+                          ১৮০ মার্কস
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টাইমার ও রিয়েল-টাইম স্কোরিং
+                        অফিশিয়াল জেএলপিটি ফরম্যাট ও রিয়েল টাইমার
                       </p>
                     </div>
                   </button>
 
-                  {/* Tile 2: Sectional Practice */}
+                  {/* 2. বাইতোওএস™ সিমুলেটর */}
                   <button
-                    id="nav-item-sectional-practice"
+                    id="nav-item-baito-sim"
                     type="button"
-                    onClick={() => handleDropdownSelect('mock-exams')}
+                    onClick={() => handleDropdownSelect('baito')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0 mt-0.5 border border-blue-500/20 group-hover/item:scale-105 transition-transform">
-                      <Clock className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5 border border-indigo-500/20 group-hover/item:scale-105 transition-transform">
+                      <Store className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          সেকশন-ভিত্তিক প্র্যাকটিস
+                          বাইতোওএস™ সিমুলেটর (BaitoOS™)
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-blue-500/10 text-blue-400 font-mono font-semibold">
-                          Sectional
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-indigo-500/10 text-indigo-400 font-mono font-semibold">
+                          Tokyo Conbini
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ভোকাবুলারি, ব্যাকরণ ও চৌকাই
+                        টোকিও ৭-ইলেভেন ও লসন ক্যাশিয়ার ডায়ালগ সিমুলেশন
                       </p>
                     </div>
                   </button>
 
-                  {/* Tile 3: Performance Analytics */}
+                  {/* 3. রিটেনশন ও মেমোরি */}
                   <button
-                    id="nav-item-performance-analytics"
+                    id="nav-item-memory-srs"
                     type="button"
-                    onClick={() => handleDropdownSelect('mock-exams')}
+                    onClick={() => handleDropdownSelect('study-plan')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
-                      <TrendingUp className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0 mt-0.5 border border-purple-500/20 group-hover/item:scale-105 transition-transform">
+                      <Layers className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          পারফরম্যান্স অ্যানালিটিক্স
+                          রিটেনশন ও মেমোরি (Memory SRS)
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
-                          Scorecard
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-purple-500/10 text-purple-400 font-mono font-semibold">
+                          Spaced Rep
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        দুর্বল টপিক চিহ্নিতকরণ ও স্কোরকার্ড
+                        দৈনিক মিশন ও স্মার্ট স্পেসড রিভিশন সিস্টেম
                       </p>
                     </div>
                   </button>
@@ -542,7 +434,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* TAB 4: ক্যারিয়ার */}
+            {/* TAB 3: জাপান ক্যারিয়ার */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('career')}
@@ -558,7 +450,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
-                <span>ক্যারিয়ার</span>
+                <span>জাপান ক্যারিয়ার</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
                     activeDropdown === 'career' ? 'rotate-180 text-white' : ''
@@ -573,55 +465,167 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    জাপান রিলোকেশন ও কমিউনিটি
+                    রিলোকেশন ও ক্যারিয়ার
                   </div>
 
-                  {/* Tile 1: BaitoOS Simulator */}
+                  {/* 1. ভিসা ও প্রস্তুতি গাইড */}
                   <button
-                    id="nav-item-baito"
+                    id="nav-item-visa-guide"
                     type="button"
-                    onClick={() => handleDropdownSelect('baito')}
+                    onClick={() => handleDropdownSelect('coordination')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5 border border-indigo-500/20 group-hover/item:scale-105 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          ভিসা ও প্রস্তুতি গাইড (Visa & Life)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
+                          Relocation
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        জাপান স্টুডেন্ট ভিসা ও স্পন্সর গাইডলাইন
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* 2. জবসাইট ও ক্যারিয়ার */}
+                  <button
+                    id="nav-item-job-roadmap"
+                    type="button"
+                    onClick={() => handleDropdownSelect('portal')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 mt-0.5 border border-sky-500/20 group-hover/item:scale-105 transition-transform">
                       <Briefcase className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          BaitoOS™ কনবিনি সিমুলেটর
+                          জবসাইট ও ক্যারিয়ার (Job Roadmap)
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-indigo-500/10 text-indigo-400 font-mono font-semibold">
-                          Tokyo Job
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-sky-500/10 text-sky-400 font-mono font-semibold">
+                          Jobs
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টোকিও কনবিনি জব ও ভিসা ডিফেন্স সিমুলেশন
+                        পার্ট-টাইম ও ফুল-টাইম জবের প্রস্তুতি ও ড্যাশবোর্ড
                       </p>
                     </div>
                   </button>
 
-                  {/* Tile 2: Leaderboard */}
+                  {/* 3. ইন্টারভিউ প্রস্তুতি */}
                   <button
-                    id="nav-item-leaderboard"
+                    id="nav-item-interview-prep"
                     type="button"
-                    onClick={() => handleDropdownSelect('leaderboard')}
+                    onClick={() => handleDropdownSelect('interview')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <Flame className="w-4 h-4" />
+                      <MessageSquare className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          লিডারবোর্ড ও স্টুডেন্ট র্যাংকিং
+                          ইন্টারভিউ প্রস্তুতি (Interview Prep)
                         </span>
                         <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          Daily XP
+                          AI Drill
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        দৈনিক XP ও স্টাডি স্ট্রিক র‍্যাঙ্কিং
+                        ভিসা ও জব ইন্টারভিউ প্রশ্নোত্তর মহড়া
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* TAB 4: ফিচার ও অফার */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('pricing')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button
+                id="nav-tab-pricing"
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === 'pricing' ? null : 'pricing')}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                  isPricingActive || activeDropdown === 'pricing'
+                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
+                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                }`}
+              >
+                <span>ফিচার ও অফার</span>
+                <ChevronDown
+                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
+                    activeDropdown === 'pricing' ? 'rotate-180 text-white' : ''
+                  }`}
+                />
+              </button>
+
+              {activeDropdown === 'pricing' && (
+                <div
+                  className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
+                  onMouseEnter={() => handleMouseEnter('pricing')}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                    সাবস্ক্রিপশন ও যোগাযোগ
+                  </div>
+
+                  {/* 1. প্রিমিয়াম সাবস্ক্রিপশন */}
+                  <button
+                    id="nav-item-premium-pricing"
+                    type="button"
+                    onClick={() => handleDropdownSelect('pricing')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 border border-rose-500/20 group-hover/item:scale-105 transition-transform">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          প্রিমিয়াম সাবস্ক্রিপশন (Pricing)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-bold">
+                          ৳৪৯৯
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        সম্পূর্ণ N5 কোর্স ও আনলিমিটেড লাইফটাইম অ্যাক্সেস
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* 2. হেল্পলাইন ও অফিস */}
+                  <button
+                    id="nav-item-support-contact"
+                    type="button"
+                    onClick={() => handleDropdownSelect('contact')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          হেল্পলাইন ও অফিস (Support/Contact)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
+                          01834348966
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        হোয়াটসঅ্যাপ হেল্পলাইন ও ফার্মগেট ঢাকা অফিস
                       </p>
                     </div>
                   </button>
@@ -904,7 +908,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#0a0a12]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2.5 text-xs animate-in slide-in-from-top-2">
           
-          {/* Mobile Group 1: কারিকুলাম */}
+          {/* Mobile Group 1: কারিকুলাম ও শিক্ষা */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -913,7 +917,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-red-400" />
-                <span>কারিকুলাম</span>
+                <span>কারিকুলাম ও শিক্ষা</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'curriculum' ? 'rotate-180' : ''}`} />
             </button>
@@ -922,76 +926,23 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
                 <button
                   type="button"
+                  onClick={() => handleDropdownSelect('kana')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">বর্ণমালা (Kana Lab)</div>
+                    <div className="text-[10px] text-white/50">হিরাগানা ও কাতাকানা স্ট্রোক অর্ডার</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
                   onClick={() => handleDropdownSelect('curriculum')}
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">Minna no Nihongo ১–২৫</div>
+                    <div className="text-xs font-bold text-white">পাঠ্যক্রম (Minna no Nihongo ১–২৫)</div>
                     <div className="text-[10px] text-white/50">প্রতিটি অধ্যায়ের ব্যাকরণ ও শব্দভাণ্ডার</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('listening-lab')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">লিসেনিং অডিও ল্যাব</div>
-                    <div className="text-[10px] text-white/50">টোকিও নেটিভ ভয়েস ও কাইওয়া ডায়ালগ</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('study-plan')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">এন৫ সিলেবাস রোডম্যাপ</div>
-                    <div className="text-[10px] text-white/50">৬০-৯০ দিনের কমপ্লিট স্টাডি প্ল্যান</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Group 2: প্র্যাকটিস ল্যাব */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'practice' ? null : 'practice')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <PenTool className="w-4 h-4 text-rose-400" />
-                <span>প্র্যাকটিস ল্যাব</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'practice' ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileExpandedGroup === 'practice' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('kana')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">৪৬ হিরাগানা ল্যাব</div>
-                    <div className="text-[10px] text-white/50">অ্যানিমেটেড স্ট্রোক অর্ডার ও ক্যানভাস</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('kana')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">৪৬ কাতাকানা ল্যাব</div>
-                    <div className="text-[10px] text-white/50">ভেক্টর গাইড ও রাইটিং টেস্ট</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>
@@ -1001,8 +952,61 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">১০০ কানজি ল্যাব</div>
-                    <div className="text-[10px] text-white/50">ওন-কুনিওমি ও স্টক ডিরেকশন</div>
+                    <div className="text-xs font-bold text-white">কাঞ্জি ল্যাব (Kanji Lab)</div>
+                    <div className="text-[10px] text-white/50">১০০ মৌলিক কাঞ্জি ও ওন-কুনিওমি</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('listening-lab')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">লিসেনিং ও উচ্চারণ (Listening Lab)</div>
+                    <div className="text-[10px] text-white/50">টোকিও নেটিভ অডিও ও কাইওয়া ডায়ালগ</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Group 2: পরীক্ষা ও প্রস্তুতি */}
+          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
+            <button
+              type="button"
+              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'readiness' ? null : 'readiness')}
+              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-amber-400" />
+                <span>পরীক্ষা ও প্রস্তুতি</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'readiness' ? 'rotate-180' : ''}`} />
+            </button>
+
+            {mobileExpandedGroup === 'readiness' && (
+              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('mock-exams')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">মক টেস্ট ও কুইজ (Mock Tests)</div>
+                    <div className="text-[10px] text-white/50">১৮০ মার্কস অফিশিয়াল ফরম্যাট ও সনদ</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('baito')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">বাইতোওএস™ সিমুলেটর (BaitoOS™)</div>
+                    <div className="text-[10px] text-white/50">৭-ইলেভেন ক্যাশিয়ার ও কাস্টমার ডায়ালগ</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>
@@ -1012,8 +1016,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">এসআরএস ফ্ল্যাশকার্ড</div>
-                    <div className="text-[10px] text-white/50">স্মার্ট মেমোরি রিটেনশন</div>
+                    <div className="text-xs font-bold text-white">রিটেনশন ও মেমোরি (Memory SRS)</div>
+                    <div className="text-[10px] text-white/50">দৈনিক মিশন ও স্পেসড রিভিশন</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>
@@ -1021,60 +1025,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* Mobile Group 3: জেএলপিটি মক টেস্ট */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'mocks' ? null : 'mocks')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-amber-400" />
-                <span>জেএলপিটি মক টেস্ট</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'mocks' ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileExpandedGroup === 'mocks' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('mock-exams')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">১৮০ মার্কস অফিশিয়াল মক টেস্ট</div>
-                    <div className="text-[10px] text-white/50">পূর্ণাঙ্গ এন৫ পরীক্ষার রিয়েল সিমুলেশন</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('mock-exams')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">সেকশন-ভিত্তিক প্র্যাকটিস</div>
-                    <div className="text-[10px] text-white/50">ভোকাবুলারি, ব্যাকরণ ও চৌকাই</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('mock-exams')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">পারফরম্যান্স অ্যানালিটিক্স</div>
-                    <div className="text-[10px] text-white/50">দুর্বল টপিক চিহ্নিতকরণ ও স্কোরকার্ড</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Group 4: ক্যারিয়ার */}
+          {/* Mobile Group 3: জাপান ক্যারিয়ার */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -1083,7 +1034,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-indigo-400" />
-                <span>ক্যারিয়ার</span>
+                <span>জাপান ক্যারিয়ার</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'career' ? 'rotate-180' : ''}`} />
             </button>
@@ -1092,23 +1043,76 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
                 <button
                   type="button"
-                  onClick={() => handleDropdownSelect('baito')}
+                  onClick={() => handleDropdownSelect('coordination')}
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">BaitoOS™ কনবিনি সিমুলেটর</div>
-                    <div className="text-[10px] text-white/50">টোকিও কনবিনি জব ও ভিসা ডিফেন্স</div>
+                    <div className="text-xs font-bold text-white">ভিসা ও প্রস্তুতি গাইড (Visa & Life)</div>
+                    <div className="text-[10px] text-white/50">জাপান স্টুডেন্ট ভিসা ও স্পন্সর গাইড</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDropdownSelect('leaderboard')}
+                  onClick={() => handleDropdownSelect('portal')}
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">লিডারবোর্ড ও স্টুডেন্ট র্যাংকিং</div>
-                    <div className="text-[10px] text-white/50">দৈনিক XP ও স্টাডি স্ট্রিক</div>
+                    <div className="text-xs font-bold text-white">জবসাইট ও ক্যারিয়ার (Job Roadmap)</div>
+                    <div className="text-[10px] text-white/50">পার্ট-টাইম ও ফুল-টাইম জবের প্রস্তুতি</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('interview')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">ইন্টারভিউ প্রস্তুতি (Interview Prep)</div>
+                    <div className="text-[10px] text-white/50">ভিসা ও জব ইন্টারভিউ প্রশ্নোত্তর মহড়া</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Group 4: ফিচার ও অফার */}
+          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
+            <button
+              type="button"
+              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'pricing' ? null : 'pricing')}
+              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-rose-400" />
+                <span>ফিচার ও অফার</span>
+              </div>
+              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'pricing' ? 'rotate-180' : ''}`} />
+            </button>
+
+            {mobileExpandedGroup === 'pricing' && (
+              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('pricing')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">প্রিমিয়াম সাবস্ক্রিপশন (Pricing)</div>
+                    <div className="text-[10px] text-white/50">লাইফটাইম অ্যাক্সেস মাত্র ৳৪৯৯</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('contact')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">হেল্পলাইন ও অফিস (Support/Contact)</div>
+                    <div className="text-[10px] text-white/50">01834348966 • BTI Central Plaza, Farmgate</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>

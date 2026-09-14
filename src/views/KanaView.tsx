@@ -90,7 +90,12 @@ export const KanaView: React.FC = () => {
     );
   }, [activeType, activeSubType, searchQuery]);
 
-  // Calculate mastery progress
+  // Keep selectedKana in sync with active list
+  useEffect(() => {
+    if (currentList.length > 0 && !currentList.some((k) => k.char === selectedKana.char)) {
+      setSelectedKana(currentList[0]);
+    }
+  }, [currentList, selectedKana.char]);
   const hiraganaTotal = HIRAGANA_SEION.length;
   const katakanaTotal = KATAKANA_SEION.length;
   const hiraganaMastered = HIRAGANA_SEION.filter((k) => masteredList.includes(k.char)).length;
@@ -258,7 +263,9 @@ export const KanaView: React.FC = () => {
                   : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
               }`}
             >
-              ডাকুওন (Dakuon 濁音 • が, ざ...)
+              {activeType === 'hiragana'
+                ? 'ডাকুওন (Dakuon 濁音 • が, ざ...)'
+                : 'ডাকুওন (Dakuon 濁音 • ガ, ザ...)'}
             </button>
 
             <button
@@ -270,7 +277,9 @@ export const KanaView: React.FC = () => {
                   : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
               }`}
             >
-              হান্দাকুওন (Handakuon 半濁音 • ぱ, ぴ...)
+              {activeType === 'hiragana'
+                ? 'হান্দাকুওন (Handakuon 半濁音 • ぱ, ぴ...)'
+                : 'হান্দাকুওন (Handakuon 半濁音 • パ, ピ...)'}
             </button>
 
             <button
@@ -282,7 +291,9 @@ export const KanaView: React.FC = () => {
                   : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
               }`}
             >
-              যুক্তবর্ণ (Yōon 拗音 • きゃ, しゅ...)
+              {activeType === 'hiragana'
+                ? 'যুক্তবর্ণ (Yōon 拗音 • きゃ, しゅ...)'
+                : 'যুক্তবর্ণ (Yōon 拗音 • キャ, シュ...)'}
             </button>
           </div>
         </div>

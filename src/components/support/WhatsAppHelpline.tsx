@@ -24,9 +24,9 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
   const [copiedLocation, setCopiedLocation] = useState(false);
 
   // Safe defensive defaults for all contact fields
-  const safePhoneRaw = NIHOMI_CONTACT?.phoneRaw || NIHOMI_CONTACT?.helpline || '01800644664';
-  const safePhoneDisplay = NIHOMI_CONTACT?.phoneFormatted || NIHOMI_CONTACT?.phone || '01800-644664';
-  const safeWhatsappNumber = NIHOMI_CONTACT?.whatsappNumber || '8801800644664';
+  const safePhoneRaw = NIHOMI_CONTACT?.phoneRaw || NIHOMI_CONTACT?.helpline || '01834348966';
+  const safePhoneDisplay = NIHOMI_CONTACT?.phoneFormatted || NIHOMI_CONTACT?.phone || '01834-348966';
+  const safeWhatsappNumber = NIHOMI_CONTACT?.whatsappNumber || '8801834348966';
   const safeAddressBn = NIHOMI_CONTACT?.officeLocationBn || 'বিটিআই সেন্ট্রাল প্লাজা, ফার্মগেট, ঢাকা - ১২১৫';
   const safeAddressEn = NIHOMI_CONTACT?.officeLocationEn || 'BTI Central Plaza, Farmgate, Dhaka - 1215';
   const defaultMessage = NIHOMI_CONTACT?.whatsappDefaultMessage || 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।';

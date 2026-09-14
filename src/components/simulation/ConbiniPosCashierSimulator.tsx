@@ -209,6 +209,43 @@ export const DEFAULT_CONBINI_ORDERS: ConbiniCustomerOrder[] = [
     wantsBentoHeated: false,
     paymentMethod: 'cash',
     tenderedCashAmount: 1000
+  },
+  {
+    id: 'ord-default-4',
+    customerName: 'Michael Foreign Tourist (マイケルさん)',
+    customerType: 'foreigner',
+    customerSpeechJa: 'すみません！東京ばな奈と抹茶キットカット、あとレジ袋をお願いします。クレジットカードで払えますか？',
+    customerSpeechRomaji: 'Sumimasen! Toukyou Banana to Maccha Kitto Katto, ato rejibukuro o onegai shimasu. Kurejitto kaado de haraemasu ka?',
+    customerSpeechBn: 'এক্সকিউজ মি! টোকিও ব্যানানা ও মাচ্চা কিটক্যাট দিন, সাথে একটি শপিং ব্যাগ। ক্রেডিট কার্ডে কি পেমেন্ট দেওয়া যাবে?',
+    items: [
+      {
+        id: 'prod-tokyo-banana',
+        barcode: '4901234567896',
+        nameJa: '東京ばな奈「見ぃつけたっ」4個入',
+        nameRomaji: 'Tokyo Banana 4-pack',
+        nameBn: 'টোকিও ব্যানানা বিখ্যাত স্যুভেনির কেক',
+        priceYen: 650,
+        category: 'dessert',
+        needsHeating: false,
+        imageIcon: '🍌'
+      },
+      {
+        id: 'prod-matcha-kitkat',
+        barcode: '4901234567897',
+        nameJa: 'キットカット 濃い抹茶 10枚',
+        nameRomaji: 'KitKat Rich Matcha 10-pack',
+        nameBn: 'কিটক্যাট জাপানিজ রিচ মাচ্চা ফ্লেভার',
+        priceYen: 380,
+        category: 'dessert',
+        needsHeating: false,
+        imageIcon: '🍵'
+      }
+    ],
+    hasPointCard: false,
+    needsBag: true,
+    needsChopsticks: false,
+    wantsBentoHeated: false,
+    paymentMethod: 'credit'
   }
 ];
 

@@ -691,7 +691,7 @@ export class SubscriptionService {
         planName: planConfig.nameBn,
         paymentMethod: paymentMethod.toUpperCase(),
         submittedAt,
-        helplinePhone: '01800-NIHOMI (01800-644664)',
+        helplinePhone: '01834348966',
       },
     };
   }

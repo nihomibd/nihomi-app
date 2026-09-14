@@ -450,7 +450,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </div>
                   </div>
                   <a
-                    href={`https://wa.me/8801800644664?text=${encodeURIComponent(`Assalamu Alaikum! I submitted manual payment for Nihomi. TrxID: ${manualSuccessData.trxID}, Phone: ${manualSuccessData.senderPhone}, Plan: ${manualSuccessData.planName}`)}`}
+                    href={`https://wa.me/8801834348966?text=${encodeURIComponent(`Assalamu Alaikum! I submitted manual payment for Nihomi. TrxID: ${manualSuccessData.trxID}, Phone: ${manualSuccessData.senderPhone}, Plan: ${manualSuccessData.planName}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
@@ -494,12 +494,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <div>
                       <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">প্রাপক নম্বর (Nihomi Official)</span>
                       <span className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 tracking-wider">
-                        01800-644664 <span className="text-xs font-normal text-pink-600 dark:text-pink-400">(01800NIHOMI)</span>
+                        01834-348966 <span className="text-xs font-normal text-pink-600 dark:text-pink-400">(Official Helpline)</span>
                       </span>
                     </div>
                     <button
                       type="button"
-                      onClick={() => handleCopyNumber('01800644664')}
+                      onClick={() => handleCopyNumber('01834348966')}
                       className="px-2.5 py-1.5 rounded-lg bg-pink-100 dark:bg-pink-950/60 hover:bg-pink-200 text-pink-700 dark:text-pink-300 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
                       id="btn-copy-nihomi-number"
                     >
@@ -519,7 +519,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                   <ol className="text-xs text-zinc-600 dark:text-zinc-400 space-y-1.5 pl-4 list-decimal marker:text-pink-600 marker:font-bold">
                     <li>আপনার বিকাশ অথবা নগদ অ্যাপ ওপেন করে <strong>Send Money</strong> সিলেক্ট করুন।</li>
-                    <li>প্রাপক নম্বরে <strong>01800-644664</strong> দিন।</li>
+                    <li>প্রাপক নম্বরে <strong>01834-348966</strong> দিন।</li>
                     <li>
                       টাকার পরিমাণ: {manualPlan === 'n5_lifetime' ? '৳১,৪৯৯ (লাইফটাইম পাস)' : '৳৪৯৯ (N5 Pro মাসিক)'}।
                     </li>

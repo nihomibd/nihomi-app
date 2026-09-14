@@ -28,19 +28,19 @@ export interface ContactConfig {
 
 export const NIHOMI_CONTACT: ContactConfig = {
   // Official Contact Numbers & 24/7 Helpline
-  phone: '+880 1800-644664',
-  phoneFormatted: '+880 1800-644664',
-  phoneRaw: '01800644664',
-  helpline: '01800644664',
+  phone: '+880 1834-348966',
+  phoneFormatted: '+880 1834-348966',
+  phoneRaw: '01834348966',
+  helpline: '01834348966',
   
   // Official bKash Payment Details
-  bkashNumber: '01800644664',
-  bkashNumberFormatted: '+880 1800-644664',
+  bkashNumber: '01834348966',
+  bkashNumberFormatted: '+880 1834-348966',
   bkashAccountType: 'Personal / Merchant Send Money',
   
   // Official WhatsApp Business Bridge
-  whatsappNumber: '8801800644664',
-  whatsappFormatted: '+880 1800-644664',
+  whatsappNumber: '8801834348966',
+  whatsappFormatted: '+880 1834-348966',
   whatsappDefaultMessage: 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।',
   
   // Emails
@@ -58,13 +58,13 @@ export const NIHOMI_CONTACT: ContactConfig = {
   // 1-Click WhatsApp Verification Generator
   getWhatsAppTrxVerificationUrl: (trxId?: string, _planName: string = 'Pro'): string => {
     const cleanTrx = trxId && typeof trxId === 'string' ? trxId.trim().toUpperCase() : '[USER_TRXID]';
-    return `https://wa.me/8801800644664?text=Hello%20Nihomi%2C%20I%20have%20paid%20via%20bKash.%20My%20TrxID%20is:%20${encodeURIComponent(cleanTrx)}`;
+    return `https://wa.me/8801834348966?text=Hello%20Nihomi%2C%20I%20have%20paid%20via%20bKash.%20My%20TrxID%20is:%20${encodeURIComponent(cleanTrx)}`;
   },
 
   // General Support URL
   getWhatsAppSupportUrl: (customMessage?: string): string => {
     const message = customMessage || 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।';
-    return `https://wa.me/8801800644664?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/8801834348966?text=${encodeURIComponent(message)}`;
   }
 };
 
