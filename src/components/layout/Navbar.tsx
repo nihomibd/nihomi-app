@@ -125,6 +125,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   });
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
 
+  // Broadcast modal/drawer states so floating widgets gracefully hide underneath
+  useEffect(() => {
+    const isAnyActive = mobileMenuOpen || isVisionModalOpen || isDictionaryOpen;
+    window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { isOpen: isAnyActive } }));
+  }, [mobileMenuOpen, isVisionModalOpen, isDictionaryOpen]);
+
   // Connectivity state
   const [isOnline, setIsOnline] = useState<boolean>(() => {
     return typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean'

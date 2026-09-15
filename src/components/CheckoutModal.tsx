@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
@@ -102,6 +102,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Success result
   const [completedInvoice, setCompletedInvoice] = useState<any>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: true, source: 'checkout-modal' } }));
+    }
+    return () => {
+      window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: false, source: 'checkout-modal' } }));
+    };
+  }, [isOpen]);
 
   if (!isOpen || !activePlan) return null;
 
@@ -324,7 +333,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6">
+        <div className="p-6 pb-28 sm:pb-6">
           {errorMessage && (
             <div className="mb-5 p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl flex items-start gap-3 text-red-700 dark:text-red-300 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />

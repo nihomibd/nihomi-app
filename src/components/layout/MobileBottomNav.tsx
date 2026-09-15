@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Compass,
   BookOpen,
@@ -17,6 +17,28 @@ interface MobileBottomNavProps {
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ currentView, onNavigate }) => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const [isAiSenseiActive, setIsAiSenseiActive] = useState(false);
+
+  useEffect(() => {
+    const handleAiToggle = (e: any) => {
+      setIsAiSenseiActive(Boolean(e.detail?.isOpen ?? e.detail?.open));
+    };
+    const handleModalToggle = (e: any) => {
+      setIsAiSenseiActive(Boolean(e.detail?.isOpen ?? e.detail?.open));
+    };
+
+    window.addEventListener('nihomi:ai-sensei-toggle', handleAiToggle);
+    window.addEventListener('nihomi:modal-toggle', handleModalToggle);
+
+    return () => {
+      window.removeEventListener('nihomi:ai-sensei-toggle', handleAiToggle);
+      window.removeEventListener('nihomi:modal-toggle', handleModalToggle);
+    };
+  }, []);
+
+  if (isAiSenseiActive) {
+    return null;
+  }
 
   const navItems = [
     {

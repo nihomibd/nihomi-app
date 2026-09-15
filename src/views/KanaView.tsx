@@ -10,6 +10,7 @@ import {
   PenTool,
   RotateCcw,
   ArrowRight,
+  ArrowLeft,
   Info,
   Layers,
   ChevronRight,
@@ -107,12 +108,29 @@ export const KanaView: React.FC = () => {
     speakJapanese(kana.char, { rate: 0.85 });
   };
 
+  const handlePrevInSequence = () => {
+    const currentIndex = currentList.findIndex((k) => k.char === selectedKana.char);
+    if (currentIndex > 0) {
+      const prev = currentList[currentIndex - 1];
+      setSelectedKana(prev);
+      speakJapanese(prev.char, { rate: 0.85 });
+    } else if (currentList.length > 0) {
+      const last = currentList[currentList.length - 1];
+      setSelectedKana(last);
+      speakJapanese(last.char, { rate: 0.85 });
+    }
+  };
+
   const handleNextInSequence = () => {
     const currentIndex = currentList.findIndex((k) => k.char === selectedKana.char);
     if (currentIndex !== -1 && currentIndex < currentList.length - 1) {
-      setSelectedKana(currentList[currentIndex + 1]);
+      const next = currentList[currentIndex + 1];
+      setSelectedKana(next);
+      speakJapanese(next.char, { rate: 0.85 });
     } else if (currentList.length > 0) {
-      setSelectedKana(currentList[0]);
+      const first = currentList[0];
+      setSelectedKana(first);
+      speakJapanese(first.char, { rate: 0.85 });
     }
   };
 
@@ -540,6 +558,41 @@ export const KanaView: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Sticky Bottom Navigation Controls on Mobile & Desktop */}
+              <div className="sticky bottom-0 z-20 px-4 py-3 bg-[#0d0d1a] border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={handlePrevInSequence}
+                  className="flex-1 min-h-[48px] px-3 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-rose-950/50 border border-slate-700 text-slate-200 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shadow-md"
+                  aria-label="পূর্ববর্তী বর্ণ"
+                >
+                  <ArrowLeft className="w-4 h-4 text-slate-400" />
+                  <span>← পূর্ববর্তী</span>
+                </button>
+
+                {/* Tactile Pronunciation Trigger */}
+                <button
+                  type="button"
+                  onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
+                  className="min-h-[48px] min-w-[48px] px-3.5 py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 active:bg-rose-600 active:text-white border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-90 cursor-pointer shadow-md"
+                  title="উচ্চারণ শুনুন"
+                  aria-label="উচ্চারণ শুনুন"
+                >
+                  <Volume2 className="w-4 h-4" />
+                  <span className="hidden xs:inline">উচ্চারণ</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleNextInSequence}
+                  className="flex-1 min-h-[48px] px-3 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shadow-md shadow-rose-900/30"
+                  aria-label="পরবর্তী বর্ণ"
+                >
+                  <span>পরবর্তী বর্ণ →</span>
+                  <ArrowRight className="w-4 h-4 text-white" />
+                </button>
               </div>
             </div>
           </div>

@@ -157,6 +157,30 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
   ]);
 
   useEffect(() => {
+    window.dispatchEvent(new CustomEvent('nihomi:ai-sensei-toggle', { detail: { isOpen } }));
+  }, [isOpen]);
+
+  // Hide floating trigger when support helpline or another modal dialog is active
+  const [isOtherModalActive, setIsOtherModalActive] = useState(false);
+  useEffect(() => {
+    const handleSupport = (e: any) => {
+      if (e?.detail?.isOpen) setIsOtherModalActive(true);
+      else setIsOtherModalActive(false);
+    };
+    const handleModalToggle = (e: any) => {
+      if (typeof e?.detail?.isOpen === 'boolean') {
+        setIsOtherModalActive(e.detail.isOpen);
+      }
+    };
+    window.addEventListener('nihomi:support-toggle', handleSupport);
+    window.addEventListener('nihomi:modal-toggle', handleModalToggle);
+    return () => {
+      window.removeEventListener('nihomi:support-toggle', handleSupport);
+      window.removeEventListener('nihomi:modal-toggle', handleModalToggle);
+    };
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -436,29 +460,34 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
     }
   };
 
+  // If another modal is active and this panel is not open, hide the trigger
+  if (isOtherModalActive && !isOpen) {
+    return null;
+  }
+
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-6 z-40">
+    <div className={isOpen ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block bg-black/80 sm:bg-transparent" : "fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40"}>
       {/* Minimized Trigger Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center space-x-2.5 px-4 py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
+          className="group relative flex items-center space-x-2 px-3.5 py-2 sm:px-4 sm:py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
           aria-label="Open AI Sensei Grammar Coach"
         >
-          <div className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
           </div>
-          <div className="text-left hidden sm:block">
-            <span className="text-xs font-bold block leading-none">AI Sensei</span>
-            <span className="text-[10px] opacity-70 font-mono">{activeContextConfig.shortLabel}</span>
+          <div className="text-left">
+            <span className="text-xs font-bold block leading-none">✨ AI সেনসেই</span>
+            <span className="text-[10px] opacity-70 font-mono hidden sm:inline">{activeContextConfig.shortLabel}</span>
           </div>
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
         </button>
       )}
 
       {/* Expanded Floating Chat Panel */}
       {isOpen && (
-        <div className="w-[360px] sm:w-[460px] max-h-[620px] h-[560px] bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-stone-900 dark:text-white animate-in zoom-in-95 duration-200">
+        <div className="w-full sm:w-[460px] h-full sm:h-[560px] sm:max-h-[620px] bg-white dark:bg-[#0a0a12] border-0 sm:border border-stone-200 dark:border-stone-800 rounded-none sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-stone-900 dark:text-white animate-in zoom-in-95 duration-200 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] sm:pt-0 sm:pb-0">
           
           {/* Header */}
           <div className="p-3.5 bg-stone-50 dark:bg-stone-950/80 border-b border-stone-200 dark:border-stone-800 flex flex-col gap-2.5">

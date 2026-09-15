@@ -47,6 +47,31 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     { label: 'AI সেনসেই ডেমো', msg: 'হ্যালো নিহোমি! ২৪/৭ AI সেনসেই এবং লিসেনিং অডিও ল্যাব কীভাবে কাজ করে?' }
   ];
 
+  // Broadcast support open/close state so other floating triggers can hide gracefully
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('nihomi:support-toggle', { detail: { isOpen } }));
+  }, [isOpen]);
+
+  // Hide floating support when AI Sensei or any modal dialog is active
+  const [isOtherModalActive, setIsOtherModalActive] = useState(false);
+  useEffect(() => {
+    const handleAiSensei = (e: any) => {
+      if (e?.detail?.isOpen) setIsOtherModalActive(true);
+      else setIsOtherModalActive(false);
+    };
+    const handleModalToggle = (e: any) => {
+      if (typeof e?.detail?.isOpen === 'boolean') {
+        setIsOtherModalActive(e.detail.isOpen);
+      }
+    };
+    window.addEventListener('nihomi:ai-sensei-toggle', handleAiSensei);
+    window.addEventListener('nihomi:modal-toggle', handleModalToggle);
+    return () => {
+      window.removeEventListener('nihomi:ai-sensei-toggle', handleAiSensei);
+      window.removeEventListener('nihomi:modal-toggle', handleModalToggle);
+    };
+  }, []);
+
   // Close popup on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -84,15 +109,17 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     }
   };
 
-  // If dismissed by student for this session, smoothly hide so it never obstructs screen
-  if (isDismissed) {
+  // If dismissed by student or another modal is active (unless this popup itself is open), hide trigger
+  if (isDismissed || (isOtherModalActive && !isOpen)) {
     return null;
   }
 
   return (
     <div
       id="nihomi-whatsapp-helpline-container"
-      className={`fixed bottom-[96px] md:bottom-24 right-4 sm:right-6 z-40 select-none ${className}`}
+      className={isOpen
+        ? `fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block p-4 sm:p-0 bg-black/75 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none select-none ${className}`
+        : `fixed bottom-[8.5rem] right-4 sm:bottom-[5.5rem] sm:right-6 z-40 select-none ${className}`}
     >
       {/* Floating Minimized Compact Pill Widget */}
       {!isOpen && (
@@ -102,19 +129,16 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label="Open Nihomi WhatsApp & Helpline Support"
-            className="flex items-center space-x-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-emerald-400/40 group"
+            className="flex items-center space-x-2 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-emerald-400/40 group"
           >
             {/* Pulsing WhatsApp Icon */}
-            <div className="relative w-6 h-6 rounded-full bg-white text-emerald-600 flex items-center justify-center font-bold shrink-0">
-              <MessageCircle className="w-4 h-4 fill-current" />
+            <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-emerald-600 flex items-center justify-center font-bold shrink-0">
+              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
             </div>
 
-            {/* Compact Label: Just Support */}
+            {/* Compact Label: [💬 সাপোর্ট] */}
             <span className="text-xs font-bold font-sans tracking-wide">
               সাপোর্ট
-            </span>
-            <span className="text-[9px] px-1.5 py-0.5 bg-emerald-800/60 text-emerald-100 rounded-md font-japanese font-medium hidden xs:inline">
-              サポート
             </span>
           </button>
 
@@ -125,7 +149,7 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
             onClick={handleDismiss}
             title="সাপোর্ট বাটন লুকান (Dismiss for this session)"
             aria-label="Dismiss support widget"
-            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-stone-900/90 hover:bg-stone-950 text-white/70 hover:text-white border border-white/20 flex items-center justify-center shadow-md transition-transform hover:scale-110 cursor-pointer z-10"
+            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-stone-900/95 hover:bg-stone-950 text-white/80 hover:text-white border border-white/20 flex items-center justify-center shadow-md transition-transform hover:scale-110 cursor-pointer z-10"
           >
             <X className="w-3 h-3" />
           </button>

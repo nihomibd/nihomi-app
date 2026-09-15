@@ -269,7 +269,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     speakingScore: 80,
     learningVelocity: 1.25,
     diagnosedWeaknesses: [
-      { category: 'Grammar', item: 'Particle ã« vs ã§', description: 'Action location vs destination context', frequency: 3 },
+      { category: 'Grammar', item: 'Particle に vs で', description: 'Action location vs destination context', frequency: 3 },
       { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on 日 and 月', frequency: 2 }
     ],
     lastPracticedAt: new Date().toISOString(),
