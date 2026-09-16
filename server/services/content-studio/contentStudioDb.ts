@@ -7,6 +7,7 @@ import {
   LessonSourceFile
 } from '../../../src/core/content-studio/types.js';
 import { ALL_DEFAULT_LESSONS } from '../../../src/core/content-studio/lessons/index.js';
+import { db } from '../../db.js';
 
 export interface SourceDocumentRecord {
   id: string;
@@ -846,6 +847,20 @@ class ContentStudioDatabase {
     this.lessons.set(id, published);
     this.saveLessonsToDisk();
     this.logAudit('APPROVE_PUBLISH_LESSON', id, founderEmail, { title: published.title, publishedAt: now });
+
+    // Synchronize to durable student lesson & draft in db.ts
+    try {
+      const existingDraft = db.getContentDrafts().find((d) => d.lessonId === id || d.id === id);
+      if (existingDraft) {
+        if (existingDraft.status !== 'APPROVED' && existingDraft.status !== 'PUBLISHED') {
+          db.updateContentDraft(existingDraft.id, { status: 'APPROVED' });
+        }
+        db.publishContentDraft(existingDraft.id, founderEmail, `Published via Content Studio by ${founderEmail}`);
+      }
+    } catch (publishSyncErr) {
+      console.warn('[ContentStudioDb] Non-fatal draft publish sync warning:', publishSyncErr);
+    }
+
     return published;
   }
 
@@ -861,6 +876,35 @@ class ContentStudioDatabase {
   // --- SOURCE DOCUMENTS (DURABLE) ---
 
   getSourceDocuments(filter?: { level?: string }): SourceDocumentRecord[] {
+    // Bidirectional sync with db.getContentSources()
+    try {
+      const dbSources = db.getContentSources();
+      for (const s of dbSources) {
+        if (!this.sourceDocuments.has(s.id)) {
+          this.sourceDocuments.set(s.id, {
+            id: s.id,
+            title: s.title,
+            filename: s.originalFilename,
+            fileType: s.mimeType || 'application/pdf',
+            fileSizeBytes: s.fileSize,
+            checksumSha256: s.contentHash,
+            storageUrl: s.storageUrl || '',
+            pageCount: s.pageCount || 1,
+            extractedText: s.extractedText,
+            ocrApplied: !!s.ocrApplied,
+            ocrConfidence: s.ocrConfidence || 100,
+            targetJlptLevel: s.targetJlptLevel as any,
+            copyrightStatus: 'ORIGINAL_PROPRIETARY',
+            uploadedBy: s.uploadedBy || 'admin',
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt
+          });
+        }
+      }
+    } catch (err) {
+      console.warn('[ContentStudioDb] Error syncing sources from db:', err);
+    }
+
     let result = Array.from(this.sourceDocuments.values());
     if (filter?.level) {
       result = result.filter((s) => s.targetJlptLevel === filter.level);
@@ -869,16 +913,109 @@ class ContentStudioDatabase {
   }
 
   getSourceDocumentById(id: string): SourceDocumentRecord | undefined {
-    return this.sourceDocuments.get(id);
+    let doc = this.sourceDocuments.get(id);
+    if (!doc) {
+      try {
+        const s = db.getContentSourceById(id);
+        if (s) {
+          doc = {
+            id: s.id,
+            title: s.title,
+            filename: s.originalFilename,
+            fileType: s.mimeType || 'application/pdf',
+            fileSizeBytes: s.fileSize,
+            checksumSha256: s.contentHash,
+            storageUrl: s.storageUrl || '',
+            pageCount: s.pageCount || 1,
+            extractedText: s.extractedText,
+            ocrApplied: !!s.ocrApplied,
+            ocrConfidence: s.ocrConfidence || 100,
+            targetJlptLevel: s.targetJlptLevel as any,
+            copyrightStatus: 'ORIGINAL_PROPRIETARY',
+            uploadedBy: s.uploadedBy || 'admin',
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt
+          };
+          this.sourceDocuments.set(doc.id, doc);
+        }
+      } catch (err) {
+        console.warn('[ContentStudioDb] Error fetching source from db:', err);
+      }
+    }
+    return doc;
   }
 
   getSourceDocumentByHash(hash: string): SourceDocumentRecord | undefined {
-    return Array.from(this.sourceDocuments.values()).find((s) => s.checksumSha256 === hash);
+    let found = Array.from(this.sourceDocuments.values()).find((s) => s.checksumSha256 === hash);
+    if (!found) {
+      try {
+        const s = db.getContentSourceByHash(hash);
+        if (s) {
+          found = {
+            id: s.id,
+            title: s.title,
+            filename: s.originalFilename,
+            fileType: s.mimeType || 'application/pdf',
+            fileSizeBytes: s.fileSize,
+            checksumSha256: s.contentHash,
+            storageUrl: s.storageUrl || '',
+            pageCount: s.pageCount || 1,
+            extractedText: s.extractedText,
+            ocrApplied: !!s.ocrApplied,
+            ocrConfidence: s.ocrConfidence || 100,
+            targetJlptLevel: s.targetJlptLevel as any,
+            copyrightStatus: 'ORIGINAL_PROPRIETARY',
+            uploadedBy: s.uploadedBy || 'admin',
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt
+          };
+          this.sourceDocuments.set(found.id, found);
+        }
+      } catch (err) {}
+    }
+    return found;
   }
 
   saveSourceDocument(record: SourceDocumentRecord): SourceDocumentRecord {
     this.sourceDocuments.set(record.id, record);
     this.saveSourcesToDisk();
+    
+    // Bidirectional sync to db.ts ContentSources
+    try {
+      const existing = db.getContentSourceById(record.id);
+      if (existing) {
+        db.updateContentSource(record.id, {
+          title: record.title,
+          pageCount: record.pageCount,
+          extractedText: record.extractedText,
+          ocrApplied: record.ocrApplied,
+          ocrConfidence: record.ocrConfidence,
+          targetJlptLevel: record.targetJlptLevel as any
+        });
+      } else {
+        db.createContentSource({
+          title: record.title,
+          originalFilename: record.filename,
+          storagePath: record.storageUrl,
+          storageUrl: record.storageUrl,
+          mimeType: record.fileType,
+          fileSize: record.fileSizeBytes,
+          sourceLanguage: 'Japanese',
+          targetJlptLevel: record.targetJlptLevel as any,
+          processingStatus: 'COMPLETED',
+          contentHash: record.checksumSha256,
+          uploadedBy: record.uploadedBy,
+          uploadedByEmail: 'admin@nihomi.com',
+          pageCount: record.pageCount,
+          extractedText: record.extractedText,
+          ocrApplied: record.ocrApplied,
+          ocrConfidence: record.ocrConfidence
+        });
+      }
+    } catch (syncErr) {
+      console.warn('[ContentStudioDb] Sync to db.contentSources warning:', syncErr);
+    }
+
     this.logAudit('SAVE_SOURCE_DOCUMENT', record.id, record.uploadedBy || 'admin', { filename: record.filename });
     return record;
   }

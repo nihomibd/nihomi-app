@@ -747,6 +747,8 @@ export interface ContentSource {
   processingError?: string;
   pageCount?: number;
   extractedText?: string;
+  ocrApplied?: boolean;
+  ocrConfidence?: number;
   contentHash?: string;
   uploadedBy: string;
   uploadedByEmail?: string;

@@ -730,6 +730,9 @@ export interface ContentSource {
   pageCount?: number;
   extractedText?: string;
   contentHash?: string;
+  storageUrl?: string;
+  ocrApplied?: boolean;
+  ocrConfidence?: number;
   uploadedBy: string;
   uploadedByEmail?: string;
   createdAt: string;
