@@ -84,5 +84,48 @@
     "isVerified": true,
     "createdAt": "2026-09-06T07:17:08.758Z",
     "updatedAt": "2026-09-06T07:17:08.758Z"
+  },
+  {
+    "id": "kn-voc-1789815103058",
+    "nodeCode": "KN-N5-VOC-001",
+    "nodeType": "VOCABULARY",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-doc-1789815103056",
+    "sourcePage": 1,
+    "sourceSnippet": "わたし (私) : I / Me [Pronoun]",
+    "sourceHash": "7e52052a69db38f108e672534dd5c61d234b8ae13ab93e5371d640beebc2b59f",
+    "trilingualData": {
+      "japanese": "私",
+      "furigana": "わたし",
+      "romaji": "watashi",
+      "english": "I / Me",
+      "bangla": "আমি",
+      "notes": "General polite pronoun"
+    },
+    "qaScore": 98,
+    "isVerified": true,
+    "createdAt": "2026-09-19T10:51:43.058Z",
+    "updatedAt": "2026-09-19T10:51:43.058Z"
+  },
+  {
+    "id": "kn-grm-1789815103058",
+    "nodeCode": "KN-N5-GRM-001",
+    "nodeType": "GRAMMAR",
+    "jlptLevel": "N5",
+    "sourceDocumentId": "src-doc-1789815103056",
+    "sourcePage": 1,
+    "sourceSnippet": "わたしは マイク・ミラーです。",
+    "sourceHash": "7e52052a69db38f108e672534dd5c61d234b8ae13ab93e5371d640beebc2b59f",
+    "trilingualData": {
+      "japanese": "〜は〜です",
+      "romaji": "~ wa ~ desu",
+      "english": "A is B",
+      "bangla": "A হলো B (পরিচয় / গুণ প্রকাশক)",
+      "notes": "は marks topic; です affirms politely."
+    },
+    "qaScore": 99,
+    "isVerified": true,
+    "createdAt": "2026-09-19T10:51:43.058Z",
+    "updatedAt": "2026-09-19T10:51:43.058Z"
   }
 ]

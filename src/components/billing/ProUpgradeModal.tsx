@@ -53,8 +53,12 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     };
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
+      window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: true, source: 'pro-upgrade-modal' } }));
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: false, source: 'pro-upgrade-modal' } }));
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -141,7 +145,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
             <X className="w-5 h-5" />
           </button>
 
-          <div className="p-6 sm:p-8 space-y-6">
+          <div className="p-6 sm:p-8 pb-28 sm:pb-8 space-y-6">
             {/* Modal Title & Value Proposition */}
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold mb-2">

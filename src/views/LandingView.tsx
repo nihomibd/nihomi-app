@@ -308,61 +308,46 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
         </p>
 
         {/* 2 Primary CTAs: Start Zero Journey + Take Level Check */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 mb-5 max-w-2xl mx-auto">
-          {/* Primary CTA: Start Japanese Zero Journey */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-3 max-w-2xl mx-auto">
+          {/* 1. Primary CTA: Crimson Gradient */}
           <button
             onClick={() => {
               trackNihomiEvent('zero_gateway_clicked', { source: 'landing_hero' });
               setIsZeroGatewayOpen(true);
             }}
-            className="flex-1 px-6 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/25 hover:shadow-xl transition-all flex items-center justify-center space-x-2.5 cursor-pointer active:scale-95 group"
+            className="flex-1 px-5 py-3.5 sm:px-6 sm:py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-700 hover:to-rose-800 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/30 hover:shadow-xl transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98 group"
           >
-            <Sparkles className="w-5 h-5 text-red-200 animate-pulse" />
-            <span>Start Japanese Zero Journey (শুরু থেকে শিখুন)</span>
-            <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-red-200 animate-pulse shrink-0" />
+            <span className="truncate">Start Japanese Zero Journey (শুরু থেকে শিখুন)</span>
+            <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
 
-          {/* Secondary CTA: Take 2-Min Level Check */}
+          {/* 2. Secondary CTA: Minimalist outline pill */}
           <button
             onClick={() => {
               trackNihomiEvent('diagnostic_exam_clicked', { source: 'landing_hero' });
               setIsDiagnosticOpen(true);
             }}
-            className="flex-1 px-6 py-4 bg-white hover:bg-stone-50 border-2 border-stone-300 text-stone-900 rounded-2xl text-sm sm:text-base font-bold shadow-xs hover:border-red-500 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95"
+            className="flex-1 px-5 py-3.5 sm:px-6 sm:py-4 bg-white hover:bg-stone-50 border border-stone-300 text-stone-800 rounded-2xl text-sm sm:text-base font-bold shadow-xs hover:border-stone-400 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
           >
-            <Target className="w-5 h-5 text-amber-500" />
-            <span>Take 2-Min Level Check (লেভেল যাচাই)</span>
+            <Target className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 shrink-0" />
+            <span className="truncate">Take 2-Min Level Check (লেভেল যাচাই)</span>
           </button>
         </div>
 
-        {/* Frictionless 1-Click Google Sign-In & Kana Jump */}
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-stone-600 mb-8">
+        {/* 3. Subtle Direct Login Link Below */}
+        <div className="flex items-center justify-center gap-4 text-xs font-medium text-stone-500 mb-8">
           <button
-            onClick={() => onNavigate('kana')}
-            className="inline-flex items-center space-x-1.5 text-stone-700 hover:text-red-600 font-bold transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-white border border-stone-200 hover:border-red-400 shadow-2xs"
+            onClick={() => {
+              if (user) {
+                onNavigate('dashboard');
+              } else {
+                openAuthModal();
+              }
+            }}
+            className="text-stone-600 hover:text-red-600 font-semibold transition-colors cursor-pointer inline-flex items-center gap-1 py-1"
           >
-            <Compass className="w-4 h-4 text-stone-500" />
-            <span>Already Know Kana? Jump to N5 Track →</span>
-          </button>
-
-          <span className="text-stone-300 hidden sm:inline">•</span>
-
-          <button
-            onClick={handleGoogleCTA}
-            disabled={isGoogleSigningIn}
-            className="inline-flex items-center space-x-1.5 text-stone-600 hover:text-stone-900 transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-white border border-stone-200 hover:border-stone-300 shadow-2xs disabled:opacity-75"
-          >
-            {isGoogleSigningIn ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-red-600" />
-            ) : (
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
-              </svg>
-            )}
-            <span>{user ? 'ড্যাশবোর্ডে প্রবেশ করুন' : 'গুগল দিয়ে ১ ক্লিকে শুরু করুন (ফ্রি ৫০ কয়েন)'}</span>
+            <span>ইতিমধ্যে একাউন্ট আছে? {user ? 'ড্যাশবোর্ডে প্রবেশ করুন' : 'লগইন করুন'} →</span>
           </button>
         </div>
 
@@ -383,31 +368,31 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             {/* Bottom Actions Row: 3 Trigger Buttons + Send Arrow */}
             <div className="flex items-center justify-between pt-2 border-t border-stone-100">
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-0.5">
                 <button
                   type="button"
                   onClick={() => setIsVoiceActive(true)}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
                 >
-                  <Mic className="w-3.5 h-3.5 text-red-600" />
+                  <Mic className="w-3.5 h-3.5 text-red-600 shrink-0" />
                   <span>Voice</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsCameraActive(true)}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
                 >
-                  <Camera className="w-3.5 h-3.5 text-blue-600" />
+                  <Camera className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                   <span>Photo OCR</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsWritingActive(true)}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
                 >
-                  <PenTool className="w-3.5 h-3.5 text-emerald-600" />
+                  <PenTool className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>Kanji Canvas</span>
                 </button>
               </div>

@@ -39,7 +39,7 @@ import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
 
 interface StudentPortalViewProps {
   initialTab?: 'learn' | 'practice' | 'assess' | 'progress' | 'profile' | 'badges' | 'dashboard' | 'settings' | 'subscription';
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
 const KANJI_CARDS = [
@@ -67,7 +67,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   initialTab = 'learn',
   onNavigate,
 }) => {
-  const { user, progress, logout } = useAuth();
+  const { user, profile, progress, logout } = useAuth();
   const resolveTab = (tab: string): 'learn' | 'practice' | 'assess' | 'progress' | 'badges' | 'profile' => {
     if (tab === 'dashboard') return 'learn';
     if (tab === 'settings' || tab === 'subscription') return 'profile';
@@ -101,45 +101,45 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   const completedLessonsCount = useMemo(() => {
     try {
       const saved = localStorage.getItem('nihomi_completed_lessons');
-      return saved ? JSON.parse(saved).length : 8;
+      return saved ? JSON.parse(saved).length : (progress?.completedLessonsCount ?? 0);
     } catch {
-      return 8;
+      return progress?.completedLessonsCount ?? 0;
     }
-  }, []);
+  }, [progress]);
 
   const masteredKanjiCount = useMemo(() => {
     try {
       const saved = localStorage.getItem('nihomi_mastered_kanji_set');
-      return saved ? JSON.parse(saved).length : 52;
+      return saved ? JSON.parse(saved).length : 0;
     } catch {
-      return 52;
+      return 0;
     }
   }, []);
 
   const totalFocusSeconds = useMemo(() => {
     try {
       const saved = localStorage.getItem('nihomi_total_focus_seconds');
-      return saved ? parseInt(saved, 10) : 3600 * 14.5;
+      return saved ? parseInt(saved, 10) : ((progress?.totalHours ?? 0) * 3600);
     } catch {
-      return 3600 * 14.5;
+      return (progress?.totalHours ?? 0) * 3600;
     }
-  }, []);
+  }, [progress]);
 
   const computedTotalHours = Number((totalFocusSeconds / 3600).toFixed(1));
 
   const studentProfile: StudentProfile = {
-    id: user?.studentId || 'NHO-100294',
-    name: user?.name || 'Md. Tanvir Kabir Biplob',
-    nameJa: 'タヌビル・カビル',
-    email: user?.email || 'nihomibd@gmail.com',
+    id: user?.studentId || 'NHO-' + (user?.id ? user.id.slice(0, 6).toUpperCase() : '100001'),
+    name: user?.name || 'Nihomi Student',
+    nameJa: user?.nameJa || 'スチューデント',
+    email: user?.email || '',
     avatarUrl: user?.avatarUrl || '',
-    currentLevel: 'N5',
-    targetLevel: 'N4',
-    targetExamDate: '2026-07-05',
-    enrolledDate: '2026-08-01',
-    streakDays: progress?.streakDays ?? 18,
-    totalStudyHours: Math.max(computedTotalHours, progress?.totalHours ?? 14.5),
-    nihomiAccountId: user?.nihomiAccountId || 'ACC-9821',
+    currentLevel: (user?.currentLevel as any) || progress?.currentLevel || 'N5',
+    targetLevel: (user?.targetLevel as any) || profile?.targetLevel || 'N4',
+    targetExamDate: profile?.targetExamDate || '2026-07-05',
+    enrolledDate: user?.createdAt ? user.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
+    streakDays: progress?.streakDays ?? progress?.currentStreak ?? user?.streakDays ?? 0,
+    totalStudyHours: Math.max(computedTotalHours, progress?.totalHours ?? 0),
+    nihomiAccountId: user?.nihomiAccountId || 'ACC-' + (user?.id ? user.id.slice(0, 4).toUpperCase() : '1001'),
     tier: (user?.planId as any) || 'starter',
   };
 
@@ -264,7 +264,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             completedLessonsCount={completedLessonsCount}
             onLaunchLesson={(lessonId) => {
               if (onNavigate) {
-                onNavigate('curriculum');
+                onNavigate('lesson', { lessonId: lessonId || 'n5-l1' });
               } else {
                 setIsLessonModalOpen(true);
               }
@@ -274,7 +274,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
             }}
             onOpenZeroGateway={() => {
               if (onNavigate) {
-                onNavigate('courses');
+                onNavigate('kana');
               } else {
                 setIsLessonModalOpen(true);
               }

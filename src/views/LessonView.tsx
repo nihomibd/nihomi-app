@@ -143,8 +143,195 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
         setIsLoading(false);
       }
     }
+<<<<<<< HEAD
     loadLesson();
   }, [selectedLessonNum]);
+=======
+    if (lessonId) {
+      loadLesson();
+      setIsDownloaded(isLessonDownloaded(lessonId));
+
+      // Restore saved progress if available
+      try {
+        const saved = localStorage.getItem(`nihomi_lesson_progress_${lessonId}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.activeTab) setActiveTab(parsed.activeTab);
+          if (typeof parsed.currentWordIndex === 'number') setCurrentWordIndex(parsed.currentWordIndex);
+          setResumedToast(`Resumed previous session at ${parsed.activeTab.toUpperCase()} tab.`);
+          setTimeout(() => setResumedToast(null), 3500);
+        }
+      } catch {}
+    }
+  }, [lessonId]);
+
+  // Auto-save student progress as they navigate tabs or vocabulary
+  useEffect(() => {
+    if (lessonId && lessonData?.lesson) {
+      try {
+        localStorage.setItem(
+          `nihomi_lesson_progress_${lessonId}`,
+          JSON.stringify({
+            lessonId,
+            activeTab,
+            currentWordIndex,
+            lastUpdated: Date.now()
+          })
+        );
+      } catch {}
+    }
+  }, [lessonId, activeTab, currentWordIndex, lessonData]);
+
+  const handleToggleOfflineDownload = () => {
+    if (!lessonData?.lesson) return;
+
+    if (isDownloaded) {
+      removeDownloadedLesson(lessonId);
+      setIsDownloaded(false);
+      setDownloadSuccessToast('Lesson removed from offline storage.');
+      setTimeout(() => setDownloadSuccessToast(null), 3000);
+    } else {
+      saveLessonOffline(
+        lessonId,
+        lessonData.lesson,
+        lessonData.courseTitle || 'JLPT Curriculum',
+        lessonData.moduleTitle || 'Japanese Core Foundations'
+      );
+      setIsDownloaded(true);
+      setDownloadSuccessToast('✅ Downloaded for offline study! You can access this lesson anytime without internet.');
+      setTimeout(() => setDownloadSuccessToast(null), 4000);
+    }
+  };
+
+  // Clean up speech and timer on tab change or unmount
+  useEffect(() => {
+    return () => {
+      stopJapaneseSpeech();
+      if (listenTimerRef.current) {
+        clearTimeout(listenTimerRef.current);
+      }
+    };
+  }, [activeTab]);
+
+  // Listen Only sequential player engine
+  useEffect(() => {
+    if (!isListenOnlyActive || !lessonData?.lesson?.vocabulary?.length) {
+      stopJapaneseSpeech();
+      if (listenTimerRef.current) clearTimeout(listenTimerRef.current);
+      return;
+    }
+
+    const vocabList = lessonData.lesson.vocabulary;
+    const currentVocab = vocabList[currentWordIndex];
+
+    if (currentVocab) {
+      const advanceSequence = () => {
+        listenTimerRef.current = setTimeout(() => {
+          if (currentWordIndex + 1 < vocabList.length) {
+            setCurrentWordIndex((idx) => idx + 1);
+          } else if (isLooping) {
+            setCurrentWordIndex(0);
+          } else {
+            setIsListenOnlyActive(false);
+            setCurrentWordIndex(0);
+          }
+        }, 1800);
+      };
+
+      try {
+        speakJapanese(currentVocab.japanese, {
+          rate: playbackSpeed,
+          onEnd: advanceSequence,
+          onError: advanceSequence
+        });
+      } catch (err) {
+        console.warn('[LessonAudio] Audio playback exception safely bypassed:', err);
+        advanceSequence();
+      }
+    }
+
+    return () => {
+      if (listenTimerRef.current) clearTimeout(listenTimerRef.current);
+    };
+  }, [isListenOnlyActive, currentWordIndex, playbackSpeed, isLooping, lessonData]);
+
+  const handleCompleteLesson = async () => {
+    if (!user || !lessonData) return;
+    setIsCompleting(true);
+    try {
+      await apiRequest('/api/progress/complete-lesson', {
+        method: 'POST',
+        body: JSON.stringify({
+          lessonId: lessonData.lesson.id,
+          studyMinutes: lessonData.lesson.estimatedMinutes || 15
+        })
+      });
+      // Synchronize to Supabase database (lesson_progress + learning_progress + activity_logs)
+      await syncLessonCompletion(
+        lessonData.lesson.id,
+        100,
+        (lessonData.lesson.estimatedMinutes || 15) * 60,
+        lessonData.lesson.xpReward || 50
+      );
+      trackNihomiEvent('first_lesson_completed', {
+        lessonId: lessonData.lesson.id,
+        title: lessonData.lesson.title,
+        studyMinutes: lessonData.lesson.estimatedMinutes || 15,
+        xpReward: lessonData.lesson.xpReward || 50
+      });
+      setCompletedSuccess(true);
+      soundEffects.playLessonCelebration();
+      await refreshProgress();
+      if (lessonData) {
+        setLessonData({ ...lessonData, isCompleted: true });
+      }
+      // Open AI Lesson Feedback Modal and Session Summary
+      setIsFeedbackModalOpen(true);
+      setIsSessionReportOpen(true);
+    } catch (err) {
+      console.error('Failed to complete lesson:', err);
+    } finally {
+      setIsCompleting(false);
+    }
+  };
+
+  const handleSrsReview = (kanjiChar: string, rating: SrsRating) => {
+    const updated = saveSrsItemReview(kanjiChar, rating, srsDeck[kanjiChar]);
+    setSrsDeck((prev) => ({ ...prev, [kanjiChar]: updated }));
+    speakJapanese(kanjiChar);
+  };
+
+  const checkPracticeAnswer = async (exerciseId: string, answer: string, correctAnswer: string) => {
+    const isCorrect = answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+    setPracticeFeedback((prev) => ({
+      ...prev,
+      [exerciseId]: { isCorrect, show: true }
+    }));
+
+    if (isCorrect) {
+      soundEffects.playCorrectPing();
+    } else {
+      soundEffects.playErrorBuzzer();
+      if (user?.id) {
+        try {
+          await apiRequest('/api/progress/record-mistake', {
+            method: 'POST',
+            body: JSON.stringify({
+              userId: user.id,
+              itemType: 'GRAMMAR',
+              conceptId: `lesson-${lessonId}-ex-${exerciseId}`,
+              studentAnswer: answer,
+              correctAnswer: correctAnswer,
+              notes: `Lesson ${lessonId} practice exercise mistake`
+            })
+          });
+        } catch (e) {
+          console.warn('Silent MemoryOS tracking note:', e);
+        }
+      }
+    }
+  };
+>>>>>>> 58140fa9043b58b8c637a84bcf90d02a96c6a8ac
 
   if (isLoading || !lessonData) {
     return (
@@ -189,6 +376,197 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Courses</span>
           </button>
+<<<<<<< HEAD
+=======
+
+          {/* Mobile 1-Row Compact Action Toolbar */}
+          <div className="flex sm:hidden items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full shrink-0">
+            {/* Focus Mode Pill */}
+            <button
+              id="btn-lesson-focus-mode-mobile"
+              onClick={() => setIsFocusMode(!isFocusMode)}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer whitespace-nowrap ${
+                isFocusMode
+                  ? 'bg-amber-500 text-stone-950 border-amber-400 font-extrabold ring-2 ring-amber-400/30'
+                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200 shadow-xs'
+              }`}
+            >
+              <span>🎯</span>
+              <span>{isFocusMode ? 'ফোকাস অন' : 'ফোকাস'}</span>
+            </button>
+
+            {/* AI Feedback / Sensei Pill */}
+            <button
+              id="btn-lesson-ai-feedback-mobile"
+              onClick={() => setIsFeedbackModalOpen(true)}
+              className="shrink-0 px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
+            >
+              <span>🤖</span>
+              <span>সেনসেই</span>
+            </button>
+
+            {/* Offline Download Pill */}
+            <button
+              id="btn-lesson-offline-mobile"
+              onClick={handleToggleOfflineDownload}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer whitespace-nowrap ${
+                isDownloaded
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200 shadow-xs'
+              }`}
+            >
+              <span>{isDownloaded ? '✓' : '📥'}</span>
+              <span>{isDownloaded ? 'অফলাইন রেডি' : 'অফলাইন'}</span>
+            </button>
+
+            {/* Quick Notes Pill */}
+            <button
+              id="btn-lesson-notes-mobile"
+              onClick={() => setIsNotesOpen(true)}
+              className="shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
+            >
+              <span>📝</span>
+              <span>নোট</span>
+            </button>
+
+            {/* Mark as Completed Pill */}
+            {user && (
+              <button
+                id="btn-lesson-complete-mobile"
+                onClick={handleCompleteLesson}
+                disabled={isCompleting || isCompleted}
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  isCompleted
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                }`}
+              >
+                <span>✓</span>
+                <span>{isCompleted ? 'সম্পন্ন' : isCompleting ? 'সেভ হচ্ছে...' : 'সম্পন্ন করুন'}</span>
+              </button>
+            )}
+
+            {/* Optional Quiz Pill */}
+            {quizSummary && (
+              <button
+                onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
+                className="shrink-0 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
+              >
+                <span>🏆</span>
+                <span>কুইজ</span>
+              </button>
+            )}
+
+            {/* Optional Pro Pill */}
+            {!isPro && (
+              <button
+                onClick={() => setIsProModalOpen(true)}
+                className="shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-extrabold text-xs shadow-xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                <span>👑</span>
+                <span>প্রো</span>
+              </button>
+            )}
+          </div>
+
+          {/* Desktop Actions Toolbar */}
+          <div className="hidden sm:flex flex-wrap items-center gap-2.5">
+            {/* Focus Mode Toggle Button */}
+            <button
+              id="btn-lesson-focus-mode"
+              onClick={() => setIsFocusMode(!isFocusMode)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
+                isFocusMode
+                  ? 'bg-amber-500 text-stone-950 border-amber-400 font-extrabold ring-2 ring-amber-400/30'
+                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
+              }`}
+              title={isFocusMode ? 'Exit Distraction-Free Focus Mode' : 'Enter Focus Mode (Zen Study)'}
+            >
+              {isFocusMode ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4 text-amber-600" />}
+              <span>{isFocusMode ? 'Exit Focus' : 'Focus Mode'}</span>
+            </button>
+
+            {/* AI Feedback Button */}
+            <button
+              onClick={() => setIsFeedbackModalOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+              title="Get AI Sensei Feedback"
+            >
+              <Bot className="w-4 h-4 text-purple-600" />
+              <span>AI Feedback</span>
+            </button>
+
+            {/* Download for Offline Button */}
+            <button
+              id="btn-lesson-offline-download"
+              onClick={handleToggleOfflineDownload}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
+                isDownloaded
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
+              }`}
+              title={isDownloaded ? 'Saved for offline study. Click to remove' : 'Download lesson for offline study'}
+            >
+              {isDownloaded ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>Offline Ready</span>
+                </>
+              ) : (
+                <>
+                  <DownloadCloud className="w-4 h-4 text-stone-500" />
+                  <span>Download for Offline</span>
+                </>
+              )}
+            </button>
+
+            {/* Quick Notes Toggle Button */}
+            <button
+              id="btn-lesson-quick-notes"
+              onClick={() => setIsNotesOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <FileText className="w-4 h-4 text-red-600" />
+              <span>Quick Notes</span>
+            </button>
+
+            {quizSummary && (
+              <button
+                onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
+                className="px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <Award className="w-4 h-4 text-amber-600" />
+                <span>Take Lesson Quiz</span>
+              </button>
+            )}
+
+            {!isPro && (
+              <button
+                id="btn-lesson-upgrade-pro"
+                onClick={() => setIsProModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <Crown className="w-4 h-4 text-stone-950" />
+                <span>Upgrade to PRO</span>
+              </button>
+            )}
+
+            {user && (
+              <button
+                onClick={handleCompleteLesson}
+                disabled={isCompleting || isCompleted}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer ${
+                  isCompleted
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                }`}
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{isCompleted ? 'Completed' : isCompleting ? 'Saving...' : 'Mark as Completed'}</span>
+              </button>
+            )}
+          </div>
+>>>>>>> 58140fa9043b58b8c637a84bcf90d02a96c6a8ac
         </div>
 
         {/* Lesson Header Banner */}

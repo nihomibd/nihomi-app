@@ -80,9 +80,9 @@ export const retentionEngine = {
     }
 
     const todayStr = new Date().toISOString().split('T')[0];
-    let currentStreak = parseInt(localStorage.getItem(STORAGE_KEYS.STREAK_DAYS) || '3', 10);
-    let longestStreak = parseInt(localStorage.getItem(STORAGE_KEYS.LONGEST_STREAK) || '7', 10);
-    let totalXp = parseInt(localStorage.getItem(STORAGE_KEYS.STUDENT_XP) || '450', 10);
+    let currentStreak = parseInt(localStorage.getItem(STORAGE_KEYS.STREAK_DAYS) || '0', 10);
+    let longestStreak = parseInt(localStorage.getItem(STORAGE_KEYS.LONGEST_STREAK) || '0', 10);
+    let totalXp = parseInt(localStorage.getItem(STORAGE_KEYS.STUDENT_XP) || '0', 10);
     let freezeCount = parseInt(localStorage.getItem(STORAGE_KEYS.FREEZE_COUNT) || '1', 10);
     const lastActiveDate = localStorage.getItem(STORAGE_KEYS.LAST_ACTIVE_DATE) || todayStr;
 

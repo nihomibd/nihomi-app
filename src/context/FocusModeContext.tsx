@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { zenAudioService, ZenSoundscapeType, ZEN_SOUNDSCAPES, ZenSoundscapeInfo } from '../lib/zenAudio';
+import { FocusAmbientTheme } from '../components/focus/FocusSakuraBackground';
 
 interface FocusModeContextType {
   isFocusMode: boolean;
@@ -9,6 +10,8 @@ interface FocusModeContextType {
   soundscapeMode: ZenSoundscapeType;
   setSoundscapeMode: (mode: ZenSoundscapeType) => void;
   soundscapes: ZenSoundscapeInfo[];
+  ambientTheme: FocusAmbientTheme;
+  setAmbientTheme: (theme: FocusAmbientTheme) => void;
 }
 
 const FocusModeContext = createContext<FocusModeContextType | undefined>(undefined);
@@ -16,6 +19,7 @@ const FocusModeContext = createContext<FocusModeContextType | undefined>(undefin
 const FOCUS_STORAGE_KEY = 'nihomi_focus_mode_active_v1';
 const ZEN_SOUND_STORAGE_KEY = 'nihomi_zen_sound_active_v1';
 const ZEN_SOUNDSCAPE_STORAGE_KEY = 'nihomi_zen_soundscape_mode_v1';
+const AMBIENT_THEME_STORAGE_KEY = 'nihomi_ambient_theme_v1';
 
 export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState<boolean>(() => {
@@ -33,6 +37,19 @@ export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const saved = localStorage.getItem(ZEN_SOUNDSCAPE_STORAGE_KEY) as ZenSoundscapeType;
     return saved || 'chimes';
   });
+
+  const [ambientTheme, setAmbientThemeState] = useState<FocusAmbientTheme>(() => {
+    if (typeof window === 'undefined') return 'Kyoto Rainy';
+    const saved = localStorage.getItem(AMBIENT_THEME_STORAGE_KEY) as FocusAmbientTheme;
+    return saved || 'Kyoto Rainy';
+  });
+
+  const setAmbientTheme = (theme: FocusAmbientTheme) => {
+    setAmbientThemeState(theme);
+    try {
+      localStorage.setItem(AMBIENT_THEME_STORAGE_KEY, theme);
+    } catch {}
+  };
 
   const setSoundscapeMode = (mode: ZenSoundscapeType) => {
     setSoundscapeModeState(mode);
@@ -109,6 +126,8 @@ export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         soundscapeMode,
         setSoundscapeMode,
         soundscapes: ZEN_SOUNDSCAPES,
+        ambientTheme,
+        setAmbientTheme,
       }}
     >
       {children}

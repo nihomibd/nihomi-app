@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   RotateCcw,
   Volume2,
@@ -12,14 +13,22 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { speakJapanese } from '../lib/tts.js';
+import { HIRAGANA_SEION, KATAKANA_SEION } from '../data/kanaData.js';
+
+interface CharacterItem {
+  char: string;
+  reading?: string;
+  meaning?: string;
+  strokes?: number;
+}
 
 interface CanvasWritingPracticeProps {
   initialCharacter?: string;
-  characterList?: { char: string; reading?: string; meaning?: string; strokes?: number }[];
+  characterList?: CharacterItem[];
   onCompletePractice?: (char: string) => void;
 }
 
-const DEFAULT_CHARACTERS = [
+const DEFAULT_KANJI_CHARACTERS: CharacterItem[] = [
   { char: '日', reading: 'ひ / にち', meaning: 'Sun / Day', strokes: 4 },
   { char: '本', reading: 'ほん', meaning: 'Book / Origin', strokes: 5 },
   { char: '語', reading: 'ご', meaning: 'Language', strokes: 14 },
@@ -32,15 +41,46 @@ const DEFAULT_CHARACTERS = [
   { char: '見', reading: 'みる / けん', meaning: 'See / Look', strokes: 7 }
 ];
 
+const ALL_46_HIRAGANA: CharacterItem[] = HIRAGANA_SEION.map((k) => ({
+  char: k.char,
+  reading: `${k.romaji} • ${k.banglaPhonetic}`,
+  meaning: k.mnemonicBn || k.mnemonicEn,
+  strokes: k.strokes
+}));
+
+const ALL_46_KATAKANA: CharacterItem[] = KATAKANA_SEION.map((k) => ({
+  char: k.char,
+  reading: `${k.romaji} • ${k.banglaPhonetic}`,
+  meaning: k.mnemonicBn || k.mnemonicEn,
+  strokes: k.strokes
+}));
+
 export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
-  initialCharacter = '日',
-  characterList = DEFAULT_CHARACTERS,
+  initialCharacter = 'あ',
+  characterList,
   onCompletePractice
 }) => {
+  const isCustomList = Boolean(characterList && characterList.length > 0);
+  const [activeCategory, setActiveCategory] = useState<'hiragana' | 'katakana' | 'kanji'>(() => {
+    if (isCustomList) return 'kanji';
+    if (KATAKANA_SEION.some(k => k.char === initialCharacter)) return 'katakana';
+    if (DEFAULT_KANJI_CHARACTERS.some(k => k.char === initialCharacter)) return 'kanji';
+    return 'hiragana';
+  });
+
+  const activeCharacters = isCustomList
+    ? (characterList as CharacterItem[])
+    : activeCategory === 'hiragana'
+    ? ALL_46_HIRAGANA
+    : activeCategory === 'katakana'
+    ? ALL_46_KATAKANA
+    : DEFAULT_KANJI_CHARACTERS;
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [selectedCharObj, setSelectedCharObj] = useState(() => {
-    const found = characterList.find((c) => c.char === initialCharacter);
-    return found || characterList[0] || { char: initialCharacter, reading: '', meaning: '', strokes: 4 };
+  const [selectedCharObj, setSelectedCharObj] = useState<CharacterItem>(() => {
+    const listToSearch = isCustomList ? characterList! : [...ALL_46_HIRAGANA, ...ALL_46_KATAKANA, ...DEFAULT_KANJI_CHARACTERS];
+    const found = listToSearch.find((c) => c.char === initialCharacter);
+    return found || activeCharacters[0] || { char: initialCharacter, reading: '', meaning: '', strokes: 4 };
   });
 
   const [isDrawing, setIsDrawing] = useState(false);
@@ -234,23 +274,83 @@ export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
         </div>
       </div>
 
+      {/* Category Selection Tabs */}
+      {!isCustomList && (
+        <div className="flex items-center gap-2 p-1 rounded-2xl bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 w-fit">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveCategory('hiragana');
+              setSelectedCharObj(ALL_46_HIRAGANA[0]);
+              speakJapanese(ALL_46_HIRAGANA[0].char, { rate: 0.85 });
+            }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeCategory === 'hiragana'
+                ? 'bg-red-600 text-white shadow-xs'
+                : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+            }`}
+          >
+            হিরাগানা (Hiragana • 46)
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveCategory('katakana');
+              setSelectedCharObj(ALL_46_KATAKANA[0]);
+              speakJapanese(ALL_46_KATAKANA[0].char, { rate: 0.85 });
+            }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeCategory === 'katakana'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+            }`}
+          >
+            কাতাকানা (Katakana • 46)
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveCategory('kanji');
+              setSelectedCharObj(DEFAULT_KANJI_CHARACTERS[0]);
+              speakJapanese(DEFAULT_KANJI_CHARACTERS[0].char, { rate: 0.85 });
+            }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeCategory === 'kanji'
+                ? 'bg-stone-900 dark:bg-stone-700 text-white shadow-xs'
+                : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+            }`}
+          >
+            বেসিক কাঞ্জি (Kanji N5)
+          </button>
+        </div>
+      )}
+
       {/* Character Selector Pill Strip */}
       <div className="space-y-2">
-        <span className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
-          Select Character to Practice:
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {characterList.map((item) => {
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
+            Select Character to Practice ({activeCharacters.length} Available):
+          </span>
+          <span className="text-[11px] text-stone-400">
+            ট্যাপ করে বর্ণ পরিবর্তন ও উচ্চারণ শুনুন
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 rounded-2xl bg-stone-50/80 dark:bg-stone-800/40 border border-stone-200/60 dark:border-stone-700/60">
+          {activeCharacters.map((item) => {
             const isSelected = selectedCharObj.char === item.char;
             return (
               <button
                 key={item.char}
-                onClick={() => setSelectedCharObj(item)}
-                className={`w-11 h-11 rounded-2xl font-serif text-lg font-bold flex items-center justify-center transition cursor-pointer ${
+                onClick={() => {
+                  setSelectedCharObj(item);
+                  speakJapanese(item.char, { rate: 0.85 });
+                }}
+                className={`w-10 h-10 rounded-xl font-serif text-base font-bold flex items-center justify-center transition cursor-pointer active:scale-95 ${
                   isSelected
-                    ? 'bg-red-600 text-white shadow-md shadow-red-600/30 scale-105'
-                    : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-red-400'
+                    ? 'bg-red-600 text-white shadow-md shadow-red-600/30 scale-105 ring-2 ring-red-400'
+                    : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-red-400 hover:bg-red-50/50 dark:hover:bg-stone-700'
                 }`}
+                title={`${item.char} - ${item.reading || ''}`}
               >
                 {item.char}
               </button>

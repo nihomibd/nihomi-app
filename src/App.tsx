@@ -91,7 +91,9 @@ export const App: React.FC = () => {
     toggleZenSound,
     soundscapeMode,
     setSoundscapeMode,
-    soundscapes
+    soundscapes,
+    ambientTheme,
+    setAmbientTheme,
   } = useFocusMode();
 
   const handleNavigate = (view: string, params: Record<string, any> = {}) => {
@@ -121,6 +123,12 @@ export const App: React.FC = () => {
         setCurrentView('courses');
       } else if (path === '/portal' || path === '/dashboard') {
         setCurrentView('portal');
+      } else if (path === '/kana' || path === '/hiragana' || path === '/katakana') {
+        setCurrentView('kana');
+      } else if (path === '/kanji') {
+        setCurrentView('kanji');
+      } else if (path === '/listening') {
+        setCurrentView('listening');
       } else if (path === '/baito' || path === '/baito-os' || path === '/simulation') {
         setCurrentView('baito');
       } else if (path === '/pricing' || path === '/plans') {
@@ -164,6 +172,9 @@ export const App: React.FC = () => {
       if (path === '/start' || path === '/campaign') setCurrentView('start');
       else if (path === '/courses' || path === '/curriculum' || path === '/pathways') setCurrentView('courses');
       else if (path === '/portal' || path === '/dashboard') setCurrentView('portal');
+      else if (path === '/kana' || path === '/hiragana' || path === '/katakana') setCurrentView('kana');
+      else if (path === '/kanji') setCurrentView('kanji');
+      else if (path === '/listening') setCurrentView('listening');
       else if (path === '/baito' || path === '/baito-os') setCurrentView('baito');
       else if (path === '/pricing' || path === '/plans') setCurrentView('pricing');
       else if (path === '/coordination') setCurrentView('coordination');
@@ -240,6 +251,7 @@ export const App: React.FC = () => {
         isActive={isFocusMode}
         soundscapeMode={soundscapeMode}
         soundActive={zenSoundActive}
+        themePreset={ambientTheme}
       />
 
       {/* Focus Mode Pomodoro Bar (25m / 50m / 5m Break Intervals + Zen Soundscape Player) */}
@@ -250,6 +262,8 @@ export const App: React.FC = () => {
           soundscapeMode={soundscapeMode}
           setSoundscapeMode={setSoundscapeMode}
           soundscapes={soundscapes}
+          ambientTheme={ambientTheme}
+          setAmbientTheme={setAmbientTheme}
           onExitFocus={() => toggleFocusMode(false)}
           onFocusBlockComplete={() => window.dispatchEvent(new CustomEvent('nihomi-focus-complete'))}
         />

@@ -133,6 +133,13 @@ model User {
   auditLogs     AdminAuditLog[] @relation("AdminAuditor")
   targetAudits  AdminAuditLog[] @relation("TargetUser")
 
+  // Content Engine Relations
+  uploadedSources   SourceDocument[]
+  createdDrafts     ContentDraft[]   @relation("DraftCreator")
+  reviewedDrafts    ContentDraft[]   @relation("DraftReviewer")
+  approvedVersions  ContentVersion[] @relation("VersionApprover")
+  publishedVersions ContentVersion[] @relation("VersionPublisher")
+
   @@index([email])
 }
 
@@ -177,8 +184,10 @@ model Course {
   updatedAt   DateTime      @updatedAt
 
   // Relations
-  modules     Module[]
-  quizzes     Quiz[]
+  modules         Module[]
+  quizzes         Quiz[]
+  contentDrafts   ContentDraft[]
+  contentVersions ContentVersion[]
 
   @@index([level, status])
   @@index([orderIndex])
@@ -226,6 +235,8 @@ model Lesson {
   kanjis          Kanji[]
   quizzes         Quiz[]
   progressRecords LessonProgress[]
+  contentDrafts   ContentDraft[]
+  contentVersions ContentVersion[]
 
   @@unique([moduleId, slug])
   @@index([moduleId, orderIndex])
@@ -672,3 +683,131 @@ model AdminAuditLog {
   @@index([adminUserId, createdAt])
   @@index([action])
 }
+
+// ----------------------------------------------------
+// NIHOMI CONTENT ENGINE™ & KNOWLEDGE SYSTEM MODELS
+// ----------------------------------------------------
+
+model SourceDocument {
+  id              String           @id @default(cuid())
+  title           String
+  filename        String
+  fileType        String           @default("PDF")
+  fileSizeBytes   BigInt
+  checksumSha256  String
+  storageUrl      String
+  pageCount       Int              @default(1)
+  extractedText   String?          @db.Text
+  ocrApplied      Boolean          @default(false)
+  ocrConfidence   Decimal?         @db.Decimal(5, 2)
+  targetJlptLevel JLPTLevel        @default(N5)
+  copyrightStatus String           @default("ACADEMIC_FAIR_USE")
+  metadata        Json?
+  uploadedById    String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  uploadedBy      User?            @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  knowledgeNodes  KnowledgeNode[]
+  contentDrafts   ContentDraft[]
+  contentVersions ContentVersion[]
+
+  @@index([checksumSha256])
+  @@index([targetJlptLevel])
+  @@index([uploadedById])
+}
+
+model KnowledgeNode {
+  id               String          @id @default(cuid())
+  nodeCode         String          @unique
+  nodeType         String          // 'VOCABULARY' | 'GRAMMAR' | 'KANJI' | 'EXPRESSION' | 'CULTURE'
+  jlptLevel        JLPTLevel       @default(N5)
+  sourceDocumentId String?
+  sourcePage       Int?
+  sourceSnippet    String?         @db.Text
+  sourceHash       String?
+  trilingualData   Json            // { ja: string, en: string, bn: string, furigana?: string, romaji?: string }
+  qaScore          Int             @default(0)
+  qaDimensions     Json?
+  isVerified       Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([nodeCode])
+  @@index([jlptLevel])
+  @@index([nodeType])
+  @@index([sourceDocumentId])
+}
+
+model ContentDraft {
+  id                 String           @id @default(cuid())
+  sourceId           String?
+  courseId           String?
+  moduleId           String?
+  lessonId           String?
+  contentType        String           @default("lesson") // 'lesson' | 'vocabulary' | 'grammar' | 'kanji'
+  title              String
+  titleJa            String?
+  titleBn            String?
+  summary            String?          @db.Text
+  explanation        String?          @db.Text
+  level              JLPTLevel        @default(N5)
+  unitNumber         Int              @default(1)
+  lessonNumber       Int              @default(1)
+  structuredContent  Json             // 14 pedagogical modules
+  status             String           @default("DRAFT") // 'DRAFT' | 'AI_GENERATED' | 'PROCESSING' | 'NEEDS_REVIEW' | 'APPROVED' | 'PUBLISHED' | 'REJECTED'
+  generationMetadata Json?
+  qaReport           Json?
+  reviewNotes        String?          @db.Text
+  createdById        String?
+  reviewedById       String?
+  reviewedAt         DateTime?
+  publishedAt        DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  source             SourceDocument?  @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  course             Course?          @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  lesson             Lesson?          @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  createdBy          User?            @relation("DraftCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy         User?            @relation("DraftReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  versions           ContentVersion[]
+
+  @@index([sourceId])
+  @@index([courseId])
+  @@index([lessonId])
+  @@index([level, status])
+}
+
+model ContentVersion {
+  id                   String          @id @default(cuid())
+  draftId              String
+  sourceId             String?
+  versionNumber        Int
+  contentJson          Json
+  metadataJson         Json?
+  targetLessonId       String?
+  targetCourseId       String?
+  changelogSummary     String?
+  checksumSha256       String
+  rollbackFromVersion  Int?
+  approvedById         String?
+  publishedById        String?
+  approvedAt           DateTime?
+  publishedAt          DateTime        @default(now())
+  createdAt            DateTime        @default(now())
+
+  draft                ContentDraft    @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  source               SourceDocument? @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  targetLesson         Lesson?         @relation(fields: [targetLessonId], references: [id], onDelete: SetNull)
+  targetCourse         Course?         @relation(fields: [targetCourseId], references: [id], onDelete: SetNull)
+  approvedBy           User?           @relation("VersionApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  publishedBy          User?           @relation("VersionPublisher", fields: [publishedById], references: [id], onDelete: SetNull)
+
+  @@index([draftId, versionNumber])
+  @@index([sourceId])
+  @@index([targetLessonId])
+}
+
