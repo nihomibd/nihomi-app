@@ -401,12 +401,35 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
     speakJapanese(kanjiChar);
   };
 
-  const checkPracticeAnswer = (exerciseId: string, answer: string, correctAnswer: string) => {
+  const checkPracticeAnswer = async (exerciseId: string, answer: string, correctAnswer: string) => {
     const isCorrect = answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
     setPracticeFeedback((prev) => ({
       ...prev,
       [exerciseId]: { isCorrect, show: true }
     }));
+
+    if (isCorrect) {
+      soundEffects.playCorrectPing();
+    } else {
+      soundEffects.playErrorBuzzer();
+      if (user?.id) {
+        try {
+          await apiRequest('/api/progress/record-mistake', {
+            method: 'POST',
+            body: JSON.stringify({
+              userId: user.id,
+              itemType: 'GRAMMAR',
+              conceptId: `lesson-${lessonId}-ex-${exerciseId}`,
+              studentAnswer: answer,
+              correctAnswer: correctAnswer,
+              notes: `Lesson ${lessonId} practice exercise mistake`
+            })
+          });
+        } catch (e) {
+          console.warn('Silent MemoryOS tracking note:', e);
+        }
+      }
+    }
   };
 
   if (isLoading || !lessonData) {

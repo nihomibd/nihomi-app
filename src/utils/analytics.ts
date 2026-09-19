@@ -35,7 +35,8 @@ export type NihomiEventType =
   | 'diagnostic_exam_completed'
   | 'nba_zero_kana_clicked'
   | 'nba_targeted_review_clicked'
-  | 'nba_lesson_launched';
+  | 'nba_lesson_launched'
+  | 'nba_mock_exam_launched';
 
 export interface LandingPageViewPayload {
   pagePath?: string;
@@ -130,6 +131,7 @@ export type EventPayloadMap = {
   nba_zero_kana_clicked: Record<string, any>;
   nba_targeted_review_clicked: Record<string, any>;
   nba_lesson_launched: Record<string, any>;
+  nba_mock_exam_launched: Record<string, any>;
 };
 
 /**

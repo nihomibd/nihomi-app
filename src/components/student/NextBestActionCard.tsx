@@ -215,19 +215,87 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
     );
   }
 
-  // Render State 3: Normal Progression (Next Minna no Nihongo Lesson)
+  // Render State 3: Normal Progression (Next Minna no Nihongo Lesson or Mock Exam Milestone)
+  const LESSON_METADATA: Record<number, { title: string; subtitle: string }> = {
+    1: { title: 'Minna no Nihongo Lesson 1 Grammar Master', subtitle: 'N1 は N2 です / N1 は N2 じゃありません • পার্টিকেল ও আত্মপরিচয়' },
+    2: { title: 'Minna no Nihongo Lesson 2 Demonstratives & Possession', subtitle: 'これ・それ・あれ・この・その・あの • নির্দেশক সর্বনাম ও অধিকার' },
+    3: { title: 'Minna no Nihongo Lesson 3 Locations & Directions', subtitle: 'ここ・そこ・あそこ・どこ • স্থান, দিক ও শপিং সংক্রান্ত কথোপকথন' },
+    4: { title: 'Minna no Nihongo Lesson 4 Time & Daily Routine', subtitle: '今〜時〜分です / 〜から〜まで • সময়, দিন ও প্রাত্যহিক কাজ' },
+    5: { title: 'Minna no Nihongo Lesson 5 Transportation & Movement', subtitle: '〜へ行きます / 〜で来ました • যাতায়াত, যানবাহন ও গন্তব্য' },
+    6: { title: 'Minna no Nihongo Lesson 6 Transitive Verbs & Actions', subtitle: '〜を〜ます / 〜で〜ます • ক্রিয়াপদ ও কর্ম নির্ধারণ' },
+    7: { title: 'Minna no Nihongo Lesson 7 Giving, Receiving & Tools', subtitle: '〜で（道具）/ 〜にあげます・もらいます • আদান-প্রদান ও উপকরণ' },
+    8: { title: 'Minna no Nihongo Lesson 8 I-Adjectives & Na-Adjectives', subtitle: '〜い形容詞 / 〜な形容詞 • বিশেষণ ও বৈশিষ্ট্য বর্ণনা' },
+    9: { title: 'Minna no Nihongo Lesson 9 Preferences & Capabilities', subtitle: '〜が好き・嫌い / 〜が上手・下手 • পছন্দ, অপছন্দ ও দক্ষতা' },
+    10: { title: 'Minna no Nihongo Lesson 10 Existence (います vs あります)', subtitle: '人・動物がいます / 物・植物があります • অস্তিত্ব ও অবস্থান' },
+    11: { title: 'Minna no Nihongo Lesson 11 Counters & Quantifiers', subtitle: '〜つ / 〜本 / 〜枚 / 〜台 • জাপানিজ সংখ্যা ও গণনাসূচক শব্দ' },
+    12: { title: 'Minna no Nihongo Lesson 12 Comparisons & Superlatives', subtitle: '〜より〜のほうが / 〜の中で一番 • তুলনা ও শ্রেষ্ঠত্ব প্রকাশ' },
+    13: { title: 'Minna no Nihongo Lesson 13 Desires & Purposes', subtitle: '〜が欲しい / 〜たいです / 〜に行きます • ইচ্ছা ও উদ্দেশ্য' },
+    14: { title: 'Minna no Nihongo Lesson 14 Te-Form & Requests', subtitle: '動詞のて形 / 〜てください • অনুরোধ ও আদেশ প্রকাশ' },
+    15: { title: 'Minna no Nihongo Lesson 15 Permissions & Prohibitions', subtitle: '〜てもいいです / 〜てはいけません • অনুমতি ও নিষেধাজ্ঞা' },
+    16: { title: 'Minna no Nihongo Lesson 16 Sequential Actions', subtitle: '〜て、〜て / 〜てから • একাধিক কাজের ধারাবাহিকতা' },
+    17: { title: 'Minna no Nihongo Lesson 17 Nai-Form & Obligations', subtitle: 'ない形 / 〜ないでください / 〜なければなりません • বাধ্যবাধকতা' },
+    18: { title: 'Minna no Nihongo Lesson 18 Dictionary Form & Ability', subtitle: '辞書形 / 〜ことができます / 趣味は〜です • সক্ষমতা ও শখ' },
+    19: { title: 'Minna no Nihongo Lesson 19 Ta-Form & Experiences', subtitle: 'た形 / 〜たことがあります / 〜たり〜たり • অতীত অভিজ্ঞতা' },
+    20: { title: 'Minna no Nihongo Lesson 20 Plain Form & Informal Speech', subtitle: '普通形 (Casual Talk) • ঘনিষ্ঠ কথোপকথন ও দৈনন্দিন জাপানিজ' },
+    21: { title: 'Minna no Nihongo Lesson 21 Opinions & Quotations', subtitle: '〜と思います / 〜と言いました • নিজস্ব মতামত ও উক্তি' },
+    22: { title: 'Minna no Nihongo Lesson 22 Relative Clauses', subtitle: '名詞修飾 (Noun Modifiers) • বাক্য দিয়ে বিশেষ্য বিশেষিত করা' },
+    23: { title: 'Minna no Nihongo Lesson 23 Time Conditions', subtitle: '〜とき / 〜と（条件） • সময় ও স্বাভাবিক ফলাফল' },
+    24: { title: 'Minna no Nihongo Lesson 24 Giving & Receiving Actions', subtitle: '〜てくれます / 〜てもらいます • অন্যের জন্য করা কাজ' },
+    25: { title: 'Minna no Nihongo Lesson 25 Conditionals (〜たら / 〜ても)', subtitle: '〜たら（仮定）/ 〜ても（逆接） • শর্ত ও সম্ভাব্য পরিস্থিতি' },
+  };
+
+  const isAllN5Completed = completedLessonsCount >= 25;
+  const nextLessonNum = Math.min(25, Math.max(1, (completedLessonsCount || 0) + 1));
+  const nextLessonId = `n5-l${nextLessonNum}`;
+  const currentMeta = LESSON_METADATA[nextLessonNum] || LESSON_METADATA[1];
+
+  if (isAllN5Completed) {
+    return (
+      <div className="bg-gradient-to-r from-emerald-950 via-stone-900 to-amber-950 text-white rounded-3xl p-6 sm:p-8 border border-emerald-500/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-left transition-colors">
+        <div className="space-y-2">
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-full border border-emerald-500/40">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <span>JLPT N5 MILESTONE ACHIEVED</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            🎉 সম্পূর্ণ JLPT N5 কারিকুলাম সম্পন্ন হয়েছে!
+          </h2>
+          <p className="text-xs text-stone-300 font-medium">
+            আপনি N5 এর সকল ২৫টি লেসন সফলভাবে শেষ করেছেন। এখন ১৮০ নম্বরের অফিসিয়াল মক টেস্টে অংশ নিয়ে সার্টিফিকেট প্রস্তুতি যাচাই করুন।
+          </p>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <button
+            id="btn-launch-mock-exam"
+            onClick={() => {
+              trackNihomiEvent('nba_mock_exam_launched', { source: 'completed_n5' });
+              if (onLaunchLesson) {
+                onLaunchLesson('mock-exams');
+              }
+            }}
+            className="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-stone-950 text-xs font-black rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center space-x-2 cursor-pointer active:scale-95 shrink-0"
+          >
+            <Play className="w-4 h-4 fill-current" />
+            <span>Launch JLPT N5 Mock Exam (180 Marks)</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] rounded-3xl p-6 sm:p-8 border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-left transition-colors">
       <div className="space-y-2">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-bold rounded-full">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>RECOMMENDED NEXT LESSON</span>
+          <span>RECOMMENDED NEXT LESSON • STEP {nextLessonNum} / 25</span>
         </div>
         <h2 className="text-xl sm:text-2xl font-black text-stone-950 dark:text-white">
-          Minna no Nihongo Lesson 1 Grammar Master
+          {currentMeta.title}
         </h2>
         <p className="text-xs text-stone-600 dark:text-stone-400 font-medium">
-          N1 は N2 です / N1 は N2 じゃありません • পার্টিকেল ও বাক্য গঠন
+          {currentMeta.subtitle}
         </p>
       </div>
 
@@ -235,15 +303,15 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
         <button
           id="btn-launch-lesson"
           onClick={() => {
-            trackNihomiEvent('nba_lesson_launched', { lesson: 'lesson-1' });
+            trackNihomiEvent('nba_lesson_launched', { lesson: nextLessonId });
             if (onLaunchLesson) {
-              onLaunchLesson('lesson-1');
+              onLaunchLesson(nextLessonId);
             }
           }}
           className="px-6 py-3 bg-stone-950 hover:bg-stone-800 dark:bg-white dark:hover:bg-stone-200 text-white dark:text-stone-950 text-xs font-bold rounded-2xl shadow-md transition-all flex items-center space-x-2 cursor-pointer active:scale-95 shrink-0"
         >
           <Play className="w-4 h-4 fill-current" />
-          <span>Launch Interactive Lesson (12 min)</span>
+          <span>Continue Learning: Lesson {nextLessonNum} (12 min)</span>
         </button>
       </div>
     </div>

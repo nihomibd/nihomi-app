@@ -241,23 +241,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
-  const [progress, setProgress] = useState<UserProgress | null>({
-    userId: user?.id || 'default_user',
-    currentLevel: 'N5',
-    streakDays: 7,
-    totalHours: 14.5,
-    completedLessonsCount: 8,
+  const [progress, setProgress] = useState<UserProgress | null>(() => {
+    try {
+      const saved = localStorage.getItem('nihomi_progress');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      userId: user?.id || 'guest',
+      currentLevel: 'N5',
+      streakDays: 0,
+      totalHours: 0,
+      completedLessonsCount: 0,
+    };
   });
 
-  const [subscription, setSubscription] = useState<UserSubscription | null>({
-    userId: user?.id || 'default_user',
-    planId: user?.planId || 'starter',
-    planName: 'Starter Learner',
-    status: 'active',
-    validUntil: '2026-12-31',
-    billingCycle: 'monthly',
-    aiCreditsRemaining: 350,
-    paymentMethod: 'bkash',
+  const [subscription, setSubscription] = useState<UserSubscription | null>(() => {
+    try {
+      const saved = localStorage.getItem('nihomi_subscription');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      userId: user?.id || 'guest',
+      planId: user?.planId || 'free',
+      planName: 'Nihomi Free Basic',
+      status: 'active',
+      validUntil: '2026-12-31',
+      billingCycle: 'monthly',
+      aiCreditsRemaining: 100,
+      paymentMethod: 'bkash',
+    };
   });
 
   const [learningDNA] = useState<LearningDNAData | null>({
@@ -489,8 +501,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setUser(null);
     setProfile(null);
+    setProgress({
+      userId: 'guest',
+      currentLevel: 'N5',
+      streakDays: 0,
+      totalHours: 0,
+      completedLessonsCount: 0,
+    });
     localStorage.removeItem('nihomi_user');
     localStorage.removeItem('nihomi_profile');
+    localStorage.removeItem('nihomi_progress');
+    localStorage.removeItem('nihomi_subscription');
   };
 
   const updateProfileData = async (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => {

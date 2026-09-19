@@ -95,6 +95,13 @@ class SoundEngine {
   }
 
   /**
+   * Sound for error/incorrect answer
+   */
+  public playErrorBuzzer(): void {
+    this.playIncorrectSoft();
+  }
+
+  /**
    * Subtle soft click for button taps and timer controls
    */
   public playButtonTap(): void {
