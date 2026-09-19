@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
   Volume2,
@@ -142,29 +143,29 @@ export const KanaView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07070d] text-slate-100 pt-24 pb-20 px-3 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#07070d] text-slate-100 pt-28 md:pt-36 pb-20 px-3 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Top Hero Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#121226] via-[#0d0d1a] to-[#07070d] border border-slate-800 p-6 sm:p-10 shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#121226]/90 via-[#0d0d1a]/95 to-[#07070d] backdrop-blur-md border border-slate-800/80 p-6 sm:p-10 shadow-2xl">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-bold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>NIHOMI KANA MASTERY LAB (五十音図)</span>
+                <span>NIHOMI KANA MASTERY LAB (五十音図) • 100% FREE</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 জাপানি বর্ণমালা ও স্ট্রোক অর্ডার ইঞ্জিন
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                ৪৬টি হিরাগানা এবং ৪৬টি কাতাকানা বর্ণ প্রতিটি স্ট্রোকের দিক, কলমের শুরু-শেষ পয়েন্ট এবং টোকিও ভয়েস উচ্চারণের মাধ্যমে হাতে-কলমে অনুশীলন করুন।
+                ৪৬টি হিরাগানা এবং ৪৬টি কাতাকানা বর্ণ প্রতিটি স্ট্রোকের দিক, কলমের শুরু-শেষ পয়েন্ট এবং টোকিও ভয়েস উচ্চারণের মাধ্যমে হাতে-কলমে অনুশীলন করুন। ফ্রি টিয়ারে কোনো সীমাবদ্ধতা নেই।
               </p>
             </div>
 
             {/* Overall Mastery Progress Widgets */}
             <div className="grid grid-cols-2 gap-3 shrink-0 sm:w-80">
               {/* Hiragana Progress */}
-              <div className="p-3.5 rounded-2xl bg-[#0a0a14] border border-slate-800 flex flex-col justify-between">
+              <div className="p-3.5 rounded-2xl bg-[#0a0a14]/80 backdrop-blur-sm border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
                 <span className="text-[11px] font-bold text-rose-400">হিরাগানা মাস্টারি</span>
                 <div className="flex items-baseline justify-between mt-1">
                   <span className="text-xl font-mono font-black text-white">
@@ -183,7 +184,7 @@ export const KanaView: React.FC = () => {
               </div>
 
               {/* Katakana Progress */}
-              <div className="p-3.5 rounded-2xl bg-[#0a0a14] border border-slate-800 flex flex-col justify-between">
+              <div className="p-3.5 rounded-2xl bg-[#0a0a14]/80 backdrop-blur-sm border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
                 <span className="text-[11px] font-bold text-amber-400">কাতাকানা মাস্টারি</span>
                 <div className="flex items-baseline justify-between mt-1">
                   <span className="text-xl font-mono font-black text-white">
@@ -208,8 +209,8 @@ export const KanaView: React.FC = () => {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             
-            {/* Primary Mode: Hiragana vs Katakana */}
-            <div className="inline-flex p-1 rounded-2xl bg-[#0f0f1c] border border-slate-800">
+            {/* Primary Mode: Hiragana vs Katakana with sliding pill */}
+            <div className="relative inline-flex p-1 rounded-2xl bg-[#0f0f1c]/90 backdrop-blur-md border border-slate-800 shadow-inner">
               <button
                 type="button"
                 onClick={() => {
@@ -218,13 +219,20 @@ export const KanaView: React.FC = () => {
                     setSelectedKana(HIRAGANA_SEION[0]);
                   }
                 }}
-                className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`relative z-10 px-5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   activeType === 'hiragana'
-                    ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
+                    ? 'text-white'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                হিরাগানা (Hiragana • 46)
+                {activeType === 'hiragana' && (
+                  <motion.div
+                    layoutId="activeKanaTypeIndicator"
+                    className="absolute inset-0 rounded-xl bg-rose-600 shadow-lg shadow-rose-600/30"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10">হিরাগানা (Hiragana • 46)</span>
               </button>
 
               <button
@@ -235,13 +243,20 @@ export const KanaView: React.FC = () => {
                     setSelectedKana(KATAKANA_SEION[0]);
                   }
                 }}
-                className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`relative z-10 px-5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   activeType === 'katakana'
-                    ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
+                    ? 'text-white'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                কাতাকানা (Katakana • 46)
+                {activeType === 'katakana' && (
+                  <motion.div
+                    layoutId="activeKanaTypeIndicator"
+                    className="absolute inset-0 rounded-xl bg-amber-600 shadow-lg shadow-amber-600/30"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10">কাতাকানা (Katakana • 46)</span>
               </button>
             </div>
 
@@ -253,7 +268,7 @@ export const KanaView: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="বর্ণ, Romaji বা উচ্চারণ খুঁজুন..."
-                className="w-full pl-10 pr-4 py-2 rounded-2xl bg-[#0d0d1a] border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-rose-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2 rounded-2xl bg-[#0d0d1a]/80 backdrop-blur-md border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-rose-500 transition-colors shadow-inner"
               />
             </div>
           </div>
@@ -263,75 +278,113 @@ export const KanaView: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveSubType('seion')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors ${
+              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
                 activeSubType === 'seion'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'text-white'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              মূল বর্ণমালা (Seion 清音)
+              {activeSubType === 'seion' && (
+                <motion.div
+                  layoutId="activeKanaSubTypeIndicator"
+                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                />
+              )}
+              <span className="relative z-10">মূল বর্ণমালা (Seion 清音 • 46)</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSubType('dakuon')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors ${
+              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
                 activeSubType === 'dakuon'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'text-white'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              {activeType === 'hiragana'
-                ? 'ডাকুওন (Dakuon 濁音 • が, ざ...)'
-                : 'ডাকুওন (Dakuon 濁音 • ガ, ザ...)'}
+              {activeSubType === 'dakuon' && (
+                <motion.div
+                  layoutId="activeKanaSubTypeIndicator"
+                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                />
+              )}
+              <span className="relative z-10">
+                {activeType === 'hiragana'
+                  ? 'ডাকুওন (Dakuon 濁音 • が, ざ...)'
+                  : 'ডাকুওন (Dakuon 濁音 • ガ, ザ...)'}
+              </span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSubType('handakuon')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors ${
+              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
                 activeSubType === 'handakuon'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'text-white'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              {activeType === 'hiragana'
-                ? 'হান্দাকুওন (Handakuon 半濁音 • ぱ, ぴ...)'
-                : 'হান্দাকুওন (Handakuon 半濁音 • パ, ピ...)'}
+              {activeSubType === 'handakuon' && (
+                <motion.div
+                  layoutId="activeKanaSubTypeIndicator"
+                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                />
+              )}
+              <span className="relative z-10">
+                {activeType === 'hiragana'
+                  ? 'হান্দাকুওন (Handakuon 半濁音 • ぱ, ぴ...)'
+                  : 'হান্দাকুওন (Handakuon 半濁音 • パ, ピ...)'}
+              </span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveSubType('yoon')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors ${
+              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
                 activeSubType === 'yoon'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'bg-transparent text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'text-white'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              {activeType === 'hiragana'
-                ? 'যুক্তবর্ণ (Yōon 拗音 • きゃ, しゅ...)'
-                : 'যুক্তবর্ণ (Yōon 拗音 • キャ, シュ...)'}
+              {activeSubType === 'yoon' && (
+                <motion.div
+                  layoutId="activeKanaSubTypeIndicator"
+                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
+                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                />
+              )}
+              <span className="relative z-10">
+                {activeType === 'hiragana'
+                  ? 'যুক্তবর্ণ (Yōon 拗音 • きゃ, しゅ...)'
+                  : 'যুক্তবর্ণ (Yōon 拗音 • キャ, シュ...)'}
+              </span>
             </button>
           </div>
         </div>
 
         {/* Kana Syllabary Grid Display */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
-          {currentList.map((k) => {
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3.5">
+          {currentList.map((k, index) => {
             const isMastered = masteredList.includes(k.char);
             const isSelected = selectedKana.char === k.char;
 
             return (
-              <div
+              <motion.div
                 key={k.char}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: Math.min(index * 0.015, 0.3) }}
+                whileHover={{ y: -3, transition: { duration: 0.15 } }}
                 onClick={() => handleSelectKana(k)}
-                className={`relative group p-4 rounded-3xl cursor-pointer border transition-all duration-200 flex flex-col items-center justify-between text-center min-h-[140px] select-none active:scale-95 ${
+                className={`relative group p-4 rounded-3xl cursor-pointer border transition-all duration-200 flex flex-col items-center justify-between text-center min-h-[140px] select-none backdrop-blur-md active:scale-95 ${
                   isSelected
-                    ? 'bg-[#151528] border-rose-500 shadow-lg shadow-rose-500/20 ring-1 ring-rose-500'
+                    ? 'bg-[#151528]/95 border-rose-500 shadow-xl shadow-rose-500/20 ring-1 ring-rose-500'
                     : isMastered
-                    ? 'bg-[#0a0f18] border-emerald-500/30 hover:border-emerald-500/60'
-                    : 'bg-[#0c0c17] border-slate-800 hover:border-slate-700 hover:bg-[#111122]'
+                    ? 'bg-[#0a0f18]/90 border-emerald-500/40 hover:border-emerald-500/70 shadow-sm hover:shadow-xl hover:shadow-emerald-950/20'
+                    : 'bg-[#0c0c17]/80 border-slate-800/80 hover:border-slate-700 hover:bg-[#111122] shadow-sm hover:shadow-xl hover:shadow-slate-950/40'
                 }`}
               >
                 {/* Mastered Badge */}
@@ -343,7 +396,7 @@ export const KanaView: React.FC = () => {
 
                 {/* Main Character Glyph */}
                 <div className="w-full flex items-center justify-center pt-1">
-                  <span className="text-4xl sm:text-5xl font-black font-japanese text-white group-hover:scale-105 transition-transform">
+                  <span className="text-4xl sm:text-5xl font-black font-japanese text-white group-hover:scale-110 transition-transform duration-200">
                     {k.char}
                   </span>
                 </div>
@@ -365,97 +418,126 @@ export const KanaView: React.FC = () => {
                     e.stopPropagation();
                     speakJapanese(k.char, { rate: 0.85 });
                   }}
-                  className="absolute bottom-2 right-2 p-1 rounded-lg text-slate-500 hover:text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute bottom-2 right-2 p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
                   title="উচ্চারণ"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
                 </button>
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
         {/* Practice Modal / Interactive Engine Sheet */}
-        {isDetailModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn">
-            <div className="relative w-full max-w-4xl bg-[#0b0b14] border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-              
-              {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0d0d1a]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-rose-600/20 text-rose-400 font-black text-2xl font-japanese flex items-center justify-center border border-rose-500/30">
-                    {selectedKana.char}
+        <AnimatePresence>
+          {isDetailModalOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsDetailModalOpen(false)}
+              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-4xl bg-[#0b0b14] border border-slate-800/90 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+              >
+                
+                {/* Modal Header */}
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0d0d1a]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-600/20 text-rose-400 font-black text-2xl font-japanese flex items-center justify-center border border-rose-500/30">
+                      {selectedKana.char}
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white flex items-center gap-2">
+                        <span>{selectedKana.char}</span>
+                        <span className="text-xs font-normal text-slate-400 font-mono">
+                          ({selectedKana.romaji} • {selectedKana.banglaPhonetic})
+                        </span>
+                      </h3>
+                      <p className="text-[11px] text-slate-400">
+                        {selectedKana.strokes}টি স্ট্রোক • {selectedKana.type === 'hiragana' ? 'হিরাগানা' : 'কাতাকানা'} • ফ্রি আনলিমিটেড প্র্যাকটিস
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white flex items-center gap-2">
-                      <span>{selectedKana.char}</span>
-                      <span className="text-xs font-normal text-slate-400 font-mono">
-                        ({selectedKana.romaji} • {selectedKana.banglaPhonetic})
-                      </span>
-                    </h3>
-                    <p className="text-[11px] text-slate-400">
-                      {selectedKana.strokes}টি স্ট্রোক • {selectedKana.type === 'hiragana' ? 'হিরাগানা' : 'কাতাকানা'}
-                    </p>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
+                      className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-rose-400 transition-colors cursor-pointer"
+                      title="উচ্চারণ"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsDetailModalOpen(false)}
+                      className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
-                    className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-rose-400 transition-colors"
-                    title="উচ্চারণ"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                  </button>
+                {/* Mode Selector within Modal with sliding tabs */}
+                <div className="flex items-center justify-between px-6 pt-3 pb-2 border-b border-slate-800 bg-[#090912]">
+                  <div className="relative inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setActiveModalTab('guide')}
+                      className={`relative z-10 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                        activeModalTab === 'guide'
+                          ? 'text-white'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {activeModalTab === 'guide' && (
+                        <motion.div
+                          layoutId="activeModalTabIndicator"
+                          className="absolute inset-0 rounded-lg bg-rose-600 shadow-md shadow-rose-600/30"
+                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        />
+                      )}
+                      <span className="relative z-10">১. স্ট্রোক গাইড (Stroke Order Guide)</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveModalTab('draw')}
+                      className={`relative z-10 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                        activeModalTab === 'draw'
+                          ? 'text-white'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {activeModalTab === 'draw' && (
+                        <motion.div
+                          layoutId="activeModalTabIndicator"
+                          className="absolute inset-0 rounded-lg bg-emerald-600 shadow-md shadow-emerald-600/30"
+                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        />
+                      )}
+                      <span className="relative z-10">২. রাইটিং ল্যাব (Freehand Writing Lab)</span>
+                    </button>
+                  </div>
 
                   <button
                     type="button"
-                    onClick={() => setIsDetailModalOpen(false)}
-                    className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                    onClick={handleNextInSequence}
+                    className="hidden sm:flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
                   >
-                    <X className="w-4 h-4" />
+                    <span>পরবর্তী বর্ণ</span>
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-
-              {/* Mode Selector within Modal */}
-              <div className="flex items-center justify-between px-6 pt-3 pb-2 border-b border-slate-800 bg-[#090912]">
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModalTab('guide')}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                      activeModalTab === 'guide'
-                        ? 'bg-rose-600 text-white'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    ১. স্ট্রোক গাইড (Stroke Order Guide)
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveModalTab('draw')}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                      activeModalTab === 'draw'
-                        ? 'bg-emerald-600 text-white'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    ২. রাইটিং ল্যাব (Freehand Writing Lab)
-                  </button>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleNextInSequence}
-                  className="hidden sm:flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white transition-colors"
-                >
-                  <span>পরবর্তী বর্ণ</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
 
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-6">
@@ -594,9 +676,10 @@ export const KanaView: React.FC = () => {
                   <ArrowRight className="w-4 h-4 text-white" />
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
+      </AnimatePresence>
       </div>
     </div>
   );
