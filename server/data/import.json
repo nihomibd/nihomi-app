@@ -1,0 +1,43 @@
+[]
+[
+  {
+    "lesson_number": 2,
+    "content_type": "vocabulary",
+    "japanese_text": "これ",
+    "romaji": "kore",
+    "bangla_meaning": "এটা (কাছের বস্তু)",
+    "order_index": 1
+  },
+  {
+    "lesson_number": 2,
+    "content_type": "vocabulary",
+    "japanese_text": "それ",
+    "romaji": "sore",
+    "bangla_meaning": "ওটা (বস্তু)",
+    "order_index": 2
+  },
+  {
+    "lesson_number": 2,
+    "content_type": "vocabulary",
+    "japanese_text": "あれ",
+    "romaji": "are",
+    "bangla_meaning": "ঐটা (একটু দূরের বস্তু)",
+    "order_index": 3
+  },
+  {
+    "lesson_number": 2,
+    "content_type": "vocabulary",
+    "japanese_text": "ほん",
+    "romaji": "hon",
+    "bangla_meaning": "বই",
+    "order_index": 4
+  },
+  {
+    "lesson_number": 2,
+    "content_type": "vocabulary",
+    "japanese_text": "じしょ",
+    "romaji": "jisho",
+    "bangla_meaning": "অভিধান/ডিকশনারি",
+    "order_index": 5
+  }
+]

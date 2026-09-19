@@ -1,0 +1,170 @@
+[
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "わたし",
+    "romaji": "watashi",
+    "bangla_meaning": "আমি"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "わたしたち",
+    "romaji": "watashitachi",
+    "bangla_meaning": "আমরা"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "あなた",
+    "romaji": "anata",
+    "bangla_meaning": "আপনি/তুমি"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "あのひと",
+    "romaji": "ano hito",
+    "bangla_meaning": "ঐ ব্যক্তি"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "みなさん",
+    "romaji": "minasan",
+    "bangla_meaning": "আপনারা সকলে/ সুধিবৃন্দ"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "せんせい",
+    "romaji": "sensei",
+    "bangla_meaning": "শিক্ষক/প্রশিক্ষক"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "きょうし",
+    "romaji": "kyoushi",
+    "bangla_meaning": "শিক্ষক (পেশা হিসেবে)"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "がくせい",
+    "romaji": "gakusei",
+    "bangla_meaning": "ছাত্র/ছাত্রী"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "かいしゃいん",
+    "romaji": "kaishain",
+    "bangla_meaning": "কোম্পানীতে চাকুরীরত ব্যক্তি"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "しゃいん",
+    "romaji": "shain",
+    "bangla_meaning": "কোম্পানির কর্মী"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "ぎんこういん",
+    "romaji": "ginkouin",
+    "bangla_meaning": "ব্যাংকে চাকুরীরত ব্যক্তি"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "いしゃ",
+    "romaji": "isha",
+    "bangla_meaning": "ডাক্তার"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "けんきゅうしゃ",
+    "romaji": "kenkyusha",
+    "bangla_meaning": "গবেষক"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "エンジニア",
+    "romaji": "enjinia",
+    "bangla_meaning": "প্রকৌশলী"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "だいがく",
+    "romaji": "daigaku",
+    "bangla_meaning": "বিশ্ববিদ্যালয়"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "びょういん",
+    "romaji": "byouin",
+    "bangla_meaning": "হাসপাতাল"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "でんき",
+    "romaji": "denki",
+    "bangla_meaning": "বিদ্যুৎ"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "だれ",
+    "romaji": "dare",
+    "bangla_meaning": "কে"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "なんさい",
+    "romaji": "nan-sai",
+    "bangla_meaning": "বয়স কত"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "はい",
+    "romaji": "hai",
+    "bangla_meaning": "জি/হ্যাঁ"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "いいえ",
+    "romaji": "iie",
+    "bangla_meaning": "না"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "はじめまして",
+    "romaji": "hajimemashite",
+    "bangla_meaning": "আপনার সাথে প্রথমবারের মত দেখা হলো"
+  },
+  {
+    "content_type": "vocabulary",
+    "japanese_text": "どうぞよろしく",
+    "romaji": "douzo yoroshiku",
+    "bangla_meaning": "আপনার সাথে পরিচিত হওয়ায় আমি আনন্দিত"
+  },
+  {
+    "content_type": "kanji",
+    "japanese_text": "私",
+    "romaji": "watashi",
+    "bangla_meaning": "আমি"
+  },
+  {
+    "content_type": "kanji",
+    "japanese_text": "人",
+    "romaji": "hito / jin",
+    "bangla_meaning": "মানুষ / ব্যক্তি"
+  },
+  {
+    "content_type": "kanji",
+    "japanese_text": "先生",
+    "romaji": "sensei",
+    "bangla_meaning": "শিক্ষক"
+  },
+  {
+    "content_type": "kanji",
+    "japanese_text": "学生",
+    "romaji": "gakusei",
+    "bangla_meaning": "শিক্ষার্থী / ছাত্র"
+  },
+  {
+    "content_type": "kanji",
+    "japanese_text": "会社員",
+    "romaji": "kaishain",
+    "bangla_meaning": "কোম্পানির কর্মচারী"
+  }
+]

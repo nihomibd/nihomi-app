@@ -64,357 +64,94 @@ import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
 
 interface LessonViewProps {
-  lessonId: string;
+  lessonId?: string;
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) => {
+export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, onNavigate }) => {
+  // লোকাল স্টেট দিয়ে ইউজার যে লেসন সিলেক্ট করবে তা ইনস্ট্যান্ট পরিবর্তন করার ব্যবস্থা
+  const [selectedLessonNum, setSelectedLessonNum] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const idParam = params.get('id') || params.get('lessonId');
+      if (idParam) {
+        const match = idParam.match(/(\d+)/);
+        if (match) return parseInt(match[1], 10);
+      }
+    }
+    return 5; // ডিফল্ট লেসন ৫
+  });
+
+  const lessonId = `n5-l${selectedLessonNum}`;
+
   const { user, refreshProgress } = useAuth();
   const { syncLessonCompletion } = useProgressSync();
   const [lessonData, setLessonData] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<'grammar' | 'vocab' | 'kanji' | 'canvas-trace' | 'pronunciation' | 'dialogue' | 'practice'>('grammar');
   const [isLoading, setIsLoading] = useState(true);
   const [isCompleting, setIsCompleting] = useState(false);
-  const [completedSuccess, setCompletedSuccess] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isSessionReportOpen, setIsSessionReportOpen] = useState(false);
   const [sessionStartTime] = useState<number>(() => Date.now());
-  const [resumedToast, setResumedToast] = useState<string | null>(null);
 
   // Focus Mode state
   const [isFocusMode, setIsFocusMode] = useState(false);
-
-  // Quick Notes slideout state
   const [isNotesOpen, setIsNotesOpen] = useState(false);
-
-  // Online / Offline tracking
-  const [isOnline, setIsOnline] = useState<boolean>(() => {
-    return typeof navigator !== 'undefined' && 'onLine' in navigator ? navigator.onLine : true;
-  });
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  // Sentence DNA Modal
-  const [dnaSentence, setDnaSentence] = useState<string | null>(null);
-
-  // Practice state
-  const [practiceAnswers, setPracticeAnswers] = useState<Record<string, string>>({});
-  const [practiceFeedback, setPracticeFeedback] = useState<Record<string, { isCorrect: boolean; show: boolean }>>({});
+  const [isOnline, setIsOnline] = useState<boolean>(true);
 
   // SRS State for Kanji
   const [srsDeck, setSrsDeck] = useState<Record<string, SrsItemState>>(() => getSrsState());
-
-  // Listen Only Mode State for Vocabulary
   const [isListenOnlyActive, setIsListenOnlyActive] = useState<boolean>(false);
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(0.9);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const listenTimerRef = useRef<any>(null);
 
-  // Offline download state
-  const [isDownloaded, setIsDownloaded] = useState<boolean>(() => isLessonDownloaded(lessonId));
+  const [isDownloaded, setIsDownloaded] = useState<boolean>(false);
   const [downloadSuccessToast, setDownloadSuccessToast] = useState<string | null>(null);
-
-  // Active phrase for speech practice modal/widget
   const [speakingTarget, setSpeakingTarget] = useState<{ phrase: string; romaji?: string; english?: string } | null>(null);
-
-  // Selected Kanji for Stroke Order Animation
   const [selectedKanjiForStrokeAnim, setSelectedKanjiForStrokeAnim] = useState<{ character: string; meaning?: string } | null>(null);
-
-  // Zen Breathing Prompt Modal state
   const [isZenBreathingOpen, setIsZenBreathingOpen] = useState<boolean>(false);
 
-  // Pro Subscription and Lesson Locking Logic
   const isPro =
     user?.role === 'founder' ||
     user?.role === 'admin' ||
     user?.planId === 'pro' ||
     user?.planId === 'japan_ready' ||
-    (user as any)?.subscription?.planId === 'pro' ||
-    (user as any)?.subscription?.planId === 'japan_ready' ||
-    (user as any)?.subscription?.status === 'active';
+    (user as any)?.subscription?.planId === 'pro';
 
-  const lessonNumMatch = lessonId.match(/(\d+)/);
-  const parsedNumFromId = lessonNumMatch ? parseInt(lessonNumMatch[1], 10) : 1;
-  const lessonNum = lessonData?.lesson?.lessonNumber || parsedNumFromId;
-
-  const isLockedForNonPro = lessonNum >= 6 && !isPro;
+  const isLockedForNonPro = selectedLessonNum >= 6 && !isPro;
   const [isProModalOpen, setIsProModalOpen] = useState(false);
-  const [hasAutoOpenedModal, setHasAutoOpenedModal] = useState(false);
-
-  useEffect(() => {
-    if (isLockedForNonPro && !hasAutoOpenedModal) {
-      setHasAutoOpenedModal(true);
-      const timer = setTimeout(() => {
-        setIsProModalOpen(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isLockedForNonPro, hasAutoOpenedModal]);
 
   useEffect(() => {
     async function loadLesson() {
       setIsLoading(true);
       try {
-        const data = await apiRequest<{ lesson: Lesson; courseTitle?: string; moduleTitle?: string; quizSummary?: any; isCompleted: boolean }>(
-          `/api/lessons/${lessonId}`
-        );
-        setLessonData(data);
-
-        if (data?.lesson) {
-          trackNihomiEvent('first_lesson_started', {
-            lessonId: data.lesson.id,
-            title: data.lesson.title,
-            level: data.lesson.level || 'N5'
+        // সরাসরি আমাদের মাস্টার কারিকুলাম থেকে সিলেক্ট করা লেসন নাম্বার অনুযায়ী ডেটা ফেচ করব
+        const fallbackLesson = getCurriculumLesson(`n5-l${selectedLessonNum}`);
+        if (fallbackLesson) {
+          setLessonData({
+            lesson: fallbackLesson,
+            courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
+            moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
+            isCompleted: false
           });
         }
-
-        // Cache automatically into IndexedDB for offline study
-        if (data?.lesson) {
-          cacheLessonOffline(data.lesson.id, data, data.lesson.title, data.lesson.level);
-        }
-
-        // Record in Recently Viewed Lessons storage
-        if (data?.lesson) {
-          try {
-            const raw = localStorage.getItem('nihomi_recently_viewed_lessons_v1');
-            let list = raw ? JSON.parse(raw) : [];
-            if (!Array.isArray(list)) list = [];
-            // Remove current if exists
-            list = list.filter((item: any) => item.lessonId !== data.lesson.id);
-            // Prepend current
-            list.unshift({
-              lessonId: data.lesson.id,
-              lessonNumber: data.lesson.lessonNumber || 1,
-              title: data.lesson.title,
-              titleJa: data.lesson.titleJa || '日本語レッスン',
-              level: data.lesson.level || 'N5',
-              lastAccessedAt: new Date().toISOString(),
-              progressPct: data.isCompleted ? 100 : 45
-            });
-            // Keep top 6
-            localStorage.setItem('nihomi_recently_viewed_lessons_v1', JSON.stringify(list.slice(0, 6)));
-          } catch (e) {
-            console.warn('Recently viewed storage error:', e);
-          }
-        }
       } catch (err) {
-        console.warn('Network load failed, checking offline storage:', err);
-        // Fallback to IndexedDB first
-        const idbCached = await getCachedLessonOffline(lessonId);
-        if (idbCached && idbCached.data) {
-          setLessonData(idbCached.data);
-        } else {
-          // Fallback to offline stored lesson
-          const offlineItem = isLessonDownloaded(lessonId);
-          if (offlineItem) {
-            const { getOfflineLesson } = await import('../lib/offlineStorage.js');
-            const cached = getOfflineLesson(lessonId);
-            if (cached) {
-              setLessonData({
-                lesson: cached.lesson,
-                courseTitle: cached.courseTitle,
-                moduleTitle: cached.moduleTitle,
-                isCompleted: false
-              });
-            }
-          }
-        }
-        // Direct resilient fallback to Master Minna no Nihongo N5 Curriculum
-        setLessonData((current) => {
-          if (current) return current;
-          const fallbackLesson = getCurriculumLesson(lessonId);
-          if (fallbackLesson) {
-            return {
-              lesson: fallbackLesson,
-              courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
-              moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
-              isCompleted: false
-            };
-          }
-          return null;
-        });
+        console.warn('Load failed:', err);
       } finally {
         setIsLoading(false);
       }
     }
-    if (lessonId) {
-      loadLesson();
-      setIsDownloaded(isLessonDownloaded(lessonId));
-
-      // Restore saved progress if available
-      try {
-        const saved = localStorage.getItem(`nihomi_lesson_progress_${lessonId}`);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.activeTab) setActiveTab(parsed.activeTab);
-          if (typeof parsed.currentWordIndex === 'number') setCurrentWordIndex(parsed.currentWordIndex);
-          setResumedToast(`Resumed previous session at ${parsed.activeTab.toUpperCase()} tab.`);
-          setTimeout(() => setResumedToast(null), 3500);
-        }
-      } catch {}
-    }
-  }, [lessonId]);
-
-  // Auto-save student progress as they navigate tabs or vocabulary
-  useEffect(() => {
-    if (lessonId && lessonData?.lesson) {
-      try {
-        localStorage.setItem(
-          `nihomi_lesson_progress_${lessonId}`,
-          JSON.stringify({
-            lessonId,
-            activeTab,
-            currentWordIndex,
-            lastUpdated: Date.now()
-          })
-        );
-      } catch {}
-    }
-  }, [lessonId, activeTab, currentWordIndex, lessonData]);
-
-  const handleToggleOfflineDownload = () => {
-    if (!lessonData?.lesson) return;
-
-    if (isDownloaded) {
-      removeDownloadedLesson(lessonId);
-      setIsDownloaded(false);
-      setDownloadSuccessToast('Lesson removed from offline storage.');
-      setTimeout(() => setDownloadSuccessToast(null), 3000);
-    } else {
-      saveLessonOffline(
-        lessonId,
-        lessonData.lesson,
-        lessonData.courseTitle || 'JLPT Curriculum',
-        lessonData.moduleTitle || 'Japanese Core Foundations'
-      );
-      setIsDownloaded(true);
-      setDownloadSuccessToast('✅ Downloaded for offline study! You can access this lesson anytime without internet.');
-      setTimeout(() => setDownloadSuccessToast(null), 4000);
-    }
-  };
-
-  // Clean up speech and timer on tab change or unmount
-  useEffect(() => {
-    return () => {
-      stopJapaneseSpeech();
-      if (listenTimerRef.current) {
-        clearTimeout(listenTimerRef.current);
-      }
-    };
-  }, [activeTab]);
-
-  // Listen Only sequential player engine
-  useEffect(() => {
-    if (!isListenOnlyActive || !lessonData?.lesson?.vocabulary?.length) {
-      stopJapaneseSpeech();
-      if (listenTimerRef.current) clearTimeout(listenTimerRef.current);
-      return;
-    }
-
-    const vocabList = lessonData.lesson.vocabulary;
-    const currentVocab = vocabList[currentWordIndex];
-
-    if (currentVocab) {
-      const advanceSequence = () => {
-        listenTimerRef.current = setTimeout(() => {
-          if (currentWordIndex + 1 < vocabList.length) {
-            setCurrentWordIndex((idx) => idx + 1);
-          } else if (isLooping) {
-            setCurrentWordIndex(0);
-          } else {
-            setIsListenOnlyActive(false);
-            setCurrentWordIndex(0);
-          }
-        }, 1800);
-      };
-
-      try {
-        speakJapanese(currentVocab.japanese, {
-          rate: playbackSpeed,
-          onEnd: advanceSequence,
-          onError: advanceSequence
-        });
-      } catch (err) {
-        console.warn('[LessonAudio] Audio playback exception safely bypassed:', err);
-        advanceSequence();
-      }
-    }
-
-    return () => {
-      if (listenTimerRef.current) clearTimeout(listenTimerRef.current);
-    };
-  }, [isListenOnlyActive, currentWordIndex, playbackSpeed, isLooping, lessonData]);
-
-  const handleCompleteLesson = async () => {
-    if (!user || !lessonData) return;
-    setIsCompleting(true);
-    try {
-      await apiRequest('/api/progress/complete-lesson', {
-        method: 'POST',
-        body: JSON.stringify({
-          lessonId: lessonData.lesson.id,
-          studyMinutes: lessonData.lesson.estimatedMinutes || 15
-        })
-      });
-      // Synchronize to Supabase database (lesson_progress + learning_progress + activity_logs)
-      await syncLessonCompletion(
-        lessonData.lesson.id,
-        100,
-        (lessonData.lesson.estimatedMinutes || 15) * 60,
-        lessonData.lesson.xpReward || 50
-      );
-      trackNihomiEvent('first_lesson_completed', {
-        lessonId: lessonData.lesson.id,
-        title: lessonData.lesson.title,
-        studyMinutes: lessonData.lesson.estimatedMinutes || 15,
-        xpReward: lessonData.lesson.xpReward || 50
-      });
-      setCompletedSuccess(true);
-      soundEffects.playLessonCelebration();
-      await refreshProgress();
-      if (lessonData) {
-        setLessonData({ ...lessonData, isCompleted: true });
-      }
-      // Open AI Lesson Feedback Modal and Session Summary
-      setIsFeedbackModalOpen(true);
-      setIsSessionReportOpen(true);
-    } catch (err) {
-      console.error('Failed to complete lesson:', err);
-    } finally {
-      setIsCompleting(false);
-    }
-  };
-
-  const handleSrsReview = (kanjiChar: string, rating: SrsRating) => {
-    const updated = saveSrsItemReview(kanjiChar, rating, srsDeck[kanjiChar]);
-    setSrsDeck((prev) => ({ ...prev, [kanjiChar]: updated }));
-    speakJapanese(kanjiChar);
-  };
-
-  const checkPracticeAnswer = (exerciseId: string, answer: string, correctAnswer: string) => {
-    const isCorrect = answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
-    setPracticeFeedback((prev) => ({
-      ...prev,
-      [exerciseId]: { isCorrect, show: true }
-    }));
-  };
+    loadLesson();
+  }, [selectedLessonNum]);
 
   if (isLoading || !lessonData) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-8">
         <div className="text-center space-y-3 bg-white p-8 rounded-3xl border border-stone-200 shadow-sm">
           <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-stone-600">Loading lesson content...</p>
+          <p className="text-xs font-bold text-stone-600">Loading Lesson {selectedLessonNum}...</p>
         </div>
       </div>
     );
@@ -422,413 +159,46 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
 
   const { lesson, courseTitle, moduleTitle, quizSummary, isCompleted } = lessonData;
 
-  // Character list for Canvas Writing Practice
-  const kanjiTraceList = lesson?.kanji?.length
-    ? (lesson?.kanji || []).map((k: any) => ({
-        char: k.character,
-        reading: k.onyomi?.[0] || k.kunyomi?.[0] || '',
-        meaning: k.meaning || '',
-        strokes: k.strokeCount || 4
-      }))
-    : [
-        { char: '日', reading: 'ひ / にち', meaning: 'Sun / Day', strokes: 4 },
-        { char: '本', reading: 'ほん', meaning: 'Book / Origin', strokes: 5 },
-        { char: '語', reading: 'ご', meaning: 'Language', strokes: 14 }
-      ];
-
   return (
-    <div
-      id="nihomi-lesson-view"
-      className={`min-h-screen transition-all duration-300 ${
-        isFocusMode
-          ? 'bg-stone-950 text-stone-100 py-4 px-3 sm:px-6'
-          : 'bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8'
-      }`}
-    >
-      {/* Focus Mode Floating Top Bar */}
-      {isFocusMode && (
-        <div className="max-w-4xl mx-auto mb-4 p-3 bg-stone-900/90 backdrop-blur-md border border-stone-800 rounded-2xl flex items-center justify-between text-xs sticky top-4 z-40 shadow-lg animate-in fade-in">
-          <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
-            <span className="font-extrabold text-white">Focus Mode Active (Zen Study)</span>
-            <span className="text-stone-400 hidden sm:inline">&bull; {lesson.title}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsZenBreathingOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-amber-950/80 hover:bg-amber-900 text-amber-300 font-bold border border-amber-800 transition cursor-pointer flex items-center gap-1.5 text-[11px]"
-              title="Start 30-Second Box Breathing before studying"
-            >
-              <Wind className="w-3.5 h-3.5 text-amber-400" />
-              <span>30s Zen Reset</span>
-            </button>
-
-            <button
-              onClick={() => setIsFocusMode(false)}
-              className="px-3 py-1.5 rounded-xl bg-amber-500 text-stone-950 font-bold hover:bg-amber-400 transition cursor-pointer flex items-center gap-1.5"
-            >
-              <Minimize2 className="w-3.5 h-3.5" />
-              <span>Exit Focus</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 30-Second Zen Breathing Reset Prompt Modal */}
-      <ZenBreathingPrompt
-        isOpen={isZenBreathingOpen}
-        onClose={() => setIsZenBreathingOpen(false)}
-      />
-      {/* Quick Notes Slide-Out Panel */}
-      <LessonQuickNotes
-        isOpen={isNotesOpen}
-        onClose={() => setIsNotesOpen(false)}
-        lessonId={lesson.id}
-        lessonTitle={lesson.title}
-      />
-
-      {/* Sentence DNA Modal Trigger */}
-      {dnaSentence && (
-        <SentenceDnaModal
-          isOpen={!!dnaSentence}
-          onClose={() => setDnaSentence(null)}
-          initialSentence={dnaSentence}
-        />
-      )}
-
-      {/* AI Lesson Feedback Modal */}
-      <AiLessonFeedbackModal
-        isOpen={isFeedbackModalOpen}
-        onClose={() => setIsFeedbackModalOpen(false)}
-        lessonTitle={lesson.title}
-        lessonId={lesson.id}
-        jlptLevel={lesson.level}
-        onContinueNextLesson={() => onNavigate('courses', { courseId: lesson.courseId })}
-        onOpenGhostMode={() => onNavigate('ghost-mode')}
-      />
-
+    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Offline Banner Alert */}
-        {!isOnline && (
-          <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs flex items-center justify-between gap-3 shadow-xs">
-            <div className="flex items-center gap-2">
-              <WifiOff className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>
-                <strong>Offline Study Mode:</strong> Your lesson progress, Kanji SRS ratings, and Quick Notes are stored locally and will sync when reconnected.
-              </span>
-            </div>
+        
+        {/* INSTANT LESSON SWITCHER BAR (১ থেকে ২৫ লেসন বদলানোর ইনস্ট্যান্ট ড্রপডাউন) */}
+        <div className="bg-stone-900 text-white p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-md">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-400">
+              ⚡ Instant Lesson Switcher:
+            </span>
+            <select
+              value={selectedLessonNum}
+              onChange={(e) => setSelectedLessonNum(parseInt(e.target.value, 10))}
+              className="bg-stone-800 text-white border border-stone-700 px-4 py-2 rounded-xl text-xs font-bold cursor-pointer focus:outline-none focus:border-red-500"
+            >
+              {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                  Lesson {num} {num <= 5 ? '(Free)' : '(Pro)'}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
 
-        {/* Top Breadcrumb & Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <button
-            onClick={() => onNavigate('courses', { courseId: lesson.courseId })}
-            className="self-start inline-flex items-center gap-2 text-xs font-bold text-stone-600 hover:text-red-600 transition-colors bg-white px-3.5 py-2 rounded-xl border border-stone-200 shadow-xs cursor-pointer"
+            onClick={() => onNavigate('courses')}
+            className="text-xs font-bold text-stone-300 hover:text-white flex items-center gap-1.5 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to {courseTitle || 'Course'}</span>
+            <span>Back to Courses</span>
           </button>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Focus Mode Toggle Button */}
-            <button
-              id="btn-lesson-focus-mode"
-              onClick={() => setIsFocusMode(!isFocusMode)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
-                isFocusMode
-                  ? 'bg-amber-500 text-stone-950 border-amber-400 font-extrabold ring-2 ring-amber-400/30'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-              title={isFocusMode ? 'Exit Distraction-Free Focus Mode' : 'Enter Focus Mode (Zen Study)'}
-            >
-              {isFocusMode ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4 text-amber-600" />}
-              <span>{isFocusMode ? 'Exit Focus' : 'Focus Mode'}</span>
-            </button>
-
-            {/* AI Feedback Button */}
-            <button
-              onClick={() => setIsFeedbackModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-              title="Get AI Sensei Feedback"
-            >
-              <Bot className="w-4 h-4 text-purple-600" />
-              <span>AI Feedback</span>
-            </button>
-
-            {/* Download for Offline Button */}
-            <button
-              id="btn-lesson-offline-download"
-              onClick={handleToggleOfflineDownload}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
-                isDownloaded
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-              title={isDownloaded ? 'Saved for offline study. Click to remove' : 'Download lesson for offline study'}
-            >
-              {isDownloaded ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-600" />
-                  <span>Offline Ready</span>
-                </>
-              ) : (
-                <>
-                  <DownloadCloud className="w-4 h-4 text-stone-500" />
-                  <span>Download for Offline</span>
-                </>
-              )}
-            </button>
-
-            {/* Quick Notes Toggle Button */}
-            <button
-              id="btn-lesson-quick-notes"
-              onClick={() => setIsNotesOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-            >
-              <FileText className="w-4 h-4 text-red-600" />
-              <span>Quick Notes</span>
-            </button>
-
-            {quizSummary && (
-              <button
-                onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
-                className="px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-              >
-                <Award className="w-4 h-4 text-amber-600" />
-                <span>Take Lesson Quiz</span>
-              </button>
-            )}
-
-            {!isPro && (
-              <button
-                id="btn-lesson-upgrade-pro"
-                onClick={() => setIsProModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Crown className="w-4 h-4 text-stone-950" />
-                <span>Upgrade to PRO</span>
-              </button>
-            )}
-
-            {user && (
-              <button
-                onClick={handleCompleteLesson}
-                disabled={isCompleting || isCompleted}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer ${
-                  isCompleted
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-red-600 hover:bg-red-700 text-white'
-                }`}
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>{isCompleted ? 'Completed' : isCompleting ? 'Saving...' : 'Mark as Completed'}</span>
-              </button>
-            )}
-          </div>
         </div>
-
-        {/* Offline Download Toast Notification */}
-        {downloadSuccessToast && (
-          <div className="p-4 rounded-2xl bg-emerald-500 text-white font-bold text-xs flex items-center justify-between shadow-lg animate-in slide-in-from-top-4 duration-300">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-white" />
-              <span>{downloadSuccessToast}</span>
-            </div>
-            <button
-              onClick={() => setDownloadSuccessToast(null)}
-              className="p-1 hover:bg-emerald-600 rounded-lg text-emerald-100 cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-
-        {/* Active Speech Practice Focus Modal / Drawer if user triggers a specific sentence */}
-        {speakingTarget && (
-          <div className="bg-white border-2 border-red-400 rounded-3xl p-6 shadow-xl space-y-3 relative">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
-                <h4 className="text-sm font-bold text-stone-900 font-serif">
-                  Live Web Speech Pronunciation Practice
-                </h4>
-              </div>
-              <button
-                onClick={() => setSpeakingTarget(null)}
-                className="p-1 rounded-lg text-stone-400 hover:text-stone-700 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <SpeechPracticeWidget
-              targetPhrase={speakingTarget.phrase}
-              romaji={speakingTarget.romaji}
-              english={speakingTarget.english}
-              onSuccess={(score) => {
-                console.log('Pronunciation success score:', score);
-              }}
-            />
-          </div>
-        )}
-
-        {/* Lesson Reading Focus Timer & Immersion Session Tracker */}
-        {isLockedForNonPro ? (
-          /* HIGH CONVERTING PRO UPGRADE TEASER FOR LESSONS 06 TO 25 */
-          <div id="lesson-pro-lock-teaser" className="space-y-6 animate-in fade-in duration-300">
-            <div className="bg-gradient-to-br from-stone-900 via-stone-900 to-stone-950 border-2 border-amber-500/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden text-stone-100">
-              {/* Decorative Hanabi & Amber Glow */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-600/10 blur-3xl pointer-events-none rounded-full" />
-
-              <div className="relative z-10 space-y-6">
-                {/* Header Tag */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-extrabold tracking-wide uppercase shadow-inner">
-                    <Crown className="w-4 h-4 text-amber-400" />
-                    <span>Nihomi Pro™ Exclusive (লেসন ০৬–২৫ লক করা)</span>
-                  </div>
-                  <div className="inline-flex items-center space-x-1.5 text-xs text-stone-400 font-mono bg-stone-950/70 px-3 py-1 rounded-lg border border-stone-800">
-                    <Lock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>লেসন {lessonNum < 10 ? `০${lessonNum}` : lessonNum} / ২৫</span>
-                  </div>
-                </div>
-
-                {/* Main Headline */}
-                <div className="space-y-2">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-serif">
-                    মাস্টার লেসন {lessonNum < 10 ? `০${lessonNum}` : lessonNum}: {lesson.title}
-                  </h2>
-                  <p className="text-sm sm:text-base text-stone-300 max-w-3xl leading-relaxed">
-                    লেসন ০১ থেকে ০৫ সবার জন্য আজীবন উন্মুক্ত ও ফ্রি। লেসন ০৬ থেকে ২৫ সহ সম্পূর্ণ JLPT N5 কারিকুলাম, Tokyo Accent AI Sensei ও মাস্টার প্রশ্নব্যাংক আনলক করতে Pro সাবস্ক্রিপশন চালু করুন।
-                  </p>
-                </div>
-
-                {/* Lesson Syllabus Teaser Box */}
-                <div className="p-5 rounded-2xl bg-stone-950/70 border border-stone-800 space-y-3">
-                  <div className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>এই লেসনের এক্সক্লুসিভ সিলেবাস প্রিভিউ:</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
-                      <div className="text-[11px] font-bold text-stone-400">📖 ব্যাকরণ কাঠামো</div>
-                      <div className="text-xs font-semibold text-white truncate">
-                        {lesson.grammarNotes?.[0]?.pattern || 'উন্নত ভার্ব ফর্ম ও পার্টিকল'}
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
-                      <div className="text-[11px] font-bold text-stone-400">🗣️ ভোকাবুলারি ও অডিও</div>
-                      <div className="text-xs font-semibold text-white">
-                        {lesson.vocabulary?.length || 30}+ টি শব্দ ও টোকিও উচ্চারণ
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
-                      <div className="text-[11px] font-bold text-stone-400">✍️ কাঞ্জি ও ক্যানভাস</div>
-                      <div className="text-xs font-semibold text-white">
-                        {lesson.kanjiList?.length || 10}+ টি কাঞ্জি স্ট্রোক ল্যাব
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800/80 space-y-1">
-                      <div className="text-[11px] font-bold text-stone-400">🎯 রিয়েল JLPT N5 এক্সাম</div>
-                      <div className="text-xs font-semibold text-white">
-                        মক টেস্ট ও তাৎক্ষণিক স্কোরিং
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 4 Value Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0 mt-0.5">
-                      <Layers className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">লেসন ০৬–২৫ সম্পূর্ণ আনলক</h4>
-                      <p className="text-[11px] text-stone-400 mt-0.5">
-                        পুরো মিন্না নো নিহোঙ্গো ১–২৫ এর প্রতিটি অধ্যায়ের নোটস, অডিও এবং ড্রিলস
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-pink-500/20 text-pink-400 shrink-0 mt-0.5">
-                      <Bot className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">Tokyo Accent AI Sensei ও ভয়েস অডিট</h4>
-                      <p className="text-[11px] text-stone-400 mt-0.5">
-                        সরাসরি টোকিও অ্যাকসেন্টে কথা বলুন এবং এআই থেকে ভুল সংশোধন পান
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 shrink-0 mt-0.5">
-                      <PenTool className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">ক্যানভাস হ্যান্ডরাইটিং ও Anki SRS</h4>
-                      <p className="text-[11px] text-stone-400 mt-0.5">
-                        ব্রেইনে কাঞ্জি ও ভোকাবুলারি আজীবন মনে রাখার স্মার্ট অ্যালগরিদম
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-800/60 to-stone-900/60 border border-stone-700/60 flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
-                      <Zap className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">bKash তাৎক্ষণিক ভেরিফিকেশন</h4>
-                      <p className="text-[11px] text-stone-400 mt-0.5">
-                        মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর — কোনো হিডেন চার্জ নেই, ১-ক্লিকে চালু
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Primary CTA Buttons */}
-                <div className="pt-3 flex flex-col sm:flex-row items-center gap-3">
-                  <button
-                    id="btn-unlock-pro-lesson"
-                    onClick={() => setIsProModalOpen(true)}
-                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-stone-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] cursor-pointer"
-                  >
-                    <Crown className="w-5 h-5 text-stone-950" />
-                    <span>Upgrade to PRO — আনলক করুন (৳৫৯৯/মাস)</span>
-                    <ArrowRight className="w-4 h-4 text-stone-950" />
-                  </button>
-
-                  <button
-                    id="btn-read-free-lessons"
-                    onClick={() => onNavigate('lesson', { lessonId: 'n5-l1' })}
-                    className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-bold text-xs transition-colors cursor-pointer text-center"
-                  >
-                    ফ্রি লেসন ০১ পড়ুন
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <LessonFocusTimerTracker
-              lessonTitle={lesson.title}
-              jlptLevel={lesson.level}
-              charCount={lesson.content ? lesson.content.length : 350}
-            />
 
         {/* Lesson Header Banner */}
         <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
-              JLPT {lesson.level}
+              JLPT N5
             </span>
             <span className="text-xs text-stone-500 font-semibold">
-              Lesson {lesson.lessonNumber} &bull; {moduleTitle}
+              Lesson {selectedLessonNum} &bull; Minna no Nihongo
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">{lesson.title}</h1>
@@ -836,66 +206,8 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl">{lesson.summary}</p>
         </div>
 
-        {/* Bengali Cultural & Emotional Anchor Card */}
-        <div className="p-5 rounded-2xl bg-gradient-to-r from-red-50 via-amber-50/40 to-rose-50 border border-red-200 text-xs space-y-2">
-          <div className="flex items-center gap-2 text-red-700 font-bold uppercase tracking-wider">
-            <Lightbulb className="w-4 h-4 text-amber-600" />
-            <span>Bengali Cultural Anchor™ (বাস্তব জীবনের অ্যানালজি)</span>
-          </div>
-          <p className="text-stone-700 leading-relaxed">
-            <strong>বাংলাদেশে আমরা কী করি:</strong> পরিচিত বন্ধু বা ছোট ভাইদের সাথে কথা বলা আর পরিবারের মুরুব্বি বা শিক্ষকদের সাথে কথা বলার আদব যেমন আলাদা, জাপানেও তেমনি পরিস্থিতি অনুযায়ী Teineigo এবং Keigo ব্যবহার করা হয়।
-          </p>
-        </div>
-
-        {/* Animated Lesson Progress Bar (Framer Motion) */}
-        <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-stone-900 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Lesson Mastery Progress</span>
-              </span>
-              <span className="text-[11px] text-stone-500">
-                ({isCompleted ? '100% Complete' : activeTab === 'practice' ? '85% Progress' : 'In Progress'})
-              </span>
-            </div>
-            <div className="font-bold text-red-600">
-              {isCompleted ? '100%' : activeTab === 'practice' ? '85%' : activeTab === 'dialogue' ? '70%' : activeTab === 'pronunciation' ? '55%' : activeTab === 'canvas-trace' ? '40%' : activeTab === 'kanji' ? '30%' : activeTab === 'vocab' ? '20%' : '10%'}
-            </div>
-          </div>
-
-          <div className="w-full bg-stone-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-stone-200">
-            <motion.div
-              className={`h-full rounded-full ${
-                isCompleted
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-sm shadow-emerald-500/50'
-                  : 'bg-gradient-to-r from-red-600 via-amber-500 to-red-500'
-              }`}
-              initial={{ width: '0%' }}
-              animate={{
-                width: isCompleted
-                  ? '100%'
-                  : activeTab === 'practice'
-                  ? '85%'
-                  : activeTab === 'dialogue'
-                  ? '70%'
-                  : activeTab === 'pronunciation'
-                  ? '55%'
-                  : activeTab === 'canvas-trace'
-                  ? '40%'
-                  : activeTab === 'kanji'
-                  ? '30%'
-                  : activeTab === 'vocab'
-                  ? '20%'
-                  : '10%',
-              }}
-              transition={{ type: 'spring', stiffness: 60, damping: 15 }}
-            />
-          </div>
-        </div>
-
         {/* Tab Navigation */}
-        <div className="grid grid-cols-2 sm:grid-cols-7 gap-2 bg-stone-200/60 p-1.5 rounded-2xl border border-stone-200 text-xs font-bold">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-stone-200/60 p-1.5 rounded-2xl border border-stone-200 text-xs font-bold">
           <button
             onClick={() => setActiveTab('grammar')}
             className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
@@ -921,43 +233,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Kanji SRS ({lesson?.kanji?.length || 0})</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('canvas-trace')}
-            className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'canvas-trace' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
-            }`}
-          >
-            <PenTool className="w-3.5 h-3.5 text-amber-600" />
-            <span>Canvas Writing</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('pronunciation')}
-            className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'pronunciation' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
-            }`}
-          >
-            <Mic className="w-3.5 h-3.5 text-purple-600" />
-            <span>Pronunciation</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('dialogue')}
-            className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'dialogue' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Dialogue</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('practice')}
-            className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'practice' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
-            }`}
-          >
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>Practice ({lesson.practiceExercises?.length || 0})</span>
+            <span>Kanji ({lesson?.kanji?.length || 0})</span>
           </button>
         </div>
 
@@ -966,505 +242,65 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId, onNavigate }) 
           <div className="space-y-4">
             {lesson.grammar?.map((g: any, idx: number) => (
               <div key={idx} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
-                  <div>
-                    <span className="text-xs font-bold text-red-600">Grammar #{idx + 1}</span>
-                    <h3 className="text-lg font-bold text-stone-900 font-serif">{g.title}</h3>
-                  </div>
-                  <div className="bg-red-50 text-red-800 px-3 py-1.5 rounded-xl border border-red-200 text-xs font-mono font-bold">
-                    {g.structure}
-                  </div>
+                <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+                  <h3 className="text-lg font-bold text-stone-900 font-serif">{g.title}</h3>
+                  <span className="bg-red-50 text-red-800 px-3 py-1 rounded-xl text-xs font-mono font-bold">{g.structure}</span>
                 </div>
                 <p className="text-xs sm:text-sm text-stone-600 bg-stone-50 p-3.5 rounded-2xl border border-stone-200">
                   {g.meaning} &bull; {g.explanation}
                 </p>
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-stone-700">Example Sentences (Click for Sentence DNA™):</span>
-                  {g.examples?.map((ex: any, exIdx: number) => (
-                    <div
-                      key={exIdx}
-                      className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between gap-4"
-                    >
-                      <div
-                        onClick={() => setDnaSentence(ex.japanese)}
-                        className="cursor-pointer space-y-0.5"
-                        title="Click for Sentence DNA™"
-                      >
-                        <p className="text-sm font-serif font-bold text-stone-900 hover:text-red-600 transition-colors">
-                          {ex.japanese}
-                        </p>
-                        <p className="text-xs text-stone-500">{ex.english}</p>
-                      </div>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => setSpeakingTarget({ phrase: ex.japanese, english: ex.english })}
-                          className="px-2 py-1 rounded-lg bg-purple-50 text-purple-700 text-[10px] font-bold border border-purple-200 hover:bg-purple-100 flex items-center gap-1 cursor-pointer"
-                          title="Practice Speaking (Web Speech API)"
-                        >
-                          <Mic className="w-3 h-3 text-purple-600" />
-                          <span>Speak</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDnaSentence(ex.japanese)}
-                          className="px-2 py-1 rounded-lg bg-red-50 text-red-700 text-[10px] font-bold border border-red-200 hover:bg-red-100 cursor-pointer"
-                        >
-                          DNA
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => speakJapanese(ex.japanese)}
-                          className="p-2 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 cursor-pointer"
-                          title="উচ্চারণ শুনুন"
-                        >
-                          <Volume2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Tab: Vocabulary with dedicated LISTEN button & LISTEN ONLY Mode */}
+        {/* Tab Content: Vocabulary */}
         {activeTab === 'vocab' && (
           <div className="space-y-4">
-            {/* LISTEN ONLY CONTROL BAR */}
-            <div className="bg-gradient-to-r from-stone-900 via-stone-850 to-stone-900 text-white rounded-3xl p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 border border-stone-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-red-600/30 border border-red-500/40 text-red-400 flex items-center justify-center shrink-0">
-                  <Headphones className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>AI Coach Listen-Only Mode</span>
-                    {isListenOnlyActive && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500 text-[10px] font-bold uppercase animate-pulse">
-                        Playing #{currentWordIndex + 1}
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-xs text-stone-400">
-                    হ্যান্ডস-ফ্রি ক্রমান্বয়ে জাপানি শব্দভাণ্ডার অডিও শোনার প্লেয়ার
-                  </p>
-                </div>
-              </div>
-
-              {/* Player Controls & Speed Adjustment */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                {/* Speed Controls: 0.75x, 1.0x, 1.25x */}
-                <div className="flex items-center bg-stone-800 rounded-xl p-1 border border-stone-700 text-xs font-bold">
-                  {[
-                    { label: '0.75x', val: 0.75 },
-                    { label: '1.0x', val: 0.95 },
-                    { label: '1.25x', val: 1.25 }
-                  ].map((spd) => (
-                    <button
-                      key={spd.label}
-                      onClick={() => setPlaybackSpeed(spd.val)}
-                      className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
-                        playbackSpeed === spd.val
-                          ? 'bg-red-600 text-white shadow-xs'
-                          : 'text-stone-400 hover:text-stone-200'
-                      }`}
-                    >
-                      {spd.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Loop Toggle */}
-                <button
-                  onClick={() => setIsLooping((prev) => !prev)}
-                  className={`p-2 rounded-xl border text-xs font-bold transition cursor-pointer ${
-                    isLooping
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                      : 'bg-stone-800 text-stone-400 border-stone-700 hover:text-white'
-                  }`}
-                  title="লুপ প্লেব্যাক"
-                >
-                  <Repeat className="w-4 h-4" />
-                </button>
-
-                {/* Play / Pause Main Button */}
-                <button
-                  onClick={() => {
-                    if (isListenOnlyActive) {
-                      setIsListenOnlyActive(false);
-                      stopJapaneseSpeech();
-                    } else {
-                      setIsListenOnlyActive(true);
-                    }
-                  }}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-red-600/30 transition cursor-pointer"
-                >
-                  {isListenOnlyActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
-                  <span>{isListenOnlyActive ? 'পজ করুন' : 'লিসেন-অনলি শুরু করুন'}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Vocabulary Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {lesson.vocabulary?.map((v: any, vIdx: number) => {
-                const isPlayingThisWord = isListenOnlyActive && currentWordIndex === vIdx;
-
-                return (
-                  <div
-                    key={v.id || vIdx}
-                    className={`bg-white border rounded-3xl p-5 shadow-sm space-y-3 transition duration-300 ${
-                      isPlayingThisWord
-                        ? 'border-red-500 ring-2 ring-red-400 ring-offset-1 bg-red-50/40'
-                        : 'border-stone-200 hover:border-stone-300'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <ruby className="text-2xl font-bold font-serif text-stone-900">
-                          {v.japanese}
-                          <rt className="text-xs text-red-600 font-sans">{v.furigana}</rt>
-                        </ruby>
-                        <p className="text-xs text-stone-400 font-mono mt-0.5">{v.romaji}</p>
-                      </div>
-
-                      {/* Audio & Speech Practice Action Buttons */}
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => setSpeakingTarget({ phrase: v.japanese, romaji: v.romaji, english: v.english })}
-                          className="px-2.5 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-purple-50 text-stone-700 hover:text-purple-700 font-bold text-xs flex items-center gap-1 transition cursor-pointer"
-                          title="Practice Speaking (Web Speech API)"
-                        >
-                          <Mic className="w-3.5 h-3.5 text-purple-600" />
-                          <span>Speak</span>
-                        </button>
-
-                        <button
-                          id={`btn-listen-vocab-${v.id || vIdx}`}
-                          onClick={() => speakJapanese(v.japanese, { rate: playbackSpeed })}
-                          className={`px-3 py-2 rounded-xl border font-bold text-xs flex items-center gap-1.5 transition cursor-pointer ${
-                            isPlayingThisWord
-                              ? 'bg-red-600 text-white border-red-600 shadow-md'
-                              : 'bg-stone-50 border-stone-200 text-stone-700 hover:text-red-600 hover:bg-stone-100'
-                          }`}
-                          title="উচ্চারণ শুনুন (Listen)"
-                        >
-                          <Volume2 className="w-4 h-4 text-red-600" />
-                          <span>Listen</span>
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-sm font-bold text-stone-800">{v.english}</p>
-                    {v.banglaMeaning && (
-                      <p className="text-xs font-semibold text-emerald-700 font-sans mt-0.5">{v.banglaMeaning}</p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Tab: Kanji with SPACED REPETITION SYSTEM (SRS) */}
-        {activeTab === 'kanji' && (
-          <div className="space-y-4">
-            {/* SRS Explainer Header */}
-            <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-                <span className="text-stone-700">
-                  <strong>স্পেসড রিপিটিশন (SRS) শিডিউলিং সক্রিয়:</strong> আপনার রেটিং অনুসারে পরবর্তীতে সঠিক সময়ে কাঞ্জি রিভিশনের শিডিউল তৈরি হয়।
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {lesson?.kanji?.map((k: any) => {
-                const srsItem = srsDeck[k.character];
-                const badge = formatNextReviewBadge(srsItem);
-
-                return (
-                  <div
-                    key={k.id || k.character}
-                    className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm space-y-3 flex flex-col justify-between"
-                  >
+              {lesson.vocabulary?.map((v: any, vIdx: number) => (
+                <div key={v.id || vIdx} className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm space-y-3">
+                  <div className="flex items-start justify-between">
                     <div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-4xl font-bold font-serif text-stone-900">{k.character}</span>
-                        <div className="text-right space-y-1">
-                          <span className="text-xs font-mono px-2 py-0.5 bg-stone-100 rounded text-stone-600 block">
-                            {k.strokeCount || 4} strokes
-                          </span>
-                          <button
-                            onClick={() => speakJapanese(k.character)}
-                            className="p-1 text-stone-400 hover:text-red-600 cursor-pointer"
-                            title="উচ্চারণ"
-                          >
-                            <Volume2 className="w-3.5 h-3.5 ml-auto" />
-                          </button>
-                        </div>
-                      </div>
-
-                      <p className="text-xs font-bold text-red-600 mt-1">{k.meaning}</p>
-                      <div className="text-[11px] text-stone-500 space-y-0.5 mt-1">
-                        <p>Onyomi: {k.onyomi?.join(', ')}</p>
-                        <p>Kunyomi: {k.kunyomi?.join(', ')}</p>
-                      </div>
-
-                      {/* Stroke Order Animation Trigger Button */}
-                      <button
-                        onClick={() => setSelectedKanjiForStrokeAnim({ character: k.character, meaning: k.meaning })}
-                        className="mt-2 w-full py-1.5 px-2 rounded-xl bg-red-50 dark:bg-red-950/40 hover:bg-red-100 text-red-700 dark:text-red-400 font-bold text-[11px] border border-red-200 dark:border-red-900 flex items-center justify-center gap-1.5 transition cursor-pointer"
-                        title="View animated stroke order & trace"
-                      >
-                        <PenTool className="w-3.5 h-3.5" />
-                        <span>Stroke Order (書き順)</span>
-                      </button>
+                      <ruby className="text-2xl font-bold font-serif text-stone-900">
+                        {v.japanese}
+                        <rt className="text-xs text-red-600 font-sans">{v.furigana}</rt>
+                      </ruby>
+                      <p className="text-xs text-stone-400 font-mono mt-0.5">{v.romaji}</p>
                     </div>
-
-                    {/* SRS Next Review Metadata Badge & Action Buttons */}
-                    <div className="pt-3 border-t border-stone-100 space-y-2">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className={`px-2.5 py-0.5 rounded-lg border font-semibold text-[10px] ${badge.colorClass}`}>
-                          {badge.label}
-                        </span>
-                        {srsItem?.stage && (
-                          <span className="text-[10px] font-bold text-stone-400 uppercase font-mono">
-                            Stage: {srsItem.stage}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-4 gap-1 pt-1">
-                        <button
-                          onClick={() => handleSrsReview(k.character, 'again')}
-                          className="py-1.5 px-1 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded-lg text-[10px] font-bold border border-rose-200 text-center transition cursor-pointer"
-                          title="ভুলে গেছি (পুনরায় দেখুন)"
-                        >
-                          Again
-                        </button>
-                        <button
-                          onClick={() => handleSrsReview(k.character, 'hard')}
-                          className="py-1.5 px-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg text-[10px] font-bold border border-amber-200 text-center transition cursor-pointer"
-                          title="কঠিন (1 দিন পর)"
-                        >
-                          Hard
-                        </button>
-                        <button
-                          onClick={() => handleSrsReview(k.character, 'good')}
-                          className="py-1.5 px-1 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-lg text-[10px] font-bold border border-blue-200 text-center transition cursor-pointer"
-                          title="পেরেছি (3 দিন পর)"
-                        >
-                          Good
-                        </button>
-                        <button
-                          onClick={() => handleSrsReview(k.character, 'easy')}
-                          className="py-1.5 px-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-bold border border-emerald-200 text-center transition cursor-pointer"
-                          title="সহজ (7 দিন পর)"
-                        >
-                          Easy
-                        </button>
-                      </div>
-                    </div>
+                    <button
+                      onClick={() => speakJapanese(v.japanese)}
+                      className="px-3 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Volume2 className="w-4 h-4 text-red-600" />
+                      <span>Listen</span>
+                    </button>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Tab: Canvas Writing Practice */}
-        {activeTab === 'canvas-trace' && (
-          <CanvasWritingPractice
-            characterList={kanjiTraceList}
-            onCompletePractice={(char) => {
-              console.log('Writing completed for:', char);
-            }}
-          />
-        )}
-
-        {/* Tab: Pronunciation Lab */}
-        {activeTab === 'pronunciation' && (
-          <PronunciationLab
-            initialPhrase={lesson.vocabulary?.[0]?.japanese || 'はじめまして'}
-            onScoreEarned={(score) => {
-              console.log('Pronunciation score earned:', score);
-            }}
-          />
-        )}
-
-        {/* Tab: Dialogue */}
-        {activeTab === 'dialogue' && (
-          <div className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-stone-900 font-serif">
-              {lesson.dialogue?.title || 'Interactive Context Dialogue'}
-            </h3>
-            <div className="space-y-3">
-              {lesson.dialogue?.lines?.map((line: any, idx: number) => (
-                <div key={idx} className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-red-700">{line.speaker}</span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setSpeakingTarget({ phrase: line.japanese, english: line.english })}
-                        className="px-2 py-0.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-bold hover:bg-purple-100 flex items-center gap-1 cursor-pointer"
-                        title="Practice Speaking (Web Speech API)"
-                      >
-                        <Mic className="w-3 h-3 text-purple-600" />
-                        <span>Speak</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => speakJapanese(line.japanese)}
-                        className="p-1 rounded text-stone-400 hover:text-red-600 cursor-pointer"
-                        title="Listen"
-                      >
-                        <Volume2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                  <p
-                    onClick={() => setDnaSentence(line.japanese)}
-                    className="text-sm font-serif font-bold text-stone-900 hover:text-red-600 cursor-pointer"
-                    title="Click for Sentence DNA™"
-                  >
-                    {line.japanese}
-                  </p>
-                  <p className="text-xs text-stone-600">{line.english}</p>
+                  <p className="text-sm font-bold text-stone-800">{v.english}</p>
+                  {v.banglaMeaning && (
+                    <p className="text-xs font-semibold text-emerald-700 font-sans mt-0.5">{v.banglaMeaning}</p>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Tab: Practice Exercises */}
-        {activeTab === 'practice' && (
-          <div className="space-y-4">
-            {lesson.practiceExercises?.map((ex: any, idx: number) => {
-              const feedback = practiceFeedback[ex.id];
-              return (
-                <div key={ex.id || idx} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm space-y-3">
-                  <span className="text-xs font-bold text-red-600">Exercise #{idx + 1}</span>
-                  <p className="text-sm font-bold text-stone-900">{ex.prompt}</p>
-
-                  {ex.type === 'multiple_choice' && ex.options && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                      {ex.options.map((opt: string, optIdx: number) => (
-                        <button
-                          key={optIdx}
-                          type="button"
-                          onClick={() => checkPracticeAnswer(ex.id, opt, ex.correctAnswer)}
-                          className={`p-3 rounded-xl border text-xs font-semibold text-left transition-all cursor-pointer ${
-                            practiceAnswers[ex.id] === opt
-                              ? 'bg-red-50 border-red-500 text-red-900'
-                              : 'bg-stone-50 border-stone-200 hover:border-stone-400 text-stone-800'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {feedback?.show && (
-                    <div className={`p-3 rounded-xl text-xs font-bold flex items-center gap-2 ${
-                      feedback.isCorrect ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'
-                    }`}>
-                      {feedback.isCorrect ? <Check className="w-4 h-4 text-emerald-600" /> : <X className="w-4 h-4 text-rose-600" />}
-                      <span>{feedback.isCorrect ? 'Correct! Well done.' : `Incorrect. Correct answer: ${ex.correctAnswer}`}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Speak & Compare Web Speech & Gemini Pronunciation Modal */}
-        {speakingTarget && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 animate-in fade-in zoom-in-95 duration-150 space-y-4">
-              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-xl bg-purple-100 text-purple-700">
-                    <Mic className="w-4 h-4" />
-                  </span>
-                  <div>
-                    <h3 className="text-sm font-bold text-stone-900">Speak & Compare (AI Clarity Scoring)</h3>
-                    <p className="text-[11px] text-stone-500">Record your pronunciation and receive Gemini AI Sensei clarity feedback</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSpeakingTarget(null)}
-                  className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-sm font-bold transition cursor-pointer"
-                >
-                  ✕
-                </button>
+        {/* Tab Content: Kanji */}
+        {activeTab === 'kanji' && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {lesson.kanji?.map((k: any, kIdx: number) => (
+              <div key={kIdx} className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm space-y-2">
+                <span className="text-4xl font-bold font-serif text-stone-900">{k.character}</span>
+                <p className="text-xs font-bold text-red-600">{k.meaning}</p>
+                <p className="text-xs text-stone-500">Onyomi: {k.onyomi?.join(', ')}</p>
+                <p className="text-xs text-stone-500">Kunyomi: {k.kunyomi?.join(', ')}</p>
               </div>
-
-              <SpeechPracticeWidget
-                targetPhrase={speakingTarget.phrase}
-                romaji={speakingTarget.romaji}
-                english={speakingTarget.english}
-                onSuccess={(score) => {
-                  soundEffects.playCorrectPing();
-                }}
-              />
-            </div>
+            ))}
           </div>
         )}
 
-        {/* Kanji Stroke Order Animator Modal */}
-        {selectedKanjiForStrokeAnim && (
-          <KanjiStrokeAnimator
-            kanji={selectedKanjiForStrokeAnim.character}
-            onClose={() => setSelectedKanjiForStrokeAnim(null)}
-          />
-        )}
-
-        {/* Post-Study Session Report Overlay */}
-        <SessionReportOverlay
-          isOpen={isSessionReportOpen}
-          onClose={() => setIsSessionReportOpen(false)}
-          data={{
-            title: lesson.title,
-            category: moduleTitle || 'JLPT Curriculum',
-            durationSeconds: Math.max(60, Math.floor((Date.now() - sessionStartTime) / 1000)),
-            vocabCount: lesson.vocabulary?.length || 12,
-            kanjiCount: lesson?.kanji?.length || 5,
-            grammarPoints: lesson.grammarNotes?.length || 3,
-            xpEarned: lesson.xpReward || 50,
-            jlptLevel: lesson.level || 'N5',
-            proficiencyGainPercent: 1.5
-          }}
-          onRetake={() => {
-            setIsSessionReportOpen(false);
-            setActiveTab('grammar');
-          }}
-          onNavigateToPortal={() => {
-            setIsSessionReportOpen(false);
-            onNavigate('portal');
-          }}
-        />
-        </>
-        )}
       </div>
-
-      {/* Global Pro Upgrade Modal inside LessonView */}
-      <ProUpgradeModal
-        isOpen={isProModalOpen}
-        onClose={() => setIsProModalOpen(false)}
-        onSuccess={() => {
-          setIsProModalOpen(false);
-          refreshProgress();
-        }}
-        defaultPlanInterval="monthly"
-      />
     </div>
   );
 };
