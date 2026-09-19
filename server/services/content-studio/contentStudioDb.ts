@@ -695,10 +695,11 @@ class ContentStudioDatabase {
       console.warn('[ContentStudioDb] Error reading lessons from disk:', err);
     }
 
-    // Always ensure all default Minna no Nihongo N5 lessons (Lessons 1-5) exist
+    // Always ensure all default Minna no Nihongo N5 lessons exist and have authoritative content
     let newLessonsAdded = false;
     for (const defLesson of ALL_DEFAULT_LESSONS) {
-      if (!this.lessons.has(defLesson.id)) {
+      const existing = this.lessons.get(defLesson.id);
+      if (!existing || ((defLesson.grammar?.length || 0) > 0 && (!existing.grammar || existing.grammar.length === 0))) {
         this.lessons.set(defLesson.id, defLesson);
         newLessonsAdded = true;
       }

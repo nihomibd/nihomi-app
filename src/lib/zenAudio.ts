@@ -44,6 +44,12 @@ export const ZEN_SOUNDSCAPES: ZenSoundscapeInfo[] = [
   },
 ];
 
+export interface ZenMixerLevels {
+  rain: number;   // 0 to 100
+  forest: number; // 0 to 100
+  city: number;   // 0 to 100
+}
+
 class ZenAudioEngine {
   private ctx: AudioContext | null = null;
   private isPlaying: boolean = false;
@@ -55,6 +61,12 @@ class ZenAudioEngine {
   private droneGain: GainNode | null = null;
   private noiseNode: AudioNode | null = null;
   private noiseGain: GainNode | null = null;
+
+  // Multi-channel soundscape mixer layers
+  private mixerLevels: ZenMixerLevels = { rain: 60, forest: 40, city: 50 };
+  private rainLayer: { node: AudioNode; gain: GainNode } | null = null;
+  private forestLayer: { node: AudioNode; gain: GainNode } | null = null;
+  private isMixerActive: boolean = false;
 
   // Japanese Hirajoshi / Insen pentatonic tuning (Hz) for serene focus
   private notes = [
@@ -378,6 +390,61 @@ class ZenAudioEngine {
 
   public getStatus(): boolean {
     return this.isPlaying;
+  }
+
+  public getMixerLevels(): ZenMixerLevels {
+    return { ...this.mixerLevels };
+  }
+
+  // Set individual mixer levels (0-100) and immediately adjust audio gains
+  public setMixerLevels(levels: Partial<ZenMixerLevels>) {
+    this.mixerLevels = { ...this.mixerLevels, ...levels };
+
+    if (!this.isPlaying || !this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+
+      // Adjust rain layer if present
+      if (this.rainLayer && this.rainLayer.gain) {
+        const rainTarget = (this.mixerLevels.rain / 100) * 0.05;
+        this.rainLayer.gain.gain.linearRampToValueAtTime(Math.max(0.0001, rainTarget), now + 0.1);
+      } else if (this.mixerLevels.rain > 0 && !this.rainLayer) {
+        this.rainLayer = this.startSoundscapeLayer('rain', 0.5);
+      }
+
+      // Adjust forest/wind layer if present
+      if (this.forestLayer && this.forestLayer.gain) {
+        const forestTarget = (this.mixerLevels.forest / 100) * 0.04;
+        this.forestLayer.gain.gain.linearRampToValueAtTime(Math.max(0.0001, forestTarget), now + 0.1);
+      } else if (this.mixerLevels.forest > 0 && !this.forestLayer) {
+        this.forestLayer = this.startSoundscapeLayer('wind', 0.5);
+      }
+
+      // If active single soundscape is playing, scale it too
+      if (this.noiseGain) {
+        const primaryVol = this.currentMode === 'rain'
+          ? (this.mixerLevels.rain / 100) * 0.05
+          : (this.mixerLevels.forest / 100) * 0.04;
+        this.noiseGain.gain.linearRampToValueAtTime(Math.max(0.0001, primaryVol), now + 0.1);
+      }
+    } catch (e) {
+      console.warn('Mixer level adjust error:', e);
+    }
+  }
+
+  // Play a soft meditative chime cue for Smart Break breathing phase transitions
+  public playChimeCue(freq?: number) {
+    try {
+      const ctx = this.getContext();
+      if (!this.masterGain) {
+        this.masterGain = ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.7, ctx.currentTime);
+        this.masterGain.connect(ctx.destination);
+      }
+      const note = freq || this.notes[2]; // F4 harmonic
+      this.playChime(note);
+    } catch {}
   }
 }
 

@@ -91,7 +91,9 @@ export const App: React.FC = () => {
     toggleZenSound,
     soundscapeMode,
     setSoundscapeMode,
-    soundscapes
+    soundscapes,
+    ambientTheme,
+    setAmbientTheme,
   } = useFocusMode();
 
   const handleNavigate = (view: string, params: Record<string, any> = {}) => {
@@ -249,6 +251,7 @@ export const App: React.FC = () => {
         isActive={isFocusMode}
         soundscapeMode={soundscapeMode}
         soundActive={zenSoundActive}
+        themePreset={ambientTheme}
       />
 
       {/* Focus Mode Pomodoro Bar (25m / 50m / 5m Break Intervals + Zen Soundscape Player) */}
@@ -259,6 +262,8 @@ export const App: React.FC = () => {
           soundscapeMode={soundscapeMode}
           setSoundscapeMode={setSoundscapeMode}
           soundscapes={soundscapes}
+          ambientTheme={ambientTheme}
+          setAmbientTheme={setAmbientTheme}
           onExitFocus={() => toggleFocusMode(false)}
           onFocusBlockComplete={() => window.dispatchEvent(new CustomEvent('nihomi-focus-complete'))}
         />

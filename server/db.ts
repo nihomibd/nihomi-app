@@ -4777,26 +4777,27 @@ class Database {
     }
 
     // Optional: Create or update Quiz if included in structuredContent
+    const structured = draft.structuredContent || (draft as any).content || {};
     const existingLesson = draft.lessonId ? this.getLessonById(draft.lessonId) : null;
     let quizId = existingLesson?.quizId;
 
-    if (draft.structuredContent.quiz && draft.structuredContent.quiz.questions?.length > 0) {
+    if (structured.quiz && structured.quiz.questions?.length > 0) {
       if (quizId && this.data.quizzes.some((q) => q.id === quizId)) {
         this.updateQuiz(quizId, {
-          title: draft.structuredContent.quiz.title || `${draft.title} Mastery Quiz`,
+          title: structured.quiz.title || `${draft.title} Mastery Quiz`,
           description: `Comprehensive evaluation covering vocabulary, kanji, and grammar from ${draft.title}.`,
-          passingScore: draft.structuredContent.quiz.passingScore || 70,
-          questions: draft.structuredContent.quiz.questions,
+          passingScore: structured.quiz.passingScore || 70,
+          questions: structured.quiz.questions,
           isPublished: true
         });
       } else {
         const createdQuiz = this.createQuiz({
           courseId: targetCourse.id,
           level: draft.level,
-          title: draft.structuredContent.quiz.title || `${draft.title} Mastery Quiz`,
+          title: structured.quiz.title || `${draft.title} Mastery Quiz`,
           description: `Comprehensive evaluation covering vocabulary, kanji, and grammar from ${draft.title}.`,
-          passingScore: draft.structuredContent.quiz.passingScore || 70,
-          questions: draft.structuredContent.quiz.questions,
+          passingScore: structured.quiz.passingScore || 70,
+          questions: structured.quiz.questions,
           isPublished: true
         });
         quizId = createdQuiz.id;
@@ -4813,11 +4814,11 @@ class Database {
         summary: draft.summary,
         explanation: draft.explanation,
         level: draft.level,
-        vocabulary: draft.structuredContent.vocabulary || [],
-        grammar: draft.structuredContent.grammar || [],
-        kanji: draft.structuredContent.kanji || [],
-        dialogue: draft.structuredContent.dialogue || [],
-        practiceExercises: draft.structuredContent.practiceExercises || [],
+        vocabulary: structured.vocabulary || [],
+        grammar: structured.grammar || [],
+        kanji: structured.kanji || [],
+        dialogue: structured.dialogue || [],
+        practiceExercises: structured.practiceExercises || [],
         quizId: quizId || existingLesson.quizId,
         isPublished: true
       });
@@ -4836,12 +4837,12 @@ class Database {
         summary: draft.summary,
         explanation: draft.explanation,
         isPublished: true,
-        estimatedMinutes: Math.max(15, (draft.structuredContent.vocabulary?.length || 0) * 2 + (draft.structuredContent.grammar?.length || 0) * 5),
-        vocabulary: draft.structuredContent.vocabulary || [],
-        grammar: draft.structuredContent.grammar || [],
-        kanji: draft.structuredContent.kanji || [],
-        dialogue: draft.structuredContent.dialogue || [],
-        practiceExercises: draft.structuredContent.practiceExercises || [],
+        estimatedMinutes: Math.max(15, (structured.vocabulary?.length || 0) * 2 + (structured.grammar?.length || 0) * 5),
+        vocabulary: structured.vocabulary || [],
+        grammar: structured.grammar || [],
+        kanji: structured.kanji || [],
+        dialogue: structured.dialogue || [],
+        practiceExercises: structured.practiceExercises || [],
         quizId
       });
     }
@@ -4849,7 +4850,7 @@ class Database {
     // Create immutable ContentVersion audit record
     if (!this.data.contentVersions) this.data.contentVersions = [];
     const previousVersions = this.data.contentVersions.filter((v) => v.draftId === draft.id);
-    const contentString = JSON.stringify(draft.structuredContent);
+    const contentString = JSON.stringify(structured);
     const checksumSha256 = crypto.createHash('sha256').update(contentString).digest('hex');
 
     const newVersion: ContentVersion = {
