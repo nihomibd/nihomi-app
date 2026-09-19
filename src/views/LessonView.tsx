@@ -143,11 +143,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
         setIsLoading(false);
       }
     }
-<<<<<<< HEAD
-    loadLesson();
-  }, [selectedLessonNum]);
-=======
-    if (lessonId) {
+if (lessonId) {
       loadLesson();
       setIsDownloaded(isLessonDownloaded(lessonId));
 
@@ -331,7 +327,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
       }
     }
   };
->>>>>>> 58140fa9043b58b8c637a84bcf90d02a96c6a8ac
+
 
   if (isLoading || !lessonData) {
     return (
@@ -376,10 +372,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Courses</span>
           </button>
-<<<<<<< HEAD
-=======
-
-          {/* Mobile 1-Row Compact Action Toolbar */}
+{/* Mobile 1-Row Compact Action Toolbar */}
           <div className="flex sm:hidden items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full shrink-0">
             {/* Focus Mode Pill */}
             <button
@@ -566,7 +559,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
               </button>
             )}
           </div>
->>>>>>> 58140fa9043b58b8c637a84bcf90d02a96c6a8ac
+
         </div>
 
         {/* Lesson Header Banner */}
