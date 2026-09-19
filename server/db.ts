@@ -2237,7 +2237,7 @@ class Database {
         },
         create: {
           id: record.id,
-          userId: record.userId,
+          user: { connect: { id: record.userId } },
           itemType: record.itemType,
           conceptId: record.conceptId,
           studentAnswer: record.studentAnswer,
