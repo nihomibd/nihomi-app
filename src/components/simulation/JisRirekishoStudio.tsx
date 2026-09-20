@@ -226,15 +226,18 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
         setFormData((prev) => ({ ...prev, motivationStatementPolished: data.polishedJa }));
         return;
       }
+      // If API returned without polishedJa, fallback to client template
+      const polishedFallback = `日本のきめ細やかな接客文化と誠実なチームワークに深く感銘を受けております。留学生として法令で定められた週28時間の就労制限を厳格に遵守し、明るい笑顔と正確な敬語を用いて、貴店の信頼向上と円滑な店舗運営に貢献したいと考え志望いたしました。`;
+      setFormData((prev) => ({ ...prev, motivationStatementPolished: polishedFallback }));
+      soundEffects.playCorrectPing();
     } catch (err) {
       console.warn('AI polish API unavailable, using high-standard Keigo template:', err);
+      const polishedFallback = `日本のきめ細やかな接客文化と誠実なチームワークに深く感銘を受けております。留学生として法令で定められた週28時間の就労制限を厳格に遵守し、明るい笑顔と正確な敬語を用いて、貴店の信頼向上と円滑な店舗運営に貢献したいと考え志望いたしました。`;
+      setFormData((prev) => ({ ...prev, motivationStatementPolished: polishedFallback }));
+      soundEffects.playCorrectPing();
+    } finally {
+      setIsPolishingMotivation(false);
     }
-
-    // Client-side fallback polish
-    const polishedFallback = `日本のきめ細やかな接客文化と誠実なチームワークに深く感銘を受けております。留学生として法令で定められた週28時間の就労制限を厳格に遵守し、明るい笑顔と正確な敬語を用いて、貴店の信頼向上と円滑な店舗運営に貢献したいと考え志望いたしました。`;
-    setFormData((prev) => ({ ...prev, motivationStatementPolished: polishedFallback }));
-    soundEffects.playCorrectPing();
-    setIsPolishingMotivation(false);
   };
 
   const handlePolishSelfPr = async () => {
@@ -256,14 +259,17 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
         setFormData((prev) => ({ ...prev, selfPrPolished: data.polishedJa }));
         return;
       }
+      const polishedFallback = `私の長所は、異文化環境における高い適応力と誠実な継続力です。来日以降、毎日継続して日本語の習得に努めており、時間厳守と明瞭な挨拶を信条としております。チームの一員として責任感を持ち、繁忙時にも落ち着いた丁寧な対応を心がけます。`;
+      setFormData((prev) => ({ ...prev, selfPrPolished: polishedFallback }));
+      soundEffects.playCorrectPing();
     } catch (err) {
       console.warn('AI polish API unavailable, using high-standard Keigo template:', err);
+      const polishedFallback = `私の長所は、異文化環境における高い適応力と誠実な継続力です。来日以降、毎日継続して日本語の習得に努めており、時間厳守と明瞭な挨拶を信条としております。チームの一員として責任感を持ち、繁忙時にも落ち着いた丁寧な対応を心がけます。`;
+      setFormData((prev) => ({ ...prev, selfPrPolished: polishedFallback }));
+      soundEffects.playCorrectPing();
+    } finally {
+      setIsPolishingSelfPr(false);
     }
-
-    const polishedFallback = `私の長所は、異文化環境における高い適応力と誠実な継続力です。来日以降、毎日継続して日本語の習得に努めており、時間厳守と明瞭な挨拶を信条としております。チームの一員として責任感を持ち、繁忙時にも落ち着いた丁寧な対応を心がけます。`;
-    setFormData((prev) => ({ ...prev, selfPrPolished: polishedFallback }));
-    soundEffects.playCorrectPing();
-    setIsPolishingSelfPr(false);
   };
 
   // Education row operations

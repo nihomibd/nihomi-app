@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { prisma } from '../prisma.js';
+import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { supabase } from '../supabase.js';
 import { MockExamAttempt } from '../types.js';
 import { db } from '../db.js';
@@ -30,7 +30,7 @@ export class MockExamPersistenceService {
    * Ensures the PostgreSQL `mock_exam_results` table exists.
    */
   private static async ensureTableExists(): Promise<void> {
-    if (this.tableInitialized) return;
+    if (this.tableInitialized || !isDatabaseConfigured()) return;
 
     try {
       await prisma.$executeRawUnsafe(`
@@ -73,59 +73,62 @@ export class MockExamPersistenceService {
     const verificationHash = attempt.verificationHash || this.generateVerificationHash(attempt);
     attempt.verificationHash = verificationHash;
 
-    // 1. Attempt PostgreSQL write via Prisma
-    try {
-      await this.ensureTableExists();
+    // 1. Attempt PostgreSQL write via Prisma if configured
+    if (isDatabaseConfigured()) {
+      try {
+        await this.ensureTableExists();
 
-      await prisma.$executeRawUnsafe(
-        `
-        INSERT INTO mock_exam_results (
-          id, user_id, mock_exam_id, exam_code, level, started_at, submitted_at,
-          time_spent_seconds, section_scores, total_scaled_score, overall_passing_score,
-          is_passed, fail_reason, letter_grade, percentile_rank, certificate_id,
-          verification_hash, user_answers, strength_summary_bn, weakness_summary_bn,
-          actionable_study_plan_bn, created_at
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6::timestamptz, $7::timestamptz,
-          $8, $9::jsonb, $10, $11,
-          $12, $13, $14, $15, $16,
-          $17, $18::jsonb, $19, $20,
-          $21::jsonb, NOW()
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          section_scores = EXCLUDED.section_scores,
-          total_scaled_score = EXCLUDED.total_scaled_score,
-          is_passed = EXCLUDED.is_passed,
-          letter_grade = EXCLUDED.letter_grade,
-          verification_hash = EXCLUDED.verification_hash;
-        `,
-        attempt.id,
-        attempt.userId,
-        attempt.mockExamId,
-        attempt.examCode,
-        attempt.level,
-        attempt.startedAt,
-        attempt.submittedAt,
-        attempt.timeSpentSeconds,
-        JSON.stringify(attempt.sectionScores),
-        attempt.totalScaledScore,
-        attempt.overallPassingScore,
-        attempt.isPassed,
-        attempt.failReason || null,
-        attempt.letterGrade,
-        attempt.percentileRank || 0,
-        attempt.certificateId,
-        verificationHash,
-        JSON.stringify(attempt.userAnswers || []),
-        attempt.strengthSummaryBn || '',
-        attempt.weaknessSummaryBn || '',
-        JSON.stringify(attempt.actionableStudyPlanBn || [])
-      );
+        await prisma.$executeRawUnsafe(
+          `
+          INSERT INTO mock_exam_results (
+            id, user_id, mock_exam_id, exam_code, level, started_at, submitted_at,
+            time_spent_seconds, section_scores, total_scaled_score, overall_passing_score,
+            is_passed, fail_reason, letter_grade, percentile_rank, certificate_id,
+            verification_hash, user_answers, strength_summary_bn, weakness_summary_bn,
+            actionable_study_plan_bn, created_at
+          ) VALUES (
+            $1, $2, $3, $4, $5, $6::timestamptz, $7::timestamptz,
+            $8, $9::jsonb, $10, $11,
+            $12, $13, $14, $15, $16,
+            $17, $18::jsonb, $19, $20,
+            $21::jsonb, NOW()
+          )
+          ON CONFLICT (id) DO UPDATE SET
+            section_scores = EXCLUDED.section_scores,
+            total_scaled_score = EXCLUDED.total_scaled_score,
+            is_passed = EXCLUDED.is_passed,
+            letter_grade = EXCLUDED.letter_grade,
+            verification_hash = EXCLUDED.verification_hash;
+          `,
+          attempt.id,
+          attempt.userId,
+          attempt.mockExamId,
+          attempt.examCode,
+          attempt.level,
+          attempt.startedAt,
+          attempt.submittedAt,
+          attempt.timeSpentSeconds,
+          JSON.stringify(attempt.sectionScores),
+          attempt.totalScaledScore,
+          attempt.overallPassingScore,
+          attempt.isPassed,
+          attempt.failReason || null,
+          attempt.letterGrade,
+          attempt.percentileRank || 0,
+          attempt.certificateId,
+          verificationHash,
+          JSON.stringify(attempt.userAnswers || []),
+          attempt.strengthSummaryBn || '',
+          attempt.weaknessSummaryBn || '',
+          JSON.stringify(attempt.actionableStudyPlanBn || [])
+        );
 
-      console.log(`[MockExamPersistence] Attempt ${attempt.id} saved to PostgreSQL successfully.`);
-      return { success: true, hash: verificationHash };
-    } catch (prismaErr: any) {
-      console.warn('[MockExamPersistence] Prisma attempt save error, trying Supabase fallback:', prismaErr?.message || prismaErr);
+        console.log(`[MockExamPersistence] Attempt ${attempt.id} saved to PostgreSQL successfully.`);
+        return { success: true, hash: verificationHash };
+      } catch (prismaErr: any) {
+        console.warn('[MockExamPersistence] Prisma attempt save error, trying Supabase fallback:', prismaErr?.message || prismaErr);
+      }
+    }
 
       // 2. Supabase fallback
       try {
@@ -162,7 +165,6 @@ export class MockExamPersistenceService {
       } catch (sbErr: any) {
         console.warn('[MockExamPersistence] Supabase exception:', sbErr?.message || sbErr);
       }
-    }
 
     return { success: false, hash: verificationHash };
   }
@@ -203,32 +205,34 @@ export class MockExamPersistenceService {
       };
     }
 
-    // 2. Query PostgreSQL if not in local memory
-    try {
-      const rows = await prisma.$queryRawUnsafe<any[]>(
-        'SELECT * FROM mock_exam_results WHERE certificate_id = $1 LIMIT 1',
-        certificateId
-      );
-      if (rows && rows.length > 0) {
-        const row = rows[0];
-        const user = db.findUserById(row.user_id);
-        const profile = db.getProfileByUserId(row.user_id);
-        const studentName = profile?.displayName || user?.email?.split('@')[0] || 'Nihomi Student';
+    // 2. Query PostgreSQL if not in local memory and database is configured
+    if (isDatabaseConfigured()) {
+      try {
+        const rows = await prisma.$queryRawUnsafe<any[]>(
+          'SELECT * FROM mock_exam_results WHERE certificate_id = $1 LIMIT 1',
+          certificateId
+        );
+        if (rows && rows.length > 0) {
+          const row = rows[0];
+          const user = db.findUserById(row.user_id);
+          const profile = db.getProfileByUserId(row.user_id);
+          const studentName = profile?.displayName || user?.email?.split('@')[0] || 'Nihomi Student';
 
-        return {
-          found: true,
-          isPassed: row.is_passed,
-          studentName,
-          examCode: row.exam_code,
-          level: row.level,
-          totalScaledScore: row.total_scaled_score,
-          letterGrade: row.letter_grade,
-          submittedAt: row.submitted_at,
-          verificationHash: row.verification_hash
-        };
+          return {
+            found: true,
+            isPassed: row.is_passed,
+            studentName,
+            examCode: row.exam_code,
+            level: row.level,
+            totalScaledScore: row.total_scaled_score,
+            letterGrade: row.letter_grade,
+            submittedAt: row.submitted_at,
+            verificationHash: row.verification_hash
+          };
+        }
+      } catch {
+        // Fall through to not found
       }
-    } catch {
-      // Fall through to not found
     }
 
     return { found: false };

@@ -21,7 +21,7 @@ import {
   Globe,
   Share2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../context/AuthContext';
 
 export interface LeaderboardUser {

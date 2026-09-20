@@ -17,6 +17,7 @@ declare global {
 
 export type NihomiEventType =
   | 'landing_page_view'
+  | 'landing_campaign_banner_clicked'
   | 'signup_started'
   | 'signup_completed'
   | 'first_lesson_started'
@@ -112,6 +113,7 @@ export interface ScorecardLinkCopiedPayload {
 
 export type EventPayloadMap = {
   landing_page_view: LandingPageViewPayload;
+  landing_campaign_banner_clicked: Record<string, any>;
   signup_started: SignupStartedPayload;
   signup_completed: SignupCompletedPayload;
   first_lesson_started: FirstLessonStartedPayload;

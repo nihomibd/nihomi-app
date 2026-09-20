@@ -1,4 +1,4 @@
-import { prisma } from '../prisma.js';
+import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
 
 export type SubscriptionTier = 'free' | 'n5_pro' | 'n5_lifetime';
@@ -154,50 +154,52 @@ export class SubscriptionService {
       };
     }
 
-    // 2. Try querying PostgreSQL via Prisma
-    try {
-      const dbUser = await prisma.user.findFirst({
-        where: {
-          OR: [{ id: userIdOrEmail }, { email: userIdOrEmail }],
-        },
-        select: {
-          id: true,
-          subscriptionTier: true,
-          subscriptionStatus: true,
-          subscriptionExpiresAt: true,
-        },
-      });
+    // 2. Try querying PostgreSQL via Prisma if configured
+    if (isDatabaseConfigured()) {
+      try {
+        const dbUser = await prisma.user.findFirst({
+          where: {
+            OR: [{ id: userIdOrEmail }, { email: userIdOrEmail }],
+          },
+          select: {
+            id: true,
+            subscriptionTier: true,
+            subscriptionStatus: true,
+            subscriptionExpiresAt: true,
+          },
+        });
 
-      if (dbUser && dbUser.subscriptionTier) {
-        const tier = (dbUser.subscriptionTier as SubscriptionTier) || 'free';
-        const expiresAt = dbUser.subscriptionExpiresAt;
-        const now = new Date();
+        if (dbUser && dbUser.subscriptionTier) {
+          const tier = (dbUser.subscriptionTier as SubscriptionTier) || 'free';
+          const expiresAt = dbUser.subscriptionExpiresAt;
+          const now = new Date();
 
-        // Check expiration
-        if (expiresAt && expiresAt < now && tier !== 'free') {
-          // Tier has expired
+          // Check expiration
+          if (expiresAt && expiresAt < now && tier !== 'free') {
+            // Tier has expired
+            return {
+              tier: 'free',
+              status: 'expired',
+              expiresAt,
+              isLifetime: false,
+              limits: SUBSCRIPTION_TIERS.free.limits,
+            };
+          }
+
+          const isLifetime = tier === 'n5_lifetime' || !expiresAt;
+          const config = SUBSCRIPTION_TIERS[tier] || SUBSCRIPTION_TIERS.free;
+
           return {
-            tier: 'free',
-            status: 'expired',
+            tier,
+            status: (dbUser.subscriptionStatus as any) || 'active',
             expiresAt,
-            isLifetime: false,
-            limits: SUBSCRIPTION_TIERS.free.limits,
+            isLifetime,
+            limits: config.limits,
           };
         }
-
-        const isLifetime = tier === 'n5_lifetime' || !expiresAt;
-        const config = SUBSCRIPTION_TIERS[tier] || SUBSCRIPTION_TIERS.free;
-
-        return {
-          tier,
-          status: (dbUser.subscriptionStatus as any) || 'active',
-          expiresAt,
-          isLifetime,
-          limits: config.limits,
-        };
+      } catch (err) {
+        console.warn('[SubscriptionService] Prisma query fallback to memory db:', (err as any)?.message);
       }
-    } catch (err) {
-      console.warn('[SubscriptionService] Prisma query fallback to memory db:', (err as any)?.message);
     }
 
     // 3. Fallback to memory db
@@ -252,89 +254,91 @@ export class SubscriptionService {
       expiresAt = new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000); // 100 years perpetual
     }
 
-    // 2. Persist in PostgreSQL via Prisma (with duplicate transaction idempotency protection)
-    try {
-      // Find or resolve user in Prisma
-      let user = await prisma.user.findFirst({
-        where: {
-          OR: [{ id: userId }, { email: params.userEmail || userId }],
-        },
-      });
-
-      if (!user && params.userEmail) {
-        user = await prisma.user.create({
-          data: {
-            email: params.userEmail,
-            name: params.userEmail.split('@')[0],
-            subscriptionTier: tier,
-            subscriptionStatus: 'active',
-            subscriptionExpiresAt: expiresAt,
+    // 2. Persist in PostgreSQL via Prisma if configured (with duplicate transaction idempotency protection)
+    if (isDatabaseConfigured()) {
+      try {
+        // Find or resolve user in Prisma
+        let user = await prisma.user.findFirst({
+          where: {
+            OR: [{ id: userId }, { email: params.userEmail || userId }],
           },
         });
-      }
 
-      if (user) {
-        // Idempotency: Check if trxID already recorded
-        const existingPayment = await prisma.payment.findUnique({
-          where: { providerTransactionId: trxID },
-        });
-
-        if (existingPayment && existingPayment.status === 'paid') {
-          console.warn(`[SubscriptionService] Idempotency notice: TrxID ${trxID} already processed.`);
-          return {
-            success: true,
-            tier,
-            expiresAt: user.subscriptionExpiresAt,
-            trxID,
-            invoiceNumber: existingPayment.invoiceNumber || invoiceNumber,
-            message: 'Subscription already active for this transaction.',
-          };
+        if (!user && params.userEmail) {
+          user = await prisma.user.create({
+            data: {
+              email: params.userEmail,
+              name: params.userEmail.split('@')[0],
+              subscriptionTier: tier,
+              subscriptionStatus: 'active',
+              subscriptionExpiresAt: expiresAt,
+            },
+          });
         }
 
-        // Atomically update user tier
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            subscriptionTier: tier,
-            subscriptionStatus: 'active',
-            subscriptionExpiresAt: expiresAt,
-          },
-        });
+        if (user) {
+          // Idempotency: Check if trxID already recorded
+          const existingPayment = await prisma.payment.findUnique({
+            where: { providerTransactionId: trxID },
+          });
 
-        // Create immutable payment audit record
-        await prisma.payment.upsert({
-          where: { providerTransactionId: trxID },
-          update: {
-            status: 'paid',
-            paidAt: new Date(),
-            amount,
-            paymentID: paymentID || null,
-            invoiceNumber,
-          },
-          create: {
-            userId: user.id,
-            paymentProvider: 'bkash',
-            providerTransactionId: trxID,
-            paymentID: paymentID || null,
-            invoiceNumber,
-            amount,
-            currency: 'BDT',
-            status: 'paid',
-            paymentMethod: params.paymentMethod || 'bKash MFS',
-            paidAt: new Date(),
-            metadata: {
+          if (existingPayment && existingPayment.status === 'paid') {
+            console.warn(`[SubscriptionService] Idempotency notice: TrxID ${trxID} already processed.`);
+            return {
+              success: true,
               tier,
-              paymentID,
-              invoiceNumber,
-              activatedAt: new Date().toISOString(),
-            },
-          },
-        });
+              expiresAt: user.subscriptionExpiresAt,
+              trxID,
+              invoiceNumber: existingPayment.invoiceNumber || invoiceNumber,
+              message: 'Subscription already active for this transaction.',
+            };
+          }
 
-        console.log(`[SubscriptionService] PostgreSQL update succeeded for user ${user.id}`);
+          // Atomically update user tier
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              subscriptionTier: tier,
+              subscriptionStatus: 'active',
+              subscriptionExpiresAt: expiresAt,
+            },
+          });
+
+          // Create immutable payment audit record
+          await prisma.payment.upsert({
+            where: { providerTransactionId: trxID },
+            update: {
+              status: 'paid',
+              paidAt: new Date(),
+              amount,
+              paymentID: paymentID || null,
+              invoiceNumber,
+            },
+            create: {
+              userId: user.id,
+              paymentProvider: 'bkash',
+              providerTransactionId: trxID,
+              paymentID: paymentID || null,
+              invoiceNumber,
+              amount,
+              currency: 'BDT',
+              status: 'paid',
+              paymentMethod: params.paymentMethod || 'bKash MFS',
+              paidAt: new Date(),
+              metadata: {
+                tier,
+                paymentID,
+                invoiceNumber,
+                activatedAt: new Date().toISOString(),
+              },
+            },
+          });
+
+          console.log(`[SubscriptionService] PostgreSQL update succeeded for user ${user.id}`);
+        }
+      } catch (err: any) {
+        console.error('[SubscriptionService] Prisma persistence warning:', err?.message);
       }
-    } catch (err: any) {
-      console.error('[SubscriptionService] Prisma persistence warning:', err?.message);
     }
 
     // 3. Atomically sync with memory db
@@ -553,19 +557,21 @@ export class SubscriptionService {
     }
 
     // 2. Anti-fraud: Duplicate TrxID check
-    try {
-      const existingPrismaPayment = await prisma.payment.findFirst({
-        where: { providerTransactionId: cleanTrx },
-      });
-      if (existingPrismaPayment) {
-        return {
-          success: false,
-          duplicate: true,
-          error: `TrxID ${cleanTrx} ইতোমধ্যেই সাবমিট করা হয়েছে। ভেরিফিকেশনের জন্য অনুগ্রহ করে অপেক্ষা করুন বা হেল্পলাইনে যোগাযোগ করুন।`,
-        };
+    if (isDatabaseConfigured()) {
+      try {
+        const existingPrismaPayment = await prisma.payment.findFirst({
+          where: { providerTransactionId: cleanTrx },
+        });
+        if (existingPrismaPayment) {
+          return {
+            success: false,
+            duplicate: true,
+            error: `TrxID ${cleanTrx} ইতোমধ্যেই সাবমিট করা হয়েছে। ভেরিফিকেশনের জন্য অনুগ্রহ করে অপেক্ষা করুন বা হেল্পলাইনে যোগাযোগ করুন।`,
+          };
+        }
+      } catch (err: any) {
+        console.warn('[SubscriptionService] Prisma check warning:', err?.message);
       }
-    } catch (err: any) {
-      console.warn('[SubscriptionService] Prisma check warning:', err?.message);
     }
 
     // In-memory duplicate check
@@ -590,47 +596,49 @@ export class SubscriptionService {
     const submissionId = `subm_${Date.now()}_${cleanTrx}`;
     const submittedAt = new Date().toISOString();
 
-    // 3. Record in Prisma
-    try {
-      let user = await prisma.user.findFirst({
-        where: { OR: [{ id: targetUserId }, { email: targetEmail }] },
-      });
-      if (!user && targetEmail) {
-        user = await prisma.user.create({
-          data: {
-            id: targetUserId.startsWith('usr_') ? targetUserId : undefined,
-            email: targetEmail,
-            name: targetName,
-            subscriptionTier: 'free',
-            subscriptionStatus: 'pending',
-          },
+    // 3. Record in Prisma if configured
+    if (isDatabaseConfigured()) {
+      try {
+        let user = await prisma.user.findFirst({
+          where: { OR: [{ id: targetUserId }, { email: targetEmail }] },
         });
-      }
-
-      if (user) {
-        await prisma.payment.create({
-          data: {
-            userId: user.id,
-            paymentProvider: paymentMethod === 'nagad' ? 'nagad_manual' : 'bkash_manual',
-            providerTransactionId: cleanTrx,
-            amount,
-            currency: 'BDT',
-            status: 'pending',
-            paymentMethod: `${paymentMethod.toUpperCase()} Send Money (Manual Submission)`,
-            metadata: {
-              senderPhone: cleanPhone,
-              selectedPlan,
-              planNameBn: planConfig.nameBn,
-              studentName: targetName,
-              note: params.note || null,
-              submittedAt,
-              verificationStatus: 'PENDING_VERIFICATION',
+        if (!user && targetEmail) {
+          user = await prisma.user.create({
+            data: {
+              id: targetUserId.startsWith('usr_') ? targetUserId : undefined,
+              email: targetEmail,
+              name: targetName,
+              subscriptionTier: 'free',
+              subscriptionStatus: 'pending',
             },
-          },
-        });
+          });
+        }
+
+        if (user) {
+          await prisma.payment.create({
+            data: {
+              userId: user.id,
+              paymentProvider: paymentMethod === 'nagad' ? 'nagad_manual' : 'bkash_manual',
+              providerTransactionId: cleanTrx,
+              amount,
+              currency: 'BDT',
+              status: 'pending',
+              paymentMethod: `${paymentMethod.toUpperCase()} Send Money (Manual Submission)`,
+              metadata: {
+                senderPhone: cleanPhone,
+                selectedPlan,
+                planNameBn: planConfig.nameBn,
+                studentName: targetName,
+                note: params.note || null,
+                submittedAt,
+                verificationStatus: 'PENDING_VERIFICATION',
+              },
+            },
+          });
+        }
+      } catch (err: any) {
+        console.warn('[SubscriptionService] Prisma manual payment insert warning:', err?.message);
       }
-    } catch (err: any) {
-      console.warn('[SubscriptionService] Prisma manual payment insert warning:', err?.message);
     }
 
     // 4. Record in in-memory DB

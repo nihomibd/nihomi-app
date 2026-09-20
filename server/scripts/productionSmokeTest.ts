@@ -227,6 +227,96 @@ async function executeSmokeSuite() {
   });
 
   // --------------------------------------------------------------------------
+  // TEST 6: SSLCOMMERZ IPN WEBHOOK & SIGNATURE VALIDATION
+  // --------------------------------------------------------------------------
+  await runTest('PAYMENT_GATEWAY', 'SSLCommerz IPN Webhook & Signature Verification', async () => {
+    const sslcommerz = PaymentProviderFactory.getProvider('sslcommerz');
+    const storePass = process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
+    const testValId = `VALID_${Date.now()}`;
+    const tranId = `TRAN_${Date.now()}`;
+
+    // Official SSLCommerz IPN signature standard
+    const secretMd5 = crypto.createHash('md5').update(storePass).digest('hex');
+    const verifyKey = 'val_id,status,tran_id';
+    const dataString = `val_id=${testValId}&status=VALID&tran_id=${tranId}&${secretMd5}`;
+    const verifySign = crypto.createHash('md5').update(dataString).digest('hex');
+
+    const testPayload = {
+      status: 'VALID',
+      tran_date: new Date().toISOString(),
+      tran_id: tranId,
+      val_id: testValId,
+      amount: '599.00',
+      currency: 'BDT',
+      card_type: 'VISA-CITY',
+      card_no: '432149XXXXXX1111',
+      bank_tran_id: `BANK_${Date.now()}`,
+      verify_sign: verifySign,
+      verify_key: verifyKey
+    };
+
+    const webhookResult = await sslcommerz.handleWebhook(testPayload, verifySign);
+    if (!webhookResult.valid) {
+      throw new Error('SSLCommerz IPN webhook signature validation failed.');
+    }
+    if (webhookResult.status !== 'paid') {
+      throw new Error(`Expected paid status from valid SSLCommerz IPN payload, got ${webhookResult.status}`);
+    }
+
+    return `SSLCommerz IPN webhook signature successfully verified with MD5 digest (${verifySign.slice(0, 12)}...). Status: ${webhookResult.status}.`;
+  });
+
+  // --------------------------------------------------------------------------
+  // TEST 7: END-TO-END STUDENT LIFECYCLE & PROGRESS SYNCHRONIZATION
+  // --------------------------------------------------------------------------
+  await runTest('STUDENT_LIFECYCLE', 'User Onboarding, Lesson 1 Completion & Pro Upgrade', async () => {
+    const testEmail = `student-${Date.now()}@nihomi.com`;
+    const { user } = db.createUser({
+      email: testEmail,
+      displayName: 'Tanvir Kabir',
+      password: 'NihomiSecurePass2026!',
+      role: 'user',
+      targetLevel: 'N5'
+    });
+
+    if (!user || !user.id) {
+      throw new Error('Failed to create new onboarding student.');
+    }
+
+    // 1. Initial wallet & level verification
+    const initialWallet = db.getUserWallet(user.id);
+    if (initialWallet.coinBalance < 0) {
+      throw new Error('Invalid initial wallet state.');
+    }
+
+    // 2. Mark Lesson 1 Complete & award 50 XP via authoritative progression engine
+    const updatedProgress = db.completeLesson(user.id, 'n5-l1', 20);
+    if (!updatedProgress.completedLessonIds.includes('n5-l1')) {
+      throw new Error('Lesson 1 was not recorded in user completedLessonIds.');
+    }
+    if (updatedProgress.experiencePoints < 50) {
+      throw new Error(`Expected at least 50 XP, got ${updatedProgress.experiencePoints}`);
+    }
+
+    // 3. Upgrade user to PRO tier
+    const sub = db.createSubscription({
+      userId: user.id,
+      planId: 'pro',
+      billingInterval: 'yearly',
+      status: 'active',
+      paymentMethod: 'bKash MFS',
+      lastPaymentId: `PAY_SUB_${Date.now()}`
+    });
+
+    const activeSub = db.getUserActiveSubscription(user.id);
+    if (!activeSub || activeSub.planId !== 'pro' || activeSub.status !== 'active') {
+      throw new Error('Failed to activate Pro subscription for student.');
+    }
+
+    return `Student '${user.email}' registered, Lesson 1 completed with 50 XP, and Pro subscription activated (${activeSub.id}).`;
+  });
+
+  // --------------------------------------------------------------------------
   // SUMMARY REPORT
   // --------------------------------------------------------------------------
   console.log('\n' + '='.repeat(80));

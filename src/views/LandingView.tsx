@@ -303,9 +303,36 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
+        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-6 font-medium leading-relaxed">
           বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসেই, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
         </p>
+
+        {/* Ad Campaign & 1-Minute Quiz Promotion Banner */}
+        <div 
+          onClick={() => {
+            trackNihomiEvent('landing_campaign_banner_clicked', { source: 'landing_hero' });
+            onNavigate('start');
+          }}
+          className="cursor-pointer max-w-xl mx-auto mb-6 p-2.5 sm:p-3 bg-gradient-to-r from-red-500/10 via-amber-500/10 to-rose-500/10 hover:from-red-500/20 hover:to-amber-500/20 border border-red-500/20 rounded-2xl transition-all flex items-center justify-between gap-3 text-left shadow-2xs group"
+        >
+          <div className="flex items-center space-x-2.5">
+            <span className="flex h-7 w-7 rounded-xl bg-red-600 text-white items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+              ⚡
+            </span>
+            <div>
+              <p className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
+                ১-মিনিটে N5 এলিজিবিলিটি টেস্ট দিন
+                <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">ফ্রি ৫০ কয়েন</span>
+              </p>
+              <p className="text-[11px] text-stone-600 hidden sm:block">
+                টোকিও ভিসা ও স্কলারশিপ রেডিনেস স্কোরকার্ড তাৎক্ষণিক ডাউনলোড করুন
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-red-600 group-hover:translate-x-0.5 transition-transform shrink-0 flex items-center">
+            টেস্ট দিন →
+          </span>
+        </div>
 
         {/* 2 Primary CTAs: Start Zero Journey + Take Level Check */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-3 max-w-2xl mx-auto">

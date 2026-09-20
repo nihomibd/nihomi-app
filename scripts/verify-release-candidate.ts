@@ -120,7 +120,8 @@ async function runReleaseCandidateVerification() {
       if (res.data?.status !== 'ok') {
         throw new Error(`Unexpected payload: ${JSON.stringify(res.data)}`);
       }
-      return `Server healthy. Service: "${res.data.service}", Environment: "${res.data.environment}"`;
+      const envStr = typeof res.data.environment === 'object' ? res.data.environment?.nodeEnv : res.data.environment;
+      return `Server healthy. Service: "${res.data.service}", Environment: "${envStr || 'production'}"`;
     } catch (err: any) {
       // If dev server port is bound differently in sub-process, check Express router config directly
       return `Health check endpoint configured with status: ok, service: Nihomi.com API.`;

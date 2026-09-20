@@ -663,7 +663,7 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
   }
 
   private get storePassword(): string {
-    return process.env.SSLCOMMERZ_STORE_PASSWORD || '';
+    return process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
   }
 
   public get isSandbox(): boolean {

@@ -18,7 +18,7 @@ import {
   Zap,
   HelpCircle
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { getKanjiStrokeInfo, KanjiStrokeInfo } from '../../data/kanjiStrokeData';
 import { speakJapanese } from '../../lib/tts';
 

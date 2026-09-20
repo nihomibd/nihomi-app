@@ -984,7 +984,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               接客アクションキー (Cashier Service Buttons)
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
               {/* 1. Greeting Button */}
               <button
                 onClick={handleGreetCustomer}
@@ -1090,7 +1090,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               お会計選択 (Payment Tender)
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 disabled={scannedItems.length === 0 || orderCompleted}
                 onClick={() => handleProcessPayment('cash')}

@@ -44,7 +44,7 @@ import {
   Loader2,
   Trophy
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   NIHOMI_JLPT_N5_CURRICULUM,
   LessonCurriculum,
@@ -57,6 +57,7 @@ import { getLessonSrsReviewSummary, recordQuizTermPerformance } from '../lib/srs
 import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator';
 import { useAuth } from '../context/AuthContext';
 import { useProgressSync } from '../hooks/useProgressSync';
+import { speakJapanese, stopJapaneseSpeech } from '../lib/tts.js';
 
 interface CurriculumExplorerViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -268,18 +269,14 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
     }
   };
 
-  // Web Speech API Native Japanese Audio Synthesis
+  // Resilient Tokyo Native Japanese Audio Synthesis
   const playJapaneseAudio = (text: string, id: string) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'ja-JP';
-      utterance.rate = 0.88;
-      setIsPlayingAudio(id);
-      utterance.onend = () => setIsPlayingAudio(null);
-      utterance.onerror = () => setIsPlayingAudio(null);
-      window.speechSynthesis.speak(utterance);
-    }
+    setIsPlayingAudio(id);
+    speakJapanese(text, {
+      rate: 0.88,
+      onEnd: () => setIsPlayingAudio(null),
+      onError: () => setIsPlayingAudio(null)
+    });
   };
 
   // Quiz Answer Selection with SRS performance recording

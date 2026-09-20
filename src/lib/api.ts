@@ -21,15 +21,35 @@ export function formatApiUrl(endpoint: string): string {
   return base ? `${base}${normalizedEndpoint}` : normalizedEndpoint;
 }
 
+const memoryStorage = new Map<string, string>();
+
 export function getStoredToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem(TOKEN_KEY);
+    }
+  } catch {
+    // Storage access blocked or restricted (e.g. cross-origin iframe)
+  }
+  return memoryStorage.get(TOKEN_KEY) || null;
 }
 
 export function setStoredToken(token: string | null): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      if (token) {
+        localStorage.setItem(TOKEN_KEY, token);
+      } else {
+        localStorage.removeItem(TOKEN_KEY);
+      }
+    }
+  } catch {
+    // Storage access blocked or restricted
+  }
   if (token) {
-    localStorage.setItem(TOKEN_KEY, token);
+    memoryStorage.set(TOKEN_KEY, token);
   } else {
-    localStorage.removeItem(TOKEN_KEY);
+    memoryStorage.delete(TOKEN_KEY);
   }
 }
 

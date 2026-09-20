@@ -195,9 +195,34 @@ const AuthContext = createContext<AuthContextType>({
   refreshAuth: async () => {},
 });
 
+const safeStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        return localStorage.getItem(key);
+      }
+    } catch {}
+    return null;
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(key, value);
+      }
+    } catch {}
+  },
+  removeItem: (key: string): void => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem(key);
+      }
+    } catch {}
+  }
+};
+
 const bootstrapDefaultLearningPath = (userId: string) => {
   const pathKey = `nihomi_learning_path_${userId}`;
-  if (localStorage.getItem(pathKey)) return;
+  if (safeStorage.getItem(pathKey)) return;
   const phases = [
     { days: [1, 2, 3, 4, 5, 6, 7], focus: 'Hiragana foundations' },
     { days: [8, 9, 10, 11, 12, 13, 14], focus: 'Katakana foundations' },
@@ -210,14 +235,14 @@ const bootstrapDefaultLearningPath = (userId: string) => {
     status: day === 1 ? 'available' : 'upcoming',
     completed: false,
   })));
-  localStorage.setItem(pathKey, JSON.stringify({ userId, level: 'N5', learningPath, bootstrappedAt: new Date().toISOString() }));
+  safeStorage.setItem(pathKey, JSON.stringify({ userId, level: 'N5', learningPath, bootstrappedAt: new Date().toISOString() }));
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => getStoredToken());
   const [user, setUser] = useState<User | null>(() => {
     try {
-      const saved = localStorage.getItem('nihomi_user');
+      const saved = safeStorage.getItem('nihomi_user');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -226,9 +251,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [profile, setProfile] = useState<UserProfile | null>(() => {
     try {
-      const saved = localStorage.getItem('nihomi_profile');
+      const saved = safeStorage.getItem('nihomi_profile');
       return saved ? JSON.parse(saved) : {
-        userId: user?.id || 'default_user',
+        userId: 'default_user',
         targetLevel: 'N5',
         targetExam: 'JLPT July 2026',
         targetExamDate: '2026-07-05',
@@ -243,11 +268,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [progress, setProgress] = useState<UserProgress | null>(() => {
     try {
-      const saved = localStorage.getItem('nihomi_progress');
+      const saved = safeStorage.getItem('nihomi_progress');
       if (saved) return JSON.parse(saved);
     } catch {}
     return {
-      userId: user?.id || 'guest',
+      userId: 'guest',
       currentLevel: 'N5',
       streakDays: 0,
       totalHours: 0,
@@ -257,12 +282,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [subscription, setSubscription] = useState<UserSubscription | null>(() => {
     try {
-      const saved = localStorage.getItem('nihomi_subscription');
+      const saved = safeStorage.getItem('nihomi_subscription');
       if (saved) return JSON.parse(saved);
     } catch {}
     return {
-      userId: user?.id || 'guest',
-      planId: user?.planId || 'free',
+      userId: 'guest',
+      planId: 'free',
       planName: 'Nihomi Free Basic',
       status: 'active',
       validUntil: '2026-12-31',
@@ -308,14 +333,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
     }
     // Allocate starter 50 Coins + 100 AI Credits for all new students
-    if (!localStorage.getItem('nihomi_student_coins')) {
-      localStorage.setItem('nihomi_student_coins', '50');
+    if (!safeStorage.getItem('nihomi_student_coins')) {
+      safeStorage.setItem('nihomi_student_coins', '50');
     }
-    if (!localStorage.getItem('nihomi_ai_credits')) {
-      localStorage.setItem('nihomi_ai_credits', '100');
+    if (!safeStorage.getItem('nihomi_ai_credits')) {
+      safeStorage.setItem('nihomi_ai_credits', '100');
     }
     setUser(newUser);
-    localStorage.setItem('nihomi_user', JSON.stringify(newUser));
+    safeStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };
 
   // Listen to Supabase Session & extract Google Avatar
@@ -339,7 +364,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session?.user && session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
-          localStorage.setItem('nihomi_auth_token', session.access_token);
+          safeStorage.setItem('nihomi_auth_token', session.access_token);
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       });
@@ -350,7 +375,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
-          localStorage.setItem('nihomi_auth_token', session.access_token);
+          safeStorage.setItem('nihomi_auth_token', session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -391,7 +416,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
-          localStorage.setItem('nihomi_auth_token', session.access_token);
+          safeStorage.setItem('nihomi_auth_token', session.access_token);
         }
         const u = session.user;
         const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
@@ -428,8 +453,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
         setStoredToken(null);
         setToken(null);
-        localStorage.removeItem('nihomi_user');
-        localStorage.removeItem('nihomi_auth_token');
+        safeStorage.removeItem('nihomi_user');
+        safeStorage.removeItem('nihomi_auth_token');
       }
     });
 
@@ -480,7 +505,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (res.profile) {
         setProfile(res.profile);
-        localStorage.setItem('nihomi_profile', JSON.stringify(res.profile));
+        safeStorage.setItem('nihomi_profile', JSON.stringify(res.profile));
       }
       if (res.progress) {
         setProgress(res.progress);
@@ -508,17 +533,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       totalHours: 0,
       completedLessonsCount: 0,
     });
-    localStorage.removeItem('nihomi_user');
-    localStorage.removeItem('nihomi_profile');
-    localStorage.removeItem('nihomi_progress');
-    localStorage.removeItem('nihomi_subscription');
+    safeStorage.removeItem('nihomi_user');
+    safeStorage.removeItem('nihomi_profile');
+    safeStorage.removeItem('nihomi_progress');
+    safeStorage.removeItem('nihomi_subscription');
   };
 
   const updateProfileData = async (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => {
     if (profile) {
       const updated = { ...profile, ...data };
       setProfile(updated as UserProfile);
-      localStorage.setItem('nihomi_profile', JSON.stringify(updated));
+      safeStorage.setItem('nihomi_profile', JSON.stringify(updated));
     }
   };
 
@@ -555,7 +580,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (data.profile) {
         setProfile(data.profile);
-        localStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
+        safeStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
       }
       if (data.progress) {
         setProgress(data.progress);
@@ -589,7 +614,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (data.profile) {
         setProfile(data.profile);
-        localStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
+        safeStorage.setItem('nihomi_profile', JSON.stringify(data.profile));
       }
       if (data.progress) {
         setProgress(data.progress);

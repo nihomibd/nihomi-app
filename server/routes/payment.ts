@@ -3,7 +3,7 @@ import { bKashService } from '../services/bKashService.js';
 import { subscriptionService, SUBSCRIPTION_TIERS, SubscriptionTier } from '../services/subscriptionService.js';
 import { optionalAuth } from '../middleware/auth.js';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
-import { prisma } from '../prisma.js';
+import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
 
 export const paymentRouter = Router();
@@ -60,47 +60,49 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
       callbackUrl: finalCallbackUrl,
     });
 
-    // Record pending transaction in Prisma PostgreSQL (non-blocking fallback)
-    try {
-      // Find or create user in prisma if missing
-      let dbUser = await prisma.user.findFirst({
-        where: { OR: [{ id: resolvedUserId }, { email: resolvedEmail }] },
-      });
-
-      if (!dbUser && resolvedEmail) {
-        dbUser = await prisma.user.create({
-          data: {
-            id: resolvedUserId.startsWith('usr_') ? resolvedUserId : undefined,
-            email: resolvedEmail,
-            name: resolvedEmail.split('@')[0],
-            subscriptionTier: 'free',
-          },
+    // Record pending transaction in Prisma PostgreSQL if configured (non-blocking fallback)
+    if (isDatabaseConfigured()) {
+      try {
+        // Find or create user in prisma if missing
+        let dbUser = await prisma.user.findFirst({
+          where: { OR: [{ id: resolvedUserId }, { email: resolvedEmail }] },
         });
-      }
 
-      if (dbUser) {
-        await prisma.payment.create({
-          data: {
-            userId: dbUser.id,
-            paymentProvider: 'bkash',
-            providerTransactionId: `PENDING_${bkashRes.paymentID}`,
-            paymentID: bkashRes.paymentID,
-            invoiceNumber,
-            amount,
-            currency: 'BDT',
-            status: 'initiated',
-            paymentMethod: 'bKash MFS',
-            metadata: {
-              tier: selectedTier,
-              invoiceNumber,
-              userEmail: resolvedEmail,
-              initiatedAt: new Date().toISOString(),
+        if (!dbUser && resolvedEmail) {
+          dbUser = await prisma.user.create({
+            data: {
+              id: resolvedUserId.startsWith('usr_') ? resolvedUserId : undefined,
+              email: resolvedEmail,
+              name: resolvedEmail.split('@')[0],
+              subscriptionTier: 'free',
             },
-          },
-        });
+          });
+        }
+
+        if (dbUser) {
+          await prisma.payment.create({
+            data: {
+              userId: dbUser.id,
+              paymentProvider: 'bkash',
+              providerTransactionId: `PENDING_${bkashRes.paymentID}`,
+              paymentID: bkashRes.paymentID,
+              invoiceNumber,
+              amount,
+              currency: 'BDT',
+              status: 'initiated',
+              paymentMethod: 'bKash MFS',
+              metadata: {
+                tier: selectedTier,
+                invoiceNumber,
+                userEmail: resolvedEmail,
+                initiatedAt: new Date().toISOString(),
+              },
+            },
+          });
+        }
+      } catch (dbErr: any) {
+        console.warn('[PaymentRouter] Prisma initial log warning (continuing):', dbErr?.message);
       }
-    } catch (dbErr: any) {
-      console.warn('[PaymentRouter] Prisma initial log warning (continuing):', dbErr?.message);
     }
 
     // Also record in memory db for state synchronization
@@ -184,19 +186,21 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     const amount = Number(execResult.amount) || 499;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
 
-    // Check Prisma Payment metadata
-    try {
-      const storedPayment = await prisma.payment.findFirst({
-        where: { paymentID },
-      });
-      if (storedPayment) {
-        resolvedUserId = storedPayment.userId;
-        const meta = (storedPayment.metadata as any) || {};
-        if (meta.tier === 'n5_lifetime') resolvedTier = 'n5_lifetime';
-        if (meta.userEmail) resolvedEmail = meta.userEmail;
+    // Check Prisma Payment metadata if configured
+    if (isDatabaseConfigured()) {
+      try {
+        const storedPayment = await prisma.payment.findFirst({
+          where: { paymentID },
+        });
+        if (storedPayment) {
+          resolvedUserId = storedPayment.userId;
+          const meta = (storedPayment.metadata as any) || {};
+          if (meta.tier === 'n5_lifetime') resolvedTier = 'n5_lifetime';
+          if (meta.userEmail) resolvedEmail = meta.userEmail;
+        }
+      } catch (err: any) {
+        console.warn('[PaymentRouter Callback] Prisma metadata lookup warning:', err?.message);
       }
-    } catch (err: any) {
-      console.warn('[PaymentRouter Callback] Prisma metadata lookup warning:', err?.message);
     }
 
     // Check memory db if still needed

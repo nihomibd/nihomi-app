@@ -114,7 +114,7 @@ import {
   INITIAL_DEFAULT_RIREKISHO
 } from './baitoSeedData.js';
 import { ContentDiffService } from './services/contentDiffService.js';
-import { prisma } from './prisma.js';
+import { prisma, isDatabaseConfigured } from './prisma.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -2223,35 +2223,37 @@ class Database {
   }
 
   private async syncMistakeToDatabase(record: MistakeRecord): Promise<void> {
-    try {
-      await prisma.mistakeRecord.upsert({
-        where: { id: record.id },
-        update: {
-          mistakeCount: record.mistakeCount,
-          studentAnswer: record.studentAnswer,
-          correctAnswer: record.correctAnswer,
-          notes: record.notes,
-          confusionTag: record.confusionTag,
-          resolved: record.resolved,
-          updatedAt: new Date(record.updatedAt)
-        },
-        create: {
-          id: record.id,
-          user: { connect: { id: record.userId } },
-          itemType: record.itemType,
-          conceptId: record.conceptId,
-          studentAnswer: record.studentAnswer,
-          correctAnswer: record.correctAnswer,
-          notes: record.notes,
-          confusionTag: record.confusionTag,
-          mistakeCount: record.mistakeCount,
-          resolved: record.resolved,
-          createdAt: new Date(record.createdAt),
-          updatedAt: new Date(record.updatedAt)
-        }
-      });
-    } catch {
-      // Offline/local DB fallback
+    if (isDatabaseConfigured()) {
+      try {
+        await prisma.mistakeRecord.upsert({
+          where: { id: record.id },
+          update: {
+            mistakeCount: record.mistakeCount,
+            studentAnswer: record.studentAnswer,
+            correctAnswer: record.correctAnswer,
+            notes: record.notes,
+            confusionTag: record.confusionTag,
+            resolved: record.resolved,
+            updatedAt: new Date(record.updatedAt)
+          },
+          create: {
+            id: record.id,
+            user: { connect: { id: record.userId } },
+            itemType: record.itemType,
+            conceptId: record.conceptId,
+            studentAnswer: record.studentAnswer,
+            correctAnswer: record.correctAnswer,
+            notes: record.notes,
+            confusionTag: record.confusionTag,
+            mistakeCount: record.mistakeCount,
+            resolved: record.resolved,
+            createdAt: new Date(record.createdAt),
+            updatedAt: new Date(record.updatedAt)
+          }
+        });
+      } catch {
+        // Offline/local DB fallback
+      }
     }
 
     if (this.supabaseClient) {
@@ -7227,14 +7229,17 @@ class Database {
     }
 
     if (fieldType === 'motivation') {
+      // Clean student input of trailing punctuation
+      const cleanInput = trimmed.replace(/[。！？\.\!\?]+$/, '');
       return {
-        polishedJa: `貴社の理念と業務内容に強く共感し、実践的な接客マナーと迅速な業務遂行を通じて貢献いたしたく、志望いたしました。留学生として週28時間規定を遵守し、誠心誠意努めてまいります。(${trimmed})`,
-        explanationBn: 'আপনার মূল ভাব বজায় রেখে অত্যন্ত মার্জিত এবং বিনীত (Kenjougo/Teineigo) কেইগোতে কনভার্ট করা হয়েছে।'
+        polishedJa: `貴社の理念と業務内容に深く共感し、${cleanInput}という動機のもと、迅速な業務遂行と丁寧な接客を通じて貢献いたしたく志望いたしました。留学生として法定の週28時間就労規則を厳格に遵守し、誠心誠意努めてまいります。`,
+        explanationBn: 'আপনার মূল উদ্দেশ্য বজায় রেখে অত্যন্ত মার্জিত এবং বিনীত (Kenjougo/Teineigo) কেইগোতে প্রফেশনাল রেজুমে ফরম্যাটে রূপান্তর করা হয়েছে।'
       };
     } else {
+      const cleanInput = trimmed.replace(/[。！？\.\!\?]+$/, '');
       return {
-        polishedJa: `私の最大の強みは、異文化環境でも迅速に適応し、何事にも誠実かつ前向きに取り組む協調性です。課題に対しても粘り強く努力を重ね、チームの信頼に応える所存です。(${trimmed})`,
-        explanationBn: 'আপনার আত্মপরিচয় ও শক্তিকে আকর্ষণীয় ও বিশ্বাসযোগ্য জাপানিজ এক্সপ্রেশনে রূপান্তর করা হয়েছে।'
+        polishedJa: `私の最大の長所は、${cleanInput}という点にあります。異文化環境においても迅速に適応し、何事にも誠実かつ前向きに取り組む姿勢を信条としております。課題に対しても粘り強く努力を重ね、店舗およびチームの信頼に全力で応える所存です。`,
+        explanationBn: 'আপনার আত্মপরিচয় ও শক্তিকে আকর্ষণীয়, বিশ্বাসযোগ্য এবং বাস্তবসম্মত জাপানিজ স্ট্যান্ডার্ড এক্সপ্রেশনে রূপান্তর করা হয়েছে।'
       };
     }
   }
@@ -7338,6 +7343,69 @@ class Database {
         nextDialogueRomaji = 'Sumuuzu na reji taiou arigatou gozaimashita! Gochisousama desu.';
         nextDialogueBn = 'চমৎকার ক্যাশিয়ার সার্ভিস দেওয়ার জন্য ধন্যবাদ!';
         nextDialogueEn = 'Thank you for the smooth checkout service!';
+        isFinished = true;
+      }
+    } else if (scenario.type === 'restaurant_izakaya') {
+      if (turnCount === 1) {
+        // Customer asks about table options and flavor choice
+        nextDialogueJa = '禁煙席でお願いします。あと、焼き鳥盛り合わせは塩味とタレ味どちらがおすすめですか？';
+        nextDialogueRomaji = 'Kin\'enseki de onegai shimasu. Ato, yakitori moriawase wa shio-aji to tare-aji dochira ga osusume desu ka?';
+        nextDialogueBn = 'নন-স্মোকিং টেবিল দিন। আর ইয়াকিতোরি প্ল্যাটারের জন্য লবণ না কি সস (তারে) কোনটা বেশি ভালো হবে?';
+        nextDialogueEn = 'Non-smoking table please. Also, for the yakitori platter, do you recommend salt or sweet tare flavor?';
+      } else if (turnCount === 2) {
+        // Customer orders additional items and drinks
+        nextDialogueJa = 'じゃあタレ味でお願いします！それとお冷（お水）を2ついただけますか？';
+        nextDialogueRomaji = 'Jaa tare-aji de onegai shimasu! Soreto ohia (omizu) o futatsu itadakemasu ka?';
+        nextDialogueBn = 'তাহলে তারে সস ফ্লেভারে দিন! সাথে ২ গ্লাস ঠান্ডা পানি দেবেন?';
+        nextDialogueEn = 'Then sweet tare flavor please! And could we also have two glasses of cold water?';
+      } else if (turnCount === 3) {
+        // Customer requests the check / bill
+        nextDialogueJa = 'ごちそうさまでした！すみません、お会計をお願いします。別々で払えますか？';
+        nextDialogueRomaji = 'Gochisousama deshita! Sumimasen, okaikei o onegai shimasu. Betsubetsu de haraemasu ka?';
+        nextDialogueBn = 'খাবারের জন্য ধন্যবাদ! এক্সকিউজ মি, বিলটা দেবেন? আমরা কি আলাদা করে পে করতে পারবো?';
+        nextDialogueEn = 'Thank you for the meal! Excuse me, check please. Can we pay separately?';
+      } else {
+        // Concluded
+        nextDialogueJa = 'とても元気で丁寧な接客でした！お会計ありがとうございます。また食べに来ますね！';
+        nextDialogueRomaji = 'Totemo genki de teinei na sekkyaku deshita! Okaikei arigatou gozaimasu. Mata tabe ni kimasu ne!';
+        nextDialogueBn = 'আপনার উদ্যমী ও বিনীত কাস্টমার সার্ভিস চমৎকার ছিল! বিল পরিশোধের জন্য ধন্যবাদ। আবার আসবো!';
+        nextDialogueEn = 'Your energetic and polite customer service was wonderful! Thank you for the check, we will definitely come back!';
+        isFinished = true;
+      }
+    } else if (scenario.type === 'ward_office') {
+      if (turnCount === 1) {
+        nextDialogueJa = 'はい、在留カードとパスポートを確認いたしました。こちらの転入届用紙に新住所とローマ字氏名のご記入をお願いできますか？';
+        nextDialogueRomaji = 'Hai, zairyuu kaado to pasupooto o kakunin itashimashita. Kochira no ten\'nyuutodoke youshi ni shin-juusho to roomaji shimei no gokinyuu o onegai dekimasu ka?';
+        nextDialogueBn = 'হ্যাঁ, রেসিডেন্ট কার্ড ও পাসপোর্ট চেক করেছি। অনুগ্রহ করে এই ফর্মটিতে নতুন ঠিকানা ও রোমাজি নাম লিখে দেবেন?';
+        nextDialogueEn = 'Yes, I have verified your Residence Card and passport. Could you please fill out your new address and romaji name on this moving-in form?';
+      } else if (turnCount === 2) {
+        nextDialogueJa = '国民健康保険の学生減免申請も合わせて行いますか？留学生の場合、前年所得申告で保険料が約7割減額されます。';
+        nextDialogueRomaji = 'Kokumin kenkou hoken no gakusei genmen shinsei mo awasete okonaimasu ka? Ryuugakusei no baai, zennen shotoku shinkoku de hokenryou ga yaku nanawari gengaku saremasu.';
+        nextDialogueBn = 'জাতীয় স্বাস্থ্য বীমার জন্য স্টুডেন্ট ডিসকাউন্ট আবেদনও কি একসাথে করবেন? শিক্ষার্থীদের জন্য প্রায় ৭০% বীমা প্রিমিয়াম মওকুফ হয়।';
+        nextDialogueEn = 'Would you also like to apply for the student discount on National Health Insurance? For international students, it reduces premiums by about 70%.';
+      } else {
+        nextDialogueJa = '住民票の登録と保険証の交付手続きが完了いたしました。新しい住所が裏面に印字された在留カードをお返しいたします。お疲れ様でした！';
+        nextDialogueRomaji = 'Juuminhyou no touroku to hokenshou no koufu tetsuduki ga kanryou itashimashita. Atarashii juusho ga uramen ni inji sareta zairyuu kaado o okaeshi itashimasu. Otsukaresama deshita!';
+        nextDialogueBn = 'ঠিকানা রেজিস্ট্রেশন ও হেলথ ইন্স্যুরেন্স কার্ড ইস্যু সম্পন্ন হয়েছে। নতুন ঠিকানা মুদ্রিত রেসিডেন্ট কার্ডটি ফেরত নিন। ধন্যবাদ!';
+        nextDialogueEn = 'Residence registration and insurance card issuance are complete. Here is your Residence Card with your new address printed on the back. Well done!';
+        isFinished = true;
+      }
+    } else if (scenario.type === 'train_metro') {
+      if (turnCount === 1) {
+        nextDialogueJa = '新宿駅ですね。山手線の内回りは1番線、外回りは2番線になります。どちらの方面でしょうか？';
+        nextDialogueRomaji = 'Shinjuku eki desu ne. Yamanote-sen no uchimawari wa ichiban-sen, sotomawari wa niban-sen ni narimasu. Dochira no houmen deshou ka?';
+        nextDialogueBn = 'শিনজুকু স্টেশন তো? ইয়ামানতে লাইনের ইনার লুপ ১ নম্বর এবং আউটার লুপ ২ নম্বর ট্র্যাক। কোন দিকে যাচ্ছেন?';
+        nextDialogueEn = 'Shinjuku station, right? The Yamanote inner loop is Track 1, and outer loop is Track 2. Which direction are you heading?';
+      } else if (turnCount === 2) {
+        nextDialogueJa = '残高不足の場合は改札内の自動精算機でチャージできます。電車の遅延証明書が必要でしたらこちらのQRコードから取得できますよ。';
+        nextDialogueRomaji = 'Zandaka busoku no baai wa kaisatsunai no jidou seisanki de chaaji dekimasu. Densha no chien shoumeisho ga hitsuyou deshita ra kochira no QR koudo kara shutoku dekimasu yo.';
+        nextDialogueBn = 'ব্যালেন্স কম থাকলে গেটের ভেতরে ফেয়ার অ্যাডজাস্টমেন্ট মেশিনে রিচার্জ করতে পারেন। ট্রেনের লেট সার্টিফিকেট লাগলে এই কিউআর কোড দিয়ে নিতে পারবেন।';
+        nextDialogueEn = 'If balance is insufficient, you can recharge at the fare adjustment machine inside the gates. If you need a train delay certificate, you can get it via this QR code.';
+      } else {
+        nextDialogueJa = 'ご案内は以上です。お気をつけていってらっしゃいませ！';
+        nextDialogueRomaji = 'Goannai wa ijou desu. Oki o tsukete itterasshaimase!';
+        nextDialogueBn = 'তথ্য প্রদান সমাপ্ত। সাবধানে যাতায়াত করুন!';
+        nextDialogueEn = 'That concludes the station assistance. Have a safe and pleasant trip!';
         isFinished = true;
       }
     }

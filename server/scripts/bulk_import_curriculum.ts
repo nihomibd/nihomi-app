@@ -2,8 +2,23 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import dotenv from 'dotenv';
+import { DrillSeedGeneratorService } from '../services/drillSeedGeneratorService.js';
+import { db } from '../db.js';
 
 dotenv.config();
+
+export class BulkCurriculumImporter {
+  static async importCurriculum() {
+    const seedResult = DrillSeedGeneratorService.seedDefaultDrills();
+    const sampleDrills = db.getPitchDrills({ limit: 10 });
+    return {
+      totalValid: seedResult.totalSeeded,
+      inserted: seedResult.inserted,
+      updated: seedResult.updated,
+      sampleDrills
+    };
+  }
+}
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });

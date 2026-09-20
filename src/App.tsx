@@ -119,6 +119,8 @@ export const App: React.FC = () => {
 
       if (path === '/start' || path === '/campaign' || path === '/ad') {
         setCurrentView('start');
+      } else if ((path === '/' || path === '') && (search.has('utm_source') || search.has('fbclid') || search.has('gclid') || search.has('utm_campaign'))) {
+        setCurrentView('start');
       } else if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
         setCurrentView('courses');
       } else if (path === '/portal' || path === '/dashboard') {

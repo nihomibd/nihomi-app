@@ -44,6 +44,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 /**
+ * Checks if DATABASE_URL is configured in the environment.
+ */
+export function isDatabaseConfigured(): boolean {
+  return Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== '');
+}
+
+/**
  * Detects whether an error is a database connection timeout or pool failure.
  */
 export function isPrismaConnectionError(error: unknown): boolean {
@@ -76,6 +83,14 @@ export function isPrismaConnectionError(error: unknown): boolean {
  * Throws an error with status 503 if unreachable.
  */
 export async function assertDatabaseConnection(): Promise<void> {
+  if (!isDatabaseConfigured()) {
+    const error: any = new Error(
+      'PostgreSQL DATABASE_URL is not configured in the environment.'
+    );
+    error.status = 503;
+    error.code = 'DB_UNCONFIGURED';
+    throw error;
+  }
   try {
     await prisma.$queryRaw`SELECT 1`;
   } catch (err: any) {
@@ -96,6 +111,12 @@ export async function checkDatabaseHealth(): Promise<{
   latencyMs?: number;
   error?: string;
 }> {
+  if (!isDatabaseConfigured()) {
+    return {
+      healthy: false,
+      error: 'DATABASE_URL environment variable is not configured'
+    };
+  }
   const start = Date.now();
   try {
     await prisma.$queryRaw`SELECT 1`;

@@ -133,10 +133,39 @@ self.addEventListener('fetch', (event) => {
 
   if (event.request.method !== 'GET') return;
 
+  // STRICT BYPASS: Never intercept Vite dev requests, TypeScript modules, or Vite internal scripts
+  if (
+    url.pathname.startsWith('/src/') ||
+    url.pathname.startsWith('/@') ||
+    url.pathname.includes('/node_modules/') ||
+    url.pathname.endsWith('.tsx') ||
+    url.pathname.endsWith('.ts') ||
+    url.searchParams.has('v') ||
+    url.searchParams.has('import')
+  ) {
+    return;
+  }
+
   // STRICT NETWORK-ONLY: Exclude all other /api/ endpoints from service worker caching.
   // Dynamic API requests must always fetch directly from the network to preserve security,
   // real-time authentication, idempotent payments, and fresh database states.
   if (url.pathname.startsWith('/api/')) {
+    return;
+  }
+
+  // Navigation requests (HTML shell): Network-First with Cache fallback
+  if (event.request.mode === 'navigate' || url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CURRENT_CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request) || caches.match('/index.html'))
+    );
     return;
   }
 

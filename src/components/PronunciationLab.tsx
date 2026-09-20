@@ -28,8 +28,10 @@ import {
 } from 'recharts';
 import { speakJapanese } from '../lib/tts.js';
 import { GamificationService } from '../lib/gamificationService.js';
+import { playTokyoPitchMelody } from '../lib/pitchAccentAudio.js';
+import { TOKYO_PITCH_DICTIONARY } from '../lib/pitchAccentData.js';
 
-interface PronunciationPhrase {
+export interface PronunciationPhrase {
   id: string;
   japanese: string;
   reading: string;
@@ -91,23 +93,78 @@ const DEFAULT_PHRASES: PronunciationPhrase[] = [
 
 const HISTORY_STORAGE_KEY = 'nihomi_pronunciation_history_v1';
 
-interface PronunciationLabProps {
+export interface PronunciationLabProps {
   initialPhrase?: string;
+  phraseList?: PronunciationPhrase[];
   onScoreEarned?: (score: number) => void;
 }
 
 export const PronunciationLab: React.FC<PronunciationLabProps> = ({
   initialPhrase,
+  phraseList,
   onScoreEarned
 }) => {
-  const [phrases] = useState<PronunciationPhrase[]>(DEFAULT_PHRASES);
-  const [selectedPhrase, setSelectedPhrase] = useState<PronunciationPhrase>(() => {
-    if (initialPhrase) {
-      const match = DEFAULT_PHRASES.find((p) => p.japanese.includes(initialPhrase));
-      if (match) return match;
+  const [phrases, setPhrases] = useState<PronunciationPhrase[]>(() => {
+    if (phraseList && phraseList.length > 0) {
+      return phraseList;
     }
-    return DEFAULT_PHRASES[0];
+    return DEFAULT_PHRASES;
   });
+
+  const [selectedPhrase, setSelectedPhrase] = useState<PronunciationPhrase>(() => {
+    const list = phraseList && phraseList.length > 0 ? phraseList : DEFAULT_PHRASES;
+    if (initialPhrase) {
+      const match = list.find((p) => p.japanese.includes(initialPhrase) || initialPhrase.includes(p.japanese));
+      if (match) return match;
+      return {
+        id: 'custom-init',
+        japanese: initialPhrase,
+        reading: initialPhrase,
+        romaji: '',
+        english: 'Current lesson phrase',
+        bangla: 'বর্তমান পাঠের বাক্য'
+      };
+    }
+    return list[0];
+  });
+
+  // Keep phrases and selectedPhrase synchronized when props change
+  useEffect(() => {
+    if (phraseList && phraseList.length > 0) {
+      setPhrases(phraseList);
+      if (initialPhrase) {
+        const match = phraseList.find((p) => p.japanese.includes(initialPhrase) || initialPhrase.includes(p.japanese));
+        if (match) {
+          setSelectedPhrase(match);
+        } else {
+          setSelectedPhrase({
+            id: 'custom-init',
+            japanese: initialPhrase,
+            reading: initialPhrase,
+            romaji: '',
+            english: 'Current lesson phrase',
+            bangla: 'বর্তমান পাঠের বাক্য'
+          });
+        }
+      } else {
+        setSelectedPhrase(phraseList[0]);
+      }
+    } else if (initialPhrase) {
+      const match = DEFAULT_PHRASES.find((p) => p.japanese.includes(initialPhrase) || initialPhrase.includes(p.japanese));
+      if (match) {
+        setSelectedPhrase(match);
+      } else {
+        setSelectedPhrase({
+          id: 'custom-init',
+          japanese: initialPhrase,
+          reading: initialPhrase,
+          romaji: '',
+          english: 'Target practice phrase',
+          bangla: 'অনুশীলনের বাক্য'
+        });
+      }
+    }
+  }, [initialPhrase, phraseList]);
 
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
@@ -414,6 +471,27 @@ export const PronunciationLab: React.FC<PronunciationLabProps> = ({
           >
             <TrendingUp className="w-4 h-4 text-emerald-600" />
             <span>{showHistoryChart ? 'Hide Trends' : 'View Trends'}</span>
+          </button>
+
+          <button
+            onClick={() => {
+              const pitchEntry = TOKYO_PITCH_DICTIONARY[selectedPhrase.japanese] || 
+                                 TOKYO_PITCH_DICTIONARY[selectedPhrase.reading] ||
+                                 Object.values(TOKYO_PITCH_DICTIONARY).find(p => selectedPhrase.japanese.includes(p.reading));
+              if (pitchEntry) {
+                playTokyoPitchMelody(pitchEntry.targetPitches, pitchEntry.morae, 1.0);
+              } else {
+                const clean = selectedPhrase.japanese.replace(/[^ぁ-んァ-ン一-龯]/g, '');
+                const moraeCount = Math.max(2, Math.min(6, clean.length || 3));
+                const targetPitches: ('H' | 'L')[] = ['L', ...Array(moraeCount - 1).fill('H')];
+                playTokyoPitchMelody(targetPitches, Array(moraeCount).fill('・'), 1.0);
+              }
+            }}
+            className="px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer border border-amber-200 dark:border-amber-900 shrink-0"
+            title="Listen to authentic Tokyo pitch accent melody contour"
+          >
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            <span>Pitch Melody</span>
           </button>
 
           <button

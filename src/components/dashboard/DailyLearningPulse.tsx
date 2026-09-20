@@ -17,7 +17,7 @@ import {
   ShieldCheck,
   ShieldAlert
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { getSrsSummaryStats, getDueSrsItems } from '../../lib/srs';
 import { SrsVocabularyService } from '../../lib/srsService';
 import { speakJapanese } from '../../lib/tts';

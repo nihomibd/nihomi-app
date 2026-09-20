@@ -54,18 +54,35 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Register Service Worker for offline resilience
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.location.protocol === 'https:') {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((reg) => {
-        console.log('Nihomi SW registered successfully:', reg.scope);
-      })
-      .catch((err) => {
-        console.warn('Nihomi SW registration skipped or failed:', err);
-      });
-  });
+// Service Worker handling:
+// In development mode, actively unregister any service workers and clear caches to prevent stale chunks
+// and eliminate any possibility of duplicate React runtime instances.
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  if (import.meta.env.DEV) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister().catch(() => {});
+      }
+    }).catch(() => {});
+    if ('caches' in window) {
+      caches.keys().then((keys) => {
+        for (const key of keys) {
+          caches.delete(key).catch(() => {});
+        }
+      }).catch(() => {});
+    }
+  } else if (window.location.protocol === 'https:' && import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => {
+          console.log('Nihomi SW registered successfully:', reg.scope);
+        })
+        .catch((err) => {
+          console.warn('Nihomi SW registration skipped or failed:', err);
+        });
+    });
+  }
 }
 
 const container = document.getElementById('root');

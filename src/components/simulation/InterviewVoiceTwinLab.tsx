@@ -22,6 +22,40 @@ import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 import { TokyoPrincipalVisaInterviewDrill } from './TokyoPrincipalVisaInterviewDrill';
 
+export const SCENARIO_QUICK_CHIPS: Record<string, Array<{ textJa: string; labelBn: string; level: string }>> = {
+  restaurant_izakaya: [
+    { textJa: 'いらっしゃいませ！何名様でしょうか？', labelBn: 'স্বাগতম! কতজন মেহমান?', level: 'Keigo' },
+    { textJa: '喜んで！ご注文を繰り返します。', labelBn: 'আনন্দের সাথে! অর্ডারটি মিলিয়ে নিচ্ছি।', level: 'Sonkei' },
+    { textJa: 'タレ味と塩味、どちらになさいますか？', labelBn: 'সস না কি লবণ ফ্লেভারে নেবেন?', level: 'Sonkei' },
+    { textJa: 'お待たせいたしました！生ビールでございます。', labelBn: 'অপেক্ষা করানোর জন্য দুঃখিত, পানীয় পরিবেশন করছি।', level: 'Kenjou' },
+    { textJa: 'お会計は別々になさいますか？ご一緒ですか？', labelBn: 'বিল কি আলাদা দেবেন না একসাথে?', level: 'Keigo' },
+    { textJa: 'ありがとうございました！またお越しくださいませ！', labelBn: 'অনেক ধন্যবাদ! আবার শুভাগমন কাম্য!', level: 'Keigo' }
+  ],
+  school_principal: [
+    { textJa: '初めまして。本日はよろしくお願いいたします。', labelBn: 'নমস্কার। আজ ইন্টারভিউয়ের জন্য ধন্যবাদ।', level: 'Kenjou' },
+    { textJa: '将来は日本のITエンジニアとして活躍したいです。', labelBn: 'ভবিষ্যতে জাপানে আইটি ইঞ্জিনিয়ার হতে চাই।', level: 'Teinei' },
+    { textJa: '両親が経済的支援者として学費を支弁してくれます。', labelBn: 'বাবা-মা আমার আর্থিক স্পন্সর।', level: 'Kenjou' }
+  ],
+  embassy_visa: [
+    { textJa: '150時間以上の日本語学習を修了いたしました。', labelBn: '১৫০+ ঘণ্টা জাপানি ভাষা শেষ করেছি।', level: 'Kenjou' },
+    { textJa: 'JLPT N5に合格し、現在はN4を学習しております。', labelBn: 'N5 পাস করেছি, এখন N4 পড়ছি।', level: 'Kenjou' },
+    { textJa: '週28時間の就労制限を厳格に遵守いたします。', labelBn: '২৮ ঘণ্টার কাজের নিয়ম কঠোরভাবে মানব।', level: 'Kenjou' }
+  ],
+  conbini_pos: [
+    { textJa: 'いらっしゃいませ！ポイントカードはお持ちですか？', labelBn: 'স্বাগতম! পয়েন্ট কার্ড আছে কি?', level: 'Keigo' },
+    { textJa: 'お弁当温めますか？レジ袋はお付けしますか？', labelBn: 'বেন্টো গরম করব? ব্যাগ লাগবে?', level: 'Keigo' },
+    { textJa: '500円のお返しとレシートでございます。', labelBn: 'ভাংতি ও রসিদ নিন।', level: 'Kenjou' }
+  ],
+  ward_office: [
+    { textJa: '転入届の提出と保険証の手続きに参りました。', labelBn: 'ঠিকানা বদল ও হেলথ কার্ডের জন্য এসেছি।', level: 'Kenjou' },
+    { textJa: '留学生の国民健康保険減免をお願いできますか？', labelBn: 'স্টুডেন্ট হেলথ ইন্স্যুরেন্স ডিসকাউন্ট চাই।', level: 'Teinei' }
+  ],
+  train_metro: [
+    { textJa: 'すみません、山手線の内回りは何番線でしょうか？', labelBn: 'এক্সকিউজ মি, ইনার লুপ কত নম্বর প্ল্যাটফর্ম?', level: 'Teinei' },
+    { textJa: '遅延証明書を1枚いただけますでしょうか？', labelBn: 'একটি ট্রেনের লেট সার্টিফিকেট দেবেন কি?', level: 'Keigo' }
+  ]
+};
+
 interface InterviewVoiceTwinLabProps {
   scenario: BaitoScenarioItem;
   onFinished?: (score: number) => void;
@@ -480,6 +514,54 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
                 再挑戦 (Retake Interview)
               </button>
             </motion.div>
+          )}
+
+          {/* Quick Keigo Response Chips for Customer Service & Roleplay */}
+          {SCENARIO_QUICK_CHIPS[scenario.type] && (
+            <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+              <div className="flex items-center justify-between text-[11px] text-slate-400">
+                <span className="font-semibold text-amber-400/90 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  推奨接客・敬語フレーズ (Quick Keigo Suggestions):
+                </span>
+                <span className="text-[10px] text-slate-500">タップで入力 / 🔊で発音</span>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1.5 scrollbar-none touch-pan-x">
+                {SCENARIO_QUICK_CHIPS[scenario.type].map((chip, idx) => (
+                  <div
+                    key={idx}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition group shrink-0"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => speakJapanese(chip.textJa)}
+                      className="p-1 rounded-md text-amber-400/80 hover:text-amber-300 hover:bg-slate-800 transition"
+                      title="発音を聞く"
+                    >
+                      <Volume2 className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        soundEffects.playButtonTap();
+                        setInputText(chip.textJa);
+                      }}
+                      className="text-left"
+                    >
+                      <div className="text-xs font-medium text-slate-200 group-hover:text-amber-300 transition whitespace-nowrap">
+                        {chip.textJa}
+                      </div>
+                      <div className="text-[9px] text-slate-400 whitespace-nowrap">
+                        {chip.labelBn}
+                      </div>
+                    </button>
+                    <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                      {chip.level}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           {/* Input Controls Bar */}
