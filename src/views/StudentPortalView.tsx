@@ -19,7 +19,8 @@ import {
   Radio,
   Crown,
   Brain,
-  Headphones
+  Headphones,
+  HardDrive
 } from 'lucide-react';
 import { DigitalStudentIdCard } from '../components/student/DigitalStudentIdCard';
 import { LearningAnalyticsDashboard } from '../components/student/LearningAnalyticsDashboard';
@@ -404,6 +405,35 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 </div>
                 <span className="px-3 py-1 bg-red-600/20 text-red-400 text-xs font-bold font-mono rounded-lg border border-red-500/30 flex items-center space-x-1">
                   <span>Open Lab</span>
+                  <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            <div
+              id="card-nihomi-cloud-portal"
+              onClick={() => onNavigate ? onNavigate('cloud') : null}
+              className="p-5 bg-gradient-to-br from-indigo-500/10 via-slate-900 to-indigo-950/30 border border-indigo-500/30 rounded-2xl hover:border-indigo-400 transition-all cursor-pointer space-y-2 group shadow-sm col-span-1 sm:col-span-2 lg:col-span-4"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-950/60 border border-indigo-500/40 text-indigo-400 flex items-center justify-center font-bold text-xs">
+                    <HardDrive className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-white group-hover:text-indigo-400 transition-colors flex items-center gap-2">
+                      <span>Nihomi Cloud™ & Japan Readiness Locker</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+                        Personal Vault
+                      </span>
+                    </h4>
+                    <p className="text-xs text-stone-400">
+                      আপনার পাসপোর্ট, COE, ভিসা ও স্টাডি মেটেরিয়ালের সুরক্ষিত ক্লাউড স্টোরেজ এবং AI ডকুমেন্ট সামারি
+                    </p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-indigo-600/20 text-indigo-300 text-xs font-bold font-mono rounded-lg border border-indigo-500/30 flex items-center space-x-1">
+                  <span>Open Vault</span>
                   <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
