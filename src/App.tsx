@@ -42,6 +42,7 @@ const AuthView = lazy(() => import('./views/AuthView').then(m => ({ default: m.A
 const KanaView = lazy(() => import('./views/KanaView').then(m => ({ default: m.KanaView })));
 const KanjiView = lazy(() => import('./views/KanjiView').then(m => ({ default: m.KanjiView })));
 const ListeningLabView = lazy(() => import('./views/ListeningLabView').then(m => ({ default: m.ListeningLabView })));
+const NihomiCloudView = lazy(() => import('./views/NihomiCloudView').then(m => ({ default: m.NihomiCloudView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -415,6 +416,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'listening' || currentView === 'listening-lab' || currentView === 'kaiwa' || currentView === 'choukai') && (
           <ListeningLabView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'cloud' || currentView === 'nihomi-cloud' || currentView === 'drive' || currentView === 'locker') && (
+          <NihomiCloudView onUpgradeClick={() => handleNavigate('pricing')} />
         )}
         </Suspense>
         </GlobalErrorBoundary>

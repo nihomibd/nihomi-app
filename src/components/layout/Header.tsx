@@ -28,7 +28,8 @@ import {
   MapPin,
   Phone,
   MessageSquare,
-  Store
+  Store,
+  HardDrive
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme, AppTheme } from '../../context/ThemeContext';
@@ -62,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   // Active Category Detection for the 4 core pillars
   const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
   const isReadinessActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests', 'baito', 'baito-os', 'study-plan', 'roadmap', 'quizzes', 'quiz-runner'].includes(currentView);
-  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community'].includes(currentView);
+  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community', 'cloud', 'nihomi-cloud', 'locker'].includes(currentView);
   const isPricingActive = ['pricing', 'plans', 'contact', 'credits', 'subscription'].includes(currentView);
 
   // Close dropdowns on outside click
@@ -542,6 +543,31 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                       </p>
                     </div>
                   </button>
+
+                  {/* 4. নিহোমি ক্লাউড ও জাপান লকার */}
+                  <button
+                    id="nav-item-cloud-vault"
+                    type="button"
+                    onClick={() => handleDropdownSelect('cloud')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 mt-0.5 border border-red-500/20 group-hover/item:scale-105 transition-transform">
+                      <HardDrive className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          নিহোমি ক্লাউড (Nihomi Cloud)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
+                          Vault
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        জাপান লকার, পাসপোর্ট ও শিক্ষা নোটসের ব্যক্তিগত ক্লাউড
+                      </p>
+                    </div>
+                  </button>
                 </div>
               )}
             </div>
@@ -796,6 +822,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                       >
                         <User className="w-3.5 h-3.5 text-white/60" />
                         <span>স্টুডেন্ট ড্যাশবোর্ড</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDropdownSelect('cloud')}
+                        className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                      >
+                        <HardDrive className="w-3.5 h-3.5 text-amber-400" />
+                        <span>নিহোমি ক্লাউড (Nihomi Cloud)</span>
                       </button>
 
                       <button
@@ -1071,6 +1106,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   <div>
                     <div className="text-xs font-bold text-white">ইন্টারভিউ প্রস্তুতি (Interview Prep)</div>
                     <div className="text-[10px] text-white/50">ভিসা ও জব ইন্টারভিউ প্রশ্নোত্তর মহড়া</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('cloud')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white">নিহোমি ক্লাউড ও জাপান লকার (Cloud Vault)</div>
+                    <div className="text-[10px] text-white/50">পাসপোর্ট, ভিসা ও শিক্ষা নোটসের পার্সোনাল ভল্ট</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>

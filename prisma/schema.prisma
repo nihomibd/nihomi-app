@@ -140,6 +140,13 @@ model User {
   approvedVersions  ContentVersion[] @relation("VersionApprover")
   publishedVersions ContentVersion[] @relation("VersionPublisher")
 
+  // Nihomi Cloud Relations
+  cloudFolders      CloudFolder[]
+  cloudFiles        CloudFile[]
+  cloudUsage        CloudUsage?
+  cloudQuota        CloudQuota?
+  cloudAiJobs       CloudAiJob[]
+
   @@index([email])
 }
 
@@ -810,4 +817,127 @@ model ContentVersion {
   @@index([sourceId])
   @@index([targetLessonId])
 }
+
+// ==============================================================================
+// NIHOMI CLOUD V1 — PERSONAL CLOUD & JAPAN READINESS VAULT
+// ==============================================================================
+
+model CloudFolder {
+  id             String        @id @default(cuid())
+  userId         String
+  parentFolderId String?
+  name           String
+  category       String        @default("general") // 'learning', 'japan', 'certificate', 'career', 'general'
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentFolder   CloudFolder?  @relation("FolderHierarchy", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  subfolders     CloudFolder[] @relation("FolderHierarchy")
+  files          CloudFile[]
+
+  @@index([userId])
+  @@index([parentFolderId])
+  @@index([userId, category])
+}
+
+model CloudFile {
+  id                 String             @id @default(cuid())
+  userId             String
+  folderId           String?
+  name               String
+  storagePath        String
+  mimeType           String
+  sizeBytes          BigInt
+  category           String             @default("general") // 'learning', 'japan', 'certificate', 'career', 'general'
+  japanLockerSection String?            // 'passport', 'coe', 'visa', 'school', 'certificates', 'housing', 'employment', 'career', 'other'
+  isFavorite         Boolean            @default(false)
+  isEncrypted        Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  deletedAt          DateTime?
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder             CloudFolder?       @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  versions           CloudFileVersion[]
+  shares             CloudShare[]
+  aiJobs             CloudAiJob[]
+
+  @@index([userId])
+  @@index([folderId])
+  @@index([userId, category])
+  @@index([userId, japanLockerSection])
+  @@index([userId, isFavorite])
+  @@index([userId, deletedAt])
+}
+
+model CloudFileVersion {
+  id            String    @id @default(cuid())
+  fileId        String
+  userId        String
+  storagePath   String
+  sizeBytes     BigInt
+  versionNumber Int       @default(1)
+  createdAt     DateTime  @default(now())
+
+  file          CloudFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([fileId])
+  @@index([userId])
+}
+
+model CloudShare {
+  id        String    @id @default(cuid())
+  fileId    String
+  ownerId   String
+  token     String    @unique
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  file      CloudFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([fileId])
+  @@index([ownerId])
+  @@index([token])
+}
+
+model CloudUsage {
+  userId       String   @id @unique
+  storageBytes BigInt   @default(0)
+  fileCount    Int      @default(0)
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CloudQuota {
+  userId     String   @id @unique
+  quotaBytes BigInt
+  plan       String   @default("free") // 'free' | 'starter' | 'pro' | 'japan_ready'
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CloudAiJob {
+  id            String    @id @default(cuid())
+  userId        String
+  fileId        String
+  jobType       String    // 'summarize' | 'translate' | 'explain_bn' | 'vocabulary' | 'kanji' | 'quiz' | 'flashcards' | 'ask_ai' | 'ocr'
+  status        String    @default("pending") // 'pending' | 'processing' | 'completed' | 'failed'
+  provider      String    @default("gemini")
+  result        String?   @db.Text
+  errorMessage  String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  file          CloudFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([fileId])
+  @@index([userId, status])
+}
+
 
