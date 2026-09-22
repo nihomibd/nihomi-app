@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NihomiBudgetConfiguration",
+  "type": "object",
+  "required": [
+    "currency",
+    "total_monthly_budget",
+    "fiscal_cycle",
+    "wallets",
+    "enforcement_rules"
+  ],
+  "properties": {
+    "currency": {
+      "type": "string",
+      "enum": ["BDT"]
+    },
+    "total_monthly_budget": {
+      "type": "number",
+      "default": 50000
+    },
+    "fiscal_cycle": {
+      "type": "string",
+      "enum": ["CALENDAR_MONTH"]
+    },
+    "wallets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "wallet_id",
+          "name",
+          "monthly_cap",
+          "daily_limit",
+          "approval_threshold",
+          "alert_threshold",
+          "current_spent",
+          "status"
+        ],
+        "properties": {
+          "wallet_id": { "type": "string" },
+          "name": { "type": "string" },
+          "monthly_cap": { "type": "number" },
+          "daily_limit": { "type": "number" },
+          "approval_threshold": { "type": "number" },
+          "alert_threshold": { "type": "number" },
+          "current_spent": { "type": "number" },
+          "status": { "type": "string", "enum": ["NORMAL", "ALERT", "FROZEN"] }
+        }
+      }
+    },
+    "enforcement_rules": {
+      "type": "object",
+      "properties": {
+        "ai_can_increase_budget": {
+          "type": "boolean",
+          "enum": [false]
+        },
+        "auto_freeze_on_100_percent": {
+          "type": "boolean",
+          "enum": [true]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "NIHOMI Virtual Corporate Office Master Manifest",
+  "version": "1.0.0",
+  "boot_timestamp": "2026-09-22T12:52:00+06:00",
+  "governance": {
+    "founder": {
+      "title": "Founder & CEO",
+      "name": "Tanvir Kabir Biplob",
+      "authority": "SOVEREIGN_FINAL_AUTHORITY",
+      "jurisdiction": "All Systems, Budgets, Codebases, and Policies"
+    },
+    "ai_coo": {
+      "id": "NHO-AI-001",
+      "role": "AI Chief Operating Officer",
+      "status": "BLUEPRINT_ACTIVE",
+      "authority": "YELLOW_OPERATIONAL_SUPERVISOR",
+      "operating_manual": "FOUNDER-OFFICE/02-AI-ORGANIZATION/AI-COO-OPERATING-SYSTEM.md"
+    }
+  },
+  "departments": [
+    { "id": "00-FOUNDER", "name": "Executive Office", "head": "FOUNDER" },
+    { "id": "01-COMPANY-BRAIN", "name": "Institutional Memory", "head": "NHO-AI-001" },
+    { "id": "02-AI-ORGANIZATION", "name": "AI Workforce & Org", "head": "NHO-AI-001" },
+    { "id": "03-TASKS", "name": "Task Operating System", "head": "NHO-AI-001" },
+    { "id": "04-APPROVALS", "name": "Executive Approval Gates", "head": "FOUNDER" },
+    { "id": "05-FINANCE", "name": "Finance & Treasury", "head": "NHO-AI-008" },
+    { "id": "06-MARKETING", "name": "Growth & Acquisition", "head": "NHO-AI-005" },
+    { "id": "07-PRODUCT", "name": "Product & Pedagogy", "head": "NHO-AI-003" },
+    { "id": "08-CONTENT", "name": "Curriculum & Content Studio", "head": "NHO-AI-004" },
+    { "id": "09-OPERATIONS", "name": "Business Operations", "head": "NHO-AI-009" },
+    { "id": "10-SECURITY", "name": "Information Security & CISO", "head": "NHO-AI-011" },
+    { "id": "11-REPORTS", "name": "Executive Telemetry & Reports", "head": "NHO-AI-012" },
+    { "id": "12-EXPERIMENTS", "name": "Growth Experiments & A/B", "head": "NHO-AI-003" },
+    { "id": "13-SOP-LIBRARY", "name": "Standard Operating Procedures", "head": "NHO-AI-009" },
+    { "id": "14-BRAND", "name": "Brand Identity & Neo-Tokyo Design", "head": "NHO-AI-005" },
+    { "id": "15-SYSTEM", "name": "Virtual Office OS Core", "head": "NHO-AI-001" }
+  ],
+  "authority_model": {
+    "tiers": ["GREEN", "YELLOW", "RED"],
+    "red_protocol": "PREPARE -> FOUNDER APPROVAL -> EXECUTE",
+    "specification": "FOUNDER-OFFICE/15-SYSTEM/AUTHORITY-MODEL.md"
+  },
+  "approval_model": {
+    "policy": "FOUNDER-OFFICE/04-APPROVALS/APPROVAL-POLICY.md",
+    "schema": "FOUNDER-OFFICE/04-APPROVALS/APPROVAL-SCHEMA.json"
+  },
+  "budget_model": {
+    "currency": "BDT",
+    "total_monthly": 50000,
+    "wallets": [
+      { "name": "Marketing", "cap": 20000 },
+      { "name": "Experiments", "cap": 10000 },
+      { "name": "AI", "cap": 10000 },
+      { "name": "Infrastructure", "cap": 5000 },
+      { "name": "Reserve", "cap": 5000 }
+    ],
+    "ai_increase_allowed": false,
+    "policy": "FOUNDER-OFFICE/05-FINANCE/BUDGET-POLICY.md"
+  },
+  "task_model": {
+    "policy": "FOUNDER-OFFICE/03-TASKS/TASK-POLICY.md",
+    "schema": "FOUNDER-OFFICE/03-TASKS/TASK-SCHEMA.json",
+    "concurrency_limit_per_agent": 1
+  },
+  "kpi_model": {
+    "mrr_target_6m": 500000,
+    "mrr_target_12m": 2000000,
+    "student_target_12m": 25000,
+    "ai_cost_ceiling_pct": 12.0
+  },
+  "company_memory": {
+    "protocol": "FOUNDER-OFFICE/15-SYSTEM/COMPANY-MEMORY-PROTOCOL.md",
+    "archive": "FOUNDER-OFFICE/01-COMPANY-BRAIN/COMPANY-MEMORY.md"
+  },
+  "integrations": {
+    "map": "FOUNDER-OFFICE/15-SYSTEM/INTEGRATION-MAP.md",
+    "status": "DISCONNECTED_STAGED",
+    "count": 12
+  },
+  "emergency_controls": {
+    "switches": [
+      "STOP ALL AI",
+      "STOP MARKETING",
+      "STOP PAYMENTS",
+      "STOP ENGINEERING",
+      "STOP AUTOMATIONS",
+      "STOP EXTERNAL ACTIONS"
+    ],
+    "specification": "FOUNDER-OFFICE/10-SECURITY/EMERGENCY-CONTROLS.md"
+  },
+  "operating_cycle": {
+    "sequence": ["DETECT", "CLASSIFY", "DIAGNOSE", "ACT", "VERIFY", "LOG", "ESCALATE"],
+    "max_retries": 2,
+    "specification": "FOUNDER-OFFICE/09-OPERATIONS/OPERATING-CYCLE.md"
+  },
+  "gates": {
+    "current_gate": "VIRTUAL OFFICE OPERATING SYSTEM",
+    "completed_gates": [
+      "GATE 0: Local Founder Office Foundation",
+      "GATE 1: Virtual Office Operating System Blueprint"
+    ],
+    "next_gate": "GATE 2: Cloud / App Integration & Founder HQ"
+  }
+}

@@ -1,4 +1,4 @@
-export type UserRole = 'user' | 'admin' | 'instructor';
+export type UserRole = 'user' | 'admin' | 'instructor' | 'founder';
 
 export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
 
@@ -1036,6 +1036,128 @@ export interface DatabaseSchema {
     createdAt: string;
     read: boolean;
   }>;
+
+  // Gate 2: Founder HQ & Virtual Office State
+  founderSettings?: FounderSettings;
+  founderApprovals?: FounderApprovalRecord[];
+  founderTasks?: FounderTaskRecord[];
+  founderBudgetWallets?: FounderBudgetWallet[];
+  aiDepartmentStatuses?: Record<string, AIDepartmentStatus>;
+  founderEmergencyControls?: FounderEmergencyControls;
+}
+
+// ==============================================================================
+// GATE 2: NIHOMI FOUNDER HQ & VIRTUAL OFFICE MODELS
+// ==============================================================================
+
+export interface MrrTargetConfig {
+  targetAmount: number;
+  currency: string;
+  deadline: string;
+  monthlyBudget: number;
+  growthPriority: string;
+  riskLevel: string;
+  updatedAt: string;
+  updatedBy: string;
+}
+
+export interface MarketTargetConfig {
+  primaryMarket: string;
+  secondaryMarket: string;
+  experimentalMarket: string;
+  geography: string[];
+  customerSegment: string;
+  language: string;
+  priceRange: string;
+  acquisitionChannels: string[];
+  priority: string;
+  timeframe: string;
+  updatedAt: string;
+  updatedBy: string;
+}
+
+export interface ActiveObjectiveConfig {
+  goal: string;
+  market: string;
+  segment: string;
+  timeframe: string;
+  budget: number;
+  status: string;
+  updatedAt: string;
+}
+
+export interface FounderSettings {
+  mrrTarget: MrrTargetConfig;
+  marketTarget: MarketTargetConfig;
+  activeObjective: ActiveObjectiveConfig;
+}
+
+export interface FounderApprovalRecord {
+  request_id: string;
+  department: string;
+  request: string;
+  amount: number;
+  risk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  expected_outcome: string;
+  recommendation: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'CHANGES_REQUESTED' | 'CANCELLED' | 'COMPLETED';
+  founder_decision?: string;
+  date: string;
+  result?: string;
+  updated_at?: string;
+}
+
+export interface FounderTaskRecord {
+  task_id: string;
+  objective: string;
+  department: string;
+  owner: string;
+  priority: 'P0' | 'P1' | 'P2' | 'P3';
+  authority: 'GREEN' | 'YELLOW' | 'RED';
+  dependencies: string[];
+  status: 'QUEUED' | 'ACTIVE' | 'BLOCKED' | 'COMPLETED' | 'CANCELLED';
+  created_at: string;
+  updated_at: string;
+  result?: string;
+  next_action?: string;
+}
+
+export interface FounderBudgetWallet {
+  wallet_id: string;
+  name: string;
+  monthly_cap: number;
+  daily_limit: number;
+  approval_threshold: number;
+  alert_threshold: number;
+  current_spent: number;
+  status: 'NORMAL' | 'ALERT' | 'FROZEN';
+  updated_at?: string;
+}
+
+export interface AIDepartmentStatus {
+  id: string;
+  name: string;
+  role: string;
+  status: 'RUNNING' | 'PAUSED' | 'BLOCKED' | 'NEEDS_APPROVAL' | 'ERROR' | 'NOT_CONFIGURED';
+  activeTasksCount: number;
+  lastActive: string;
+  details?: string;
+}
+
+export interface EmergencyControlSwitch {
+  active: boolean;
+  updatedAt: string;
+  updatedBy: string;
+  connected: boolean;
+}
+
+export interface FounderEmergencyControls {
+  stopAllAi: EmergencyControlSwitch;
+  stopMarketing: EmergencyControlSwitch;
+  stopPayments: EmergencyControlSwitch;
+  stopEngineering: EmergencyControlSwitch;
+  stopAutomations: EmergencyControlSwitch;
+  stopExternalActions: EmergencyControlSwitch;
 }
 
 export type MockExamSectionType = 'vocabulary' | 'grammar_reading' | 'listening';

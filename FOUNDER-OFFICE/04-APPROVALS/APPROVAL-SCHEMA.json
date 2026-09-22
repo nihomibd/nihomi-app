@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NihomiApprovalRequest",
+  "type": "object",
+  "required": [
+    "request_id",
+    "department",
+    "request",
+    "amount",
+    "risk",
+    "expected_outcome",
+    "recommendation",
+    "status",
+    "founder_decision",
+    "date",
+    "result"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^APP-[0-9]{4}-[0-9]{3,}$"
+    },
+    "department": {
+      "type": "string",
+      "enum": [
+        "EXECUTIVE",
+        "PRODUCT",
+        "TECHNOLOGY",
+        "CONTENT",
+        "MARKETING",
+        "ADS",
+        "SALES",
+        "FINANCE",
+        "OPERATIONS",
+        "SECURITY",
+        "ANALYTICS"
+      ]
+    },
+    "request": {
+      "type": "string",
+      "description": "Clear and specific description of the requested action."
+    },
+    "amount": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Financial commitment in BDT (0 if non-financial)."
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "expected_outcome": {
+      "type": "string",
+      "description": "Measurable business or technical outcome upon approval."
+    },
+    "recommendation": {
+      "type": "string",
+      "description": "AI COO or Department Head recommendation."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED",
+        "CHANGES_REQUESTED",
+        "CANCELLED",
+        "COMPLETED"
+      ]
+    },
+    "founder_decision": {
+      "type": "string",
+      "description": "Explicit statement or condition from the Founder."
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "description": "Post-execution verification notes (empty while pending)."
+    }
+  }
+}

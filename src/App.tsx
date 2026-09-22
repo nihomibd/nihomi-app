@@ -143,6 +143,8 @@ export const App: React.FC = () => {
         setCurrentView('documents');
       } else if (path === '/credits') {
         setCurrentView('credits');
+      } else if (path === '/founder' || path === '/admin/founder' || path === '/command-center') {
+        setCurrentView('founder');
       } else if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
         setCurrentView('growth');
       } else if (path === '/terms' || path === '/terms-of-service') {
@@ -184,6 +186,7 @@ export const App: React.FC = () => {
       else if (path === '/coordination') setCurrentView('coordination');
       else if (path === '/documents') setCurrentView('documents');
       else if (path === '/credits') setCurrentView('credits');
+      else if (path === '/founder' || path === '/admin/founder' || path === '/command-center') setCurrentView('founder');
       else if (path === '/admin/growth' || path === '/growth') setCurrentView('growth');
       else if (path === '/terms') setCurrentView('terms');
       else if (path === '/privacy') setCurrentView('privacy');

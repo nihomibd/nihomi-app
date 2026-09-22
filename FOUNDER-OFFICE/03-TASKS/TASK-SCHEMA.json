@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NihomiTaskRecord",
+  "type": "object",
+  "required": [
+    "task_id",
+    "objective",
+    "department",
+    "owner",
+    "priority",
+    "authority",
+    "dependencies",
+    "status",
+    "created_at",
+    "updated_at",
+    "result",
+    "next_action"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^TSK-[A-Z]{3,4}-[0-9]{3,}$"
+    },
+    "objective": {
+      "type": "string",
+      "description": "Clear, verifiable statement of task objective."
+    },
+    "department": {
+      "type": "string",
+      "enum": [
+        "EXECUTIVE",
+        "PRODUCT",
+        "TECHNOLOGY",
+        "CONTENT",
+        "MARKETING",
+        "ADS",
+        "SALES",
+        "FINANCE",
+        "OPERATIONS",
+        "SECURITY",
+        "ANALYTICS"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "description": "Employee ID of assigned AI or Human owner."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "authority": {
+      "type": "string",
+      "enum": ["GREEN", "YELLOW", "RED"]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["QUEUED", "ACTIVE", "BLOCKED", "COMPLETED", "CANCELLED"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "description": "Summary of output, verification metrics, or artifacts created."
+    },
+    "next_action": {
+      "type": "string",
+      "description": "Next logical step following task outcome."
+    }
+  }
+}

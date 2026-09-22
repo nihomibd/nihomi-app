@@ -520,6 +520,44 @@ export function requireAdmin(req: Request | any, res: Response, next: NextFuncti
 }
 
 /**
+ * Express Middleware: Require Founder role strictly.
+ * Accepts tokens via standard Authorization: Bearer <token> header.
+ */
+export function requireFounder(req: Request | any, res: Response, next: NextFunction) {
+  const token = extractBearerToken(req);
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized. Bearer token missing in Authorization header.',
+      code: 'AUTH_REQUIRED'
+    });
+  }
+
+  const user = getUserFromToken(token);
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized. Invalid or expired authentication token.',
+      code: 'INVALID_TOKEN'
+    });
+  }
+
+  const isFounder = (user.role as string) === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+
+  if (!isFounder) {
+    return res.status(403).json({
+      success: false,
+      error: 'Forbidden. Access restricted strictly to NIHOMI Founder.',
+      code: 'FORBIDDEN_FOUNDER_ONLY'
+    });
+  }
+
+  req.user = user;
+  req.authContext = { user, token };
+  next();
+}
+
+/**
  * Express Middleware: Require specific Role(s).
  * Accepts tokens ONLY via standard `Authorization: Bearer <token>` header.
  */

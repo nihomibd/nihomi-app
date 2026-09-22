@@ -21,6 +21,7 @@ import { analyticsRouter } from '../server/routes/analytics.js';
 import { voiceRouter } from '../server/routes/voice.js';
 import { referralRouter } from '../server/routes/referral.js';
 import { dashboardRouter } from '../server/routes/dashboard.js';
+import { founderRouter } from '../server/routes/founder.js';
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/analytics', analyticsRouter);
 app.use('/api/voice', voiceRouter);
 app.use('/api/referrals', referralRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/founder', founderRouter);
 
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', service: 'nihomi-api', timestamp: new Date().toISOString() });

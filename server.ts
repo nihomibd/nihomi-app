@@ -29,6 +29,7 @@ import { voiceRouter } from './server/routes/voice.js';
 import { referralRouter } from './server/routes/referral.js';
 import { dashboardRouter } from './server/routes/dashboard.js';
 import cloudRouter from './server/routes/cloud.js';
+import { founderRouter } from './server/routes/founder.js';
 import { SpeakingReadinessCertService } from './server/services/speakingReadinessCertService.js';
 import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
@@ -186,6 +187,7 @@ async function startServer() {
   app.use('/api/referral', referralRouter);
   app.use('/api/dashboard', dashboardRouter);
   app.use('/api/cloud', cloudRouter);
+  app.use('/api/founder', founderRouter);
 
   // Public Institutional Certificate Verification Endpoint
   app.get('/api/public/verify-certificate/:certId', (req, res) => {

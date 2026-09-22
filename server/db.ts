@@ -43,6 +43,15 @@ import {
   SubscriptionStatus,
   PaymentStatus,
   PaymentProviderType,
+  FounderSettings,
+  MrrTargetConfig,
+  MarketTargetConfig,
+  ActiveObjectiveConfig,
+  FounderApprovalRecord,
+  FounderTaskRecord,
+  FounderBudgetWallet,
+  AIDepartmentStatus,
+  FounderEmergencyControls,
   ContentSource,
   ContentDraft,
   ContentVersion,
@@ -7435,6 +7444,378 @@ class Database {
       isFinished,
       finalReadinessScore: isFinished ? Math.max(78, overallScore) : undefined
     };
+  }
+
+  // ==============================================================================
+  // GATE 2: FOUNDER HQ & VIRTUAL OFFICE METHODS
+  // ==============================================================================
+
+  public getFounderSettings(): FounderSettings {
+    if (!this.data.founderSettings) {
+      this.data.founderSettings = {
+        mrrTarget: {
+          targetAmount: 10000,
+          currency: 'USD',
+          deadline: '2027-12-31',
+          monthlyBudget: 50000,
+          growthPriority: 'SUSTAINABLE_PROFITABLE',
+          riskLevel: 'MODERATE',
+          updatedAt: new Date().toISOString(),
+          updatedBy: 'mdtanvirkabirbiplob@gmail.com'
+        },
+        marketTarget: {
+          primaryMarket: 'Bangladesh',
+          secondaryMarket: 'Japan',
+          experimentalMarket: 'Global South Asia',
+          geography: ['Dhaka', 'Chittagong', 'Sylhet', 'Tokyo'],
+          customerSegment: 'Japanese N5/N4 Aspirants & Relocation Candidates',
+          language: 'Bengali / Japanese / English',
+          priceRange: '৳499 - ৳14,999 BDT',
+          acquisitionChannels: ['Facebook Reels', 'Direct Campus Partnerships', 'Organic SEO', 'Live Masterclasses'],
+          priority: 'P1_PRIMARY_EXPANSION',
+          timeframe: 'Q4 2026 - Q4 2027',
+          updatedAt: new Date().toISOString(),
+          updatedBy: 'mdtanvirkabirbiplob@gmail.com'
+        },
+        activeObjective: {
+          goal: 'Achieve $10,000 MRR & 500 Active Pro/Japan Ready Subscribers',
+          market: 'Bangladesh & Japan Relocation Candidates',
+          segment: 'JLPT N5/N4 Learners & BaitoOS Job Seekers',
+          timeframe: 'Q4 2026 - Q2 2027',
+          budget: 50000,
+          status: 'ACTIVE',
+          updatedAt: new Date().toISOString()
+        }
+      };
+    }
+    return this.data.founderSettings;
+  }
+
+  public updateMrrTarget(updates: Partial<MrrTargetConfig>, userEmail: string): MrrTargetConfig {
+    const current = this.getFounderSettings();
+    const before = { ...current.mrrTarget };
+    current.mrrTarget = {
+      ...current.mrrTarget,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+      updatedBy: userEmail
+    };
+
+    current.activeObjective.goal = `Achieve ${current.mrrTarget.currency === 'USD' ? '$' : '৳'}${Number(current.mrrTarget.targetAmount).toLocaleString()} MRR Target`;
+    current.activeObjective.budget = Number(current.mrrTarget.monthlyBudget);
+    current.activeObjective.updatedAt = new Date().toISOString();
+
+    this.recordAdminAuditLog(
+      'admin-system',
+      userEmail,
+      'MRR_TARGET_UPDATE',
+      'founder_settings.mrrTarget',
+      { before, after: current.mrrTarget }
+    );
+    this.save();
+    return current.mrrTarget;
+  }
+
+  public updateMarketTarget(updates: Partial<MarketTargetConfig>, userEmail: string): MarketTargetConfig {
+    const current = this.getFounderSettings();
+    const before = { ...current.marketTarget };
+    current.marketTarget = {
+      ...current.marketTarget,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+      updatedBy: userEmail
+    };
+
+    current.activeObjective.market = `${current.marketTarget.primaryMarket} (Primary), ${current.marketTarget.secondaryMarket} (Secondary)`;
+    current.activeObjective.segment = current.marketTarget.customerSegment;
+    current.activeObjective.timeframe = current.marketTarget.timeframe;
+    current.activeObjective.updatedAt = new Date().toISOString();
+
+    this.recordAdminAuditLog(
+      'admin-system',
+      userEmail,
+      'MARKET_TARGET_UPDATE',
+      'founder_settings.marketTarget',
+      { before, after: current.marketTarget }
+    );
+    this.save();
+    return current.marketTarget;
+  }
+
+  public getFounderApprovals(): FounderApprovalRecord[] {
+    if (!this.data.founderApprovals || this.data.founderApprovals.length === 0) {
+      this.data.founderApprovals = [
+        {
+          request_id: 'APP-2026-001',
+          department: 'EXECUTIVE',
+          request: 'Initialize local Founder Office & Operating System Blueprint',
+          amount: 0,
+          risk: 'LOW',
+          expected_outcome: 'Establish 16-department organizational blueprint without modifying production',
+          recommendation: 'Approve to enable structured agent scaling',
+          status: 'COMPLETED',
+          founder_decision: 'APPROVED',
+          date: '2026-09-22T12:46:00+06:00',
+          result: 'Created local FOUNDER-OFFICE structure and operational policies.'
+        },
+        {
+          request_id: 'APP-2026-002',
+          department: 'MARKETING',
+          request: 'Allocate ৳5,000 for Facebook Reels N5 study video boost campaign',
+          amount: 5000,
+          risk: 'MEDIUM',
+          expected_outcome: 'Acquire 250+ student trial registrations at ৳20 CPR',
+          recommendation: 'Approve within monthly ৳20,000 Marketing Wallet allocation',
+          status: 'PENDING',
+          date: new Date().toISOString(),
+          result: ''
+        },
+        {
+          request_id: 'APP-2026-003',
+          department: 'CONTENT',
+          request: 'Publish Minna no Nihongo Lessons 1-5 to production live curriculum',
+          amount: 0,
+          risk: 'HIGH',
+          expected_outcome: 'Provide verified interactive exercises to 1,400+ enrolled students',
+          recommendation: 'Linguistic QA passed 100%. Ready for Founder Gate clearance.',
+          status: 'PENDING',
+          date: new Date().toISOString(),
+          result: ''
+        }
+      ];
+    }
+    return this.data.founderApprovals;
+  }
+
+  public createFounderApproval(entry: Omit<FounderApprovalRecord, 'date'>): FounderApprovalRecord {
+    const approvals = this.getFounderApprovals();
+    const record: FounderApprovalRecord = {
+      ...entry,
+      date: new Date().toISOString()
+    };
+    approvals.unshift(record);
+    this.recordAdminAuditLog(
+      'admin-system',
+      'founder@nihomi.com',
+      'APPROVAL_SUBMISSION',
+      `founder_approval.${record.request_id}`,
+      record
+    );
+    this.save();
+    return record;
+  }
+
+  public updateApprovalDecision(
+    requestId: string,
+    decision: 'APPROVED' | 'REJECTED' | 'CHANGES_REQUESTED' | 'CANCELLED',
+    userEmail: string,
+    notes?: string
+  ): FounderApprovalRecord | null {
+    const approvals = this.getFounderApprovals();
+    const item = approvals.find((a) => a.request_id === requestId);
+    if (!item) return null;
+
+    const before = { ...item };
+    item.status = decision;
+    item.founder_decision = `${decision}: ${notes || 'Actioned by Founder'}`;
+    item.updated_at = new Date().toISOString();
+    if (decision === 'APPROVED') {
+      item.result = `Approved by ${userEmail} at ${item.updated_at}. Action queued for execution.`;
+    } else if (decision === 'REJECTED') {
+      item.result = `Rejected by Founder. Execution cancelled.`;
+    }
+
+    this.recordAdminAuditLog(
+      'admin-system',
+      userEmail,
+      'APPROVAL_DECISION',
+      `founder_approval.${requestId}`,
+      { before, after: item, decision, notes }
+    );
+    this.save();
+    return item;
+  }
+
+  public getFounderTasks(statusFilter?: string): FounderTaskRecord[] {
+    if (!this.data.founderTasks || this.data.founderTasks.length === 0) {
+      this.data.founderTasks = [
+        {
+          task_id: 'TSK-EXEC-001',
+          objective: 'Boot NIHOMI Virtual Office Operating System Blueprint',
+          department: 'EXECUTIVE',
+          owner: 'NHO-AI-001',
+          priority: 'P0',
+          authority: 'GREEN',
+          dependencies: [],
+          status: 'COMPLETED',
+          created_at: '2026-09-22T12:42:00+06:00',
+          updated_at: '2026-09-22T12:55:00+06:00',
+          result: 'Complete full operational blueprint across all 16 departments',
+          next_action: 'Upgrade FounderCommandCenterView into NIHOMI Founder HQ'
+        },
+        {
+          task_id: 'TSK-HQ-002',
+          objective: 'Upgrade FounderCommandCenterView into NIHOMI Founder HQ with live telemetry',
+          department: 'EXECUTIVE',
+          owner: 'FOUNDER',
+          priority: 'P0',
+          authority: 'YELLOW',
+          dependencies: ['TSK-EXEC-001'],
+          status: 'ACTIVE',
+          created_at: '2026-09-22T13:00:00+06:00',
+          updated_at: '2026-09-22T13:00:00+06:00',
+          result: 'In progress',
+          next_action: 'Run comprehensive test suite'
+        },
+        {
+          task_id: 'TSK-CONT-001',
+          objective: 'Structure N5 Vocab Chapter 1 into JSON for Content Studio',
+          department: 'CONTENT',
+          owner: 'NHO-AI-004',
+          priority: 'P1',
+          authority: 'YELLOW',
+          dependencies: [],
+          status: 'QUEUED',
+          created_at: '2026-09-22T12:48:00+06:00',
+          updated_at: '2026-09-22T12:48:00+06:00',
+          next_action: 'Run OCR validation'
+        },
+        {
+          task_id: 'TSK-MKT-001',
+          objective: 'Draft 5 Facebook educational reel scripts for Baito phrases',
+          department: 'MARKETING',
+          owner: 'NHO-AI-005',
+          priority: 'P2',
+          authority: 'GREEN',
+          dependencies: [],
+          status: 'QUEUED',
+          created_at: '2026-09-22T12:48:00+06:00',
+          updated_at: '2026-09-22T12:48:00+06:00',
+          next_action: 'Submit for brand review'
+        }
+      ];
+    }
+    if (statusFilter) {
+      return this.data.founderTasks.filter((t) => t.status.toLowerCase() === statusFilter.toLowerCase());
+    }
+    return this.data.founderTasks;
+  }
+
+  public createFounderTask(task: Omit<FounderTaskRecord, 'created_at' | 'updated_at'>): FounderTaskRecord {
+    const tasks = this.getFounderTasks();
+    const now = new Date().toISOString();
+    const record: FounderTaskRecord = {
+      ...task,
+      created_at: now,
+      updated_at: now
+    };
+    tasks.unshift(record);
+    this.save();
+    return record;
+  }
+
+  public updateFounderTask(taskId: string, updates: Partial<FounderTaskRecord>): FounderTaskRecord | null {
+    const tasks = this.getFounderTasks();
+    const item = tasks.find((t) => t.task_id === taskId);
+    if (!item) return null;
+
+    Object.assign(item, updates);
+    item.updated_at = new Date().toISOString();
+    this.save();
+    return item;
+  }
+
+  public getFounderBudgetWallets(): FounderBudgetWallet[] {
+    if (!this.data.founderBudgetWallets || this.data.founderBudgetWallets.length === 0) {
+      this.data.founderBudgetWallets = [
+        { wallet_id: 'w-marketing', name: 'Marketing', monthly_cap: 20000, daily_limit: 1000, approval_threshold: 500, alert_threshold: 16000, current_spent: 2450, status: 'NORMAL' },
+        { wallet_id: 'w-experiments', name: 'Experiments', monthly_cap: 10000, daily_limit: 500, approval_threshold: 250, alert_threshold: 8000, current_spent: 800, status: 'NORMAL' },
+        { wallet_id: 'w-ai', name: 'AI (Inference)', monthly_cap: 10000, daily_limit: 500, approval_threshold: 200, alert_threshold: 8000, current_spent: 1840, status: 'NORMAL' },
+        { wallet_id: 'w-infra', name: 'Infrastructure', monthly_cap: 5000, daily_limit: 250, approval_threshold: 1000, alert_threshold: 4000, current_spent: 1200, status: 'NORMAL' },
+        { wallet_id: 'w-reserve', name: 'Reserve', monthly_cap: 5000, daily_limit: 0, approval_threshold: 0, alert_threshold: 4000, current_spent: 0, status: 'NORMAL' }
+      ];
+    }
+    return this.data.founderBudgetWallets;
+  }
+
+  public updateFounderBudgetWallet(walletId: string, updates: Partial<FounderBudgetWallet>, userEmail: string): FounderBudgetWallet | null {
+    const wallets = this.getFounderBudgetWallets();
+    const item = wallets.find((w) => w.wallet_id === walletId);
+    if (!item) return null;
+
+    const before = { ...item };
+    Object.assign(item, updates);
+    item.updated_at = new Date().toISOString();
+
+    this.recordAdminAuditLog(
+      'admin-system',
+      userEmail,
+      'BUDGET_WALLET_UPDATE',
+      `founder_budget_wallet.${item.wallet_id}`,
+      { before, after: item }
+    );
+    this.save();
+    return item;
+  }
+
+  public getAiDepartmentStatuses(): Record<string, AIDepartmentStatus> {
+    if (!this.data.aiDepartmentStatuses) {
+      this.data.aiDepartmentStatuses = {
+        'AI COO': { id: 'NHO-AI-001', name: 'AI COO', role: 'Chief Operating Officer', status: 'RUNNING', activeTasksCount: 2, lastActive: new Date().toISOString(), details: 'Orchestrating departmental sprints and synthesizing morning briefs' },
+        'AI CTO': { id: 'NHO-AI-002', name: 'AI CTO', role: 'Chief Technology Officer', status: 'RUNNING', activeTasksCount: 1, lastActive: new Date().toISOString(), details: 'Maintaining 99.9% uptime, zero-defect verification, and stateless JWTs' },
+        'AI Product': { id: 'NHO-AI-003', name: 'AI Product', role: 'Head of Product', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Refining BaitoOS and JLPT mock exam roadmaps' },
+        'AI Content': { id: 'NHO-AI-004', name: 'AI Content', role: 'Head of Curriculum & Content', status: 'RUNNING', activeTasksCount: 1, lastActive: new Date().toISOString(), details: 'Structuring Minna no Nihongo N5 grammar and Kanji Furigana' },
+        'AI Marketing': { id: 'NHO-AI-005', name: 'AI Marketing', role: 'Head of Growth & Marketing', status: 'RUNNING', activeTasksCount: 1, lastActive: new Date().toISOString(), details: 'Drafting Facebook educational reels and student referral funnels' },
+        'AI Ads': { id: 'NHO-AI-006', name: 'AI Ads', role: 'Performance Marketing Lead', status: 'PAUSED', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Awaiting Founder approval for Q4 Meta campaign budget' },
+        'AI Sales': { id: 'NHO-AI-007', name: 'AI Sales', role: 'Admissions & Conversion Lead', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Assisting free trial learners with bKash upgrade milestones' },
+        'AI Finance': { id: 'NHO-AI-008', name: 'AI Finance', role: 'Financial Controller', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Reconciling bKash and Stripe transaction ledgers against MRR target' },
+        'AI Operations': { id: 'NHO-AI-009', name: 'AI Operations', role: 'Head of Business Operations', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Auditing SOP compliance and subscription lifecycle crons' },
+        'AI Support': { id: 'NHO-AI-010', name: 'AI Support', role: 'Head of Customer Success', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Resolving student queries in Bengali and English (CSAT 4.95)' },
+        'AI QA/Security': { id: 'NHO-AI-011', name: 'AI QA/Security', role: 'Chief Information Security Officer', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Zero secrets leaked, HMAC token validation active' },
+        'AI Analytics': { id: 'NHO-AI-012', name: 'AI Analytics', role: 'Head of Analytics', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Aggregating learner retention cohorts and telemetry' },
+        'AI Japan Intelligence': { id: 'NHO-AI-013', name: 'AI Japan Intelligence', role: 'Japan Relocation Intelligence Lead', status: 'RUNNING', activeTasksCount: 0, lastActive: new Date().toISOString(), details: 'Tracking Ministry of Justice Tokutei Ginou SSW job quotas' }
+      };
+    }
+    return this.data.aiDepartmentStatuses;
+  }
+
+  public getFounderEmergencyControls(): FounderEmergencyControls {
+    if (!this.data.founderEmergencyControls) {
+      this.data.founderEmergencyControls = {
+        stopAllAi: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: true },
+        stopMarketing: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: true },
+        stopPayments: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: true },
+        stopEngineering: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: false },
+        stopAutomations: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: true },
+        stopExternalActions: { active: false, updatedAt: new Date().toISOString(), updatedBy: 'SYSTEM', connected: false }
+      };
+    }
+    return this.data.founderEmergencyControls;
+  }
+
+  public toggleFounderEmergencyControl(
+    switchKey: keyof FounderEmergencyControls,
+    active: boolean,
+    userEmail: string
+  ): FounderEmergencyControls {
+    const controls = this.getFounderEmergencyControls();
+    const sw = controls[switchKey];
+    if (sw) {
+      const before = { ...sw };
+      sw.active = active;
+      sw.updatedAt = new Date().toISOString();
+      sw.updatedBy = userEmail;
+
+      this.recordAdminAuditLog(
+        'admin-system',
+        userEmail,
+        active ? 'EMERGENCY_KILLSWITCH_ACTIVATED' : 'EMERGENCY_KILLSWITCH_DEACTIVATED',
+        `founder_emergency_controls.${switchKey}`,
+        { switchKey, active, before, after: sw }
+      );
+      this.save();
+    }
+    return controls;
   }
 
   public resetAllToSeed() {
