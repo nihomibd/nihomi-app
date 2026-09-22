@@ -39,6 +39,7 @@ import { updatePageMetaTags } from '../lib/seo';
 import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
 import { Plan } from '../types';
+import { NihomiMobileShowcase } from '../components/showcase/NihomiMobileShowcase';
 
 interface LandingViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -572,6 +573,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
         </div>
       </section>
+
+      {/* ========================================================================= */}
+      {/* NIHOMI MOBILE STUDIO SHOWCASE (Three Photorealistic Flagship Phones)      */}
+      {/* ========================================================================= */}
+      <NihomiMobileShowcase />
 
       {/* ========================================================================= */}
       {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free Starter vs Pro)   */}
