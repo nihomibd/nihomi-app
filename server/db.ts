@@ -52,6 +52,7 @@ import {
   FounderBudgetWallet,
   AIDepartmentStatus,
   FounderEmergencyControls,
+  AiActionLedgerEntry,
   ContentSource,
   ContentDraft,
   ContentVersion,
@@ -127,6 +128,7 @@ import { prisma, isDatabaseConfigured } from './prisma.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
+const FOUNDER_OFFICE_DB_FILE = path.join(DATA_DIR, 'founder_office_db.json');
 
 // Helper for password hashing
 export function hashPassword(password: string, salt?: string): { hash: string; salt: string } {
@@ -451,7 +453,8 @@ class Database {
     accentSrsCards: [],
     speakingCertificates: [],
     roleplaySessions: [],
-    mistakeRecords: []
+    mistakeRecords: [],
+    aiActionLedger: []
   };
 
   private isLoaded = false;
@@ -1114,10 +1117,12 @@ class Database {
       if (!this.data.dailyStudySessions) this.data.dailyStudySessions = [];
       if (!this.data.srsCards) this.data.srsCards = [];
       if (!this.data.srsLogs) this.data.srsLogs = [];
+      this.loadFounderState();
       this.isLoaded = true;
     } catch (err) {
       console.error('Error initializing database defaults:', err);
       this.seedDefaultData();
+      this.loadFounderState();
       this.isLoaded = true;
     }
   }
@@ -1527,10 +1532,77 @@ class Database {
   }
 
   public save() {
-    // STRICT POSTGRESQL PERSISTENCE:
-    // Ephemeral disk writes to nihomi_db.json are eliminated.
-    // In production, database mutations are committed directly to PostgreSQL / Supabase,
-    // avoiding race conditions, memory-disk diverging states, and filesystem latency.
+    this.saveFounderState();
+  }
+
+  public saveFounderState() {
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      const stateToPersist = {
+        founderSettings: this.data.founderSettings,
+        founderApprovals: this.data.founderApprovals,
+        founderTasks: this.data.founderTasks,
+        founderBudgetWallets: this.data.founderBudgetWallets,
+        aiDepartmentStatuses: this.data.aiDepartmentStatuses,
+        founderEmergencyControls: this.data.founderEmergencyControls,
+        adminAuditLogs: this.data.adminAuditLogs,
+        aiActionLedger: this.data.aiActionLedger
+      };
+      const tmpFile = `${FOUNDER_OFFICE_DB_FILE}.tmp.${Date.now()}`;
+      fs.writeFileSync(tmpFile, JSON.stringify(stateToPersist, null, 2), 'utf-8');
+      fs.renameSync(tmpFile, FOUNDER_OFFICE_DB_FILE);
+    } catch (err) {
+      console.error('[FounderDB] Error saving founder office state to durable disk:', err);
+    }
+  }
+
+  public loadFounderState() {
+    try {
+      if (fs.existsSync(FOUNDER_OFFICE_DB_FILE)) {
+        const raw = fs.readFileSync(FOUNDER_OFFICE_DB_FILE, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (parsed.founderSettings) this.data.founderSettings = parsed.founderSettings;
+        if (parsed.founderApprovals && Array.isArray(parsed.founderApprovals)) {
+          this.data.founderApprovals = parsed.founderApprovals;
+        }
+        if (parsed.founderTasks && Array.isArray(parsed.founderTasks)) {
+          this.data.founderTasks = parsed.founderTasks;
+        }
+        if (parsed.founderBudgetWallets && Array.isArray(parsed.founderBudgetWallets)) {
+          this.data.founderBudgetWallets = parsed.founderBudgetWallets;
+        }
+        if (parsed.aiDepartmentStatuses) this.data.aiDepartmentStatuses = parsed.aiDepartmentStatuses;
+        if (parsed.founderEmergencyControls) this.data.founderEmergencyControls = parsed.founderEmergencyControls;
+        if (parsed.adminAuditLogs && Array.isArray(parsed.adminAuditLogs)) {
+          this.data.adminAuditLogs = parsed.adminAuditLogs;
+        }
+        if (parsed.aiActionLedger && Array.isArray(parsed.aiActionLedger)) {
+          this.data.aiActionLedger = parsed.aiActionLedger;
+        }
+        console.log('[FounderDB] Successfully hydrated durable Founder Office state from disk.');
+      }
+    } catch (err) {
+      console.error('[FounderDB] Error loading durable founder office state:', err);
+    }
+  }
+
+  public recordAiAction(entry: Omit<AiActionLedgerEntry, 'action_id' | 'timestamp'>): AiActionLedgerEntry {
+    if (!this.data.aiActionLedger) this.data.aiActionLedger = [];
+    const action: AiActionLedgerEntry = {
+      action_id: `ACT-${Date.now()}-${crypto.randomUUID().slice(0, 4)}`,
+      timestamp: new Date().toISOString(),
+      ...entry
+    };
+    this.data.aiActionLedger.unshift(action);
+    this.saveFounderState();
+    return action;
+  }
+
+  public getAiActionLedger(limit = 100): AiActionLedgerEntry[] {
+    if (!this.data.aiActionLedger) this.data.aiActionLedger = [];
+    return this.data.aiActionLedger.slice(0, limit);
   }
 
   // --- USER & AUTH ---

@@ -96,6 +96,27 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
   const [isEmergencyConfirmOpen, setIsEmergencyConfirmOpen] = useState(false);
   const [targetKillSwitch, setTargetKillSwitch] = useState<{ key: string; active: boolean; label: string } | null>(null);
 
+  // Gate 3: AI COO Modals & Telemetry
+  const [isDailyBriefModalOpen, setIsDailyBriefModalOpen] = useState(false);
+  const [dailyBriefData, setDailyBriefData] = useState<any | null>(null);
+  const [isBriefLoading, setIsBriefLoading] = useState(false);
+
+  const [isDecomposeModalOpen, setIsDecomposeModalOpen] = useState(false);
+  const [decomposeForm, setDecomposeForm] = useState({
+    goal: 'Scale NIHOMI N5 Japanese Acquisition & Baito Relocation',
+    targetMrr: 10000,
+    market: 'Bangladesh',
+    customerSegment: 'University Engineers & Nursing Candidates',
+    timeframe: '30 days',
+    budget: 50000
+  });
+  const [decomposedPlan, setDecomposedPlan] = useState<any | null>(null);
+  const [isDecomposing, setIsDecomposing] = useState(false);
+
+  const [isLedgerModalOpen, setIsLedgerModalOpen] = useState(false);
+  const [ledgerEntries, setLedgerEntries] = useState<any[]>([]);
+  const [isLedgerLoading, setIsLedgerLoading] = useState(false);
+
   const getAuthHeaders = useCallback(() => {
     const token = localStorage.getItem('nihomi_auth_token') || '';
     return {
@@ -317,6 +338,65 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
       alert(e.message || 'Error updating emergency control');
     } finally {
       setIsActionLoading(false);
+    }
+  };
+
+  // Gate 3: Generate Daily CEO Brief
+  const handleGenerateDailyBrief = async () => {
+    setIsBriefLoading(true);
+    setIsDailyBriefModalOpen(true);
+    try {
+      const res = await fetch('/api/founder/ai-coo/daily-brief', {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+      const data = await res.json();
+      if (data.success && data.brief) {
+        setDailyBriefData(data.brief);
+      }
+    } catch (err) {
+      console.error('Error generating daily brief:', err);
+    } finally {
+      setIsBriefLoading(false);
+    }
+  };
+
+  // Gate 3: Decompose Strategic Objective
+  const handleDecomposeObjective = async () => {
+    setIsDecomposing(true);
+    try {
+      const res = await fetch('/api/founder/ai-coo/decompose-objective', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(decomposeForm)
+      });
+      const data = await res.json();
+      if (data.success && data.plan) {
+        setDecomposedPlan(data.plan);
+      }
+    } catch (err) {
+      console.error('Error decomposing objective:', err);
+    } finally {
+      setIsDecomposing(false);
+    }
+  };
+
+  // Gate 3: Fetch AI Action Ledger
+  const handleFetchLedger = async () => {
+    setIsLedgerLoading(true);
+    setIsLedgerModalOpen(true);
+    try {
+      const res = await fetch('/api/founder/ai-coo/action-ledger?limit=50', {
+        headers: getAuthHeaders()
+      });
+      const data = await res.json();
+      if (data.success && data.ledger) {
+        setLedgerEntries(data.ledger);
+      }
+    } catch (err) {
+      console.error('Error fetching action ledger:', err);
+    } finally {
+      setIsLedgerLoading(false);
     }
   };
 
@@ -630,36 +710,42 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
               <div className="space-y-1">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="w-4 h-4 text-amber-400" />
-                  <h3 className="text-base font-bold text-white">Ask AI CEO (Executive Grounded Assistant)</h3>
+                  <h3 className="text-base font-bold text-white">AI COO Command & Orchestration Hub</h3>
+                  <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold rounded">
+                    NHO-AI-001
+                  </span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  READ / ANALYZE / SUMMARIZE Mode • Strictly grounded in database telemetry
+                  READ / ANALYZE / PLAN / DELEGATE / REPORT • Sovereign Gated • Reports to Founder
                 </p>
               </div>
 
-              {/* Integration Ready Media Controls */}
-              <div className="flex items-center space-x-2">
+              {/* Executive Action Toolbar */}
+              <div className="flex flex-wrap items-center gap-2">
                 <button
-                  onClick={() => {
-                    setMediaNotice('Voice recognition integration ready: Awaiting microphone access permission in upcoming build.');
-                    setTimeout(() => setMediaNotice(null), 4000);
-                  }}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition-colors cursor-pointer"
-                  title="Voice Input (Integration Ready)"
+                  onClick={handleGenerateDailyBrief}
+                  disabled={isBriefLoading}
+                  className="px-3 py-1.5 bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 text-indigo-200 text-xs font-bold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm"
                 >
-                  <Mic className="w-3.5 h-3.5 text-indigo-400" />
-                  <span className="text-[11px]">Voice (Ready)</span>
+                  <FileText className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>{isBriefLoading ? 'Generating...' : 'Daily CEO Brief'}</span>
                 </button>
+
                 <button
-                  onClick={() => {
-                    setMediaNotice('Camera & document OCR input integration ready: Connected to ContentEngine in Gate 3.');
-                    setTimeout(() => setMediaNotice(null), 4000);
-                  }}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition-colors cursor-pointer"
-                  title="Vision Ingestion (Integration Ready)"
+                  onClick={() => setIsDecomposeModalOpen(true)}
+                  className="px-3 py-1.5 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/60 text-emerald-200 text-xs font-bold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm"
                 >
-                  <Camera className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-[11px]">Vision (Ready)</span>
+                  <Target className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Decompose Objective</span>
+                </button>
+
+                <button
+                  onClick={handleFetchLedger}
+                  disabled={isLedgerLoading}
+                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-amber-300 text-xs font-bold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm"
+                >
+                  <Activity className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Action Ledger</span>
                 </button>
               </div>
             </div>
@@ -673,23 +759,27 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
             {/* Pre-set Bengali Executive Command Chips */}
             <div className="space-y-2">
               <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">
-                QUICK EXECUTIVE DIRECTIVES (বাংলা কম্যান্ডস)
+                EXECUTIVE DIRECTIVES (বাংলা কম্যান্ডস — ভেরিফাইড ডাটা সোর্স)
               </span>
               <div className="flex flex-wrap gap-2">
                 {[
                   'আজকে পুরো অফিসের আপডেট দাও।',
-                  'আমার MRR status কী?',
-                  'আমার market target কী?',
-                  'আমার approval কী কী আছে?',
+                  'আজকে কী কী কাজ চলছে?',
                   'কোন department blocked?',
-                  'আজকের risk কী?',
-                  'আজকে কী কী কাজ চলছে?'
+                  'আমার MRR status কী?',
+                  'আমার target-এর gap কত?',
+                  'আজকের biggest business risk কী?',
+                  'আমার approval কী কী?',
+                  'এই সপ্তাহের priority কী হওয়া উচিত?',
+                  'Marketing department-এর current work কী?',
+                  'Content pipeline-এর অবস্থা কী?',
+                  'Product-এর biggest bottleneck কী?'
                 ].map((prompt, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSendChat(prompt)}
                     disabled={isChatSending}
-                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs text-amber-300 font-medium rounded-full transition-all hover:border-amber-500/50 cursor-pointer text-left"
+                    className="px-3 py-1.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-xs text-amber-300 font-medium rounded-full transition-all hover:border-amber-500/50 cursor-pointer text-left"
                   >
                     💬 {prompt}
                   </button>
@@ -1428,6 +1518,315 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                 className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-xl cursor-pointer"
               >
                 {isActionLoading ? 'Updating...' : 'Confirm Override'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================================== */}
+      {/* MODAL 5: DAILY CEO BRIEF */}
+      {/* ==================================================================== */}
+      {isDailyBriefModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-[#0e0e1a] border border-slate-700 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center space-x-3">
+                <FileText className="w-6 h-6 text-amber-400" />
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">Daily CEO Executive Brief</h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    Generated by AI COO (NHO-AI-001) • Verified Telemetry
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsDailyBriefModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {isBriefLoading ? (
+              <div className="p-12 text-center space-y-3">
+                <Loader2 className="w-8 h-8 text-amber-400 animate-spin mx-auto" />
+                <p className="text-sm text-slate-300">Synthesizing 21-section executive brief from database tables...</p>
+              </div>
+            ) : dailyBriefData ? (
+              <div className="space-y-6 text-xs text-slate-300">
+                {/* Executive Summary */}
+                <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-1">
+                  <span className="font-mono text-[10px] uppercase font-bold text-amber-400 block">EXECUTIVE SUMMARY</span>
+                  <p className="text-slate-100 text-sm leading-relaxed">{dailyBriefData.executive_summary}</p>
+                </div>
+
+                {/* Key Metrics Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 bg-[#12121f] rounded-xl border border-slate-800">
+                    <span className="text-[10px] text-slate-500 font-mono block">CURRENT MRR</span>
+                    <span className="text-base font-bold text-emerald-400 font-mono">৳{dailyBriefData.sections?.mrr?.current_mrr?.toLocaleString()} BDT</span>
+                  </div>
+                  <div className="p-3 bg-[#12121f] rounded-xl border border-slate-800">
+                    <span className="text-[10px] text-slate-500 font-mono block">MRR TARGET</span>
+                    <span className="text-base font-bold text-white font-mono">${dailyBriefData.sections?.mrr?.target_mrr?.toLocaleString()} USD</span>
+                  </div>
+                  <div className="p-3 bg-[#12121f] rounded-xl border border-slate-800">
+                    <span className="text-[10px] text-slate-500 font-mono block">ACTIVE SUBSCRIBERS</span>
+                    <span className="text-base font-bold text-indigo-300 font-mono">{dailyBriefData.sections?.paid_members?.active_count} members</span>
+                  </div>
+                  <div className="p-3 bg-[#12121f] rounded-xl border border-slate-800">
+                    <span className="text-[10px] text-slate-500 font-mono block">REMAINING BUDGET</span>
+                    <span className="text-base font-bold text-amber-300 font-mono">৳{dailyBriefData.sections?.budget?.remaining?.toLocaleString()} BDT</span>
+                  </div>
+                </div>
+
+                {/* Status Sections */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-2">
+                    <span className="font-bold text-slate-200 block text-xs flex items-center gap-2">
+                      <Target className="w-4 h-4 text-emerald-400" /> Target Market & Customer Segment
+                    </span>
+                    <p className="text-slate-400">
+                      Primary: <span className="text-white">{dailyBriefData.sections?.market_status?.primary}</span> | Secondary: <span className="text-white">{dailyBriefData.sections?.market_status?.secondary}</span>
+                    </p>
+                    <p className="text-slate-400">
+                      Segment: <span className="text-white">{dailyBriefData.sections?.market_status?.segment}</span>
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-2">
+                    <span className="font-bold text-slate-200 block text-xs flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-amber-400" /> AI Cost Guard & Marketing
+                    </span>
+                    <p className="text-slate-400">
+                      AI Cost: ৳{dailyBriefData.sections?.ai_cost?.spend_mtd} / ৳{dailyBriefData.sections?.ai_cost?.cap}
+                    </p>
+                    <p className="text-slate-400">
+                      Marketing: ৳{dailyBriefData.sections?.marketing?.spend_mtd} / ৳{dailyBriefData.sections?.marketing?.cap}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Priorities & Next Actions */}
+                <div className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-3">
+                  <span className="font-bold text-amber-300 block text-xs uppercase tracking-wider font-mono">
+                    TODAY'S EXECUTIVE PRIORITIES & NEXT ACTIONS
+                  </span>
+                  <ul className="space-y-1.5 list-disc list-inside text-slate-300">
+                    {dailyBriefData.sections?.todays_priorities?.map((p: string, i: number) => (
+                      <li key={i}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-slate-800">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(JSON.stringify(dailyBriefData, null, 2));
+                  alert('Brief copied to clipboard!');
+                }}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Copy JSON
+              </button>
+              <button
+                onClick={() => setIsDailyBriefModalOpen(false)}
+                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================================== */}
+      {/* MODAL 6: DECOMPOSE STRATEGIC OBJECTIVE */}
+      {/* ==================================================================== */}
+      {isDecomposeModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-[#0e0e1a] border border-slate-700 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center space-x-3">
+                <Target className="w-6 h-6 text-emerald-400" />
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">Decompose Strategic Objective</h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    AI COO Objective Breakdown: Goal → Initiatives → Department Tasks
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setIsDecomposeModalOpen(false);
+                  setDecomposedPlan(null);
+                }}
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-400 mb-1">Strategic Goal Statement</label>
+                  <input
+                    type="text"
+                    value={decomposeForm.goal}
+                    onChange={(e) => setDecomposeForm({ ...decomposeForm, goal: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 mb-1">Target MRR (USD)</label>
+                  <input
+                    type="number"
+                    value={decomposeForm.targetMrr}
+                    onChange={(e) => setDecomposeForm({ ...decomposeForm, targetMrr: Number(e.target.value) })}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 mb-1">Target Geography / Market</label>
+                  <input
+                    type="text"
+                    value={decomposeForm.market}
+                    onChange={(e) => setDecomposeForm({ ...decomposeForm, market: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 mb-1">Allocated Budget (BDT)</label>
+                  <input
+                    type="number"
+                    value={decomposeForm.budget}
+                    onChange={(e) => setDecomposeForm({ ...decomposeForm, budget: Number(e.target.value) })}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={handleDecomposeObjective}
+                  disabled={isDecomposing}
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center space-x-2 transition-all cursor-pointer shadow-md"
+                >
+                  {isDecomposing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />}
+                  <span>{isDecomposing ? 'Decomposing...' : 'Generate Department Assignments'}</span>
+                </button>
+              </div>
+
+              {decomposedPlan && (
+                <div className="p-5 bg-[#12121f] rounded-2xl border border-emerald-500/30 space-y-4 animate-fade-in">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span className="font-bold text-emerald-300">Generated Work Breakdown ({decomposedPlan.tasks?.length} Tasks)</span>
+                    <span className="text-[10px] font-mono text-slate-400">Zero External Autonomous Execution</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {decomposedPlan.tasks?.map((tsk: any, idx: number) => (
+                      <div key={idx} className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-mono text-emerald-400 font-bold text-[11px]">{tsk.task_id}</span>
+                            <span className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] rounded font-mono">{tsk.department}</span>
+                            <span className={`px-2 py-0.5 text-[10px] rounded font-mono font-bold ${tsk.authority === 'RED' ? 'bg-red-950 text-red-300' : 'bg-emerald-950 text-emerald-300'}`}>
+                              {tsk.authority}
+                            </span>
+                          </div>
+                          <p className="text-slate-200 text-xs">{tsk.objective}</p>
+                          <p className="text-[10px] text-slate-400">Owner: {tsk.owner} • Success Metric: {tsk.success_metric}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end space-x-2 pt-4 border-t border-slate-800">
+              <button
+                onClick={() => {
+                  setIsDecomposeModalOpen(false);
+                  setDecomposedPlan(null);
+                }}
+                className="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================================== */}
+      {/* MODAL 7: AI ACTION LEDGER */}
+      {/* ==================================================================== */}
+      {isLedgerModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-[#0e0e1a] border border-slate-700 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center space-x-3">
+                <Activity className="w-6 h-6 text-amber-400" />
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">Immutable AI Action Ledger</h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    Durable Append-Only Record of AI Agent Operations & Decisions
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsLedgerModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {isLedgerLoading ? (
+              <div className="p-12 text-center space-y-3">
+                <Loader2 className="w-8 h-8 text-amber-400 animate-spin mx-auto" />
+                <p className="text-sm text-slate-300">Loading AI action ledger from disk...</p>
+              </div>
+            ) : ledgerEntries.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-500">
+                বর্তমানে কোনো এআই অ্যাকশন রেকর্ড নেই।
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {ledgerEntries.map((act: any) => (
+                  <div key={act.action_id} className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-2 text-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-mono text-amber-400 font-bold">{act.action_id}</span>
+                        <span className="px-2 py-0.5 bg-slate-800 text-slate-300 font-mono rounded text-[10px]">{act.employee_id}</span>
+                        <span className="px-2 py-0.5 bg-indigo-950 text-indigo-300 font-mono rounded text-[10px]">{act.action_type}</span>
+                        <span className={`px-2 py-0.5 font-mono rounded text-[10px] font-bold ${act.authority === 'RED' ? 'bg-red-950 text-red-300' : act.authority === 'YELLOW' ? 'bg-yellow-950 text-yellow-300' : 'bg-emerald-950 text-emerald-300'}`}>
+                          {act.authority}
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-500">{new Date(act.timestamp).toLocaleTimeString()}</span>
+                    </div>
+
+                    <p className="text-white font-medium">{act.goal}</p>
+                    <p className="text-slate-400 text-[11px]">{act.decision}</p>
+                    <p className="text-emerald-300 text-[10px] font-mono">Outcome: {act.result}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-center justify-end pt-4 border-t border-slate-800">
+              <button
+                onClick={() => setIsLedgerModalOpen(false)}
+                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Close Ledger
               </button>
             </div>
           </div>

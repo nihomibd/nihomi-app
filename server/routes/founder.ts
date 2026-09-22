@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { db } from '../db.js';
 import { requireFounder } from '../middleware/rbac.js';
 import { AuthenticatedRequest } from '../authHelper.js';
+import { aiCoo } from '../services/aiCooRuntimeService.js';
 
 export const founderRouter = Router();
 
@@ -437,164 +438,224 @@ founderRouter.get('/audit-logs', (req: AuthenticatedRequest, res: Response) => {
 
 /**
  * POST /api/founder/ai-ceo/query
- * Read-only AI CEO query processor grounded strictly in database telemetry
+ * AI CEO query processor backed by sovereign AI COO runtime
  */
-founderRouter.post('/ai-ceo/query', (req: AuthenticatedRequest, res: Response) => {
+founderRouter.post('/ai-ceo/query', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { query } = req.body;
     if (!query || typeof query !== 'string') {
       return res.status(400).json({ success: false, error: 'query string is required' });
     }
-
-    const rev = db.getRevenueMetrics();
-    const settings = db.getFounderSettings();
-    const approvals = db.getFounderApprovals();
-    const tasks = db.getFounderTasks();
-    const wallets = db.getFounderBudgetWallets();
-    const emergency = db.getFounderEmergencyControls();
-    const normalizedQuery = query.trim().toLowerCase();
-
-    const pendingApprovals = approvals.filter((a) => a.status === 'PENDING');
-    const activeTasks = tasks.filter((t) => t.status === 'ACTIVE');
-    const blockedTasks = tasks.filter((t) => t.status === 'BLOCKED');
-
-    let responseText = '';
-    let category = 'GENERAL_EXECUTIVE';
-
-    // 1. "আজকে পুরো অফিসের আপডেট দাও।" / Office Update
-    if (
-      normalizedQuery.includes('অফিসের আপডেট') ||
-      normalizedQuery.includes('পুরো অফিস') ||
-      normalizedQuery.includes('office update') ||
-      normalizedQuery.includes('full update')
-    ) {
-      category = 'OFFICE_OVERVIEW';
-      responseText = `সম্মানিত ফাউন্ডার, আজকের পুরো অফিসের এক্সিকিউটিভ ওভারভিউ:\n\n` +
-        `• রাজস্ব ও MRR: বর্তমান MRR ৳${rev.mrr?.toLocaleString() || 0} BDT ($${Math.round((rev.mrr || 0) / 122)} USD)। মোট সংগৃহীত রাজস্ব ৳${rev.totalRevenue?.toLocaleString() || 0} BDT।\n` +
-        `• সক্রিয় সদস্য: ${rev.activeSubscribers || 0} জন পেইড শিক্ষার্থী এবং এই মাসে নতুন সাবস্ক্রাইবার ${rev.newSubscribersThisMonth || 0} জন।\n` +
-        `• টাস্ক স্ট্যাটাস: বর্তমানে ${activeTasks.length}টি টাস্ক সক্রিয়ভাবে চলমান, ${blockedTasks.length}টি টাস্ক ব্লকড।\n` +
-        `• পেন্ডিং অ্যাপ্রুভাল: ${pendingApprovals.length}টি প্রপোজাল আপনার সিদ্ধান্তের অপেক্ষায় রয়েছে।\n` +
-        `• সিস্টেম স্বাস্থ্য: পেমেন্ট গেটওয়ে ও ডাটাবেস সম্পূর্ণ সক্রিয় (Uptime 99.9%)। কোনো ইমার্জেন্সি লকডাউন সক্রিয় নেই।`;
-    }
-    // 2. "আমার MRR status কী?" / MRR Status
-    else if (
-      normalizedQuery.includes('mrr') ||
-      normalizedQuery.includes('মাসিক রাজস্ব') ||
-      normalizedQuery.includes('revenue status')
-    ) {
-      category = 'MRR_TELEMETRY';
-      const mrrTarget = settings.mrrTarget.targetAmount;
-      const currency = settings.mrrTarget.currency;
-      const targetInBdt = currency === 'USD' ? mrrTarget * 122 : mrrTarget;
-      const gapBdt = Math.max(0, targetInBdt - (rev.mrr || 0));
-
-      responseText = `আপনার বর্তমান MRR স্ট্যাটাস:\n\n` +
-        `• বর্তমান MRR: ৳${(rev.mrr || 0).toLocaleString()} BDT\n` +
-        `• লক্ষ্যমাত্রা (Target): ${currency === 'USD' ? '$' : '৳'}${mrrTarget.toLocaleString()} (${currency})\n` +
-        `• টার্গেট পূরণ হতে বাকি (MRR Gap): ৳${gapBdt.toLocaleString()} BDT\n` +
-        `• সক্রিয় পেইড শিক্ষার্থী: ${rev.activeSubscribers || 0} জন\n` +
-        `• পেসিং: ডেডলাইন ${settings.mrrTarget.deadline} পর্যন্ত সাসটেইনেবল গ্রোথ ট্র্যাকে রয়েছে।`;
-    }
-    // 3. "আমার market target কী?" / Market Target
-    else if (
-      normalizedQuery.includes('market target') ||
-      normalizedQuery.includes('মার্কেট টার্গেট') ||
-      normalizedQuery.includes('লক্ষ্য মার্কেট')
-    ) {
-      category = 'MARKET_STRATEGY';
-      responseText = `আপনার বর্তমান মার্কেট টার্গেটিং কৌশল:\n\n` +
-        `• প্রাইমারি মার্কেট: ${settings.marketTarget.primaryMarket}\n` +
-        `• সেকেন্ডারি মার্কেট: ${settings.marketTarget.secondaryMarket}\n` +
-        `• এক্সপেরিমেন্টাল মার্কেট: ${settings.marketTarget.experimentalMarket}\n` +
-        `• টার্গেট অডিয়েন্স সেগমেন্ট: ${settings.marketTarget.customerSegment}\n` +
-        `• অ্যাকুইজিশন চ্যানেল: ${settings.marketTarget.acquisitionChannels.join(', ')}\n` +
-        `• প্রাইস রেঞ্জ: ${settings.marketTarget.priceRange}`;
-    }
-    // 4. "আমার approval কী কী আছে?" / Approvals
-    else if (
-      normalizedQuery.includes('approval') ||
-      normalizedQuery.includes('অনুমোদন') ||
-      normalizedQuery.includes('পেন্ডিং')
-    ) {
-      category = 'APPROVALS';
-      if (pendingApprovals.length === 0) {
-        responseText = `বর্তমানে আপনার অনুমোদনের অপেক্ষায় কোনো পেন্ডিং প্রপোজাল নেই। সব ডিপার্টমেন্ট অনুমোদিত বাজেটের ভেতর কাজ করছে।`;
-      } else {
-        responseText = `বর্তমানে ${pendingApprovals.length}টি আইটেম আপনার অনুমোদনের অপেক্ষায় আছে:\n\n` +
-          pendingApprovals.map((a, i) =>
-            `${i + 1}. [${a.request_id}] (${a.department}): ${a.request} | বাজেট: ৳${a.amount} | রিস্ক: ${a.risk}`
-          ).join('\n');
-      }
-    }
-    // 5. "কোন department blocked?" / Blockers
-    else if (
-      normalizedQuery.includes('blocked') ||
-      normalizedQuery.includes('ব্লক') ||
-      normalizedQuery.includes('আটকে')
-    ) {
-      category = 'BLOCKERS';
-      if (blockedTasks.length === 0) {
-        responseText = `আলহামদুলিল্লাহ, বর্তমানে কোনো ডিপার্টমেন্ট বা টাস্ক ব্লকড নেই। সব টিম মসৃণভাবে অগ্রসর হচ্ছে।`;
-      } else {
-        responseText = `বর্তমানে ${blockedTasks.length}টি টাস্ক ব্লকড অবস্থায় আছে:\n\n` +
-          blockedTasks.map((t, i) =>
-            `${i + 1}. [${t.task_id}] (${t.department}): ${t.objective} (Dependency: ${t.dependencies.join(', ') || 'N/A'})`
-          ).join('\n');
-      }
-    }
-    // 6. "আজকের risk কী?" / Risks
-    else if (
-      normalizedQuery.includes('risk') ||
-      normalizedQuery.includes('ঝুঁকি') ||
-      normalizedQuery.includes('রিস্ক')
-    ) {
-      category = 'RISKS';
-      const isEmergency = Object.values(emergency).some((s) => s.active);
-      const aiSpend = wallets.find((w) => w.wallet_id === 'w-ai')?.current_spent || 0;
-      const marketingSpend = wallets.find((w) => w.wallet_id === 'w-marketing')?.current_spent || 0;
-
-      responseText = `আজকের রিস্ক ও সিকিউরিটি ওভারভিউ:\n\n` +
-        `• ইমার্জেন্সি লকডাউন: ${isEmergency ? '⚠️ একটি বা একাধিক সুইচ সক্রিয়!' : 'স্বাভাবিক (সব স্বাভাবিক)'}\n` +
-        `• পেমেন্ট গেটওয়ে: bKash ও SSLCommerz স্বাস্থ্য শতভাগ স্থিতিশীল\n` +
-        `• AI টোকেন বার্ন: দৈনিক খরচ ৳${aiSpend} BDT (দৈনিক ক্যাপ ৳500-এর নিরাপদ সীমার মধ্যে)\n` +
-        `• মার্কেটিং খরচ: ৳${marketingSpend} BDT (মাসিক ৳20,000 ক্যাপের নিচে)\n` +
-        `• সিদ্ধান্ত: বর্তমানে কোনো ক্রিটিক্যাল সিকিউরিটি বা আর্থিক ঝুঁকি শনাক্ত হয়নি।`;
-    }
-    // 7. "আজকে কী কী কাজ চলছে?" / Active Tasks
-    else if (
-      normalizedQuery.includes('কী কাজ চলছে') ||
-      normalizedQuery.includes('চলমান কাজ') ||
-      normalizedQuery.includes('active work') ||
-      normalizedQuery.includes('tasks')
-    ) {
-      category = 'TASKS';
-      if (activeTasks.length === 0) {
-        responseText = `বর্তমানে কোনো টাস্ক সক্রিয়ভাবে রানিং নেই। কিউতে থাকা টাস্কগুলো শুরু করার অপেক্ষায় রয়েছে।`;
-      } else {
-        responseText = `বর্তমানে চলমান গুরুত্বপূর্ণ টাস্কসমূহ:\n\n` +
-          activeTasks.map((t, i) =>
-            `${i + 1}. [${t.task_id}] (${t.department}): ${t.objective} (ওনার: ${t.owner})`
-          ).join('\n');
-      }
-    }
-    // General Query Fallback using Real Telemetry
-    else {
-      responseText = `সম্মানিত ফাউন্ডার, আপনার প্রশ্নটি গ্রহণ করা হয়েছে।\n\n` +
-        `বর্তমান রিয়েল-টাইম তথ্য অনুযায়ী:\n` +
-        `• MRR: ৳${(rev.mrr || 0).toLocaleString()} BDT (টার্গেট $${settings.mrrTarget.targetAmount})\n` +
-        `• মোট পেইড মেম্বার: ${rev.activeSubscribers || 0} জন\n` +
-        `• পেন্ডিং অ্যাপ্রুভাল: ${pendingApprovals.length}টি\n` +
-        `• অবশিষ্ট মাসিক বাজেট: ৳${Math.max(0, (settings.mrrTarget.monthlyBudget || 50000) - wallets.reduce((s, w) => s + w.current_spent, 0)).toLocaleString()} BDT\n\n` +
-        `বিস্তারিত জানার জন্য স্পেসিফিক কমান্ড দিন (যেমন: 'MRR status', 'Approval list', 'Risk report')।`;
-    }
-
+    const result = await aiCoo.executeCommand(query, req.user?.email || 'founder@nihomi.com');
     return res.json({
       success: true,
-      query,
+      query: result.command,
+      category: result.category,
+      response: result.response,
+      mode: result.mode,
+      dataSources: result.data_sources,
+      actionId: result.action_id,
+      telemetryTimestamp: result.timestamp
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ==============================================================================
+// GATE 3: AI COO RUNTIME & COMPANY ORCHESTRATION ENDPOINTS
+// ==============================================================================
+
+/**
+ * GET /api/founder/ai-coo/status
+ * Returns AI COO identity, operating mode, constraints, and department tree
+ */
+founderRouter.get('/ai-coo/status', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const departments = db.getAiDepartmentStatuses();
+    return res.json({
+      success: true,
+      identity: aiCoo.identity,
+      departmentCount: Object.keys(departments).length,
+      orchestrationBoundaries: {
+        maxDepth: aiCoo.MAX_ORCHESTRATION_DEPTH,
+        maxWorkersPerObjective: aiCoo.MAX_WORKERS_PER_OBJECTIVE,
+        maxRetries: aiCoo.MAX_RETRIES
+      }
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/command
+ * Natural-language executive command processor in Bengali & English
+ */
+founderRouter.post('/ai-coo/command', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { command } = req.body;
+    if (!command || typeof command !== 'string') {
+      return res.status(400).json({ success: false, error: 'command string is required' });
+    }
+    const result = await aiCoo.executeCommand(command, req.user?.email || 'founder@nihomi.com');
+    return res.json({
+      success: true,
+      result
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/daily-brief
+ * Generates structured 21-section Daily CEO Brief without hallucinated metrics
+ */
+founderRouter.post('/ai-coo/daily-brief', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const brief = aiCoo.generateDailyCeoBrief();
+    return res.json({
+      success: true,
+      brief
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/decompose-objective
+ * Converts high-level Founder objective into actionable department work items
+ */
+founderRouter.post('/ai-coo/decompose-objective', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { goal, targetMrr, market, customerSegment, timeframe, budget } = req.body;
+    if (!goal || typeof targetMrr !== 'number' || !market) {
+      return res.status(400).json({
+        success: false,
+        error: 'goal, targetMrr (number), and market (string) are required'
+      });
+    }
+    const plan = aiCoo.decomposeObjective({
+      goal,
+      targetMrr,
+      market,
+      customerSegment,
+      timeframe,
+      budget
+    });
+    return res.json({
+      success: true,
+      plan
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/delegate-task
+ * Dispatches work to an AI department worker conforming to authority tiers
+ */
+founderRouter.post('/ai-coo/delegate-task', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { objective, department, owner, priority, authority, dependencies, deadline, success_metric } = req.body;
+    if (!objective || !department || !owner || !priority || !authority) {
+      return res.status(400).json({
+        success: false,
+        error: 'objective, department, owner, priority, and authority are required'
+      });
+    }
+    const result = aiCoo.delegateTask({
+      objective,
+      department,
+      owner,
+      priority,
+      authority,
+      dependencies,
+      deadline,
+      success_metric
+    });
+    return res.json({
+      success: true,
+      ...result
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/founder/ai-coo/action-ledger
+ * Fetches the immutable AI Action Ledger from durable storage
+ */
+founderRouter.get('/ai-coo/action-ledger', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 50;
+    const ledger = db.getAiActionLedger(limit);
+    return res.json({
+      success: true,
+      count: ledger.length,
+      ledger
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/resolve-conflict
+ * Inter-departmental conflict analysis & option generation
+ */
+founderRouter.post('/ai-coo/resolve-conflict', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { departmentA, proposalA, departmentB, proposalB, context } = req.body;
+    if (!departmentA || !proposalA || !departmentB || !proposalB || !context) {
+      return res.status(400).json({
+        success: false,
+        error: 'departmentA, proposalA, departmentB, proposalB, and context are required'
+      });
+    }
+    const resolution = aiCoo.resolveConflict({
+      departmentA,
+      proposalA,
+      departmentB,
+      proposalB,
+      context
+    });
+    return res.json({
+      success: true,
+      resolution
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/founder/ai-coo/escalate-risk
+ * Operational risk classification and escalation engine
+ */
+founderRouter.post('/ai-coo/escalate-risk', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { category, description, severity, impact, mitigation } = req.body;
+    if (!category || !description || !severity) {
+      return res.status(400).json({
+        success: false,
+        error: 'category, description, and severity (LOW|MEDIUM|HIGH|CRITICAL) are required'
+      });
+    }
+    const result = aiCoo.escalateRisk({
       category,
-      response: responseText,
-      mode: 'READ_ONLY_GROUNDED',
-      telemetryTimestamp: new Date().toISOString()
+      description,
+      severity,
+      impact,
+      mitigation
+    });
+    return res.json({
+      success: true,
+      ...result
     });
   } catch (error: any) {
     return res.status(500).json({ success: false, error: error.message });

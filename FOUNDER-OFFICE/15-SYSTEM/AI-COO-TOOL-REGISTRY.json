@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "registry_name": "NIHOMI.COM AI COO Controlled Tool Registry",
+  "version": "1.0.0",
+  "updated_at": "2026-09-22T13:40:00+06:00",
+  "sovereignty_rule": "FOUNDER_FINAL_AUTHORITY",
+  "enforcement_layer": "server/services/aiCooRuntimeService.ts",
+  "gate_3_mode": "READ_ANALYZE_PLAN_DELEGATE_REPORT",
+  "tools": [
+    {
+      "tool_id": "TOOL-READ-TELEMETRY",
+      "name": "Read Platform Telemetry & Revenue KPIs",
+      "description": "Ingests verified real-time revenue, MRR, paid subscribers, churn rate, and active objectives from db.ts without hallucinating missing data.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "totalRevenue": { "type": "number" },
+          "mrr": { "type": "number" },
+          "activeSubscribers": { "type": "number" },
+          "churnRate": { "type": "number" }
+        }
+      },
+      "permission": "READ",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-READ-TASKS",
+      "name": "Read Work Tasks Backlog",
+      "description": "Reads active, queued, blocked, and completed tasks conforming to TASK-SCHEMA.json.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "statusFilter": { "type": "string", "enum": ["ALL", "ACTIVE", "QUEUED", "BLOCKED", "COMPLETED"] }
+        }
+      },
+      "output_schema": {
+        "type": "array",
+        "items": { "type": "object" }
+      },
+      "permission": "READ",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-READ-APPROVALS",
+      "name": "Read Pending Executive Approvals",
+      "description": "Inspects pending, approved, and rejected approvals in the Founder queue conforming to APPROVAL-SCHEMA.json.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "statusFilter": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED", "CHANGES_REQUESTED"] }
+        }
+      },
+      "output_schema": {
+        "type": "array",
+        "items": { "type": "object" }
+      },
+      "permission": "READ",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-READ-BUDGET",
+      "name": "Read Budget Firewall & AI Cost Telemetry",
+      "description": "Inspects current spend across the 5 isolated wallets and queries AI Cost Guard counters.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "wallets": { "type": "array" },
+          "totalBudget": { "type": "number" },
+          "remainingBudget": { "type": "number" }
+        }
+      },
+      "permission": "READ",
+      "risk": "LOW",
+      "department": "FINANCE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-READ-COMPANY-BRAIN",
+      "name": "Read Company Brain Documentation",
+      "description": "Retrieves strategic principles, mission, customer intelligence, product doctrine, and lesson archives from FOUNDER-OFFICE/01-COMPANY-BRAIN/.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "topic": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string" },
+          "sourceFile": { "type": "string" }
+        }
+      },
+      "permission": "READ",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-DECOMPOSE-OBJECTIVE",
+      "name": "Decompose Strategic Objective",
+      "description": "Decomposes a high-level Founder objective into initiatives, department tasks, dependencies, success metrics, and risk mitigations.",
+      "input_schema": {
+        "type": "object",
+        "required": ["goal", "targetMrr", "market"],
+        "properties": {
+          "goal": { "type": "string" },
+          "targetMrr": { "type": "number" },
+          "market": { "type": "string" },
+          "customerSegment": { "type": "string" },
+          "timeframe": { "type": "string" },
+          "monthlyBudget": { "type": "number" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "initiatives": { "type": "array" },
+          "tasks": { "type": "array" },
+          "metrics": { "type": "object" },
+          "risks": { "type": "array" }
+        }
+      },
+      "permission": "PLAN",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-DELEGATE-TASK",
+      "name": "Delegate Task to Department",
+      "description": "Dispatches an internal work task to one of the 12 AI department heads. Bound by authority levels (GREEN/YELLOW/RED).",
+      "input_schema": {
+        "type": "object",
+        "required": ["task_id", "objective", "department", "owner", "priority", "authority"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "objective": { "type": "string" },
+          "department": { "type": "string" },
+          "owner": { "type": "string" },
+          "priority": { "type": "string", "enum": ["P0", "P1", "P2"] },
+          "authority": { "type": "string", "enum": ["GREEN", "YELLOW", "RED"] },
+          "dependencies": { "type": "array", "items": { "type": "string" } },
+          "deadline": { "type": "string" },
+          "success_metric": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "dispatched": { "type": "boolean" },
+          "task": { "type": "object" }
+        }
+      },
+      "permission": "DELEGATE",
+      "risk": "MEDIUM",
+      "department": "EXECUTIVE",
+      "approval_requirement": "CONTROLLED (YELLOW)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-GENERATE-DAILY-BRIEF",
+      "name": "Synthesize Daily CEO Brief",
+      "description": "Aggregates data across all 16 departments into a structured 21-section executive brief without hallucinated values.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "briefType": { "type": "string", "enum": ["MORNING_BRIEF", "DAILY_CLOSE", "WEEKLY_REVIEW"] }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "executiveSummary": { "type": "string" },
+          "sections": { "type": "object" },
+          "generatedAt": { "type": "string" }
+        }
+      },
+      "permission": "REPORT",
+      "risk": "LOW",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-RESOLVE-CONFLICT",
+      "name": "Analyze Departmental Recommendation Conflict",
+      "description": "Compares conflicting department proposals, evaluates data sources and assumptions, and prepares balanced recommendations for Founder decision.",
+      "input_schema": {
+        "type": "object",
+        "required": ["proposalA", "proposalB"],
+        "properties": {
+          "proposalA": { "type": "object" },
+          "proposalB": { "type": "object" },
+          "context": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "conflictSummary": { "type": "string" },
+          "divergencePoints": { "type": "array" },
+          "founderRecommendation": { "type": "string" }
+        }
+      },
+      "permission": "ANALYZE",
+      "risk": "MEDIUM",
+      "department": "EXECUTIVE",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-ESCALATE-RISK",
+      "name": "Classify & Escalate Operational Risk",
+      "description": "Assesses an anomaly, assigns risk severity (LOW, MEDIUM, HIGH, CRITICAL), and triggers immediate Founder notification for HIGH/CRITICAL items.",
+      "input_schema": {
+        "type": "object",
+        "required": ["category", "description", "severity"],
+        "properties": {
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+          "impact": { "type": "string" },
+          "recommendedMitigation": { "type": "string" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "escalated": { "type": "boolean" },
+          "alertLevel": { "type": "string" }
+        }
+      },
+      "permission": "ANALYZE",
+      "risk": "HIGH",
+      "department": "SECURITY",
+      "approval_requirement": "NONE (GREEN)",
+      "audit_behavior": "LOG_TO_ACTION_LEDGER",
+      "runtime_status": "ACTIVE_UNRESTRICTED"
+    },
+    {
+      "tool_id": "TOOL-EXEC-FINANCIAL-DISBURSEMENT",
+      "name": "Execute Financial Disbursement or Bank Transfer",
+      "description": "Moves capital, authorizes refunds, or alters payment gateway credentials. Strictly locked behind Founder Explicit Approval.",
+      "input_schema": { "type": "object" },
+      "output_schema": { "type": "object" },
+      "permission": "EXECUTE",
+      "risk": "CRITICAL",
+      "department": "FINANCE",
+      "approval_requirement": "FOUNDER_EXPLICIT (RED)",
+      "audit_behavior": "IMMUTABLE_AUDIT_LOG",
+      "runtime_status": "LOCKED_GATED"
+    },
+    {
+      "tool_id": "TOOL-EXEC-PRODUCTION-DEPLOYMENT",
+      "name": "Deploy Application Code to Production",
+      "description": "Promotes builds to Vercel/Cloudflare production domains. Strictly locked behind Founder Explicit Approval.",
+      "input_schema": { "type": "object" },
+      "output_schema": { "type": "object" },
+      "permission": "EXECUTE",
+      "risk": "CRITICAL",
+      "department": "CTO",
+      "approval_requirement": "FOUNDER_EXPLICIT (RED)",
+      "audit_behavior": "IMMUTABLE_AUDIT_LOG",
+      "runtime_status": "LOCKED_GATED"
+    },
+    {
+      "tool_id": "TOOL-EXEC-DATABASE-MIGRATION",
+      "name": "Execute Production DDL Database Migration",
+      "description": "Runs destructive DDL/migrations on live PostgreSQL/Supabase. Strictly locked behind Founder Explicit Approval.",
+      "input_schema": { "type": "object" },
+      "output_schema": { "type": "object" },
+      "permission": "EXECUTE",
+      "risk": "CRITICAL",
+      "department": "CTO",
+      "approval_requirement": "FOUNDER_EXPLICIT (RED)",
+      "audit_behavior": "IMMUTABLE_AUDIT_LOG",
+      "runtime_status": "LOCKED_GATED"
+    }
+  ]
+}

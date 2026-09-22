@@ -1,0 +1,1644 @@
+{
+  "founderSettings": {
+    "mrrTarget": {
+      "targetAmount": 15000,
+      "currency": "USD",
+      "deadline": "2027-06-30",
+      "monthlyBudget": 60000,
+      "growthPriority": "AGGRESSIVE_SCALE",
+      "riskLevel": "MODERATE",
+      "updatedAt": "2026-09-22T07:48:30.675Z",
+      "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+    },
+    "marketTarget": {
+      "primaryMarket": "Bangladesh",
+      "secondaryMarket": "Japan",
+      "experimentalMarket": "India & Nepal",
+      "geography": [
+        "Dhaka",
+        "Chittagong",
+        "Sylhet",
+        "Tokyo"
+      ],
+      "customerSegment": "University Engineers & Nursing Candidates",
+      "language": "Bengali / Japanese / English",
+      "priceRange": "৳499 - ৳19,999 BDT",
+      "acquisitionChannels": [
+        "Facebook Reels",
+        "Direct Campus Partnerships",
+        "Organic SEO",
+        "Live Masterclasses"
+      ],
+      "priority": "P1_PRIMARY_EXPANSION",
+      "timeframe": "Q4 2026 - Q4 2027",
+      "updatedAt": "2026-09-22T07:48:30.688Z",
+      "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+    },
+    "activeObjective": {
+      "goal": "Achieve $15,000 MRR Target",
+      "market": "Bangladesh (Primary), Japan (Secondary)",
+      "segment": "University Engineers & Nursing Candidates",
+      "timeframe": "Q4 2026 - Q4 2027",
+      "budget": 60000,
+      "status": "ACTIVE",
+      "updatedAt": "2026-09-22T07:48:30.688Z"
+    }
+  },
+  "founderApprovals": [
+    {
+      "request_id": "RISK-1790063488444",
+      "department": "SECURITY",
+      "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "amount": 0,
+      "risk": "MEDIUM",
+      "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+      "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+      "status": "PENDING",
+      "date": "2026-09-22T07:51:28.445Z"
+    },
+    {
+      "request_id": "APP-RED-1790063488422",
+      "department": "FINANCE",
+      "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+      "amount": 0,
+      "risk": "HIGH",
+      "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+      "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+      "status": "PENDING",
+      "date": "2026-09-22T07:51:28.422Z"
+    },
+    {
+      "request_id": "APP-TEST-1790063310711",
+      "department": "MARKETING",
+      "request": "Test verification campaign boost",
+      "amount": 1500,
+      "risk": "LOW",
+      "expected_outcome": "Verify approval queue mechanics",
+      "recommendation": "Approve for test suite",
+      "status": "APPROVED",
+      "date": "2026-09-22T07:48:30.711Z",
+      "founder_decision": "APPROVED: Approved by test suite runner",
+      "updated_at": "2026-09-22T07:48:30.736Z",
+      "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:48:30.736Z. Action queued for execution."
+    },
+    {
+      "request_id": "RISK-1790063304266",
+      "department": "SECURITY",
+      "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "amount": 0,
+      "risk": "MEDIUM",
+      "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+      "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+      "status": "PENDING",
+      "date": "2026-09-22T07:48:24.266Z"
+    },
+    {
+      "request_id": "APP-RED-1790063304255",
+      "department": "FINANCE",
+      "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+      "amount": 0,
+      "risk": "HIGH",
+      "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+      "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+      "status": "PENDING",
+      "date": "2026-09-22T07:48:24.255Z"
+    },
+    {
+      "request_id": "RISK-1790063246917",
+      "department": "SECURITY",
+      "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "amount": 0,
+      "risk": "MEDIUM",
+      "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+      "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+      "status": "PENDING",
+      "date": "2026-09-22T07:47:26.918Z"
+    },
+    {
+      "request_id": "APP-RED-1790063246895",
+      "department": "FINANCE",
+      "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+      "amount": 0,
+      "risk": "HIGH",
+      "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+      "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+      "status": "PENDING",
+      "date": "2026-09-22T07:47:26.895Z"
+    },
+    {
+      "request_id": "APP-TEST-1790063164146",
+      "department": "MARKETING",
+      "request": "Test verification campaign boost",
+      "amount": 1500,
+      "risk": "LOW",
+      "expected_outcome": "Verify approval queue mechanics",
+      "recommendation": "Approve for test suite",
+      "status": "APPROVED",
+      "date": "2026-09-22T07:46:04.146Z",
+      "founder_decision": "APPROVED: Approved by test suite runner",
+      "updated_at": "2026-09-22T07:46:04.166Z",
+      "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:46:04.166Z. Action queued for execution."
+    },
+    {
+      "request_id": "APP-2026-001",
+      "department": "EXECUTIVE",
+      "request": "Initialize local Founder Office & Operating System Blueprint",
+      "amount": 0,
+      "risk": "LOW",
+      "expected_outcome": "Establish 16-department organizational blueprint without modifying production",
+      "recommendation": "Approve to enable structured agent scaling",
+      "status": "COMPLETED",
+      "founder_decision": "APPROVED",
+      "date": "2026-09-22T12:46:00+06:00",
+      "result": "Created local FOUNDER-OFFICE structure and operational policies."
+    },
+    {
+      "request_id": "APP-2026-002",
+      "department": "MARKETING",
+      "request": "Allocate ৳5,000 for Facebook Reels N5 study video boost campaign",
+      "amount": 5000,
+      "risk": "MEDIUM",
+      "expected_outcome": "Acquire 250+ student trial registrations at ৳20 CPR",
+      "recommendation": "Approve within monthly ৳20,000 Marketing Wallet allocation",
+      "status": "PENDING",
+      "date": "2026-09-22T07:46:04.146Z",
+      "result": ""
+    },
+    {
+      "request_id": "APP-2026-003",
+      "department": "CONTENT",
+      "request": "Publish Minna no Nihongo Lessons 1-5 to production live curriculum",
+      "amount": 0,
+      "risk": "HIGH",
+      "expected_outcome": "Provide verified interactive exercises to 1,400+ enrolled students",
+      "recommendation": "Linguistic QA passed 100%. Ready for Founder Gate clearance.",
+      "status": "PENDING",
+      "date": "2026-09-22T07:46:04.146Z",
+      "result": ""
+    }
+  ],
+  "founderTasks": [
+    {
+      "task_id": "TSK-CON-8411",
+      "objective": "Generate N4 Nursing Vocabulary audio drills",
+      "department": "CONTENT",
+      "owner": "NHO-AI-004",
+      "priority": "P2",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "ACTIVE",
+      "next_action": "Assigned to NHO-AI-004. Target deadline: 2026-10-15. Metric: 100% QA on 50 audio clips",
+      "created_at": "2026-09-22T07:51:28.411Z",
+      "updated_at": "2026-09-22T07:51:28.411Z"
+    },
+    {
+      "task_id": "TSK-TEST-1790063310741",
+      "objective": "Automated test task for Gate 2 verification",
+      "department": "EXECUTIVE",
+      "owner": "NHO-AI-001",
+      "priority": "P1",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "COMPLETED",
+      "next_action": "Assert completion",
+      "created_at": "2026-09-22T07:48:30.742Z",
+      "updated_at": "2026-09-22T07:48:30.755Z",
+      "result": "Verified 100% green by test suite"
+    },
+    {
+      "task_id": "TSK-CON-4248",
+      "objective": "Generate N4 Nursing Vocabulary audio drills",
+      "department": "CONTENT",
+      "owner": "NHO-AI-004",
+      "priority": "P2",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "ACTIVE",
+      "next_action": "Assigned to NHO-AI-004. Target deadline: 2026-10-15. Metric: 100% QA on 50 audio clips",
+      "created_at": "2026-09-22T07:48:24.248Z",
+      "updated_at": "2026-09-22T07:48:24.248Z"
+    },
+    {
+      "task_id": "TSK-CON-6883",
+      "objective": "Generate N4 Nursing Vocabulary audio drills",
+      "department": "CONTENT",
+      "owner": "NHO-AI-004",
+      "priority": "P2",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "ACTIVE",
+      "next_action": "Assigned to NHO-AI-004. Target deadline: 2026-10-15. Metric: 100% QA on 50 audio clips",
+      "created_at": "2026-09-22T07:47:26.883Z",
+      "updated_at": "2026-09-22T07:47:26.883Z"
+    },
+    {
+      "task_id": "TSK-TEST-1790063164177",
+      "objective": "Automated test task for Gate 2 verification",
+      "department": "EXECUTIVE",
+      "owner": "NHO-AI-001",
+      "priority": "P1",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "COMPLETED",
+      "next_action": "Assert completion",
+      "created_at": "2026-09-22T07:46:04.178Z",
+      "updated_at": "2026-09-22T07:46:04.180Z",
+      "result": "Verified 100% green by test suite"
+    },
+    {
+      "task_id": "TSK-EXEC-001",
+      "objective": "Boot NIHOMI Virtual Office Operating System Blueprint",
+      "department": "EXECUTIVE",
+      "owner": "NHO-AI-001",
+      "priority": "P0",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "COMPLETED",
+      "created_at": "2026-09-22T12:42:00+06:00",
+      "updated_at": "2026-09-22T12:55:00+06:00",
+      "result": "Complete full operational blueprint across all 16 departments",
+      "next_action": "Upgrade FounderCommandCenterView into NIHOMI Founder HQ"
+    },
+    {
+      "task_id": "TSK-HQ-002",
+      "objective": "Upgrade FounderCommandCenterView into NIHOMI Founder HQ with live telemetry",
+      "department": "EXECUTIVE",
+      "owner": "FOUNDER",
+      "priority": "P0",
+      "authority": "YELLOW",
+      "dependencies": [
+        "TSK-EXEC-001"
+      ],
+      "status": "ACTIVE",
+      "created_at": "2026-09-22T13:00:00+06:00",
+      "updated_at": "2026-09-22T13:00:00+06:00",
+      "result": "In progress",
+      "next_action": "Run comprehensive test suite"
+    },
+    {
+      "task_id": "TSK-CONT-001",
+      "objective": "Structure N5 Vocab Chapter 1 into JSON for Content Studio",
+      "department": "CONTENT",
+      "owner": "NHO-AI-004",
+      "priority": "P1",
+      "authority": "YELLOW",
+      "dependencies": [],
+      "status": "QUEUED",
+      "created_at": "2026-09-22T12:48:00+06:00",
+      "updated_at": "2026-09-22T12:48:00+06:00",
+      "next_action": "Run OCR validation"
+    },
+    {
+      "task_id": "TSK-MKT-001",
+      "objective": "Draft 5 Facebook educational reel scripts for Baito phrases",
+      "department": "MARKETING",
+      "owner": "NHO-AI-005",
+      "priority": "P2",
+      "authority": "GREEN",
+      "dependencies": [],
+      "status": "QUEUED",
+      "created_at": "2026-09-22T12:48:00+06:00",
+      "updated_at": "2026-09-22T12:48:00+06:00",
+      "next_action": "Submit for brand review"
+    }
+  ],
+  "founderBudgetWallets": [
+    {
+      "wallet_id": "w-marketing",
+      "name": "Marketing",
+      "monthly_cap": 20000,
+      "daily_limit": 1000,
+      "approval_threshold": 500,
+      "alert_threshold": 16000,
+      "current_spent": 2450,
+      "status": "NORMAL",
+      "updated_at": "2026-09-22T07:48:30.765Z"
+    },
+    {
+      "wallet_id": "w-experiments",
+      "name": "Experiments",
+      "monthly_cap": 10000,
+      "daily_limit": 500,
+      "approval_threshold": 250,
+      "alert_threshold": 8000,
+      "current_spent": 800,
+      "status": "NORMAL"
+    },
+    {
+      "wallet_id": "w-ai",
+      "name": "AI (Inference)",
+      "monthly_cap": 10000,
+      "daily_limit": 500,
+      "approval_threshold": 200,
+      "alert_threshold": 8000,
+      "current_spent": 1840,
+      "status": "NORMAL"
+    },
+    {
+      "wallet_id": "w-infra",
+      "name": "Infrastructure",
+      "monthly_cap": 5000,
+      "daily_limit": 250,
+      "approval_threshold": 1000,
+      "alert_threshold": 4000,
+      "current_spent": 1200,
+      "status": "NORMAL"
+    },
+    {
+      "wallet_id": "w-reserve",
+      "name": "Reserve",
+      "monthly_cap": 5000,
+      "daily_limit": 0,
+      "approval_threshold": 0,
+      "alert_threshold": 4000,
+      "current_spent": 0,
+      "status": "NORMAL"
+    }
+  ],
+  "founderEmergencyControls": {
+    "stopAllAi": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:51:28.485Z",
+      "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+      "connected": true
+    },
+    "stopMarketing": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:46:04.238Z",
+      "updatedBy": "SYSTEM",
+      "connected": true
+    },
+    "stopPayments": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:46:04.238Z",
+      "updatedBy": "SYSTEM",
+      "connected": true
+    },
+    "stopEngineering": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:46:04.238Z",
+      "updatedBy": "SYSTEM",
+      "connected": false
+    },
+    "stopAutomations": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:46:04.238Z",
+      "updatedBy": "SYSTEM",
+      "connected": true
+    },
+    "stopExternalActions": {
+      "active": false,
+      "updatedAt": "2026-09-22T07:46:04.238Z",
+      "updatedBy": "SYSTEM",
+      "connected": false
+    }
+  },
+  "adminAuditLogs": [
+    {
+      "id": "log-seed-01",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "system_initialized",
+      "targetResource": "billing_engine",
+      "details": {
+        "message": "Production subscription engine initialized with BDT pricing tiers."
+      },
+      "createdAt": "2026-09-22T07:46:04.051Z"
+    },
+    {
+      "id": "log-2f67ea2e",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "MRR_TARGET_UPDATE",
+      "targetResource": "founder_settings.mrrTarget",
+      "details": {
+        "before": {
+          "targetAmount": 10000,
+          "currency": "USD",
+          "deadline": "2027-12-31",
+          "monthlyBudget": 50000,
+          "growthPriority": "SUSTAINABLE_PROFITABLE",
+          "riskLevel": "MODERATE",
+          "updatedAt": "2026-09-22T07:46:04.079Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        },
+        "after": {
+          "targetAmount": 15000,
+          "currency": "USD",
+          "deadline": "2027-06-30",
+          "monthlyBudget": 60000,
+          "growthPriority": "AGGRESSIVE_SCALE",
+          "riskLevel": "MODERATE",
+          "updatedAt": "2026-09-22T07:46:04.080Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.123Z"
+    },
+    {
+      "id": "log-a75f6afc",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "MARKET_TARGET_UPDATE",
+      "targetResource": "founder_settings.marketTarget",
+      "details": {
+        "before": {
+          "primaryMarket": "Bangladesh",
+          "secondaryMarket": "Japan",
+          "experimentalMarket": "Global South Asia",
+          "geography": [
+            "Dhaka",
+            "Chittagong",
+            "Sylhet",
+            "Tokyo"
+          ],
+          "customerSegment": "Japanese N5/N4 Aspirants & Relocation Candidates",
+          "language": "Bengali / Japanese / English",
+          "priceRange": "৳499 - ৳14,999 BDT",
+          "acquisitionChannels": [
+            "Facebook Reels",
+            "Direct Campus Partnerships",
+            "Organic SEO",
+            "Live Masterclasses"
+          ],
+          "priority": "P1_PRIMARY_EXPANSION",
+          "timeframe": "Q4 2026 - Q4 2027",
+          "updatedAt": "2026-09-22T07:46:04.079Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        },
+        "after": {
+          "primaryMarket": "Bangladesh",
+          "secondaryMarket": "Japan",
+          "experimentalMarket": "India & Nepal",
+          "geography": [
+            "Dhaka",
+            "Chittagong",
+            "Sylhet",
+            "Tokyo"
+          ],
+          "customerSegment": "University Engineers & Nursing Candidates",
+          "language": "Bengali / Japanese / English",
+          "priceRange": "৳499 - ৳19,999 BDT",
+          "acquisitionChannels": [
+            "Facebook Reels",
+            "Direct Campus Partnerships",
+            "Organic SEO",
+            "Live Masterclasses"
+          ],
+          "priority": "P1_PRIMARY_EXPANSION",
+          "timeframe": "Q4 2026 - Q4 2027",
+          "updatedAt": "2026-09-22T07:46:04.140Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.140Z"
+    },
+    {
+      "id": "log-cd60a63e",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.APP-TEST-1790063164146",
+      "details": {
+        "request_id": "APP-TEST-1790063164146",
+        "department": "MARKETING",
+        "request": "Test verification campaign boost",
+        "amount": 1500,
+        "risk": "LOW",
+        "expected_outcome": "Verify approval queue mechanics",
+        "recommendation": "Approve for test suite",
+        "status": "APPROVED",
+        "date": "2026-09-22T07:46:04.146Z",
+        "founder_decision": "APPROVED: Approved by test suite runner",
+        "updated_at": "2026-09-22T07:46:04.166Z",
+        "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:46:04.166Z. Action queued for execution."
+      },
+      "createdAt": "2026-09-22T07:46:04.146Z"
+    },
+    {
+      "id": "log-b2a8a0af",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "APPROVAL_DECISION",
+      "targetResource": "founder_approval.APP-TEST-1790063164146",
+      "details": {
+        "before": {
+          "request_id": "APP-TEST-1790063164146",
+          "department": "MARKETING",
+          "request": "Test verification campaign boost",
+          "amount": 1500,
+          "risk": "LOW",
+          "expected_outcome": "Verify approval queue mechanics",
+          "recommendation": "Approve for test suite",
+          "status": "PENDING",
+          "date": "2026-09-22T07:46:04.146Z"
+        },
+        "after": {
+          "request_id": "APP-TEST-1790063164146",
+          "department": "MARKETING",
+          "request": "Test verification campaign boost",
+          "amount": 1500,
+          "risk": "LOW",
+          "expected_outcome": "Verify approval queue mechanics",
+          "recommendation": "Approve for test suite",
+          "status": "APPROVED",
+          "date": "2026-09-22T07:46:04.146Z",
+          "founder_decision": "APPROVED: Approved by test suite runner",
+          "updated_at": "2026-09-22T07:46:04.166Z",
+          "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:46:04.166Z. Action queued for execution."
+        },
+        "decision": "APPROVED",
+        "notes": "Approved by test suite runner"
+      },
+      "createdAt": "2026-09-22T07:46:04.166Z"
+    },
+    {
+      "id": "log-d28783b2",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "BUDGET_WALLET_UPDATE",
+      "targetResource": "founder_budget_wallet.w-marketing",
+      "details": {
+        "before": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL"
+        },
+        "after": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:46:04.233Z"
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.196Z"
+    },
+    {
+      "id": "log-4084dbbc",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "BUDGET_WALLET_UPDATE",
+      "targetResource": "founder_budget_wallet.w-marketing",
+      "details": {
+        "before": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 22000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:46:04.196Z"
+        },
+        "after": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:46:04.233Z"
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.233Z"
+    },
+    {
+      "id": "log-b97b836b",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_ACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": true,
+        "before": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:46:04.238Z",
+          "updatedBy": "SYSTEM",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:46:04.244Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.238Z"
+    },
+    {
+      "id": "log-c00a4cdf",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_DEACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": false,
+        "before": {
+          "active": true,
+          "updatedAt": "2026-09-22T07:46:04.238Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:46:04.244Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:46:04.244Z"
+    },
+    {
+      "id": "log-cacbc43a",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.APP-RED-1790063246895",
+      "details": {
+        "request_id": "APP-RED-1790063246895",
+        "department": "FINANCE",
+        "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+        "amount": 0,
+        "risk": "HIGH",
+        "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+        "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+        "status": "PENDING",
+        "date": "2026-09-22T07:47:26.895Z"
+      },
+      "createdAt": "2026-09-22T07:47:26.895Z"
+    },
+    {
+      "id": "log-02d90392",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.RISK-1790063246917",
+      "details": {
+        "request_id": "RISK-1790063246917",
+        "department": "SECURITY",
+        "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+        "amount": 0,
+        "risk": "MEDIUM",
+        "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+        "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+        "status": "PENDING",
+        "date": "2026-09-22T07:47:26.918Z"
+      },
+      "createdAt": "2026-09-22T07:47:26.918Z"
+    },
+    {
+      "id": "log-2e57b161",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_ACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": true,
+        "before": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:46:04.244Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:47:26.998Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:47:26.978Z"
+    },
+    {
+      "id": "log-c5e6ab1e",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_DEACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": false,
+        "before": {
+          "active": true,
+          "updatedAt": "2026-09-22T07:47:26.978Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:47:26.998Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:47:26.998Z"
+    },
+    {
+      "id": "log-648c99fd",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.APP-RED-1790063304255",
+      "details": {
+        "request_id": "APP-RED-1790063304255",
+        "department": "FINANCE",
+        "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+        "amount": 0,
+        "risk": "HIGH",
+        "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+        "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+        "status": "PENDING",
+        "date": "2026-09-22T07:48:24.255Z"
+      },
+      "createdAt": "2026-09-22T07:48:24.255Z"
+    },
+    {
+      "id": "log-017f760e",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.RISK-1790063304266",
+      "details": {
+        "request_id": "RISK-1790063304266",
+        "department": "SECURITY",
+        "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+        "amount": 0,
+        "risk": "MEDIUM",
+        "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+        "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+        "status": "PENDING",
+        "date": "2026-09-22T07:48:24.266Z"
+      },
+      "createdAt": "2026-09-22T07:48:24.266Z"
+    },
+    {
+      "id": "log-77324cad",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_ACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": true,
+        "before": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:47:26.998Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:24.338Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:48:24.315Z"
+    },
+    {
+      "id": "log-fddbeccf",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_DEACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": false,
+        "before": {
+          "active": true,
+          "updatedAt": "2026-09-22T07:48:24.315Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:24.338Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:48:24.338Z"
+    },
+    {
+      "id": "log-2af3a9b7",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "MRR_TARGET_UPDATE",
+      "targetResource": "founder_settings.mrrTarget",
+      "details": {
+        "before": {
+          "targetAmount": 15000,
+          "currency": "USD",
+          "deadline": "2027-06-30",
+          "monthlyBudget": 60000,
+          "growthPriority": "AGGRESSIVE_SCALE",
+          "riskLevel": "MODERATE",
+          "updatedAt": "2026-09-22T07:46:04.080Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        },
+        "after": {
+          "targetAmount": 15000,
+          "currency": "USD",
+          "deadline": "2027-06-30",
+          "monthlyBudget": 60000,
+          "growthPriority": "AGGRESSIVE_SCALE",
+          "riskLevel": "MODERATE",
+          "updatedAt": "2026-09-22T07:48:30.675Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.681Z"
+    },
+    {
+      "id": "log-0db36b69",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "MARKET_TARGET_UPDATE",
+      "targetResource": "founder_settings.marketTarget",
+      "details": {
+        "before": {
+          "primaryMarket": "Bangladesh",
+          "secondaryMarket": "Japan",
+          "experimentalMarket": "India & Nepal",
+          "geography": [
+            "Dhaka",
+            "Chittagong",
+            "Sylhet",
+            "Tokyo"
+          ],
+          "customerSegment": "University Engineers & Nursing Candidates",
+          "language": "Bengali / Japanese / English",
+          "priceRange": "৳499 - ৳19,999 BDT",
+          "acquisitionChannels": [
+            "Facebook Reels",
+            "Direct Campus Partnerships",
+            "Organic SEO",
+            "Live Masterclasses"
+          ],
+          "priority": "P1_PRIMARY_EXPANSION",
+          "timeframe": "Q4 2026 - Q4 2027",
+          "updatedAt": "2026-09-22T07:46:04.140Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        },
+        "after": {
+          "primaryMarket": "Bangladesh",
+          "secondaryMarket": "Japan",
+          "experimentalMarket": "India & Nepal",
+          "geography": [
+            "Dhaka",
+            "Chittagong",
+            "Sylhet",
+            "Tokyo"
+          ],
+          "customerSegment": "University Engineers & Nursing Candidates",
+          "language": "Bengali / Japanese / English",
+          "priceRange": "৳499 - ৳19,999 BDT",
+          "acquisitionChannels": [
+            "Facebook Reels",
+            "Direct Campus Partnerships",
+            "Organic SEO",
+            "Live Masterclasses"
+          ],
+          "priority": "P1_PRIMARY_EXPANSION",
+          "timeframe": "Q4 2026 - Q4 2027",
+          "updatedAt": "2026-09-22T07:48:30.688Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com"
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.688Z"
+    },
+    {
+      "id": "log-44ad3917",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.APP-TEST-1790063310711",
+      "details": {
+        "request_id": "APP-TEST-1790063310711",
+        "department": "MARKETING",
+        "request": "Test verification campaign boost",
+        "amount": 1500,
+        "risk": "LOW",
+        "expected_outcome": "Verify approval queue mechanics",
+        "recommendation": "Approve for test suite",
+        "status": "APPROVED",
+        "date": "2026-09-22T07:48:30.711Z",
+        "founder_decision": "APPROVED: Approved by test suite runner",
+        "updated_at": "2026-09-22T07:48:30.736Z",
+        "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:48:30.736Z. Action queued for execution."
+      },
+      "createdAt": "2026-09-22T07:48:30.711Z"
+    },
+    {
+      "id": "log-32cf7316",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "APPROVAL_DECISION",
+      "targetResource": "founder_approval.APP-TEST-1790063310711",
+      "details": {
+        "before": {
+          "request_id": "APP-TEST-1790063310711",
+          "department": "MARKETING",
+          "request": "Test verification campaign boost",
+          "amount": 1500,
+          "risk": "LOW",
+          "expected_outcome": "Verify approval queue mechanics",
+          "recommendation": "Approve for test suite",
+          "status": "PENDING",
+          "date": "2026-09-22T07:48:30.711Z"
+        },
+        "after": {
+          "request_id": "APP-TEST-1790063310711",
+          "department": "MARKETING",
+          "request": "Test verification campaign boost",
+          "amount": 1500,
+          "risk": "LOW",
+          "expected_outcome": "Verify approval queue mechanics",
+          "recommendation": "Approve for test suite",
+          "status": "APPROVED",
+          "date": "2026-09-22T07:48:30.711Z",
+          "founder_decision": "APPROVED: Approved by test suite runner",
+          "updated_at": "2026-09-22T07:48:30.736Z",
+          "result": "Approved by mdtanvirkabirbiplob@gmail.com at 2026-09-22T07:48:30.736Z. Action queued for execution."
+        },
+        "decision": "APPROVED",
+        "notes": "Approved by test suite runner"
+      },
+      "createdAt": "2026-09-22T07:48:30.736Z"
+    },
+    {
+      "id": "log-ed7c93d3",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "BUDGET_WALLET_UPDATE",
+      "targetResource": "founder_budget_wallet.w-marketing",
+      "details": {
+        "before": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:46:04.233Z"
+        },
+        "after": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:48:30.765Z"
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.758Z"
+    },
+    {
+      "id": "log-be166d3a",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "BUDGET_WALLET_UPDATE",
+      "targetResource": "founder_budget_wallet.w-marketing",
+      "details": {
+        "before": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 22000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:48:30.758Z"
+        },
+        "after": {
+          "wallet_id": "w-marketing",
+          "name": "Marketing",
+          "monthly_cap": 20000,
+          "daily_limit": 1000,
+          "approval_threshold": 500,
+          "alert_threshold": 16000,
+          "current_spent": 2450,
+          "status": "NORMAL",
+          "updated_at": "2026-09-22T07:48:30.765Z"
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.765Z"
+    },
+    {
+      "id": "log-70f0cd50",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_ACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": true,
+        "before": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:24.338Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:30.807Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.770Z"
+    },
+    {
+      "id": "log-628a62f8",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_DEACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": false,
+        "before": {
+          "active": true,
+          "updatedAt": "2026-09-22T07:48:30.770Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:30.807Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:48:30.807Z"
+    },
+    {
+      "id": "log-891b8a91",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.APP-RED-1790063488422",
+      "details": {
+        "request_id": "APP-RED-1790063488422",
+        "department": "FINANCE",
+        "request": "[HIGH RISK - RED AUTHORITY] Disburse BDT 50,000 marketing advance to overseas media agency",
+        "amount": 0,
+        "risk": "HIGH",
+        "expected_outcome": "Accomplish objective: Disburse BDT 50,000 marketing advance to overseas media agency",
+        "recommendation": "Package as Founder approval request. Autonomous execution locked.",
+        "status": "PENDING",
+        "date": "2026-09-22T07:51:28.422Z"
+      },
+      "createdAt": "2026-09-22T07:51:28.422Z"
+    },
+    {
+      "id": "log-ab98c52a",
+      "adminUserId": "admin-system",
+      "adminEmail": "founder@nihomi.com",
+      "action": "APPROVAL_SUBMISSION",
+      "targetResource": "founder_approval.RISK-1790063488444",
+      "details": {
+        "request_id": "RISK-1790063488444",
+        "department": "SECURITY",
+        "request": "[ESCALATED HIGH RISK] INFRASTRUCTURE: Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+        "amount": 0,
+        "risk": "MEDIUM",
+        "expected_outcome": "Immediate containment of risk: Student signups temporarily delayed during evening peak hours",
+        "recommendation": "Authorize recommended mitigation: Switch primary OTP traffic to secondary Telco aggregator",
+        "status": "PENDING",
+        "date": "2026-09-22T07:51:28.445Z"
+      },
+      "createdAt": "2026-09-22T07:51:28.445Z"
+    },
+    {
+      "id": "log-5341d7c5",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_ACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": true,
+        "before": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:48:30.807Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:51:28.485Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:51:28.478Z"
+    },
+    {
+      "id": "log-72c79952",
+      "adminUserId": "admin-system",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "EMERGENCY_KILLSWITCH_DEACTIVATED",
+      "targetResource": "founder_emergency_controls.stopAllAi",
+      "details": {
+        "switchKey": "stopAllAi",
+        "active": false,
+        "before": {
+          "active": true,
+          "updatedAt": "2026-09-22T07:51:28.478Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        },
+        "after": {
+          "active": false,
+          "updatedAt": "2026-09-22T07:51:28.485Z",
+          "updatedBy": "mdtanvirkabirbiplob@gmail.com",
+          "connected": true
+        }
+      },
+      "createdAt": "2026-09-22T07:51:28.485Z"
+    }
+  ],
+  "aiActionLedger": [
+    {
+      "action_id": "ACT-1790063488454-e2f5",
+      "timestamp": "2026-09-22T07:51:28.454Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Assess & Escalate Risk: INFRASTRUCTURE",
+      "task": "Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "data_sources": [
+        "RISK-REGISTER.md",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Classified severity as [HIGH]. Immediate Founder alert dispatched. High-priority approval item queued.",
+      "authority": "RED",
+      "action_type": "ANALYZE",
+      "result": "Immediate Founder alert dispatched. High-priority approval item queued."
+    },
+    {
+      "action_id": "ACT-1790063488438-42b9",
+      "timestamp": "2026-09-22T07:51:28.438Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Resolve Inter-Departmental Recommendation Conflict",
+      "task": "Q4 Budget Allocation Contention",
+      "data_sources": [
+        "CompanyBrain",
+        "AUTHORITY-MODEL.md"
+      ],
+      "decision": "Analyzed conflicting departmental assumptions and formatted 2 structured options for Founder decision.",
+      "authority": "YELLOW",
+      "action_type": "ANALYZE",
+      "result": "Conflict between MARKETING and FINANCE surfaced to Founder."
+    },
+    {
+      "action_id": "ACT-1790063488430-baf6",
+      "timestamp": "2026-09-22T07:51:28.430Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Gated Delegation for High-Risk Action",
+      "task": "Disburse BDT 50,000 marketing advance to overseas media agency",
+      "data_sources": [
+        "AUTHORITY-MODEL.md",
+        "APPROVAL-SCHEMA.json"
+      ],
+      "decision": "Blocked autonomous dispatch of RED action. Created approval request [APP-RED-1790063488422].",
+      "authority": "RED",
+      "action_type": "PREPARE",
+      "result": "Routed to Founder Approval Queue (APP-RED-1790063488422)."
+    },
+    {
+      "action_id": "ACT-1790063488415-cdf5",
+      "timestamp": "2026-09-22T07:51:28.415Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Delegate Work to Department CONTENT",
+      "task": "TSK-CON-8411",
+      "data_sources": [
+        "TASK-SCHEMA.json",
+        "AI-EMPLOYEE-REGISTRY.json"
+      ],
+      "decision": "Dispatched task [TSK-CON-8411] to NHO-AI-004 under [GREEN] authority.",
+      "authority": "GREEN",
+      "action_type": "DELEGATE",
+      "result": "Task active in CONTENT backlog."
+    },
+    {
+      "action_id": "ACT-1790063488406-60a4",
+      "timestamp": "2026-09-22T07:51:28.406Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Decompose Strategic Objective: Reach $10,000 MRR by expanding Japanese nursing curriculum in Dhaka",
+      "task": "Target: $10000 MRR in Bangladesh & Japan",
+      "data_sources": [
+        "FounderSettings",
+        "TASK-SCHEMA.json",
+        "BUDGET-SCHEMA.json"
+      ],
+      "decision": "Decomposed goal into 3 initiatives and 5 departmental tasks. Zero external autonomous execution triggered.",
+      "authority": "GREEN",
+      "action_type": "PLAN",
+      "result": "Created plan with 5 work assignments."
+    },
+    {
+      "action_id": "ACT-1790063488402-42c0",
+      "timestamp": "2026-09-22T07:51:28.402Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Synthesize Daily Executive CEO Brief",
+      "task": "Scheduled / On-Demand CEO Brief Generation",
+      "data_sources": [
+        "RevenueMetrics",
+        "FounderSettings",
+        "FounderBudgetWallets",
+        "FounderApprovals",
+        "FounderTasks"
+      ],
+      "decision": "Synthesized 21-section brief without hallucination.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "result": "Brief [BRIEF-1790063488402] generated with 0 critical alerts."
+    },
+    {
+      "action_id": "ACT-1790063488396-72d1",
+      "timestamp": "2026-09-22T07:51:28.396Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "What are our current blockers and bottlenecks?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderTasks(BLOCKED)",
+        "FOUNDER-OFFICE/07-PRODUCT/PRODUCT-ROADMAP.md"
+      ],
+      "decision": "Responded under category [PRODUCT_BOTTLENECK] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063488393-5156",
+      "timestamp": "2026-09-22T07:51:28.393Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আমাদের বাজেট এবং খরচ কত?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderBudgetWallets",
+        "db.getFounderSettings(mrrTarget.monthlyBudget)"
+      ],
+      "decision": "Responded under category [BUDGET_AND_SPEND] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063488390-7267",
+      "timestamp": "2026-09-22T07:51:28.390Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আজকে পুরো অফিসের আপডেট দাও",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderApprovals",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Responded under category [OFFICE_OVERVIEW] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063304271-3384",
+      "timestamp": "2026-09-22T07:48:24.271Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Assess & Escalate Risk: INFRASTRUCTURE",
+      "task": "Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "data_sources": [
+        "RISK-REGISTER.md",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Classified severity as [HIGH]. Immediate Founder alert dispatched. High-priority approval item queued.",
+      "authority": "RED",
+      "action_type": "ANALYZE",
+      "result": "Immediate Founder alert dispatched. High-priority approval item queued."
+    },
+    {
+      "action_id": "ACT-1790063304263-d816",
+      "timestamp": "2026-09-22T07:48:24.263Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Resolve Inter-Departmental Recommendation Conflict",
+      "task": "Q4 Budget Allocation Contention",
+      "data_sources": [
+        "CompanyBrain",
+        "AUTHORITY-MODEL.md"
+      ],
+      "decision": "Analyzed conflicting departmental assumptions and formatted 2 structured options for Founder decision.",
+      "authority": "YELLOW",
+      "action_type": "ANALYZE",
+      "result": "Conflict between MARKETING and FINANCE surfaced to Founder."
+    },
+    {
+      "action_id": "ACT-1790063304260-09b8",
+      "timestamp": "2026-09-22T07:48:24.260Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Gated Delegation for High-Risk Action",
+      "task": "Disburse BDT 50,000 marketing advance to overseas media agency",
+      "data_sources": [
+        "AUTHORITY-MODEL.md",
+        "APPROVAL-SCHEMA.json"
+      ],
+      "decision": "Blocked autonomous dispatch of RED action. Created approval request [APP-RED-1790063304255].",
+      "authority": "RED",
+      "action_type": "PREPARE",
+      "result": "Routed to Founder Approval Queue (APP-RED-1790063304255)."
+    },
+    {
+      "action_id": "ACT-1790063304252-0b5d",
+      "timestamp": "2026-09-22T07:48:24.252Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Delegate Work to Department CONTENT",
+      "task": "TSK-CON-4248",
+      "data_sources": [
+        "TASK-SCHEMA.json",
+        "AI-EMPLOYEE-REGISTRY.json"
+      ],
+      "decision": "Dispatched task [TSK-CON-4248] to NHO-AI-004 under [GREEN] authority.",
+      "authority": "GREEN",
+      "action_type": "DELEGATE",
+      "result": "Task active in CONTENT backlog."
+    },
+    {
+      "action_id": "ACT-1790063304245-6642",
+      "timestamp": "2026-09-22T07:48:24.245Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Decompose Strategic Objective: Reach $10,000 MRR by expanding Japanese nursing curriculum in Dhaka",
+      "task": "Target: $10000 MRR in Bangladesh & Japan",
+      "data_sources": [
+        "FounderSettings",
+        "TASK-SCHEMA.json",
+        "BUDGET-SCHEMA.json"
+      ],
+      "decision": "Decomposed goal into 3 initiatives and 5 departmental tasks. Zero external autonomous execution triggered.",
+      "authority": "GREEN",
+      "action_type": "PLAN",
+      "result": "Created plan with 5 work assignments."
+    },
+    {
+      "action_id": "ACT-1790063304236-ee95",
+      "timestamp": "2026-09-22T07:48:24.236Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Synthesize Daily Executive CEO Brief",
+      "task": "Scheduled / On-Demand CEO Brief Generation",
+      "data_sources": [
+        "RevenueMetrics",
+        "FounderSettings",
+        "FounderBudgetWallets",
+        "FounderApprovals",
+        "FounderTasks"
+      ],
+      "decision": "Synthesized 21-section brief without hallucination.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "result": "Brief [BRIEF-1790063304236] generated with 0 critical alerts."
+    },
+    {
+      "action_id": "ACT-1790063304217-0662",
+      "timestamp": "2026-09-22T07:48:24.217Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "What are our current blockers and bottlenecks?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderTasks(BLOCKED)",
+        "FOUNDER-OFFICE/07-PRODUCT/PRODUCT-ROADMAP.md"
+      ],
+      "decision": "Responded under category [PRODUCT_BOTTLENECK] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063304214-642b",
+      "timestamp": "2026-09-22T07:48:24.214Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আমাদের বাজেট এবং খরচ কত?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderBudgetWallets",
+        "db.getFounderSettings(mrrTarget.monthlyBudget)"
+      ],
+      "decision": "Responded under category [BUDGET_AND_SPEND] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063304211-5712",
+      "timestamp": "2026-09-22T07:48:24.211Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আজকে পুরো অফিসের আপডেট দাও",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderApprovals",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Responded under category [OFFICE_OVERVIEW] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063246924-45a7",
+      "timestamp": "2026-09-22T07:47:26.924Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Assess & Escalate Risk: INFRASTRUCTURE",
+      "task": "Third-party SMS gateway latency exceeds 15 seconds for student OTPs",
+      "data_sources": [
+        "RISK-REGISTER.md",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Classified severity as [HIGH]. Immediate Founder alert dispatched. High-priority approval item queued.",
+      "authority": "RED",
+      "action_type": "ANALYZE",
+      "result": "Immediate Founder alert dispatched. High-priority approval item queued."
+    },
+    {
+      "action_id": "ACT-1790063246912-b986",
+      "timestamp": "2026-09-22T07:47:26.912Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Resolve Inter-Departmental Recommendation Conflict",
+      "task": "Q4 Budget Allocation Contention",
+      "data_sources": [
+        "CompanyBrain",
+        "AUTHORITY-MODEL.md"
+      ],
+      "decision": "Analyzed conflicting departmental assumptions and formatted 2 structured options for Founder decision.",
+      "authority": "YELLOW",
+      "action_type": "ANALYZE",
+      "result": "Conflict between MARKETING and FINANCE surfaced to Founder."
+    },
+    {
+      "action_id": "ACT-1790063246901-cd15",
+      "timestamp": "2026-09-22T07:47:26.901Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Gated Delegation for High-Risk Action",
+      "task": "Disburse BDT 50,000 marketing advance to overseas media agency",
+      "data_sources": [
+        "AUTHORITY-MODEL.md",
+        "APPROVAL-SCHEMA.json"
+      ],
+      "decision": "Blocked autonomous dispatch of RED action. Created approval request [APP-RED-1790063246895].",
+      "authority": "RED",
+      "action_type": "PREPARE",
+      "result": "Routed to Founder Approval Queue (APP-RED-1790063246895)."
+    },
+    {
+      "action_id": "ACT-1790063246886-4c62",
+      "timestamp": "2026-09-22T07:47:26.886Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Delegate Work to Department CONTENT",
+      "task": "TSK-CON-6883",
+      "data_sources": [
+        "TASK-SCHEMA.json",
+        "AI-EMPLOYEE-REGISTRY.json"
+      ],
+      "decision": "Dispatched task [TSK-CON-6883] to NHO-AI-004 under [GREEN] authority.",
+      "authority": "GREEN",
+      "action_type": "DELEGATE",
+      "result": "Task active in CONTENT backlog."
+    },
+    {
+      "action_id": "ACT-1790063246831-21fc",
+      "timestamp": "2026-09-22T07:47:26.831Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Decompose Strategic Objective: Reach $10,000 MRR by expanding Japanese nursing curriculum in Dhaka",
+      "task": "Target: $10000 MRR in Bangladesh & Japan",
+      "data_sources": [
+        "FounderSettings",
+        "TASK-SCHEMA.json",
+        "BUDGET-SCHEMA.json"
+      ],
+      "decision": "Decomposed goal into 3 initiatives and 5 departmental tasks. Zero external autonomous execution triggered.",
+      "authority": "GREEN",
+      "action_type": "PLAN",
+      "result": "Created plan with 5 work assignments."
+    },
+    {
+      "action_id": "ACT-1790063246806-889a",
+      "timestamp": "2026-09-22T07:47:26.806Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Synthesize Daily Executive CEO Brief",
+      "task": "Scheduled / On-Demand CEO Brief Generation",
+      "data_sources": [
+        "RevenueMetrics",
+        "FounderSettings",
+        "FounderBudgetWallets",
+        "FounderApprovals",
+        "FounderTasks"
+      ],
+      "decision": "Synthesized 21-section brief without hallucination.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "result": "Brief [BRIEF-1790063246806] generated with 0 critical alerts."
+    },
+    {
+      "action_id": "ACT-1790063246762-2135",
+      "timestamp": "2026-09-22T07:47:26.762Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "What are our current blockers?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks"
+      ],
+      "decision": "Responded under category [GENERAL_EXECUTIVE] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063246759-a1ad",
+      "timestamp": "2026-09-22T07:47:26.759Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আমাদের বাজেট এবং খরচ কত?",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks"
+      ],
+      "decision": "Responded under category [GENERAL_EXECUTIVE] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    },
+    {
+      "action_id": "ACT-1790063246752-269f",
+      "timestamp": "2026-09-22T07:47:26.752Z",
+      "employee_id": "NHO-AI-001",
+      "goal": "Address Founder Natural-Language Query",
+      "task": "আজকে পুরো অফিসের আপডেট দাও",
+      "data_sources": [
+        "db.getRevenueMetrics",
+        "db.getFounderSettings",
+        "db.getFounderTasks",
+        "db.getFounderApprovals",
+        "db.getFounderEmergencyControls"
+      ],
+      "decision": "Responded under category [OFFICE_OVERVIEW] with verified telemetry.",
+      "authority": "GREEN",
+      "action_type": "REPORT",
+      "cost_tokens": 0,
+      "cost_bdt": 0,
+      "result": "Delivered executive report to Founder (mdtanvirkabirbiplob@gmail.com)."
+    }
+  ]
+}

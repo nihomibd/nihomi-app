@@ -1044,6 +1044,66 @@ export interface DatabaseSchema {
   founderBudgetWallets?: FounderBudgetWallet[];
   aiDepartmentStatuses?: Record<string, AIDepartmentStatus>;
   founderEmergencyControls?: FounderEmergencyControls;
+
+  // Gate 3: AI COO Runtime & Action Ledger
+  aiActionLedger?: AiActionLedgerEntry[];
+}
+
+// ==============================================================================
+// GATE 3: AI COO RUNTIME & COMPANY ORCHESTRATION MODELS
+// ==============================================================================
+
+export interface AiActionLedgerEntry {
+  action_id: string;
+  employee_id: string;
+  goal: string;
+  task?: string;
+  data_sources: string[];
+  decision: string;
+  authority: 'GREEN' | 'YELLOW' | 'RED';
+  action_type: 'READ' | 'ANALYZE' | 'PLAN' | 'DELEGATE' | 'REPORT' | 'PREPARE';
+  cost_tokens?: number;
+  cost_bdt?: number;
+  result: string;
+  timestamp: string;
+  approval_id?: string;
+  rollback_info?: string;
+}
+
+export interface DecomposedTaskItem {
+  task_id: string;
+  department: string;
+  owner: string;
+  objective: string;
+  priority: 'P0' | 'P1' | 'P2';
+  authority: 'GREEN' | 'YELLOW' | 'RED';
+  dependencies: string[];
+  deadline: string;
+  success_metric: string;
+  risk: string;
+}
+
+export interface DecomposedObjectivePlan {
+  goal: string;
+  targetMrr: number;
+  market: string;
+  timeframe: string;
+  budget: number;
+  initiatives: Array<{
+    name: string;
+    leadDepartment: string;
+    description: string;
+  }>;
+  tasks: DecomposedTaskItem[];
+  dependencies: string[];
+  metrics: Record<string, string>;
+  deadlines: Record<string, string>;
+  risks: Array<{
+    risk: string;
+    level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    mitigation: string;
+  }>;
+  createdAt: string;
 }
 
 // ==============================================================================
