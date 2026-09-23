@@ -216,6 +216,62 @@ class WorldAudioEngine {
     } catch {}
   }
 
+  public playPedestrianSignal(type: 'piyo' | 'kakkou' = 'piyo') {
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+
+      if (type === 'piyo') {
+        // Tokyo Scramble Crossing "Piyo Piyo" acoustic bird chirp
+        [0.0, 0.28].forEach((offset) => {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(2450, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(1750, now + offset + 0.16);
+
+          gain.gain.setValueAtTime(0.0001, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.08, now + offset + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.2);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.22);
+        });
+      } else {
+        // Tokyo Scramble Crossing "Kakkou" (Cuckoo) two-tone chime
+        const notes = [
+          { freq: 1046.5, time: 0.0, dur: 0.24 }, // High C6
+          { freq: 830.6, time: 0.28, dur: 0.35 }  // Ab5
+        ];
+        notes.forEach(({ freq, time, dur }) => {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + time);
+
+          gain.gain.setValueAtTime(0.0001, now + time);
+          gain.gain.exponentialRampToValueAtTime(0.09, now + time + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now + time);
+          osc.stop(now + time + dur + 0.05);
+        });
+      }
+    } catch {}
+  }
+
   public getIsPlaying(): boolean {
     return this.isPlaying;
   }
