@@ -99,7 +99,18 @@ export class RealWorldProvider {
     tiles.registerPlugin(authPlugin);
 
     // Reorient from ECEF Earth coordinates to Local Tangent Plane (ENU)
-    const reorientPlugin = new ReorientationPlugin();
+    // Convert anchor latitude and longitude from degrees to radians per 3d-tiles-renderer specification
+    const latRad = (this.status.anchor.latitude * Math.PI) / 180;
+    const lonRad = (this.status.anchor.longitude * Math.PI) / 180;
+    const heightMeters = this.status.anchor.altitude || 18;
+
+    const reorientPlugin = new ReorientationPlugin({
+      lat: latRad,
+      lon: lonRad,
+      height: heightMeters,
+      up: '+y',
+      recenter: true
+    });
     tiles.registerPlugin(reorientPlugin);
     this.reorientationPlugin = reorientPlugin;
 
@@ -108,9 +119,37 @@ export class RealWorldProvider {
     tiles.setResolutionFromRenderer(camera, renderer);
     tiles.errorTarget = 14; // Tuned for crisp urban building facades while preserving 60 FPS
 
-    // Set geographic anchor to Shibuya Crossing
-    const anchorEcef = geodeticToECEF(this.status.anchor);
-    tiles.group.position.set(-anchorEcef.x, -anchorEcef.y, -anchorEcef.z);
+    // Event listener: On successful root tileset connection, ensure fallback mesh is unmounted
+    tiles.addEventListener('load-root-tileset', () => {
+      console.log('[RealWorldProvider] Successfully connected and streaming Google Photorealistic 3D Tiles.');
+      if (this.fallbackMesh) {
+        this.group.remove(this.fallbackMesh);
+        this.fallbackMesh = null;
+      }
+      this.status = {
+        ...this.status,
+        providerType: 'google_3d_tiles',
+        hasApiKey: true,
+        isStreaming: true,
+        errorMessage: undefined
+      };
+      this.notifyStatus();
+    });
+
+    // Event listener: On network or auth error, fall back gracefully to photographic scene
+    tiles.addEventListener('load-error', (e: any) => {
+      const errMsg = e.error?.message || 'Failed to stream Google 3D Tiles (check API Key and Map Tiles API enablement).';
+      console.warn('[RealWorldProvider] 3D Tiles streaming error:', errMsg);
+      this.status = {
+        ...this.status,
+        isStreaming: false,
+        errorMessage: errMsg
+      };
+      this.notifyStatus();
+      if (!this.fallbackMesh) {
+        this.initPhotographicGeographicFoundation(scene);
+      }
+    });
 
     this.group.add(tiles.group);
     scene.add(this.group);
