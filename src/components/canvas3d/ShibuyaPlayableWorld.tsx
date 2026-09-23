@@ -1,6 +1,6 @@
 // src/components/canvas3d/ShibuyaPlayableWorld.tsx
-// NIHOMI WORLD™ V4: REALITY CANVAS™ — Playable 3D Shibuya World & In-World Learning Engine
-// First-Person / Third-Person WASD Movement, 7-Eleven Conbini NPC Interaction, Spatial Audio & Zero-Buttonism HUD
+// NIHOMI WORLD™ V5: REALITY CANVAS™ — AAA Stylized 3D Shibuya World & PBR Realism Engine
+// Stylized Anime Characters, PBR Storefront, Dynamic Soft Shadows, Neon Glow & In-World Keigo Learning Loop
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
@@ -61,6 +61,285 @@ interface DialogueState {
   };
   step: 'greeting' | 'sensei_coaching' | 'success';
 }
+
+// ============================================================================
+// PROCEDURAL PBR TEXTURE GENERATORS (Zero network latency, instant rendering)
+// ============================================================================
+
+function createAsphaltTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#12141c';
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Subtle grain noise for road asphalt
+    for (let i = 0; i < 35000; i++) {
+      const x = Math.random() * 512;
+      const y = Math.random() * 512;
+      const brightness = 14 + Math.random() * 18;
+      ctx.fillStyle = `rgb(${brightness}, ${brightness + 2}, ${brightness + 6})`;
+      ctx.fillRect(x, y, 1.5, 1.5);
+    }
+
+    // Wet sheen reflection streaks
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.015)';
+    for (let i = 0; i < 15; i++) {
+      ctx.fillRect(Math.random() * 512, 0, 15 + Math.random() * 30, 512);
+    }
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(12, 12);
+  return texture;
+}
+
+function createCrosswalkTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 256, 256);
+
+    // Subtle road grit on paint
+    ctx.fillStyle = 'rgba(18, 20, 28, 0.12)';
+    for (let i = 0; i < 4000; i++) {
+      ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+    }
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
+function createTileFloorTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#eae7df';
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.strokeStyle = '#c8c5bc';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(0, 0, 128, 128);
+    ctx.strokeRect(128, 0, 128, 128);
+    ctx.strokeRect(0, 128, 128, 128);
+    ctx.strokeRect(128, 128, 128, 128);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(6, 6);
+  return texture;
+}
+
+function createSevenElevenSignTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 1024, 256);
+
+    // Top Orange Stripe & Bottom Green Stripe
+    ctx.fillStyle = '#ff7700';
+    ctx.fillRect(0, 0, 1024, 24);
+    ctx.fillStyle = '#008844';
+    ctx.fillRect(0, 232, 1024, 24);
+
+    // 7-Eleven Japanese Logo
+    ctx.fillStyle = '#dd1111';
+    ctx.font = '900 110px "Arial Black", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('7-ELEVEN', 380, 128);
+
+    ctx.fillStyle = '#008844';
+    ctx.font = 'bold 74px "Hiragino Kaku Gothic Pro", sans-serif';
+    ctx.fillText('セブン-イレブン', 820, 128);
+  }
+  return new THREE.CanvasTexture(canvas);
+}
+
+function createPosScreenTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 384;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#091321';
+    ctx.fillRect(0, 0, 512, 384);
+
+    ctx.fillStyle = '#00e5ff';
+    ctx.fillRect(0, 0, 512, 54);
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('NIHOMI CONBINI POS SYSTEM • レジ1', 20, 36);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '24px sans-serif';
+    ctx.fillText('からあげクン (レギュラー)', 24, 110);
+    ctx.fillText('お～いお茶 (500ml)', 24, 150);
+    ctx.fillText('おにぎり (ツナマヨ)', 24, 190);
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillText('¥240', 410, 110);
+    ctx.fillText('¥160', 410, 150);
+    ctx.fillText('¥150', 410, 190);
+
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(20, 240, 472, 110);
+    ctx.fillStyle = '#4ade80';
+    ctx.font = 'bold 38px sans-serif';
+    ctx.fillText('合計 (TOTAL): ¥1,350', 40, 310);
+  }
+  return new THREE.CanvasTexture(canvas);
+}
+
+function createAnimeFaceTexture(type: 'manager' | 'player'): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    // Skin Base
+    ctx.fillStyle = '#ffd6ba';
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Anime Eyes
+    const eyeColor = type === 'manager' ? '#2e1f13' : '#1d4ed8';
+    // Left Eye
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.ellipse(170, 240, 48, 62, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = eyeColor;
+    ctx.beginPath();
+    ctx.ellipse(176, 244, 32, 46, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(164, 224, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Right Eye
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.ellipse(342, 240, 48, 62, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = eyeColor;
+    ctx.beginPath();
+    ctx.ellipse(336, 244, 32, 46, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(326, 224, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eyelashes & Brows
+    ctx.strokeStyle = '#181924';
+    ctx.lineWidth = 9;
+    ctx.beginPath();
+    ctx.moveTo(120, 185);
+    ctx.quadraticCurveTo(170, 160, 225, 180);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(287, 180);
+    ctx.quadraticCurveTo(342, 160, 392, 185);
+    ctx.stroke();
+
+    // Gentle Smile
+    ctx.strokeStyle = '#a84c32';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(256, 340, 34, 0.2 * Math.PI, 0.8 * Math.PI);
+    ctx.stroke();
+
+    // Soft Blush
+    ctx.fillStyle = 'rgba(255, 110, 120, 0.28)';
+    ctx.beginPath();
+    ctx.ellipse(135, 305, 38, 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(377, 305, 38, 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  return new THREE.CanvasTexture(canvas);
+}
+
+function createVendingMachineTexture(brand: 'boss' | 'cola'): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 768;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = brand === 'boss' ? '#003399' : '#cc1111';
+    ctx.fillRect(0, 0, 512, 768);
+
+    // Header Logo
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 48px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(brand === 'boss' ? 'BOSS COFFEE' : 'Coca-Cola', 256, 75);
+
+    // Product Display Glass Area
+    ctx.fillStyle = '#0a0d1a';
+    ctx.fillRect(40, 130, 432, 280);
+    ctx.strokeStyle = '#445577';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(40, 130, 432, 280);
+
+    // Display Drink Rows
+    for (let row = 0; row < 2; row++) {
+      for (let col = 0; col < 4; col++) {
+        const cx = 85 + col * 98;
+        const cy = 180 + row * 120;
+        ctx.fillStyle = col % 2 === 0 ? '#10b981' : '#f59e0b';
+        ctx.fillRect(cx - 24, cy - 40, 48, 70);
+
+        // Price badge
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(cx - 26, cy + 34, 52, 18);
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText('¥140', cx, cy + 48);
+      }
+    }
+
+    // Push Buttons
+    ctx.fillStyle = '#22d3ee';
+    for (let col = 0; col < 4; col++) {
+      ctx.fillRect(65 + col * 98, 430, 40, 22);
+    }
+
+    // Coin slot and change return
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(400, 485, 45, 12);
+    ctx.fillRect(415, 510, 15, 30);
+
+    // Bottom Dispenser Door
+    ctx.fillStyle = '#1e2433';
+    ctx.fillRect(60, 580, 392, 130);
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(60, 580, 392, 130);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText('PUSH 取り出し口', 256, 650);
+  }
+  return new THREE.CanvasTexture(canvas);
+}
+
+// ============================================================================
+// MAIN PLAYABLE 3D COMPONENT
+// ============================================================================
 
 export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   coins,
@@ -145,16 +424,24 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   // Sound triggers state
   const hasTriggeredStoreChimeRef = useRef(false);
   const footstepCooldownRef = useRef(0);
+  const walkCycleTimeRef = useRef(0);
 
   // Three.js instances
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const playerMeshRef = useRef<THREE.Group | null>(null);
-  const npcManagerRef = useRef<THREE.Group | null>(null);
+  const playerAvatarGroupRef = useRef<THREE.Group | null>(null);
+  const playerLimbsRef = useRef<{
+    leftLeg?: THREE.Group;
+    rightLeg?: THREE.Group;
+    leftArm?: THREE.Group;
+    rightArm?: THREE.Group;
+  }>({});
+  const npcManagerGroupRef = useRef<THREE.Group | null>(null);
+  const npcRightArmRef = useRef<THREE.Group | null>(null);
   const animFrameRef = useRef<number | null>(null);
 
-  // Store coordinates (7-Eleven at x: -14, z: -6)
+  // Coordinates
   const CONBINI_POS = { x: -14, y: 0, z: -6 };
   const NPC_MANAGER_POS = { x: -14, y: 0.9, z: -8.5 };
 
@@ -194,7 +481,6 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   // Handle Dialogue Choices
   const handleSelectChoice = (choiceId: string) => {
     if (choiceId === 'baito_keigo') {
-      // Correct Keigo response!
       playSpeech('はい！ちょうど夕方と夜勤のスタッフを募集していますよ。面接の日程を決めましょうか？');
       worldAudio.playSuccessRewardChime();
       triggerCelebrationConfetti();
@@ -221,7 +507,6 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         ]
       });
     } else if (choiceId === 'baito_casual' || choiceId === 'ask_sensei') {
-      // Tanaka AI Sensei Smooth Intervention
       playSpeech('田中先生です。日本のアルバイト応募では「バイトありますか」は失礼にあたります。「アルバイトの募集はありますか」と丁寧に尋ねましょう。');
       setDialogue((prev) => ({
         ...prev,
@@ -248,7 +533,6 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         ]
       }));
     } else if (choiceId === 'retry_keigo') {
-      // User retries with correct Keigo!
       handleSelectChoice('baito_keigo');
     } else if (choiceId === 'order_food') {
       playSpeech('はい！からあげクンとお茶ですね。温めますので少々お待ちください。');
@@ -280,13 +564,11 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       const key = e.key.toLowerCase();
       keysPressedRef.current[key] = true;
 
-      // 'E' Key triggers in-world interaction if proximity prompt is visible
       if (key === 'e' && proximityPrompt.visible && !isDialogueOpenRef.current) {
         e.preventDefault();
         handleTriggerInteraction();
       }
 
-      // Escape closes dialogue or releases pointer lock
       if (e.key === 'Escape' && isDialogueOpenRef.current) {
         setDialogue((prev) => ({ ...prev, isOpen: false }));
       }
@@ -347,338 +629,575 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     // 1. Scene & Cinematic Fog
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a0a14);
-    scene.fog = new THREE.FogExp2(0x0a0a14, 0.016);
+    scene.fog = new THREE.FogExp2(0x0a0a14, 0.015);
     sceneRef.current = scene;
 
     // 2. Camera
-    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 300);
+    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 350);
     cameraRef.current = camera;
 
-    // 3. Renderer with soft shadows
+    // 3. Renderer with Dynamic Soft Shadows
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
 
     mountEl.innerHTML = '';
     mountEl.appendChild(renderer.domElement);
 
-    // 4. Lighting Engine
+    // 4. Cinematic Lighting Engine
     // Ambient moonlit night
-    const ambientLight = new THREE.AmbientLight(0x282c3f, 1.4);
+    const ambientLight = new THREE.AmbientLight(0x222638, 1.2);
     scene.add(ambientLight);
 
-    // Moonlight Directional
-    const moonLight = new THREE.DirectionalLight(0x7080b0, 1.2);
-    moonLight.position.set(20, 45, 25);
+    // Directional Moonlight with Soft Cast Shadows
+    const moonLight = new THREE.DirectionalLight(0x8899cc, 1.4);
+    moonLight.position.set(25, 45, 20);
+    moonLight.castShadow = true;
+    moonLight.shadow.mapSize.width = 2048;
+    moonLight.shadow.mapSize.height = 2048;
+    moonLight.shadow.camera.near = 0.5;
+    moonLight.shadow.camera.far = 140;
+    moonLight.shadow.camera.left = -35;
+    moonLight.shadow.camera.right = 35;
+    moonLight.shadow.camera.top = 35;
+    moonLight.shadow.camera.bottom = -35;
+    moonLight.shadow.bias = -0.0005;
     scene.add(moonLight);
 
-    // Warm Neon Streetlights along Shibuya
-    const neonCyan = new THREE.PointLight(0x00e5ff, 2.5, 30);
-    neonCyan.position.set(0, 8, 0);
+    // Warm Neon Streetlights along Shibuya Crossing
+    const neonCyan = new THREE.PointLight(0x00e5ff, 2.8, 32);
+    neonCyan.position.set(0, 8, 2);
     scene.add(neonCyan);
 
-    const neonMagenta = new THREE.PointLight(0xff007f, 2.8, 35);
-    neonMagenta.position.set(15, 12, -15);
+    const neonMagenta = new THREE.PointLight(0xff007f, 3.2, 38);
+    neonMagenta.position.set(16, 14, -18);
     scene.add(neonMagenta);
 
-    // 5. Environment Geometry: Shibuya Scramble Crossing
-    // Asphalt Ground Plane
+    // 5. PBR Environment Geometry: Shibuya Scramble Crossing
+    // Asphalt Ground Plane with PBR procedural grit texture
+    const asphaltTex = createAsphaltTexture();
     const groundGeo = new THREE.PlaneGeometry(160, 160);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x11131a,
-      roughness: 0.5,
-      metalness: 0.15
+      map: asphaltTex,
+      roughness: 0.35,
+      metalness: 0.2
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = 0;
+    ground.receiveShadow = true;
     scene.add(ground);
 
-    // Shibuya Scramble Crosswalk Zebra Stripes
+    // Shibuya Scramble Crosswalk Zebra Stripes with Paint Texture
     const crosswalkGroup = new THREE.Group();
+    const crosswalkTex = createCrosswalkTexture();
     const stripeMat = new THREE.MeshStandardMaterial({
+      map: crosswalkTex,
       color: 0xffffff,
-      roughness: 0.3,
+      roughness: 0.25,
       metalness: 0.05
     });
 
     // Diagonal crossing 1 (North-West to South-East)
     for (let i = -14; i <= 14; i += 2.2) {
-      const stripeGeo = new THREE.BoxGeometry(0.8, 0.02, 18);
+      const stripeGeo = new THREE.BoxGeometry(0.85, 0.02, 18);
       const stripe = new THREE.Mesh(stripeGeo, stripeMat);
       stripe.position.set(i, 0.015, -4);
       stripe.rotation.y = Math.PI / 5;
+      stripe.receiveShadow = true;
       crosswalkGroup.add(stripe);
     }
     // Diagonal crossing 2 (North-East to South-West)
     for (let i = -14; i <= 14; i += 2.2) {
-      const stripeGeo = new THREE.BoxGeometry(0.8, 0.02, 18);
+      const stripeGeo = new THREE.BoxGeometry(0.85, 0.02, 18);
       const stripe = new THREE.Mesh(stripeGeo, stripeMat);
       stripe.position.set(i, 0.015, -4);
       stripe.rotation.y = -Math.PI / 5;
+      stripe.receiveShadow = true;
       crosswalkGroup.add(stripe);
     }
     scene.add(crosswalkGroup);
 
-    // Sidewalk slabs with concrete curbs
-    const sidewalkMat = new THREE.MeshStandardMaterial({ color: 0x222634, roughness: 0.6 });
-    const sidewalkGeo = new THREE.BoxGeometry(30, 0.25, 25);
+    // Sidewalk slabs with concrete curbs & Yellow Tactile Tenji Blocks
+    const sidewalkMat = new THREE.MeshStandardMaterial({ color: 0x272c3d, roughness: 0.65 });
+    const sidewalkGeo = new THREE.BoxGeometry(32, 0.28, 26);
+
     const westSidewalk = new THREE.Mesh(sidewalkGeo, sidewalkMat);
-    westSidewalk.position.set(-18, 0.125, -10);
+    westSidewalk.position.set(-19, 0.14, -10);
+    westSidewalk.receiveShadow = true;
     scene.add(westSidewalk);
 
     const eastSidewalk = new THREE.Mesh(sidewalkGeo, sidewalkMat);
-    eastSidewalk.position.set(18, 0.125, -10);
+    eastSidewalk.position.set(19, 0.14, -10);
+    eastSidewalk.receiveShadow = true;
     scene.add(eastSidewalk);
 
-    // 6. BUILD THE 3D 7-ELEVEN / CONBINI STOREFRONT
-    const conbiniGroup = new THREE.Group();
-    conbiniGroup.position.set(CONBINI_POS.x, 0.25, CONBINI_POS.z);
+    // Yellow Tenji Tactile Paving along Curb Edge
+    const tenjiMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.4, emissive: 0x854d0e, emissiveIntensity: 0.2 });
+    for (let tz = -22; tz <= 2; tz += 2) {
+      const tenjiBlock = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.04, 1.8), tenjiMat);
+      tenjiBlock.position.set(-3.2, 0.3, tz);
+      scene.add(tenjiBlock);
+    }
 
-    // Store Floor
-    const conbiniFloorGeo = new THREE.BoxGeometry(14, 0.05, 12);
-    const conbiniFloorMat = new THREE.MeshStandardMaterial({ color: 0xe8e6df, roughness: 0.2 });
+    // 6. BUILD THE HIGH-FIDELITY PBR 7-ELEVEN / CONBINI STOREFRONT
+    const conbiniGroup = new THREE.Group();
+    conbiniGroup.position.set(CONBINI_POS.x, 0.28, CONBINI_POS.z);
+
+    // Store Floor with Glossy Tiled Linoleum
+    const tileFloorTex = createTileFloorTexture();
+    const conbiniFloorGeo = new THREE.BoxGeometry(15, 0.05, 13);
+    const conbiniFloorMat = new THREE.MeshStandardMaterial({
+      map: tileFloorTex,
+      roughness: 0.18,
+      metalness: 0.1
+    });
     const conbiniFloor = new THREE.Mesh(conbiniFloorGeo, conbiniFloorMat);
-    conbiniFloor.position.set(0, 0.025, -2);
+    conbiniFloor.position.set(0, 0.025, -2.5);
+    conbiniFloor.receiveShadow = true;
     conbiniGroup.add(conbiniFloor);
 
-    // Store Walls (Rear and sides)
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0x1f222e, roughness: 0.5 });
-    const backWall = new THREE.Mesh(new THREE.BoxGeometry(14, 5, 0.4), wallMat);
-    backWall.position.set(0, 2.5, -8);
+    // Store Walls
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0x1f2330, roughness: 0.5 });
+    const backWall = new THREE.Mesh(new THREE.BoxGeometry(15, 5.2, 0.4), wallMat);
+    backWall.position.set(0, 2.6, -9);
+    backWall.receiveShadow = true;
     conbiniGroup.add(backWall);
 
-    const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.4, 5, 12), wallMat);
-    leftWall.position.set(-7, 2.5, -2);
+    const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.4, 5.2, 13), wallMat);
+    leftWall.position.set(-7.5, 2.6, -2.5);
+    leftWall.receiveShadow = true;
     conbiniGroup.add(leftWall);
 
-    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.4, 5, 12), wallMat);
-    rightWall.position.set(7, 2.5, -2);
+    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.4, 5.2, 13), wallMat);
+    rightWall.position.set(7.5, 2.6, -2.5);
+    rightWall.receiveShadow = true;
     conbiniGroup.add(rightWall);
 
-    // 7-Eleven Iconic 3-Color Horizontal Canopy Stripe (Orange, Green, Red)
+    // 7-Eleven Iconic Glowing 3-Stripe Canopy (PBR with Emissive Glow)
     const canopyOrange = new THREE.Mesh(
-      new THREE.BoxGeometry(14.4, 0.35, 1.2),
-      new THREE.MeshBasicMaterial({ color: 0xff7700 })
+      new THREE.BoxGeometry(15.2, 0.35, 1.4),
+      new THREE.MeshStandardMaterial({ color: 0xff7700, emissive: 0xff6600, emissiveIntensity: 0.8, roughness: 0.3 })
     );
-    canopyOrange.position.set(0, 4.8, 3.8);
+    canopyOrange.position.set(0, 5.0, 3.8);
+    canopyOrange.castShadow = true;
     conbiniGroup.add(canopyOrange);
 
     const canopyGreen = new THREE.Mesh(
-      new THREE.BoxGeometry(14.4, 0.35, 1.2),
-      new THREE.MeshBasicMaterial({ color: 0x008844 })
+      new THREE.BoxGeometry(15.2, 0.35, 1.4),
+      new THREE.MeshStandardMaterial({ color: 0x008844, emissive: 0x007733, emissiveIntensity: 0.8, roughness: 0.3 })
     );
-    canopyGreen.position.set(0, 4.45, 3.8);
+    canopyGreen.position.set(0, 4.65, 3.8);
     conbiniGroup.add(canopyGreen);
 
     const canopyRed = new THREE.Mesh(
-      new THREE.BoxGeometry(14.4, 0.35, 1.2),
-      new THREE.MeshBasicMaterial({ color: 0xee2222 })
+      new THREE.BoxGeometry(15.2, 0.35, 1.4),
+      new THREE.MeshStandardMaterial({ color: 0xee2222, emissive: 0xcc1111, emissiveIntensity: 0.8, roughness: 0.3 })
     );
-    canopyRed.position.set(0, 4.1, 3.8);
+    canopyRed.position.set(0, 4.3, 3.8);
     conbiniGroup.add(canopyRed);
 
-    // Illuminated 7-Eleven Storefront Sign
-    const signCanvas = document.createElement('canvas');
-    signCanvas.width = 512;
-    signCanvas.height = 128;
-    const ctx = signCanvas.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, 512, 128);
-      ctx.fillStyle = '#008844';
-      ctx.font = 'bold 54px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('7-ELEVEN コンビニ', 256, 64);
-    }
-    const signTexture = new THREE.CanvasTexture(signCanvas);
+    // High-Resolution Illuminated 7-Eleven Signboard
+    const signTex = createSevenElevenSignTexture();
     const signMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(10, 1.2, 0.2),
-      new THREE.MeshBasicMaterial({ map: signTexture })
+      new THREE.BoxGeometry(12, 1.4, 0.25),
+      new THREE.MeshStandardMaterial({
+        map: signTex,
+        roughness: 0.2,
+        emissive: 0xffffff,
+        emissiveMap: signTex,
+        emissiveIntensity: 0.7
+      })
     );
-    signMesh.position.set(0, 5.8, 3.8);
+    signMesh.position.set(0, 6.0, 3.8);
+    signMesh.castShadow = true;
     conbiniGroup.add(signMesh);
 
-    // Front Glass Window panels & Automatic Sliding Door
+    // Front Glass Window panels (PBR Glass with Reflections)
     const glassMat = new THREE.MeshStandardMaterial({
       color: 0x88ccff,
       transparent: true,
-      opacity: 0.3,
-      roughness: 0.05
+      opacity: 0.35,
+      roughness: 0.04,
+      metalness: 0.15
     });
-    const leftGlass = new THREE.Mesh(new THREE.BoxGeometry(4.8, 4, 0.1), glassMat);
-    leftGlass.position.set(-4.5, 2, 3.8);
+    const leftGlass = new THREE.Mesh(new THREE.BoxGeometry(5.2, 4.2, 0.1), glassMat);
+    leftGlass.position.set(-4.8, 2.1, 3.8);
     conbiniGroup.add(leftGlass);
 
-    const rightGlass = new THREE.Mesh(new THREE.BoxGeometry(4.8, 4, 0.1), glassMat);
-    rightGlass.position.set(4.5, 2, 3.8);
+    const rightGlass = new THREE.Mesh(new THREE.BoxGeometry(5.2, 4.2, 0.1), glassMat);
+    rightGlass.position.set(4.8, 2.1, 3.8);
     conbiniGroup.add(rightGlass);
 
-    // Warm Interior Conbini Ceiling Light
-    const conbiniInteriorLight = new THREE.PointLight(0xfff6dd, 3.2, 16);
-    conbiniInteriorLight.position.set(0, 3.8, -2);
+    // Warm Interior Ceiling PointLight with Shadows
+    const conbiniInteriorLight = new THREE.PointLight(0xfff5dd, 3.5, 18);
+    conbiniInteriorLight.position.set(0, 4.2, -2.5);
+    conbiniInteriorLight.castShadow = true;
     conbiniGroup.add(conbiniInteriorLight);
 
     // Register Checkout Counter
-    const counterMat = new THREE.MeshStandardMaterial({ color: 0xd0cfc9, roughness: 0.3 });
-    const counterMesh = new THREE.Mesh(new THREE.BoxGeometry(5.5, 1.1, 1.4), counterMat);
-    counterMesh.position.set(0, 0.55, -4.5);
+    const counterMat = new THREE.MeshStandardMaterial({ color: 0xc8c6be, roughness: 0.25, metalness: 0.1 });
+    const counterMesh = new THREE.Mesh(new THREE.BoxGeometry(6.0, 1.15, 1.5), counterMat);
+    counterMesh.position.set(0, 0.575, -5.0);
+    counterMesh.castShadow = true;
+    counterMesh.receiveShadow = true;
     conbiniGroup.add(counterMesh);
 
-    // POS Register Monitor Screen
+    // PBR POS Cashier Screen with Active Japanese Transaction
+    const posScreenTex = createPosScreenTexture();
     const posMonitor = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 0.6, 0.4),
-      new THREE.MeshBasicMaterial({ color: 0x00f0ff })
+      new THREE.BoxGeometry(0.85, 0.65, 0.1),
+      new THREE.MeshStandardMaterial({
+        map: posScreenTex,
+        emissive: 0xffffff,
+        emissiveMap: posScreenTex,
+        emissiveIntensity: 0.85
+      })
     );
-    posMonitor.position.set(-0.8, 1.4, -4.5);
+    posMonitor.position.set(-1.0, 1.45, -5.0);
+    posMonitor.rotation.y = 0.15;
     conbiniGroup.add(posMonitor);
 
-    // Product Shelves with Colorful Japanese Snacks/Drinks
-    for (let s = -4.5; s <= 4.5; s += 3.0) {
-      if (s === -1.5) continue; // Walkway
-      const shelf = new THREE.Mesh(
-        new THREE.BoxGeometry(1.6, 2.2, 5.5),
-        new THREE.MeshStandardMaterial({ color: 0x3a3f52, roughness: 0.4 })
+    // Hot Food Warmer Showcase ("Hot Chef / Karaage-kun Display")
+    const hotShowcaseGroup = new THREE.Group();
+    hotShowcaseGroup.position.set(1.4, 1.45, -5.0);
+    const warmerBox = new THREE.Mesh(
+      new THREE.BoxGeometry(1.4, 0.8, 0.8),
+      new THREE.MeshStandardMaterial({ color: 0xff8800, transparent: true, opacity: 0.45, roughness: 0.1 })
+    );
+    hotShowcaseGroup.add(warmerBox);
+    const warmerLight = new THREE.PointLight(0xffaa33, 2.0, 4.5);
+    warmerLight.position.set(0, 0, 0);
+    hotShowcaseGroup.add(warmerLight);
+    conbiniGroup.add(hotShowcaseGroup);
+
+    // Realistic Product Shelves with Colorful Stock
+    for (let s = -5.0; s <= 5.0; s += 3.2) {
+      if (s === -1.8) continue; // aisle walkway
+      const shelfGroup = new THREE.Group();
+      shelfGroup.position.set(s, 1.15, 0.2);
+
+      const shelfBase = new THREE.Mesh(
+        new THREE.BoxGeometry(1.6, 2.3, 6.0),
+        new THREE.MeshStandardMaterial({ color: 0x33384a, roughness: 0.4 })
       );
-      shelf.position.set(s, 1.1, 0.5);
-      conbiniGroup.add(shelf);
+      shelfBase.castShadow = true;
+      shelfBase.receiveShadow = true;
+      shelfGroup.add(shelfBase);
+
+      // Colorful merchandise layers
+      for (let layer = 0; layer < 3; layer++) {
+        const itemStrip = new THREE.Mesh(
+          new THREE.BoxGeometry(1.65, 0.25, 5.8),
+          new THREE.MeshStandardMaterial({
+            color: layer === 0 ? 0x10b981 : layer === 1 ? 0xf59e0b : 0xef4444,
+            roughness: 0.3
+          })
+        );
+        itemStrip.position.set(0, -0.6 + layer * 0.65, 0);
+        shelfGroup.add(itemStrip);
+      }
+      conbiniGroup.add(shelfGroup);
     }
 
-    // 7. 3D STORE MANAGER NPC (Tanaka-tencho / Yamada-san)
+    // 7. HIGH-FIDELITY STYLIZED 3D STORE MANAGER NPC ("Tanaka-tencho")
     const npcGroup = new THREE.Group();
-    npcGroup.position.set(0, 0, -6.0); // Standing behind counter
+    npcGroup.position.set(0, 0, -6.6); // Standing behind counter
 
-    // NPC Body / Green 7-Eleven Uniform Apron
-    const npcBody = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.35, 0.45, 1.4, 16),
-      new THREE.MeshStandardMaterial({ color: 0x008844, roughness: 0.5 })
+    // Torso / White Shirt + 7-Eleven Uniform Apron
+    const managerTorso = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.38, 0.44, 1.45, 16),
+      new THREE.MeshStandardMaterial({ color: 0x008844, roughness: 0.45 })
     );
-    npcBody.position.y = 1.1;
-    npcGroup.add(npcBody);
+    managerTorso.position.y = 1.15;
+    managerTorso.castShadow = true;
+    npcGroup.add(managerTorso);
 
-    // NPC Head
-    const npcHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.28, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0xffd1b3, roughness: 0.4 })
+    // Orange Apron Neck Trim
+    const apronTrim = new THREE.Mesh(
+      new THREE.TorusGeometry(0.32, 0.04, 8, 16),
+      new THREE.MeshStandardMaterial({ color: 0xff7700, roughness: 0.3 })
     );
-    npcHead.position.y = 2.05;
-    npcGroup.add(npcHead);
+    apronTrim.rotation.x = Math.PI / 2;
+    apronTrim.position.y = 1.75;
+    npcGroup.add(apronTrim);
 
-    // NPC Hair (Stylized Dark Anime Hair)
-    const npcHair = new THREE.Mesh(
-      new THREE.SphereGeometry(0.31, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0x1a1a24, roughness: 0.6 })
+    // Head with Anime Face Texture
+    const managerFaceTex = createAnimeFaceTexture('manager');
+    const managerHead = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 20, 20),
+      new THREE.MeshStandardMaterial({
+        map: managerFaceTex,
+        roughness: 0.55
+      })
     );
-    npcHair.position.set(0, 2.15, -0.05);
-    npcGroup.add(npcHair);
+    managerHead.position.y = 2.15;
+    managerHead.rotation.y = Math.PI; // Face forward toward player
+    managerHead.castShadow = true;
+    npcGroup.add(managerHead);
+
+    // Multi-Layered Stylized Dark Anime Hair (Bangs & Volume)
+    const hairMat = new THREE.MeshStandardMaterial({ color: 0x161824, roughness: 0.5 });
+    const hairCrown = new THREE.Mesh(new THREE.SphereGeometry(0.33, 16, 16), hairMat);
+    hairCrown.position.set(0, 2.25, -0.05);
+    npcGroup.add(hairCrown);
+
+    for (let h = -2; h <= 2; h++) {
+      const bang = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.22, 4), hairMat);
+      bang.position.set(h * 0.1, 2.22, 0.26);
+      bang.rotation.x = Math.PI / 1.4;
+      npcGroup.add(bang);
+    }
+
+    // Right Arm for Greeting Animation
+    const npcRightArmGroup = new THREE.Group();
+    npcRightArmGroup.position.set(0.48, 1.65, 0);
+    const rightArm = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.09, 0.08, 0.65, 8),
+      new THREE.MeshStandardMaterial({ color: 0x008844 })
+    );
+    rightArm.position.y = -0.32;
+    npcRightArmGroup.add(rightArm);
+    npcRightArmRef.current = npcRightArmGroup;
+    npcGroup.add(npcRightArmGroup);
 
     // Overhead Floating Japanese Name Badge 「店長 田中」
     const nameBadgeCanvas = document.createElement('canvas');
-    nameBadgeCanvas.width = 256;
-    nameBadgeCanvas.height = 64;
+    nameBadgeCanvas.width = 280;
+    nameBadgeCanvas.height = 70;
     const badgeCtx = nameBadgeCanvas.getContext('2d');
     if (badgeCtx) {
-      badgeCtx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-      badgeCtx.roundRect(4, 4, 248, 56, 12);
+      badgeCtx.fillStyle = 'rgba(7, 10, 20, 0.9)';
+      badgeCtx.roundRect(4, 4, 272, 62, 14);
       badgeCtx.fill();
-      badgeCtx.strokeStyle = '#00ffcc';
-      badgeCtx.lineWidth = 3;
+      badgeCtx.strokeStyle = '#10b981';
+      badgeCtx.lineWidth = 3.5;
       badgeCtx.stroke();
       badgeCtx.fillStyle = '#ffffff';
-      badgeCtx.font = 'bold 26px sans-serif';
+      badgeCtx.font = 'bold 28px sans-serif';
       badgeCtx.textAlign = 'center';
       badgeCtx.textBaseline = 'middle';
-      badgeCtx.fillText('店長 田中 (Manager)', 128, 32);
+      badgeCtx.fillText('店長 田中 (Manager)', 140, 35);
     }
     const badgeTexture = new THREE.CanvasTexture(nameBadgeCanvas);
     const badgeSprite = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: badgeTexture, transparent: true })
     );
-    badgeSprite.scale.set(2.2, 0.6, 1);
-    badgeSprite.position.set(0, 2.7, 0);
+    badgeSprite.scale.set(2.4, 0.65, 1);
+    badgeSprite.position.set(0, 2.85, 0);
     npcGroup.add(badgeSprite);
 
-    npcManagerRef.current = npcGroup;
+    npcManagerGroupRef.current = npcGroup;
     conbiniGroup.add(npcGroup);
     scene.add(conbiniGroup);
 
-    // 8. SURROUNDING TOKYO LANDMARKS
+    // 8. SURROUNDING TOKYO LANDMARKS (PBR Fidelity)
     // Shibuya 109 Curved Tower (Iconic landmark at z: -45)
     const tower109 = new THREE.Mesh(
-      new THREE.CylinderGeometry(9, 11, 45, 32),
-      new THREE.MeshStandardMaterial({ color: 0x1e202e, roughness: 0.3 })
+      new THREE.CylinderGeometry(9, 11.5, 48, 36),
+      new THREE.MeshStandardMaterial({ color: 0x181a26, roughness: 0.3, metalness: 0.35 })
     );
-    tower109.position.set(0, 22.5, -45);
+    tower109.position.set(0, 24, -45);
+    tower109.castShadow = true;
+    tower109.receiveShadow = true;
     scene.add(tower109);
 
-    // 109 Neon Billboard Header
+    // 109 Neon Billboard Header with Glowing Emission
     const towerSign = new THREE.Mesh(
-      new THREE.CylinderGeometry(9.3, 9.3, 5, 32),
-      new THREE.MeshBasicMaterial({ color: 0xff0066 })
+      new THREE.CylinderGeometry(9.4, 9.4, 5.5, 36),
+      new THREE.MeshStandardMaterial({
+        color: 0xff0066,
+        emissive: 0xff0066,
+        emissiveIntensity: 1.2,
+        roughness: 0.2
+      })
     );
-    towerSign.position.set(0, 36, -45);
+    towerSign.position.set(0, 38, -45);
     scene.add(towerSign);
 
     // QFRONT Building with Giant Video Screen (East side)
     const qfront = new THREE.Mesh(
-      new THREE.BoxGeometry(26, 38, 18),
-      new THREE.MeshStandardMaterial({ color: 0x161924, roughness: 0.2 })
+      new THREE.BoxGeometry(28, 40, 20),
+      new THREE.MeshStandardMaterial({ color: 0x141620, roughness: 0.2, metalness: 0.5 })
     );
-    qfront.position.set(28, 19, -20);
+    qfront.position.set(30, 20, -20);
+    qfront.castShadow = true;
+    qfront.receiveShadow = true;
     scene.add(qfront);
 
     const qfrontScreen = new THREE.Mesh(
-      new THREE.PlaneGeometry(16, 20),
-      new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+      new THREE.PlaneGeometry(18, 22),
+      new THREE.MeshStandardMaterial({
+        color: 0x00e5ff,
+        emissive: 0x00e5ff,
+        emissiveIntensity: 1.1,
+        roughness: 0.1
+      })
     );
-    qfrontScreen.position.set(14.9, 18, -20);
+    qfrontScreen.position.set(15.9, 19, -20);
     qfrontScreen.rotation.y = -Math.PI / 2;
     scene.add(qfrontScreen);
 
     // Tokyo Language Academy Building (West side)
     const academy = new THREE.Mesh(
-      new THREE.BoxGeometry(20, 28, 22),
-      new THREE.MeshStandardMaterial({ color: 0x181c2b, roughness: 0.4 })
+      new THREE.BoxGeometry(22, 30, 24),
+      new THREE.MeshStandardMaterial({ color: 0x161928, roughness: 0.4 })
     );
-    academy.position.set(-28, 14, 15);
+    academy.position.set(-30, 15, 15);
+    academy.castShadow = true;
+    academy.receiveShadow = true;
     scene.add(academy);
 
-    // Japanese Vending Machines (Jidohanbaiki) along West Sidewalk
-    const vendingGeo = new THREE.BoxGeometry(1.2, 2.2, 0.9);
-    const blueVending = new THREE.Mesh(vendingGeo, new THREE.MeshStandardMaterial({ color: 0x0055ff }));
-    blueVending.position.set(-8, 1.25, -2);
+    // 9. HIGH-FIDELITY JAPANESE VENDING MACHINES (Jidohanbaiki)
+    const bossTex = createVendingMachineTexture('boss');
+    const blueVending = new THREE.Mesh(
+      new THREE.BoxGeometry(1.3, 2.3, 0.95),
+      new THREE.MeshStandardMaterial({
+        map: bossTex,
+        roughness: 0.25,
+        metalness: 0.15,
+        emissive: 0xffffff,
+        emissiveMap: bossTex,
+        emissiveIntensity: 0.4
+      })
+    );
+    blueVending.position.set(-8.2, 1.35, -2);
     blueVending.rotation.y = Math.PI / 2;
+    blueVending.castShadow = true;
     scene.add(blueVending);
 
-    const redVending = new THREE.Mesh(vendingGeo, new THREE.MeshStandardMaterial({ color: 0xdd1111 }));
-    redVending.position.set(-8, 1.25, -3.4);
+    const colaTex = createVendingMachineTexture('cola');
+    const redVending = new THREE.Mesh(
+      new THREE.BoxGeometry(1.3, 2.3, 0.95),
+      new THREE.MeshStandardMaterial({
+        map: colaTex,
+        roughness: 0.25,
+        metalness: 0.15,
+        emissive: 0xffffff,
+        emissiveMap: colaTex,
+        emissiveIntensity: 0.4
+      })
+    );
+    redVending.position.set(-8.2, 1.35, -3.6);
     redVending.rotation.y = Math.PI / 2;
+    redVending.castShadow = true;
     scene.add(redVending);
 
-    // 9. PLAYER AVATAR MESH (for 3rd Person View)
+    // Recycling Bin for Cans & Bottles
+    const recycleBin = new THREE.Mesh(
+      new THREE.BoxGeometry(0.7, 1.1, 0.8),
+      new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.5 })
+    );
+    recycleBin.position.set(-8.2, 0.75, -4.8);
+    recycleBin.castShadow = true;
+    scene.add(recycleBin);
+
+    // 10. HIERARCHICAL STYLIZED PLAYER AVATAR RIG (for 3rd Person View & Shadows)
     const playerGroup = new THREE.Group();
-    const playerBody = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.3, 0.38, 1.3, 16),
-      new THREE.MeshStandardMaterial({ color: 0x3b82f6, roughness: 0.5 })
-    );
-    playerBody.position.y = 0.9;
-    playerGroup.add(playerBody);
 
+    // Pelvis / Hips
+    const playerPelvis = new THREE.Group();
+    playerPelvis.position.y = 0.9;
+
+    // Torso / Tokyo Streetwear Varsity Jacket
+    const playerTorso = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.34, 0.38, 1.05, 14),
+      new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.45, metalness: 0.1 })
+    );
+    playerTorso.position.y = 0.52;
+    playerTorso.castShadow = true;
+    playerPelvis.add(playerTorso);
+
+    // Commuter Backpack on Back
+    const backpack = new THREE.Mesh(
+      new THREE.BoxGeometry(0.48, 0.65, 0.26),
+      new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.6 })
+    );
+    backpack.position.set(0, 0.52, -0.28);
+    backpack.castShadow = true;
+    playerPelvis.add(backpack);
+
+    // Head with Anime Face Texture & Spiky Hair
+    const playerFaceTex = createAnimeFaceTexture('player');
     const playerHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.25, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0xffd1b3, roughness: 0.4 })
+      new THREE.SphereGeometry(0.28, 16, 16),
+      new THREE.MeshStandardMaterial({ map: playerFaceTex, roughness: 0.55 })
     );
-    playerHead.position.y = 1.75;
-    playerGroup.add(playerHead);
+    playerHead.position.y = 1.32;
+    playerHead.rotation.y = Math.PI;
+    playerHead.castShadow = true;
+    playerPelvis.add(playerHead);
 
-    playerMeshRef.current = playerGroup;
+    const playerHairCrown = new THREE.Mesh(
+      new THREE.SphereGeometry(0.31, 14, 14),
+      new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.5 })
+    );
+    playerHairCrown.position.set(0, 1.42, -0.05);
+    playerPelvis.add(playerHairCrown);
+
+    // Limbs Hierarchical Rigging for Walking Animation
+    // Left & Right Upper Arms
+    const armMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.5 });
+    const handMat = new THREE.MeshStandardMaterial({ color: 0xffd6ba, roughness: 0.5 });
+
+    const leftArmGroup = new THREE.Group();
+    leftArmGroup.position.set(-0.46, 0.92, 0);
+    const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.6, 8), armMat);
+    leftArm.position.y = -0.3;
+    leftArm.castShadow = true;
+    leftArmGroup.add(leftArm);
+    playerPelvis.add(leftArmGroup);
+
+    const rightArmGroup = new THREE.Group();
+    rightArmGroup.position.set(0.46, 0.92, 0);
+    const rightArmMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.6, 8), armMat);
+    rightArmMesh.position.y = -0.3;
+    rightArmMesh.castShadow = true;
+    rightArmGroup.add(rightArmMesh);
+    playerPelvis.add(rightArmGroup);
+
+    // Left & Right Legs
+    const pantsMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 });
+    const shoeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+
+    const leftLegGroup = new THREE.Group();
+    leftLegGroup.position.set(-0.18, 0, 0);
+    const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.85, 8), pantsMat);
+    leftLeg.position.y = -0.42;
+    leftLeg.castShadow = true;
+    leftLegGroup.add(leftLeg);
+    const leftShoe = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.3), shoeMat);
+    leftShoe.position.set(0, -0.84, 0.06);
+    leftLegGroup.add(leftShoe);
+    playerPelvis.add(leftLegGroup);
+
+    const rightLegGroup = new THREE.Group();
+    rightLegGroup.position.set(0.18, 0, 0);
+    const rightLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.85, 8), pantsMat);
+    rightLeg.position.y = -0.42;
+    rightLeg.castShadow = true;
+    rightLegGroup.add(rightLeg);
+    const rightShoe = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.3), shoeMat);
+    rightShoe.position.set(0, -0.84, 0.06);
+    rightLegGroup.add(rightShoe);
+    playerPelvis.add(rightLegGroup);
+
+    playerGroup.add(playerPelvis);
+    playerAvatarGroupRef.current = playerGroup;
+    playerLimbsRef.current = {
+      leftLeg: leftLegGroup,
+      rightLeg: rightLegGroup,
+      leftArm: leftArmGroup,
+      rightArm: rightArmGroup
+    };
     scene.add(playerGroup);
 
-    // 10. GAME ENGINE LOOP (Movement, Camera, Physics & Proximity)
+    // 11. 60 FPS GAME ENGINE LOOP (Movement, Limbs Animation, Camera & Proximity)
     let lastTime = performance.now();
 
     const animate = (now: number) => {
@@ -687,9 +1206,24 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       const delta = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // Subtle NPC Breathing & Idle Animation
-      if (npcManagerRef.current) {
-        npcManagerRef.current.position.y = 0.05 + Math.sin(now * 0.003) * 0.03;
+      // Subtle NPC Breathing & Wave Animation
+      if (npcManagerGroupRef.current) {
+        npcManagerGroupRef.current.position.y = 0.05 + Math.sin(now * 0.0028) * 0.025;
+      }
+
+      // Check distance to NPC for wave reaction
+      const distToNpc = Math.hypot(
+        playerPosRef.current.x - NPC_MANAGER_POS.x,
+        playerPosRef.current.z - NPC_MANAGER_POS.z
+      );
+
+      if (npcRightArmRef.current) {
+        if (distToNpc < 5.0) {
+          // Raise arm in friendly retail greeting
+          npcRightArmRef.current.rotation.z = -0.8 + Math.sin(now * 0.008) * 0.2;
+        } else {
+          npcRightArmRef.current.rotation.z = -0.15;
+        }
       }
 
       // Movement Physics (WASD / Arrow Keys)
@@ -700,9 +1234,9 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         const moveForward = keys['w'] || keys['arrowup'] ? 1 : keys['s'] || keys['arrowdown'] ? -1 : 0;
         const moveRight = keys['d'] || keys['arrowright'] ? 1 : keys['a'] || keys['arrowleft'] ? -1 : 0;
         const isSprinting = !!keys['shift'];
+        const isMoving = moveForward !== 0 || moveRight !== 0;
 
-        if (moveForward !== 0 || moveRight !== 0) {
-          // Direction relative to camera yaw
+        if (isMoving) {
           const forward = new THREE.Vector3(-Math.sin(cameraYawRef.current), 0, -Math.cos(cameraYawRef.current));
           const right = new THREE.Vector3(Math.cos(cameraYawRef.current), 0, -Math.sin(cameraYawRef.current));
 
@@ -713,43 +1247,60 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
           const baseSpeed = isSprinting ? 9.5 : 5.5;
           playerVelocityRef.current.copy(moveVector.multiplyScalar(baseSpeed));
 
+          // Animate Limbs Walk Cycle
+          walkCycleTimeRef.current += delta * (isSprinting ? 14 : 9);
+          const walkPhase = walkCycleTimeRef.current;
+
+          if (playerLimbsRef.current.leftLeg) {
+            playerLimbsRef.current.leftLeg.rotation.x = Math.sin(walkPhase) * 0.65;
+          }
+          if (playerLimbsRef.current.rightLeg) {
+            playerLimbsRef.current.rightLeg.rotation.x = -Math.sin(walkPhase) * 0.65;
+          }
+          if (playerLimbsRef.current.leftArm) {
+            playerLimbsRef.current.leftArm.rotation.x = -Math.sin(walkPhase) * 0.55;
+          }
+          if (playerLimbsRef.current.rightArm) {
+            playerLimbsRef.current.rightArm.rotation.x = Math.sin(walkPhase) * 0.55;
+          }
+
           // Footstep audio synthesizer
           if (now - footstepCooldownRef.current > (isSprinting ? 280 : 420)) {
             worldAudio.playFootstepSound();
             footstepCooldownRef.current = now;
           }
         } else {
-          // Damping deceleration
+          // Smooth deceleration & return limbs to neutral pose
           playerVelocityRef.current.multiplyScalar(0.7);
+
+          if (playerLimbsRef.current.leftLeg) playerLimbsRef.current.leftLeg.rotation.x *= 0.8;
+          if (playerLimbsRef.current.rightLeg) playerLimbsRef.current.rightLeg.rotation.x *= 0.8;
+          if (playerLimbsRef.current.leftArm) playerLimbsRef.current.leftArm.rotation.x *= 0.8;
+          if (playerLimbsRef.current.rightArm) playerLimbsRef.current.rightArm.rotation.x *= 0.8;
         }
 
-        // Apply velocity to player position with boundary clamp
+        // Apply velocity with boundary clamping
         playerPosRef.current.x += playerVelocityRef.current.x * delta;
         playerPosRef.current.z += playerVelocityRef.current.z * delta;
 
-        // Keep player inside playable Shibuya Crossing bounds
         playerPosRef.current.x = Math.max(-28, Math.min(28, playerPosRef.current.x));
         playerPosRef.current.z = Math.max(-30, Math.min(28, playerPosRef.current.z));
 
         // Sync player avatar mesh position & orientation
-        if (playerMeshRef.current) {
-          playerMeshRef.current.position.set(playerPosRef.current.x, 0, playerPosRef.current.z);
-          playerMeshRef.current.rotation.y = cameraYawRef.current;
-          playerMeshRef.current.visible = cameraMode === 'third_person';
+        if (playerAvatarGroupRef.current) {
+          playerAvatarGroupRef.current.position.set(playerPosRef.current.x, 0, playerPosRef.current.z);
+          playerAvatarGroupRef.current.rotation.y = cameraYawRef.current;
+          playerAvatarGroupRef.current.visible = cameraMode === 'third_person';
         }
 
         // Update Camera Position & Rotation
         if (cameraMode === 'first_person') {
-          // Head-bobbing effect while moving
-          const isMoving = playerVelocityRef.current.lengthSq() > 0.1;
-          const headBob = isMoving ? Math.sin(now * 0.012) * 0.05 : 0;
-
+          const headBob = isMoving ? Math.sin(now * 0.012) * 0.045 : 0;
           camera.position.set(playerPosRef.current.x, playerPosRef.current.y + headBob, playerPosRef.current.z);
           camera.rotation.order = 'YXZ';
           camera.rotation.y = cameraYawRef.current;
           camera.rotation.x = cameraPitchRef.current;
         } else {
-          // Third-person smooth over-the-shoulder chase camera
           const camDist = 3.6;
           const camHeight = 2.0;
           const camX = playerPosRef.current.x + Math.sin(cameraYawRef.current) * camDist;
@@ -759,17 +1310,12 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
           camera.lookAt(playerPosRef.current.x, playerPosRef.current.y + 1.2, playerPosRef.current.z);
         }
 
-        // 11. SPATIAL PROXIMITY DETECTION (7-Eleven & Store Manager NPC)
-        const distToNpc = Math.hypot(
-          playerPosRef.current.x - NPC_MANAGER_POS.x,
-          playerPosRef.current.z - NPC_MANAGER_POS.z
-        );
+        // 12. PROXIMITY DETECTION & CONTEXTUAL PROMPT
         const distToStoreFront = Math.hypot(
           playerPosRef.current.x - CONBINI_POS.x,
           playerPosRef.current.z - (CONBINI_POS.z + 4)
         );
 
-        // Conbini Door Arrival Chime
         if (distToStoreFront < 5.5 && !hasTriggeredStoreChimeRef.current) {
           worldAudio.playConbiniDoorChime();
           hasTriggeredStoreChimeRef.current = true;
@@ -777,7 +1323,6 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
           hasTriggeredStoreChimeRef.current = false;
         }
 
-        // Contextual Interaction Prompt (Zero-Buttonism)
         if (distToNpc < 5.0) {
           setProximityPrompt({
             visible: true,
