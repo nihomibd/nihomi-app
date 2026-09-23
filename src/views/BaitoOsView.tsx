@@ -241,18 +241,21 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate }) => {
             <div className="space-y-3 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/40">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>BaitoOS™ 2.0 & Tokyo Relocation Hub</span>
+                <span>NIHOMI WORKOS™ • Experience Japan. Before You Arrive.</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
-                バイト・面接・東京現地生活 <br className="hidden sm:inline" />
+                日本の職場・実務シミュレーター <br className="hidden sm:inline" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-rose-400">
-                  超実践型 3Dバーチャルシミュレーター
+                  Nihomi WorkOS™ Workplace Simulation
                 </span>
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed">
-                コンビニPOSレジ操作・校長面接・ビザ審査・区役所手続き・JIS規格履歴書作成を本番同様に完全訓練。
-                東京現地の即戦力として自信を持って飛び立ちましょう。
+                Experience Japan. Before You Arrive. コンビニPOSレジ・レストラン接客・工場安全・面接をリアルタイムに体験。失敗から学び、AI Senseiの指導で確実にレベルアップしましょう。
               </p>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span>シミュレーション演習 • 教育目的の学習環境です（特定企業や公的資格の保証ではありません）</span>
+              </div>
             </div>
 
             {/* Quick Readiness Scorecard */}

@@ -104,7 +104,7 @@ export const PLAN_CONFIGS: Record<string, any> = {
     planName: 'Nihomi Free Basic',
     priceUSD: 0,
     priceBDT: 0,
-    features: ['Hiragana & Katakana Mastery', 'N5 Lessons 1–3 Access', 'Basic Spaced Repetition', 'Community Support'],
+    features: ['Hiragana & Katakana Complete Mastery', 'N5 Lessons 1–5 Free Access', 'All 100 N5 Kanji Practice Unlocked', 'Basic Spaced Repetition'],
   },
   starter: {
     planId: 'starter',

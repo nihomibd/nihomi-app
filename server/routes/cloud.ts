@@ -3,7 +3,7 @@
 
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
+import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
 import { CloudService } from '../cloud/cloudService.js';
 import { CloudQuotaService, MAX_FILE_SIZE_BYTES } from '../cloud/quota.js';
 import { CloudAiJobService } from '../cloud/aiJobService.js';
@@ -22,10 +22,13 @@ const upload = multer({
   },
 });
 
-function getAuthUser(req: AuthenticatedRequest): { userId: string; email?: string } {
+function getAuthUser(req: AuthenticatedRequest, allowGuest = false): { userId: string; email?: string } {
   const user = req.user || req.authContext?.user;
   const userId = user?.id || user?.userId;
   if (!userId) {
+    if (allowGuest) {
+      return { userId: 'usr_guest_demo', email: 'guest@nihomi.com' };
+    }
     const error: any = new Error('Unauthorized: Authentication credentials required.');
     error.status = 401;
     throw error;
@@ -41,9 +44,9 @@ function getAuthUser(req: AuthenticatedRequest): { userId: string; email?: strin
  * GET /api/cloud/usage
  * Retrieves user's active cloud usage metrics and quota limits.
  */
-router.get('/usage', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/usage', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId, email } = getAuthUser(req);
+    const { userId, email } = getAuthUser(req, true);
     const usage = await cloudService.getUserUsage(userId);
     const quota = await quotaService.resolveUserQuota(userId, email);
 
@@ -76,9 +79,9 @@ router.get('/usage', requireAuth, async (req: AuthenticatedRequest, res: Respons
 /**
  * GET /api/cloud/quota
  */
-router.get('/quota', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/quota', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId, email } = getAuthUser(req);
+    const { userId, email } = getAuthUser(req, true);
     const quota = await quotaService.resolveUserQuota(userId, email);
     res.json({
       success: true,
@@ -102,9 +105,9 @@ router.get('/quota', requireAuth, async (req: AuthenticatedRequest, res: Respons
 /**
  * GET /api/cloud/folders
  */
-router.get('/folders', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/folders', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = getAuthUser(req);
+    const { userId } = getAuthUser(req, true);
     const category = req.query.category as CloudCategory | undefined;
     const parentFolderId = req.query.parentFolderId === undefined ? undefined : (req.query.parentFolderId as string || null);
 
@@ -213,9 +216,9 @@ router.post(
 /**
  * GET /api/cloud/files
  */
-router.get('/files', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/files', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = getAuthUser(req);
+    const { userId } = getAuthUser(req, true);
     const {
       folderId,
       category,

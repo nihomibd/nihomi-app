@@ -18391,18 +18391,20 @@ aiRouter.post(
 );
 aiRouter.post(
   "/sentence-dna",
-  requireAuth2,
-  aiCostGuard({ operationType: "dna", estimatedTokens: 600 }),
+  optionalAuth2,
+  aiCostGuard({ operationType: "dna", estimatedTokens: 600, allowGuest: true }),
   async (req, res) => {
     try {
       const { sentence } = req.body;
       if (!sentence || typeof sentence !== "string") {
         return res.status(400).json({ error: "Japanese sentence string is required." });
       }
-      const userId = req.user.id;
-      const profile = db.getProfileByUserId(userId);
+      const userId = req.user?.id || "guest-learner";
+      const profile = req.user ? db.getProfileByUserId(userId) : null;
       const dna = await processSentenceDnaRequest(sentence.trim(), profile?.targetLevel || "N5");
-      recordAiCostUsage(userId, 500, "dna");
+      if (req.user) {
+        recordAiCostUsage(userId, 500, "dna");
+      }
       return res.json({ success: true, sentenceDna: dna });
     } catch (err) {
       console.error("Sentence DNA error:", err);
@@ -49037,19 +49039,22 @@ var upload3 = multer3({
     // 250 MB
   }
 });
-function getAuthUser(req) {
+function getAuthUser(req, allowGuest = false) {
   const user = req.user || req.authContext?.user;
   const userId = user?.id || user?.userId;
   if (!userId) {
+    if (allowGuest) {
+      return { userId: "usr_guest_demo", email: "guest@nihomi.com" };
+    }
     const error = new Error("Unauthorized: Authentication credentials required.");
     error.status = 401;
     throw error;
   }
   return { userId, email: user.email };
 }
-router.get("/usage", requireAuth2, async (req, res) => {
+router.get("/usage", optionalAuth2, async (req, res) => {
   try {
-    const { userId, email } = getAuthUser(req);
+    const { userId, email } = getAuthUser(req, true);
     const usage = await cloudService.getUserUsage(userId);
     const quota = await quotaService.resolveUserQuota(userId, email);
     const percentage = quota.quotaBytes > 0 ? Math.min(100, Number((usage.storageBytes / quota.quotaBytes * 100).toFixed(1))) : 0;
@@ -49073,9 +49078,9 @@ router.get("/usage", requireAuth2, async (req, res) => {
     });
   }
 });
-router.get("/quota", requireAuth2, async (req, res) => {
+router.get("/quota", optionalAuth2, async (req, res) => {
   try {
-    const { userId, email } = getAuthUser(req);
+    const { userId, email } = getAuthUser(req, true);
     const quota = await quotaService.resolveUserQuota(userId, email);
     res.json({
       success: true,
@@ -49091,9 +49096,9 @@ router.get("/quota", requireAuth2, async (req, res) => {
     });
   }
 });
-router.get("/folders", requireAuth2, async (req, res) => {
+router.get("/folders", optionalAuth2, async (req, res) => {
   try {
-    const { userId } = getAuthUser(req);
+    const { userId } = getAuthUser(req, true);
     const category = req.query.category;
     const parentFolderId = req.query.parentFolderId === void 0 ? void 0 : req.query.parentFolderId || null;
     const folders = await cloudService.getFolders(userId, category, parentFolderId);
@@ -49171,9 +49176,9 @@ router.post(
     }
   }
 );
-router.get("/files", requireAuth2, async (req, res) => {
+router.get("/files", optionalAuth2, async (req, res) => {
   try {
-    const { userId } = getAuthUser(req);
+    const { userId } = getAuthUser(req, true);
     const {
       folderId,
       category,

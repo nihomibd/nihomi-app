@@ -160,11 +160,11 @@ aiRouter.post(
   }
 );
 
-// 3. Sentence DNA Endpoint — Secured with AI Cost Guard
+// 3. Sentence DNA Endpoint — Secured with AI Cost Guard (Accessible with graceful guest fallback)
 aiRouter.post(
   '/sentence-dna',
-  requireAuth,
-  aiCostGuard({ operationType: 'dna', estimatedTokens: 600 }),
+  optionalAuth,
+  aiCostGuard({ operationType: 'dna', estimatedTokens: 600, allowGuest: true }),
   async (req: AuthenticatedRequest, res) => {
     try {
       const { sentence } = req.body;
@@ -172,11 +172,13 @@ aiRouter.post(
         return res.status(400).json({ error: 'Japanese sentence string is required.' });
       }
 
-      const userId = req.user!.id;
-      const profile = db.getProfileByUserId(userId);
+      const userId = req.user?.id || 'guest-learner';
+      const profile = req.user ? db.getProfileByUserId(userId) : null;
       const dna = await processSentenceDnaRequest(sentence.trim(), profile?.targetLevel || 'N5');
 
-      recordAiCostUsage(userId, 500, 'dna');
+      if (req.user) {
+        recordAiCostUsage(userId, 500, 'dna');
+      }
 
       return res.json({ success: true, sentenceDna: dna });
     } catch (err: any) {

@@ -150,7 +150,7 @@ export const App: React.FC = () => {
         setCurrentView('kanji');
       } else if (path === '/listening') {
         setCurrentView('listening');
-      } else if (path === '/baito' || path === '/baito-os' || path === '/simulation') {
+      } else if (path === '/baito' || path === '/baito-os' || path === '/simulation' || path === '/workos' || path === '/work-os') {
         setCurrentView('baito');
       } else if (path === '/pricing' || path === '/plans') {
         setCurrentView('pricing');
@@ -204,7 +204,7 @@ export const App: React.FC = () => {
       else if (path === '/kana' || path === '/hiragana' || path === '/katakana') setCurrentView('kana');
       else if (path === '/kanji') setCurrentView('kanji');
       else if (path === '/listening') setCurrentView('listening');
-      else if (path === '/baito' || path === '/baito-os') setCurrentView('baito');
+      else if (path === '/baito' || path === '/baito-os' || path === '/workos' || path === '/work-os') setCurrentView('baito');
       else if (path === '/pricing' || path === '/plans') setCurrentView('pricing');
       else if (path === '/coordination') setCurrentView('coordination');
       else if (path === '/documents') setCurrentView('documents');
@@ -426,7 +426,7 @@ export const App: React.FC = () => {
             onNavigate={handleNavigate}
           />
         )}
-        {(currentView === 'baito' || currentView === 'baito-os' || currentView === 'simulation' || currentView === 'relocation') && (
+        {(currentView === 'baito' || currentView === 'baito-os' || currentView === 'simulation' || currentView === 'relocation' || currentView === 'workos' || currentView === 'work-os') && (
           <BaitoOsView onNavigate={handleNavigate} />
         )}
         {(currentView === 'interview' || currentView === 'interview-lab' || currentView === 'visa-defense') && (

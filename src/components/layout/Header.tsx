@@ -382,27 +382,27 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     </div>
                   </button>
 
-                  {/* 2. বাইতোওএস™ সিমুলেটর */}
+                  {/* 2. NIHOMI WORKOS™ সিমুলেটর */}
                   <button
                     id="nav-item-baito-sim"
                     type="button"
                     onClick={() => handleDropdownSelect('baito')}
                     className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5 border border-indigo-500/20 group-hover/item:scale-105 transition-transform">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
                       <Store className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          বাইতোওএস™ সিমুলেটর (BaitoOS™)
+                          নিহোমি ওয়ার্কওএস™ (Nihomi WorkOS™)
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-indigo-500/10 text-indigo-400 font-mono font-semibold">
-                          Tokyo Conbini
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-300 font-mono font-semibold">
+                          Work Simulation
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টোকিও ৭-ইলেভেন ও লসন ক্যাশিয়ার ডায়ালগ সিমুলেশন
+                        Experience Japan. Before You Arrive. (টোকিও কর্মক্ষেত্র সিমুলেশন)
                       </p>
                     </div>
                   </button>
@@ -1040,8 +1040,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">বাইতোওএস™ সিমুলেটর (BaitoOS™)</div>
-                    <div className="text-[10px] text-white/50">৭-ইলেভেন ক্যাশিয়ার ও কাস্টমার ডায়ালগ</div>
+                    <div className="text-xs font-bold text-white">নিহোমি ওয়ার্কওএস™ (WorkOS™)</div>
+                    <div className="text-[10px] text-white/50">Experience Japan. Before You Arrive.</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>

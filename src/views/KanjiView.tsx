@@ -94,13 +94,13 @@ export const KanjiView: React.FC = () => {
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-bold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>NIHOMI JLPT N5 KANJI MASTER LAB (漢字100選)</span>
+                <span>NIHOMI JLPT N5 KANJI MASTER LAB (漢字100選) • ALL 100 UNLOCKED & FREE</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 অফিসিয়াল JLPT N5 ১০০টি কাঞ্জি মাস্টার গাইড
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                অন-ইওমি (Onyomi), কুন-ইওমি (Kunyomi), বাংলা অর্থ, রিয়েলটাইম স্ট্রোক অর্ডার অ্যানিমেশন এবং ক্যালিগ্রাফি অনুশীলনের মাধ্যমে ১০০টি N5 কাঞ্জি আয়ত্ত করুন।
+                অন-ইওমি (Onyomi), কুন-ইওমি (Kunyomi), বাংলা অর্থ, রিয়েলটাইম স্ট্রোক অর্ডার অ্যানিমেশন এবং ক্যালিগ্রাফি অনুশীলনের মাধ্যমে ১০০টি N5 কাঞ্জি আয়ত্ত করুন। ফ্রি অ্যাকাউন্টে কোনো সীমাবদ্ধতা নেই।
               </p>
             </div>
 

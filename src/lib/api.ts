@@ -25,25 +25,40 @@ const memoryStorage = new Map<string, string>();
 
 export function getStoredToken(): string | null {
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const token = localStorage.getItem(TOKEN_KEY);
-      if (token) return token;
+    if (typeof window !== 'undefined') {
+      if (window.localStorage) {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (token) return token;
 
-      // Fallback: check Supabase auth token stored by supabase-js
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
-          const item = localStorage.getItem(key);
-          if (item) {
-            try {
-              const parsed = JSON.parse(item);
-              const supabaseToken = parsed.access_token || parsed.currentSession?.access_token;
-              if (supabaseToken) {
-                setStoredToken(supabaseToken);
-                return supabaseToken;
-              }
-            } catch {}
+        // Fallback: check Supabase auth token stored by supabase-js
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+            const item = localStorage.getItem(key);
+            if (item) {
+              try {
+                const parsed = JSON.parse(item);
+                const supabaseToken = parsed.access_token || parsed.currentSession?.access_token;
+                if (supabaseToken) {
+                  setStoredToken(supabaseToken);
+                  return supabaseToken;
+                }
+              } catch {}
+            }
           }
+        }
+      }
+
+      if (window.sessionStorage) {
+        const sessionToken = sessionStorage.getItem(TOKEN_KEY);
+        if (sessionToken) return sessionToken;
+      }
+
+      // Cookie fallback
+      if (typeof document !== 'undefined' && document.cookie) {
+        const match = document.cookie.match(/(?:^|;\s*)nihomi_auth_token=([^;]+)/);
+        if (match && match[1]) {
+          return decodeURIComponent(match[1]);
         }
       }
     }

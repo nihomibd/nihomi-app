@@ -125,7 +125,17 @@ const MINNA_NO_NIHONGO_LESSONS = [
 ];
 
 export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
-  const { progress } = useAuth();
+  const { user, subscription, progress } = useAuth();
+
+  const isPro =
+    user?.role === 'founder' ||
+    user?.role === 'admin' ||
+    user?.planId === 'pro' ||
+    user?.planId === 'japan_ready' ||
+    subscription?.planId === 'pro' ||
+    subscription?.planId === 'japan_ready' ||
+    (user as any)?.subscriptionTier === 'pro' ||
+    (user as any)?.subscriptionTier === 'japan_ready';
 
   // Tab: 'pathways' (Structured Sequential Progression) vs 'catalog' (Browsing All)
   const [activeTab, setActiveTab] = useState<'pathways' | 'catalog'>('pathways');
@@ -427,39 +437,42 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                   {/* Sequential Lesson Scroller / Drawer */}
                   <div className="border-t border-stone-200 dark:border-stone-800/80 pt-4">
                     <div className="flex items-center justify-between mb-3 text-xs font-bold text-stone-700 dark:text-stone-300">
-                      <span>মিন্না নো নিহোঙ্গো ২৫টি পাঠের ধারাবাহিক তালিকা:</span>
-                      <span className="text-stone-400 font-normal">১ থেকে ২৫ ক্রমানুসারে আনলক হবে</span>
+                      <span>মিন্না নো নিহোঙ্গো ২৫টি পাঠের ধারাবাহিক সিলেবাস:</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-medium">পাঠ ১–৫ সম্পূর্ণ ফ্রি • পাঠ ৬–২৫ নিহোমি প্রো</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
                       {MINNA_NO_NIHONGO_LESSONS.map((l) => {
-                        const isUnlocked = isFoundationDone || l.num === 1;
+                        const isFreeLesson = l.num <= 5;
+                        const isUnlocked = isFreeLesson || isPro;
                         const isCurrent = l.num === 1;
 
                         return (
                           <div
                             key={l.id}
                             onClick={() => {
-                              if (isUnlocked) {
-                                onNavigate('lesson', { lessonId: `n5-l${l.num}` });
-                              }
+                              onNavigate('lesson', { lessonId: `n5-l${l.num}` });
                             }}
                             className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                               isCurrent
                                 ? 'bg-red-500/10 border-red-500 text-red-700 dark:text-red-300 shadow-2xs'
                                 : isUnlocked
                                 ? 'bg-white dark:bg-stone-900/80 border-stone-200 dark:border-stone-800 hover:border-stone-400'
-                                : 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200/50 dark:border-stone-800/40 text-stone-400'
+                                : 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200/50 dark:border-stone-800/40 text-stone-400 hover:border-amber-400/50'
                             }`}
                           >
                             <div className="flex items-center justify-between text-[11px] font-mono mb-1">
                               <span className="font-bold">第{l.num}課</span>
                               {isCurrent ? (
                                 <span className="text-[9px] px-1.5 py-0.2 bg-red-600 text-white rounded font-sans font-bold">চলমান</span>
-                              ) : isUnlocked ? (
+                              ) : isFreeLesson ? (
+                                <span className="text-[9px] px-1.5 py-0.2 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded font-sans font-bold">FREE</span>
+                              ) : isPro ? (
                                 <Check className="w-3 h-3 text-emerald-500" />
                               ) : (
-                                <Lock className="w-3 h-3 text-stone-400" />
+                                <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.2 bg-amber-500/15 text-amber-500 border border-amber-500/30 rounded font-mono font-bold">
+                                  <Lock className="w-2.5 h-2.5" /> PRO
+                                </span>
                               )}
                             </div>
                             <div className="text-xs font-semibold truncate text-stone-900 dark:text-stone-200">

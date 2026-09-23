@@ -467,9 +467,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
                 <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
 
-                {/* বাইতো / পার্ট-টাইম প্রস্তুতি */}
+                {/* NIHOMI WORKOS™ প্রস্তুতি */}
                 <BaitoReadinessCard 
-                  onLaunch={() => setIsConbiniOpen(true)} 
+                  onLaunch={() => {
+                    if (onNavigate) {
+                      onNavigate('baito');
+                    } else {
+                      setIsConbiniOpen(true);
+                    }
+                  }} 
                   onLaunchConbini={() => setIsConbiniOpen(true)} 
                   readinessScore={baitoReadinessScore} 
                 />
