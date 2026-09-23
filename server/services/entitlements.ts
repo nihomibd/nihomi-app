@@ -14,6 +14,9 @@ export const PLAN_LIMITS: Record<PlanId, { aiMonthlyQuota: number; maxLevel: str
   starter: { aiMonthlyQuota: 100, maxLevel: 'N4' },
   pro: { aiMonthlyQuota: 1000, maxLevel: 'N3' },
   japan_ready: { aiMonthlyQuota: 3000, maxLevel: 'N1' },
+  trip_7d: { aiMonthlyQuota: 200, maxLevel: 'N5' },
+  trip_14d: { aiMonthlyQuota: 500, maxLevel: 'N4' },
+  trip_30d: { aiMonthlyQuota: 1200, maxLevel: 'N3' },
   n5_pro: { aiMonthlyQuota: 5000, maxLevel: 'N5' },
   n5_lifetime: { aiMonthlyQuota: 99999, maxLevel: 'N5' },
   lifetime: { aiMonthlyQuota: 99999, maxLevel: 'N1' }
@@ -150,14 +153,44 @@ export const PLAN_ENTITLEMENTS: Record<PlanId, FeatureKey[]> = {
     'priority_ai',
     'quizzes',
     'ai_coach'
+  ],
+  trip_7d: [
+    'n5_basic',
+    'n5',
+    'living_in_japan',
+    'quizzes',
+    'ai_coach'
+  ],
+  trip_14d: [
+    'n5_basic',
+    'n5',
+    'n4',
+    'living_in_japan',
+    'keigo_mastery',
+    'quizzes',
+    'ai_coach'
+  ],
+  trip_30d: [
+    'n5_basic',
+    'n5',
+    'n4',
+    'n3',
+    'living_in_japan',
+    'keigo_mastery',
+    'japan_readiness',
+    'quizzes',
+    'ai_coach'
   ]
 };
 
 const TIER_ORDER: Record<PlanId, number> = {
   free: 0,
   starter: 1,
+  trip_7d: 2,
+  trip_14d: 2,
   pro: 2,
   n5_pro: 2,
+  trip_30d: 3,
   japan_ready: 3,
   n5_lifetime: 3,
   lifetime: 4

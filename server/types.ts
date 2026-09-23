@@ -286,7 +286,7 @@ export interface AISession {
 // RECURRING REVENUE & SUBSCRIPTION ENGINE
 // ==========================================
 
-export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready' | 'n5_pro' | 'n5_lifetime' | 'lifetime';
+export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready' | 'trip_7d' | 'trip_14d' | 'trip_30d' | 'n5_pro' | 'n5_lifetime' | 'lifetime';
 
 export type BillingInterval = 'monthly' | 'yearly';
 

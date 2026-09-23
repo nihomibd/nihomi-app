@@ -519,3 +519,82 @@ CREATE POLICY "Admin and staff can manage source documents" ON public.source_doc
 CREATE POLICY "Public read for verified knowledge nodes" ON public.knowledge_nodes FOR SELECT USING (true);
 CREATE POLICY "Admin and staff can manage knowledge nodes" ON public.knowledge_nodes FOR ALL USING (true);
 CREATE POLICY "Admin and staff can manage content drafts" ON public.content_drafts FOR ALL USING (true);
+
+-- ==============================================================================
+-- 10. RECURRING REVENUE, SUBSCRIPTIONS, JAPAN TRIP PASS & COIN ECONOMY (V3)
+-- ==============================================================================
+
+-- 10.1 Subscriptions Table (Continuous Memberships & Enterprise Accounts)
+CREATE TABLE IF NOT EXISTS public.subscriptions (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    plan_id TEXT NOT NULL, -- 'free' | 'starter' | 'pro' | 'japan_ready' | 'trip_7d' | 'trip_14d' | 'trip_30d'
+    status TEXT NOT NULL DEFAULT 'active', -- 'trialing' | 'active' | 'past_due' | 'cancelled' | 'expired'
+    billing_interval TEXT NOT NULL DEFAULT 'monthly', -- 'monthly' | 'yearly' | 'pass_fixed'
+    current_period_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    current_period_end TIMESTAMPTZ NOT NULL,
+    cancel_at_period_end BOOLEAN DEFAULT false,
+    cancelled_at TIMESTAMPTZ,
+    payment_method TEXT DEFAULT 'bkash', -- 'bkash' | 'sslcommerz' | 'card' | 'nagad'
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_user_status ON public.subscriptions(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_plan ON public.subscriptions(plan_id);
+
+-- 10.2 Japan Trip Passes Table (Short-Term Tourist & Survival Passes)
+CREATE TABLE IF NOT EXISTS public.japan_trip_passes (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    pass_tier TEXT NOT NULL, -- 'trip_7d' | 'trip_14d' | 'trip_30d'
+    duration_days INT NOT NULL,
+    coins_granted INT NOT NULL,
+    activated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMPTZ NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    payment_ref TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_japan_trip_passes_user ON public.japan_trip_passes(user_id, is_active);
+CREATE INDEX IF NOT EXISTS idx_japan_trip_passes_expires ON public.japan_trip_passes(expires_at);
+
+-- 10.3 Coin Wallets Table (Nihomi Coin Micro-Economy & Expansion Revenue)
+CREATE TABLE IF NOT EXISTS public.coin_wallets (
+    user_id TEXT PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+    coin_balance INT NOT NULL DEFAULT 420,
+    lifetime_earned INT NOT NULL DEFAULT 420,
+    lifetime_spent INT NOT NULL DEFAULT 0,
+    last_earned_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 10.4 Coin Ledger Transactions Table (Audit Proof Ledger)
+CREATE TABLE IF NOT EXISTS public.coin_transactions (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id TEXT NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    amount INT NOT NULL,
+    transaction_type TEXT NOT NULL, -- 'EARN' | 'SPEND' | 'TOPUP' | 'BONUS' | 'REFUND'
+    source TEXT NOT NULL, -- 'MISSION_001', 'IZAKAYA_ROLEPLAY', 'TOPUP_PACK_200', 'DIAGNOSTIC_REWARD', 'AI_VOICE_QUERY'
+    description TEXT,
+    balance_after INT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_coin_transactions_user ON public.coin_transactions(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_coin_transactions_type ON public.coin_transactions(transaction_type);
+
+-- RLS for Section 10 Tables
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.japan_trip_passes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.coin_wallets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.coin_transactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own subscriptions" ON public.subscriptions FOR SELECT USING (true);
+CREATE POLICY "Users can view own trip passes" ON public.japan_trip_passes FOR SELECT USING (true);
+CREATE POLICY "Users can view own coin wallet" ON public.coin_wallets FOR SELECT USING (true);
+CREATE POLICY "Users can update own coin wallet" ON public.coin_wallets FOR ALL USING (true);
+CREATE POLICY "Users can view own coin transactions" ON public.coin_transactions FOR SELECT USING (true);
+

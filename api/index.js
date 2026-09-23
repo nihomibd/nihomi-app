@@ -8645,6 +8645,79 @@ var init_db = __esm({
         isPublished: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "trip_7d",
+        name: "Japan Trip Pass (7-Day)",
+        displayNameJa: "\u65E5\u672C\u65C5\u884C 7\u65E5\u9593\u30D1\u30B9",
+        tagline: "7-Day instant survival Japanese & spatial hotspot navigation",
+        description: "Instant survival Japanese, airport/train navigation, conbini ordering, and 200 Nihomi Coins.",
+        badge: "Short-Term Travel",
+        order: 5,
+        monthlyPrice: 1490,
+        yearlyPrice: 1490,
+        currency: "BDT",
+        aiMonthlyLimit: 200,
+        features: [
+          "7 Days full access to all Shibuya 3D hotspots",
+          "200 Nihomi Coins for voice coaching & simulations",
+          "Narita/Haneda Airport & Tokyo Subway navigation",
+          "Conbini & restaurant audio phrases",
+          "Emergency medical & taxi survival cheat sheets"
+        ],
+        entitlements: ["n5", "quizzes", "ai_coach"],
+        isPublished: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "trip_14d",
+        name: "Golden Explorer Pass (14-Day)",
+        displayNameJa: "\u30B4\u30FC\u30EB\u30C7\u30F3 14\u65E5\u9593\u30D1\u30B9",
+        tagline: "14-Day Tokyo, Kyoto & Osaka comprehensive companion",
+        description: "14 Days unlimited hotspot access, 500 Nihomi Coins, Izakaya roleplay, and menu OCR reader.",
+        badge: "Traveler Choice",
+        isRecommended: true,
+        order: 6,
+        monthlyPrice: 2490,
+        yearlyPrice: 2490,
+        currency: "BDT",
+        aiMonthlyLimit: 500,
+        features: [
+          "14 Days unlimited access to all spatial hotspots",
+          "500 Nihomi Coins for live Tanaka Sensei voice coaching",
+          "Izakaya dining roleplay simulator included",
+          "Shinkansen bullet train booking guide",
+          "Offline audio phrase packs"
+        ],
+        entitlements: ["n5", "n4", "quizzes", "ai_coach", "business_japanese"],
+        isPublished: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "trip_30d",
+        name: "Japan Nomad Pass (30-Day)",
+        displayNameJa: "\u30B8\u30E3\u30D1\u30F3 \u30CE\u30DE\u30C9 30\u65E5\u9593\u30D1\u30B9",
+        tagline: "30-Day deep travel, digital nomad & internship survival pass",
+        description: "Full 30-day survival & cultural immersion, 1,200 Nihomi Coins, apartment renting, and priority AI.",
+        badge: "Nomad Immersion",
+        order: 7,
+        monthlyPrice: 3990,
+        yearlyPrice: 3990,
+        currency: "BDT",
+        aiMonthlyLimit: 1200,
+        features: [
+          "30 Days unrestricted access to all 3D content & courses",
+          "1,200 Nihomi Coins for extensive AI coaching & simulation",
+          "Apartment rental & SIM card survival phrases",
+          "Onsen etiquette & Japanese cultural safety guide",
+          "Priority AI real-time audio translation"
+        ],
+        entitlements: ["n5", "n4", "n3", "quizzes", "ai_coach", "business_japanese", "japan_ready"],
+        isPublished: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       }
     ];
     SEED_PLAN_PRICES = [
@@ -20106,6 +20179,9 @@ var PLAN_LIMITS = {
   starter: { aiMonthlyQuota: 100, maxLevel: "N4" },
   pro: { aiMonthlyQuota: 1e3, maxLevel: "N3" },
   japan_ready: { aiMonthlyQuota: 3e3, maxLevel: "N1" },
+  trip_7d: { aiMonthlyQuota: 200, maxLevel: "N5" },
+  trip_14d: { aiMonthlyQuota: 500, maxLevel: "N4" },
+  trip_30d: { aiMonthlyQuota: 1200, maxLevel: "N3" },
   n5_pro: { aiMonthlyQuota: 5e3, maxLevel: "N5" },
   n5_lifetime: { aiMonthlyQuota: 99999, maxLevel: "N5" },
   lifetime: { aiMonthlyQuota: 99999, maxLevel: "N1" }
@@ -20206,6 +20282,33 @@ var PLAN_ENTITLEMENTS = {
     "living_in_japan",
     "certificates",
     "priority_ai",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_7d: [
+    "n5_basic",
+    "n5",
+    "living_in_japan",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_14d: [
+    "n5_basic",
+    "n5",
+    "n4",
+    "living_in_japan",
+    "keigo_mastery",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_30d: [
+    "n5_basic",
+    "n5",
+    "n4",
+    "n3",
+    "living_in_japan",
+    "keigo_mastery",
+    "japan_readiness",
     "quizzes",
     "ai_coach"
   ]

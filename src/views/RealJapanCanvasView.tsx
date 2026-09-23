@@ -33,7 +33,9 @@ import {
   Send,
   Loader2,
   LogIn,
-  Eye
+  Eye,
+  Lock,
+  Plane
 } from 'lucide-react';
 import {
   SHIBUYA_HOTSPOTS,
@@ -43,6 +45,7 @@ import {
 } from '../data/shibuyaWorldData';
 import { Shibuya3DCanvas, HotspotScreenPosition } from '../components/canvas3d/Shibuya3DCanvas';
 import { InCanvasAuthModal } from '../components/canvas3d/InCanvasAuthModal';
+import { ContextualPaywallModal, PaywallMode } from '../components/canvas3d/ContextualPaywallModal';
 import { speakJapanese } from '../lib/tts';
 import { worldAudio } from '../lib/worldAudio';
 import { triggerCelebrationConfetti } from '../lib/gamificationService';
@@ -64,6 +67,43 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   const [isInCanvasAuthOpen, setIsInCanvasAuthOpen] = useState(false);
   const [isSenseiChatOpen, setIsSenseiChatOpen] = useState(false);
   const [isPronouncing, setIsPronouncing] = useState(false);
+
+  // Contextual Paywall State (Zero-Buttonism MRR & Expansion Loop)
+  const [paywallModalOpen, setPaywallModalOpen] = useState(false);
+  const [paywallConfig, setPaywallConfig] = useState<{
+    mode: PaywallMode;
+    hotspotTitle?: string;
+    hotspotTitleJa?: string;
+    unlockCostCoins?: number;
+    initialTrack?: 'continuous' | 'trip_pass';
+    onUnlockSuccess?: () => void;
+  }>({
+    mode: 'coin_unlock',
+    hotspotTitle: 'Izakaya Staff Roleplay',
+    hotspotTitleJa: '居酒屋接客ロールプレイング',
+    unlockCostCoins: 20
+  });
+
+  // Hotspot Unlocked State (Persistent)
+  const [unlockedHotspots, setUnlockedHotspots] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('nihomi_unlocked_hotspots');
+      return stored ? JSON.parse(stored) : ['spot-crossing', 'spot-conbini'];
+    } catch {
+      return ['spot-crossing', 'spot-conbini'];
+    }
+  });
+
+  const unlockHotspot = useCallback((spotId: string) => {
+    setUnlockedHotspots((prev) => {
+      if (prev.includes(spotId)) return prev;
+      const updated = [...prev, spotId];
+      try {
+        localStorage.setItem('nihomi_unlocked_hotspots', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  }, []);
 
   // 3D Pin screen projection map
   const [projectedPins, setProjectedPins] = useState<Record<string, HotspotScreenPosition>>({});
@@ -210,7 +250,18 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   const handleAskSensei = async () => {
     if (!senseiQuery.trim()) return;
     if (coins < 10) {
-      alert('আপনার পর্যাপ্ত কয়েন নেই! সারভাইভাল টেস্ট সম্পন্ন করে ৫০ কয়েন অর্জন করুন।');
+      setPaywallConfig({
+        mode: 'coin_topup',
+        hotspotTitle: 'Tanaka AI Sensei Voice Coaching',
+        hotspotTitleJa: '田中先生 リアルタイム音声指導',
+        onUnlockSuccess: () => {
+          try {
+            const stored = localStorage.getItem('nihomi_student_coins');
+            if (stored) setCoins(parseInt(stored, 10));
+          } catch {}
+        }
+      });
+      setPaywallModalOpen(true);
       return;
     }
 
@@ -295,10 +346,10 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   NIHOMI WORLD™
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  SHIBUYA 360° V2
+                  SHIBUYA 360° V3
                 </span>
               </div>
-              <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™</p>
+              <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™ • MRR Engine</p>
             </div>
           </button>
 
@@ -332,11 +383,24 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
         {/* Right: Coin Economy HUD, Ambient Audio, AI Sensei Chat, Auth */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Nihomi Coin Balance Pill (Clickable -> Utility info) */}
+          {/* Nihomi Coin Balance Pill (Clickable -> In-Canvas Coin Vault & Top-Up) */}
           <button
-            onClick={() => setIsSenseiChatOpen(true)}
+            onClick={() => {
+              setPaywallConfig({
+                mode: 'coin_topup',
+                hotspotTitle: 'Nihomi Coin Vault',
+                hotspotTitleJa: 'ニホミコイン ウォレット',
+                onUnlockSuccess: () => {
+                  try {
+                    const stored = localStorage.getItem('nihomi_student_coins');
+                    if (stored) setCoins(parseInt(stored, 10));
+                  } catch {}
+                }
+              });
+              setPaywallModalOpen(true);
+            }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-500/10 border border-amber-400/40 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10 hover:border-amber-400 transition-all active:scale-95"
-            title="Nihomi Coins — Redeem for AI Sensei Voice Coaching"
+            title="Nihomi Coins — Click to Top Up or Redeem"
           >
             <Coins className="w-4 h-4 text-amber-400 animate-pulse" />
             <span className="font-mono tracking-tight">{coins}</span>
@@ -455,6 +519,16 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                     {hotspot.nearbyJob && (
                       <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         বাইট
+                      </span>
+                    )}
+                    {hotspot.id === 'spot-restaurant' && !unlockedHotspots.includes('spot-restaurant') && (!user?.planId || user.planId === 'free' || user.planId === 'starter') && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-0.5">
+                        <Lock className="w-2.5 h-2.5" /> 20 🪙
+                      </span>
+                    )}
+                    {hotspot.id === 'spot-school' && (!user?.planId || user.planId === 'free') && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-0.5">
+                        <GraduationCap className="w-2.5 h-2.5" /> PRO
                       </span>
                     )}
                   </div>
@@ -689,23 +763,71 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
           {/* Action Trigger Button */}
           <div className="pt-6 mt-6 border-t border-white/10">
-            <button
-              onClick={() => {
-                if (selectedHotspot.directAction.viewTarget === 'mission-001') {
-                  setActiveMission('mission-001');
-                  setSelectedHotspot(null);
-                } else {
-                  onNavigate(
-                    selectedHotspot.directAction.viewTarget,
-                    selectedHotspot.directAction.params
-                  );
-                }
-              }}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-bold text-sm shadow-xl shadow-rose-900/30 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2"
-            >
-              <span>{selectedHotspot.directAction.labelBn}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {selectedHotspot.id === 'spot-restaurant' && !unlockedHotspots.includes('spot-restaurant') && (!user?.planId || user.planId === 'free' || user.planId === 'starter') ? (
+              <button
+                onClick={() => {
+                  setPaywallConfig({
+                    mode: 'coin_unlock',
+                    hotspotTitle: 'Izakaya Staff Roleplay (Torikizoku Center-Gai)',
+                    hotspotTitleJa: '鳥貴族 居酒屋接客ロールプレイング',
+                    unlockCostCoins: 20,
+                    onUnlockSuccess: () => {
+                      unlockHotspot('spot-restaurant');
+                      try {
+                        const stored = localStorage.getItem('nihomi_student_coins');
+                        if (stored) setCoins(parseInt(stored, 10));
+                      } catch {}
+                      onNavigate(selectedHotspot.directAction.viewTarget, selectedHotspot.directAction.params);
+                    }
+                  });
+                  setPaywallModalOpen(true);
+                }}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-zinc-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 active:scale-98 transition-all flex items-center justify-center gap-2"
+              >
+                <Coins className="w-4 h-4 text-zinc-950" />
+                <span>২০ নিহোমি কয়েন দিয়ে রেস্তোরাঁ রোলপ্লে আনলক করুন</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : selectedHotspot.id === 'spot-school' && (!user?.planId || user.planId === 'free') ? (
+              <button
+                onClick={() => {
+                  setPaywallConfig({
+                    mode: 'academy_upgrade',
+                    initialTrack: 'continuous',
+                    hotspotTitle: 'Tokyo Japanese Language Academy',
+                    hotspotTitleJa: '東京渋谷日本語アカデミー',
+                    onUnlockSuccess: () => {
+                      unlockHotspot('spot-school');
+                      onNavigate('courses');
+                    }
+                  });
+                  setPaywallModalOpen(true);
+                }}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-600 hover:brightness-110 text-white font-extrabold text-sm shadow-xl shadow-rose-900/30 active:scale-98 transition-all flex items-center justify-center gap-2"
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>নিহোমি প্রো / ট্রিপ পাস নিয়ে একাডেমিতে প্রবেশ করুন</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (selectedHotspot.directAction.viewTarget === 'mission-001') {
+                    setActiveMission('mission-001');
+                    setSelectedHotspot(null);
+                  } else {
+                    onNavigate(
+                      selectedHotspot.directAction.viewTarget,
+                      selectedHotspot.directAction.params
+                    );
+                  }
+                }}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-bold text-sm shadow-xl shadow-rose-900/30 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2"
+              >
+                <span>{selectedHotspot.directAction.labelBn}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -1043,10 +1165,28 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
         }}
       />
 
+      {/* 9.1 CONTEXTUAL PAYWALL & EXPANSION REVENUE MODAL (ZERO BUTTONISM) */}
+      <ContextualPaywallModal
+        isOpen={paywallModalOpen}
+        onClose={() => setPaywallModalOpen(false)}
+        mode={paywallConfig.mode}
+        hotspotTitle={paywallConfig.hotspotTitle}
+        hotspotTitleJa={paywallConfig.hotspotTitleJa}
+        unlockCostCoins={paywallConfig.unlockCostCoins}
+        initialTrack={paywallConfig.initialTrack}
+        onUnlockSuccess={() => {
+          try {
+            const stored = localStorage.getItem('nihomi_student_coins');
+            if (stored) setCoins(parseInt(stored, 10));
+          } catch {}
+          paywallConfig.onUnlockSuccess?.();
+        }}
+      />
+
       {/* 10. MINIMAL FOOTER TELEMETRY & 360° CONTROLS GUIDE */}
       <footer className="relative z-30 w-full px-4 sm:px-8 py-3 flex items-center justify-between border-t border-white/5 bg-[#06060c]/60 backdrop-blur-md text-[11px] text-zinc-400">
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-zinc-300">NIHOMI WORLD™ V2</span>
+          <span className="font-semibold text-zinc-300">NIHOMI WORLD™ V3</span>
           <span className="text-zinc-600">•</span>
           <span className="hidden sm:inline">Experience Japan. Before You Arrive.</span>
         </div>

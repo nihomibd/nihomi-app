@@ -254,6 +254,79 @@ export const SEED_PLANS: Plan[] = [
     isPublished: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'trip_7d',
+    name: 'Japan Trip Pass (7-Day)',
+    displayNameJa: '日本旅行 7日間パス',
+    tagline: '7-Day instant survival Japanese & spatial hotspot navigation',
+    description: 'Instant survival Japanese, airport/train navigation, conbini ordering, and 200 Nihomi Coins.',
+    badge: 'Short-Term Travel',
+    order: 5,
+    monthlyPrice: 1490,
+    yearlyPrice: 1490,
+    currency: 'BDT',
+    aiMonthlyLimit: 200,
+    features: [
+      '7 Days full access to all Shibuya 3D hotspots',
+      '200 Nihomi Coins for voice coaching & simulations',
+      'Narita/Haneda Airport & Tokyo Subway navigation',
+      'Conbini & restaurant audio phrases',
+      'Emergency medical & taxi survival cheat sheets'
+    ],
+    entitlements: ['n5', 'quizzes', 'ai_coach'],
+    isPublished: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'trip_14d',
+    name: 'Golden Explorer Pass (14-Day)',
+    displayNameJa: 'ゴールデン 14日間パス',
+    tagline: '14-Day Tokyo, Kyoto & Osaka comprehensive companion',
+    description: '14 Days unlimited hotspot access, 500 Nihomi Coins, Izakaya roleplay, and menu OCR reader.',
+    badge: 'Traveler Choice',
+    isRecommended: true,
+    order: 6,
+    monthlyPrice: 2490,
+    yearlyPrice: 2490,
+    currency: 'BDT',
+    aiMonthlyLimit: 500,
+    features: [
+      '14 Days unlimited access to all spatial hotspots',
+      '500 Nihomi Coins for live Tanaka Sensei voice coaching',
+      'Izakaya dining roleplay simulator included',
+      'Shinkansen bullet train booking guide',
+      'Offline audio phrase packs'
+    ],
+    entitlements: ['n5', 'n4', 'quizzes', 'ai_coach', 'business_japanese'],
+    isPublished: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'trip_30d',
+    name: 'Japan Nomad Pass (30-Day)',
+    displayNameJa: 'ジャパン ノマド 30日間パス',
+    tagline: '30-Day deep travel, digital nomad & internship survival pass',
+    description: 'Full 30-day survival & cultural immersion, 1,200 Nihomi Coins, apartment renting, and priority AI.',
+    badge: 'Nomad Immersion',
+    order: 7,
+    monthlyPrice: 3990,
+    yearlyPrice: 3990,
+    currency: 'BDT',
+    aiMonthlyLimit: 1200,
+    features: [
+      '30 Days unrestricted access to all 3D content & courses',
+      '1,200 Nihomi Coins for extensive AI coaching & simulation',
+      'Apartment rental & SIM card survival phrases',
+      'Onsen etiquette & Japanese cultural safety guide',
+      'Priority AI real-time audio translation'
+    ],
+    entitlements: ['n5', 'n4', 'n3', 'quizzes', 'ai_coach', 'business_japanese', 'japan_ready'],
+    isPublished: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   }
 ];
 

@@ -127,6 +127,27 @@ export const PLAN_CONFIGS: Record<string, any> = {
     priceBDT: 3990,
     features: ['Unrestricted N5 to N1 Access', '1,500 Monthly Nihomi Coins', 'Interview & Visa Simulation', 'Priority AI Routing'],
   },
+  trip_7d: {
+    planId: 'trip_7d',
+    planName: 'Japan Trip Pass (7-Day)',
+    priceUSD: 14,
+    priceBDT: 1490,
+    features: ['7 Days Full Hotspot Access', '200 Nihomi Coins', 'Airport & Tokyo Subway Guide', 'Emergency Phrasebook'],
+  },
+  trip_14d: {
+    planId: 'trip_14d',
+    planName: 'Golden Explorer Pass (14-Day)',
+    priceUSD: 24,
+    priceBDT: 2490,
+    features: ['14 Days Spatial Hotspot Access', '500 Nihomi Coins', 'Izakaya Roleplay Simulator', 'Menu OCR Reader'],
+  },
+  trip_30d: {
+    planId: 'trip_30d',
+    planName: 'Japan Nomad Pass (30-Day)',
+    priceUSD: 39,
+    priceBDT: 3990,
+    features: ['30 Days Unrestricted Access', '1,200 Nihomi Coins', 'Apartment & Cultural Guide', 'Priority AI Translation'],
+  },
 };
 
 export interface AuthContextType {
@@ -154,7 +175,8 @@ export interface AuthContextType {
   logout: () => Promise<void>;
   updateProfileData: (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string; displayName?: string; bio?: string; nativeLanguage?: string }>) => Promise<void>;
   updateProfile: (data: any) => Promise<void>;
-  updateSubscriptionPlan: (planId: 'free' | 'starter' | 'pro' | 'japan_ready' | string, method?: 'card' | 'eps' | 'paddle' | 'bkash' | string) => Promise<void>;
+  updateSubscriptionPlan: (planId: 'free' | 'starter' | 'pro' | 'japan_ready' | 'trip_7d' | 'trip_14d' | 'trip_30d' | string, method?: 'card' | 'eps' | 'paddle' | 'bkash' | string) => Promise<void>;
+  purchaseCoinPack: (packId: string) => Promise<boolean>;
   topUpCredits: (amount: number) => Promise<void>;
   refreshSubscription: () => Promise<void>;
   refreshProgress: () => Promise<void>;
@@ -188,6 +210,7 @@ const AuthContext = createContext<AuthContextType>({
   updateProfileData: async () => {},
   updateProfile: async () => {},
   updateSubscriptionPlan: async () => {},
+  purchaseCoinPack: async () => true,
   topUpCredits: async () => {},
   refreshSubscription: async () => {},
   refreshProgress: async () => {},
@@ -312,11 +335,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     lastPracticedAt: new Date().toISOString(),
   });
 
-  const [coinWallet] = useState<CoinWalletData | null>({
-    userId: user?.id || 'default_user',
-    coinBalance: 500,
-    lifetimeEarned: 1200,
-    lifetimeSpent: 700,
+  const [coinWallet, setCoinWallet] = useState<CoinWalletData | null>(() => {
+    try {
+      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+      return {
+        userId: user?.id || 'default_user',
+        coinBalance: storedCoins,
+        lifetimeEarned: storedCoins,
+        lifetimeSpent: 0,
+      };
+    } catch {
+      return {
+        userId: 'default_user',
+        coinBalance: 420,
+        lifetimeEarned: 420,
+        lifetimeSpent: 0,
+      };
+    }
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
@@ -557,15 +592,81 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateSubscriptionPlan = async (planId: 'free' | 'starter' | 'pro' | 'japan_ready', method: 'card' | 'eps' | 'paddle' | 'bkash' = 'bkash') => {
+  const updateSubscriptionPlan = async (
+    planId: 'free' | 'starter' | 'pro' | 'japan_ready' | 'trip_7d' | 'trip_14d' | 'trip_30d' | string,
+    method: 'card' | 'eps' | 'paddle' | 'bkash' | string = 'bkash'
+  ) => {
+    let coinsGranted = 0;
+    let durationDays = 30;
+    if (planId === 'trip_7d') { durationDays = 7; coinsGranted = 200; }
+    else if (planId === 'trip_14d') { durationDays = 14; coinsGranted = 500; }
+    else if (planId === 'trip_30d') { durationDays = 30; coinsGranted = 1200; }
+    else if (planId === 'starter') { durationDays = 30; coinsGranted = 100; }
+    else if (planId === 'pro') { durationDays = 30; coinsGranted = 500; }
+    else if (planId === 'japan_ready') { durationDays = 30; coinsGranted = 1500; }
+
+    const now = new Date();
+    const validUntil = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString();
+
     if (user) {
       const updatedUser = { ...user, planId };
       setUserData(updatedUser);
-      if (subscription) {
-        const updatedSub = { ...subscription, planId, paymentMethod: method };
-        setSubscription(updatedSub);
-      }
+      safeStorage.setItem('nihomi_user', JSON.stringify(updatedUser));
     }
+
+    const updatedSub: UserSubscription = {
+      userId: user?.id || 'guest',
+      planId,
+      planName: PLAN_CONFIGS[planId]?.planName || planId,
+      status: 'active',
+      validUntil,
+      billingCycle: planId.startsWith('trip_') ? 'fixed_pass' : 'monthly',
+      aiCreditsRemaining: (subscription?.aiCreditsRemaining || 0) + coinsGranted,
+      paymentMethod: method,
+      features: PLAN_CONFIGS[planId]?.features || []
+    };
+    setSubscription(updatedSub);
+    safeStorage.setItem('nihomi_subscription', JSON.stringify(updatedSub));
+
+    if (coinsGranted > 0) {
+      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+      const newBalance = storedCoins + coinsGranted;
+      safeStorage.setItem('nihomi_student_coins', newBalance.toString());
+      setCoinWallet(prev => ({
+        userId: user?.id || 'guest',
+        coinBalance: newBalance,
+        lifetimeEarned: (prev?.lifetimeEarned || 420) + coinsGranted,
+        lifetimeSpent: prev?.lifetimeSpent || 0
+      }));
+    }
+
+    try {
+      const token = getStoredToken();
+      if (token) {
+        apiRequest('/api/billing/change-plan', {
+          method: 'POST',
+          body: JSON.stringify({ planId, paymentMethod: method })
+        }).catch(() => {});
+      }
+    } catch {}
+  };
+
+  const purchaseCoinPack = async (packId: string): Promise<boolean> => {
+    let coinsToAdd = 50;
+    if (packId === 'pack_200') coinsToAdd = 250;
+    else if (packId === 'pack_500') coinsToAdd = 650;
+
+    const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+    const newBalance = storedCoins + coinsToAdd;
+    safeStorage.setItem('nihomi_student_coins', newBalance.toString());
+    setCoinWallet(prev => ({
+      userId: user?.id || 'guest',
+      coinBalance: newBalance,
+      lifetimeEarned: (prev?.lifetimeEarned || 420) + coinsToAdd,
+      lifetimeSpent: prev?.lifetimeSpent || 0
+    }));
+
+    return true;
   };
 
   const login = async (email?: string, password?: string): Promise<boolean> => {
@@ -715,6 +816,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateProfileData,
         updateProfile,
         updateSubscriptionPlan,
+        purchaseCoinPack,
         topUpCredits,
         refreshSubscription,
         refreshProgress,
