@@ -74,4 +74,73 @@ export class MemoryOSEngine {
       return { scorePercent: 100, totalAttempts: 0 };
     }
   }
+
+  /**
+   * SuperMemo-2 (SM-2) Spaced Repetition scheduling for phrase attempts
+   */
+  public recordAttempt(params: {
+    phraseJa: string;
+    meaningEn: string;
+    jlptLevel: string;
+    qualityScore: 0 | 1 | 2 | 3 | 4 | 5;
+    studentInput: string;
+  }): MemoryLogItem {
+    const isSuccess = params.qualityScore >= 3;
+    let intervalDays = 1;
+    let easeFactor = 2.5;
+
+    // SuperMemo-2 ease factor formula: EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
+    const q = params.qualityScore;
+    easeFactor = Math.max(1.3, easeFactor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)));
+
+    if (q >= 4) {
+      intervalDays = 6;
+    } else if (q === 3) {
+      intervalDays = 3;
+    } else {
+      intervalDays = 1;
+    }
+
+    const nextReviewTimestamp = Date.now() + intervalDays * 24 * 60 * 60 * 1000;
+
+    const logItem: MemoryLogItem = {
+      id: `srs-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      phraseJa: params.phraseJa,
+      meaningEn: params.meaningEn,
+      jlptLevel: params.jlptLevel,
+      qualityScore: params.qualityScore,
+      easeFactor,
+      intervalDays,
+      nextReviewTimestamp,
+      lastReviewedTimestamp: Date.now()
+    };
+
+    MemoryOSEngine.logInteraction({
+      locationId: 'spatial_world',
+      locationName: 'Shibuya Crossing',
+      targetRole: 'Japanese Conversational Partner',
+      studentUtterance: params.studentInput,
+      isCorrectKeigo: isSuccess,
+      keigoCategory: isSuccess ? 'teineigo' : 'casual',
+      feedbackGiven: isSuccess ? 'Polite Japanese mastered' : 'Needs Keigo refinement',
+      correctionPhrase: params.phraseJa
+    });
+
+    return logItem;
+  }
 }
+
+export interface MemoryLogItem {
+  id: string;
+  phraseJa: string;
+  meaningEn: string;
+  jlptLevel: string;
+  qualityScore: number;
+  easeFactor: number;
+  intervalDays: number;
+  nextReviewTimestamp: number;
+  lastReviewedTimestamp: number;
+}
+
+export const memoryOS = new MemoryOSEngine();
+

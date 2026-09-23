@@ -10,10 +10,11 @@ export interface WorldPOI {
   id: string;
   nameJa: string;
   nameEn: string;
-  category: 'station' | 'conbini' | 'restaurant' | 'izakaya' | 'retail';
+  category: 'station' | 'conbini' | 'restaurant' | 'izakaya' | 'retail' | 'government' | 'finance' | 'transport';
   position: THREE.Vector3;
   interactionRadius: number;
   promptText: string;
+  npcId?: string;
 }
 
 export const SHIBUYA_POIS: WorldPOI[] = [
@@ -24,7 +25,8 @@ export const SHIBUYA_POIS: WorldPOI[] = [
     category: 'conbini',
     position: new THREE.Vector3(-14, 0.9, -6),
     interactionRadius: 5.0,
-    promptText: "Press 'E' to Talk to Store Manager (店長 田中)"
+    promptText: "Press 'E' to Talk to Store Manager (店長 田中)",
+    npcId: 'npc_tanaka_manager'
   },
   {
     id: 'jr-shibuya-station',
@@ -33,7 +35,8 @@ export const SHIBUYA_POIS: WorldPOI[] = [
     category: 'station',
     position: new THREE.Vector3(0, 0.9, -35),
     interactionRadius: 6.0,
-    promptText: "Press 'E' to Check Ticket Turnstiles & Yamanote Departures"
+    promptText: "Press 'E' to Enter Station & Buy Tickets / Suica",
+    npcId: 'npc_station_master_sato'
   },
   {
     id: 'ramen-ichiran',
@@ -66,6 +69,23 @@ export const SHIBUYA_POIS: WorldPOI[] = [
 
 export class WorldInteractionLayer {
   public pois: WorldPOI[] = SHIBUYA_POIS;
+
+  /**
+   * Dynamically loads POIs from an active World Graph node
+   */
+  public loadFromGraphNode(node: { pois: Array<{ id: string; nameJa: string; nameEn: string; category: string; localCoordinates: [number, number, number]; promptText: string; npcId?: string }> }): void {
+    if (!node.pois || node.pois.length === 0) return;
+    this.pois = node.pois.map((p) => ({
+      id: p.id,
+      nameJa: p.nameJa,
+      nameEn: p.nameEn,
+      category: p.category as any,
+      position: new THREE.Vector3(p.localCoordinates[0], 0.9, p.localCoordinates[2]),
+      interactionRadius: 5.5,
+      promptText: p.promptText,
+      npcId: p.npcId
+    }));
+  }
 
   /**
    * Checks for proximity to any registered POI from the player's current position

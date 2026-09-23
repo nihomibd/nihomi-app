@@ -28,7 +28,13 @@ import {
   ShieldAlert,
   Globe,
   Settings,
-  X
+  X,
+  Train,
+  CreditCard,
+  Plane,
+  Navigation,
+  ArrowRight,
+  Ticket
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
@@ -41,6 +47,16 @@ import { WorldInteractionLayer, WorldPOI, SHIBUYA_POIS } from './engine/WorldInt
 import { spatialAudio } from './engine/SpatialAudioEngine';
 import { MemoryOSEngine } from './engine/MemoryOSEngine';
 import { JAPAN_GEO_ANCHORS } from './engine/GeoCoordinates';
+
+// Scalable World Graph & Transportation Subsystems
+import { worldGraphManager } from './worldGraph/WorldGraphManager';
+import { WORLD_NODES, JAPAN_DISTRICTS } from './worldGraph/WorldGraphData';
+import { WorldGraphNode, TransitRoute } from './worldGraph/WorldGraphTypes';
+import { TicketVendingMachineModal, TrainRideTransitModal } from './transport/RailwaySystem';
+import { AirportImmigrationSim } from './transport/AirportImmigrationSim';
+import { TaxiTransitSim } from './transport/TaxiTransitSim';
+import { SPATIAL_NPC_REGISTRY } from './learning/SpatialNPCRegistry';
+import { observationalLearningEngine } from './learning/ObservationalLearningEngine';
 
 interface ShibuyaPlayableWorldProps {
   coins: number;
@@ -110,6 +126,27 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState<boolean>(false);
   const [inputApiKey, setInputApiKey] = useState<string>('');
 
+  // World Graph & Inter-District Transportation State
+  const [currentNode, setCurrentNode] = useState<WorldGraphNode>(worldGraphManager.getCurrentNode());
+  const [suicaBalance, setSuicaBalance] = useState<number>(worldGraphManager.getSuicaBalance());
+  const [isWorldMapOpen, setIsWorldMapOpen] = useState<boolean>(false);
+  const [isTicketMachineOpen, setIsTicketMachineOpen] = useState<boolean>(false);
+  const [isAirportSimOpen, setIsAirportSimOpen] = useState<boolean>(false);
+  const [isTaxiSimOpen, setIsTaxiSimOpen] = useState<boolean>(false);
+  const [trainRideState, setTrainRideState] = useState<{
+    isOpen: boolean;
+    lineJa: string;
+    lineEn: string;
+    destJa: string;
+    travelMin: number;
+  }>({
+    isOpen: false,
+    lineJa: 'JR 山手線',
+    lineEn: 'JR Yamanote Line',
+    destJa: '新宿',
+    travelMin: 7
+  });
+
   // Dialogue & Learning Loop State
   const [dialogue, setDialogue] = useState<DialogueState>({
     isOpen: false,
@@ -142,6 +179,54 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       }
     ]
   });
+
+  // World Graph Event Listener
+  useEffect(() => {
+    const unsubscribe = worldGraphManager.subscribe((event) => {
+      if (event.type === 'NODE_CHANGED') {
+        setCurrentNode(event.node);
+        interactionLayerRef.current.loadFromGraphNode(event.node);
+        setQuestObjective(`Arrived at ${event.node.nameEn}. Explore local POIs and transit connections.`);
+      } else if (event.type === 'SUICA_CHARGED' || event.type === 'FARE_DEDUCTED') {
+        setSuicaBalance(event.newBalanceYen);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  // Transit Execution Handlers
+  const handleStartTransit = useCallback((route: TransitRoute) => {
+    if (route.transitMode === 'taxi') {
+      setIsTaxiSimOpen(true);
+      return;
+    }
+
+    if (route.requiresICCardOrTicket && suicaBalance < route.fareYen) {
+      alert(`ICカードの残高が不足しています (Insufficient Suica balance). Required: ¥${route.fareYen}. Please charge at ticket machine.`);
+      setIsTicketMachineOpen(true);
+      return;
+    }
+
+    setTrainRideState({
+      isOpen: true,
+      lineJa: route.routeLineNameJa,
+      lineEn: route.routeLineNameEn,
+      destJa: route.arrivalStationNameJa,
+      travelMin: route.travelTimeMinutes
+    });
+  }, [suicaBalance]);
+
+  const handleCompleteTrainRide = useCallback(() => {
+    const route = currentNode.transitRoutes.find(
+      (r) => r.arrivalStationNameJa === trainRideState.destJa || r.routeLineNameJa === trainRideState.lineJa
+    ) || currentNode.transitRoutes[0];
+
+    setTrainRideState((prev) => ({ ...prev, isOpen: false }));
+
+    if (route) {
+      worldGraphManager.travelRoute(route.id);
+    }
+  }, [currentNode, trainRideState]);
 
   // Engine Subsystem References
   const realWorldProviderRef = useRef<RealWorldProvider | null>(null);
@@ -192,8 +277,58 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     speakJapanese(text, { rate: 0.95 });
   }, []);
 
-  // Open / Trigger Store Dialogue
+  // Open / Trigger Store Dialogue or Transport Modal
   const handleTriggerInteraction = useCallback(() => {
+    if (!activePOI) return;
+
+    if (activePOI.id === 'poi_narita_immigration') {
+      setIsAirportSimOpen(true);
+      return;
+    }
+
+    if (activePOI.id === 'poi_ticket_machine' || activePOI.id === 'poi_shibuya_station') {
+      setIsTicketMachineOpen(true);
+      return;
+    }
+
+    if (activePOI.id === 'poi_ticket_gates') {
+      const route = currentNode.transitRoutes[0];
+      if (route) {
+        handleStartTransit(route);
+      } else {
+        setIsTicketMachineOpen(true);
+      }
+      return;
+    }
+
+    if (activePOI.id === 'poi_shibuya_taxi') {
+      setIsTaxiSimOpen(true);
+      return;
+    }
+
+    // Dynamic Spatial NPC Lookup
+    if (activePOI.npcId && SPATIAL_NPC_REGISTRY[activePOI.npcId]) {
+      const npc = SPATIAL_NPC_REGISTRY[activePOI.npcId];
+      setDialogue({
+        isOpen: true,
+        step: 'greeting',
+        speaker: 'manager',
+        npcJapaneseText: npc.dialogueRoot.textJa,
+        npcRomaji: npc.dialogueRoot.textRomaji,
+        npcEnglish: npc.dialogueRoot.textEn,
+        choices: npc.dialogueRoot.choices.map((c) => ({
+          id: c.id,
+          textJa: c.textJa,
+          textRomaji: c.textRomaji,
+          textEn: c.textEn,
+          isCorrectKeigo: c.isCorrectKeigo
+        }))
+      });
+      playSpeech(npc.dialogueRoot.textJa);
+      return;
+    }
+
+    // Default 7-Eleven Dialogue
     setDialogue((prev) => ({
       ...prev,
       isOpen: true,
@@ -204,7 +339,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       npcEnglish: 'Welcome! Hello. How can I help you today?'
     }));
     playSpeech('いらっしゃいませ！こんにちは。今日はどうしましたか？');
-  }, [playSpeech]);
+  }, [activePOI, currentNode, handleStartTransit, playSpeech]);
 
   // Handle Dialogue Choice Selection
   const handleSelectChoice = (choiceId: string) => {
@@ -376,12 +511,12 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 500);
     cameraRef.current = camera;
 
-    // 3. WebGL Renderer with ACES Filmic Tone Mapping
+    // 3. WebGL Renderer with ACES Filmic Tone Mapping (Calibrated Exposure)
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 0.92; // Calibrated to prevent blinding glare and overexposed surfaces
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
@@ -389,11 +524,12 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     mountEl.innerHTML = '';
     mountEl.appendChild(renderer.domElement);
 
-    // 4. Cinematic Post-Processing Pipeline
+    // 4. Cinematic Post-Processing Pipeline (Targeted Bloom for Neons Only)
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
 
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.55, 0.45, 0.85);
+    // Threshold 0.88 restricts bloom to neon signs, traffic lights, and headlights (no full-screen glare)
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.38, 0.28, 0.88);
     composer.addPass(bloomPass);
 
     const outputPass = new OutputPass();
@@ -401,11 +537,11 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     composerRef.current = composer;
 
     // 5. Dynamic Solar Lighting
-    const ambientLight = new THREE.AmbientLight(0x334155, 1.2);
+    const ambientLight = new THREE.AmbientLight(0x1e293b, 0.55);
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
 
-    const sunLight = new THREE.DirectionalLight(0xfff7e6, 1.8);
+    const sunLight = new THREE.DirectionalLight(0xfff7e6, 1.05);
     sunLight.position.set(30, 60, 25);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 2048;
@@ -742,7 +878,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
 
       {/* TOP HUD BAR */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-20">
-        {/* Real World Geographic Foundation Status Pill */}
+        {/* Real World Geographic Foundation & Active World Node Pill */}
         <div className="flex items-center space-x-3 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-cyan-500/30 shadow-2xl pointer-events-auto">
           <div
             className={`w-3 h-3 rounded-full ${
@@ -766,12 +902,31 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
                 {foundationStatus.providerType === 'google_3d_tiles' ? 'GOOGLE 3D TILES' : 'REAL GEOGRAPHIC MESH'}
               </span>
             </div>
-            <p className="text-sm font-semibold text-white">渋谷スクランブル交差点 (Shibuya Scramble Crossing)</p>
+            <div className="flex items-center space-x-2 mt-0.5">
+              <p className="text-sm font-semibold text-white">{currentNode.nameJa}</p>
+              <button
+                onClick={() => setIsWorldMapOpen(true)}
+                className="flex items-center space-x-1 px-2.5 py-0.5 rounded-lg bg-cyan-600/30 hover:bg-cyan-600 text-[11px] font-bold text-cyan-200 border border-cyan-400/40 transition-all shadow"
+              >
+                <Navigation className="w-3 h-3" />
+                <span>路線図・移動 (World Map)</span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Live Tokyo Solar Time, Atmosphere & Controls */}
         <div className="flex items-center space-x-2.5 pointer-events-auto">
+          {/* Suica IC Card Balance Pill */}
+          <button
+            onClick={() => setIsTicketMachineOpen(true)}
+            className="flex items-center space-x-1.5 bg-emerald-950/80 hover:bg-emerald-900/90 backdrop-blur-md px-3 py-2 rounded-xl border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold shadow-lg transition-colors"
+            title="Click to recharge Suica IC Card"
+          >
+            <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Suica: ¥{suicaBalance.toLocaleString()}</span>
+          </button>
+
           {/* Dynamic Tokyo Time Pill */}
           <div className="flex items-center space-x-2 bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-mono text-slate-200">
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
@@ -970,6 +1125,149 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
           </div>
         </div>
       )}
+
+      {/* WORLD GRAPH & INTER-DISTRICT TRANSIT ROUTE MAP MODAL */}
+      {isWorldMapOpen && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-6 z-40 pointer-events-auto">
+          <div className="w-full max-w-2xl bg-slate-900 border-2 border-cyan-500/40 rounded-3xl p-6 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-lg border border-cyan-500/30">
+                  🗺️
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white">日本全国ワールドグラフ (Japan World Graph)</h3>
+                  <p className="text-[11px] text-slate-400">Select City, District, or Train Route to travel continuously</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsWorldMapOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Region / Node List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1">
+              {Object.values(WORLD_NODES).map((node) => {
+                const isCurrent = node.id === currentNode.id;
+                return (
+                  <div
+                    key={node.id}
+                    className={`p-4 rounded-2xl border transition-all ${
+                      isCurrent
+                        ? 'bg-cyan-950/60 border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                        : 'bg-slate-800/60 hover:bg-slate-800 border-slate-700/80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-700/60 text-slate-300">
+                        {node.nodeType.replace('_', ' ').toUpperCase()}
+                      </span>
+                      {isCurrent && (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                          CURRENT LOCATION
+                        </span>
+                      )}
+                    </div>
+
+                    <h4 className="text-sm font-bold text-white mt-2">{node.nameJa}</h4>
+                    <p className="text-xs text-slate-300 font-medium">{node.nameEn}</p>
+                    <p className="text-[11px] text-emerald-400/90 font-bengali mt-0.5">{node.nameBn}</p>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-700/60 flex items-center justify-between">
+                      <span className="text-[11px] text-slate-400 font-mono">
+                        {node.pois.length} POIs • {node.transitRoutes.length} Routes
+                      </span>
+                      {!isCurrent && (
+                        <button
+                          onClick={() => {
+                            worldGraphManager.setNodeDirect(node.id);
+                            setIsWorldMapOpen(false);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center space-x-1"
+                        >
+                          <span>Travel (移動)</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Current Active Routes Drawer */}
+            <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
+              <h5 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Direct Transit Connections from {currentNode.nameJa}:
+              </h5>
+              <div className="space-y-2">
+                {currentNode.transitRoutes.map((route) => (
+                  <div
+                    key={route.id}
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-colors"
+                  >
+                    <div>
+                      <p className="text-xs font-bold text-white">{route.routeLineNameJa}</p>
+                      <p className="text-[11px] text-slate-400 font-mono">
+                        {route.routeLineNameEn} • Fare: ¥{route.fareYen} • {route.travelTimeMinutes} min
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsWorldMapOpen(false);
+                        handleStartTransit(route);
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md"
+                    >
+                      Board ({route.transitMode.toUpperCase()})
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* RAILWAY TICKET MACHINE MODAL */}
+      <TicketVendingMachineModal
+        isOpen={isTicketMachineOpen}
+        onClose={() => setIsTicketMachineOpen(false)}
+        onSuccess={(newBal) => setSuicaBalance(newBal)}
+      />
+
+      {/* TRAIN RIDE TRANSIT SIMULATION MODAL */}
+      <TrainRideTransitModal
+        isOpen={trainRideState.isOpen}
+        lineNameJa={trainRideState.lineJa}
+        lineNameEn={trainRideState.lineEn}
+        destinationJa={trainRideState.destJa}
+        travelMinutes={trainRideState.travelMin}
+        onComplete={handleCompleteTrainRide}
+      />
+
+      {/* AIRPORT IMMIGRATION SIMULATION MODAL */}
+      <AirportImmigrationSim
+        isOpen={isAirportSimOpen}
+        onClose={() => setIsAirportSimOpen(false)}
+        onComplete={({ coins, xp }) => {
+          onAddCoins(coins);
+          setXp((p) => p + xp);
+          setQuestObjective('Immigration passed! You have legally entered Japan.');
+        }}
+      />
+
+      {/* TOKYO TAXI TRANSIT SIMULATION MODAL */}
+      <TaxiTransitSim
+        isOpen={isTaxiSimOpen}
+        onClose={() => setIsTaxiSimOpen(false)}
+        onArrival={() => {
+          worldGraphManager.setNodeDirect('node_shibuya_scramble');
+        }}
+      />
 
       {/* FOUNDER GEOGRAPHIC SETTINGS & API KEY CONFIGURATION MODAL */}
       {isSettingsModalOpen && (

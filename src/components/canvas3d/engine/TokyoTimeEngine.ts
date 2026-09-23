@@ -129,73 +129,73 @@ export class TokyoTimeEngine {
     switch (period) {
       case 'dawn':
         sunColor = new THREE.Color(0xfde047);
-        sunIntensity = 1.1;
-        ambientColor = new THREE.Color(0x64748b);
-        ambientIntensity = 1.1;
+        sunIntensity = 0.70;
+        ambientColor = new THREE.Color(0x334155);
+        ambientIntensity = 0.55;
         skyColor = new THREE.Color(0x1e1b4b);
         fogColor = new THREE.Color(0x1e1b4b);
-        neonIntensityMultiplier = 0.5;
+        neonIntensityMultiplier = 0.6;
         pedestrianDensityFactor = 0.7;
         trafficDensityFactor = 0.8;
         break;
 
       case 'morning_rush':
-        sunColor = new THREE.Color(0xffedd5);
-        sunIntensity = 1.7;
-        ambientColor = new THREE.Color(0x94a3b8);
-        ambientIntensity = 1.25;
-        skyColor = new THREE.Color(0x38bdf8);
-        fogColor = new THREE.Color(0x38bdf8);
-        neonIntensityMultiplier = 0.15;
+        sunColor = new THREE.Color(0xfffaed);
+        sunIntensity = 0.98;
+        ambientColor = new THREE.Color(0x475569);
+        ambientIntensity = 0.65;
+        skyColor = new THREE.Color(0x0284c7);
+        fogColor = new THREE.Color(0x0c1524);
+        neonIntensityMultiplier = 0.2;
         pedestrianDensityFactor = 1.5; // High commuter scramble density
         trafficDensityFactor = 1.3;
         break;
 
       case 'day':
-        sunColor = new THREE.Color(0xffffff);
-        sunIntensity = 1.8;
-        ambientColor = new THREE.Color(0x94a3b8);
-        ambientIntensity = 1.35;
-        skyColor = new THREE.Color(0x0284c7);
-        fogColor = new THREE.Color(0x0284c7);
-        neonIntensityMultiplier = 0.1;
+        sunColor = new THREE.Color(0xfffcf5);
+        sunIntensity = 1.05; // Balanced, non-blinding daylight
+        ambientColor = new THREE.Color(0x64748b);
+        ambientIntensity = 0.70;
+        skyColor = new THREE.Color(0x0369a1);
+        fogColor = new THREE.Color(0x0c1322);
+        neonIntensityMultiplier = 0.15;
         pedestrianDensityFactor = 1.1;
         trafficDensityFactor = 1.0;
         break;
 
       case 'golden_hour':
         sunColor = new THREE.Color(0xf97316); // Warm Tokyo sunset amber
-        sunIntensity = 1.9;
-        ambientColor = new THREE.Color(0x7c2d12);
-        ambientIntensity = 1.15;
-        skyColor = new THREE.Color(0x431407);
-        fogColor = new THREE.Color(0x431407);
-        neonIntensityMultiplier = 0.75;
+        sunIntensity = 1.15;
+        ambientColor = new THREE.Color(0x431407);
+        ambientIntensity = 0.60;
+        skyColor = new THREE.Color(0x270b04);
+        fogColor = new THREE.Color(0x1c0905);
+        neonIntensityMultiplier = 0.85;
         pedestrianDensityFactor = 1.6; // Shibuya evening rush
         trafficDensityFactor = 1.4;
         break;
 
       case 'dusk':
-        sunColor = new THREE.Color(0xc026d3);
-        sunIntensity = 0.8;
-        ambientColor = new THREE.Color(0x1e1b4b);
-        ambientIntensity = 0.9;
-        skyColor = new THREE.Color(0x0f172a);
-        fogColor = new THREE.Color(0x0f172a);
-        neonIntensityMultiplier = 1.2;
+        sunColor = new THREE.Color(0xa855f7);
+        sunIntensity = 0.50;
+        ambientColor = new THREE.Color(0x0f172a);
+        ambientIntensity = 0.45;
+        skyColor = new THREE.Color(0x080c18);
+        fogColor = new THREE.Color(0x080c18);
+        neonIntensityMultiplier = 1.3;
         pedestrianDensityFactor = 1.3;
         trafficDensityFactor = 1.2;
         break;
 
       case 'night':
       default:
-        sunColor = new THREE.Color(0x818cf8); // Cool moonlight
-        sunIntensity = 0.55;
-        ambientColor = new THREE.Color(0x0f172a);
-        ambientIntensity = 0.85;
-        skyColor = new THREE.Color(0x060710);
-        fogColor = new THREE.Color(0x060710);
-        neonIntensityMultiplier = 1.6; // Full neon glow
+        sunColor = new THREE.Color(0x6366f1); // Cool subtle moonlight
+        sunIntensity = 0.30;
+        ambientColor = new THREE.Color(0x05070f);
+        ambientIntensity = 0.40;
+        skyColor = new THREE.Color(0x030308);
+        fogColor = new THREE.Color(0x030308);
+        neonIntensityMultiplier = 1.8; // Rich Tokyo neon night glow
         pedestrianDensityFactor = 0.7;
         trafficDensityFactor = 0.9;
         break;
