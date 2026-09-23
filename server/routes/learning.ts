@@ -82,8 +82,8 @@ learningRouter.get('/lessons/:id', optionalAuth, async (req: AuthenticatedReques
     return res.status(404).json({ error: 'Lesson not found' });
   }
 
-  // Paywall check: Free trial allows Lesson 1. Lessons 2-25 require N5 Pro or Lifetime pass
-  if (lesson.lessonNumber > 1) {
+  // Paywall check: Free tier allows Lessons 1 to 5. Lessons 6 to 25 require N5 Pro or Lifetime pass
+  if (lesson.lessonNumber > 5) {
     const identifier = req.user?.id || req.user?.email || (req.headers['x-user-id'] as string) || (req.query.userId as string);
     if (!identifier) {
       return res.status(402).json({
@@ -92,7 +92,7 @@ learningRouter.get('/lessons/:id', optionalAuth, async (req: AuthenticatedReques
         error: 'Subscription Required',
         requiredTier: 'n5_pro',
         currentTier: 'free',
-        message: 'মিন্না নো নিহোঙ্গো লেসন ২ থেকে ২৫ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন।'
+        message: 'মিন্না নো নিহোঙ্গো লেসন ০৬ থেকে ২৫ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন (লেসন ০১–০৫ সম্পূর্ণ ফ্রি)।'
       });
     }
 
@@ -104,7 +104,7 @@ learningRouter.get('/lessons/:id', optionalAuth, async (req: AuthenticatedReques
         error: 'Subscription Required',
         requiredTier: 'n5_pro',
         currentTier: access.currentTier,
-        message: access.reason || 'মিন্না নো নিহোঙ্গো পূর্ণাঙ্গ ব্যাকরণ ব্যাংক ও পাঠসমূহ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন।'
+        message: access.reason || 'মিন্না নো নিহোঙ্গো পূর্ণাঙ্গ ব্যাকরণ ব্যাংক ও লেসন ০৬–২৫ আনলক করতে N5 প্রো সাবস্ক্রিপশন প্রয়োজন (লেসন ০১–০৫ সম্পূর্ণ ফ্রি)।'
       });
     }
   }

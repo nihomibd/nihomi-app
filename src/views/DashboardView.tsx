@@ -35,7 +35,7 @@ class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundary
       const handleNav = (v: string) => this.props.onNavigate?.(v);
       return (
         <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 pt-6 px-4 sm:px-6">
-          <div className="max-w-md mx-auto sm:max-w-lg md:max-w-xl lg:max-w-2xl space-y-5">
+          <div className="max-w-5xl mx-auto space-y-5">
             {/* Greeting & Header */}
             <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-700 text-xs font-bold">

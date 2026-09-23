@@ -351,6 +351,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       apiRequest('/api/auth/me')
         .then((res) => {
           if (res?.authenticated && res.user) {
+            if (res.token) {
+              setStoredToken(res.token);
+              setToken(res.token);
+              safeStorage.setItem('nihomi_auth_token', res.token);
+            }
             setUserData(res.user);
             if (res.profile) setProfile(res.profile);
             if (res.progress) setProgress(res.progress);
@@ -404,6 +409,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Sync with backend /api/auth/me to populate verified profile & progress
         apiRequest('/api/auth/me').then((res) => {
           if (res?.authenticated && res.user) {
+            if (res.token) {
+              setStoredToken(res.token);
+              setToken(res.token);
+              safeStorage.setItem('nihomi_auth_token', res.token);
+            }
             if (res.profile) setProfile(res.profile);
             if (res.progress) setProgress(res.progress);
           }

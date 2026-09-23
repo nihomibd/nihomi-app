@@ -156,7 +156,7 @@ export const SEED_PLANS: Plan[] = [
     currency: 'BDT',
     aiMonthlyLimit: 10,
     features: [
-      'N5 introductory lessons & foundational kana',
+      'N5 introductory lessons (Lessons 01-05 completely free) & all 46 Kana',
       'Essential vocabulary & grammar previews',
       'Basic practice quizzes',
       '10 AI Coach interactions / month',

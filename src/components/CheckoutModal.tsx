@@ -362,7 +362,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <Smartphone className="w-3.5 h-3.5" />
               <span>ম্যানুয়াল বিকাশ / নগদ (Send Money)</span>
               <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wider font-extrabold hidden sm:inline">
-                তাৎক্ষণিক
+                ভেরিফিকেশন
               </span>
             </button>
             <button

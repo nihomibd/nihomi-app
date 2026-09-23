@@ -352,7 +352,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
               100% Authorized Bangladesh Payment Methods
             </h4>
             <p className="text-xs text-zinc-500">
-              Instant activation via bKash Personal & Merchant, SSLCommerz, Nagad, Visa, Mastercard, and American Express.
+              Fast manual verification & swift activation via bKash & Nagad (Send Money / TrxID) and card payments.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -400,10 +400,10 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                     <td className="py-3 px-4 font-semibold text-zinc-900 dark:text-zinc-100">
                       JLPT N5 Curriculum (Foundations)
                     </td>
-                    <td className="py-3 px-3 text-center text-zinc-500">Intro Only (Lessons 1-2)</td>
-                    <td className="py-3 px-3 text-center text-emerald-600 font-bold">Full 10 Lessons</td>
-                    <td className="py-3 px-3 text-center bg-red-500/5 text-emerald-600 font-bold">Full 10 Lessons</td>
-                    <td className="py-3 px-3 text-center text-emerald-600 font-bold">Full 10 Lessons</td>
+                    <td className="py-3 px-3 text-center text-emerald-600 font-bold">Lessons 1–5 Free</td>
+                    <td className="py-3 px-3 text-center text-emerald-600 font-bold">Full 25 Lessons</td>
+                    <td className="py-3 px-3 text-center bg-red-500/5 text-emerald-600 font-bold">Full 25 Lessons</td>
+                    <td className="py-3 px-3 text-center text-emerald-600 font-bold">Full 25 Lessons</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-4 font-semibold text-zinc-900 dark:text-zinc-100">
@@ -476,7 +476,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 space-y-1.5 text-xs">
               <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">Can I pay using bKash or Nagad?</h4>
               <p className="text-zinc-600 dark:text-zinc-400">
-                Yes! We support bKash Tokenized Checkout and all major local mobile financial services, allowing you to pay instantly in BDT without needing an international credit card.
+                Yes! Lessons 1–5 are 100% free. For Pro access, we support bKash and Nagad with rapid manual TrxID verification, allowing you to pay easily in BDT without needing an international credit card.
               </p>
             </div>
 

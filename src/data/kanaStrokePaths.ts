@@ -17,7 +17,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   'あ': [
     { strokeNumber: 1, path: 'M 25 32 Q 50 30 75 32', startPoint: { x: 25, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বাম থেকে ডানে অনুভূমিক দাগ' },
     { strokeNumber: 2, path: 'M 50 16 Q 48 50 44 82', startPoint: { x: 50, y: 16 }, direction: 'down', releaseType: 'harai', instructionBn: '২. মাঝখান দিয়ে নিচে বাঁকিয়ে নামান' },
-    { strokeNumber: 3, path: 'M 35 48 C 20 62 30 80 50 78 C 72 76 80 52 60 48 C 42 46 36 68 40 76', startPoint: { x: 35, y: 48 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. ভেতর থেকে ঘুরিয়ে বড় লুপ তৈরি করুন' }
+    { strokeNumber: 3, path: 'M 38 42 C 32 52 26 62 24 70 C 22 78 30 78 36 70 C 42 62 46 48 52 44 C 60 38 74 38 80 50 C 84 62 82 74 72 82 C 62 86 52 82 46 76', startPoint: { x: 38, y: 42 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. কেন্দ্র থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)' }
   ],
   'い': [
     { strokeNumber: 1, path: 'M 30 26 C 26 50 28 68 36 78 Q 40 80 44 74', startPoint: { x: 30, y: 26 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামে বাঁকিয়ে নিচে এনে শেষের হুক' },

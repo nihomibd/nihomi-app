@@ -430,11 +430,99 @@ export function getUserFromRequest(req: Request): AuthenticatedUser | null {
   return getUserFromToken(token);
 }
 
+// In-memory cache for validated Supabase tokens (5 min TTL) to minimize redundant network roundtrips
+interface CachedSupabaseUser {
+  user: AuthenticatedUser;
+  expiresAt: number;
+}
+const verifiedTokenCache = new Map<string, CachedSupabaseUser>();
+
+/**
+ * Validates a Supabase session token against Supabase Auth engine if native HMAC verification yields null.
+ */
+export async function verifySupabaseTokenAsync(token?: string): Promise<AuthenticatedUser | null> {
+  if (!token || typeof token !== 'string') return null;
+  const cleanToken = token.replace(/^Bearer\s+/i, '').trim();
+  if (!cleanToken || cleanToken.split('.').length !== 3) return null;
+
+  // Check cache
+  const cached = verifiedTokenCache.get(cleanToken);
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.user;
+  }
+
+  try {
+    const { getSupabaseAdminClient } = await import('./middleware/supabaseAuth.js');
+    const supabase = getSupabaseAdminClient();
+    const { data, error } = await supabase.auth.getUser(cleanToken);
+
+    if (error || !data?.user) {
+      return null;
+    }
+
+    const u = data.user;
+    const email = (u.email || (u.user_metadata?.email as string) || '').toLowerCase().trim();
+    const isFounder = email === 'mdtanvirkabirbiplob@gmail.com';
+    const appMeta = u.app_metadata || {};
+    const userMeta = u.user_metadata || {};
+    const rawRole = ((appMeta.role as string) || (userMeta.role as string) || '').toLowerCase();
+    let role: UserRole = 'user';
+    if (isFounder || rawRole === 'admin' || rawRole === 'founder') role = 'admin';
+    else if (rawRole === 'instructor' || rawRole === 'teacher') role = 'instructor';
+
+    let user = db.findUserById(u.id);
+    if (!user && email) {
+      user = db.findUserByEmail(email);
+    }
+    if (!user) {
+      user = db.ensureUserExists({
+        id: u.id,
+        email: email || `user-${u.id.slice(0, 8)}@nihomi.com`,
+        role
+      });
+    } else if (user.role !== role) {
+      user.role = role;
+      try { db.save(); } catch {}
+    }
+
+    const authUser: AuthenticatedUser = {
+      id: u.id,
+      email: user?.email || email,
+      role,
+      passwordHash: user?.passwordHash,
+      passwordSalt: user?.passwordSalt,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
+      resetToken: user?.resetToken,
+      resetTokenExpiry: user?.resetTokenExpiry
+    };
+
+    // Cache valid token for 5 minutes
+    verifiedTokenCache.set(cleanToken, {
+      user: authUser,
+      expiresAt: Date.now() + 5 * 60 * 1000
+    });
+
+    return authUser;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Resolves user from token synchronously via native JWT; falls back to Supabase Auth verification.
+ */
+export async function resolveUserFromTokenAsync(token?: string): Promise<AuthenticatedUser | null> {
+  const syncUser = getUserFromToken(token);
+  if (syncUser) return syncUser;
+  return verifySupabaseTokenAsync(token);
+}
+
 /**
  * Express Middleware: Require valid stateless authentication.
  * Accepts tokens ONLY via standard `Authorization: Bearer <token>` header.
  */
-export function requireAuth(req: Request | any, res: Response, next: NextFunction) {
+export async function requireAuth(req: Request | any, res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
   if (!token) {
     return res.status(401).json({
@@ -443,7 +531,7 @@ export function requireAuth(req: Request | any, res: Response, next: NextFunctio
     });
   }
 
-  const user = getUserFromToken(token);
+  const user = await resolveUserFromTokenAsync(token);
   if (!user) {
     return res.status(401).json({
       error: 'Unauthorized. Invalid or expired authentication token.',
@@ -460,10 +548,10 @@ export function requireAuth(req: Request | any, res: Response, next: NextFunctio
  * Express Middleware: Optional authentication.
  * Attaches user and authContext if valid Bearer token is present; proceeds otherwise.
  */
-export function optionalAuth(req: Request | any, _res: Response, next: NextFunction) {
+export async function optionalAuth(req: Request | any, _res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
   if (token) {
-    const user = getUserFromToken(token);
+    const user = await resolveUserFromTokenAsync(token);
     if (user) {
       req.user = user;
       req.authContext = { user, token };
@@ -476,7 +564,7 @@ export function optionalAuth(req: Request | any, _res: Response, next: NextFunct
  * Express Middleware: Require Admin role.
  * Accepts tokens ONLY via standard `Authorization: Bearer <token>` header.
  */
-export function requireAdmin(req: Request | any, res: Response, next: NextFunction) {
+export async function requireAdmin(req: Request | any, res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
   if (!token) {
     return res.status(401).json({
@@ -485,7 +573,7 @@ export function requireAdmin(req: Request | any, res: Response, next: NextFuncti
     });
   }
 
-  const user = getUserFromToken(token);
+  const user = await resolveUserFromTokenAsync(token);
   if (!user) {
     return res.status(401).json({
       error: 'Unauthorized. Invalid or expired authentication token.',
@@ -513,7 +601,7 @@ export function requireAdmin(req: Request | any, res: Response, next: NextFuncti
  * Express Middleware: Require Founder role strictly.
  * Accepts tokens via standard Authorization: Bearer <token> header.
  */
-export function requireFounder(req: Request | any, res: Response, next: NextFunction) {
+export async function requireFounder(req: Request | any, res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
   if (!token) {
     return res.status(401).json({
@@ -523,7 +611,7 @@ export function requireFounder(req: Request | any, res: Response, next: NextFunc
     });
   }
 
-  const user = getUserFromToken(token);
+  const user = await resolveUserFromTokenAsync(token);
   if (!user) {
     return res.status(401).json({
       success: false,
@@ -553,7 +641,7 @@ export function requireFounder(req: Request | any, res: Response, next: NextFunc
  */
 export function requireRole(allowedRoles: UserRole | UserRole[]) {
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
-  return (req: Request | any, res: Response, next: NextFunction) => {
+  return async (req: Request | any, res: Response, next: NextFunction) => {
     const token = extractBearerToken(req);
     if (!token) {
       return res.status(401).json({
@@ -562,7 +650,7 @@ export function requireRole(allowedRoles: UserRole | UserRole[]) {
       });
     }
 
-    const user = getUserFromToken(token);
+    const user = await resolveUserFromTokenAsync(token);
     if (!user) {
       return res.status(401).json({
         error: 'Unauthorized. Invalid or expired authentication token.',

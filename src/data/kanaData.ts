@@ -57,7 +57,7 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     strokeDetails: [
       { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'বাম থেকে ডানে হালকা বাঁকানো অনুভূমিক দাগ', descriptionEn: 'Horizontal stroke left to right', path: 'M 25 32 Q 50 30 75 32', startPoint: { x: 25, y: 32 } },
       { strokeNumber: 2, direction: 'down', releaseType: 'harai', descriptionBn: 'উপর থেকে নিচে কিছুটা বক্রভাবে সোজা নামানো', descriptionEn: 'Vertical curving down stroke', path: 'M 50 16 Q 48 50 44 80', startPoint: { x: 50, y: 16 } },
-      { strokeNumber: 3, direction: 'circle', releaseType: 'tome', descriptionBn: 'মাঝখান থেকে বৃত্তাকারে ঘুরিয়ে নিচে বৃত্ত পূরণ', descriptionEn: 'Curving loop around the cross', path: 'M 35 48 Q 20 65 35 78 Q 65 90 76 65 Q 82 44 58 48 Q 42 52 38 72', startPoint: { x: 35, y: 48 } }
+      { strokeNumber: 3, direction: 'circle', releaseType: 'harai', descriptionBn: 'কেন্দ্র থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)', descriptionEn: 'Curving loop around the cross with smooth harai finish', path: 'M 38 42 C 32 52 26 62 24 70 C 22 78 30 78 36 70 C 42 62 46 48 52 44 C 60 38 74 38 80 50 C 84 62 82 74 72 82 C 62 86 52 82 46 76', startPoint: { x: 38, y: 42 } }
     ]
   },
   {

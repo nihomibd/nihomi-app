@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { speakJapanese } from '../lib/tts.js';
 import { HIRAGANA_SEION, KATAKANA_SEION } from '../data/kanaData.js';
+import { JLPT_N5_KANJI_100 } from '../data/kanji100Data.js';
 
 interface CharacterItem {
   char: string;
@@ -28,18 +29,12 @@ interface CanvasWritingPracticeProps {
   onCompletePractice?: (char: string) => void;
 }
 
-const DEFAULT_KANJI_CHARACTERS: CharacterItem[] = [
-  { char: '日', reading: 'ひ / にち', meaning: 'Sun / Day', strokes: 4 },
-  { char: '本', reading: 'ほん', meaning: 'Book / Origin', strokes: 5 },
-  { char: '語', reading: 'ご', meaning: 'Language', strokes: 14 },
-  { char: '学', reading: 'がく', meaning: 'Study / Learn', strokes: 8 },
-  { char: '生', reading: 'せい / なま', meaning: 'Life / Student', strokes: 5 },
-  { char: '先', reading: 'せん', meaning: 'Previous / Ahead', strokes: 6 },
-  { char: '私', reading: 'わたし', meaning: 'I / Me', strokes: 7 },
-  { char: '食', reading: 'たべる / しょく', meaning: 'Eat / Food', strokes: 9 },
-  { char: '行', reading: 'いく / こう', meaning: 'Go / Act', strokes: 6 },
-  { char: '見', reading: 'みる / けん', meaning: 'See / Look', strokes: 7 }
-];
+const ALL_100_N5_KANJI: CharacterItem[] = JLPT_N5_KANJI_100.map((k) => ({
+  char: k.kanji,
+  reading: [k.onyomi.join(', '), k.kunyomi.join(', ')].filter(Boolean).join(' • '),
+  meaning: `${k.meaningEn} (${k.meaningBn})`,
+  strokes: k.strokeCount
+}));
 
 const ALL_46_HIRAGANA: CharacterItem[] = HIRAGANA_SEION.map((k) => ({
   char: k.char,
@@ -64,7 +59,7 @@ export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
   const [activeCategory, setActiveCategory] = useState<'hiragana' | 'katakana' | 'kanji'>(() => {
     if (isCustomList) return 'kanji';
     if (KATAKANA_SEION.some(k => k.char === initialCharacter)) return 'katakana';
-    if (DEFAULT_KANJI_CHARACTERS.some(k => k.char === initialCharacter)) return 'kanji';
+    if (ALL_100_N5_KANJI.some(k => k.char === initialCharacter)) return 'kanji';
     return 'hiragana';
   });
 
@@ -74,11 +69,11 @@ export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
     ? ALL_46_HIRAGANA
     : activeCategory === 'katakana'
     ? ALL_46_KATAKANA
-    : DEFAULT_KANJI_CHARACTERS;
+    : ALL_100_N5_KANJI;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedCharObj, setSelectedCharObj] = useState<CharacterItem>(() => {
-    const listToSearch = isCustomList ? characterList! : [...ALL_46_HIRAGANA, ...ALL_46_KATAKANA, ...DEFAULT_KANJI_CHARACTERS];
+    const listToSearch = isCustomList ? characterList! : [...ALL_46_HIRAGANA, ...ALL_46_KATAKANA, ...ALL_100_N5_KANJI];
     const found = listToSearch.find((c) => c.char === initialCharacter);
     return found || activeCharacters[0] || { char: initialCharacter, reading: '', meaning: '', strokes: 4 };
   });
@@ -311,8 +306,8 @@ export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
             type="button"
             onClick={() => {
               setActiveCategory('kanji');
-              setSelectedCharObj(DEFAULT_KANJI_CHARACTERS[0]);
-              speakJapanese(DEFAULT_KANJI_CHARACTERS[0].char, { rate: 0.85 });
+              setSelectedCharObj(ALL_100_N5_KANJI[0]);
+              speakJapanese(ALL_100_N5_KANJI[0].char, { rate: 0.85 });
             }}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeCategory === 'kanji'
@@ -320,7 +315,7 @@ export const CanvasWritingPractice: React.FC<CanvasWritingPracticeProps> = ({
                 : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
-            বেসিক কাঞ্জি (Kanji N5)
+            কাঞ্জি (Kanji N5 • 100)
           </button>
         </div>
       )}

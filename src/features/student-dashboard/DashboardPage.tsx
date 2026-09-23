@@ -245,7 +245,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 selection:bg-rose-100 selection:text-rose-900">
       <OfflineNotificationBanner />
-      <main className="max-w-md mx-auto sm:max-w-lg md:max-w-xl lg:max-w-2xl px-4 sm:px-6 pt-3 space-y-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-6">
         
         {viewState === 'loading' && <DashboardLoadingSkeleton />}
 
@@ -255,214 +255,234 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         {viewState === 'idle' && data && (
           <>
-            {/* ১. স্টুডেন্ট ওয়েলকাম ও আসল কয়েন/ক্রেডিট */}
-            <StudentHeader 
-              student={data.student} 
-              accountUsage={data.accountUsage} 
-              onOpenAiTutor={() => setIsAiTutorOpen(true)}
-              onOpenStore={() => setIsStoreOpen(true)}
-              onOpenUpgradePro={() => setIsProModalOpen(true)}
-              isPro={isPro}
-              activeStreak={data.streak.currentStreak}
-            />
+            {/* Top Full-Width Section: Student Header & Priority Banners */}
+            <div className="space-y-4">
+              {/* ১. স্টুডেন্ট ওয়েলকাম ও আসল কয়েন/ক্রেডিট */}
+              <StudentHeader 
+                student={data.student} 
+                accountUsage={data.accountUsage} 
+                onOpenAiTutor={() => setIsAiTutorOpen(true)}
+                onOpenStore={() => setIsStoreOpen(true)}
+                onOpenUpgradePro={() => setIsProModalOpen(true)}
+                isPro={isPro}
+                activeStreak={data.streak.currentStreak}
+              />
 
-            {/* Manual Payment (bKash/Nagad) Verification in Progress Alert */}
-            {pendingTrx && !isPro && (
-              <div id="banner-manual-payment-verifying" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 flex items-start gap-3 shadow-xs">
-                <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5 animate-pulse" />
-                <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-amber-950">
-                      পেমেন্ট ভেরিফিকেশন চলছে (Verification Pending)
-                    </span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900">
-                      TrxID: {pendingTrx.trxID || pendingTrx.id}
-                    </span>
-                  </div>
-                  <p className="text-stone-700 leading-relaxed">
-                    আপনার ম্যানুয়াল বিকাশ/নগদ পেমেন্টটি অ্যাডমিন প্যানেলে যাচাই করা হচ্ছে (সাধারণত ৫-১৫ মিনিটের মধ্যে অনুমোদিত হয়)। অনুমোদনের সাথে সাথে প্রো অ্যাক্সেস স্বয়ংক্রিয়ভাবে চালু হয়ে যাবে।
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Quick Sensei Search & Sensor Actions: Voice Coach, Photo OCR & Kanji */}
-            <section className="bg-white rounded-2xl p-3.5 sm:p-4 border border-stone-200/90 shadow-xs space-y-3" aria-label="Nihomi Sensei Tools">
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    id="input-dashboard-sensei-search"
-                    type="text"
-                    value={dashboardQuery}
-                    onChange={(e) => setDashboardQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleSenseiSearch();
-                    }}
-                    placeholder="Ask Sensei in English, বাংলা, or 日本語..."
-                    className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-900 placeholder:text-stone-400 focus:outline-hidden focus:border-stone-900 transition-colors"
-                  />
-                </div>
-                <button
-                  id="btn-dashboard-sensei-search"
-                  type="button"
-                  onClick={() => handleSenseiSearch()}
-                  disabled={isSearchingSensei || !dashboardQuery.trim()}
-                  className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
-                  aria-label="Send Query"
-                >
-                  {isSearchingSensei ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
-                </button>
-              </div>
-
-              {/* Action Buttons: [Voice], [Photo OCR], [Kanji Canvas] */}
-              <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 flex-wrap sm:flex-nowrap">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <button
-                    id="btn-dashboard-voice"
-                    type="button"
-                    onClick={() => setIsVoiceOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                  >
-                    <Mic className="w-3.5 h-3.5 text-red-600" />
-                    <span>Voice</span>
-                  </button>
-
-                  <button
-                    id="btn-dashboard-photo-ocr"
-                    type="button"
-                    onClick={() => setIsVisionOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                  >
-                    <Camera className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Photo OCR</span>
-                  </button>
-
-                  <button
-                    id="btn-dashboard-kanji-canvas"
-                    type="button"
-                    onClick={() => setIsWritingOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                  >
-                    <PenTool className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Kanji Canvas</span>
-                  </button>
-                </div>
-
-                <button
-                  id="btn-dashboard-open-ai-tutor"
-                  type="button"
-                  onClick={() => setIsAiTutorOpen(true)}
-                  className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  <span>AI Tutor</span>
-                </button>
-              </div>
-
-              {senseiSearchResult && (
-                <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs text-stone-800 space-y-1 animate-in fade-in">
-                  <div className="flex items-center justify-between font-bold text-[10px] text-stone-500 uppercase tracking-wider">
-                    <span>Nihomi Sensei Advice</span>
-                    <button
-                      type="button"
-                      onClick={() => setSenseiSearchResult(null)}
-                      className="text-stone-400 hover:text-stone-600 cursor-pointer"
-                    >
-                      ×
-                    </button>
-                  </div>
-                  <p className="leading-relaxed whitespace-pre-line">{senseiSearchResult}</p>
-                </div>
-              )}
-            </section>
-
-            {/* ১.৫. Nihomi Pro™ সাবস্ক্রিপশন কার্ড (Unlock All 25 Lessons) */}
-            {!isPro && (
-              <section
-                id="dashboard-pro-upgrade-card"
-                aria-label="Nihomi Pro Upgrade"
-                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/50 p-5 sm:p-6 shadow-xl text-white"
-              >
-                <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
-                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="space-y-1.5 max-w-md">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold uppercase tracking-wide">
-                      <Crown className="w-3 h-3 text-amber-400" />
-                      <span>Nihomi Pro™ • সম্পূর্ণ আনলক</span>
+              {/* Manual Payment (bKash/Nagad) Verification in Progress Alert */}
+              {pendingTrx && !isPro && (
+                <div id="banner-manual-payment-verifying" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 flex items-start gap-3 shadow-xs">
+                  <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5 animate-pulse" />
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-amber-950">
+                        পেমেন্ট ভেরিফিকেশন চলছে (Verification Pending)
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900">
+                        TrxID: {pendingTrx.trxID || pendingTrx.id}
+                      </span>
                     </div>
-                    <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
-                      ২৫টি সম্পূর্ণ JLPT N5 লেসন ও AI Sensei ভয়েস কোচ আনলক করুন
-                    </h3>
-                    <p className="text-xs text-stone-300 leading-relaxed">
-                      লেসন ০৬–২৫ এর সম্পূর্ণ ব্যাকরণ, আনলিমিটেড স্পিচ প্র্যাকটিস ও কাঞ্জি ড্রয়িং ক্যানভাস পেতে Pro নিন। মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর (bKash তাৎক্ষণিক অ্যাক্টিভেশন)।
+                    <p className="text-stone-700 leading-relaxed">
+                      আপনার ম্যানুয়াল বিকাশ/নগদ পেমেন্টটি অ্যাডমিন প্যানেলে যাচাই করা হচ্ছে (সাধারণত ৫-১৫ মিনিটের মধ্যে অনুমোদিত হয়)। অনুমোদনের সাথে সাথে প্রো অ্যাক্সেস স্বয়ংক্রিয়ভাবে চালু হয়ে যাবে।
                     </p>
                   </div>
+                </div>
+              )}
 
-                  <div className="shrink-0 w-full sm:w-auto">
+              {/* ১.৫. Nihomi Pro™ সাবস্ক্রিপশন কার্ড (Unlock Lessons 06 to 25) */}
+              {!isPro && (
+                <section
+                  id="dashboard-pro-upgrade-card"
+                  aria-label="Nihomi Pro Upgrade"
+                  className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/50 p-5 sm:p-6 shadow-xl text-white"
+                >
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
+                  <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="space-y-1.5 max-w-2xl">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold uppercase tracking-wide">
+                        <Crown className="w-3 h-3 text-amber-400" />
+                        <span>Nihomi Pro™ • সম্পূর্ণ আনলক</span>
+                      </div>
+                      <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
+                        লেসন ০১–০৫ ফ্রি • সম্পূর্ণ JLPT N5 এর লেসন ০৬–২৫ ও AI Sensei কোচ আনলক করুন
+                      </h3>
+                      <p className="text-xs text-stone-300 leading-relaxed">
+                        লেসন ০৬–২৫ এর সম্পূর্ণ ব্যাকরণ, আনলিমিটেড স্পিচ প্র্যাকটিস ও কাঞ্জি ড্রয়িং ক্যানভাস পেতে Pro নিন। মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর (bKash/Nagad ম্যানুয়াল ভেরিফিকেশন ও দ্রুত অ্যাক্টিভেশন)।
+                      </p>
+                    </div>
+
+                    <div className="shrink-0 w-full sm:w-auto">
+                      <button
+                        id="btn-dashboard-upgrade-pro"
+                        type="button"
+                        onClick={() => setIsProModalOpen(true)}
+                        className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+                      >
+                        <Crown className="w-4 h-4 text-stone-950 fill-stone-950" />
+                        <span>Upgrade to PRO</span>
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              )}
+            </div>
+
+            {/* Responsive Desktop 12-Column Grid (8 cols Main Learning, 4 cols Progress & Stats) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* Left Column: Primary Learning Flow (8 cols on desktop) */}
+              <div className="lg:col-span-8 space-y-6">
+                
+                {/* Quick Sensei Search & Sensor Actions: Voice Coach, Photo OCR & Kanji */}
+                <section className="bg-white rounded-2xl p-4 border border-stone-200/90 shadow-xs space-y-3" aria-label="Nihomi Sensei Tools">
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex-1">
+                      <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <input
+                        id="input-dashboard-sensei-search"
+                        type="text"
+                        value={dashboardQuery}
+                        onChange={(e) => setDashboardQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSenseiSearch();
+                        }}
+                        placeholder="Ask Sensei in English, বাংলা, or 日本語..."
+                        className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-900 placeholder:text-stone-400 focus:outline-hidden focus:border-stone-900 transition-colors"
+                      />
+                    </div>
                     <button
-                      id="btn-dashboard-upgrade-pro"
+                      id="btn-dashboard-sensei-search"
                       type="button"
-                      onClick={() => setIsProModalOpen(true)}
-                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+                      onClick={() => handleSenseiSearch()}
+                      disabled={isSearchingSensei || !dashboardQuery.trim()}
+                      className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
+                      aria-label="Send Query"
                     >
-                      <Crown className="w-4 h-4 text-stone-950 fill-stone-950" />
-                      <span>Upgrade to PRO</span>
+                      {isSearchingSensei ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                     </button>
                   </div>
-                </div>
-              </section>
-            )}
 
-            {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
-            <ContinueLearningCard
-              lesson={data.continueLesson}
-              onResumeLesson={handleResume}
-            />
+                  {/* Action Buttons: [Voice], [Photo OCR], [Kanji Canvas], [AI Tutor] */}
+                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 flex-wrap sm:flex-nowrap">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <button
+                        id="btn-dashboard-voice"
+                        type="button"
+                        onClick={() => setIsVoiceOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                      >
+                        <Mic className="w-3.5 h-3.5 text-red-600" />
+                        <span>Voice</span>
+                      </button>
 
-            {/* ৩. ইন্টারঅ্যাকটিভ আজকের লক্ষ্য (ক্লিক করলেই প্রগ্রেস বাড়ে) */}
-            <DailyPlan
-              planItems={data.dailyPlan}
-              onSelectTask={(id) => toggleDailyTask(id)}
-              onOpenVocabulary={() => setIsVocabularyOpen(true)}
-              onOpenListening={() => setIsListeningOpen(true)}
-            />
+                      <button
+                        id="btn-dashboard-photo-ocr"
+                        type="button"
+                        onClick={() => setIsVisionOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                      >
+                        <Camera className="w-3.5 h-3.5 text-blue-600" />
+                        <span>Photo OCR</span>
+                      </button>
 
-            {/* ৪. রিয়েল ডেইলি চ্যালেঞ্জ ও কয়েন পুরষ্কার */}
-            <DailyChallengeCard
-              challenge={data.dailyChallenge}
-              onCompleteChallenge={() => handleStartChallenge()}
-            />
+                      <button
+                        id="btn-dashboard-kanji-canvas"
+                        type="button"
+                        onClick={() => setIsWritingOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                      >
+                        <PenTool className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Kanji Canvas</span>
+                      </button>
+                    </div>
 
-            {/* ৫. শব্দ ও কাঞ্জি অগ্রগতি */}
-            <VocabKanjiProgress
-              vocabulary={data.vocabularyProgress}
-              kanji={data.kanjiProgress}
-              onPracticeKanji={() => setIsKanjiPracticeOpen(true)}
-              onPracticeVocabulary={() => setIsVocabularyOpen(true)}
-              onPracticeWriting={() => setIsWritingOpen(true)}
-            />
+                    <button
+                      id="btn-dashboard-open-ai-tutor"
+                      type="button"
+                      onClick={() => setIsAiTutorOpen(true)}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      <span>AI Tutor</span>
+                    </button>
+                  </div>
 
-            {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
-            <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
+                  {senseiSearchResult && (
+                    <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs text-stone-800 space-y-1 animate-in fade-in">
+                      <div className="flex items-center justify-between font-bold text-[10px] text-stone-500 uppercase tracking-wider">
+                        <span>Nihomi Sensei Advice</span>
+                        <button
+                          type="button"
+                          onClick={() => setSenseiSearchResult(null)}
+                          className="text-stone-400 hover:text-stone-600 cursor-pointer"
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <p className="leading-relaxed whitespace-pre-line">{senseiSearchResult}</p>
+                    </div>
+                  )}
+                </section>
 
-            <BaitoReadinessCard onLaunch={() => setIsConbiniOpen(true)} onLaunchConbini={() => setIsConbiniOpen(true)} readinessScore={baitoReadinessScore} />
+                {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
+                <ContinueLearningCard
+                  lesson={data.continueLesson}
+                  onResumeLesson={handleResume}
+                />
 
-            {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
-            <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
+                {/* ৩. ইন্টারঅ্যাকটিভ আজকের লক্ষ্য (ক্লিক করলেই প্রগ্রেস বাড়ে) */}
+                <DailyPlan
+                  planItems={data.dailyPlan}
+                  onSelectTask={(id) => toggleDailyTask(id)}
+                  onOpenVocabulary={() => setIsVocabularyOpen(true)}
+                  onOpenListening={() => setIsListeningOpen(true)}
+                />
 
-            {/* ৮. ভাইরাল রেফারেল ও রিওয়ার্ড লুপ (Invite Friends) */}
-            <InviteFriendsCard
-              studentId={data.student?.id}
-              studentName={data.student?.name}
-              nihomiAccountId={data.student?.nihomiAccountId}
-            />
+                {/* ৫. শব্দ ও কাঞ্জি অগ্রগতি */}
+                <VocabKanjiProgress
+                  vocabulary={data.vocabularyProgress}
+                  kanji={data.kanjiProgress}
+                  onPracticeKanji={() => setIsKanjiPracticeOpen(true)}
+                  onPracticeVocabulary={() => setIsVocabularyOpen(true)}
+                  onPracticeWriting={() => setIsWritingOpen(true)}
+                />
 
-            {/* ৯. ভুলের খাতা (MemoryOS) */}
-            <RecentMistakes
-              mistakes={data.recentMistakes}
-              onOpenMistakeBook={handleOpenMistakeBookClick}
-            />
+                {/* ৯. ভুলের খাতা (MemoryOS) */}
+                <RecentMistakes
+                  mistakes={data.recentMistakes}
+                  onOpenMistakeBook={handleOpenMistakeBookClick}
+                />
+              </div>
+
+              {/* Right Column: Gamification, Streaks, Tests & Community (4 cols on desktop) */}
+              <div className="lg:col-span-4 space-y-6">
+                {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
+                <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
+
+                {/* ৪. রিয়েল ডেইলি চ্যালেঞ্জ ও কয়েন পুরষ্কার */}
+                <DailyChallengeCard
+                  challenge={data.dailyChallenge}
+                  onCompleteChallenge={() => handleStartChallenge()}
+                />
+
+                {/* ৬. JLPT প্রস্তুতি রেডিনেস */}
+                <JLPTProgress progress={data.jlptProgress} onTakeMockExam={() => setIsMockExamOpen(true)} />
+
+                {/* বাইতো / পার্ট-টাইম প্রস্তুতি */}
+                <BaitoReadinessCard 
+                  onLaunch={() => setIsConbiniOpen(true)} 
+                  onLaunchConbini={() => setIsConbiniOpen(true)} 
+                  readinessScore={baitoReadinessScore} 
+                />
+
+                {/* ৮. ভাইরাল রেফারেল ও রিওয়ার্ড লুপ (Invite Friends) */}
+                <InviteFriendsCard
+                  studentId={data.student?.id}
+                  studentName={data.student?.name}
+                  nihomiAccountId={data.student?.nihomiAccountId}
+                />
+              </div>
+
+            </div>
           </>
         )}
 

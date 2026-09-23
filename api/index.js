@@ -8547,7 +8547,7 @@ var init_db = __esm({
         currency: "BDT",
         aiMonthlyLimit: 10,
         features: [
-          "N5 introductory lessons & foundational kana",
+          "N5 introductory lessons (Lessons 01-05 completely free) & all 46 Kana",
           "Essential vocabulary & grammar previews",
           "Basic practice quizzes",
           "10 AI Coach interactions / month",
@@ -15003,6 +15003,221 @@ var init_db = __esm({
   }
 });
 
+// server/middleware/supabaseAuth.ts
+var supabaseAuth_exports = {};
+__export(supabaseAuth_exports, {
+  authenticateUser: () => authenticateUser,
+  getSupabaseAdminClient: () => getSupabaseAdminClient,
+  optionalAuth: () => optionalAuth,
+  requireAuth: () => requireAuth,
+  requireRole: () => requireRole,
+  verifyResourceOwnership: () => verifyResourceOwnership
+});
+import { createClient as createClient2 } from "@supabase/supabase-js";
+function getSupabaseAdminClient() {
+  if (supabaseClientInstance) {
+    return supabaseClientInstance;
+  }
+  const rawUrl2 = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim();
+  const supabaseUrl2 = rawUrl2 && !rawUrl2.includes("placeholder") ? rawUrl2 : "https://aiychtkhktwsjrieeaha.supabase.co";
+  const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || "").trim();
+  const supabaseAnonKey2 = (process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || "sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t").trim();
+  const activeKey = supabaseServiceKey || supabaseAnonKey2;
+  if (!supabaseUrl2 || !activeKey) {
+    const errorMsg = "[SupabaseAuth] Missing required Supabase credentials (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY).";
+    if (process.env.NODE_ENV === "production") {
+      console.error(`[CRITICAL SECURITY FATAL] ${errorMsg}`);
+    } else {
+      console.warn(`[SupabaseAuth Warning] ${errorMsg} Running in degraded mode.`);
+    }
+    throw new Error(errorMsg);
+  }
+  if (!supabaseServiceKey && supabaseAnonKey2) {
+    console.warn(
+      "[SupabaseAuth Warning] SUPABASE_SERVICE_ROLE_KEY is not set; falling back to SUPABASE_ANON_KEY for JWT validation."
+    );
+  }
+  supabaseClientInstance = createClient2(supabaseUrl2, activeKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+  return supabaseClientInstance;
+}
+function extractBearerToken(req) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || typeof authHeader !== "string") {
+    return null;
+  }
+  const parts = authHeader.trim().split(/\s+/);
+  if (parts.length === 2 && /^Bearer$/i.test(parts[0])) {
+    return parts[1].trim();
+  }
+  if (parts.length === 1 && parts[0].includes(".")) {
+    return parts[0].trim();
+  }
+  return null;
+}
+function mapSupabaseUserToAuthenticatedUser(supabaseUser) {
+  const appMeta = supabaseUser.app_metadata || {};
+  const userMeta = supabaseUser.user_metadata || {};
+  const email = supabaseUser.email || userMeta.email || "";
+  const rawRole = appMeta.role || userMeta.role || appMeta.user_role || "STUDENT";
+  const isFounder = email.toLowerCase() === "mdtanvirkabirbiplob@gmail.com";
+  let normalizedRole = rawRole.toUpperCase();
+  if (isFounder) {
+    normalizedRole = "ADMIN";
+  } else if (normalizedRole === "USER" || normalizedRole === "LEARNER") {
+    normalizedRole = "STUDENT";
+  } else if (normalizedRole === "INSTRUCTOR" || normalizedRole === "STAFF") {
+    normalizedRole = "TEACHER";
+  }
+  const studentId = appMeta.student_id || appMeta.studentId || userMeta.student_id || userMeta.studentId || userMeta.nhm_id || void 0;
+  return {
+    id: supabaseUser.id,
+    email,
+    role: normalizedRole,
+    studentId,
+    metadata: {
+      ...appMeta,
+      ...userMeta
+    },
+    rawUser: supabaseUser
+  };
+}
+async function requireAuth(req, res, next) {
+  const token = extractBearerToken(req);
+  if (!token) {
+    res.status(401).json({
+      success: false,
+      error: "UNAUTHORIZED",
+      message: "Bearer token required"
+    });
+    return;
+  }
+  let supabase3;
+  try {
+    supabase3 = getSupabaseAdminClient();
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: "INTERNAL_SERVER_ERROR",
+      message: "Authentication service configuration error"
+    });
+    return;
+  }
+  try {
+    const { data, error } = await supabase3.auth.getUser(token);
+    if (error || !data?.user) {
+      res.status(401).json({
+        success: false,
+        error: "UNAUTHORIZED",
+        message: error?.message || "Invalid, expired, or revoked token"
+      });
+      return;
+    }
+    req.user = mapSupabaseUserToAuthenticatedUser(data.user);
+    next();
+  } catch (err) {
+    console.error("[SupabaseAuth] Token validation exception:", err);
+    res.status(401).json({
+      success: false,
+      error: "UNAUTHORIZED",
+      message: "Token verification failed"
+    });
+  }
+}
+async function optionalAuth(req, _res, next) {
+  const token = extractBearerToken(req);
+  if (!token) {
+    return next();
+  }
+  try {
+    const supabase3 = getSupabaseAdminClient();
+    const { data, error } = await supabase3.auth.getUser(token);
+    if (!error && data?.user) {
+      req.user = mapSupabaseUserToAuthenticatedUser(data.user);
+    }
+  } catch {
+  }
+  next();
+}
+function requireRole(allowedRoles) {
+  const rolesList = (Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]).map(
+    (r) => r.toUpperCase()
+  );
+  return (req, res, next) => {
+    if (!req.user) {
+      res.status(401).json({
+        success: false,
+        error: "UNAUTHORIZED",
+        message: "Authentication required"
+      });
+      return;
+    }
+    const currentRole = (req.user.role || "").toUpperCase();
+    const isAuthorized = rolesList.includes(currentRole);
+    if (!isAuthorized) {
+      res.status(403).json({
+        success: false,
+        error: "FORBIDDEN",
+        message: `Forbidden: Access restricted to [${rolesList.join(", ")}] roles`,
+        currentRole: req.user.role,
+        requiredRoles: rolesList
+      });
+      return;
+    }
+    next();
+  };
+}
+function verifyResourceOwnership(paramName = "userId", options = { allowBypassRoles: ["ADMIN", "TEACHER"] }) {
+  const bypassRoles = (options.allowBypassRoles || []).map((r) => r.toUpperCase());
+  return (req, res, next) => {
+    if (!req.user) {
+      res.status(401).json({
+        success: false,
+        error: "UNAUTHORIZED",
+        message: "Authentication required"
+      });
+      return;
+    }
+    const currentRole = (req.user.role || "").toUpperCase();
+    if (bypassRoles.includes(currentRole)) {
+      return next();
+    }
+    const targetUserId = req.params[paramName] || req.query[paramName];
+    if (!targetUserId) {
+      res.status(400).json({
+        success: false,
+        error: "BAD_REQUEST",
+        message: `Missing required resource parameter: :${paramName}`
+      });
+      return;
+    }
+    if (targetUserId !== req.user.id) {
+      console.warn(
+        `[Tenant Isolation Violation] User ${req.user.id} (${req.user.email}) attempted unauthorized access to resource belonging to ${targetUserId}`
+      );
+      res.status(403).json({
+        success: false,
+        error: "FORBIDDEN",
+        message: "Resource access denied. You are only authorized to access your own student data."
+      });
+      return;
+    }
+    next();
+  };
+}
+var supabaseClientInstance, authenticateUser;
+var init_supabaseAuth = __esm({
+  "server/middleware/supabaseAuth.ts"() {
+    supabaseClientInstance = null;
+    authenticateUser = requireAuth;
+  }
+});
+
 // server/supabase.ts
 var supabase_exports = {};
 __export(supabase_exports, {
@@ -15012,13 +15227,13 @@ __export(supabase_exports, {
   getSupabase: () => getSupabase,
   supabase: () => supabase
 });
-import { createClient as createClient2 } from "@supabase/supabase-js";
+import { createClient as createClient3 } from "@supabase/supabase-js";
 function getSupabase() {
   if (serverSupabaseClient) {
     return serverSupabaseClient;
   }
   const activeKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-  serverSupabaseClient = createClient2(SUPABASE_URL, activeKey, {
+  serverSupabaseClient = createClient3(SUPABASE_URL, activeKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -16053,7 +16268,7 @@ function createSessionToken(user) {
 }
 function revokeSessionToken(_token) {
 }
-function extractBearerToken(req) {
+function extractBearerToken2(req) {
   const authHeader = req.headers?.authorization;
   if (!authHeader || typeof authHeader !== "string") {
     return null;
@@ -16101,15 +16316,82 @@ function getUserFromToken(token) {
     return null;
   }
 }
-function requireAuth(req, res, next) {
-  const token = extractBearerToken(req);
+var verifiedTokenCache = /* @__PURE__ */ new Map();
+async function verifySupabaseTokenAsync(token) {
+  if (!token || typeof token !== "string") return null;
+  const cleanToken = token.replace(/^Bearer\s+/i, "").trim();
+  if (!cleanToken || cleanToken.split(".").length !== 3) return null;
+  const cached = verifiedTokenCache.get(cleanToken);
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.user;
+  }
+  try {
+    const { getSupabaseAdminClient: getSupabaseAdminClient2 } = await Promise.resolve().then(() => (init_supabaseAuth(), supabaseAuth_exports));
+    const supabase3 = getSupabaseAdminClient2();
+    const { data, error } = await supabase3.auth.getUser(cleanToken);
+    if (error || !data?.user) {
+      return null;
+    }
+    const u = data.user;
+    const email = (u.email || u.user_metadata?.email || "").toLowerCase().trim();
+    const isFounder = email === "mdtanvirkabirbiplob@gmail.com";
+    const appMeta = u.app_metadata || {};
+    const userMeta = u.user_metadata || {};
+    const rawRole = (appMeta.role || userMeta.role || "").toLowerCase();
+    let role = "user";
+    if (isFounder || rawRole === "admin" || rawRole === "founder") role = "admin";
+    else if (rawRole === "instructor" || rawRole === "teacher") role = "instructor";
+    let user = db.findUserById(u.id);
+    if (!user && email) {
+      user = db.findUserByEmail(email);
+    }
+    if (!user) {
+      user = db.ensureUserExists({
+        id: u.id,
+        email: email || `user-${u.id.slice(0, 8)}@nihomi.com`,
+        role
+      });
+    } else if (user.role !== role) {
+      user.role = role;
+      try {
+        db.save();
+      } catch {
+      }
+    }
+    const authUser = {
+      id: u.id,
+      email: user?.email || email,
+      role,
+      passwordHash: user?.passwordHash,
+      passwordSalt: user?.passwordSalt,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
+      resetToken: user?.resetToken,
+      resetTokenExpiry: user?.resetTokenExpiry
+    };
+    verifiedTokenCache.set(cleanToken, {
+      user: authUser,
+      expiresAt: Date.now() + 5 * 60 * 1e3
+    });
+    return authUser;
+  } catch {
+    return null;
+  }
+}
+async function resolveUserFromTokenAsync(token) {
+  const syncUser = getUserFromToken(token);
+  if (syncUser) return syncUser;
+  return verifySupabaseTokenAsync(token);
+}
+async function requireAuth2(req, res, next) {
+  const token = extractBearerToken2(req);
   if (!token) {
     return res.status(401).json({
       error: "Unauthorized. Bearer token missing in Authorization header.",
       code: "AUTH_REQUIRED"
     });
   }
-  const user = getUserFromToken(token);
+  const user = await resolveUserFromTokenAsync(token);
   if (!user) {
     return res.status(401).json({
       error: "Unauthorized. Invalid or expired authentication token.",
@@ -16120,10 +16402,10 @@ function requireAuth(req, res, next) {
   req.authContext = { user, token };
   next();
 }
-function optionalAuth(req, _res, next) {
-  const token = extractBearerToken(req);
+async function optionalAuth2(req, _res, next) {
+  const token = extractBearerToken2(req);
   if (token) {
-    const user = getUserFromToken(token);
+    const user = await resolveUserFromTokenAsync(token);
     if (user) {
       req.user = user;
       req.authContext = { user, token };
@@ -16131,15 +16413,15 @@ function optionalAuth(req, _res, next) {
   }
   next();
 }
-function requireAdmin(req, res, next) {
-  const token = extractBearerToken(req);
+async function requireAdmin(req, res, next) {
+  const token = extractBearerToken2(req);
   if (!token) {
     return res.status(401).json({
       error: "Unauthorized. Bearer token missing in Authorization header.",
       code: "AUTH_REQUIRED"
     });
   }
-  const user = getUserFromToken(token);
+  const user = await resolveUserFromTokenAsync(token);
   if (!user) {
     return res.status(401).json({
       error: "Unauthorized. Invalid or expired authentication token.",
@@ -16159,17 +16441,17 @@ function requireAdmin(req, res, next) {
   req.authContext = { user, token };
   next();
 }
-function requireRole(allowedRoles) {
+function requireRole2(allowedRoles) {
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
-  return (req, res, next) => {
-    const token = extractBearerToken(req);
+  return async (req, res, next) => {
+    const token = extractBearerToken2(req);
     if (!token) {
       return res.status(401).json({
         error: "Unauthorized. Bearer token missing in Authorization header.",
         code: "AUTH_REQUIRED"
       });
     }
-    const user = getUserFromToken(token);
+    const user = await resolveUserFromTokenAsync(token);
     if (!user) {
       return res.status(401).json({
         error: "Unauthorized. Invalid or expired authentication token.",
@@ -16187,8 +16469,8 @@ function requireRole(allowedRoles) {
     next();
   };
 }
-var requireStaff = requireRole(["admin", "instructor"]);
-var authenticateUser = requireAuth;
+var requireStaff = requireRole2(["admin", "instructor"]);
+var authenticateUser2 = requireAuth2;
 
 // server/services/googleAuth.ts
 import { OAuth2Client } from "google-auth-library";
@@ -16371,7 +16653,7 @@ authRouter.post("/login", (req, res) => {
     return res.status(500).json({ error: "Login failed." });
   }
 });
-authRouter.post("/switch-view-mode", requireAuth, (req, res) => {
+authRouter.post("/switch-view-mode", requireAuth2, (req, res) => {
   const { targetMode } = req.body;
   const user = req.user;
   if (user.role !== "admin" && user.role !== "instructor") {
@@ -16383,9 +16665,9 @@ authRouter.post("/switch-view-mode", requireAuth, (req, res) => {
     message: `Switched operational view mode to: ${targetMode ? targetMode.toUpperCase() : "STUDENT"}`
   });
 });
-authRouter.get("/me", (req, res) => {
-  const token = extractBearerToken(req);
-  const user = token ? getUserFromToken(token) : null;
+authRouter.get("/me", async (req, res) => {
+  const token = extractBearerToken2(req);
+  const user = token ? await resolveUserFromTokenAsync(token) : null;
   if (!user) {
     return res.status(200).json({
       authenticated: false,
@@ -16405,8 +16687,10 @@ authRouter.get("/me", (req, res) => {
   }
   const profile = db.getProfileByUserId(user.id);
   const progress = db.getProgressByUserId(user.id);
+  const sessionToken = createSessionToken(user);
   return res.json({
     authenticated: true,
+    token: sessionToken,
     user: {
       id: user.id,
       email: user.email,
@@ -16460,7 +16744,7 @@ authRouter.post("/reset-password-confirm", (req, res) => {
   }
   return res.json({ success: true, message: "Password has been reset successfully. You may now log in." });
 });
-authRouter.put("/profile", requireAuth, (req, res) => {
+authRouter.put("/profile", requireAuth2, (req, res) => {
   const user = req.user;
   const { displayName, targetLevel, dailyGoalMinutes, bio, nativeLanguage } = req.body;
   const updatedProfile = db.updateProfile(user.id, {
@@ -16477,7 +16761,7 @@ authRouter.put("/profile", requireAuth, (req, res) => {
   }
   return res.json({ profile: updatedProfile });
 });
-authRouter.put("/password", requireAuth, (req, res) => {
+authRouter.put("/password", requireAuth2, (req, res) => {
   const user = req.user;
   const { currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword) {
@@ -16499,7 +16783,7 @@ init_db();
 import { Router as Router2 } from "express";
 init_subscriptionService();
 var learningRouter = Router2();
-learningRouter.get("/courses", optionalAuth, (req, res) => {
+learningRouter.get("/courses", optionalAuth2, (req, res) => {
   const level = req.query.level;
   const courses = db.getCourses(false, level);
   const enriched = courses.map((course) => {
@@ -16513,7 +16797,7 @@ learningRouter.get("/courses", optionalAuth, (req, res) => {
   });
   return res.json({ courses: enriched });
 });
-learningRouter.get("/courses/:id", optionalAuth, (req, res) => {
+learningRouter.get("/courses/:id", optionalAuth2, (req, res) => {
   const course = db.getCourseById(req.params.id);
   if (!course || !course.isPublished) {
     return res.status(404).json({ error: "Course not found" });
@@ -16550,17 +16834,17 @@ learningRouter.get("/courses/:id", optionalAuth, (req, res) => {
     userProgress
   });
 });
-learningRouter.get("/lessons", optionalAuth, (req, res) => {
+learningRouter.get("/lessons", optionalAuth2, (req, res) => {
   const level = req.query.level;
   const lessons = db.getLessons(false, level);
   return res.json({ lessons });
 });
-learningRouter.get("/lessons/:id", optionalAuth, async (req, res) => {
+learningRouter.get("/lessons/:id", optionalAuth2, async (req, res) => {
   const lesson = db.getLessonById(req.params.id);
   if (!lesson || !lesson.isPublished) {
     return res.status(404).json({ error: "Lesson not found" });
   }
-  if (lesson.lessonNumber > 1) {
+  if (lesson.lessonNumber > 5) {
     const identifier = req.user?.id || req.user?.email || req.headers["x-user-id"] || req.query.userId;
     if (!identifier) {
       return res.status(402).json({
@@ -16569,7 +16853,7 @@ learningRouter.get("/lessons/:id", optionalAuth, async (req, res) => {
         error: "Subscription Required",
         requiredTier: "n5_pro",
         currentTier: "free",
-        message: "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09B2\u09C7\u09B8\u09A8 \u09E8 \u09A5\u09C7\u0995\u09C7 \u09E8\u09EB \u0986\u09A8\u09B2\u0995 \u0995\u09B0\u09A4\u09C7 N5 \u09AA\u09CD\u09B0\u09CB \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u0964"
+        message: "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09B2\u09C7\u09B8\u09A8 \u09E6\u09EC \u09A5\u09C7\u0995\u09C7 \u09E8\u09EB \u0986\u09A8\u09B2\u0995 \u0995\u09B0\u09A4\u09C7 N5 \u09AA\u09CD\u09B0\u09CB \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8 (\u09B2\u09C7\u09B8\u09A8 \u09E6\u09E7\u2013\u09E6\u09EB \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AB\u09CD\u09B0\u09BF)\u0964"
       });
     }
     const access = await subscriptionService.canAccess(identifier, "n5_pro");
@@ -16580,7 +16864,7 @@ learningRouter.get("/lessons/:id", optionalAuth, async (req, res) => {
         error: "Subscription Required",
         requiredTier: "n5_pro",
         currentTier: access.currentTier,
-        message: access.reason || "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u0993 \u09AA\u09BE\u09A0\u09B8\u09AE\u09C2\u09B9 \u0986\u09A8\u09B2\u0995 \u0995\u09B0\u09A4\u09C7 N5 \u09AA\u09CD\u09B0\u09CB \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u0964"
+        message: access.reason || "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u0993 \u09B2\u09C7\u09B8\u09A8 \u09E6\u09EC\u2013\u09E8\u09EB \u0986\u09A8\u09B2\u0995 \u0995\u09B0\u09A4\u09C7 N5 \u09AA\u09CD\u09B0\u09CB \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8 (\u09B2\u09C7\u09B8\u09A8 \u09E6\u09E7\u2013\u09E6\u09EB \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AB\u09CD\u09B0\u09BF)\u0964"
       });
     }
   }
@@ -16611,7 +16895,7 @@ learningRouter.get("/lessons/:id", optionalAuth, async (req, res) => {
     userQuizAttempt
   });
 });
-learningRouter.get("/progress", requireAuth, (req, res) => {
+learningRouter.get("/progress", requireAuth2, (req, res) => {
   const progress = db.getProgressByUserId(req.user.id);
   const profile = db.getProfileByUserId(req.user.id);
   const quizAttempts = db.getUserQuizAttempts(req.user.id);
@@ -16653,7 +16937,7 @@ learningRouter.get("/progress", requireAuth, (req, res) => {
     } : null
   });
 });
-learningRouter.post("/progress/complete-lesson", requireAuth, (req, res) => {
+learningRouter.post("/progress/complete-lesson", requireAuth2, (req, res) => {
   const { lessonId, studyMinutes } = req.body;
   if (!lessonId) {
     return res.status(400).json({ error: "lessonId is required" });
@@ -16669,7 +16953,7 @@ learningRouter.post("/progress/complete-lesson", requireAuth, (req, res) => {
     message: "Lesson completed! Progress saved."
   });
 });
-learningRouter.post("/progress/set-current", requireAuth, (req, res) => {
+learningRouter.post("/progress/set-current", requireAuth2, (req, res) => {
   const { lessonId } = req.body;
   if (!lessonId) {
     return res.status(400).json({ error: "lessonId is required" });
@@ -16677,7 +16961,7 @@ learningRouter.post("/progress/set-current", requireAuth, (req, res) => {
   const updatedProgress = db.setCurrentLesson(req.user.id, lessonId);
   return res.json({ success: true, progress: updatedProgress });
 });
-learningRouter.post("/progress/add-study-time", requireAuth, (req, res) => {
+learningRouter.post("/progress/add-study-time", requireAuth2, (req, res) => {
   const { minutes, xp } = req.body;
   const numMinutes = Number(minutes) || 0;
   if (numMinutes <= 0) {
@@ -16690,7 +16974,7 @@ learningRouter.post("/progress/add-study-time", requireAuth, (req, res) => {
     message: `${numMinutes} minutes of focused study time saved! +${Math.round(numMinutes * 2)} XP earned.`
   });
 });
-learningRouter.get("/community/leaderboard", optionalAuth, (req, res) => {
+learningRouter.get("/community/leaderboard", optionalAuth2, (req, res) => {
   const filter = req.query.filter || "week";
   let currentUser = null;
   let currentProgress = null;
@@ -16874,7 +17158,7 @@ learningRouter.get("/n5-lessons", async (_req, res) => {
   const { fullN5Lessons: fullN5Lessons2 } = await Promise.resolve().then(() => (init_seedData(), seedData_exports));
   return res.json({ success: true, lessons: fullN5Lessons2 });
 });
-learningRouter.get("/notifications", optionalAuth, (req, res) => {
+learningRouter.get("/notifications", optionalAuth2, (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 20;
   const notifications = db.getStudentNotifications(limit);
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -16884,11 +17168,11 @@ learningRouter.get("/notifications", optionalAuth, (req, res) => {
     unreadCount
   });
 });
-learningRouter.post("/notifications/:id/read", optionalAuth, (req, res) => {
+learningRouter.post("/notifications/:id/read", optionalAuth2, (req, res) => {
   db.markNotificationAsRead(req.params.id);
   return res.json({ success: true, message: "Notification marked as read." });
 });
-learningRouter.post("/progress/record-mistake", optionalAuth, (req, res) => {
+learningRouter.post("/progress/record-mistake", optionalAuth2, (req, res) => {
   try {
     const { userId: bodyUserId, itemType, conceptId, studentAnswer, correctAnswer, notes } = req.body;
     const targetUserId = bodyUserId || req.user?.id;
@@ -16926,7 +17210,7 @@ learningRouter.post("/progress/record-mistake", optionalAuth, (req, res) => {
     });
   }
 });
-learningRouter.get("/progress/weak-areas/:userId", optionalAuth, (req, res) => {
+learningRouter.get("/progress/weak-areas/:userId", optionalAuth2, (req, res) => {
   try {
     const targetUserId = req.params.userId || req.user?.id || "usr-demo";
     const data = db.getWeakAreas(targetUserId);
@@ -16960,7 +17244,7 @@ learningRouter.get("/progress/weak-areas/:userId", optionalAuth, (req, res) => {
     });
   }
 });
-learningRouter.get("/progress/weak-areas", optionalAuth, (req, res) => {
+learningRouter.get("/progress/weak-areas", optionalAuth2, (req, res) => {
   try {
     const targetUserId = req.user?.id || "usr-demo";
     const data = db.getWeakAreas(targetUserId);
@@ -16994,7 +17278,7 @@ learningRouter.get("/progress/weak-areas", optionalAuth, (req, res) => {
     });
   }
 });
-learningRouter.post("/progress/record-activity", optionalAuth, (req, res) => {
+learningRouter.post("/progress/record-activity", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "usr-demo";
     const { activity, xpGained } = req.body || {};
@@ -17012,7 +17296,7 @@ learningRouter.post("/progress/record-activity", optionalAuth, (req, res) => {
     });
   }
 });
-learningRouter.get("/progress/streak", optionalAuth, (req, res) => {
+learningRouter.get("/progress/streak", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "usr-demo";
     const progress = db.getProgress(userId);
@@ -17037,7 +17321,7 @@ learningRouter.get("/progress/streak", optionalAuth, (req, res) => {
 init_db();
 import { Router as Router3 } from "express";
 var quizzesRouter = Router3();
-quizzesRouter.get("/", optionalAuth, (req, res) => {
+quizzesRouter.get("/", optionalAuth2, (req, res) => {
   const level = req.query.level;
   const quizzes = db.getQuizzes(false, level);
   const summary = quizzes.map((q) => ({
@@ -17052,7 +17336,7 @@ quizzesRouter.get("/", optionalAuth, (req, res) => {
   }));
   return res.json({ quizzes: summary });
 });
-quizzesRouter.get("/:id", optionalAuth, (req, res) => {
+quizzesRouter.get("/:id", optionalAuth2, (req, res) => {
   const quiz = db.getQuizById(req.params.id);
   if (!quiz || !quiz.isPublished) {
     return res.status(404).json({ error: "Quiz not found" });
@@ -17083,7 +17367,7 @@ quizzesRouter.get("/:id", optionalAuth, (req, res) => {
     userPastAttempts
   });
 });
-quizzesRouter.post("/:id/submit", requireAuth, (req, res) => {
+quizzesRouter.post("/:id/submit", requireAuth2, (req, res) => {
   try {
     const { answers } = req.body;
     if (!answers || !Array.isArray(answers)) {
@@ -17117,7 +17401,7 @@ quizzesRouter.post("/:id/submit", requireAuth, (req, res) => {
     return res.status(500).json({ error: error.message || "Failed to submit quiz" });
   }
 });
-quizzesRouter.get("/attempts/history", requireAuth, (req, res) => {
+quizzesRouter.get("/attempts/history", requireAuth2, (req, res) => {
   const attempts = db.getUserQuizAttempts(req.user.id);
   const enriched = attempts.map((att) => {
     const quiz = db.getQuizById(att.quizId);
@@ -17133,7 +17417,7 @@ quizzesRouter.get("/attempts/history", requireAuth, (req, res) => {
 init_db();
 import { Router as Router4 } from "express";
 var workRouter = Router4();
-workRouter.get("/", optionalAuth, (req, res) => {
+workRouter.get("/", optionalAuth2, (req, res) => {
   const category = req.query.category;
   const items = db.getWorkJapanese(category, false);
   const categories = [
@@ -17160,7 +17444,7 @@ workRouter.get("/", optionalAuth, (req, res) => {
     }))
   });
 });
-workRouter.get("/:id", optionalAuth, (req, res) => {
+workRouter.get("/:id", optionalAuth2, (req, res) => {
   let item = db.getWorkJapaneseById(req.params.id);
   if (!item) {
     const all = db.getWorkJapanese(void 0, false);
@@ -17988,7 +18272,7 @@ import crypto5 from "crypto";
 var aiRouter = Router5();
 aiRouter.post(
   "/coach",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "coach", estimatedTokens: 1e3 }),
   async (req, res) => {
     try {
@@ -18071,7 +18355,7 @@ aiRouter.post(
 );
 aiRouter.post(
   "/vision-sensei",
-  optionalAuth,
+  optionalAuth2,
   aiCostGuard({ operationType: "vision", estimatedTokens: 1500, allowGuest: true }),
   async (req, res) => {
     try {
@@ -18107,7 +18391,7 @@ aiRouter.post(
 );
 aiRouter.post(
   "/sentence-dna",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "dna", estimatedTokens: 600 }),
   async (req, res) => {
     try {
@@ -18154,13 +18438,13 @@ aiRouter.get("/credits/packs", (_req, res) => {
   ];
   return res.json({ success: true, packs });
 });
-aiRouter.get("/sessions", requireAuth, (req, res) => {
+aiRouter.get("/sessions", requireAuth2, (req, res) => {
   const sessions = db.getAISessions(req.user.id);
   return res.json(sessions);
 });
 aiRouter.post(
   "/endless-drills",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "drill", estimatedTokens: 1200 }),
   async (req, res) => {
     try {
@@ -18176,7 +18460,7 @@ aiRouter.post(
     }
   }
 );
-aiRouter.post("/example-sentence", optionalAuth, async (req, res) => {
+aiRouter.post("/example-sentence", optionalAuth2, async (req, res) => {
   try {
     const { word, reading, jlptLevel } = req.body;
     if (!word || typeof word !== "string") {
@@ -18196,7 +18480,7 @@ aiRouter.post("/example-sentence", optionalAuth, async (req, res) => {
     return res.status(500).json({ error: "Failed to generate example sentence." });
   }
 });
-aiRouter.post("/explain-mistake", optionalAuth, async (req, res) => {
+aiRouter.post("/explain-mistake", optionalAuth2, async (req, res) => {
   try {
     const { question, questionJa, selectedOption, correctOption, allOptions, userLevel, conceptCode } = req.body;
     if (!question || !selectedOption || !correctOption) {
@@ -18222,7 +18506,7 @@ aiRouter.post("/explain-mistake", optionalAuth, async (req, res) => {
 });
 aiRouter.post(
   "/pronunciation-assessment",
-  optionalAuth,
+  optionalAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 800, allowGuest: true }),
   async (req, res) => {
     try {
@@ -18251,7 +18535,7 @@ aiRouter.post(
 );
 aiRouter.post(
   "/study-schedule",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "explainer", estimatedTokens: 1500 }),
   async (req, res) => {
     try {
@@ -19745,10 +20029,10 @@ init_db();
 import { Router as Router7 } from "express";
 
 // server/middleware/rbac.ts
-function requireRole2(allowedRoles, options = {}) {
+function requireRole3(allowedRoles, options = {}) {
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
   return (req, res, next) => {
-    const token = extractBearerToken(req);
+    const token = extractBearerToken2(req);
     const user = req.user || (token ? getUserFromToken(token) : null);
     if (!user) {
       return res.status(401).json({
@@ -19782,7 +20066,7 @@ function requireRole2(allowedRoles, options = {}) {
   };
 }
 function requireFounder(req, res, next) {
-  const token = extractBearerToken(req);
+  const token = extractBearerToken2(req);
   const user = req.user || (token ? getUserFromToken(token) : null);
   if (!user) {
     return res.status(401).json({
@@ -19803,197 +20087,15 @@ function requireFounder(req, res, next) {
   req.user = user;
   return next();
 }
-var requireAdmin2 = requireRole2("admin", {
+var requireAdmin2 = requireRole3("admin", {
   errorMessage: "Forbidden. Administrator privileges required."
 });
-var requireStaff2 = requireRole2(["admin", "instructor"], {
+var requireStaff2 = requireRole3(["admin", "instructor"], {
   errorMessage: "Forbidden. Staff or instructor credentials required."
 });
 
-// server/middleware/supabaseAuth.ts
-import { createClient as createClient3 } from "@supabase/supabase-js";
-var supabaseClientInstance = null;
-function getSupabaseAdminClient() {
-  if (supabaseClientInstance) {
-    return supabaseClientInstance;
-  }
-  const rawUrl2 = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim();
-  const supabaseUrl2 = rawUrl2 && !rawUrl2.includes("placeholder") ? rawUrl2 : "https://aiychtkhktwsjrieeaha.supabase.co";
-  const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || "").trim();
-  const supabaseAnonKey2 = (process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || "sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t").trim();
-  const activeKey = supabaseServiceKey || supabaseAnonKey2;
-  if (!supabaseUrl2 || !activeKey) {
-    const errorMsg = "[SupabaseAuth] Missing required Supabase credentials (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY).";
-    if (process.env.NODE_ENV === "production") {
-      console.error(`[CRITICAL SECURITY FATAL] ${errorMsg}`);
-    } else {
-      console.warn(`[SupabaseAuth Warning] ${errorMsg} Running in degraded mode.`);
-    }
-    throw new Error(errorMsg);
-  }
-  if (!supabaseServiceKey && supabaseAnonKey2) {
-    console.warn(
-      "[SupabaseAuth Warning] SUPABASE_SERVICE_ROLE_KEY is not set; falling back to SUPABASE_ANON_KEY for JWT validation."
-    );
-  }
-  supabaseClientInstance = createClient3(supabaseUrl2, activeKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false
-    }
-  });
-  return supabaseClientInstance;
-}
-function extractBearerToken2(req) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || typeof authHeader !== "string") {
-    return null;
-  }
-  const parts = authHeader.trim().split(/\s+/);
-  if (parts.length === 2 && /^Bearer$/i.test(parts[0])) {
-    return parts[1].trim();
-  }
-  if (parts.length === 1 && parts[0].includes(".")) {
-    return parts[0].trim();
-  }
-  return null;
-}
-function mapSupabaseUserToAuthenticatedUser(supabaseUser) {
-  const appMeta = supabaseUser.app_metadata || {};
-  const userMeta = supabaseUser.user_metadata || {};
-  const email = supabaseUser.email || userMeta.email || "";
-  const rawRole = appMeta.role || userMeta.role || appMeta.user_role || "STUDENT";
-  const isFounder = email.toLowerCase() === "mdtanvirkabirbiplob@gmail.com";
-  let normalizedRole = rawRole.toUpperCase();
-  if (isFounder) {
-    normalizedRole = "ADMIN";
-  } else if (normalizedRole === "USER" || normalizedRole === "LEARNER") {
-    normalizedRole = "STUDENT";
-  } else if (normalizedRole === "INSTRUCTOR" || normalizedRole === "STAFF") {
-    normalizedRole = "TEACHER";
-  }
-  const studentId = appMeta.student_id || appMeta.studentId || userMeta.student_id || userMeta.studentId || userMeta.nhm_id || void 0;
-  return {
-    id: supabaseUser.id,
-    email,
-    role: normalizedRole,
-    studentId,
-    metadata: {
-      ...appMeta,
-      ...userMeta
-    },
-    rawUser: supabaseUser
-  };
-}
-async function requireAuth2(req, res, next) {
-  const token = extractBearerToken2(req);
-  if (!token) {
-    res.status(401).json({
-      success: false,
-      error: "UNAUTHORIZED",
-      message: "Bearer token required"
-    });
-    return;
-  }
-  let supabase3;
-  try {
-    supabase3 = getSupabaseAdminClient();
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      error: "INTERNAL_SERVER_ERROR",
-      message: "Authentication service configuration error"
-    });
-    return;
-  }
-  try {
-    const { data, error } = await supabase3.auth.getUser(token);
-    if (error || !data?.user) {
-      res.status(401).json({
-        success: false,
-        error: "UNAUTHORIZED",
-        message: error?.message || "Invalid, expired, or revoked token"
-      });
-      return;
-    }
-    req.user = mapSupabaseUserToAuthenticatedUser(data.user);
-    next();
-  } catch (err) {
-    console.error("[SupabaseAuth] Token validation exception:", err);
-    res.status(401).json({
-      success: false,
-      error: "UNAUTHORIZED",
-      message: "Token verification failed"
-    });
-  }
-}
-function requireRole3(allowedRoles) {
-  const rolesList = (Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]).map(
-    (r) => r.toUpperCase()
-  );
-  return (req, res, next) => {
-    if (!req.user) {
-      res.status(401).json({
-        success: false,
-        error: "UNAUTHORIZED",
-        message: "Authentication required"
-      });
-      return;
-    }
-    const currentRole = (req.user.role || "").toUpperCase();
-    const isAuthorized = rolesList.includes(currentRole);
-    if (!isAuthorized) {
-      res.status(403).json({
-        success: false,
-        error: "FORBIDDEN",
-        message: `Forbidden: Access restricted to [${rolesList.join(", ")}] roles`,
-        currentRole: req.user.role,
-        requiredRoles: rolesList
-      });
-      return;
-    }
-    next();
-  };
-}
-function verifyResourceOwnership(paramName = "userId", options = { allowBypassRoles: ["ADMIN", "TEACHER"] }) {
-  const bypassRoles = (options.allowBypassRoles || []).map((r) => r.toUpperCase());
-  return (req, res, next) => {
-    if (!req.user) {
-      res.status(401).json({
-        success: false,
-        error: "UNAUTHORIZED",
-        message: "Authentication required"
-      });
-      return;
-    }
-    const currentRole = (req.user.role || "").toUpperCase();
-    if (bypassRoles.includes(currentRole)) {
-      return next();
-    }
-    const targetUserId = req.params[paramName] || req.query[paramName];
-    if (!targetUserId) {
-      res.status(400).json({
-        success: false,
-        error: "BAD_REQUEST",
-        message: `Missing required resource parameter: :${paramName}`
-      });
-      return;
-    }
-    if (targetUserId !== req.user.id) {
-      console.warn(
-        `[Tenant Isolation Violation] User ${req.user.id} (${req.user.email}) attempted unauthorized access to resource belonging to ${targetUserId}`
-      );
-      res.status(403).json({
-        success: false,
-        error: "FORBIDDEN",
-        message: "Resource access denied. You are only authorized to access your own student data."
-      });
-      return;
-    }
-    next();
-  };
-}
+// server/middleware/auth.ts
+init_supabaseAuth();
 
 // server/services/entitlements.ts
 init_db();
@@ -21024,7 +21126,7 @@ billingRouter.get("/plans", (req, res) => {
     res.status(500).json({ error: "Failed to retrieve plans" });
   }
 });
-billingRouter.get("/subscription", authenticateUser, (req, res) => {
+billingRouter.get("/subscription", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const user = req.user;
@@ -21074,7 +21176,7 @@ billingRouter.get("/subscription", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to retrieve subscription details" });
   }
 });
-billingRouter.post("/validate-coupon", authenticateUser, (req, res) => {
+billingRouter.post("/validate-coupon", authenticateUser2, (req, res) => {
   try {
     const { code, planId, billingInterval } = req.body;
     if (!code || !planId || !billingInterval) {
@@ -21104,7 +21206,7 @@ billingRouter.post("/validate-coupon", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to validate coupon code" });
   }
 });
-billingRouter.post("/checkout", authenticateUser, async (req, res) => {
+billingRouter.post("/checkout", authenticateUser2, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = req.user;
@@ -21179,7 +21281,7 @@ billingRouter.post("/checkout", authenticateUser, async (req, res) => {
     res.status(500).json({ error: "Failed to initiate checkout session." });
   }
 });
-billingRouter.post("/verify-payment", authenticateUser, async (req, res) => {
+billingRouter.post("/verify-payment", authenticateUser2, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = req.user;
@@ -21584,7 +21686,7 @@ billingRouter.post("/bkash/submit-manual-trxid", async (req, res) => {
     return res.status(500).json({ success: false, error: err.message || "TrxID submission failed" });
   }
 });
-billingRouter.get("/pending-trxids", optionalAuth, async (req, res) => {
+billingRouter.get("/pending-trxids", optionalAuth2, async (req, res) => {
   try {
     const user = req.user;
     const isFounderAuth = user?.role === "founder" || user?.role === "admin" || user?.email === "mdtanvirkabirbiplob@gmail.com";
@@ -21649,7 +21751,7 @@ billingRouter.get("/pending-trxids", optionalAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to fetch pending submissions." });
   }
 });
-billingRouter.post("/approve-trxid", optionalAuth, async (req, res) => {
+billingRouter.post("/approve-trxid", optionalAuth2, async (req, res) => {
   try {
     const user = req.user;
     const isFounderAuth = user?.role === "founder" || user?.role === "admin" || user?.email === "mdtanvirkabirbiplob@gmail.com";
@@ -21734,7 +21836,7 @@ billingRouter.post("/approve-trxid", optionalAuth, async (req, res) => {
     return res.status(500).json({ success: false, error: err.message || "Failed to approve transaction." });
   }
 });
-billingRouter.get("/wallet", authenticateUser, (req, res) => {
+billingRouter.get("/wallet", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const wallet = db.getUserWallet(userId);
@@ -21933,7 +22035,7 @@ billingRouter.post("/webhook/:provider", async (req, res) => {
     return res.status(500).json({ error: "Internal server error processing webhook." });
   }
 });
-billingRouter.post("/start-trial", authenticateUser, (req, res) => {
+billingRouter.post("/start-trial", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const { planId = "pro" } = req.body;
@@ -21964,7 +22066,7 @@ billingRouter.post("/start-trial", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to start free trial." });
   }
 });
-billingRouter.post("/cancel", authenticateUser, (req, res) => {
+billingRouter.post("/cancel", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const { reason, immediate = false } = req.body;
@@ -21986,7 +22088,7 @@ billingRouter.post("/cancel", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to cancel subscription." });
   }
 });
-billingRouter.post("/reactivate", authenticateUser, (req, res) => {
+billingRouter.post("/reactivate", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const sub = db.getUserSubscriptions(userId).find((s) => s.cancelAtPeriodEnd || s.status === "cancelled");
@@ -22005,7 +22107,7 @@ billingRouter.post("/reactivate", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to reactivate subscription." });
   }
 });
-billingRouter.post("/toggle-auto-renew", authenticateUser, (req, res) => {
+billingRouter.post("/toggle-auto-renew", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const { enabled } = req.body;
@@ -22032,7 +22134,7 @@ billingRouter.post("/toggle-auto-renew", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to update auto-renewal setting." });
   }
 });
-billingRouter.get("/invoices", authenticateUser, (req, res) => {
+billingRouter.get("/invoices", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const invoices = db.getUserInvoices(userId);
@@ -22045,7 +22147,7 @@ billingRouter.get("/invoices", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to retrieve invoices." });
   }
 });
-billingRouter.get("/invoices/:id", authenticateUser, (req, res) => {
+billingRouter.get("/invoices/:id", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const invoice = db.getInvoiceById(req.params.id);
@@ -22061,7 +22163,7 @@ billingRouter.get("/invoices/:id", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to retrieve invoice." });
   }
 });
-billingRouter.post("/invoices/:id/send-email", authenticateUser, (req, res) => {
+billingRouter.post("/invoices/:id/send-email", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const user = req.user;
@@ -22088,7 +22190,7 @@ billingRouter.post("/invoices/:id/send-email", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to deliver invoice email receipt." });
   }
 });
-billingRouter.post("/invoices/bulk-refund", authenticateUser, (req, res) => {
+billingRouter.post("/invoices/bulk-refund", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const { invoiceIds, reason } = req.body;
@@ -22133,7 +22235,7 @@ billingRouter.post("/invoices/bulk-refund", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to process bulk refund." });
   }
 });
-billingRouter.get("/usage", authenticateUser, (req, res) => {
+billingRouter.get("/usage", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const planId = getUserActivePlanId(userId);
@@ -22154,7 +22256,7 @@ billingRouter.get("/usage", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to fetch AI usage." });
   }
 });
-billingRouter.get("/payment-methods", authenticateUser, (req, res) => {
+billingRouter.get("/payment-methods", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const paymentMethods = db.getUserPaymentMethods(userId);
@@ -22167,7 +22269,7 @@ billingRouter.get("/payment-methods", authenticateUser, (req, res) => {
     res.status(500).json({ error: "Failed to retrieve saved payment methods." });
   }
 });
-billingRouter.post("/payment-methods", authenticateUser, (req, res) => {
+billingRouter.post("/payment-methods", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const { type, bKashNumber, cardNumber, cardExpiry, cardCvc, cardHolderName, isDefault } = req.body;
@@ -22233,7 +22335,7 @@ billingRouter.post("/payment-methods", authenticateUser, (req, res) => {
     res.status(500).json({ error: err.message || "Failed to save payment method." });
   }
 });
-billingRouter.post("/payment-methods/:id/refresh", authenticateUser, (req, res) => {
+billingRouter.post("/payment-methods/:id/refresh", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const pmId = req.params.id;
@@ -22244,7 +22346,7 @@ billingRouter.post("/payment-methods/:id/refresh", authenticateUser, (req, res) 
     res.status(500).json({ error: err.message || "Failed to refresh payment method token." });
   }
 });
-billingRouter.post("/payment-methods/:id/set-default", authenticateUser, (req, res) => {
+billingRouter.post("/payment-methods/:id/set-default", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const pmId = req.params.id;
@@ -22262,7 +22364,7 @@ billingRouter.post("/payment-methods/:id/set-default", authenticateUser, (req, r
     res.status(500).json({ error: err.message || "Failed to set default payment method." });
   }
 });
-billingRouter.delete("/payment-methods/:id", authenticateUser, (req, res) => {
+billingRouter.delete("/payment-methods/:id", authenticateUser2, (req, res) => {
   try {
     const userId = req.user.id;
     const pmId = req.params.id;
@@ -22498,7 +22600,7 @@ paymentRouter.get("/plans", (_req, res) => {
     return res.status(500).json({ success: false, error: "Failed to fetch plan catalog" });
   }
 });
-paymentRouter.post("/create", optionalAuth, async (req, res) => {
+paymentRouter.post("/create", optionalAuth2, async (req, res) => {
   try {
     const { tier = "n5_pro", callbackUrl } = req.body;
     const user = req.user;
@@ -22675,7 +22777,7 @@ paymentRouter.get("/callback", async (req, res) => {
     return res.redirect(`/payment/callback?status=failed&error=${encodeURIComponent(err?.message || "Execution error")}&paymentID=${encodeURIComponent(paymentID)}`);
   }
 });
-paymentRouter.post("/execute", optionalAuth, async (req, res) => {
+paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
   const { paymentID } = req.body;
   const user = req.user;
   if (!paymentID) {
@@ -22761,8 +22863,8 @@ var getSubscriptionHandler = async (req, res) => {
     return res.status(500).json({ success: false, error: "Failed to retrieve subscription" });
   }
 };
-paymentRouter.get("/me", optionalAuth, getSubscriptionHandler);
-paymentRouter.get("/subscription", optionalAuth, getSubscriptionHandler);
+paymentRouter.get("/me", optionalAuth2, getSubscriptionHandler);
+paymentRouter.get("/subscription", optionalAuth2, getSubscriptionHandler);
 paymentRouter.get("/manual/instructions", (_req, res) => {
   return res.json({
     success: true,
@@ -22798,7 +22900,7 @@ paymentRouter.get("/manual/instructions", (_req, res) => {
     ]
   });
 });
-paymentRouter.post("/manual/submit", optionalAuth, async (req, res) => {
+paymentRouter.post("/manual/submit", optionalAuth2, async (req, res) => {
   try {
     const { senderPhone, trxID, selectedPlan, paymentMethod = "bkash", studentName, note } = req.body;
     const user = req.user;
@@ -22824,7 +22926,7 @@ paymentRouter.post("/manual/submit", optionalAuth, async (req, res) => {
     });
   }
 });
-paymentRouter.get("/manual/my-pending", optionalAuth, async (req, res) => {
+paymentRouter.get("/manual/my-pending", optionalAuth2, async (req, res) => {
   try {
     const user = req.user;
     const email = user?.email || req.query.email;
@@ -22847,7 +22949,7 @@ paymentRouter.get("/manual/my-pending", optionalAuth, async (req, res) => {
 var isFounderOrAdmin = (user) => {
   return user?.role === "admin" || user?.role === "founder" || user?.email === "mdtanvirkabirbiplob@gmail.com";
 };
-paymentRouter.get("/admin/pending", optionalAuth, async (req, res) => {
+paymentRouter.get("/admin/pending", optionalAuth2, async (req, res) => {
   try {
     const user = req.user;
     if (!isFounderOrAdmin(user)) {
@@ -22863,7 +22965,7 @@ paymentRouter.get("/admin/pending", optionalAuth, async (req, res) => {
     return res.status(500).json({ success: false, error: "Failed to retrieve pending submissions." });
   }
 });
-paymentRouter.post("/admin/verify", optionalAuth, async (req, res) => {
+paymentRouter.post("/admin/verify", optionalAuth2, async (req, res) => {
   try {
     const user = req.user;
     if (!isFounderOrAdmin(user)) {
@@ -22960,7 +23062,7 @@ paymentRouter.post("/admin/verify", optionalAuth, async (req, res) => {
 // server/routes/coordination.ts
 import { Router as Router9 } from "express";
 var coordinationRouter = Router9();
-coordinationRouter.get("/live-cohorts", optionalAuth, (req, res) => {
+coordinationRouter.get("/live-cohorts", optionalAuth2, (req, res) => {
   const cohorts = [
     {
       id: "cohort-live-n5-01",
@@ -23007,7 +23109,7 @@ coordinationRouter.get("/live-cohorts", optionalAuth, (req, res) => {
   ];
   return res.json({ success: true, cohorts });
 });
-coordinationRouter.get("/dhaka-campus/programs", optionalAuth, (req, res) => {
+coordinationRouter.get("/dhaka-campus/programs", optionalAuth2, (req, res) => {
   const programs = {
     campusName: "NIHOMI Admissions & Visa Desk (Powered by bdTrip24)",
     address: "House 42, Road 11, Block E, Banani / Dhanmondi Campus, Dhaka, Bangladesh",
@@ -23047,7 +23149,7 @@ coordinationRouter.get("/dhaka-campus/programs", optionalAuth, (req, res) => {
   };
   return res.json({ success: true, programs });
 });
-coordinationRouter.post("/dhaka-campus/apply-visa", requireAuth, (req, res) => {
+coordinationRouter.post("/dhaka-campus/apply-visa", requireAuth2, (req, res) => {
   const {
     fullName,
     phoneNumber,
@@ -23081,7 +23183,7 @@ coordinationRouter.post("/dhaka-campus/apply-visa", requireAuth, (req, res) => {
     application: applicationRecord
   });
 });
-coordinationRouter.get("/bdtrip24/japan-flights", optionalAuth, (req, res) => {
+coordinationRouter.get("/bdtrip24/japan-flights", optionalAuth2, (req, res) => {
   const routes = [
     {
       id: "flight-dac-nrt-01",
@@ -23115,7 +23217,7 @@ coordinationRouter.get("/bdtrip24/japan-flights", optionalAuth, (req, res) => {
   ];
   return res.json({ success: true, routes });
 });
-coordinationRouter.post("/bdtrip24/verify-ticket", requireAuth, (req, res) => {
+coordinationRouter.post("/bdtrip24/verify-ticket", requireAuth2, (req, res) => {
   const { studentName, flightRoute, departureDate, passportNumber, airportPickupRequired, japanDormitoryAddress } = req.body;
   const bookingTicket = {
     bookingRef: `BDT24-NIH-${Math.floor(1e5 + Math.random() * 9e5)}`,
@@ -23142,7 +23244,7 @@ coordinationRouter.post("/bdtrip24/verify-ticket", requireAuth, (req, res) => {
 init_db();
 import { Router as Router10 } from "express";
 var japanTwinRouter = Router10();
-japanTwinRouter.get("/profile", requireAuth, (req, res) => {
+japanTwinRouter.get("/profile", requireAuth2, (req, res) => {
   const userId = req.user.id;
   const profile = db.getProfileByUserId(userId);
   const progress = db.getProgressByUserId(userId);
@@ -23195,7 +23297,7 @@ japanTwinRouter.get("/profile", requireAuth, (req, res) => {
   };
   return res.json({ success: true, japanTwin: twinData });
 });
-japanTwinRouter.post("/simulate-day", requireAuth, async (req, res) => {
+japanTwinRouter.post("/simulate-day", requireAuth2, async (req, res) => {
   const { dayNumber, userActionResponse } = req.body;
   const dayScenarios = {
     1: {
@@ -23285,7 +23387,7 @@ japanTwinRouter.post("/simulate-day", requireAuth, async (req, res) => {
 init_db();
 import { Router as Router11 } from "express";
 var ghostModeRouter = Router11();
-ghostModeRouter.get("/active-ghosts", requireAuth, (req, res) => {
+ghostModeRouter.get("/active-ghosts", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { level, confusionType, resolved, dueOnly } = req.query;
@@ -23307,7 +23409,7 @@ ghostModeRouter.get("/active-ghosts", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch ghost weaknesses" });
   }
 });
-ghostModeRouter.get("/stats", requireAuth, (req, res) => {
+ghostModeRouter.get("/stats", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const stats = db.getGhostMasteryStats(userId);
@@ -23317,7 +23419,7 @@ ghostModeRouter.get("/stats", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch stats" });
   }
 });
-ghostModeRouter.post("/resolve-ghost", requireAuth, (req, res) => {
+ghostModeRouter.post("/resolve-ghost", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { ghostId, selectedAnswerIndex, isCorrect: directIsCorrect } = req.body;
@@ -23351,7 +23453,7 @@ ghostModeRouter.post("/resolve-ghost", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to record ghost attempt" });
   }
 });
-ghostModeRouter.post("/log-error", requireAuth, (req, res) => {
+ghostModeRouter.post("/log-error", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { questionId, quizId, lessonId, conceptCode, userSelected, correctAnswer, category, details } = req.body;
@@ -23378,7 +23480,7 @@ ghostModeRouter.post("/log-error", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to log student error" });
   }
 });
-ghostModeRouter.post("/create-ghost", requireAuth, (req, res) => {
+ghostModeRouter.post("/create-ghost", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const {
@@ -23692,7 +23794,7 @@ mockExamsRouter.get("/verify-certificate/:certificateId", async (req, res) => {
     return res.status(500).json({ success: false, error: err.message });
   }
 });
-mockExamsRouter.get("/", optionalAuth, (req, res) => {
+mockExamsRouter.get("/", optionalAuth2, (req, res) => {
   try {
     const level = req.query.level;
     const exams = db.getMockExams(level);
@@ -23740,7 +23842,7 @@ mockExamsRouter.get("/", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch mock exams" });
   }
 });
-mockExamsRouter.get("/:id", optionalAuth, requireSubscription("n5_pro"), (req, res) => {
+mockExamsRouter.get("/:id", optionalAuth2, requireSubscription("n5_pro"), (req, res) => {
   try {
     const exam = db.getMockExamById(req.params.id);
     if (!exam) {
@@ -23799,7 +23901,7 @@ mockExamsRouter.get("/:id", optionalAuth, requireSubscription("n5_pro"), (req, r
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch mock exam detail" });
   }
 });
-mockExamsRouter.post("/:id/submit", requireAuth, requireSubscription("n5_pro"), async (req, res) => {
+mockExamsRouter.post("/:id/submit", requireAuth2, requireSubscription("n5_pro"), async (req, res) => {
   try {
     const { answers, sectionTimesSpentSeconds, totalTimeSpentSeconds } = req.body;
     if (!answers || !Array.isArray(answers)) {
@@ -23860,7 +23962,7 @@ mockExamsRouter.post("/:id/submit", requireAuth, requireSubscription("n5_pro"), 
     return res.status(500).json({ success: false, error: error.message || "Failed to submit mock exam" });
   }
 });
-mockExamsRouter.get("/attempts/:attemptId", requireAuth, (req, res) => {
+mockExamsRouter.get("/attempts/:attemptId", requireAuth2, (req, res) => {
   try {
     const attempt = db.getMockExamAttemptById(req.params.attemptId);
     if (!attempt || attempt.userId !== req.user.id) {
@@ -23905,7 +24007,7 @@ mockExamsRouter.get("/attempts/:attemptId", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch attempt detail" });
   }
 });
-mockExamsRouter.get("/user/history", requireAuth, (req, res) => {
+mockExamsRouter.get("/user/history", requireAuth2, (req, res) => {
   try {
     const attempts = db.getUserMockExamAttempts(req.user.id);
     return res.json({ success: true, attempts });
@@ -36953,7 +37055,7 @@ contentEngineRouter.get("/jobs", requireAdmin, (req, res) => {
     return res.status(500).json({ error: "Failed to retrieve background jobs" });
   }
 });
-contentEngineRouter.get("/jobs/:id", optionalAuth, (req, res) => {
+contentEngineRouter.get("/jobs/:id", optionalAuth2, (req, res) => {
   try {
     const job = backgroundJobQueue.getJob(req.params.id);
     if (!job) {
@@ -37006,7 +37108,7 @@ contentEngineRouter.delete("/sources/:id", requireAdmin, (req, res) => {
   if (!ok) return res.status(404).json({ error: "Content source not found" });
   return res.json({ success: true, message: "Content source deleted" });
 });
-contentEngineRouter.get("/sources/:id/file", optionalAuth, async (req, res) => {
+contentEngineRouter.get("/sources/:id/file", optionalAuth2, async (req, res) => {
   try {
     const source = db.getContentSourceById(req.params.id);
     if (!source) {
@@ -37030,7 +37132,7 @@ contentEngineRouter.get("/sources/:id/file", optionalAuth, async (req, res) => {
     return res.status(500).json({ error: err.message || "Failed to retrieve source document" });
   }
 });
-contentEngineRouter.get("/sources/:id/download", optionalAuth, async (req, res) => {
+contentEngineRouter.get("/sources/:id/download", optionalAuth2, async (req, res) => {
   try {
     const source = db.getContentSourceById(req.params.id);
     if (!source) {
@@ -37284,7 +37386,7 @@ contentEngineRouter.get("/versions/:v1/diff/:v2", requireAdmin, (req, res) => {
     diff: result.diff
   });
 });
-contentEngineRouter.get("/published", optionalAuth, (req, res) => {
+contentEngineRouter.get("/published", optionalAuth2, (req, res) => {
   const level = req.query.level;
   const published = db.getPublishedContent(level);
   return res.json({ success: true, ...published });
@@ -39532,16 +39634,16 @@ var upload2 = multer2({
     }
   }
 });
-contentStudioRouter.get("/stats", optionalAuth, (req, res) => {
+contentStudioRouter.get("/stats", optionalAuth2, (req, res) => {
   const stats = contentStudioDb.getStats();
   res.json({ success: true, stats });
 });
-contentStudioRouter.get("/lessons", optionalAuth, (req, res) => {
+contentStudioRouter.get("/lessons", optionalAuth2, (req, res) => {
   const { level, status } = req.query;
   const lessons = contentStudioDb.getLessons({ level, status });
   res.json({ success: true, count: lessons.length, lessons });
 });
-contentStudioRouter.get("/lessons/:id", optionalAuth, (req, res) => {
+contentStudioRouter.get("/lessons/:id", optionalAuth2, (req, res) => {
   const { id } = req.params;
   const lesson = contentStudioDb.getLessonById(id);
   if (!lesson) return res.status(404).json({ error: `Lesson ${id} not found` });
@@ -39894,7 +39996,7 @@ function syncAllDefaultLessonsToLiveCatalog() {
   }
   return { count: publishedTitles.length, titles: publishedTitles };
 }
-contentStudioRouter.post("/lessons/batch-publish-defaults", optionalAuth, (req, res) => {
+contentStudioRouter.post("/lessons/batch-publish-defaults", optionalAuth2, (req, res) => {
   const result = syncAllDefaultLessonsToLiveCatalog();
   res.json({
     success: true,
@@ -40000,7 +40102,7 @@ contentStudioRouter.get("/publishing-queue", requireStaff2, (req, res) => {
     queue: items
   });
 });
-contentStudioRouter.get("/publishing-queue/stats", optionalAuth, (req, res) => {
+contentStudioRouter.get("/publishing-queue/stats", optionalAuth2, (req, res) => {
   const stats = liveLessonPublishingQueueService.getStats();
   res.json({ success: true, stats });
 });
@@ -41800,7 +41902,7 @@ whiteLabelRouter.post("/certificate/generate", (req, res) => {
 init_db();
 import { Router as Router18 } from "express";
 var studyPlanRouter = Router18();
-studyPlanRouter.get("/", optionalAuth, (req, res) => {
+studyPlanRouter.get("/", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "usr-student-01";
     const studyPlan = db.getStudyPlan(userId);
@@ -41819,7 +41921,7 @@ studyPlanRouter.get("/", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch study plan" });
   }
 });
-studyPlanRouter.post("/save", requireAuth, (req, res) => {
+studyPlanRouter.post("/save", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const {
@@ -41855,7 +41957,7 @@ studyPlanRouter.post("/save", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to save study plan" });
   }
 });
-studyPlanRouter.get("/daily-session", optionalAuth, (req, res) => {
+studyPlanRouter.get("/daily-session", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "usr-student-01";
     const date = req.query.date;
@@ -41866,7 +41968,7 @@ studyPlanRouter.get("/daily-session", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch daily session" });
   }
 });
-studyPlanRouter.post("/complete-task", requireAuth, (req, res) => {
+studyPlanRouter.post("/complete-task", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { taskId, completedIncrement } = req.body;
@@ -41887,7 +41989,7 @@ studyPlanRouter.post("/complete-task", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to complete task" });
   }
 });
-studyPlanRouter.get("/srs-queue", requireAuth, (req, res) => {
+studyPlanRouter.get("/srs-queue", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const srsData = db.getSrsReviewQueue(userId);
@@ -41897,7 +41999,7 @@ studyPlanRouter.get("/srs-queue", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch SRS queue" });
   }
 });
-studyPlanRouter.post("/recalculate", requireAuth, (req, res) => {
+studyPlanRouter.post("/recalculate", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { pace } = req.body;
@@ -41926,14 +42028,14 @@ studyPlanRouter.post("/recalculate", requireAuth, (req, res) => {
 init_db();
 import { Router as Router19 } from "express";
 var baitoSimulationRouter = Router19();
-baitoSimulationRouter.get("/scenarios", optionalAuth, (req, res) => {
+baitoSimulationRouter.get("/scenarios", optionalAuth2, (req, res) => {
   const scenarios = db.getBaitoScenarios();
   return res.json({
     success: true,
     scenarios
   });
 });
-baitoSimulationRouter.get("/scenarios/:id", optionalAuth, (req, res) => {
+baitoSimulationRouter.get("/scenarios/:id", optionalAuth2, (req, res) => {
   const scenario = db.getBaitoScenarioById(req.params.id);
   if (!scenario) {
     return res.status(404).json({ error: "Scenario not found" });
@@ -41943,21 +42045,21 @@ baitoSimulationRouter.get("/scenarios/:id", optionalAuth, (req, res) => {
     scenario
   });
 });
-baitoSimulationRouter.get("/conbini/products", optionalAuth, (req, res) => {
+baitoSimulationRouter.get("/conbini/products", optionalAuth2, (req, res) => {
   const products = db.getConbiniProducts();
   return res.json({
     success: true,
     products
   });
 });
-baitoSimulationRouter.get("/conbini/orders", optionalAuth, (req, res) => {
+baitoSimulationRouter.get("/conbini/orders", optionalAuth2, (req, res) => {
   const orders = db.getConbiniOrders();
   return res.json({
     success: true,
     orders
   });
 });
-baitoSimulationRouter.post("/interview/evaluate", optionalAuth, (req, res) => {
+baitoSimulationRouter.post("/interview/evaluate", optionalAuth2, (req, res) => {
   const { scenarioId, userText, history } = req.body;
   if (!userText || typeof userText !== "string") {
     return res.status(400).json({ error: "userText is required" });
@@ -41965,7 +42067,7 @@ baitoSimulationRouter.post("/interview/evaluate", optionalAuth, (req, res) => {
   const result = db.evaluateBaitoInterview(scenarioId || "sc-school-principal", userText, history || []);
   return res.json(result);
 });
-baitoSimulationRouter.get("/rirekisho", optionalAuth, (req, res) => {
+baitoSimulationRouter.get("/rirekisho", optionalAuth2, (req, res) => {
   const userId = req.user?.id || "usr_default";
   const rirekisho = db.getRirekisho(userId);
   return res.json({
@@ -41973,7 +42075,7 @@ baitoSimulationRouter.get("/rirekisho", optionalAuth, (req, res) => {
     rirekisho
   });
 });
-baitoSimulationRouter.post("/rirekisho/save", optionalAuth, (req, res) => {
+baitoSimulationRouter.post("/rirekisho/save", optionalAuth2, (req, res) => {
   const userId = req.user?.id || "usr_default";
   const updated = db.saveRirekisho(userId, req.body);
   return res.json({
@@ -41982,7 +42084,7 @@ baitoSimulationRouter.post("/rirekisho/save", optionalAuth, (req, res) => {
     message: "Rirekisho saved successfully"
   });
 });
-baitoSimulationRouter.post("/rirekisho/polish", optionalAuth, (req, res) => {
+baitoSimulationRouter.post("/rirekisho/polish", optionalAuth2, (req, res) => {
   const { text, fieldType } = req.body;
   const polished = db.polishRirekishoText(text || "", fieldType || "motivation");
   return res.json({
@@ -41998,7 +42100,7 @@ var srsRouter = Router20();
 function resolveUserId(req) {
   return req.user?.id || "usr-student-01";
 }
-srsRouter.get("/cards", optionalAuth, (req, res) => {
+srsRouter.get("/cards", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { itemType, level, stage, dueOnly, search, lessonId } = req.query;
@@ -42020,7 +42122,7 @@ srsRouter.get("/cards", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch SRS cards" });
   }
 });
-srsRouter.get("/due", optionalAuth, (req, res) => {
+srsRouter.get("/due", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { itemType, level, limit } = req.query;
@@ -42040,7 +42142,7 @@ srsRouter.get("/due", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch due cards" });
   }
 });
-srsRouter.post("/review", optionalAuth, (req, res) => {
+srsRouter.post("/review", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { cardId, rating, responseTimeMs, algorithmMode, targetRetention } = req.body;
@@ -42071,7 +42173,7 @@ srsRouter.post("/review", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to record SRS review" });
   }
 });
-srsRouter.get("/retention-curve", optionalAuth, (req, res) => {
+srsRouter.get("/retention-curve", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { cardId } = req.query;
@@ -42085,7 +42187,7 @@ srsRouter.get("/retention-curve", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to generate retention curve" });
   }
 });
-srsRouter.get("/telemetry", optionalAuth, (req, res) => {
+srsRouter.get("/telemetry", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const stats = db.getSrsTelemetryStats(userId);
@@ -42098,7 +42200,7 @@ srsRouter.get("/telemetry", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to fetch telemetry stats" });
   }
 });
-srsRouter.post("/sync-lesson/:lessonId", optionalAuth, (req, res) => {
+srsRouter.post("/sync-lesson/:lessonId", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { lessonId } = req.params;
@@ -42120,7 +42222,7 @@ srsRouter.post("/sync-lesson/:lessonId", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to sync lesson" });
   }
 });
-srsRouter.post("/batch-sync-lessons", optionalAuth, (req, res) => {
+srsRouter.post("/batch-sync-lessons", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { lessonIds, level } = req.body;
@@ -42154,7 +42256,7 @@ srsRouter.post("/batch-sync-lessons", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to batch sync" });
   }
 });
-srsRouter.post("/seed-defaults", optionalAuth, (req, res) => {
+srsRouter.post("/seed-defaults", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const cards = db.seedInitialSrsCardsForUser(userId);
@@ -42169,7 +42271,7 @@ srsRouter.post("/seed-defaults", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message || "Failed to seed deck" });
   }
 });
-srsRouter.post("/card/:cardId/reset", optionalAuth, (req, res) => {
+srsRouter.post("/card/:cardId/reset", optionalAuth2, (req, res) => {
   try {
     const userId = resolveUserId(req);
     const { cardId } = req.params;
@@ -42204,7 +42306,7 @@ init_db();
 import { Router as Router21 } from "express";
 init_learnerAnalyticsService();
 var analyticsRouter = Router21();
-analyticsRouter.get("/overview", requireAuth, (req, res) => {
+analyticsRouter.get("/overview", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const forceRefresh = req.query.refresh === "true";
@@ -42221,7 +42323,7 @@ analyticsRouter.get("/overview", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/retention-trend", requireAuth, (req, res) => {
+analyticsRouter.get("/retention-trend", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = db.getLearnerAnalyticsSummary(userId);
@@ -42238,7 +42340,7 @@ analyticsRouter.get("/retention-trend", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/mock-exams", requireAuth, (req, res) => {
+analyticsRouter.get("/mock-exams", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = db.getLearnerAnalyticsSummary(userId);
@@ -42254,7 +42356,7 @@ analyticsRouter.get("/mock-exams", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/study-pulse", requireAuth, (req, res) => {
+analyticsRouter.get("/study-pulse", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = db.getLearnerAnalyticsSummary(userId);
@@ -42270,7 +42372,7 @@ analyticsRouter.get("/study-pulse", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/voice-telemetry", requireAuth, (req, res) => {
+analyticsRouter.get("/voice-telemetry", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = db.getLearnerAnalyticsSummary(userId);
@@ -42286,7 +42388,7 @@ analyticsRouter.get("/voice-telemetry", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/leaderboard", optionalAuth, (req, res) => {
+analyticsRouter.get("/leaderboard", optionalAuth2, (req, res) => {
   try {
     const timeframeParam = req.query.timeframe;
     const timeframe = ["today", "week", "allTime"].includes(timeframeParam) ? timeframeParam : "allTime";
@@ -42305,7 +42407,7 @@ analyticsRouter.get("/leaderboard", optionalAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.post("/refresh", requireAuth, (req, res) => {
+analyticsRouter.post("/refresh", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = LearnerAnalyticsService.computeLearnerAnalytics(userId);
@@ -42323,7 +42425,7 @@ analyticsRouter.post("/refresh", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.post("/track", optionalAuth, (req, res) => {
+analyticsRouter.post("/track", optionalAuth2, (req, res) => {
   try {
     const { event, properties } = req.body || {};
     if (!event || typeof event !== "string") {
@@ -42374,7 +42476,7 @@ analyticsRouter.post("/track", optionalAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/cohort", requireAuth, (req, res) => {
+analyticsRouter.get("/cohort", requireAuth2, (req, res) => {
   try {
     const cohort = db.getCohortAnalytics();
     return res.json({
@@ -42389,7 +42491,7 @@ analyticsRouter.get("/cohort", requireAuth, (req, res) => {
     });
   }
 });
-analyticsRouter.get("/growth", optionalAuth, (req, res) => {
+analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
   try {
     const user = req.user;
     const isFounderAuth = user?.role === "founder" || user?.role === "admin" || user?.email === "mdtanvirkabirbiplob@gmail.com";
@@ -46669,17 +46771,17 @@ async function handlePitchAccentEvaluation(req, res) {
 }
 voiceRouter.post(
   "/evaluate-pitch",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 800 }),
   handlePitchAccentEvaluation
 );
 voiceRouter.post(
   "/evaluate-pitch-accent",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 800 }),
   handlePitchAccentEvaluation
 );
-voiceRouter.get("/presets", optionalAuth, (_req, res) => {
+voiceRouter.get("/presets", optionalAuth2, (_req, res) => {
   try {
     return res.json({
       success: true,
@@ -46694,7 +46796,7 @@ voiceRouter.get("/presets", optionalAuth, (_req, res) => {
     });
   }
 });
-voiceRouter.get("/drills", optionalAuth, (req, res) => {
+voiceRouter.get("/drills", optionalAuth2, (req, res) => {
   try {
     const category = req.query.category;
     const jlptLevel = req.query.jlptLevel;
@@ -46720,7 +46822,7 @@ voiceRouter.get("/drills", optionalAuth, (req, res) => {
     });
   }
 });
-voiceRouter.post("/drills/generate", optionalAuth, (req, res) => {
+voiceRouter.post("/drills/generate", optionalAuth2, (req, res) => {
   try {
     const { vocabulary, persist = false } = req.body;
     if (!vocabulary || !Array.isArray(vocabulary) || vocabulary.length === 0) {
@@ -46764,7 +46866,7 @@ voiceRouter.post("/drills/generate", optionalAuth, (req, res) => {
     });
   }
 });
-voiceRouter.post("/drills/seed", requireAuth, (req, res) => {
+voiceRouter.post("/drills/seed", requireAuth2, (req, res) => {
   try {
     const user = req.user;
     if (user.role !== "admin" && user.role !== "instructor") {
@@ -46784,7 +46886,7 @@ voiceRouter.post("/drills/seed", requireAuth, (req, res) => {
     });
   }
 });
-voiceRouter.get("/history", requireAuth, (req, res) => {
+voiceRouter.get("/history", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : 30;
@@ -46802,7 +46904,7 @@ voiceRouter.get("/history", requireAuth, (req, res) => {
     });
   }
 });
-voiceRouter.get("/telemetry", requireAuth, (req, res) => {
+voiceRouter.get("/telemetry", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const summary = db.getLearnerAnalyticsSummary(userId);
@@ -46820,7 +46922,7 @@ voiceRouter.get("/telemetry", requireAuth, (req, res) => {
 });
 voiceRouter.get(
   "/drills/adaptive",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 300 }),
   async (req, res) => {
     try {
@@ -46841,7 +46943,7 @@ voiceRouter.get(
 );
 voiceRouter.post(
   "/session/start",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 200 }),
   async (req, res) => {
     try {
@@ -46911,7 +47013,7 @@ voiceRouter.post(
 );
 voiceRouter.post(
   "/session/submit-step",
-  requireAuth,
+  requireAuth2,
   aiCostGuard({ operationType: "pronunciation", estimatedTokens: 600 }),
   async (req, res) => {
     try {
@@ -47026,7 +47128,7 @@ voiceRouter.post(
     }
   }
 );
-voiceRouter.get("/session/:id", requireAuth, (req, res) => {
+voiceRouter.get("/session/:id", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const session = db.getAccentMasterySession(req.params.id);
@@ -47048,7 +47150,7 @@ voiceRouter.get("/session/:id", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.get("/sessions", requireAuth, (req, res) => {
+voiceRouter.get("/sessions", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : 20;
@@ -47062,7 +47164,7 @@ voiceRouter.get("/sessions", requireAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.post("/drills/phrasal-preview", optionalAuth, (req, res) => {
+voiceRouter.post("/drills/phrasal-preview", optionalAuth2, (req, res) => {
   try {
     const input = req.body || {};
     if (!input.word && !input.drillId && !input.readingKana) {
@@ -47081,7 +47183,7 @@ voiceRouter.post("/drills/phrasal-preview", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.get("/drills/due-reviews", optionalAuth, (req, res) => {
+voiceRouter.get("/drills/due-reviews", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "guest";
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : 20;
@@ -47098,7 +47200,7 @@ voiceRouter.get("/drills/due-reviews", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.post("/drills/srs-review", optionalAuth, (req, res) => {
+voiceRouter.post("/drills/srs-review", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "guest";
     const submission = req.body || {};
@@ -47119,7 +47221,7 @@ voiceRouter.post("/drills/srs-review", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.get("/student/diagnostic-report", optionalAuth, (req, res) => {
+voiceRouter.get("/student/diagnostic-report", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "guest";
     const days = req.query.days ? parseInt(req.query.days, 10) : 30;
@@ -47164,7 +47266,7 @@ voiceRouter.post("/sentence/analyze-prosody", (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.post("/sentence/evaluate-shadowing", optionalAuth, (req, res) => {
+voiceRouter.post("/sentence/evaluate-shadowing", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "guest";
     const submission = req.body;
@@ -47236,7 +47338,7 @@ voiceRouter.post("/sentence/evaluate-shadowing", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.get("/student/speaking-certificate", optionalAuth, async (req, res) => {
+voiceRouter.get("/student/speaking-certificate", optionalAuth2, async (req, res) => {
   try {
     const userId = req.user?.id || "guest";
     const studentName = typeof req.query.studentName === "string" ? req.query.studentName : void 0;
@@ -47280,7 +47382,7 @@ voiceRouter.get("/roleplay/scenarios/:scenarioId", (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.post("/roleplay/session/start", optionalAuth, (req, res) => {
+voiceRouter.post("/roleplay/session/start", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || req.body.userId || "guest-learner";
     const { scenarioId } = req.body;
@@ -47294,7 +47396,7 @@ voiceRouter.post("/roleplay/session/start", optionalAuth, (req, res) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 });
-voiceRouter.post("/roleplay/session/:sessionId/turn", optionalAuth, (req, res) => {
+voiceRouter.post("/roleplay/session/:sessionId/turn", optionalAuth2, (req, res) => {
   try {
     const { sessionId } = req.params;
     const { userTranscript, userF0Trajectory, audioDurationMs } = req.body;
@@ -47370,7 +47472,7 @@ function getReferralRecords() {
   }
   return db.data.referralRecords;
 }
-referralRouter.post("/claim", optionalAuth, (req, res) => {
+referralRouter.post("/claim", optionalAuth2, (req, res) => {
   const { referralCode, userId } = req.body;
   const refereeUserId = req.user?.id || userId;
   if (!referralCode || typeof referralCode !== "string") {
@@ -47473,7 +47575,7 @@ referralRouter.post("/claim", optionalAuth, (req, res) => {
     proDaysGranted: proDaysToGrant
   });
 });
-referralRouter.get("/stats", optionalAuth, (req, res) => {
+referralRouter.get("/stats", optionalAuth2, (req, res) => {
   const userId = req.user?.id || req.query.userId;
   if (!userId) {
     return res.status(401).json({ error: "Authentication required" });
@@ -47496,10 +47598,11 @@ referralRouter.get("/stats", optionalAuth, (req, res) => {
 });
 
 // server/routes/dashboard.ts
-import { Router as Router24 } from "express";
+init_supabaseAuth();
 init_db();
+import { Router as Router24 } from "express";
 var dashboardRouter = Router24();
-dashboardRouter.get("/me", requireAuth2, (req, res) => {
+dashboardRouter.get("/me", requireAuth, (req, res) => {
   const user = req.user;
   const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
   const profile = db.getProfile(user.id);
@@ -47533,7 +47636,7 @@ dashboardRouter.get("/me", requireAuth2, (req, res) => {
 });
 dashboardRouter.get(
   "/student/:userId",
-  requireAuth2,
+  requireAuth,
   verifyResourceOwnership("userId", { allowBypassRoles: ["ADMIN", "TEACHER"] }),
   (req, res) => {
     const { userId } = req.params;
@@ -47555,8 +47658,8 @@ dashboardRouter.get(
 );
 dashboardRouter.get(
   "/admin/stats",
-  requireAuth2,
-  requireRole3(["ADMIN"]),
+  requireAuth,
+  requireRole(["ADMIN"]),
   (_req, res) => {
     const stats = db.getAdminStats();
     return res.json({
@@ -47573,8 +47676,8 @@ dashboardRouter.get(
 );
 dashboardRouter.get(
   "/teacher/cohorts",
-  requireAuth2,
-  requireRole3(["ADMIN", "TEACHER"]),
+  requireAuth,
+  requireRole(["ADMIN", "TEACHER"]),
   (req, res) => {
     return res.json({
       success: true,
@@ -48944,7 +49047,7 @@ function getAuthUser(req) {
   }
   return { userId, email: user.email };
 }
-router.get("/usage", requireAuth, async (req, res) => {
+router.get("/usage", requireAuth2, async (req, res) => {
   try {
     const { userId, email } = getAuthUser(req);
     const usage = await cloudService.getUserUsage(userId);
@@ -48970,7 +49073,7 @@ router.get("/usage", requireAuth, async (req, res) => {
     });
   }
 });
-router.get("/quota", requireAuth, async (req, res) => {
+router.get("/quota", requireAuth2, async (req, res) => {
   try {
     const { userId, email } = getAuthUser(req);
     const quota = await quotaService.resolveUserQuota(userId, email);
@@ -48988,7 +49091,7 @@ router.get("/quota", requireAuth, async (req, res) => {
     });
   }
 });
-router.get("/folders", requireAuth, async (req, res) => {
+router.get("/folders", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const category = req.query.category;
@@ -48999,7 +49102,7 @@ router.get("/folders", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.post("/folders", requireAuth, async (req, res) => {
+router.post("/folders", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const { name, parentFolderId, category } = req.body;
@@ -49012,7 +49115,7 @@ router.post("/folders", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.patch("/folders/:id", requireAuth, async (req, res) => {
+router.patch("/folders/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const folderId = req.params.id;
@@ -49023,7 +49126,7 @@ router.patch("/folders/:id", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.delete("/folders/:id", requireAuth, async (req, res) => {
+router.delete("/folders/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     await cloudService.deleteFolder(userId, req.params.id);
@@ -49034,7 +49137,7 @@ router.delete("/folders/:id", requireAuth, async (req, res) => {
 });
 router.post(
   "/files/upload",
-  requireAuth,
+  requireAuth2,
   upload3.single("file"),
   async (req, res) => {
     try {
@@ -49068,7 +49171,7 @@ router.post(
     }
   }
 );
-router.get("/files", requireAuth, async (req, res) => {
+router.get("/files", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const {
@@ -49100,7 +49203,7 @@ router.get("/files", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.get("/files/:id", requireAuth, async (req, res) => {
+router.get("/files/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const file = await cloudService.getFileById(userId, req.params.id);
@@ -49109,7 +49212,7 @@ router.get("/files/:id", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.get("/files/:id/download", requireAuth, async (req, res) => {
+router.get("/files/:id/download", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const { downloadUrl, file } = await cloudService.getFileDownloadUrl(userId, req.params.id);
@@ -49118,7 +49221,7 @@ router.get("/files/:id/download", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.get("/files/direct-download", requireAuth, async (req, res) => {
+router.get("/files/direct-download", requireAuth2, async (req, res) => {
   try {
     const storagePath = req.query.path;
     if (!storagePath) {
@@ -49137,7 +49240,7 @@ router.get("/files/direct-download", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.patch("/files/:id", requireAuth, async (req, res) => {
+router.patch("/files/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const { name, folderId, category, japanLockerSection, isFavorite } = req.body;
@@ -49153,7 +49256,7 @@ router.patch("/files/:id", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.delete("/files/:id", requireAuth, async (req, res) => {
+router.delete("/files/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const file = await cloudService.trashFile(userId, req.params.id);
@@ -49162,7 +49265,7 @@ router.delete("/files/:id", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.post("/files/:id/restore", requireAuth, async (req, res) => {
+router.post("/files/:id/restore", requireAuth2, async (req, res) => {
   try {
     const { userId, email } = getAuthUser(req);
     const file = await cloudService.restoreFile(userId, req.params.id, email);
@@ -49171,7 +49274,7 @@ router.post("/files/:id/restore", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.delete("/files/:id/permanent", requireAuth, async (req, res) => {
+router.delete("/files/:id/permanent", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     await cloudService.deleteFilePermanently(userId, req.params.id);
@@ -49180,7 +49283,7 @@ router.delete("/files/:id/permanent", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.post("/files/:id/share", requireAuth, async (req, res) => {
+router.post("/files/:id/share", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const expiresInHours = req.body.expiresInHours ? parseInt(req.body.expiresInHours, 10) : 72;
@@ -49199,7 +49302,7 @@ router.get("/shares/:token", async (req, res) => {
     res.status(err.status || 404).json({ success: false, error: err.message });
   }
 });
-router.delete("/shares/:id", requireAuth, async (req, res) => {
+router.delete("/shares/:id", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     await cloudService.revokeShare(userId, req.params.id);
@@ -49208,7 +49311,7 @@ router.delete("/shares/:id", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.post("/ai/:fileId", requireAuth, async (req, res) => {
+router.post("/ai/:fileId", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const { jobType, prompt } = req.body;
@@ -49221,7 +49324,7 @@ router.post("/ai/:fileId", requireAuth, async (req, res) => {
     res.status(err.status || 500).json({ success: false, error: err.message });
   }
 });
-router.get("/ai/jobs/:fileId", requireAuth, async (req, res) => {
+router.get("/ai/jobs/:fileId", requireAuth2, async (req, res) => {
   try {
     const { userId } = getAuthUser(req);
     const jobs = await aiJobService.getJobsForFile(userId, req.params.fileId);

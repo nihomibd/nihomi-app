@@ -13,6 +13,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts.js';
+import { JLPT_N5_KANJI_100 } from '../../data/kanji100Data.js';
 
 export interface KanjiStrokeItem {
   kanji: string;
@@ -25,128 +26,16 @@ export interface KanjiStrokeItem {
   jlpt: string;
 }
 
-export const ESSENTIAL_KANJI_BANK: KanjiStrokeItem[] = [
-  {
-    kanji: '日',
-    onyomi: 'ニチ, ジツ',
-    kunyomi: 'ひ, -び, -か',
-    meaning: 'Sun, Day, Japan',
-    meaningBn: 'সূর্য, দিন, জাপান',
-    strokes: 4,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '本',
-    onyomi: 'ホン',
-    kunyomi: 'もと',
-    meaning: 'Book, Origin, Real',
-    meaningBn: 'বই, উৎস, মূল',
-    strokes: 5,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '語',
-    onyomi: 'ゴ',
-    kunyomi: 'かた.る, かた.らう',
-    meaning: 'Language, Word, Speech',
-    meaningBn: 'ভাষা, শব্দ, কথন',
-    strokes: 14,
-    grade: 'G2',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '学',
-    onyomi: 'ガク',
-    kunyomi: 'まな.ぶ',
-    meaning: 'Study, Learning, Science',
-    meaningBn: 'পড়াশোনা, শিক্ষা, জ্ঞান',
-    strokes: 8,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '生',
-    onyomi: 'セイ, ショウ',
-    kunyomi: 'い.きる, う.まれる, なま',
-    meaning: 'Life, Birth, Student',
-    meaningBn: 'জীবন, জন্ম, শিক্ষার্থী',
-    strokes: 5,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '先',
-    onyomi: 'セン',
-    kunyomi: 'さき, ま.ず',
-    meaning: 'Before, Ahead, Previous',
-    meaningBn: 'পূর্বে, আগে, অগ্রগামী',
-    strokes: 6,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '行',
-    onyomi: 'コウ, ギョウ, アン',
-    kunyomi: 'い.く, ゆ.く, おこな.う',
-    meaning: 'Go, Act, Conduct, Line',
-    meaningBn: 'যাওয়া, কাজ করা, সারি',
-    strokes: 6,
-    grade: 'G2',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '来',
-    onyomi: 'ライ, タイ',
-    kunyomi: 'く.る, きた.る',
-    meaning: 'Come, Next, Future',
-    meaningBn: 'আসা, আগামী, পরবর্তী',
-    strokes: 7,
-    grade: 'G2',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '食',
-    onyomi: 'ショク, ジキ',
-    kunyomi: 'た.べる, く.らう',
-    meaning: 'Eat, Food, Meal',
-    meaningBn: 'খাওয়া, খাদ্য, আহার',
-    strokes: 9,
-    grade: 'G2',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '見',
-    onyomi: 'ケン',
-    kunyomi: 'み.る, み.える, み.せる',
-    meaning: 'See, Look, View',
-    meaningBn: 'দেখা, লক্ষ্য করা',
-    strokes: 7,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '人',
-    onyomi: 'ジン, ニン',
-    kunyomi: 'ひと',
-    meaning: 'Person, Human',
-    meaningBn: 'মানুষ, ব্যক্তি',
-    strokes: 2,
-    grade: 'G1',
-    jlpt: 'N5',
-  },
-  {
-    kanji: '何',
-    onyomi: 'カ',
-    kunyomi: 'なに, なん',
-    meaning: 'What, Which, How many',
-    meaningBn: 'কী, কোনটি, কত',
-    strokes: 7,
-    grade: 'G2',
-    jlpt: 'N5',
-  },
-];
+export const ESSENTIAL_KANJI_BANK: KanjiStrokeItem[] = JLPT_N5_KANJI_100.map((k) => ({
+  kanji: k.kanji,
+  onyomi: Array.isArray(k.onyomi) ? k.onyomi.join(', ') : (k.onyomi || ''),
+  kunyomi: Array.isArray(k.kunyomi) ? k.kunyomi.join(', ') : (k.kunyomi || ''),
+  meaning: k.meaningEn || '',
+  meaningBn: k.meaningBn || '',
+  strokes: k.strokeCount || 4,
+  grade: 'G1',
+  jlpt: 'N5'
+}));
 
 interface KanjiStrokeCanvasProps {
   isOpen?: boolean;

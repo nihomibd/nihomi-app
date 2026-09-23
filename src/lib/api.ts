@@ -26,7 +26,26 @@ const memoryStorage = new Map<string, string>();
 export function getStoredToken(): string | null {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
-      return localStorage.getItem(TOKEN_KEY);
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token) return token;
+
+      // Fallback: check Supabase auth token stored by supabase-js
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+          const item = localStorage.getItem(key);
+          if (item) {
+            try {
+              const parsed = JSON.parse(item);
+              const supabaseToken = parsed.access_token || parsed.currentSession?.access_token;
+              if (supabaseToken) {
+                setStoredToken(supabaseToken);
+                return supabaseToken;
+              }
+            } catch {}
+          }
+        }
+      }
     }
   } catch {
     // Storage access blocked or restricted (e.g. cross-origin iframe)
