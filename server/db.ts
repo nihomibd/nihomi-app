@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { getCurriculumLesson } from '../src/data/lessons/n5MasterCurriculum.js';
 import {
   DatabaseSchema,
   User,
@@ -1665,6 +1666,8 @@ class Database {
         existing.updatedAt = new Date().toISOString();
         this.save();
       }
+      this.getProfileByUserId(existing.id);
+      this.getProgressByUserId(existing.id);
       return existing;
     }
 
@@ -1779,8 +1782,24 @@ class Database {
     return { user, profile, progress };
   }
 
-  public getProfileByUserId(userId: string): UserProfile | undefined {
-    return this.data.profiles.find((p) => p.userId === userId);
+  public getProfileByUserId(userId: string): UserProfile {
+    let profile = this.data.profiles.find((p) => p.userId === userId);
+    if (!profile) {
+      const user = this.findUserById(userId);
+      const now = new Date().toISOString();
+      profile = {
+        userId,
+        displayName: user?.email?.split('@')[0] || 'Japanese Learner',
+        nativeLanguage: 'English',
+        targetLevel: 'N5',
+        dailyGoalMinutes: 20,
+        createdAt: now,
+        updatedAt: now
+      };
+      this.data.profiles.push(profile);
+      this.save();
+    }
+    return profile;
   }
 
   public getProfile(userId: string): UserProfile | undefined {
@@ -2438,7 +2457,23 @@ class Database {
   }
 
   public getLessonById(id: string): Lesson | undefined {
-    return this.data.lessons.find((l) => l.id === id);
+    let lesson = this.data.lessons.find((l) => l.id === id);
+    if (!lesson) {
+      const numMatch = id.match(/l(?:esson)?[-_]?(\d+)/i) || id.match(/[-_](\d+)$/) || id.match(/(\d+)$/);
+      const lessonNum = numMatch ? parseInt(numMatch[1], 10) : undefined;
+      if (lessonNum && lessonNum >= 1 && lessonNum <= 25) {
+        lesson = this.data.lessons.find((l) => l.lessonNumber === lessonNum);
+        if (!lesson) {
+          const cLesson = getCurriculumLesson(lessonNum);
+          if (cLesson) {
+            lesson = cLesson as any;
+            this.data.lessons.push(lesson);
+            this.save();
+          }
+        }
+      }
+    }
+    return lesson;
   }
 
   // --- QUIZZES ---

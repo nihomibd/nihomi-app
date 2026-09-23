@@ -3548,8 +3548,16 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
   if (typeof lessonIdOrNum === 'number') {
     num = lessonIdOrNum;
   } else {
-    const match = String(lessonIdOrNum).match(/\d+/);
-    if (match) num = parseInt(match[0], 10);
+    const str = String(lessonIdOrNum).trim();
+    const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+    if (lMatch) {
+      num = parseInt(lMatch[1], 10);
+    } else {
+      const allMatches = str.match(/\d+/g);
+      if (allMatches && allMatches.length > 0) {
+        num = parseInt(allMatches[allMatches.length - 1], 10);
+      }
+    }
   }
   if (num < 1) num = 1;
   if (num > 25) num = 25;

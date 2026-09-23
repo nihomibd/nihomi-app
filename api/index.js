@@ -8,6 +8,3570 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
+// src/data/lessons/n5MasterCurriculum.ts
+function getCurriculumLesson(lessonIdOrNum) {
+  let num = 1;
+  if (typeof lessonIdOrNum === "number") {
+    num = lessonIdOrNum;
+  } else {
+    const str = String(lessonIdOrNum).trim();
+    const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+    if (lMatch) {
+      num = parseInt(lMatch[1], 10);
+    } else {
+      const allMatches = str.match(/\d+/g);
+      if (allMatches && allMatches.length > 0) {
+        num = parseInt(allMatches[allMatches.length - 1], 10);
+      }
+    }
+  }
+  if (num < 1) num = 1;
+  if (num > 25) num = 25;
+  const item = NIHOMI_JLPT_N5_CURRICULUM.find((l) => l.lessonNumber === num) || NIHOMI_JLPT_N5_CURRICULUM[0];
+  if (!item) return null;
+  return {
+    id: `les-n5-${item.lessonNumber}`,
+    moduleId: `mod-n5-${Math.ceil(item.lessonNumber / 5)}`,
+    courseId: "course-n5",
+    level: "N5",
+    lessonNumber: item.lessonNumber,
+    title: item.titleEnglish,
+    titleJa: item.titleJapanese,
+    summary: `${item.topic} \u2014 Complete Minna no Nihongo Lesson ${item.lessonNumber} with core vocabulary, Bengali grammar notes, Kanji drills, and quizzes.`,
+    explanation: `Lesson ${item.lessonNumber} focuses on ${item.topic}. Study the vocabulary, listen to native pronunciation, review the Bengali grammar notes, and test your knowledge.`,
+    isPublished: true,
+    estimatedMinutes: 25,
+    createdAt: "2025-01-01T00:00:00.000Z",
+    updatedAt: "2025-01-01T00:00:00.000Z",
+    vocabulary: item.vocabularies.map((v, i) => ({
+      id: `voc-${item.lessonNumber}-${i + 1}`,
+      japanese: v?.kanji || v.hiragana,
+      furigana: v.hiragana,
+      romaji: v.romaji,
+      english: v.meaningEnglish,
+      banglaMeaning: v.meaningBengali,
+      partOfSpeech: v.partOfSpeech || "noun",
+      level: "N5",
+      exampleSentenceJa: v.example?.japanese || v?.kanji,
+      exampleSentenceEn: v.example?.english || v.meaningEnglish,
+      exampleSentenceBn: v.example?.bengali || v.meaningBengali,
+      exampleFurigana: v.example?.romaji || v.romaji
+    })),
+    grammar: item.grammarPatterns.map((g, i) => ({
+      id: g.id || `gram-${item.lessonNumber}-${i + 1}`,
+      title: g.pattern,
+      titleJa: g.topic,
+      structure: g.pattern,
+      meaning: g.explanationEnglish,
+      explanation: g.explanationBengali,
+      level: "N5",
+      examples: [
+        {
+          japanese: g.dialogue?.speakerA || "",
+          english: g.dialogue?.english || "",
+          breakdown: g.dialogue?.bengali || ""
+        },
+        {
+          japanese: g.dialogue?.speakerB || "",
+          english: g.dialogue?.english || "",
+          breakdown: g.dialogue?.bengali || ""
+        }
+      ]
+    })),
+    kanji: item.kanjiList.map((k, i) => ({
+      id: `kanji-${item.lessonNumber}-${i + 1}`,
+      character: k?.kanji,
+      meaning: `${k.meaningEnglish} (${k.meaningBengali})`,
+      onyomi: k.onyomi,
+      kunyomi: k.kunyomi,
+      strokes: k.strokeCount,
+      radicals: k?.kanji,
+      level: "N5",
+      examples: k.compounds.map((c) => ({
+        word: c.word,
+        reading: c.reading,
+        meaning: `${c.meaningEnglish} / ${c.meaningBengali}`
+      }))
+    })),
+    dialogue: item.grammarPatterns.map((g) => ({
+      speaker: "\u7530\u4E2D (Tanaka)",
+      speakerRole: "Student",
+      japanese: g.dialogue?.speakerA || "",
+      english: `${g.dialogue?.english} (${g.dialogue?.bengali})`
+    })),
+    practiceExercises: [
+      {
+        id: `prac-${item.lessonNumber}-1`,
+        instruction: "Choose the grammatically correct Japanese sentence structure:",
+        questionJa: item.practiceQuiz.question,
+        hint: item.practiceQuiz.questionRomaji,
+        type: "multiple_choice",
+        options: item.practiceQuiz.options,
+        correctAnswer: item.practiceQuiz.correctAnswer,
+        explanation: `${item.practiceQuiz.explanationEnglish} ${item.practiceQuiz.explanationBengali}`
+      }
+    ],
+    quizId: item.practiceQuiz.id
+  };
+}
+var NIHOMI_JLPT_N5_CURRICULUM;
+var init_n5MasterCurriculum = __esm({
+  "src/data/lessons/n5MasterCurriculum.ts"() {
+    NIHOMI_JLPT_N5_CURRICULUM = [
+      // --- LESSON 1 ---
+      {
+        lessonNumber: 1,
+        titleEnglish: "Meeting People & Self-Introductions",
+        titleJapanese: "\u7B2C1\u8AB2\uFF1A\u81EA\u5DF1\u7D39\u4ECB\u3068\u51FA\u4F1A\u3044",
+        topic: "\u81EA\u5DF1\u7D39\u4ECB (Self-Introduction)",
+        vocabularies: [
+          {
+            kanji: "\u79C1",
+            hiragana: "\u308F\u305F\u3057",
+            romaji: "watashi",
+            meaningEnglish: "I / Me",
+            meaningBengali: "\u0986\u09AE\u09BF",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306F \u304C\u304F\u305B\u3044 \u3067\u3059\u3002",
+              romaji: "Watashi wa gakusei desu.",
+              english: "I am a student.",
+              bengali: "\u0986\u09AE\u09BF \u098F\u0995\u099C\u09A8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u0964"
+            }
+          },
+          {
+            kanji: "\u5148\u751F",
+            hiragana: "\u305B\u3093\u305B\u3044",
+            romaji: "sensei",
+            meaningEnglish: "Teacher / Instructor",
+            meaningBengali: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 / \u0993\u09B8\u09CD\u09A4\u09BE\u09A6",
+            example: {
+              japanese: "\u305F\u306A\u304B\u3055\u3093\u306F \u306B\u307B\u3093\u3054\u306E \u305B\u3093\u305B\u3044 \u3067\u3059\u3002",
+              romaji: "Tanaka-san wa nihongo no sensei desu.",
+              english: "Mr. Tanaka is a Japanese teacher.",
+              bengali: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u09B9\u09B2\u09C7\u09A8 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0964"
+            }
+          },
+          {
+            kanji: "\u5B66\u751F",
+            hiragana: "\u304C\u304F\u305B\u3044",
+            romaji: "gakusei",
+            meaningEnglish: "Student",
+            meaningBengali: "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 / \u099B\u09BE\u09A4\u09CD\u09B0",
+            example: {
+              japanese: "\u30E9\u30D2\u30E0\u3055\u3093\u306F \u304C\u304F\u305B\u3044 \u3067\u3059\u3002",
+              romaji: "Rahimu-san wa gakusei desu.",
+              english: "Rahim is a student.",
+              bengali: "\u09B0\u09B9\u09BF\u09AE \u098F\u0995\u099C\u09A8 \u099B\u09BE\u09A4\u09CD\u09B0\u0964"
+            }
+          },
+          {
+            kanji: "\u4F1A\u793E\u54E1",
+            hiragana: "\u304B\u3044\u3057\u3083\u3044\u3093",
+            romaji: "kaishain",
+            meaningEnglish: "Company Employee",
+            meaningBengali: "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u0995\u09B0\u09CD\u09AE\u099A\u09BE\u09B0\u09C0 / \u099A\u09BE\u0995\u09C1\u09B0\u09BF\u099C\u09C0\u09AC\u09C0",
+            example: {
+              japanese: "\u30DF\u30E9\u30FC\u3055\u3093\u306F IMC\u306E \u304B\u3044\u3057\u3083\u3044\u3093 \u3067\u3059\u3002",
+              romaji: "Miraa-san wa IMC no kaishain desu.",
+              english: "Mr. Miller is an employee of IMC.",
+              bengali: "\u09AE\u09BF\u09B2\u09BE\u09B0 \u09B8\u09BE\u09B9\u09C7\u09AC \u0986\u0987\u098F\u09AE\u09B8\u09BF \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u099A\u09BE\u0995\u09C1\u09B0\u09BF\u099C\u09C0\u09AC\u09C0\u0964"
+            }
+          },
+          {
+            kanji: "\u65E5\u672C\u4EBA",
+            hiragana: "\u306B\u307B\u3093\u3058\u3093",
+            romaji: "nihonjin",
+            meaningEnglish: "Japanese person",
+            meaningBengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+            example: {
+              japanese: "\u3055\u304F\u3089\u3055\u3093\u306F \u306B\u307B\u3093\u3058\u3093 \u3067\u3059\u3002",
+              romaji: "Sakura-san wa nihonjin desu.",
+              english: "Sakura is Japanese.",
+              bengali: "\u09B8\u09BE\u0995\u09C1\u09B0\u09BE \u09B9\u09B2\u09C7\u09A8 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-01-01",
+            pattern: "N1 \u306F N2 \u3067\u3059 / \u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+            topic: "Topic Marker & Polite Copula",
+            explanationEnglish: "'\u306F' (wa) marks the sentence topic. '\u3067\u3059' (desu) means 'is/am/are'. To negate politely, replace '\u3067\u3059' with '\u3058\u3083\u3042\u308A\u307E\u305B\u3093' (ja arimasen).",
+            explanationBengali: "'\u306F' (\u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3: \u0993\u09DF\u09BE) \u09B9\u09B2\u09CB \u099F\u09AA\u09BF\u0995 \u09AE\u09BE\u09B0\u09CD\u0995\u09BE\u09B0 \u0995\u09A3\u09BE\u0964 '\u3067\u3059' \u09B9\u09B2\u09CB \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 '\u09B9\u09DF/\u0986\u099B\u09BF'\u0964 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0995\u09B0\u09A4\u09C7 '\u3058\u3083\u3042\u308A\u307E\u305B\u3093' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+            dialogue: {
+              speakerA: "A: \u521D\u3081\u307E\u3057\u3066\u3001\u308F\u305F\u3057\u306F \u7530\u4E2D \u3067\u3059\u3002(Hajimemashite, watashi wa Tanaka desu.)",
+              speakerB: "B: \u521D\u3081\u307E\u3057\u3066\u3001\u30E9\u30D2\u30E0 \u3067\u3059\u3002\u3088\u308D\u3057\u304F\u304A\u306D\u304C\u3044\u3057\u307E\u3059\u3002(Hajimemashite, Rahimu desu. Yoroshiku onegaishimasu.)",
+              english: "A: Nice to meet you, I am Tanaka. / B: Nice to meet you, I am Rahim. Pleased to meet you.",
+              bengali: "A: \u09B6\u09C1\u09AD \u09AA\u09B0\u09BF\u099A\u09DF, \u0986\u09AE\u09BF \u09A4\u09BE\u09A8\u09BE\u0995\u09BE\u0964 / B: \u09B6\u09C1\u09AD \u09AA\u09B0\u09BF\u099A\u09DF, \u0986\u09AE\u09BF \u09B0\u09B9\u09BF\u09AE\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AA\u09B0\u09BF\u099A\u09BF\u09A4 \u09B9\u09DF\u09C7 \u0986\u09A8\u09A8\u09CD\u09A6\u09BF\u09A4\u0964"
+            }
+          },
+          {
+            id: "g-01-02",
+            pattern: "N1 \u3082 N2 \u3067\u3059 / N1 \u306E N2",
+            topic: "Inclusive '\u3082' and Possessive '\u306E'",
+            explanationEnglish: "'\u3082' (mo) means 'also/too'. '\u306E' (no) connects two nouns to show possession or affiliation.",
+            explanationBengali: "'\u3082' (\u09AE\u09CB) '\u0993/\u098F\u099B\u09BE\u09DC\u09BE\u0993' \u09AC\u09CB\u099D\u09BE\u09DF\u0964 '\u306E' (\u09A8\u09CB) \u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u09AC\u09BE \u09B8\u09AE\u09CD\u09AC\u09A8\u09CD\u09A7 ('\u098F\u09B0') \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u30DF\u30E9\u30FC\u3055\u3093\u306F \u304C\u304F\u305B\u3044 \u3067\u3059\u304B\u3002(Miraa-san wa gakusei desu ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u304B\u3044\u3057\u3083\u3044\u3093 \u3067\u3059\u3002\u30B5\u30F3\u30C8\u30B9\u3055\u3093\u3082 \u304B\u3044\u3057\u3083\u3044\u3093 \u3067\u3059\u3002(Iie, kaishain desu. Santosu-san mo kaishain desu.)",
+              english: "A: Is Mr. Miller a student? / B: No, he is a company employee. Mr. Santos is also a company employee.",
+              bengali: "A: \u09AE\u09BF\u09B2\u09BE\u09B0 \u09B8\u09BE\u09B9\u09C7\u09AC \u0995\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0? / B: \u09A8\u09BE, \u099A\u09BE\u0995\u09C1\u09B0\u09BF\u099C\u09C0\u09AC\u09C0\u0964 \u09B8\u09BE\u09A8\u09CD\u09A4\u09CB\u09B8 \u09B8\u09BE\u09B9\u09C7\u09AC\u0993 \u098F\u0995\u099C\u09A8 \u099A\u09BE\u0995\u09C1\u09B0\u09BF\u099C\u09C0\u09AC\u09C0\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u65E5",
+            strokeCount: 4,
+            onyomi: ["\u30CB\u30C1 (nichi)", "\u30B8\u30C4 (jitsu)"],
+            kunyomi: ["\u3072 (hi)", "-\u3073 (-bi)"],
+            meaningEnglish: "Sun / Day / Japan",
+            meaningBengali: "\u09B8\u09C2\u09B0\u09CD\u09AF / \u09A6\u09BF\u09A8 / \u099C\u09BE\u09AA\u09BE\u09A8",
+            compounds: [
+              { word: "\u65E5\u672C", reading: "\u306B\u307B\u3093 (nihon)", meaningEnglish: "Japan", meaningBengali: "\u099C\u09BE\u09AA\u09BE\u09A8" },
+              { word: "\u65E5\u66DC\u65E5", reading: "\u306B\u3061\u3088\u3046\u3073 (nichiyoubi)", meaningEnglish: "Sunday", meaningBengali: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0" }
+            ]
+          },
+          {
+            kanji: "\u672C",
+            strokeCount: 5,
+            onyomi: ["\u30DB\u30F3 (hon)"],
+            kunyomi: ["\u3082\u3068 (moto)"],
+            meaningEnglish: "Book / Origin / Main",
+            meaningBengali: "\u09AC\u0987 / \u0989\u09CE\u09B8 / \u09AE\u09C2\u09B2",
+            compounds: [
+              { word: "\u65E5\u672C\u8A9E", reading: "\u306B\u307B\u3093\u3054 (nihongo)", meaningEnglish: "Japanese language", meaningBengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE" },
+              { word: "\u672C\u5C4B", reading: "\u307B\u3093\u3084 (hon'ya)", meaningEnglish: "Bookstore", meaningBengali: "\u09AC\u0987\u09DF\u09C7\u09B0 \u09A6\u09CB\u0995\u09BE\u09A8" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-01",
+          question: "\u308F\u305F\u3057\uFF08\u3000\uFF09\u304C\u304F\u305B\u3044 \u3067\u3059\u3002",
+          questionRomaji: "Watashi ( ) gakusei desu.",
+          options: ["\u306F", "\u304C", "\u3092", "\u306B"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u306F",
+          explanationEnglish: "'\u306F' (pronounced 'wa') marks '\u308F\u305F\u3057' as the topic of the sentence.",
+          explanationBengali: "'\u308F\u305F\u3057' \u098F\u09B0 \u09AA\u09B0\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09AE\u09C2\u09B2 \u09AC\u09BF\u09B7\u09DF (\u099F\u09AA\u09BF\u0995) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 '\u306F' (\u0993\u09DF\u09BE) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964"
+        }
+      },
+      // --- LESSON 2 ---
+      {
+        lessonNumber: 2,
+        titleEnglish: "Demonstratives: This, That & Possessions",
+        titleJapanese: "\u7B2C2\u8AB2\uFF1A\u3053\u308C\u30FB\u305D\u308C\u30FB\u3042\u308C\u3068\u7269\u306E\u6240\u6709",
+        topic: "\u7269\u306E\u6307\u793A (Pointing to Objects: \u3053\u308C\u30FB\u305D\u308C\u30FB\u3042\u308C)",
+        vocabularies: [
+          {
+            kanji: "\u672C",
+            hiragana: "\u307B\u3093",
+            romaji: "hon",
+            meaningEnglish: "Book",
+            meaningBengali: "\u09AC\u0987",
+            example: {
+              japanese: "\u3053\u308C\u306F \u306B\u307B\u3093\u3054\u306E \u307B\u3093 \u3067\u3059\u3002",
+              romaji: "Kore wa nihongo no hon desu.",
+              english: "This is a Japanese book.",
+              bengali: "\u098F\u099F\u09BF \u098F\u0995\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AC\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u8F9E\u66F8",
+            hiragana: "\u3058\u3057\u3087",
+            romaji: "jisho",
+            meaningEnglish: "Dictionary",
+            meaningBengali: "\u0985\u09AD\u09BF\u09A7\u09BE\u09A8 / \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF",
+            example: {
+              japanese: "\u305D\u308C\u306F \u3060\u308C\u306E \u3058\u3057\u3087 \u3067\u3059\u304B\u3002",
+              romaji: "Sore wa dare no jisho desu ka.",
+              english: "Whose dictionary is that?",
+              bengali: "\u0993\u099F\u09BF \u0995\u09BE\u09B0 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8?"
+            }
+          },
+          {
+            kanji: "\u9375",
+            hiragana: "\u304B\u304E",
+            romaji: "kagi",
+            meaningEnglish: "Key",
+            meaningBengali: "\u099A\u09BE\u09AC\u09BF",
+            example: {
+              japanese: "\u3042\u308C\u306F \u304F\u308B\u307E\u306E \u304B\u304E \u3067\u3059\u3002",
+              romaji: "Are wa kuruma no kagi desu.",
+              english: "That over there is the car key.",
+              bengali: "\u0990\u099F\u09BF \u0997\u09BE\u09DC\u09BF\u09B0 \u099A\u09BE\u09AC\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5098",
+            hiragana: "\u304B\u3055",
+            romaji: "kasa",
+            meaningEnglish: "Umbrella",
+            meaningBengali: "\u099B\u09BE\u09A4\u09BE",
+            example: {
+              japanese: "\u3053\u306E \u304B\u3055\u306F \u308F\u305F\u3057\u306E\u3067\u3059\u3002",
+              romaji: "Kono kasa wa watashi no desu.",
+              english: "This umbrella is mine.",
+              bengali: "\u098F\u0987 \u099B\u09BE\u09A4\u09BE\u099F\u09BF \u0986\u09AE\u09BE\u09B0\u0964"
+            }
+          },
+          {
+            kanji: "\u6642\u8A08",
+            hiragana: "\u3068\u3051\u3044",
+            romaji: "tokei",
+            meaningEnglish: "Watch / Clock",
+            meaningBengali: "\u0998\u09DC\u09BF",
+            example: {
+              japanese: "\u305D\u306E \u3068\u3051\u3044\u306F \u30B9\u30A4\u30B9\u306E \u3068\u3051\u3044 \u3067\u3059\u3002",
+              romaji: "Sono tokei wa suisu no tokei desu.",
+              english: "That watch is a Swiss watch.",
+              bengali: "\u0990 \u0998\u09DC\u09BF\u099F\u09BF \u09B8\u09C1\u0987\u09B8 \u0998\u09DC\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-02-01",
+            pattern: "\u3053\u308C / \u305D\u308C / \u3042\u308C \u306F N \u3067\u3059",
+            topic: "Demonstrative Pronouns for Things",
+            explanationEnglish: "'\u3053\u308C' (near speaker), '\u305D\u308C' (near listener), '\u3042\u308C' (far from both). They stand alone as nouns before '\u306F'.",
+            explanationBengali: "'\u3053\u308C' (\u09AC\u0995\u09CD\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7), '\u305D\u308C' (\u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7), '\u3042\u308C' (\u0989\u09AD\u09DF\u09C7\u09B0 \u09A5\u09C7\u0995\u09C7 \u09A6\u09C2\u09B0\u09C7)\u0964 \u098F\u0997\u09C1\u09B2\u09CB \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF \u09B8\u09B0\u09CD\u09AC\u09A8\u09BE\u09AE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u306F' \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u308C\u306F \u306A\u3093 \u3067\u3059\u304B\u3002(Kore wa nan desu ka?)",
+              speakerB: "B: \u305D\u308C\u306F \u306B\u307B\u3093\u306E \u304A\u3061\u3083 \u3067\u3059\u3002(Sore wa nihon no ocha desu.)",
+              english: "A: What is this? / B: That is Japanese green tea.",
+              bengali: "A: \u098F\u099F\u09BF \u0995\u09C0? / B: \u0993\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09BE\u0964"
+            }
+          },
+          {
+            id: "g-02-02",
+            pattern: "\u3053\u306E / \u305D\u306E / \u3042\u306E N \u306F [Noun/Owner] \u306E \u3067\u3059",
+            topic: "Demonstrative Adjectives & Possessive Ellipsis",
+            explanationEnglish: "'\u3053\u306E/\u305D\u306E/\u3042\u306E' MUST be directly followed by a noun. '[Noun] \u306E \u3067\u3059' can mean 'belongs to [Noun]'.",
+            explanationBengali: "'\u3053\u306E/\u305D\u306E/\u3042\u306E' \u098F\u09B0 \u09A0\u09BF\u0995 \u09AA\u09B0\u09C7\u0987 \u098F\u0995\u099F\u09BF \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF \u09AC\u09B8\u09BE\u09A4\u09C7 \u09B9\u09DF\u0964 '[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306E \u3067\u3059' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u306E \u304B\u3055\u306F \u3042\u306A\u305F\u306E \u3067\u3059\u304B\u3002(Kono kasa wa anata no desu ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u305F\u306A\u304B\u3055\u3093\u306E \u3067\u3059\u3002(Iie, Tanaka-san no desu.)",
+              english: "A: Is this umbrella yours? / B: No, it is Mr. Tanaka's.",
+              bengali: "A: \u098F\u0987 \u099B\u09BE\u09A4\u09BE\u099F\u09BF \u0995\u09BF \u0986\u09AA\u09A8\u09BE\u09B0? / B: \u09A8\u09BE, \u098F\u099F\u09BF \u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC\u09C7\u09B0\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4EBA",
+            strokeCount: 2,
+            onyomi: ["\u30B8\u30F3 (jin)", "\u30CB\u30F3 (nin)"],
+            kunyomi: ["\u3072\u3068 (hito)"],
+            meaningEnglish: "Person / Human",
+            meaningBengali: "\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF / \u09AE\u09BE\u09A8\u09C1\u09B7 / \u09A8\u09BE\u0997\u09B0\u09BF\u0995",
+            compounds: [
+              { word: "\u5916\u56FD\u4EBA", reading: "\u304C\u3044\u3053\u304F\u3058\u3093 (gaikokujin)", meaningEnglish: "Foreigner", meaningBengali: "\u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09A8\u09BE\u0997\u09B0\u09BF\u0995" },
+              { word: "\u4E09\u4EBA", reading: "\u3055\u3093\u306B\u3093 (sannin)", meaningEnglish: "Three people", meaningBengali: "\u09A4\u09BF\u09A8\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF" }
+            ]
+          },
+          {
+            kanji: "\u6708",
+            strokeCount: 4,
+            onyomi: ["\u30B2\u30C4 (getsu)", "\u30AC\u30C4 (gatsu)"],
+            kunyomi: ["\u3064\u304D (tsuki)"],
+            meaningEnglish: "Moon / Month",
+            meaningBengali: "\u099A\u09BE\u0981\u09A6 / \u09AE\u09BE\u09B8",
+            compounds: [
+              { word: "\u6708\u66DC\u65E5", reading: "\u3052\u3064\u3088\u3046\u3073 (getsuyoubi)", meaningEnglish: "Monday", meaningBengali: "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0" },
+              { word: "\u4E00\u6708", reading: "\u3044\u3061\u304C\u3064 (ichigatsu)", meaningEnglish: "January", meaningBengali: "\u099C\u09BE\u09A8\u09C1\u09AF\u09BC\u09BE\u09B0\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-02",
+          question: "\uFF08\u3000\uFF09\u672C\u306F \u308F\u305F\u3057\u306E \u3067\u3059\u3002",
+          questionRomaji: "( ) hon wa watashi no desu.",
+          options: ["\u3053\u306E", "\u3053\u308C", "\u3053\u3053", "\u3069\u308C"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3053\u306E",
+          explanationEnglish: "Because '\u672C' (noun) follows directly, the demonstrative adjective '\u3053\u306E' must be used instead of '\u3053\u308C'.",
+          explanationBengali: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09AA\u09B0\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF '\u672C' (\u09AC\u0987) \u09B0\u09DF\u09C7\u099B\u09C7, \u09A4\u09BE\u0987 '\u3053\u308C' \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 '\u3053\u306E' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 3 ---
+      {
+        lessonNumber: 3,
+        titleEnglish: "Places, Directions & Locations",
+        titleJapanese: "\u7B2C3\u8AB2\uFF1A\u5834\u6240\u30FB\u65B9\u89D2\u30FB\u8CB7\u3044\u7269",
+        topic: "\u5834\u6240\u306E\u6307\u793A (Pointing to Places: \u3053\u3053\u30FB\u305D\u3053\u30FB\u3042\u305D\u3053)",
+        vocabularies: [
+          {
+            kanji: "\u6559\u5BA4",
+            hiragana: "\u304D\u3087\u3046\u3057\u3064",
+            romaji: "kyoushitsu",
+            meaningEnglish: "Classroom",
+            meaningBengali: "\u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7",
+            example: {
+              japanese: "\u3053\u3053\u306F \u304D\u3087\u3046\u3057\u3064 \u3067\u3059\u3002",
+              romaji: "Koko wa kyoushitsu desu.",
+              english: "Here is the classroom.",
+              bengali: "\u098F\u099F\u09BF \u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7\u0964"
+            }
+          },
+          {
+            kanji: "\u4E8B\u52D9\u6240",
+            hiragana: "\u3058\u3080\u3057\u3087",
+            romaji: "jimusho",
+            meaningEnglish: "Office",
+            meaningBengali: "\u09A6\u09AA\u09CD\u09A4\u09B0 / \u0985\u09AB\u09BF\u09B8",
+            example: {
+              japanese: "\u3058\u3080\u3057\u3087\u306F \u3042\u305D\u3053 \u3067\u3059\u3002",
+              romaji: "Jimusho wa asoko desu.",
+              english: "The office is over there.",
+              bengali: "\u0985\u09AB\u09BF\u09B8\u099F\u09BF \u0990 \u09A6\u09C2\u09B0\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u90E8\u5C4B",
+            hiragana: "\u3078\u3084",
+            romaji: "heya",
+            meaningEnglish: "Room",
+            meaningBengali: "\u0998\u09B0 / \u0995\u0995\u09CD\u09B7",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306E \u3078\u3084\u306F \u306B\u304B\u3044 \u3067\u3059\u3002",
+              romaji: "Watashi no heya wa nikai desu.",
+              english: "My room is on the second floor.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u09B0\u09C1\u09AE\u099F\u09BF \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09A4\u09B2\u09BE\u09DF\u0964"
+            }
+          },
+          {
+            kanji: "\u30C8\u30A4\u30EC",
+            hiragana: "\u3068\u3044\u308C",
+            romaji: "toire",
+            meaningEnglish: "Restroom / Toilet",
+            meaningBengali: "\u09B6\u09CC\u099A\u09BE\u0997\u09BE\u09B0 / \u099F\u09AF\u09BC\u09B2\u09C7\u099F",
+            example: {
+              japanese: "\u3068\u3044\u308C\u306F \u3069\u3053 \u3067\u3059\u304B\u3002",
+              romaji: "Toire wa doko desu ka.",
+              english: "Where is the restroom?",
+              bengali: "\u099F\u09AF\u09BC\u09B2\u09C7\u099F\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?"
+            }
+          },
+          {
+            kanji: "\u56FD",
+            hiragana: "\u304F\u306B",
+            romaji: "kuni",
+            meaningEnglish: "Country / Homeland",
+            meaningBengali: "\u09A6\u09C7\u09B6 / \u09B8\u09CD\u09AC\u09A6\u09C7\u09B6",
+            example: {
+              japanese: "\u304A\u304F\u306B\uFF08\u56FD\uFF09\u306F \u3069\u3061\u3089 \u3067\u3059\u304B\u3002",
+              romaji: "Okuni wa dochira desu ka.",
+              english: "Which country are you from?",
+              bengali: "\u0986\u09AA\u09A8\u09BE\u09B0 \u09A6\u09C7\u09B6 \u0995\u09CB\u09A8\u099F\u09BF?"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-03-01",
+            pattern: "\u3053\u3053 / \u305D\u3053 / \u3042\u305D\u3053 \u306F [Place] \u3067\u3059",
+            topic: "Demonstrative Location Words",
+            explanationEnglish: "'\u3053\u3053' (here), '\u305D\u3053' (there near listener), '\u3042\u305D\u3053' (over there). '\u3069\u3053' asks 'where'. Polite equivalents are '\u3053\u3061\u3089\u30FB\u305D\u3061\u3089\u30FB\u3042\u3061\u3089\u30FB\u3069\u3061\u3089'.",
+            explanationBengali: "'\u3053\u3053' (\u098F\u0996\u09BE\u09A8\u09C7), '\u305D\u3053' (\u0993\u0996\u09BE\u09A8\u09C7), '\u3042\u305D\u3053' (\u0990 \u09A6\u09C2\u09B0\u09C7)\u0964 \u09B8\u09CD\u09A5\u09BE\u09A8 \u099C\u09BF\u099C\u09CD\u099E\u09C7\u09B8 \u0995\u09B0\u09A4\u09C7 '\u3069\u3053' \u09AC\u09BE \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B0\u09C2\u09AA '\u3069\u3061\u3089' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+            dialogue: {
+              speakerA: "A: \u3059\u307F\u307E\u305B\u3093\u3001\u3046\u3051\u3064\u3051\u306F \u3069\u3053 \u3067\u3059\u304B\u3002(Sumimasen, uketsuke wa doko desu ka?)",
+              speakerB: "B: \u3042\u3061\u3089 \u3067\u3059\u3002(Achira desu.)",
+              english: "A: Excuse me, where is the reception? / B: It is over that way (polite).",
+              bengali: "A: \u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u0985\u09AD\u09CD\u09AF\u09B0\u09CD\u09A5\u09A8\u09BE \u09A1\u09C7\u09B8\u09CD\u0995\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09AF\u09BC? / B: \u0990 \u09A6\u09BF\u0995\u09C7\u0964"
+            }
+          },
+          {
+            id: "g-03-02",
+            pattern: "[Item/Place] \u306F [Country/Company] \u306E \u3067\u3059 / \u3044\u304F\u3089 \u3067\u3059\u304B",
+            topic: "Country of Origin and Asking Price",
+            explanationEnglish: "'[Country] \u306E [Item]' indicates manufacturing origin. '[Item] \u306F \u3044\u304F\u3089 \u3067\u3059\u304B' asks for the price.",
+            explanationBengali: "'[\u09A6\u09C7\u09B6] \u306E [\u099C\u09BF\u09A8\u09BF\u09B8]' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u0989\u09CE\u09AA\u09BE\u09A6\u09BF\u09A4 \u09A6\u09C7\u09B6 \u09AC\u09CB\u099D\u09BE\u09DF\u0964 '\u3044\u304F\u3089 \u3067\u3059\u304B' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09A6\u09BE\u09AE \u099C\u09BF\u099C\u09CD\u099E\u09C7\u09B8 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u306E \u3068\u3051\u3044\u306F \u3044\u304F\u3089 \u3067\u3059\u304B\u3002(Kono tokei wa ikura desu ka?)",
+              speakerB: "B: 5,000\u3048\u3093\uFF08\u4E94\u5343\u5186\uFF09 \u3067\u3059\u3002(Gosen-en desu.)",
+              english: "A: How much is this watch? / B: It is 5,000 yen.",
+              bengali: "A: \u098F\u0987 \u0998\u09DC\u09BF\u099F\u09BF\u09B0 \u09A6\u09BE\u09AE \u0995\u09A4? / B: \u09EB,\u09E6\u09E6\u09E6 \u0987\u09DF\u09C7\u09A8\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u706B",
+            strokeCount: 4,
+            onyomi: ["\u30AB (ka)"],
+            kunyomi: ["\u3072 (hi)", "\u307B (ho)"],
+            meaningEnglish: "Fire",
+            meaningBengali: "\u0986\u0997\u09C1\u09A8",
+            compounds: [
+              { word: "\u706B\u66DC\u65E5", reading: "\u304B\u3088\u3046\u3073 (kayoubi)", meaningEnglish: "Tuesday", meaningBengali: "\u09AE\u0999\u09CD\u0997\u09B2\u09AC\u09BE\u09B0" },
+              { word: "\u706B\u4E8B", reading: "\u304B\u3058 (kaji)", meaningEnglish: "Conflagration / Fire disaster", meaningBengali: "\u0985\u0997\u09CD\u09A8\u09BF\u0995\u09BE\u09A3\u09CD\u09A1" }
+            ]
+          },
+          {
+            kanji: "\u6C34",
+            strokeCount: 4,
+            onyomi: ["\u30B9\u30A4 (sui)"],
+            kunyomi: ["\u307F\u305A (mizu)"],
+            meaningEnglish: "Water",
+            meaningBengali: "\u09AA\u09BE\u09A8\u09BF / \u099C\u09B2",
+            compounds: [
+              { word: "\u6C34\u66DC\u65E5", reading: "\u3059\u3044\u3088\u3046\u3073 (suiyoubi)", meaningEnglish: "Wednesday", meaningBengali: "\u09AC\u09C1\u09A7\u09AC\u09BE\u09B0" },
+              { word: "\u304A\u6C34", reading: "\u304A\u307F\u305A (omizu)", meaningEnglish: "Drinking water", meaningBengali: "\u0996\u09BE\u09AC\u09BE\u09B0 \u09AA\u09BE\u09A8\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-03",
+          question: "\u3059\u307F\u307E\u305B\u3093\u3001\u304E\u3093\u3053\u3046\u306F\uFF08\u3000\uFF09\u3067\u3059\u304B\u3002\u2015\u2015\u3042\u305D\u3053 \u3067\u3059\u3002",
+          questionRomaji: "Sumimasen, ginkou wa ( ) desu ka? -- Asoko desu.",
+          options: ["\u3069\u3053", "\u3060\u308C", "\u306A\u306B", "\u3044\u304F\u3089"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3069\u3053",
+          explanationEnglish: "'\u3069\u3053' (where) is used to ask for the location of the bank.",
+          explanationBengali: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u099C\u09BE\u09A8\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09B8\u09C2\u099A\u0995 \u09B6\u09AC\u09CD\u09A6 '\u3069\u3053' (\u0995\u09CB\u09A5\u09BE\u09DF) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 4 ---
+      {
+        lessonNumber: 4,
+        titleEnglish: "Time, Days & Daily Routines",
+        titleJapanese: "\u7B2C4\u8AB2\uFF1A\u6642\u523B\u30FB\u66DC\u65E5\u30FB\u65E5\u8AB2\u306E\u52D5\u8A5E",
+        topic: "\u6642\u9593\u3068\u52D5\u8A5E\u306E\u57FA\u672C (~\u307E\u3059 / ~\u307E\u305B\u3093)",
+        vocabularies: [
+          {
+            kanji: "\u8D77\u304D\u307E\u3059",
+            hiragana: "\u304A\u304D\u307E\u3059",
+            romaji: "okimasu",
+            meaningEnglish: "To wake up / get up",
+            meaningBengali: "\u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0993\u09A0\u09BE / \u099C\u09BE\u0997\u09CD\u09B0\u09A4 \u09B9\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306F \u307E\u3044\u3042\u3055 6\u3058\u306B \u304A\u304D\u307E\u3059\u3002",
+              romaji: "Watashi wa maiasa rokuji ni okimasu.",
+              english: "I wake up at 6:00 every morning.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B8\u0995\u09BE\u09B2 \u09EC\u099F\u09BE\u09DF \u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0989\u09A0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5BDD\u307E\u3059",
+            hiragana: "\u306D\u307E\u3059",
+            romaji: "nemasu",
+            meaningEnglish: "To sleep / go to bed",
+            meaningBengali: "\u0998\u09C1\u09AE\u09BE\u09A8\u09CB / \u0998\u09C1\u09AE\u09BE\u09A4\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3088\u308B 11\u3058\u306B \u306D\u307E\u3059\u3002",
+              romaji: "Yoru juuichiji ni nemasu.",
+              english: "I go to bed at 11:00 PM.",
+              bengali: "\u0986\u09AE\u09BF \u09B0\u09BE\u09A4\u09C7 \u09E7\u09E7\u099F\u09BE\u09DF \u0998\u09C1\u09AE\u09BE\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u50CD\u304D\u307E\u3059",
+            hiragana: "\u306F\u305F\u3089\u304D\u307E\u3059",
+            romaji: "hatarakimasu",
+            meaningEnglish: "To work",
+            meaningBengali: "\u0995\u09BE\u099C \u0995\u09B0\u09BE / \u099A\u09BE\u0995\u09B0\u09BF \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3052\u3064\u3088\u3046\u3073\u304B\u3089 \u304D\u3093\u3088\u3046\u3073\u307E\u3067 \u306F\u305F\u3089\u304D\u307E\u3059\u3002",
+              romaji: "Getsuyoubi kara kinyoubi made hatarakimasu.",
+              english: "I work from Monday to Friday.",
+              bengali: "\u0986\u09AE\u09BF \u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 \u09A5\u09C7\u0995\u09C7 \u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 \u0995\u09BE\u099C \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u52C9\u5F37\u3057\u307E\u3059",
+            hiragana: "\u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3059",
+            romaji: "benkyoushimasu",
+            meaningEnglish: "To study",
+            meaningBengali: "\u09AA\u09DC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u307E\u3044\u3070\u3093 \u306B\u307B\u3093\u3054\u3092 \u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3059\u3002",
+              romaji: "Maiban nihongo o benkyoushimasu.",
+              english: "I study Japanese every night.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B0\u09BE\u09A4\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u09DC\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u9280\u884C",
+            hiragana: "\u304E\u3093\u3053\u3046",
+            romaji: "ginkou",
+            meaningEnglish: "Bank",
+            meaningBengali: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995",
+            example: {
+              japanese: "\u304E\u3093\u3053\u3046\u306F 9\u3058\u304B\u3089 3\u3058\u307E\u3067 \u3067\u3059\u3002",
+              romaji: "Ginkou wa kuji kara sanji made desu.",
+              english: "The bank is open from 9:00 to 3:00.",
+              bengali: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09B8\u0995\u09BE\u09B2 \u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09AC\u09BF\u0995\u09BE\u09B2 \u09E9\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-04-01",
+            pattern: "[Specific Time] \u306B Verb (\u307E\u3059 / \u307E\u3057\u305F / \u307E\u305B\u3093)",
+            topic: "Time Particle '\u306B' and Verb Tenses",
+            explanationEnglish: "'\u306B' (ni) marks a specific numerical point in time (e.g. 7\u6642\u306B). Present/Future affirmative: ~\u307E\u3059, Past affirmative: ~\u307E\u3057\u305F, Negative: ~\u307E\u305B\u3093, Past negative: ~\u307E\u305B\u3093\u3067\u3057\u305F.",
+            explanationBengali: "\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u0982\u0996\u09CD\u09AF\u09BE\u09AC\u09BE\u099A\u0995 \u09B8\u09AE\u09DF\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u306B' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8/\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09CE: ~\u307E\u3059, \u0985\u09A4\u09C0\u09A4: ~\u307E\u3057\u305F, \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995: ~\u307E\u305B\u3093, \u0985\u09A4\u09C0\u09A4 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995: ~\u307E\u305B\u3093\u3067\u3057\u305F\u0964",
+            dialogue: {
+              speakerA: "A: \u307E\u3044\u3042\u3055 \u306A\u3093\u3058\u306B \u304A\u304D\u307E\u3059\u304B\u3002(Maiasa nanji ni okimasu ka?)",
+              speakerB: "B: 6\u3058\u306F\u3093\u306B \u304A\u304D\u307E\u3059\u3002(Rokuji-han ni okimasu.)",
+              english: "A: What time do you wake up every morning? / B: I wake up at 6:30.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B8\u0995\u09BE\u09B2\u09C7 \u0995\u09DF\u099F\u09BE\u09DF \u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0993\u09A0\u09C7\u09A8? / B: \u09B8\u0995\u09BE\u09B2 \u09EC:\u09E9\u09E6 \u098F \u0989\u09A0\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-04-02",
+            pattern: "[Time/Place 1] \u304B\u3089 [Time/Place 2] \u307E\u3067",
+            topic: "From... Until... (Starting and Ending Points)",
+            explanationEnglish: "'\u304B\u3089' (kara) means 'from'; '\u307E\u3067' (made) means 'until/to'.",
+            explanationBengali: "'\u304B\u3089' \u0985\u09B0\u09CD\u09A5 '\u09A5\u09C7\u0995\u09C7' \u098F\u09AC\u0982 '\u307E\u3067' \u0985\u09B0\u09CD\u09A5 '\u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4'\u0964 \u09B8\u09AE\u09DF \u09AC\u09BE \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1 \u0993 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3072\u308B\u3084\u3059\u307F\u306F \u306A\u3093\u3058\u304B\u3089 \u306A\u3093\u3058\u307E\u3067 \u3067\u3059\u304B\u3002(Hiruyasumi wa nanji kara nanji made desu ka?)",
+              speakerB: "B: 12\u3058\u304B\u3089 1\u3058\u307E\u3067 \u3067\u3059\u3002(Juuniji kara ichiji made desu.)",
+              english: "A: From what time to what time is lunch break? / B: From 12:00 to 1:00.",
+              bengali: "A: \u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u09AC\u09BF\u09B0\u09A4\u09BF \u0995\u09DF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u0995\u09DF\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4? / B: \u09E7\u09E8\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09E7\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u6728",
+            strokeCount: 4,
+            onyomi: ["\u30E2\u30AF (moku)", "\u30DC\u30AF (boku)"],
+            kunyomi: ["\u304D (ki)", "\u3053- (ko-)"],
+            meaningEnglish: "Tree / Wood",
+            meaningBengali: "\u0997\u09BE\u099B / \u0995\u09BE\u09A0",
+            compounds: [
+              { word: "\u6728\u66DC\u65E5", reading: "\u3082\u304F\u3088\u3046\u3073 (mokuyoubi)", meaningEnglish: "Thursday", meaningBengali: "\u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF\u09AC\u09BE\u09B0" },
+              { word: "\u5927\u6728", reading: "\u305F\u3044\u307C\u304F (taiboku)", meaningEnglish: "Large tree", meaningBengali: "\u09AC\u09BF\u09B6\u09BE\u09B2 \u09AC\u09C3\u0995\u09CD\u09B7" }
+            ]
+          },
+          {
+            kanji: "\u91D1",
+            strokeCount: 8,
+            onyomi: ["\u30AD\u30F3 (kin)", "\u30B3\u30F3 (kon)"],
+            kunyomi: ["\u304B\u306D (kane)", "\u304B\u306A- (kana-)"],
+            meaningEnglish: "Gold / Money",
+            meaningBengali: "\u09B8\u09CD\u09AC\u09B0\u09CD\u09A3 / \u099F\u09BE\u0995\u09BE / \u09AA\u09DF\u09B8\u09BE",
+            compounds: [
+              { word: "\u91D1\u66DC\u65E5", reading: "\u304D\u3093\u3088\u3046\u3073 (kin'youbi)", meaningEnglish: "Friday", meaningBengali: "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0" },
+              { word: "\u304A\u91D1", reading: "\u304A\u304B\u306D (okane)", meaningEnglish: "Money", meaningBengali: "\u099F\u09BE\u0995\u09BE-\u09AA\u09AF\u09BC\u09B8\u09BE" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-04",
+          question: "\u304D\u306E\u3046\u306E \u3070\u3093\u300110\u3058\uFF08\u3000\uFF09\u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3057\u305F\u3002",
+          questionRomaji: "Kinou no ban, juuji ( ) benkyoushimashita.",
+          options: ["\u306B", "\u3067", "\u3092", "\u307E\u3067"],
+          correctOptionIndex: 3,
+          correctAnswer: "\u307E\u3067",
+          explanationEnglish: "'10\u3058\u307E\u3067' means 'studied until 10 o'clock'.",
+          explanationBengali: "\u09B0\u09BE\u09A4 \u09E7\u09E6\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AA\u09DC\u09BE\u09B6\u09CB\u09A8\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u307E\u3067' (\u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 5 ---
+      {
+        lessonNumber: 5,
+        titleEnglish: "Movement & Transportation",
+        titleJapanese: "\u7B2C5\u8AB2\uFF1A\u79FB\u52D5\u306E\u52D5\u8A5E\u3068\u4EA4\u901A\u624B\u6BB5",
+        topic: "\u884C\u304D\u307E\u3059\u30FB\u6765\u307E\u3059\u30FB\u5E30\u308A\u307E\u3059 (Go, Come, Return with \u3078 & \u3067)",
+        vocabularies: [
+          {
+            kanji: "\u884C\u304D\u307E\u3059",
+            hiragana: "\u3044\u304D\u307E\u3059",
+            romaji: "ikimasu",
+            meaningEnglish: "To go",
+            meaningBengali: "\u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306F \u3068\u3046\u304D\u3087\u3046\u3078 \u3044\u304D\u307E\u3059\u3002",
+              romaji: "Watashi wa Toukyou e ikimasu.",
+              english: "I will go to Tokyo.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09CB\u0995\u09BF\u0993 \u09AF\u09BE\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u6765\u307E\u3059",
+            hiragana: "\u304D\u307E\u3059",
+            romaji: "kimasu",
+            meaningEnglish: "To come",
+            meaningBengali: "\u0986\u09B8\u09BE",
+            example: {
+              japanese: "\u3068\u3082\u3060\u3061\u304C \u306B\u307B\u3093\u3078 \u304D\u307E\u3057\u305F\u3002",
+              romaji: "Tomodachi ga nihon e kimashita.",
+              english: "My friend came to Japan.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u09AC\u09A8\u09CD\u09A7\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u098F\u09B8\u09C7\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u5E30\u308A\u307E\u3059",
+            hiragana: "\u304B\u3048\u308A\u307E\u3059",
+            romaji: "kaerimasu",
+            meaningEnglish: "To return / go home",
+            meaningBengali: "\u09AC\u09BE\u09DC\u09BF \u09AB\u09C7\u09B0\u09BE / \u09AB\u09BF\u09B0\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "6\u3058\u306B \u3046\u3061\u3078 \u304B\u3048\u308A\u307E\u3059\u3002",
+              romaji: "Rokuji ni uchi e kaerimasu.",
+              english: "I return home at 6:00.",
+              bengali: "\u0986\u09AE\u09BF \u09EC\u099F\u09BE\u09DF \u09AC\u09BE\u09DC\u09BF \u09AB\u09BF\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u96FB\u8ECA",
+            hiragana: "\u3067\u3093\u3057\u3083",
+            romaji: "densha",
+            meaningEnglish: "Train",
+            meaningBengali: "\u099F\u09CD\u09B0\u09C7\u09A8 / \u09AC\u09C8\u09A6\u09CD\u09AF\u09C1\u09A4\u09BF\u0995 \u099F\u09CD\u09B0\u09C7\u09A8",
+            example: {
+              japanese: "\u3067\u3093\u3057\u3083\u3067 \u304C\u3063\u3053\u3046\u3078 \u3044\u304D\u307E\u3059\u3002",
+              romaji: "Densha de gakkou e ikimasu.",
+              english: "I go to school by train.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0995\u09B0\u09C7 \u09B8\u09CD\u0995\u09C1\u09B2\u09C7 \u09AF\u09BE\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u98DB\u884C\u6A5F",
+            hiragana: "\u3072\u3053\u3046\u304D",
+            romaji: "hikouki",
+            meaningEnglish: "Airplane",
+            meaningBengali: "\u0989\u09DC\u09CB\u099C\u09BE\u09B9\u09BE\u099C / \u09AC\u09BF\u09AE\u09BE\u09A8",
+            example: {
+              japanese: "\u3072\u3053\u3046\u304D\u3067 \u304F\u306B\u3078 \u304B\u3048\u308A\u307E\u3059\u3002",
+              romaji: "Hikouki de kuni e kaerimasu.",
+              english: "I return to my home country by airplane.",
+              bengali: "\u0986\u09AE\u09BF \u09AC\u09BF\u09AE\u09BE\u09A8\u09C7 \u0995\u09B0\u09C7 \u09A6\u09C7\u09B6\u09C7 \u09AB\u09BF\u09B0\u09AC\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-05-01",
+            pattern: "[Place] \u3078 \u884C\u304D\u307E\u3059 / \u6765\u307E\u3059 / \u5E30\u308A\u307E\u3059",
+            topic: "Direction Particle '\u3078' (pronounced 'e')",
+            explanationEnglish: "'\u3078' indicates the direction/destination of movement verbs (go, come, return).",
+            explanationBengali: "'\u3078' (\u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3: '\u098F') \u0995\u09A3\u09BE\u099F\u09BF \u0997\u09A4\u09BF\u09B6\u09C0\u09B2 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 (\u09AF\u09BE\u0993\u09DF\u09BE, \u0986\u09B8\u09BE, \u09AB\u09C7\u09B0\u09BE) \u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3042\u3057\u305F \u3069\u3053\u3078 \u3044\u304D\u307E\u3059\u304B\u3002(Ashita doko e ikimasu ka?)",
+              speakerB: "B: \u304D\u3087\u3046\u3068\u3078 \u3044\u304D\u307E\u3059\u3002(Kyouto e ikimasu.)",
+              english: "A: Where will you go tomorrow? / B: I will go to Kyoto.",
+              bengali: "A: \u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u0986\u09AA\u09A8\u09BF \u0995\u09CB\u09A5\u09BE\u09DF \u09AF\u09BE\u09AC\u09C7\u09A8? / B: \u0986\u09AE\u09BF \u0995\u09BF\u09DF\u09CB\u099F\u09CB \u09AF\u09BE\u09AC\u0964"
+            }
+          },
+          {
+            id: "g-05-02",
+            pattern: "[Vehicle / Means] \u3067 \u884C\u304D\u307E\u3059 / [Person] \u3068 \u884C\u304D\u307E\u3059",
+            topic: "Means of Transport '\u3067' and Accompaniment '\u3068'",
+            explanationEnglish: "'\u3067' (de) specifies the vehicle or method of transportation. '\u3068' (to) indicates doing the action together with someone.",
+            explanationBengali: "'\u3067' \u09AA\u09B0\u09BF\u09AC\u09B9\u09A8 \u09AC\u09BE \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE \u09AC\u09CB\u099D\u09BE\u09DF (\u09AF\u09C7\u09AE\u09A8: \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0995\u09B0\u09C7)\u0964 '\u3068' \u0995\u09BE\u09B0\u09CB \u09B8\u09BE\u09A5\u09C7 \u09AF\u09CC\u09A5\u09AD\u09BE\u09AC\u09C7 \u0995\u09BF\u099B\u09C1 \u0995\u09B0\u09BE ('\u09B8\u09BE\u09A5\u09C7') \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u306A\u3093\u3067 \u3068\u3046\u304D\u3087\u3046\u3078 \u3044\u304D\u307E\u3059\u304B\u3002(Nan de Toukyou e ikimasu ka?)",
+              speakerB: "B: \u3057\u3093\u304B\u3093\u305B\u3093\u3067 \u3044\u304D\u307E\u3059\u3002(Shinkansen de ikimasu.)",
+              english: "A: By what means will you go to Tokyo? / B: I will go by Shinkansen (Bullet Train).",
+              bengali: "A: \u0995\u09C0\u09B8\u09C7 \u0995\u09B0\u09C7 \u099F\u09CB\u0995\u09BF\u0993 \u09AF\u09BE\u09AC\u09C7\u09A8? / B: \u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 (\u09B6\u09BF\u09A8\u0995\u09BE\u09A8\u09B8\u09C7\u09A8) \u0995\u09B0\u09C7 \u09AF\u09BE\u09AC\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u571F",
+            strokeCount: 3,
+            onyomi: ["\u30C9 (do)", "\u30C8 (to)"],
+            kunyomi: ["\u3064\u3061 (tsuchi)"],
+            meaningEnglish: "Soil / Earth / Ground",
+            meaningBengali: "\u09AE\u09BE\u099F\u09BF / \u09AA\u09C3\u09A5\u09BF\u09AC\u09C0",
+            compounds: [
+              { word: "\u571F\u66DC\u65E5", reading: "\u3069\u3088\u3046\u3073 (doyoubi)", meaningEnglish: "Saturday", meaningBengali: "\u09B6\u09A8\u09BF\u09AC\u09BE\u09B0" },
+              { word: "\u571F\u5730", reading: "\u3068\u3061 (tochi)", meaningEnglish: "Land / Plot", meaningBengali: "\u099C\u09AE\u09BF" }
+            ]
+          },
+          {
+            kanji: "\u5C71",
+            strokeCount: 3,
+            onyomi: ["\u30B5\u30F3 (san)"],
+            kunyomi: ["\u3084\u307E (yama)"],
+            meaningEnglish: "Mountain",
+            meaningBengali: "\u09AA\u09BE\u09B9\u09BE\u09A1\u09BC / \u09AA\u09B0\u09CD\u09AC\u09A4",
+            compounds: [
+              { word: "\u5BCC\u58EB\u5C71", reading: "\u3075\u3058\u3055\u3093 (Fujisan)", meaningEnglish: "Mount Fuji", meaningBengali: "\u09AB\u09C1\u099C\u09BF \u09AA\u09B0\u09CD\u09AC\u09A4" },
+              { word: "\u706B\u5C71", reading: "\u304B\u3056\u3093 (kazan)", meaningEnglish: "Volcano", meaningBengali: "\u0986\u0997\u09CD\u09A8\u09C7\u09AF\u09BC\u0997\u09BF\u09B0\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-05",
+          question: "\u308F\u305F\u3057\u306F \u30BF\u30AF\u30B7\u30FC\uFF08\u3000\uFF09\u3046\u3061\u3078 \u304B\u3048\u308A\u307E\u3057\u305F\u3002",
+          questionRomaji: "Watashi wa takushii ( ) uchi e kaerimashita.",
+          options: ["\u3067", "\u3078", "\u306B", "\u3092"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3067",
+          explanationEnglish: "'\u3067' indicates the means of transportation (by taxi).",
+          explanationBengali: "\u09AA\u09B0\u09BF\u09AC\u09B9\u09A8\u09C7\u09B0 \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE (\u099F\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09BF \u09AF\u09CB\u0997\u09C7) \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 '\u3067' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964"
+        }
+      },
+      // --- LESSON 6 ---
+      {
+        lessonNumber: 6,
+        titleEnglish: "Objects, Actions & Transitive Verbs",
+        titleJapanese: "\u7B2C6\u8AB2\uFF1A\u4ED6\u52D5\u8A5E\u3068\u76EE\u7684\u8A9E\u306E\u300C\u3092\u300D\u30FB\u5834\u6240\u306E\u300C\u3067\u300D",
+        topic: "\u4ED6\u52D5\u8A5E\u3068\u65E5\u5E38\u306E\u52D5\u4F5C (Transitive Verbs: \u3092\u30FB\u3067\u30FB\u307E\u305B\u3093\u304B)",
+        vocabularies: [
+          {
+            kanji: "\u98DF\u3079\u307E\u3059",
+            hiragana: "\u305F\u3079\u307E\u3059",
+            romaji: "tabemasu",
+            meaningEnglish: "To eat",
+            meaningBengali: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE",
+            example: {
+              japanese: "\u3054\u306F\u3093\u3092 \u305F\u3079\u307E\u3059\u3002",
+              romaji: "Gohan o tabemasu.",
+              english: "I eat rice / meals.",
+              bengali: "\u0986\u09AE\u09BF \u09AD\u09BE\u09A4/\u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u98F2\u307F\u307E\u3059",
+            hiragana: "\u306E\u307F\u307E\u3059",
+            romaji: "nomimasu",
+            meaningEnglish: "To drink",
+            meaningBengali: "\u09AA\u09BE\u09A8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u307F\u305A\u3092 \u306E\u307F\u307E\u3059\u3002",
+              romaji: "Mizu o nomimasu.",
+              english: "I drink water.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u898B\u307E\u3059",
+            hiragana: "\u307F\u307E\u3059",
+            romaji: "mimasu",
+            meaningEnglish: "To see / watch",
+            meaningBengali: "\u09A6\u09C7\u0996\u09BE",
+            example: {
+              japanese: "\u30C6\u30EC\u30D3\u3092 \u307F\u307E\u3059\u3002",
+              romaji: "Terebi o mimasu.",
+              english: "I watch television.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09C7\u09B2\u09BF\u09AD\u09BF\u09B6\u09A8 \u09A6\u09C7\u0996\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u8CB7\u3044\u307E\u3059",
+            hiragana: "\u304B\u3044\u307E\u3059",
+            romaji: "kaimasu",
+            meaningEnglish: "To buy",
+            meaningBengali: "\u0995\u09C7\u09A8\u09BE / \u0995\u09CD\u09B0\u09DF \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u30D1\u30F3\u3092 \u304B\u3044\u307E\u3059\u3002",
+              romaji: "Pan o kaimasu.",
+              english: "I buy bread.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09BE\u0989\u09B0\u09C1\u099F\u09BF \u0995\u09BF\u09A8\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u805E\u304D\u307E\u3059",
+            hiragana: "\u304D\u304D\u307E\u3059",
+            romaji: "kikimasu",
+            meaningEnglish: "To hear / listen",
+            meaningBengali: "\u09B6\u09CB\u09A8\u09BE",
+            example: {
+              japanese: "\u304A\u3093\u304C\u304F\u3092 \u304D\u304D\u307E\u3059\u3002",
+              romaji: "Ongaku o kikimasu.",
+              english: "I listen to music.",
+              bengali: "\u0986\u09AE\u09BF \u0997\u09BE\u09A8 \u09B6\u09C1\u09A8\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-06-01",
+            pattern: "[Noun] \u3092 Verb (Transitive) / [Place] \u3067 Verb",
+            topic: "Direct Object '\u3092' and Action Location '\u3067'",
+            explanationEnglish: "'\u3092' (o) marks the direct object of a transitive action. '\u3067' (de) specifies the place where the action occurs.",
+            explanationBengali: "'\u3092' (\u0993) \u0995\u09B0\u09CD\u09AE\u09AA\u09A6 \u09AC\u09BE \u09A1\u09BF\u09B0\u09C7\u0995\u09CD\u099F \u0985\u09AC\u099C\u09C7\u0995\u09CD\u099F \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 '\u3067' (\u09A6\u09C7) \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3069\u3053\u3067 \u305D\u306E \u307B\u3093\u3092 \u304B\u3044\u307E\u3057\u305F\u304B\u3002(Doko de sono hon o kaimashita ka?)",
+              speakerB: "B: \u3048\u304D\u307E\u3048\u306E \u307B\u3093\u3084\u3067 \u304B\u3044\u307E\u3057\u305F\u3002(Ekimae no hon'ya de kaimashita.)",
+              english: "A: Where did you buy that book? / B: I bought it at the bookstore in front of the station.",
+              bengali: "A: \u098F\u0987 \u09AC\u0987\u099F\u09BF \u0995\u09CB\u09A5\u09BE \u09A5\u09C7\u0995\u09C7 \u0995\u09BF\u09A8\u09C7\u099B\u09C7\u09A8? / B: \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u09B8\u09BE\u09AE\u09A8\u09C7\u09B0 \u09AC\u0987\u09DF\u09C7\u09B0 \u09A6\u09CB\u0995\u09BE\u09A8 \u09A5\u09C7\u0995\u09C7 \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-06-02",
+            pattern: "Verb \u307E\u305B\u3093\u304B / Verb \u307E\u3057\u3087\u3046",
+            topic: "Polite Invitation & Enthusiastic Agreement",
+            explanationEnglish: "'~\u307E\u305B\u3093\u304B' invites someone ('Won't you...?'). '~\u307E\u3057\u3087\u3046' expresses enthusiastic agreement or suggestion ('Let's do it!').",
+            explanationBengali: "'~\u307E\u305B\u3093\u304B' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u0995\u09BE\u0989\u0995\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB \u09B9\u09DF ('\u0995\u09B0\u09AC\u09C7\u09A8 \u0995\u09BF?')\u0964 '~\u307E\u3057\u3087\u3046' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09B8\u09AE\u09CD\u09AE\u09A4\u09BF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC ('\u099A\u09B2\u09C1\u09A8 \u0995\u09B0\u09BF')\u0964",
+            dialogue: {
+              speakerA: "A: \u3044\u3063\u3057\u3087\u306B \u30B3\u30FC\u30D2\u30FC\u3092 \u306E\u307F\u307E\u305B\u3093\u304B\u3002(Issho ni koohii o nomimasen ka?)",
+              speakerB: "B: \u3048\u3048\u3001\u306E\u307F\u307E\u3057\u3087\u3046\u3002(Ee, nomimashou.)",
+              english: "A: Won't you drink coffee together with me? / B: Yes, let's drink!",
+              bengali: "A: \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0995\u09AB\u09BF \u0996\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u099A\u09B2\u09C1\u09A8 \u0996\u09BE\u0987!"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u5DDD",
+            strokeCount: 3,
+            onyomi: ["\u30BB\u30F3 (sen)"],
+            kunyomi: ["\u304B\u308F (kawa)"],
+            meaningEnglish: "River / Stream",
+            meaningBengali: "\u09A8\u09A6\u09C0",
+            compounds: [
+              { word: "\u30CA\u30A4\u30EB\u5DDD", reading: "\u306A\u3044\u308B\u304C\u308F (nairugawa)", meaningEnglish: "Nile River", meaningBengali: "\u09A8\u09C0\u09B2\u09A8\u09A6" },
+              { word: "\u5C0F\u5DDD", reading: "\u304A\u304C\u308F (ogawa)", meaningEnglish: "Brook / Stream", meaningBengali: "\u099B\u09CB\u099F \u09A8\u09A6\u09C0 / \u099D\u09B0\u09CD\u09A3\u09BE" }
+            ]
+          },
+          {
+            kanji: "\u7530",
+            strokeCount: 5,
+            onyomi: ["\u30C7\u30F3 (den)"],
+            kunyomi: ["\u305F (ta)"],
+            meaningEnglish: "Rice Field",
+            meaningBengali: "\u09A7\u09BE\u09A8\u0995\u09CD\u09B7\u09C7\u09A4 / \u0995\u09CD\u09B7\u09C7\u09A4",
+            compounds: [
+              { word: "\u7530\u4E2D", reading: "\u305F\u306A\u304B (Tanaka)", meaningEnglish: "Tanaka (Surname)", meaningBengali: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE (\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AA\u09A6\u09AC\u09BF)" },
+              { word: "\u6C34\u7530", reading: "\u3059\u3044\u3067\u3093 (suiden)", meaningEnglish: "Paddy field", meaningBengali: "\u09A7\u09BE\u09A8\u0995\u09CD\u09B7\u09C7\u09A4" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-06",
+          question: "\u3068\u3057\u3087\u304B\u3093\u3067 \u672C\uFF08\u3000\uFF09\u3088\u307F\u307E\u3059\u3002",
+          questionRomaji: "Toshokan de hon ( ) yomimasu.",
+          options: ["\u3092", "\u306B", "\u3067", "\u3078"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3092",
+          explanationEnglish: "'\u3092' marks '\u672C' (book) as the direct object of the verb '\u3088\u307F\u307E\u3059' (read).",
+          explanationBengali: "'\u3088\u307F\u307E\u3059' (\u09AA\u09DC\u09BE) \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u0985\u09AC\u099C\u09C7\u0995\u09CD\u099F '\u672C' (\u09AC\u0987) \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3092' \u0995\u09A3\u09BE \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 7 ---
+      {
+        lessonNumber: 7,
+        titleEnglish: "Giving, Receiving & Tool Means",
+        titleJapanese: "\u7B2C7\u8AB2\uFF1A\u6388\u53D7\u52D5\u8A5E\uFF08\u3042\u3052\u307E\u3059\u30FB\u3082\u3089\u3044\u307E\u3059\uFF09\u3068\u9053\u5177\u306E\u300C\u3067\u300D",
+        topic: "\u9053\u5177\u30FB\u624B\u6BB5\u3068\u6388\u53D7\u8868\u73FE (Tools & Giving/Receiving)",
+        vocabularies: [
+          {
+            kanji: "\u5207\u308A\u307E\u3059",
+            hiragana: "\u304D\u308A\u307E\u3059",
+            romaji: "kirimasu",
+            meaningEnglish: "To cut / slice",
+            meaningBengali: "\u0995\u09BE\u099F\u09BE",
+            example: {
+              japanese: "\u30CA\u30A4\u30D5\u3067 \u30D1\u30F3\u3092 \u304D\u308A\u307E\u3059\u3002",
+              romaji: "Naifu de pan o kirimasu.",
+              english: "I cut bread with a knife.",
+              bengali: "\u0986\u09AE\u09BF \u099B\u09C1\u09B0\u09BF \u09A6\u09BF\u09DF\u09C7 \u09AA\u09BE\u0989\u09B0\u09C1\u099F\u09BF \u0995\u09BE\u099F\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u3042\u3052\u307E\u3059",
+            hiragana: "\u3042\u3052\u307E\u3059",
+            romaji: "agemasu",
+            meaningEnglish: "To give",
+            meaningBengali: "\u09A6\u09C7\u0993\u09DF\u09BE / \u0989\u09AA\u09B9\u09BE\u09B0 \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u306F\u306F\u306B \u306F\u306A\u3092 \u3042\u3052\u307E\u3057\u305F\u3002",
+              romaji: "Haha ni hana o agemashita.",
+              english: "I gave flowers to my mother.",
+              bengali: "\u0986\u09AE\u09BF \u09AE\u09BE\u0995\u09C7 \u09AB\u09C1\u09B2 \u0989\u09AA\u09B9\u09BE\u09B0 \u09A6\u09BF\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u3082\u3089\u3044\u307E\u3059",
+            hiragana: "\u3082\u3089\u3044\u307E\u3059",
+            romaji: "moraimasu",
+            meaningEnglish: "To receive",
+            meaningBengali: "\u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09BE / \u09AA\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u305B\u3093\u305B\u3044\u306B \u307B\u3093\u3092 \u3082\u3089\u3044\u307E\u3057\u305F\u3002",
+              romaji: "Sensei ni hon o moraimashita.",
+              english: "I received a book from the teacher.",
+              bengali: "\u0986\u09AE\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u098F\u0995\u099F\u09BF \u09AC\u0987 \u09AA\u09C7\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u8CB8\u3057\u307E\u3059",
+            hiragana: "\u304B\u3057\u307E\u3059",
+            romaji: "kashimasu",
+            meaningEnglish: "To lend",
+            meaningBengali: "\u09A7\u09BE\u09B0 \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3068\u3082\u3060\u3061\u306B \u30DA\u30F3\u3092 \u304B\u3057\u307E\u3057\u305F\u3002",
+              romaji: "Tomodachi ni pen o kashimashita.",
+              english: "I lent a pen to my friend.",
+              bengali: "\u0986\u09AE\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u0995\u09C7 \u0995\u09B2\u09AE \u09A7\u09BE\u09B0 \u09A6\u09BF\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u501F\u308A\u307E\u3059",
+            hiragana: "\u304B\u308A\u307E\u3059",
+            romaji: "karimasu",
+            meaningEnglish: "To borrow",
+            meaningBengali: "\u09A7\u09BE\u09B0 \u09A8\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u304E\u3093\u3053\u3046\u304B\u3089 \u304A\u304B\u306D\u3092 \u304B\u308A\u307E\u3057\u305F\u3002",
+              romaji: "Ginkou kara okane o karimashita.",
+              english: "I borrowed money from the bank.",
+              bengali: "\u0986\u09AE\u09BF \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09A5\u09C7\u0995\u09C7 \u099F\u09BE\u0995\u09BE \u098B\u09A3 \u09A8\u09BF\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-07-01",
+            pattern: "[Tool / Language] \u3067 Verb",
+            topic: "Instrument / Medium Particle '\u3067'",
+            explanationEnglish: "'\u3067' indicates the instrument, tool, or language used to perform an action (e.g.\u7BB8\u3067, \u65E5\u672C\u8A9E\u3067).",
+            explanationBengali: "'\u3067' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u0989\u09AA\u0995\u09B0\u09A3, \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE \u09AC\u09BE \u09AD\u09BE\u09B7\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09AA\u09BE\u09DF (\u09AF\u09C7\u09AE\u09A8: \u0995\u09BE\u09A0\u09BF \u09A6\u09BF\u09DF\u09C7, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF)\u0964",
+            dialogue: {
+              speakerA: "A: \u300CThank you\u300D\u306F \u306B\u307B\u3093\u3054\u3067 \u306A\u3093\u3068 \u3044\u3044\u307E\u3059\u304B\u3002(\u300CThank you\u300Dwa nihongo de nan to iimasu ka?)",
+              speakerB: "B: \u300C\u3042\u308A\u304C\u3068\u3046\u300D\u3068 \u3044\u3044\u307E\u3059\u3002(\u300CArigatou\u300Dto iimasu.)",
+              english: "A: How do you say 'Thank you' in Japanese? / B: You say 'Arigatou'.",
+              bengali: "A: 'Thank you' \u0995\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u0995\u09C0 \u09AC\u09B2\u09C7? / B: '\u0986\u09B0\u09BF\u0997\u09BE\u09A4\u09CC' \u09AC\u09B2\u09C7\u0964"
+            }
+          },
+          {
+            id: "g-07-02",
+            pattern: "[Person] \u306B \u3042\u3052\u307E\u3059 / \u3082\u3089\u3044\u307E\u3059 / \u3082\u3046 Verb \u307E\u3057\u305F",
+            topic: "Giving / Receiving & 'Already completed' (\u3082\u3046)",
+            explanationEnglish: "'[Person] \u306B \u3042\u3052\u307E\u3059' = give to [Person]. '[Person] \u306B/\u304B\u3089 \u3082\u3089\u3044\u307E\u3059' = receive from [Person]. '\u3082\u3046 ~\u307E\u3057\u305F' = already finished.",
+            explanationBengali: "'[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306B \u3042\u3052\u307E\u3059' = \u0995\u09BE\u0989\u0995\u09C7 \u09A6\u09C7\u0993\u09DF\u09BE\u0964 '[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306B/\u304B\u3089 \u3082\u3089\u3044\u307E\u3059' = \u0995\u09BE\u09B0\u09CB \u09A5\u09C7\u0995\u09C7 \u09AA\u09BE\u0993\u09DF\u09BE\u0964 '\u3082\u3046 ~\u307E\u3057\u305F' = \u0987\u09A4\u09CB\u09AE\u09A7\u09CD\u09AF\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u0993\u09DF\u09BE\u0964",
+            dialogue: {
+              speakerA: "A: \u3082\u3046 \u3072\u308B\u3054\u306F\u3093\u3092 \u305F\u3079\u307E\u3057\u305F\u304B\u3002(Mou hirugohan o tabemashita ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u307E\u3060\u3067\u3059\u3002\u3053\u308C\u304B\u3089 \u305F\u3079\u307E\u3059\u3002(Iie, mada desu. Kore kara tabemasu.)",
+              english: "A: Have you already eaten lunch? / B: No, not yet. I will eat now.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0987\u09A4\u09BF\u09AE\u09A7\u09CD\u09AF\u09C7 \u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09C7\u09DF\u09C7\u099B\u09C7\u09A8? / B: \u09A8\u09BE, \u098F\u0996\u09A8\u0993 \u0996\u09BE\u0987\u09A8\u09BF\u0964 \u098F\u0996\u09A8 \u0996\u09BE\u09AC\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E00",
+            strokeCount: 1,
+            onyomi: ["\u30A4\u30C1 (ichi)", "\u30A4\u30C4 (itsu)"],
+            kunyomi: ["\u3072\u3068 (hito)", "\u3072\u3068\u3064 (hitotsu)"],
+            meaningEnglish: "One",
+            meaningBengali: "\u098F\u0995 / \u09E7",
+            compounds: [
+              { word: "\u4E00\u65E5", reading: "\u3064\u3044\u305F\u3061 (tsuitachi) / \u3044\u3061\u306B\u3061 (ichinichi)", meaningEnglish: "1st day of month / One day", meaningBengali: "\u09E7 \u09A4\u09BE\u09B0\u09BF\u0996 / \u098F\u0995\u09A6\u09BF\u09A8" },
+              { word: "\u4E00\u4EBA", reading: "\u3072\u3068\u308A (hitori)", meaningEnglish: "One person / Alone", meaningBengali: "\u098F\u0995\u099C\u09A8 / \u098F\u0995\u09BE" }
+            ]
+          },
+          {
+            kanji: "\u4E8C",
+            strokeCount: 2,
+            onyomi: ["\u30CB (ni)"],
+            kunyomi: ["\u3075\u305F (futa)", "\u3075\u305F\u3064 (futatsu)"],
+            meaningEnglish: "Two",
+            meaningBengali: "\u09A6\u09C1\u0987 / \u09E8",
+            compounds: [
+              { word: "\u4E8C\u65E5", reading: "\u3075\u3064\u304B (futsuka)", meaningEnglish: "2nd day of month / Two days", meaningBengali: "\u09E8 \u09A4\u09BE\u09B0\u09BF\u0996 / \u09A6\u09C1\u0987 \u09A6\u09BF\u09A8" },
+              { word: "\u4E8C\u4EBA", reading: "\u3075\u305F\u308A (futari)", meaningEnglish: "Two people / Couple", meaningBengali: "\u09A6\u09C1\u099C\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-07",
+          question: "\u306F\u3057\uFF08\u3000\uFF09\u30E9\u30FC\u30E1\u30F3\u3092 \u305F\u3079\u307E\u3059\u3002",
+          questionRomaji: "Hashi ( ) raamen o tabemasu.",
+          options: ["\u3067", "\u3092", "\u306B", "\u3068"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3067",
+          explanationEnglish: "'\u3067' marks '\u306F\u3057' (chopsticks) as the tool used for eating.",
+          explanationBengali: "\u099A\u09AA\u09B8\u09CD\u099F\u09BF\u0995 \u09B9\u09B2\u09CB \u0996\u09BE\u0993\u09DF\u09BE\u09B0 \u0989\u09AA\u0995\u09B0\u09A3, \u09A4\u09BE\u0987 '\u3067' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 8 ---
+      {
+        lessonNumber: 8,
+        titleEnglish: "Adjectives: Describing Objects & People",
+        titleJapanese: "\u7B2C8\u8AB2\uFF1A\u5F62\u5BB9\u8A5E\u306E\u57FA\u790E\uFF08\u3044\u5F62\u5BB9\u8A5E\u30FB\u306A\u5F62\u5BB9\u8A5E\uFF09",
+        topic: "\u3044\u5F62\u5BB9\u8A5E\u3068\u306A\u5F62\u5BB9\u8A5E (i-adjectives & na-adjectives)",
+        vocabularies: [
+          {
+            kanji: "\u5927\u304D\u3044",
+            hiragana: "\u304A\u304A\u304D\u3044",
+            romaji: "ookii",
+            meaningEnglish: "Big / Large",
+            meaningBengali: "\u09AC\u09A1\u09BC",
+            example: {
+              japanese: "\u3053\u306E \u3078\u3084\u306F \u304A\u304A\u304D\u3044 \u3067\u3059\u3002",
+              romaji: "Kono heya wa ookii desu.",
+              english: "This room is large.",
+              bengali: "\u098F\u0987 \u0998\u09B0\u099F\u09BF \u09AC\u09DC\u0964"
+            }
+          },
+          {
+            kanji: "\u5C0F\u3055\u3044",
+            hiragana: "\u3061\u3044\u3055\u3044",
+            romaji: "chiisai",
+            meaningEnglish: "Small / Little",
+            meaningBengali: "\u099B\u09CB\u099F",
+            example: {
+              japanese: "\u3061\u3044\u3055\u3044 \u304F\u308B\u307E\u3092 \u304B\u3044\u307E\u3057\u305F\u3002",
+              romaji: "Chiisai kuruma o kaimashita.",
+              english: "I bought a small car.",
+              bengali: "\u0986\u09AE\u09BF \u098F\u0995\u099F\u09BF \u099B\u09CB\u099F \u0997\u09BE\u09DC\u09BF \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u89AA\u5207",
+            hiragana: "\u3057\u3093\u305B\u3064",
+            romaji: "shinsetsu",
+            meaningEnglish: "Kind / Helpful (na-adj)",
+            meaningBengali: "\u09A6\u09DF\u09BE\u09B2\u09C1 / \u0985\u09AE\u09BE\u09DF\u09BF\u0995",
+            example: {
+              japanese: "\u305F\u306A\u304B\u3055\u3093\u306F \u3057\u3093\u305B\u3064\u306A \u3072\u3068 \u3067\u3059\u3002",
+              romaji: "Tanaka-san wa shinsetsu na hito desu.",
+              english: "Mr. Tanaka is a kind person.",
+              bengali: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u098F\u0995\u099C\u09A8 \u09A6\u09AF\u09BC\u09BE\u09B2\u09C1 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6709\u540D",
+            hiragana: "\u3086\u3046\u3081\u3044",
+            romaji: "yuumei",
+            meaningEnglish: "Famous (na-adj)",
+            meaningBengali: "\u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4 / \u09AA\u09CD\u09B0\u09B8\u09BF\u09A6\u09CD\u09A7",
+            example: {
+              japanese: "\u3075\u3058\u3055\u3093\u306F \u3086\u3046\u3081\u3044\u3067\u3059\u3002",
+              romaji: "Fujisan wa yuumei desu.",
+              english: "Mount Fuji is famous.",
+              bengali: "\u09AB\u09C1\u099C\u09BF \u09AA\u09B0\u09CD\u09AC\u09A4 \u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4\u0964"
+            }
+          },
+          {
+            kanji: "\u7F8E\u5473\u3057\u3044",
+            hiragana: "\u304A\u3044\u3057\u3044",
+            romaji: "oishii",
+            meaningEnglish: "Delicious / Tasty",
+            meaningBengali: "\u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1 / \u09AE\u099C\u09BE\u09A6\u09BE\u09B0",
+            example: {
+              japanese: "\u306B\u307B\u3093\u306E \u308A\u3087\u3046\u308A\u306F \u304A\u3044\u3057\u3044 \u3067\u3059\u3002",
+              romaji: "Nihon no ryouri wa oishii desu.",
+              english: "Japanese food is delicious.",
+              bengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09C1\u09AC\u0987 \u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-08-01",
+            pattern: "\u3044-Adj \u3067\u3059 / \u304F\u306A\u3044\u3067\u3059 & \u306A-Adj \u3067\u3059 / \u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+            topic: "Adjective Conjugation in Present Tense",
+            explanationEnglish: "i-adjectives drop '\u3044' and add '\u304F\u306A\u3044\u3067\u3059' for negative (e.g. \u5927\u304D\u304F\u306A\u3044\u3067\u3059). na-adjectives behave like nouns with '\u3058\u3083\u3042\u308A\u307E\u305B\u3093' (e.g. \u89AA\u5207\u3058\u3083\u3042\u308A\u307E\u305B\u3093).",
+            explanationBengali: "i-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u0995\u09B0\u09A4\u09C7 '\u3044' \u09AC\u09BE\u09A6 \u09A6\u09BF\u09DF\u09C7 '\u304F\u306A\u3044\u3067\u3059' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09DF\u0964 na-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AE\u09A4\u09CB '\u3058\u3083\u3042\u308A\u307E\u305B\u3093' \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3068\u3046\u304D\u3087\u3046\u306F \u3044\u307E \u3055\u3080\u3044 \u3067\u3059\u304B\u3002(Toukyou wa ima samui desu ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u3042\u307E\u308A \u3055\u3080\u304F\u306A\u3044 \u3067\u3059\u3002(Iie, amari samukunai desu.)",
+              english: "A: Is Tokyo cold right now? / B: No, it is not very cold.",
+              bengali: "A: \u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u0995\u09BF \u098F\u0996\u09A8 \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE? / B: \u09A8\u09BE, \u0996\u09C1\u09AC \u098F\u0995\u099F\u09BE \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09A8\u09DF\u0964"
+            }
+          },
+          {
+            id: "g-08-02",
+            pattern: "\u3044-Adj Noun / \u306A-Adj \u306A Noun",
+            topic: "Direct Noun Modification with Adjectives",
+            explanationEnglish: "i-adjectives modify nouns directly (\u304A\u3044\u3057\u3044 \u304A\u8336). na-adjectives require '\u306A' before nouns (\u304D\u308C\u3044\u306A \u82B1).",
+            explanationBengali: "i-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u304A\u3044\u3057\u3044 \u304A\u8336)\u0964 na-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09A4\u09C7 '\u306A' \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u304D\u308C\u3044\u306A \u82B1)\u0964",
+            dialogue: {
+              speakerA: "A: \u304D\u3087\u3046\u3068\u306F \u3069\u3093\u306A \u307E\u3061 \u3067\u3059\u304B\u3002(Kyouto wa donna machi desu ka?)",
+              speakerB: "B: \u3057\u305A\u304B\u3067 \u304D\u308C\u3044\u306A \u307E\u3061 \u3067\u3059\u3002(Shizuka de kirei na machi desu.)",
+              english: "A: What kind of city is Kyoto? / B: It is a quiet and beautiful city.",
+              bengali: "A: \u0995\u09BF\u09DF\u09CB\u099F\u09CB \u0995\u09C7\u09AE\u09A8 \u09B6\u09B9\u09B0? / B: \u098F\u099F\u09BF \u098F\u0995\u099F\u09BF \u09B6\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u09B6\u09B9\u09B0\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E09",
+            strokeCount: 3,
+            onyomi: ["\u30B5\u30F3 (san)"],
+            kunyomi: ["\u307F (mi)", "\u307F\u3063\u3064 (mittsu)"],
+            meaningEnglish: "Three",
+            meaningBengali: "\u09A4\u09BF\u09A8 / \u09E9",
+            compounds: [
+              { word: "\u4E09\u6708", reading: "\u3055\u3093\u304C\u3064 (sangatsu)", meaningEnglish: "March", meaningBengali: "\u09AE\u09BE\u09B0\u09CD\u099A \u09AE\u09BE\u09B8" },
+              { word: "\u4E09\u65E5", reading: "\u307F\u3063\u304B (mikka)", meaningEnglish: "3rd day of month / Three days", meaningBengali: "\u09E9 \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          },
+          {
+            kanji: "\u56DB",
+            strokeCount: 5,
+            onyomi: ["\u30B7 (shi)"],
+            kunyomi: ["\u3088 (yo)", "\u3088\u3093 (yon)", "\u3088\u3063\u3064 (yottsu)"],
+            meaningEnglish: "Four",
+            meaningBengali: "\u099A\u09BE\u09B0 / \u09EA",
+            compounds: [
+              { word: "\u56DB\u6708", reading: "\u3057\u304C\u3064 (shigatsu)", meaningEnglish: "April", meaningBengali: "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2 \u09AE\u09BE\u09B8" },
+              { word: "\u56DB\u4EBA", reading: "\u3088\u306B\u3093 (yonin)", meaningEnglish: "Four people", meaningBengali: "\u099A\u09BE\u09B0\u099C\u09A8" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-08",
+          question: "\u305F\u306A\u304B\u3055\u3093\u306F\uFF08\u3000\uFF09\u4EBA \u3067\u3059\u3002",
+          questionRomaji: "Tanaka-san wa ( ) hito desu.",
+          options: ["\u3057\u305A\u304B\u306A", "\u3057\u305A\u304B", "\u3057\u305A\u304B\u3060", "\u3057\u305A\u304B\u3055"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3057\u305A\u304B\u306A",
+          explanationEnglish: "'\u3057\u305A\u304B' is a na-adjective modifying '\u4EBA' (noun), so '\u306A' is required.",
+          explanationBengali: "'\u3057\u305A\u304B' \u098F\u0995\u099F\u09BF na-adjective \u098F\u09AC\u0982 \u09AA\u09B0\u09C7 '\u4EBA' \u09A5\u09BE\u0995\u09BE\u09DF '\u306A' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09DF\u09C7 '\u3057\u305A\u304B\u306A' \u09B9\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 9 ---
+      {
+        lessonNumber: 9,
+        titleEnglish: "Likes, Dislikes, Skills & Possessions",
+        titleJapanese: "\u7B2C9\u8AB2\uFF1A\u55DC\u597D\u30FB\u80FD\u529B\u30FB\u6240\u6709\u306E\u300C\u304C\u300D\u3068\u7406\u7531\u306E\u300C\u304B\u3089\u300D",
+        topic: "\u597D\u304D\u30FB\u5ACC\u3044\u30FB\u4E0A\u624B\u30FB\u4E0B\u624B\u30FB\u308F\u304B\u308A\u307E\u3059\u30FB\u3042\u308A\u307E\u3059 (Preferences & Abilities)",
+        vocabularies: [
+          {
+            kanji: "\u597D\u304D",
+            hiragana: "\u3059\u304D",
+            romaji: "suki",
+            meaningEnglish: "Like / Fond of (na-adj)",
+            meaningBengali: "\u09AA\u099B\u09A8\u09CD\u09A6 / \u09AA\u09CD\u09B0\u09BF\u09DF",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306F \u65E5\u672C\u6599\u7406\u304C \u3059\u304D\u3067\u3059\u3002",
+              romaji: "Watashi wa nihon ryouri ga suki desu.",
+              english: "I like Japanese cuisine.",
+              bengali: "\u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0996\u09BE\u09AC\u09BE\u09B0 \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5ACC\u3044",
+            hiragana: "\u304D\u3089\u3044",
+            romaji: "kirai",
+            meaningEnglish: "Dislike / Hate (na-adj)",
+            meaningBengali: "\u0985\u09AA\u099B\u09A8\u09CD\u09A6 / \u0985\u09AA\u09CD\u09B0\u09BF\u09DF",
+            example: {
+              japanese: "\u3055\u304B\u306A\u304C \u304D\u3089\u3044\u3067\u3059\u3002",
+              romaji: "Sakana ga kirai desu.",
+              english: "I dislike fish.",
+              bengali: "\u0986\u09AE\u09BF \u09AE\u09BE\u099B \u0985\u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u4E0A\u624B",
+            hiragana: "\u3058\u3087\u3046\u305A",
+            romaji: "jouzu",
+            meaningEnglish: "Good at / Skillful (na-adj)",
+            meaningBengali: "\u09A6\u0995\u09CD\u09B7 / \u09AA\u099F\u09C1",
+            example: {
+              japanese: "\u30DF\u30E9\u30FC\u3055\u3093\u306F \u65E5\u672C\u8A9E\u304C \u3058\u3087\u3046\u305A\u3067\u3059\u3002",
+              romaji: "Miraa-san wa nihongo ga jouzu desu.",
+              english: "Mr. Miller is good at Japanese.",
+              bengali: "\u09AE\u09BF\u09B2\u09BE\u09B0 \u09B8\u09BE\u09B9\u09C7\u09AC \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u09A6\u0995\u09CD\u09B7\u0964"
+            }
+          },
+          {
+            kanji: "\u4E0B\u624B",
+            hiragana: "\u3078\u305F",
+            romaji: "heta",
+            meaningEnglish: "Poor at / Unskillful (na-adj)",
+            meaningBengali: "\u0985\u09A6\u0995\u09CD\u09B7 / \u0995\u09BE\u0981\u099A\u09BE",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306F \u3046\u305F\u304C \u3078\u305F\u3067\u3059\u3002",
+              romaji: "Watashi wa uta ga heta desu.",
+              english: "I am poor at singing.",
+              bengali: "\u0986\u09AE\u09BF \u0997\u09BE\u09A8 \u0997\u09BE\u0993\u09DF\u09BE\u09DF \u0986\u09A8\u09BE\u09DC\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5206\u304B\u308A\u307E\u3059",
+            hiragana: "\u308F\u304B\u308A\u307E\u3059",
+            romaji: "wakarimasu",
+            meaningEnglish: "To understand / comprehend",
+            meaningBengali: "\u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BE / \u099C\u09BE\u09A8\u09BE",
+            example: {
+              japanese: "\u3048\u3044\u3054\u304C \u308F\u304B\u308A\u307E\u3059\u304B\u3002",
+              romaji: "Eigo ga wakarimasu ka.",
+              english: "Do you understand English?",
+              bengali: "\u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0987\u0982\u09B0\u09C7\u099C\u09BF \u09AC\u09CB\u099D\u09C7\u09A8?"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-09-01",
+            pattern: "N \u304C \u597D\u304D / \u5ACC\u3044 / \u4E0A\u624B / \u4E0B\u624B / \u3042\u308A\u307E\u3059 / \u308F\u304B\u308A\u307E\u3059",
+            topic: "Object of Preference, Ability & State marked by '\u304C'",
+            explanationEnglish: "Emotions, preferences, abilities (\u4E0A\u624B/\u4E0B\u624B), and states (\u3042\u308A\u307E\u3059/\u308F\u304B\u308A\u307E\u3059) take the particle '\u304C' (ga) rather than '\u3092'.",
+            explanationBengali: "\u09AA\u099B\u09A8\u09CD\u09A6-\u0985\u09AA\u099B\u09A8\u09CD\u09A6 (\u597D\u304D/\u5ACC\u3044), \u09A6\u0995\u09CD\u09B7\u09A4\u09BE (\u4E0A\u624B/\u4E0B\u624B) \u098F\u09AC\u0982 \u09AC\u09CB\u09A7\u0997\u09AE\u09CD\u09AF\u09A4\u09BE/\u09A5\u09BE\u0995\u09BE (\u308F\u304B\u308A\u307E\u3059/\u3042\u308A\u307E\u3059) \u098F\u09B0 \u0985\u09AC\u099C\u09C7\u0995\u09CD\u099F\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u3092' \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 '\u304C' \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u30AB\u30E9\u30AA\u30B1\u304C \u3059\u304D\u3067\u3059\u304B\u3002(Karaoke ga suki desu ka?)",
+              speakerB: "B: \u306F\u3044\u3001\u3068\u3066\u3082 \u3059\u304D\u3067\u3059\u3002(Hai, totemo suki desu.)",
+              english: "A: Do you like Karaoke? / B: Yes, I like it very much.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0995\u09BE\u09B0\u09BE\u0993\u0995\u09C7 \u0997\u09BE\u09A8 \u0997\u09BE\u0993\u09DF\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09C7\u09A8? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u0985\u09A8\u09C7\u0995 \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-09-02",
+            pattern: "Sentence 1 \u304B\u3089\u3001Sentence 2",
+            topic: "Stating Reasons and Causes with '\u304B\u3089'",
+            explanationEnglish: "'\u304B\u3089' attached to the end of a sentence or clause indicates the reason ('because / since').",
+            explanationBengali: "\u0995\u09CB\u09A8\u09CB \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 '\u304B\u3089' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09B2\u09C7 \u09A4\u09BE '\u0995\u09BE\u09B0\u09A3' \u09AC\u09BE '\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1' \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3069\u3046\u3057\u3066 \u304D\u306E\u3046 \u3084\u3059\u307F\u307E\u3057\u305F\u304B\u3002(Doushite kinou yasumimashita ka?)",
+              speakerB: "B: \u3073\u3087\u3046\u304D\u3067\u3057\u305F \u304B\u3089\u3002(Byouki deshita kara.)",
+              english: "A: Why were you absent yesterday? / B: Because I was sick.",
+              bengali: "A: \u0997\u09A4\u0995\u09BE\u09B2 \u0986\u09AA\u09A8\u09BF \u099B\u09C1\u099F\u09BF \u09A8\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u0995\u09C7\u09A8? / B: \u0995\u09BE\u09B0\u09A3 \u0986\u09AE\u09BF \u0985\u09B8\u09C1\u09B8\u09CD\u09A5 \u099B\u09BF\u09B2\u09BE\u09AE\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E94",
+            strokeCount: 4,
+            onyomi: ["\u30B4 (go)"],
+            kunyomi: ["\u3044\u3064 (itsu)", "\u3044\u3064\u3064 (itsutsu)"],
+            meaningEnglish: "Five",
+            meaningBengali: "\u09AA\u09BE\u0981\u099A / \u09EB",
+            compounds: [
+              { word: "\u4E94\u6708", reading: "\u3054\u304C\u3064 (gogatsu)", meaningEnglish: "May", meaningBengali: "\u09AE\u09C7 \u09AE\u09BE\u09B8" },
+              { word: "\u4E94\u65E5", reading: "\u3044\u3064\u304B (itsuka)", meaningEnglish: "5th day of month / Five days", meaningBengali: "\u09EB \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          },
+          {
+            kanji: "\u516D",
+            strokeCount: 4,
+            onyomi: ["\u30ED\u30AF (roku)"],
+            kunyomi: ["\u3080 (mu)", "\u3080\u3063\u3064 (muttsu)", "\u3080\u3044 (mui)"],
+            meaningEnglish: "Six",
+            meaningBengali: "\u099B\u09AF\u09BC / \u09EC",
+            compounds: [
+              { word: "\u516D\u6708", reading: "\u308D\u304F\u304C\u3064 (rokugatsu)", meaningEnglish: "June", meaningBengali: "\u099C\u09C1\u09A8 \u09AE\u09BE\u09B8" },
+              { word: "\u516D\u65E5", reading: "\u3080\u3044\u304B (muika)", meaningEnglish: "6th day of month / Six days", meaningBengali: "\u09EC \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-09",
+          question: "\u308F\u305F\u3057\u306F \u65E5\u672C\u306E \u30A2\u30CB\u30E1\uFF08\u3000\uFF09\u3059\u304D\u3067\u3059\u3002",
+          questionRomaji: "Watashi wa nihon no anime ( ) suki desu.",
+          options: ["\u304C", "\u3092", "\u306B", "\u3067"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u304C",
+          explanationEnglish: "'\u3059\u304D' (like) takes the particle '\u304C' to mark the object of preference.",
+          explanationBengali: "\u09AA\u099B\u09A8\u09CD\u09A6 \u09AC\u09BE '\u3059\u304D' \u098F\u09B0 \u0985\u09AC\u099C\u09C7\u0995\u09CD\u099F \u09B8\u09AC\u09B8\u09AE\u09DF '\u304C' \u0995\u09A3\u09BE \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u09B9\u09DF\u0964"
+        }
+      },
+      // --- LESSON 10 ---
+      {
+        lessonNumber: 10,
+        titleEnglish: "Existence: Being & Location (\u3044\u307E\u3059 / \u3042\u308A\u307E\u3059)",
+        titleJapanese: "\u7B2C10\u8AB2\uFF1A\u5B58\u5728\u306E\u52D5\u8A5E\uFF08\u3044\u307E\u3059\u30FB\u3042\u308A\u307E\u3059\uFF09\u3068\u4F4D\u7F6E\u8A5E",
+        topic: "\u4EBA\u30FB\u7269\u306E\u6240\u5728\u3068\u4F4D\u7F6E\u8868\u73FE (Existence of Animate/Inanimate & Positional Words)",
+        vocabularies: [
+          {
+            kanji: "\u3042\u308A\u307E\u3059",
+            hiragana: "\u3042\u308A\u307E\u3059",
+            romaji: "arimasu",
+            meaningEnglish: "To exist / have (inanimate objects & plants)",
+            meaningBengali: "\u09A5\u09BE\u0995\u09BE / \u0986\u099B\u09C7 (\u099C\u09DC\u09AC\u09B8\u09CD\u09A4\u09C1 \u0993 \u0989\u09A6\u09CD\u09AD\u09BF\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF)",
+            example: {
+              japanese: "\u3064\u304F\u3048\u306E \u3046\u3048\u306B \u307B\u3093\u304C \u3042\u308A\u307E\u3059\u3002",
+              romaji: "Tsukue no ue ni hon ga arimasu.",
+              english: "There is a book on the desk.",
+              bengali: "\u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u0989\u09AA\u09B0 \u09AC\u0987 \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u3044\u307E\u3059",
+            hiragana: "\u3044\u307E\u3059",
+            romaji: "imasu",
+            meaningEnglish: "To exist / be present (living beings: humans & animals)",
+            meaningBengali: "\u09A5\u09BE\u0995\u09BE / \u0986\u099B\u09C7\u09A8 / \u0986\u099B\u09C7 (\u09AE\u09BE\u09A8\u09C1\u09B7 \u0993 \u09AA\u09CD\u09B0\u09BE\u09A3\u09C0\u09B0 \u099C\u09A8\u09CD\u09AF)",
+            example: {
+              japanese: "\u306B\u308F\u306B \u3044\u306C\u304C \u3044\u307E\u3059\u3002",
+              romaji: "Niwa ni inu ga imasu.",
+              english: "There is a dog in the garden.",
+              bengali: "\u09AC\u09BE\u0997\u09BE\u09A8\u09C7 \u098F\u0995\u099F\u09BF \u0995\u09C1\u0995\u09C1\u09B0 \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u4E0A",
+            hiragana: "\u3046\u3048",
+            romaji: "ue",
+            meaningEnglish: "Top / Above / On",
+            meaningBengali: "\u0989\u09AA\u09B0\u09C7",
+            example: {
+              japanese: "\u3044\u3059\u306E \u3046\u3048\u306B \u306D\u3053\u304C \u3044\u307E\u3059\u3002",
+              romaji: "Isu no ue ni neko ga imasu.",
+              english: "There is a cat on the chair.",
+              bengali: "\u099A\u09C7\u09DF\u09BE\u09B0\u09C7\u09B0 \u0989\u09AA\u09B0 \u098F\u0995\u099F\u09BF \u09AC\u09BF\u09DC\u09BE\u09B2 \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u4E0B",
+            hiragana: "\u3057\u305F",
+            romaji: "shita",
+            meaningEnglish: "Under / Below",
+            meaningBengali: "\u09A8\u09BF\u099A\u09C7",
+            example: {
+              japanese: "\u30D9\u30C3\u30C9\u306E \u3057\u305F\u306B \u304B\u3070\u3093\u304C \u3042\u308A\u307E\u3059\u3002",
+              romaji: "Beddo no shita ni kaban ga arimasu.",
+              english: "There is a bag under the bed.",
+              bengali: "\u0996\u09BE\u099F\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7 \u09AC\u09CD\u09AF\u09BE\u0997 \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u4E2D",
+            hiragana: "\u306A\u304B",
+            romaji: "naka",
+            meaningEnglish: "Inside / Middle",
+            meaningBengali: "\u09AD\u09C7\u09A4\u09B0\u09C7 / \u09AE\u09A7\u09CD\u09AF\u09C7",
+            example: {
+              japanese: "\u306F\u3053\u306E \u306A\u304B\u306B \u306A\u306B\u304C \u3042\u308A\u307E\u3059\u304B\u3002",
+              romaji: "Hako no naka ni nani ga arimasu ka.",
+              english: "What is inside the box?",
+              bengali: "\u09AC\u09BE\u0995\u09CD\u09B8\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7 \u0995\u09C0 \u0986\u099B\u09C7?"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-10-01",
+            pattern: "[Place] \u306B [Noun] \u304C \u3042\u308A\u307E\u3059 / \u3044\u307E\u3059",
+            topic: "Expressing Existence in a Specific Location",
+            explanationEnglish: "'[Place] \u306B' marks the location of existence. Use '\u3042\u308A\u307E\u3059' for inanimate objects/plants and '\u3044\u307E\u3059' for animate beings (people/animals).",
+            explanationBengali: "'[\u09B8\u09CD\u09A5\u09BE\u09A8] \u306B' \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u099C\u09BE\u09DF\u0997\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 \u099C\u09DC\u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u099C\u09A8\u09CD\u09AF '\u3042\u308A\u307E\u3059' \u098F\u09AC\u0982 \u09AE\u09BE\u09A8\u09C1\u09B7/\u09AA\u09CD\u09B0\u09BE\u09A3\u09C0\u09B0 \u099C\u09A8\u09CD\u09AF '\u3044\u307E\u3059' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u304D\u3087\u3046\u3057\u3064\u306B \u3060\u308C\u304C \u3044\u307E\u3059\u304B\u3002(Kyoushitsu ni dare ga imasu ka?)",
+              speakerB: "B: \u305B\u3093\u305B\u3044\u3068 \u304C\u304F\u305B\u3044\u304C \u3044\u307E\u3059\u3002(Sensei to gakusei ga imasu.)",
+              english: "A: Who is in the classroom? / B: The teacher and students are there.",
+              bengali: "A: \u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7\u09C7 \u0995\u09C7 \u0986\u099B\u09C7\u09A8? / B: \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0993 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09B0\u09BE \u0986\u099B\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            id: "g-10-02",
+            pattern: "[Noun 1] \u306E [\u4E0A/\u4E0B/\u524D/\u5F8C\u308D/\u96A3/\u9593] \u306B [Noun 2] \u304C \u3042\u308A\u307E\u3059/\u3044\u307E\u3059",
+            topic: "Relative Spatial Positions with Location Nouns",
+            explanationEnglish: "Positional nouns (\u4E0A, \u4E0B, \u524D, \u5F8C\u308D, \u96A3, \u9593) describe precise spatial relations relative to a reference object.",
+            explanationBengali: "\u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09B6\u09AC\u09CD\u09A6\u09B8\u09AE\u09C2\u09B9 (\u09AF\u09C7\u09AE\u09A8: \u4E0A \u0989\u09AA\u09B0\u09C7, \u4E0B \u09A8\u09BF\u099A\u09C7, \u524D \u09B8\u09BE\u09AE\u09A8\u09C7, \u5F8C\u308D \u09AA\u09C7\u099B\u09A8\u09C7, \u96A3 \u09AA\u09BE\u09B6\u09C7, \u9593 \u09AE\u09BE\u099D\u09C7) \u0995\u09CB\u09A8\u09CB \u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u0986\u09AA\u09C7\u0995\u09CD\u09B7\u09BF\u0995 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u304E\u3093\u3053\u3046\u306E \u3068\u306A\u308A\u306B \u306A\u306B\u304C \u3042\u308A\u307E\u3059\u304B\u3002(Ginkou no tonari ni nani ga arimasu ka?)",
+              speakerB: "B: \u3086\u3046\u3073\u3093\u304D\u3087\u304F\u304C \u3042\u308A\u307E\u3059\u3002(Yuubinkyoku ga arimasu.)",
+              english: "A: What is next to the bank? / B: There is a post office.",
+              bengali: "A: \u09AC\u09CD\u09AF\u09BE\u0982\u0995\u09C7\u09B0 \u09AA\u09BE\u09B6\u09C7 \u0995\u09C0 \u0986\u099B\u09C7? / B: \u098F\u0995\u099F\u09BF \u09AA\u09CB\u09B8\u09CD\u099F \u0985\u09AB\u09BF\u09B8 \u0986\u099B\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E03",
+            strokeCount: 2,
+            onyomi: ["\u30B7\u30C1 (shichi)"],
+            kunyomi: ["\u306A\u306A (nana)", "\u306A\u306A\u3064 (nanatsu)", "\u306A\u306E (nano)"],
+            meaningEnglish: "Seven",
+            meaningBengali: "\u09B8\u09BE\u09A4 / \u09ED",
+            compounds: [
+              { word: "\u4E03\u6708", reading: "\u3057\u3061\u304C\u3064 (shichigatsu)", meaningEnglish: "July", meaningBengali: "\u099C\u09C1\u09B2\u09BE\u0987 \u09AE\u09BE\u09B8" },
+              { word: "\u4E03\u65E5", reading: "\u306A\u306E\u304B (nanoka)", meaningEnglish: "7th day of month / Seven days", meaningBengali: "\u09ED \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          },
+          {
+            kanji: "\u516B",
+            strokeCount: 2,
+            onyomi: ["\u30CF\u30C1 (hachi)"],
+            kunyomi: ["\u3084 (ya)", "\u3084\u3063\u3064 (yattsu)", "\u3088\u3046 (you)"],
+            meaningEnglish: "Eight",
+            meaningBengali: "\u0986\u099F / \u09EE",
+            compounds: [
+              { word: "\u516B\u6708", reading: "\u306F\u3061\u304C\u3064 (hachigatsu)", meaningEnglish: "August", meaningBengali: "\u0986\u0997\u09B8\u09CD\u099F \u09AE\u09BE\u09B8" },
+              { word: "\u516B\u65E5", reading: "\u3088\u3046\u304B (youka)", meaningEnglish: "8th day of month / Eight days", meaningBengali: "\u09EE \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-10",
+          question: "\u3053\u3046\u3048\u3093\u306B \u3053\u3069\u3082\uFF08\u3000\uFF09\u3044\u307E\u3059\u3002",
+          questionRomaji: "Kouen ni kodomo ( ) imasu.",
+          options: ["\u304C", "\u3092", "\u3067", "\u306B"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u304C",
+          explanationEnglish: "'\u304C' marks '\u3053\u3069\u3082' (children, animate beings) as the entity that exists with '\u3044\u307E\u3059'.",
+          explanationBengali: "'\u3044\u307E\u3059' \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8\u0995\u09BE\u09B0\u09C0 \u09B8\u09A4\u09CD\u09A4\u09BE '\u3053\u3069\u3082' (\u09B6\u09BF\u09B6\u09C1\u09B0\u09BE) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 '\u304C' \u0995\u09A3\u09BE \u09AC\u09B8\u09C7\u0964"
+        }
+      },
+      // --- LESSON 11 ---
+      {
+        lessonNumber: 11,
+        titleEnglish: "Counters, Quantities & Time Periods",
+        titleJapanese: "\u7B2C11\u8AB2\uFF1A\u52A9\u6570\u8A5E\u30FB\u6570\u91CF\u8A5E\u3068\u671F\u9593\u306E\u8868\u73FE",
+        topic: "\u52A9\u6570\u8A5E\uFF08\u3064\u30FB\u4EBA\u30FB\u679A\u30FB\u53F0\u30FB\u56DE\uFF09\u3068\u671F\u9593 (Counters & Durations)",
+        vocabularies: [
+          {
+            kanji: "\u4E00\u3064",
+            hiragana: "\u3072\u3068\u3064",
+            romaji: "hitotsu",
+            meaningEnglish: "One (general counter)",
+            meaningBengali: "\u098F\u0995\u099F\u09BF (\u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0997\u09A3\u09A8\u09BE\u09AC\u09BE\u099A\u0995)",
+            example: {
+              japanese: "\u308A\u3093\u3054\u3092 \u3072\u3068\u3064 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Ringo o hitotsu kudasai.",
+              english: "Please give me one apple.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u0986\u09AE\u09BE\u0995\u09C7 \u098F\u0995\u099F\u09BF \u0986\u09AA\u09C7\u09B2 \u09A6\u09BF\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u679A",
+            hiragana: "\u307E\u3044",
+            romaji: "mai",
+            meaningEnglish: "Counter for thin/flat items (sheets, tickets, shirts)",
+            meaningBengali: "\u09AA\u09BE\u09A4\u09B2\u09BE/\u099A\u09CD\u09AF\u09BE\u09AA\u09CD\u099F\u09BE \u099C\u09BF\u09A8\u09BF\u09B8 \u0997\u09A3\u09A8\u09BE\u09B0 \u098F\u0995\u0995 (\u0995\u09BE\u0997\u099C, \u099F\u09BF\u0995\u09BF\u099F, \u099C\u09BE\u09AE\u09BE)",
+            example: {
+              japanese: "\u304D\u3063\u3066\u3092 5\u307E\u3044 \u304B\u3044\u307E\u3057\u305F\u3002",
+              romaji: "Kitte o gomai kaimashita.",
+              english: "I bought 5 stamps.",
+              bengali: "\u0986\u09AE\u09BF \u09EB\u099F\u09BF \u09A1\u09BE\u0995\u099F\u09BF\u0995\u09C7\u099F \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u53F0",
+            hiragana: "\u3060\u3044",
+            romaji: "dai",
+            meaningEnglish: "Counter for machines, vehicles & computers",
+            meaningBengali: "\u09AF\u09A8\u09CD\u09A4\u09CD\u09B0\u09AA\u09BE\u09A4\u09BF, \u0997\u09BE\u09DC\u09BF \u0993 \u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0 \u0997\u09A3\u09A8\u09BE\u09B0 \u098F\u0995\u0995",
+            example: {
+              japanese: "\u304F\u308B\u307E\u304C 2\u3060\u3044 \u3042\u308A\u307E\u3059\u3002",
+              romaji: "Kuruma ga nidai arimasu.",
+              english: "There are two cars.",
+              bengali: "\u09A6\u09C1\u099F\u09BF \u0997\u09BE\u09DC\u09BF \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u6642\u9593",
+            hiragana: "\u3058\u304B\u3093",
+            romaji: "jikan",
+            meaningEnglish: "Hours (duration)",
+            meaningBengali: "\u0998\u09A3\u09CD\u099F\u09BE (\u09B8\u09AE\u09DF\u0995\u09BE\u09B2)",
+            example: {
+              japanese: "\u307E\u3044\u306B\u3061 2\u3058\u304B\u3093 \u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3059\u3002",
+              romaji: "Mainichi nijikan benkyoushimasu.",
+              english: "I study for 2 hours every day.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09E8 \u0998\u09A3\u09CD\u099F\u09BE \u09AA\u09DC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5144\u5F1F",
+            hiragana: "\u304D\u3087\u3046\u3060\u3044",
+            romaji: "kyoudai",
+            meaningEnglish: "Brothers / Siblings",
+            meaningBengali: "\u09AD\u09BE\u0987\u09AC\u09CB\u09A8",
+            example: {
+              japanese: "\u304D\u3087\u3046\u3060\u3044\u306F \u306A\u3093\u306B\u3093 \u3044\u307E\u3059\u304B\u3002",
+              romaji: "Kyoudai wa nannin imasu ka.",
+              english: "How many siblings do you have?",
+              bengali: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09A4\u099C\u09A8 \u09AD\u09BE\u0987\u09AC\u09CB\u09A8 \u0986\u099B\u09C7\u09A8?"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-11-01",
+            pattern: "[Noun] \u3092 [Quantity/Counter] Verb",
+            topic: "Quantifier Placement without Particle after Number",
+            explanationEnglish: "In Japanese, quantifiers generally sit immediately before the verb without taking any additional particle (e.g., \u308A\u3093\u3054\u3092 3\u3064 \u8CB7\u3044\u307E\u3057\u305F).",
+            explanationBengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u09B8\u0982\u0996\u09CD\u09AF\u09BE \u09AC\u09BE \u09AA\u09B0\u09BF\u09AE\u09BE\u09AA\u09AC\u09BE\u099A\u0995 \u09B6\u09AC\u09CD\u09A6 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u0995\u09CB\u09A8\u09CB \u0995\u09A3\u09BE \u099B\u09BE\u09DC\u09BE\u0987 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0995\u09CD\u09B0\u09BF\u09DF\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u308A\u3093\u3054\u3092 3\u3064 \u8CB7\u3044\u307E\u3057\u305F)\u0964",
+            dialogue: {
+              speakerA: "A: \u307F\u304B\u3093\u3092 \u3044\u304F\u3064 \u304B\u3044\u307E\u3057\u305F\u304B\u3002(Mikan o ikutsu kaimashita ka?)",
+              speakerB: "B: 4\u3064 \u304B\u3044\u307E\u3057\u305F\u3002(Yottsu kaimashita.)",
+              english: "A: How many mandarins did you buy? / B: I bought four.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09DF\u099F\u09BF \u0995\u09AE\u09B2\u09BE \u0995\u09BF\u09A8\u09C7\u099B\u09C7\u09A8? / B: \u09EA\u099F\u09BF \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-11-02",
+            pattern: "[Period] \u306B [Frequency] \u56DE Verb / [Duration] \u304B\u304B\u308A\u307E\u3059",
+            topic: "Frequency per Period and Time/Cost Required",
+            explanationEnglish: "'1\u304B\u6708\u306B 2\u56DE' expresses frequency (twice a month). '\u304B\u304B\u308A\u307E\u3059' indicates the time or monetary cost taken to complete something.",
+            explanationBengali: "'1\u304B\u6708\u306B 2\u56DE' \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09DF\u09C7 \u0995\u09BE\u099C\u09C7\u09B0 \u09AA\u09CC\u09A8\u0983\u09AA\u09C1\u09A8\u09BF\u0995\u09A4\u09BE (\u09AE\u09BE\u09B8\u09C7 \u09E8 \u09AC\u09BE\u09B0) \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964 '\u304B\u304B\u308A\u307E\u3059' \u09B8\u09AE\u09DF \u09AC\u09BE \u0996\u09B0\u099A \u09B2\u09BE\u0997\u09BE \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3068\u3046\u304D\u3087\u3046\u304B\u3089 \u304A\u304A\u3055\u304B\u307E\u3067 \u3057\u3093\u304B\u3093\u305B\u3093\u3067 \u3069\u306E\u304F\u3089\u3044 \u304B\u304B\u308A\u307E\u3059\u304B\u3002(Toukyou kara Oosaka made shinkansen de donokurai kakarimasu ka?)",
+              speakerB: "B: 2\u3058\u304B\u3093\u306F\u3093 \u304B\u304B\u308A\u307E\u3059\u3002(Nijikan-han kakarimasu.)",
+              english: "A: About how long does it take from Tokyo to Osaka by Shinkansen? / B: It takes 2 and a half hours.",
+              bengali: "A: \u099F\u09CB\u0995\u09BF\u0993 \u09A5\u09C7\u0995\u09C7 \u0993\u09B8\u09BE\u0995\u09BE \u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0995\u09A4\u0995\u09CD\u09B7\u09A3 \u09B2\u09BE\u0997\u09C7? / B: \u0986\u09DC\u09BE\u0987 \u0998\u09A3\u09CD\u099F\u09BE \u09B2\u09BE\u0997\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E5D",
+            strokeCount: 2,
+            onyomi: ["\u30AD\u30E5\u30A6 (kyuu)", "\u30AF (ku)"],
+            kunyomi: ["\u3053\u3053\u306E (kokono)", "\u3053\u3053\u306E\u3064 (kokonotsu)"],
+            meaningEnglish: "Nine",
+            meaningBengali: "\u09A8\u09AF\u09BC / \u09EF",
+            compounds: [
+              { word: "\u4E5D\u6708", reading: "\u304F\u304C\u3064 (kugatsu)", meaningEnglish: "September", meaningBengali: "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0 \u09AE\u09BE\u09B8" },
+              { word: "\u4E5D\u65E5", reading: "\u3053\u3053\u306E\u304B (kokonoka)", meaningEnglish: "9th day of month / Nine days", meaningBengali: "\u09EF \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          },
+          {
+            kanji: "\u5341",
+            strokeCount: 2,
+            onyomi: ["\u30B8\u30E5\u30A6 (juu)", "\u30B8\u30C3 (ji')"],
+            kunyomi: ["\u3068\u304A (too)", "\u3068 (to)"],
+            meaningEnglish: "Ten",
+            meaningBengali: "\u09A6\u09B6 / \u09E7\u09E6",
+            compounds: [
+              { word: "\u5341\u6708", reading: "\u3058\u3085\u3046\u304C\u3064 (juugatsu)", meaningEnglish: "October", meaningBengali: "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0 \u09AE\u09BE\u09B8" },
+              { word: "\u5341\u65E5", reading: "\u3068\u304A\u304B (tooka)", meaningEnglish: "10th day of month / Ten days", meaningBengali: "\u09E7\u09E6 \u09A4\u09BE\u09B0\u09BF\u0996" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-11",
+          question: "1\u3057\u3085\u3046\u304B\u3093\u306B 3\uFF08\u3000\uFF09\u30D7\u30FC\u30EB\u3067 \u304A\u3088\u304E\u307E\u3059\u3002",
+          questionRomaji: "Isshuukan ni san ( ) puuru de oyogimasu.",
+          options: ["\u304B\u3044 (\u56DE)", "\u3060\u3044 (\u53F0)", "\u307E\u3044 (\u679A)", "\u306B\u3093 (\u4EBA)"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u304B\u3044 (\u56DE)",
+          explanationEnglish: "'\u56DE' (kai) is the counter for frequency/times (3 times a week).",
+          explanationBengali: "\u09AA\u09CC\u09A8\u0983\u09AA\u09C1\u09A8\u09BF\u0995\u09A4\u09BE \u09AC\u09BE \u09AC\u09BE\u09B0 \u0997\u09A3\u09A8\u09BE\u09DF '\u56DE' (\u0995\u09BE\u0987) \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF (\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7 \u09E9 \u09AC\u09BE\u09B0)\u0964"
+        }
+      },
+      // --- LESSON 12 ---
+      {
+        lessonNumber: 12,
+        titleEnglish: "Comparisons & Superlatives",
+        titleJapanese: "\u7B2C12\u8AB2\uFF1A\u6BD4\u8F03\u7D1A\uFF08\u3088\u308A\u30FB\u3069\u3061\u3089\uFF09\u3068\u6700\u4E0A\u7D1A\uFF08\u4E00\u756A\uFF09",
+        topic: "\u6BD4\u8F03\u8868\u73FE (Comparing Nouns: A \u306F B \u3088\u308A / A \u3068 B \u3068 \u3069\u3061\u3089 / \u306E\u4E2D\u3067\u4E00\u756A)",
+        vocabularies: [
+          {
+            kanji: "\u7C21\u5358",
+            hiragana: "\u304B\u3093\u305F\u3093",
+            romaji: "kantan",
+            meaningEnglish: "Simple / Easy (na-adj)",
+            meaningBengali: "\u09B8\u09B9\u099C / \u09B8\u09B0\u09B2",
+            example: {
+              japanese: "\u3053\u306E \u30C6\u30B9\u30C8\u306F \u304B\u3093\u305F\u3093\u3067\u3057\u305F\u3002",
+              romaji: "Kono tesuto wa kantan deshita.",
+              english: "This test was easy.",
+              bengali: "\u098F\u0987 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE\u099F\u09BF \u09B8\u09B9\u099C \u099B\u09BF\u09B2\u0964"
+            }
+          },
+          {
+            kanji: "\u8FD1\u3044",
+            hiragana: "\u3061\u304B\u3044",
+            romaji: "chikai",
+            meaningEnglish: "Near / Close",
+            meaningBengali: "\u0995\u09BE\u099B\u09C7 / \u09A8\u09BF\u0995\u099F\u09AC\u09B0\u09CD\u09A4\u09C0",
+            example: {
+              japanese: "\u3048\u304D\u304B\u3089 \u3046\u3061\u307E\u3067 \u3061\u304B\u3044\u3067\u3059\u3002",
+              romaji: "Eki kara uchi made chikai desu.",
+              english: "My house is close to the station.",
+              bengali: "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8 \u09A5\u09C7\u0995\u09C7 \u0986\u09AE\u09BE\u09B0 \u09AC\u09BE\u09DC\u09BF \u0995\u09BE\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u9060\u3044",
+            hiragana: "\u3068\u304A\u3044",
+            romaji: "tooi",
+            meaningEnglish: "Far / Distant",
+            meaningBengali: "\u09A6\u09C2\u09B0\u09C7",
+            example: {
+              japanese: "\u304C\u3063\u3053\u3046\u306F \u3068\u304A\u3044\u3067\u3059\u3002",
+              romaji: "Gakkou wa tooi desu.",
+              english: "The school is far away.",
+              bengali: "\u09B8\u09CD\u0995\u09C1\u09B2\u099F\u09BF \u0985\u09A8\u09C7\u0995 \u09A6\u09C2\u09B0\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u901F\u3044",
+            hiragana: "\u306F\u3084\u3044",
+            romaji: "hayai",
+            meaningEnglish: "Fast / Quick",
+            meaningBengali: "\u09A6\u09CD\u09B0\u09C1\u09A4 / \u09A6\u09CD\u09B0\u09C1\u09A4\u0997\u09BE\u09AE\u09C0",
+            example: {
+              japanese: "\u3057\u3093\u304B\u3093\u305B\u3093\u306F \u3068\u3066\u3082 \u306F\u3084\u3044\u3067\u3059\u3002",
+              romaji: "Shinkansen wa totemo hayai desu.",
+              english: "The Shinkansen is very fast.",
+              bengali: "\u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09A6\u09CD\u09B0\u09C1\u09A4\u0997\u09BE\u09AE\u09C0\u0964"
+            }
+          },
+          {
+            kanji: "\u5B63\u7BC0",
+            hiragana: "\u304D\u305B\u3064",
+            romaji: "kisetsu",
+            meaningEnglish: "Season",
+            meaningBengali: "\u098B\u09A4\u09C1 / \u0995\u09BE\u09B2",
+            example: {
+              japanese: "\u3069\u306E \u304D\u305B\u3064\u304C \u3044\u3061\u3070\u3093 \u3059\u304D\u3067\u3059\u304B\u3002",
+              romaji: "Dono kisetsu ga ichiban suki desu ka.",
+              english: "Which season do you like the best?",
+              bengali: "\u0995\u09CB\u09A8 \u098B\u09A4\u09C1\u099F\u09BF \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6?"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-12-01",
+            pattern: "N1 \u306F N2 \u3088\u308A [Adjective] \u3067\u3059 / N1 \u3068 N2 \u3068 \u3069\u3061\u3089\u304C [Adj] \u3067\u3059\u304B",
+            topic: "Comparative Degree between Two Items",
+            explanationEnglish: "'N1 \u306F N2 \u3088\u308A Adj \u3067\u3059' means 'N1 is more Adj than N2'. In questions, 'N1 \u3068 N2 \u3068 \u3069\u3061\u3089\u304C Adj \u3067\u3059\u304B' asks which of the two is more.",
+            explanationBengali: "'N1 \u306F N2 \u3088\u308A Adj \u3067\u3059' = N1, N2 \u098F\u09B0 \u099A\u09C7\u09DF\u09C7 \u09AC\u09C7\u09B6\u09BF \u0997\u09C1\u09A3\u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8\u0964 \u09A6\u09C1\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09A4\u09C1\u09B2\u09A8\u09BE\u09DF \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u0995\u09B0\u09A4\u09C7 '\u3069\u3061\u3089' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u306B\u307B\u3093\u3054 \u3068 \u3048\u3044\u3054 \u3068 \u3069\u3061\u3089\u304C \u3080\u305A\u304B\u3057\u3044\u3067\u3059\u304B\u3002(Nihongo to Eigo to dochira ga muzukashii desu ka?)",
+              speakerB: "B: \u306B\u307B\u3093\u3054\u306E \u307B\u3046\u304C \u3080\u305A\u304B\u3057\u3044\u3067\u3059\u3002(Nihongo no hou ga muzukashii desu.)",
+              english: "A: Between Japanese and English, which is more difficult? / B: Japanese is more difficult.",
+              bengali: "A: \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u098F\u09AC\u0982 \u0987\u0982\u09B0\u09C7\u099C\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09C7\u09B6\u09BF \u0995\u09A0\u09BF\u09A8? / B: \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AC\u09C7\u09B6\u09BF \u0995\u09A0\u09BF\u09A8\u0964"
+            }
+          },
+          {
+            id: "g-12-02",
+            pattern: "[Category] \u306E\u4E2D\u3067 [Question Word] \u304C \u4E00\u756A [Adjective] \u3067\u3059\u304B",
+            topic: "Superlative Degree among Three or More Items",
+            explanationEnglish: "'\u306E\u4E2D (\u306A\u304B) \u3067' sets the domain of comparison, and '\u4E00\u756A (\u3044\u3061\u3070\u3093)' marks the superlative ('the most / best').",
+            explanationBengali: "'[\u09B6\u09CD\u09B0\u09C7\u09A3\u09C0] \u306E\u4E2D\u3067' \u09A4\u09C1\u09B2\u09A8\u09BE\u09B0 \u09AA\u09B0\u09BF\u09A7\u09BF \u098F\u09AC\u0982 '\u4E00\u756A' (\u0987\u099A\u09BF\u09AC\u09BE\u0982) '\u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7' \u09AC\u09BE \u09B8\u09C1\u09AA\u09BE\u09B0\u09B2\u09C7\u099F\u09BF\u09AD \u09A1\u09BF\u0997\u09CD\u09B0\u09BF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: 1\u306D\u3093\u3067 \u3044\u3064\u304C \u3044\u3061\u3070\u3093 \u3055\u3080\u3044\u3067\u3059\u304B\u3002(Ichinen de itsu ga ichiban samui desu ka?)",
+              speakerB: "B: 1\u304C\u3064\u304C \u3044\u3061\u3070\u3093 \u3055\u3080\u3044\u3067\u3059\u3002(Ichigatsu ga ichiban samui desu.)",
+              english: "A: In a year, when is it the coldest? / B: January is the coldest.",
+              bengali: "A: \u098F\u0995 \u09AC\u099B\u09B0\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u0996\u09A8 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09AC\u09C7\u09B6\u09BF \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09A5\u09BE\u0995\u09C7? / B: \u099C\u09BE\u09A8\u09C1\u09DF\u09BE\u09B0\u09BF \u09AE\u09BE\u09B8\u09C7 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09AC\u09C7\u09B6\u09BF \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09A5\u09BE\u0995\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u767E",
+            strokeCount: 6,
+            onyomi: ["\u30D2\u30E3\u30AF (hyaku)", "\u30D3\u30E3\u30AF (byaku)", "\u30D4\u30E3\u30AF (pyaku)"],
+            kunyomi: ["\u3082\u3082 (momo)"],
+            meaningEnglish: "Hundred",
+            meaningBengali: "\u09B6\u09A4 / \u09E7\u09E6\u09E6",
+            compounds: [
+              { word: "\u4E09\u767E", reading: "\u3055\u3093\u3073\u3083\u304F (sanbyaku)", meaningEnglish: "300", meaningBengali: "\u09A4\u09BF\u09A8\u09B6\u09A4" },
+              { word: "\u767E\u8CA8\u5E97", reading: "\u3072\u3083\u3063\u304B\u3066\u3093 (hyakkaten)", meaningEnglish: "Department store", meaningBengali: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0" }
+            ]
+          },
+          {
+            kanji: "\u5343",
+            strokeCount: 3,
+            onyomi: ["\u30BB\u30F3 (sen)", "\u30BC\u30F3 (zen)"],
+            kunyomi: ["\u3061 (chi)"],
+            meaningEnglish: "Thousand",
+            meaningBengali: "\u09B9\u09BE\u099C\u09BE\u09B0 / \u09E7\u09E6\u09E6\u09E6",
+            compounds: [
+              { word: "\u4E09\u5343", reading: "\u3055\u3093\u305C\u3093 (sanzen)", meaningEnglish: "3,000", meaningBengali: "\u09A4\u09BF\u09A8 \u09B9\u09BE\u099C\u09BE\u09B0" },
+              { word: "\u5343\u8449", reading: "\u3061\u3070 (Chiba)", meaningEnglish: "Chiba Prefecture", meaningBengali: "\u099A\u09BF\u09AC\u09BE \u09AA\u09CD\u09B0\u09BF\u09AB\u09C7\u0995\u099A\u09BE\u09B0" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-12",
+          question: "\u30B9\u30DD\u30FC\u30C4\u306E \u4E2D\u3067 \u30B5\u30C3\u30AB\u30FC\uFF08\u3000\uFF09\u4E00\u756A \u304A\u3082\u3057\u308D\u3044\u3067\u3059\u3002",
+          questionRomaji: "Supootsu no naka de sakkaa ( ) ichiban omoshiroi desu.",
+          options: ["\u304C", "\u306F", "\u3067", "\u3088\u308A"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u304C",
+          explanationEnglish: "In superlative comparisons, the selected item is marked with '\u304C' (\u30B5\u30C3\u30AB\u30FC\u304C \u4E00\u756A...).",
+          explanationBengali: "\u09B8\u09C1\u09AA\u09BE\u09B0\u09B2\u09C7\u099F\u09BF\u09AD \u09AC\u09BE\u0995\u09CD\u09AF\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09BF\u09A4 \u0986\u0987\u099F\u09C7\u09AE\u099F\u09BF\u09B0 \u09AA\u09B0\u09C7 '\u304C' \u09AC\u09B8\u09C7 (\u30B5\u30C3\u30AB\u30FC\u304C \u4E00\u756A...)\u0964"
+        }
+      },
+      // --- LESSON 13 ---
+      {
+        lessonNumber: 13,
+        titleEnglish: "Desires & Purpose of Movement (~\u305F\u3044 / \u307B\u3057\u3044)",
+        titleJapanese: "\u7B2C13\u8AB2\uFF1A\u9858\u671B\u8868\u73FE\uFF08\u301C\u305F\u3044\u30FB\u6B32\u3057\u3044\uFF09\u3068\u79FB\u52D5\u306E\u76EE\u7684\u300C\u301C\u306B\u884C\u304D\u307E\u3059\u300D",
+        topic: "\u9858\u671B\u3068\u76EE\u7684 (Expressing Desires with \u6B32\u3057\u3044 / ~\u305F\u3044 and Purpose with \u306B\u884C\u304D\u307E\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u6B32\u3057\u3044",
+            hiragana: "\u307B\u3057\u3044",
+            romaji: "hoshii",
+            meaningEnglish: "Want / Desired (i-adj for objects)",
+            meaningBengali: "\u099A\u09BE\u0993\u09DF\u09BE / \u0987\u099A\u09CD\u099B\u09BE (\u09AC\u09B8\u09CD\u09A4\u09C1 \u099A\u09BE\u0993\u09DF\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF)",
+            example: {
+              japanese: "\u3042\u305F\u3089\u3057\u3044 \u304F\u308B\u307E\u304C \u307B\u3057\u3044\u3067\u3059\u3002",
+              romaji: "Atarashii kuruma ga hoshii desu.",
+              english: "I want a new car.",
+              bengali: "\u0986\u09AE\u09BF \u098F\u0995\u099F\u09BF \u09A8\u09A4\u09C1\u09A8 \u0997\u09BE\u09DC\u09BF \u099A\u09BE\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u904A\u3073\u307E\u3059",
+            hiragana: "\u3042\u305D\u3073\u307E\u3059",
+            romaji: "asobimasu",
+            meaningEnglish: "To play / enjoy oneself / hang out",
+            meaningBengali: "\u0996\u09C7\u09B2\u09BE\u09A7\u09C1\u09B2\u09BE \u0995\u09B0\u09BE / \u0998\u09C1\u09B0\u09C7 \u09AC\u09C7\u09DC\u09BE\u09A8\u09CB / \u0986\u09A8\u09A8\u09CD\u09A6 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3057\u3085\u3046\u307E\u3064 \u3068\u3082\u3060\u3061\u3068 \u3042\u305D\u3073\u307E\u3059\u3002",
+              romaji: "Shuumatsu tomodachi to asobimasu.",
+              english: "I will hang out with friends this weekend.",
+              bengali: "\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09BE\u09A8\u09CD\u09A4\u09C7 \u0986\u09AE\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0998\u09C1\u09B0\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u6CF3\u304E\u307E\u3059",
+            hiragana: "\u304A\u3088\u304E\u307E\u3059",
+            romaji: "oyogimasu",
+            meaningEnglish: "To swim",
+            meaningBengali: "\u09B8\u09BE\u0981\u09A4\u09BE\u09B0 \u0995\u09BE\u099F\u09BE",
+            example: {
+              japanese: "\u3046\u307F\u3067 \u304A\u3088\u304E\u305F\u3044\u3067\u3059\u3002",
+              romaji: "Umi de oyogitai desu.",
+              english: "I want to swim in the sea.",
+              bengali: "\u0986\u09AE\u09BF \u09B8\u09AE\u09C1\u09A6\u09CD\u09B0\u09C7 \u09B8\u09BE\u0981\u09A4\u09BE\u09B0 \u0995\u09BE\u099F\u09A4\u09C7 \u099A\u09BE\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u8FCE\u3048\u307E\u3059",
+            hiragana: "\u3080\u304B\u3048\u307E\u3059",
+            romaji: "mukaemasu",
+            meaningEnglish: "To welcome / pick up someone",
+            meaningBengali: "\u0985\u09AD\u09CD\u09AF\u09B0\u09CD\u09A5\u09A8\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB / \u098F\u0997\u09BF\u09DF\u09C7 \u0986\u09A8\u09A4\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u304F\u3046\u3053\u3046\u3078 \u3068\u3082\u3060\u3061\u3092 \u3080\u304B\u3048\u306B \u3044\u304D\u307E\u3059\u3002",
+              romaji: "Kuukou e tomodachi o mukaeni ikimasu.",
+              english: "I am going to the airport to pick up my friend.",
+              bengali: "\u0986\u09AE\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u0995\u09C7 \u098F\u0997\u09BF\u09DF\u09C7 \u0986\u09A8\u09A4\u09C7 \u09AC\u09BF\u09AE\u09BE\u09A8\u09AC\u09A8\u09CD\u09A6\u09B0\u09C7 \u09AF\u09BE\u099A\u09CD\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u75B2\u308C\u307E\u3059",
+            hiragana: "\u3064\u304B\u308C\u307E\u3059",
+            romaji: "tsukaremasu",
+            meaningEnglish: "To get tired",
+            meaningBengali: "\u0995\u09CD\u09B2\u09BE\u09A8\u09CD\u09A4 \u09B9\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u304D\u3087\u3046\u306F \u3068\u3066\u3082 \u3064\u304B\u308C\u307E\u3057\u305F\u3002",
+              romaji: "Kyou wa totemo tsukaremashita.",
+              english: "I got very tired today.",
+              bengali: "\u0986\u099C\u0995\u09C7 \u0986\u09AE\u09BF \u0996\u09C1\u09AC \u0995\u09CD\u09B2\u09BE\u09A8\u09CD\u09A4 \u09B9\u09DF\u09C7 \u0997\u09C7\u099B\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-13-01",
+            pattern: "N \u304C \u6B32\u3057\u3044\u3067\u3059 / Verb[stem] \u305F\u3044\u3067\u3059",
+            topic: "Expressing Wanting Objects vs. Wanting to Perform Actions",
+            explanationEnglish: "'N \u304C \u6B32\u3057\u3044\u3067\u3059' expresses desire for a noun. 'Verb[masu-stem] + \u305F\u3044\u3067\u3059' expresses desire to do an action. Conjugates like an i-adjective (\u305F\u304F\u306A\u3044\u3067\u3059).",
+            explanationBengali: "'N \u304C \u6B32\u3057\u3044\u3067\u3059' \u0995\u09CB\u09A8\u09CB \u09AC\u09B8\u09CD\u09A4\u09C1 \u099A\u09BE\u0993\u09DF\u09BE \u09AC\u09CB\u099D\u09BE\u09DF\u0964 'Verb[masu-stem] + \u305F\u3044\u3067\u3059' \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u0987\u099A\u09CD\u099B\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u306A\u306B\u3092 \u305F\u3079\u305F\u3044\u3067\u3059\u304B\u3002(Nani o tabetai desu ka?)",
+              speakerB: "B: \u3059\u3057\u3092 \u305F\u3079\u305F\u3044\u3067\u3059\u3002(Sushi o tabetai desu.)",
+              english: "A: What do you want to eat? / B: I want to eat sushi.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u09A8? / B: \u0986\u09AE\u09BF \u09B8\u09C1\u09B6\u09BF \u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u0987\u0964"
+            }
+          },
+          {
+            id: "g-13-02",
+            pattern: "[Place] \u3078 [Verb stem / Noun] \u306B \u884C\u304D\u307E\u3059 / \u6765\u307E\u3059 / \u5E30\u308A\u307E\u3059",
+            topic: "Purpose of Movement with Particle '\u306B'",
+            explanationEnglish: "Attaching '\u306B' after a verb masu-stem or action noun indicates the purpose for going, coming, or returning.",
+            explanationBengali: "\u0997\u09A4\u09BF\u09B6\u09C0\u09B2 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u09B8\u09CD\u099F\u09C7\u09AE \u09AC\u09BE \u098F\u0995\u09B6\u09A8 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AA\u09B0\u09C7 '\u306B' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u30C7\u30D1\u30FC\u30C8\u3078 \u306A\u306B\u3092 \u304B\u3044\u306B \u3044\u304D\u307E\u3059\u304B\u3002(Depaato e nani o kai ni ikimasu ka?)",
+              speakerB: "B: \u3075\u304F\u3092 \u304B\u3044\u306B \u3044\u304D\u307E\u3059\u3002(Fuku o kai ni ikimasu.)",
+              english: "A: What are you going to buy at the department store? / B: I am going to buy clothes.",
+              bengali: "A: \u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u0995\u09C0 \u0995\u09BF\u09A8\u09A4\u09C7 \u09AF\u09BE\u099A\u09CD\u099B\u09C7\u09A8? / B: \u099C\u09BE\u09AE\u09BE\u0995\u09BE\u09AA\u09DC \u0995\u09BF\u09A8\u09A4\u09C7 \u09AF\u09BE\u099A\u09CD\u099B\u09BF\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u4E07",
+            strokeCount: 3,
+            onyomi: ["\u30DE\u30F3 (man)", "\u30D0\u30F3 (ban)"],
+            kunyomi: ["\u3088\u308D\u305A (yorozu)"],
+            meaningEnglish: "Ten Thousand (10,000)",
+            meaningBengali: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0 / \u09AE\u09BE\u09A8 (\u09E7\u09E6,\u09E6\u09E6\u09E6)",
+            compounds: [
+              { word: "\u4E00\u4E07", reading: "\u3044\u3061\u307E\u3093 (ichiman)", meaningEnglish: "10,000", meaningBengali: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0" },
+              { word: "\u4E07\u5E74\u7B46", reading: "\u307E\u3093\u306D\u3093\u3072\u3064 (mannenhitsu)", meaningEnglish: "Fountain pen", meaningBengali: "\u09AB\u09BE\u0989\u09A8\u09CD\u099F\u09C7\u09A8 \u09AA\u09C7\u09A8" }
+            ]
+          },
+          {
+            kanji: "\u5186",
+            strokeCount: 4,
+            onyomi: ["\u30A8\u30F3 (en)"],
+            kunyomi: ["\u307E\u308B-\u3044 (maru-i)"],
+            meaningEnglish: "Yen (currency) / Circle / Round",
+            meaningBengali: "\u0987\u09DF\u09C7\u09A8 (\u09AE\u09C1\u09A6\u09CD\u09B0\u09BE) / \u09AC\u09C3\u09A4\u09CD\u09A4",
+            compounds: [
+              { word: "\u767E\u5186", reading: "\u3072\u3083\u304F\u3048\u3093 (hyakuen)", meaningEnglish: "100 Yen", meaningBengali: "\u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8" },
+              { word: "\u5186\u9AD8", reading: "\u3048\u3093\u3060\u304B (endaka)", meaningEnglish: "Strong Yen", meaningBengali: "\u09B6\u0995\u09CD\u09A4\u09BF\u09B6\u09BE\u09B2\u09C0 \u0987\u09AF\u09BC\u09C7\u09A8" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-13",
+          question: "\u304D\u3087\u3046\u3068\u3078 \u304A\u307E\u3064\u308A\u3092 \u898B\uFF08\u3000\uFF09\u884C\u304D\u307E\u3059\u3002",
+          questionRomaji: "Kyouto e omatsuri o mi ( ) ikimasu.",
+          options: ["\u306B", "\u3067", "\u3092", "\u3078"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u306B",
+          explanationEnglish: "'\u898B\u306B \u884C\u304D\u307E\u3059' uses '\u306B' after the verb stem '\u898B' to indicate the purpose of going.",
+          explanationBengali: "\u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF\u09AE\u09C2\u09B2\u0995 \u0997\u09AE\u09A8\u09BE\u0997\u09AE\u09A8 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u09B8\u09CD\u099F\u09C7\u09AE '\u898B' \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u306B' \u0995\u09A3\u09BE \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09DF\u0964"
+        }
+      },
+      // --- LESSON 14 ---
+      {
+        lessonNumber: 14,
+        titleEnglish: "The Te-Form & Polite Requests (~\u3066\u304F\u3060\u3055\u3044 / ~\u3066\u3044\u307E\u3059)",
+        titleJapanese: "\u7B2C14\u8AB2\uFF1A\u3066\u5F62\uFF08\u52D5\u8A5E\u306E\u30B0\u30EB\u30FC\u30D7\u6D3B\u7528\uFF09\u3068\u4F9D\u983C\u30FB\u9032\u884C\u5F62",
+        topic: "\u3066\u5F62\u306E\u6D3B\u7528\u3068\u9032\u884C\u5F62\u30FB\u4F9D\u983C (Te-Form, ~\u3066\u304F\u3060\u3055\u3044, ~\u3066\u3044\u307E\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u3064\u3051\u307E\u3059",
+            hiragana: "\u3064\u3051\u307E\u3059",
+            romaji: "tsukemasu",
+            meaningEnglish: "To turn on / switch on (lights, AC)",
+            meaningBengali: "\u099A\u09BE\u09B2\u09C1 \u0995\u09B0\u09BE / \u09B8\u09C1\u0987\u099A \u0985\u09A8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3067\u3093\u304D\u3092 \u3064\u3051\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Denki o tsukete kudasai.",
+              english: "Please turn on the light.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u09AC\u09BE\u09A4\u09BF\u099F\u09BF \u099C\u09CD\u09AC\u09BE\u09B2\u09BE\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u6D88\u3057\u307E\u3059",
+            hiragana: "\u3051\u3057\u307E\u3059",
+            romaji: "keshimasu",
+            meaningEnglish: "To turn off / extinguish / erase",
+            meaningBengali: "\u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09BE / \u09A8\u09C7\u09AD\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u30A8\u30A2\u30B3\u30F3\u3092 \u3051\u3057\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Eakon o keshite kudasai.",
+              english: "Please turn off the air conditioner.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u098F\u09B8\u09BF \u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09C1\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u958B\u3051\u307E\u3059",
+            hiragana: "\u3042\u3051\u307E\u3059",
+            romaji: "akemasu",
+            meaningEnglish: "To open (door, window)",
+            meaningBengali: "\u0996\u09CB\u09B2\u09BE (\u09A6\u09B0\u099C\u09BE, \u099C\u09BE\u09A8\u09BE\u09B2\u09BE)",
+            example: {
+              japanese: "\u30C9\u30A2\u3092 \u3042\u3051\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Doa o akete kudasai.",
+              english: "Please open the door.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u09A6\u09B0\u099C\u09BE\u099F\u09BF \u0996\u09C1\u09B2\u09C1\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u9589\u3081\u307E\u3059",
+            hiragana: "\u3057\u3081\u307E\u3059",
+            romaji: "shimemasu",
+            meaningEnglish: "To close / shut (door, window)",
+            meaningBengali: "\u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09BE (\u09A6\u09B0\u099C\u09BE, \u099C\u09BE\u09A8\u09BE\u09B2\u09BE)",
+            example: {
+              japanese: "\u307E\u3069\u3092 \u3057\u3081\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Mado o shimete kudasai.",
+              english: "Please close the window.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u099C\u09BE\u09A8\u09BE\u09B2\u09BE\u099F\u09BF \u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09C1\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u6025\u304E\u307E\u3059",
+            hiragana: "\u3044\u305D\u304E\u307E\u3059",
+            romaji: "isogimasu",
+            meaningEnglish: "To hurry / rush",
+            meaningBengali: "\u09A4\u09BE\u09DC\u09BE\u09B9\u09C1\u09DC\u09CB \u0995\u09B0\u09BE / \u09A6\u09CD\u09B0\u09C1\u09A4 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3058\u304B\u3093\u304C \u3042\u308A\u307E\u305B\u3093\u304B\u3089\u3001\u3044\u305D\u304E\u307E\u3057\u3087\u3046\u3002",
+              romaji: "Jikan ga arimasen kara, isogimashou.",
+              english: "Since there is no time, let's hurry.",
+              bengali: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09B8\u09AE\u09DF \u09A8\u09C7\u0987, \u099A\u09B2\u09C1\u09A8 \u09A6\u09CD\u09B0\u09C1\u09A4 \u0995\u09B0\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-14-01",
+            pattern: "Verb [\u3066-form] \u304F\u3060\u3055\u3044",
+            topic: "Polite Request / Instruction with Te-Form",
+            explanationEnglish: "Conjugating a verb into its Te-form (e.g. \u66F8\u3044\u3066, \u98DF\u3079\u3066, \u6765\u3066) followed by '\u304F\u3060\u3055\u3044' forms a polite request ('Please do...').",
+            explanationBengali: "\u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 '\u3066-\u09AB\u09B0\u09CD\u09AE' \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u304F\u3060\u3055\u3044' \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09C7 \u0995\u09BE\u0989\u0995\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u0985\u09A8\u09C1\u09B0\u09CB\u09A7 \u0995\u09B0\u09BE \u09B9\u09DF ('\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 ... \u0995\u09B0\u09C1\u09A8')\u0964",
+            dialogue: {
+              speakerA: "A: \u3059\u307F\u307E\u305B\u3093\u304C\u3001\u306A\u307E\u3048\u3092 \u304B\u3044\u3066 \u304F\u3060\u3055\u3044\u3002(Sumimasen ga, namae o kaite kudasai.)",
+              speakerB: "B: \u306F\u3044\u3001\u308F\u304B\u308A\u307E\u3057\u305F\u3002(Hai, wakarimashita.)",
+              english: "A: Excuse me, but please write your name. / B: Yes, understood.",
+              bengali: "A: \u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u09A8\u09BE\u09AE \u09B2\u09BF\u0996\u09C1\u09A8\u0964 / B: \u09A0\u09BF\u0995 \u0986\u099B\u09C7, \u09AC\u09C1\u099D\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-14-02",
+            pattern: "Verb [\u3066-form] \u3044\u307E\u3059 / Verb [stem] \u307E\u3057\u3087\u3046\u304B",
+            topic: "Present Continuous Action & Offering Assistance",
+            explanationEnglish: "'~\u3066\u3044\u307E\u3059' expresses an action currently happening right now. '~\u307E\u3057\u3087\u3046\u304B' offers assistance to the listener ('Shall I...?').",
+            explanationBengali: "'~\u3066\u3044\u307E\u3059' \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8\u09C7 \u099A\u09B2\u09AE\u09BE\u09A8 \u0995\u09BE\u099C (Present Continuous) \u09AC\u09CB\u099D\u09BE\u09DF\u0964 '~\u307E\u3057\u3087\u3046\u304B' \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u0995\u09C7 \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u0995\u09B0\u09BE\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC ('\u0986\u09AE\u09BF \u0995\u09BF \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u0995\u09B0\u09AC?') \u09A6\u09BF\u09A4\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3044\u307E \u306A\u306B\u3092 \u3057\u3066\u3044\u307E\u3059\u304B\u3002(Ima nani o shite imasu ka?)",
+              speakerB: "B: \u306B\u307B\u3093\u3054\u3092 \u3079\u3093\u304D\u3087\u3046\u3057\u3066 \u3044\u307E\u3059\u3002(Nihongo o benkyoushite imasu.)",
+              english: "A: What are you doing right now? / B: I am studying Japanese.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u098F\u0996\u09A8 \u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8? / B: \u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u09DC\u099B\u09BF\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u7236",
+            strokeCount: 4,
+            onyomi: ["\u30D5 (fu)"],
+            kunyomi: ["\u3061\u3061 (chichi)", "\u3068\u3046 (tou)"],
+            meaningEnglish: "Father",
+            meaningBengali: "\u09AC\u09BE\u09AC\u09BE / \u09AA\u09BF\u09A4\u09BE",
+            compounds: [
+              { word: "\u304A\u7236\u3055\u3093", reading: "\u304A\u3068\u3046\u3055\u3093 (otousan)", meaningEnglish: "Father (polite/someone else's)", meaningBengali: "\u09AC\u09BE\u09AC\u09BE (\u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09B8\u09C2\u099A\u0995)" },
+              { word: "\u7956\u7236", reading: "\u305D\u3075 (sofu)", meaningEnglish: "Grandfather", meaningBengali: "\u09A6\u09BE\u09A6\u09BE / \u09A8\u09BE\u09A8\u09BE" }
+            ]
+          },
+          {
+            kanji: "\u6BCD",
+            strokeCount: 5,
+            onyomi: ["\u30DC (bo)"],
+            kunyomi: ["\u306F\u306F (haha)", "\u304B\u3042 (kaa)"],
+            meaningEnglish: "Mother",
+            meaningBengali: "\u09AE\u09BE / \u09AE\u09BE\u09A4\u09BE",
+            compounds: [
+              { word: "\u304A\u6BCD\u3055\u3093", reading: "\u304A\u304B\u3042\u3055\u3093 (okaasan)", meaningEnglish: "Mother (polite/someone else's)", meaningBengali: "\u09AE\u09BE (\u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09B8\u09C2\u099A\u0995)" },
+              { word: "\u7956\u6BCD", reading: "\u305D\u307C (sobo)", meaningEnglish: "Grandmother", meaningBengali: "\u09A6\u09BE\u09A6\u09BF / \u09A8\u09BE\u09A8\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-14",
+          question: "\u3069\u3046\u305E \u3053\u3053\u306B\uFF08\u3000\uFF09\u304F\u3060\u3055\u3044\u3002",
+          questionRomaji: "Douzo koko ni ( ) kudasai.",
+          options: ["\u3059\u308F\u3063\u3066", "\u3059\u308F\u308A\u307E\u3059", "\u3059\u308F\u308B", "\u3059\u308F\u308A"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3059\u308F\u3063\u3066",
+          explanationEnglish: "'\u3059\u308F\u3063\u3066' is the Te-form of '\u3059\u308F\u308A\u307E\u3059' (to sit), required before '\u304F\u3060\u3055\u3044'.",
+          explanationBengali: "'\u304F\u3060\u3055\u3044' \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u3066-\u09B0\u09C2\u09AA '\u3059\u308F\u3063\u3066' (\u09AC\u09B8\u09BE) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 15 ---
+      {
+        lessonNumber: 15,
+        titleEnglish: "Permission, Prohibition & Continuous States",
+        titleJapanese: "\u7B2C15\u8AB2\uFF1A\u8A31\u53EF\uFF08\u301C\u3066\u3082\u3044\u3044\uFF09\u30FB\u7981\u6B62\uFF08\u301C\u3066\u306F\u3044\u3051\u306A\u3044\uFF09\u30FB\u7D99\u7D9A\u72B6\u614B",
+        topic: "\u8A31\u53EF\u30FB\u7981\u6B62\u30FB\u72B6\u614B (Permission: ~\u3066\u3082\u3044\u3044, Prohibition: ~\u3066\u306F\u3044\u3051\u307E\u305B\u3093, Habitual States: \u4F4F\u3093\u3067\u3044\u307E\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u7F6E\u304D\u307E\u3059",
+            hiragana: "\u304A\u304D\u307E\u3059",
+            romaji: "okimasu",
+            meaningEnglish: "To put / place",
+            meaningBengali: "\u09B0\u09BE\u0996\u09BE / \u09B8\u09CD\u09A5\u09BE\u09AA\u09A8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3053\u3053\u306B \u306B\u3082\u3064\u3092 \u304A\u3044\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Koko ni nimotsu o oite kudasai.",
+              english: "Please put the luggage here.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u09AE\u09BE\u09B2\u09BE\u09AE\u09BE\u09B2 \u098F\u0996\u09BE\u09A8\u09C7 \u09B0\u09BE\u0996\u09C1\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u4F5C\u308A\u307E\u3059",
+            hiragana: "\u3064\u304F\u308A\u307E\u3059",
+            romaji: "tsukurimasu",
+            meaningEnglish: "To make / produce / create",
+            meaningBengali: "\u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09BE / \u0989\u09CE\u09AA\u09BE\u09A6\u09A8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3070\u3093\u3054\u306F\u3093\u3092 \u3064\u304F\u308A\u307E\u3059\u3002",
+              romaji: "Bangohan o tsukurimasu.",
+              english: "I will make dinner.",
+              bengali: "\u0986\u09AE\u09BF \u09B0\u09BE\u09A4\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u58F2\u308A\u307E\u3059",
+            hiragana: "\u3046\u308A\u307E\u3059",
+            romaji: "urimasu",
+            meaningEnglish: "To sell",
+            meaningBengali: "\u09AC\u09BF\u0995\u09CD\u09B0\u09BF \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3053\u306E \u307F\u305B\u3067 \u30D5\u30EB\u30FC\u30C4\u3092 \u3046\u3063\u3066 \u3044\u307E\u3059\u3002",
+              romaji: "Kono mise de furuutsu o utte imasu.",
+              english: "They sell fruits at this shop.",
+              bengali: "\u098F\u0987 \u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u09AB\u09B2\u09AE\u09C2\u09B2 \u09AC\u09BF\u0995\u09CD\u09B0\u09BF \u0995\u09B0\u09BE \u09B9\u09DF\u0964"
+            }
+          },
+          {
+            kanji: "\u77E5\u308A\u307E\u3059",
+            hiragana: "\u3057\u308A\u307E\u3059",
+            romaji: "shirimasu",
+            meaningEnglish: "To get to know (state: \u77E5\u3063\u3066\u3044\u307E\u3059)",
+            meaningBengali: "\u099C\u09BE\u09A8\u09BE / \u099A\u09C7\u09A8\u09BE (\u0985\u09AC\u09B8\u09CD\u09A5\u09BE: \u77E5\u3063\u3066\u3044\u307E\u3059)",
+            example: {
+              japanese: "\u3042\u306E \u3072\u3068\u3092 \u3057\u3063\u3066 \u3044\u307E\u3059\u304B\u3002",
+              romaji: "Ano hito o shitte imasu ka.",
+              english: "Do you know that person?",
+              bengali: "\u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0990 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0995\u09C7 \u099A\u09C7\u09A8\u09C7\u09A8?"
+            }
+          },
+          {
+            kanji: "\u4F4F\u307F\u307E\u3059",
+            hiragana: "\u3059\u307F\u307E\u3059",
+            romaji: "sumimasu",
+            meaningEnglish: "To live / reside (state: \u4F4F\u3093\u3067\u3044\u307E\u3059)",
+            meaningBengali: "\u09AC\u09B8\u09AC\u09BE\u09B8 \u0995\u09B0\u09BE (\u0985\u09AC\u09B8\u09CD\u09A5\u09BE: \u4F4F\u3093\u3067\u3044\u307E\u3059)",
+            example: {
+              japanese: "\u3068\u3046\u304D\u3087\u3046\u306B \u3059\u3093\u3067 \u3044\u307E\u3059\u3002",
+              romaji: "Toukyou ni sunde imasu.",
+              english: "I live in Tokyo.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AC\u09B8\u09AC\u09BE\u09B8 \u0995\u09B0\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-15-01",
+            pattern: "Verb [\u3066-form] \u3082\u3044\u3044\u3067\u3059 / Verb [\u3066-form] \u306F\u3044\u3051\u307E\u305B\u3093",
+            topic: "Granting/Asking Permission and Stating Strong Prohibition",
+            explanationEnglish: "'~\u3066\u3082\u3044\u3044\u3067\u3059\u304B' politely asks for permission ('May I...?'). '~\u3066\u306F\u3044\u3051\u307E\u305B\u3093' strictly forbids an action ('You must not...').",
+            explanationBengali: "'~\u3066\u3082\u3044\u3044\u3067\u3059\u304B' \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF ('\u0986\u09AE\u09BF \u0995\u09BF ... \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?') \u098F\u09AC\u0982 '~\u3066\u306F\u3044\u3051\u307E\u305B\u3093' \u09A8\u09BF\u09B7\u09C7\u09A7\u09BE\u099C\u09CD\u099E\u09BE ('... \u0995\u09B0\u09BE \u09A8\u09BF\u09B7\u09C7\u09A7') \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u3053\u3067 \u3057\u3083\u3057\u3093\u3092 \u3068\u3063\u3066\u3082 \u3044\u3044\u3067\u3059\u304B\u3002(Koko de shashin o tottemo ii desu ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u3053\u3053\u3067\u306F \u3068\u3063\u3066\u306F \u3044\u3051\u307E\u305B\u3093\u3002(Iie, koko dewa totte wa ikemasen.)",
+              english: "A: May I take a photo here? / B: No, you must not take photos here.",
+              bengali: "A: \u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09BF \u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF? / B: \u09A8\u09BE, \u098F\u0996\u09BE\u09A8\u09C7 \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE\u0964"
+            }
+          },
+          {
+            id: "g-15-02",
+            pattern: "Verb [\u3066-form] \u3044\u307E\u3059 (State / Occupation / Residence)",
+            topic: "Continuous States & Habitual Conditions",
+            explanationEnglish: "Beyond ongoing actions, '~\u3066\u3044\u307E\u3059' describes resulting persistent states (e.g. \u7D50\u5A5A\u3057\u3066\u3044\u307E\u3059 is married, \u77E5\u3063\u3066\u3044\u307E\u3059 knows, \u4F4F\u3093\u3067\u3044\u307E\u3059 resides).",
+            explanationBengali: "\u099A\u09B2\u09AE\u09BE\u09A8 \u0995\u09BE\u099C \u099B\u09BE\u09DC\u09BE\u0993 \u09B8\u09CD\u09A5\u09BE\u09AF\u09BC\u09C0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE \u09AC\u09BE \u09AA\u09C7\u09B6\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 '~\u3066\u3044\u307E\u3059' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF (\u09AF\u09C7\u09AE\u09A8: \u09AC\u09BF\u09AC\u09BE\u09B9\u09BF\u09A4, \u09AC\u09B8\u09AC\u09BE\u09B8 \u0995\u09B0\u09C7\u09A8, \u099A\u09C7\u09A8\u09C7\u09A8)\u0964",
+            dialogue: {
+              speakerA: "A: \u305F\u306A\u304B\u3055\u3093\u306E \u3067\u3093\u308F\u3070\u3093\u3054\u3046\u3092 \u3057\u3063\u3066 \u3044\u307E\u3059\u304B\u3002(Tanaka-san no denwa bangou o shitte imasu ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u3057\u308A\u307E\u305B\u3093\u3002(Iie, shirimasen.)",
+              english: "A: Do you know Mr. Tanaka's phone number? / B: No, I don't know.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC\u09C7\u09B0 \u09AB\u09CB\u09A8 \u09A8\u09AE\u09CD\u09AC\u09B0 \u099C\u09BE\u09A8\u09C7\u09A8? / B: \u09A8\u09BE, \u099C\u09BE\u09A8\u09BF \u09A8\u09BE\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u53CB",
+            strokeCount: 4,
+            onyomi: ["\u30E6\u30A6 (yuu)"],
+            kunyomi: ["\u3068\u3082 (tomo)"],
+            meaningEnglish: "Friend",
+            meaningBengali: "\u09AC\u09A8\u09CD\u09A7\u09C1 / \u09B8\u0996\u09BE",
+            compounds: [
+              { word: "\u53CB\u9054", reading: "\u3068\u3082\u3060\u3061 (tomodachi)", meaningEnglish: "Friend / Pals", meaningBengali: "\u09AC\u09A8\u09CD\u09A7\u09C1" },
+              { word: "\u53CB\u4EBA", reading: "\u3086\u3046\u3058\u3093 (yuujin)", meaningEnglish: "Friend (formal)", meaningBengali: "\u0998\u09A8\u09BF\u09B7\u09CD\u09A0 \u09AC\u09A8\u09CD\u09A7\u09C1" }
+            ]
+          },
+          {
+            kanji: "\u4F55",
+            strokeCount: 7,
+            onyomi: ["\u30AB (ka)"],
+            kunyomi: ["\u306A\u306B (nani)", "\u306A\u3093 (nan)"],
+            meaningEnglish: "What",
+            meaningBengali: "\u0995\u09C0 / \u0995\u09BF",
+            compounds: [
+              { word: "\u4F55\u6642", reading: "\u306A\u3093\u3058 (nanji)", meaningEnglish: "What time", meaningBengali: "\u0995\u09AF\u09BC\u099F\u09BE \u09AC\u09BE\u099C\u09C7" },
+              { word: "\u4F55\u4EBA", reading: "\u306A\u3093\u306B\u3093 (nannin) / \u306A\u306B\u3058\u3093 (nanijin)", meaningEnglish: "How many people / What nationality", meaningBengali: "\u0995\u09A4\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF / \u0995\u09CB\u09A8 \u099C\u09BE\u09A4\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-15",
+          question: "\u3073\u3087\u3046\u3044\u3093\u3067 \u305F\u3070\u3053\u3092\uFF08\u3000\uFF09\u306F\u3044\u3051\u307E\u305B\u3093\u3002",
+          questionRomaji: "Byouin de tabako o ( ) wa ikemasen.",
+          options: ["\u3059\u3063\u3066", "\u3059\u3044\u307E\u3059", "\u3059\u3046", "\u3059\u3044"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3059\u3063\u3066",
+          explanationEnglish: "'\u3059\u3063\u3066' is the Te-form of '\u3059\u3044\u307E\u3059' (to smoke), required before '\u306F\u3044\u3051\u307E\u305B\u3093'.",
+          explanationBengali: "\u09A8\u09BF\u09B7\u09C7\u09A7\u09BE\u099C\u09CD\u099E\u09BE '~\u3066\u306F\u3044\u3051\u307E\u305B\u3093' \u0997\u09A0\u09A8\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u3066-\u09AB\u09B0\u09CD\u09AE '\u3059\u3063\u3066' (\u09A7\u09C2\u09AE\u09AA\u09BE\u09A8) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 16 ---
+      {
+        lessonNumber: 16,
+        titleEnglish: "Connecting Clauses, Sequential Actions & Physical Attributes",
+        titleJapanese: "\u7B2C16\u8AB2\uFF1A\u6587\u306E\u63A5\u7D9A\uFF08\u3066\u5F62\u9023\u7D50\u30FB\u301C\u3066\u304B\u3089\uFF09\u3068\u5C5E\u6027\u306E\u8868\u73FE",
+        topic: "\u9023\u7D9A\u52D5\u4F5C\u3068\u7279\u5FB4\u63CF\u5199 (Sequential Actions with ~\u3066, ~\u3066\u304B\u3089 and Body Attributes N1 \u306F N2 \u304C Adj)",
+        vocabularies: [
+          {
+            kanji: "\u4E57\u308A\u307E\u3059",
+            hiragana: "\u306E\u308A\u307E\u3059",
+            romaji: "norimasu",
+            meaningEnglish: "To get on / ride (train, bus)",
+            meaningBengali: "\u099A\u09DC\u09BE / \u0993\u09A0\u09BE (\u09AC\u09BE\u09B8, \u099F\u09CD\u09B0\u09C7\u09A8)",
+            example: {
+              japanese: "\u3067\u3093\u3057\u3083\u306B \u306E\u308A\u307E\u3059\u3002",
+              romaji: "Densha ni norimasu.",
+              english: "I get on the train.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0989\u09A0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u964D\u308A\u307E\u3059",
+            hiragana: "\u304A\u308A\u307E\u3059",
+            romaji: "orimasu",
+            meaningEnglish: "To get off / alight (train, bus)",
+            meaningBengali: "\u09A8\u09BE\u09AE\u09BE (\u09AC\u09BE\u09B8, \u099F\u09CD\u09B0\u09C7\u09A8 \u09A5\u09C7\u0995\u09C7)",
+            example: {
+              japanese: "\u3057\u3093\u3058\u3085\u304F\u3048\u304D\u3067 \u3067\u3093\u3057\u3083\u3092 \u304A\u308A\u307E\u3059\u3002",
+              romaji: "Shinjuku eki de densha o orimasu.",
+              english: "I get off the train at Shinjuku Station.",
+              bengali: "\u0986\u09AE\u09BF \u09B6\u09BF\u09A8\u099C\u09C1\u0995\u09C1 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8 \u09A5\u09C7\u0995\u09C7 \u09A8\u09BE\u09AE\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u4E57\u308A\u63DB\u3048\u307E\u3059",
+            hiragana: "\u306E\u308A\u304B\u3048\u307E\u3059",
+            romaji: "norikaemasu",
+            meaningEnglish: "To transfer / change trains",
+            meaningBengali: "\u099F\u09CD\u09B0\u09C7\u09A8 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0995\u09B0\u09BE / \u09AC\u09A6\u09B2\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u3068\u3046\u304D\u3087\u3046\u3048\u304D\u3067 \u3061\u304B\u3066\u3064\u306B \u306E\u308A\u304B\u3048\u307E\u3059\u3002",
+              romaji: "Toukyou eki de chikatetsu ni norikaemasu.",
+              english: "I transfer to the subway at Tokyo Station.",
+              bengali: "\u0986\u09AE\u09BF \u099F\u09CB\u0995\u09BF\u0993 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09B8\u09BE\u09AC\u0993\u09AF\u09BC\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6D74\u3073\u307E\u3059",
+            hiragana: "\u3042\u3073\u307E\u3059",
+            romaji: "abimasu",
+            meaningEnglish: "To take (a shower)",
+            meaningBengali: "\u09A8\u09C7\u0993\u09DF\u09BE (\u0997\u09CB\u09B8\u09B2/\u09B6\u09BE\u0993\u09AF\u09BC\u09BE\u09B0)",
+            example: {
+              japanese: "\u3042\u3055 \u30B7\u30E3\u30EF\u30FC\u3092 \u3042\u3073\u307E\u3059\u3002",
+              romaji: "Asa shawaa o abimasu.",
+              english: "I take a shower in the morning.",
+              bengali: "\u0986\u09AE\u09BF \u09B8\u0995\u09BE\u09B2\u09C7 \u09B6\u09BE\u0993\u09DF\u09BE\u09B0 \u09A8\u09BF\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u5165\u308C\u307E\u3059",
+            hiragana: "\u3044\u308C\u307E\u3059",
+            romaji: "iremasu",
+            meaningEnglish: "To put in / insert",
+            meaningBengali: "\u09AD\u09C7\u09A4\u09B0\u09C7 \u09A2\u09CB\u0995\u09BE\u09A8\u09CB / \u09B0\u09BE\u0996\u09BE",
+            example: {
+              japanese: "\u3055\u3044\u3075\u306B \u304A\u304B\u306D\u3092 \u3044\u308C\u307E\u3059\u3002",
+              romaji: "Saifu ni okane o iremasu.",
+              english: "I put money into my wallet.",
+              bengali: "\u0986\u09AE\u09BF \u09AE\u09BE\u09A8\u09BF\u09AC\u09CD\u09AF\u09BE\u0997\u09C7 \u099F\u09BE\u0995\u09BE \u09B0\u09BE\u0996\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-16-01",
+            pattern: "V1 [\u3066-form]\u3001V2 [\u3066-form]\u3001V3 / V1 [\u3066-form] \u304B\u3089\u3001V2",
+            topic: "Connecting Actions in Chronological Sequence",
+            explanationEnglish: "Use the Te-form of verbs in sequence to list chronological actions. 'V1 \u3066\u304B\u3089 V2' specifically emphasizes 'after doing V1, then V2'.",
+            explanationBengali: "\u09A7\u09BE\u09B0\u09BE\u09AC\u09BE\u09B9\u09BF\u0995 \u0995\u09BE\u099C \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u0997\u09C1\u09B2\u09CB\u0995\u09C7 '\u3066-\u09AB\u09B0\u09CD\u09AE' \u09A6\u09BF\u09DF\u09C7 \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09BE \u09B9\u09DF\u0964 'V1 \u3066\u304B\u3089' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE 'V1 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0' \u09AC\u09CB\u099D\u09BE\u09AF\u09BC\u0964",
+            dialogue: {
+              speakerA: "A: \u304D\u306E\u3046 \u306A\u306B\u3092 \u3057\u307E\u3057\u305F\u304B\u3002(Kinou nani o shimashita ka?)",
+              speakerB: "B: \u9280\u5EA7\u3078 \u3044\u3063\u3066\u3001\u3048\u3044\u304C\u3092 \u307F\u3066\u3001\u304A\u3061\u3083\u3092 \u306E\u307F\u307E\u3057\u305F\u3002(Ginza e itte, eiga o mite, ocha o nomimashita.)",
+              english: "A: What did you do yesterday? / B: I went to Ginza, watched a movie, and drank tea.",
+              bengali: "A: \u0997\u09A4\u0995\u09BE\u09B2 \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u0995\u09B0\u09C7\u099B\u09BF\u09B2\u09C7\u09A8? / B: \u0997\u09BF\u09A8\u099C\u09BE\u09DF \u0997\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE, \u09B8\u09BF\u09A8\u09C7\u09AE\u09BE \u09A6\u09C7\u0996\u09C7\u099B\u09BF\u09B2\u09BE\u09AE \u098F\u09AC\u0982 \u099A\u09BE \u0996\u09C7\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964"
+            }
+          },
+          {
+            id: "g-16-02",
+            pattern: "[Person/Entity] \u306F [Body Part/Feature] \u304C [Adjective] \u3067\u3059",
+            topic: "Describing Physical Attributes & Characteristics",
+            explanationEnglish: "Use '\u306F' for the overall topic and '\u304C' for the specific attribute (e.g. \u30DE\u30EA\u30A2\u3055\u3093\u306F \u9AEA\u304C \u9577\u3044\u3067\u3059 = Maria has long hair).",
+            explanationBengali: "\u0995\u09CB\u09A8\u09CB \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u09B0 \u09B6\u09BE\u09B0\u09C0\u09B0\u09BF\u0995 \u09AC\u09C8\u09B6\u09BF\u09B7\u09CD\u099F\u09CD\u09AF \u09AC\u09BE \u0985\u0999\u09CD\u0997\u09C7\u09B0 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE\u09DF \u09AE\u09C2\u09B2 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u09A4\u09C7 '\u306F' \u098F\u09AC\u0982 \u0985\u0999\u09CD\u0997\u09C7 '\u304C' \u0995\u09A3\u09BE \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u30B5\u30F3\u30C8\u30B9\u3055\u3093\u306F \u3069\u3093\u306A \u3072\u3068\u3067\u3059\u304B\u3002(Santosu-san wa donna hito desu ka?)",
+              speakerB: "B: \u305B\u304C \u305F\u304B\u304F\u3066\u3001\u3081\u304C \u304A\u304A\u304D\u3044 \u3072\u3068\u3067\u3059\u3002(Se ga takakute, me ga ookii hito desu.)",
+              english: "A: What kind of person is Mr. Santos? / B: He is tall and has large eyes.",
+              bengali: "A: \u09B8\u09BE\u09A8\u09CD\u09A4\u09CB\u09B8 \u09B8\u09BE\u09B9\u09C7\u09AC \u0995\u09C7\u09AE\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7? / B: \u0989\u09A8\u09BF \u09B2\u09AE\u09CD\u09AC\u09BE \u098F\u09AC\u0982 \u09AC\u09DC \u099A\u09CB\u0996\u09C7\u09B0 \u0985\u09A7\u09BF\u0995\u09BE\u09B0\u09C0 \u098F\u0995\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u7537",
+            strokeCount: 7,
+            onyomi: ["\u30C0\u30F3 (dan)", "\u30CA\u30F3 (nan)"],
+            kunyomi: ["\u304A\u3068\u3053 (otoko)"],
+            meaningEnglish: "Man / Male",
+            meaningBengali: "\u09AA\u09C1\u09B0\u09C1\u09B7 / \u099B\u09C7\u09B2\u09C7",
+            compounds: [
+              { word: "\u7537\u306E\u5B50", reading: "\u304A\u3068\u3053\u306E\u3053 (otokonoko)", meaningEnglish: "Boy", meaningBengali: "\u099B\u09C7\u09B2\u09C7 \u09B6\u09BF\u09B6\u09C1" },
+              { word: "\u7537\u6027", reading: "\u3060\u3093\u305B\u3044 (dansei)", meaningEnglish: "Male / Man (polite)", meaningBengali: "\u09AA\u09C1\u09B0\u09C1\u09B7" }
+            ]
+          },
+          {
+            kanji: "\u5973",
+            strokeCount: 3,
+            onyomi: ["\u30B8\u30E7 (jo)", "\u30CB\u30E7 (nyo)"],
+            kunyomi: ["\u304A\u3093\u306A (onna)", "\u3081 (me)"],
+            meaningEnglish: "Woman / Female",
+            meaningBengali: "\u09A8\u09BE\u09B0\u09C0 / \u09AE\u09C7\u09AF\u09BC\u09C7",
+            compounds: [
+              { word: "\u5973\u306E\u5B50", reading: "\u304A\u3093\u306A\u306E\u3053 (onnanoko)", meaningEnglish: "Girl", meaningBengali: "\u09AE\u09C7\u09DF\u09C7 \u09B6\u09BF\u09B6\u09C1" },
+              { word: "\u5973\u6027", reading: "\u3058\u3087\u305B\u3044 (josei)", meaningEnglish: "Female / Woman (polite)", meaningBengali: "\u09AE\u09B9\u09BF\u09B2\u09BE / \u09A8\u09BE\u09B0\u09C0" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-16",
+          question: "\u3042\u3055\u3054\u306F\u3093\u3092\uFF08\u3000\uFF09\u304B\u3089\u3001\u304B\u3044\u3057\u3083\u3078 \u3044\u304D\u307E\u3059\u3002",
+          questionRomaji: "Asagohan o ( ) kara, kaisha e ikimasu.",
+          options: ["\u305F\u3079\u3066", "\u305F\u3079\u307E\u3059", "\u305F\u3079\u308B", "\u305F\u3079\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u305F\u3079\u3066",
+          explanationEnglish: "'~\u3066\u304B\u3089' requires the Te-form '\u305F\u3079\u3066' to mean 'after eating breakfast'.",
+          explanationBengali: "\u09A8\u09BE\u09B8\u09CD\u09A4\u09BE \u0996\u09BE\u0993\u09DF\u09BE\u09B0 \u09AA\u09B0 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3066\u304B\u3089' \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3066-\u09AB\u09B0\u09CD\u09AE '\u305F\u3079\u3066' \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 17 ---
+      {
+        lessonNumber: 17,
+        titleEnglish: "The Nai-Form & Obligations (~\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093)",
+        titleJapanese: "\u7B2C17\u8AB2\uFF1A\u306A\u3044\u5F62\uFF08\u5426\u5B9A\u5F62\uFF09\u3068\u7FA9\u52D9\u30FB\u4E0D\u5FC5\u8981\u30FB\u7981\u6B62",
+        topic: "\u306A\u3044\u5F62\u306E\u6D3B\u7528\u3068\u7FA9\u52D9\u30FB\u4E0D\u8981 (Nai-Form, ~\u306A\u3044\u3067\u304F\u3060\u3055\u3044, ~\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093, ~\u306A\u304F\u3066\u3082\u3044\u3044\u3067\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u899A\u3048\u307E\u3059",
+            hiragana: "\u304A\u307C\u3048\u307E\u3059",
+            romaji: "oboemasu",
+            meaningEnglish: "To memorize / remember",
+            meaningBengali: "\u09AE\u09C1\u0996\u09B8\u09CD\u09A5 \u0995\u09B0\u09BE / \u09AE\u09A8\u09C7 \u09B0\u09BE\u0996\u09BE",
+            example: {
+              japanese: "\u304B\u3093\u3058\u3092 \u304A\u307C\u3048\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093\u3002",
+              romaji: "Kanji o oboenakereba narimasen.",
+              english: "I must memorize Kanji.",
+              bengali: "\u0986\u09AE\u09BE\u0995\u09C7 \u0995\u09BE\u099E\u09CD\u099C\u09BF \u09AE\u09C1\u0996\u09B8\u09CD\u09A5 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u5FD8\u308C\u307E\u3059",
+            hiragana: "\u308F\u3059\u308C\u307E\u3059",
+            romaji: "wasuremasu",
+            meaningEnglish: "To forget",
+            meaningBengali: "\u09AD\u09C1\u09B2\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u30D1\u30B9\u30DD\u30FC\u30C8\u3092 \u308F\u3059\u308C\u306A\u3044\u3067 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Pasupooto o wasurenaide kudasai.",
+              english: "Please do not forget your passport.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09B8\u09AA\u09CB\u09B0\u09CD\u099F \u09AD\u09C1\u09B2\u09AC\u09C7\u09A8 \u09A8\u09BE\u0964"
+            }
+          },
+          {
+            kanji: "\u7121\u304F\u3057\u307E\u3059",
+            hiragana: "\u306A\u304F\u3057\u307E\u3059",
+            romaji: "nakushimasu",
+            meaningEnglish: "To lose (something)",
+            meaningBengali: "\u09B9\u09BE\u09B0\u09BF\u09DF\u09C7 \u09AB\u09C7\u09B2\u09BE",
+            example: {
+              japanese: "\u3055\u3044\u3075\u3092 \u306A\u304F\u3057\u307E\u3057\u305F\u3002",
+              romaji: "Saifu o nakushimashita.",
+              english: "I lost my wallet.",
+              bengali: "\u0986\u09AE\u09BF \u0986\u09AE\u09BE\u09B0 \u09AE\u09BE\u09A8\u09BF\u09AC\u09CD\u09AF\u09BE\u0997 \u09B9\u09BE\u09B0\u09BF\u09DF\u09C7 \u09AB\u09C7\u09B2\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6255\u3044\u307E\u3059",
+            hiragana: "\u306F\u3089\u3044\u307E\u3059",
+            romaji: "haraimasu",
+            meaningEnglish: "To pay",
+            meaningBengali: "\u09AA\u09B0\u09BF\u09B6\u09CB\u09A7 \u0995\u09B0\u09BE / \u099F\u09BE\u0995\u09BE \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u304A\u304B\u306D\u3092 \u306F\u3089\u308F\u306A\u304F\u3066\u3082 \u3044\u3044\u3067\u3059\u3002",
+              romaji: "Okane o harawanakutemo ii desu.",
+              english: "You do not need to pay money.",
+              bengali: "\u099F\u09BE\u0995\u09BE \u09AA\u09B0\u09BF\u09B6\u09CB\u09A7 \u09A8\u09BE \u0995\u09B0\u09B2\u09C7\u0993 \u099A\u09B2\u09AC\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u8FD4\u3057\u307E\u3059",
+            hiragana: "\u304B\u3048\u3057\u307E\u3059",
+            romaji: "kaeshimasu",
+            meaningEnglish: "To return / give back (something)",
+            meaningBengali: "\u09AB\u09C7\u09B0\u09A4 \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3042\u3057\u305F \u307B\u3093\u3092 \u304B\u3048\u3057\u307E\u3059\u3002",
+              romaji: "Ashita hon o kaeshimasu.",
+              english: "I will return the book tomorrow.",
+              bengali: "\u0986\u09AE\u09BF \u0995\u09BE\u09B2 \u09AC\u0987\u099F\u09BF \u09AB\u09C7\u09B0\u09A4 \u09A6\u09C7\u09AC\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-17-01",
+            pattern: "Verb [\u306A\u3044-form] \u3067 \u304F\u3060\u3055\u3044 / Verb [\u306A\u3044-form] \u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093",
+            topic: "Negative Request and Strong Obligation / Must Do",
+            explanationEnglish: "'~\u306A\u3044\u3067\u304F\u3060\u3055\u3044' means 'Please do not do...'. '~\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093' expresses a mandatory requirement or obligation ('Must / Have to do').",
+            explanationBengali: "'~\u306A\u3044\u3067\u304F\u3060\u3055\u3044' \u0985\u09B0\u09CD\u09A5 '\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 ... \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE'\u0964 '~\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093' \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u09AC\u09BE\u09A7\u09CD\u09AF\u09AC\u09BE\u09A7\u0995\u09A4\u09BE \u09AC\u09BE \u0986\u09AC\u09B6\u09CD\u09AF\u0995\u09A4\u09BE ('\u0985\u09AC\u09B6\u09CD\u09AF\u0987 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7') \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u304F\u3059\u308A\u3092 \u306E\u307E\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093\u304B\u3002(Kusuri o nomanakereba narimasen ka?)",
+              speakerB: "B: \u306F\u3044\u30011\u306B\u3061\u306B 3\u304B\u3044 \u306E\u3093\u3067 \u304F\u3060\u3055\u3044\u3002(Hai, ichinichi ni sankai nonde kudasai.)",
+              english: "A: Must I take the medicine? / B: Yes, please take it 3 times a day.",
+              bengali: "A: \u0986\u09AE\u09BE\u0995\u09C7 \u0995\u09BF \u0993\u09B7\u09C1\u09A7 \u0996\u09C7\u09A4\u09C7\u0987 \u09B9\u09AC\u09C7? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u09A6\u09BF\u09A8\u09C7 \u09E9 \u09AC\u09BE\u09B0 \u0996\u09BE\u09A8\u0964"
+            }
+          },
+          {
+            id: "g-17-02",
+            pattern: "Verb [\u306A\u3044-form] \u306A\u304F\u3066\u3082 \u3044\u3044\u3067\u3059",
+            topic: "Lack of Necessity / No Need to Do",
+            explanationEnglish: "'~\u306A\u304F\u3066\u3082\u3044\u3044\u3067\u3059' indicates that the action is not required ('You do not have to do... / It is okay not to...').",
+            explanationBengali: "'~\u306A\u304F\u3066\u3082\u3044\u3044\u3067\u3059' \u0985\u09B0\u09CD\u09A5 '\u09A8\u09BE \u0995\u09B0\u09B2\u09C7\u0993 \u099A\u09B2\u09AC\u09C7 / \u0995\u09B0\u09BE\u09B0 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8 \u09A8\u09C7\u0987'\u0964",
+            dialogue: {
+              speakerA: "A: \u3042\u3057\u305F\u3082 \u3053\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093\u304B\u3002(Ashita mo konakereba narimasen ka?)",
+              speakerB: "B: \u3044\u3044\u3048\u3001\u3053\u306A\u304F\u3066\u3082 \u3044\u3044\u3067\u3059\u3002(Iie, konakutemo ii desu.)",
+              english: "A: Must I come tomorrow as well? / B: No, you do not have to come.",
+              bengali: "A: \u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2\u0993 \u0995\u09BF \u0986\u09B8\u09A4\u09C7 \u09B9\u09AC\u09C7? / B: \u09A8\u09BE, \u09A8\u09BE \u0986\u09B8\u09B2\u09C7\u0993 \u099A\u09B2\u09AC\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u5B50",
+            strokeCount: 3,
+            onyomi: ["\u30B7 (shi)", "\u30B9 (su)"],
+            kunyomi: ["\u3053 (ko)"],
+            meaningEnglish: "Child",
+            meaningBengali: "\u09B6\u09BF\u09B6\u09C1 / \u09B8\u09A8\u09CD\u09A4\u09BE\u09A8",
+            compounds: [
+              { word: "\u5B50\u4F9B", reading: "\u3053\u3069\u3082 (kodomo)", meaningEnglish: "Children / Child", meaningBengali: "\u09B8\u09A8\u09CD\u09A4\u09BE\u09A8 / \u09B6\u09BF\u09B6\u09C1" },
+              { word: "\u5973\u5B50", reading: "\u3058\u3087\u3057 (joshi)", meaningEnglish: "Woman / Girl", meaningBengali: "\u09AE\u09C7\u09DF\u09C7 / \u09A4\u09B0\u09C1\u09A3\u09C0" }
+            ]
+          },
+          {
+            kanji: "\u5148",
+            strokeCount: 6,
+            onyomi: ["\u30BB\u30F3 (sen)"],
+            kunyomi: ["\u3055\u304D (saki)", "\u307E-\u305A (ma-zu)"],
+            meaningEnglish: "Previous / Ahead / Past",
+            meaningBengali: "\u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 / \u0985\u0997\u09CD\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 / \u0986\u0997\u09C7",
+            compounds: [
+              { word: "\u5148\u751F", reading: "\u305B\u3093\u305B\u3044 (sensei)", meaningEnglish: "Teacher / Master", meaningBengali: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995" },
+              { word: "\u5148\u9031", reading: "\u305B\u3093\u3057\u3085\u3046 (senshuu)", meaningEnglish: "Last week", meaningBengali: "\u0997\u09A4 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-17",
+          question: "\u3042\u3057\u305F \u30C6\u30B9\u30C8\u304C \u3042\u308A\u307E\u3059\u304B\u3089\u3001\u304D\u3087\u3046 \u3079\u3093\u304D\u3087\u3046\uFF08\u3000\uFF09\u3002",
+          questionRomaji: "Ashita tesuto ga arimasu kara, kyou benkyou ( ).",
+          options: ["\u3057\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093", "\u3057\u306A\u304F\u3066\u3082 \u3044\u3044\u3067\u3059", "\u3057\u306A\u3044\u3067 \u304F\u3060\u3055\u3044", "\u3057\u307E\u3057\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3057\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093",
+          explanationEnglish: "'\u3057\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093' means 'must study', matching the reason that there is a test tomorrow.",
+          explanationBengali: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0986\u099B\u09C7, \u09A4\u09BE\u0987 \u0986\u099C \u09AA\u09DC\u09BE\u09B6\u09CB\u09A8\u09BE '\u0995\u09B0\u09A4\u09C7\u0987 \u09B9\u09AC\u09C7' (\u3057\u306A\u3051\u308C\u3070 \u306A\u308A\u307E\u305B\u3093)\u0964"
+        }
+      },
+      // --- LESSON 18 ---
+      {
+        lessonNumber: 18,
+        titleEnglish: "Dictionary Form, Potential Ability & Hobbies",
+        titleJapanese: "\u7B2C18\u8AB2\uFF1A\u8F9E\u66F8\u5F62\uFF08\u539F\u5F62\uFF09\u3068\u53EF\u80FD\u30FB\u8DA3\u5473\u30FB\u9806\u5E8F\u8868\u73FE",
+        topic: "\u8F9E\u66F8\u5F62\u3068\u53EF\u80FD\u8868\u73FE\u30FB\u8DA3\u5473 (Dictionary Form: ~\u3053\u3068\u304C\u3067\u304D\u308B, \u8DA3\u5473\u306F~\u3053\u3068\u3067\u3059, ~\u307E\u3048\u306B)",
+        vocabularies: [
+          {
+            kanji: "\u3067\u304D\u307E\u3059",
+            hiragana: "\u3067\u304D\u307E\u3059",
+            romaji: "dekimasu",
+            meaningEnglish: "Can do / Be able to",
+            meaningBengali: "\u09AA\u09BE\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BE / \u09B8\u0995\u09CD\u09B7\u09AE \u09B9\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u30D4\u30A2\u30CE\u3092 \u3072\u304F \u3053\u3068\u304C \u3067\u304D\u307E\u3059\u3002",
+              romaji: "Piano o hiku koto ga dekimasu.",
+              english: "I can play the piano.",
+              bengali: "\u0986\u09AE\u09BF \u09AA\u09BF\u09DF\u09BE\u09A8\u09CB \u09AC\u09BE\u099C\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6D17\u3044\u307E\u3059",
+            hiragana: "\u3042\u3089\u3044\u307E\u3059",
+            romaji: "araimasu",
+            meaningEnglish: "To wash",
+            meaningBengali: "\u09A7\u09CB\u09DF\u09BE / \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3054\u306F\u3093\u3092 \u305F\u3079\u308B \u307E\u3048\u306B\u3001\u3066\u3092 \u3042\u3089\u3044\u307E\u3059\u3002",
+              romaji: "Gohan o taberu mae ni, te o araimasu.",
+              english: "Before eating a meal, I wash my hands.",
+              bengali: "\u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u0993\u09DF\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u0986\u09AE\u09BF \u09B9\u09BE\u09A4 \u09A7\u09C1\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u5F3E\u304D\u307E\u3059",
+            hiragana: "\u3072\u304D\u307E\u3059",
+            romaji: "hikimasu",
+            meaningEnglish: "To play (stringed instruments or piano)",
+            meaningBengali: "\u09AC\u09BE\u099C\u09BE\u09A8\u09CB (\u0997\u09BF\u099F\u09BE\u09B0, \u09AA\u09BF\u09DF\u09BE\u09A8\u09CB)",
+            example: {
+              japanese: "\u30AE\u30BF\u30FC\u3092 \u3072\u304F \u3053\u3068\u304C \u3067\u304D\u307E\u3059\u304B\u3002",
+              romaji: "Gitaa o hiku koto ga dekimasu ka.",
+              english: "Can you play the guitar?",
+              bengali: "\u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0997\u09BF\u099F\u09BE\u09B0 \u09AC\u09BE\u099C\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8?"
+            }
+          },
+          {
+            kanji: "\u6B4C\u3044\u307E\u3059",
+            hiragana: "\u3046\u305F\u3044\u307E\u3059",
+            romaji: "utaimasu",
+            meaningEnglish: "To sing",
+            meaningBengali: "\u0997\u09BE\u09A8 \u0997\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u306B\u307B\u3093\u306E \u3046\u305F\u3092 \u3046\u305F\u3046 \u3053\u3068\u304C \u3059\u304D\u3067\u3059\u3002",
+              romaji: "Nihon no uta o utau koto ga suki desu.",
+              english: "I like singing Japanese songs.",
+              bengali: "\u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0997\u09BE\u09A8 \u0997\u09BE\u0987\u09A4\u09C7 \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u96C6\u3081\u307E\u3059",
+            hiragana: "\u3042\u3064\u3081\u307E\u3059",
+            romaji: "atsumemasu",
+            meaningEnglish: "To collect / gather",
+            meaningBengali: "\u09B8\u0982\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09BE / \u099C\u09AE\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u308F\u305F\u3057\u306E \u3057\u3085\u307F\u306F \u304D\u3063\u3066\u3092 \u3042\u3064\u3081\u308B \u3053\u3068\u3067\u3059\u3002",
+              romaji: "Watashi no shumi wa kitte o atsumeru koto desu.",
+              english: "My hobby is collecting stamps.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u09B6\u0996 \u09A1\u09BE\u0995\u099F\u09BF\u0995\u09C7\u099F \u09B8\u0982\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09BE\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-18-01",
+            pattern: "Verb [Dictionary form] \u3053\u3068\u304C \u3067\u304D\u307E\u3059 / \u8DA3\u5473\u306F Verb [Dict form] \u3053\u3068\u3067\u3059",
+            topic: "Expressing Potential Ability and Nominalizing Verbs for Hobbies",
+            explanationEnglish: "'Verb[dict] + \u3053\u3068\u304C\u3067\u304D\u307E\u3059' expresses potential ability ('can do...'). '\u3053\u3068\u3067\u3059' nominalizes a verb to state one's hobby.",
+            explanationBengali: "'Verb[\u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09B0\u09C2\u09AA] + \u3053\u3068\u304C\u3067\u304D\u307E\u3059' \u09B8\u09BE\u09AE\u09B0\u09CD\u09A5\u09CD\u09AF \u09AC\u09BE \u09AF\u09CB\u0997\u09CD\u09AF\u09A4\u09BE ('\u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BE') \u09AC\u09CB\u099D\u09BE\u09DF\u0964 '\u3053\u3068\u3067\u3059' \u09AD\u09BE\u09B0\u09CD\u09AC\u0995\u09C7 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09C7 \u09B6\u0996 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u304B\u3093\u3058\u3092 \u3088\u3080 \u3053\u3068\u304C \u3067\u304D\u307E\u3059\u304B\u3002(Kanji o yomu koto ga dekimasu ka?)",
+              speakerB: "B: \u3059\u3053\u3057 \u3088\u3080 \u3053\u3068\u304C \u3067\u304D\u307E\u3059\u3002(Sukoshi yomu koto ga dekimasu.)",
+              english: "A: Can you read Kanji? / B: I can read a little.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0995\u09BE\u099E\u09CD\u099C\u09BF \u09AA\u09DC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8? / B: \u098F\u0995\u099F\u09C1 \u098F\u0995\u099F\u09C1 \u09AA\u09DC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-18-02",
+            pattern: "Verb [Dictionary form] / Noun \u306E \u307E\u3048\u306B\u3001Action",
+            topic: "Expressing 'Before doing...' with '\u307E\u3048\u306B'",
+            explanationEnglish: "'Verb[dict] \u307E\u3048\u306B' indicates that an action takes place prior to another event.",
+            explanationBengali: "'Verb[\u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09B0\u09C2\u09AA] \u307E\u3048\u306B' \u09AC\u09BE 'Noun \u306E \u307E\u3048\u306B' \u0985\u09B0\u09CD\u09A5 '... \u0995\u09B0\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7'\u0964",
+            dialogue: {
+              speakerA: "A: \u3044\u3064 \u304F\u3059\u308A\u3092 \u306E\u307F\u307E\u3059\u304B\u3002(Itsu kusuri o nomimasu ka?)",
+              speakerB: "B: \u306D\u308B \u307E\u3048\u306B \u306E\u307F\u307E\u3059\u3002(Neru mae ni nomimasu.)",
+              english: "A: When do you take the medicine? / B: I take it before sleeping.",
+              bengali: "A: \u0995\u0996\u09A8 \u0993\u09B7\u09C1\u09A7 \u0996\u09BE\u09A8? / B: \u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0986\u0997\u09C7 \u0996\u09BE\u0987\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u751F",
+            strokeCount: 5,
+            onyomi: ["\u30BB\u30A4 (sei)", "\u30B7\u30E7\u30A6 (shou)"],
+            kunyomi: ["\u3044-\u304D\u308B (i-kiru)", "\u3046-\u307E\u308C\u308B (u-mareru)", "\u306A\u307E (nama)"],
+            meaningEnglish: "Life / Birth / Raw",
+            meaningBengali: "\u099C\u09C0\u09AC\u09A8 / \u099C\u09A8\u09CD\u09AE / \u0995\u09BE\u0981\u099A\u09BE",
+            compounds: [
+              { word: "\u5B66\u751F", reading: "\u304C\u304F\u305B\u3044 (gakusei)", meaningEnglish: "Student", meaningBengali: "\u099B\u09BE\u09A4\u09CD\u09B0 / \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0" },
+              { word: "\u5148\u751F", reading: "\u305B\u3093\u305B\u3044 (sensei)", meaningEnglish: "Teacher", meaningBengali: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995" }
+            ]
+          },
+          {
+            kanji: "\u5B66",
+            strokeCount: 8,
+            onyomi: ["\u30AC\u30AF (gaku)"],
+            kunyomi: ["\u307E\u306A-\u3076 (mana-bu)"],
+            meaningEnglish: "Study / Learning / Science",
+            meaningBengali: "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE / \u099C\u09CD\u099E\u09BE\u09A8 / \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE",
+            compounds: [
+              { word: "\u5927\u5B66", reading: "\u3060\u3044\u304C\u304F (daigaku)", meaningEnglish: "University / College", meaningBengali: "\u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC" },
+              { word: "\u5B66\u6821", reading: "\u304C\u3063\u3053\u3046 (gakkou)", meaningEnglish: "School", meaningBengali: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC / \u09B8\u09CD\u0995\u09C1\u09B2" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-18",
+          question: "\u308F\u305F\u3057\u306F \u65E5\u672C\u8A9E\u3092\uFF08\u3000\uFF09\u3053\u3068\u304C \u3067\u304D\u307E\u3059\u3002",
+          questionRomaji: "Watashi wa nihongo o ( ) koto ga dekimasu.",
+          options: ["\u306F\u306A\u3059", "\u306F\u306A\u3057\u307E\u3059", "\u306F\u306A\u3057\u3066", "\u306F\u306A\u3057\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u306F\u306A\u3059",
+          explanationEnglish: "'~\u3053\u3068\u304C \u3067\u304D\u307E\u3059' strictly requires the dictionary form of the verb ('\u306F\u306A\u3059').",
+          explanationBengali: "'~\u3053\u3068\u304C \u3067\u304D\u307E\u3059' \u0997\u09A0\u09A8\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09CD\u09B0\u09BF\u09DF\u09BE\u09B0 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09B0\u09C2\u09AA '\u306F\u306A\u3059' \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 19 ---
+      {
+        lessonNumber: 19,
+        titleEnglish: "The Ta-Form: Past Experiences & Non-Exhaustive Actions",
+        titleJapanese: "\u7B2C19\u8AB2\uFF1A\u305F\u5F62\uFF08\u904E\u53BB\u5F62\uFF09\u3068\u7D4C\u9A13\u30FB\u52D5\u4F5C\u306E\u4E26\u5217\uFF08\u301C\u305F\u308A\u301C\u305F\u308A\uFF09",
+        topic: "\u305F\u5F62\u306E\u6D3B\u7528\u3068\u7D4C\u9A13\u30FB\u5909\u5316 (Ta-Form: ~\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059, ~\u305F\u308A~\u305F\u308A\u3057\u307E\u3059, ~\u304F\u306A\u308A\u307E\u3059/~\u306B\u306A\u308A\u307E\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u767B\u308A\u307E\u3059",
+            hiragana: "\u306E\u307C\u308A\u307E\u3059",
+            romaji: "noborimasu",
+            meaningEnglish: "To climb (a mountain)",
+            meaningBengali: "\u09AA\u09BE\u09B9\u09BE\u09A1\u09BC\u09C7 \u0993\u09A0\u09BE / \u0986\u09B0\u09CB\u09B9\u09A3 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3075\u3058\u3055\u3093\u306B \u306E\u307C\u3063\u305F \u3053\u3068\u304C \u3042\u308A\u307E\u3059\u3002",
+              romaji: "Fujisan ni nobotta koto ga arimasu.",
+              english: "I have climbed Mount Fuji before.",
+              bengali: "\u0986\u09AE\u09BF \u09AB\u09C1\u099C\u09BF \u09AA\u09BE\u09B9\u09BE\u09DC\u09C7 \u0989\u09A0\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6CCA\u307E\u308A\u307E\u3059",
+            hiragana: "\u3068\u307E\u308A\u307E\u3059",
+            romaji: "tomarimasu",
+            meaningEnglish: "To stay at (hotel, inn)",
+            meaningBengali: "\u09B0\u09BE\u09A4\u09CD\u09B0\u09BF\u09AF\u09BE\u09AA\u09A8 \u0995\u09B0\u09BE / \u09B9\u09CB\u099F\u09C7\u09B2\u09C7 \u09A5\u09BE\u0995\u09BE",
+            example: {
+              japanese: "\u30DB\u30C6\u30EB\u306B \u3068\u307E\u308A\u307E\u3057\u305F\u3002",
+              romaji: "Hoteru ni tomarimashita.",
+              english: "I stayed at a hotel.",
+              bengali: "\u0986\u09AE\u09BF \u098F\u0995\u099F\u09BF \u09B9\u09CB\u099F\u09C7\u09B2\u09C7 \u09B0\u09BE\u09A4 \u0995\u09BE\u099F\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964"
+            }
+          },
+          {
+            kanji: "\u6383\u9664\u3057\u307E\u3059",
+            hiragana: "\u305D\u3046\u3058\u3057\u307E\u3059",
+            romaji: "soujishimasu",
+            meaningEnglish: "To clean (a room)",
+            meaningBengali: "\u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09BE / \u09B8\u09BE\u09AB \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3078\u3084\u3092 \u305D\u3046\u3058\u3057\u307E\u3059\u3002",
+              romaji: "Heya o soujishimasu.",
+              english: "I clean my room.",
+              bengali: "\u0986\u09AE\u09BF \u0998\u09B0 \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u6D17\u6FEF\u3057\u307E\u3059",
+            hiragana: "\u305B\u3093\u305F\u304F\u3057\u307E\u3059",
+            romaji: "sentakushimasu",
+            meaningEnglish: "To do laundry / wash clothes",
+            meaningBengali: "\u0995\u09BE\u09AA\u09DC \u09A7\u09CB\u09DF\u09BE",
+            example: {
+              japanese: "\u306B\u3061\u3088\u3046\u3073\u306B \u305B\u3093\u305F\u304F\u3057\u307E\u3059\u3002",
+              romaji: "Nichiyoubi ni sentakushimasu.",
+              english: "I do laundry on Sundays.",
+              bengali: "\u0986\u09AE\u09BF \u09B0\u09AC\u09BF\u09AC\u09BE\u09B0 \u0995\u09BE\u09AA\u09DC \u09A7\u09C1\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u306A\u308A\u307E\u3059",
+            hiragana: "\u306A\u308A\u307E\u3059",
+            romaji: "narimasu",
+            meaningEnglish: "To become / turn into",
+            meaningBengali: "\u09B9\u0993\u09AF\u09BC\u09BE / \u09AA\u09B0\u09BF\u09A3\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE",
+            example: {
+              japanese: "\u3082\u3046\u3059\u3050 \u306F\u308B\u306B \u306A\u308A\u307E\u3059\u3002",
+              romaji: "Mousugu haru ni narimasu.",
+              english: "Soon it will become spring.",
+              bengali: "\u09B6\u09C0\u0998\u09CD\u09B0\u0987 \u09AC\u09B8\u09A8\u09CD\u09A4\u0995\u09BE\u09B2 \u09B9\u09AC\u09C7\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-19-01",
+            pattern: "Verb [\u305F-form] \u3053\u3068\u304C \u3042\u308A\u307E\u3059",
+            topic: "Expressing Past Life Experience",
+            explanationEnglish: "'Verb[ta-form] + \u3053\u3068\u304C\u3042\u308A\u307E\u3059' expresses that one has had the past experience of doing something ('Have ever done...').",
+            explanationBengali: "'Verb[\u305F-\u09AB\u09B0\u09CD\u09AE] + \u3053\u3068\u304C\u3042\u308A\u307E\u3059' \u0985\u09A4\u09C0\u09A4 \u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u0995\u09CB\u09A8\u09CB \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u09A5\u09BE\u0995\u09BE ('\u0995\u0996\u09A8\u09CB \u0995\u09B0\u09C7\u099B\u09BF') \u09AC\u09CB\u099D\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3059\u3057\u3092 \u305F\u3079\u305F \u3053\u3068\u304C \u3042\u308A\u307E\u3059\u304B\u3002(Sushi o tabeta koto ga arimasu ka?)",
+              speakerB: "B: \u306F\u3044\u3001\u3044\u3061\u3069 \u3042\u308A\u307E\u3059\u3002(Hai, ichido arimasu.)",
+              english: "A: Have you ever eaten sushi? / B: Yes, once.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u0995\u0996\u09A8\u09CB \u09B8\u09C1\u09B6\u09BF \u0996\u09C7\u09DF\u09C7\u099B\u09C7\u09A8? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u098F\u0995\u09AC\u09BE\u09B0 \u0996\u09C7\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-19-02",
+            pattern: "V1 [\u305F\u308A]\u3001V2 [\u305F\u308A] \u3057\u307E\u3059 / Adj + \u306A\u308A\u307E\u3059",
+            topic: "Listing Representative Actions & Changes of State",
+            explanationEnglish: "'~\u305F\u308A ~\u305F\u308A \u3057\u307E\u3059' lists representative sample actions among others. '\u3044-Adj \u304F\u306A\u308A\u307E\u3059 / \u306A-Adj\u30FBNoun \u306B\u306A\u308A\u307E\u3059' indicates a change of state.",
+            explanationBengali: "'~\u305F\u308A ~\u305F\u308A \u3057\u307E\u3059' \u098F\u0995\u09BE\u09A7\u09BF\u0995 \u0995\u09BE\u099C\u09C7\u09B0 \u0989\u09A6\u09BE\u09B9\u09B0\u09A3 \u09A4\u09BE\u09B2\u09BF\u0995\u09BE \u09AC\u09CB\u099D\u09BE\u09DF\u0964 '\u304F\u306A\u308A\u307E\u3059 / \u306B\u306A\u308A\u307E\u3059' \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09B0 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3084\u3059\u307F\u306E \u3072\u306F \u306A\u306B\u3092 \u3057\u307E\u3059\u304B\u3002(Yasumi no hi wa nani o shimasu ka?)",
+              speakerB: "B: \u307B\u3093\u3092 \u3088\u3093\u3060\u308A\u3001\u304A\u3093\u304C\u304F\u3092 \u304D\u3044\u305F\u308A \u3057\u307E\u3059\u3002(Hon o yondari, ongaku o kiitari shimasu.)",
+              english: "A: What do you do on days off? / B: I read books, listen to music, and such.",
+              bengali: "A: \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u0995\u09C0 \u0995\u09B0\u09C7\u09A8? / B: \u09AC\u0987 \u09AA\u09DC\u09BF, \u0997\u09BE\u09A8 \u09B6\u09C1\u09A8\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF \u0995\u09B0\u09BF\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u6821",
+            strokeCount: 10,
+            onyomi: ["\u30B3\u30A6 (kou)"],
+            kunyomi: [],
+            meaningEnglish: "School / Exam",
+            meaningBengali: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC / \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B2\u09AF\u09BC",
+            compounds: [
+              { word: "\u5B66\u6821", reading: "\u304C\u3063\u3053\u3046 (gakkou)", meaningEnglish: "School", meaningBengali: "\u09B8\u09CD\u0995\u09C1\u09B2" },
+              { word: "\u6821\u9577", reading: "\u3053\u3046\u3061\u3087\u3046 (kouchou)", meaningEnglish: "Principal", meaningBengali: "\u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09B6\u09BF\u0995\u09CD\u09B7\u0995" }
+            ]
+          },
+          {
+            kanji: "\u5E74",
+            strokeCount: 6,
+            onyomi: ["\u30CD\u30F3 (nen)"],
+            kunyomi: ["\u3068\u3057 (toshi)"],
+            meaningEnglish: "Year / Age",
+            meaningBengali: "\u09AC\u099B\u09B0 / \u09AC\u09AF\u09BC\u09B8",
+            compounds: [
+              { word: "\u4ECA\u5E74", reading: "\u3053\u3068\u3057 (kotoshi)", meaningEnglish: "This year", meaningBengali: "\u099A\u09B2\u09A4\u09BF \u09AC\u099B\u09B0" },
+              { word: "\u6765\u5E74", reading: "\u3089\u3044\u306D\u3093 (rainen)", meaningEnglish: "Next year", meaningBengali: "\u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-19",
+          question: "\u304D\u3087\u3046\u3068\u3078\uFF08\u3000\uFF09\u3053\u3068\u304C \u3042\u308A\u307E\u3059\u304B\u3002",
+          questionRomaji: "Kyouto e ( ) koto ga arimasu ka.",
+          options: ["\u3044\u3063\u305F", "\u3044\u304D\u307E\u3059", "\u3044\u3063\u3066", "\u3044\u304F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3044\u3063\u305F",
+          explanationEnglish: "'~\u305F \u3053\u3068\u304C \u3042\u308A\u307E\u3059' requires the past Ta-form '\u3044\u3063\u305F' (went).",
+          explanationBengali: "\u0985\u09A4\u09C0\u09A4 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE '~\u305F \u3053\u3068\u304C \u3042\u308A\u307E\u3059' \u0997\u09A0\u09A8\u09C7 \u305F-\u09AB\u09B0\u09CD\u09AE '\u3044\u3063\u305F' \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 20 ---
+      {
+        lessonNumber: 20,
+        titleEnglish: "Plain / Casual Form (\u666E\u901A\u5F62) in Informal Conversation",
+        titleJapanese: "\u7B2C20\u8AB2\uFF1A\u666E\u901A\u5F62\uFF08\u30BF\u30E1\u53E3\u30FB\u304F\u3060\u3051\u305F\u4F1A\u8A71\uFF09\u306E\u4F53\u7CFB",
+        topic: "\u666E\u901A\u5F62\u3068\u4E01\u5BE7\u5F62\u306E\u5909\u63DB (Plain Form vs. Polite Form in Casual Speech)",
+        vocabularies: [
+          {
+            kanji: "\u8981\u308A\u307E\u3059",
+            hiragana: "\u3044\u308A\u307E\u3059",
+            romaji: "irimasu",
+            meaningEnglish: "To need / require",
+            meaningBengali: "\u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8 \u09B9\u0993\u09DF\u09BE / \u09B2\u09BE\u0997\u09BE",
+            example: {
+              japanese: "\u30D3\u30B6\u304C \u3044\u308B\uFF1F \u2015\u2015 \u3046\u3046\u3093\u3001\u3044\u3089\u306A\u3044\u3002(Casual)",
+              romaji: "Biza ga iru? -- Uun, iranai.",
+              english: "Do you need a visa? -- No, I don't need one.",
+              bengali: "\u09AD\u09BF\u09B8\u09BE \u0995\u09BF \u09A6\u09B0\u0995\u09BE\u09B0? -- \u09A8\u09BE, \u09A6\u09B0\u0995\u09BE\u09B0 \u09A8\u09C7\u0987\u0964"
+            }
+          },
+          {
+            kanji: "\u8ABF\u3079\u307E\u3059",
+            hiragana: "\u3057\u3089\u3079\u307E\u3059",
+            romaji: "shirabemasu",
+            meaningEnglish: "To check / investigate / look up",
+            meaningBengali: "\u0996\u09CB\u0981\u099C \u0995\u09B0\u09BE / \u09AF\u09BE\u099A\u09BE\u0987 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u30CD\u30C3\u30C8\u3067 \u3057\u3089\u3079\u308B\u3002(Casual)",
+              romaji: "Netto de shiraberu.",
+              english: "I will look it up on the internet.",
+              bengali: "\u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09A8\u09C7\u099F\u09C7 \u0996\u09C1\u0981\u099C\u09C7 \u09A6\u09C7\u0996\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u76F4\u3057\u307E\u3059",
+            hiragana: "\u306A\u304A\u3057\u307E\u3059",
+            romaji: "naoshimasu",
+            meaningEnglish: "To repair / fix / correct",
+            meaningBengali: "\u09AE\u09C7\u09B0\u09BE\u09AE\u09A4 \u0995\u09B0\u09BE / \u09A0\u09BF\u0995 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u304F\u308B\u307E\u3092 \u306A\u304A\u3059\u3002(Casual)",
+              romaji: "Kuruma o naosu.",
+              english: "I'll repair the car.",
+              bengali: "\u0997\u09BE\u09DC\u09BF \u09A0\u09BF\u0995 \u0995\u09B0\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u4FEE\u7406\u3057\u307E\u3059",
+            hiragana: "\u3057\u3085\u3046\u308A\u3057\u307E\u3059",
+            romaji: "shuurishimasu",
+            meaningEnglish: "To repair / service (appliances, cars)",
+            meaningBengali: "\u09B8\u09BE\u09B0\u09BE\u0987 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u30D1\u30BD\u30B3\u30F3\u3092 \u3057\u3085\u3046\u308A\u3059\u308B\u3002(Casual)",
+              romaji: "Pasokon o shuuri suru.",
+              english: "I'll service the computer.",
+              bengali: "\u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0 \u09B8\u09BE\u09B0\u09BE\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u8A00\u8449",
+            hiragana: "\u3053\u3068\u3070",
+            romaji: "kotoba",
+            meaningEnglish: "Word / Language / Vocabulary",
+            meaningBengali: "\u09B6\u09AC\u09CD\u09A6 / \u09AD\u09BE\u09B7\u09BE / \u09AC\u09BE\u09A3\u09C0",
+            example: {
+              japanese: "\u65E5\u672C\u306E \u3053\u3068\u3070\u3092 \u304A\u307C\u3048\u308B\u3002(Casual)",
+              romaji: "Nihon no kotoba o oboeru.",
+              english: "I memorize Japanese words.",
+              bengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09AC\u09CD\u09A6 \u09AE\u09C1\u0996\u09B8\u09CD\u09A5 \u0995\u09B0\u09BF\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-20-01",
+            pattern: "Plain Affirmative: [Dict form] / Plain Negative: [\u306A\u3044-form] / Plain Past: [\u305F-form]",
+            topic: "System of Plain Style (\u666E\u901A\u5F62)",
+            explanationEnglish: "Replace '\u3067\u3059/\u307E\u3059' with plain dictionary, nai, and ta forms when talking casually with close friends, family, or equals.",
+            explanationBengali: "\u0998\u09A8\u09BF\u09B7\u09CD\u09A0 \u09AC\u09A8\u09CD\u09A7\u09C1, \u09AA\u09B0\u09BF\u09AC\u09BE\u09B0\u09C7\u09B0 \u09B8\u09A6\u09B8\u09CD\u09AF \u09AC\u09BE \u09B8\u09AE\u09AC\u09DF\u09B8\u09C0\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0998\u09B0\u09CB\u09DF\u09BE \u0986\u09B2\u09BE\u09AA\u09C7 '\u3067\u3059/\u307E\u3059' \u09AC\u09BE\u09A6 \u09A6\u09BF\u09DF\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA (\u666E\u901A\u5F62) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3042\u3057\u305F \u3068\u3046\u304D\u3087\u3046\u3078 \u3044\u304F\uFF1F(Ashita Toukyou e iku?)",
+              speakerB: "B: \u3046\u3093\u3001\u3044\u304F\u3002(Un, iku.)",
+              english: "A: Going to Tokyo tomorrow? (Casual) / B: Yeah, I'm going.",
+              bengali: "A: \u0995\u09BE\u09B2 \u099F\u09CB\u0995\u09BF\u0993 \u09AF\u09BE\u09AC\u09BF? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u09AF\u09BE\u09AC\u0964"
+            }
+          },
+          {
+            id: "g-20-02",
+            pattern: "Noun/Na-Adj \u3060 / \u3058\u3083\u306A\u3044 / \u3060\u3063\u305F / \u3058\u3083\u306A\u304B\u3063\u305F",
+            topic: "Plain Copula for Nouns and Na-Adjectives",
+            explanationEnglish: "Nouns and Na-adjectives replace '\u3067\u3059' with '\u3060' (affirmative), '\u3058\u3083\u306A\u3044' (negative), '\u3060\u3063\u305F' (past), and '\u3058\u3083\u306A\u304B\u3063\u305F' (past negative). Questions drop '\u3060' and end with rising intonation.",
+            explanationBengali: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF \u0993 na-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7 '\u3067\u3059' \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 '\u3060', '\u3058\u3083\u306A\u3044', '\u3060\u3063\u305F', '\u3058\u3083\u306A\u304B\u3063\u305F' \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09C7 '\u3060' \u09AC\u09BE\u09A6 \u09A6\u09BF\u09DF\u09C7 \u0997\u09B2\u09BE\u09B0 \u09B8\u09CD\u09AC\u09B0 \u0989\u0981\u099A\u09C1\u09A4\u09C7 \u0993\u09A0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u304D\u3087\u3046 \u3072\u307E\uFF1F(Kyou hima?)",
+              speakerB: "B: \u3046\u3046\u3093\u3001\u3072\u307E\u3058\u3083\u306A\u3044\u3002(Uun, hima janai.)",
+              english: "A: Free today? / B: No, not free.",
+              bengali: "A: \u0986\u099C \u0985\u09AC\u09B8\u09B0 \u0986\u099B\u09BF\u09B8? / B: \u09A8\u09BE, \u0985\u09AC\u09B8\u09B0 \u09A8\u09C7\u0987\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u8ECA",
+            strokeCount: 7,
+            onyomi: ["\u30B7\u30E3 (sha)"],
+            kunyomi: ["\u304F\u308B\u307E (kuruma)"],
+            meaningEnglish: "Car / Vehicle / Wheel",
+            meaningBengali: "\u0997\u09BE\u09DC\u09BF / \u099A\u09BE\u0995\u09BE",
+            compounds: [
+              { word: "\u81EA\u52D5\u8ECA", reading: "\u3058\u3069\u3046\u3057\u3083 (jidousha)", meaningEnglish: "Automobile / Car", meaningBengali: "\u09AE\u09CB\u099F\u09B0\u0997\u09BE\u09A1\u09BC\u09BF" },
+              { word: "\u96FB\u8ECA", reading: "\u3067\u3093\u3057\u3083 (densha)", meaningEnglish: "Train", meaningBengali: "\u09AC\u09C8\u09A6\u09CD\u09AF\u09C1\u09A4\u09BF\u0995 \u099F\u09CD\u09B0\u09C7\u09A8" }
+            ]
+          },
+          {
+            kanji: "\u96FB",
+            strokeCount: 13,
+            onyomi: ["\u30C7\u30F3 (den)"],
+            kunyomi: [],
+            meaningEnglish: "Electricity / Electric",
+            meaningBengali: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE",
+            compounds: [
+              { word: "\u96FB\u8A71", reading: "\u3067\u3093\u308F (denwa)", meaningEnglish: "Telephone", meaningBengali: "\u099F\u09C7\u09B2\u09BF\u09AB\u09CB\u09A8" },
+              { word: "\u96FB\u6C17", reading: "\u3067\u3093\u304D (denki)", meaningEnglish: "Electricity / Lights", meaningBengali: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE / \u09AC\u09BE\u09A4\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-20",
+          question: "\u3042\u3057\u305F \u3044\u305D\u304C\u3057\u3044\uFF1F \u2015\u2015 \u3046\u3046\u3093\u3001\uFF08\u3000\uFF09\u3002(Casual conversation)",
+          questionRomaji: "Ashita isogashii? -- Uun, ( ).",
+          options: ["\u3044\u305D\u304C\u3057\u304F\u306A\u3044", "\u3044\u305D\u304C\u3057\u304F\u306A\u3044\u3067\u3059", "\u3044\u305D\u304C\u3057\u304F\u3042\u308A\u307E\u305B\u3093", "\u3044\u305D\u304C\u3057\u3044"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3044\u305D\u304C\u3057\u304F\u306A\u3044",
+          explanationEnglish: "In casual/plain speech, the negative of '\u3044\u305D\u304C\u3057\u3044' is simply '\u3044\u305D\u304C\u3057\u304F\u306A\u3044'.",
+          explanationBengali: "\u0998\u09B0\u09CB\u09DF\u09BE \u0986\u09B2\u09BE\u09AA\u09C7 (Casual) '\u3044\u305D\u304C\u3057\u3044' \u098F\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u09B9\u09B2\u09CB '\u3044\u305D\u304C\u3057\u304F\u306A\u3044'\u0964"
+        }
+      },
+      // --- LESSON 21 ---
+      {
+        lessonNumber: 21,
+        titleEnglish: "Opinions, Quotes & Conjectures (~\u3068\u601D\u3044\u307E\u3059 / ~\u3068\u8A00\u3044\u307E\u3057\u305F)",
+        titleJapanese: "\u7B2C21\u8AB2\uFF1A\u610F\u898B\u306E\u300C\u301C\u3068\u601D\u3046\u300D\u30FB\u5F15\u7528\u306E\u300C\u301C\u3068\u8A00\u3046\u300D\u30FB\u63A8\u91CF\u306E\u300C\u301C\u3067\u3057\u3087\u3046\u300D",
+        topic: "\u601D\u8003\u30FB\u5F15\u7528\u30FB\u63A8\u91CF (Expressing Thoughts with ~\u3068\u601D\u3044\u307E\u3059, Quoting with ~\u3068\u8A00\u3044\u307E\u3057\u305F)",
+        vocabularies: [
+          {
+            kanji: "\u601D\u3044\u307E\u3059",
+            hiragana: "\u304A\u3082\u3044\u307E\u3059",
+            romaji: "omoimasu",
+            meaningEnglish: "To think / believe",
+            meaningBengali: "\u09AE\u09A8\u09C7 \u0995\u09B0\u09BE / \u09AD\u09BE\u09AC\u09BE",
+            example: {
+              japanese: "\u3042\u3057\u305F\u306F \u3042\u3081\u304C \u3075\u308B\u3068 \u304A\u3082\u3044\u307E\u3059\u3002",
+              romaji: "Ashita wa ame ga furu to omoimasu.",
+              english: "I think it will rain tomorrow.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09DF \u0995\u09BE\u09B2 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u09AC\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u8A00\u3044\u307E\u3059",
+            hiragana: "\u3044\u3044\u307E\u3059",
+            romaji: "iimasu",
+            meaningEnglish: "To say / tell",
+            meaningBengali: "\u09AC\u09B2\u09BE",
+            example: {
+              japanese: "\u305F\u306A\u304B\u3055\u3093\u306F \u300C\u3042\u308A\u304C\u3068\u3046\u300D\u3068 \u3044\u3044\u307E\u3057\u305F\u3002",
+              romaji: 'Tanaka-san wa "arigatou" to iimashita.',
+              english: "Mr. Tanaka said 'Thank you'.",
+              bengali: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC '\u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6' \u09AC\u09B2\u09B2\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u52DD\u3061\u307E\u3059",
+            hiragana: "\u304B\u3061\u307E\u3059",
+            romaji: "kachimasu",
+            meaningEnglish: "To win",
+            meaningBengali: "\u099C\u09C7\u09A4\u09BE / \u099C\u09DF\u09C0 \u09B9\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u306B\u307B\u3093\u306E \u30C1\u30FC\u30E0\u304C \u304B\u3064\u3068 \u304A\u3082\u3044\u307E\u3059\u3002",
+              romaji: "Nihon no chiimu ga katsu to omoimasu.",
+              english: "I think the Japanese team will win.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09DF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09A6\u09B2 \u099C\u09BF\u09A4\u09AC\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u8CA0\u3051\u307E\u3059",
+            hiragana: "\u307E\u3051\u307E\u3059",
+            romaji: "makemasu",
+            meaningEnglish: "To lose / be defeated",
+            meaningBengali: "\u09AA\u09B0\u09BE\u099C\u09BF\u09A4 \u09B9\u0993\u09DF\u09BE / \u09B9\u09BE\u09B0\u09BE",
+            example: {
+              japanese: "\u3057\u3042\u3044\u306B \u307E\u3051\u307E\u3057\u305F\u3002",
+              romaji: "Shiai ni makemashita.",
+              english: "We lost the match.",
+              bengali: "\u0986\u09AE\u09B0\u09BE \u0996\u09C7\u09B2\u09BE\u09DF \u09B9\u09C7\u09B0\u09C7 \u0997\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u5F79\u306B\u7ACB\u3061\u307E\u3059",
+            hiragana: "\u3084\u304F\u306B\u305F\u3061\u307E\u3059",
+            romaji: "yaku ni tachimasu",
+            meaningEnglish: "To be useful / helpful",
+            meaningBengali: "\u0995\u09BE\u099C\u09C7 \u09B2\u09BE\u0997\u09BE / \u0989\u09AA\u0995\u09BE\u09B0\u09C0 \u09B9\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3053\u306E \u30A2\u30D7\u30EA\u306F \u3068\u3066\u3082 \u3084\u304F\u306B\u305F\u3061\u307E\u3059\u3002",
+              romaji: "Kono apuri wa totemo yaku ni tachimasu.",
+              english: "This app is very useful.",
+              bengali: "\u098F\u0987 \u0985\u09CD\u09AF\u09BE\u09AA\u099F\u09BF \u0996\u09C1\u09AC\u0987 \u0989\u09AA\u0995\u09BE\u09B0\u09C0\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-21-01",
+            pattern: "[Plain Form clause] \u3068 \u601D\u3044\u307E\u3059",
+            topic: "Expressing Subjective Opinion / Conjecture",
+            explanationEnglish: "'[Plain clause] \u3068 \u601D\u3044\u307E\u3059' states the speaker's personal conjecture or opinion ('I think that...').",
+            explanationBengali: "'[\u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA] \u3068 \u601D\u3044\u307E\u3059' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09A8\u09BF\u099C\u09C7\u09B0 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u09AE\u09A4\u09BE\u09AE\u09A4 \u09AC\u09BE \u0985\u09A8\u09C1\u09AE\u09BE\u09A8 ('\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09DF \u09AF\u09C7...') \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09BE \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u306B\u307B\u3093\u306E \u3076\u3063\u304B\u306F \u305F\u304B\u3044\u3068 \u304A\u3082\u3044\u307E\u3059\u304B\u3002(Nihon no bukka wa takai to omoimasu ka?)",
+              speakerB: "B: \u306F\u3044\u3001\u3068\u3066\u3082 \u305F\u304B\u3044\u3068 \u304A\u3082\u3044\u307E\u3059\u3002(Hai, totemo takai to omoimasu.)",
+              english: "A: Do you think prices in Japan are high? / B: Yes, I think they are very high.",
+              bengali: "A: \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099C\u09C0\u09AC\u09A8\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE\u09B0 \u0996\u09B0\u099A \u0995\u09BF \u09AC\u09C7\u09B6\u09BF \u09AE\u09A8\u09C7 \u09B9\u09DF? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09DF \u0985\u09A8\u09C7\u0995 \u09AC\u09C7\u09B6\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-21-02",
+            pattern: "\u300CQuote\u300D / [Plain clause] \u3068 \u8A00\u3044\u307E\u3057\u305F",
+            topic: "Direct and Indirect Speech Quotation",
+            explanationEnglish: "'\u3068 \u8A00\u3044\u307E\u3057\u305F' quotes what someone said, either verbatim inside brackets or indirectly in plain form.",
+            explanationBengali: "'\u3068 \u8A00\u3044\u307E\u3057\u305F' \u0995\u09BE\u09B0\u09CB \u0989\u0995\u09CD\u09A4\u09BF\u0995\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AC\u09BE \u09AA\u09B0\u09CB\u0995\u09CD\u09B7\u09AD\u09BE\u09AC\u09C7 \u0989\u09A6\u09CD\u09A7\u09C3\u09A4 \u0995\u09B0\u09A4\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u30DF\u30E9\u30FC\u3055\u3093\u306F \u306A\u3093\u3068 \u3044\u3044\u307E\u3057\u305F\u304B\u3002(Miraa-san wa nan to iimashita ka?)",
+              speakerB: "B: \u3089\u3044\u3057\u3085\u3046 \u304D\u3087\u3046\u3068\u3078 \u3044\u304F\u3068 \u3044\u3044\u307E\u3057\u305F\u3002(Raishuu Kyouto e iku to iimashita.)",
+              english: "A: What did Mr. Miller say? / B: He said that he will go to Kyoto next week.",
+              bengali: "A: \u09AE\u09BF\u09B2\u09BE\u09B0 \u09B8\u09BE\u09B9\u09C7\u09AC \u0995\u09C0 \u09AC\u09B2\u09B2\u09C7\u09A8? / B: \u0989\u09A8\u09BF \u09AC\u09B2\u09B2\u09C7\u09A8 \u09AF\u09C7 \u0986\u0997\u09BE\u09AE\u09C0 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7 \u0995\u09BF\u09DF\u09CB\u099F\u09CB \u09AF\u09BE\u09AC\u09C7\u09A8\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u767D",
+            strokeCount: 5,
+            onyomi: ["\u30CF\u30AF (haku)", "\u30D3\u30E3\u30AF (byaku)"],
+            kunyomi: ["\u3057\u308D (shiro)", "\u3057\u308D-\u3044 (shiro-i)"],
+            meaningEnglish: "White",
+            meaningBengali: "\u09B8\u09BE\u09A6\u09BE",
+            compounds: [
+              { word: "\u767D\u3044", reading: "\u3057\u308D\u3044 (shiroi)", meaningEnglish: "White (adj)", meaningBengali: "\u09B8\u09BE\u09A6\u09BE" },
+              { word: "\u767D\u9CE5", reading: "\u306F\u304F\u3061\u3087\u3046 (hakuchou)", meaningEnglish: "Swan", meaningBengali: "\u09B0\u09BE\u099C\u09B9\u09BE\u0981\u09B8" }
+            ]
+          },
+          {
+            kanji: "\u8D64",
+            strokeCount: 7,
+            onyomi: ["\u30BB\u30AD (seki)", "\u30B7\u30E3\u30AF (shaku)"],
+            kunyomi: ["\u3042\u304B (aka)", "\u3042\u304B-\u3044 (aka-i)"],
+            meaningEnglish: "Red",
+            meaningBengali: "\u09B2\u09BE\u09B2",
+            compounds: [
+              { word: "\u8D64\u3044", reading: "\u3042\u304B\u3044 (akai)", meaningEnglish: "Red (adj)", meaningBengali: "\u09B2\u09BE\u09B2" },
+              { word: "\u8D64\u3061\u3083\u3093", reading: "\u3042\u304B\u3061\u3083\u3093 (akachan)", meaningEnglish: "Baby / Infant", meaningBengali: "\u099B\u09CB\u099F \u09B6\u09BF\u09B6\u09C1 / \u09AC\u09BE\u099A\u09CD\u099A\u09BE" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-21",
+          question: "\u3042\u3057\u305F\u306F \u3044\u3044 \u3066\u3093\u304D\u306B\uFF08\u3000\uFF09\u3068 \u601D\u3044\u307E\u3059\u3002",
+          questionRomaji: "Ashita wa ii tenki ni ( ) to omoimasu.",
+          options: ["\u306A\u308B", "\u306A\u308A\u307E\u3059", "\u306A\u3063\u3066", "\u306A\u308A\u307E\u3057\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u306A\u308B",
+          explanationEnglish: "'~\u3068 \u601D\u3044\u307E\u3059' requires the plain dictionary form '\u306A\u308B' before '\u3068'.",
+          explanationBengali: "'~\u3068 \u601D\u3044\u307E\u3059' \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA '\u306A\u308B' \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 22 ---
+      {
+        lessonNumber: 22,
+        titleEnglish: "Noun Modification with Relative Clauses (\u9023\u4F53\u4FEE\u98FE)",
+        titleJapanese: "\u7B2C22\u8AB2\uFF1A\u540D\u8A5E\u4FEE\u98FE\u7BC0\uFF08\u9023\u4F53\u4FEE\u98FE\uFF09\u3068\u8907\u6587\u69CB\u9020",
+        topic: "\u540D\u8A5E\u4FEE\u98FE\u7BC0 (Relative Clauses Modifying Nouns: [Verb Plain] + Noun)",
+        vocabularies: [
+          {
+            kanji: "\u7740\u307E\u3059",
+            hiragana: "\u304D\u307E\u3059",
+            romaji: "kimasu",
+            meaningEnglish: "To wear / put on (shirts, jackets, above waist)",
+            meaningBengali: "\u09AA\u09B0\u09BE (\u09B6\u09BE\u09B0\u09CD\u099F, \u099C\u09CD\u09AF\u09BE\u0995\u09C7\u099F - \u0995\u09CB\u09AE\u09B0\u09C7\u09B0 \u0989\u09AA\u09B0\u09C7)",
+            example: {
+              japanese: "\u3057\u308D\u3044 \u30B7\u30E3\u30C4\u3092 \u304D\u3066 \u3044\u308B \u3072\u3068\u306F \u305F\u306A\u304B\u3055\u3093\u3067\u3059\u3002",
+              romaji: "Shiroi shatsu o kite iru hito wa Tanaka-san desu.",
+              english: "The person wearing a white shirt is Mr. Tanaka.",
+              bengali: "\u09B8\u09BE\u09A6\u09BE \u09B6\u09BE\u09B0\u09CD\u099F \u09AA\u09B0\u09BE \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u099F\u09BF \u09B9\u09B2\u09C7\u09A8 \u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u5C65\u304D\u307E\u3059",
+            hiragana: "\u306F\u304D\u307E\u3059",
+            romaji: "hakimasu",
+            meaningEnglish: "To wear / put on (shoes, pants, below waist)",
+            meaningBengali: "\u09AA\u09B0\u09BE (\u099C\u09C1\u09A4\u09CB, \u09AA\u09CD\u09AF\u09BE\u09A8\u09CD\u099F - \u0995\u09CB\u09AE\u09B0\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7)",
+            example: {
+              japanese: "\u304F\u3064\u3092 \u306F\u304D\u307E\u3059\u3002",
+              romaji: "Kutsu o hakimasu.",
+              english: "I put on shoes.",
+              bengali: "\u0986\u09AE\u09BF \u099C\u09C1\u09A4\u09CB \u09AA\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u88AB\u308A\u307E\u3059",
+            hiragana: "\u304B\u3076\u308A\u307E\u3059",
+            romaji: "kaburimasu",
+            meaningEnglish: "To wear / put on (hat, cap)",
+            meaningBengali: "\u09AA\u09B0\u09BE (\u099F\u09C1\u09AA\u09BF)",
+            example: {
+              japanese: "\u307C\u3046\u3057\u3092 \u304B\u3076\u3063\u3066 \u3044\u307E\u3059\u3002",
+              romaji: "Boushi o kabutte imasu.",
+              english: "He is wearing a hat.",
+              bengali: "\u09B8\u09C7 \u099F\u09C1\u09AA\u09BF \u09AA\u09B0\u09C7 \u0986\u099B\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u639B\u3051\u307E\u3059",
+            hiragana: "\u304B\u3051\u307E\u3059",
+            romaji: "kakemasu",
+            meaningEnglish: "To put on (glasses)",
+            meaningBengali: "\u09AA\u09B0\u09BE (\u099A\u09B6\u09AE\u09BE)",
+            example: {
+              japanese: "\u3081\u304C\u306D\u3092 \u304B\u3051\u3066 \u3044\u307E\u3059\u3002",
+              romaji: "Megane o kakete imasu.",
+              english: "She is wearing glasses.",
+              bengali: "\u09A4\u09BF\u09A8\u09BF \u099A\u09B6\u09AE\u09BE \u09AA\u09B0\u09C7 \u0986\u099B\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u751F\u307E\u308C\u307E\u3059",
+            hiragana: "\u3046\u307E\u308C\u307E\u3059",
+            romaji: "umaremasu",
+            meaningEnglish: "To be born",
+            meaningBengali: "\u099C\u09A8\u09CD\u09AE\u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u308F\u305F\u3057\u304C \u3046\u307E\u308C\u305F \u3068\u3053\u308D\u306F \u30C0\u30C3\u30AB\u3067\u3059\u3002",
+              romaji: "Watashi ga umareta tokoro wa Dakka desu.",
+              english: "The place where I was born is Dhaka.",
+              bengali: "\u0986\u09AE\u09BE\u09B0 \u099C\u09A8\u09CD\u09AE\u09B8\u09CD\u09A5\u09BE\u09A8 \u09B9\u09B2\u09CB \u09A2\u09BE\u0995\u09BE\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-22-01",
+            pattern: "[Verb Plain / Adj / Noun \u306E] + Noun",
+            topic: "Relative Clause Modifying a Noun",
+            explanationEnglish: "In Japanese, a modifying relative clause always precedes the noun it modifies, with the verb in plain form (e.g., \u79C1\u304C\u4F5C\u3063\u305F\u30B1\u30FC\u30AD = The cake that I made). The subject inside the relative clause takes '\u304C'.",
+            explanationBengali: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE\u09AE\u09C2\u09B2\u0995 \u09AC\u09BE\u0995\u09CD\u09AF\u09BE\u0982\u09B6 \u09B8\u09AC\u09B8\u09AE\u09DF \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7 \u098F\u09AC\u0982 \u09AD\u09BE\u09B0\u09CD\u09AC\u099F\u09BF \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09C7 (Plain) \u09A5\u09BE\u0995\u09C7\u0964 \u09AC\u09BE\u0995\u09CD\u09AF\u09BE\u0982\u09B6\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7\u09B0 \u0995\u09B0\u09CD\u09A4\u09BE\u09DF '\u304C' \u0995\u09A3\u09BE \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u308C\u306F \u306A\u3093\u3067\u3059\u304B\u3002(Kore wa nan desu ka?)",
+              speakerB: "B: \u3053\u308C\u306F \u304D\u306E\u3046 \u304B\u3044\u306B\u3044\u3063\u305F \u30AB\u30E1\u30E9\u3067\u3059\u3002(Kore wa kinou kai ni itta kamera desu.)",
+              english: "A: What is this? / B: This is the camera that I went to buy yesterday.",
+              bengali: "A: \u098F\u099F\u09BF \u0995\u09C0? / B: \u098F\u099F\u09BF \u09B9\u09B2\u09CB \u09B8\u09C7\u0987 \u0995\u09CD\u09AF\u09BE\u09AE\u09C7\u09B0\u09BE \u09AF\u09BE \u0986\u09AE\u09BF \u0997\u09A4\u0995\u09BE\u09B2 \u0995\u09BF\u09A8\u09A4\u09C7 \u0997\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964"
+            }
+          },
+          {
+            id: "g-22-02",
+            pattern: "[Verb Plain] \u6642\u9593 / \u7D04\u675F / \u7528\u4E8B \u304C \u3042\u308A\u307E\u3059",
+            topic: "Noun Clauses with Time, Appointments, and Errands",
+            explanationEnglish: "'\u672C\u3092\u8AAD\u3080 \u6642\u9593' = time to read books. '\u53CB\u9054\u3068\u4F1A\u3046 \u7D04\u675F' = promise/appointment to meet a friend.",
+            explanationBengali: "'\u672C\u3092\u8AAD\u3080 \u6642\u9593' = \u09AC\u0987 \u09AA\u09DC\u09BE\u09B0 \u09B8\u09AE\u09DF\u0964 '\u53CB\u9054\u3068\u4F1A\u3046 \u7D04\u675F' = \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF\u09B6\u09CD\u09B0\u09C1\u09A4\u09BF\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u3093\u3070\u3093 \u3044\u3063\u3057\u3087\u306B \u3054\u306F\u3093\u3092 \u305F\u3079\u307E\u305B\u3093\u304B\u3002(Konban issho ni gohan o tabemasen ka?)",
+              speakerB: "B: \u3059\u307F\u307E\u305B\u3093\u3001\u304D\u3087\u3046\u306F \u3068\u3082\u3060\u3061\u3068 \u3042\u3046 \u3084\u304F\u305D\u304F\u304C \u3042\u308A\u307E\u3059\u3002(Sumimasen, kyou wa tomodachi to au yakusoku ga arimasu.)",
+              english: "A: Won't you have dinner with me tonight? / B: Sorry, today I have an appointment to meet a friend.",
+              bengali: "A: \u0986\u099C \u09B0\u09BE\u09A4\u09C7 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u09AC\u09C7\u09A8? / B: \u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u0986\u099C \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE\u09B0 \u0995\u09A5\u09BE \u0986\u099B\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u9752",
+            strokeCount: 8,
+            onyomi: ["\u30BB\u30A4 (sei)", "\u30B7\u30E7\u30A6 (shou)"],
+            kunyomi: ["\u3042\u304A (ao)", "\u3042\u304A-\u3044 (ao-i)"],
+            meaningEnglish: "Blue / Green (traffic light)",
+            meaningBengali: "\u09A8\u09C0\u09B2",
+            compounds: [
+              { word: "\u9752\u3044", reading: "\u3042\u304A\u3044 (aoi)", meaningEnglish: "Blue (adj)", meaningBengali: "\u09A8\u09C0\u09B2 \u09B0\u0999\u09C7\u09B0" },
+              { word: "\u9752\u5E74", reading: "\u305B\u3044\u306D\u3093 (seinen)", meaningEnglish: "Youth / Young man", meaningBengali: "\u09AF\u09C1\u09AC\u0995 / \u09A4\u09B0\u09C1\u09A3" }
+            ]
+          },
+          {
+            kanji: "\u9ED2",
+            strokeCount: 11,
+            onyomi: ["\u30B3\u30AF (koku)"],
+            kunyomi: ["\u304F\u308D (kuro)", "\u304F\u308D-\u3044 (kuro-i)"],
+            meaningEnglish: "Black",
+            meaningBengali: "\u0995\u09BE\u09B2\u09CB",
+            compounds: [
+              { word: "\u9ED2\u3044", reading: "\u304F\u308D\u3044 (kuroi)", meaningEnglish: "Black (adj)", meaningBengali: "\u0995\u09BE\u09B2\u09CB \u09B0\u0999\u09C7\u09B0" },
+              { word: "\u9ED2\u677F", reading: "\u3053\u304F\u3070\u3093 (kokuban)", meaningEnglish: "Blackboard", meaningBengali: "\u09AC\u09CD\u09B2\u09CD\u09AF\u09BE\u0995\u09AC\u09CB\u09B0\u09CD\u09A1" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-22",
+          question: "\u3042\u305D\u3053\u3067 \u672C\u3092\uFF08\u3000\uFF09\u4EBA\u306F \u3060\u308C\u3067\u3059\u304B\u3002",
+          questionRomaji: "Asoko de hon o ( ) hito wa dare desu ka.",
+          options: ["\u3088\u3093\u3067 \u3044\u308B", "\u3088\u307F\u307E\u3059", "\u3088\u307F\u307E\u3057\u305F", "\u3088\u3080\u3067\u3057\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3088\u3093\u3067 \u3044\u308B",
+          explanationEnglish: "'\u3088\u3093\u3067 \u3044\u308B' (plain continuous form) modifies the noun '\u4EBA' directly ('The person who is reading a book over there').",
+          explanationBengali: "'\u4EBA' (\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF) \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u0995\u09C7 \u09AE\u09A1\u09BF\u09AB\u09BE\u0987 \u0995\u09B0\u09A4\u09C7 \u09AD\u09BE\u09B0\u09CD\u09AC\u09C7\u09B0 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0995\u09A8\u09CD\u099F\u09BF\u09A8\u09BF\u0989\u09DF\u09BE\u09B8 \u09B0\u09C2\u09AA '\u3088\u3093\u3067 \u3044\u308B' \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 23 ---
+      {
+        lessonNumber: 23,
+        titleEnglish: "Temporal 'When' (~\u3068\u304D) & Natural Conditionals (~\u3068)",
+        titleJapanese: "\u7B2C23\u8AB2\uFF1A\u6642\u306E\u8868\u73FE\u300C\u301C\u3068\u304D\u300D\u3068\u5FC5\u7136\u7684\u6761\u4EF6\u300C\u301C\u3068\u300D",
+        topic: "\u6642\u3068\u6761\u4EF6 (When: ~\u3068\u304D, Natural Consequence Conditionals: ~\u3068)",
+        vocabularies: [
+          {
+            kanji: "\u805E\u304D\u307E\u3059",
+            hiragana: "\u304D\u304D\u307E\u3059",
+            romaji: "kikimasu",
+            meaningEnglish: "To ask (a question / direction)",
+            meaningBengali: "\u099C\u09BF\u099C\u09CD\u099E\u09C7\u09B8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u307F\u3061\u304C \u308F\u304B\u3089\u306A\u3044 \u3068\u304D\u3001\u3072\u3068\u306B \u304D\u304D\u307E\u3059\u3002",
+              romaji: "Michi ga wakaranai toki, hito ni kikimasu.",
+              english: "When I don't know the way, I ask someone.",
+              bengali: "\u09AF\u0996\u09A8 \u09AA\u09A5 \u099A\u09BF\u09A8\u09BF \u09A8\u09BE, \u09A4\u0996\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7\u0995\u09C7 \u099C\u09BF\u099C\u09CD\u099E\u09C7\u09B8 \u0995\u09B0\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u56DE\u3057\u307E\u3059",
+            hiragana: "\u307E\u308F\u3057\u307E\u3059",
+            romaji: "mawashimasu",
+            meaningEnglish: "To turn / rotate",
+            meaningBengali: "\u0998\u09CB\u09B0\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u3053\u308C\u3092 \u307E\u308F\u3059\u3068\u3001\u304A\u3068\u304C \u304A\u304A\u304D\u304F \u306A\u308A\u307E\u3059\u3002",
+              romaji: "Kore o mawasu to, oto ga ookiku narimasu.",
+              english: "If you turn this, the sound becomes louder.",
+              bengali: "\u098F\u099F\u09BF \u0998\u09CB\u09B0\u09BE\u09B2\u09C7 \u0986\u0993\u09DF\u09BE\u099C \u09AC\u09DC \u09B9\u09AC\u09C7\u0964"
+            }
+          },
+          {
+            kanji: "\u5F15\u304D\u307E\u3059",
+            hiragana: "\u3072\u304D\u307E\u3059",
+            romaji: "hikimasu",
+            meaningEnglish: "To pull / draw",
+            meaningBengali: "\u099F\u09BE\u09A8\u09BE",
+            example: {
+              japanese: "\u30C9\u30A2\u3092 \u3072\u3044\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Doa o hiite kudasai.",
+              english: "Please pull the door.",
+              bengali: "\u09A6\u09DF\u09BE \u0995\u09B0\u09C7 \u09A6\u09B0\u099C\u09BE\u099F\u09BF \u099F\u09BE\u09A8\u09C1\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u5909\u3048\u307E\u3059",
+            hiragana: "\u304B\u3048\u307E\u3059",
+            romaji: "kaemasu",
+            meaningEnglish: "To change / alter",
+            meaningBengali: "\u09AC\u09A6\u09B2\u09BE\u09A8\u09CB / \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3058\u304B\u3093\u3092 \u304B\u3048\u307E\u3059\u3002",
+              romaji: "Jikan o kaemasu.",
+              english: "I will change the time.",
+              bengali: "\u0986\u09AE\u09BF \u09B8\u09AE\u09DF \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0995\u09B0\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u6E21\u308A\u307E\u3059",
+            hiragana: "\u308F\u305F\u308A\u307E\u3059",
+            romaji: "watarimasu",
+            meaningEnglish: "To cross (a bridge, road)",
+            meaningBengali: "\u09AA\u09BE\u09B0 \u09B9\u0993\u09DF\u09BE (\u09B8\u09C7\u09A4\u09C1, \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE)",
+            example: {
+              japanese: "\u306F\u3057\u3092 \u308F\u305F\u308B\u3068\u3001\u307F\u304E\u306B \u3048\u304D\u304C \u3042\u308A\u307E\u3059\u3002",
+              romaji: "Hashi o wataru to, migi ni eki ga arimasu.",
+              english: "When you cross the bridge, there is a station on the right.",
+              bengali: "\u09B8\u09C7\u09A4\u09C1 \u09AA\u09BE\u09B0 \u09B9\u09B2\u09C7\u0987 \u09A1\u09BE\u09A8\u09C7 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8 \u09A6\u09C7\u0996\u09A4\u09C7 \u09AA\u09BE\u09AC\u09C7\u09A8\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-23-01",
+            pattern: "[Verb Plain / Adj / Noun \u306E] \u3068\u304D\u3001Main Clause",
+            topic: "Temporal Conjunction 'When'",
+            explanationEnglish: "'\u301C\u3068\u304D' specifies the timing or condition when the main action takes place. Use dictionary form for before/during, and ta-form for completed actions.",
+            explanationBengali: "'\u301C\u3068\u304D' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE '\u09AF\u0996\u09A8 / \u09B8\u09C7\u0987 \u09B8\u09AE\u09DF\u09C7' \u09AC\u09CB\u099D\u09BE\u09DF\u0964 \u099A\u09B2\u09AE\u09BE\u09A8 \u09AC\u09BE \u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09B0\u09C2\u09AA \u098F\u09AC\u0982 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09BE\u099C\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u305F-\u09AB\u09B0\u09CD\u09AE \u09AC\u09B8\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u3042\u305F\u307E\u304C \u3044\u305F\u3044 \u3068\u304D\u3001\u3069\u3046\u3057\u307E\u3059\u304B\u3002(Atama ga itai toki, dou shimasu ka?)",
+              speakerB: "B: \u304F\u3059\u308A\u3092 \u306E\u3093\u3067 \u306D\u307E\u3059\u3002(Kusuri o nonde nemasu.)",
+              english: "A: What do you do when you have a headache? / B: I take medicine and sleep.",
+              bengali: "A: \u09AF\u0996\u09A8 \u09AE\u09BE\u09A5\u09BE \u09AC\u09CD\u09AF\u09A5\u09BE \u0995\u09B0\u09C7 \u09A4\u0996\u09A8 \u0995\u09C0 \u0995\u09B0\u09C7\u09A8? / B: \u0993\u09B7\u09C1\u09A7 \u0996\u09C7\u09DF\u09C7 \u0998\u09C1\u09AE\u09BF\u09DF\u09C7 \u09AA\u09DC\u09BF\u0964"
+            }
+          },
+          {
+            id: "g-23-02",
+            pattern: "Verb [Dictionary form] \u3068\u3001[Natural result / Direction]",
+            topic: "Condition of Inevitable Outcome or Giving Directions",
+            explanationEnglish: "'Verb[dict] + \u3068' indicates that whenever Action 1 occurs, Event 2 naturally or automatically follows (especially for machines and street directions).",
+            explanationBengali: "'Verb[\u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09B0\u09C2\u09AA] + \u3068' \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u0985\u09AC\u09A7\u09BE\u09B0\u09BF\u09A4 \u09AB\u09B2\u09BE\u09AB\u09B2 \u09AC\u09BE \u09AF\u09A8\u09CD\u09A4\u09CD\u09B0 \u09AA\u09B0\u09BF\u099A\u09BE\u09B2\u09A8\u09BE \u098F\u09AC\u0982 \u09AA\u09A5\u09C7\u09B0 \u09A6\u09BF\u0995\u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE ('... \u0995\u09B0\u09B2\u09C7\u0987 ... \u0998\u099F\u09AC\u09C7') \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09AA\u09BE\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3053\u306E \u30DC\u30BF\u30F3\u3092 \u304A\u3059\u3068\u3001\u3069\u3046\u306A\u308A\u307E\u3059\u304B\u3002(Kono botan o osu to, dou narimasu ka?)",
+              speakerB: "B: \u304D\u3063\u3077\u304C \u3067\u307E\u3059\u3002(Kippu ga demasu.)",
+              english: "A: If I press this button, what happens? / B: The ticket comes out.",
+              bengali: "A: \u098F\u0987 \u09AC\u09CB\u09A4\u09BE\u09AE\u099F\u09BF \u099A\u09BE\u09AA\u09B2\u09C7 \u0995\u09C0 \u09B9\u09AC\u09C7? / B: \u099F\u09BF\u0995\u09BF\u099F \u09AC\u09C7\u09B0\u09BF\u09DF\u09C7 \u0986\u09B8\u09AC\u09C7\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u9AD8",
+            strokeCount: 10,
+            onyomi: ["\u30B3\u30A6 (kou)"],
+            kunyomi: ["\u305F\u304B (taka)", "\u305F\u304B-\u3044 (taka-i)"],
+            meaningEnglish: "High / Tall / Expensive",
+            meaningBengali: "\u0989\u0981\u099A\u09C1 / \u09B2\u09AE\u09CD\u09AC\u09BE / \u09A6\u09BE\u09AE\u09BF",
+            compounds: [
+              { word: "\u9AD8\u3044", reading: "\u305F\u304B\u3044 (takai)", meaningEnglish: "Expensive / Tall (adj)", meaningBengali: "\u0989\u0981\u099A\u09C1 / \u09A6\u09BE\u09AE\u09BF" },
+              { word: "\u9AD8\u6821", reading: "\u3053\u3046\u3053\u3046 (koukou)", meaningEnglish: "High school", meaningBengali: "\u0989\u099A\u09CD\u099A \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09DF" }
+            ]
+          },
+          {
+            kanji: "\u5B89",
+            strokeCount: 6,
+            onyomi: ["\u30A2\u30F3 (an)"],
+            kunyomi: ["\u3084\u3059 (yasu)", "\u3084\u3059-\u3044 (yasu-i)"],
+            meaningEnglish: "Cheap / Inexpensive / Peaceful / Safe",
+            meaningBengali: "\u09B8\u09B8\u09CD\u09A4\u09BE / \u09B6\u09BE\u09A8\u09CD\u09A4 / \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6",
+            compounds: [
+              { word: "\u5B89\u3044", reading: "\u3084\u3059\u3044 (yasui)", meaningEnglish: "Cheap (adj)", meaningBengali: "\u09B8\u09B8\u09CD\u09A4\u09BE" },
+              { word: "\u5B89\u5FC3", reading: "\u3042\u3093\u3057\u3093 (anshin)", meaningEnglish: "Relief / Peace of mind", meaningBengali: "\u09B8\u09CD\u09AC\u09B8\u09CD\u09A4\u09BF / \u09AA\u09CD\u09B0\u09B6\u09BE\u09A8\u09CD\u09A4\u09BF" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-23",
+          question: "\u3053\u306E \u307F\u3061\u3092 \u307E\u3063\u3059\u3050 \u884C\u304F\uFF08\u3000\uFF09\u3001\u304E\u3093\u3053\u3046\u304C \u3042\u308A\u307E\u3059\u3002",
+          questionRomaji: "Kono michi o massugu iku ( ), ginkou ga arimasu.",
+          options: ["\u3068", "\u304B\u3089", "\u306E\u3067", "\u3067"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3068",
+          explanationEnglish: "'\u884C\u304F \u3068' uses the directional/natural conditional particle '\u3068' (If you go straight, there is a bank).",
+          explanationBengali: "\u09AA\u09A5 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE\u09DF \u0985\u09AC\u09A7\u09BE\u09B0\u09BF\u09A4 \u09AB\u09B2\u09BE\u09AB\u09B2 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3068' \u0995\u09A3\u09BE \u09AC\u09B8\u09AC\u09C7 (\u09B8\u09CB\u099C\u09BE \u0997\u09C7\u09B2\u09C7\u0987 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09AA\u09BE\u09AC\u09C7\u09A8)\u0964"
+        }
+      },
+      // --- LESSON 24 ---
+      {
+        lessonNumber: 24,
+        titleEnglish: "Giving & Receiving Favors (~\u3066\u3042\u3052\u308B / ~\u3066\u3082\u3089\u3046 / ~\u3066\u304F\u308C\u308B)",
+        titleJapanese: "\u7B2C24\u8AB2\uFF1A\u6388\u53D7\u88DC\u52A9\u52D5\u8A5E\uFF08\u301C\u3066\u3042\u3052\u308B\u30FB\u301C\u3066\u3082\u3089\u3046\u30FB\u301C\u3066\u304F\u308C\u308B\uFF09",
+        topic: "\u6388\u53D7\u8868\u73FE\u306E\u5FDC\u7528 (Giving/Receiving Favors: ~\u3066\u3042\u3052\u307E\u3059, ~\u3066\u3082\u3089\u3044\u307E\u3059, ~\u3066\u304F\u308C\u307E\u3059)",
+        vocabularies: [
+          {
+            kanji: "\u304F\u308C\u307E\u3059",
+            hiragana: "\u304F\u308C\u307E\u3059",
+            romaji: "kuremasu",
+            meaningEnglish: "To give (to me or my family member)",
+            meaningBengali: "\u0986\u09AE\u09BE\u0995\u09C7 \u09AC\u09BE \u0986\u09AE\u09BE\u09B0 \u09B8\u09CD\u09AC\u099C\u09A8\u0995\u09C7 \u0995\u09BF\u099B\u09C1 \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3055\u3068\u3046\u3055\u3093\u306F \u308F\u305F\u3057\u306B \u30D7\u30EC\u30BB\u30F3\u30C8\u3092 \u304F\u308C\u307E\u3057\u305F\u3002",
+              romaji: "Satou-san wa watashi ni purezento o kuremashita.",
+              english: "Ms. Sato gave me a present.",
+              bengali: "\u09B8\u09BE\u09A4\u09CB \u09B8\u09BE\u09A8 \u0986\u09AE\u09BE\u0995\u09C7 \u098F\u0995\u099F\u09BF \u0989\u09AA\u09B9\u09BE\u09B0 \u09A6\u09BF\u09DF\u09C7\u099B\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u76F4\u3057\u307E\u3059",
+            hiragana: "\u306A\u304A\u3057\u307E\u3059",
+            romaji: "naoshimasu",
+            meaningEnglish: "To correct / fix (mistakes, essay)",
+            meaningBengali: "\u09B8\u0982\u09B6\u09CB\u09A7\u09A8 \u0995\u09B0\u09C7 \u09A6\u09C7\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u305B\u3093\u305B\u3044\u306B \u3055\u304F\u3076\u3093\u3092 \u306A\u304A\u3057\u3066 \u3082\u3089\u3044\u307E\u3057\u305F\u3002",
+              romaji: "Sensei ni sakubun o naoshite moraimashita.",
+              english: "I had my essay corrected by the teacher.",
+              bengali: "\u0986\u09AE\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u09AA\u09CD\u09B0\u09AC\u09A8\u09CD\u09A7\u099F\u09BF \u09B8\u0982\u09B6\u09CB\u09A7\u09A8 \u0995\u09B0\u09BF\u09DF\u09C7 \u09A8\u09BF\u09DF\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u9023\u308C\u3066\u884C\u304D\u307E\u3059",
+            hiragana: "\u3064\u308C\u3066\u3044\u304D\u307E\u3059",
+            romaji: "tsurete ikimasu",
+            meaningEnglish: "To take someone along",
+            meaningBengali: "\u0995\u09BE\u0989\u0995\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09A8\u09BF\u09DF\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3044\u3082\u3046\u3068\u3092 \u3069\u3046\u3076\u3064\u3048\u3093\u3078 \u3064\u308C\u3066\u3044\u304D\u307E\u3057\u305F\u3002",
+              romaji: "Imouto o doubutsuen e tsurete ikimashita.",
+              english: "I took my little sister to the zoo.",
+              bengali: "\u0986\u09AE\u09BF \u099B\u09CB\u099F \u09AC\u09CB\u09A8\u0995\u09C7 \u099A\u09BF\u09DC\u09BF\u09DF\u09BE\u0996\u09BE\u09A8\u09BE\u09DF \u09A8\u09BF\u09DF\u09C7 \u0997\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964"
+            }
+          },
+          {
+            kanji: "\u9023\u308C\u3066\u6765\u307E\u3059",
+            hiragana: "\u3064\u308C\u3066\u304D\u307E\u3059",
+            romaji: "tsurete kimasu",
+            meaningEnglish: "To bring someone along",
+            meaningBengali: "\u0995\u09BE\u0989\u0995\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09A8\u09BF\u09DF\u09C7 \u0986\u09B8\u09BE",
+            example: {
+              japanese: "\u3068\u3082\u3060\u3061\u3092 \u30D1\u30FC\u30C6\u30A3\u30FC\u306B \u3064\u308C\u3066\u304D\u307E\u3057\u305F\u3002",
+              romaji: "Tomodachi o paatii ni tsurete kimashita.",
+              english: "I brought my friend to the party.",
+              bengali: "\u0986\u09AE\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u0995\u09C7 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u09A4\u09C7 \u09A8\u09BF\u09DF\u09C7 \u098F\u09B8\u09C7\u099B\u09BF\u0964"
+            }
+          },
+          {
+            kanji: "\u9001\u308A\u307E\u3059",
+            hiragana: "\u304A\u304F\u308A\u307E\u3059",
+            romaji: "okurimasu",
+            meaningEnglish: "To escort / see someone off / send",
+            meaningBengali: "\u09AA\u09CC\u0981\u099B\u09C7 \u09A6\u09C7\u0993\u09DF\u09BE / \u09AC\u09BF\u09A6\u09BE\u09DF \u099C\u09BE\u09A8\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u304F\u308B\u307E\u3067 \u3048\u304D\u307E\u3067 \u304A\u304F\u3063\u3066 \u304F\u308C\u307E\u3057\u305F\u3002",
+              romaji: "Kuruma de eki made okutte kuremashita.",
+              english: "He kindly gave me a ride to the station.",
+              bengali: "\u09A4\u09BF\u09A8\u09BF \u0997\u09BE\u09DC\u09BF\u09A4\u09C7 \u0995\u09B0\u09C7 \u0986\u09AE\u09BE\u0995\u09C7 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AA\u09CC\u0981\u099B\u09C7 \u09A6\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09C7\u09A8\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-24-01",
+            pattern: "[Giver] \u304C \u308F\u305F\u3057\u306B Verb [\u3066-form] \u304F\u308C\u307E\u3059",
+            topic: "Receiving a Favor Done for Me / My In-Group",
+            explanationEnglish: "'~\u3066\u304F\u308C\u307E\u3059' specifically highlights gratitude when someone performs a kind action for the speaker ('[Person] kindly did for me').",
+            explanationBengali: "'~\u3066\u304F\u308C\u307E\u3059' \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u0995\u09C3\u09A4\u099C\u09CD\u099E\u09A4\u09BE\u09B8\u09C2\u099A\u0995 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6, \u09AF\u0996\u09A8 \u0995\u09C7\u0989 \u09AC\u0995\u09CD\u09A4\u09BE \u09AC\u09BE \u09A4\u09BE\u09B0 \u09B8\u09CD\u09AC\u099C\u09A8\u09C7\u09B0 \u0989\u09AA\u0995\u09BE\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09C7 \u09A6\u09C7\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3059\u3066\u304D\u306A \u304B\u3070\u3093\u3067\u3059\u306D\u3002(Suteki na kaban desu ne.)",
+              speakerB: "B: \u306F\u306F\u304C \u305F\u3093\u3058\u3087\u3046\u3073\u306B \u304B\u3063\u3066 \u304F\u308C\u307E\u3057\u305F\u3002(Haha ga tanjoubi ni katte kuremashita.)",
+              english: "A: That's a lovely bag! / B: My mother kindly bought it for me for my birthday.",
+              bengali: "A: \u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u09AC\u09CD\u09AF\u09BE\u0997 \u09A4\u09CB! / B: \u09AE\u09BE \u0986\u09AE\u09BE\u09B0 \u099C\u09A8\u09CD\u09AE\u09A6\u09BF\u09A8\u09C7 \u09AD\u09BE\u09B2\u09CB\u09AC\u09C7\u09B8\u09C7 \u0995\u09BF\u09A8\u09C7 \u09A6\u09BF\u09DF\u09C7\u099B\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            id: "g-24-02",
+            pattern: "\u308F\u305F\u3057\u306F [Person] \u306B Verb [\u3066-form] \u3082\u3089\u3044\u307E\u3059 / \u3042\u3052\u307E\u3059",
+            topic: "Having an Action Done by Someone vs. Doing a Favor for Someone",
+            explanationEnglish: "'~\u3066\u3082\u3089\u3044\u307E\u3059' means receiving a favor from someone. '~\u3066\u3042\u3052\u307E\u3059' means doing an action as a favor for someone else.",
+            explanationBengali: "'~\u3066\u3082\u3089\u3044\u307E\u3059' \u0995\u09BE\u09B0\u09CB \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0989\u09AA\u0995\u09BE\u09B0 \u09AA\u09BE\u0993\u09DF\u09BE\u0964 '~\u3066\u3042\u3052\u307E\u3059' \u0995\u09BE\u09B0\u09CB \u0989\u09AA\u0995\u09BE\u09B0\u09BE\u09B0\u09CD\u09A5\u09C7 \u0995\u09BE\u099C \u0995\u09B0\u09C7 \u09A6\u09C7\u0993\u09DF\u09BE\u0964",
+            dialogue: {
+              speakerA: "A: \u3060\u308C\u306B \u306B\u307B\u3093\u3054\u3092 \u304A\u3057\u3048\u3066 \u3082\u3089\u3044\u307E\u3057\u305F\u304B\u3002(Dare ni nihongo o oshiete moraimashita ka?)",
+              speakerB: "B: \u305F\u306A\u304B\u305B\u3093\u305B\u3044\u306B \u304A\u3057\u3048\u3066 \u3082\u3089\u3044\u307E\u3057\u305F\u3002(Tanaka-sensei ni oshiete moraimashita.)",
+              english: "A: From whom did you have Japanese taught? / B: I had Tanaka-sensei teach me.",
+              bengali: "A: \u0986\u09AA\u09A8\u09BF \u0995\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09BF\u0996\u09C7\u099B\u09C7\u09A8? / B: \u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0986\u09AE\u09BE\u0995\u09C7 \u09B6\u09BF\u0996\u09BF\u09DF\u09C7\u099B\u09C7\u09A8\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u9577",
+            strokeCount: 8,
+            onyomi: ["\u30C1\u30E7\u30A6 (chou)"],
+            kunyomi: ["\u306A\u304C (naga)", "\u306A\u304C-\u3044 (naga-i)"],
+            meaningEnglish: "Long / Leader / Chief",
+            meaningBengali: "\u09A6\u09C0\u09B0\u09CD\u0998 / \u09B2\u09AE\u09CD\u09AC\u09BE / \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8",
+            compounds: [
+              { word: "\u9577\u3044", reading: "\u306A\u304C\u3044 (nagai)", meaningEnglish: "Long (adj)", meaningBengali: "\u09B2\u09AE\u09CD\u09AC\u09BE / \u09A6\u09C0\u09B0\u09CD\u0998" },
+              { word: "\u793E\u9577", reading: "\u3057\u3083\u3061\u3087\u3046 (shachou)", meaningEnglish: "Company President", meaningBengali: "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8" }
+            ]
+          },
+          {
+            kanji: "\u77ED",
+            strokeCount: 12,
+            onyomi: ["\u30BF\u30F3 (tan)"],
+            kunyomi: ["\u307F\u3058\u304B (mijika)", "\u307F\u3058\u304B-\u3044 (mijika-i)"],
+            meaningEnglish: "Short / Brief / Defect",
+            meaningBengali: "\u0996\u09BE\u099F\u09CB / \u09B8\u0982\u0995\u09CD\u09B7\u09BF\u09AA\u09CD\u09A4",
+            compounds: [
+              { word: "\u77ED\u3044", reading: "\u307F\u3058\u304B\u3044 (mijikai)", meaningEnglish: "Short (adj)", meaningBengali: "\u0996\u09BE\u099F\u09CB / \u09B8\u0982\u0995\u09CD\u09B7\u09BF\u09AA\u09CD\u09A4" },
+              { word: "\u77ED\u5927", reading: "\u305F\u3093\u3060\u3044 (tandai)", meaningEnglish: "Junior college", meaningBengali: "\u099C\u09C1\u09A8\u09BF\u09AF\u09BC\u09B0 \u0995\u09B2\u09C7\u099C" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-24",
+          question: "\u3068\u3082\u3060\u3061\u304C \u3048\u304D\u307E\u3067 \u304F\u308B\u307E\u3067\uFF08\u3000\uFF09\u304F\u308C\u307E\u3057\u305F\u3002",
+          questionRomaji: "Tomodachi ga eki made kuruma de ( ) kuremashita.",
+          options: ["\u304A\u304F\u3063\u3066", "\u304A\u304F\u308A\u307E\u3059", "\u304A\u304F\u308B", "\u304A\u304F\u3063\u305F"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u304A\u304F\u3063\u3066",
+          explanationEnglish: "'~\u3066\u304F\u308C\u307E\u3059' requires the Te-form '\u304A\u304F\u3063\u3066' (escorted/gave a ride).",
+          explanationBengali: "'~\u3066\u304F\u308C\u307E\u3057\u305F' \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3066-\u09AB\u09B0\u09CD\u09AE '\u304A\u304F\u3063\u3066' (\u09AA\u09CC\u0981\u099B\u09C7 \u09A6\u09C7\u0993\u09DF\u09BE) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      },
+      // --- LESSON 25 ---
+      {
+        lessonNumber: 25,
+        titleEnglish: "Conditionals (~\u305F\u3089) & Concessives (~\u3066\u3082)",
+        titleJapanese: "\u7B2C25\u8AB2\uFF1A\u4EEE\u5B9A\u6761\u4EF6\u300C\u301C\u305F\u3089\u300D\u3068\u9006\u63A5\u78BA\u5B9A\u300C\u301C\u3066\u3082\u300D\u306E\u7DCF\u62EC",
+        topic: "\u6761\u4EF6\u8868\u73FE\u306E\u5B8C\u6210 (Hypothetical Conditionals: ~\u305F\u3089, Concessive 'Even if': ~\u3066\u3082)",
+        vocabularies: [
+          {
+            kanji: "\u8003\u3048\u307E\u3059",
+            hiragana: "\u304B\u3093\u304C\u3048\u307E\u3059",
+            romaji: "kangaemasu",
+            meaningEnglish: "To think / consider / ponder",
+            meaningBengali: "\u099A\u09BF\u09A8\u09CD\u09A4\u09BE \u0995\u09B0\u09BE / \u09AC\u09BF\u09AC\u09C7\u099A\u09A8\u09BE \u0995\u09B0\u09BE",
+            example: {
+              japanese: "\u3088\u304F \u304B\u3093\u304C\u3048\u3066\u304B\u3089\u3001\u304D\u3081\u307E\u3059\u3002",
+              romaji: "Yoku kangaete kara, kimemasu.",
+              english: "After thinking carefully, I will decide.",
+              bengali: "\u09AD\u09BE\u09B2\u09CB\u09AD\u09BE\u09AC\u09C7 \u099A\u09BF\u09A8\u09CD\u09A4\u09BE \u0995\u09B0\u09C7 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09A8\u09C7\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u7740\u304D\u307E\u3059",
+            hiragana: "\u3064\u304D\u307E\u3059",
+            romaji: "tsukimasu",
+            meaningEnglish: "To arrive (at station, airport)",
+            meaningBengali: "\u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB",
+            example: {
+              japanese: "\u3048\u304D\u306B \u3064\u3044\u305F\u3089\u3001\u3067\u3093\u308F\u3057\u3066 \u304F\u3060\u3055\u3044\u3002",
+              romaji: "Eki ni tsuitara, denwashite kudasai.",
+              english: "When you arrive at the station, please call me.",
+              bengali: "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09B2\u09C7 \u0986\u09AE\u09BE\u0995\u09C7 \u09AB\u09CB\u09A8 \u0995\u09B0\u09AC\u09C7\u09A8\u0964"
+            }
+          },
+          {
+            kanji: "\u7559\u5B66\u3057\u307E\u3059",
+            hiragana: "\u308A\u3085\u3046\u304C\u304F\u3057\u307E\u3059",
+            romaji: "ryuugakushimasu",
+            meaningEnglish: "To study abroad",
+            meaningBengali: "\u09AC\u09BF\u09A6\u09C7\u09B6\u09C7 \u0989\u099A\u09CD\u099A\u09B6\u09BF\u0995\u09CD\u09B7\u09BE \u09A8\u09BF\u09A4\u09C7 \u09AF\u09BE\u0993\u09DF\u09BE",
+            example: {
+              japanese: "\u3089\u3044\u306D\u3093 \u306B\u307B\u3093\u3078 \u308A\u3085\u3046\u304C\u304F\u3057\u307E\u3059\u3002",
+              romaji: "Rainen nihon e ryuugakushimasu.",
+              english: "Next year I will study abroad in Japan.",
+              bengali: "\u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AA\u09DC\u09A4\u09C7 \u09AF\u09BE\u09AC\u0964"
+            }
+          },
+          {
+            kanji: "\u9811\u5F35\u308A\u307E\u3059",
+            hiragana: "\u304C\u3093\u3070\u308A\u307E\u3059",
+            romaji: "ganbarimasu",
+            meaningEnglish: "To do one's best / persevere",
+            meaningBengali: "\u09B8\u09B0\u09CD\u09AC\u09CB\u099A\u09CD\u099A \u099A\u09C7\u09B7\u09CD\u099F\u09BE \u0995\u09B0\u09BE / \u09B2\u09C7\u0997\u09C7 \u09A5\u09BE\u0995\u09BE",
+            example: {
+              japanese: "JLPT N5\u306E\u3054\u3046\u304B\u304F\u306B \u3080\u3051\u3066 \u304C\u3093\u3070\u308A\u307E\u3059\uFF01",
+              romaji: "JLPT N5 no goukaku ni mukete ganbarimasu!",
+              english: "I will do my best to pass JLPT N5!",
+              bengali: "\u099C\u09C7\u098F\u09B2\u09AA\u09BF\u099F\u09BF \u098F\u09A8\u09EB \u09AA\u09BE\u09B8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09B8\u09B0\u09CD\u09AC\u09CB\u099A\u09CD\u099A \u099A\u09C7\u09B7\u09CD\u099F\u09BE \u0995\u09B0\u09AC!"
+            }
+          },
+          {
+            kanji: "\u7530\u820E",
+            hiragana: "\u3044\u306A\u304B",
+            romaji: "inaka",
+            meaningEnglish: "Countryside / Rural hometown",
+            meaningBengali: "\u0997\u09CD\u09B0\u09BE\u09AE / \u09AE\u09AB\u09B8\u09CD\u09AC\u09B2",
+            example: {
+              japanese: "\u3068\u3057\u3092 \u3068\u3063\u305F\u3089\u3001\u3044\u306A\u304B\u3067 \u304F\u3089\u3057\u305F\u3044\u3067\u3059\u3002",
+              romaji: "Toshi o tottara, inaka de kurashitai desu.",
+              english: "When I get older, I want to live in the countryside.",
+              bengali: "\u09AC\u09DF\u09B8 \u09B9\u09B2\u09C7 \u0986\u09AE\u09BF \u0997\u09CD\u09B0\u09BE\u09AE\u09C7 \u09AC\u09B8\u09AC\u09BE\u09B8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u0987\u0964"
+            }
+          }
+        ],
+        grammarPatterns: [
+          {
+            id: "g-25-01",
+            pattern: "[Verb / Adj / Noun \u305F-form] + \u3089\u3001Main Clause",
+            topic: "General / Future Hypothetical Conditional (~\u305F\u3089 = If / When)",
+            explanationEnglish: "'~\u305F\u3089' is the most versatile conditional in Japanese. It means 'If (hypothetical)' or 'When / Once (definite future occurrence)'. Formed by adding '\u3089' to the past Ta-form.",
+            explanationBengali: "'~\u305F\u3089' \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u099C\u09A8\u09AA\u09CD\u09B0\u09BF\u09DF \u09B6\u09B0\u09CD\u09A4\u09B8\u09C2\u099A\u0995 \u09B0\u09C2\u09AA\u0964 \u098F\u09B0 \u0985\u09B0\u09CD\u09A5 '\u09AF\u09A6\u09BF' \u09AC\u09BE \u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7 \u0995\u09CB\u09A8\u09CB \u0998\u099F\u09A8\u09BE \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0998\u099F\u09BE\u09B0 \u09AA\u09B0 '\u09AF\u0996\u09A8'\u0964 \u0985\u09A4\u09C0\u09A4 \u305F-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u3089' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09DF\u09C7 \u0997\u09A0\u09BF\u09A4 \u09B9\u09DF\u0964",
+            dialogue: {
+              speakerA: "A: \u3042\u3057\u305F \u3042\u3081\u304C \u3075\u3063\u305F\u3089\u3001\u3069\u3046\u3057\u307E\u3059\u304B\u3002(Ashita ame ga futtara, dou shimasu ka?)",
+              speakerB: "B: \u3046\u3061\u3067 \u3048\u3044\u304C\u3092 \u307F\u307E\u3059\u3002(Uchi de eiga o mimasu.)",
+              english: "A: If it rains tomorrow, what will you do? / B: I will watch a movie at home.",
+              bengali: "A: \u0995\u09BE\u09B2 \u09AF\u09A6\u09BF \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u09DF \u09A4\u09AC\u09C7 \u0995\u09C0 \u0995\u09B0\u09AC\u09C7\u09A8? / B: \u09AC\u09BE\u09B8\u09BE\u09DF \u09B8\u09BF\u09A8\u09C7\u09AE\u09BE \u09A6\u09C7\u0996\u09AC\u0964"
+            }
+          },
+          {
+            id: "g-25-02",
+            pattern: "[Verb \u3066-form / \u3044-Adj \u304F\u3066 / \u306A-Adj\u30FBNoun \u3067] + \u3082\u3001Main Clause",
+            topic: "Concessive Clause (~\u3066\u3082 = Even if / Even though)",
+            explanationEnglish: "'~\u3066\u3082' expresses that the result in the main clause occurs regardless of the condition ('Even if / Even though...').",
+            explanationBengali: "'~\u3066\u3082' \u09B6\u09B0\u09CD\u09A4 \u09B8\u09A4\u09CD\u09A4\u09CD\u09AC\u09C7\u0993 \u0995\u09CB\u09A8\u09CB \u09AB\u09B2\u09BE\u09AB\u09B2 \u0985\u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09A5\u09BE\u0995\u09BE ('\u098F\u09AE\u09A8\u0995\u09BF ... \u09B9\u09B2\u09C7\u0993') \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            dialogue: {
+              speakerA: "A: \u305F\u304B\u304F\u3066\u3082\u3001\u3053\u306E \u304F\u308B\u307E\u3092 \u304B\u3044\u307E\u3059\u304B\u3002(Takakutemo, kono kuruma o kaimasu ka?)",
+              speakerB: "B: \u306F\u3044\u3001\u3059\u304D\u3067\u3059\u304B\u3089 \u304B\u3044\u307E\u3059\u3002(Hai, suki desu kara kaimasu.)",
+              english: "A: Even if it is expensive, will you buy this car? / B: Yes, because I like it I will buy it.",
+              bengali: "A: \u09A6\u09BE\u09AE\u09BF \u09B9\u09B2\u09C7\u0993 \u0995\u09BF \u098F\u0987 \u0997\u09BE\u09DC\u09BF\u099F\u09BF \u0995\u09BF\u09A8\u09AC\u09C7\u09A8? / B: \u09B9\u09CD\u09AF\u09BE\u0981, \u09AA\u099B\u09A8\u09CD\u09A6 \u09B9\u09DF\u09C7\u099B\u09C7 \u09AC\u09B2\u09C7 \u0995\u09BF\u09A8\u09AC\u0964"
+            }
+          }
+        ],
+        kanjiList: [
+          {
+            kanji: "\u591A",
+            strokeCount: 6,
+            onyomi: ["\u30BF (ta)"],
+            kunyomi: ["\u304A\u304A (oo)", "\u304A\u304A-\u3044 (oo-i)"],
+            meaningEnglish: "Many / Much / Frequent",
+            meaningBengali: "\u0985\u09A8\u09C7\u0995 / \u09AA\u09CD\u09B0\u099A\u09C1\u09B0 / \u09AC\u09B9\u09C1",
+            compounds: [
+              { word: "\u591A\u3044", reading: "\u304A\u304A\u3044 (ooi)", meaningEnglish: "Many / Plentiful", meaningBengali: "\u0985\u09A8\u09C7\u0995" },
+              { word: "\u591A\u5206", reading: "\u305F\u3076\u3093 (tabun)", meaningEnglish: "Probably / Perhaps", meaningBengali: "\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4" }
+            ]
+          },
+          {
+            kanji: "\u5C11",
+            strokeCount: 4,
+            onyomi: ["\u30B7\u30E7\u30A6 (shou)"],
+            kunyomi: ["\u3059\u304F (suku)", "\u3059\u304F-\u306A\u3044 (suku-nai)", "\u3059\u3053 (suko)", "\u3059\u3053-\u3057 (suko-shi)"],
+            meaningEnglish: "Few / Little / Scarce",
+            meaningBengali: "\u0985\u09B2\u09CD\u09AA / \u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF / \u0995\u09AE",
+            compounds: [
+              { word: "\u5C11\u3057", reading: "\u3059\u3053\u3057 (sukoshi)", meaningEnglish: "A little / A few", meaningBengali: "\u0985\u09B2\u09CD\u09AA / \u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF" },
+              { word: "\u5C11\u306A\u3044", reading: "\u3059\u304F\u306A\u3044 (sukunai)", meaningEnglish: "Few / Scarce", meaningBengali: "\u0995\u09AE \u09B8\u0982\u0996\u09CD\u09AF\u0995" }
+            ]
+          }
+        ],
+        practiceQuiz: {
+          id: "q-25",
+          question: "\u304A\u91D1\u304C\uFF08\u3000\uFF09\u3001\u305B\u304B\u3044\u308A\u3087\u3053\u3046\u3092 \u3057\u305F\u3044\u3067\u3059\u3002",
+          questionRomaji: "Okane ga ( ), sekairyokou o shitai desu.",
+          options: ["\u3042\u3063\u305F\u3089", "\u3042\u3063\u3066", "\u3042\u308B\u3068", "\u3042\u308C\u3070"],
+          correctOptionIndex: 0,
+          correctAnswer: "\u3042\u3063\u305F\u3089",
+          explanationEnglish: "'\u3042\u3063\u305F\u3089' (If I had money) is the past Ta-form + \u3089 conditional expressing future desire.",
+          explanationBengali: "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4 \u0987\u099A\u09CD\u099B\u09BE \u0993 \u09B6\u09B0\u09CD\u09A4 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3042\u3063\u305F\u3089' (\u09AF\u09A6\u09BF \u099F\u09BE\u0995\u09BE \u09A5\u09BE\u0995\u09C7) \u09AC\u09B8\u09AC\u09C7\u0964"
+        }
+      }
+    ];
+  }
+});
+
 // server/services/adaptiveSrsService.ts
 var AdaptiveSrsService;
 var init_adaptiveSrsService = __esm({
@@ -4958,6 +8522,7 @@ function verifyPassword(password, hash, salt) {
 var DATA_DIR, DB_FILE, FOUNDER_OFFICE_DB_FILE, SEED_PLANS, SEED_PLAN_PRICES, SEED_COUPONS, Database, db;
 var init_db = __esm({
   "server/db.ts"() {
+    init_n5MasterCurriculum();
     init_adaptiveSrsService();
     init_learnerAnalyticsService();
     init_seedData();
@@ -6373,6 +9938,8 @@ var init_db = __esm({
             existing.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
             this.save();
           }
+          this.getProfileByUserId(existing.id);
+          this.getProgressByUserId(existing.id);
           return existing;
         }
         const id = params.id || `usr-${crypto2.randomUUID().slice(0, 8)}`;
@@ -6464,7 +10031,23 @@ var init_db = __esm({
         return { user, profile, progress };
       }
       getProfileByUserId(userId) {
-        return this.data.profiles.find((p) => p.userId === userId);
+        let profile = this.data.profiles.find((p) => p.userId === userId);
+        if (!profile) {
+          const user = this.findUserById(userId);
+          const now = (/* @__PURE__ */ new Date()).toISOString();
+          profile = {
+            userId,
+            displayName: user?.email?.split("@")[0] || "Japanese Learner",
+            nativeLanguage: "English",
+            targetLevel: "N5",
+            dailyGoalMinutes: 20,
+            createdAt: now,
+            updatedAt: now
+          };
+          this.data.profiles.push(profile);
+          this.save();
+        }
+        return profile;
       }
       getProfile(userId) {
         return this.getProfileByUserId(userId);
@@ -6978,7 +10561,23 @@ var init_db = __esm({
         return (this.data.lessons || []).filter((l) => includeUnpublished ? true : l.isPublished).filter((l) => level ? l.level === level : true).sort((a, b) => a.lessonNumber - b.lessonNumber);
       }
       getLessonById(id) {
-        return this.data.lessons.find((l) => l.id === id);
+        let lesson = this.data.lessons.find((l) => l.id === id);
+        if (!lesson) {
+          const numMatch = id.match(/l(?:esson)?[-_]?(\d+)/i) || id.match(/[-_](\d+)$/) || id.match(/(\d+)$/);
+          const lessonNum = numMatch ? parseInt(numMatch[1], 10) : void 0;
+          if (lessonNum && lessonNum >= 1 && lessonNum <= 25) {
+            lesson = this.data.lessons.find((l) => l.lessonNumber === lessonNum);
+            if (!lesson) {
+              const cLesson = getCurriculumLesson(lessonNum);
+              if (cLesson) {
+                lesson = cLesson;
+                this.data.lessons.push(lesson);
+                this.save();
+              }
+            }
+          }
+        }
+        return lesson;
       }
       // --- QUIZZES ---
       getQuizzes(includeUnpublished = false, level) {

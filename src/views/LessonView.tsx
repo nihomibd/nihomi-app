@@ -72,15 +72,21 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
   // লোকাল স্টেট দিয়ে ইউজার যে লেসন সিলেক্ট করবে তা ইনস্ট্যান্ট পরিবর্তন করার ব্যবস্থা
   const [selectedLessonNum, setSelectedLessonNum] = useState<number>(() => {
     if (propLessonId) {
-      const match = propLessonId.match(/(\d+)/);
-      if (match) return parseInt(match[1], 10);
+      const str = String(propLessonId).trim();
+      const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+      if (lMatch) return parseInt(lMatch[1], 10);
+      const allMatches = str.match(/\d+/g);
+      if (allMatches && allMatches.length > 0) return parseInt(allMatches[allMatches.length - 1], 10);
     }
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const idParam = params.get('id') || params.get('lessonId');
       if (idParam) {
-        const match = idParam.match(/(\d+)/);
-        if (match) return parseInt(match[1], 10);
+        const str = String(idParam).trim();
+        const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+        if (lMatch) return parseInt(lMatch[1], 10);
+        const allMatches = str.match(/\d+/g);
+        if (allMatches && allMatches.length > 0) return parseInt(allMatches[allMatches.length - 1], 10);
       }
     }
     return 1; // Default to Lesson 1
@@ -150,9 +156,12 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
         // Try local offline cache first
         const cached = await getCachedLessonOffline(lessonId);
         if (cached) {
-          setLessonData(cached);
-          setIsLoading(false);
-          return;
+          const payload = (cached as any).data || cached;
+          if (payload && payload.lesson) {
+            setLessonData(payload);
+            setIsLoading(false);
+            return;
+          }
         }
 
         // Try API endpoint
@@ -373,12 +382,31 @@ if (lessonId) {
   };
 
 
-  if (isLoading || !lessonData) {
+  if (isLoading || !lessonData || !lessonData.lesson) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-8">
-        <div className="text-center space-y-3 bg-white p-8 rounded-3xl border border-stone-200 shadow-sm">
+        <div className="text-center space-y-3 bg-white p-8 rounded-3xl border border-stone-200 shadow-sm max-w-sm">
           <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-xs font-bold text-stone-600">Loading Lesson {selectedLessonNum}...</p>
+          <div className="flex justify-center gap-2 pt-2">
+            <button
+              onClick={() => {
+                const fallbackLesson = getCurriculumLesson(`n5-l${selectedLessonNum}`);
+                if (fallbackLesson) {
+                  setLessonData({
+                    lesson: fallbackLesson,
+                    courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
+                    moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
+                    isCompleted: false
+                  });
+                  setIsLoading(false);
+                }
+              }}
+              className="px-3 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-semibold hover:bg-stone-800 transition"
+            >
+              সরাসরি লোড করুন (Direct Load)
+            </button>
+          </div>
         </div>
       </div>
     );

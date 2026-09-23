@@ -44,6 +44,7 @@ const KanjiView = lazy(() => import('./views/KanjiView').then(m => ({ default: m
 const ListeningLabView = lazy(() => import('./views/ListeningLabView').then(m => ({ default: m.ListeningLabView })));
 const NihomiCloudView = lazy(() => import('./views/NihomiCloudView').then(m => ({ default: m.NihomiCloudView })));
 const NihomiMobileShowcase = lazy(() => import('./components/showcase/NihomiMobileShowcase').then(m => ({ default: m.NihomiMobileShowcase })));
+const DashboardView = lazy(() => import('./views/DashboardView').then(m => ({ default: m.DashboardView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -99,11 +100,20 @@ export const App: React.FC = () => {
   } = useFocusMode();
 
   const handleNavigate = (view: string, params: Record<string, any> = {}) => {
-    setCurrentView(view);
-    setViewParams(params);
+    let targetView = view;
+    let targetParams = { ...params };
+    if (view.startsWith('lesson/')) {
+      targetView = 'lesson';
+      targetParams.lessonId = view.replace('lesson/', '');
+    } else if (view.startsWith('quiz/') || view.startsWith('quizzes/')) {
+      targetView = 'quiz-runner';
+      targetParams.quizId = view.split('/')[1];
+    }
+    setCurrentView(targetView);
+    setViewParams(targetParams);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
-      const targetPath = view === 'landing' ? '/' : `/${view}`;
+      const targetPath = targetView === 'landing' ? '/' : `/${targetView}`;
       if (window.location.pathname !== targetPath) {
         window.history.pushState({}, '', targetPath);
       }
@@ -125,8 +135,15 @@ export const App: React.FC = () => {
         setCurrentView('start');
       } else if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
         setCurrentView('courses');
-      } else if (path === '/portal' || path === '/dashboard') {
+      } else if (path === '/dashboard') {
+        setCurrentView('dashboard');
+      } else if (path === '/portal') {
         setCurrentView('portal');
+      } else if (path.startsWith('/lesson/') || path === '/lesson') {
+        const lessonFromPath = path.replace(/^\/lesson\/?/, '');
+        const targetLesson = lessonFromPath || search.get('id') || search.get('lessonId') || 'n5-l1';
+        setCurrentView('lesson');
+        setViewParams({ lessonId: targetLesson });
       } else if (path === '/kana' || path === '/hiragana' || path === '/katakana') {
         setCurrentView('kana');
       } else if (path === '/kanji') {
@@ -177,7 +194,13 @@ export const App: React.FC = () => {
       const path = window.location.pathname.toLowerCase();
       if (path === '/start' || path === '/campaign') setCurrentView('start');
       else if (path === '/courses' || path === '/curriculum' || path === '/pathways') setCurrentView('courses');
-      else if (path === '/portal' || path === '/dashboard') setCurrentView('portal');
+      else if (path === '/dashboard') setCurrentView('dashboard');
+      else if (path === '/portal') setCurrentView('portal');
+      else if (path.startsWith('/lesson/') || path === '/lesson') {
+        const lessonFromPath = path.replace(/^\/lesson\/?/, '');
+        setCurrentView('lesson');
+        setViewParams({ lessonId: lessonFromPath || 'n5-l1' });
+      }
       else if (path === '/kana' || path === '/hiragana' || path === '/katakana') setCurrentView('kana');
       else if (path === '/kanji') setCurrentView('kanji');
       else if (path === '/listening') setCurrentView('listening');
@@ -300,6 +323,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'landing' || currentView === 'home') && (
           <LandingView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard') && (
+          <DashboardView onNavigate={handleNavigate} />
         )}
         {currentView === 'courses' && (
           <CoursesView onNavigate={handleNavigate} />
