@@ -242,9 +242,9 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   const sunLightRef = useRef<THREE.DirectionalLight | null>(null);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
 
-  // Player Avatar & Kinematics Refs
+  // Player Avatar & Kinematics Refs (Calibrated 1.62m Natural Eye Height)
   const playerAvatarGroupRef = useRef<THREE.Group | null>(null);
-  const playerPosRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.9, 14));
+  const playerPosRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 1.62, 14));
   const playerVelocityRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 0, 0));
   const cameraYawRef = useRef<number>(Math.PI);
   const cameraPitchRef = useRef<number>(0);
@@ -516,7 +516,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.92; // Calibrated to prevent blinding glare and overexposed surfaces
+    renderer.toneMappingExposure = 1.0; // Calibrated exposure for natural, physically accurate Tokyo daylight
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
@@ -524,12 +524,12 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     mountEl.innerHTML = '';
     mountEl.appendChild(renderer.domElement);
 
-    // 4. Cinematic Post-Processing Pipeline (Targeted Bloom for Neons Only)
+    // 4. Cinematic Post-Processing Pipeline (Strict Threshold to prevent daylight washout)
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
 
-    // Threshold 0.88 restricts bloom to neon signs, traffic lights, and headlights (no full-screen glare)
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.38, 0.28, 0.88);
+    // Threshold 1.0 ensures standard daylight surfaces (<= 1.0) never bloom into full-screen glare; only HDR emissive > 1.0 glows
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.12, 0.2, 1.0);
     composer.addPass(bloomPass);
 
     const outputPass = new OutputPass();
@@ -570,113 +570,13 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     simulation.initialize(scene);
     simulationEngineRef.current = simulation;
 
-    // 8. NIHOMI PLAYER AVATAR (Articulated Rig with Dynamic Shadows)
+    // 8. NIHOMI SPATIAL ANCHOR (Zero cartoon primitives - Native First-Person View)
     const playerGroup = new THREE.Group();
-    const playerPelvis = new THREE.Group();
-    playerPelvis.position.y = 0.9;
-
-    const jacketMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.45, metalness: 0.15 });
-    const pTorso = new THREE.Group();
-    const playerTorso = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.66, 0.3), jacketMat);
-    playerTorso.position.y = 0.33;
-    playerTorso.castShadow = true;
-    pTorso.add(playerTorso);
-
-    const backpack = new THREE.Mesh(
-      new THREE.BoxGeometry(0.44, 0.55, 0.24),
-      new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.6 })
-    );
-    backpack.position.set(0, 0.33, -0.25);
-    backpack.castShadow = true;
-    pTorso.add(backpack);
-
-    const playerHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.19, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0xfcd34d, roughness: 0.5 })
-    );
-    playerHead.position.y = 0.85;
-    playerHead.castShadow = true;
-    pTorso.add(playerHead);
-
-    const playerHairCrown = new THREE.Mesh(
-      new THREE.SphereGeometry(0.21, 14, 14),
-      new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.5 })
-    );
-    playerHairCrown.position.set(0, 0.92, -0.04);
-    pTorso.add(playerHairCrown);
-    playerPelvis.add(pTorso);
-
-    // Player Articulated Arms
-    const pArmMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.5 });
-    const pLeftArmGroup = new THREE.Group();
-    pLeftArmGroup.position.set(-0.35, 0.56, 0);
-    const pLeftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.38, 8), pArmMat);
-    pLeftArm.position.y = -0.19;
-    pLeftArm.castShadow = true;
-    pLeftArmGroup.add(pLeftArm);
-    pTorso.add(pLeftArmGroup);
-
-    const pRightArmGroup = new THREE.Group();
-    pRightArmGroup.position.set(0.35, 0.56, 0);
-    const pRightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.38, 8), pArmMat);
-    pRightArm.position.y = -0.19;
-    pRightArm.castShadow = true;
-    pRightArmGroup.add(pRightArm);
-    pTorso.add(pRightArmGroup);
-
-    // Player Articulated Legs
-    const pPantsMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 });
-    const pShoeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
-
-    const pLeftThighGroup = new THREE.Group();
-    pLeftThighGroup.position.set(-0.16, 0, 0);
-    const pLeftThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.46, 8), pPantsMat);
-    pLeftThigh.position.y = -0.23;
-    pLeftThigh.castShadow = true;
-    pLeftThighGroup.add(pLeftThigh);
-    const pLeftKnee = new THREE.Group();
-    pLeftKnee.position.y = -0.46;
-    const pLeftShin = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.46, 8), pPantsMat);
-    pLeftShin.position.y = -0.23;
-    pLeftKnee.add(pLeftShin);
-    const pLeftShoe = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.11, 0.3), pShoeMat);
-    pLeftShoe.position.set(0, -0.45, 0.06);
-    pLeftKnee.add(pLeftShoe);
-    pLeftThighGroup.add(pLeftKnee);
-    playerPelvis.add(pLeftThighGroup);
-
-    const pRightThighGroup = new THREE.Group();
-    pRightThighGroup.position.set(0.16, 0, 0);
-    const pRightThigh = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.46, 8), pPantsMat);
-    pRightThigh.position.y = -0.23;
-    pRightThigh.castShadow = true;
-    pRightThighGroup.add(pRightThigh);
-    const pRightKnee = new THREE.Group();
-    pRightKnee.position.y = -0.46;
-    const pRightShin = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.46, 8), pPantsMat);
-    pRightShin.position.y = -0.23;
-    pRightKnee.add(pRightShin);
-    const pRightShoe = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.11, 0.3), pShoeMat);
-    pRightShoe.position.set(0, -0.45, 0.06);
-    pRightKnee.add(pRightShoe);
-    pRightThighGroup.add(pRightKnee);
-    playerPelvis.add(pRightThighGroup);
-
-    playerGroup.add(playerPelvis);
     playerGroup.position.copy(playerPosRef.current);
     scene.add(playerGroup);
     playerAvatarGroupRef.current = playerGroup;
 
-    playerLimbsRef.current = {
-      leftThigh: pLeftThighGroup,
-      rightThigh: pRightThighGroup,
-      leftKnee: pLeftKnee,
-      rightKnee: pRightKnee,
-      leftArm: pLeftArmGroup,
-      rightArm: pRightArmGroup,
-      torso: pTorso,
-      pelvis: playerPelvis
-    };
+    playerLimbsRef.current = {};
 
     // 9. ANIMATION & RENDER LOOP
     let lastTime = performance.now();
@@ -691,13 +591,8 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       const atmosphere = timeEngineRef.current.calculateAtmosphere();
       setLiveTokyoTime(atmosphere.tokyoTimeString);
 
-      scene.background = atmosphere.skyColor;
-      if (!scene.fog) {
-        scene.fog = new THREE.FogExp2(atmosphere.fogColor.getHex(), atmosphere.fogDensity);
-      } else {
-        (scene.fog as THREE.FogExp2).color.copy(atmosphere.fogColor);
-        (scene.fog as THREE.FogExp2).density = atmosphere.fogDensity;
-      }
+      scene.background = new THREE.Color(0x0a0a12);
+      scene.fog = null; // Physically accurate clear atmosphere without blinding milky haze
 
       if (ambientLightRef.current) {
         ambientLightRef.current.color.copy(atmosphere.ambientColor);
@@ -784,7 +679,6 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         if (playerAvatarGroupRef.current) {
           playerAvatarGroupRef.current.position.set(playerPosRef.current.x, 0, playerPosRef.current.z);
           playerAvatarGroupRef.current.rotation.y = cameraYawRef.current;
-          playerAvatarGroupRef.current.visible = cameraMode === 'third_person';
         }
 
         if (cameraMode === 'first_person') {

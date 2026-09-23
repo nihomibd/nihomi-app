@@ -27,6 +27,7 @@ export class RealWorldProvider {
   private tilesRenderer: TilesRenderer | null = null;
   private reorientationPlugin: ReorientationPlugin | null = null;
   private fallbackMesh: THREE.Group | null = null;
+  private photoDomeMesh: THREE.Mesh | null = null;
   private onStatusChange?: (status: RealityFoundationStatus) => void;
   private lastAttributionCheck: number = 0;
 
@@ -137,39 +138,39 @@ export class RealWorldProvider {
     const fallbackGroup = new THREE.Group();
     fallbackGroup.name = 'Photographic_Geographic_Foundation';
 
-    // 1. High-Resolution Real-World Street Panorama Canvas
+    // 1. High-Resolution Real-World 360° Seamless Street Sphere
     const textureLoader = new THREE.TextureLoader();
     const photoTexture = textureLoader.load('/assets/shibuya-crossing.jpg', (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.repeat.set(1, 1);
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.generateMipmaps = false;
     });
 
-    const cylinderGeo = new THREE.CylinderGeometry(85, 85, 48, 48, 1, true);
-    cylinderGeo.scale(-1, 1, 1); // Invert faces inward so avatar stands inside real Shibuya panorama
+    // Invert sphere faces inward so the learner stands inside real 360° Shibuya
+    const sphereGeo = new THREE.SphereGeometry(350, 64, 40);
+    sphereGeo.scale(-1, 1, 1);
 
-    const cylinderMat = new THREE.MeshBasicMaterial({
+    // toneMapped: false ensures the photo texture renders at native photographic exposure without glare or blowout
+    const sphereMat = new THREE.MeshBasicMaterial({
       map: photoTexture,
-      side: THREE.BackSide,
-      fog: false
+      side: THREE.DoubleSide, // Always visible from both interior and exterior without backface culling
+      fog: false,
+      toneMapped: false
     });
 
-    const photoDome = new THREE.Mesh(cylinderGeo, cylinderMat);
-    photoDome.position.set(0, 16, 0);
+    const photoDome = new THREE.Mesh(sphereGeo, sphereMat);
+    photoDome.position.set(0, 0, 0);
+    this.photoDomeMesh = photoDome;
     fallbackGroup.add(photoDome);
 
-    // 2. Real-World Metric Ground Basemap
-    const groundGeo = new THREE.PlaneGeometry(180, 180);
-    const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x12151e,
-      roughness: 0.35,
-      metalness: 0.2
-    });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
-    ground.receiveShadow = true;
-    fallbackGroup.add(ground);
+    // 2. Invisible physical walking plane (colliders & physics only, no cartoon box visual)
+    const walkPlaneGeo = new THREE.PlaneGeometry(200, 200);
+    const walkPlaneMat = new THREE.MeshBasicMaterial({ visible: false });
+    const walkPlane = new THREE.Mesh(walkPlaneGeo, walkPlaneMat);
+    walkPlane.rotation.x = -Math.PI / 2;
+    walkPlane.position.y = 0;
+    fallbackGroup.add(walkPlane);
 
     this.fallbackMesh = fallbackGroup;
     this.group.add(fallbackGroup);
@@ -189,6 +190,11 @@ export class RealWorldProvider {
    * Updates tile streaming and collects dynamic data attributions on each frame
    */
   public update(camera: THREE.PerspectiveCamera, now: number): void {
+    // Keep 360° reality dome centered on camera to prevent parallax boundary clipping
+    if (this.photoDomeMesh) {
+      this.photoDomeMesh.position.copy(camera.position);
+    }
+
     if (this.tilesRenderer) {
       this.tilesRenderer.update();
 
@@ -239,5 +245,6 @@ export class RealWorldProvider {
       this.group.remove(this.fallbackMesh);
       this.fallbackMesh = null;
     }
+    this.photoDomeMesh = null;
   }
 }
