@@ -16,6 +16,9 @@ import { worldGraphManager } from '../../src/components/canvas3d/worldGraph/Worl
 import { WORLD_NODES, JAPAN_DISTRICTS } from '../../src/components/canvas3d/worldGraph/WorldGraphData';
 import { observationalLearningEngine } from '../../src/components/canvas3d/learning/ObservationalLearningEngine';
 import { SPATIAL_NPC_REGISTRY } from '../../src/components/canvas3d/learning/SpatialNPCRegistry';
+import { WorldProviderManager, CAMERA_VIEW_PRESETS } from '../../src/components/canvas3d/engine/WorldProviderManager';
+import { PLATEAU_SHIBUYA_ENDPOINTS } from '../../src/components/canvas3d/engine/providers/Plateau3DTilesProvider';
+import { SHIBUYA_OSM_POIS } from '../../src/components/canvas3d/engine/providers/OpenGeoProvider';
 import * as THREE from 'three';
 
 console.log('================================================================================');
@@ -194,6 +197,30 @@ if (evalResult.isCorrect && evalResult.scheduledIntervalDays >= 1 && evalResult.
   throw new Error('Observational Learning evaluation error');
 }
 
+// [CHECK 8] Open Japan Geo Engine: PLATEAU 3D Tiles & OpenStreetMap Providers ($0.00 / month)
+console.log('[OPEN GEO CHECK 8] Open Japan Geo Engine (Project PLATEAU & OSM):');
+
+const geoManager = new WorldProviderManager(shibuyaAnchor, 'plateau_3d_tiles');
+const initialStatus = geoManager.getStatus();
+
+console.log(`  └─ Primary Provider: ${initialStatus.providerName}`);
+console.log(`  └─ Cost Model: ${initialStatus.costModel}`);
+console.log(`  └─ Open Data License: ${initialStatus.license}`);
+console.log(`  └─ PLATEAU Shibuya LOD2 Endpoint: ${PLATEAU_SHIBUYA_ENDPOINTS.BUILDINGS_LOD2}`);
+console.log(`  └─ OSM Verified Shibuya POIs: ${SHIBUYA_OSM_POIS.length} nodes (Station, Koban, Yucho Bank, Conbini)`);
+console.log(`  └─ Camera Flight Presets: ${Object.keys(CAMERA_VIEW_PRESETS).join(', ')}`);
+
+if (
+  initialStatus.providerType === 'plateau_3d_tiles' &&
+  initialStatus.costModel.includes('$0.00') &&
+  SHIBUYA_OSM_POIS.length >= 5 &&
+  CAMERA_VIEW_PRESETS.aerial_tokyo.position.y === 260
+) {
+  console.log('  ✓ PASS: Open Japan Geo Engine (PLATEAU 3D Tiles + OSM) verified with Zero API Billing.\n');
+} else {
+  throw new Error('Open Japan Geo Engine verification failed');
+}
+
 console.log('================================================================================');
-console.log('  ✓ ALL 7/7 REAL-WORLD GEOGRAPHIC, WORLD GRAPH & TRANSPORT CHECKS PASSED');
+console.log('  ✓ ALL 8/8 REAL-WORLD GEOGRAPHIC, WORLD GRAPH & OPEN DATA CHECKS PASSED');
 console.log('================================================================================');

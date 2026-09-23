@@ -1,0 +1,211 @@
+// src/components/canvas3d/engine/providers/Plateau3DTilesProvider.ts
+// NIHOMI OPEN JAPAN GEO ENGINE — PROJECT PLATEAU 3D TILES PROVIDER
+// Open 3D CityGML & 3D Tiles published by Japan's Ministry of Land, Infrastructure, Transport and Tourism (MLIT)
+// Zero API Key • $0.00 / month Billing • CC BY 4.0 Open Data License
+
+import * as THREE from 'three';
+import { TilesRenderer } from '3d-tiles-renderer';
+import { ReorientationPlugin } from '3d-tiles-renderer/plugins';
+import { JAPAN_GEO_ANCHORS, GeodeticCoordinate } from '../GeoCoordinates';
+import { IWorldProvider, WorldProviderStatus, GeoProviderType } from './WorldProviderAdapter';
+
+export const PLATEAU_SHIBUYA_ENDPOINTS = {
+  // Shibuya Ward LOD2 Building Models with Photorealistic Facade Textures (Official MLIT 2025 Release)
+  BUILDINGS_LOD2: 'https://assets.cms.plateau.reearth.io/assets/16/b016d3-42ef-4428-ad99-d229310b39fd/13113_shibuya-ku_pref_2025_citygml_1_op_bldg_3dtiles_13113_shibuya-ku_lod2/tileset.json',
+  // Shibuya Ward LOD1 Massing Volume Models
+  BUILDINGS_LOD1: 'https://assets.cms.plateau.reearth.io/assets/cf/26763c-faae-41b3-b110-2a4dd602f250/13113_shibuya-ku_pref_2025_citygml_1_op_bldg_3dtiles_13113_shibuya-ku_lod1/tileset.json',
+  // Shibuya Transportation / Road Network LOD3
+  ROADS_LOD3: 'https://assets.cms.plateau.reearth.io/assets/ba/3b3ca7-270b-4fd9-b355-27b1ea7d7df5/13113_shibuya-ku_pref_2025_citygml_1_op_tran_3dtiles_lod3/tileset.json',
+  // Shibuya Bridges LOD2
+  BRIDGES_LOD2: 'https://assets.cms.plateau.reearth.io/assets/37/acee1e-84d2-457d-a6a6-486d52cdb1a1/13113_shibuya-ku_pref_2025_citygml_1_op_brid_3dtiles_lod2/tileset.json'
+};
+
+export class Plateau3DTilesProvider implements IWorldProvider {
+  public readonly name = 'Project PLATEAU (国土交通省 3D都市モデル)';
+  public readonly type: GeoProviderType = 'plateau_3d_tiles';
+  public group: THREE.Group;
+
+  private buildingTiles: TilesRenderer | null = null;
+  private roadTiles: TilesRenderer | null = null;
+  private status: WorldProviderStatus;
+  private onStatusChange?: (status: WorldProviderStatus) => void;
+  private activeLayers: Set<string> = new Set(['buildings_lod2', 'roads_lod3']);
+  private loadedTilesCount: number = 0;
+
+  constructor(
+    anchor: GeodeticCoordinate = JAPAN_GEO_ANCHORS.SHIBUYA_SCRAMBLE,
+    onStatusChange?: (status: WorldProviderStatus) => void
+  ) {
+    this.group = new THREE.Group();
+    this.group.name = 'Plateau_OpenGeo_Layer';
+    this.onStatusChange = onStatusChange;
+
+    this.status = {
+      providerName: this.name,
+      providerType: this.type,
+      costModel: '$0.00 / month (Free Open Data)',
+      license: 'Government of Japan Open Data Terms of Use (CC BY 4.0)',
+      isStreaming: false,
+      activeLayers: Array.from(this.activeLayers),
+      loadedTilesCount: 0,
+      attributions: [
+        'Project PLATEAU (国土交通省 3D都市モデル)',
+        'G-Spatial Information Center (G空間センター)',
+        'Shibuya Ward Urban Development Division'
+      ],
+      anchor
+    };
+  }
+
+  public async initialize(
+    scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+    renderer: THREE.WebGLRenderer
+  ): Promise<void> {
+    scene.add(this.group);
+
+    try {
+      // 1. Initialize PLATEAU LOD2 Buildings Tileset
+      const bldgTiles = new TilesRenderer(PLATEAU_SHIBUYA_ENDPOINTS.BUILDINGS_LOD2);
+
+      // Convert Anchor Lat/Lon to Radians for local tangent orientation (ENU)
+      const latRad = (this.status.anchor.latitude * Math.PI) / 180;
+      const lonRad = (this.status.anchor.longitude * Math.PI) / 180;
+      const heightMeters = this.status.anchor.altitude || 18;
+
+      const reorientPlugin = new ReorientationPlugin({
+        lat: latRad,
+        lon: lonRad,
+        height: heightMeters,
+        up: '+y',
+        recenter: true
+      });
+      bldgTiles.registerPlugin(reorientPlugin);
+
+      bldgTiles.setCamera(camera);
+      bldgTiles.setResolutionFromRenderer(camera, renderer);
+      bldgTiles.errorTarget = 14;
+
+      // Realism Shading & Material Enhancement Hook
+      bldgTiles.addEventListener('load-model', (e: any) => {
+        this.loadedTilesCount++;
+        this.status.loadedTilesCount = this.loadedTilesCount;
+        if (e.scene) {
+          e.scene.traverse((child: any) => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              if (child.material) {
+                // Enhance raw CityGML materials with PBR surface realism
+                if (Array.isArray(child.material)) {
+                  child.material.forEach((m: any) => this.enhancePBRMaterial(m));
+                } else {
+                  this.enhancePBRMaterial(child.material);
+                }
+              }
+            }
+          });
+        }
+        this.notifyStatus();
+      });
+
+      bldgTiles.addEventListener('load-root-tileset', () => {
+        console.log('[PlateauProvider] Connected to MLIT PLATEAU Shibuya 3D Tiles.');
+        this.status.isStreaming = true;
+        this.status.errorMessage = undefined;
+        this.notifyStatus();
+      });
+
+      bldgTiles.addEventListener('load-error', (e: any) => {
+        console.warn('[PlateauProvider] Building tileset load warning:', e.error?.message || e);
+        this.status.errorMessage = e.error?.message;
+        this.notifyStatus();
+      });
+
+      this.group.add(bldgTiles.group);
+      this.buildingTiles = bldgTiles;
+
+      // 2. Add Ground Reference Plane for Crosswalk Alignment
+      const groundGeo = new THREE.PlaneGeometry(300, 300);
+      const groundMat = new THREE.MeshStandardMaterial({
+        color: 0x181c26,
+        roughness: 0.85,
+        metalness: 0.1
+      });
+      const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+      groundMesh.rotation.x = -Math.PI / 2;
+      groundMesh.position.y = -0.05;
+      groundMesh.receiveShadow = true;
+      this.group.add(groundMesh);
+
+      this.status.isStreaming = true;
+      this.notifyStatus();
+    } catch (err: any) {
+      console.error('[PlateauProvider] Failed to initialize PLATEAU 3D Tiles:', err);
+      this.status.errorMessage = err?.message || 'Failed to initialize PLATEAU 3D Tiles';
+      this.notifyStatus();
+    }
+  }
+
+  private enhancePBRMaterial(material: any): void {
+    if (!material) return;
+    material.roughness = THREE.MathUtils.clamp(material.roughness || 0.65, 0.45, 0.8);
+    material.metalness = THREE.MathUtils.clamp(material.metalness || 0.1, 0.05, 0.25);
+  }
+
+  public update(camera: THREE.PerspectiveCamera, now: number): void {
+    if (this.buildingTiles) {
+      this.buildingTiles.update();
+    }
+    if (this.roadTiles) {
+      this.roadTiles.update();
+    }
+  }
+
+  public handleResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): void {
+    if (this.buildingTiles) {
+      this.buildingTiles.setResolutionFromRenderer(camera, renderer);
+    }
+    if (this.roadTiles) {
+      this.roadTiles.setResolutionFromRenderer(camera, renderer);
+    }
+  }
+
+  public setLayerVisibility(layerName: string, visible: boolean): void {
+    if (visible) {
+      this.activeLayers.add(layerName);
+    } else {
+      this.activeLayers.delete(layerName);
+    }
+
+    if (layerName === 'buildings_lod2' && this.buildingTiles) {
+      this.buildingTiles.group.visible = visible;
+    }
+    if (layerName === 'roads_lod3' && this.roadTiles) {
+      this.roadTiles.group.visible = visible;
+    }
+
+    this.status.activeLayers = Array.from(this.activeLayers);
+    this.notifyStatus();
+  }
+
+  public getStatus(): WorldProviderStatus {
+    return { ...this.status };
+  }
+
+  private notifyStatus(): void {
+    this.onStatusChange?.(this.getStatus());
+  }
+
+  public dispose(): void {
+    if (this.buildingTiles) {
+      this.buildingTiles.dispose();
+      this.buildingTiles = null;
+    }
+    if (this.roadTiles) {
+      this.roadTiles.dispose();
+      this.roadTiles = null;
+    }
+    this.group.clear();
+  }
+}

@@ -34,13 +34,16 @@ import {
   Plane,
   Navigation,
   ArrowRight,
-  Ticket
+  Ticket,
+  Building2,
+  Layers
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 
-// Modular Nihomi World Engine Subsystems
-import { RealWorldProvider, RealityFoundationStatus } from './engine/RealWorldProvider';
+// Modular Nihomi World Engine Subsystems (Open Japan Geo Engine)
+import { WorldProviderManager, CAMERA_VIEW_PRESETS } from './engine/WorldProviderManager';
+import { WorldProviderStatus, GeoProviderType, CameraViewPreset } from './engine/providers/WorldProviderAdapter';
 import { TokyoTimeEngine, TimeOverridePreset, SolarAtmosphereState } from './engine/TokyoTimeEngine';
 import { UrbanSimulationEngine } from './engine/UrbanSimulationEngine';
 import { WorldInteractionLayer, WorldPOI, SHIBUYA_POIS } from './engine/WorldInteractionLayer';
@@ -115,16 +118,20 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   const [liveTokyoTime, setLiveTokyoTime] = useState<string>('20:15 JST');
   const [trafficSignalState, setTrafficSignalState] = useState<'walk_green' | 'traffic_green'>('walk_green');
 
-  // Real World Foundation & Credential State
-  const [foundationStatus, setFoundationStatus] = useState<RealityFoundationStatus>({
-    providerType: 'photographic_real_world',
-    hasApiKey: false,
-    isStreaming: false,
-    attributions: ['Nihomi Real Japan Canvas™'],
+  // Open Japan Geo Engine State (Project PLATEAU & OpenStreetMap — $0.00 / month Free Open Data)
+  const [geoStatus, setGeoStatus] = useState<WorldProviderStatus>({
+    providerName: 'Project PLATEAU (国土交通省 3D都市モデル)',
+    providerType: 'plateau_3d_tiles',
+    costModel: '$0.00 / month (Free Open Data)',
+    license: 'Government of Japan Open Data Terms of Use (CC BY 4.0)',
+    isStreaming: true,
+    activeLayers: ['buildings_lod2', 'roads_lod3'],
+    loadedTilesCount: 0,
+    attributions: ['Project PLATEAU (国土交通省 3D都市モデル)', '© OpenStreetMap contributors'],
     anchor: JAPAN_GEO_ANCHORS.SHIBUYA_SCRAMBLE
   });
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState<boolean>(false);
-  const [inputApiKey, setInputApiKey] = useState<string>('');
+  const [isOpenGeoModalOpen, setIsOpenGeoModalOpen] = useState<boolean>(false);
+  const [currentCameraPreset, setCurrentCameraPreset] = useState<CameraViewPreset>('street_scramble');
 
   // World Graph & Inter-District Transportation State
   const [currentNode, setCurrentNode] = useState<WorldGraphNode>(worldGraphManager.getCurrentNode());
@@ -228,8 +235,8 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     }
   }, [currentNode, trainRideState]);
 
-  // Engine Subsystem References
-  const realWorldProviderRef = useRef<RealWorldProvider | null>(null);
+  // Engine Subsystem References (Provider-Agnostic Open Japan Geo Engine)
+  const worldProviderManagerRef = useRef<WorldProviderManager | null>(null);
   const timeEngineRef = useRef<TokyoTimeEngine>(new TokyoTimeEngine());
   const simulationEngineRef = useRef<UrbanSimulationEngine | null>(null);
   const interactionLayerRef = useRef<WorldInteractionLayer>(new WorldInteractionLayer());
@@ -556,12 +563,14 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     scene.add(sunLight);
     sunLightRef.current = sunLight;
 
-    // 6. REAL WORLD FOUNDATION (Google 3D Tiles / Photographic Geographic Mesh)
-    const provider = new RealWorldProvider(JAPAN_GEO_ANCHORS.SHIBUYA_SCRAMBLE, (status) => {
-      setFoundationStatus(status);
-    });
-    provider.initialize(scene, camera, renderer);
-    realWorldProviderRef.current = provider;
+    // 6. OPEN JAPAN GEO ENGINE (Project PLATEAU 3D Tiles + OpenStreetMap)
+    const providerManager = new WorldProviderManager(
+      JAPAN_GEO_ANCHORS.SHIBUYA_SCRAMBLE,
+      'plateau_3d_tiles',
+      (status) => setGeoStatus(status)
+    );
+    providerManager.initialize(scene, camera, renderer);
+    worldProviderManagerRef.current = providerManager;
 
     // 7. URBAN SIMULATION ENGINE (Traffic & Pedestrians)
     const simulation = new UrbanSimulationEngine((signalState) => {
@@ -605,8 +614,19 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         sunLightRef.current.position.copy(atmosphere.sunPosition);
       }
 
-      // 9B. Update Real World 3D Tiles Streaming
-      provider.update(camera, now);
+      // 9B. Update Open Japan Geo Engine & Cinematic Camera Transitions
+      providerManager.update(camera, now);
+
+      const flight = providerManager.stepCameraFlight(now);
+      if (flight.inFlight && flight.pos) {
+        camera.position.copy(flight.pos);
+        if (flight.pitch !== undefined) cameraPitchRef.current = flight.pitch;
+        if (flight.yaw !== undefined) cameraYawRef.current = flight.yaw;
+        camera.rotation.order = 'YXZ';
+        camera.rotation.y = cameraYawRef.current;
+        camera.rotation.x = cameraPitchRef.current;
+        playerPosRef.current.copy(flight.pos);
+      }
 
       // 9C. Update Urban Simulation (Traffic & Pedestrians)
       simulation.update(delta, now, playerPosRef.current, atmosphere);
@@ -727,30 +747,38 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
       composerRef.current?.setSize(w, h);
-      provider.handleResize(camera, renderer);
+      providerManager.handleResize(camera, renderer);
     };
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      provider.dispose();
+      providerManager.dispose();
       simulation.dispose();
       renderer.dispose();
       composerRef.current = null;
     };
   }, [cameraMode, isAudioMuted]);
 
-  // Handle API Key Submission for Google Maps Platform 3D Tiles
-  const handleSaveApiKey = () => {
-    if (realWorldProviderRef.current && sceneRef.current && cameraRef.current && rendererRef.current) {
-      realWorldProviderRef.current.setApiKey(
-        inputApiKey.trim(),
-        sceneRef.current,
-        cameraRef.current,
-        rendererRef.current
+  // Open Japan Geo Engine: Switch Provider
+  const handleSwitchGeoProvider = async (type: GeoProviderType) => {
+    if (worldProviderManagerRef.current) {
+      await worldProviderManagerRef.current.switchProvider(type);
+      setGeoStatus(worldProviderManagerRef.current.getStatus());
+    }
+  };
+
+  // Open Japan Geo Engine: Cinematic Camera Scale Transition
+  const handleTriggerCameraPreset = (preset: CameraViewPreset) => {
+    setCurrentCameraPreset(preset);
+    if (worldProviderManagerRef.current) {
+      worldProviderManagerRef.current.triggerCameraPreset(
+        preset,
+        playerPosRef.current,
+        cameraPitchRef.current,
+        cameraYawRef.current
       );
-      setIsSettingsModalOpen(false);
     }
   };
 
@@ -776,24 +804,24 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         <div className="flex items-center space-x-3 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-cyan-500/30 shadow-2xl pointer-events-auto">
           <div
             className={`w-3 h-3 rounded-full ${
-              foundationStatus.providerType === 'google_3d_tiles'
+              geoStatus.providerType === 'plateau_3d_tiles'
                 ? 'bg-emerald-400 animate-pulse'
-                : 'bg-amber-400'
+                : 'bg-cyan-400'
             }`}
           />
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                REAL JAPAN FOUNDATION
+                OPEN JAPAN GEO FOUNDATION
               </span>
               <span
                 className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold ${
-                  foundationStatus.providerType === 'google_3d_tiles'
+                  geoStatus.providerType === 'plateau_3d_tiles'
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                 }`}
               >
-                {foundationStatus.providerType === 'google_3d_tiles' ? 'GOOGLE 3D TILES' : 'REAL GEOGRAPHIC MESH'}
+                {geoStatus.providerType === 'plateau_3d_tiles' ? 'PLATEAU 3D (国土交通省)' : 'OPENSTREETMAP / OVERTURE'}
               </span>
             </div>
             <div className="flex items-center space-x-2 mt-0.5">
@@ -885,13 +913,54 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
             <span>{cameraMode === 'first_person' ? '1st Person' : '3rd Person'}</span>
           </button>
 
-          {/* Settings / API Key Button */}
+          {/* Cinematic Camera Flight Scale Selector */}
+          <div className="flex items-center bg-slate-900/80 p-0.5 rounded-xl border border-slate-700 backdrop-blur-md">
+            <button
+              onClick={() => handleTriggerCameraPreset('aerial_tokyo')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                currentCameraPreset === 'aerial_tokyo'
+                  ? 'bg-cyan-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              title="Tokyo Aerial Overview (260m)"
+            >
+              <Plane className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Tokyo 260m</span>
+            </button>
+            <button
+              onClick={() => handleTriggerCameraPreset('district_shibuya')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                currentCameraPreset === 'district_shibuya'
+                  ? 'bg-cyan-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              title="Shibuya District View (65m)"
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Shibuya 65m</span>
+            </button>
+            <button
+              onClick={() => handleTriggerCameraPreset('street_scramble')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                currentCameraPreset === 'street_scramble'
+                  ? 'bg-cyan-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              title="Street Level Scramble Crossing (1.62m)"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Street 1.62m</span>
+            </button>
+          </div>
+
+          {/* Open Japan Geo Console Button */}
           <button
-            onClick={() => setIsSettingsModalOpen(true)}
-            className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 backdrop-blur-md transition-colors shadow-lg"
-            title="Geographic Foundation Settings"
+            onClick={() => setIsOpenGeoModalOpen(true)}
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-emerald-500/40 backdrop-blur-md transition-colors shadow-lg text-xs font-semibold"
+            title="Open Japan Geo Engine Console"
           >
-            <Settings className="w-4 h-4 text-slate-300" />
+            <Layers className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-300 font-bold hidden sm:inline">PLATEAU 3D</span>
           </button>
 
           {onSwitchToPanorama && (
@@ -1163,97 +1232,165 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         }}
       />
 
-      {/* FOUNDER GEOGRAPHIC SETTINGS & API KEY CONFIGURATION MODAL */}
-      {isSettingsModalOpen && (
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-6 z-40 pointer-events-auto">
-          <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      {/* OPEN JAPAN GEO ENGINE CONSOLE MODAL */}
+      {isOpenGeoModalOpen && (
+        <div className="absolute inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center p-6 z-40 pointer-events-auto">
+          <div className="w-full max-w-xl bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center space-x-2.5">
-                <Globe className="w-5 h-5 text-cyan-400" />
-                <h3 className="text-base font-bold text-white">Real Japan Geographic Foundation</h3>
+                <Layers className="w-5 h-5 text-emerald-400" />
+                <div>
+                  <h3 className="text-base font-bold text-white">オープンジャパン地理基盤 (Open Japan Geo Engine)</h3>
+                  <p className="text-[11px] text-slate-400">Zero-API-Bill Open Geographic Foundation</p>
+                </div>
               </div>
               <button
-                onClick={() => setIsSettingsModalOpen(false)}
+                onClick={() => setIsOpenGeoModalOpen(false)}
                 className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-              <p>
-                Nihomi World™ is architected on top of a <strong>Photorealistic 3D Geographic Foundation</strong>.
-                When configured, the world directly streams Google Maps Platform 3D Tiles. When unconfigured, it seamlessly operates on the photographic geographic foundation.
-              </p>
+            <div className="space-y-3.5 text-xs text-slate-300 leading-relaxed">
+              {/* Cost & License Badges */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 space-y-1">
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">API Billing Cost</span>
+                  <p className="text-sm font-black text-emerald-300">$0.00 / month</p>
+                  <p className="text-[10px] text-emerald-400/80 font-mono">Zero External API Billing Risk</p>
+                </div>
+                <div className="p-3 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 space-y-1">
+                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Open Data License</span>
+                  <p className="text-xs font-bold text-cyan-200">CC BY 4.0 / ODbL</p>
+                  <p className="text-[10px] text-cyan-400/80 font-mono">Government of Japan Open Data</p>
+                </div>
+              </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 font-mono text-[11px]">
+              {/* Active Provider Status */}
+              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 font-mono text-[11px]">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Current Provider:</span>
-                  <span className="text-cyan-400 font-bold">{foundationStatus.providerType}</span>
+                  <span className="text-slate-500">Active Foundation:</span>
+                  <span className="text-emerald-400 font-bold">{geoStatus.providerName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Geographic Anchor:</span>
-                  <span className="text-slate-300">Shibuya (35.6595° N, 139.7005° E)</span>
+                  <span className="text-slate-300">Shibuya Scramble (35.6595° N, 139.7005° E)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Active Attributions:</span>
-                  <span className="text-emerald-400">{foundationStatus.attributions.join(', ')}</span>
+                  <span className="text-slate-500">Active Layers:</span>
+                  <span className="text-cyan-400">{geoStatus.activeLayers.join(' • ')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Loaded 3D Tiles:</span>
+                  <span className="text-amber-400 font-bold">{geoStatus.loadedTilesCount} tiles loaded</span>
                 </div>
               </div>
 
-              <div className="space-y-1.5 pt-2">
-                <label className="font-semibold text-slate-200 text-xs">
-                  Google Maps Platform API Key (Map Tiles API enabled):
-                </label>
-                <input
-                  type="password"
-                  placeholder="AIzaSy..."
-                  value={inputApiKey}
-                  onChange={(e) => setInputApiKey(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono text-xs"
-                />
-                <p className="text-[10px] text-slate-500">
-                  Your key is saved locally in your browser session and never sent to third-party backends.
-                </p>
+              {/* Provider Selection */}
+              <div className="space-y-2 pt-1">
+                <label className="font-semibold text-slate-200 text-xs">Switch Geographic Provider:</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                  <button
+                    onClick={() => handleSwitchGeoProvider('plateau_3d_tiles')}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      geoStatus.providerType === 'plateau_3d_tiles'
+                        ? 'bg-emerald-950/60 border-emerald-400 text-white shadow-lg'
+                        : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-emerald-400">Project PLATEAU</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">MLIT Japan 3D Tiles</p>
+                  </button>
+
+                  <button
+                    onClick={() => handleSwitchGeoProvider('open_geo_osm')}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      geoStatus.providerType === 'open_geo_osm'
+                        ? 'bg-cyan-950/60 border-cyan-400 text-white shadow-lg'
+                        : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-cyan-400">OpenStreetMap</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Roads & Rail Network</p>
+                  </button>
+
+                  <button
+                    onClick={() => handleSwitchGeoProvider('photographic_fallback')}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      geoStatus.providerType === 'photographic_fallback'
+                        ? 'bg-amber-950/60 border-amber-400 text-white shadow-lg'
+                        : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-amber-400">360° Panorama</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Photographic Dome</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Camera Flyover Shortcuts */}
+              <div className="space-y-2 pt-1">
+                <label className="font-semibold text-slate-200 text-xs">Cinematic Geographic Flyovers:</label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => {
+                      handleTriggerCameraPreset('aerial_tokyo');
+                      setIsOpenGeoModalOpen(false);
+                    }}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center transition-colors"
+                  >
+                    <span className="text-xs font-bold text-white block">Tokyo Aerial</span>
+                    <span className="text-[10px] text-slate-400">260m Altitude</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleTriggerCameraPreset('district_shibuya');
+                      setIsOpenGeoModalOpen(false);
+                    }}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center transition-colors"
+                  >
+                    <span className="text-xs font-bold text-white block">Shibuya District</span>
+                    <span className="text-[10px] text-slate-400">65m Altitude</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleTriggerCameraPreset('street_scramble');
+                      setIsOpenGeoModalOpen(false);
+                    }}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center transition-colors"
+                  >
+                    <span className="text-xs font-bold text-white block">Street Level</span>
+                    <span className="text-[10px] text-slate-400">1.62m Eye Height</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2.5 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+              <span className="text-[10px] text-slate-500 font-mono">
+                Attribution: {geoStatus.attributions.join(' • ')}
+              </span>
               <button
-                onClick={() => setIsSettingsModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+                onClick={() => setIsOpenGeoModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-colors"
               >
                 Close
-              </button>
-              <button
-                onClick={handleSaveApiKey}
-                className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-colors"
-              >
-                Connect 3D Tiles
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* MANDATORY GOOGLE BRAND & DATA ATTRIBUTION BAR */}
-      <div className="absolute bottom-16 left-4 flex items-center space-x-3 pointer-events-none z-20">
-        {foundationStatus.providerType === 'google_3d_tiles' && (
-          <div className="bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-md shadow-md flex items-center">
-            {/* Google Brand Logo Text */}
-            <span className="text-[12px] font-black tracking-tight text-slate-800 font-sans">
-              <span className="text-blue-500">G</span>
-              <span className="text-red-500">o</span>
-              <span className="text-amber-500">o</span>
-              <span className="text-blue-500">g</span>
-              <span className="text-green-500">l</span>
-              <span className="text-red-500">e</span>
-            </span>
-          </div>
-        )}
-
-        <div className="bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-800 text-[10px] text-slate-400 font-mono">
-          Imagery: {foundationStatus.attributions.join(' • ')}
+      {/* OPEN DATA ATTRIBUTION & ZERO-COST STATUS BAR */}
+      <div className="absolute bottom-16 left-4 flex items-center space-x-2 pointer-events-none z-20">
+        <div className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/80 text-[11px] text-slate-300 font-mono flex items-center space-x-2 shadow-lg">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-400 font-bold">PLATEAU 3D</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-slate-300">{geoStatus.attributions[0]}</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-cyan-300 font-semibold">{geoStatus.costModel}</span>
         </div>
       </div>
 
