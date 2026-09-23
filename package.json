@@ -24,6 +24,7 @@
     "@types/pdf-parse": "^1.1.5",
     "@types/pdfkit": "^0.17.6",
     "@vitejs/plugin-react": "^5.0.4",
+    "3d-tiles-renderer": "^0.5.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "cors": "^2.8.6",
