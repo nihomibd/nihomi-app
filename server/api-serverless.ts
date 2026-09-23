@@ -1,3 +1,4 @@
+import './polyfill.js';
 import express, { Request, Response } from 'express';
 import { authRouter } from './routes/auth.js';
 import { learningRouter } from './routes/learning.js';

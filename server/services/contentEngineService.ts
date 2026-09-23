@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import * as pdfParseModule from 'pdf-parse';
-const pdfParse: any = (pdfParseModule as any).default || pdfParseModule;
 import { GoogleGenAI, Type, Schema } from '@google/genai';
 import { db } from '../db.js';
 import { cloudStorageService } from './cloudStorageService.js';
@@ -30,31 +28,37 @@ import {
 
 async function extractPdfTextAndPages(fileBuffer: Buffer): Promise<{ text: string; pageCount: number; pages: { num: number; text: string }[] }> {
   try {
-    // 1. Try pdf-parse v2 class API
-    const ParserClass = (pdfParseModule as any).PDFParse || (pdfParse as any)?.PDFParse;
-    if (typeof ParserClass === 'function') {
-      const parser = new ParserClass({ data: fileBuffer });
-      const textResult = await parser.getText();
-      const pages = Array.isArray(textResult?.pages) ? textResult.pages : [];
-      const extractedText = (textResult?.text || '').trim();
-      if (extractedText.length > 0) {
-        return {
-          text: extractedText,
-          pageCount: textResult?.total || pages.length || 1,
-          pages: pages.map((p: any, idx: number) => ({ num: p.num || idx + 1, text: p.text || '' }))
-        };
-      }
-    }
+    // Dynamic import to prevent crashing serverless cold-start in Node.js environments lacking canvas/DOM APIs
+    const pdfParseModule: any = await import('pdf-parse').catch(() => null);
+    const pdfParse: any = pdfParseModule?.default || pdfParseModule;
 
-    // 2. Try functional call (pdf-parse v1 style)
-    if (typeof pdfParse === 'function') {
-      const data = await pdfParse(fileBuffer);
-      if (data?.text) {
-        return {
-          text: (data.text || '').trim(),
-          pageCount: data.numpages || 1,
-          pages: []
-        };
+    if (pdfParseModule) {
+      // 1. Try pdf-parse v2 class API
+      const ParserClass = pdfParseModule.PDFParse || pdfParse?.PDFParse;
+      if (typeof ParserClass === 'function') {
+        const parser = new ParserClass({ data: fileBuffer });
+        const textResult = await parser.getText();
+        const pages = Array.isArray(textResult?.pages) ? textResult.pages : [];
+        const extractedText = (textResult?.text || '').trim();
+        if (extractedText.length > 0) {
+          return {
+            text: extractedText,
+            pageCount: textResult?.total || pages.length || 1,
+            pages: pages.map((p: any, idx: number) => ({ num: p.num || idx + 1, text: p.text || '' }))
+          };
+        }
+      }
+
+      // 2. Try functional call (pdf-parse v1 style)
+      if (typeof pdfParse === 'function') {
+        const data = await pdfParse(fileBuffer);
+        if (data?.text) {
+          return {
+            text: (data.text || '').trim(),
+            pageCount: data.numpages || 1,
+            pages: []
+          };
+        }
       }
     }
   } catch (err: any) {

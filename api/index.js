@@ -12189,6 +12189,70 @@ Return ONLY valid JSON matching this structure:
   }
 });
 
+// server/polyfill.ts
+if (typeof globalThis.DOMMatrix === "undefined") {
+  globalThis.DOMMatrix = class DOMMatrix {
+    constructor(init) {
+      this.a = 1;
+      this.b = 0;
+      this.c = 0;
+      this.d = 1;
+      this.e = 0;
+      this.f = 0;
+      this.m11 = 1;
+      this.m12 = 0;
+      this.m13 = 0;
+      this.m14 = 0;
+      this.m21 = 0;
+      this.m22 = 1;
+      this.m23 = 0;
+      this.m24 = 0;
+      this.m31 = 0;
+      this.m32 = 0;
+      this.m33 = 1;
+      this.m34 = 0;
+      this.m41 = 0;
+      this.m42 = 0;
+      this.m43 = 0;
+      this.m44 = 1;
+      this.is2D = true;
+      this.isIdentity = true;
+      if (Array.isArray(init) && init.length >= 6) {
+        this.a = this.m11 = init[0];
+        this.b = this.m12 = init[1];
+        this.c = this.m21 = init[2];
+        this.d = this.m22 = init[3];
+        this.e = this.m41 = init[4];
+        this.f = this.m42 = init[5];
+      }
+    }
+    multiply() {
+      return this;
+    }
+    translate() {
+      return this;
+    }
+    scale() {
+      return this;
+    }
+    rotate() {
+      return this;
+    }
+    inverse() {
+      return this;
+    }
+    transformPoint(p) {
+      return p;
+    }
+    toFloat32Array() {
+      return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    }
+    toFloat64Array() {
+      return new Float64Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    }
+  };
+}
+
 // server/api-serverless.ts
 import express2 from "express";
 
@@ -20429,7 +20493,6 @@ import path7 from "path";
 init_db();
 import path6 from "path";
 import crypto10 from "crypto";
-import * as pdfParseModule from "pdf-parse";
 import { GoogleGenAI as GoogleGenAI3 } from "@google/genai";
 
 // server/services/cloudStorageService.ts
@@ -31982,31 +32045,34 @@ var QAEngineService = class {
 };
 
 // server/services/contentEngineService.ts
-var pdfParse = pdfParseModule.default || pdfParseModule;
 async function extractPdfTextAndPages(fileBuffer) {
   try {
-    const ParserClass = pdfParseModule.PDFParse || pdfParse?.PDFParse;
-    if (typeof ParserClass === "function") {
-      const parser = new ParserClass({ data: fileBuffer });
-      const textResult = await parser.getText();
-      const pages = Array.isArray(textResult?.pages) ? textResult.pages : [];
-      const extractedText = (textResult?.text || "").trim();
-      if (extractedText.length > 0) {
-        return {
-          text: extractedText,
-          pageCount: textResult?.total || pages.length || 1,
-          pages: pages.map((p, idx) => ({ num: p.num || idx + 1, text: p.text || "" }))
-        };
+    const pdfParseModule = await import("pdf-parse").catch(() => null);
+    const pdfParse = pdfParseModule?.default || pdfParseModule;
+    if (pdfParseModule) {
+      const ParserClass = pdfParseModule.PDFParse || pdfParse?.PDFParse;
+      if (typeof ParserClass === "function") {
+        const parser = new ParserClass({ data: fileBuffer });
+        const textResult = await parser.getText();
+        const pages = Array.isArray(textResult?.pages) ? textResult.pages : [];
+        const extractedText = (textResult?.text || "").trim();
+        if (extractedText.length > 0) {
+          return {
+            text: extractedText,
+            pageCount: textResult?.total || pages.length || 1,
+            pages: pages.map((p, idx) => ({ num: p.num || idx + 1, text: p.text || "" }))
+          };
+        }
       }
-    }
-    if (typeof pdfParse === "function") {
-      const data = await pdfParse(fileBuffer);
-      if (data?.text) {
-        return {
-          text: (data.text || "").trim(),
-          pageCount: data.numpages || 1,
-          pages: []
-        };
+      if (typeof pdfParse === "function") {
+        const data = await pdfParse(fileBuffer);
+        if (data?.text) {
+          return {
+            text: (data.text || "").trim(),
+            pageCount: data.numpages || 1,
+            pages: []
+          };
+        }
       }
     }
   } catch (err) {

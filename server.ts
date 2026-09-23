@@ -1,4 +1,5 @@
 import './server/env.js';
+import './server/polyfill.js';
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
