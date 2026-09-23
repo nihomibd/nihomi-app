@@ -105,9 +105,6 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     });
   }, []);
 
-  // 3D Pin screen projection map
-  const [projectedPins, setProjectedPins] = useState<Record<string, HotspotScreenPosition>>({});
-
   // Nihomi Coin Economy State (Local + Cloud Synced)
   const [coins, setCoins] = useState<number>(() => {
     try {
@@ -323,7 +320,9 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           setSelectedHotspot(spot);
           worldAudio.playTokyoChime();
         }}
-        onHotspotsProjected={(positions) => setProjectedPins(positions)}
+        unlockedHotspots={unlockedHotspots}
+        userPlanId={user?.planId || 'free'}
+        missionComplete={missionComplete}
       />
 
       {/* Atmospheric Overlays for Readability & Contrast */}
@@ -463,96 +462,6 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           )}
         </div>
       </header>
-
-      {/* 3. 3D PROJECTED SPATIAL HOTSPOT PINS (ANCHORED IN 360° WEBGL SPACE) */}
-      <div className="relative z-20 flex-grow w-full pointer-events-none">
-        {SHIBUYA_HOTSPOTS.map((hotspot) => {
-          const projected = projectedPins[hotspot.id];
-          const isSelected = selectedHotspot?.id === hotspot.id;
-
-          // If WebGL projected pin is available, use dynamic 3D screen position; else use fallback percentage
-          const isVisible = projected ? projected.visible : true;
-          const leftPos = projected ? `${projected.x}px` : `${hotspot.coords.x}%`;
-          const topPos = projected ? `${projected.y}px` : `${hotspot.coords.y}%`;
-          const scale = projected ? projected.scale : 1.0;
-
-          return (
-            <div
-              key={hotspot.id}
-              style={{
-                left: leftPos,
-                top: topPos,
-                transform: `translate(-50%, -50%) scale(${scale})`,
-                opacity: isVisible ? 1 : 0,
-                pointerEvents: isVisible ? 'auto' : 'none'
-              }}
-              className="absolute transition-opacity duration-200"
-            >
-              {/* Hotspot Pin Button */}
-              <button
-                onClick={() => {
-                  setSelectedHotspot(hotspot);
-                  worldAudio.playTokyoChime();
-                }}
-                className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-2xl backdrop-blur-md transition-all duration-300 ${
-                  isSelected
-                    ? 'bg-zinc-900/95 border-2 border-amber-400 shadow-2xl shadow-amber-500/40 scale-110 ring-4 ring-amber-400/20'
-                    : 'bg-zinc-950/85 hover:bg-zinc-900/95 border border-white/20 hover:border-amber-400/70 shadow-lg hover:scale-105'
-                }`}
-              >
-                {/* Radar Pulse Ring */}
-                <span className="absolute -inset-1 rounded-2xl bg-amber-400/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75" />
-
-                {/* Hotspot Icon */}
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                  isSelected ? 'bg-amber-400/20 text-amber-300' : 'bg-white/10 group-hover:bg-amber-400/20'
-                }`}>
-                  {renderCategoryIcon(hotspot.category)}
-                </div>
-
-                {/* Hotspot Name & Mini Tag */}
-                <div className="text-left pr-1">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">
-                      {hotspot.nameJa}
-                    </span>
-                    {hotspot.nearbyJob && (
-                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        বাইট
-                      </span>
-                    )}
-                    {hotspot.id === 'spot-restaurant' && !unlockedHotspots.includes('spot-restaurant') && (!user?.planId || user.planId === 'free' || user.planId === 'starter') && (
-                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-0.5">
-                        <Lock className="w-2.5 h-2.5" /> 20 🪙
-                      </span>
-                    )}
-                    {hotspot.id === 'spot-school' && (!user?.planId || user.planId === 'free') && (
-                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-0.5">
-                        <GraduationCap className="w-2.5 h-2.5" /> PRO
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-[10px] text-zinc-400 font-medium block leading-none mt-0.5">
-                    {hotspot.nameBn}
-                  </span>
-                </div>
-
-                {/* Next Best Action Glow Indicator */}
-                {!missionComplete && hotspot.id === 'spot-crossing' && (
-                  <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-md animate-bounce">
-                    START HERE
-                  </span>
-                )}
-                {missionComplete && hotspot.id === 'spot-conbini' && (
-                  <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md animate-pulse">
-                    RECOMMENDED
-                  </span>
-                )}
-              </button>
-            </div>
-          );
-        })}
-      </div>
 
       {/* 4. AI SENSEI ADAPTIVE WELCOME CARD (BOTTOM CENTER) */}
       {!selectedHotspot && activeMission === 'none' && !isSenseiChatOpen && (
@@ -756,6 +665,96 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                 <div className="flex items-center gap-2 text-[11px] text-zinc-400 mt-2">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                   <span>{selectedHotspot.nearbyJob.hoursLimit}</span>
+                </div>
+              </div>
+            )}
+            {/* Real Subscription Options for Tokyo Language Academy */}
+            {selectedHotspot.id === 'spot-school' && (
+              <div className="mt-6 p-4 rounded-2xl bg-zinc-900/90 border border-indigo-500/30 shadow-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4 text-indigo-400" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      ল্যাঙ্গুয়েজ স্কুল মেম্বারশিপ প্ল্যান
+                    </span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">
+                    JLPT N5-N1
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  {/* Starter Tier */}
+                  <div
+                    onClick={() => {
+                      setPaywallConfig({
+                        mode: 'academy_upgrade',
+                        initialTrack: 'continuous',
+                        hotspotTitle: 'Tokyo Japanese Language Academy',
+                        hotspotTitleJa: '東京渋谷日本語アカデミー'
+                      });
+                      setPaywallModalOpen(true);
+                    }}
+                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/50 cursor-pointer transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-white">Starter Learner (N5)</span>
+                        <span className="text-[10px] text-amber-300 font-mono">100 Coins/mo</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 mt-0.5">লেসন ১-২৫ ও ডিজিটাল স্টুডেন্ট আইডি</p>
+                    </div>
+                    <span className="text-sm font-extrabold text-amber-300 font-mono">৳990<span className="text-[10px] text-zinc-400 font-normal">/mo</span></span>
+                  </div>
+
+                  {/* Pro Tier (Popular) */}
+                  <div
+                    onClick={() => {
+                      setPaywallConfig({
+                        mode: 'academy_upgrade',
+                        initialTrack: 'continuous',
+                        hotspotTitle: 'Tokyo Japanese Language Academy',
+                        hotspotTitleJa: '東京渋谷日本語アカデミー'
+                      });
+                      setPaywallModalOpen(true);
+                    }}
+                    className="p-3 rounded-xl bg-gradient-to-r from-amber-500/15 via-rose-500/10 to-indigo-500/10 hover:from-amber-500/25 border border-amber-400/50 cursor-pointer transition-all flex items-center justify-between relative"
+                  >
+                    <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded text-[8px] font-black bg-amber-400 text-zinc-950">
+                      POPULAR
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-white">Nihomi PRO Learning (N5+N4)</span>
+                        <span className="text-[10px] text-amber-300 font-mono">500 Coins/mo</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-300 mt-0.5">ভয়েস AI সেনসেই ও ফুল মক এক্সাম ইঞ্জিন</p>
+                    </div>
+                    <span className="text-sm font-extrabold text-amber-300 font-mono">৳1,990<span className="text-[10px] text-zinc-400 font-normal">/mo</span></span>
+                  </div>
+
+                  {/* Japan Trip Pass Option */}
+                  <div
+                    onClick={() => {
+                      setPaywallConfig({
+                        mode: 'academy_upgrade',
+                        initialTrack: 'trip_pass',
+                        hotspotTitle: 'Tokyo Japanese Language Academy',
+                        hotspotTitleJa: '東京渋谷日本語アカデミー'
+                      });
+                      setPaywallModalOpen(true);
+                    }}
+                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-cyan-500/30 hover:border-cyan-400 cursor-pointer transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-cyan-300">Japan Trip Pass (Tourist Track)</span>
+                        <span className="text-[10px] text-cyan-200 font-mono">7–30 Days</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 mt-0.5">টোকিও সারভাইভাল ও সাবওয়ে ডাইনিং নেভিগেশন</p>
+                    </div>
+                    <span className="text-sm font-extrabold text-cyan-300 font-mono">৳1,490<span className="text-[10px] text-zinc-400 font-normal"> থেকে</span></span>
+                  </div>
                 </div>
               </div>
             )}

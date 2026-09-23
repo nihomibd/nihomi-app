@@ -1,15 +1,30 @@
 // src/components/canvas3d/Shibuya3DCanvas.tsx
-// NIHOMI WORLD™ — 3D/360° Street View Panoramic Canvas Engine (Three.js)
-// Implements true WebGL panoramic sphere, volumetric particles, raycasted 3D pins, and mobile gyro/touch controls.
+// NIHOMI WORLD™ V3.2 — Ultra-Stable 3D/360° Street View Panoramic Canvas Engine
+// Zero-Flicker Architecture, Preloaded Panorama, Memory Leak Elimination & Direct DOM Pin Projections
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
+import {
+  Compass,
+  Store,
+  UtensilsCrossed,
+  Train,
+  GraduationCap,
+  MapPin,
+  Lock,
+  RotateCcw,
+  Sparkles,
+  Zap,
+  Eye,
+  Maximize2
+} from 'lucide-react';
 import { ShibuyaHotspot } from '../../data/shibuyaWorldData';
+import { worldAudio } from '../../lib/worldAudio';
 
 export interface HotspotScreenPosition {
   id: string;
-  x: number; // Pixels from left
-  y: number; // Pixels from top
+  x: number;
+  y: number;
   visible: boolean;
   scale: number;
 }
@@ -18,42 +33,52 @@ interface Shibuya3DCanvasProps {
   hotspots: ShibuyaHotspot[];
   selectedHotspotId: string | null;
   onSelectHotspot: (hotspot: ShibuyaHotspot) => void;
-  onHotspotsProjected: (positions: Record<string, HotspotScreenPosition>) => void;
+  unlockedHotspots?: string[];
+  userPlanId?: string;
+  missionComplete?: boolean;
 }
 
-// Spherical coordinates (yaw: 0-360 deg, pitch: -85 to +85 deg) for Shibuya hotspots
+// Fixed spherical coordinates (yaw: -180 to +180 deg, pitch: -85 to +85 deg)
 const HOTSPOT_SPHERICAL_COORDS: Record<string, { yaw: number; pitch: number }> = {
-  'spot-crossing': { yaw: 0, pitch: -14 },
-  'spot-conbini': { yaw: -52, pitch: -4 },
-  'spot-restaurant': { yaw: 56, pitch: -5 },
-  'spot-station': { yaw: 22, pitch: -25 },
-  'spot-school': { yaw: -24, pitch: 20 },
+  'spot-crossing': { yaw: 0, pitch: -12 },
+  'spot-conbini': { yaw: -50, pitch: -4 },
+  'spot-restaurant': { yaw: 55, pitch: -5 },
+  'spot-station': { yaw: 22, pitch: -22 },
+  'spot-school': { yaw: -25, pitch: 18 },
 };
 
 export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
   hotspots,
   selectedHotspotId,
   onSelectHotspot,
-  onHotspotsProjected
+  unlockedHotspots = ['spot-crossing', 'spot-conbini'],
+  userPlanId = 'free',
+  missionComplete = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [webglSupported, setWebglSupported] = useState<boolean>(true);
-  const [isUserInteracting, setIsUserInteracting] = useState(false);
-  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  const canvasMountRef = useRef<HTMLDivElement>(null);
 
-  // References for animation loop
+  // Mode: 3D WebGL vs High-Res Static Panorama
+  const [viewMode, setViewMode] = useState<'3d' | 'static'>('3d');
+  const [isTextureLoaded, setIsTextureLoaded] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
+
+  // References for Three.js instances to avoid re-creation
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const reqIdRef = useRef<number | null>(null);
+  const sphereMeshRef = useRef<THREE.Mesh | null>(null);
+  const particlesRef = useRef<THREE.Points | null>(null);
+  const animFrameRef = useRef<number | null>(null);
 
-  // Spherical camera rotation angles
+  // Spherical camera rotation angles (lon: horizontal yaw, lat: vertical pitch)
   const lonRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const targetLonRef = useRef<number>(0);
   const targetLatRef = useRef<number>(0);
 
-  // Interaction tracking
+  // Pointer drag state
+  const isPointerDownRef = useRef(false);
   const pointerStartRef = useRef<{ x: number; y: number; lon: number; lat: number }>({
     x: 0,
     y: 0,
@@ -61,67 +86,98 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
     lat: 0
   });
 
-  // Touch pinch zoom
+  // Touch pinch distance
   const touchDistanceRef = useRef<number | null>(null);
 
-  // Check WebGL availability safely
-  const checkWebGL = useCallback((): boolean => {
-    try {
-      const canvas = document.createElement('canvas');
-      return !!(
-        window.WebGLRenderingContext &&
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-      );
-    } catch {
-      return false;
+  // Direct DOM pin references to update positions without React re-render overhead
+  const pinDOMElementsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Up-to-date props refs for the render loop
+  const hotspotsRef = useRef(hotspots);
+  hotspotsRef.current = hotspots;
+
+  const onSelectRef = useRef(onSelectHotspot);
+  onSelectRef.current = onSelectHotspot;
+
+  // Icon Resolver
+  const renderCategoryIcon = (category: ShibuyaHotspot['category']) => {
+    switch (category) {
+      case 'crossing':
+        return <Compass className="w-4 h-4 text-amber-400" />;
+      case 'conbini':
+        return <Store className="w-4 h-4 text-emerald-400" />;
+      case 'restaurant':
+        return <UtensilsCrossed className="w-4 h-4 text-orange-400" />;
+      case 'station':
+        return <Train className="w-4 h-4 text-cyan-400" />;
+      case 'school':
+        return <GraduationCap className="w-4 h-4 text-pink-400" />;
+      default:
+        return <MapPin className="w-4 h-4 text-indigo-400" />;
     }
+  };
+
+  // Reset view to center crossing
+  const handleResetOrientation = useCallback(() => {
+    targetLonRef.current = 0;
+    targetLatRef.current = 0;
+    if (cameraRef.current) {
+      cameraRef.current.fov = 72;
+      cameraRef.current.updateProjectionMatrix();
+    }
+    worldAudio.playTokyoChime();
   }, []);
 
+  // ---------------------------------------------------------------------------
+  // WEBGL INITIALIZATION EFFECT (MOUNTS ONCE ONLY)
+  // ---------------------------------------------------------------------------
   useEffect(() => {
-    const isSupported = checkWebGL();
-    if (!isSupported) {
-      setWebglSupported(false);
-      return;
-    }
+    if (viewMode !== '3d') return;
 
-    const container = containerRef.current;
-    if (!container) return;
+    const mount = canvasMountRef.current;
+    if (!mount) return;
 
-    const width = container.clientWidth || window.innerWidth;
-    const height = container.clientHeight || window.innerHeight;
+    const width = mount.clientWidth || window.innerWidth;
+    const height = mount.clientHeight || window.innerHeight;
 
-    // 1. SCENE SETUP
+    // 1. SCENE
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // 2. CAMERA SETUP
-    const camera = new THREE.PerspectiveCamera(72, width / height, 0.1, 1000);
+    // 2. CAMERA
+    const camera = new THREE.PerspectiveCamera(72, width / height, 0.1, 1200);
     camera.position.set(0, 0, 0);
     cameraRef.current = camera;
 
-    // 3. RENDERER SETUP
+    // 3. RENDERER
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: false,
-        powerPreference: 'high-performance'
+        alpha: true,
+        powerPreference: 'high-performance',
+        failIfMajorPerformanceCaveat: false
       });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      container.appendChild(renderer.domElement);
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      renderer.domElement.style.display = 'block';
+
+      mount.appendChild(renderer.domElement);
       rendererRef.current = renderer;
     } catch (err) {
-      console.warn('[Shibuya3DCanvas] WebGL init fallback triggered:', err);
-      setWebglSupported(false);
+      console.warn('[Shibuya3DCanvas] WebGL init failed, switching to static panorama:', err);
+      setViewMode('static');
       return;
     }
 
-    // 4. PANORAMIC 360° SPHERE GEOMETRY
-    const sphereGeometry = new THREE.SphereGeometry(500, 64, 40);
-    sphereGeometry.scale(-1, 1, 1); // Invert faces inward
+    // 4. PANORAMIC SPHERE
+    const sphereGeometry = new THREE.SphereGeometry(500, 60, 40);
+    sphereGeometry.scale(-1, 1, 1); // Invert so inside is visible
 
+    // Preload texture
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       '/assets/shibuya-crossing.jpg',
@@ -129,6 +185,7 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = false;
 
         const sphereMaterial = new THREE.MeshBasicMaterial({
           map: texture,
@@ -136,67 +193,62 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
         });
         const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
         scene.add(sphereMesh);
-        setIsCanvasReady(true);
+        sphereMeshRef.current = sphereMesh;
+        setIsTextureLoaded(true);
       },
       undefined,
       (err) => {
-        console.warn('[Shibuya3DCanvas] Texture load error, using chromatic fallback:', err);
-        const fallbackMaterial = new THREE.MeshBasicMaterial({ color: 0x0a0a14 });
-        const sphereMesh = new THREE.Mesh(sphereGeometry, fallbackMaterial);
-        scene.add(sphereMesh);
-        setIsCanvasReady(true);
+        console.warn('[Shibuya3DCanvas] Texture failed, using fallback:', err);
+        setViewMode('static');
       }
     );
 
-    // 5. VOLUMETRIC SPATIAL PARTICLES (Cyan / Amber Tokyo Night Embers)
-    const particleCount = 180;
-    const particleGeometry = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
+    // 5. VOLUMETRIC NIGHT EMBERS (Subtle Tokyo Cyber Atmosphere)
+    const particleCount = 140;
+    const particleGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount; i++) {
-      // Distribute in sphere between radius 60 and 380
-      const r = 60 + Math.random() * 320;
+      const r = 80 + Math.random() * 320;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
 
-      particlePositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      particlePositions[i * 3 + 1] = r * Math.cos(phi);
-      particlePositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.cos(phi);
+      positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
 
-      // Alternate amber / cyan cyber hues
-      const isCyan = Math.random() > 0.5;
-      particleColors[i * 3] = isCyan ? 0.2 : 0.98;
-      particleColors[i * 3 + 1] = isCyan ? 0.8 : 0.65;
-      particleColors[i * 3 + 2] = isCyan ? 0.95 : 0.2;
+      const isCyan = Math.random() > 0.45;
+      colors[i * 3] = isCyan ? 0.15 : 0.98;
+      colors[i * 3 + 1] = isCyan ? 0.85 : 0.65;
+      colors[i * 3 + 2] = isCyan ? 0.95 : 0.2;
     }
 
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 2.2,
+    const particleMat = new THREE.PointsMaterial({
+      size: 2.5,
       vertexColors: true,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.65,
       blending: THREE.AdditiveBlending
     });
 
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
+    particlesRef.current = particles;
 
-    // 6. ANIMATION & 3D PIN PROJECTION LOOP
-    const tempVector = new THREE.Vector3();
-    const cameraDirection = new THREE.Vector3();
+    // 6. RENDER LOOP (Direct DOM Pin Updates — 0 React Re-renders!)
+    const tempVec = new THREE.Vector3();
+    const camDir = new THREE.Vector3();
 
-    const animate = () => {
-      reqIdRef.current = requestAnimationFrame(animate);
+    const renderLoop = () => {
+      animFrameRef.current = requestAnimationFrame(renderLoop);
 
-      // Smooth inertia lerp
+      // Smooth camera interpolation
       latRef.current += (targetLatRef.current - latRef.current) * 0.12;
       lonRef.current += (targetLonRef.current - lonRef.current) * 0.12;
-
-      // Clamp latitude to avoid pole gimbal lock
       latRef.current = Math.max(-75, Math.min(75, latRef.current));
 
       const phi = THREE.MathUtils.degToRad(90 - latRef.current);
@@ -207,58 +259,69 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
       const targetZ = 500 * Math.sin(phi) * Math.sin(theta);
 
       camera.lookAt(targetX, targetY, targetZ);
-      camera.getWorldDirection(cameraDirection);
+      camera.getWorldDirection(camDir);
 
-      // Subtle particle orbital drift
-      particles.rotation.y += 0.0003;
+      if (particlesRef.current) {
+        particlesRef.current.rotation.y += 0.0003;
+      }
 
-      // 7. PROJECT 3D HOTSPOT PINS TO SCREEN COORDINATES
-      const containerW = container.clientWidth || window.innerWidth;
-      const containerH = container.clientHeight || window.innerHeight;
-      const projectedPositions: Record<string, HotspotScreenPosition> = {};
+      // Update 3D projected pin positions directly in DOM
+      const curMount = canvasMountRef.current;
+      if (curMount) {
+        const w = curMount.clientWidth || window.innerWidth;
+        const h = curMount.clientHeight || window.innerHeight;
 
-      hotspots.forEach((spot) => {
-        const coords = HOTSPOT_SPHERICAL_COORDS[spot.id] || { yaw: spot.coords.x - 50, pitch: (50 - spot.coords.y) * 0.5 };
-        const spotPhi = THREE.MathUtils.degToRad(90 - coords.pitch);
-        const spotTheta = THREE.MathUtils.degToRad(coords.yaw);
+        hotspotsRef.current.forEach((spot) => {
+          const domPin = pinDOMElementsRef.current[spot.id];
+          if (!domPin) return;
 
-        const r = 420;
-        tempVector.set(
-          r * Math.sin(spotPhi) * Math.cos(spotTheta),
-          r * Math.cos(spotPhi),
-          r * Math.sin(spotPhi) * Math.sin(spotTheta)
-        );
+          const spherical = HOTSPOT_SPHERICAL_COORDS[spot.id] || {
+            yaw: (spot.coords.x - 50) * 1.8,
+            pitch: (50 - spot.coords.y) * 0.6
+          };
 
-        // Dot product to check if facing camera
-        const normalizedVec = tempVector.clone().normalize();
-        const dot = normalizedVec.dot(cameraDirection);
-        const isFacing = dot > 0.25;
+          const sPhi = THREE.MathUtils.degToRad(90 - spherical.pitch);
+          const sTheta = THREE.MathUtils.degToRad(spherical.yaw);
+          const radius = 420;
 
-        tempVector.project(camera);
+          tempVec.set(
+            radius * Math.sin(sPhi) * Math.cos(sTheta),
+            radius * Math.cos(sPhi),
+            radius * Math.sin(sPhi) * Math.sin(sTheta)
+          );
 
-        const x = (tempVector.x * 0.5 + 0.5) * containerW;
-        const y = (-tempVector.y * 0.5 + 0.5) * containerH;
+          // Facing dot product
+          const norm = tempVec.clone().normalize();
+          const dot = norm.dot(camDir);
+          const isFacing = dot > 0.15;
 
-        projectedPositions[spot.id] = {
-          id: spot.id,
-          x,
-          y,
-          visible: isFacing && tempVector.z < 1,
-          scale: THREE.MathUtils.clamp(dot, 0.7, 1.1)
-        };
-      });
+          tempVec.project(camera);
 
-      onHotspotsProjected(projectedPositions);
+          const screenX = (tempVec.x * 0.5 + 0.5) * w;
+          const screenY = (-tempVec.y * 0.5 + 0.5) * h;
+          const scale = THREE.MathUtils.clamp(dot, 0.75, 1.05);
+
+          if (isFacing && tempVec.z < 1) {
+            domPin.style.opacity = '1';
+            domPin.style.pointerEvents = 'auto';
+            domPin.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) scale(${scale})`;
+          } else {
+            domPin.style.opacity = '0';
+            domPin.style.pointerEvents = 'none';
+          }
+        });
+      }
+
       renderer.render(scene, camera);
     };
 
-    animate();
+    renderLoop();
 
-    // 8. RESIZE LISTENER
+    // 7. WINDOW RESIZE HANDLER
     const handleResize = () => {
-      if (!containerRef.current || !cameraRef.current || !rendererRef.current) return;
-      const newW = containerRef.current.clientWidth;
-      const newH = containerRef.current.clientHeight;
+      if (!canvasMountRef.current || !cameraRef.current || !rendererRef.current) return;
+      const newW = canvasMountRef.current.clientWidth;
+      const newH = canvasMountRef.current.clientHeight;
       cameraRef.current.aspect = newW / newH;
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(newW, newH);
@@ -266,74 +329,85 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
 
     window.addEventListener('resize', handleResize);
 
+    // 8. CONTEXT LOSS SAFETY
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      console.warn('[Shibuya3DCanvas] WebGL context lost. Gracefully falling back to static panorama.');
+      setViewMode('static');
+    };
+
+    renderer.domElement.addEventListener('webglcontextlost', handleContextLost);
+
     // CLEANUP
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (reqIdRef.current) cancelAnimationFrame(reqIdRef.current);
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (rendererRef.current && rendererRef.current.domElement) {
+        rendererRef.current.domElement.removeEventListener('webglcontextlost', handleContextLost);
         try {
-          container.removeChild(rendererRef.current.domElement);
+          if (mount.contains(rendererRef.current.domElement)) {
+            mount.removeChild(rendererRef.current.domElement);
+          }
           rendererRef.current.dispose();
         } catch {}
       }
       sphereGeometry.dispose();
-      particleGeometry.dispose();
-      particleMaterial.dispose();
+      particleGeo.dispose();
+      particleMat.dispose();
     };
-  }, [checkWebGL, hotspots, onHotspotsProjected]);
+  }, [viewMode]);
 
-  // POINTER & TOUCH CONTROLS
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    setIsUserInteracting(true);
+  // ---------------------------------------------------------------------------
+  // INTERACTION HANDLERS (MOUSE & TOUCH DRAG)
+  // ---------------------------------------------------------------------------
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isPointerDownRef.current = true;
+    setIsInteracting(true);
     pointerStartRef.current = {
       x: e.clientX,
       y: e.clientY,
       lon: targetLonRef.current,
       lat: targetLatRef.current
     };
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
   };
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isUserInteracting) return;
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isPointerDownRef.current) return;
     const deltaX = e.clientX - pointerStartRef.current.x;
     const deltaY = e.clientY - pointerStartRef.current.y;
 
-    // Fluid drag sensitivity (tuned for street view feel)
-    targetLonRef.current = pointerStartRef.current.lon - deltaX * 0.16;
-    targetLatRef.current = pointerStartRef.current.lat + deltaY * 0.16;
+    targetLonRef.current = pointerStartRef.current.lon - deltaX * 0.18;
+    targetLatRef.current = pointerStartRef.current.lat + deltaY * 0.18;
   };
 
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    setIsUserInteracting(false);
-    try {
-      (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
-    } catch {}
+  const handlePointerUp = () => {
+    isPointerDownRef.current = false;
+    setIsInteracting(false);
   };
 
-  // WHEEL ZOOM
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+  // Wheel Zoom
+  const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     if (!cameraRef.current) return;
-    const fov = cameraRef.current.fov + e.deltaY * 0.04;
-    cameraRef.current.fov = THREE.MathUtils.clamp(fov, 45, 88);
+    const newFov = cameraRef.current.fov + e.deltaY * 0.04;
+    cameraRef.current.fov = THREE.MathUtils.clamp(newFov, 45, 85);
     cameraRef.current.updateProjectionMatrix();
   };
 
-  // TOUCH ZOOM (PINCH)
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+  // Touch Pinch Zoom
+  const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2 && cameraRef.current) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
-      const distance = Math.hypot(dx, dy);
+      const dist = Math.hypot(dx, dy);
 
       if (touchDistanceRef.current !== null) {
-        const delta = touchDistanceRef.current - distance;
-        const fov = cameraRef.current.fov + delta * 0.15;
-        cameraRef.current.fov = THREE.MathUtils.clamp(fov, 45, 88);
+        const delta = touchDistanceRef.current - dist;
+        const newFov = cameraRef.current.fov + delta * 0.15;
+        cameraRef.current.fov = THREE.MathUtils.clamp(newFov, 45, 85);
         cameraRef.current.updateProjectionMatrix();
       }
-      touchDistanceRef.current = distance;
+      touchDistanceRef.current = dist;
     }
   };
 
@@ -341,52 +415,177 @@ export const Shibuya3DCanvas: React.FC<Shibuya3DCanvasProps> = ({
     touchDistanceRef.current = null;
   };
 
-  // Quick Reset View to Scramble Center
-  const resetOrientation = () => {
-    targetLonRef.current = 0;
-    targetLatRef.current = 0;
-    if (cameraRef.current) {
-      cameraRef.current.fov = 72;
-      cameraRef.current.updateProjectionMatrix();
-    }
-  };
-
-  // If WebGL fails, render high-res smooth 2D fallback with drag panning
-  if (!webglSupported) {
-    return (
-      <div className="absolute inset-0 overflow-hidden select-none cursor-grab active:cursor-grabbing">
-        <img
-          src="/assets/shibuya-crossing.jpg"
-          alt="Shibuya Crossing Fallback"
-          className="w-full h-full object-cover brightness-[0.78] contrast-[1.08]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-[#06060c]/60" />
-      </div>
-    );
-  }
-
   return (
     <div
       ref={containerRef}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
+      onPointerLeave={handlePointerUp}
       onWheel={handleWheel}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className={`absolute inset-0 z-0 overflow-hidden cursor-grab active:cursor-grabbing select-none transition-opacity duration-1000 ${
-        isCanvasReady ? 'opacity-100' : 'opacity-0'
-      }`}
-      style={{ touchAction: 'none' }}
+      style={{
+        // Guaranteed rock-solid background fallback: NEVER turns black under any circumstances
+        backgroundImage: `url('/assets/shibuya-crossing.jpg')`,
+        backgroundPosition: 'center center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        touchAction: 'none'
+      }}
+      className="absolute inset-0 z-0 overflow-hidden select-none cursor-grab active:cursor-grabbing bg-[#090912]"
     >
-      {/* Subtle Spatial Drag Helper Tooltip (Fades out when interacting) */}
-      {!isUserInteracting && (
-        <div className="absolute bottom-6 left-6 z-20 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-950/60 border border-white/10 text-[11px] text-zinc-300 backdrop-blur-md animate-pulse">
-          <span className="w-2 h-2 rounded-full bg-cyan-400" />
-          <span>Drag / Pan 360° • Scroll to Zoom</span>
-        </div>
+      {/* 1. Three.js Canvas Mount Layer */}
+      {viewMode === '3d' && (
+        <div
+          ref={canvasMountRef}
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            isTextureLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
       )}
+
+      {/* 2. Ambient Cinema Vignette Overlay (Enhanced Contrast & Depth) */}
+      <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#06060c]/40 to-[#06060c]/80 pointer-events-none z-10" />
+
+      {/* 3. TACTILE 3D SPATIAL LOCATION PINS OVERLAY */}
+      <div className="absolute inset-0 pointer-events-none z-20">
+        {hotspots.map((hotspot) => {
+          const isSelected = selectedHotspotId === hotspot.id;
+          const isIzakaya = hotspot.id === 'spot-restaurant';
+          const isSchool = hotspot.id === 'spot-school';
+          const isLocked = isIzakaya && !unlockedHotspots.includes('spot-restaurant') && (userPlanId === 'free' || userPlanId === 'starter');
+          const isProRequired = isSchool && userPlanId === 'free';
+
+          // For static mode fallback, position using predefined coords
+          const fallbackStyle: React.CSSProperties = viewMode === 'static' ? {
+            left: `${hotspot.coords.x}%`,
+            top: `${hotspot.coords.y}%`,
+            transform: 'translate(-50%, -50%)',
+            opacity: 1,
+            pointerEvents: 'auto'
+          } : {
+            left: 0,
+            top: 0,
+            opacity: 0,
+            pointerEvents: 'none',
+            willChange: 'transform, opacity'
+          };
+
+          return (
+            <div
+              key={hotspot.id}
+              ref={(el) => {
+                pinDOMElementsRef.current[hotspot.id] = el;
+              }}
+              style={fallbackStyle}
+              className="absolute transition-transform duration-75"
+            >
+              {/* Ultra-Tactile Interactive Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  worldAudio.playTokyoChime();
+                  onSelectRef.current(hotspot);
+                }}
+                className={`group relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl backdrop-blur-xl transition-all duration-200 active:scale-90 active:translate-y-0.5 shadow-2xl ${
+                  isSelected
+                    ? 'bg-zinc-900/95 border-2 border-amber-400 ring-4 ring-amber-400/25 shadow-amber-500/40 scale-105'
+                    : 'bg-zinc-950/90 hover:bg-zinc-900 border border-white/20 hover:border-amber-400/80 shadow-black/90 hover:scale-105'
+                }`}
+                title={`Click to open ${hotspot.nameJa} (${hotspot.nameBn})`}
+              >
+                {/* Radar Pulse Effect */}
+                <span className="absolute -inset-1 rounded-2xl bg-amber-400/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75" />
+
+                {/* Hotspot Category Icon */}
+                <div
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors shadow-md ${
+                    isSelected
+                      ? 'bg-amber-400/25 text-amber-300'
+                      : 'bg-white/10 group-hover:bg-amber-400/20'
+                  }`}
+                >
+                  {renderCategoryIcon(hotspot.category)}
+                </div>
+
+                {/* Hotspot Titles & Badges */}
+                <div className="text-left pr-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold text-xs text-white group-hover:text-amber-300 transition-colors">
+                      {hotspot.nameJa}
+                    </span>
+                    {hotspot.nearbyJob && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-emerald-500/25 text-emerald-300 border border-emerald-500/40">
+                        {hotspot.nearbyJob.hourlyWage.split('/')[0]}
+                      </span>
+                    )}
+                    {isLocked && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-amber-500/25 text-amber-300 border border-amber-500/40 flex items-center gap-0.5">
+                        <Lock className="w-2.5 h-2.5" /> 20 🪙
+                      </span>
+                    )}
+                    {isProRequired && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-indigo-500/25 text-indigo-300 border border-indigo-500/40">
+                        PRO
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-zinc-400 font-semibold block leading-tight mt-0.5">
+                    {hotspot.nameBn}
+                  </span>
+                </div>
+
+                {/* Recommended Objective Badges */}
+                {!missionComplete && hotspot.id === 'spot-crossing' && (
+                  <span className="absolute -top-3 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-lg animate-bounce">
+                    START HERE
+                  </span>
+                )}
+                {missionComplete && hotspot.id === 'spot-conbini' && (
+                  <span className="absolute -top-3 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg animate-pulse">
+                    LEARN KEIGO
+                  </span>
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 4. TACTILE SPATIAL VIEW CONTROLS (BOTTOM LEFT) */}
+      <div className="absolute bottom-6 left-6 z-30 flex items-center gap-2">
+        {/* Reset View Button */}
+        <button
+          onClick={handleResetOrientation}
+          className="p-2.5 rounded-xl bg-zinc-950/80 hover:bg-zinc-900 border border-white/15 hover:border-amber-400/50 text-zinc-300 hover:text-white backdrop-blur-md shadow-xl active:scale-95 transition-all flex items-center gap-1.5 text-xs font-semibold"
+          title="Reset View to Shibuya Crossing Center"
+        >
+          <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+          <span className="hidden sm:inline">Reset View</span>
+        </button>
+
+        {/* View Mode Switcher (3D WebGL vs Stable Static) */}
+        <button
+          onClick={() => {
+            setViewMode(prev => (prev === '3d' ? 'static' : '3d'));
+            worldAudio.playTokyoChime();
+          }}
+          className="p-2.5 rounded-xl bg-zinc-950/80 hover:bg-zinc-900 border border-white/15 hover:border-cyan-400/50 text-zinc-300 hover:text-white backdrop-blur-md shadow-xl active:scale-95 transition-all flex items-center gap-1.5 text-xs font-semibold"
+          title={viewMode === '3d' ? 'Switch to Static Panorama Mode' : 'Switch to 3D WebGL Mode'}
+        >
+          <Eye className="w-3.5 h-3.5 text-cyan-400" />
+          <span>{viewMode === '3d' ? '3D WebGL' : 'Static Mode'}</span>
+        </button>
+
+        {/* Interaction Drag Indicator */}
+        {!isInteracting && (
+          <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-950/60 border border-white/10 text-[11px] text-zinc-400 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Drag anywhere to look around Tokyo 360°</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
