@@ -232,6 +232,26 @@ analyticsRouter.post('/track', optionalAuth, (req: AuthenticatedRequest, res) =>
 });
 
 /**
+ * GET /api/analytics/cohort
+ * Returns platform-wide cohort statistics, recall rates, and active learner counts.
+ */
+analyticsRouter.get('/cohort', requireAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const cohort = db.getCohortAnalytics();
+    return res.json({
+      success: true,
+      cohort
+    });
+  } catch (error: any) {
+    console.error('[Analytics] Error retrieving cohort analytics:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to retrieve cohort analytics'
+    });
+  }
+});
+
+/**
  * GET /api/analytics/growth
  * Real-time Founder Growth Command Center metrics.
  * Supports authentication or founder passkey for instant mobile oversight.

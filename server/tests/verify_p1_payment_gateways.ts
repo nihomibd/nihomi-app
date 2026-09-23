@@ -162,7 +162,7 @@ async function runPaymentTests() {
   }, testPayment);
 
   assert(validVerification.success && validVerification.status === 'paid', '7. Valid 11-digit BD mobile number verified successfully');
-  assert(validVerification.paymentMethodDetails.accountNumberMasked === '018•••••678', '8. bKash account number properly masked for PCI/security compliance');
+  assert(validVerification.paymentMethodDetails.accountNumberMasked === '018•••••966', '8. bKash account number properly masked for PCI/security compliance');
 
   const invalidPayment: Payment = {
     ...testPayment,

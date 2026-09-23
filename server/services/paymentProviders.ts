@@ -516,7 +516,15 @@ export class BKashPaymentProvider implements PaymentProvider {
     }
 
     const rawMsisdn = (data.customerMsisdn || params.accountNumber || '').trim();
-    const masked = rawMsisdn.length >= 7 ? `${rawMsisdn.slice(0, 3)}•••••${rawMsisdn.slice(-3)}` : '01XXXXXXXXX';
+    const digitsOnly = rawMsisdn.replace(/\D/g, '');
+    const normalizedMsisdn = digitsOnly.startsWith('880')
+      ? digitsOnly.slice(2)
+      : digitsOnly.startsWith('88')
+      ? digitsOnly.slice(2)
+      : digitsOnly;
+    const masked = normalizedMsisdn.length >= 7
+      ? `${normalizedMsisdn.slice(0, 3)}•••••${normalizedMsisdn.slice(-3)}`
+      : (rawMsisdn.length >= 7 ? `${rawMsisdn.slice(0, 3)}•••••${rawMsisdn.slice(-3)}` : '01XXXXXXXXX');
 
     return {
       success: true,

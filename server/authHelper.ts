@@ -163,7 +163,7 @@ function getVerificationSecrets(): string[] {
  * Validates whether a given string is an allowed UserRole.
  */
 function isValidUserRole(role: unknown): role is UserRole {
-  return role === 'admin' || role === 'instructor' || role === 'user';
+  return role === 'admin' || role === 'instructor' || role === 'user' || role === 'founder';
 }
 
 /**
@@ -176,16 +176,6 @@ function isValidUserRole(role: unknown): role is UserRole {
  * Defaults safely to 'user'. Hardcoded email bypasses are strictly forbidden.
  */
 function resolveUserRole(rawPayload: Record<string, any>): UserRole {
-  // Founder Identity Auto-Verification
-  const checkEmail = (
-    rawPayload.email ||
-    rawPayload.user_metadata?.email ||
-    rawPayload.app_metadata?.email ||
-    ''
-  ).toLowerCase().trim();
-  if (checkEmail === 'mdtanvirkabirbiplob@gmail.com') {
-    return 'admin';
-  }
 
   // 1. Supabase app_metadata.role (server-controlled, cannot be spoofed by client)
   if (isValidUserRole(rawPayload.app_metadata?.role)) {

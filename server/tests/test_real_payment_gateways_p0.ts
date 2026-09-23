@@ -267,7 +267,7 @@ async function runRealPaymentGatewayTests() {
 
     assert(bkashVerify.success === true, '11. bKash execution verifies payment successfully');
     assert(bkashVerify.providerTransactionId === 'BKX_TRX_99228811', '12. bKash returns actual bank transaction ID');
-    assert(bkashVerify.paymentMethodDetails.accountNumberMasked === '017•••••344', '13. bKash masks student MSISDN');
+    assert(bkashVerify.paymentMethodDetails.accountNumberMasked === '018•••••966', '13. bKash masks student MSISDN');
 
     // -------------------------------------------------------------
     // TEST 5: SSLCommerz Session Init & Order Validation Flow

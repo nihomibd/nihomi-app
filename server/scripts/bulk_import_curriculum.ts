@@ -118,7 +118,10 @@ async function main() {
   process.exit(0);
 }
 
-main().catch(e => {
-  console.error("❌ Fatal Error:", e);
-  process.exit(1);
-});
+const isDirectExecution = process.argv[1] && process.argv[1].replace(/\\/g, '/').endsWith('bulk_import_curriculum.ts');
+if (isDirectExecution) {
+  main().catch(e => {
+    console.error("❌ Fatal Error:", e);
+    process.exit(1);
+  });
+}

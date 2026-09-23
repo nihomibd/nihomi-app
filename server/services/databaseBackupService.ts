@@ -92,9 +92,16 @@ export class DatabaseBackupService {
     try {
       this.ensureBackupDirExists();
       manifest.lastUpdated = new Date().toISOString();
-      const tempPath = `${this.manifestPath}.tmp`;
+      const tempPath = `${this.manifestPath}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
       fs.writeFileSync(tempPath, JSON.stringify(manifest, null, 2), 'utf-8');
-      fs.renameSync(tempPath, this.manifestPath);
+      try {
+        fs.renameSync(tempPath, this.manifestPath);
+      } catch {
+        fs.copyFileSync(tempPath, this.manifestPath);
+        try {
+          fs.unlinkSync(tempPath);
+        } catch {}
+      }
     } catch (err) {
       console.error('[Backup Service] Failed to save backup manifest:', err);
     }

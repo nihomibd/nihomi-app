@@ -1531,31 +1531,49 @@ class Database {
     return DATA_DIR;
   }
 
+  public safeWriteJsonFile(filePath: string, data: any): void {
+    try {
+      const dir = path.dirname(filePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      const tmpFile = `${filePath}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2), 'utf-8');
+      try {
+        fs.renameSync(tmpFile, filePath);
+      } catch {
+        // Fallback for Windows EPERM file locking
+        fs.copyFileSync(tmpFile, filePath);
+        try {
+          fs.unlinkSync(tmpFile);
+        } catch {}
+      }
+    } catch (err) {
+      console.error(`[DB Persistence] Error writing ${path.basename(filePath)}:`, err);
+    }
+  }
+
+  public saveDbFile() {
+    this.safeWriteJsonFile(DB_FILE, this.data);
+  }
+
   public save() {
     this.saveFounderState();
+    this.saveDbFile();
   }
 
   public saveFounderState() {
-    try {
-      if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      }
-      const stateToPersist = {
-        founderSettings: this.data.founderSettings,
-        founderApprovals: this.data.founderApprovals,
-        founderTasks: this.data.founderTasks,
-        founderBudgetWallets: this.data.founderBudgetWallets,
-        aiDepartmentStatuses: this.data.aiDepartmentStatuses,
-        founderEmergencyControls: this.data.founderEmergencyControls,
-        adminAuditLogs: this.data.adminAuditLogs,
-        aiActionLedger: this.data.aiActionLedger
-      };
-      const tmpFile = `${FOUNDER_OFFICE_DB_FILE}.tmp.${Date.now()}`;
-      fs.writeFileSync(tmpFile, JSON.stringify(stateToPersist, null, 2), 'utf-8');
-      fs.renameSync(tmpFile, FOUNDER_OFFICE_DB_FILE);
-    } catch (err) {
-      console.error('[FounderDB] Error saving founder office state to durable disk:', err);
-    }
+    const stateToPersist = {
+      founderSettings: this.data.founderSettings,
+      founderApprovals: this.data.founderApprovals,
+      founderTasks: this.data.founderTasks,
+      founderBudgetWallets: this.data.founderBudgetWallets,
+      aiDepartmentStatuses: this.data.aiDepartmentStatuses,
+      founderEmergencyControls: this.data.founderEmergencyControls,
+      adminAuditLogs: this.data.adminAuditLogs,
+      aiActionLedger: this.data.aiActionLedger
+    };
+    this.safeWriteJsonFile(FOUNDER_OFFICE_DB_FILE, stateToPersist);
   }
 
   public loadFounderState() {
