@@ -41,8 +41,8 @@ export function getSupabaseAdminClient(): SupabaseClient {
 
   const rawUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').trim();
   const supabaseUrl = rawUrl && !rawUrl.includes('placeholder') ? rawUrl : 'https://aiychtkhktwsjrieeaha.supabase.co';
-  const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
-  const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t').trim();
+  const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || '').trim();
+  const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t').trim();
 
   const activeKey = supabaseServiceKey || supabaseAnonKey;
 

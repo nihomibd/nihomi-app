@@ -1,16 +1,26 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Canonical NIHOMI Production Supabase Endpoint
-export const SUPABASE_URL = 'https://aiychtkhktwsjrieeaha.supabase.co';
+export const SUPABASE_URL = (
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL ||
+  'https://aiychtkhktwsjrieeaha.supabase.co'
+).trim();
 
-// Fallback anonymous key for public client queries
-export const SUPABASE_ANON_KEY =
-  (process.env.SUPABASE_ANON_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t').trim();
+// Anonymous / Publishable key for public client queries
+export const SUPABASE_ANON_KEY = (
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_PUBLISHABLE_KEY ||
+  'sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t'
+).trim();
 
-// Service Role Key for administrative backend operations
-export const SUPABASE_SERVICE_ROLE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+// Service Role / Secret Key for administrative backend operations
+export const SUPABASE_SERVICE_ROLE_KEY = (
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SECRET_KEY ||
+  ''
+).trim();
 
 let serverSupabaseClient: SupabaseClient | null = null;
 

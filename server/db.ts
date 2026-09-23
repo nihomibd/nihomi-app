@@ -471,8 +471,10 @@ class Database {
     const supabaseUrl = rawUrl && !rawUrl.includes('placeholder') ? rawUrl : 'https://aiychtkhktwsjrieeaha.supabase.co';
     const supabaseKey = (
       process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_SECRET_KEY ||
       process.env.SUPABASE_ANON_KEY ||
       process.env.VITE_SUPABASE_ANON_KEY ||
+      process.env.SUPABASE_PUBLISHABLE_KEY ||
       ''
     ).trim();
 
@@ -1531,7 +1533,22 @@ class Database {
     return DATA_DIR;
   }
 
+  public assertProductionStorageSafety(operation: string): void {
+    if (process.env.NODE_ENV === 'production' && !this.isSupabaseConnected) {
+      const error: any = new Error(
+        `[PRODUCTION PERSISTENCE ERROR] Cannot execute '${operation}'. Production requires an active Supabase PostgreSQL datastore. Local filesystem fallback is disabled in production to prevent silent data loss.`
+      );
+      error.status = 503;
+      error.code = 'PERSISTENCE_UNAVAILABLE';
+      throw error;
+    }
+  }
+
   public safeWriteJsonFile(filePath: string, data: any): void {
+    if (process.env.NODE_ENV === 'production') {
+      // In production, writing to ephemeral filesystem JSON databases is strictly disabled
+      return;
+    }
     try {
       const dir = path.dirname(filePath);
       if (!fs.existsSync(dir)) {
@@ -1639,6 +1656,7 @@ class Database {
     displayName?: string;
     targetLevel?: JLPTLevel;
   }): User {
+    this.assertProductionStorageSafety('ensureUserExists');
     const cleanEmail = (params.email || '').trim().toLowerCase();
     let existing = (params.id ? this.findUserById(params.id) : undefined) || (cleanEmail ? this.findUserByEmail(cleanEmail) : undefined);
     if (existing) {
@@ -1705,6 +1723,7 @@ class Database {
     targetLevel?: JLPTLevel;
     nativeLanguage?: string;
   }): { user: User; profile: UserProfile; progress: UserProgress } {
+    this.assertProductionStorageSafety('createUser');
     const id = `usr-${crypto.randomUUID().slice(0, 8)}`;
     const { hash, salt } = hashPassword(params.password);
     const now = new Date().toISOString();
@@ -1851,6 +1870,7 @@ class Database {
   }
 
   public completeLesson(userId: string, lessonId: string, studyMinutes = 15): UserProgress {
+    this.assertProductionStorageSafety('completeLesson');
     const p = this.getProgressByUserId(userId);
     const today = new Date().toISOString().split('T')[0];
 
@@ -2761,6 +2781,7 @@ class Database {
     paymentMethod?: string;
     lastPaymentId?: string;
   }): Subscription {
+    this.assertProductionStorageSafety('createSubscription');
     const now = new Date();
     const periodMonths = params.billingInterval === 'yearly' ? 12 : 1;
     const periodStart = now.toISOString();
@@ -5434,6 +5455,7 @@ class Database {
     ghostId: string,
     isCorrect: boolean
   ): { success: boolean; ghost: GhostWeaknessItem; progress: UserProgress; message: string } {
+    this.assertProductionStorageSafety('recordGhostAttempt');
     if (!this.data.ghostWeaknesses) this.data.ghostWeaknesses = [];
     const ghost = this.data.ghostWeaknesses.find((g) => g.id === ghostId && g.userId === userId);
     if (!ghost) {

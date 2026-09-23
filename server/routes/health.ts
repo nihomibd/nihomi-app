@@ -59,7 +59,7 @@ healthRouter.get('/', async (_req, res) => {
   const healthPayload = {
     status: 'ok',
     system: 'healthy',
-    service: 'Nihomi Japanese Learning OS API',
+    service: 'Nihomi.com API',
     version: '1.0.0-prod',
     timestamp: now.toISOString(),
     latencyMs: totalLatencyMs,
