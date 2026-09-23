@@ -45,6 +45,7 @@ const ListeningLabView = lazy(() => import('./views/ListeningLabView').then(m =>
 const NihomiCloudView = lazy(() => import('./views/NihomiCloudView').then(m => ({ default: m.NihomiCloudView })));
 const NihomiMobileShowcase = lazy(() => import('./components/showcase/NihomiMobileShowcase').then(m => ({ default: m.NihomiMobileShowcase })));
 const DashboardView = lazy(() => import('./views/DashboardView').then(m => ({ default: m.DashboardView })));
+const RealJapanCanvasView = lazy(() => import('./views/RealJapanCanvasView').then(m => ({ default: m.RealJapanCanvasView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -131,6 +132,10 @@ export const App: React.FC = () => {
 
       if (path === '/start' || path === '/campaign' || path === '/ad') {
         setCurrentView('start');
+      } else if (path === '/world' || path === '/canvas' || path === '/shibuya') {
+        setCurrentView('landing');
+      } else if (path === '/classic') {
+        setCurrentView('classic');
       } else if ((path === '/' || path === '') && (search.has('utm_source') || search.has('fbclid') || search.has('gclid') || search.has('utm_campaign'))) {
         setCurrentView('start');
       } else if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
@@ -193,6 +198,8 @@ export const App: React.FC = () => {
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase();
       if (path === '/start' || path === '/campaign') setCurrentView('start');
+      else if (path === '/world' || path === '/canvas' || path === '/shibuya') setCurrentView('landing');
+      else if (path === '/classic') setCurrentView('classic');
       else if (path === '/courses' || path === '/curriculum' || path === '/pathways') setCurrentView('courses');
       else if (path === '/dashboard') setCurrentView('dashboard');
       else if (path === '/portal') setCurrentView('portal');
@@ -270,11 +277,12 @@ export const App: React.FC = () => {
 
   const activeSoundscape = soundscapes.find((s) => s.id === soundscapeMode) || soundscapes[0];
   const isAdLanding = currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign';
+  const isCanvasMode = currentView === 'landing' || currentView === 'home' || currentView === 'world' || currentView === 'canvas';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
       {/* Offline Feedback & Service Worker Resilience Banner */}
-      {!isFocusMode && !isAdLanding && <OfflineNotificationBanner />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && <OfflineNotificationBanner />}
 
       {/* Focus Mode Sakura Ambient Canvas Background */}
       <FocusSakuraBackground
@@ -302,8 +310,8 @@ export const App: React.FC = () => {
       {/* Global Export Download Path Toast Notification */}
       <ExportToastNotification />
 
-      {/* Main Header */}
-      {!isFocusMode && !isAdLanding && (
+      {/* Main Header (Hidden in Real Japan Canvas mode for cinematic Shibuya immersion) */}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
@@ -312,7 +320,7 @@ export const App: React.FC = () => {
         />
       )}
       
-      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
+      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isCanvasMode ? 'p-0 pb-0' : isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
         <GlobalErrorBoundary>
           <Suspense fallback={<ViewLoadingFallback />}>
           {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
@@ -321,7 +329,10 @@ export const App: React.FC = () => {
         {(currentView === 'growth' || currentView === 'admin-growth' || currentView === 'founder/growth') && (
           <AdminGrowthView onNavigate={handleNavigate} />
         )}
-        {(currentView === 'landing' || currentView === 'home') && (
+        {(currentView === 'landing' || currentView === 'home' || currentView === 'world' || currentView === 'canvas') && (
+          <RealJapanCanvasView onNavigate={handleNavigate} />
+        )}
+        {currentView === 'classic' && (
           <LandingView onNavigate={handleNavigate} />
         )}
         {(currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard') && (
@@ -427,10 +438,18 @@ export const App: React.FC = () => {
           />
         )}
         {(currentView === 'baito' || currentView === 'baito-os' || currentView === 'simulation' || currentView === 'relocation' || currentView === 'workos' || currentView === 'work-os') && (
-          <BaitoOsView onNavigate={handleNavigate} />
+          <BaitoOsView
+            onNavigate={handleNavigate}
+            initialScenarioId={viewParams.scenarioId}
+            initialTab={viewParams.tab}
+          />
         )}
         {(currentView === 'interview' || currentView === 'interview-lab' || currentView === 'visa-defense') && (
-          <BaitoOsView onNavigate={handleNavigate} />
+          <BaitoOsView
+            onNavigate={handleNavigate}
+            initialScenarioId={viewParams.scenarioId || 'sc-school-principal'}
+            initialTab={viewParams.tab || 'interview_lab'}
+          />
         )}
         {(currentView === 'verify-cert' || currentView === 'verify' || currentView === 'certificate-verification') && (
           <CertificateVerificationPage
@@ -457,10 +476,10 @@ export const App: React.FC = () => {
         </GlobalErrorBoundary>
       </main>
 
-      {!isFocusMode && !isAdLanding && <Footer onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && <Footer onNavigate={handleNavigate} />}
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
-      {!isFocusMode && !isAdLanding && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
 
       {/* Global Command Palette (Triggered from Header search bar or ⌘K) */}
       <CommandPaletteModal
@@ -487,13 +506,13 @@ export const App: React.FC = () => {
       <AuthModal />
 
       {/* Persistent AI Sensei Instant Grammar Floating Coach */}
-      <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />
+      {!isCanvasMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
 
       {/* Official WhatsApp & Student Admission Helpline Widget */}
-      {!isFocusMode && <WhatsAppHelpline />}
+      {!isFocusMode && !isCanvasMode && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
-      {!isFocusMode && <InstallPWA />}
+      {!isFocusMode && !isCanvasMode && <InstallPWA />}
     </div>
   );
 };

@@ -172,12 +172,19 @@ export const DEFAULT_BAITO_SCENARIOS: BaitoScenarioItem[] = [
 
 interface BaitoOsViewProps {
   onNavigate?: (view: string, params?: Record<string, any>) => void;
+  initialScenarioId?: string;
+  initialTab?: 'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab';
 }
 
-export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate }) => {
-  const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab'>('pos_terminal');
+export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialScenarioId, initialTab }) => {
+  const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab'>(initialTab || 'pos_terminal');
   const [scenarios, setScenarios] = useState<BaitoScenarioItem[]>(() => DEFAULT_BAITO_SCENARIOS);
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>('sc-conbini-pos');
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(initialScenarioId || 'sc-conbini-pos');
+
+  useEffect(() => {
+    if (initialScenarioId) setSelectedScenarioId(initialScenarioId);
+    if (initialTab) setActiveTab(initialTab);
+  }, [initialScenarioId, initialTab]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userReadinessStats, setUserReadinessStats] = useState({
     conbiniPassed: 12,

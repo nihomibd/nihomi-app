@@ -186,6 +186,21 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             ref={navContainerRef}
             className="hidden md:flex items-center space-x-1 lg:space-x-2"
           >
+            {/* NIHOMI WORLD™ (REAL JAPAN CANVAS) */}
+            <button
+              id="nav-tab-world"
+              type="button"
+              onClick={() => onNavigate('landing')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                currentView === 'landing' || currentView === 'world' || currentView === 'canvas'
+                  ? 'bg-gradient-to-r from-rose-500/25 to-amber-500/25 text-amber-300 border border-amber-400/40 shadow-sm ring-1 ring-amber-400/20'
+                  : 'text-amber-300/90 hover:text-amber-200 hover:bg-amber-400/10 border border-amber-400/20'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-400" />
+              <span>নিহোমি ওয়ার্ল্ড™</span>
+            </button>
+
             {/* TAB 1: কারিকুলাম ও শিক্ষা */}
             <div
               className="relative"
@@ -943,6 +958,21 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#0a0a12]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2.5 text-xs animate-in slide-in-from-top-2">
           
+          {/* Mobile Direct Entry: NIHOMI WORLD™ */}
+          <button
+            type="button"
+            onClick={() => handleDropdownSelect('landing')}
+            className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500/20 via-amber-500/20 to-rose-500/10 border border-amber-400/40 text-amber-300 font-extrabold flex items-center justify-between shadow-lg"
+          >
+            <div className="flex items-center gap-2">
+              <Compass className="w-4 h-4 text-amber-400 animate-spin" />
+              <span>নিহোমি ওয়ার্ল্ড™ (Real Japan Canvas)</span>
+            </div>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-400 text-zinc-950 font-black">
+              SHIBUYA
+            </span>
+          </button>
+
           {/* Mobile Group 1: কারিকুলাম ও শিক্ষা */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
