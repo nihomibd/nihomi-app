@@ -1,8 +1,8 @@
 // src/views/RealJapanCanvasView.tsx
-// NIHOMI WORLD™: A Real Japan Canvas™ (Shibuya Crossing V1 Experience)
-// Action-first, spatial Japanese learning and Tokyo WorkOS™ integration
+// NIHOMI WORLD™: SHIBUYA V2 — 3D/360° Real Japan Canvas™, Coin Economy & In-Canvas Auth
+// Full immersive spatial WebGL Street View, Gamified Test-to-Earn, and Zero-Redirect Auth
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   MapPin,
   Volume2,
@@ -28,7 +28,12 @@ import {
   Activity,
   ShieldCheck,
   Zap,
-  Globe
+  Globe,
+  Coins,
+  Send,
+  Loader2,
+  LogIn,
+  Eye
 } from 'lucide-react';
 import {
   SHIBUYA_HOTSPOTS,
@@ -36,6 +41,8 @@ import {
   TOKYO_SURVIVAL_DIAGNOSTIC,
   TokyoSurvivalQuestion
 } from '../data/shibuyaWorldData';
+import { Shibuya3DCanvas, HotspotScreenPosition } from '../components/canvas3d/Shibuya3DCanvas';
+import { InCanvasAuthModal } from '../components/canvas3d/InCanvasAuthModal';
 import { speakJapanese } from '../lib/tts';
 import { worldAudio } from '../lib/worldAudio';
 import { triggerCelebrationConfetti } from '../lib/gamificationService';
@@ -46,7 +53,7 @@ interface RealJapanCanvasViewProps {
 }
 
 export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavigate }) => {
-  const { user, openAuthModal } = useAuth();
+  const { user, coinWallet } = useAuth();
 
   // Active States
   const [selectedHotspot, setSelectedHotspot] = useState<ShibuyaHotspot | null>(null);
@@ -54,8 +61,24 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   const [currentTimeJST, setCurrentTimeJST] = useState<string>('20:15');
   const [activeMission, setActiveMission] = useState<'none' | 'mission-001'>('none');
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
-  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
+  const [isInCanvasAuthOpen, setIsInCanvasAuthOpen] = useState(false);
+  const [isSenseiChatOpen, setIsSenseiChatOpen] = useState(false);
   const [isPronouncing, setIsPronouncing] = useState(false);
+
+  // 3D Pin screen projection map
+  const [projectedPins, setProjectedPins] = useState<Record<string, HotspotScreenPosition>>({});
+
+  // Nihomi Coin Economy State (Local + Cloud Synced)
+  const [coins, setCoins] = useState<number>(() => {
+    try {
+      const stored = localStorage.getItem('nihomi_student_coins');
+      return stored ? parseInt(stored, 10) : (coinWallet?.coinBalance || 420);
+    } catch {
+      return 420;
+    }
+  });
+
+  // Mission 001 Completion State
   const [missionComplete, setMissionComplete] = useState<boolean>(() => {
     try {
       return localStorage.getItem('nihomi_mission_001_done') === 'true';
@@ -64,10 +87,22 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     }
   });
 
-  // Diagnostic state
+  // Survival Diagnostic State
   const [diagStep, setDiagStep] = useState(0);
   const [diagAnswers, setDiagAnswers] = useState<Record<number, number>>({});
   const [diagCompleted, setDiagCompleted] = useState(false);
+
+  // Tanaka AI Sensei Instant Voice Q&A state
+  const [senseiQuery, setSenseiQuery] = useState('');
+  const [senseiResponse, setSenseiResponse] = useState<string | null>(null);
+  const [isSenseiThinking, setIsSenseiThinking] = useState(false);
+
+  // Sync coins with auth wallet if updated
+  useEffect(() => {
+    if (coinWallet?.coinBalance && coinWallet.coinBalance > coins) {
+      setCoins(coinWallet.coinBalance);
+    }
+  }, [coinWallet]);
 
   // Live JST Clock (Tokyo Time)
   useEffect(() => {
@@ -86,17 +121,32 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     return () => clearInterval(interval);
   }, []);
 
-  // Show Welcome Dialog on first landing if Mission 001 is not yet completed
-  useEffect(() => {
-    const hasSeenWelcome = sessionStorage.getItem('nihomi_shibuya_welcome_seen');
-    if (!hasSeenWelcome && !missionComplete) {
-      const timer = setTimeout(() => {
-        setIsWelcomeModalOpen(true);
-        sessionStorage.setItem('nihomi_shibuya_welcome_seen', 'true');
-      }, 700);
-      return () => clearTimeout(timer);
-    }
-  }, [missionComplete]);
+  // Update coins helper
+  const addCoins = useCallback((amount: number) => {
+    setCoins((prev) => {
+      const updated = prev + amount;
+      try {
+        localStorage.setItem('nihomi_student_coins', updated.toString());
+      } catch {}
+      return updated;
+    });
+  }, []);
+
+  const deductCoins = useCallback((amount: number): boolean => {
+    let success = false;
+    setCoins((prev) => {
+      if (prev >= amount) {
+        success = true;
+        const updated = prev - amount;
+        try {
+          localStorage.setItem('nihomi_student_coins', updated.toString());
+        } catch {}
+        return updated;
+      }
+      return prev;
+    });
+    return success;
+  }, []);
 
   // Audio ambient toggle
   const toggleAmbientAudio = () => {
@@ -127,29 +177,71 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     triggerCelebrationConfetti();
     worldAudio.playTokyoChime();
     setMissionComplete(true);
+    addCoins(50); // Reward 50 coins for Mission 001!
     try {
       localStorage.setItem('nihomi_mission_001_done', 'true');
     } catch {}
     setActiveMission('none');
-    // Set focus on Conbini hotspot as next best action
+
+    // Guide user to next best action (Conbini)
     const conbini = SHIBUYA_HOTSPOTS.find(h => h.id === 'spot-conbini');
     if (conbini) {
       setTimeout(() => setSelectedHotspot(conbini), 600);
     }
   };
 
-  // Diagnostic Answer selection
+  // Diagnostic Answer Selection & Coin Reward
   const handleSelectDiagOption = (questionId: number, optionIdx: number) => {
     const updated = { ...diagAnswers, [questionId]: optionIdx };
     setDiagAnswers(updated);
     if (diagStep < TOKYO_SURVIVAL_DIAGNOSTIC.length - 1) {
-      setTimeout(() => setDiagStep(prev => prev + 1), 500);
+      setTimeout(() => setDiagStep(prev => prev + 1), 450);
     } else {
       setTimeout(() => {
         setDiagCompleted(true);
         triggerCelebrationConfetti();
-      }, 500);
+        worldAudio.playTokyoChime();
+        addCoins(50); // Reward +50 Nihomi Coins!
+      }, 450);
     }
+  };
+
+  // Tanaka AI Sensei Instant Conversation (Redeem 10 Coins)
+  const handleAskSensei = async () => {
+    if (!senseiQuery.trim()) return;
+    if (coins < 10) {
+      alert('আপনার পর্যাপ্ত কয়েন নেই! সারভাইভাল টেস্ট সম্পন্ন করে ৫০ কয়েন অর্জন করুন।');
+      return;
+    }
+
+    const deducted = deductCoins(10);
+    if (!deducted) return;
+
+    setIsSenseiThinking(true);
+    const query = senseiQuery.trim();
+    setSenseiQuery('');
+
+    // Pre-structured contextual responses for ultra-fast, offline-resilient immersion
+    setTimeout(() => {
+      let replyJa = 'はい、田中先生です。渋谷での生活とアルバイトで一番大切なのは、明るい挨拶と時間厳守です！';
+      let replyBn = 'হ্যাঁ, তানাকা সেনসেই শুনছি। শিবুয়াতে কাজ ও দৈনন্দিন জীবনে সবচেয়ে জরুরি হলো প্রাণবন্ত অভিবাদন এবং সময়ানুবর্তিতা!';
+
+      const qLower = query.toLowerCase();
+      if (qLower.includes('conbini') || qLower.includes('7-eleven') || query.includes('コンビニ')) {
+        replyJa = 'コンビニでは「いらっしゃいませ」「お弁当温めますか？」を一番よく使います。袋が必要かも必ず確認しましょう。';
+        replyBn = 'কনবিনিতে "ইরাশশাইমাসে" এবং "ওবেন্তো গরম করব কি?" বাক্য দুটি সবচেয়ে বেশি ব্যবহৃত হয়। ব্যাগ লাগবে কিনা নিশ্চিত হোন।';
+      } else if (qLower.includes('interview') || qLower.includes('baito') || query.includes('面接')) {
+        replyJa = '面接では「はじめまして、よろしくお願いいたします」「週に28時間以内で働けます」と誠実に答えるのが合格の秘訣です。';
+        replyBn = 'ইন্টারভিউতে "প্রথম সাক্ষাতে আনন্দিত" এবং "সপ্তাহে ২৮ ঘণ্টার মধ্যে কাজ করব" আন্তরিকভাবে বলাই সফলতার মূল চাবিকাঠি।';
+      } else if (qLower.includes('restaurant') || qLower.includes('izakaya') || query.includes('居酒屋')) {
+        replyJa = '居酒屋ではお客様が「すみません！」と呼んだら、全員で大きな声で「喜んで！」と即答します。';
+        replyBn = 'ইজাকায়াতে কাস্টমার "সুমিমাসেন!" ডাকলে সাথে সাথে জোরে "ইয়োরোকোন্দে!" (আনন্দের সাথে!) উত্তর দিন।';
+      }
+
+      setSenseiResponse(`${replyJa}\n\n[বাংলা ব্যাখ্যা]: ${replyBn}`);
+      setIsSenseiThinking(false);
+      handlePlayVoice(replyJa);
+    }, 600);
   };
 
   // Hotspot Icon Resolver
@@ -172,24 +264,21 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
   return (
     <div className="relative w-full min-h-screen bg-[#06060c] text-slate-100 overflow-hidden font-sans select-none flex flex-col justify-between">
-      {/* 1. CINEMATIC SHIBUYA CROSSING BACKDROP */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="/assets/shibuya-crossing.jpg"
-          alt="Shibuya Crossing Tokyo"
-          className="w-full h-full object-cover object-center scale-[1.03] transition-transform duration-10000 ease-out brightness-[0.78] contrast-[1.08]"
-          loading="eager"
-        />
-        {/* Subtle Atmospheric Vignette & Color Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-[#06060c]/40 to-[#06060c]/70 backdrop-blur-[0.5px]" />
-        <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#06060c]/20 to-[#06060c]/80" />
+      {/* 1. 3D/360° WEBGL STREET VIEW PANORAMIC CANVAS LAYER */}
+      <Shibuya3DCanvas
+        hotspots={SHIBUYA_HOTSPOTS}
+        selectedHotspotId={selectedHotspot?.id || null}
+        onSelectHotspot={(spot) => {
+          setSelectedHotspot(spot);
+          worldAudio.playTokyoChime();
+        }}
+        onHotspotsProjected={(positions) => setProjectedPins(positions)}
+      />
 
-        {/* Ambient Neon Glow pulses in corners */}
-        <div className="absolute top-1/4 left-1/5 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/4 w-[32rem] h-[32rem] bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
-      </div>
+      {/* Atmospheric Overlays for Readability & Contrast */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-[#06060c]/70 pointer-events-none z-10" />
 
-      {/* 2. MINIMALIST CINEMATIC HUD / TOP BAR (No SaaS Buttonism) */}
+      {/* 2. MINIMALIST CINEMATIC HUD / TOP BAR (No Generic SaaS Buttonism) */}
       <header className="relative z-30 w-full px-4 sm:px-8 pt-5 pb-3 flex items-center justify-between border-b border-white/5 bg-[#06060c]/60 backdrop-blur-md">
         {/* Left: Brand & Telemetry */}
         <div className="flex items-center gap-4">
@@ -197,7 +286,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             onClick={() => { setSelectedHotspot(null); setActiveMission('none'); }}
             className="flex items-center gap-2.5 text-left group transition-transform active:scale-95"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-1 ring-white/20">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-red-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-1 ring-white/20">
               <span className="text-white font-bold text-sm tracking-wider">に</span>
             </div>
             <div>
@@ -206,7 +295,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   NIHOMI WORLD™
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  SHIBUYA V1
+                  SHIBUYA 360° V2
                 </span>
               </div>
               <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™</p>
@@ -241,8 +330,19 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           </div>
         </div>
 
-        {/* Right: Soundscape, Classic Courses Bridge, Profile */}
+        {/* Right: Coin Economy HUD, Ambient Audio, AI Sensei Chat, Auth */}
         <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Nihomi Coin Balance Pill (Clickable -> Utility info) */}
+          <button
+            onClick={() => setIsSenseiChatOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-500/10 border border-amber-400/40 text-amber-300 text-xs font-bold shadow-md shadow-amber-500/10 hover:border-amber-400 transition-all active:scale-95"
+            title="Nihomi Coins — Redeem for AI Sensei Voice Coaching"
+          >
+            <Coins className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="font-mono tracking-tight">{coins}</span>
+            <span className="text-[10px] text-amber-200/80 font-normal">Coins</span>
+          </button>
+
           {/* Ambient Tokyo Sound Toggle */}
           <button
             onClick={toggleAmbientAudio}
@@ -257,18 +357,27 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             <span className="hidden sm:inline">{!isAudioMuted ? 'Tokyo Live' : 'Sound'}</span>
           </button>
 
+          {/* Tanaka AI Sensei Instant Chat Launcher */}
+          <button
+            onClick={() => setIsSenseiChatOpen(true)}
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 text-xs font-bold text-zinc-200 transition-all flex items-center gap-1.5"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="hidden sm:inline">AI সেনসেই</span>
+            <span className="sm:hidden">Sensei</span>
+          </button>
+
           {/* Quick Bridge to Classic Courses & Dashboard */}
           <button
             onClick={() => onNavigate('courses')}
-            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-xs font-semibold text-zinc-200 transition-all flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-xs font-semibold text-zinc-200 transition-all flex items-center gap-1.5"
             title="Access Minna no Nihongo 1-25 & Full Curriculum"
           >
             <Layers className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">কারিকুলাম ও কোর্স</span>
-            <span className="sm:hidden">Courses</span>
+            <span className="hidden sm:inline">কোর্স</span>
           </button>
 
-          {/* User Sign-in / Avatar */}
+          {/* In-Canvas User Sign-in / Avatar (Zero-Redirect) */}
           {user ? (
             <button
               onClick={() => onNavigate('dashboard')}
@@ -281,172 +390,186 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             </button>
           ) : (
             <button
-              onClick={() => openAuthModal('login')}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 text-white font-bold text-xs shadow-md shadow-rose-900/30 hover:brightness-110 active:scale-95 transition-all"
+              onClick={() => setIsInCanvasAuthOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 text-white font-bold text-xs shadow-md shadow-rose-900/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5"
             >
-              লগইন / শুরু
+              <LogIn className="w-3.5 h-3.5" />
+              <span>লগইন</span>
             </button>
           )}
         </div>
       </header>
 
-      {/* 3. INTERACTIVE SPATIAL CANVAS LAYER (SHIBUYA HOTSPOTS) */}
-      <div className="relative z-10 flex-grow w-full h-[65vh] md:h-[72vh] flex items-center justify-center p-4">
-        {/* Hotspots Container positioned across the screen */}
-        <div className="relative w-full max-w-6xl h-full mx-auto">
-          {SHIBUYA_HOTSPOTS.map((hotspot) => {
-            const isSelected = selectedHotspot?.id === hotspot.id;
-            return (
-              <div
-                key={hotspot.id}
-                style={{
-                  left: `${hotspot.coords.x}%`,
-                  top: `${hotspot.coords.y}%`,
-                  transform: 'translate(-50%, -50%)'
+      {/* 3. 3D PROJECTED SPATIAL HOTSPOT PINS (ANCHORED IN 360° WEBGL SPACE) */}
+      <div className="relative z-20 flex-grow w-full pointer-events-none">
+        {SHIBUYA_HOTSPOTS.map((hotspot) => {
+          const projected = projectedPins[hotspot.id];
+          const isSelected = selectedHotspot?.id === hotspot.id;
+
+          // If WebGL projected pin is available, use dynamic 3D screen position; else use fallback percentage
+          const isVisible = projected ? projected.visible : true;
+          const leftPos = projected ? `${projected.x}px` : `${hotspot.coords.x}%`;
+          const topPos = projected ? `${projected.y}px` : `${hotspot.coords.y}%`;
+          const scale = projected ? projected.scale : 1.0;
+
+          return (
+            <div
+              key={hotspot.id}
+              style={{
+                left: leftPos,
+                top: topPos,
+                transform: `translate(-50%, -50%) scale(${scale})`,
+                opacity: isVisible ? 1 : 0,
+                pointerEvents: isVisible ? 'auto' : 'none'
+              }}
+              className="absolute transition-opacity duration-200"
+            >
+              {/* Hotspot Pin Button */}
+              <button
+                onClick={() => {
+                  setSelectedHotspot(hotspot);
+                  worldAudio.playTokyoChime();
                 }}
-                className="absolute z-20 transition-all duration-300"
+                className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-2xl backdrop-blur-md transition-all duration-300 ${
+                  isSelected
+                    ? 'bg-zinc-900/95 border-2 border-amber-400 shadow-2xl shadow-amber-500/40 scale-110 ring-4 ring-amber-400/20'
+                    : 'bg-zinc-950/85 hover:bg-zinc-900/95 border border-white/20 hover:border-amber-400/70 shadow-lg hover:scale-105'
+                }`}
               >
-                {/* Hotspot Pin Button */}
-                <button
-                  onClick={() => {
-                    setSelectedHotspot(hotspot);
-                    worldAudio.playTokyoChime();
-                  }}
-                  className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-2xl backdrop-blur-md transition-all duration-300 ${
-                    isSelected
-                      ? 'bg-zinc-900/95 border-2 border-amber-400 shadow-2xl shadow-amber-500/30 scale-110 ring-4 ring-amber-400/20'
-                      : 'bg-zinc-900/80 hover:bg-zinc-900/95 border border-white/20 hover:border-amber-400/70 shadow-lg hover:scale-105'
-                  }`}
-                >
-                  {/* Radar Pulse Ring */}
-                  <span className="absolute -inset-1 rounded-2xl bg-amber-400/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75" />
+                {/* Radar Pulse Ring */}
+                <span className="absolute -inset-1 rounded-2xl bg-amber-400/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75" />
 
-                  {/* Hotspot Icon */}
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                    isSelected ? 'bg-amber-400/20 text-amber-300' : 'bg-white/10 group-hover:bg-amber-400/20'
-                  }`}>
-                    {renderCategoryIcon(hotspot.category)}
-                  </div>
-
-                  {/* Hotspot Name & Mini Tag */}
-                  <div className="text-left pr-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">
-                        {hotspot.nameJa}
-                      </span>
-                      {hotspot.nearbyJob && (
-                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                          বাইট
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-zinc-400 font-medium block leading-none mt-0.5">
-                      {hotspot.nameBn}
-                    </span>
-                  </div>
-
-                  {/* Next Best Action Glow Indicator */}
-                  {!missionComplete && hotspot.id === 'spot-crossing' && (
-                    <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-md animate-bounce">
-                      START HERE
-                    </span>
-                  )}
-                  {missionComplete && hotspot.id === 'spot-conbini' && (
-                    <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md animate-pulse">
-                      RECOMMENDED
-                    </span>
-                  )}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* 4. AI SENSEI ADAPTIVE WELCOME CARD (BOTTOM CENTER) */}
-        {!selectedHotspot && activeMission === 'none' && (
-          <div className="absolute bottom-5 inset-x-4 max-w-2xl mx-auto z-20">
-            <div className="p-4 sm:p-5 rounded-2xl bg-zinc-900/90 border border-white/15 backdrop-blur-xl shadow-2xl shadow-black/80">
-              <div className="flex items-start gap-3.5 mb-3.5">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center flex-shrink-0 shadow-md">
-                  <span className="text-white font-extrabold text-sm">田</span>
+                {/* Hotspot Icon */}
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
+                  isSelected ? 'bg-amber-400/20 text-amber-300' : 'bg-white/10 group-hover:bg-amber-400/20'
+                }`}>
+                  {renderCategoryIcon(hotspot.category)}
                 </div>
-                <div>
+
+                {/* Hotspot Name & Mini Tag */}
+                <div className="text-left pr-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">
+                      {hotspot.nameJa}
+                    </span>
+                    {hotspot.nearbyJob && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        বাইট
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-zinc-400 font-medium block leading-none mt-0.5">
+                    {hotspot.nameBn}
+                  </span>
+                </div>
+
+                {/* Next Best Action Glow Indicator */}
+                {!missionComplete && hotspot.id === 'spot-crossing' && (
+                  <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-md animate-bounce">
+                    START HERE
+                  </span>
+                )}
+                {missionComplete && hotspot.id === 'spot-conbini' && (
+                  <span className="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md animate-pulse">
+                    RECOMMENDED
+                  </span>
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 4. AI SENSEI ADAPTIVE WELCOME CARD (BOTTOM CENTER) */}
+      {!selectedHotspot && activeMission === 'none' && !isSenseiChatOpen && (
+        <div className="relative bottom-4 inset-x-4 max-w-2xl mx-auto z-20">
+          <div className="p-4 sm:p-5 rounded-2xl bg-zinc-950/90 border border-white/15 backdrop-blur-xl shadow-2xl shadow-black/90">
+            <div className="flex items-start gap-3.5 mb-3.5">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                <span className="text-white font-extrabold text-sm">田</span>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-bold text-white">Tanaka AI Sensei (田中先生)</h3>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Live in Tokyo
+                      Live in Tokyo 360°
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-300 mt-0.5">
-                    "Welcome to Japan. 🇯🇵 You are at Shibuya Crossing. Learn by exploring places, speaking real phrases, and trying authentic jobs."
-                  </p>
+                  {/* Coin prompt */}
+                  <span className="text-[11px] font-semibold text-amber-300 flex items-center gap-1">
+                    <Coins className="w-3.5 h-3.5" /> +50 Coins per Mission
+                  </span>
                 </div>
-              </div>
-
-              {/* 3 Adaptive Action Cards (Apple / MUJI Standard) */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {/* 1: Zero Japanese */}
-                <button
-                  onClick={() => {
-                    worldAudio.playTokyoChime();
-                    setActiveMission('mission-001');
-                  }}
-                  className="p-3 rounded-xl bg-gradient-to-b from-rose-500/15 to-rose-500/5 hover:from-rose-500/25 hover:to-rose-500/15 border border-rose-500/30 hover:border-rose-400 text-left transition-all group"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-rose-400">
-                      はじめて • ZERO
-                    </span>
-                    <Sparkles className="w-3.5 h-3.5 text-rose-400 group-hover:rotate-12 transition-transform" />
-                  </div>
-                  <h4 className="text-xs font-bold text-white group-hover:text-rose-200">আমি কিছুই জানি না</h4>
-                  <p className="text-[11px] text-zinc-400 mt-0.5">১ম সম্ভাষণ শিখুন (Mission 001)</p>
-                </button>
-
-                {/* 2: Explore Shibuya & Jobs */}
-                <button
-                  onClick={() => {
-                    const conbini = SHIBUYA_HOTSPOTS.find(h => h.id === 'spot-conbini');
-                    if (conbini) setSelectedHotspot(conbini);
-                    worldAudio.playTokyoChime();
-                  }}
-                  className="p-3 rounded-xl bg-gradient-to-b from-emerald-500/15 to-emerald-500/5 hover:from-emerald-500/25 hover:to-emerald-500/15 border border-emerald-500/30 hover:border-emerald-400 text-left transition-all group"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400">
-                      東京探索 • EXPLORE
-                    </span>
-                    <Briefcase className="w-3.5 h-3.5 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
-                  </div>
-                  <h4 className="text-xs font-bold text-white group-hover:text-emerald-200">শিবুয়া এক্সপ্লোর ও চাকরি</h4>
-                  <p className="text-[11px] text-zinc-400 mt-0.5">কনবিনি ক্যাশিয়ার ও পার্ট-টাইম জব</p>
-                </button>
-
-                {/* 3: Test My Japanese */}
-                <button
-                  onClick={() => {
-                    setIsDiagnosticOpen(true);
-                    setDiagStep(0);
-                    setDiagCompleted(false);
-                    worldAudio.playTokyoChime();
-                  }}
-                  className="p-3 rounded-xl bg-gradient-to-b from-cyan-500/15 to-cyan-500/5 hover:from-cyan-500/25 hover:to-cyan-500/15 border border-cyan-500/30 hover:border-cyan-400 text-left transition-all group"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400">
-                      実力判定 • TEST
-                    </span>
-                    <Activity className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h4 className="text-xs font-bold text-white group-hover:text-cyan-200">আমার দক্ষতা যাচাই</h4>
-                  <p className="text-[11px] text-zinc-400 mt-0.5">৩টি দ্রুত টোকিও সারভাইভাল প্রশ্ন</p>
-                </button>
+                <p className="text-xs text-zinc-300 mt-1">
+                  "Welcome to Japan. 🇯🇵 Drag anywhere to look around Shibuya Crossing. Learn by exploring places, speaking real phrases, and trying authentic jobs."
+                </p>
               </div>
             </div>
+
+            {/* 3 Adaptive Action Cards (Apple / MUJI Standard) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              {/* 1: Zero Japanese */}
+              <button
+                onClick={() => {
+                  worldAudio.playTokyoChime();
+                  setActiveMission('mission-001');
+                }}
+                className="p-3 rounded-xl bg-gradient-to-b from-rose-500/15 to-rose-500/5 hover:from-rose-500/25 hover:to-rose-500/15 border border-rose-500/30 hover:border-rose-400 text-left transition-all group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-rose-400">
+                    はじめて • ZERO
+                  </span>
+                  <Sparkles className="w-3.5 h-3.5 text-rose-400 group-hover:rotate-12 transition-transform" />
+                </div>
+                <h4 className="text-xs font-bold text-white group-hover:text-rose-200">আমি কিছুই জানি না</h4>
+                <p className="text-[11px] text-zinc-400 mt-0.5">১ম সম্ভাষণ শিখুন (+50 Coins)</p>
+              </button>
+
+              {/* 2: Explore Shibuya & Jobs */}
+              <button
+                onClick={() => {
+                  const conbini = SHIBUYA_HOTSPOTS.find(h => h.id === 'spot-conbini');
+                  if (conbini) setSelectedHotspot(conbini);
+                  worldAudio.playTokyoChime();
+                }}
+                className="p-3 rounded-xl bg-gradient-to-b from-emerald-500/15 to-emerald-500/5 hover:from-emerald-500/25 hover:to-emerald-500/15 border border-emerald-500/30 hover:border-emerald-400 text-left transition-all group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400">
+                    東京探索 • EXPLORE
+                  </span>
+                  <Briefcase className="w-3.5 h-3.5 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+                <h4 className="text-xs font-bold text-white group-hover:text-emerald-200">শিবুয়া এক্সপ্লোর ও চাকরি</h4>
+                <p className="text-[11px] text-zinc-400 mt-0.5">কনবিনি ক্যাশিয়ার ও পার্ট-টাইম জব</p>
+              </button>
+
+              {/* 3: Test My Japanese (Test to Earn +50 Coins) */}
+              <button
+                onClick={() => {
+                  setIsDiagnosticOpen(true);
+                  setDiagStep(0);
+                  setDiagCompleted(false);
+                  worldAudio.playTokyoChime();
+                }}
+                className="p-3 rounded-xl bg-gradient-to-b from-cyan-500/15 to-cyan-500/5 hover:from-cyan-500/25 hover:to-cyan-500/15 border border-cyan-500/30 hover:border-cyan-400 text-left transition-all group relative overflow-hidden"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                    実力判定 • TEST TO EARN
+                  </span>
+                  <Coins className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+                </div>
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-200">আমার দক্ষতা যাচাই</h4>
+                <p className="text-[11px] text-amber-300 font-semibold mt-0.5">৩টি প্রশ্নে জিতে নিন +৫০ কয়েন</p>
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* 5. HOTSPOT DETAIL FLOATING DOSSIER (SLIDE DRAWER) */}
       {selectedHotspot && (
@@ -603,7 +726,9 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
                 MISSION 001: TOKYO FIRST WORDS
               </span>
-              <span className="text-xs text-amber-400 font-semibold">+50 XP</span>
+              <span className="text-xs text-amber-400 font-semibold flex items-center gap-1">
+                <Coins className="w-3.5 h-3.5" /> +50 Coins (+50 XP)
+              </span>
             </div>
 
             <h2 className="text-xl font-extrabold text-white">
@@ -658,13 +783,13 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               className="w-full mt-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-extrabold text-sm shadow-xl shadow-emerald-900/30 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>আমি উচ্চারণ করেছি — Mission 001 সম্পন্ন করুন</span>
+              <span>উচ্চারণ সম্পন্ন করেছি — মিশন সম্পন্ন করুন (+৫০ কয়েন)</span>
             </button>
           </div>
         </div>
       )}
 
-      {/* 7. TOKYO SURVIVAL DIAGNOSTIC MODAL */}
+      {/* 7. TOKYO SURVIVAL DIAGNOSTIC MODAL (TEST TO EARN +50 NIHOMI COINS) */}
       {isDiagnosticOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
           <div className="relative w-full max-w-lg bg-zinc-900 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200">
@@ -678,8 +803,9 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             {!diagCompleted ? (
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
-                    TOKYO SURVIVAL DIAGNOSTIC ({diagStep + 1} / {TOKYO_SURVIVAL_DIAGNOSTIC.length})
+                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Coins className="w-3.5 h-3.5 text-amber-400" />
+                    TEST TO EARN ({diagStep + 1} / {TOKYO_SURVIVAL_DIAGNOSTIC.length})
                   </span>
                   <span className="text-xs text-zinc-400 font-mono">
                     {TOKYO_SURVIVAL_DIAGNOSTIC[diagStep].location}
@@ -727,18 +853,40 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                 </div>
               </div>
             ) : (
-              /* Diagnostic Completed Screen */
+              /* Diagnostic Completed & Coin Reward Screen */
               <div className="text-center py-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
-                  <Award className="w-7 h-7 text-white" />
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-amber-500/20">
+                  <Coins className="w-9 h-9 text-zinc-950 animate-bounce" />
                 </div>
-                <h3 className="text-lg font-black text-white">Tokyo Survival Assessment Complete</h3>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-black mb-2">
+                  <Sparkles className="w-3.5 h-3.5" /> REWARD UNLOCKED: +50 NIHOMI COINS!
+                </div>
+                <h3 className="text-xl font-black text-white">অভিনন্দন! আপনি টোকিও সারভাইভাল পাস করেছেন</h3>
                 <p className="text-xs text-emerald-300 font-semibold mt-1">
-                  সারভাইভাল রেজাল্ট: Grade A (Tokyo Ready)
+                  সারভাইভাল রেটিং: Grade A (Tokyo Workplace Ready)
                 </p>
                 <p className="text-xs text-zinc-300 mt-3 leading-relaxed">
-                  আপনার জন্য সবচেয়ে উপযুক্ত পথ: মিন্না নো নিহোঙ্গো লেসন ১–৫ ফ্রি কারিকুলাম অথবা সরাসরি কনবিনি ক্যাশিয়ার ওয়ার্কওএস সিমুলেশন।
+                  আপনার অর্জিত ৫০টি নিহোমি কয়েন দিয়ে আপনি সরাসরি তানাকা সেনসেইয়ের লাইভ এআই কোচিং ও কনবিনি সিমুলেশন আনলক করতে পারবেন।
                 </p>
+
+                {/* If user not logged in, prompt seamless in-canvas login to save */}
+                {!user && (
+                  <div className="mt-5 p-3 rounded-xl bg-white/5 border border-white/10 text-left flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-bold text-white">কয়েন ক্লাউডে সংরক্ষণ করুন</p>
+                      <p className="text-[11px] text-zinc-400">লগইন ছাড়াই অর্জিত, তবে একাউন্টে সেভ করা উত্তম</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsDiagnosticOpen(false);
+                        setIsInCanvasAuthOpen(true);
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-amber-500 text-zinc-950 text-xs font-bold whitespace-nowrap"
+                    >
+                      সেভ করুন
+                    </button>
+                  </div>
+                )}
 
                 <div className="mt-6 space-y-2.5">
                   <button
@@ -746,18 +894,20 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                       setIsDiagnosticOpen(false);
                       onNavigate('baito', { scenarioId: 'sc-conbini-pos', tab: 'pos_terminal' });
                     }}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-xs shadow-lg hover:brightness-110 transition-all"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-xs shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2"
                   >
-                    Start Conbini POS Simulator (WorkOS™)
+                    <span>Start Conbini POS Simulator (WorkOS™)</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => {
                       setIsDiagnosticOpen(false);
-                      onNavigate('lesson', { lessonId: 'n5-l1' });
+                      setIsSenseiChatOpen(true);
                     }}
-                    className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-zinc-200 font-medium text-xs transition-all"
+                    className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-amber-300 font-semibold text-xs transition-all flex items-center justify-center gap-2"
                   >
-                    Open Minna no Nihongo Lesson 1 (Free)
+                    <Coins className="w-4 h-4 text-amber-400" />
+                    <span>কয়েন দিয়ে AI সেনসেইয়ের সাথে কথা বলুন</span>
                   </button>
                 </div>
               </div>
@@ -766,12 +916,139 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
         </div>
       )}
 
-      {/* 8. MINIMAL FOOTER TELEMETRY & COPYRIGHT */}
+      {/* 8. TANAKA AI SENSEI IN-CANVAS VOICE & CHAT DRAWER (COIN REDEMPTION UTILITY) */}
+      {isSenseiChatOpen && (
+        <div className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-zinc-950/95 border-l border-white/10 backdrop-blur-2xl z-40 p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-right duration-300">
+          <div>
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-extrabold text-sm">
+                  田
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Tanaka AI Sensei (田中先生)</h3>
+                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Tokyo Real-Time Coach</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsSenseiChatOpen(false)}
+                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Coin Utility Status Banner */}
+            <div className="mt-4 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Coins className="w-4 h-4 text-amber-400 animate-pulse" />
+                <span className="text-xs font-bold text-amber-300 font-mono">{coins} Coins Available</span>
+              </div>
+              <span className="text-[10px] text-zinc-400">10 Coins / Query</span>
+            </div>
+
+            {/* Conversation Area */}
+            <div className="mt-5 space-y-4 max-h-[50vh] overflow-y-auto pr-1">
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-300 leading-relaxed">
+                こんにちは！田中先生です。渋谷でのアルバイトや日本語の挨拶、日常会話について何でも聞いてください。（1回の質問で10コイン消費）
+              </div>
+
+              {senseiResponse && (
+                <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/15 to-zinc-900 border border-amber-400/40 text-xs space-y-2">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-amber-400 uppercase tracking-wide">
+                    <span>AI SENSEI ANALYSIS</span>
+                    <button
+                      onClick={() => handlePlayVoice(senseiResponse.split('\n')[0])}
+                      className="p-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300"
+                      title="Replay Voice"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-white whitespace-pre-wrap leading-relaxed">{senseiResponse}</p>
+                </div>
+              )}
+
+              {isSenseiThinking && (
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-400 flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+                  <span>তানাকা সেনসেই বিশ্লেষণ করছেন...</span>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Prompt Chips */}
+            <div className="mt-4">
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-2">
+                দ্রুত প্রশ্ন (Quick Prompts)
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  'কনবিনিতে ব্যাগ চাওয়ার নিয়ম কী?',
+                  'ইন্টারভিউতে কীভাবে সম্ভাষণ করব?',
+                  'রেস্তোরাঁয় অর্ডার নেওয়ার নিয়ম'
+                ].map((prompt, pIdx) => (
+                  <button
+                    key={pIdx}
+                    onClick={() => setSenseiQuery(prompt)}
+                    className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-[11px] text-zinc-300 text-left"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Query Input Box */}
+          <div className="pt-4 border-t border-white/10">
+            <div className="relative">
+              <input
+                type="text"
+                value={senseiQuery}
+                onChange={(e) => setSenseiQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleAskSensei();
+                }}
+                placeholder="জাপানিজ বা বাইতো নিয়ে প্রশ্ন করুন..."
+                className="w-full pl-3 pr-10 py-3 rounded-xl bg-white/5 border border-white/15 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400/60"
+              />
+              <button
+                onClick={handleAskSensei}
+                disabled={!senseiQuery.trim() || isSenseiThinking}
+                className="absolute right-2 top-2 p-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold disabled:opacity-40 transition-all"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-[10px] text-zinc-500 text-center mt-2">
+              🪙 10 Coins consumed per voice interaction • Instant native Tokyo pronunciation
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* 9. IN-CANVAS AUTH MODAL (ZERO REDIRECTS) */}
+      <InCanvasAuthModal
+        isOpen={isInCanvasAuthOpen}
+        onClose={() => setIsInCanvasAuthOpen(false)}
+        coinsPending={50}
+        onAuthSuccess={() => {
+          addCoins(50);
+          triggerCelebrationConfetti();
+        }}
+      />
+
+      {/* 10. MINIMAL FOOTER TELEMETRY & 360° CONTROLS GUIDE */}
       <footer className="relative z-30 w-full px-4 sm:px-8 py-3 flex items-center justify-between border-t border-white/5 bg-[#06060c]/60 backdrop-blur-md text-[11px] text-zinc-400">
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-zinc-300">NIHOMI WORLD™</span>
+          <span className="font-semibold text-zinc-300">NIHOMI WORLD™ V2</span>
           <span className="text-zinc-600">•</span>
-          <span>Experience Japan. Before You Arrive.</span>
+          <span className="hidden sm:inline">Experience Japan. Before You Arrive.</span>
         </div>
         <div className="flex items-center gap-4">
           <button
