@@ -113,6 +113,109 @@ class WorldAudioEngine {
     } catch {}
   }
 
+  public playConbiniDoorChime() {
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      // Authentic Japanese Convenience Store Entrance Chime Melody
+      // Part 1: F#5 (740Hz), D5 (587Hz), A4 (440Hz), D5 (587Hz), E5 (659Hz), A5 (880Hz)
+      // Part 2: E5 (659Hz), F#5 (740Hz), E5 (659Hz), A4 (440Hz), D5 (587Hz)
+      const melody = [
+        { freq: 739.99, time: 0.00, dur: 0.18 }, // F#5
+        { freq: 587.33, time: 0.18, dur: 0.18 }, // D5
+        { freq: 440.00, time: 0.36, dur: 0.18 }, // A4
+        { freq: 587.33, time: 0.54, dur: 0.18 }, // D5
+        { freq: 659.25, time: 0.72, dur: 0.18 }, // E5
+        { freq: 880.00, time: 0.90, dur: 0.40 }, // A5
+        { freq: 659.25, time: 1.35, dur: 0.18 }, // E5
+        { freq: 739.99, time: 1.53, dur: 0.18 }, // F#5
+        { freq: 659.25, time: 1.71, dur: 0.18 }, // E5
+        { freq: 440.00, time: 1.89, dur: 0.18 }, // A4
+        { freq: 587.33, time: 2.07, dur: 0.50 }, // D5
+      ];
+
+      melody.forEach(({ freq, time, dur }) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        // Warm electric bell chime timbre (sine with gentle overtone)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + time);
+
+        gain.gain.setValueAtTime(0.0001, now + time);
+        gain.gain.exponentialRampToValueAtTime(0.12, now + time + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur + 0.3);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now + time);
+        osc.stop(now + time + dur + 0.35);
+      });
+    } catch {}
+  }
+
+  public playFootstepSound() {
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(320, now);
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(70 + Math.random() * 20, now);
+      osc.frequency.exponentialRampToValueAtTime(35, now + 0.06);
+
+      gain.gain.setValueAtTime(0.025, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.065);
+    } catch {}
+  }
+
+  public playSuccessRewardChime() {
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      // Upbeat Level-Up / Coin Reward sequence (C5 -> E5 -> G5 -> C6)
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+        gain.gain.setValueAtTime(0.0001, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.14, now + idx * 0.08 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.6);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.65);
+      });
+    } catch {}
+  }
+
   public getIsPlaying(): boolean {
     return this.isPlaying;
   }

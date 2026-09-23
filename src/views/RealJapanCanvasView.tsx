@@ -35,7 +35,8 @@ import {
   LogIn,
   Eye,
   Lock,
-  Plane
+  Plane,
+  Gamepad2
 } from 'lucide-react';
 import {
   SHIBUYA_HOTSPOTS,
@@ -44,6 +45,7 @@ import {
   TokyoSurvivalQuestion
 } from '../data/shibuyaWorldData';
 import { Shibuya3DCanvas, HotspotScreenPosition } from '../components/canvas3d/Shibuya3DCanvas';
+import { ShibuyaPlayableWorld } from '../components/canvas3d/ShibuyaPlayableWorld';
 import { InCanvasAuthModal } from '../components/canvas3d/InCanvasAuthModal';
 import { ContextualPaywallModal, PaywallMode } from '../components/canvas3d/ContextualPaywallModal';
 import { speakJapanese } from '../lib/tts';
@@ -57,6 +59,9 @@ interface RealJapanCanvasViewProps {
 
 export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavigate }) => {
   const { user, coinWallet } = useAuth();
+
+  // Active Experience Mode: Flagship 3D Playable Reality Canvas vs 360° Photo Panorama
+  const [experienceMode, setExperienceMode] = useState<'playable_3d' | 'panorama_360'>('playable_3d');
 
   // Active States
   const [selectedHotspot, setSelectedHotspot] = useState<ShibuyaHotspot | null>(null);
@@ -312,45 +317,66 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
   return (
     <div className="relative w-full min-h-screen bg-[#06060c] text-slate-100 overflow-hidden font-sans select-none flex flex-col justify-between">
-      {/* 1. 3D/360° WEBGL STREET VIEW PANORAMIC CANVAS LAYER */}
-      <Shibuya3DCanvas
-        hotspots={SHIBUYA_HOTSPOTS}
-        selectedHotspotId={selectedHotspot?.id || null}
-        onSelectHotspot={(spot) => {
-          setSelectedHotspot(spot);
-          worldAudio.playTokyoChime();
-        }}
-        unlockedHotspots={unlockedHotspots}
-        userPlanId={user?.planId || 'free'}
-        missionComplete={missionComplete}
-      />
+      {experienceMode === 'playable_3d' ? (
+        <ShibuyaPlayableWorld
+          coins={coins}
+          onAddCoins={addCoins}
+          onNavigate={onNavigate}
+          currentTimeJST={currentTimeJST}
+          onSwitchToPanorama={() => setExperienceMode('panorama_360')}
+        />
+      ) : (
+        <>
+          {/* 1. 3D/360° WEBGL STREET VIEW PANORAMIC CANVAS LAYER */}
+          <Shibuya3DCanvas
+            hotspots={SHIBUYA_HOTSPOTS}
+            selectedHotspotId={selectedHotspot?.id || null}
+            onSelectHotspot={(spot) => {
+              setSelectedHotspot(spot);
+              worldAudio.playTokyoChime();
+            }}
+            unlockedHotspots={unlockedHotspots}
+            userPlanId={user?.planId || 'free'}
+            missionComplete={missionComplete}
+          />
 
-      {/* Atmospheric Overlays for Readability & Contrast */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-[#06060c]/70 pointer-events-none z-10" />
+          {/* Atmospheric Overlays for Readability & Contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-[#06060c]/70 pointer-events-none z-10" />
 
-      {/* 2. MINIMALIST CINEMATIC HUD / TOP BAR (No Generic SaaS Buttonism) */}
-      <header className="relative z-30 w-full px-4 sm:px-8 pt-5 pb-3 flex items-center justify-between border-b border-white/5 bg-[#06060c]/60 backdrop-blur-md">
-        {/* Left: Brand & Telemetry */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => { setSelectedHotspot(null); setActiveMission('none'); }}
-            className="flex items-center gap-2.5 text-left group transition-transform active:scale-95"
-          >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-red-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-1 ring-white/20">
-              <span className="text-white font-bold text-sm tracking-wider">に</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold tracking-tight text-sm text-white group-hover:text-amber-300 transition-colors">
-                  NIHOMI WORLD™
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  SHIBUYA 360° V3
-                </span>
-              </div>
-              <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™ • MRR Engine</p>
-            </div>
-          </button>
+          {/* 2. MINIMALIST CINEMATIC HUD / TOP BAR (No Generic SaaS Buttonism) */}
+          <header className="relative z-30 w-full px-4 sm:px-8 pt-5 pb-3 flex items-center justify-between border-b border-white/5 bg-[#06060c]/60 backdrop-blur-md">
+            {/* Left: Brand & Telemetry */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => { setSelectedHotspot(null); setActiveMission('none'); }}
+                className="flex items-center gap-2.5 text-left group transition-transform active:scale-95"
+              >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-red-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-1 ring-white/20">
+                  <span className="text-white font-bold text-sm tracking-wider">に</span>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold tracking-tight text-sm text-white group-hover:text-amber-300 transition-colors">
+                      NIHOMI WORLD™
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                      SHIBUYA 360° V3
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExperienceMode('playable_3d');
+                      }}
+                      className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-emerald-500/30 to-teal-500/20 hover:from-emerald-500/40 hover:to-teal-500/30 border border-emerald-400/40 text-emerald-300 font-bold text-xs flex items-center gap-1.5 shadow-lg transition-all active:scale-95"
+                      title="Switch to Playable 3D Shibuya Crossing with WASD controls"
+                    >
+                      <Gamepad2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>🎮 Playable 3D</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™ • MRR Engine</p>
+                </div>
+              </button>
 
           {/* Tokyo District Telemetry Pill */}
           <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 backdrop-blur-sm">
@@ -1219,6 +1245,8 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           </button>
         </div>
       </footer>
+        </>
+      )}
     </div>
   );
 };
