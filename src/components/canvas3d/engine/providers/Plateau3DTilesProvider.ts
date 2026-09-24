@@ -5,7 +5,8 @@
 
 import * as THREE from 'three';
 import { TilesRenderer } from '3d-tiles-renderer';
-import { ReorientationPlugin } from '3d-tiles-renderer/plugins';
+import { ReorientationPlugin, GLTFExtensionsPlugin } from '3d-tiles-renderer/plugins';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { JAPAN_GEO_ANCHORS, GeodeticCoordinate } from '../GeoCoordinates';
 import { IWorldProvider, WorldProviderStatus, GeoProviderType } from './WorldProviderAdapter';
 
@@ -27,6 +28,7 @@ export class Plateau3DTilesProvider implements IWorldProvider {
 
   private buildingTiles: TilesRenderer | null = null;
   private roadTiles: TilesRenderer | null = null;
+  private dracoLoader: DRACOLoader | null = null;
   private status: WorldProviderStatus;
   private onStatusChange?: (status: WorldProviderStatus) => void;
   private activeLayers: Set<string> = new Set(['buildings_lod2', 'roads_lod3']);
@@ -46,6 +48,8 @@ export class Plateau3DTilesProvider implements IWorldProvider {
       costModel: '$0.00 / month (Free Open Data)',
       license: 'Government of Japan Open Data Terms of Use (CC BY 4.0)',
       isStreaming: false,
+      rootTilesetLoaded: false,
+      childTilesLoadedCount: 0,
       activeLayers: Array.from(this.activeLayers),
       loadedTilesCount: 0,
       attributions: [
@@ -65,8 +69,22 @@ export class Plateau3DTilesProvider implements IWorldProvider {
     scene.add(this.group);
 
     try {
-      // 1. Initialize PLATEAU LOD2 Buildings Tileset
+      // 1. Configure Shared DRACO Loader for Compressed CityGML Geometry
+      const draco = new DRACOLoader();
+      draco.setDecoderPath('/draco/gltf/');
+      draco.setDecoderConfig({ type: 'wasm' });
+      this.dracoLoader = draco;
+
+      // 2. Initialize PLATEAU LOD2 Buildings Tileset
       const bldgTiles = new TilesRenderer(PLATEAU_SHIBUYA_ENDPOINTS.BUILDINGS_LOD2);
+
+      // Register GLTF Extensions Plugin with Draco and CESIUM_RTC Support
+      const gltfPlugin = new GLTFExtensionsPlugin({
+        dracoLoader: draco,
+        rtc: true, // Crucial for CESIUM_RTC translation math in CityGML b3dm
+        metadata: false
+      });
+      bldgTiles.registerPlugin(gltfPlugin);
 
       // Convert Anchor Lat/Lon to Radians for local tangent orientation (ENU)
       const latRad = (this.status.anchor.latitude * Math.PI) / 180;
@@ -84,19 +102,23 @@ export class Plateau3DTilesProvider implements IWorldProvider {
 
       bldgTiles.setCamera(camera);
       bldgTiles.setResolutionFromRenderer(camera, renderer);
-      bldgTiles.errorTarget = 14;
+      bldgTiles.errorTarget = 6; // Standard detail target
+      bldgTiles.maxDepth = 15;
+      bldgTiles.loadSiblings = true;
 
-      // Realism Shading & Material Enhancement Hook
+      // Model Loading & PBR Material Realism Hook
       bldgTiles.addEventListener('load-model', (e: any) => {
         this.loadedTilesCount++;
+        this.status.childTilesLoadedCount = this.loadedTilesCount;
         this.status.loadedTilesCount = this.loadedTilesCount;
+        this.status.isStreaming = true; // Streaming strictly verified once a tile model arrives
+
         if (e.scene) {
           e.scene.traverse((child: any) => {
             if (child.isMesh) {
               child.castShadow = true;
               child.receiveShadow = true;
               if (child.material) {
-                // Enhance raw CityGML materials with PBR surface realism
                 if (Array.isArray(child.material)) {
                   child.material.forEach((m: any) => this.enhancePBRMaterial(m));
                 } else {
@@ -110,8 +132,8 @@ export class Plateau3DTilesProvider implements IWorldProvider {
       });
 
       bldgTiles.addEventListener('load-root-tileset', () => {
-        console.log('[PlateauProvider] Connected to MLIT PLATEAU Shibuya 3D Tiles.');
-        this.status.isStreaming = true;
+        console.log('[PlateauProvider] Connected to MLIT PLATEAU Shibuya 3D Tiles root.');
+        this.status.rootTilesetLoaded = true;
         this.status.errorMessage = undefined;
         this.notifyStatus();
       });
@@ -125,11 +147,11 @@ export class Plateau3DTilesProvider implements IWorldProvider {
       this.group.add(bldgTiles.group);
       this.buildingTiles = bldgTiles;
 
-      // 2. Add Ground Reference Plane for Crosswalk Alignment
-      const groundGeo = new THREE.PlaneGeometry(300, 300);
+      // 3. Ground Reference Plane for Baseline Alignment
+      const groundGeo = new THREE.PlaneGeometry(500, 500);
       const groundMat = new THREE.MeshStandardMaterial({
-        color: 0x181c26,
-        roughness: 0.85,
+        color: 0x1e2433,
+        roughness: 0.8,
         metalness: 0.1
       });
       const groundMesh = new THREE.Mesh(groundGeo, groundMat);
@@ -138,7 +160,6 @@ export class Plateau3DTilesProvider implements IWorldProvider {
       groundMesh.receiveShadow = true;
       this.group.add(groundMesh);
 
-      this.status.isStreaming = true;
       this.notifyStatus();
     } catch (err: any) {
       console.error('[PlateauProvider] Failed to initialize PLATEAU 3D Tiles:', err);
@@ -149,8 +170,19 @@ export class Plateau3DTilesProvider implements IWorldProvider {
 
   private enhancePBRMaterial(material: any): void {
     if (!material) return;
-    material.roughness = THREE.MathUtils.clamp(material.roughness || 0.65, 0.45, 0.8);
-    material.metalness = THREE.MathUtils.clamp(material.metalness || 0.1, 0.05, 0.25);
+    material.side = THREE.DoubleSide; // Ensure all building facades are visible from any camera angle
+
+    if (material.map) {
+      // Textured LOD2 building facade
+      material.roughness = THREE.MathUtils.clamp(material.roughness ?? 0.45, 0.35, 0.65);
+      material.metalness = THREE.MathUtils.clamp(material.metalness ?? 0.15, 0.05, 0.3);
+    } else {
+      // Untextured massing surfaces - apply authentic Tokyo architectural slate styling
+      material.color = new THREE.Color(0x64748b);
+      material.roughness = 0.55;
+      material.metalness = 0.12;
+    }
+    material.needsUpdate = true;
   }
 
   public update(camera: THREE.PerspectiveCamera, now: number): void {
@@ -205,6 +237,10 @@ export class Plateau3DTilesProvider implements IWorldProvider {
     if (this.roadTiles) {
       this.roadTiles.dispose();
       this.roadTiles = null;
+    }
+    if (this.dracoLoader) {
+      this.dracoLoader.dispose();
+      this.dracoLoader = null;
     }
     this.group.clear();
   }

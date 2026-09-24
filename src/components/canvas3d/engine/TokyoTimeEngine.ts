@@ -132,8 +132,8 @@ export class TokyoTimeEngine {
         sunIntensity = 0.65;
         ambientColor = new THREE.Color(0x1e293b);
         ambientIntensity = 0.35;
-        skyColor = new THREE.Color(0x0a0a12);
-        fogColor = new THREE.Color(0x0a0a12);
+        skyColor = new THREE.Color(0x332845);
+        fogColor = new THREE.Color(0x332845);
         neonIntensityMultiplier = 0.6;
         pedestrianDensityFactor = 0.7;
         trafficDensityFactor = 0.8;
@@ -144,8 +144,8 @@ export class TokyoTimeEngine {
         sunIntensity = 0.85;
         ambientColor = new THREE.Color(0x334155);
         ambientIntensity = 0.40;
-        skyColor = new THREE.Color(0x0a0a12);
-        fogColor = new THREE.Color(0x0a0a12);
+        skyColor = new THREE.Color(0x273549);
+        fogColor = new THREE.Color(0x273549);
         neonIntensityMultiplier = 0.2;
         pedestrianDensityFactor = 1.5; // High commuter scramble density
         trafficDensityFactor = 1.3;
@@ -156,8 +156,8 @@ export class TokyoTimeEngine {
         sunIntensity = 0.95; // Mathematically calibrated natural Tokyo sunlight (prevents overexposure)
         ambientColor = new THREE.Color(0x334155);
         ambientIntensity = 0.45; // Balanced sky fill without washing out diffuse materials
-        skyColor = new THREE.Color(0x0a0a12);
-        fogColor = new THREE.Color(0x0a0a12);
+        skyColor = new THREE.Color(0x3b5370);
+        fogColor = new THREE.Color(0x3b5370);
         fogDensity = 0.0005;
         neonIntensityMultiplier = 0.15;
         pedestrianDensityFactor = 1.1;
@@ -169,8 +169,8 @@ export class TokyoTimeEngine {
         sunIntensity = 0.90;
         ambientColor = new THREE.Color(0x2d1810);
         ambientIntensity = 0.40;
-        skyColor = new THREE.Color(0x0a0a12);
-        fogColor = new THREE.Color(0x0a0a12);
+        skyColor = new THREE.Color(0x4a2e38);
+        fogColor = new THREE.Color(0x4a2e38);
         neonIntensityMultiplier = 0.85;
         pedestrianDensityFactor = 1.6; // Shibuya evening rush
         trafficDensityFactor = 1.4;
@@ -181,8 +181,8 @@ export class TokyoTimeEngine {
         sunIntensity = 0.45;
         ambientColor = new THREE.Color(0x0f172a);
         ambientIntensity = 0.35;
-        skyColor = new THREE.Color(0x0a0a12);
-        fogColor = new THREE.Color(0x0a0a12);
+        skyColor = new THREE.Color(0x1a1a32);
+        fogColor = new THREE.Color(0x1a1a32);
         neonIntensityMultiplier = 1.3;
         pedestrianDensityFactor = 1.3;
         trafficDensityFactor = 1.2;

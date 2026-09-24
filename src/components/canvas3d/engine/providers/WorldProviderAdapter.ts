@@ -13,6 +13,8 @@ export interface WorldProviderStatus {
   costModel: '$0.00 / month (Free Open Data)';
   license: string;
   isStreaming: boolean;
+  rootTilesetLoaded?: boolean;
+  childTilesLoadedCount?: number;
   activeLayers: string[];
   loadedTilesCount: number;
   attributions: string[];

@@ -514,8 +514,8 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // 2. Camera
-    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 500);
+    // 2. Camera (far plane 2000m for complete Tokyo macro overview and district coverage)
+    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 2000);
     cameraRef.current = camera;
 
     // 3. WebGL Renderer with ACES Filmic Tone Mapping (Calibrated Exposure)
@@ -600,7 +600,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       const atmosphere = timeEngineRef.current.calculateAtmosphere();
       setLiveTokyoTime(atmosphere.tokyoTimeString);
 
-      scene.background = new THREE.Color(0x0a0a12);
+      scene.background = atmosphere.skyColor;
       scene.fog = null; // Physically accurate clear atmosphere without blinding milky haze
 
       if (ambientLightRef.current) {

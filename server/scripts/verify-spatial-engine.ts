@@ -198,7 +198,7 @@ if (evalResult.isCorrect && evalResult.scheduledIntervalDays >= 1 && evalResult.
 }
 
 // [CHECK 8] Open Japan Geo Engine: PLATEAU 3D Tiles & OpenStreetMap Providers ($0.00 / month)
-console.log('[OPEN GEO CHECK 8] Open Japan Geo Engine (Project PLATEAU & OSM):');
+console.log('[OPEN GEO CHECK 8] Open Japan Geo Engine (Project PLATEAU & OSM) Live Network Verification:');
 
 const geoManager = new WorldProviderManager(shibuyaAnchor, 'plateau_3d_tiles');
 const initialStatus = geoManager.getStatus();
@@ -206,17 +206,83 @@ const initialStatus = geoManager.getStatus();
 console.log(`  └─ Primary Provider: ${initialStatus.providerName}`);
 console.log(`  └─ Cost Model: ${initialStatus.costModel}`);
 console.log(`  └─ Open Data License: ${initialStatus.license}`);
-console.log(`  └─ PLATEAU Shibuya LOD2 Endpoint: ${PLATEAU_SHIBUYA_ENDPOINTS.BUILDINGS_LOD2}`);
+console.log(`  └─ Initial isStreaming: ${initialStatus.isStreaming} (Must be false before network stream starts)`);
+
+// 8A. Strict check: isStreaming MUST NOT be true before actual network transmission
+if (initialStatus.isStreaming !== false) {
+  throw new Error('Check 8 Failure: isStreaming must be false prior to network streaming');
+}
+
+// 8B. Live Network Verification of Official MLIT PLATEAU Shibuya LOD2 Tileset
+const tilesetUrl = PLATEAU_SHIBUYA_ENDPOINTS.BUILDINGS_LOD2;
+console.log(`  └─ [Network Proof 1] Fetching PLATEAU Shibuya LOD2 tileset.json: ${tilesetUrl}`);
+const tilesetRes = await fetch(tilesetUrl);
+if (!tilesetRes.ok) {
+  throw new Error(`Failed to fetch root tileset.json: HTTP ${tilesetRes.status}`);
+}
+const tilesetJson = await tilesetRes.json();
+console.log(`     ✓ Root tileset.json: HTTP 200 OK (Asset version: ${tilesetJson.asset?.version}, GeometricError: ${tilesetJson.root?.geometricError?.toFixed(1)})`);
+
+// 8C. Live Network Verification of Root Tile (b3dm payload)
+const rootTileUri = tilesetJson.root?.content?.uri;
+if (!rootTileUri) {
+  throw new Error('Check 8 Failure: Root tileset.json does not declare content URI');
+}
+const rootTileUrl = new URL(rootTileUri, tilesetUrl).href;
+console.log(`  └─ [Network Proof 2] Fetching Root Tile b3dm payload: ${rootTileUrl}`);
+const rootTileRes = await fetch(rootTileUrl);
+if (!rootTileRes.ok) {
+  throw new Error(`Failed to fetch root tile: HTTP ${rootTileRes.status}`);
+}
+const rootTileBuf = await rootTileRes.arrayBuffer();
+const view = new DataView(rootTileBuf);
+const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
+if (magic !== 'b3dm') {
+  throw new Error(`Check 8 Failure: Expected b3dm magic, got ${magic}`);
+}
+console.log(`     ✓ Root Tile b3dm: HTTP 200 OK (${rootTileBuf.byteLength.toLocaleString()} bytes, Magic: "${magic}")`);
+
+// 8D. Verify Embedded GLB, Draco Mesh Compression & CESIUM_RTC Header
+const ftJsonLen = view.getUint32(12, true);
+const ftBinLen = view.getUint32(16, true);
+const btJsonLen = view.getUint32(20, true);
+const btBinLen = view.getUint32(24, true);
+const glbOffset = 28 + ftJsonLen + ftBinLen + btJsonLen + btBinLen;
+const glbView = new DataView(rootTileBuf, glbOffset);
+const glbMagic = String.fromCharCode(glbView.getUint8(0), glbView.getUint8(1), glbView.getUint8(2), glbView.getUint8(3));
+if (glbMagic !== 'glTF') {
+  throw new Error(`Check 8 Failure: Embedded GLB magic is ${glbMagic}, expected glTF`);
+}
+const jsonChunkLen = glbView.getUint32(12, true);
+const jsonBytes = new Uint8Array(rootTileBuf, glbOffset + 20, jsonChunkLen);
+const gltf = JSON.parse(new TextDecoder().decode(jsonBytes));
+const extensions = gltf.extensionsUsed || [];
+const rtcCenter = gltf.extensions?.CESIUM_RTC?.center;
+
+console.log(`  └─ [3D Geometry Proof] GLTF Extensions in PLATEAU b3dm: ${extensions.join(', ')}`);
+console.log(`     ✓ Draco Mesh Compression verified: ${extensions.includes('KHR_draco_mesh_compression')}`);
+console.log(`     ✓ CESIUM_RTC Center verified: [${rtcCenter?.map((n: number) => n.toFixed(1)).join(', ')}]`);
+
+if (!extensions.includes('KHR_draco_mesh_compression') || !rtcCenter) {
+  throw new Error('Check 8 Failure: Missing Draco or CESIUM_RTC in PLATEAU b3dm payload');
+}
+
+// 8E. Live Network Verification of Child Tile
+const childTileUri = tilesetJson.root?.children?.[0]?.content?.uri;
+if (childTileUri) {
+  const childTileUrl = new URL(childTileUri, tilesetUrl).href;
+  console.log(`  └─ [Network Proof 3] Fetching Child Tile b3dm payload: ${childTileUrl}`);
+  const childRes = await fetch(childTileUrl, { method: 'HEAD' });
+  console.log(`     ✓ Child Tile: HTTP ${childRes.status} OK (${childRes.headers.get('content-length')} bytes)`);
+  if (!childRes.ok) throw new Error(`Child tile fetch failed with HTTP ${childRes.status}`);
+}
+
+// 8F. Verify Camera Presets & OSM POIs
 console.log(`  └─ OSM Verified Shibuya POIs: ${SHIBUYA_OSM_POIS.length} nodes (Station, Koban, Yucho Bank, Conbini)`);
 console.log(`  └─ Camera Flight Presets: ${Object.keys(CAMERA_VIEW_PRESETS).join(', ')}`);
 
-if (
-  initialStatus.providerType === 'plateau_3d_tiles' &&
-  initialStatus.costModel.includes('$0.00') &&
-  SHIBUYA_OSM_POIS.length >= 5 &&
-  CAMERA_VIEW_PRESETS.aerial_tokyo.position.y === 260
-) {
-  console.log('  ✓ PASS: Open Japan Geo Engine (PLATEAU 3D Tiles + OSM) verified with Zero API Billing.\n');
+if (SHIBUYA_OSM_POIS.length >= 5 && CAMERA_VIEW_PRESETS.aerial_tokyo.position.y === 260) {
+  console.log('  ✓ PASS: Open Japan Geo Engine (PLATEAU 3D Tiles + OSM + Draco + RTC) verified with live network proof & Zero API Billing.\n');
 } else {
   throw new Error('Open Japan Geo Engine verification failed');
 }
@@ -224,3 +290,4 @@ if (
 console.log('================================================================================');
 console.log('  ✓ ALL 8/8 REAL-WORLD GEOGRAPHIC, WORLD GRAPH & OPEN DATA CHECKS PASSED');
 console.log('================================================================================');
+
