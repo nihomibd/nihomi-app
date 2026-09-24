@@ -115,11 +115,12 @@ export class OpenGeoProvider implements IWorldProvider {
     const roadGroup = new THREE.Group();
     roadGroup.name = 'OSM_Road_Corridors';
 
-    const asphaltGeo = new THREE.PlaneGeometry(160, 160);
+    const asphaltGeo = new THREE.PlaneGeometry(240, 240);
     const asphaltMat = new THREE.MeshStandardMaterial({
-      color: 0x1a1e27,
-      roughness: 0.8,
-      metalness: 0.12
+      color: 0x475569, // Visible authentic Japanese urban asphalt pavement
+      roughness: 0.75,
+      metalness: 0.1,
+      side: THREE.DoubleSide
     });
     const asphalt = new THREE.Mesh(asphaltGeo, asphaltMat);
     asphalt.rotation.x = -Math.PI / 2;
@@ -130,10 +131,11 @@ export class OpenGeoProvider implements IWorldProvider {
     // 2. Shibuya Scramble Crosswalk Zebra Striping (Authentic Multi-Diagonal Intersections)
     const stripeMat = new THREE.MeshStandardMaterial({
       color: 0xffffff,
-      roughness: 0.6,
+      roughness: 0.4,
       polygonOffset: true,
       polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1
+      polygonOffsetUnits: -1,
+      side: THREE.DoubleSide
     });
 
     const createCrosswalk = (x: number, z: number, length: number, width: number, rotY: number) => {

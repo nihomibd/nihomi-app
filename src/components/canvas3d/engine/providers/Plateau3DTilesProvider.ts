@@ -118,6 +118,12 @@ export class Plateau3DTilesProvider implements IWorldProvider {
             if (child.isMesh) {
               child.castShadow = true;
               child.receiveShadow = true;
+
+              // Ensure geometry has valid surface normals for lighting
+              if (child.geometry && !child.geometry.attributes.normal) {
+                child.geometry.computeVertexNormals();
+              }
+
               if (child.material) {
                 if (Array.isArray(child.material)) {
                   child.material.forEach((m: any) => this.enhancePBRMaterial(m));
@@ -147,10 +153,10 @@ export class Plateau3DTilesProvider implements IWorldProvider {
       this.group.add(bldgTiles.group);
       this.buildingTiles = bldgTiles;
 
-      // 3. Ground Reference Plane for Baseline Alignment
-      const groundGeo = new THREE.PlaneGeometry(500, 500);
+      // 3. Ground Reference Plane for Baseline Alignment (Visible Slate Road Asphalt)
+      const groundGeo = new THREE.PlaneGeometry(600, 600);
       const groundMat = new THREE.MeshStandardMaterial({
-        color: 0x1e2433,
+        color: 0x475569, // Visible slate road surface
         roughness: 0.8,
         metalness: 0.1
       });
@@ -170,17 +176,25 @@ export class Plateau3DTilesProvider implements IWorldProvider {
 
   private enhancePBRMaterial(material: any): void {
     if (!material) return;
-    material.side = THREE.DoubleSide; // Ensure all building facades are visible from any camera angle
+    material.side = THREE.DoubleSide; // Ensure both front and back faces of building walls are always rendered
+    material.transparent = false;
+    material.opacity = 1.0;
+    material.depthWrite = true;
 
     if (material.map) {
       // Textured LOD2 building facade
-      material.roughness = THREE.MathUtils.clamp(material.roughness ?? 0.45, 0.35, 0.65);
-      material.metalness = THREE.MathUtils.clamp(material.metalness ?? 0.15, 0.05, 0.3);
+      material.color = new THREE.Color(0xffffff); // Pure white base to let facade textures shine with full vibrance
+      material.roughness = 0.45;
+      material.metalness = 0.1;
+      material.emissive = new THREE.Color(0x334155); // Subtle ambient glow so shadow sides never vanish into black
+      material.emissiveIntensity = 0.25;
     } else {
-      // Untextured massing surfaces - apply authentic Tokyo architectural slate styling
-      material.color = new THREE.Color(0x64748b);
-      material.roughness = 0.55;
-      material.metalness = 0.12;
+      // Untextured massing surfaces / roofs - force solid visible light architectural stone
+      material.color = new THREE.Color(0xd1d5db); // Light concrete/stone grey (#d1d5db) - high visibility
+      material.roughness = 0.45;
+      material.metalness = 0.1;
+      material.emissive = new THREE.Color(0x1e293b);
+      material.emissiveIntensity = 0.2;
     }
     material.needsUpdate = true;
   }

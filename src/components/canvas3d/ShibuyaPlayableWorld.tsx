@@ -543,22 +543,29 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     composer.addPass(outputPass);
     composerRef.current = composer;
 
-    // 5. Dynamic Solar Lighting
-    const ambientLight = new THREE.AmbientLight(0x1e293b, 0.55);
+    // 5. Dynamic Solar & City Illumination (Omnidirectional Daylight & Fill Lights)
+    const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x64748b, 1.35); // Sky azure fill + ground bounce fill
+    scene.add(hemiLight);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.95); // White base ambient so no building face is ever dark
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
 
-    const sunLight = new THREE.DirectionalLight(0xfff7e6, 1.05);
-    sunLight.position.set(30, 60, 25);
+    const fillLight = new THREE.DirectionalLight(0xe0e7ff, 0.85); // Secondary fill illuminating north & west building walls
+    fillLight.position.set(-60, 50, -45);
+    scene.add(fillLight);
+
+    const sunLight = new THREE.DirectionalLight(0xfffaed, 1.25); // Primary Tokyo sun
+    sunLight.position.set(45, 80, 35);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 2048;
     sunLight.shadow.mapSize.height = 2048;
     sunLight.shadow.camera.near = 0.5;
-    sunLight.shadow.camera.far = 180;
-    sunLight.shadow.camera.left = -45;
-    sunLight.shadow.camera.right = 45;
-    sunLight.shadow.camera.top = 45;
-    sunLight.shadow.camera.bottom = -45;
+    sunLight.shadow.camera.far = 400;
+    sunLight.shadow.camera.left = -200;
+    sunLight.shadow.camera.right = 200;
+    sunLight.shadow.camera.top = 200;
+    sunLight.shadow.camera.bottom = -200;
     sunLight.shadow.bias = -0.0004;
     scene.add(sunLight);
     sunLightRef.current = sunLight;
@@ -604,13 +611,13 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       scene.fog = null; // Physically accurate clear atmosphere without blinding milky haze
 
       if (ambientLightRef.current) {
-        ambientLightRef.current.color.copy(atmosphere.ambientColor);
-        ambientLightRef.current.intensity = atmosphere.ambientIntensity;
+        ambientLightRef.current.color.set(0xffffff);
+        ambientLightRef.current.intensity = Math.max(0.95, atmosphere.ambientIntensity * 2.2);
       }
 
       if (sunLightRef.current) {
         sunLightRef.current.color.copy(atmosphere.sunColor);
-        sunLightRef.current.intensity = atmosphere.sunIntensity;
+        sunLightRef.current.intensity = Math.max(1.15, atmosphere.sunIntensity);
         sunLightRef.current.position.copy(atmosphere.sunPosition);
       }
 
