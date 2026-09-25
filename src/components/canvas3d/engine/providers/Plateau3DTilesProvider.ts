@@ -73,7 +73,8 @@ export class Plateau3DTilesProvider implements IWorldProvider {
     try {
       // 1. Configure Shared DRACO Loader for Compressed CityGML Geometry
       const draco = new DRACOLoader();
-      draco.setDecoderPath('/draco/gltf/');
+      // Google GStatic CDN is the official standard for Three.js Draco decoders and eliminates Vercel asset rewrite issues
+      draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
       draco.setDecoderConfig({ type: 'wasm' });
       this.dracoLoader = draco;
 

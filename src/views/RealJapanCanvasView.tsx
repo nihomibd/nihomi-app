@@ -63,6 +63,16 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   // Active Experience Mode: Flagship 3D Playable Reality Canvas vs 360° Photo Panorama
   const [experienceMode, setExperienceMode] = useState<'playable_3d' | 'panorama_360'>('playable_3d');
 
+  // GATE 1: Premium Landing Hero State (Hide the void until student clicks Start Journey)
+  const [isJourneyStarted, setIsJourneyStarted] = useState<boolean>(() => {
+    try {
+      const search = new URLSearchParams(window.location.search);
+      return search.get('explore') === 'true' || search.get('start') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
   // Active States
   const [selectedHotspot, setSelectedHotspot] = useState<ShibuyaHotspot | null>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(true);
@@ -315,16 +325,180 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     }
   };
 
+  // GATE 1: Premium Apple-Grade Landing Page / Hero Overlay (Hides 3D Canvas until student starts journey)
+  if (!isJourneyStarted) {
+    return (
+      <div className="relative w-full min-h-screen bg-[#06060c] text-white overflow-hidden font-sans select-none flex flex-col justify-between" id="landing-hero-overlay">
+        {/* Ambient Tokyo Aurora Orbs */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-red-600/25 via-rose-600/15 to-amber-500/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+
+        {/* Apple-grade Minimalist Top Header */}
+        <header className="relative z-20 w-full px-6 sm:px-12 py-5 flex items-center justify-between border-b border-white/5 bg-[#06060c]/50 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-red-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-900/30 ring-1 ring-white/20">
+              <span className="text-white font-bold text-sm tracking-wider">日</span>
+            </div>
+            <div>
+              <span className="font-extrabold tracking-tight text-base text-white">Nihomi AI™</span>
+              <p className="text-[10px] text-zinc-400 font-medium">Continuous Japanese Learning Companion</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 backdrop-blur-sm">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="font-mono text-zinc-200">東京都 渋谷区</span>
+              <span className="text-zinc-500">•</span>
+              <span className="font-mono text-amber-300 font-semibold">{currentTimeJST} JST</span>
+            </div>
+
+            <button
+              onClick={() => onNavigate('courses')}
+              className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-200 transition-all cursor-pointer"
+            >
+              কোর্স (Curriculum)
+            </button>
+
+            {user ? (
+              <button
+                onClick={() => onNavigate('dashboard')}
+                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs shadow-md shadow-red-900/30 hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+              >
+                Dashboard →
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsInCanvasAuthOpen(true)}
+                className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 active:scale-95 transition-all cursor-pointer"
+              >
+                লগইন (Sign In)
+              </button>
+            )}
+          </div>
+        </header>
+
+        {/* Center Hero Content (Apple-Grade Typography & Design) */}
+        <div className="relative z-20 max-w-4xl mx-auto px-6 py-12 sm:py-16 text-center space-y-8 my-auto">
+          {/* Continuous Learning Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-xs font-semibold tracking-wider uppercase text-zinc-300">
+              NIHOMI AI™ • NEXT-GEN JAPANESE PLATFORM
+            </span>
+          </div>
+
+          {/* Master Headline & Sub-headline */}
+          <div className="space-y-4">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white leading-none">
+              Nihomi AI™
+            </h1>
+            <p className="text-2xl sm:text-4xl text-zinc-300 font-light max-w-2xl mx-auto leading-tight">
+              You don't just learn Japanese.{' '}
+              <br />
+              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-300">
+                You experience it.
+              </span>
+            </p>
+          </div>
+
+          {/* Description */}
+          <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto font-normal leading-relaxed">
+            টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ তানাকা AI সেনসেই লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+          </p>
+
+          {/* Action: Clear "Start Journey" button */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => {
+                worldAudio.playTokyoChime();
+                setIsJourneyStarted(true);
+              }}
+              className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-4.5 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-base sm:text-lg rounded-2xl shadow-2xl shadow-red-600/40 hover:shadow-red-500/60 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer group"
+              id="btn-start-journey"
+            >
+              <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+              <span>Start Journey</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            <button
+              onClick={() => onNavigate('dashboard')}
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Student Dashboard</span>
+              <ChevronRight className="w-4 h-4 text-zinc-400" />
+            </button>
+          </div>
+
+          {/* 4 Apple-grade Feature Cards */}
+          <div className="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+              <span className="text-lg block mb-1">🏙️</span>
+              <p className="text-xs font-bold text-white">Tokyo Spatial World</p>
+              <p className="text-[11px] text-zinc-400">শিবুয়া ক্রসিং ও কনবিনি</p>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+              <span className="text-lg block mb-1">🤖</span>
+              <p className="text-xs font-bold text-white">Tanaka AI Sensei</p>
+              <p className="text-[11px] text-zinc-400">বাংলায় ২৪/৭ ব্যাকরণ টিউটর</p>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+              <span className="text-lg block mb-1">🏪</span>
+              <p className="text-xs font-bold text-white">Nihomi WorkOS™</p>
+              <p className="text-[11px] text-zinc-400">৭-ইলেভেন ক্যাশিয়ার ড্রিল</p>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+              <span className="text-lg block mb-1">📜</span>
+              <p className="text-xs font-bold text-white">JLPT N5–N1</p>
+              <p className="text-[11px] text-zinc-400">মিন্না নো নিহোঙ্গো ১–২৫</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info bar */}
+        <footer className="relative z-20 w-full px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 border-t border-white/5 bg-[#06060c]/60 backdrop-blur-md gap-2">
+          <span>© NIHOMI AI™ — Dhaka to Tokyo Japanese Language OS</span>
+          <div className="flex items-center gap-4">
+            <button onClick={() => onNavigate('courses')} className="hover:text-zinc-300 transition-colors">Courses</button>
+            <button onClick={() => onNavigate('start')} className="hover:text-zinc-300 transition-colors">1-Min Test</button>
+            <button onClick={() => onNavigate('contact')} className="hover:text-zinc-300 transition-colors">Help & Contact</button>
+          </div>
+        </footer>
+
+        {isInCanvasAuthOpen && (
+          <InCanvasAuthModal
+            isOpen={isInCanvasAuthOpen}
+            onClose={() => setIsInCanvasAuthOpen(false)}
+            onAuthSuccess={() => {
+              setIsInCanvasAuthOpen(false);
+              onNavigate('dashboard');
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full min-h-screen bg-[#06060c] text-slate-100 overflow-hidden font-sans select-none flex flex-col justify-between">
       {experienceMode === 'playable_3d' ? (
-        <ShibuyaPlayableWorld
-          coins={coins}
-          onAddCoins={addCoins}
-          onNavigate={onNavigate}
-          currentTimeJST={currentTimeJST}
-          onSwitchToPanorama={() => setExperienceMode('panorama_360')}
-        />
+        <div className="relative w-full h-screen">
+          <button
+            onClick={() => setIsJourneyStarted(false)}
+            className="absolute top-4 left-4 z-40 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-white font-bold text-xs border border-white/20 backdrop-blur-md shadow-2xl flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer pointer-events-auto"
+            title="Return to Landing Overview"
+          >
+            <span>← Overview</span>
+          </button>
+          <ShibuyaPlayableWorld
+            coins={coins}
+            onAddCoins={addCoins}
+            onNavigate={onNavigate}
+            currentTimeJST={currentTimeJST}
+            onSwitchToPanorama={() => setExperienceMode('panorama_360')}
+          />
+        </div>
       ) : (
         <>
           {/* 1. 3D/360° WEBGL STREET VIEW PANORAMIC CANVAS LAYER */}
@@ -346,7 +520,14 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           {/* 2. MINIMALIST CINEMATIC HUD / TOP BAR (No Generic SaaS Buttonism) */}
           <header className="relative z-30 w-full px-4 sm:px-8 pt-5 pb-3 flex items-center justify-between border-b border-white/5 bg-[#06060c]/60 backdrop-blur-md">
             {/* Left: Brand & Telemetry */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsJourneyStarted(false)}
+                className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
+                title="Return to Landing Overview"
+              >
+                <span>← Overview</span>
+              </button>
               <button
                 onClick={() => { setSelectedHotspot(null); setActiveMission('none'); }}
                 className="flex items-center gap-2.5 text-left group transition-transform active:scale-95"

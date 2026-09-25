@@ -248,6 +248,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const sunLightRef = useRef<THREE.DirectionalLight | null>(null);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
+  const photoDomeRef = useRef<THREE.Mesh | null>(null);
 
   // Player Avatar & Kinematics Refs (Calibrated 1.62m Natural Eye Height)
   const playerAvatarGroupRef = useRef<THREE.Group | null>(null);
@@ -570,6 +571,27 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     scene.add(sunLight);
     sunLightRef.current = sunLight;
 
+    // 5B. High-Fidelity 360° Photographic Tokyo Dome (Guarantees zero empty void)
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('/assets/shibuya-crossing.jpg', (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.generateMipmaps = false;
+      const sphereGeo = new THREE.SphereGeometry(350, 48, 32);
+      sphereGeo.scale(-1, 1, 1);
+      const sphereMat = new THREE.MeshBasicMaterial({
+        map: tex,
+        side: THREE.DoubleSide,
+        depthWrite: false, // Ensures 3D building meshes render in front without Z-fighting
+        fog: false
+      });
+      const photoDome = new THREE.Mesh(sphereGeo, sphereMat);
+      photoDome.position.set(0, 0, 0);
+      scene.add(photoDome);
+      photoDomeRef.current = photoDome;
+    });
+
     // 6. OPEN JAPAN GEO ENGINE (Project PLATEAU 3D Tiles + OpenStreetMap)
     const providerManager = new WorldProviderManager(
       JAPAN_GEO_ANCHORS.SHIBUYA_SCRAMBLE,
@@ -619,6 +641,10 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         sunLightRef.current.color.copy(atmosphere.sunColor);
         sunLightRef.current.intensity = Math.max(1.15, atmosphere.sunIntensity);
         sunLightRef.current.position.copy(atmosphere.sunPosition);
+      }
+
+      if (photoDomeRef.current) {
+        photoDomeRef.current.position.copy(camera.position);
       }
 
       // 9B. Update Open Japan Geo Engine & Cinematic Camera Transitions
@@ -761,6 +787,16 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
     return () => {
       window.removeEventListener('resize', handleResize);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (photoDomeRef.current && scene) {
+        scene.remove(photoDomeRef.current);
+        photoDomeRef.current.geometry.dispose();
+        if (Array.isArray(photoDomeRef.current.material)) {
+          photoDomeRef.current.material.forEach((m) => m.dispose());
+        } else {
+          photoDomeRef.current.material.dispose();
+        }
+        photoDomeRef.current = null;
+      }
       providerManager.dispose();
       simulation.dispose();
       renderer.dispose();
@@ -915,71 +951,32 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
           {/* Perspective Toggle */}
           <button
             onClick={() => setCameraMode((prev) => (prev === 'first_person' ? 'third_person' : 'first_person'))}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 backdrop-blur-md transition-colors shadow-lg text-xs font-medium"
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 backdrop-blur-md transition-colors shadow-lg text-xs font-medium"
           >
             <Camera className="w-4 h-4 text-cyan-400" />
             <span>{cameraMode === 'first_person' ? '1st Person' : '3rd Person'}</span>
-          </button>
-
-          {/* Cinematic Camera Flight Scale Selector */}
-          <div className="flex items-center bg-slate-900/80 p-0.5 rounded-xl border border-slate-700 backdrop-blur-md">
-            <button
-              onClick={() => handleTriggerCameraPreset('aerial_tokyo')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                currentCameraPreset === 'aerial_tokyo'
-                  ? 'bg-cyan-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Tokyo Aerial Overview (260m)"
-            >
-              <Plane className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Tokyo 260m</span>
-            </button>
-            <button
-              onClick={() => handleTriggerCameraPreset('district_shibuya')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                currentCameraPreset === 'district_shibuya'
-                  ? 'bg-cyan-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Shibuya District View (65m)"
-            >
-              <Building2 className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Shibuya 65m</span>
-            </button>
-            <button
-              onClick={() => handleTriggerCameraPreset('street_scramble')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                currentCameraPreset === 'street_scramble'
-                  ? 'bg-cyan-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Street Level Scramble Crossing (1.62m)"
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Street 1.62m</span>
-            </button>
-          </div>
-
-          {/* Open Japan Geo Console Button */}
-          <button
-            onClick={() => setIsOpenGeoModalOpen(true)}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-emerald-500/40 backdrop-blur-md transition-colors shadow-lg text-xs font-semibold"
-            title="Open Japan Geo Engine Console"
-          >
-            <Layers className="w-4 h-4 text-emerald-400" />
-            <span className="text-emerald-300 font-bold hidden sm:inline">PLATEAU 3D</span>
           </button>
 
           {onSwitchToPanorama && (
             <button
               onClick={onSwitchToPanorama}
               className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 backdrop-blur-md transition-colors shadow-lg text-xs font-medium"
+              title="Switch to 360° Photo Panorama"
             >
               <Eye className="w-4 h-4 text-amber-400" />
-              <span>360° Panorama</span>
+              <span className="hidden sm:inline">360° Panorama</span>
             </button>
           )}
+
+          {/* Exit to Student Dashboard */}
+          <button
+            onClick={() => onNavigate('dashboard')}
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-red-600/90 hover:bg-red-600 text-white font-bold border border-red-500/40 backdrop-blur-md transition-all shadow-lg text-xs"
+            title="Exit 3D and Return to Dashboard"
+          >
+            <span>Dashboard</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 
