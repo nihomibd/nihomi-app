@@ -46,6 +46,14 @@ const NihomiCloudView = lazy(() => import('./views/NihomiCloudView').then(m => (
 const NihomiMobileShowcase = lazy(() => import('./components/showcase/NihomiMobileShowcase').then(m => ({ default: m.NihomiMobileShowcase })));
 const DashboardView = lazy(() => import('./views/DashboardView').then(m => ({ default: m.DashboardView })));
 const RealJapanCanvasView = lazy(() => import('./views/RealJapanCanvasView').then(m => ({ default: m.RealJapanCanvasView })));
+const MemoryOsView = lazy(() => import('./views/MemoryOsView').then(m => ({ default: m.MemoryOsView })));
+const JapanTwinView = lazy(() => import('./views/JapanTwinView').then(m => ({ default: m.JapanTwinView })));
+const ProfileView = lazy(() => import('./views/ProfileView').then(m => ({ default: m.ProfileView })));
+const BadgesView = lazy(() => import('./views/BadgesView').then(m => ({ default: m.BadgesView })));
+const ProgressView = lazy(() => import('./views/ProgressView').then(m => ({ default: m.ProgressView })));
+const VocabularyView = lazy(() => import('./views/VocabularyView').then(m => ({ default: m.VocabularyView })));
+const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ default: m.AICoachView })));
+const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -55,6 +63,92 @@ const ViewLoadingFallback: React.FC = () => (
     </span>
   </div>
 );
+
+const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: string) => void }> = ({ currentView, onNavigate }) => (
+  <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center max-w-lg mx-auto" id="route-recovery-view">
+    <div className="w-16 h-16 rounded-3xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 font-black text-2xl mb-4 shadow-sm select-none">
+      日
+    </div>
+    <span className="px-2.5 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-mono font-bold mb-3">
+      Route: /{currentView}
+    </span>
+    <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight mb-2">
+      পৃষ্ঠাটি লোড করা যাচ্ছে না (Page Relocated)
+    </h2>
+    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
+      আপনি যে পৃষ্ঠাটিতে প্রবেশের চেষ্টা করছেন সেটি স্থানান্তরিত বা প্রস্তুত করা হচ্ছে। সরাসরি ড্যাশবোর্ড বা হোমে ফিরে যান।
+    </p>
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        onClick={() => onNavigate('dashboard')}
+        className="btn-haptic px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs shadow-sm cursor-pointer"
+      >
+        ← Student Dashboard
+      </button>
+      <button
+        type="button"
+        onClick={() => onNavigate('landing')}
+        className="btn-haptic px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-800 dark:text-stone-200 font-bold text-xs cursor-pointer border border-stone-200 dark:border-stone-700"
+      >
+        Go to Home
+      </button>
+    </div>
+  </div>
+);
+
+const KNOWN_VIEWS = new Set([
+  'start', 'ad-campaign', 'campaign', 'ad',
+  'growth', 'admin-growth', 'founder/growth',
+  'landing', 'home', 'world', 'canvas', 'shibuya',
+  'classic',
+  'dashboard', 'student-dashboard', 'portal-dashboard',
+  'courses', 'curriculum', 'pathways',
+  'lesson',
+  'portal', 'portal-settings', 'portal-subscription',
+  'credits',
+  'coordination',
+  'documents',
+  'terms', 'terms-of-service',
+  'privacy', 'privacy-policy',
+  'refund-policy', 'refund', 'refunds',
+  'contact', 'support',
+  'signature', 'email-signature',
+  'quizzes', 'quiz',
+  'quiz-runner',
+  'pricing', 'plans',
+  'payment-callback', 'billing/callback',
+  'login', 'signin',
+  'auth', 'signup', 'register',
+  'reset-password',
+  'subscription',
+  'passport',
+  'institution', 'academy', 'dils',
+  'founder', 'admin', 'command-center',
+  'content-studio',
+  'curriculum-explorer', 'n5-curriculum', 'minna',
+  'leaderboard', 'community', 'community-leaderboard', 'rankings',
+  'ghost-mode', 'ghost',
+  'mock-exams', 'mock-exam-hub', 'mock-tests',
+  'mock-exam-runner', 'mock-exam',
+  'study-plan', 'roadmap', 'study-planner',
+  'baito', 'baito-os', 'simulation', 'relocation', 'workos', 'work-os',
+  'interview', 'interview-lab', 'visa-defense',
+  'verify-cert', 'verify', 'certificate-verification',
+  'kana', 'hiragana', 'katakana', 'kana-lab',
+  'kanji', 'kanji-lab', 'kanji-100', 'n5-kanji',
+  'listening', 'listening-lab', 'kaiwa', 'choukai',
+  'cloud', 'nihomi-cloud', 'drive', 'locker',
+  'showcase', 'mockups', 'mobile-showcase',
+  'memory-os', 'memoryos', 'srs', 'memory',
+  'japan-twin', 'japantwin', 'twin',
+  'profile', 'account', 'me',
+  'badges', 'achievements',
+  'progress', 'stats', 'telemetry',
+  'vocabulary', 'vocab', 'words',
+  'ai-coach', 'coach', 'tutor',
+  'quiz-insights', 'insights'
+]);
 
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
@@ -79,6 +173,152 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { ZenSoundscapeType } from './lib/zenAudio';
+
+const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { view: string; params: Record<string, any> } => {
+  const path = pathname.toLowerCase();
+  const queryCert = searchParams.get('certId') || searchParams.get('id');
+
+  if (path === '/start' || path === '/campaign' || path === '/ad') {
+    return { view: 'start', params: {} };
+  }
+  if (path === '/world' || path === '/canvas' || path === '/shibuya') {
+    return { view: 'landing', params: {} };
+  }
+  if (path === '/classic') {
+    return { view: 'classic', params: {} };
+  }
+  if ((path === '/' || path === '') && (searchParams.has('utm_source') || searchParams.has('fbclid') || searchParams.has('gclid') || searchParams.has('utm_campaign'))) {
+    return { view: 'start', params: {} };
+  }
+  if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
+    return { view: 'courses', params: {} };
+  }
+  if (path === '/dashboard' || path === '/student-dashboard') {
+    return { view: 'dashboard', params: {} };
+  }
+  if (path === '/portal') {
+    return { view: 'portal', params: {} };
+  }
+  if (path === '/portal-settings') {
+    return { view: 'portal-settings', params: {} };
+  }
+  if (path === '/portal-subscription') {
+    return { view: 'portal-subscription', params: {} };
+  }
+  if (path.startsWith('/lesson/') || path === '/lesson') {
+    const lessonFromPath = path.replace(/^\/lesson\/?/, '');
+    const targetLesson = lessonFromPath || searchParams.get('id') || searchParams.get('lessonId') || 'n5-l1';
+    return { view: 'lesson', params: { lessonId: targetLesson } };
+  }
+  if (path === '/kana' || path === '/hiragana' || path === '/katakana' || path === '/kana-lab') {
+    return { view: 'kana', params: {} };
+  }
+  if (path === '/kanji' || path === '/kanji-lab' || path === '/kanji-100' || path === '/n5-kanji') {
+    return { view: 'kanji', params: {} };
+  }
+  if (path === '/listening' || path === '/listening-lab') {
+    return { view: 'listening', params: {} };
+  }
+  if (path === '/baito' || path === '/baito-os' || path === '/simulation' || path === '/workos' || path === '/work-os') {
+    return { view: 'baito', params: {} };
+  }
+  if (path === '/memory-os' || path === '/memoryos' || path === '/srs' || path === '/memory') {
+    return { view: 'memory-os', params: {} };
+  }
+  if (path === '/japan-twin' || path === '/japantwin' || path === '/twin') {
+    return { view: 'japan-twin', params: {} };
+  }
+  if (path === '/pricing' || path === '/plans') {
+    return { view: 'pricing', params: {} };
+  }
+  if (path === '/profile' || path === '/account' || path === '/me') {
+    return { view: 'profile', params: {} };
+  }
+  if (path === '/badges' || path === '/achievements') {
+    return { view: 'badges', params: {} };
+  }
+  if (path === '/progress' || path === '/stats') {
+    return { view: 'progress', params: {} };
+  }
+  if (path === '/vocabulary' || path === '/vocab') {
+    return { view: 'vocabulary', params: {} };
+  }
+  if (path === '/ai-coach' || path === '/coach') {
+    return { view: 'ai-coach', params: {} };
+  }
+  if (path === '/leaderboard' || path === '/community' || path === '/rankings') {
+    return { view: 'leaderboard', params: {} };
+  }
+  if (path === '/quizzes' || path === '/quiz') {
+    return { view: 'quizzes', params: {} };
+  }
+  if (path.startsWith('/quiz/') || path.startsWith('/quizzes/')) {
+    const quizId = path.split('/')[2] || 'quiz-n5-01';
+    return { view: 'quiz-runner', params: { quizId } };
+  }
+  if (path === '/mock-exams' || path === '/mock') {
+    return { view: 'mock-exams', params: {} };
+  }
+  if (path === '/study-plan' || path === '/roadmap') {
+    return { view: 'study-plan', params: {} };
+  }
+  if (path === '/ghost-mode' || path === '/ghost') {
+    return { view: 'ghost-mode', params: {} };
+  }
+  if (path === '/cloud' || path === '/drive') {
+    return { view: 'cloud', params: {} };
+  }
+  if (path === '/coordination') {
+    return { view: 'coordination', params: {} };
+  }
+  if (path === '/documents') {
+    return { view: 'documents', params: {} };
+  }
+  if (path === '/credits') {
+    return { view: 'credits', params: {} };
+  }
+  if (path === '/founder' || path === '/admin/founder' || path === '/command-center') {
+    return { view: 'founder', params: {} };
+  }
+  if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
+    return { view: 'growth', params: {} };
+  }
+  if (path === '/terms' || path === '/terms-of-service') {
+    return { view: 'terms', params: {} };
+  }
+  if (path === '/privacy' || path === '/privacy-policy') {
+    return { view: 'privacy', params: {} };
+  }
+  if (path === '/refund-policy' || path === '/refund' || path === '/refunds') {
+    return { view: 'refund-policy', params: {} };
+  }
+  if (path === '/contact' || path === '/support') {
+    return { view: 'contact', params: {} };
+  }
+  if (path === '/payment/callback' || path === '/billing/callback') {
+    return { view: 'payment-callback', params: {} };
+  }
+  if (path === '/login' || path === '/signin') {
+    return { view: 'login', params: {} };
+  }
+  if (path === '/auth' || path === '/signup' || path === '/register') {
+    return { view: 'auth', params: {} };
+  }
+  if (path === '/reset-password' || path === '/auth/reset-password') {
+    return { view: 'reset-password', params: {} };
+  }
+  if (path.startsWith('/verify') || queryCert) {
+    const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
+    const targetCert = certFromPath || queryCert;
+    return { view: 'verify-cert', params: { certId: targetCert ? decodeURIComponent(targetCert) : '' } };
+  }
+  if (path === '/' || path === '') {
+    return { view: 'landing', params: {} };
+  }
+
+  const cleanPath = path.replace(/^\//, '');
+  return { view: cleanPath || 'landing', params: {} };
+};
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -126,107 +366,19 @@ export const App: React.FC = () => {
     try {
       captureReferralFromUrl();
       captureUtmFromUrl();
-      const path = window.location.pathname.toLowerCase();
       const search = new URLSearchParams(window.location.search);
-      const queryCert = search.get('certId') || search.get('id');
-
-      if (path === '/start' || path === '/campaign' || path === '/ad') {
-        setCurrentView('start');
-      } else if (path === '/world' || path === '/canvas' || path === '/shibuya') {
-        setCurrentView('landing');
-      } else if (path === '/classic') {
-        setCurrentView('classic');
-      } else if ((path === '/' || path === '') && (search.has('utm_source') || search.has('fbclid') || search.has('gclid') || search.has('utm_campaign'))) {
-        setCurrentView('start');
-      } else if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
-        setCurrentView('courses');
-      } else if (path === '/dashboard') {
-        setCurrentView('dashboard');
-      } else if (path === '/portal') {
-        setCurrentView('portal');
-      } else if (path.startsWith('/lesson/') || path === '/lesson') {
-        const lessonFromPath = path.replace(/^\/lesson\/?/, '');
-        const targetLesson = lessonFromPath || search.get('id') || search.get('lessonId') || 'n5-l1';
-        setCurrentView('lesson');
-        setViewParams({ lessonId: targetLesson });
-      } else if (path === '/kana' || path === '/hiragana' || path === '/katakana') {
-        setCurrentView('kana');
-      } else if (path === '/kanji') {
-        setCurrentView('kanji');
-      } else if (path === '/listening') {
-        setCurrentView('listening');
-      } else if (path === '/baito' || path === '/baito-os' || path === '/simulation' || path === '/workos' || path === '/work-os') {
-        setCurrentView('baito');
-      } else if (path === '/pricing' || path === '/plans') {
-        setCurrentView('pricing');
-      } else if (path === '/coordination') {
-        setCurrentView('coordination');
-      } else if (path === '/documents') {
-        setCurrentView('documents');
-      } else if (path === '/credits') {
-        setCurrentView('credits');
-      } else if (path === '/founder' || path === '/admin/founder' || path === '/command-center') {
-        setCurrentView('founder');
-      } else if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
-        setCurrentView('growth');
-      } else if (path === '/terms' || path === '/terms-of-service') {
-        setCurrentView('terms');
-      } else if (path === '/privacy' || path === '/privacy-policy') {
-        setCurrentView('privacy');
-      } else if (path === '/refund-policy' || path === '/refund' || path === '/refunds') {
-        setCurrentView('refund-policy');
-      } else if (path === '/contact' || path === '/support') {
-        setCurrentView('contact');
-      } else if (path === '/payment/callback' || path === '/billing/callback') {
-        setCurrentView('payment-callback');
-      } else if (path === '/login' || path === '/signin') {
-        setCurrentView('login');
-      } else if (path === '/auth' || path === '/signup' || path === '/register') {
-        setCurrentView('auth');
-      } else if (path === '/reset-password' || path === '/auth/reset-password') {
-        setCurrentView('reset-password');
-      } else if (path.startsWith('/verify') || queryCert) {
-        const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
-        const targetCert = certFromPath || queryCert;
-        setCurrentView('verify-cert');
-        if (targetCert) {
-          setViewParams({ certId: decodeURIComponent(targetCert) });
-        }
-      }
+      const { view, params } = resolveViewFromUrl(window.location.pathname, search);
+      setCurrentView(view);
+      setViewParams(params);
     } catch (e) {}
 
     const handlePopState = () => {
-      const path = window.location.pathname.toLowerCase();
-      if (path === '/start' || path === '/campaign') setCurrentView('start');
-      else if (path === '/world' || path === '/canvas' || path === '/shibuya') setCurrentView('landing');
-      else if (path === '/classic') setCurrentView('classic');
-      else if (path === '/courses' || path === '/curriculum' || path === '/pathways') setCurrentView('courses');
-      else if (path === '/dashboard') setCurrentView('dashboard');
-      else if (path === '/portal') setCurrentView('portal');
-      else if (path.startsWith('/lesson/') || path === '/lesson') {
-        const lessonFromPath = path.replace(/^\/lesson\/?/, '');
-        setCurrentView('lesson');
-        setViewParams({ lessonId: lessonFromPath || 'n5-l1' });
-      }
-      else if (path === '/kana' || path === '/hiragana' || path === '/katakana') setCurrentView('kana');
-      else if (path === '/kanji') setCurrentView('kanji');
-      else if (path === '/listening') setCurrentView('listening');
-      else if (path === '/baito' || path === '/baito-os' || path === '/workos' || path === '/work-os') setCurrentView('baito');
-      else if (path === '/pricing' || path === '/plans') setCurrentView('pricing');
-      else if (path === '/coordination') setCurrentView('coordination');
-      else if (path === '/documents') setCurrentView('documents');
-      else if (path === '/credits') setCurrentView('credits');
-      else if (path === '/founder' || path === '/admin/founder' || path === '/command-center') setCurrentView('founder');
-      else if (path === '/admin/growth' || path === '/growth') setCurrentView('growth');
-      else if (path === '/terms') setCurrentView('terms');
-      else if (path === '/privacy') setCurrentView('privacy');
-      else if (path === '/refund-policy') setCurrentView('refund-policy');
-      else if (path === '/contact') setCurrentView('contact');
-      else if (path === '/payment/callback' || path === '/billing/callback') setCurrentView('payment-callback');
-      else if (path === '/login' || path === '/signin') setCurrentView('login');
-      else if (path === '/auth' || path === '/signup') setCurrentView('auth');
-      else if (path === '/reset-password') setCurrentView('reset-password');
-      else if (path === '/' || path === '') setCurrentView('landing');
+      try {
+        const search = new URLSearchParams(window.location.search);
+        const { view, params } = resolveViewFromUrl(window.location.pathname, search);
+        setCurrentView(view);
+        setViewParams(params);
+      } catch (e) {}
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -471,6 +623,33 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'showcase' || currentView === 'mockups' || currentView === 'mobile-showcase') && (
           <NihomiMobileShowcase />
+        )}
+        {(currentView === 'memory-os' || currentView === 'memoryos' || currentView === 'srs' || currentView === 'memory') && (
+          <MemoryOsView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'japan-twin' || currentView === 'japantwin' || currentView === 'twin') && (
+          <JapanTwinView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'profile' || currentView === 'account' || currentView === 'me') && (
+          <ProfileView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'badges' || currentView === 'achievements') && (
+          <BadgesView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'progress' || currentView === 'stats' || currentView === 'telemetry') && (
+          <ProgressView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'vocabulary' || currentView === 'vocab' || currentView === 'words') && (
+          <VocabularyView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'ai-coach' || currentView === 'coach' || currentView === 'tutor') && (
+          <AICoachView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'quiz-insights' || currentView === 'insights') && (
+          <QuizPerformanceInsightsView onNavigate={handleNavigate} />
+        )}
+        {!KNOWN_VIEWS.has(currentView) && (
+          <RouteRecoveryView currentView={currentView} onNavigate={handleNavigate} />
         )}
         </Suspense>
         </GlobalErrorBoundary>

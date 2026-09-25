@@ -26,14 +26,133 @@ interface JapanTwinViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
+const DEFAULT_TWIN_DATA = {
+  studentName: 'Nihomi Student',
+  targetCity: 'Tokyo (Shinjuku / Takadanobaba)',
+  targetPurpose: 'Language School & Career Relocation',
+  daysToJapan: 206,
+  arrivalDate: '2027-03-15',
+  targetJLPT: 'N4',
+  readinessScore: 68,
+  metrics: {
+    speaking: 62,
+    listening: 70,
+    grammar: 75,
+    kanji: 58,
+    keigo: 52,
+    dailyLife: 78,
+    workplace: 60,
+    emergency: 48
+  },
+  predictedBottlenecks: [
+    {
+      id: 'risk-1',
+      title: 'Workplace Fast-Speech Listening',
+      severity: 'High',
+      description: 'You are likely to freeze when Japanese conbini managers or customers speak rapidly.'
+    },
+    {
+      id: 'risk-2',
+      title: 'Keigo Humility (Kenjougo vs Sonkeigo)',
+      severity: 'Medium',
+      description: 'Confusion when humbling your actions in front of external clients or teachers.'
+    }
+  ],
+  recommendedPlan: {
+    title: '14-Day Japan Survival & Keigo Accelerator',
+    dailyMinutes: 12,
+    priorityDrill: '10-minute Conbini Register & Listening Drill'
+  }
+};
+
+const DEFAULT_DAY_SCENARIOS: Record<number, any> = {
+  1: {
+    day: 1,
+    title: 'Tokyo Narita Airport: Immigration & Customs',
+    titleJa: '成田空港・入国審査と税関',
+    situation: 'The immigration officer inspects your COE and passport.',
+    npcPrompt: 'こんにちは。パスポートと在留資格認定証明書（COE）を見せてください。滞在期間と目的は何ですか？',
+    romaji: 'Konnichiwa. Pasupooto to Zairyuu Shikaku Nintei Shoumeisho (COE) wo misete kudasai. Taizai kikan to mokuteki wa nan desu ka?',
+    bangla: 'নমস্কার। আপনার পাসপোর্ট ও সিওই (COE) দেখান। আপনার অবস্থানের মেয়াদ ও উদ্দেশ্য কী?',
+    evaluation: 'Immigration completed successfully. Remember to state "Ryuugaku" (Study Abroad) clearly.',
+    weakSkillDetected: 'Airport Formal Answering & COE Vocabulary'
+  },
+  2: {
+    day: 2,
+    title: 'Day 2: Yamanote Subway & Suica Card Purchase',
+    titleJa: '山手線・Suicaカード購入と改札',
+    situation: 'You are at Shinjuku station purchasing your first IC card from the ticket machine.',
+    npcPrompt: '定期券、またはSuicaの新規購入ですか？デポジット500円が必要です。チャージ金額を選んでください。',
+    romaji: 'Teikiken, matawa Suica no shinki kounyuu desu ka? Depojitto gohyaku-en ga hitsuyou desu. Chaaji kingaku wo erande kudasai.',
+    bangla: 'কম্যুটার পাস নাকি নতুন সুইকা কার্ড কিনবেন? ৫০০ ইয়েন ডিপোজিট লাগবে। রিচার্জের পরিমাণ নির্বাচন করুন।',
+    evaluation: 'IC card purchased! Next time listen carefully for the change return chime.',
+    weakSkillDetected: 'Tokyo Subway Ticket Machine Japanese'
+  },
+  3: {
+    day: 3,
+    title: 'Day 3: Language School First Day Orientation',
+    titleJa: '日本語学校・初日オリエンテーション',
+    situation: 'Sensei is greeting new international students in class.',
+    npcPrompt: '皆さん、おはようございます。これから自己紹介をしてください。国籍と日本に来た理由を教えてください。',
+    romaji: 'Minasan, ohayou gozaimasu. Korekara jikoshoukai wo shite kudasai. Kokuseki to Nihon ni kita riyuu wo oshiete kudasai.',
+    bangla: 'সবাইকে শুভ সকাল। এখন নিজ নিজ পরিচয় দিন। আপনার দেশ ও জাপানে আসার কারণ বলুন।',
+    evaluation: 'Clear self-introduction! Use "Yoroshiku onegaishimasu" with a 30-degree bow.',
+    weakSkillDetected: 'Classroom Self-Introduction (Jikoshoukai)'
+  },
+  4: {
+    day: 4,
+    title: 'Day 4: 7-Eleven Conbini Ordering & Payment',
+    titleJa: 'セブンイレブン・注文とお会計',
+    situation: 'Cashier asks about warm food, bag, and point card.',
+    npcPrompt: 'お弁当温めますか？レジ袋はご利用になりますか？ポイントカードはお持ちですか？',
+    romaji: 'Obentou atatamemasu ka? Rejibukuro wa go-riyou ni narimasu ka? Pointo kaado wa omochi desu ka?',
+    bangla: 'লাঞ্চবক্স কি গরম করে দেব? প্লাস্টিক ব্যাগ লাগবে? পয়েন্ট কার্ড আছে কি?',
+    evaluation: 'Handled conbini speed smoothly! Remember: "Daijoubu desu" means no bag.',
+    weakSkillDetected: 'Conbini Fast Transaction Keigo'
+  },
+  5: {
+    day: 5,
+    title: 'Day 5: Shinjuku City Hall Residence Registration',
+    titleJa: '新宿区役所・住民登録と保険手続き',
+    situation: 'City Hall officer asks for your address and national health insurance enrollment.',
+    npcPrompt: '転入届の記入をお願いします。日本の新しい住所と電話番号をこちらに書いてください。国民健康保険にも加入しますか？',
+    romaji: 'Tennyuutodoke no kinyuu wo onegaishimasu. Nihon no atarashii juusho to denwabangou wo kochira ni kaite kudasai. Kokumin kenkou hoken ni mo kanyuu shimasu ka?',
+    bangla: 'মুভ-ইন ফর্মটি পূরণ করুন। জাপানের নতুন ঠিকানা ও ফোন নম্বর এখানে লিখুন। স্বাস্থ্যবীমাও কি সাথে করবেন?',
+    evaluation: 'City Hall registration passed. Kept address in kanji or romaji clearly written.',
+    weakSkillDetected: 'Japanese Official Government Forms & Procedures'
+  },
+  6: {
+    day: 6,
+    title: 'Day 6: Baito First Shift Rush at Restaurant',
+    titleJa: '居酒屋バイト・初シフトのピークタイム',
+    situation: 'Senior staff asks you to serve water, wipe table 4, and take order.',
+    npcPrompt: 'いらっしゃいませ！4番テーブルにお冷とメニューをお出しして、注文が入ったらハンディに入力してください！',
+    romaji: 'Irasshaimase! Yon-ban teeburu ni ohie to menyuu wo odashi shite, chuumon ga haittara handi ni nyuuryoku shite kudasai!',
+    bangla: 'স্বাগতম! ৪ নম্বর টেবিলে ঠান্ডা পানি ও মেনু দিন, এবং অর্ডার আসলে ডিভাইসে এন্ট্রি করুন!',
+    evaluation: 'Baito shift survived! Remember: always say "Kashikomarimashita" when receiving instructions.',
+    weakSkillDetected: 'Restaurant Fast-Paced Keigo & Rush Communication'
+  },
+  7: {
+    day: 7,
+    title: 'Day 7: Emergency Clinic & Pharmacy',
+    titleJa: 'クリニック・問診票と処方箋薬局',
+    situation: 'Nurse asks about fever symptoms and allergies before seeing the doctor.',
+    npcPrompt: '熱はいつからありますか？アレルギーやお薬の副作用を経験したことはありますか？保険証をお預かりします。',
+    romaji: 'Netsu wa itsu kara arimasu ka? Arerugii ya okusuri no fukusayou wo keiken shita koto wa arimasu ka? Hokenshou wo oazukari shimasu.',
+    bangla: 'জ্বর কবে থেকে? অ্যালার্জি বা কোনো ওষুধের পার্শ্বপ্রতিক্রিয়ার অতীত অভিজ্ঞতা আছে? বীমা কার্ডটি দিন।',
+    evaluation: 'Clinic consultation completed safely. Stated body temperature in Celsius accurately.',
+    weakSkillDetected: 'Medical Symptoms & Allergy Vocabulary in Japanese'
+  }
+};
+
 export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
   const { user, profile } = useAuth();
-  const [twinData, setTwinData] = useState<any | null>(null);
+  const [twinData, setTwinData] = useState<any>(DEFAULT_TWIN_DATA);
   const [activeDay, setActiveDay] = useState(1);
-  const [simulationResult, setSimulationResult] = useState<any | null>(null);
+  const [simulationResult, setSimulationResult] = useState<any>(DEFAULT_DAY_SCENARIOS[1]);
   const [userSpeechInput, setUserSpeechInput] = useState('');
   const [isSimulating, setIsSimulating] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function loadTwin() {
@@ -44,13 +163,17 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
           setTwinData(res.japanTwin);
         }
       } catch (err) {
-        console.error('Failed to load JapanTwin:', err);
+        console.warn('Using default JapanTwin profile telemetry:', err);
+        setTwinData({
+          ...DEFAULT_TWIN_DATA,
+          studentName: profile?.displayName || user?.name || 'Nihomi Student'
+        });
       } finally {
         setIsLoading(false);
       }
     }
     loadTwin();
-  }, []);
+  }, [profile?.displayName, user?.name]);
 
   const handleRunDaySimulation = async (dayNumber: number) => {
     setActiveDay(dayNumber);
@@ -62,9 +185,12 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
       });
       if (res.success && res.dayResult) {
         setSimulationResult(res.dayResult);
+      } else {
+        setSimulationResult(DEFAULT_DAY_SCENARIOS[dayNumber] || DEFAULT_DAY_SCENARIOS[1]);
       }
     } catch (err) {
-      console.error('Simulation error:', err);
+      console.warn('Simulation API offline, using interactive local scenario:', err);
+      setSimulationResult(DEFAULT_DAY_SCENARIOS[dayNumber] || DEFAULT_DAY_SCENARIOS[1]);
     } finally {
       setIsSimulating(false);
     }
@@ -87,6 +213,24 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-10 px-4 sm:px-6 lg:px-8" id="japan-twin-view">
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Unauthenticated Preview Banner */}
+        {!user && (
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-stone-300">
+                <strong>Interactive Tokyo Simulator (Preview Mode):</strong> Test your day-to-day survival skills in Tokyo. Sign in to save telemetry to your permanent student record.
+              </span>
+            </div>
+            <button
+              onClick={() => onNavigate('login')}
+              className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shrink-0 cursor-pointer"
+            >
+              Sign In to Save
+            </button>
+          </div>
+        )}
+
         {/* Header Hero */}
         <div className="bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-stone-800 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-600/30 border border-red-500/50 text-red-300 text-xs font-bold">
@@ -153,7 +297,12 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Active Simulation Stage */}
-          {simulationResult && (
+          {isSimulating ? (
+            <div className="p-12 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col items-center justify-center space-y-3 animate-pulse">
+              <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
+              <p className="text-xs font-bold text-stone-600">Simulating Day {activeDay} in Tokyo...</p>
+            </div>
+          ) : simulationResult ? (
             <div className="p-6 rounded-2xl bg-stone-50 border border-stone-200 space-y-5 animate-in fade-in">
               <div className="flex items-start justify-between">
                 <div>
@@ -218,7 +367,7 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
                 </button>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

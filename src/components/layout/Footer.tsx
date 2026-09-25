@@ -47,6 +47,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Pathways
             </button>
             <button
+              onClick={() => onNavigate?.('japan-twin')}
+              className="hover:text-stone-950 transition-colors cursor-pointer text-rose-600 font-bold"
+            >
+              JapanTwin™
+            </button>
+            <button
+              onClick={() => onNavigate?.('memory-os')}
+              className="hover:text-stone-950 transition-colors cursor-pointer"
+            >
+              MemoryOS™
+            </button>
+            <button
               onClick={() => onNavigate?.('portal')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
             >
