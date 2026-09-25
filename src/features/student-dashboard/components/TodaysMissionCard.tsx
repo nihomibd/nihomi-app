@@ -110,7 +110,7 @@ export const TodaysMissionCard: React.FC<TodaysMissionCardProps> = ({
           <button
             type="button"
             onClick={() => onStartMission(mission)}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+            className="w-full sm:w-auto min-h-[48px] px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
           >
             <Play className="w-4 h-4 fill-stone-950" />
             <span>Start Mission • শুরু করুন</span>

@@ -27,7 +27,7 @@ import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
-import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2 } from 'lucide-react';
+import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2, Home, BookOpen, User } from 'lucide-react';
 import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
@@ -72,6 +72,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [isProModalOpen, setIsProModalOpen] = useState(false);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
+
+  const desktopTabs: { id: NavTab; label: string; labelJa: string; icon: React.ComponentType<{ className?: string }> }[] = [
+    { id: 'home', label: 'Home', labelJa: 'ホーム', icon: Home },
+    { id: 'learn', label: 'Learn', labelJa: '学ぶ', icon: BookOpen },
+    { id: 'practice', label: 'Practice', labelJa: '練習', icon: CheckCircle2 },
+    { id: 'ai', label: 'AI Sensei', labelJa: 'AI', icon: Sparkles },
+    { id: 'profile', label: 'Profile', labelJa: 'マイページ', icon: User },
+  ];
 
   const isPro =
     user?.role === 'founder' ||
@@ -243,11 +251,55 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   }
 
   if (activeTab !== 'home' && activeTab !== 'ai') {
-    return <div className="min-h-screen bg-stone-50 pb-20"><div className="sticky top-0 z-40 flex items-center justify-between border-b border-stone-200 bg-white/95 px-4 py-3 backdrop-blur"><button type="button" onClick={() => setActiveTab('home')} className="rounded-xl bg-stone-900 px-3 py-2 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-rose-500">← Home</button><span className="text-xs font-bold text-stone-500">Nihomi 学ぶ</span></div>{renderEmbeddedTab()}<MobileBottomNavigation currentTab={activeTab} onTabChange={handleTabChange} /></div>;
+    return (
+      <div className="min-h-screen bg-stone-50 text-stone-900 pb-28 md:pb-12 selection:bg-rose-100 selection:text-rose-900">
+        <div className="sticky top-0 z-40 flex items-center justify-between border-b border-stone-200/90 bg-white/95 px-4 sm:px-6 py-3 backdrop-blur-md shadow-2xs">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveTab('home')}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-stone-900 px-3.5 py-2 text-xs font-bold text-white hover:bg-stone-800 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer"
+            >
+              <span>← Home (ホーム)</span>
+            </button>
+            <span className="text-xs font-bold text-stone-500 hidden sm:inline">
+              Nihomi {activeTab === 'learn' ? '学ぶ (Learn)' : activeTab === 'practice' ? '練習 (Practice)' : 'マイページ (Profile)'}
+            </span>
+          </div>
+
+          {/* Desktop Sub Navigation */}
+          <nav aria-label="Desktop Sub Navigation" className="hidden md:flex items-center gap-1 bg-stone-100/90 dark:bg-stone-800/90 p-1.5 rounded-xl border border-stone-200/60 dark:border-stone-700/60">
+            {desktopTabs.map((t) => {
+              const isActive = activeTab === t.id;
+              const Icon = t.icon;
+              return (
+                <button
+                  key={t.id}
+                  id={`desktop-sub-tab-${t.id}`}
+                  type="button"
+                  onClick={() => handleTabChange(t.id)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-[0.98] cursor-pointer select-none ${
+                    isActive ? 'bg-white dark:bg-stone-900 text-stone-950 dark:text-white shadow-2xs font-bold' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                  }`}
+                >
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-600 dark:text-rose-400' : 'text-stone-400'}`} />
+                  <span>{t.label}</span>
+                  <span className="text-[10px] text-stone-400 font-normal">({t.labelJa})</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          {renderEmbeddedTab()}
+        </div>
+        <MobileBottomNavigation currentTab={activeTab} onTabChange={handleTabChange} />
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 selection:bg-rose-100 selection:text-rose-900">
+    <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-28 md:pb-12 selection:bg-rose-100 selection:text-rose-900">
       <OfflineNotificationBanner />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-6">
         
@@ -261,6 +313,64 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <>
             {/* Top Full-Width Section: Student Header & Priority Banners */}
             <div className="space-y-4">
+              {/* Desktop Navigation Top-Bar (Strictly hidden on mobile, Apple-grade on desktop) */}
+              <nav
+                id="student-dashboard-desktop-nav"
+                aria-label="Student Desktop Navigation"
+                className="hidden md:flex items-center justify-between bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-2xl px-5 py-3 shadow-xs transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center text-white shadow-xs font-black text-xs select-none">
+                    日
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black tracking-tight text-stone-900 dark:text-white">
+                        NIHOMI AI™
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40">
+                        Student OS
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 bg-stone-100/90 dark:bg-stone-800/90 p-1.5 rounded-xl border border-stone-200/60 dark:border-stone-700/60">
+                  {desktopTabs.map((t) => {
+                    const isActive = activeTab === t.id;
+                    const Icon = t.icon;
+                    return (
+                      <button
+                        key={t.id}
+                        id={`desktop-tab-${t.id}`}
+                        type="button"
+                        onClick={() => handleTabChange(t.id)}
+                        className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 select-none cursor-pointer active:scale-[0.98] ${
+                          isActive
+                            ? 'bg-white dark:bg-stone-900 text-stone-950 dark:text-white shadow-xs font-bold'
+                            : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white hover:bg-stone-200/60 dark:hover:bg-stone-700/60'
+                        }`}
+                      >
+                        <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-600 dark:text-rose-400' : 'text-stone-400'}`} />
+                        <span>{t.label}</span>
+                        <span className="text-[10px] text-stone-400 font-normal">({t.labelJa})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAiTutorOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-900/50 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-all active:scale-[0.98] cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>24/7 AI Coach</span>
+                  </button>
+                </div>
+              </nav>
+
               {/* ১. স্টুডেন্ট ওয়েলকাম ও আসল কয়েন/ক্রেডিট */}
               <StudentHeader 
                 student={data.student} 

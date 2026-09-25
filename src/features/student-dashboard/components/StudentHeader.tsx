@@ -36,7 +36,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
   return (
     <>
     <header className="pt-2 pb-4 border-b border-stone-200 bg-white/80 backdrop-blur-sm sticky top-0 z-20">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold tracking-wide bg-stone-900 text-white">
@@ -48,7 +48,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-stone-900">
               おはよう, {student.name}
             </h1>
-            <button type="button" onClick={() => setIsIdOpen(true)} className="inline-flex items-center gap-1 rounded-lg bg-stone-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm transition-colors hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+            <button type="button" onClick={() => setIsIdOpen(true)} className="inline-flex items-center gap-1 rounded-lg bg-stone-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm transition-all active:scale-[0.98] hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer">
               <span aria-hidden="true">🪪</span> Student ID
             </button>
           </div>
@@ -57,8 +57,8 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({ student, accountUs
           </p>
         </div>
 
-        <div className="shrink-0 pt-1">
-          <div className="flex items-center gap-2">
+        <div className="shrink-0 pt-1 w-full sm:w-auto">
+          <div className="flex items-center gap-2 flex-wrap justify-between sm:justify-end">
             {!isPro && (
               <button
                 id="btn-header-upgrade-pro"

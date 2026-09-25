@@ -479,7 +479,9 @@ export const App: React.FC = () => {
       {!isFocusMode && !isAdLanding && !isCanvasMode && <Footer onNavigate={handleNavigate} />}
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && currentView !== 'dashboard' && currentView !== 'student-dashboard' && currentView !== 'portal-dashboard' && (
+        <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />
+      )}
 
       {/* Global Command Palette (Triggered from Header search bar or ⌘K) */}
       <CommandPaletteModal
