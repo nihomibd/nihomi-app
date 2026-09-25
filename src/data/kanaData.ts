@@ -25,6 +25,10 @@ export interface KanaCharacter {
   strokeDetails?: KanaStrokeInfo[];
   mnemonicEn: string;
   mnemonicBn: string;
+  originMnemonic?: string;
+  exampleWord?: string;
+  exampleReading?: string;
+  exampleMeaning?: string;
   gridRow: 'a' | 'ka' | 'sa' | 'ta' | 'na' | 'ha' | 'ma' | 'ya' | 'ra' | 'wa' | 'n' | 'dakuon' | 'handakuon' | 'yoon';
   gridCol: number; // 0: a, 1: i, 2: u, 3: e, 4: o
   exampleVocab: {

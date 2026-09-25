@@ -12,7 +12,15 @@ export const healthRouter = Router();
 healthRouter.get('/', async (_req, res) => {
   const startTime = Date.now();
   const isGeminiConfigured = !!process.env.GEMINI_API_KEY;
+  const isBkashConfigured = !!(
+    process.env.BKASH_APP_KEY &&
+    process.env.BKASH_APP_SECRET &&
+    process.env.BKASH_USERNAME &&
+    process.env.BKASH_PASSWORD
+  );
   const isEpsConfigured = !!(process.env.EPS_MERCHANT_ID && process.env.EPS_API_KEY);
+  const isSslCommerzConfigured = !!(process.env.SSLCOMMERZ_STORE_ID && process.env.SSLCOMMERZ_STORE_PASSWORD);
+  const isAnyPaymentConfigured = isBkashConfigured || isEpsConfigured || isSslCommerzConfigured;
 
   // 1. Database Health & Latency Probe
   const dbStartTime = Date.now();
@@ -101,8 +109,13 @@ healthRouter.get('/', async (_req, res) => {
       ]
     },
     paymentGateway: {
-      provider: 'EPS (Easy Payment System) & bKash Hybrid Gateway',
-      status: isEpsConfigured ? 'live_production' : 'sandbox_ready',
+      provider: 'bKash Tokenized & EPS / SSLCommerz MFS Gateway Layer',
+      status: isAnyPaymentConfigured ? (isEpsConfigured || (isBkashConfigured && !process.env.BKASH_SANDBOX) ? 'live_production' : 'sandbox_configured') : 'not_configured',
+      gateways: {
+        bKash: isBkashConfigured ? 'configured' : 'not_configured',
+        eps: isEpsConfigured ? 'configured' : 'not_configured',
+        sslCommerz: isSslCommerzConfigured ? 'configured' : 'not_configured'
+      },
       supportedMfs: ['bKash', 'Nagad', 'Rocket', 'Upay', 'Visa/Mastercard']
     },
     memory: {

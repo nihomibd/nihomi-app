@@ -66,35 +66,7 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
   };
 }
 
-/**
- * Require Founder credentials strictly
- */
-export function requireFounder(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  const token = extractBearerToken(req);
-  const user = req.user || (token ? getUserFromToken(token) : null);
-
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      error: 'Authentication required. Please sign in.',
-      code: 'UNAUTHORIZED'
-    });
-  }
-
-  const isFounder = (user.role as string) === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
-
-  if (!isFounder) {
-    console.warn(`[RBAC Gate] Founder access denied for user: ${user.email} (Role: ${user.role})`);
-    return res.status(403).json({
-      success: false,
-      error: 'Forbidden. Access restricted to NIHOMI Founder.',
-      code: 'FORBIDDEN_FOUNDER_ONLY'
-    });
-  }
-
-  req.user = user;
-  return next();
-}
+// Note: requireFounder and FOUNDER_EMAIL are exported from authHelper.js at the bottom of this file.
 
 /**
  * Require Admin role strictly
@@ -144,3 +116,6 @@ export function requireOwnerOrAdmin(paramKey = 'userId') {
     });
   };
 }
+
+export { requireFounder, FOUNDER_EMAIL } from '../authHelper.js';
+

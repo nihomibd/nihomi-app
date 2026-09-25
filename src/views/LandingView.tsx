@@ -40,6 +40,7 @@ import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
 import { Plan } from '../types';
 import { NihomiMobileShowcase } from '../components/showcase/NihomiMobileShowcase';
+import { HanabiBackground } from '../components/HanabiBackground';
 
 interface LandingViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -284,87 +285,56 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="bg-[#FAF9F6] text-stone-900 selection:bg-red-500 selection:text-white">
+    <div className="relative min-h-screen bg-[#0a0a12] text-white selection:bg-red-500 selection:text-white overflow-hidden">
+      {/* Subtle Japanese festival fireworks canvas background */}
+      <HanabiBackground />
+
+      {/* Ambient Red / Amber Glow Orbs */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-red-600/15 via-rose-600/10 to-transparent blur-[120px] rounded-full z-0" />
+      <div className="pointer-events-none absolute top-96 -left-40 w-96 h-96 bg-amber-500/10 blur-[100px] rounded-full z-0" />
 
       {/* ========================================================================= */}
-      {/* SECTION 1: HERO & PROMPT HUB (Apple / Gemini Minimalist Aesthetic)        */}
+      {/* SECTION 1: HERO & PROMPT HUB (Neo-Tokyo Dark Obsidian Aesthetic)          */}
       {/* ========================================================================= */}
-      <section className="pt-12 sm:pt-16 pb-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+      <section className="relative z-10 pt-16 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
         
-        {/* Continuous Learning Badge */}
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200 text-stone-700 text-xs font-semibold mb-6 shadow-2xs">
-          <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-          <span>NIHOMI.COM • BANGLADESH TO TOKYO JAPANESE OS</span>
+        {/* Top Capsule Badge */}
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.12] text-stone-300 text-xs font-semibold mb-6 shadow-sm backdrop-blur-md">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+          <span className="font-mono text-[11px] tracking-wider text-stone-200">NIHOMI AI™ • NEXT-GEN JAPANESE PLATFORM</span>
         </div>
 
-        {/* Master Minimalist Headline with Glowing Red Accent */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-950 leading-[1.15] mb-4">
-          শূন্য থেকে <span className="text-red-600 font-japanese drop-shadow-sm">JLPT N5</span> — <br className="hidden sm:inline" />
-          জাপানিজ ভাষা শেখার আধুনিক <span className="underline decoration-red-500/40 decoration-wavy underline-offset-8">AI প্ল্যাটফর্ম</span>
+        {/* Master Headline: Screenshot 2 Exact Visual Dialogue */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-2">
+          Nihomi AI™
         </h1>
-
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto mb-6 font-medium leading-relaxed">
-          বাংলা ভাষায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসেই, অথেনটিক মিন্না নো নিহোঙ্গো কারিকুলাম এবং টোকিও কনবিনি সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+        <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">
+          You don't just learn Japanese.
+        </p>
+        <p className="text-2xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-500 mb-6 tracking-tight">
+          You experience it.
         </p>
 
-        {/* Ad Campaign & 1-Minute Quiz Promotion Banner */}
-        <div 
-          onClick={() => {
-            trackNihomiEvent('landing_campaign_banner_clicked', { source: 'landing_hero' });
-            onNavigate('start');
-          }}
-          className="cursor-pointer max-w-xl mx-auto mb-6 p-2.5 sm:p-3 bg-gradient-to-r from-red-500/10 via-amber-500/10 to-rose-500/10 hover:from-red-500/20 hover:to-amber-500/20 border border-red-500/20 rounded-2xl transition-all flex items-center justify-between gap-3 text-left shadow-2xs group"
-        >
-          <div className="flex items-center space-x-2.5">
-            <span className="flex h-7 w-7 rounded-xl bg-red-600 text-white items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-              ⚡
-            </span>
-            <div>
-              <p className="text-xs sm:text-sm font-bold text-stone-900 flex items-center gap-1.5">
-                ১-মিনিটে N5 এলিজিবিলিটি টেস্ট দিন
-                <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">ফ্রি ৫০ কয়েন</span>
-              </p>
-              <p className="text-[11px] text-stone-600 hidden sm:block">
-                টোকিও ভিসা ও স্কলারশিপ রেডিনেস স্কোরকার্ড তাৎক্ষণিক ডাউনলোড করুন
-              </p>
-            </div>
-          </div>
-          <span className="text-xs font-bold text-red-600 group-hover:translate-x-0.5 transition-transform shrink-0 flex items-center">
-            টেস্ট দিন →
-          </span>
-        </div>
+        {/* Subtitle */}
+        <p className="text-sm sm:text-base md:text-lg text-stone-300 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
+          টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ তানাকা AI সেনসেই লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+        </p>
 
-        {/* 2 Primary CTAs: Start Zero Journey + Take Level Check */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-3 max-w-2xl mx-auto">
-          {/* 1. Primary CTA: Crimson Gradient */}
+        {/* Primary CTAs matching Screenshot 2: Start Journey + Student Dashboard */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-4 max-w-xl mx-auto">
+          {/* 1. Primary CTA: Crimson / Rose Gradient with Sparkles */}
           <button
             onClick={() => {
               trackNihomiEvent('zero_gateway_clicked', { source: 'landing_hero' });
               setIsZeroGatewayOpen(true);
             }}
-            className="flex-1 px-5 py-3.5 sm:px-6 sm:py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-700 hover:to-rose-800 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/30 hover:shadow-xl transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98 group"
+            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 group"
           >
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-red-200 animate-pulse shrink-0" />
-            <span className="truncate">Start Japanese Zero Journey (শুরু থেকে শিখুন)</span>
-            <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform shrink-0" />
+            <Sparkles className="w-4 h-4 text-amber-200 animate-pulse shrink-0" />
+            <span>Start Journey →</span>
           </button>
 
-          {/* 2. Secondary CTA: Minimalist outline pill */}
-          <button
-            onClick={() => {
-              trackNihomiEvent('diagnostic_exam_clicked', { source: 'landing_hero' });
-              setIsDiagnosticOpen(true);
-            }}
-            className="flex-1 px-5 py-3.5 sm:px-6 sm:py-4 bg-white hover:bg-stone-50 border border-stone-300 text-stone-800 rounded-2xl text-sm sm:text-base font-bold shadow-xs hover:border-stone-400 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
-          >
-            <Target className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 shrink-0" />
-            <span className="truncate">Take 2-Min Level Check (লেভেল যাচাই)</span>
-          </button>
-        </div>
-
-        {/* 3. Subtle Direct Login Link Below */}
-        <div className="flex items-center justify-center gap-4 text-xs font-medium text-stone-500 mb-8">
+          {/* 2. Secondary CTA: Dark Button */}
           <button
             onClick={() => {
               if (user) {
@@ -373,15 +343,42 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                 openAuthModal();
               }
             }}
-            className="text-stone-600 hover:text-red-600 font-semibold transition-colors cursor-pointer inline-flex items-center gap-1 py-1"
+            className="w-full sm:w-auto px-7 py-3.5 bg-stone-900/90 hover:bg-stone-800 text-stone-200 hover:text-white border border-stone-800 hover:border-stone-700 rounded-2xl text-sm sm:text-base font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 backdrop-blur-md"
           >
-            <span>ইতিমধ্যে একাউন্ট আছে? {user ? 'ড্যাশবোর্ডে প্রবেশ করুন' : 'লগইন করুন'} →</span>
+            <span>Student Dashboard &gt;</span>
           </button>
         </div>
 
-        {/* Minimalist AI Prompt / Search Bar */}
+        {/* 1-Minute Quiz Promotion Banner */}
+        <div 
+          onClick={() => {
+            trackNihomiEvent('landing_campaign_banner_clicked', { source: 'landing_hero' });
+            onNavigate('start');
+          }}
+          className="cursor-pointer max-w-xl mx-auto mb-8 p-2.5 sm:p-3 bg-white/[0.04] hover:bg-white/[0.08] border border-red-500/25 rounded-2xl transition-all flex items-center justify-between gap-3 text-left shadow-lg backdrop-blur-md group"
+        >
+          <div className="flex items-center space-x-2.5">
+            <span className="flex h-7 w-7 rounded-xl bg-red-600/80 text-white items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+              ⚡
+            </span>
+            <div>
+              <p className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                ১-মিনিটে N5 এলিজিবিলিটি টেস্ট দিন
+                <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">ফ্রি ৫০ কয়েন</span>
+              </p>
+              <p className="text-[11px] text-stone-400 hidden sm:block">
+                টোকিও ভিসা ও স্কলারশিপ রেডিনেস স্কোরকার্ড তাৎক্ষণিক ডাউনলোড করুন
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-red-400 group-hover:translate-x-0.5 transition-transform shrink-0 flex items-center">
+            টেস্ট দিন →
+          </span>
+        </div>
+
+        {/* Dark Glassmorphism AI Prompt / Search Bar */}
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-3xl border border-stone-200 shadow-sm hover:border-stone-300 transition-all p-4 sm:p-5 text-left space-y-4">
+          <div className="bg-[#12121e]/90 rounded-3xl border border-white/10 shadow-2xl hover:border-white/20 transition-all p-4 sm:p-5 text-left space-y-4 backdrop-blur-xl">
             
             {/* Input Line */}
             <input
@@ -390,37 +387,37 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               onChange={(e) => setQueryInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(queryInput)}
               placeholder="Ask Nihomi AI Sensei anything in English, বাংলা, or 日本語 (e.g. particle rules, baito keigo)..."
-              className="w-full bg-transparent text-sm sm:text-base text-stone-900 placeholder:text-stone-400 focus:outline-hidden leading-relaxed"
+              className="w-full bg-transparent text-sm sm:text-base text-white placeholder:text-stone-500 focus:outline-hidden leading-relaxed"
             />
 
             {/* Bottom Actions Row: 3 Trigger Buttons + Send Arrow */}
-            <div className="flex items-center justify-between pt-2 border-t border-stone-100">
+            <div className="flex items-center justify-between pt-2 border-t border-white/10">
               
               <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-0.5">
                 <button
                   type="button"
                   onClick={() => setIsVoiceActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
                 >
-                  <Mic className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                  <Mic className="w-3.5 h-3.5 text-red-400 shrink-0" />
                   <span>Voice</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsCameraActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
                 >
-                  <Camera className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <Camera className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                   <span>Photo OCR</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsWritingActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
                 >
-                  <PenTool className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <PenTool className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>Kanji Canvas</span>
                 </button>
               </div>
@@ -429,7 +426,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <button
                 onClick={() => handleSearch(queryInput)}
                 disabled={isAnswering || !queryInput.trim()}
-                className="w-9 h-9 rounded-xl bg-stone-900 hover:bg-red-600 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                className="w-9 h-9 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
                 aria-label="Send Query"
               >
                 {isAnswering ? (
@@ -444,8 +441,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Quick Suggestions Chips */}
-          <div className="flex items-center justify-center flex-wrap gap-2 text-xs text-stone-500 pt-4">
-            <span className="font-semibold text-stone-400 text-xs">Try:</span>
+          <div className="flex items-center justify-center flex-wrap gap-2 text-xs text-stone-400 pt-4">
+            <span className="font-semibold text-stone-500 text-xs">Try:</span>
             {[
               'は (wa) vs が (ga)',
               '〜てください vs 〜てくださいませんか',
@@ -455,7 +452,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <button
                 key={idx}
                 onClick={() => handleSearch(q)}
-                className="px-3.5 py-1.5 bg-white hover:bg-stone-100 border border-stone-200 text-stone-700 rounded-full text-xs font-medium transition-colors cursor-pointer shadow-2xs hover:border-stone-400"
+                className="px-3.5 py-1.5 bg-stone-900/80 hover:bg-stone-800 border border-white/10 text-stone-300 hover:text-white rounded-full text-xs font-medium transition-colors cursor-pointer shadow-sm"
               >
                 {q}
               </button>
@@ -464,35 +461,35 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
           {/* AI Response Output Box */}
           {aiAnswer && (
-            <div className="mt-4 bg-white rounded-3xl p-6 border border-stone-200 shadow-sm animate-in fade-in space-y-3 text-left">
-              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+            <div className="mt-4 bg-[#12121e]/95 rounded-3xl p-6 border border-white/15 shadow-2xl animate-in fade-in space-y-3 text-left backdrop-blur-xl">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-stone-950 text-white font-bold text-xs flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-red-600 text-white font-bold text-xs flex items-center justify-center">
                     日
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-stone-900 block">নিহোমি AI সেনসেই</span>
+                    <span className="text-xs font-bold text-white block">নিহোমি AI সেনসেই</span>
                     <span className="text-[10px] text-stone-400 font-mono">লাইভ ব্যাকরণ সমাধান</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1.5">
                   <button
                     onClick={() => speakJapanese(aiAnswer)}
-                    className="p-1.5 text-stone-500 hover:text-stone-900 rounded-lg hover:bg-stone-100 cursor-pointer"
+                    className="p-1.5 text-stone-400 hover:text-white rounded-lg hover:bg-white/10 cursor-pointer"
                     title="উচ্চারণ শুনুন"
                   >
-                    <Volume2 className="w-4 h-4 text-red-600" />
+                    <Volume2 className="w-4 h-4 text-red-400" />
                   </button>
                   <button
                     onClick={() => setAiAnswer(null)}
-                    className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-100 cursor-pointer"
+                    className="p-1.5 text-stone-400 hover:text-white rounded-lg hover:bg-white/10 cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              <div className="text-xs sm:text-sm text-stone-800 leading-relaxed font-sans whitespace-pre-line">
+              <div className="text-xs sm:text-sm text-stone-200 leading-relaxed font-sans whitespace-pre-line">
                 {aiAnswer}
               </div>
             </div>
@@ -505,18 +502,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* SECTION 2: 6-STEP CONTINUOUS LEARNING PATH (The Nihomi OS Architecture)    */}
       {/* ========================================================================= */}
-      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-16 bg-[#0f0f1b]/90 border-t border-white/10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-bold mb-3 border border-red-200">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold mb-3 border border-red-500/20">
               <Zap className="w-3.5 h-3.5" />
               <span>নিহোমি ওএস আর্কিটেকচার</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-stone-950 tracking-tight">
-              ৬ ধাপে সম্পূর্ণ জাপানিজ প্রস্তুতি <span className="text-red-600">(Step 1 → Step 6)</span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              ৬ ধাপে সম্পূর্ণ জাপানিজ প্রস্তুতি <span className="text-red-500">(Step 1 → Step 6)</span>
             </h2>
-            <p className="text-xs sm:text-sm text-stone-600 mt-2">
+            <p className="text-xs sm:text-sm text-stone-400 mt-2">
               শূন্য বর্ণমালা থেকে শুরু করে তোশিবা নেটিভ অডিও, টোকিও কনবিনি জব ড্রিল ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট
             </p>
           </div>
@@ -528,24 +525,24 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               return (
                 <div
                   key={item.step}
-                  className="p-6 rounded-3xl bg-stone-50/70 hover:bg-white border border-stone-200 hover:border-stone-400 hover:shadow-md transition-all flex flex-col justify-between group"
+                  className="p-6 rounded-3xl bg-[#161626]/90 hover:bg-[#1a1a2e] border border-white/10 hover:border-red-500/40 hover:shadow-xl transition-all flex flex-col justify-between group backdrop-blur-md"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="w-8 h-8 rounded-xl bg-stone-950 text-white font-mono font-bold text-xs flex items-center justify-center">
+                      <span className="w-8 h-8 rounded-xl bg-stone-900 border border-white/10 text-white font-mono font-bold text-xs flex items-center justify-center">
                         {item.step}
                       </span>
-                      <span className="px-2.5 py-1 rounded-full bg-white border border-stone-200 text-stone-500 text-[10px] font-bold font-mono">
+                      <span className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-stone-300 text-[10px] font-bold font-mono">
                         {item.duration}
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-red-600 shadow-2xs group-hover:scale-105 transition-transform">
+                      <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center text-red-400 shadow-sm group-hover:scale-105 transition-transform">
                         <IconComponent className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-base text-stone-950 group-hover:text-red-600 transition-colors">
+                        <h3 className="font-bold text-base text-white group-hover:text-red-400 transition-colors">
                           {item.title}
                         </h3>
                         <p className="text-[11px] text-stone-400 font-japanese font-medium">
@@ -554,14 +551,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                       </div>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6 mt-3">
+                    <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-6 mt-3">
                       {item.desc}
                     </p>
                   </div>
 
                   <button
                     onClick={() => onNavigate(item.view)}
-                    className="w-full py-2.5 px-4 bg-white hover:bg-stone-950 hover:text-white border border-stone-200 text-stone-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-2xs active:scale-95"
+                    className="w-full py-2.5 px-4 bg-stone-900 hover:bg-red-600 text-white border border-white/10 hover:border-red-500/40 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm active:scale-95"
                   >
                     <span>এই ধাপে প্রবেশ করুন</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -582,18 +579,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free Starter vs Pro)   */}
       {/* ========================================================================= */}
-      <section className="py-16 bg-[#FAF9F6] border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-16 bg-[#0a0a12] border-t border-white/10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           
           <div className="text-center max-w-xl mx-auto mb-12">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold mb-3 border border-emerald-200">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold mb-3 border border-emerald-500/20">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>স্বচ্ছ কোর্স ফি ও ইনস্ট্যান্ট এক্টিভেশন</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-stone-950 tracking-tight">
-              সহজ মূল্যতালিকা • <span className="text-red-600">কোনো গোপন চার্জ নেই</span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              সহজ মূল্যতালিকা • <span className="text-red-500">কোনো গোপন চার্জ নেই</span>
             </h2>
-            <p className="text-xs sm:text-sm text-stone-600 mt-2">
+            <p className="text-xs sm:text-sm text-stone-400 mt-2">
               ফ্রি স্টার্টার দিয়ে পরখ করুন অথবা ৳৪৯৯-এ আজীবন অ্যাক্সেস নিয়ে JLPT N5 এর সম্পূর্ণ প্রস্তুতি নিন
             </p>
           </div>
@@ -601,10 +598,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             
             {/* 1. Free Starter Tier */}
-            <div className="p-7 rounded-3xl bg-white border border-stone-200 shadow-sm flex flex-col justify-between">
+            <div className="p-7 rounded-3xl bg-[#12121e]/90 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-bold font-mono">
+                  <span className="px-3 py-1 rounded-full bg-stone-800 text-stone-300 text-xs font-bold font-mono">
                     ফ্রি স্টার্টার
                   </span>
                   <span className="text-xs text-stone-400 font-medium">বেসিক অ্যাক্সেস</span>
@@ -612,13 +609,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
                 <div className="mb-6">
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-3xl sm:text-4xl font-black text-stone-950">৳০</span>
-                    <span className="text-xs text-stone-500">/ আজীবন ফ্রি</span>
+                    <span className="text-3xl sm:text-4xl font-black text-white">৳০</span>
+                    <span className="text-xs text-stone-400">/ আজীবন ফ্রি</span>
                   </div>
-                  <p className="text-xs text-stone-500 mt-1">জাপানিজ বর্ণমালা ও প্রাথমিক শব্দ শেখার জন্য উপযুক্ত</p>
+                  <p className="text-xs text-stone-400 mt-1">জাপানিজ বর্ণমালা ও প্রাথমিক শব্দ শেখার জন্য উপযুক্ত</p>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-stone-100 mb-8">
+                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
                   {[
                     '৪৬টি হিরাগানা ও ৪৬টি কাতাকানা সম্পূর্ণ স্ট্রোক ল্যাব',
                     'মিন্না নো নিহোঙ্গো লেসন ০১ থেকে ০৫ সম্পূর্ণ ফ্রি',
@@ -627,8 +624,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     '১০টি এআই সেনসেই প্রশ্ন প্রতি মাসে',
                     'ফ্রি ৫০ নিহোমি কয়েন সাইন-আপ বোনাস'
                   ].map((feat, idx) => (
-                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-700">
-                      <Check className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-300">
+                      <Check className="w-4 h-4 text-stone-500 shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -637,36 +634,36 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
               <button
                 onClick={handleGoogleCTA}
-                className="w-full py-3.5 bg-stone-100 hover:bg-stone-200 text-stone-900 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center"
+                className="w-full py-3.5 bg-stone-800/90 hover:bg-stone-700 text-white rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center border border-white/10"
               >
                 ফ্রি শুরু করুন (১-ক্লিক সাইন ইন)
               </button>
             </div>
 
             {/* 2. N5 Pro Lifetime Tier (Highlighted) */}
-            <div className="p-7 rounded-3xl bg-white border-2 border-red-600 shadow-xl shadow-red-600/10 flex flex-col justify-between relative overflow-hidden">
+            <div className="p-7 rounded-3xl bg-[#161626]/90 border-2 border-red-500 shadow-2xl shadow-red-500/15 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
               <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
                 সর্বাধিক জনপ্রিয়
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold font-mono">
+                  <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-bold font-mono border border-red-500/30">
                     N5 Pro লাইফটাইম
                   </span>
-                  <span className="text-xs text-red-600 font-bold">৬৭% ছাড়</span>
+                  <span className="text-xs text-red-400 font-bold">৬৭% ছাড়</span>
                 </div>
 
                 <div className="mb-6">
                   <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl sm:text-4xl font-black text-red-600">৳৪৯৯</span>
+                    <span className="text-3xl sm:text-4xl font-black text-white">৳৪৯৯</span>
                     <span className="text-sm text-stone-400 line-through">৳১,৪৯৯</span>
-                    <span className="text-xs text-stone-500">/ এককালীন ফি</span>
+                    <span className="text-xs text-stone-400">/ এককালীন ফি</span>
                   </div>
-                  <p className="text-xs text-stone-500 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, বাইতো ও মক টেস্টে আজীবন অ্যাক্সেস</p>
+                  <p className="text-xs text-stone-400 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, বাইতো ও মক টেস্টে আজীবন অ্যাক্সেস</p>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-stone-100 mb-8">
+                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
                   {[
                     'মিন্না নো নিহোঙ্গো লেসন ০৬–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
                     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
@@ -676,8 +673,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
                     'দেশীয় bKash ও Nagad এ দ্রুত ট্রানজেকশন ভেরিফিকেশন ও অ্যাক্টিভেশন'
                   ].map((feat, idx) => (
-                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-900 font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-200 font-medium">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -689,7 +686,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
                   setIsCheckoutOpen(true);
                 }}
-                className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/25 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
+                className="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
               >
                 <span>এনরোল করুন — ৳৪৯৯ (bKash / Nagad)</span>
                 <ArrowRight className="w-4 h-4" />
@@ -704,18 +701,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* SECTION 4: MINIMALIST FAQ & DIRECT HELPLINE (WhatsApp 01834348966)         */}
       {/* ========================================================================= */}
-      <section className="py-16 bg-white border-t border-stone-200 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-16 bg-[#0f0f1b]/95 border-t border-white/10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           
           <div className="text-center mb-10">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-bold mb-3 border border-stone-200">
-              <HelpCircle className="w-3.5 h-3.5 text-red-500" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-stone-800 text-stone-300 text-xs font-bold mb-3 border border-stone-700">
+              <HelpCircle className="w-3.5 h-3.5 text-red-400" />
               <span>সাধারণ জিজ্ঞাসাসমূহ</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-stone-950 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
             </h2>
-            <p className="text-xs sm:text-sm text-stone-500 mt-2">
+            <p className="text-xs sm:text-sm text-stone-400 mt-2">
               নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে প্রয়োজনীয় তথ্য
             </p>
           </div>
@@ -727,15 +724,15 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               return (
                 <div
                   key={index}
-                  className="border border-stone-200 rounded-2xl overflow-hidden bg-stone-50/50 transition-all"
+                  className="border border-white/10 rounded-2xl overflow-hidden bg-[#161626]/80 transition-all backdrop-blur-md"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isExpanded ? null : index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between space-x-4 cursor-pointer hover:bg-stone-100/60 transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between space-x-4 cursor-pointer hover:bg-white/[0.04] transition-colors"
                     aria-expanded={isExpanded}
                   >
-                    <span className="font-bold text-sm sm:text-base text-stone-900 flex items-center gap-2.5">
-                      <span className="w-6 h-6 rounded-full bg-red-100 text-red-600 text-xs flex items-center justify-center font-mono font-bold shrink-0">
+                    <span className="font-bold text-sm sm:text-base text-white flex items-center gap-2.5">
+                      <span className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 text-xs flex items-center justify-center font-mono font-bold shrink-0 border border-red-500/30">
                         {index + 1}
                       </span>
                       <span>{faq.question}</span>
@@ -748,7 +745,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   </button>
 
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-stone-600 leading-relaxed border-t border-stone-200/60 animate-in fade-in duration-200">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-stone-300 leading-relaxed border-t border-white/10 animate-in fade-in duration-200">
                       <p className="pl-8 sm:pl-8.5">{faq.answer}</p>
                     </div>
                   )}

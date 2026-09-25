@@ -4,6 +4,14 @@ import crypto from 'crypto';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { getCurriculumLesson } from '../src/data/lessons/n5MasterCurriculum.js';
 import {
+  INITIAL_MRR_TARGET,
+  INITIAL_MARKET_TARGET,
+  INITIAL_AI_OFFICE_DEPARTMENTS,
+  INITIAL_APPROVAL_REQUESTS,
+  INITIAL_BUDGET_WALLETS,
+  INITIAL_COMPANY_BRAIN_ITEMS
+} from './companyBrainSeedData.js';
+import {
   DatabaseSchema,
   User,
   UserRole,
@@ -54,6 +62,14 @@ import {
   AIDepartmentStatus,
   FounderEmergencyControls,
   AiActionLedgerEntry,
+  MrrTarget,
+  MarketTarget,
+  AiOfficeDepartment,
+  ApprovalRequest,
+  ApprovalRequestStatus,
+  BudgetWallet,
+  CompanyBrainItem,
+  FounderAuditLog,
   ContentSource,
   ContentDraft,
   ContentVersion,
@@ -8036,6 +8052,206 @@ class Database {
       this.save();
     }
     return controls;
+  }
+
+  public getMrrTarget(): MrrTarget {
+    if (!this.data.mrrTarget) {
+      this.data.mrrTarget = { ...INITIAL_MRR_TARGET };
+    }
+    return this.data.mrrTarget;
+  }
+
+  public saveMrrTarget(updates: Partial<MrrTarget>, userEmail?: string): MrrTarget {
+    const current = this.getMrrTarget();
+    this.data.mrrTarget = {
+      ...current,
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    if (userEmail) {
+      this.recordFounderAuditLog(
+        userEmail,
+        'MRR_TARGET_SAVED',
+        'mrr_target',
+        { before: current, after: this.data.mrrTarget }
+      );
+    }
+    this.save();
+    return this.data.mrrTarget;
+  }
+
+  public getMarketTarget(): MarketTarget {
+    if (!this.data.marketTarget) {
+      this.data.marketTarget = { ...INITIAL_MARKET_TARGET };
+    }
+    return this.data.marketTarget;
+  }
+
+  public saveMarketTarget(updates: Partial<MarketTarget>, userEmail?: string): MarketTarget {
+    const current = this.getMarketTarget();
+    this.data.marketTarget = {
+      ...current,
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    if (userEmail) {
+      this.recordFounderAuditLog(
+        userEmail,
+        'MARKET_TARGET_SAVED',
+        'market_target',
+        { before: current, after: this.data.marketTarget }
+      );
+    }
+    this.save();
+    return this.data.marketTarget;
+  }
+
+  public getActiveObjective(): ActiveObjectiveConfig {
+    const base = this.getFounderSettings().activeObjective;
+    return {
+      ...base,
+      mrrTarget: this.getMrrTarget(),
+      marketTarget: this.getMarketTarget()
+    };
+  }
+
+  public getAiOfficeStatus(): AiOfficeDepartment[] {
+    if (!this.data.aiOfficeDepartments || this.data.aiOfficeDepartments.length === 0) {
+      this.data.aiOfficeDepartments = [...INITIAL_AI_OFFICE_DEPARTMENTS];
+    }
+    return this.data.aiOfficeDepartments;
+  }
+
+  public getApprovalRequests(): ApprovalRequest[] {
+    if (!this.data.approvalRequests || this.data.approvalRequests.length === 0) {
+      this.data.approvalRequests = [...INITIAL_APPROVAL_REQUESTS];
+    }
+    return this.data.approvalRequests;
+  }
+
+  public createApprovalRequest(req: Partial<ApprovalRequest>): ApprovalRequest {
+    const requests = this.getApprovalRequests();
+    const newReq: ApprovalRequest = {
+      request_id: req.request_id || req.id || `appr-${Date.now()}`,
+      id: req.id || req.request_id || `appr-${Date.now()}`,
+      request: req.request || req.title || 'Untitled Approval Request',
+      title: req.title || req.request || 'Untitled Approval Request',
+      department: req.department || 'EXECUTIVE',
+      amount: req.amount || req.costEstimate || 0,
+      currency: req.currency || 'BDT',
+      risk: req.risk || req.riskLevel || 'LOW',
+      expected_outcome: req.expected_outcome || '',
+      status: req.status || 'PENDING',
+      requestedBy: req.requestedBy || 'ai-office@nihomi.com',
+      created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString()
+    };
+    requests.unshift(newReq);
+    this.save();
+    return newReq;
+  }
+
+  public resolveApprovalRequest(
+    id: string,
+    status: ApprovalRequestStatus,
+    notes?: string,
+    userEmail?: string,
+    resultNote?: string
+  ): ApprovalRequest | null {
+    const requests = this.getApprovalRequests();
+    const found = requests.find(r => r.id === id || r.request_id === id);
+    if (!found) return null;
+    found.status = status;
+    found.founder_decision = notes || status;
+    found.decided_at = new Date().toISOString();
+    found.decidedAt = new Date().toISOString();
+    found.result = resultNote || `Decision: ${status}. ${notes || ''}`;
+    if (userEmail) {
+      this.recordFounderAuditLog(
+        userEmail,
+        'APPROVAL_REQUEST_RESOLVED',
+        `approval_request.${id}`,
+        { status, notes, resultNote }
+      );
+    }
+    this.save();
+    return found;
+  }
+
+  public getBudgetFirewall(): BudgetWallet[] {
+    if (!this.data.budgetWallets || this.data.budgetWallets.length === 0) {
+      this.data.budgetWallets = [...INITIAL_BUDGET_WALLETS];
+    }
+    return this.data.budgetWallets;
+  }
+
+  public getCompanyBrainItems(): CompanyBrainItem[] {
+    if (!this.data.companyBrainItems || this.data.companyBrainItems.length === 0) {
+      this.data.companyBrainItems = [...INITIAL_COMPANY_BRAIN_ITEMS];
+    }
+    return this.data.companyBrainItems;
+  }
+
+  public searchCompanyBrain(query: string): CompanyBrainItem[] {
+    const items = this.getCompanyBrainItems();
+    const cleanQuery = (query || '').toLowerCase().trim();
+    if (!cleanQuery) return items;
+    return items.filter(item => {
+      const titleMatch = (item.title || '').toLowerCase().includes(cleanQuery);
+      const summaryMatch = (item.summary || item.summaryBn || '').toLowerCase().includes(cleanQuery);
+      const contentMatch = (item.content || item.contentEn || '').toLowerCase().includes(cleanQuery);
+      const tagsMatch = (item.tags || []).some(t => t.toLowerCase().includes(cleanQuery));
+      return titleMatch || summaryMatch || contentMatch || tagsMatch;
+    });
+  }
+
+  public recordFounderAuditLog(
+    actorOrEntry: string | Partial<FounderAuditLog> & Record<string, any>,
+    action?: string,
+    target?: string,
+    details: any = {}
+  ): FounderAuditLog {
+    if (!this.data.founderAuditLogs) {
+      this.data.founderAuditLogs = [];
+    }
+    let log: FounderAuditLog;
+    if (typeof actorOrEntry === 'object' && actorOrEntry !== null) {
+      log = {
+        id: actorOrEntry.id || `faudit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        actor: actorOrEntry.actor || 'Founder',
+        actorEmail: actorOrEntry.actorEmail || 'mdtanvirkabirbiplob@gmail.com',
+        action: actorOrEntry.action || 'FOUNDER_ACTION',
+        target: actorOrEntry.target || 'system',
+        reason: actorOrEntry.reason,
+        dataSource: actorOrEntry.dataSource,
+        risk: actorOrEntry.risk,
+        approvalStatus: actorOrEntry.approvalStatus,
+        details: actorOrEntry.details || actorOrEntry,
+        timestamp: actorOrEntry.timestamp || new Date().toISOString()
+      };
+    } else {
+      log = {
+        id: `faudit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        actor: String(actorOrEntry),
+        action: action || 'FOUNDER_ACTION',
+        target: target || 'system',
+        details,
+        timestamp: new Date().toISOString()
+      };
+    }
+    this.data.founderAuditLogs.unshift(log);
+    this.save();
+    return log;
+  }
+
+  public getFounderAuditLogs(limit?: number): FounderAuditLog[] {
+    if (!this.data.founderAuditLogs) {
+      this.data.founderAuditLogs = [];
+    }
+    if (limit && limit > 0) {
+      return this.data.founderAuditLogs.slice(0, limit);
+    }
+    return this.data.founderAuditLogs;
   }
 
   public resetAllToSeed() {

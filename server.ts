@@ -91,7 +91,7 @@ setInterval(async () => {
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = 3000;
 
   // Enable CORS for web, mobile, and edge proxy environments
   app.use(cors({
@@ -166,6 +166,7 @@ async function startServer() {
   app.use('/api/work-japanese', workRouter);
   app.use('/api/ai', aiRouter);
   app.use('/api/admin', adminRouter);
+  app.use('/api/founder', founderRouter);
   app.use('/api/coordination', coordinationRouter);
   app.use('/api/japan-twin', japanTwinRouter);
   app.use('/api/ghost-mode', ghostModeRouter);
@@ -333,10 +334,7 @@ ${allUrls
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        host: '127.0.0.1',
-        port: PORT,
-        strictPort: false,
-        hmr: { host: '127.0.0.1' }
+        hmr: false
       },
       appType: 'spa'
     });
@@ -394,24 +392,11 @@ ${allUrls
     next(err);
   });
 
-  const HOST = '127.0.0.1';
-  const startListening = (targetPort: number, fallbackPort: number = 3001) => {
-    const serverInstance = app.listen(targetPort, HOST, () => {
-      console.log(`[Nihomi] Server running on http://${HOST}:${targetPort}`);
-      console.log(`[Nihomi] Ready for browser access: http://${HOST}:${targetPort}`);
-    });
-
-    serverInstance.on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE' && targetPort !== fallbackPort) {
-        console.warn(`[Nihomi] Port ${targetPort} is busy. Gracefully falling back to port ${fallbackPort}...`);
-        startListening(fallbackPort, fallbackPort);
-      } else {
-        console.error(`[Nihomi] Server failed to bind to ${HOST}:${targetPort}:`, err);
-      }
-    });
-  };
-
-  startListening(PORT, 3001);
+  const HOST = '0.0.0.0';
+  app.listen(PORT, HOST, () => {
+    console.log(`[Nihomi] Server running on http://${HOST}:${PORT}`);
+    console.log(`[Nihomi] Ready for browser access: http://${HOST}:${PORT}`);
+  });
 }
 
 startServer().catch((err) => {

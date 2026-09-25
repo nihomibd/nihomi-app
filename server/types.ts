@@ -1044,6 +1044,13 @@ export interface DatabaseSchema {
   founderBudgetWallets?: FounderBudgetWallet[];
   aiDepartmentStatuses?: Record<string, AIDepartmentStatus>;
   founderEmergencyControls?: FounderEmergencyControls;
+  mrrTarget?: MrrTarget;
+  marketTarget?: MarketTarget;
+  aiOfficeDepartments?: AiOfficeDepartment[];
+  approvalRequests?: ApprovalRequest[];
+  budgetWallets?: BudgetWallet[];
+  companyBrainItems?: CompanyBrainItem[];
+  founderAuditLogs?: FounderAuditLog[];
 
   // Gate 3: AI COO Runtime & Action Ledger
   aiActionLedger?: AiActionLedgerEntry[];
@@ -1110,6 +1117,136 @@ export interface DecomposedObjectivePlan {
 // GATE 2: NIHOMI FOUNDER HQ & VIRTUAL OFFICE MODELS
 // ==============================================================================
 
+export interface MrrTarget {
+  id: string;
+  targetAmount: number;
+  currency: string;
+  deadline: string;
+  operatingBudget: number;
+  operatingBudgetCurrency?: string;
+  growthPriority: string;
+  riskLevel: string;
+  isActive: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MarketTarget {
+  id: string;
+  primaryMarket: string;
+  secondaryMarket: string;
+  experimentalMarket?: string;
+  geography: string | string[];
+  customerSegment: string;
+  language: string;
+  priceRange: string;
+  acquisitionChannels: string[];
+  priority?: string;
+  timeframe?: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AiOfficeDepartment {
+  id: string;
+  code: string;
+  name: string;
+  role: string;
+  description: string;
+  status: 'RUNNING' | 'PAUSED' | 'NOT_CONFIGURED' | 'ERROR' | 'BLOCKED' | 'NEEDS_APPROVAL';
+  statusDetails: string;
+  monthlyBudgetLimit: number;
+  monthlyBudgetCurrency: string;
+  spentThisMonth: number;
+  concurrencyLimit: number;
+  lastActiveAt: string;
+}
+
+export type ApprovalRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CHANGES_REQUESTED' | 'CANCELLED' | 'COMPLETED';
+
+export interface ApprovalRequest {
+  request_id?: string;
+  id?: string;
+  request?: string;
+  title?: string;
+  department?: string;
+  amount?: number;
+  costEstimate?: number;
+  currency?: string;
+  risk?: string;
+  riskLevel?: string;
+  expected_outcome?: string;
+  AI_recommendation?: string;
+  recommendation?: string;
+  status: ApprovalRequestStatus;
+  founder_decision?: string;
+  decisionNotes?: string;
+  result?: string;
+  requestedBy?: string;
+  created_at?: string;
+  createdAt?: string;
+  decided_at?: string;
+  decidedAt?: string;
+}
+
+export interface BudgetWallet {
+  id: string;
+  name: string;
+  description?: string;
+  monthly_limit?: number;
+  monthlyCap?: number;
+  daily_limit?: number;
+  dailyLimit?: number;
+  approval_threshold?: number;
+  alert_threshold?: number;
+  spent_amount?: number;
+  currentSpend?: number;
+  remaining_amount?: number;
+  currency: string;
+  status?: string;
+  isLocked?: boolean;
+  updatedAt?: string;
+  lastResetDate?: string;
+}
+
+export interface CompanyBrainItem {
+  id: string;
+  category: string;
+  title: string;
+  summary?: string;
+  summaryBn?: string;
+  content?: string;
+  contentEn?: string;
+  author?: string;
+  tags: string[];
+  keyTakeaways?: string[];
+  sourceDocument?: string;
+  confidenceScore?: number;
+  verifiedByFounder?: boolean;
+  status?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FounderAuditLog {
+  id: string;
+  actor: string;
+  actorEmail?: string;
+  action: string;
+  target?: string;
+  reason?: string;
+  dataSource?: string;
+  risk?: string;
+  approvalStatus?: string;
+  result?: string;
+  metadata?: Record<string, any>;
+  details?: Record<string, any>;
+  ipAddress?: string;
+  timestamp: string;
+}
+
 export interface MrrTargetConfig {
   targetAmount: number;
   currency: string;
@@ -1144,6 +1281,8 @@ export interface ActiveObjectiveConfig {
   budget: number;
   status: string;
   updatedAt: string;
+  mrrTarget?: MrrTarget;
+  marketTarget?: MarketTarget;
 }
 
 export interface FounderSettings {

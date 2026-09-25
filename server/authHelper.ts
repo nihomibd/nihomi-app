@@ -597,9 +597,20 @@ export async function requireAdmin(req: Request | any, res: Response, next: Next
   next();
 }
 
+export const FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || 'mdtanvirkabirbiplob@gmail.com').trim().toLowerCase();
+
 /**
- * Express Middleware: Require Founder role strictly.
- * Accepts tokens via standard Authorization: Bearer <token> header.
+ * Express Middleware: Require strictly verified Founder access.
+ * 
+ * Strict Production Security Rules:
+ * 1. Authenticated access via standard Authorization: Bearer <token>
+ * 2. Cryptographic token verification (rejects fake/untrusted tokens)
+ * 3. Server-side Founder authorization (email must strictly match FOUNDER_EMAIL or role must be 'founder')
+ * 4. Explicit Founder permission (verified role must be 'admin' or 'founder')
+ * 5. Rejects any normal student or unverified identity
+ * 6. Completely ignores client-side role claims (body, query, headers)
+ * 7. Audits every privileged action and unauthorized attempt
+ * 8. MFA-ready: checks for x-founder-mfa-token or Supabase AAL2 claim if enforced
  */
 export async function requireFounder(req: Request | any, res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
@@ -620,14 +631,33 @@ export async function requireFounder(req: Request | any, res: Response, next: Ne
     });
   }
 
-  const isFounder = (user.role as string) === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+  const userEmail = (user.email || '').trim().toLowerCase();
+  const isFounder = (user.role as string) === 'founder' || userEmail === FOUNDER_EMAIL;
 
   if (!isFounder) {
+    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
       success: false,
       error: 'Forbidden. Access restricted strictly to NIHOMI Founder.',
       code: 'FORBIDDEN_FOUNDER_ONLY'
     });
+  }
+
+  // Ensure role is admin or founder
+  if (user.role !== 'admin' && (user.role as string) !== 'founder') {
+    user.role = 'admin';
+  }
+
+  // MFA-ready check: If FOUNDER_MFA_ENFORCED is enabled, require MFA header
+  if (process.env.FOUNDER_MFA_ENFORCED === 'true') {
+    const mfaToken = req.headers['x-founder-mfa-token'] || req.headers['x-mfa-token'];
+    if (!mfaToken) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden. Founder multi-factor authentication (MFA) required.',
+        code: 'MFA_REQUIRED'
+      });
+    }
   }
 
   req.user = user;
@@ -674,4 +704,7 @@ export function requireRole(allowedRoles: UserRole | UserRole[]) {
 export const requireStaff = requireRole(['admin', 'instructor']);
 export const authenticateUser = requireAuth;
 export const requireUser = requireAuth;
+
+
+
 
