@@ -275,9 +275,9 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const activeSoundscape = soundscapes.find((s) => s.id === soundscapeMode) || soundscapes[0];
   const isAdLanding = currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign';
   const isCanvasMode = currentView === 'landing' || currentView === 'home' || currentView === 'world' || currentView === 'canvas';
+  const isDashboardRoute = currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
@@ -310,8 +310,8 @@ export const App: React.FC = () => {
       {/* Global Export Download Path Toast Notification */}
       <ExportToastNotification />
 
-      {/* Main Header (Hidden in Real Japan Canvas mode for cinematic Shibuya immersion) */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && (
+      {/* Main Header (Hidden in Real Japan Canvas and Student Dashboard for unified minimal UX) */}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}

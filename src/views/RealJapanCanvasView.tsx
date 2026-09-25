@@ -1302,9 +1302,20 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               )}
 
               {isSenseiThinking && (
-                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-400 flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
-                  <span>তানাকা সেনসেই বিশ্লেষণ করছেন...</span>
+                <div className="flex items-end gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 animate-in fade-in">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 p-0.5 shrink-0 shadow-xs">
+                    <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+                      <span className="font-japanese font-black text-amber-400 text-[9px]">田中</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-zinc-300 font-medium">Tanaka Sensei is typing</span>
+                    <div className="flex items-center gap-1 pt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '200ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '400ms' }} />
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

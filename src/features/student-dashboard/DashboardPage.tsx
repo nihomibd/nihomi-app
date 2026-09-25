@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useStudentDashboard } from './useStudentDashboard';
-import { StudentHeader } from './components/StudentHeader';
 import { ContinueLearningCard } from './components/ContinueLearningCard';
 import { DailyPlan } from './components/DailyPlan';
 import { DailyChallengeCard } from './components/DailyChallengeCard';
@@ -27,13 +26,16 @@ import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
-import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2, Home, BookOpen, User } from 'lucide-react';
+import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2, Home, BookOpen, User, Compass, Flame, Coins, X } from 'lucide-react';
 import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
 import { useAuth } from '../../context/AuthContext';
 import { TodaysMissionCard } from './components/TodaysMissionCard';
 import { GoldenLearningLoopModal, NextExperienceData } from '../../components/learning/GoldenLearningLoopModal';
+import { DigitalStudentIdCard } from '../../components/student/DigitalStudentIdCard';
+import { AIUsageSummary } from './components/AIUsageSummary';
+import { StudentProfile as DigitalStudentProfile } from '../../types/nihomi';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -109,6 +111,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [pendingTrx, setPendingTrx] = useState<any | null>(null);
   const [isGoldenLoopOpen, setIsGoldenLoopOpen] = useState(false);
   const [selectedMission, setSelectedMission] = useState<NextExperienceData | null>(null);
+  const [isIdOpen, setIsIdOpen] = useState(false);
 
   // Poll for pending manual bKash/Nagad submission verification
   React.useEffect(() => {
@@ -298,9 +301,131 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     );
   }
 
+  const digitalStudent: DigitalStudentProfile = {
+    id: data?.student.id || user?.id || 'std_01',
+    nihomiAccountId: `NHM-${(data?.student.id || user?.id || '000000').slice(-6)}`,
+    name: data?.student.name || user?.name || 'Student',
+    email: user?.email || `${data?.student.id || 'std'}@student.nihomi.com`,
+    enrolledDate: new Date().toISOString(),
+    currentLevel: (data?.student.jlptLevel as any) || 'N5',
+    targetLevel: (data?.student.jlptLevel as any) || 'N5',
+    streakDays: data?.streak.currentStreak || 1,
+    totalStudyHours: 0,
+  };
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-28 md:pb-12 selection:bg-rose-100 selection:text-rose-900">
       <OfflineNotificationBanner />
+
+      {/* Unified Apple-Style Sticky Top Navigation Bar */}
+      {viewState === 'idle' && data && (
+        <header
+          id="student-dashboard-unified-nav"
+          aria-label="Student Unified Navigation"
+          className="sticky top-0 z-30 bg-white/90 dark:bg-stone-900/90 backdrop-blur-xl border-b border-stone-200/80 dark:border-stone-800 transition-colors shadow-xs"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            {/* Left: Brand + Student Identity */}
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center text-white shadow-xs font-black text-sm shrink-0 select-none">
+                日
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-black tracking-tight text-stone-900 dark:text-white truncate">
+                    NIHOMI AI™
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40 shrink-0">
+                    JLPT {data.student.jlptLevel}
+                  </span>
+                </div>
+                <div className="text-[11px] text-stone-500 font-medium truncate">
+                  おはよう, {data.student.name.split(' ')[0]} • Day {data.student.journeyDay}
+                </div>
+              </div>
+            </div>
+
+            {/* Center: Desktop Segmented Pill Tabs */}
+            <nav className="hidden md:flex items-center gap-1 bg-stone-100/90 dark:bg-stone-800/90 p-1 rounded-xl border border-stone-200/60 dark:border-stone-700/60" aria-label="Desktop Tabs">
+              {desktopTabs.map((t) => {
+                const isActive = activeTab === t.id;
+                const Icon = t.icon;
+                return (
+                  <button
+                    key={t.id}
+                    id={`desktop-tab-${t.id}`}
+                    type="button"
+                    onClick={() => handleTabChange(t.id)}
+                    className={`btn-haptic inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold select-none cursor-pointer transition-all ${
+                      isActive
+                        ? 'bg-white dark:bg-stone-900 text-stone-950 dark:text-white shadow-xs font-bold'
+                        : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white hover:bg-stone-200/60 dark:hover:bg-stone-700/60'
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-600 dark:text-rose-400' : 'text-stone-400'}`} />
+                    <span>{t.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Right: Streak, Currency, ID, Pro, AI Coach */}
+            <div className="flex items-center gap-2 shrink-0">
+              <div
+                title={`${data.streak.currentStreak} Day Streak`}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs font-black select-none"
+              >
+                <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                <span>{data.streak.currentStreak}d</span>
+              </div>
+
+              <AIUsageSummary
+                usage={data.accountUsage}
+                onOpenAiTutor={() => setIsAiTutorOpen(true)}
+                onOpenStore={() => setIsStoreOpen(true)}
+              />
+
+              <button
+                type="button"
+                onClick={() => setIsIdOpen(true)}
+                className="btn-haptic inline-flex items-center gap-1 rounded-lg bg-stone-900 dark:bg-stone-800 px-2.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-stone-800 dark:hover:bg-stone-700 cursor-pointer"
+                title="Digital Student ID Card"
+              >
+                <span>🪪</span>
+                <span className="hidden sm:inline">ID</span>
+              </button>
+
+              {!isPro ? (
+                <button
+                  id="btn-header-upgrade-pro"
+                  type="button"
+                  onClick={() => setIsProModalOpen(true)}
+                  className="btn-haptic inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 px-3 py-1.5 text-xs font-black shadow-xs cursor-pointer"
+                  title="Nihomi Pro — Unlock All Lessons"
+                >
+                  <Crown className="w-3.5 h-3.5 text-stone-950 fill-stone-950" />
+                  <span>PRO</span>
+                </button>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-black select-none">
+                  <Crown className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  <span>PRO</span>
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setIsAiTutorOpen(true)}
+                className="btn-haptic hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-900/50 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/60 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                <span>AI Sensei</span>
+              </button>
+            </div>
+          </div>
+        </header>
+      )}
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-6">
         
         {viewState === 'loading' && <DashboardLoadingSkeleton />}
@@ -311,135 +436,53 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         {viewState === 'idle' && data && (
           <>
-            {/* Top Full-Width Section: Student Header & Priority Banners */}
+            {/* Top Priority Banners & Focal Hero Action */}
             <div className="space-y-4">
-              {/* Desktop Navigation Top-Bar (Strictly hidden on mobile, Apple-grade on desktop) */}
-              <nav
-                id="student-dashboard-desktop-nav"
-                aria-label="Student Desktop Navigation"
-                className="hidden md:flex items-center justify-between bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-2xl px-5 py-3 shadow-xs transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center text-white shadow-xs font-black text-xs select-none">
-                    日
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-black tracking-tight text-stone-900 dark:text-white">
-                        NIHOMI AI™
-                      </span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40">
-                        Student OS
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1.5 bg-stone-100/90 dark:bg-stone-800/90 p-1.5 rounded-xl border border-stone-200/60 dark:border-stone-700/60">
-                  {desktopTabs.map((t) => {
-                    const isActive = activeTab === t.id;
-                    const Icon = t.icon;
-                    return (
-                      <button
-                        key={t.id}
-                        id={`desktop-tab-${t.id}`}
-                        type="button"
-                        onClick={() => handleTabChange(t.id)}
-                        className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 select-none cursor-pointer active:scale-[0.98] ${
-                          isActive
-                            ? 'bg-white dark:bg-stone-900 text-stone-950 dark:text-white shadow-xs font-bold'
-                            : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white hover:bg-stone-200/60 dark:hover:bg-stone-700/60'
-                        }`}
-                      >
-                        <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-600 dark:text-rose-400' : 'text-stone-400'}`} />
-                        <span>{t.label}</span>
-                        <span className="text-[10px] text-stone-400 font-normal">({t.labelJa})</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsAiTutorOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-900/50 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-all active:scale-[0.98] cursor-pointer"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>24/7 AI Coach</span>
-                  </button>
-                </div>
-              </nav>
-
-              {/* ১. স্টুডেন্ট ওয়েলকাম ও আসল কয়েন/ক্রেডিট */}
-              <StudentHeader 
-                student={data.student} 
-                accountUsage={data.accountUsage} 
-                onOpenAiTutor={() => setIsAiTutorOpen(true)}
-                onOpenStore={() => setIsStoreOpen(true)}
-                onOpenUpgradePro={() => setIsProModalOpen(true)}
-                isPro={isPro}
-                activeStreak={data.streak.currentStreak}
-              />
-
               {/* Manual Payment (bKash/Nagad) Verification in Progress Alert */}
               {pendingTrx && !isPro && (
-                <div id="banner-manual-payment-verifying" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 flex items-start gap-3 shadow-xs">
-                  <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5 animate-pulse" />
-                  <div className="space-y-1 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-amber-950">
-                        পেমেন্ট ভেরিফিকেশন চলছে (Verification Pending)
-                      </span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900">
-                        TrxID: {pendingTrx.trxID || pendingTrx.id}
-                      </span>
-                    </div>
-                    <p className="text-stone-700 leading-relaxed">
-                      আপনার ম্যানুয়াল বিকাশ/নগদ পেমেন্টটি অ্যাডমিন প্যানেলে যাচাই করা হচ্ছে (সাধারণত ৫-১৫ মিনিটের মধ্যে অনুমোদিত হয়)। অনুমোদনের সাথে সাথে প্রো অ্যাক্সেস স্বয়ংক্রিয়ভাবে চালু হয়ে যাবে।
-                    </p>
+                <div id="banner-manual-payment-verifying" className="px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-950 flex items-center justify-between gap-3 text-xs shadow-xs">
+                  <div className="flex items-center gap-2 font-medium">
+                    <Clock className="w-4 h-4 text-amber-600 shrink-0 animate-pulse" />
+                    <span>Payment Verifying • Pro unlocks automatically in 5–15 mins.</span>
                   </div>
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-200 text-amber-900 shrink-0">
+                    TrxID: {pendingTrx.trxID || pendingTrx.id}
+                  </span>
                 </div>
               )}
 
-              {/* ১.৫. Nihomi Pro™ সাবস্ক্রিপশন কার্ড (Unlock Lessons 06 to 25) */}
+              {/* Nihomi Pro™ Subscription Bar (Unlock Lessons 06 to 25) */}
               {!isPro && (
                 <section
                   id="dashboard-pro-upgrade-card"
                   aria-label="Nihomi Pro Upgrade"
-                  className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/50 p-5 sm:p-6 shadow-xl text-white"
+                  className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-500/40 p-4 sm:p-5 shadow-lg text-white"
                 >
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 blur-3xl pointer-events-none rounded-full" />
-                  <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="space-y-1.5 max-w-2xl">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold uppercase tracking-wide">
+                  <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wide">
                         <Crown className="w-3 h-3 text-amber-400" />
-                        <span>Nihomi Pro™ • সম্পূর্ণ আনলক</span>
+                        <span>JLPT N5 Core • Unlock Lessons 06–25</span>
                       </div>
-                      <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
-                        লেসন ০১–০৫ ফ্রি • সম্পূর্ণ JLPT N5 এর লেসন ০৬–২৫ ও AI Sensei কোচ আনলক করুন
-                      </h3>
-                      <p className="text-xs text-stone-300 leading-relaxed">
-                        লেসন ০৬–২৫ এর সম্পূর্ণ ব্যাকরণ, আনলিমিটেড স্পিচ প্র্যাকটিস ও কাঞ্জি ড্রয়িং ক্যানভাস পেতে Pro নিন। মাত্র ৳৫৯৯/মাস বা ৳৪,৯৯০/বছর (bKash/Nagad ম্যানুয়াল ভেরিফিকেশন ও দ্রুত অ্যাক্টিভেশন)।
+                      <p className="text-xs text-stone-300">
+                        Full grammar mastery, infinite AI Sensei drills & Kanji canvas.
                       </p>
                     </div>
 
-                    <div className="shrink-0 w-full sm:w-auto">
-                      <button
-                        id="btn-dashboard-upgrade-pro"
-                        type="button"
-                        onClick={() => setIsProModalOpen(true)}
-                        className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
-                      >
-                        <Crown className="w-4 h-4 text-stone-950 fill-stone-950" />
-                        <span>Upgrade to PRO</span>
-                      </button>
-                    </div>
+                    <button
+                      id="btn-dashboard-upgrade-pro"
+                      type="button"
+                      onClick={() => setIsProModalOpen(true)}
+                      className="btn-haptic w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-md shadow-amber-500/20 flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                    >
+                      <Crown className="w-3.5 h-3.5 text-stone-950 fill-stone-950" />
+                      <span>Upgrade to PRO ➔ ৳৫৯৯/mo</span>
+                    </button>
                   </div>
                 </section>
               )}
 
-              {/* ১.৬. Nihomi Sensei AI™ Today's Mission Priority Action */}
+              {/* Nihomi Sensei AI™ Today's Mission Priority Action (The Reels Focal Point) */}
               <TodaysMissionCard
                 userId={user?.id}
                 onStartMission={(exp) => {
@@ -743,6 +786,30 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             if (onNavigate) onNavigate('japan-twin');
           }}
         />
+      )}
+
+      {/* Digital Student ID Card Modal */}
+      {isIdOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/70 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setIsIdOpen(false);
+          }}
+        >
+          <section role="dialog" aria-modal="true" aria-labelledby="student-id-title" className="relative w-full max-w-sm">
+            <div className="sr-only" id="student-id-title">Digital Student ID Card</div>
+            <button
+              type="button"
+              aria-label="Close ID card"
+              onClick={() => setIsIdOpen(false)}
+              className="absolute right-2 top-2 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus:outline-hidden cursor-pointer"
+            >
+              <X size={18} aria-hidden="true" />
+            </button>
+            <DigitalStudentIdCard student={digitalStudent} />
+          </section>
+        </div>
       )}
     </div>
   );

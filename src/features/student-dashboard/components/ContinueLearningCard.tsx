@@ -51,17 +51,14 @@ export const ContinueLearningCard: React.FC<ContinueLearningCardProps> = ({
         </div>
 
         <div>
-          <h2 id="continue-learning-heading" className="text-lg sm:text-xl font-bold tracking-tight text-white">
+          <h2 id="continue-learning-heading" className="text-base sm:text-lg font-bold tracking-tight text-white">
             {activeLesson.topic}
           </h2>
           {activeLesson.topicJapanese && (
-            <p className="text-xs text-stone-300 font-medium mt-0.5 tracking-wide font-sans">
+            <p className="text-xs text-stone-400 font-japanese mt-0.5">
               {activeLesson.topicJapanese}
             </p>
           )}
-          <p className="text-xs text-stone-400 mt-1">
-            {activeLesson.title}
-          </p>
         </div>
 
         <div 
@@ -81,7 +78,7 @@ export const ContinueLearningCard: React.FC<ContinueLearningCardProps> = ({
           <button
             type="button"
             onClick={() => onResumeLesson?.(activeLesson.lessonId)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-stone-950 font-semibold text-sm hover:bg-stone-100 active:scale-[0.99] transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+            className="btn-haptic w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-stone-950 font-bold text-xs hover:bg-stone-100 transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
           >
             <span>Continue Learning</span>
             <span className="text-xs text-stone-500 font-normal">| শেখা চালিয়ে যান</span>

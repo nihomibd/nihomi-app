@@ -417,9 +417,20 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 p-3 rounded-2xl bg-[#131322] border border-slate-800 text-slate-400 text-xs w-fit animate-pulse">
-              <div className="w-4 h-4 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
-              <span>Sensei Tanaka উত্তর লিখছেন...</span>
+            <div className="flex items-end gap-2.5 max-w-[85%] animate-in fade-in slide-in-from-bottom-2 duration-200">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 p-0.5 shrink-0 shadow-md">
+                <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+                  <span className="font-japanese font-black text-rose-400 text-[10px]">田中</span>
+                </div>
+              </div>
+              <div className="bg-[#18182e] border border-slate-800/80 rounded-2xl rounded-bl-xs px-4 py-3 shadow-lg flex items-center gap-2.5">
+                <span className="text-[11px] text-slate-300 font-medium">Sensei Tanaka is typing</span>
+                <div className="flex items-center gap-1 pt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-typing-dot" style={{ animationDelay: '0ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-typing-dot" style={{ animationDelay: '200ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-typing-dot" style={{ animationDelay: '400ms' }} />
+                </div>
+              </div>
             </div>
           )}
 
@@ -442,7 +453,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
               type="button"
               onClick={() => askSensei(qp.prompt)}
               disabled={isLoading || (quotaExceeded && !isPro)}
-              className="shrink-0 px-2.5 py-1 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] sm:text-[11px] text-slate-300 hover:text-white transition-colors disabled:opacity-40 cursor-pointer"
+              className="btn-haptic shrink-0 px-2.5 py-1 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] sm:text-[11px] text-slate-300 hover:text-white transition-colors disabled:opacity-40 cursor-pointer"
             >
               {qp.label}
             </button>
@@ -462,7 +473,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
             <button
               type="button"
               onClick={isListening ? stopVoiceInput : startVoiceInput}
-              className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl transition-all cursor-pointer shrink-0 ${
+              className={`btn-haptic p-2.5 sm:p-3 rounded-xl sm:rounded-2xl transition-all cursor-pointer shrink-0 ${
                 isListening
                   ? 'bg-rose-600 text-white animate-pulse shadow-lg ring-2 ring-rose-400'
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
@@ -485,7 +496,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
             <button
               type="submit"
               disabled={isLoading || !input.trim() || (quotaExceeded && !isPro)}
-              className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs sm:text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-rose-600/30 flex items-center gap-1.5 shrink-0 cursor-pointer"
+              className="btn-haptic px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-rose-600/30 flex items-center gap-1.5 shrink-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
               <span className="hidden sm:inline">পাঠান</span>

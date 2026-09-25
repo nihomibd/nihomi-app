@@ -683,9 +683,20 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             )}
 
             {isLoading && (
-              <div className="flex items-center space-x-2 text-stone-400 p-2 text-xs">
-                <Loader2 className="w-4 h-4 animate-spin text-red-500" />
-                <span>Nihomi Sensei AI™ is analyzing speech & grammar...</span>
+              <div className="flex items-end gap-2 p-2 animate-in fade-in">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 p-0.5 shrink-0 shadow-xs">
+                  <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+                    <span className="font-japanese font-black text-rose-400 text-[8px]">田中</span>
+                  </div>
+                </div>
+                <div className="bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl rounded-bl-xs px-3 py-2 shadow-xs flex items-center gap-2">
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">Tanaka Sensei typing</span>
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '200ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '400ms' }} />
+                  </div>
+                </div>
               </div>
             )}
             <div ref={messagesEndRef} />

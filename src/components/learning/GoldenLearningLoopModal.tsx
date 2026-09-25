@@ -57,6 +57,69 @@ interface GoldenLearningLoopModalProps {
   onExploreTokyo?: () => void;
 }
 
+export const MISSION_REELS_SEQUENCE: NextExperienceData[] = [
+  {
+    id: 'exp-golden-path-001',
+    situation: '7-Eleven Shibuya (渋谷スクランブル前)',
+    situationJa: 'セブン-イレブン 渋谷スクランブル店',
+    situationBn: 'শিবুয়া ক্রসিং সেভেন-ইলেভেন',
+    goal: "Mission 1: Buy Water & Decline Plastic Bag",
+    goalJa: '水を1本買い、レジ袋を丁寧に断る（袋は結構です）',
+    goalBn: 'মিশন ১: এক বোতল পানি কেনা ও শপিং ব্যাগ বিনম্রভাবে না বলা',
+    whyExplanation: 'Practice polite refusal in real Tokyo convenience stores.',
+    targetPhraseJa: 'お水を1本ください。袋は結構です。',
+    targetPhraseRomaji: 'Omizu o ippon kudasai. Fukuro wa kekkou desu.',
+    targetPhraseEn: 'One bottle of water, please. No bag needed, thank you.',
+    targetPhraseBn: 'এক বোতল পানি দিন দয়া করে। ব্যাগ লাগবে না।',
+    keigoRuleNote: '『結構です (Kekkou desu)』is the polished way to decline optional items.',
+    actionType: 'experience',
+    targetView: 'landing',
+    targetParams: { hotspotId: 'spot-conbini' },
+    rewardCoins: 20,
+    rewardXp: 50
+  },
+  {
+    id: 'exp-golden-path-002',
+    situation: 'Starbucks Tsutaya Shibuya (スターバックス 渋谷店)',
+    situationJa: 'スターバックス 渋谷TSUTAYA店',
+    situationBn: 'শিবুয়া স্টারবাকস কফি শপ',
+    goal: "Mission 2: Order Iced Matcha Latte (Tall Size)",
+    goalJa: 'アイス抹茶ラテのトールサイズを1つ注文する',
+    goalBn: 'মিশন ২: স্টারবাকসে আইসড মাচ্চা লাতে অর্ডার করা',
+    whyExplanation: 'Order custom drinks at Tokyo cafes like a local.',
+    targetPhraseJa: 'アイス抹茶ラテのトールを1つお願いします。',
+    targetPhraseRomaji: 'Aisu matcha rate no tooru o hitotsu onegaishimasu.',
+    targetPhraseEn: 'One Tall Iced Matcha Latte, please.',
+    targetPhraseBn: 'একটি টল সাইজ আইসড মাচ্চা লাতে দিন দয়া করে।',
+    keigoRuleNote: 'Use『〜をお願いします (o onegaishimasu)』for polite customer requests.',
+    actionType: 'experience',
+    targetView: 'landing',
+    targetParams: { hotspotId: 'spot-cafe' },
+    rewardCoins: 25,
+    rewardXp: 60
+  },
+  {
+    id: 'exp-golden-path-003',
+    situation: 'Shibuya Station Hachiko Gate (渋谷駅 ハチ公口)',
+    situationJa: 'JR渋谷駅 ハチ公改札口',
+    situationBn: 'জেআর শিবুয়া স্টেশন হাচিকো গেট',
+    goal: "Mission 3: Ask Station Staff for Yamanote Line Platform",
+    goalJa: '駅員に山手線のホームの場所を尋ねる',
+    goalBn: 'মিশন ৩: স্টেশন মাস্টারকে ইয়ামানতে ট্রেনের প্ল্যাটফর্ম জিজ্ঞেস করা',
+    whyExplanation: 'Essential navigation phrase for the Tokyo train network.',
+    targetPhraseJa: 'すみません、山手線のホームはどこですか？',
+    targetPhraseRomaji: 'Sumimasen, Yamanote-sen no hoomu wa doko desu ka?',
+    targetPhraseEn: 'Excuse me, where is the Yamanote Line platform?',
+    targetPhraseBn: 'শুনুন, ইয়ামানতে লাইনের প্ল্যাটফর্মটি কোনদিকে?',
+    keigoRuleNote: '『すみません (Sumimasen)』opens any respectful inquiry in Japan.',
+    actionType: 'experience',
+    targetView: 'landing',
+    targetParams: { hotspotId: 'spot-station' },
+    rewardCoins: 30,
+    rewardXp: 75
+  }
+];
+
 export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = ({
   isOpen,
   onClose,
@@ -70,27 +133,22 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
   const [userInput, setUserInput] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [evaluation, setEvaluation] = useState<any | null>(null);
+  const [missionIndex, setMissionIndex] = useState(0);
   const recognitionRef = useRef<any>(null);
 
-  const expData: NextExperienceData = experience || {
-    id: 'exp-golden-path-001',
-    situation: '7-Eleven Shibuya Crossing (渋谷スクランブル交差点前)',
-    situationJa: 'セブン-イレブン 渋谷スクランブル店',
-    situationBn: 'শিবুয়া ক্রসিং সেভেন-ইলেভেন কনভেনিয়েন্স স্টোর',
-    goal: "Today's Mission: Buy Bottled Water & Decline Plastic Bag",
-    goalJa: '水を1本買い、レジ袋を丁寧に断る（袋は結構です）',
-    goalBn: 'আজকের মিশন: এক বোতল পানি কেনা ও শপিং ব্যাগ বিনম্রভাবে না বলা',
-    whyExplanation: 'You just arrived in Tokyo and need hydration. Practice real everyday Japanese without embarrassment.',
-    targetPhraseJa: 'お水を1本ください。袋は結構です。',
-    targetPhraseRomaji: 'Omizu o ippon kudasai. Fukuro wa kekkou desu.',
-    targetPhraseEn: 'One bottle of water, please. No bag needed, thank you.',
-    targetPhraseBn: 'এক বোতল পানি দিন দয়া করে। ব্যাগ লাগবে না।',
-    keigoRuleNote: '『結構です (Kekkou desu)』is the polished, respectful way to decline optional items in Japanese shops.',
-    actionType: 'experience',
-    targetView: 'landing',
-    targetParams: { hotspotId: 'spot-conbini' },
-    rewardCoins: 20,
-    rewardXp: 50
+  const expData: NextExperienceData = experience
+    ? (missionIndex === 0 ? experience : MISSION_REELS_SEQUENCE[missionIndex % MISSION_REELS_SEQUENCE.length])
+    : MISSION_REELS_SEQUENCE[missionIndex % MISSION_REELS_SEQUENCE.length];
+
+  const nextMissionPreview: NextExperienceData =
+    MISSION_REELS_SEQUENCE[(missionIndex + 1) % MISSION_REELS_SEQUENCE.length];
+
+  const handleNextContinuousMission = () => {
+    soundEffects.playCorrectPing();
+    setMissionIndex((prev) => prev + 1);
+    setStep('prompt');
+    setUserInput('');
+    setEvaluation(null);
   };
 
   useEffect(() => {
@@ -410,46 +468,61 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
               </div>
             </div>
 
-            {/* Transfer Call to Action: Live World / Workplace */}
-            <div className="space-y-2">
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">
-                Transfer & Mastery (বাস্তব জগতে প্রয়োগ করুন)
+            {/* CONTINUOUS PLAY (THE REELS PRINCIPLE) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-purple-500/15 border-2 border-amber-400/50 shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-black text-amber-300 uppercase tracking-widest flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  REELS PRINCIPLE • CONTINUOUS ACTION
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                  Next Up
+                </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <button
-                  onClick={() => {
-                    onClose();
-                    if (onExploreTokyo) {
-                      onExploreTokyo();
-                    } else if (onNavigate) {
-                      onNavigate('landing', { hotspotId: 'spot-conbini' });
-                    }
-                  }}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left text-xs font-bold text-white flex items-center justify-between transition-colors cursor-pointer"
-                >
-                  <span>Experience in 3D Shibuya</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
-                </button>
 
-                <button
-                  onClick={() => {
-                    onClose();
-                    onNavigate?.('baito', { scenarioId: 'sc-conbini-pos' });
-                  }}
-                  className="p-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-left text-xs font-black flex items-center justify-between transition-colors cursor-pointer"
-                >
-                  <span>Nihomi WorkOS™ POS Shift</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
-                </button>
+              <div>
+                <h4 className="text-sm sm:text-base font-black text-white">
+                  Next: {nextMissionPreview.goal}
+                </h4>
+                <p className="text-xs text-stone-300 font-japanese mt-0.5">
+                  {nextMissionPreview.targetPhraseJa}
+                </p>
               </div>
+
+              <button
+                type="button"
+                onClick={handleNextContinuousMission}
+                className="btn-haptic w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Play Next Mission ➔ (পরবর্তী মিশন শুরু করুন)</span>
+                <ArrowRight className="w-4 h-4 fill-stone-950" />
+              </button>
             </div>
 
-            <button
-              onClick={onClose}
-              className="w-full py-2.5 rounded-xl border border-slate-800 text-xs font-bold text-slate-400 hover:text-white"
-            >
-              Done & Return to Dashboard
-            </button>
+            {/* Transfer & 3D Exploration Actions */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button
+                onClick={() => {
+                  onClose();
+                  if (onExploreTokyo) {
+                    onExploreTokyo();
+                  } else if (onNavigate) {
+                    onNavigate('landing', { hotspotId: 'spot-conbini' });
+                  }
+                }}
+                className="btn-haptic p-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left text-xs font-bold text-white flex items-center justify-between transition-colors cursor-pointer"
+              >
+                <span>Experience in 3D Shibuya</span>
+                <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+              </button>
+
+              <button
+                onClick={onClose}
+                className="btn-haptic p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold text-center transition-colors cursor-pointer"
+              >
+                Return to Dashboard
+              </button>
+            </div>
           </div>
         )}
 

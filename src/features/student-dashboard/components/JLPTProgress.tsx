@@ -20,12 +20,12 @@ export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress, onTakeMock
       <div className="flex items-center justify-between gap-2 mb-4">
         <div>
           <h2 id="jlpt-progress-heading" className="text-base font-bold text-stone-900 tracking-tight">
-            JLPT {progress.level} Readiness <span className="text-xs font-medium text-stone-500 font-sans">| প্রস্তুতি অগ্রগতি</span>
+            JLPT {progress.level} Core
           </h2>
-          <p className="text-xs text-stone-500">Overall syllabus mastery</p>
+          <p className="text-xs text-stone-500 font-medium">Syllabus Mastery</p>
         </div>
         <div className="text-right">
-          <span className="text-lg font-extrabold text-stone-900">{progress.overallPercent}%</span>
+          <span className="text-xl font-black text-rose-600 font-mono">{progress.overallPercent}%</span>
         </div>
       </div>
 
@@ -59,10 +59,9 @@ export const JLPTProgress: React.FC<JLPTProgressProps> = ({ progress, onTakeMock
         type="button"
         onClick={onTakeMockExam}
         aria-label="Take N5 Mock Exam"
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
+        className="btn-haptic mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 px-4 py-3 text-xs font-bold text-white transition-all hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer shadow-xs"
       >
-        <span>Take N5 Mock Exam</span>
-        <span className="text-xs font-medium text-stone-300">| পূর্ণ মক পরীক্ষা</span>
+        <span>Take N5 Mock Exam ➔</span>
       </button>
     </section>
   );
