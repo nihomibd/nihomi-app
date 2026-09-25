@@ -288,7 +288,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
 
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <h3 className="text-sm sm:text-base font-bold text-white leading-tight">নিহোমি AI সেনসেই</h3>
+                <h3 className="text-sm sm:text-base font-bold text-white leading-tight">Nihomi Sensei AI™</h3>
                 <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
                   Tanaka
                 </span>
@@ -497,4 +497,5 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
   );
 };
 
+export const NihomiSenseiAiModal = AiSenseiModal;
 export default AiSenseiModal;

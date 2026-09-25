@@ -149,7 +149,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
     {
       id: 'welcome',
       sender: 'sensei',
-      text: 'こんにちは！(Konnichiwa!) I am your AI Sensei. Ask me any grammar question, or tap the 🎙️ Mic to practice speaking Japanese and get instant pronunciation & pitch feedback!',
+      text: 'こんにちは！(Konnichiwa!) I am your Nihomi Sensei AI™. Ask me any grammar question, or tap the 🎙️ Mic to practice speaking Japanese and get instant pronunciation & pitch feedback!',
       romaji: 'Konnichiwa! Nan demo kiite kudasai.',
       bengaliTranslation: 'নমস্কার! যেকোনো ব্যাকরণ প্রশ্ন করুন অথবা মাইক্রোফোনে জাপানি উচ্চারণ প্র্যাকটিস করুন।',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -472,13 +472,13 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
         <button
           onClick={() => setIsOpen(true)}
           className="group relative flex items-center space-x-2 px-3.5 py-2 sm:px-4 sm:py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
-          aria-label="Open AI Sensei Grammar Coach"
+          aria-label="Open Nihomi Sensei AI™ Grammar Coach"
         >
           <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
           </div>
           <div className="text-left">
-            <span className="text-xs font-bold block leading-none">✨ AI সেনসেই</span>
+            <span className="text-xs font-bold block leading-none">✨ Nihomi Sensei AI™</span>
             <span className="text-[10px] opacity-70 font-mono hidden sm:inline">{activeContextConfig.shortLabel}</span>
           </div>
           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
@@ -498,7 +498,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
                 </div>
                 <div>
                   <h4 className="text-sm font-bold flex items-center space-x-1.5">
-                    <span>Nihomi AI Sensei</span>
+                    <span>Nihomi Sensei AI™</span>
                     <span className="px-1.5 py-0.2 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 text-[9px] font-mono font-bold rounded">
                       Gemini + WebSpeech
                     </span>
@@ -685,7 +685,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             {isLoading && (
               <div className="flex items-center space-x-2 text-stone-400 p-2 text-xs">
                 <Loader2 className="w-4 h-4 animate-spin text-red-500" />
-                <span>AI Sensei is analyzing speech & grammar...</span>
+                <span>Nihomi Sensei AI™ is analyzing speech & grammar...</span>
               </div>
             )}
             <div ref={messagesEndRef} />

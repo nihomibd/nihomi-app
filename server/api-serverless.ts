@@ -29,8 +29,19 @@ import { founderRouter } from './routes/founder.js';
 
 const app = express();
 
-app.use(express.json({ limit: '25mb' }));
-app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+app.use(express.json({
+  limit: '25mb',
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf;
+  }
+}));
+app.use(express.urlencoded({
+  extended: true,
+  limit: '25mb',
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 
 // Health check endpoint
 app.use('/api/health', healthRouter);
@@ -61,6 +72,9 @@ app.use('/api/study-planner', studyPlanRouter);
 app.use('/api/baito', baitoSimulationRouter);
 app.use('/api/simulation', baitoSimulationRouter);
 app.use('/api/baito-simulation', baitoSimulationRouter);
+app.use('/api/workos', baitoSimulationRouter);
+app.use('/api/work-os', baitoSimulationRouter);
+app.use('/api/sensei-ai', aiRouter);
 app.use('/api/srs', srsRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/voice', voiceRouter);

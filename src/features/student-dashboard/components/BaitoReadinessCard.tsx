@@ -44,4 +44,5 @@ export const BaitoReadinessCard: React.FC<BaitoReadinessCardProps> = ({ onLaunch
   );
 };
 
+export const NihomiWorkOsReadinessCard = BaitoReadinessCard;
 export default BaitoReadinessCard;

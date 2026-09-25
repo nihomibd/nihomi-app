@@ -203,7 +203,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a12]" />
             </div>
             <div>
-              <h2 id="ai-sensei-title" className="text-sm sm:text-base font-bold text-white leading-tight">নিহোমি AI সেনসেই</h2>
+              <h2 id="ai-sensei-title" className="text-sm sm:text-base font-bold text-white leading-tight">Nihomi Sensei AI™</h2>
               <p className="text-[11px] font-medium text-slate-400">২৪/৭ জাপানি শিক্ষক • বাংলা / English</p>
             </div>
           </div>
@@ -340,4 +340,5 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
   );
 };
 
+export const NihomiSenseiAiDrawer = AiSenseiDrawer;
 export default AiSenseiDrawer;

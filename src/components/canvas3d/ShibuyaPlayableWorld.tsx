@@ -391,8 +391,8 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         isOpen: true,
         speaker: 'sensei',
         step: 'sensei_coaching',
-        npcJapaneseText: '💡 田中AI先生の敬語ワンポイントレッスン',
-        npcRomaji: 'Tanaka AI Sensei Keigo One-Point Lesson',
+        npcJapaneseText: '💡 Nihomi Sensei AI™ 敬語ワンポイントレッスン',
+        npcRomaji: 'Nihomi Sensei AI™ Keigo One-Point Lesson',
         npcEnglish: 'In Japanese workplace culture, asking 「バイトありますか？」 directly is too blunt and informal. Use the polite business structure:',
         senseiGuidance: {
           title: 'Workplace Etiquette: Part-Time Job Inquiry',
@@ -808,37 +808,38 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       {/* TOP HUD BAR */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-20">
         {/* Real World Geographic Foundation & Active World Node Pill */}
-        <div className="flex items-center space-x-3 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-cyan-500/30 shadow-2xl pointer-events-auto">
+        <div className="flex items-center space-x-2 sm:space-x-3 bg-slate-900/90 backdrop-blur-md px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl border border-cyan-500/30 shadow-2xl pointer-events-auto shrink-0 max-w-[50%] sm:max-w-none">
           <div
-            className={`w-3 h-3 rounded-full ${
+            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full shrink-0 ${
               geoStatus.providerType === 'plateau_3d_tiles'
                 ? 'bg-emerald-400 animate-pulse'
                 : 'bg-cyan-400'
             }`}
           />
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+          <div className="min-w-0">
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
+              <span className="hidden md:inline text-xs font-bold uppercase tracking-wider text-cyan-400">
                 OPEN JAPAN GEO FOUNDATION
               </span>
               <span
-                className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                className={`text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full font-mono font-bold truncate ${
                   geoStatus.providerType === 'plateau_3d_tiles'
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                     : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                 }`}
               >
-                {geoStatus.providerType === 'plateau_3d_tiles' ? 'PLATEAU 3D (国土交通省)' : 'OPENSTREETMAP / OVERTURE'}
+                {geoStatus.providerType === 'plateau_3d_tiles' ? 'PLATEAU 3D' : 'OSM'}
               </span>
             </div>
-            <div className="flex items-center space-x-2 mt-0.5">
-              <p className="text-sm font-semibold text-white">{currentNode.nameJa}</p>
+            <div className="flex items-center space-x-1.5 sm:space-x-2 mt-0.5">
+              <p className="text-xs sm:text-sm font-semibold text-white truncate">{currentNode.nameJa}</p>
               <button
                 onClick={() => setIsWorldMapOpen(true)}
-                className="flex items-center space-x-1 px-2.5 py-0.5 rounded-lg bg-cyan-600/30 hover:bg-cyan-600 text-[11px] font-bold text-cyan-200 border border-cyan-400/40 transition-all shadow"
+                className="flex items-center space-x-1 px-2 py-0.5 rounded-lg bg-cyan-600/30 hover:bg-cyan-600 text-[10px] sm:text-[11px] font-bold text-cyan-200 border border-cyan-400/40 transition-all shadow shrink-0"
               >
-                <Navigation className="w-3 h-3" />
-                <span>路線図・移動 (World Map)</span>
+                <Navigation className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                <span className="hidden sm:inline">路線図・移動</span>
+                <span className="sm:hidden">Map</span>
               </button>
             </div>
           </div>

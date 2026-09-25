@@ -5,6 +5,14 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    host: '127.0.0.1',
+    port: 3000,
+    strictPort: false,
+    watch: {
+      ignored: ['**/scratch_*/**', '**/screenshot*', '**/*.tmp*']
+    }
+  },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime']
   },

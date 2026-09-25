@@ -32,6 +32,8 @@ import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
 import { useAuth } from '../../context/AuthContext';
+import { TodaysMissionCard } from './components/TodaysMissionCard';
+import { GoldenLearningLoopModal, NextExperienceData } from '../../components/learning/GoldenLearningLoopModal';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
@@ -97,6 +99,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const [isSearchingSensei, setIsSearchingSensei] = useState(false);
   const [senseiSearchResult, setSenseiSearchResult] = useState<string | null>(null);
   const [pendingTrx, setPendingTrx] = useState<any | null>(null);
+  const [isGoldenLoopOpen, setIsGoldenLoopOpen] = useState(false);
+  const [selectedMission, setSelectedMission] = useState<NextExperienceData | null>(null);
 
   // Poll for pending manual bKash/Nagad submission verification
   React.useEffect(() => {
@@ -324,6 +328,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   </div>
                 </section>
               )}
+
+              {/* ১.৬. Nihomi Sensei AI™ Today's Mission Priority Action */}
+              <TodaysMissionCard
+                userId={user?.id}
+                onStartMission={(exp) => {
+                  setSelectedMission(exp || null);
+                  setIsGoldenLoopOpen(true);
+                }}
+              />
             </div>
 
             {/* Responsive Desktop 12-Column Grid (8 cols Main Learning, 4 cols Progress & Stats) */}
@@ -423,6 +436,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   )}
                 </section>
 
+                {/* ১.৫. নিহোমি সেনসেই AI™ গোল্ডেন মিশন (Autonomous Next Action & MemoryOS) */}
+                <TodaysMissionCard
+                  onStartMission={(mission) => {
+                    setSelectedMission(mission);
+                    setIsGoldenLoopOpen(true);
+                  }}
+                />
+
                 {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
                 <ContinueLearningCard
                   lesson={data.continueLesson}
@@ -514,6 +535,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         onClose={() => setIsAiTutorOpen(false)}
         onNavigateSubscription={() => onNavigate?.('pricing')}
       />
+      <GoldenLearningLoopModal
+        isOpen={isGoldenLoopOpen}
+        onClose={() => setIsGoldenLoopOpen(false)}
+        experience={selectedMission}
+        onNavigate={onNavigate}
+        onSuccessReward={(coins, xp) => {
+          showToast(`মিশন সম্পন্ন! +${coins} Coins ও +${xp} XP যুক্ত হয়েছে।`);
+          refresh();
+        }}
+      />
       <Lesson12PlayerModal
         isOpen={isLessonOpen}
         onClose={() => setIsLessonOpen(false)}
@@ -586,6 +617,23 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           refreshSubscription();
         }}
       />
+
+      {/* Autonomous Golden Learning Loop & Mastery Modal */}
+      {isGoldenLoopOpen && (
+        <GoldenLearningLoopModal
+          isOpen={isGoldenLoopOpen}
+          onClose={() => setIsGoldenLoopOpen(false)}
+          experience={selectedMission}
+          onMasteryComplete={() => {
+            refresh();
+            refreshProgress();
+          }}
+          onExploreTokyo={() => {
+            setIsGoldenLoopOpen(false);
+            if (onNavigate) onNavigate('japan-twin');
+          }}
+        />
+      )}
     </div>
   );
 };

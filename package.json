@@ -9,7 +9,7 @@
     "start": "node dist/server.cjs",
     "smoke-test": "tsx server/scripts/productionSmokeTest.ts",
     "verify-rc": "tsx scripts/verify-release-candidate.ts",
-    "clean": "rm -rf dist",
+    "clean": "node -e \"try { fs.rmSync('dist', { recursive: true, force: true }); } catch (e) {}\"",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

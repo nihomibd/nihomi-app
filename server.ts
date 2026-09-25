@@ -91,7 +91,7 @@ setInterval(async () => {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Enable CORS for web, mobile, and edge proxy environments
   app.use(cors({
@@ -182,6 +182,9 @@ async function startServer() {
   app.use('/api/baito', baitoSimulationRouter);
   app.use('/api/simulation', baitoSimulationRouter);
   app.use('/api/baito-simulation', baitoSimulationRouter);
+  app.use('/api/workos', baitoSimulationRouter);
+  app.use('/api/work-os', baitoSimulationRouter);
+  app.use('/api/sensei-ai', aiRouter);
   app.use('/api/srs', srsRouter);
   app.use('/api/analytics', analyticsRouter);
   app.use('/api/voice', voiceRouter);
@@ -328,10 +331,32 @@ ${allUrls
   // Vite middleware for development vs Static files for production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        host: '127.0.0.1',
+        port: PORT,
+        strictPort: false,
+        hmr: { host: '127.0.0.1' }
+      },
       appType: 'spa'
     });
     app.use(vite.middlewares);
+    app.use('*', async (req, res, next) => {
+      if (req.originalUrl.startsWith('/api')) {
+        return next();
+      }
+      try {
+        const url = req.originalUrl;
+        const fs = await import('fs');
+        const indexPath = path.resolve(process.cwd(), 'index.html');
+        let template = fs.readFileSync(indexPath, 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e: any) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
@@ -369,9 +394,24 @@ ${allUrls
     next(err);
   });
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Nihomi] Server running on http://0.0.0.0:${PORT}`);
-  });
+  const HOST = '127.0.0.1';
+  const startListening = (targetPort: number, fallbackPort: number = 3001) => {
+    const serverInstance = app.listen(targetPort, HOST, () => {
+      console.log(`[Nihomi] Server running on http://${HOST}:${targetPort}`);
+      console.log(`[Nihomi] Ready for browser access: http://${HOST}:${targetPort}`);
+    });
+
+    serverInstance.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE' && targetPort !== fallbackPort) {
+        console.warn(`[Nihomi] Port ${targetPort} is busy. Gracefully falling back to port ${fallbackPort}...`);
+        startListening(fallbackPort, fallbackPort);
+      } else {
+        console.error(`[Nihomi] Server failed to bind to ${HOST}:${targetPort}:`, err);
+      }
+    });
+  };
+
+  startListening(PORT, 3001);
 }
 
 startServer().catch((err) => {

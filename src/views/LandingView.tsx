@@ -98,7 +98,7 @@ const N5_PRO_PLAN: Plan = {
   name: 'N5 Pro Lifetime',
   displayNameJa: 'N5プロ・完全マスター (生涯アクセス)',
   tagline: 'Complete JLPT N5 mastery with lifetime access',
-  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, BaitoOS, and 180-Mark Mock Exams',
+  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, Nihomi WorkOS™, and 180-Mark Mock Exams',
   monthlyPrice: 499,
   yearlyPrice: 499,
   currency: 'BDT',
@@ -109,9 +109,9 @@ const N5_PRO_PLAN: Plan = {
     'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
     'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
-    'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
+    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
     '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
-    '২৪/৭ আনলিমিটেড তানাকা এআই সেনসেই লাইভ টিউটর',
+    '২৪/৭ আনলিমিটেড Nihomi Sensei AI™ লাইভ টিউটর',
     'আজীবন অ্যাক্সেস — মোবাইল, ট্যাবলেট ও ল্যাপটপ'
   ],
   aiMonthlyLimit: 500,
@@ -215,7 +215,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     },
     {
       question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
-      answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন (BaitoOS™) ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
+      answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন (Nihomi WorkOS™) ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
     }
   ];
 
@@ -263,7 +263,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     },
     {
       step: '05',
-      title: 'BaitoOS™ Conbini Shift',
+      title: 'Nihomi WorkOS™ Conbini Shift',
       titleJa: 'コンビニ接客・レジ演習',
       desc: 'টোকিও ৭-ইলেভেন ও লসন ক্যাশিয়ার সিমুলেটর, কেইগো ডায়ালগ ও বাস্তব কাস্টমার সার্ভিস।',
       duration: '১ সপ্তাহ',
@@ -671,9 +671,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                     'মিন্না নো নিহোঙ্গো লেসন ০৬–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
                     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
                     'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
-                    'BaitoOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
+                    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
                     '১৮০ মার্কসের অফিশিয়াল মক টেস্ট ও ভেরিফাইড সনদ',
-                    '২৪/৭ তানাকা এআই সেনসেই লাইভ টিউটর',
+                    '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
                     'দেশীয় bKash ও Nagad এ দ্রুত ট্রানজেকশন ভেরিফিকেশন ও অ্যাক্টিভেশন'
                   ].map((feat, idx) => (
                     <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-900 font-medium">

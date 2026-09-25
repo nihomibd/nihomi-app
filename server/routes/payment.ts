@@ -1,5 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { bKashService } from '../services/bKashService.js';
+import { sslCommerzService } from '../services/sslCommerzService.js';
+import { stripePaymentService } from '../services/stripePaymentService.js';
 import { subscriptionService, SUBSCRIPTION_TIERS, SubscriptionTier } from '../services/subscriptionService.js';
 import { optionalAuth } from '../middleware/auth.js';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
@@ -594,4 +596,240 @@ paymentRouter.post('/admin/verify', optionalAuth, async (req: AuthenticatedReque
     return res.status(500).json({ success: false, error: err.message || 'Verification failed.' });
   }
 });
+
+// ========================================================
+// 9. SSLCOMMERZ GATEWAY INTEGRATION (MFS & CARDS)
+// ========================================================
+paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+    const {
+      tier = 'n5_pro',
+      planId,
+      amount: requestedAmount,
+      currency = 'BDT',
+      callbackUrl,
+      successUrl,
+      failUrl,
+      cancelUrl,
+      name,
+      phone
+    } = req.body;
+
+    const selectedTier = (planId || tier) as SubscriptionTier;
+    const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
+    const amount = Number(requestedAmount) || planConfig.priceBdt || 499;
+
+    const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
+    const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
+    const resolvedName = name || user?.name || resolvedEmail.split('@')[0];
+    const resolvedPhone = phone || (user as any)?.phone || '+8801834-348966';
+
+    const result = await sslCommerzService.initSession({
+      amount,
+      currency,
+      planTier: selectedTier,
+      userId: resolvedUserId,
+      userEmail: resolvedEmail,
+      userName: resolvedName,
+      userPhone: resolvedPhone,
+      callbackUrl,
+      successUrl,
+      failUrl,
+      cancelUrl
+    });
+
+    return res.json(result);
+  } catch (err: any) {
+    console.error('[PaymentRouter] SSLCommerz init error:', err);
+    return res.status(500).json({
+      success: false,
+      error: err?.message || 'Failed to initiate SSLCommerz session.'
+    });
+  }
+});
+
+const handleSslSuccess = async (req: Request, res: Response) => {
+  try {
+    const payload = { ...req.query, ...req.body };
+    const tranId = payload.tran_id || payload.paymentId || (req.query.paymentId as string);
+    const valId = payload.val_id;
+
+    console.log(`[PaymentRouter] SSLCommerz success callback for tranId: ${tranId}, valId: ${valId}`);
+
+    const result = await sslCommerzService.processPaymentSuccess(payload);
+
+    // If client requested JSON (API / Mobile / Test), return JSON
+    if (req.headers.accept?.includes('application/json') || req.is('json')) {
+      return res.json(result);
+    }
+
+    // Otherwise redirect to frontend callback
+    const redirectParams = new URLSearchParams({
+      status: 'success',
+      provider: 'sslcommerz',
+      trxID: result.tranId,
+      tier: result.tier,
+      amount: String(result.amount),
+      invoiceNumber: result.invoiceNumber
+    });
+
+    return res.redirect(`/payment/callback?${redirectParams.toString()}`);
+  } catch (err: any) {
+    console.error('[PaymentRouter] SSLCommerz success processing error:', err);
+    return res.redirect(`/payment/callback?status=failed&error=${encodeURIComponent(err?.message || 'SSLCommerz processing error')}`);
+  }
+};
+
+paymentRouter.post('/sslcommerz/success', handleSslSuccess);
+paymentRouter.get('/sslcommerz/success', handleSslSuccess);
+
+const handleSslFail = (req: Request, res: Response) => {
+  const payload = { ...req.query, ...req.body };
+  const tranId = payload.tran_id || payload.paymentId || '';
+  const errorMsg = payload.error || payload.failedreason || 'Payment failed on SSLCommerz gateway.';
+
+  if (tranId) {
+    try {
+      db.updatePayment(tranId, {
+        status: 'failed',
+        failedAt: new Date().toISOString(),
+        failureReason: errorMsg
+      });
+      db.save();
+    } catch {}
+  }
+
+  if (req.headers.accept?.includes('application/json')) {
+    return res.status(400).json({ success: false, status: 'failed', error: errorMsg, tranId });
+  }
+
+  return res.redirect(`/payment/callback?status=failed&error=${encodeURIComponent(errorMsg)}&paymentID=${encodeURIComponent(tranId)}`);
+};
+
+paymentRouter.post('/sslcommerz/fail', handleSslFail);
+paymentRouter.get('/sslcommerz/fail', handleSslFail);
+
+const handleSslCancel = (req: Request, res: Response) => {
+  const payload = { ...req.query, ...req.body };
+  const tranId = payload.tran_id || payload.paymentId || '';
+
+  if (tranId) {
+    try {
+      db.updatePayment(tranId, {
+        status: 'cancelled',
+        failureReason: 'Transaction cancelled by customer.'
+      });
+      db.save();
+    } catch {}
+  }
+
+  if (req.headers.accept?.includes('application/json')) {
+    return res.json({ success: true, status: 'cancelled', tranId });
+  }
+
+  return res.redirect(`/payment/callback?status=cancelled&paymentID=${encodeURIComponent(tranId)}`);
+};
+
+paymentRouter.post('/sslcommerz/cancel', handleSslCancel);
+paymentRouter.get('/sslcommerz/cancel', handleSslCancel);
+
+// SSLCommerz IPN (Instant Payment Notification) Webhook
+paymentRouter.post('/sslcommerz/ipn', async (req: Request, res: Response) => {
+  try {
+    const payload = req.body || {};
+    const signatureValid = sslCommerzService.verifyIpnSignature(payload);
+
+    if (!signatureValid && process.env.NODE_ENV === 'production') {
+      console.warn('[PaymentRouter] SSLCommerz IPN signature verification failed.');
+      return res.status(400).send('IPN signature invalid');
+    }
+
+    await sslCommerzService.processPaymentSuccess(payload);
+    return res.status(200).send('IPN OK');
+  } catch (err: any) {
+    console.error('[PaymentRouter] SSLCommerz IPN error:', err);
+    return res.status(500).send('IPN processing error');
+  }
+});
+
+// ========================================================
+// 10. STRIPE GATEWAY INTEGRATION (GLOBAL CARDS / USD / JPY)
+// ========================================================
+paymentRouter.post('/stripe/create-checkout-session', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+    const {
+      tier = 'n5_pro',
+      planId,
+      amount: requestedAmount,
+      currency = 'usd',
+      successUrl,
+      cancelUrl
+    } = req.body;
+
+    const selectedTier = (planId || tier) as SubscriptionTier;
+    const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
+    
+    // Default international pricing: N5 Pro = $9.99 (or 499 BDT equivalent), Lifetime = $29.99
+    let amount = Number(requestedAmount);
+    if (!amount) {
+      if (currency.toLowerCase() === 'usd') {
+        amount = selectedTier === 'n5_lifetime' ? 29.99 : 9.99;
+      } else if (currency.toLowerCase() === 'jpy') {
+        amount = selectedTier === 'n5_lifetime' ? 4500 : 1500;
+      } else {
+        amount = planConfig.priceBdt || 499;
+      }
+    }
+
+    const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
+    const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
+
+    const sessionResult = await stripePaymentService.createCheckoutSession({
+      userId: resolvedUserId,
+      userEmail: resolvedEmail,
+      planTier: selectedTier,
+      amount,
+      currency,
+      successUrl,
+      cancelUrl
+    });
+
+    return res.json(sessionResult);
+  } catch (err: any) {
+    console.error('[PaymentRouter] Stripe session error:', err);
+    return res.status(500).json({
+      success: false,
+      error: err?.message || 'Failed to create Stripe Checkout session.'
+    });
+  }
+});
+
+paymentRouter.post('/stripe/webhook', async (req: Request, res: Response) => {
+  const sigHeader = (req.headers['stripe-signature'] || req.headers['x-stripe-signature']) as string | undefined;
+  const rawBody = (req as any).rawBody || req.body;
+
+  try {
+    const signatureValid = stripePaymentService.verifyWebhookSignature(rawBody, sigHeader);
+
+    if (!signatureValid && process.env.NODE_ENV === 'production' && stripePaymentService.isLiveConfigured) {
+      console.warn('[PaymentRouter] Stripe webhook signature mismatch.');
+      return res.status(400).json({ error: 'Webhook signature verification failed.' });
+    }
+
+    const event = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const processResult = await stripePaymentService.processWebhookEvent(
+      event,
+      req.headers as Record<string, any>,
+      sigHeader
+    );
+
+    return res.json({ received: true, ...processResult });
+  } catch (err: any) {
+    console.error('[PaymentRouter] Stripe webhook handling exception:', err);
+    return res.status(500).json({ error: 'Webhook processing exception.' });
+  }
+});
+
 

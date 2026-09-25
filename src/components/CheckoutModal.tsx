@@ -245,6 +245,45 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         }
       }
 
+      // Real SSLCommerz Multi-Channel Hosted PGW Redirect (Cards, Internet Banking, MFS)
+      if (provider === 'sslcommerz') {
+        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
+        const sslRes = await billingApi.createSslCommerzPayment({
+          tier,
+          planId: activePlan.id,
+          amount: finalPrice,
+          currency: 'BDT',
+          name: user?.name,
+          phone: '+8801834-348966'
+        });
+        if (sslRes.success && sslRes.gatewayUrl) {
+          window.location.href = sslRes.gatewayUrl;
+          return;
+        }
+        if (!sslRes.success && sslRes.error) {
+          throw new Error(sslRes.error);
+        }
+      }
+
+      // Real Stripe Checkout Redirect (International Visa/Mastercard, USD/JPY)
+      if (provider === 'stripe') {
+        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
+        const stripeRes = await billingApi.createStripeCheckoutSession({
+          tier,
+          planId: activePlan.id,
+          amount: interval === 'yearly' || tier === 'n5_lifetime' ? 29.99 : 9.99,
+          currency: 'usd'
+        });
+        if (stripeRes.success && stripeRes.url) {
+          window.location.href = stripeRes.url;
+          return;
+        }
+        if (!stripeRes.error && stripeRes.url) {
+          window.location.href = stripeRes.url;
+          return;
+        }
+      }
+
       const initRes = await billingApi.initiateCheckout({
         planId: activePlan.id,
         billingInterval: interval,
@@ -301,17 +340,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto" id="checkout-modal-backdrop">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto" id="checkout-modal-backdrop">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.2 }}
-        className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden my-8"
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden my-auto"
         id="checkout-modal-container"
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-zinc-900/70 shrink-0">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-red-600/10 text-red-600 flex items-center justify-center font-bold text-sm">
               日
@@ -333,7 +372,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 pb-28 sm:pb-6">
+        <div className="p-6 overflow-y-auto flex-1 pb-20 sm:pb-6">
           {errorMessage && (
             <div className="mb-5 p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl flex items-start gap-3 text-red-700 dark:text-red-300 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -761,9 +800,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 {/* Gateway Selection */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
-                    Select Payment Gateway (Bangladesh Authorized)
+                    Select Payment Gateway (Bangladesh MFS, SSLCommerz Cards & Global Stripe)
                   </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
                     <button
                       type="button"
                       onClick={() => setProvider('bkash')}
@@ -802,7 +841,28 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
                           Cards & Banking
                         </p>
-                        <p className="text-[10px] text-zinc-500 truncate">VISA / MC</p>
+                        <p className="text-[10px] text-zinc-500 truncate">SSLCommerz BDT</p>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setProvider('stripe')}
+                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
+                        provider === 'stripe'
+                          ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 ring-2 ring-indigo-500/20'
+                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
+                      }`}
+                      id="provider-stripe"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                        <CreditCard className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                          Stripe Global
+                        </p>
+                        <p className="text-[10px] text-zinc-500 truncate">USD / JPY / Int'l</p>
                       </div>
                     </button>
 
@@ -905,7 +965,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-sm">
                   <div className="flex justify-between text-zinc-600 dark:text-zinc-400 text-xs">
                     <span>
-                      {selectedPlan.name} ({interval === 'yearly' ? 'Annual Plan' : 'Monthly Plan'})
+                      {activePlan.name} ({interval === 'yearly' ? 'Annual Plan' : 'Monthly Plan'})
                     </span>
                     <span>৳{basePrice.toLocaleString()}</span>
                   </div>
@@ -1197,10 +1257,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     Payment Verified & Activated
                   </span>
                   <h3 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 mt-1">
-                    Welcome to Nihomi {selectedPlan.name}!
+                    Welcome to Nihomi {activePlan.name}!
                   </h3>
                   <p className="text-xs text-zinc-500 mt-1">
-                    Your subscription is active and all {selectedPlan.name} learning modules are unlocked.
+                    Your subscription is active and all {activePlan.name} learning modules are unlocked.
                   </p>
                 </div>
 

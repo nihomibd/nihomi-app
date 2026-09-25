@@ -193,7 +193,65 @@ export class OpenGeoProvider implements IWorldProvider {
 
     this.group.add(viaductGroup);
 
-    // 4. Spatial POI Markers (OSM Verified Nodes)
+    // 4. Solid Vertical Urban Buildings (Connecting Roofs to Ground Level)
+    const buildingGroup = new THREE.Group();
+    buildingGroup.name = 'Shibuya_Urban_Building_Masses';
+
+    const solidBuildingMat = new THREE.MeshBasicMaterial({
+      color: 0x888888,
+      side: THREE.DoubleSide,
+      wireframe: false
+    });
+
+    const createSolidBuilding = (
+      name: string,
+      x: number,
+      z: number,
+      width: number,
+      height: number,
+      depth: number,
+      rotY: number = 0
+    ) => {
+      const bldgGeo = new THREE.BoxGeometry(width, height, depth);
+      const bldgMesh = new THREE.Mesh(bldgGeo, solidBuildingMat);
+      // Position at height / 2 so the base connects solidly at Y = 0 (ground level)
+      bldgMesh.position.set(x, height / 2, z);
+      bldgMesh.rotation.y = rotY;
+      bldgMesh.castShadow = true;
+      bldgMesh.receiveShadow = true;
+      bldgMesh.frustumCulled = false;
+      bldgMesh.name = name;
+      return bldgMesh;
+    };
+
+    // Major Landmark Buildings Surrounding Shibuya Scramble Crossing
+    // QFRONT (Tsutaya / Starbucks Facing Scramble)
+    buildingGroup.add(createSolidBuilding('QFRONT_Building', 0, -28, 30, 42, 24));
+
+    // Shibuya 109 Fashion Tower (Iconic Cylindrical/Massing Tower)
+    buildingGroup.add(createSolidBuilding('Shibuya_109_Tower', -38, -18, 26, 52, 26));
+
+    // Dogenzaka Commercial Block (7-Eleven, Conbini & Retail Streetfront)
+    buildingGroup.add(createSolidBuilding('Dogenzaka_Commercial_Block', -22, 18, 28, 38, 34));
+
+    // Shibuya Scramble Square Skyscraper (East Exit High-Rise Landmark)
+    buildingGroup.add(createSolidBuilding('Shibuya_Scramble_Square', 36, 12, 40, 110, 38));
+
+    // Shibuya Station Hachiko Gate Terminal Complex
+    buildingGroup.add(createSolidBuilding('Shibuya_Station_Terminal', 18, -22, 32, 34, 38));
+
+    // Miyashita Park / Inokashira-dori Urban Corridor Block
+    buildingGroup.add(createSolidBuilding('Miyashita_Corridor_Block', 22, -65, 46, 40, 32));
+
+    // Center-gai Pedestrian Street Perimeter Block
+    buildingGroup.add(createSolidBuilding('Center_Gai_Perimeter_Block', -36, -50, 40, 36, 42));
+
+    // South Shibuya Station Plaza Office Block
+    buildingGroup.add(createSolidBuilding('South_Station_Plaza_Block', 2, 48, 54, 30, 32));
+
+    this.group.add(buildingGroup);
+
+    // 5. Spatial POI Markers (OSM Verified Nodes)
     SHIBUYA_OSM_POIS.forEach((poi) => {
       const markerGroup = new THREE.Group();
       markerGroup.position.copy(poi.position);

@@ -357,7 +357,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-extrabold tracking-tight text-sm text-white group-hover:text-amber-300 transition-colors">
-                      NIHOMI WORLD™
+                      Nihomi Experience™
                     </span>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
                       SHIBUYA 360° V3
@@ -374,7 +374,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                       <span>🎮 Playable 3D</span>
                     </button>
                   </div>
-                  <p className="text-[11px] text-zinc-400 font-medium">Real Japan Canvas™ • MRR Engine</p>
+                  <p className="text-[11px] text-zinc-400 font-medium">Nihomi Experience™ • Real Japan Canvas™</p>
                 </div>
               </button>
 
@@ -500,7 +500,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-white">Tanaka AI Sensei (田中先生)</h3>
+                    <h3 className="text-sm font-bold text-white">Tanaka Sensei • Nihomi Sensei AI™ (田中先生)</h3>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Live in Tokyo 360°
@@ -1074,7 +1074,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   田
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Tanaka AI Sensei (田中先生)</h3>
+                  <h3 className="text-sm font-bold text-white">Tanaka Sensei • Nihomi Sensei AI™ (田中先生)</h3>
                   <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Tokyo Real-Time Coach</span>
@@ -1107,7 +1107,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               {senseiResponse && (
                 <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/15 to-zinc-900 border border-amber-400/40 text-xs space-y-2">
                   <div className="flex items-center justify-between text-[10px] font-bold text-amber-400 uppercase tracking-wide">
-                    <span>AI SENSEI ANALYSIS</span>
+                    <span>NIHOMI SENSEI AI™ ANALYSIS</span>
                     <button
                       onClick={() => handlePlayVoice(senseiResponse.split('\n')[0])}
                       className="p-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300"

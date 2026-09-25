@@ -667,11 +667,11 @@ export class SSLCommerzPaymentProvider implements PaymentProvider {
   public providerName: PaymentProviderType = 'sslcommerz';
 
   private get storeId(): string {
-    return process.env.SSLCOMMERZ_STORE_ID || '';
+    return process.env.SSLCOMMERZ_STORE_ID || process.env.STORE_ID || '';
   }
 
   private get storePassword(): string {
-    return process.env.SSLCOMMERZ_STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
+    return process.env.SSLCOMMERZ_STORE_PASSWORD || process.env.STORE_PASSWORD || 'sslcommerz_nihomi_live_store_pass_2026';
   }
 
   public get isSandbox(): boolean {

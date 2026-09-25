@@ -481,6 +481,49 @@ export const billingApi = {
     }>;
   }> {
     return apiRequest('/api/admin/payments/pending');
+  },
+
+  // SSLCommerz Session Init (Cards, Internet Banking, MFS)
+  async createSslCommerzPayment(params: {
+    tier?: string;
+    planId?: string;
+    amount?: number;
+    currency?: string;
+    name?: string;
+    phone?: string;
+  }): Promise<{
+    success: boolean;
+    tranId: string;
+    sessionkey: string;
+    gatewayUrl: string;
+    isSandbox: boolean;
+    error?: string;
+  }> {
+    return apiRequest('/api/payment/sslcommerz/init', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  },
+
+  // Stripe International Checkout Session
+  async createStripeCheckoutSession(params: {
+    tier?: string;
+    planId?: string;
+    amount?: number;
+    currency?: string;
+    successUrl?: string;
+    cancelUrl?: string;
+  }): Promise<{
+    success: boolean;
+    sessionId: string;
+    url: string;
+    isMock: boolean;
+    error?: string;
+  }> {
+    return apiRequest('/api/payment/stripe/create-checkout-session', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
   }
 };
 

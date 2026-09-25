@@ -359,3 +359,63 @@ aiRouter.post(
     }
   }
 );
+
+// 11. Nihomi Sensei AI™ Next Experience Decision Engine
+aiRouter.get('/next-experience', optionalAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || 'guest-learner';
+    const { SenseiNextExperienceService } = await import('../services/senseiNextExperienceService.js');
+    const nextExperience = SenseiNextExperienceService.getNextExperience(userId);
+    return res.json({ success: true, nextExperience });
+  } catch (err: any) {
+    console.error('Next Experience decision error:', err);
+    return res.status(500).json({ error: 'Failed to compute next experience.' });
+  }
+});
+
+aiRouter.post('/next-experience', optionalAuth, async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id || req.body?.userId || 'guest-learner';
+    const { SenseiNextExperienceService } = await import('../services/senseiNextExperienceService.js');
+    const nextExperience = SenseiNextExperienceService.getNextExperience(userId);
+    return res.json({ success: true, nextExperience });
+  } catch (err: any) {
+    console.error('Next Experience decision error:', err);
+    return res.status(500).json({ error: 'Failed to compute next experience.' });
+  }
+});
+
+// 12. Golden Learning Loop Attempt Evaluator
+aiRouter.post(
+  '/evaluate-attempt',
+  optionalAuth,
+  aiCostGuard({ operationType: 'coach', estimatedTokens: 500, allowGuest: true }),
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      const { situationId, userInput, targetPhraseJa } = req.body;
+      const userId = req.user?.id || 'guest-learner';
+
+      if (!userInput || typeof userInput !== 'string') {
+        return res.status(400).json({ error: 'userInput string is required.' });
+      }
+
+      const { SenseiNextExperienceService } = await import('../services/senseiNextExperienceService.js');
+      const result = SenseiNextExperienceService.evaluateAttempt({
+        userId,
+        situationId: situationId || 'exp-golden-path-001',
+        userInput,
+        targetPhraseJa: targetPhraseJa || 'お水を1本ください。袋は結構です。'
+      });
+
+      if (req.user) {
+        recordAiCostUsage(userId, 400, 'coach');
+      }
+
+      return res.json({ success: true, ...result });
+    } catch (err: any) {
+      console.error('Evaluate attempt error:', err);
+      return res.status(500).json({ error: 'Failed to evaluate attempt.' });
+    }
+  }
+);
+

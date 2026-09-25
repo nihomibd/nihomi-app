@@ -1243,6 +1243,11 @@ export interface BaitoEvaluationResponse {
   finalReadinessScore?: number;
 }
 
+// Nihomi WorkOS™ Architectural Type Aliases
+export type NihomiWorkOsScenarioType = BaitoScenarioType;
+export type NihomiWorkOsScenarioItem = BaitoScenarioItem;
+export type NihomiWorkOsEvaluationResponse = BaitoEvaluationResponse;
+
 export interface JisRirekishoData {
   id: string;
   userId: string;

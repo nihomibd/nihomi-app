@@ -37,7 +37,7 @@ export const RecentMistakes: React.FC<RecentMistakesProps> = ({
             Review Your Mistakes <span className="text-xs font-medium text-stone-500 font-sans">| মেমোরি ও ভুলের খাতা</span>
           </h2>
           <p className="text-xs text-stone-500">
-            {visibleMistakes.length} items flagged by NIHOMI MemoryOS
+            {visibleMistakes.length} items flagged by Nihomi MemoryOS™
           </p>
         </div>
 

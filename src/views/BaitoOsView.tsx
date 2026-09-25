@@ -257,7 +257,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
                 </span>
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Experience Japan. Before You Arrive. コンビニPOSレジ・レストラン接客・工場安全・面接をリアルタイムに体験。失敗から学び、AI Senseiの指導で確実にレベルアップしましょう。
+                Experience Japan. Before You Arrive. コンビニPOSレジ・レストラン接客・工場安全・面接をリアルタイムに体験。失敗から学び、Nihomi Sensei AI™の指導で確実にレベルアップしましょう。
               </p>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400">
                 <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
@@ -443,3 +443,6 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
     </div>
   );
 };
+
+export const NihomiWorkOsView = BaitoOsView;
+export type { BaitoOsViewProps, BaitoOsViewProps as NihomiWorkOsViewProps };
