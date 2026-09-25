@@ -9,7 +9,8 @@ export type KanjiCategory =
   | 'directions'
   | 'body'
   | 'actions'
-  | 'daily';
+  | 'daily'
+  | 'adjectives';
 
 export interface KanjiEntry {
   kanji: string;
@@ -1611,8 +1612,409 @@ export const JLPT_N5_KANJI_100: KanjiEntry[] = [
       { word: '小さい', reading: 'ちいさい (chiisai)', meaningBn: 'ছোট', meaningEn: 'Small' },
       { word: '小学校', reading: 'しょうがっこう (shougakkou)', meaningBn: 'প্রাইমারি স্কুল', meaningEn: 'Elementary school' }
     ]
+  },
+  // 9. ESSENTIAL ADJECTIVES & TIME (24 Additional JLPT N5 Core Kanji - Total 120)
+  {
+    kanji: '高',
+    onyomi: ['コウ (kou)'],
+    kunyomi: ['たか・い (taka-i)'],
+    meaningBn: 'উঁচু / দামি (High / Expensive)',
+    meaningEn: 'High / Expensive',
+    strokeCount: 10,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '高',
+    radicalName: 'たかい (takai)',
+    compounds: [
+      { word: '高い', reading: 'たかい (takai)', meaningBn: 'উঁচু বা দামি', meaningEn: 'High / expensive' },
+      { word: '高校', reading: 'こうこう (koukou)', meaningBn: 'হাইস্কুল', meaningEn: 'High school' },
+      { word: '円高', reading: 'えんだか (endaka)', meaningBn: 'ইয়েন মুদ্রার উচ্চ মান', meaningEn: 'Strong yen' }
+    ]
+  },
+  {
+    kanji: '安',
+    onyomi: ['アン (an)'],
+    kunyomi: ['やす・い (yasu-i)'],
+    meaningBn: 'সস্তা / নিরাপদ / শান্ত (Cheap / Safe)',
+    meaningEn: 'Cheap / Safe / Peaceful',
+    strokeCount: 6,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '宀',
+    radicalName: 'うかんむり (ukanmuri)',
+    compounds: [
+      { word: '安い', reading: 'やすい (yasui)', meaningBn: 'সস্তা বা কমদামি', meaningEn: 'Cheap / inexpensive' },
+      { word: '安心', reading: 'あんしん (anshin)', meaningBn: 'মনে শান্তি / স্বস্তি', meaningEn: 'Peace of mind' },
+      { word: '安全', reading: 'あんぜん (anzen)', meaningBn: 'নিরাপদ', meaningEn: 'Safety' }
+    ]
+  },
+  {
+    kanji: '新',
+    onyomi: ['シン (shin)'],
+    kunyomi: ['あたら・しい (atara-shii)'],
+    meaningBn: 'নতুন (New)',
+    meaningEn: 'New',
+    strokeCount: 13,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '斤',
+    radicalName: 'おのづくり (onodukuri)',
+    compounds: [
+      { word: '新しい', reading: 'あたらしい (atarashii)', meaningBn: 'নতুন', meaningEn: 'New' },
+      { word: '新聞', reading: 'しんぶん (shinbun)', meaningBn: 'সংবাদপত্র (Newspaper)', meaningEn: 'Newspaper' },
+      { word: '新年', reading: 'しんねん (shinnen)', meaningBn: 'নতুন বছর (New Year)', meaningEn: 'New Year' }
+    ]
+  },
+  {
+    kanji: '古',
+    onyomi: ['コ (ko)'],
+    kunyomi: ['ふる・い (furu-i)'],
+    meaningBn: 'পুরোনো (Old)',
+    meaningEn: 'Old (things)',
+    strokeCount: 5,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '口',
+    radicalName: 'くち (kuchi)',
+    compounds: [
+      { word: '古い', reading: 'ふるい (furui)', meaningBn: 'পুরোনো', meaningEn: 'Old' },
+      { word: '中古', reading: 'ちゅうこ (chuuko)', meaningBn: 'ব্যবহৃত / সেকেন্ড-হ্যান্ড', meaningEn: 'Secondhand' }
+    ]
+  },
+  {
+    kanji: '長',
+    onyomi: ['チョウ (chou)'],
+    kunyomi: ['なが・い (naga-i)'],
+    meaningBn: 'লম্বা / প্রধান (Long / Chief)',
+    meaningEn: 'Long / Chief',
+    strokeCount: 8,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '長',
+    radicalName: 'ながい (nagai)',
+    compounds: [
+      { word: '長い', reading: 'ながい (nagai)', meaningBn: 'লম্বা বা দীর্ঘ', meaningEn: 'Long' },
+      { word: '社長', reading: 'しゃちょう (shachou)', meaningBn: 'কোম্পানি প্রেসিডেন্ট', meaningEn: 'Company President' },
+      { word: '校長', reading: 'こうちょう (kouchou)', meaningBn: 'স্কুল অধ্যক্ষ', meaningEn: 'Principal' }
+    ]
+  },
+  {
+    kanji: '多',
+    onyomi: ['タ (ta)'],
+    kunyomi: ['おお・い (oo-i)'],
+    meaningBn: 'অনেক / প্রচুর (Many / Much)',
+    meaningEn: 'Many / Much',
+    strokeCount: 6,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '夕',
+    radicalName: 'ゆうべ (yuube)',
+    compounds: [
+      { word: '多い', reading: 'おおい (ooi)', meaningBn: 'অনেক বা প্রচুর', meaningEn: 'Many / abundant' },
+      { word: '多分', reading: 'たぶん (tabun)', meaningBn: 'সম্ভবত (Probably)', meaningEn: 'Probably' }
+    ]
+  },
+  {
+    kanji: '少',
+    onyomi: ['ショウ (shou)'],
+    kunyomi: ['すく・ない (suku-nai)', 'すこ・し (suko-shi)'],
+    meaningBn: 'অল্প / সামান্য (Few / Little)',
+    meaningEn: 'Few / Little',
+    strokeCount: 4,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '小',
+    radicalName: 'しょう (shou)',
+    compounds: [
+      { word: '少ない', reading: 'すくない (sukunai)', meaningBn: 'অল্প বা কম', meaningEn: 'Few' },
+      { word: '少し', reading: 'すこし (sukoshi)', meaningBn: 'সামান্য / একটু', meaningEn: 'A little' },
+      { word: '少年', reading: 'しょうねん (shounen)', meaningBn: 'কিশোর বালক', meaningEn: 'Boy / Youth' }
+    ]
+  },
+  {
+    kanji: '早',
+    onyomi: ['ソウ (sou)'],
+    kunyomi: ['はや・い (haya-i)'],
+    meaningBn: 'তাড়াতাড়ি / দ্রুত (Early / Fast)',
+    meaningEn: 'Early / Fast',
+    strokeCount: 6,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '日',
+    radicalName: 'ひ (hi)',
+    compounds: [
+      { word: '早い', reading: 'はやい (hayai)', meaningBn: 'তাড়াতাড়ি', meaningEn: 'Early' },
+      { word: '早く', reading: 'はやく (hayaku)', meaningBn: 'দ্রুত বা সকাল সকাল', meaningEn: 'Quickly' }
+    ]
+  },
+  {
+    kanji: '明',
+    onyomi: ['メイ (mei)', 'ミョウ (myou)'],
+    kunyomi: ['あか・るい (aka-rui)'],
+    meaningBn: 'উজ্জ্বল / স্পষ্ট (Bright / Clear)',
+    meaningEn: 'Bright / Clear',
+    strokeCount: 8,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '日',
+    radicalName: 'ひへん (hihen)',
+    compounds: [
+      { word: '明るい', reading: 'あかるい (akarui)', meaningBn: 'উজ্জ্বল বা হাসিখুশি', meaningEn: 'Bright' },
+      { word: '明日', reading: 'あした / みょうにち', meaningBn: 'আগামীকাল (Tomorrow)', meaningEn: 'Tomorrow' },
+      { word: '説明', reading: 'せつめい (setsumei)', meaningBn: 'ব্যাখ্যা (Explanation)', meaningEn: 'Explanation' }
+    ]
+  },
+  {
+    kanji: '暗',
+    onyomi: ['アン (an)'],
+    kunyomi: ['くら・い (kura-i)'],
+    meaningBn: 'অন্ধকার (Dark)',
+    meaningEn: 'Dark',
+    strokeCount: 13,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '日',
+    radicalName: 'ひへん (hihen)',
+    compounds: [
+      { word: '暗い', reading: 'くらい (kurai)', meaningBn: 'অন্ধকার বা বিষাদময়', meaningEn: 'Dark / gloomy' },
+      { word: '暗記', reading: 'あんき (anki)', meaningBn: 'মুখস্থ করা (Memorization)', meaningEn: 'Memorization' }
+    ]
+  },
+  {
+    kanji: '広',
+    onyomi: ['コウ (kou)'],
+    kunyomi: ['ひろ・い (hiro-i)'],
+    meaningBn: 'প্রশস্ত / চওড়া (Wide / Spacious)',
+    meaningEn: 'Wide / Spacious',
+    strokeCount: 5,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '广',
+    radicalName: 'まだれ (madare)',
+    compounds: [
+      { word: '広い', reading: 'ひろい (hiroi)', meaningBn: 'প্রশস্ত বা চওড়া', meaningEn: 'Spacious / wide' },
+      { word: '広告', reading: 'こうこく (koukoku)', meaningBn: 'বিজ্ঞাপন (Advertisement)', meaningEn: 'Advertisement' }
+    ]
+  },
+  {
+    kanji: '近',
+    onyomi: ['キン (kin)'],
+    kunyomi: ['ちか・い (chika-i)'],
+    meaningBn: 'কাছে / নিকটবর্তী (Near / Close)',
+    meaningEn: 'Near / Close',
+    strokeCount: 7,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '辶',
+    radicalName: 'しんにょう (shinnyou)',
+    compounds: [
+      { word: '近い', reading: 'ちかい (chikai)', meaningBn: 'কাছে', meaningEn: 'Near' },
+      { word: '近く', reading: 'ちかく (chikaku)', meaningBn: 'আশেপাশে বা নিকটে', meaningEn: 'Nearby' },
+      { word: '最近', reading: 'さいきん (saikin)', meaningBn: 'সম্প্রতি (Recently)', meaningEn: 'Recently' }
+    ]
+  },
+  {
+    kanji: '遠',
+    onyomi: ['エン (en)'],
+    kunyomi: ['とお・い (too-i)'],
+    meaningBn: 'দূরে / দূরবর্তী (Far / Distant)',
+    meaningEn: 'Far / Distant',
+    strokeCount: 13,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '辶',
+    radicalName: 'しんにょう (shinnyou)',
+    compounds: [
+      { word: '遠い', reading: 'とおい (tooi)', meaningBn: 'দূরে', meaningEn: 'Far' },
+      { word: '遠足', reading: 'えんそく (ensoku)', meaningBn: 'পিকনিক বা ভ্রমণ', meaningEn: 'Excursion' }
+    ]
+  },
+  {
+    kanji: '重',
+    onyomi: ['ジュウ (juu)', 'チョウ (chou)'],
+    kunyomi: ['おも・い (omo-i)', 'かさ・なる (kasa-naru)'],
+    meaningBn: 'ভারী / গুরুত্বপূর্ণ (Heavy / Important)',
+    meaningEn: 'Heavy / Important',
+    strokeCount: 9,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '里',
+    radicalName: 'さと (sato)',
+    compounds: [
+      { word: '重い', reading: 'おもい (omoi)', meaningBn: 'ভারী', meaningEn: 'Heavy' },
+      { word: '体重', reading: 'たいじゅう (taijuu)', meaningBn: 'শরীরের ওজন', meaningEn: 'Body weight' },
+      { word: '重要', reading: 'じゅうよう (juuyou)', meaningBn: 'গুরুত্বপূর্ণ', meaningEn: 'Important' }
+    ]
+  },
+  {
+    kanji: '軽',
+    onyomi: ['ケイ (kei)'],
+    kunyomi: ['かる・い (karu-i)'],
+    meaningBn: 'হালকা (Lightweight)',
+    meaningEn: 'Light / Lightweight',
+    strokeCount: 12,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '車',
+    radicalName: 'くるまへん (kurumahen)',
+    compounds: [
+      { word: '軽い', reading: 'かるい (karui)', meaningBn: 'হালকা', meaningEn: 'Light' },
+      { word: '軽食', reading: 'けいしょく (keishoku)', meaningBn: 'হালকা নাস্তা (Snack)', meaningEn: 'Light meal' }
+    ]
+  },
+  {
+    kanji: '強',
+    onyomi: ['キョウ (kyou)', 'ゴウ (gou)'],
+    kunyomi: ['つよ・い (tsuyo-i)'],
+    meaningBn: 'শক্তিশালী / প্রবল (Strong)',
+    meaningEn: 'Strong',
+    strokeCount: 11,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '弓',
+    radicalName: 'ゆみへん (yumihen)',
+    compounds: [
+      { word: '強い', reading: 'つよい (tsuyoi)', meaningBn: 'শক্তিশালী বা প্রবল', meaningEn: 'Strong' },
+      { word: '勉強', reading: 'べんきょう (benkyou)', meaningBn: 'পড়াশোনা (Study)', meaningEn: 'Study' }
+    ]
+  },
+  {
+    kanji: '弱',
+    onyomi: ['ジャク (jaku)'],
+    kunyomi: ['よわ・い (yowa-i)'],
+    meaningBn: 'দুর্বল (Weak)',
+    meaningEn: 'Weak',
+    strokeCount: 10,
+    category: 'adjectives',
+    categoryNameBn: 'বিশেষণ ও অবস্থা (Adjectives)',
+    radical: '弓',
+    radicalName: 'ゆみ (yumi)',
+    compounds: [
+      { word: '弱い', reading: 'よわい (yowai)', meaningBn: 'দুর্বল', meaningEn: 'Weak' },
+      { word: '弱点', reading: 'じゃくてん (jakuten)', meaningBn: 'দুর্বলতা বা ত্রুটি', meaningEn: 'Weak point' }
+    ]
+  },
+  {
+    kanji: '毎',
+    onyomi: ['マイ (mai)'],
+    kunyomi: ['ごと (goto)'],
+    meaningBn: 'প্রতি / প্রতিটি (Every)',
+    meaningEn: 'Every',
+    strokeCount: 6,
+    category: 'daily',
+    categoryNameBn: 'দৈনন্দিন জীবন ও সমাজ (Daily Life & School)',
+    radical: '毋',
+    radicalName: 'なかれ (nakare)',
+    compounds: [
+      { word: '毎日', reading: 'まいにち (mainichi)', meaningBn: 'প্রতিদিন', meaningEn: 'Every day' },
+      { word: '毎週', reading: 'まいしゅう (maishuu)', meaningBn: 'প্রতি সপ্তাহে', meaningEn: 'Every week' },
+      { word: '毎月', reading: 'まいつき (maitsuki)', meaningBn: 'প্রতি মাসে', meaningEn: 'Every month' }
+    ]
+  },
+  {
+    kanji: '週',
+    onyomi: ['シュウ (shuu)'],
+    kunyomi: [],
+    meaningBn: 'সপ্তাহ (Week)',
+    meaningEn: 'Week',
+    strokeCount: 11,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '辶',
+    radicalName: 'しんにょう (shinnyou)',
+    compounds: [
+      { word: '今週', reading: 'こんしゅう (konshuu)', meaningBn: 'চলতি সপ্তাহ', meaningEn: 'This week' },
+      { word: '来週', reading: 'らいしゅう (raishuu)', meaningBn: 'আগামী সপ্তাহ', meaningEn: 'Next week' },
+      { word: '週末', reading: 'しゅうまつ (shuumatsu)', meaningBn: 'উইকএন্ড / ছুটির দিন', meaningEn: 'Weekend' }
+    ]
+  },
+  {
+    kanji: '午',
+    onyomi: ['ゴ (go)'],
+    kunyomi: [],
+    meaningBn: 'দুপুর / মধ্যাহ্ন (Noon)',
+    meaningEn: 'Noon',
+    strokeCount: 4,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '十',
+    radicalName: 'じゅう (juu)',
+    compounds: [
+      { word: '午前', reading: 'ごぜん (gozen)', meaningBn: 'সকাল / পূর্বাহ্ন (AM)', meaningEn: 'Morning / AM' },
+      { word: '午後', reading: 'ごご (gogo)', meaningBn: 'বিকাল / অপরাহ্ন (PM)', meaningEn: 'Afternoon / PM' },
+      { word: '正午', reading: 'しょうご (shougo)', meaningBn: 'ঠিক দুপুর ১২টা', meaningEn: 'High noon' }
+    ]
+  },
+  {
+    kanji: '朝',
+    onyomi: ['チョウ (chou)'],
+    kunyomi: ['あさ (asa)'],
+    meaningBn: 'সকাল (Morning)',
+    meaningEn: 'Morning',
+    strokeCount: 12,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '月',
+    radicalName: 'つき (tsuki)',
+    compounds: [
+      { word: '朝', reading: 'あさ (asa)', meaningBn: 'সকাল', meaningEn: 'Morning' },
+      { word: '今朝', reading: 'けさ (kesa)', meaningBn: 'আজ সকালে', meaningEn: 'This morning' },
+      { word: '朝食', reading: 'ちょうしょく (choushoku)', meaningBn: 'সকালের নাস্তা', meaningEn: 'Breakfast' }
+    ]
+  },
+  {
+    kanji: '昼',
+    onyomi: ['チュウ (chuu)'],
+    kunyomi: ['ひる (hiru)'],
+    meaningBn: 'দুপুর / দিনের বেলা (Noon / Daytime)',
+    meaningEn: 'Daytime / Noon',
+    strokeCount: 9,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '日',
+    radicalName: 'ひ (hi)',
+    compounds: [
+      { word: '昼', reading: 'ひる (hiru)', meaningBn: 'দুপুর', meaningEn: 'Noon / Daytime' },
+      { word: '昼食', reading: 'ちゅうしょく (chuushoku)', meaningBn: 'দুপুরের খাবার', meaningEn: 'Lunch' },
+      { word: '昼休み', reading: 'ひるやすみ (hiruyasumi)', meaningBn: 'দুপুরের বিরতি', meaningEn: 'Lunch break' }
+    ]
+  },
+  {
+    kanji: '夜',
+    onyomi: ['ヤ (ya)'],
+    kunyomi: ['よる (yoru)', 'よ (yo)'],
+    meaningBn: 'রাত (Night)',
+    meaningEn: 'Night',
+    strokeCount: 8,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '夕',
+    radicalName: 'ゆうべ (yuube)',
+    compounds: [
+      { word: '夜', reading: 'よる (yoru)', meaningBn: 'রাত', meaningEn: 'Night' },
+      { word: '今夜', reading: 'こんや (konya)', meaningBn: 'আজ রাত', meaningEn: 'Tonight' },
+      { word: '夜食', reading: 'やしょく (yashoku)', meaningBn: 'রাতের নাস্তা', meaningEn: 'Late night snack' }
+    ]
+  },
+  {
+    kanji: '夕',
+    onyomi: ['セキ (seki)'],
+    kunyomi: ['ゆう (yuu)'],
+    meaningBn: 'সন্ধ্যা (Evening)',
+    meaningEn: 'Evening',
+    strokeCount: 3,
+    category: 'calendar',
+    categoryNameBn: 'সময় ও পঞ্জিকা (Time)',
+    radical: '夕',
+    radicalName: 'ゆうべ (yuube)',
+    compounds: [
+      { word: '夕方', reading: 'ゆうがた (yuugata)', meaningBn: 'সন্ধ্যাবেলা', meaningEn: 'Evening' },
+      { word: '夕食', reading: 'ゆうしょく (yuushoku)', meaningBn: 'রাতের ডিনার', meaningEn: 'Dinner' }
+    ]
   }
 ];
+
+export const JLPT_N5_KANJI_120 = JLPT_N5_KANJI_100;
 
 export function getMasteredKanjiList(): string[] {
   if (typeof window === 'undefined') return [];

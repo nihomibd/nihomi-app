@@ -134,6 +134,7 @@ const KNOWN_VIEWS = new Set([
   'study-plan', 'roadmap', 'study-planner',
   'baito', 'baito-os', 'simulation', 'relocation', 'workos', 'work-os',
   'interview', 'interview-lab', 'visa-defense',
+  'rirekisho', 'cv-builder', 'resume', 'jis-rirekisho',
   'verify-cert', 'verify', 'certificate-verification',
   'kana', 'hiragana', 'katakana', 'kana-lab',
   'kanji', 'kanji-lab', 'kanji-100', 'n5-kanji',
@@ -601,6 +602,12 @@ export const App: React.FC = () => {
             onNavigate={handleNavigate}
             initialScenarioId={viewParams.scenarioId || 'sc-school-principal'}
             initialTab={viewParams.tab || 'interview_lab'}
+          />
+        )}
+        {(currentView === 'rirekisho' || currentView === 'cv-builder' || currentView === 'resume' || currentView === 'jis-rirekisho') && (
+          <BaitoOsView
+            onNavigate={handleNavigate}
+            initialTab="rirekisho"
           />
         )}
         {(currentView === 'verify-cert' || currentView === 'verify' || currentView === 'certificate-verification') && (

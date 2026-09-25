@@ -22,8 +22,12 @@ import {
   RotateCcw,
   Languages,
   Check,
-  Briefcase
+  Briefcase,
+  ArrowRight,
+  Loader2
 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { JisRirekishoData } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
 
@@ -77,9 +81,10 @@ const PHOTO_PRESETS = [
 
 interface JisRirekishoStudioProps {
   onSaved?: (rirekisho: JisRirekishoData) => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
-export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved }) => {
+export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved, onNavigate }) => {
   const [formData, setFormData] = useState<JisRirekishoData>(() => {
     try {
       const saved = localStorage.getItem('nihomi_jis_rirekisho');
@@ -95,6 +100,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [showLeadMagnetModal, setShowLeadMagnetModal] = useState(false);
   const [isPolishingMotivation, setIsPolishingMotivation] = useState(false);
   const [isPolishingSelfPr, setIsPolishingSelfPr] = useState(false);
   const [saveSuccessNotice, setSaveSuccessNotice] = useState(false);
@@ -155,6 +162,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
       soundEffects.playCorrectPing();
       setSaveSuccessNotice(true);
       setTimeout(() => setSaveSuccessNotice(false), 3000);
+      setShowLeadMagnetModal(true);
     }
   };
 
@@ -173,13 +181,53 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
     reader.readAsDataURL(file);
   };
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     soundEffects.playButtonTap();
-    setViewMode('preview');
-    // Allow React state update to paint preview before triggering print dialog
-    setTimeout(() => {
+    setIsGeneratingPdf(true);
+
+    try {
+      if (viewMode !== 'preview') {
+        setViewMode('preview');
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
+
+      const paperElement = document.getElementById('jis-resume-paper');
+      if (!paperElement) {
+        window.print();
+        setShowLeadMagnetModal(true);
+        return;
+      }
+
+      const canvas = await html2canvas(paperElement, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.98);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = (canvas.height * pageWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+      const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
+      pdf.save(`Nihomi_JIS_Rirekisho_${safeName}.pdf`);
+
+      soundEffects.playLessonCelebration();
+      setShowLeadMagnetModal(true);
+    } catch (err) {
+      console.warn('html2canvas/jspdf fallback to browser print dialog:', err);
       window.print();
-    }, 250);
+      setShowLeadMagnetModal(true);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   const handleSelectJlptLevel = (level: JisRirekishoData['jlptLevel']) => {
@@ -370,11 +418,12 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
 
           <button
             onClick={handleDownloadPdf}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition flex items-center gap-2"
-            title="Download JIS Resume as PDF or Print"
+            disabled={isGeneratingPdf}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition flex items-center gap-2 disabled:opacity-50"
+            title="Download JIS Resume as Official A4 PDF"
           >
-            <Download className="w-4 h-4" />
-            <span>PDF 保存 / 印刷</span>
+            {isGeneratingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            <span>{isGeneratingPdf ? 'A4 PDF生成中...' : 'PDF 保存 (JIS A4)'}</span>
           </button>
 
           <button
@@ -954,10 +1003,11 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
               </button>
               <button
                 onClick={handleDownloadPdf}
-                className="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5 shadow"
+                disabled={isGeneratingPdf}
+                className="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5 shadow disabled:opacity-50"
               >
-                <Printer className="w-3.5 h-3.5" />
-                <span>印刷 / PDF保存</span>
+                {isGeneratingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                <span>{isGeneratingPdf ? 'A4 PDF生成中...' : 'PDF 保存 (JIS A4)'}</span>
               </button>
             </div>
           </div>
@@ -1141,6 +1191,95 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved 
                   {formData.selfPrPolished || formData.selfPr}
                 </p>
               </div>
+            </div>
+
+            {/* Commute, Dependents & Spouse Table (JIS Official Standard) */}
+            <table className="w-full border-collapse border border-slate-950 text-xs">
+              <tbody>
+                <tr>
+                  <td className="w-28 bg-slate-100 p-2 font-bold border border-slate-950">通勤時間</td>
+                  <td className="p-2 border border-slate-950">約 {formData.commuteTimeMinutes || 25} 分</td>
+                  <td className="w-28 bg-slate-100 p-2 font-bold border border-slate-950">扶養家族数</td>
+                  <td className="p-2 border border-slate-950">{formData.dependentsCount || 0} 人（配偶者を除く）</td>
+                </tr>
+                <tr>
+                  <td className="bg-slate-100 p-2 font-bold border border-slate-950">配偶者</td>
+                  <td className="p-2 border border-slate-950">{formData.hasSpouse ? '有' : '無'}</td>
+                  <td className="bg-slate-100 p-2 font-bold border border-slate-950">配偶者の扶養義務</td>
+                  <td className="p-2 border border-slate-950">無</td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Nihomi Official Brand Watermark & JIS Verification Footer */}
+            <div className="pt-3 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between text-[10px] text-slate-500 font-sans gap-1">
+              <span>日本産業規格 JIS Z 8303 準拠様式（全国アルバイト・留学・特定技能・正社員共通）</span>
+              <span className="font-semibold text-slate-700">Created via Nihomi.com — Learn JLPT N5 for Free • ID: NHM-CV-2026</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Viral PLG Lead Magnet Conversion Modal */}
+      {showLeadMagnetModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 print:hidden">
+          <div className="relative w-full max-w-md bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-3xl shadow-inner">
+              🎉
+            </div>
+
+            <div className="space-y-2">
+              <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold">
+                JIS RESUME GENERATED (100% FREE)
+              </span>
+              <h3 className="text-xl font-black text-slate-100">
+                আপনার অফিসিয়াল জাপানিজ JIS সিভি সফলভাবে তৈরি হয়েছে!
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                জাপানে পার্ট-টাইম (Baito) বা ফুল-টাইম জবের ইন্টারভিউতে সফল হতে বেসিক হিরাগানা, কাতাকানা ও কাঞ্জি অনুশীলন করুন।
+              </p>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setShowLeadMagnetModal(false);
+                  if (onNavigate) {
+                    onNavigate('kana');
+                  }
+                }}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm shadow-xl shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Start Free Kana & Kanji Practice</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setShowLeadMagnetModal(false);
+                  if (onNavigate) {
+                    onNavigate('baito', { tab: 'interview_lab' });
+                  }
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs transition border border-amber-500/20 cursor-pointer"
+              >
+                🎙️ ইন্টারভিউ ভয়েস টুইন ল্যাব প্র্যাকটিস করুন
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setShowLeadMagnetModal(false);
+                }}
+                className="w-full py-2 text-slate-400 hover:text-slate-200 text-xs transition font-medium cursor-pointer"
+              >
+                সিভি দেখুন ও এডিট করুন (Close)
+              </button>
             </div>
           </div>
         </div>

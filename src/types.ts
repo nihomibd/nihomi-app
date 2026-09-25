@@ -1166,7 +1166,10 @@ export type BaitoScenarioType =
   | 'embassy_visa'
   | 'restaurant_izakaya'
   | 'train_metro'
-  | 'ward_office';
+  | 'ward_office'
+  | 'factory_genba'
+  | 'hotel_shukuba'
+  | 'cafe_fastfood';
 
 export interface BaitoScenarioItem {
   id: string;

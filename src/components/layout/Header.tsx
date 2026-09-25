@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   // Active Category Detection for the 4 core pillars
   const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
   const isReadinessActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests', 'baito', 'baito-os', 'study-plan', 'roadmap', 'quizzes', 'quiz-runner'].includes(currentView);
-  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community', 'cloud', 'nihomi-cloud', 'locker'].includes(currentView);
+  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community', 'cloud', 'nihomi-cloud', 'locker', 'rirekisho', 'cv-builder', 'resume', 'jis-rirekisho'].includes(currentView);
   const isPricingActive = ['pricing', 'plans', 'contact', 'credits', 'subscription'].includes(currentView);
 
   // Close dropdowns on outside click
@@ -580,6 +580,31 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
                         জাপান লকার, পাসপোর্ট ও শিক্ষা নোটসের ব্যক্তিগত ক্লাউড
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* 5. জাপানিজ সিভি বিল্ডার (JIS Rirekisho) */}
+                  <button
+                    id="nav-item-rirekisho-builder"
+                    type="button"
+                    onClick={() => handleDropdownSelect('rirekisho')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          জাপানিজ সিভি বিল্ডার (JIS Rirekisho)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
+                          Free A4 PDF
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        অফিশিয়াল জাপানিজ ফরম্যাটে সিভি তৈরি ও ডাউনলোড
                       </p>
                     </div>
                   </button>
@@ -1147,6 +1172,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   <div>
                     <div className="text-xs font-bold text-white">নিহোমি ক্লাউড ও জাপান লকার (Cloud Vault)</div>
                     <div className="text-[10px] text-white/50">পাসপোর্ট, ভিসা ও শিক্ষা নোটসের পার্সোনাল ভল্ট</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDropdownSelect('rirekisho')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-amber-300">জাপানিজ সিভি বিল্ডার (JIS Rirekisho)</div>
+                    <div className="text-[10px] text-white/50">১০০% ফ্রি অফিশিয়াল A4 PDF ফরম্যাট</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>

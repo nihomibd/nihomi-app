@@ -23,6 +23,7 @@ import {
   KanjiEntry,
   KanjiCategory,
   JLPT_N5_KANJI_100,
+  JLPT_N5_KANJI_120,
   getMasteredKanjiList,
   toggleMasteredKanji
 } from '../data/kanji100Data';
@@ -30,7 +31,7 @@ import { KanjiStrokeVisualizer } from '../components/kanji/KanjiStrokeVisualizer
 import { speakJapanese } from '../lib/tts';
 
 const CATEGORIES: { id: KanjiCategory | 'all'; labelBn: string; icon: any }[] = [
-  { id: 'all', labelBn: 'সকল কাঞ্জি (১০০)', icon: Layers },
+  { id: 'all', labelBn: 'সকল কাঞ্জি (১২০)', icon: Layers },
   { id: 'numbers', labelBn: 'সংখ্যা (Numbers)', icon: Hash },
   { id: 'calendar', labelBn: 'সময় ও পঞ্জিকা (Time)', icon: Calendar },
   { id: 'directions', labelBn: 'দিক ও অবস্থান (Directions)', icon: Compass },
@@ -38,7 +39,8 @@ const CATEGORIES: { id: KanjiCategory | 'all'; labelBn: string; icon: any }[] = 
   { id: 'people', labelBn: 'মানুষ ও পরিবার (People)', icon: Users },
   { id: 'body', labelBn: 'দেহ ও ইন্দ্রিয় (Body)', icon: Activity },
   { id: 'actions', labelBn: 'ক্রিয়া ও কাজ (Verbs)', icon: Sparkles },
-  { id: 'daily', labelBn: 'দৈনন্দিন জীবন (Daily Life)', icon: Briefcase }
+  { id: 'daily', labelBn: 'দৈনন্দিন জীবন (Daily Life)', icon: Briefcase },
+  { id: 'adjectives', labelBn: 'বিশেষণ ও অবস্থা (Adjectives)', icon: Award }
 ];
 
 export const KanjiView: React.FC = () => {
@@ -94,13 +96,13 @@ export const KanjiView: React.FC = () => {
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-bold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>NIHOMI JLPT N5 KANJI MASTER LAB (漢字100選) • ALL 100 UNLOCKED & FREE</span>
+                <span>NIHOMI JLPT N5 KANJI MASTER LAB (漢字120選) • ALL 120 UNLOCKED & FREE</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                অফিসিয়াল JLPT N5 ১০০টি কাঞ্জি মাস্টার গাইড
+                অফিসিয়াল JLPT N5 ১২০টি কাঞ্জি মাস্টার গাইড
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                অন-ইওমি (Onyomi), কুন-ইওমি (Kunyomi), বাংলা অর্থ, রিয়েলটাইম স্ট্রোক অর্ডার অ্যানিমেশন এবং ক্যালিগ্রাফি অনুশীলনের মাধ্যমে ১০০টি N5 কাঞ্জি আয়ত্ত করুন। ফ্রি অ্যাকাউন্টে কোনো সীমাবদ্ধতা নেই।
+                অন-ইওমি (Onyomi), কুন-ইওমি (Kunyomi), বাংলা অর্থ, রিয়েলটাইম স্ট্রোক অর্ডার অ্যানিমেশন এবং ক্যালিগ্রাফি অনুশীলনের মাধ্যমে ১২০টি N5 কাঞ্জি আয়ত্ত করুন। ফ্রি অ্যাকাউন্টে কোনো সীমাবদ্ধতা নেই।
               </p>
             </div>
 

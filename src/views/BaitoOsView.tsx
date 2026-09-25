@@ -167,6 +167,105 @@ export const DEFAULT_BAITO_SCENARIOS: BaitoScenarioItem[] = [
       { ja: 'お待たせいたしました', kana: 'おまたせいたしました', meaningBn: 'অপেক্ষা করানোর জন্য দুঃখিত', meaningEn: 'Sorry to keep you waiting' },
       { ja: 'お会計', kana: 'おかいけい', meaningBn: 'বিল/হিসাব', meaningEn: 'Bill / Check' }
     ]
+  },
+  {
+    id: 'sc-factory-genba',
+    type: 'factory_genba',
+    title: 'Tokyo Bento Processing Line & Genba Safety',
+    titleJa: '食品工場・弁当ライン作業（指差し呼称・衛生プロトコル）',
+    titleBn: 'বেন্তো ফ্যাক্টরি ফুড প্রসেসিং লাইন ও সেইফটি কলআউট',
+    subtitle: 'Master fast-paced assembly commands, hairnet/roller hygiene checklist, and 85°C heat inspection.',
+    difficulty: 'N5',
+    location: 'Chiba Narita Bento Manufacturing Genba',
+    interlocutorName: 'Matsuda Hancho (松田班長)',
+    interlocutorRole: 'Factory Floor Shift Leader',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'おはようございます！ラインに入る前にエアシャワーと粘着ローラーはかけましたか？今日の目標は1分40食です。安全第一で指差し確認、ヨシ！',
+      romaji: 'Ohayou gozaimasu! Rain ni hairu mae ni ea shawaa to nenchaku rooraa wa kakemashita ka? Kyou no mokuhyou wa ippun yonjuu-shoku desu. Anzen daiichi de yubisashi kakunin, yoshi!',
+      bn: 'শুভ সকাল! প্রোডাকশন লাইনে ঢোকার আগে এয়ার শাওয়ার ও হেয়ার রোলার চালিয়েছেন তো? আজকের টার্গেট প্রতি মিনিটে ৪০টি খাবার প্যাক করা। সেইফটি ফার্স্ট!',
+      en: 'Good morning! Did you complete the air shower and sticky roller check before entering the line? Today target is 40 packs/minute. Safety first, point and call, all good!'
+    },
+    objectives: [
+      'Confirm sanitation & roller checklist (衛生チェック完了いたしました)',
+      'Call out safety point and call (加熱温度85度以上、ヨシ！)',
+      'Acknowledge urgent line speed commands (かしこまりました！)',
+      'Report defective bento or packaging flaw (異物混入の恐れがあります)'
+    ],
+    contextDescription: 'Factory & Food lines are one of the most common early jobs for language students. Speed, hygiene rules, and sharp short confirmations are critical.',
+    keyVocabulary: [
+      { ja: '指差し確認', kana: 'ゆびさしかくにん', meaningBn: 'আঙ্গুল দিয়ে নিশ্চিতকরণ (Point & Call)', meaningEn: 'Point and call verification' },
+      { ja: '安全第一', kana: 'あんぜんだいいち', meaningBn: 'নিরাপত্তা সবার আগে', meaningEn: 'Safety first' },
+      { ja: '衛生管理', kana: 'えいせいかんり', meaningBn: 'স্বাস্থ্যবিধি ব্যবস্থাপনা', meaningEn: 'Hygiene control' },
+      { ja: '賞味期限', kana: 'しょうみきげん', meaningBn: 'মেয়াদোত্তীর্ণের তারিখ', meaningEn: 'Best-before date' },
+      { ja: 'かしこまりました', kana: 'かしこまりました', meaningBn: 'স্পষ্ট বুঝতে পেরেছি', meaningEn: 'Understood / Roger' }
+    ]
+  },
+  {
+    id: 'sc-hotel-shukuba',
+    type: 'hotel_shukuba',
+    title: 'Ryokan & Hotel Front Desk Omotenashi',
+    titleJa: '老舗旅館・ホテルフロント接客（チェックイン・荷物預かり）',
+    titleBn: 'জাপানিজ হোটেল ও রিয়োকান ফ্রন্ট ডেস্ক হসপিটালিটি',
+    subtitle: 'Master highest-tier Kenjougo/Sonkeigo, check-in registration, onsen rules, and luggage storage.',
+    difficulty: 'N4',
+    location: 'Asakusa Traditional Ryokan (Tokyo)',
+    interlocutorName: 'Okami-san (女将) & International Guests',
+    interlocutorRole: 'Head Ryokan Mistress & Front Supervisor',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: 'いらっしゃいませ。当館へお越しいただき誠にありがとうございます。ご宿泊のご予約をお伺いしてもよろしいでしょうか？',
+      romaji: 'Irasshaimase. Toukan e okoshi itadaki makoto ni arigatou gozaimasu. Goshukuhaku no goyoyaku o oukagai shitemo yoroshii deshou ka?',
+      bn: 'স্বাগতম। আমাদের রিয়োকানে আসার জন্য আন্তরিক ধন্যবাদ। আপনার রুম রিজার্ভেশন চেক করার জন্য নামটি জানতে পারি কি?',
+      en: 'Welcome. Thank you very much for visiting our Ryokan. May I inquire about your reservation name please?'
+    },
+    objectives: [
+      'Welcome guests with formal Omotenashi Keigo (誠にありがとうございます)',
+      'Verify passport and fill Japanese registration card',
+      'Explain Onsen bath hours and Yukata etiquette',
+      'Store luggage safely with receipt tags (お荷物をお預かりいたします)'
+    ],
+    contextDescription: 'Traditional hotel hospitality (Omotenashi) requires humble forms (Kenjougo) and refined customer posture.',
+    keyVocabulary: [
+      { ja: '誠にありがとうございます', kana: 'まことにありがとうございます', meaningBn: 'অশেষ ধন্যবাদ', meaningEn: 'Thank you very much' },
+      { ja: 'ご宿泊', kana: 'ごしゅくはく', meaningBn: 'আপনার অবস্থান (Stay)', meaningEn: 'Your stay' },
+      { ja: 'お預かりいたします', kana: 'おあずかりいたします', meaningBn: 'আমরা যত্নে রাখছি', meaningEn: 'We will hold / keep' },
+      { ja: '温泉の入り方', kana: 'おんせんのはいりかた', meaningBn: 'অনসেন ব্যবহারের নিয়ম', meaningEn: 'Onsen bath rules' },
+      { ja: '朝食券', kana: 'ちょうしょくけん', meaningBn: 'সকালের নাস্তার কুপন', meaningEn: 'Breakfast voucher' }
+    ]
+  },
+  {
+    id: 'sc-cafe-fastfood',
+    type: 'cafe_fastfood',
+    title: 'Tokyo Cafe & Fast-Food Counter Ordering',
+    titleJa: '都内カフェ・ファストフード接客（イートイン・サイズ確認）',
+    titleBn: 'টোকিও ক্যাফে ও ফাস্টফুড কাউন্টার অর্ডার ম্যানেজমেন্ট',
+    subtitle: 'Handle rapid order taking, Dine-in vs Takeout tax differentiation, drink sizing, and contactless IC cards.',
+    difficulty: 'N5',
+    location: 'Shinjuku Station South Exit Coffee Counter',
+    interlocutorName: 'Fast-Paced Morning Commuters',
+    interlocutorRole: 'Tokyo Morning Office Workers & Regulars',
+    interlocutorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    initialDialogue: {
+      ja: '注文お願いします！アイスキャラメルラテのグランデを1つと、照り焼きバーガーセットで。あ、店内です！Suicaで払えますか？',
+      romaji: 'Chuumon onegai shimasu! Aisu kyarameru rate no gurande o hitotsu to, teriyaki baagaa setto de. A, tennai desu! Suica de haraemasu ka?',
+      bn: 'অর্ডার দিন! একটি আইস ক্যারামেল লাতে (গ্রান্দে সাইজ) এবং তেরিয়াকি বার্গার মিল সেট। আমি ভেতরে বসে খাব! সুইকা কার্ডে পে করা যাবে?',
+      en: 'Can I order please! One Iced Caramel Latte (Grande) and a Teriyaki Burger set. Dine-in please! Can I pay with Suica?'
+    },
+    objectives: [
+      'Confirm Dine-in vs Takeout (店内でお召し上がりですか / お持ち帰りですか)',
+      'Clarify drink temperature & sizing (ホットかアイス、どちらになさいますか？)',
+      'Process Suica / Pasmo transit contactless payment (端末にタッチをお願いします)',
+      'Hand over order ticket with Keigo (番号札をお持ちになってお待ちください)'
+    ],
+    contextDescription: 'Busy station cafes require fast, accurate differentiation between 10% eat-in and 8% takeout tax, plus seamless contactless register operation.',
+    keyVocabulary: [
+      { ja: '店内でお召し上がり', kana: 'てんないでおめしあがり', meaningBn: 'দোকানের ভেতরে খাওয়া (Dine-in)', meaningEn: 'Dine-in' },
+      { ja: 'お持ち帰り', kana: 'おもちかえり', meaningBn: 'পার্সেল / টেকআউট (Takeout)', meaningEn: 'Takeout' },
+      { ja: 'タッチしてください', kana: 'たっちしてください', meaningBn: 'কার্ড টাচ করুন', meaningEn: 'Please tap your IC card' },
+      { ja: '番号札', kana: 'ばんごうふだ', meaningBn: 'টোকেন / নম্বর স্লিপ', meaningEn: 'Order number token' },
+      { ja: 'お会計', kana: 'おかいけい', meaningBn: 'মোট বিল / মূল্য পরিশোধ', meaningEn: 'Bill / Payment' }
+    ]
   }
 ];
 
@@ -180,6 +279,9 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
   const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab'>(initialTab || 'pos_terminal');
   const [scenarios, setScenarios] = useState<BaitoScenarioItem[]>(() => DEFAULT_BAITO_SCENARIOS);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(initialScenarioId || 'sc-conbini-pos');
+  const [ambientMode, setAmbientMode] = useState<'off' | 'conbini' | 'cafe' | 'factory'>('off');
+  const [rushHourActive, setRushHourActive] = useState<boolean>(false);
+  const [rushHourSeconds, setRushHourSeconds] = useState<number>(45);
 
   useEffect(() => {
     if (initialScenarioId) setSelectedScenarioId(initialScenarioId);
@@ -192,6 +294,54 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
     rirekishoScore: 95,
     pitchAccentMastery: 88
   });
+
+  // Ambient sound synthesis lifecycle
+  useEffect(() => {
+    if (ambientMode === 'off') {
+      soundEffects.stopAmbient();
+    } else {
+      soundEffects.startAmbient(ambientMode);
+    }
+    return () => {
+      soundEffects.stopAmbient();
+    };
+  }, [ambientMode]);
+
+  // Rush Hour pressure countdown
+  useEffect(() => {
+    if (!rushHourActive) return;
+    const interval = setInterval(() => {
+      setRushHourSeconds((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setRushHourActive(false);
+          soundEffects.playIncorrectSoft();
+          return 0;
+        }
+        if (prev <= 6) {
+          soundEffects.playTick();
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [rushHourActive]);
+
+  const handleToggleRushHour = () => {
+    soundEffects.playButtonTap();
+    if (rushHourActive) {
+      setRushHourActive(false);
+    } else {
+      setRushHourSeconds(45);
+      setRushHourActive(true);
+    }
+  };
+
+  const handleResetRushHour = () => {
+    soundEffects.playButtonTap();
+    setRushHourSeconds(45);
+    setRushHourActive(true);
+  };
 
   // Fetch scenarios from API with 250ms hard failsafe timer
   useEffect(() => {
@@ -281,67 +431,163 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
             </div>
           </div>
 
-          {/* Hub Navigation Tabs */}
-          <div className="mt-8 pt-6 border-t border-slate-800 flex flex-wrap gap-2 sm:gap-3">
-            <button
-              onClick={() => {
-                soundEffects.playButtonTap();
-                setActiveTab('pos_terminal');
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
-                activeTab === 'pos_terminal'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-              }`}
-            >
-              <Store className="w-4 h-4" />
-              <span>🏪 コンビニPOSレジ端末 (Conbini POS)</span>
-            </button>
+          {/* Hub Navigation Tabs & Immersion Control Bar */}
+          <div className="mt-8 pt-6 border-t border-slate-800 space-y-4">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              <button
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setActiveTab('pos_terminal');
+                }}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
+                  activeTab === 'pos_terminal'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Store className="w-4 h-4" />
+                <span>🏪 コンビニPOSレジ端末 (Conbini POS)</span>
+              </button>
 
-            <button
-              onClick={() => {
-                soundEffects.playButtonTap();
-                setActiveTab('interview_lab');
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
-                activeTab === 'interview_lab'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>🎙️ 校長・大使館・バイト面接 (Interview Twin)</span>
-            </button>
+              <button
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setActiveTab('interview_lab');
+                }}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
+                  activeTab === 'interview_lab'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>🎙️ 校長・大使館・バイト面接 (Interview Twin)</span>
+              </button>
 
-            <button
-              onClick={() => {
-                soundEffects.playButtonTap();
-                setActiveTab('rirekisho');
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
-                activeTab === 'rirekisho'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              <span>📝 JIS日本標準 履歴書 (Rirekisho Studio)</span>
-            </button>
+              <button
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setActiveTab('rirekisho');
+                }}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
+                  activeTab === 'rirekisho'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                <span>📝 JIS日本標準 履歴書 (Rirekisho Studio)</span>
+              </button>
 
-            <button
-              onClick={() => {
-                soundEffects.playButtonTap();
-                setActiveTab('pitch_lab');
-              }}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
-                activeTab === 'pitch_lab'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-              }`}
-            >
-              <Activity className="w-4 h-4" />
-              <span>🌊 東京ピッチアクセント波形ラボ (Pitch Lab)</span>
-            </button>
+              <button
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setActiveTab('pitch_lab');
+                }}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
+                  activeTab === 'pitch_lab'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Activity className="w-4 h-4" />
+                <span>🌊 東京ピッチアクセント波形ラボ (Pitch Lab)</span>
+              </button>
+            </div>
+
+            {/* Immersion Bar: Tokyo Ambient Audio & Rush-Hour Pressure Mode */}
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-3 border-t border-slate-800/80 bg-slate-950/60 p-3.5 rounded-2xl">
+              {/* Tokyo Ambient Audio Toggle */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5 mr-1">
+                  <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>東京環境音 (Ambience):</span>
+                </span>
+                <div className="inline-flex items-center rounded-xl bg-slate-900 p-1 border border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundEffects.playButtonTap();
+                      setAmbientMode('off');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition ${
+                      ambientMode === 'off' ? 'bg-slate-800 text-slate-100 shadow' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    Off
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundEffects.playButtonTap();
+                      setAmbientMode('conbini');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition flex items-center gap-1 ${
+                      ambientMode === 'conbini' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    🏪 7-Elevenチャイム
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundEffects.playButtonTap();
+                      setAmbientMode('cafe');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition flex items-center gap-1 ${
+                      ambientMode === 'cafe' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    ☕ 都内カフェ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundEffects.playButtonTap();
+                      setAmbientMode('factory');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition flex items-center gap-1 ${
+                      ambientMode === 'factory' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    🏭 弁当ライン
+                  </button>
+                </div>
+              </div>
+
+              {/* Rush Hour Pressure Countdown Mode */}
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={handleToggleRushHour}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border ${
+                    rushHourActive
+                      ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 ring-1 ring-rose-500/30'
+                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border-slate-800'
+                  }`}
+                >
+                  <Zap className={`w-3.5 h-3.5 ${rushHourActive ? 'text-rose-400 animate-bounce' : 'text-amber-400'}`} />
+                  <span>{rushHourActive ? 'ラッシュアワー計測中' : '⚡ ラッシュアワー突入 (45s)'}</span>
+                </button>
+
+                {rushHourActive && (
+                  <div className="flex items-center gap-2 bg-slate-900 px-3 py-1 rounded-xl border border-rose-500/30">
+                    <Clock className={`w-3.5 h-3.5 ${rushHourSeconds <= 10 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`} />
+                    <span className={`font-mono text-xs font-bold ${rushHourSeconds <= 10 ? 'text-rose-400 animate-pulse' : 'text-amber-300'}`}>
+                      {rushHourSeconds}s
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleResetRushHour}
+                      className="p-1 text-slate-400 hover:text-slate-200 transition"
+                      title="Reset 45s Rush Hour Timer"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -352,7 +598,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
               <Compass className="w-4 h-4 text-amber-400" />
               東京現地シミュレーション シナリオ選択 (Select Relocation Scenario)
             </h2>
-            <span className="text-xs text-slate-500 font-mono">全6シナリオ収録</span>
+            <span className="text-xs text-slate-500 font-mono">全{scenarios.length}シナリオ収録</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -424,7 +670,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
             >
-              <JisRirekishoStudio />
+              <JisRirekishoStudio onNavigate={onNavigate} />
             </motion.div>
           )}
 

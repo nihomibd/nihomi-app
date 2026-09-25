@@ -227,10 +227,99 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
           </div>
         )}
 
-        {/* 3. TYPE SELECTORS (Hiragana vs Katakana) & SUB-TYPES */}
+        {/* 3. BEGINNER ROADMAP TIMELINE & PROGRESSION PATH */}
+        <div className="bg-[#0b0c16] border border-slate-800/80 rounded-2xl p-4 shadow-xl space-y-3">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span className="font-mono text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5" />
+              <span>শূন্য থেকে কাঞ্জি — শিক্ষণ পথরেখা (Beginner Roadmap)</span>
+            </span>
+            <span className="text-[11px] text-slate-400">স্টেপ ১ থেকে ৫ ক্রমানুসারে শিখুন</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveSubType('seion');
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                activeSubType === 'seion'
+                  ? 'bg-rose-950/40 border-rose-500/50 text-white shadow-sm'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <div className="text-[10px] font-mono text-rose-400 font-bold">স্টেপ ১</div>
+              <div className="font-bold text-slate-100">বেসিক ৪৬ বর্ণ</div>
+              <div className="text-[10px] text-slate-500">Seion (あ〜ん)</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveSubType('dakuon');
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                activeSubType === 'dakuon'
+                  ? 'bg-amber-950/40 border-amber-500/50 text-white shadow-sm'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <div className="text-[10px] font-mono text-amber-400 font-bold">স্টেপ ২</div>
+              <div className="font-bold text-slate-100">তেনতেন (২০)</div>
+              <div className="text-[10px] text-slate-500">Dakuon (が〜ぼ)</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveSubType('handakuon');
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                activeSubType === 'handakuon'
+                  ? 'bg-emerald-950/40 border-emerald-500/50 text-white shadow-sm'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <div className="text-[10px] font-mono text-emerald-400 font-bold">স্টেপ ৩</div>
+              <div className="font-bold text-slate-100">মারু বৃত্ত (৫)</div>
+              <div className="text-[10px] text-slate-500">Handakuon (ぱ〜ぽ)</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveSubType('yoon');
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                activeSubType === 'yoon'
+                  ? 'bg-cyan-950/40 border-cyan-500/50 text-white shadow-sm'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <div className="text-[10px] font-mono text-cyan-400 font-bold">স্টেপ ৪</div>
+              <div className="font-bold text-slate-100">যুক্তবর্ণ (৩৬)</div>
+              <div className="text-[10px] text-slate-500">Yoon (きゃ〜ぴょ)</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                if (onNavigate) onNavigate('kanji');
+              }}
+              className="p-2.5 rounded-xl border border-purple-500/30 bg-purple-950/20 text-left hover:bg-purple-900/30 transition-all cursor-pointer col-span-2 sm:col-span-1"
+            >
+              <div className="text-[10px] font-mono text-purple-400 font-bold">স্টেপ ৫ ➔</div>
+              <div className="font-bold text-purple-200">১২০টি N5 কাঞ্জি</div>
+              <div className="text-[10px] text-purple-400">Kanji Studio</div>
+            </button>
+          </div>
+        </div>
+
+        {/* 4. TYPE SELECTORS (Hiragana vs Katakana) & SUB-TYPES */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0d0e1a] p-3 rounded-2xl border border-slate-800">
           {/* Main Type Toggle */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <button
               type="button"
               onClick={() => {
@@ -243,7 +332,7 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
               }`}
             >
-              <span>হিরাগানা (Hiragana • 46)</span>
+              <span>হিরাগানা (Hiragana)</span>
             </button>
 
             <button
@@ -258,8 +347,48 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
               }`}
             >
-              <span>কাতাকানা (Katakana • 46)</span>
+              <span>কাতাকানা (Katakana)</span>
             </button>
+
+            {/* Subtype quick pill buttons */}
+            <div className="flex items-center gap-1 ml-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setActiveSubType('seion')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  activeSubType === 'seion' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-300'
+                }`}
+              >
+                Seion (৪৬)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveSubType('dakuon')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  activeSubType === 'dakuon' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'text-slate-400 hover:text-slate-300'
+                }`}
+              >
+                Tenten (২০)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveSubType('handakuon')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  activeSubType === 'handakuon' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-300'
+                }`}
+              >
+                Maru (৫)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveSubType('yoon')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  activeSubType === 'yoon' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-300'
+                }`}
+              >
+                Yoon (৩৬)
+              </button>
+            </div>
           </div>
 
           {/* Search Box */}
@@ -269,7 +398,7 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="অক্ষর বা Romaji লিখুন (উদা: ka, あ)..."
+              placeholder="অক্ষর বা Romaji লিখুন (উদা: ka, あ, ga)..."
               className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
             />
           </div>
