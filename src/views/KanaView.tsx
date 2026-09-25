@@ -1,3 +1,8 @@
+// src/views/KanaView.tsx
+// NIHOMI KANA STUDIO™ — INTERACTIVE JAPANESE WRITING & REELS FLOW
+// Combines interactive 4-stage canvas (Show → Stroke Order → Tracing → Free-write),
+// seamless auto-advance Reels flow, and real-time MemoryOS mistake synchronization.
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -16,7 +21,12 @@ import {
   Layers,
   ChevronRight,
   HelpCircle,
-  X
+  X,
+  Grid,
+  Zap,
+  Flame,
+  ShieldCheck,
+  Brain
 } from 'lucide-react';
 import {
   KanaCharacter,
@@ -30,37 +40,34 @@ import {
   getMasteredKanaList,
   toggleMasteredKana
 } from '../data/kanaData';
-import { StrokeOrderGuide } from '../components/kana/StrokeOrderGuide';
 import { KanaDrawingCanvas } from '../components/kana/KanaDrawingCanvas';
 import { speakJapanese } from '../lib/tts';
-import { retentionEngine } from '../lib/retentionEngine';
+import { getKanaMistakes, KanaMistakeRecord } from '../lib/kanaMemorySync';
 
-const ROWS_ORDER = ['a', 'ka', 'sa', 'ta', 'na', 'ha', 'ma', 'ya', 'ra', 'wa', 'n'] as const;
-const ROW_LABELS_BN: Record<string, string> = {
-  a: 'আ-সারি (あ行)',
-  ka: 'কা-সারি (か行)',
-  sa: 'সা-সারি (さ行)',
-  ta: 'তা-সারি (た行)',
-  na: 'না-সারি (な行)',
-  ha: 'হা-সারি (は行)',
-  ma: 'মা-সারি (ま行)',
-  ya: 'ইয়া-সারি (や行)',
-  ra: 'রা-সারি (ら行)',
-  wa: 'ওয়া-সারি (わ行)',
-  n: 'ন্/ং (ん)'
-};
+interface KanaViewProps {
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
+}
 
-export const KanaView: React.FC = () => {
+export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
   const [activeType, setActiveType] = useState<KanaType>('hiragana');
   const [activeSubType, setActiveSubType] = useState<KanaSubType>('seion');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedKana, setSelectedKana] = useState<KanaCharacter>(HIRAGANA_SEION[0]);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
-  const [activeModalTab, setActiveModalTab] = useState<'guide' | 'draw'>('guide');
+  const [viewLayout, setViewLayout] = useState<'studio' | 'grid'>('studio');
   const [masteredList, setMasteredList] = useState<string[]>([]);
+  const [recentMistakes, setRecentMistakes] = useState<KanaMistakeRecord[]>([]);
+
+  // Refresh mastery and memory-os logs
+  const refreshMasteryAndLogs = () => {
+    setMasteredList(getMasteredKanaList());
+    setRecentMistakes(getKanaMistakes());
+  };
 
   useEffect(() => {
-    setMasteredList(getMasteredKanaList());
+    refreshMasteryAndLogs();
+    const handleMemoryUpdate = () => refreshMasteryAndLogs();
+    window.addEventListener('nihomi:memory-updated', handleMemoryUpdate);
+    return () => window.removeEventListener('nihomi:memory-updated', handleMemoryUpdate);
   }, []);
 
   // Filter kana according to selection
@@ -73,7 +80,6 @@ export const KanaView: React.FC = () => {
         (k) => (activeSubType === 'dakuon' ? k.subType === 'dakuon' : k.subType === 'handakuon') && k.type === activeType
       );
       if (source.length === 0) {
-        // Fallback to all dakuon/handakuon
         source = DAKUON_HANDAKUON_KANA.filter((k) => k.subType === activeSubType);
       }
     } else {
@@ -98,15 +104,24 @@ export const KanaView: React.FC = () => {
       setSelectedKana(currentList[0]);
     }
   }, [currentList, selectedKana.char]);
-  const hiraganaTotal = HIRAGANA_SEION.length;
-  const katakanaTotal = KATAKANA_SEION.length;
-  const hiraganaMastered = HIRAGANA_SEION.filter((k) => masteredList.includes(k.char)).length;
-  const katakanaMastered = KATAKANA_SEION.filter((k) => masteredList.includes(k.char)).length;
 
-  const handleSelectKana = (kana: KanaCharacter) => {
-    setSelectedKana(kana);
-    setIsDetailModalOpen(true);
-    speakJapanese(kana.char, { rate: 0.85 });
+  const totalCharacters = currentList.length;
+  const masteredCount = currentList.filter((k) => masteredList.includes(k.char)).length;
+  const progressPercent = totalCharacters > 0 ? Math.round((masteredCount / totalCharacters) * 100) : 0;
+
+  // The Reels Principle: Instant Next Character Progression
+  const handleNextInSequence = () => {
+    const currentIndex = currentList.findIndex((k) => k.char === selectedKana.char);
+    if (currentIndex !== -1 && currentIndex < currentList.length - 1) {
+      const next = currentList[currentIndex + 1];
+      setSelectedKana(next);
+      speakJapanese(next.char, { rate: 0.85 });
+    } else if (currentList.length > 0) {
+      // Loop back to start for continuous endless drill
+      const first = currentList[0];
+      setSelectedKana(first);
+      speakJapanese(first.char, { rate: 0.85 });
+    }
   };
 
   const handlePrevInSequence = () => {
@@ -122,564 +137,348 @@ export const KanaView: React.FC = () => {
     }
   };
 
-  const handleNextInSequence = () => {
-    const currentIndex = currentList.findIndex((k) => k.char === selectedKana.char);
-    if (currentIndex !== -1 && currentIndex < currentList.length - 1) {
-      const next = currentList[currentIndex + 1];
-      setSelectedKana(next);
-      speakJapanese(next.char, { rate: 0.85 });
-    } else if (currentList.length > 0) {
-      const first = currentList[0];
-      setSelectedKana(first);
-      speakJapanese(first.char, { rate: 0.85 });
-    }
-  };
-
-  const handleMasteryToggle = (isMastered: boolean) => {
-    setMasteredList(getMasteredKanaList());
-    if (isMastered) {
-      retentionEngine.recordActivity('KANA').catch(() => {});
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-[#07070d] text-slate-100 pt-28 md:pt-36 pb-20 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#07070e] text-slate-100 font-sans antialiased pb-24 selection:bg-rose-500 selection:text-white overflow-x-hidden">
+      
+      {/* 1. TOP HEADER & NAVIGATION */}
+      <div className="bg-[#0b0c16]/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 sm:px-6 lg:px-8 py-3.5 shadow-lg">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="inline-flex items-center space-x-2 px-3 py-0.5 bg-rose-500/15 text-rose-300 text-[11px] font-mono font-bold rounded-full border border-rose-500/30">
+              <Sparkles className="w-3 h-3 text-rose-400" />
+              <span>NIHOMI KANA STUDIO™ • 日本語文字</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            </div>
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+              <span>হিরাগানা ও কাতাকানা ক্যানভাস</span>
+              <span className="text-xs px-2 py-0.5 bg-slate-800 text-slate-300 rounded font-mono font-normal">
+                {masteredCount}/{totalCharacters} Mastered ({progressPercent}%)
+              </span>
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* View Mode Switcher: Studio vs Grid */}
+            <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+              <button
+                type="button"
+                onClick={() => setViewLayout('studio')}
+                className={`btn-haptic px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewLayout === 'studio'
+                    ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>স্টুডিও মোড</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewLayout('grid')}
+                className={`btn-haptic px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewLayout === 'grid'
+                    ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Grid className="w-3.5 h-3.5" />
+                <span>চার্ট ভিউ</span>
+              </button>
+            </div>
+
+            {onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate('dashboard')}
+                className="btn-haptic px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 rounded-xl transition-colors cursor-pointer"
+              >
+                ← ড্যাশবোর্ড
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
         
-        {/* Top Hero Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#121226]/90 via-[#0d0d1a]/95 to-[#07070d] backdrop-blur-md border border-slate-800/80 p-6 sm:p-10 shadow-2xl">
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-bold tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>NIHOMI KANA MASTERY LAB (五十音図) • 100% FREE</span>
-              </div>
-              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                জাপানি বর্ণমালা ও স্ট্রোক অর্ডার ইঞ্জিন
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                ৪৬টি হিরাগানা এবং ৪৬টি কাতাকানা বর্ণ প্রতিটি স্ট্রোকের দিক, কলমের শুরু-শেষ পয়েন্ট এবং টোকিও ভয়েস উচ্চারণের মাধ্যমে হাতে-কলমে অনুশীলন করুন। ফ্রি টিয়ারে কোনো সীমাবদ্ধতা নেই।
-              </p>
-            </div>
-
-            {/* Overall Mastery Progress Widgets */}
-            <div className="grid grid-cols-2 gap-3 shrink-0 sm:w-80">
-              {/* Hiragana Progress */}
-              <div className="p-3.5 rounded-2xl bg-[#0a0a14]/80 backdrop-blur-sm border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
-                <span className="text-[11px] font-bold text-rose-400">হিরাগানা মাস্টারি</span>
-                <div className="flex items-baseline justify-between mt-1">
-                  <span className="text-xl font-mono font-black text-white">
-                    {hiraganaMastered} <span className="text-xs text-slate-500">/ {hiraganaTotal}</span>
-                  </span>
-                  <span className="text-[11px] font-bold text-slate-400">
-                    {Math.round((hiraganaMastered / hiraganaTotal) * 100)}%
-                  </span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                  <div
-                    className="h-full bg-rose-500 rounded-full transition-all duration-500"
-                    style={{ width: `${(hiraganaMastered / hiraganaTotal) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Katakana Progress */}
-              <div className="p-3.5 rounded-2xl bg-[#0a0a14]/80 backdrop-blur-sm border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-lg transition-shadow">
-                <span className="text-[11px] font-bold text-amber-400">কাতাকানা মাস্টারি</span>
-                <div className="flex items-baseline justify-between mt-1">
-                  <span className="text-xl font-mono font-black text-white">
-                    {katakanaMastered} <span className="text-xs text-slate-500">/ {katakanaTotal}</span>
-                  </span>
-                  <span className="text-[11px] font-bold text-slate-400">
-                    {Math.round((katakanaMastered / katakanaTotal) * 100)}%
-                  </span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                  <div
-                    className="h-full bg-amber-500 rounded-full transition-all duration-500"
-                    style={{ width: `${(katakanaMastered / katakanaTotal) * 100}%` }}
-                  />
-                </div>
+        {/* 2. MEMORYOS SYNC BANNER (Surfaces weak kana if any were logged) */}
+        {recentMistakes.length > 0 && (
+          <div className="p-3.5 rounded-2xl bg-[#14101e] border border-purple-500/30 text-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-2.5">
+              <Brain className="w-5 h-5 text-purple-400 shrink-0" />
+              <div className="text-xs">
+                <span className="font-bold text-white">MemoryOS™ Active Review Sync: </span>
+                <span>
+                  আপনার ক্যানভাস অনুশীলনে {recentMistakes.length}টি দুর্বল স্ট্রোক ও অক্ষর শনাক্ত হয়েছে এবং Spaced Repetition রিভিউতে যুক্ত রয়েছে।
+                </span>
               </div>
             </div>
+
+            {onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate('memory-os')}
+                className="btn-haptic shrink-0 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+              >
+                ভুলের খাতা ও রিভিউ দেখুন ➔
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* 3. TYPE SELECTORS (Hiragana vs Katakana) & SUB-TYPES */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0d0e1a] p-3 rounded-2xl border border-slate-800">
+          {/* Main Type Toggle */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveType('hiragana');
+                setSelectedKana(HIRAGANA_SEION[0]);
+              }}
+              className={`btn-haptic px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                activeType === 'hiragana'
+                  ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
+                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>হিরাগানা (Hiragana • 46)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveType('katakana');
+                setSelectedKana(KATAKANA_SEION[0]);
+              }}
+              className={`btn-haptic px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                activeType === 'katakana'
+                  ? 'bg-amber-500 text-stone-950 shadow-lg shadow-amber-500/30'
+                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>কাতাকানা (Katakana • 46)</span>
+            </button>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full sm:w-64">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="অক্ষর বা Romaji লিখুন (উদা: ka, あ)..."
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500"
+            />
           </div>
         </div>
 
-        {/* Tab & Filter Bar */}
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-            
-            {/* Primary Mode: Hiragana vs Katakana with sliding pill */}
-            <div className="relative inline-flex p-1 rounded-2xl bg-[#0f0f1c]/90 backdrop-blur-md border border-slate-800 shadow-inner">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveType('hiragana');
-                  if (activeSubType === 'seion') {
-                    setSelectedKana(HIRAGANA_SEION[0]);
-                  }
-                }}
-                className={`relative z-10 px-5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                  activeType === 'hiragana'
-                    ? 'text-white'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {activeType === 'hiragana' && (
-                  <motion.div
-                    layoutId="activeKanaTypeIndicator"
-                    className="absolute inset-0 rounded-xl bg-rose-600 shadow-lg shadow-rose-600/30"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">হিরাগানা (Hiragana • 46)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveType('katakana');
-                  if (activeSubType === 'seion') {
-                    setSelectedKana(KATAKANA_SEION[0]);
-                  }
-                }}
-                className={`relative z-10 px-5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                  activeType === 'katakana'
-                    ? 'text-white'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {activeType === 'katakana' && (
-                  <motion.div
-                    layoutId="activeKanaTypeIndicator"
-                    className="absolute inset-0 rounded-xl bg-amber-600 shadow-lg shadow-amber-600/30"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">কাতাকানা (Katakana • 46)</span>
-              </button>
-            </div>
-
-            {/* Search Input */}
-            <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="বর্ণ, Romaji বা উচ্চারণ খুঁজুন..."
-                className="w-full pl-10 pr-4 py-2 rounded-2xl bg-[#0d0d1a]/80 backdrop-blur-md border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-rose-500 transition-colors shadow-inner"
-              />
-            </div>
+        {/* 4. REELS CAROUSEL / QUICK-JUMP STRIP */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+            <span className="font-mono text-[11px] uppercase tracking-wider font-bold">
+              ধারাবাহিক বর্ণ স্ক্রল ({currentList.length} Characters)
+            </span>
+            <span className="text-[10px]">ক্লিক করে সরাসরি নির্বাচন করুন</span>
           </div>
 
-          {/* Sub-Category Pills (Seion, Dakuon, Handakuon, Yoon) */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            <button
-              type="button"
-              onClick={() => setActiveSubType('seion')}
-              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
-                activeSubType === 'seion'
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {activeSubType === 'seion' && (
-                <motion.div
-                  layoutId="activeKanaSubTypeIndicator"
-                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">মূল বর্ণমালা (Seion 清音 • 46)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveSubType('dakuon')}
-              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
-                activeSubType === 'dakuon'
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {activeSubType === 'dakuon' && (
-                <motion.div
-                  layoutId="activeKanaSubTypeIndicator"
-                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">
-                {activeType === 'hiragana'
-                  ? 'ডাকুওন (Dakuon 濁音 • が, ざ...)'
-                  : 'ডাকুওন (Dakuon 濁音 • ガ, ザ...)'}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveSubType('handakuon')}
-              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
-                activeSubType === 'handakuon'
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {activeSubType === 'handakuon' && (
-                <motion.div
-                  layoutId="activeKanaSubTypeIndicator"
-                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">
-                {activeType === 'hiragana'
-                  ? 'হান্দাকুওন (Handakuon 半濁音 • ぱ, ぴ...)'
-                  : 'হান্দাকুওন (Handakuon 半濁音 • パ, ピ...)'}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveSubType('yoon')}
-              className={`relative px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-colors cursor-pointer ${
-                activeSubType === 'yoon'
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {activeSubType === 'yoon' && (
-                <motion.div
-                  layoutId="activeKanaSubTypeIndicator"
-                  className="absolute inset-0 rounded-xl bg-slate-800 border border-slate-700"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">
-                {activeType === 'hiragana'
-                  ? 'যুক্তবর্ণ (Yōon 拗音 • きゃ, しゅ...)'
-                  : 'যুক্তবর্ণ (Yōon 拗音 • キャ, シュ...)'}
-              </span>
-            </button>
-          </div>
-        </div>
-
-        {/* Kana Syllabary Grid Display */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3.5">
-          {currentList.map((k, index) => {
-            const isMastered = masteredList.includes(k.char);
-            const isSelected = selectedKana.char === k.char;
-
-            return (
-              <motion.div
-                key={k.char}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: Math.min(index * 0.015, 0.3) }}
-                whileHover={{ y: -3, transition: { duration: 0.15 } }}
-                onClick={() => handleSelectKana(k)}
-                className={`relative group p-4 rounded-3xl cursor-pointer border transition-all duration-200 flex flex-col items-center justify-between text-center min-h-[140px] select-none backdrop-blur-md active:scale-95 ${
-                  isSelected
-                    ? 'bg-[#151528]/95 border-rose-500 shadow-xl shadow-rose-500/20 ring-1 ring-rose-500'
-                    : isMastered
-                    ? 'bg-[#0a0f18]/90 border-emerald-500/40 hover:border-emerald-500/70 shadow-sm hover:shadow-xl hover:shadow-emerald-950/20'
-                    : 'bg-[#0c0c17]/80 border-slate-800/80 hover:border-slate-700 hover:bg-[#111122] shadow-sm hover:shadow-xl hover:shadow-slate-950/40'
-                }`}
-              >
-                {/* Mastered Badge */}
-                {isMastered && (
-                  <div className="absolute top-2.5 right-2.5 text-emerald-400">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                )}
-
-                {/* Main Character Glyph */}
-                <div className="w-full flex items-center justify-center pt-1">
-                  <span className="text-4xl sm:text-5xl font-black font-japanese text-white group-hover:scale-110 transition-transform duration-200">
-                    {k.char}
-                  </span>
-                </div>
-
-                {/* Subtitle Info */}
-                <div className="w-full mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-slate-400">
-                  <span className="font-mono text-xs font-bold text-rose-300">
-                    {k.romaji}
-                  </span>
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    {k.banglaPhonetic}
-                  </span>
-                </div>
-
-                {/* Quick Pronounce Button */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 no-scrollbar">
+            {currentList.map((k) => {
+              const isSelected = selectedKana.char === k.char;
+              const isDone = masteredList.includes(k.char);
+              return (
                 <button
+                  key={k.char}
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
+                    setSelectedKana(k);
                     speakJapanese(k.char, { rate: 0.85 });
                   }}
-                  className="absolute bottom-2 right-2 p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
-                  title="উচ্চারণ"
+                  className={`btn-haptic shrink-0 w-11 h-12 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer select-none ${
+                    isSelected
+                      ? 'bg-rose-600 border-rose-400 text-white shadow-lg shadow-rose-600/30 scale-105'
+                      : isDone
+                      ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50'
+                      : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-700'
+                  }`}
                 >
-                  <Volume2 className="w-3.5 h-3.5" />
+                  <span className="text-sm font-black font-japanese leading-none">{k.char}</span>
+                  <span className="text-[9px] font-mono opacity-80 leading-tight mt-0.5">{k.romaji}</span>
                 </button>
-              </motion.div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
-        {/* Practice Modal / Interactive Engine Sheet */}
-        <AnimatePresence>
-          {isDetailModalOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsDetailModalOpen(false)}
-              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 15 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-4xl bg-[#0b0b14] border border-slate-800/90 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
-              >
-                
-                {/* Modal Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0d0d1a]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-rose-600/20 text-rose-400 font-black text-2xl font-japanese flex items-center justify-center border border-rose-500/30">
-                      {selectedKana.char}
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-white flex items-center gap-2">
-                        <span>{selectedKana.char}</span>
-                        <span className="text-xs font-normal text-slate-400 font-mono">
-                          ({selectedKana.romaji} • {selectedKana.banglaPhonetic})
-                        </span>
-                      </h3>
-                      <p className="text-[11px] text-slate-400">
-                        {selectedKana.strokes}টি স্ট্রোক • {selectedKana.type === 'hiragana' ? 'হিরাগানা' : 'কাতাকানা'} • ফ্রি আনলিমিটেড প্র্যাকটিস
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
-                      className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-rose-400 transition-colors cursor-pointer"
-                      title="উচ্চারণ"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setIsDetailModalOpen(false)}
-                      className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Mode Selector within Modal with sliding tabs */}
-                <div className="flex items-center justify-between px-6 pt-3 pb-2 border-b border-slate-800 bg-[#090912]">
-                  <div className="relative inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => setActiveModalTab('guide')}
-                      className={`relative z-10 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                        activeModalTab === 'guide'
-                          ? 'text-white'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      {activeModalTab === 'guide' && (
-                        <motion.div
-                          layoutId="activeModalTabIndicator"
-                          className="absolute inset-0 rounded-lg bg-rose-600 shadow-md shadow-rose-600/30"
-                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                        />
-                      )}
-                      <span className="relative z-10">১. স্ট্রোক গাইড (Stroke Order Guide)</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setActiveModalTab('draw')}
-                      className={`relative z-10 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                        activeModalTab === 'draw'
-                          ? 'text-white'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      {activeModalTab === 'draw' && (
-                        <motion.div
-                          layoutId="activeModalTabIndicator"
-                          className="absolute inset-0 rounded-lg bg-emerald-600 shadow-md shadow-emerald-600/30"
-                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                        />
-                      )}
-                      <span className="relative z-10">২. রাইটিং ল্যাব (Freehand Writing Lab)</span>
-                    </button>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleNextInSequence}
-                    className="hidden sm:flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
-                  >
-                    <span>পরবর্তী বর্ণ</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-              {/* Modal Body */}
-              <div className="p-6 overflow-y-auto space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  
-                  {/* Left Column: Visualizer or Writing Canvas */}
-                  <div className="lg:col-span-7 flex justify-center">
-                    {activeModalTab === 'guide' ? (
-                      <StrokeOrderGuide
-                        kana={selectedKana}
-                        className="w-full max-w-sm"
-                      />
-                    ) : (
-                      <KanaDrawingCanvas
-                        kana={selectedKana}
-                        onNextCharacter={handleNextInSequence}
-                        onMasteryToggled={handleMasteryToggle}
-                        className="w-full max-w-sm"
-                      />
-                    )}
-                  </div>
-
-                  {/* Right Column: Mnemonics, Vocabulary, and Character Info */}
-                  <div className="lg:col-span-5 space-y-4">
-                    {/* Mnemonics Card */}
-                    <div className="p-4 rounded-2xl bg-[#0f0f1f] border border-slate-800 space-y-2">
-                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
-                        <HelpCircle className="w-3.5 h-3.5" />
-                        <span>মনে রাখার কৌশল (Mnemonic)</span>
-                      </div>
-                      <p className="text-xs text-slate-200 leading-relaxed font-medium">
-                        {selectedKana.mnemonicBn}
-                      </p>
-                      <p className="text-[11px] text-slate-400 italic">
-                        "{selectedKana.mnemonicEn}"
-                      </p>
-                    </div>
-
-                    {/* Example Vocabulary Card */}
-                    <div className="p-4 rounded-2xl bg-[#0f0f1f] border border-slate-800 space-y-3">
-                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-400">
-                        <BookOpen className="w-3.5 h-3.5" />
-                        <span>ব্যবহারিক শব্দভাণ্ডার (Vocabulary)</span>
-                      </div>
-
-                      <div className="space-y-2">
-                        {selectedKana.exampleVocab.map((v, idx) => (
-                          <div
-                            key={idx}
-                            className="p-2.5 rounded-xl bg-[#090912] border border-slate-800/80 flex items-center justify-between hover:border-slate-700 transition"
-                          >
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-bold font-japanese text-white">
-                                  {v.word}
-                                </span>
-                                <span className="text-xs text-rose-400 font-mono">
-                                  {v.reading}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-400 mt-0.5">
-                                {v.meaningBn}
-                              </p>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => speakJapanese(v.word, { rate: 0.85 })}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition"
-                              title="উচ্চারণ"
-                            >
-                              <Volume2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Quick Switch Row */}
-                    <div className="flex items-center justify-between pt-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const res = toggleMasteredKana(selectedKana.char);
-                          handleMasteryToggle(res.isMastered);
-                        }}
-                        className={`w-full py-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition ${
-                          masteredList.includes(selectedKana.char)
-                            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                            : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700'
-                        }`}
-                      >
-                        <Award className="w-4 h-4" />
-                        <span>
-                          {masteredList.includes(selectedKana.char)
-                            ? 'মাস্টারি তালিকাভুক্ত ✓'
-                            : 'মাস্টারড হিসেবে চিহ্নিত করুন'}
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sticky Bottom Navigation Controls on Mobile & Desktop */}
-              <div className="sticky bottom-0 z-20 px-4 py-3 bg-[#0d0d1a] border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        {/* 5. PRIMARY CONTENT AREA */}
+        {viewLayout === 'studio' ? (
+          /* ========================================================== */
+          /* STUDIO CANVAS FIRST VIEW (The Interactive Writing Engine)  */
+          /* ========================================================== */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Center Canvas (7 columns) */}
+            <div className="lg:col-span-7 flex flex-col items-center">
+              <div className="w-full flex items-center justify-between mb-2 px-1">
                 <button
                   type="button"
                   onClick={handlePrevInSequence}
-                  className="flex-1 min-h-[48px] px-3 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-rose-950/50 border border-slate-700 text-slate-200 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shadow-md"
-                  aria-label="পূর্ববর্তী বর্ণ"
+                  className="btn-haptic px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center gap-1 cursor-pointer"
                 >
-                  <ArrowLeft className="w-4 h-4 text-slate-400" />
-                  <span>← পূর্ববর্তী</span>
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>আগের বর্ণ</span>
                 </button>
 
-                {/* Tactile Pronunciation Trigger */}
-                <button
-                  type="button"
-                  onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
-                  className="min-h-[48px] min-w-[48px] px-3.5 py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 active:bg-rose-600 active:text-white border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-90 cursor-pointer shadow-md"
-                  title="উচ্চারণ শুনুন"
-                  aria-label="উচ্চারণ শুনুন"
-                >
-                  <Volume2 className="w-4 h-4" />
-                  <span className="hidden xs:inline">উচ্চারণ</span>
-                </button>
+                <div className="text-center">
+                  <span className="text-xs font-mono font-bold text-amber-400">
+                    {currentList.findIndex((k) => k.char === selectedKana.char) + 1} / {currentList.length}
+                  </span>
+                </div>
 
                 <button
                   type="button"
                   onClick={handleNextInSequence}
-                  className="flex-1 min-h-[48px] px-3 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shadow-md shadow-rose-900/30"
-                  aria-label="পরবর্তী বর্ণ"
+                  className="btn-haptic px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 flex items-center gap-1 cursor-pointer"
                 >
-                  <span>পরবর্তী বর্ণ →</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
+                  <span>পরের বর্ণ</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
+
+              {/* Core Interactive Kana Canvas Component */}
+              <KanaDrawingCanvas
+                kana={selectedKana}
+                onNextCharacter={handleNextInSequence}
+                onMasteryToggled={() => refreshMasteryAndLogs()}
+                className="w-full max-w-md mx-auto"
+                autoAdvance={true}
+              />
+            </div>
+
+            {/* Right Information & Guide Panel (5 columns) */}
+            <div className="lg:col-span-5 space-y-4">
+              
+              {/* Cultural Origin & Phonetic Card */}
+              <div className="p-5 rounded-3xl bg-[#0b0c16] border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-rose-400 font-bold">
+                    Phonetic & Mnemonic Details
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => speakJapanese(selectedKana.char, { rate: 0.85 })}
+                    className="btn-haptic p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-rose-400 transition-colors cursor-pointer"
+                    title="Audio"
+                  >
+                    <Volume2 className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-black text-white font-japanese">{selectedKana.char}</span>
+                  <div>
+                    <div className="text-sm font-black text-amber-300 font-mono">{selectedKana.romaji}</div>
+                    <div className="text-xs text-slate-400">{selectedKana.banglaPhonetic}</div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed pt-1 border-t border-slate-800/80">
+                  {selectedKana.originMnemonic ||
+                    `এই বর্ণটি জাপানি ভাষায় ${selectedKana.romaji} হিসেবে উচ্চারিত হয়। সঠিক স্ট্রোক অনুসরন করে লিখলে হাতের লেখা আকর্ষণীয় হবে।`}
+                </p>
+
+                {/* Example Vocabulary Word */}
+                <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">
+                    ব্যবহারিক উদাহরণ শব্দ (Example Word):
+                  </div>
+                  <div className="text-sm font-bold text-white font-japanese">
+                    {selectedKana.exampleWord || `${selectedKana.char}`}
+                  </div>
+                  <div className="text-xs text-slate-300">
+                    {selectedKana.exampleReading || selectedKana.romaji} — {selectedKana.exampleMeaning || 'জাপানি প্রাত্যহিক শব্দ'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Japanese Calligraphy Golden Rules */}
+              <div className="p-5 rounded-3xl bg-[#0b0c16] border border-slate-800 space-y-2.5">
+                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>জাপানি ক্যালিগ্রাফির ৩টি মূল নীতি</span>
+                </h4>
+                <ul className="space-y-2 text-xs text-slate-300">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 mt-1.5" />
+                    <span><strong>止め (Tome):</strong> স্ট্রোকের শেষে তুলি বা কলম দৃঢ়ভাবে থামানো।</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 mt-1.5" />
+                    <span><strong>はね (Hane):</strong> নিচে থেকে হালকা বাঁকিয়ে হুকের মতো উপরে তোলা।</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0 mt-1.5" />
+                    <span><strong>はらい (Harai):</strong> চাপ কমাতে কমাতে হালকা টানে আলতো করে শেষ করা।</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Quick Action: Take N5 Diagnostic */}
+              {onNavigate && (
+                <button
+                  type="button"
+                  onClick={() => onNavigate('quizzes')}
+                  className="btn-haptic w-full py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white text-xs font-bold flex items-center justify-between transition-colors cursor-pointer"
+                >
+                  <span>N5 কুইজ ও শব্দভান্ডার প্র্যাকটিস</span>
+                  <ArrowRight className="w-4 h-4 text-rose-400" />
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* ========================================================== */
+          /* SYLLABARY CHART GRID (Full 46-card overview)              */
+          /* ========================================================== */
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+            {currentList.map((k) => {
+              const isDone = masteredList.includes(k.char);
+              const isSelected = selectedKana.char === k.char;
+
+              return (
+                <div
+                  key={k.char}
+                  onClick={() => {
+                    setSelectedKana(k);
+                    setViewLayout('studio');
+                    speakJapanese(k.char, { rate: 0.85 });
+                  }}
+                  className={`btn-haptic p-3.5 rounded-2xl border flex flex-col items-center justify-between text-center min-h-[120px] select-none cursor-pointer transition-all ${
+                    isSelected
+                      ? 'bg-rose-950/40 border-rose-500 shadow-lg shadow-rose-500/20'
+                      : isDone
+                      ? 'bg-emerald-950/30 border-emerald-500/30 hover:border-emerald-500/60'
+                      : 'bg-[#0d0e1a] border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="w-full flex items-center justify-between text-[10px] text-slate-500">
+                    <span className="font-mono text-rose-300 font-bold">{k.romaji}</span>
+                    {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                  </div>
+
+                  <span className="text-4xl font-black font-japanese text-white my-1">
+                    {k.char}
+                  </span>
+
+                  <span className="text-[11px] text-slate-400">{k.banglaPhonetic}</span>
+                </div>
+              );
+            })}
+          </div>
         )}
-      </AnimatePresence>
+
       </div>
     </div>
   );

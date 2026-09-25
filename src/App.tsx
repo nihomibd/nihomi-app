@@ -610,7 +610,7 @@ export const App: React.FC = () => {
           />
         )}
         {(currentView === 'kana' || currentView === 'hiragana' || currentView === 'katakana' || currentView === 'kana-lab') && (
-          <KanaView />
+          <KanaView onNavigate={handleNavigate} />
         )}
         {(currentView === 'kanji' || currentView === 'kanji-lab' || currentView === 'kanji-100' || currentView === 'n5-kanji') && (
           <KanjiView />
