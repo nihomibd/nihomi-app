@@ -107,6 +107,9 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
   const [isAudioMuted, setIsAudioMuted] = useState(true);
   const [isPointerLocked, setIsPointerLocked] = useState(false);
   const [activePOI, setActivePOI] = useState<WorldPOI | null>(null);
+  // Loading state: true until photodome texture has loaded (prevents blank gray void)
+  const [isSceneReady, setIsSceneReady] = useState(false);
+  const [loadingPhase, setLoadingPhase] = useState<'renderer' | 'dome' | 'world'>('renderer');
   const [questObjective, setQuestObjective] = useState<string>(
     'Explore Shibuya & Ask 7-Eleven Store Manager about a Part-Time Job (Baito)'
   );
@@ -573,24 +576,46 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
 
     // 5B. High-Fidelity 360° Photographic Tokyo Dome (Guarantees zero empty void)
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('/assets/shibuya-crossing.jpg', (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.minFilter = THREE.LinearFilter;
-      tex.magFilter = THREE.LinearFilter;
-      tex.generateMipmaps = false;
-      const sphereGeo = new THREE.SphereGeometry(350, 48, 32);
-      sphereGeo.scale(-1, 1, 1);
-      const sphereMat = new THREE.MeshBasicMaterial({
-        map: tex,
-        side: THREE.DoubleSide,
-        depthWrite: false, // Ensures 3D building meshes render in front without Z-fighting
-        fog: false
-      });
-      const photoDome = new THREE.Mesh(sphereGeo, sphereMat);
-      photoDome.position.set(0, 0, 0);
-      scene.add(photoDome);
-      photoDomeRef.current = photoDome;
-    });
+    setLoadingPhase('dome');
+
+    // Fallback: if texture takes > 6s, show world anyway
+    const fallbackTimer = setTimeout(() => {
+      setIsSceneReady(true);
+      setLoadingPhase('world');
+    }, 6000);
+
+    textureLoader.load(
+      '/assets/shibuya-crossing.jpg',
+      (tex) => {
+        clearTimeout(fallbackTimer);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        tex.generateMipmaps = false;
+        const sphereGeo = new THREE.SphereGeometry(350, 48, 32);
+        sphereGeo.scale(-1, 1, 1);
+        const sphereMat = new THREE.MeshBasicMaterial({
+          map: tex,
+          side: THREE.DoubleSide,
+          depthWrite: false, // Ensures 3D building meshes render in front without Z-fighting
+          fog: false
+        });
+        const photoDome = new THREE.Mesh(sphereGeo, sphereMat);
+        photoDome.position.set(0, 0, 0);
+        scene.add(photoDome);
+        photoDomeRef.current = photoDome;
+        // Scene is ready: hide loading overlay
+        setIsSceneReady(true);
+        setLoadingPhase('world');
+      },
+      undefined,
+      () => {
+        // Texture failed — still show the world (sky color acts as fallback)
+        clearTimeout(fallbackTimer);
+        setIsSceneReady(true);
+        setLoadingPhase('world');
+      }
+    );
 
     // 6. OPEN JAPAN GEO ENGINE (Project PLATEAU 3D Tiles + OpenStreetMap)
     const providerManager = new WorldProviderManager(
@@ -801,6 +826,9 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       simulation.dispose();
       renderer.dispose();
       composerRef.current = null;
+      clearTimeout(fallbackTimer);
+      setIsSceneReady(false);
+      setLoadingPhase('renderer');
     };
   }, [cameraMode, isAudioMuted]);
 
@@ -832,7 +860,56 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
       onClick={requestPointerLock}
     >
       {/* 3D Canvas Mount Point */}
-      <div ref={canvasMountRef} className="w-full h-full absolute inset-0 cursor-crosshair" />
+      <div ref={canvasMountRef} className={`w-full h-full absolute inset-0 cursor-crosshair transition-opacity duration-700 ${isSceneReady ? 'opacity-100' : 'opacity-0'}`} />
+
+      {/* ✨ PREMIUM LOADING OVERLAY — Shown until photodome is ready */}
+      {!isSceneReady && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#05050d] pointer-events-none select-none">
+          {/* Ambient aurora orbs */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[260px] bg-gradient-to-tr from-rose-700/20 via-red-600/10 to-amber-500/8 rounded-full blur-[120px]" />
+          <div className="absolute bottom-10 left-10 w-64 h-64 bg-indigo-700/10 rounded-full blur-[90px]" />
+
+          {/* Logo */}
+          <div className="relative flex flex-col items-center gap-6">
+            {/* Pulsing Nihomi 日 logo */}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-rose-600 to-amber-500 blur-xl opacity-60 animate-pulse" />
+              <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-500 to-amber-500 flex items-center justify-center shadow-2xl ring-1 ring-white/20">
+                <span className="text-white font-black text-4xl leading-none select-none">日</span>
+              </div>
+            </div>
+
+            {/* Brand name */}
+            <div className="text-center space-y-1">
+              <h2 className="text-2xl font-black tracking-tight text-white">Nihomi AI™</h2>
+              <p className="text-sm text-zinc-400 font-medium">
+                {loadingPhase === 'renderer' ? 'Initializing 3D Engine...' :
+                 loadingPhase === 'dome' ? 'Loading Tokyo Environment...' :
+                 'Entering Shibuya...'}
+              </p>
+            </div>
+
+            {/* Animated progress dots */}
+            <div className="flex items-center gap-2.5">
+              {['renderer', 'dome', 'world'].map((phase, i) => (
+                <div
+                  key={phase}
+                  className={`rounded-full transition-all duration-500 ${
+                    loadingPhase === 'renderer' && i === 0 ? 'w-6 h-2 bg-rose-500' :
+                    loadingPhase === 'dome' && i <= 1 ? (i === 1 ? 'w-6 h-2 bg-amber-400 animate-pulse' : 'w-2 h-2 bg-rose-500') :
+                    i < 2 ? 'w-2 h-2 bg-emerald-400' : 'w-2 h-2 bg-zinc-700'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Sub-label */}
+            <p className="text-[11px] text-zinc-600 font-mono">
+              東京都 渋谷区 ● PLATEAU 3D TILES
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Crosshair (1st Person Mode) */}
       {cameraMode === 'first_person' && isPointerLocked && !dialogue.isOpen && (

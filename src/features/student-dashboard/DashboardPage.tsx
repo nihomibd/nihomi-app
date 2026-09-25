@@ -26,7 +26,7 @@ import { WritingPracticeModal } from './components/WritingPracticeModal';
 import { InviteFriendsCard } from './components/InviteFriendsCard';
 import { InstallPWA } from '../../components/common/InstallPWA';
 import { OfflineNotificationBanner } from '../../components/common/OfflineNotificationBanner';
-import { Search, Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2, Home, BookOpen, User, Compass, Flame, Coins, X } from 'lucide-react';
+import { Mic, Camera, PenTool, Sparkles, ArrowRight, Loader2, Crown, Clock, CheckCircle2, Home, BookOpen, User, Compass, Flame, Coins, X } from 'lucide-react';
 import { VisionSenseiModal } from '../../components/VisionSenseiModal';
 import { VoiceSenseiPractice } from '../../components/practice/VoiceSenseiPractice';
 import { ProUpgradeModal } from '../../components/billing/ProUpgradeModal';
@@ -317,7 +317,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-28 md:pb-12 selection:bg-rose-100 selection:text-rose-900">
+    <div className="min-h-screen bg-[#F9F9FB] text-stone-900 font-sans antialiased pb-24 md:pb-12 selection:bg-rose-100 selection:text-rose-900">
       <OfflineNotificationBanner />
 
       {/* Unified Apple-Style Sticky Top Navigation Bar */}
@@ -454,38 +454,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 </div>
               )}
 
-              {/* Nihomi Pro™ Subscription Bar (Unlock Lessons 06 to 25) */}
-              {!isPro && (
-                <section
-                  id="dashboard-pro-upgrade-card"
-                  aria-label="Nihomi Pro Upgrade"
-                  className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-500/40 p-4 sm:p-5 shadow-lg text-white"
-                >
-                  <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div className="space-y-1">
-                      <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wide">
-                        <Crown className="w-3 h-3 text-amber-400" />
-                        <span>JLPT N5 Core • Unlock Lessons 06–25</span>
-                      </div>
-                      <p className="text-xs text-stone-300">
-                        Full grammar mastery, infinite AI Sensei drills & Kanji canvas.
-                      </p>
-                    </div>
-
-                    <button
-                      id="btn-dashboard-upgrade-pro"
-                      type="button"
-                      onClick={() => setIsProModalOpen(true)}
-                      className="btn-haptic w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs tracking-wide shadow-md shadow-amber-500/20 flex items-center justify-center gap-2 cursor-pointer shrink-0"
-                    >
-                      <Crown className="w-3.5 h-3.5 text-stone-950 fill-stone-950" />
-                      <span>Upgrade to PRO ➔ ৳৫৯৯/mo</span>
-                    </button>
-                  </div>
-                </section>
-              )}
-
-              {/* Nihomi Sensei AI™ Today's Mission Priority Action (The Reels Focal Point) */}
+              {/* ★ PRIMARY FOCAL POINT: Nihomi Sensei AI™ Today's Mission (The Reels Principle — one action at a time) */}
               <TodaysMissionCard
                 userId={user?.id}
                 onStartMission={(exp) => {
@@ -493,112 +462,104 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   setIsGoldenLoopOpen(true);
                 }}
               />
+
+              {/* Nihomi Pro™ — Subtle secondary pill (not the hero) */}
+              {!isPro && (
+                <section
+                  id="dashboard-pro-upgrade-card"
+                  aria-label="Nihomi Pro Upgrade"
+                  className="relative overflow-hidden rounded-2xl bg-white border border-amber-200/80 p-3.5 sm:p-4 shadow-xs"
+                >
+                  <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                        <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-stone-800">Unlock All 25 Lessons + Infinite AI Drills</p>
+                        <p className="text-[11px] text-stone-400">JLPT N5 full mastery · Kanji canvas · Baito simulation</p>
+                      </div>
+                    </div>
+                    <button
+                      id="btn-dashboard-upgrade-pro"
+                      type="button"
+                      onClick={() => setIsProModalOpen(true)}
+                      className="btn-haptic w-full sm:w-auto px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs tracking-wide shadow-sm shadow-amber-500/20 flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                    >
+                      <Crown className="w-3 h-3 text-stone-950 fill-stone-950" />
+                      <span>PRO → ৳৫৯৯/mo</span>
+                    </button>
+                  </div>
+                </section>
+              )}
             </div>
 
             {/* Responsive Desktop 12-Column Grid (8 cols Main Learning, 4 cols Progress & Stats) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              
               {/* Left Column: Primary Learning Flow (8 cols on desktop) */}
-              <div className="lg:col-span-8 space-y-6">
+              <div className="lg:col-span-8 space-y-5">
                 
-                {/* Quick Sensei Search & Sensor Actions: Voice Coach, Photo OCR & Kanji */}
-                <section className="bg-white rounded-2xl p-4 border border-stone-200/90 shadow-xs space-y-3" aria-label="Nihomi Sensei Tools">
-                  <div className="flex items-center gap-2">
-                    <div className="relative flex-1">
-                      <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      <input
-                        id="input-dashboard-sensei-search"
-                        type="text"
-                        value={dashboardQuery}
-                        onChange={(e) => setDashboardQuery(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleSenseiSearch();
-                        }}
-                        placeholder="Ask Sensei in English, বাংলা, or 日本語..."
-                        className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-900 placeholder:text-stone-400 focus:outline-hidden focus:border-stone-900 transition-colors"
-                      />
-                    </div>
+                {/* Quick-Access Sensor Actions: Voice, Photo OCR, Kanji Canvas */}
+                <section className="bg-white rounded-2xl px-4 py-3 border border-stone-200/90 shadow-xs flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap" aria-label="Nihomi Quick Actions">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider shrink-0 hidden sm:inline">Quick Actions</span>
                     <button
-                      id="btn-dashboard-sensei-search"
+                      id="btn-dashboard-voice"
                       type="button"
-                      onClick={() => handleSenseiSearch()}
-                      disabled={isSearchingSensei || !dashboardQuery.trim()}
-                      className="btn-haptic px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
-                      aria-label="Send Query"
+                      onClick={() => setIsVoiceOpen(true)}
+                      className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F9F9FB] hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
                     >
-                      {isSearchingSensei ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+                      <Mic className="w-3.5 h-3.5 text-red-500" />
+                      <span>Voice</span>
+                    </button>
+                    <button
+                      id="btn-dashboard-photo-ocr"
+                      type="button"
+                      onClick={() => setIsVisionOpen(true)}
+                      className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F9F9FB] hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-blue-500" />
+                      <span>Photo OCR</span>
+                    </button>
+                    <button
+                      id="btn-dashboard-kanji-canvas"
+                      type="button"
+                      onClick={() => setIsWritingOpen(true)}
+                      className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F9F9FB] hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                    >
+                      <PenTool className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Kanji Canvas</span>
                     </button>
                   </div>
-
-                  {/* Action Buttons: [Voice], [Photo OCR], [Kanji Canvas], [AI Tutor] */}
-                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 flex-wrap sm:flex-nowrap">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <button
-                        id="btn-dashboard-voice"
-                        type="button"
-                        onClick={() => setIsVoiceOpen(true)}
-                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                      >
-                        <Mic className="w-3.5 h-3.5 text-red-600" />
-                        <span>Voice</span>
-                      </button>
-
-                      <button
-                        id="btn-dashboard-photo-ocr"
-                        type="button"
-                        onClick={() => setIsVisionOpen(true)}
-                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                      >
-                        <Camera className="w-3.5 h-3.5 text-blue-600" />
-                        <span>Photo OCR</span>
-                      </button>
-
-                      <button
-                        id="btn-dashboard-kanji-canvas"
-                        type="button"
-                        onClick={() => setIsWritingOpen(true)}
-                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
-                      >
-                        <PenTool className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Kanji Canvas</span>
-                      </button>
-                    </div>
-
-                    <button
-                      id="btn-dashboard-open-ai-tutor"
-                      type="button"
-                      onClick={() => setIsAiTutorOpen(true)}
-                      className="btn-haptic inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
-                    >
-                      <Sparkles className="w-3 h-3" />
-                      <span>AI Tutor</span>
-                    </button>
-                  </div>
-
-                  {senseiSearchResult && (
-                    <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs text-stone-800 space-y-1 animate-in fade-in">
-                      <div className="flex items-center justify-between font-bold text-[10px] text-stone-500 uppercase tracking-wider">
-                        <span>Nihomi Sensei Advice</span>
-                        <button
-                          type="button"
-                          onClick={() => setSenseiSearchResult(null)}
-                          className="text-stone-400 hover:text-stone-600 cursor-pointer"
-                        >
-                          ×
-                        </button>
-                      </div>
-                      <p className="leading-relaxed whitespace-pre-line">{senseiSearchResult}</p>
-                    </div>
-                  )}
+                  <button
+                    id="btn-dashboard-open-ai-tutor"
+                    type="button"
+                    onClick={() => setIsAiTutorOpen(true)}
+                    className="btn-haptic inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 rounded-xl transition-colors shrink-0 cursor-pointer shadow-sm shadow-rose-600/20"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>AI Tutor</span>
+                  </button>
                 </section>
 
-                {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
+                {/* Sensei Search Result (only shown when a result is available) */}
+                {senseiSearchResult && (
+                  <div className="bg-white rounded-2xl p-4 border border-stone-200/90 shadow-xs text-xs text-stone-800 space-y-2 animate-in fade-in">
+                    <div className="flex items-center justify-between font-bold text-[10px] text-stone-400 uppercase tracking-wider">
+                      <span className="flex items-center gap-1"><Sparkles className="w-3 h-3 text-rose-500" />Nihomi Sensei Advice</span>
+                      <button type="button" onClick={() => setSenseiSearchResult(null)} className="text-stone-400 hover:text-stone-600 cursor-pointer">×</button>
+                    </div>
+                    <p className="leading-relaxed whitespace-pre-line">{senseiSearchResult}</p>
+                  </div>
+                )}
+
+                {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
                 <ContinueLearningCard
                   lesson={data.continueLesson}
                   onResumeLesson={handleResume}
                 />
 
-                {/* ৩. ইন্টারঅ্যাকটিভ আজকের লক্ষ্য (ক্লিক করলেই প্রগ্রেস বাড়ে) */}
+                {/* ৩. ইন্টারঅ্যাকটিভ আজকের লক্ষ্য (ক্লিক করলেই প্রগ্রেস বাড়ে) */}
                 <DailyPlan
                   planItems={data.dailyPlan}
                   onSelectTask={(id) => toggleDailyTask(id)}
@@ -675,6 +636,49 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
         )}
       </main>
+
+      {/* ✨ FLOATING AI SENSEI PILL (Premium WhatsApp/Apple-style input at bottom) */}
+      {viewState === 'idle' && data && (
+        <div className="fixed bottom-[72px] md:bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-4 pointer-events-none">
+          <div className="pointer-events-auto flex items-center gap-2 bg-white/95 backdrop-blur-xl border border-stone-200/90 shadow-xl shadow-stone-900/10 rounded-2xl px-3 py-2.5">
+            {/* Sensei Avatar Pulse */}
+            <div className="relative shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center shadow-sm">
+                <span className="text-white font-black text-sm leading-none">日</span>
+              </div>
+              {isSearchingSensei && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white animate-pulse" />
+              )}
+            </div>
+            {/* Input */}
+            <div className="relative flex-1">
+              <input
+                id="input-floating-sensei"
+                type="text"
+                value={dashboardQuery}
+                onChange={(e) => setDashboardQuery(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSenseiSearch(); }}
+                placeholder={isSearchingSensei ? 'Sensei is thinking...' : 'Ask Sensei anything...'}
+                disabled={isSearchingSensei}
+                className="w-full bg-transparent text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none disabled:opacity-60"
+              />
+            </div>
+            {/* Send button */}
+            <button
+              type="button"
+              onClick={() => handleSenseiSearch()}
+              disabled={isSearchingSensei || !dashboardQuery.trim()}
+              className="btn-haptic shrink-0 w-8 h-8 rounded-xl bg-stone-900 hover:bg-rose-600 disabled:opacity-30 text-white flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="Ask Sensei"
+            >
+              {isSearchingSensei
+                ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                : <ArrowRight className="w-3.5 h-3.5" />
+              }
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* মোবাইল বটম বার */}
       <MobileBottomNavigation
