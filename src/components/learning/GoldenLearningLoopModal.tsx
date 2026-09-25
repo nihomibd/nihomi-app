@@ -276,8 +276,8 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl rounded-3xl bg-slate-900 border border-amber-500/30 text-slate-100 shadow-2xl overflow-hidden p-6 sm:p-7 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-amber-500/30 text-slate-100 shadow-2xl p-6 sm:p-7 space-y-6 my-auto">
         
         {/* Header: Situation Context & Close */}
         <div className="flex items-start justify-between gap-3 border-b border-slate-800 pb-4">

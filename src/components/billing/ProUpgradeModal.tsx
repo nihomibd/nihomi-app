@@ -131,7 +131,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-xl bg-[#0f0f1c] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden text-slate-100 my-8"
+          className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto bg-[#0f0f1c] border border-slate-800 rounded-3xl shadow-2xl text-slate-100 my-auto"
         >
           {/* Top Header Glow */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-pink-500 to-amber-500" />
@@ -139,13 +139,13 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors z-10"
+            className="btn-haptic absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors z-10 cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="p-6 sm:p-8 pb-28 sm:pb-8 space-y-6">
+          <div className="p-6 sm:p-8 space-y-6">
             {/* Modal Title & Value Proposition */}
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold mb-2">
@@ -167,7 +167,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   {/* Monthly Plan */}
                   <div
                     onClick={() => setBillingInterval('monthly')}
-                    className={`cursor-pointer rounded-xl p-4 border transition-all relative ${
+                    className={`btn-haptic cursor-pointer rounded-2xl p-4 border transition-all relative ${
                       billingInterval === 'monthly'
                         ? 'border-red-500/80 bg-red-500/10 shadow-lg shadow-red-500/10'
                         : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
@@ -181,7 +181,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   {/* Yearly Plan (Best Value) */}
                   <div
                     onClick={() => setBillingInterval('yearly')}
-                    className={`cursor-pointer rounded-xl p-4 border transition-all relative ${
+                    className={`btn-haptic cursor-pointer rounded-2xl p-4 border transition-all relative ${
                       billingInterval === 'yearly'
                         ? 'border-red-500/80 bg-red-500/10 shadow-lg shadow-red-500/10'
                         : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
@@ -197,7 +197,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 </div>
 
                 {/* 2. Official bKash Number Box */}
-                <div className="p-4 rounded-xl bg-[#16162a] border border-slate-700/80 space-y-2">
+                <div className="p-4 rounded-2xl bg-[#16162a] border border-slate-700/80 space-y-2">
                   <div className="flex items-center justify-between text-xs text-slate-300">
                     <span className="flex items-center gap-1.5 font-medium text-pink-400">
                       <Smartphone className="w-4 h-4" />
@@ -206,14 +206,14 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     <span className="text-[11px] text-slate-400">Send Money / Payment</span>
                   </div>
 
-                  <div className="flex items-center justify-between bg-[#0a0a14] px-4 py-3 rounded-lg border border-slate-800">
+                  <div className="flex items-center justify-between bg-[#0a0a14] px-4 py-3 rounded-xl border border-slate-800">
                     <span className="font-mono text-base sm:text-lg font-bold text-white tracking-wider">
                       {NIHOMI_CONTACT.bkashNumberFormatted}
                     </span>
                     <button
                       type="button"
                       onClick={handleCopyBkashNumber}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold transition-all active:scale-95 shadow"
+                      className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold transition-all cursor-pointer shadow"
                     >
                       {copied ? (
                         <>
@@ -301,7 +301,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   <button
                     type="submit"
                     disabled={isSubmitting || !trxId.trim()}
-                    className="w-full py-3.5 px-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-xl shadow-lg shadow-red-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                    className="btn-haptic w-full py-3.5 px-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-xl shadow-lg shadow-red-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
@@ -344,7 +344,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     href={whatsappVerificationUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all active:scale-95"
+                    className="btn-haptic w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
                   >
                     <MessageSquare className="w-4 h-4" />
                     <span>WhatsApp-এ TrxID নিশ্চিত করুন</span>
@@ -359,7 +359,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 <div className="pt-2">
                   <button
                     onClick={onClose}
-                    className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition-colors"
+                    className="btn-haptic px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition-colors cursor-pointer"
                   >
                     পড়াশোনায় ফিরে যান
                   </button>

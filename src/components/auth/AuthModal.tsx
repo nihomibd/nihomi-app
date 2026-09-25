@@ -107,11 +107,11 @@ export const AuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden text-left">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/75 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 text-left my-auto">
         <button
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-700 rounded-full hover:bg-stone-100 transition-colors z-10 cursor-pointer"
+          className="btn-haptic absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-700 rounded-full hover:bg-stone-100 transition-colors z-10 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -133,7 +133,7 @@ export const AuthModal: React.FC = () => {
           <button
             onClick={handleGoogleClick}
             disabled={isProcessing}
-            className="w-full py-3.5 px-4 bg-white hover:bg-stone-50 text-stone-800 font-semibold text-sm rounded-2xl border border-stone-300 shadow-2xs hover:shadow-xs transition-all flex items-center justify-center space-x-3 active:scale-[0.98] cursor-pointer"
+            className="btn-haptic w-full py-3.5 px-4 bg-white hover:bg-stone-50 text-stone-800 font-semibold text-sm rounded-2xl border border-stone-300 shadow-2xs hover:shadow-xs transition-all flex items-center justify-center space-x-3 cursor-pointer"
           >
             {isProcessing ? (
               <Loader2 className="w-5 h-5 animate-spin text-stone-900" />
@@ -160,7 +160,7 @@ export const AuthModal: React.FC = () => {
           {/* Frictionless Student Onboarding */}
           <button
             onClick={handleStudentQuick}
-            className="w-full py-2.5 px-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+            className="btn-haptic w-full py-2.5 px-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
           >
             <div className="flex items-center space-x-2.5">
               <div className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold text-[10px] flex items-center justify-center">
@@ -176,7 +176,7 @@ export const AuthModal: React.FC = () => {
 
           <button
             onClick={handleFounderQuick}
-            className="w-full py-2.5 px-3.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
           >
             <div className="flex items-center space-x-2.5">
               <div className="w-6 h-6 rounded-full bg-amber-600 text-white font-bold text-[10px] flex items-center justify-center">

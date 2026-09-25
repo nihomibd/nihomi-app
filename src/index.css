@@ -65,6 +65,7 @@ button, a, input, select, textarea, [role="button"] {
   }
 }
 .animate-typing-dot {
+  display: inline-block;
   animation: typingBounce 1.2s infinite ease-in-out;
 }
 

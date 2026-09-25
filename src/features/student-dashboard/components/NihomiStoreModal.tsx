@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, Coins, CreditCard, Sparkles, X } from 'lucide-react';
+import { CheckCircle2, Coins, CreditCard, Sparkles, X, ShieldCheck } from 'lucide-react';
 import { trackPurchase } from '../../../lib/analytics';
 
 export interface StorePackage {
@@ -29,17 +29,24 @@ export const NihomiStoreModal: React.FC<NihomiStoreModalProps> = ({ isOpen, onCl
   const [receipt, setReceipt] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen) { setSelectedPack(null); setReceipt(null); setIsProcessing(false); }
+    if (!isOpen) {
+      setSelectedPack(null);
+      setReceipt(null);
+      setIsProcessing(false);
+    }
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
-    const handleKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
   const handleCheckout = async () => {
     if (!selectedPack) return;
     setIsProcessing(true);
@@ -55,12 +62,124 @@ export const NihomiStoreModal: React.FC<NihomiStoreModalProps> = ({ isOpen, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-stone-950/70 p-0 sm:items-center sm:p-4" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <section className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-[#fffdf8] shadow-2xl sm:rounded-3xl" role="dialog" aria-modal="true" aria-labelledby="nihomi-store-title">
-        <header className="flex items-center justify-between border-b border-stone-200 bg-white px-5 py-4"><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-rose-600">Nihomi Store</p><h2 id="nihomi-store-title" className="mt-1 text-lg font-bold text-stone-950">Coins & AI Credits Top-Up</h2><p className="text-xs font-medium text-stone-500">নিরাপদ bKash Checkout (BDT ৳)</p></div><button type="button" aria-label="Store বন্ধ করুন" onClick={onClose} className="rounded-full p-2 text-stone-500 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-rose-500"><X size={20} aria-hidden="true" /></button></header>
-        <div className="px-5 py-5"><div className="mb-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800"><CreditCard size={16} aria-hidden="true" /> bKash verified student checkout • BDT</div>
-          <div className="space-y-3">{PACKAGES.map((pack) => <button key={pack.id} type="button" onClick={() => { setSelectedPack(pack); setReceipt(null); }} className={`w-full rounded-2xl border p-4 text-left transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 ${selectedPack?.id === pack.id ? 'border-rose-500 bg-rose-50 ring-1 ring-rose-200' : 'border-stone-200 bg-white hover:border-rose-300'}`}><div className="flex items-start justify-between gap-3"><div><h3 className="text-sm font-bold text-stone-950">{pack.name}</h3><p className="mt-1 text-xs text-stone-500">{pack.description}</p></div><span className="text-lg font-black text-rose-700">৳{pack.price}</span></div><div className="mt-3 flex gap-3 text-xs font-bold text-stone-700">{pack.coins > 0 && <span className="flex items-center gap-1"><Coins size={14} className="text-amber-600" aria-hidden="true" />+{pack.coins} Coins</span>}<span className="flex items-center gap-1"><Sparkles size={14} className="text-indigo-600" aria-hidden="true" />+{pack.credits} AI Credits</span></div></button>)}</div>
-          {receipt ? <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center"><CheckCircle2 className="mx-auto text-emerald-600" size={28} aria-hidden="true" /><p className="mt-2 text-sm font-bold text-emerald-900">Top-up successful!</p><p className="mt-1 text-xs text-emerald-800">রসিদ: {receipt}</p><button type="button" onClick={onClose} className="mt-4 w-full rounded-xl bg-stone-900 px-4 py-3 text-sm font-bold text-white hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-stone-400">ড্যাশবোর্ডে ফিরুন</button></div> : <button type="button" disabled={!selectedPack || isProcessing} onClick={() => void handleCheckout()} className="mt-5 w-full rounded-xl bg-[#e2136e] px-4 py-3.5 text-sm font-bold text-white hover:bg-[#c90f61] focus:outline-none focus:ring-2 focus:ring-rose-500 disabled:cursor-not-allowed disabled:bg-stone-300">{isProcessing ? 'bKash যাচাই হচ্ছে...' : selectedPack ? `Pay ৳${selectedPack.price} with bKash` : 'একটি প্যাকেজ বেছে নিন'}</button>}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/75 backdrop-blur-sm p-4 overflow-y-auto"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white shadow-2xl border border-stone-200 text-left my-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="nihomi-store-title"
+      >
+        <header className="flex items-center justify-between border-b border-stone-200 bg-stone-50/80 px-6 py-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 font-mono">
+                NIHOMI STORE
+              </span>
+              <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-full">
+                bKash Instant
+              </span>
+            </div>
+            <h2 id="nihomi-store-title" className="mt-1 text-lg font-black text-stone-950">
+              Coins & AI Credits Top-Up
+            </h2>
+            <p className="text-xs font-medium text-stone-500">
+              নিরাপদ bKash Checkout (BDT ৳)
+            </p>
+          </div>
+          <button
+            type="button"
+            aria-label="Store বন্ধ করুন"
+            onClick={onClose}
+            className="btn-haptic rounded-full p-2 text-stone-400 hover:text-stone-700 hover:bg-stone-200/60 focus:outline-none transition-colors cursor-pointer"
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
+        </header>
+
+        <div className="p-6 space-y-4">
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-xs font-semibold text-emerald-800">
+            <CreditCard size={16} aria-hidden="true" className="shrink-0" />
+            <span>bKash verified student checkout • Direct auto-credit</span>
+          </div>
+
+          <div className="space-y-3">
+            {PACKAGES.map((pack) => (
+              <button
+                key={pack.id}
+                type="button"
+                onClick={() => {
+                  setSelectedPack(pack);
+                  setReceipt(null);
+                }}
+                className={`btn-haptic w-full rounded-2xl border p-4 text-left transition-all cursor-pointer ${
+                  selectedPack?.id === pack.id
+                    ? 'border-rose-500 bg-rose-50/70 shadow-md ring-2 ring-rose-400'
+                    : 'border-stone-200 bg-white hover:border-rose-300 hover:bg-stone-50/50'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-stone-950">{pack.name}</h3>
+                    <p className="mt-1 text-xs text-stone-500">{pack.description}</p>
+                  </div>
+                  <span className="text-lg font-black text-rose-600">৳{pack.price}</span>
+                </div>
+                <div className="mt-3 flex gap-3 text-xs font-bold text-stone-700">
+                  {pack.coins > 0 && (
+                    <span className="flex items-center gap-1">
+                      <Coins size={14} className="text-amber-500" aria-hidden="true" />
+                      +{pack.coins} Coins
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <Sparkles size={14} className="text-indigo-600" aria-hidden="true" />
+                    +{pack.credits} AI Credits
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {receipt ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center space-y-2">
+              <CheckCircle2 className="mx-auto text-emerald-600" size={32} aria-hidden="true" />
+              <p className="text-sm font-bold text-emerald-950">Top-up Successful!</p>
+              <p className="text-xs text-emerald-800 font-mono">রসিদ / TrxID: {receipt}</p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn-haptic mt-3 w-full rounded-xl bg-stone-900 px-4 py-3 text-sm font-bold text-white hover:bg-stone-800 transition-colors cursor-pointer"
+              >
+                ড্যাশবোর্ডে ফিরুন
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={!selectedPack || isProcessing}
+              onClick={() => void handleCheckout()}
+              className="btn-haptic w-full rounded-2xl bg-[#e2136e] hover:bg-[#c90f61] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-pink-500/20 disabled:cursor-not-allowed disabled:bg-stone-200 disabled:text-stone-400 transition-all cursor-pointer flex items-center justify-center space-x-2"
+            >
+              {isProcessing ? (
+                <span>bKash যাচাই হচ্ছে...</span>
+              ) : selectedPack ? (
+                <span>Pay ৳{selectedPack.price} with bKash</span>
+              ) : (
+                <span>একটি প্যাকেজ বেছে নিন</span>
+              )}
+            </button>
+          )}
+
+          <div className="flex items-center justify-center space-x-1.5 text-[11px] text-stone-400 pt-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Official SSL & bKash Merchant Gateway Secured</span>
+          </div>
         </div>
       </section>
     </div>

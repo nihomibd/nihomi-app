@@ -27,7 +27,13 @@ import {
   ListTodo,
   ShieldAlert,
   Loader2,
-  Compass
+  Compass,
+  Lock,
+  Eye,
+  EyeOff,
+  KeyRound,
+  LogOut,
+  ArrowLeft
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -36,10 +42,22 @@ interface FounderCommandCenterViewProps {
 }
 
 export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> = ({ onNavigate }) => {
-  const { user } = useAuth();
+  const { user, login, loginWithGoogle, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<
     'overview' | 'ai-ceo' | 'approvals' | 'departments' | 'tasks' | 'budget' | 'emergency'
   >('overview');
+
+  // Executive Login & Gatekeeper State
+  const [founderEmailInput, setFounderEmailInput] = useState('mdtanvirkabirbiplob@gmail.com');
+  const [founderPasscodeInput, setFounderPasscodeInput] = useState('');
+  const [showPasscode, setShowPasscode] = useState(false);
+  const [isAuthorizing, setIsAuthorizing] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const isAuthorizedFounder = Boolean(
+    user &&
+    (user.role === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com')
+  );
 
   // Loading & Error States
   const [isLoading, setIsLoading] = useState(true);
@@ -178,8 +196,12 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
   }, [getAuthHeaders]);
 
   useEffect(() => {
-    fetchAllFounderData();
-  }, [fetchAllFounderData]);
+    if (isAuthorizedFounder) {
+      fetchAllFounderData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [fetchAllFounderData, isAuthorizedFounder]);
 
   // AI CEO Query Submission
   const handleSendChat = async (promptText?: string) => {
@@ -405,6 +427,215 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
     if (taskFilter === 'ALL') return true;
     return t.status.toUpperCase() === taskFilter;
   });
+
+  const handleFounderLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!founderEmailInput.trim() || !founderPasscodeInput) {
+      setAuthError('Email and executive passcode are required.');
+      return;
+    }
+    setIsAuthorizing(true);
+    setAuthError(null);
+    try {
+      const ok = await login(founderEmailInput.trim(), founderPasscodeInput);
+      if (!ok) {
+        setAuthError('Authentication failed. Invalid founder credentials.');
+      } else {
+        fetchAllFounderData();
+      }
+    } catch (err: any) {
+      setAuthError(err?.message || 'Authentication error connecting to server');
+    } finally {
+      setIsAuthorizing(false);
+    }
+  };
+
+  const handleGoogleFounderLogin = async () => {
+    setIsAuthorizing(true);
+    setAuthError(null);
+    try {
+      const ok = await loginWithGoogle();
+      if (!ok) {
+        setAuthError('Google sign-in was canceled or failed.');
+      }
+    } catch (err: any) {
+      setAuthError(err?.message || 'Google sign-in error');
+    } finally {
+      setIsAuthorizing(false);
+    }
+  };
+
+  // EXECUTIVE GATEKEEPER (Rendered when unauthenticated or unauthorized)
+  if (!isAuthorizedFounder) {
+    return (
+      <div className="min-h-screen bg-[#07070d] text-slate-100 font-sans antialiased flex items-center justify-center p-4 relative overflow-hidden selection:bg-amber-500 selection:text-black">
+        {/* Background glow & subtle ambient styling */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.12),transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(99,102,241,0.08),transparent_70%)] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full max-w-md bg-[#0e0e18]/95 border border-amber-500/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(245,158,11,0.14)] backdrop-blur-2xl relative z-10">
+          {/* Header Badge */}
+          <div className="flex flex-col items-center text-center space-y-3 mb-6">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-0.5 shadow-xl shadow-amber-500/30 flex items-center justify-center">
+              <div className="w-full h-full bg-[#0b0b14] rounded-2xl flex items-center justify-center">
+                <Crown className="w-8 h-8 text-amber-400 animate-pulse" />
+              </div>
+            </div>
+
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-amber-500/15 text-amber-300 text-[11px] font-mono font-bold rounded-full border border-amber-500/30">
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>LEVEL 0 APEX SECURITY</span>
+            </div>
+
+            <h1 className="text-2xl font-black tracking-tight text-white">
+              Founder Command HQ
+            </h1>
+            <p className="text-xs text-slate-400 font-mono">
+              にほみ 創業者統括本部 • Executive Terminal
+            </p>
+          </div>
+
+          {/* Contextual Warning / Account status */}
+          {user ? (
+            <div className="mb-5 p-3.5 bg-amber-950/40 border border-amber-500/40 rounded-xl text-left space-y-2">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-amber-300">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Non-Founder Session Detected</span>
+              </div>
+              <p className="text-[11px] text-slate-300">
+                Signed in as <span className="font-mono text-white font-bold">{user.email}</span> ({user.role}). This account does not possess Level 0 Executive clearance.
+              </p>
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="btn-haptic w-full py-1.5 px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5 text-slate-400" />
+                <span>Switch to Founder Account</span>
+              </button>
+            </div>
+          ) : (
+            <div className="mb-5 p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl text-left">
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Executive authentication required to access real-time financial telemetry, AI department orchestrators, and kill-switches.
+              </p>
+            </div>
+          )}
+
+          {/* Error Alert */}
+          {authError && (
+            <div className="mb-5 p-3 bg-red-950/60 border border-red-500/50 rounded-xl flex items-center space-x-2 text-red-200 text-xs text-left">
+              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <span>{authError}</span>
+            </div>
+          )}
+
+          {/* 1-Click Google Sign-In */}
+          <div className="space-y-4">
+            <button
+              type="button"
+              disabled={isAuthorizing}
+              onClick={handleGoogleFounderLogin}
+              className="btn-haptic w-full py-3 px-4 bg-white hover:bg-slate-100 text-slate-900 font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md cursor-pointer disabled:opacity-50"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+              </svg>
+              <span>Sign in with Google (Founder)</span>
+            </button>
+
+            <div className="relative flex items-center justify-center my-2">
+              <div className="border-t border-slate-800 w-full" />
+              <span className="bg-[#0e0e18] px-3 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+                or executive passcode
+              </span>
+            </div>
+
+            {/* Email + Passcode Form */}
+            <form onSubmit={handleFounderLogin} className="space-y-3 text-left">
+              <div>
+                <label className="block text-[11px] font-mono font-medium text-slate-300 mb-1">
+                  Founder Email
+                </label>
+                <input
+                  type="email"
+                  value={founderEmailInput}
+                  onChange={(e) => setFounderEmailInput(e.target.value)}
+                  required
+                  className="w-full px-3.5 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                  placeholder="mdtanvirkabirbiplob@gmail.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-mono font-medium text-slate-300 mb-1">
+                  Executive Passcode
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPasscode ? 'text' : 'password'}
+                    value={founderPasscodeInput}
+                    onChange={(e) => setFounderPasscodeInput(e.target.value)}
+                    required
+                    className="w-full pl-3.5 pr-10 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                    placeholder="Enter founder passcode"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPasscode(!showPasscode)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    {showPasscode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isAuthorizing}
+                className="btn-haptic w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-lg shadow-amber-500/20 cursor-pointer disabled:opacity-50 mt-1"
+              >
+                {isAuthorizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Verifying Credentials...</span>
+                  </>
+                ) : (
+                  <>
+                    <KeyRound className="w-4 h-4" />
+                    <span>Authorize Executive Session</span>
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+            <button
+              type="button"
+              onClick={() => onNavigate('portal')}
+              className="hover:text-amber-400 flex items-center space-x-1 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Student Portal</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate('landing')}
+              className="hover:text-amber-400 transition-colors cursor-pointer"
+            >
+              Public Site →
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#07070d] text-slate-100 font-sans antialiased text-left pb-28 selection:bg-amber-500 selection:text-black">

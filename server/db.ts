@@ -1795,7 +1795,7 @@ class Database {
     email: string;
     password: string;
     displayName: string;
-    role?: 'user' | 'admin';
+    role?: UserRole;
     targetLevel?: JLPTLevel;
     nativeLanguage?: string;
   }): { user: User; profile: UserProfile; progress: UserProgress } {

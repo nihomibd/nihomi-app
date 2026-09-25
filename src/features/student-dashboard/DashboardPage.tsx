@@ -302,15 +302,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   }
 
   const digitalStudent: DigitalStudentProfile = {
-    id: data?.student.id || user?.id || 'std_01',
-    nihomiAccountId: `NHM-${(data?.student.id || user?.id || '000000').slice(-6)}`,
-    name: data?.student.name || user?.name || 'Student',
+    id: data?.student.id || user?.studentId || user?.id || 'NHO-100001',
+    nihomiAccountId: user?.nihomiAccountId || `ACC-${(data?.student.id || user?.id || '1001').slice(-4)}`,
+    name: user?.name || data?.student.name || 'Nihomi Student',
+    nameJa: user?.nameJa || '日本語学習者',
     email: user?.email || `${data?.student.id || 'std'}@student.nihomi.com`,
-    enrolledDate: new Date().toISOString(),
-    currentLevel: (data?.student.jlptLevel as any) || 'N5',
-    targetLevel: (data?.student.jlptLevel as any) || 'N5',
-    streakDays: data?.streak.currentStreak || 1,
+    avatarUrl: user?.avatarUrl || '',
+    enrolledDate: user?.createdAt ? user.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
+    currentLevel: (user?.currentLevel as any) || (data?.student.jlptLevel as any) || 'N5',
+    targetLevel: (user?.targetLevel as any) || 'N4',
+    streakDays: data?.streak.currentStreak || user?.streakDays || 1,
     totalStudyHours: 0,
+    tier: (user?.planId as any) || (isPro ? 'pro' : 'starter')
   };
 
   return (
@@ -520,7 +523,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                       type="button"
                       onClick={() => handleSenseiSearch()}
                       disabled={isSearchingSensei || !dashboardQuery.trim()}
-                      className="px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
+                      className="btn-haptic px-3.5 py-2 bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center shrink-0 cursor-pointer"
                       aria-label="Send Query"
                     >
                       {isSearchingSensei ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
@@ -534,7 +537,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         id="btn-dashboard-voice"
                         type="button"
                         onClick={() => setIsVoiceOpen(true)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
                       >
                         <Mic className="w-3.5 h-3.5 text-red-600" />
                         <span>Voice</span>
@@ -544,7 +547,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         id="btn-dashboard-photo-ocr"
                         type="button"
                         onClick={() => setIsVisionOpen(true)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
                       >
                         <Camera className="w-3.5 h-3.5 text-blue-600" />
                         <span>Photo OCR</span>
@@ -554,7 +557,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                         id="btn-dashboard-kanji-canvas"
                         type="button"
                         onClick={() => setIsWritingOpen(true)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
+                        className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 hover:bg-stone-100 text-stone-700 hover:text-stone-950 text-xs font-semibold rounded-xl border border-stone-200 transition-colors cursor-pointer"
                       >
                         <PenTool className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Kanji Canvas</span>
@@ -565,7 +568,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                       id="btn-dashboard-open-ai-tutor"
                       type="button"
                       onClick={() => setIsAiTutorOpen(true)}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
+                      className="btn-haptic inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
                     >
                       <Sparkles className="w-3 h-3" />
                       <span>AI Tutor</span>
@@ -588,14 +591,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     </div>
                   )}
                 </section>
-
-                {/* ১.৫. নিহোমি সেনসেই AI™ গোল্ডেন মিশন (Autonomous Next Action & MemoryOS) */}
-                <TodaysMissionCard
-                  onStartMission={(mission) => {
-                    setSelectedMission(mission);
-                    setIsGoldenLoopOpen(true);
-                  }}
-                />
 
                 {/* ২. হিরো লেসন - শেখা চালিয়ে যান */}
                 <ContinueLearningCard
@@ -629,6 +624,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
               {/* Right Column: Gamification, Streaks, Tests & Community (4 cols on desktop) */}
               <div className="lg:col-span-4 space-y-6">
+                {/* ১. ডিজিটাল লার্নিং পাসপোর্ট (Digital Student Identity) */}
+                <DigitalStudentIdCard student={digitalStudent} />
+
                 {/* ৭. ধারাবাহিকতা / স্ট্রাইক */}
                 <StreakCard streak={data.streak} onOpenLeaderboard={() => setIsLeaderboardOpen(true)} />
 
