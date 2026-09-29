@@ -141,7 +141,7 @@ export const StrokeOrderGuide: React.FC<StrokeOrderGuideProps> = ({
         </span>
 
         {/* Dynamic Vector Stroke Layer */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
           {/* Render already completed strokes */}
           {strokes.map((stroke, idx) => {
             if (idx > currentStroke) return null;
@@ -154,11 +154,11 @@ export const StrokeOrderGuide: React.FC<StrokeOrderGuideProps> = ({
                   <path
                     d={stroke.path}
                     fill="none"
-                    stroke="#f43f5e"
-                    strokeWidth="8"
+                    stroke="#f97316"
+                    strokeWidth="11"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    opacity="0.25"
+                    opacity="0.35"
                     className="animate-pulse"
                   />
                 )}
@@ -167,8 +167,8 @@ export const StrokeOrderGuide: React.FC<StrokeOrderGuideProps> = ({
                 <path
                   d={stroke.path}
                   fill="none"
-                  stroke={isCurrent ? '#f43f5e' : '#64748b'}
-                  strokeWidth={isCurrent ? '5.5' : '4'}
+                  stroke={isCurrent ? '#f97316' : '#64748b'}
+                  strokeWidth={isCurrent ? '6.5' : '4.5'}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -177,8 +177,8 @@ export const StrokeOrderGuide: React.FC<StrokeOrderGuideProps> = ({
                 <circle
                   cx={stroke.startPoint.x}
                   cy={stroke.startPoint.y}
-                  r={isCurrent ? '3.5' : '2.5'}
-                  fill={isCurrent ? '#fbbf24' : '#475569'}
+                  r={isCurrent ? '4' : '2.5'}
+                  fill={isCurrent ? '#f97316' : '#475569'}
                   stroke="#0f172a"
                   strokeWidth="1"
                 />

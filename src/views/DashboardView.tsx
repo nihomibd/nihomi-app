@@ -1,188 +1,421 @@
-import React, { useState, Component, ErrorInfo, ReactNode } from 'react';
-import { DashboardPage } from '../features/student-dashboard';
-import { NavTab } from '../features/student-dashboard/components/MobileBottomNavigation';
-import { MemoryOsView } from './MemoryOsView';
-import { BookOpen, Sparkles, ArrowRight, RotateCcw, Compass, Award } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Sparkles,
+  ArrowRight,
+  Flame,
+  BookOpen,
+  CheckCircle2,
+  PenTool,
+  Brain,
+  Bot,
+  Target,
+  Clock,
+  ChevronRight,
+  RotateCcw,
+  Zap,
+  BookmarkCheck,
+  Compass
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
+import { MemoryOsView } from './MemoryOsView';
 
 interface DashboardViewProps {
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
-interface ErrorBoundaryProps {
-  children: ReactNode;
-  onNavigate?: (view: string) => void;
+interface ProgressRingProps {
+  percentage: number;
+  label: string;
+  labelBn: string;
+  countText: string;
+  color: string;
+  bgColor: string;
+  textColor: string;
+  onClick?: () => void;
 }
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
-}
+const ProgressRing: React.FC<ProgressRingProps> = ({
+  percentage,
+  label,
+  labelBn,
+  countText,
+  color,
+  bgColor,
+  textColor,
+  onClick
+}) => {
+  const radius = 38;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percentage)) / 100) * circumference;
 
-class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  public state: ErrorBoundaryState = { hasError: false };
-
-  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.warn('[DashboardErrorBoundary] Caught dashboard render error:', error, errorInfo);
-  }
-
-  public render() {
-    if (this.state.hasError) {
-      const handleNav = (v: string) => this.props.onNavigate?.(v);
-      return (
-        <div className="min-h-screen bg-stone-50 text-stone-900 font-sans antialiased pb-24 pt-6 px-4 sm:px-6">
-          <div className="max-w-5xl mx-auto space-y-5">
-            {/* Greeting & Header */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-700 text-xs font-bold">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Nihomi Learning Dashboard</span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">
-                স্বাগতম, নিহোমিয়ান! (Welcome Learner)
-              </h1>
-              <p className="text-xs text-stone-600 leading-relaxed">
-                আপনার ধারাবাহিক জাপানি ভাষা শিক্ষার মিশন শুরু করুন। নিচের যে-কোনো মডিউল নির্বাচন করে সরাসরি পড়াশোনা শুরু করতে পারেন।
-              </p>
-            </div>
-
-            {/* Next Best Action Card */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-stone-950 via-stone-900 to-rose-950 p-6 text-white shadow-xl">
-              <div className="space-y-3">
-                <span className="text-[10px] font-extrabold tracking-widest text-amber-400 uppercase">
-                  ⚡ Next Best Action • পরবর্তী করণীয়
-                </span>
-                <h3 className="text-lg font-bold">
-                  Minna no Nihongo: Lesson 01
-                </h3>
-                <p className="text-xs text-stone-300">
-                  পরিচয় ও অভিবাদন (Meeting People & Self-Introductions) — সম্পূর্ণ ফ্রি ও অডিওসহ।
-                </p>
-                <div className="pt-2 flex flex-wrap gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => handleNav('lesson/n5-l1')}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-500 transition shadow-lg shadow-rose-600/30 cursor-pointer"
-                  >
-                    <span>লেসন ০১ শুরু করুন</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleNav('kana')}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-stone-800 text-stone-200 font-bold text-xs hover:bg-stone-700 transition cursor-pointer"
-                  >
-                    <BookOpen className="w-4 h-4" />
-                    <span>Kana Lab (হিরাগানা/কাতাকানা)</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Progress Overview Grid */}
-            <div className="grid grid-cols-2 gap-3.5">
-              <div
-                onClick={() => handleNav('kana')}
-                className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm cursor-pointer hover:border-rose-300 transition"
-              >
-                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Kana Foundations</span>
-                <span className="text-lg font-black text-stone-900">46 / 46</span>
-                <span className="text-xs text-stone-500 block mt-1">হিরাগানা ও কাতাকানা</span>
-              </div>
-              <div
-                onClick={() => handleNav('kanji')}
-                className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm cursor-pointer hover:border-rose-300 transition"
-              >
-                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Kanji N5 Lab</span>
-                <span className="text-lg font-black text-stone-900">100 Kanji</span>
-                <span className="text-xs text-stone-500 block mt-1">স্ট্রোক ও অর্থসহ ড্রিল</span>
-              </div>
-            </div>
-
-            {/* Recovery / Retry Bar */}
-            <div className="text-center pt-2">
-              <button
-                type="button"
-                onClick={() => this.setState({ hasError: false })}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-800 transition cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>ড্যাশবোর্ড পুনরায় লোড করুন (Retry)</span>
-              </button>
-            </div>
-          </div>
+  return (
+    <div
+      onClick={onClick}
+      className="p-5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] transition-all duration-200 cursor-pointer flex flex-col items-center text-center group"
+    >
+      <div className="relative w-24 h-24 mb-3 flex items-center justify-center">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="transparent"
+            stroke="currentColor"
+            strokeWidth="7"
+            className="text-white/[0.08]"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="transparent"
+            stroke={color}
+            strokeWidth="7"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            className="transition-all duration-700 ease-out"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className={`text-base font-black tracking-tight ${textColor}`}>
+            {percentage}%
+          </span>
         </div>
-      );
-    }
-    return this.props.children;
-  }
-}
+      </div>
+
+      <span className="text-xs font-bold text-white group-hover:text-stone-100 transition-colors">
+        {label}
+      </span>
+      <span className="text-[11px] text-stone-400 mt-0.5">
+        {labelBn}
+      </span>
+      <span className="text-[10px] font-mono text-stone-500 mt-1">
+        {countText}
+      </span>
+    </div>
+  );
+};
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
+  const { user, progress } = useAuth();
+  const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
-  const handleResumeLesson = (lessonId: string) => {
-    if (onNavigate) {
-      onNavigate(`lesson/${lessonId}`);
-    }
-  };
+  // Student metrics
+  const studentName = user?.name || 'Nihomi Student';
+  const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
+  const completedLessonsCount = (progress as any)?.completedLessonsCount || 0;
+  const kanaMasteredCount = 46; // Foundational
+  const kanjiMasteredCount = 24; // N5 progress
 
-  const handleNavigateTab = (tab: NavTab) => {
-    if (tab === 'practice' && onNavigate) {
-      onNavigate('practice');
-    } else if (tab === 'learn' && onNavigate) {
-      onNavigate('courses');
-    } else if (tab === 'profile' && onNavigate) {
-      onNavigate('profile');
-    }
-  };
+  const kanaPercent = 100;
+  const kanjiPercent = Math.round((kanjiMasteredCount / 100) * 100);
+  const grammarPercent = Math.round((completedLessonsCount / 40) * 100);
 
-  const handleOpenMistakeBook = () => {
-    if (onNavigate) {
-      onNavigate('memory-os');
-    } else {
-      setShowMemoryOs(true);
+  // Spaced repetition review bank sample items
+  const srsReviewItems = [
+    {
+      id: 'srs-1',
+      pattern: 'は (wa) vs が (ga)',
+      category: 'Particle Distinction',
+      mistakeNote: 'সামগ্রিক টপিক নির্দেশ করতে "は" এবং সুনির্দিষ্ট নতুন কর্তা জোর দিতে "が" ব্যবহৃত হয়।',
+      dueStatus: 'Due Today (আজকে পুনরাবৃত্তি)',
+      color: 'border-red-500/30 bg-red-500/5'
+    },
+    {
+      id: 'srs-2',
+      pattern: 'あります vs います',
+      category: 'Animacy Existence',
+      mistakeNote: 'প্রাণী ও মানুষের ক্ষেত্রে "います" এবং জড়বস্তু বা উদ্ভিদে "あります" বসবে।',
+      dueStatus: 'Due in 2h (২ ঘণ্টার মধ্যে)',
+      color: 'border-amber-500/30 bg-amber-500/5'
+    },
+    {
+      id: 'srs-3',
+      pattern: '〜てください (te-form request)',
+      category: 'Verb Conjugation',
+      mistakeNote: 'অনুরোধমূলক নির্দেশ তৈরিতে ভার্বের て-ফর্ম রূপান্তর আবশ্যক (যেমন: 食べます -> 食べてください)।',
+      dueStatus: 'Ready for Drill (রিভিউ প্রস্তুত)',
+      color: 'border-emerald-500/30 bg-emerald-500/5'
     }
-  };
-
-  const handleMemoryNavigate = (view: string) => {
-    if (view === 'dashboard') {
-      setShowMemoryOs(false);
-    } else {
-      onNavigate?.(view);
-    }
-  };
+  ];
 
   if (showMemoryOs) {
     return (
-      <div className="relative min-h-screen bg-stone-50 pb-16">
-        <div className="p-4 max-w-5xl mx-auto">
+      <div className="min-h-screen bg-[#0D0D11] text-white p-4 sm:p-6 lg:p-8">
+        <div className="max-w-5xl mx-auto space-y-4">
           <button
             type="button"
             onClick={() => setShowMemoryOs(false)}
-            className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-xs font-semibold hover:bg-stone-800 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-xs font-bold text-white transition-all cursor-pointer"
           >
-            ← ড্যাশবোর্ডে ফিরে যান
+            ← ড্যাশবোর্ডে ফিরে যান (Return to Dashboard)
           </button>
-          <MemoryOsView onNavigate={handleMemoryNavigate} />
+          <MemoryOsView onNavigate={(view) => {
+            if (view === 'dashboard') setShowMemoryOs(false);
+            else onNavigate?.(view);
+          }} />
         </div>
       </div>
     );
   }
 
   return (
-    <DashboardErrorBoundary onNavigate={onNavigate}>
-      <DashboardPage
-        onResumeLesson={handleResumeLesson}
-        onNavigateTab={handleNavigateTab}
-        onNavigate={onNavigate}
-        onOpenMistakeBook={handleOpenMistakeBook}
-      />
-    </DashboardErrorBoundary>
+    <div className="min-h-screen bg-[#0D0D11] text-stone-100 font-sans antialiased pb-20 selection:bg-red-600 selection:text-white">
+      {/* Top Header Bar */}
+      <header className="border-b border-white/[0.08] bg-[#0D0D11]/90 backdrop-blur-md sticky top-0 z-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Left: Identity */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-red-600/20 select-none">
+              日
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-black text-white tracking-tight">NIHOMI STUDENT OS</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 font-mono font-bold border border-red-500/30">
+                  JLPT N5
+                </span>
+              </div>
+              <p className="text-[11px] text-stone-400 font-medium">
+                ようこそ, {studentName} • Spaced Repetition Active
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Quick Telemetry */}
+          <div className="flex items-center gap-2.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-xs font-bold text-amber-400">
+              <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span>{streakDays}d Streak</span>
+            </div>
+
+            <button
+              onClick={() => setIsAiSenseiOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white transition-all shadow-md shadow-red-600/20 cursor-pointer"
+            >
+              <Bot className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Tanaka AI</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Streamlined 3-Zone Workspace */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 space-y-8">
+        
+        {/* ========================================================================= */}
+        {/* ZONE A: TODAY'S ACTION CARD (Clean next best step, zero visual clutter)   */}
+        {/* ========================================================================= */}
+        <section aria-label="Today's Action Card">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#13131c] via-[#161622] to-[#101018] border border-white/[0.12] p-6 sm:p-8 shadow-2xl">
+            {/* Subtle red glowing accent */}
+            <div className="pointer-events-none absolute -right-16 -top-16 w-56 h-56 bg-red-600/15 rounded-full blur-3xl" />
+
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/20 border border-red-500/30 text-red-400 text-xs font-bold font-mono">
+                  <Zap className="w-3.5 h-3.5 text-amber-300" />
+                  <span>ZONE A • TODAY'S NEXT BEST STEP</span>
+                </div>
+
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight leading-snug">
+                  Minna no Nihongo: Lesson 01 — 自己紹介 (Self-Introduction)
+                </h1>
+
+                <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-medium">
+                  আমি শিক্ষার্থী (~は ~です / ~じゃありません) • তোশিবা নেটিভ অডিও ডায়ালগ, ২৫টি মৌলিক ভোকাবুলারি ও ৩টি ব্যাকরণ স্ট্রাকচার।
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-stone-400 font-mono">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-stone-500" />
+                    ~১৫ মিনিট
+                  </span>
+                  <span>•</span>
+                  <span>২৫টি শব্দার্থ</span>
+                  <span>•</span>
+                  <span>৩টি ব্যাকরণ প্যাটার্ন</span>
+                  <span>•</span>
+                  <span className="text-emerald-400 font-bold">ফ্রি অ্যাক্সেস</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+                <button
+                  onClick={() => onNavigate?.('lesson', { lessonId: 'l01' })}
+                  className="px-7 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>লেসন ০১ শুরু করুন</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onNavigate?.('kana')}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-stone-300 hover:text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <PenTool className="w-3.5 h-3.5 text-rose-400" />
+                    <span>কানা ল্যাব</span>
+                  </button>
+
+                  <button
+                    onClick={() => setIsAiSenseiOpen(true)}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-stone-300 hover:text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Bot className="w-3.5 h-3.5 text-amber-400" />
+                    <span>AI কোচ</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* ZONE B: COMPACT PROGRESS RINGS (Kana %, Kanji %, N5 Grammar %)             */}
+        {/* ========================================================================= */}
+        <section aria-label="Progress Overview" className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-stone-400 font-mono flex items-center gap-2">
+              <Target className="w-3.5 h-3.5 text-red-500" />
+              <span>ZONE B • COMPACT PROGRESS METER (দক্ষতা ট্র্যাকার)</span>
+            </h2>
+            <button
+              onClick={() => onNavigate?.('courses')}
+              className="text-xs text-red-400 hover:text-red-300 font-semibold flex items-center gap-1 cursor-pointer"
+            >
+              <span>সকল কোর্স দেখুন</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <ProgressRing
+              percentage={kanaPercent}
+              label="Kana Foundations"
+              labelBn="হিরাগানা ও কাতাকানা"
+              countText="৪৬ / ৪৬ অক্ষর সম্পন্ন"
+              color="#f43f5e"
+              bgColor="#fda4af"
+              textColor="text-rose-400"
+              onClick={() => onNavigate?.('kana')}
+            />
+
+            <ProgressRing
+              percentage={kanjiPercent}
+              label="Kanji N5 Lab"
+              labelBn="১০০ মৌলিক কাঞ্জি"
+              countText={`${kanjiMasteredCount} / ১০০ কাঞ্জি মাস্টার্ড`}
+              color="#fbbf24"
+              bgColor="#fde68a"
+              textColor="text-amber-400"
+              onClick={() => onNavigate?.('kanji')}
+            />
+
+            <ProgressRing
+              percentage={grammarPercent}
+              label="N5 Master Grammar"
+              labelBn="মিন্না নো নিহোঙ্গো"
+              countText={`${completedLessonsCount} / ৪০টি ইন্টারঅ্যাক্টিভ পাঠ`}
+              color="#10b981"
+              bgColor="#a7f3d0"
+              textColor="text-emerald-400"
+              onClick={() => onNavigate?.('courses')}
+            />
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* ZONE C: SRS MISTAKE REVIEW BANK (Mistakes saved for spaced repetition)    */}
+        {/* ========================================================================= */}
+        <section aria-label="SRS Mistake Bank" className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-stone-400 font-mono flex items-center gap-2">
+              <Brain className="w-3.5 h-3.5 text-amber-400" />
+              <span>ZONE C • SRS MISTAKE REVIEW BANK (স্পেসড রিপিটেশন ভুল ব্যাংক)</span>
+            </h2>
+            <button
+              onClick={() => setShowMemoryOs(true)}
+              className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 cursor-pointer"
+            >
+              <span>MemoryOS™ খুলুন</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="rounded-3xl bg-white/[0.03] border border-white/[0.08] p-5 sm:p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+              <div>
+                <p className="text-sm font-bold text-white flex items-center gap-2">
+                  <span>অনুশীলন ও কুইজে চিহ্নিত দুর্বলতা ব্যাংক</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-bold">
+                    ৩টি রিভিউ সক্রিয়
+                  </span>
+                </p>
+                <p className="text-xs text-stone-400 mt-0.5">
+                  স্পেসড রিপিটেশন অ্যালগরিদম নিয়মিত বিরতিতে আপনার ভুল হওয়া ব্যাকরণ ও শব্দার্থ পুনরায় স্মরণ করিয়ে দেবে।
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowMemoryOs(true)}
+                className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-amber-500/20 cursor-pointer shrink-0"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>রিভিউ সেশন শুরু করুন</span>
+              </button>
+            </div>
+
+            {/* Mistake Items Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              {srsReviewItems.map((item) => (
+                <div
+                  key={item.id}
+                  className={`p-4 rounded-2xl border ${item.color} space-y-2 flex flex-col justify-between`}
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-stone-400">
+                      <span>{item.category}</span>
+                      <BookmarkCheck className="w-3.5 h-3.5 text-stone-500" />
+                    </div>
+                    <div className="text-sm font-bold text-white font-japanese">
+                      {item.pattern}
+                    </div>
+                    <p className="text-xs text-stone-300 leading-relaxed">
+                      {item.mistakeNote}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-amber-400 font-semibold">{item.dueStatus}</span>
+                    <button
+                      onClick={() => setShowMemoryOs(true)}
+                      className="text-stone-400 hover:text-white cursor-pointer underline"
+                    >
+                      ড্রিল করুন
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      {/* Tanaka AI Sensei Modal */}
+      {isAiSenseiOpen && (
+        <AiSenseiModal
+          isOpen={isAiSenseiOpen}
+          onClose={() => setIsAiSenseiOpen(false)}
+        />
+      )}
+    </div>
   );
 };
 

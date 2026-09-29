@@ -1,3 +1,7 @@
+import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } from '../../types';
+import n5MasterData from '../n5_master.json';
+import { stripFurigana, extractReading } from '../../utils/furigana';
+
 export interface CurriculumVocab {
   kanji: string;
   hiragana: string;
@@ -3541,8 +3545,6 @@ export const NIHOMI_JLPT_N5_CURRICULUM: LessonCurriculum[] = [
   }
 ];
 
-import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } from '../../types';
-
 export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | null {
   let num: number = 1;
   if (typeof lessonIdOrNum === 'number') {
@@ -3560,7 +3562,89 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     }
   }
   if (num < 1) num = 1;
-  if (num > 25) num = 25;
+  if (num > 40) num = 40;
+
+  // First check n5_master.json for complete 40 lessons
+  const masterItem = (n5MasterData as any[]).find((l: any) => l.lesson_metadata?.lesson_number === num);
+  if (masterItem) {
+    const meta = masterItem.lesson_metadata;
+    const bridge = masterItem.bengali_bridge;
+    return {
+      id: `les-n5-${meta.lesson_number}`,
+      moduleId: `mod-n5-${meta.module_number}`,
+      courseId: 'course-n5',
+      level: 'N5',
+      lessonNumber: meta.lesson_number,
+      title: meta.title_en,
+      titleJa: meta.title_ja,
+      summary: bridge?.explanation_bn || `${meta.title_ja} — N5 Lesson ${meta.lesson_number}`,
+      explanation: bridge?.core_concept_bn || bridge?.explanation_bn,
+      isPublished: true,
+      estimatedMinutes: meta.estimated_minutes || 25,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-01T00:00:00.000Z',
+      vocabulary: (masterItem.vocabulary_scope || []).map((v: any, i: number): VocabularyItem => ({
+        id: `voc-${meta.lesson_number}-${i + 1}`,
+        japanese: stripFurigana(v.word_ja),
+        furigana: extractReading(v.word_ja) || v.romaji,
+        romaji: v.romaji,
+        english: v.meaning_en,
+        banglaMeaning: v.meaning_bn,
+        partOfSpeech: v.partOfSpeech || v.part_of_speech || 'noun',
+        level: 'N5',
+        exampleSentenceJa: stripFurigana(v.example_ja),
+        exampleSentenceEn: v.example_en,
+        exampleSentenceBn: v.example_bn,
+        exampleFurigana: extractReading(v.example_ja)
+      })),
+      grammar: (masterItem.grammar_points || []).map((g: any, i: number): GrammarItem => ({
+        id: g.point_id || `gram-${meta.lesson_number}-${i + 1}`,
+        title: g.pattern_ja,
+        titleJa: g.pattern_bn,
+        structure: g.pattern_ja,
+        meaning: g.pattern_bn,
+        explanation: `${g.explanation_bn}${g.common_pitfalls?.length ? '\n\n' + g.common_pitfalls.join('\n') : ''}`,
+        level: 'N5',
+        examples: (g.examples || []).map((ex: any) => ({
+          japanese: stripFurigana(ex.ja),
+          english: ex.en,
+          breakdown: ex.bn
+        }))
+      })),
+      kanji: (masterItem.kanji_scope || []).map((k: any, i: number): KanjiItem => ({
+        id: `kanji-${meta.lesson_number}-${i + 1}`,
+        character: k.kanji,
+        meaning: `${k.meaning_en} (${k.meaning_bn})`,
+        onyomi: k.onyomi ? [k.onyomi] : [],
+        kunyomi: k.kunyomi ? [k.kunyomi] : [],
+        strokes: k.stroke_count || 1,
+        radicals: k.kanji,
+        level: 'N5',
+        examples: (k.compounds || []).map((c: any) => ({
+          word: stripFurigana(c.word_ja),
+          reading: extractReading(c.word_ja),
+          meaning: `${c.meaning_en} / ${c.meaning_bn}`
+        }))
+      })),
+      dialogue: (masterItem.dialogue_scenario?.lines || []).map((d: any): LessonDialogue => ({
+        speaker: d.speaker_ja,
+        speakerRole: d.speaker_en,
+        japanese: stripFurigana(d.line_ja),
+        english: `${d.line_en} (${d.line_bn})`
+      })),
+      practiceExercises: (masterItem.quizzes || []).map((q: any, i: number) => ({
+        id: q.quiz_id || `prac-${meta.lesson_number}-${i + 1}`,
+        instruction: q.question_bn || 'Choose the grammatically correct Japanese sentence structure:',
+        questionJa: stripFurigana(q.question_ja),
+        hint: q.question_bn,
+        type: 'multiple_choice',
+        options: (q.options || []).map((o: string) => stripFurigana(o)),
+        correctAnswer: stripFurigana(q.options?.[q.correct_index] || q.options?.[0] || ''),
+        explanation: q.explanation_bn
+      })),
+      quizId: masterItem.quizzes?.[0]?.quiz_id || `quiz-n5-${meta.lesson_number}`
+    };
+  }
 
   const item = NIHOMI_JLPT_N5_CURRICULUM.find((l) => l.lessonNumber === num) || NIHOMI_JLPT_N5_CURRICULUM[0];
   if (!item) return null;

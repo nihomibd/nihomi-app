@@ -23,11 +23,25 @@ export function formatApiUrl(endpoint: string): string {
 
 const memoryStorage = new Map<string, string>();
 
+export function getOrGenerateGuestToken(): string {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let guestId = localStorage.getItem('nihomi_guest_id');
+      if (!guestId) {
+        guestId = 'guest_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('nihomi_guest_id', guestId);
+      }
+      return guestId;
+    }
+  } catch {}
+  return 'guest_anon';
+}
+
 export function getStoredToken(): string | null {
   try {
     if (typeof window !== 'undefined') {
       if (window.localStorage) {
-        const token = localStorage.getItem(TOKEN_KEY);
+        const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('nihomi_token');
         if (token) return token;
 
         // Fallback: check Supabase auth token stored by supabase-js
@@ -92,8 +106,10 @@ export async function apiRequest<T = any>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = getStoredToken();
+  const guestId = getOrGenerateGuestToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'x-guest-session-id': guestId,
     ...(options.headers as Record<string, string>)
   };
 

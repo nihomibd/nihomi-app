@@ -15,9 +15,9 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   // HIRAGANA (46 SEION CHARACTERS)
   // ==========================================
   'あ': [
-    { strokeNumber: 1, path: 'M 25 32 Q 50 30 75 32', startPoint: { x: 25, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বাম থেকে ডানে অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 50 16 Q 48 50 44 82', startPoint: { x: 50, y: 16 }, direction: 'down', releaseType: 'harai', instructionBn: '২. মাঝখান দিয়ে নিচে বাঁকিয়ে নামান' },
-    { strokeNumber: 3, path: 'M 38 42 C 32 52 26 62 24 70 C 22 78 30 78 36 70 C 42 62 46 48 52 44 C 60 38 74 38 80 50 C 84 62 82 74 72 82 C 62 86 52 82 46 76', startPoint: { x: 38, y: 42 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. কেন্দ্র থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)' }
+    { strokeNumber: 1, path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বাম থেকে ডানে মসৃণ অনুভূমিক দাগ' },
+    { strokeNumber: 2, path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84', startPoint: { x: 47, y: 16 }, direction: 'down', releaseType: 'harai', instructionBn: '২. উপর থেকে নিচে ১ম দাগ ভেদ করে বাঁকানো উলম্ব দাগ' },
+    { strokeNumber: 3, path: 'M 60.2 40.5 C 60.9 41.5 61.3 44.5 60.7 46.1 C 56.4 57.3 50.4 67.9 37.4 78.9 C 31.1 84.2 22.8 82.3 22.5 71.2 C 22.2 61.2 34.8 50.0 52.2 46.7 C 63.6 44.5 77.0 47.9 80.2 58.4 C 83.9 70.5 76.7 82.6 61.0 86.3', startPoint: { x: 60.2, y: 40.5 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. কেন্দ্রের উপর থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)' }
   ],
   'い': [
     { strokeNumber: 1, path: 'M 30 26 C 26 50 28 68 36 78 Q 40 80 44 74', startPoint: { x: 30, y: 26 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামে বাঁকিয়ে নিচে এনে শেষের হুক' },

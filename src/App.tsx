@@ -11,7 +11,7 @@ const DocumentsView = lazy(() => import('./views/DocumentsView').then(m => ({ de
 const EmailSignatureView = lazy(() => import('./views/EmailSignatureView').then(m => ({ default: m.EmailSignatureView })));
 const CoordinationHubView = lazy(() => import('./views/CoordinationHubView').then(m => ({ default: m.CoordinationHubView })));
 const AICreditsView = lazy(() => import('./views/AICreditsView').then(m => ({ default: m.AICreditsView })));
-const CoursesView = lazy(() => import('./views/CoursesView').then(m => ({ default: m.CoursesView })));
+const CoursesView = lazy(() => import('./views/CoursesView').then(m => ({ default: m.default || m.CoursesView })));
 const LessonView = lazy(() => import('./views/LessonView').then(m => ({ default: m.LessonView })));
 const QuizzesView = lazy(() => import('./views/QuizzesView').then(m => ({ default: m.QuizzesView })));
 const QuizRunnerView = lazy(() => import('./views/QuizRunnerView').then(m => ({ default: m.QuizRunnerView })));
@@ -429,7 +429,7 @@ export const App: React.FC = () => {
   }, []);
 
   const isAdLanding = currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign';
-  const isCanvasMode = currentView === 'landing' || currentView === 'home' || currentView === 'world' || currentView === 'canvas';
+  const isCanvasMode = currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya';
   const isDashboardRoute = currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard';
 
   return (
@@ -482,16 +482,16 @@ export const App: React.FC = () => {
         {(currentView === 'growth' || currentView === 'admin-growth' || currentView === 'founder/growth') && (
           <AdminGrowthView onNavigate={handleNavigate} />
         )}
-        {(currentView === 'landing' || currentView === 'home' || currentView === 'world' || currentView === 'canvas') && (
-          <RealJapanCanvasView onNavigate={handleNavigate} />
-        )}
-        {currentView === 'classic' && (
+        {(currentView === 'landing' || currentView === 'home' || currentView === 'classic') && (
           <LandingView onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya') && (
+          <RealJapanCanvasView onNavigate={handleNavigate} />
         )}
         {(currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard') && (
           <DashboardView onNavigate={handleNavigate} />
         )}
-        {currentView === 'courses' && (
+        {(currentView === 'courses' || currentView === 'pathways') && (
           <CoursesView onNavigate={handleNavigate} />
         )}
         {currentView === 'lesson' && (

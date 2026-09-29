@@ -239,6 +239,7 @@ export const KanjiStrokeAnimator: React.FC<KanjiStrokeAnimatorProps> = ({
             <svg
               ref={canvasRef}
               viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid meet"
               className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
               onMouseDown={handleStartDraw}
               onMouseMove={handleMoveDraw}
@@ -253,18 +254,32 @@ export const KanjiStrokeAnimator: React.FC<KanjiStrokeAnimatorProps> = ({
                   const isLatest = index === currentStep - 1;
                   return (
                     <g key={stroke.strokeNumber}>
+                      {/* Active stroke vivid glow */}
+                      {isLatest && (
+                        <path
+                          d={stroke.path}
+                          fill="none"
+                          stroke="#f97316"
+                          strokeWidth="11"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          opacity="0.35"
+                          className="animate-pulse"
+                        />
+                      )}
+
                       {/* Stroke Path Line */}
                       <motion.path
                         d={stroke.path}
                         fill="none"
-                        stroke={isLatest ? '#dc2626' : '#1e293b'}
-                        strokeWidth="7"
+                        stroke={isLatest ? '#f97316' : '#1e293b'}
+                        strokeWidth="6.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="dark:stroke-stone-200"
-                        initial={{ pathLength: 0 }}
+                        className={isLatest ? 'stroke-orange-500 dark:stroke-orange-400' : 'stroke-slate-900 dark:stroke-stone-200'}
+                        initial={isLatest ? { pathLength: 0 } : false}
                         animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.6 / playbackSpeed, ease: 'easeInOut' }}
+                        transition={{ duration: 0.75 / playbackSpeed, ease: 'easeInOut' }}
                       />
 
                       {/* Numbered Indicator Bubble */}
@@ -274,7 +289,7 @@ export const KanjiStrokeAnimator: React.FC<KanjiStrokeAnimatorProps> = ({
                             cx={stroke.startPoint.x}
                             cy={stroke.startPoint.y}
                             r="4.5"
-                            fill={isLatest ? '#ef4444' : '#64748b'}
+                            fill={isLatest ? '#f97316' : '#64748b'}
                             className="shadow-sm"
                           />
                           <text

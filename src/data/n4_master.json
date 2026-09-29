@@ -1,0 +1,5045 @@
+[
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L01",
+      "lesson_number": 1,
+      "module_number": 1,
+      "module_name": "Explanations & Polite Requests",
+      "module_name_bn": "ব্যাখ্যা ও বিনীত অনুরোধ",
+      "title_ja": "んですの用法[ようほう]",
+      "title_en": "Giving Explanations (~ndesu / ~ndesuga)",
+      "title_bn": "ব্যাখ্যা প্রদান ও ভূমিকা স্থাপন (~んです / 〜んですが)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় শুধু সাধারণ তথ্য না দিয়ে যখন কোনো কারণ, পটভূমি বা আবেগময় ব্যাখ্যা দিতে হয়, তখন বাক্য সাধারণ রূপে শেষ না করে 〜んです (ndesu) যোগ করা হয়। এটি কথ্য রূপ 〜のだ (noda) এর বিনম্র রূপ। গঠন: ক্রিয়া/বিশেষণ এর সাধারণ রূপ (Plain form) + んです। な-বিশেষণ ও বিশেষ্যের বর্তমান ইতিবাচকে な যোগ করে 〜なんです হয়।",
+      "core_concept_bn": "পরিস্থিতির ব্যাখ্যা চাওয়া (どうしたんですか), কারণ ব্যাখ্যা করা (頭が痛いんです), এবং কোনো অনুরোধের পটভূমি তৈরি করতে 〜んですが ব্যবহার।",
+      "real_world_context_bn": "জাপানে অফিসে বা বাইতোতে দেরির কারণ ব্যাখ্যা করতে কিংবা ডাক্তারখানায় উপসর্গের গভীরতা তুলে ধরতে んです ব্যবহার অপরিহার্য।",
+      "key_takeaway_bn": "সাধারণ です বললে নিছক তথ্য বোঝায়, কিন্তু んです বললে শ্রোতার সাথে বোঝাপড়া ও সহানুভূতি তৈরি হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "理由[りゆう]",
+        "romaji": "riyuu",
+        "meaning_bn": "কারণ / অজুহাত",
+        "meaning_en": "reason",
+        "part_of_speech": "noun",
+        "example_ja": "遅刻[ちこく]した理由[りゆう]を教[おし]えてください。",
+        "example_bn": "দেরি হওয়ার কারণটি দয়া করে বলুন।",
+        "example_en": "Please tell me the reason for being late."
+      },
+      {
+        "word_ja": "都合[つごう]",
+        "romaji": "tsugou",
+        "meaning_bn": "সুবিধা / পরিস্থিতি",
+        "meaning_en": "convenience / circumstances",
+        "part_of_speech": "noun",
+        "example_ja": "明日[あした]は都合[つごう]が悪[わる]いんです。",
+        "example_bn": "আগামীকাল আমার সময় বা সুবিধা হবে না।",
+        "example_en": "Tomorrow is not convenient for me."
+      },
+      {
+        "word_ja": "故障[こしょう]",
+        "romaji": "koshou",
+        "meaning_bn": "যন্ত্র নষ্ট হওয়া / বিকল",
+        "meaning_en": "breakdown / out of order",
+        "part_of_speech": "noun",
+        "example_ja": "エアコンが故障[こしょう]したんです。",
+        "example_bn": "এয়ার কন্ডিশনারটি নষ্ট হয়ে গিয়েছে।",
+        "example_en": "The air conditioner has broken down."
+      },
+      {
+        "word_ja": "気分[きぶん]",
+        "romaji": "kibun",
+        "meaning_bn": "শারীরিক বা মানসিক অনুভূতি",
+        "meaning_en": "feeling / mood",
+        "part_of_speech": "noun",
+        "example_ja": "少[すこ]し気分[きぶん]が悪[わる]いんです。",
+        "example_bn": "আমার শরীরটা কিছুটা খারাপ লাগছে।",
+        "example_en": "I am feeling a little unwell."
+      },
+      {
+        "word_ja": "連絡[れんらく]する",
+        "romaji": "renraku suru",
+        "meaning_bn": "যোগাযোগ করা / খবর দেওয়া",
+        "meaning_en": "to contact / notify",
+        "part_of_speech": "verb",
+        "example_ja": "すぐ先生[せんせい]に連絡[れんらく]したんです。",
+        "example_bn": "আমি তখনই শিক্ষকের সাথে যোগাযোগ করেছিলাম।",
+        "example_en": "I contacted the teacher immediately."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "理",
+        "onyomi": "リ",
+        "kunyomi": "ことわり",
+        "meaning_bn": "যুক্তি / কারণ / বিজ্ঞান",
+        "meaning_en": "reason / logic",
+        "stroke_count": 11,
+        "compounds": [
+          {
+            "word_ja": "理由[りゆう]",
+            "meaning_bn": "কারণ",
+            "meaning_en": "reason"
+          },
+          {
+            "word_ja": "料理[りょうり]",
+            "meaning_bn": "রান্না",
+            "meaning_en": "cooking"
+          },
+          {
+            "word_ja": "理解[りかい]",
+            "meaning_bn": "অনুধাবন",
+            "meaning_en": "understanding"
+          }
+        ]
+      },
+      {
+        "kanji": "由",
+        "onyomi": "ユ, ユウ",
+        "kunyomi": "よし",
+        "meaning_bn": "উৎস / স্বাধীনতা",
+        "meaning_en": "reason / originate",
+        "stroke_count": 5,
+        "compounds": [
+          {
+            "word_ja": "自由[じゆう]",
+            "meaning_bn": "স্বাধীনতা",
+            "meaning_en": "freedom"
+          },
+          {
+            "word_ja": "経由[けいゆ]",
+            "meaning_bn": "ভায়া / মাধ্যম",
+            "meaning_en": "via"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G01-1",
+        "pattern_ja": "普通形[ふつうけい] + んです",
+        "pattern_bn": "সাধারণ রূপ + んです (কারণ বা প্রেক্ষাপট ব্যাখ্যা)",
+        "explanation_bn": "যখন আপনি এমন কোনো তথ্য দেন যা শ্রোতার কাছে ব্যাখ্যা হিসেবে কাজ করে। না-বিশেষণ ও বিশেষ্যের ক্ষেত্রে 'だ' এর বদলে 'な' যুক্ত হয় (যেমন: 暇なんです、病気なんです)।",
+        "common_pitfalls": [
+          "শুধু সাধারণ সত্য বা সাধারণ বিবৃতিতে んです ব্যবহার করলে অতিরিক্ত কৈফিয়ত মনে হতে পারে।",
+          "বিশেষ্যের সাথে だんです বলা ভুল, সবসময় なんです বলতে হবে।"
+        ],
+        "examples": [
+          {
+            "ja": "バスが来[こ]なかったんです。",
+            "bn": "বাস আসেনি বলেই দেরি হয়েছে।",
+            "en": "It's because the bus didn't come."
+          },
+          {
+            "ja": "今日[きょう]はテストがあるんです。",
+            "bn": "আজকের দিনটিতে আমার পরীক্ষা আছে।",
+            "en": "It's because I have an exam today."
+          }
+        ]
+      },
+      {
+        "point_id": "N4-G01-2",
+        "pattern_ja": "〜んですが、〜ていただけませんか",
+        "pattern_bn": "পটভূমি তৈরি + বিনীত অনুরোধ",
+        "explanation_bn": "কাউকে কোনো অনুরোধ করার পূর্বে পরিস্থিতিটি んですが দিয়ে প্রকাশ করে তারপর অনুরোধ করলে তা অত্যন্ত মার্জিত শোনায়।",
+        "common_pitfalls": [
+          "সরাসরি 〜てください বললে অনেক সময় কর্কশ শোনাতে পারে; জাপানি ব্যবসায়িক সংস্কৃতিতে んですが দিয়ে শুরু করা নিয়ম।"
+        ],
+        "examples": [
+          {
+            "ja": "日本語[にほんご]の手紙[てがみ]を書[か]いたんですが、見[み]ていただけませんか。",
+            "bn": "জাপানি ভাষার একটি চিঠি লিখেছি, একটু দেখে দেবেন কি?",
+            "en": "I wrote a Japanese letter, could you please take a look at it?"
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসে দেরিতে আসার পর সুপারভাইজার ও কর্মচারীর কথোপকথন।",
+      "situation_en": "Dialogue at the workplace between a supervisor and employee regarding late arrival.",
+      "lines": [
+        {
+          "speaker_ja": "部長[ぶちょう]",
+          "speaker_en": "Department Manager",
+          "line_ja": "どうしたんですか。少[すこ]し遅[おく]れましたね。",
+          "line_bn": "কী হয়েছে? কিছুটা দেরি হয়ে গেল যে।",
+          "line_en": "What happened? You are a bit late."
+        },
+        {
+          "speaker_ja": "ラヒム",
+          "speaker_en": "Rahim",
+          "line_ja": "すみません、電車[でんしゃ]が事故[じこ]で止[と]まったんです。",
+          "line_bn": "ক্ষমা করবেন, ট্রেন দুর্ঘটনার কারণে চলাচল বন্ধ ছিল।",
+          "line_en": "I apologize, the train stopped due to an accident."
+        },
+        {
+          "speaker_ja": "部長[ぶちょう]",
+          "speaker_en": "Department Manager",
+          "line_ja": "そうだったんですか。大変[たいへん]でしたね。怪我[けが]はありませんでしたか。",
+          "line_bn": "তাই নাকি! খুব ঝামেলা পোহাতে হয়েছে। কোনো আঘাত লাগেনি তো?",
+          "line_en": "Is that so? That must have been tough. Were you not hurt?"
+        },
+        {
+          "speaker_ja": "ラヒム",
+          "speaker_en": "Rahim",
+          "line_ja": "はい、大丈夫[だいじょうぶ]です。すぐ仕事[しごと]を始[はじ]めます。",
+          "line_bn": "হ্যাঁ, আমি একদম ঠিক আছি। এখনই কাজ শুরু করছি।",
+          "line_en": "Yes, I am fine. I will start working right away."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "দেরি হলে ট্রেনের 'বিলম্ব প্রমাণপত্র' (遅延証明書 - Chien Shoumeisho) সংগ্রহ করা",
+      "tip_bn": "জাপানে ট্রেন বা মেট্রো ১ মিনিট দেরি হলেও স্টেশন থেকে Delay Certificate দেওয়া হয়। স্কুল বা অফিসে ট্রেনের কারণে দেরি হলে স্টেশন মাস্টারের কাছ থেকে বা রেলওয়ের ওয়েবসাইট থেকে এই সনদ সংগ্রহ করে জমা দিলে অনুপস্থিতি বা জরিমানার কোনো দায় থাকে না।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "理由[りゆう]",
+        "romaji_input": "riyuu",
+        "target_display": "りゆう",
+        "meaning_bn": "কারণ"
+      },
+      {
+        "prompt_ja": "都合[つごう]",
+        "romaji_input": "tsugou",
+        "target_display": "つごう",
+        "meaning_bn": "সুবিধা"
+      },
+      {
+        "prompt_ja": "故障[こしょう]",
+        "romaji_input": "koshou",
+        "target_display": "こしょう",
+        "meaning_bn": "নষ্ট হওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L01-1",
+        "question_ja": "「どうして昨日[きのう]休[やす]んだんですか」「熱[ねつ]が（　　）んです」",
+        "question_bn": "খালি জায়গায় সঠিক রূপ কোনটি বসবে?",
+        "options": [
+          "あった",
+          "あります",
+          "あったの",
+          "あるでした"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অতীতকালের সাধারণ রূপ (Plain past form) あった এর সাথে んです যুক্ত হয়ে 熱があったんです (জ্বর ছিল) হবে।"
+      },
+      {
+        "quiz_id": "Q-N4-L01-2",
+        "question_ja": "な-形容詞[けいようし]と「んです」の 正[ただ]しい 接続[せつぞく]は どれですか。",
+        "question_bn": "な-বিশেষণের সাথে んです এর সঠিক সংযোগ কোনটি?",
+        "options": [
+          "暇なんです",
+          "暇だんです",
+          "暇ですんです",
+          "暇いんです"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "な-বিশেষ্যের বর্তমান ইতিবাচক রূপে だ এর বদলে な যুক্ত হয়ে 暇なんです (অবসর আছি বলে) হয়।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L02",
+      "lesson_number": 2,
+      "module_number": 1,
+      "module_name": "Explanations & Polite Requests",
+      "module_name_bn": "ব্যাখ্যা ও বিনীত অনুরোধ",
+      "title_ja": "〜ていただけませんか",
+      "title_en": "Polite Requests (~te itadakemasenka)",
+      "title_bn": "অত্যন্ত বিনীত অনুরোধ (~তে ইতাদাকেমাসেন কা)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় কাউকে কোনো কাজ করে দেওয়ার জন্য অনুরোধ করার সময় 〜てください সাধারণ অনুরোধ প্রকাশ করে। কিন্তু অপরিচিত ব্যক্তি, জ্যেষ্ঠ কর্মকর্তা বা শিক্ষককে অনুরোধ করতে হলে 〜ていただけませんか (te itadakemasenka) বা 〜てくださいませんか ব্যবহার করা হয়, যা বাংলায় 'দয়া করে কি একটু অনুগ্রহ করবেন?' এর সমতুল্য।",
+      "core_concept_bn": "নম্রতার স্তর: 〜てください (সাধারণ) < 〜てくれませんか (বন্ধুত্বপূর্ণ) < 〜てくださいませんか (বিনীত) < 〜ていただけませんか (সর্বোচ্চ বিনীত)।",
+      "real_world_context_bn": "ব্যাংকে ফর্ম পূরণ, সরকারি ওয়ার্ড অফিসে নথিপত্র যাচাই কিংবা সিটি হলের কর্মকর্তাদের সাহায্য চাওয়ার সময় এই রূপটি নিত্যদিনের ভাষা।",
+      "key_takeaway_bn": "ক্রিয়ার তে-ফর্ম (Te-form) এর সাথে いただけませんか যোগ করে প্রশ্নটি করা হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "申込書[もうしこみしょ]",
+        "romaji": "moushikomisho",
+        "meaning_bn": "আবেদনপত্র",
+        "meaning_en": "application form",
+        "part_of_speech": "noun",
+        "example_ja": "この申込書[もうしこみしょ]の書[か]き方[かた]を教[おし]えていただけませんか。",
+        "example_bn": "এই আবেদনপত্র লেখার নিয়মটি কি দয়া করে একটু শিখিয়ে দেবেন?",
+        "example_en": "Could you please show me how to fill out this application form?"
+      },
+      {
+        "word_ja": "案内[あんない]する",
+        "romaji": "annai suru",
+        "meaning_bn": "পথ দেখানো / গাইড করা",
+        "meaning_en": "to guide / show around",
+        "part_of_speech": "verb",
+        "example_ja": "市役所[しやくしょ]まで案内[あんない]していただけませんか。",
+        "example_bn": "সিটি হল পর্যন্ত আমাকে একটু পথ দেখিয়ে দেবেন কি?",
+        "example_en": "Could you please guide me to the city office?"
+      },
+      {
+        "word_ja": "確認[かくにん]する",
+        "romaji": "kakunin suru",
+        "meaning_bn": "যাচাই করা / নিশ্চিত হওয়া",
+        "meaning_en": "to confirm / check",
+        "part_of_speech": "verb",
+        "example_ja": "書類[しょるい]を確認[かくにん]していただけませんか。",
+        "example_bn": "কাগজপত্রগুলো একটু যাচাই করে দেবেন কি?",
+        "example_en": "Could you please check these documents?"
+      },
+      {
+        "word_ja": "直[なお]す",
+        "romaji": "naosu",
+        "meaning_bn": "সংশোধন করা / ঠিক করা",
+        "meaning_en": "to repair / correct",
+        "part_of_speech": "verb",
+        "example_ja": "作文[さくぶん]の間違い[まちがい]を直[なお]していただけませんか。",
+        "example_bn": "রচনাটির ভুলগুলো কি একটু শুধরে দেবেন?",
+        "example_en": "Could you please correct the errors in my essay?"
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "申",
+        "onyomi": "シン",
+        "kunyomi": "もう・す",
+        "meaning_bn": "বলা / আবেদন করা",
+        "meaning_en": "say / report",
+        "stroke_count": 5,
+        "compounds": [
+          {
+            "word_ja": "申[もう]す",
+            "meaning_bn": "বলা (নম্র রূপ)",
+            "meaning_en": "to say (humble)"
+          },
+          {
+            "word_ja": "申込[もうしこみ]",
+            "meaning_bn": "আবেদন",
+            "meaning_en": "application"
+          }
+        ]
+      },
+      {
+        "kanji": "込",
+        "onyomi": "-",
+        "kunyomi": "こ・む",
+        "meaning_bn": "ভেতরে ঢোকা / ভিড়",
+        "meaning_en": "crowded / into",
+        "stroke_count": 7,
+        "compounds": [
+          {
+            "word_ja": "込[こ]む",
+            "meaning_bn": "ভিড় হওয়া",
+            "meaning_en": "to be crowded"
+          },
+          {
+            "word_ja": "申[もう]し込[こ]む",
+            "meaning_bn": "আবেদন করা",
+            "meaning_en": "to apply"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G02-1",
+        "pattern_ja": "動詞[どうし] て形[けい] + いただけませんか",
+        "pattern_bn": "ক্রিয়ার তে-ফর্ম + いただけませんか (বিনীত অনুরোধ)",
+        "explanation_bn": "相手 (অন্য ব্যক্তি) কে বিনম্রভাবে কোনো কাজের অনুরোধ করতে ব্যবহৃত হয়। এটি いただく (বিনম্র গ্রহণ করা) এর সম্ভাবনাময় রূপ いただける থেকে এসেছে।",
+        "common_pitfalls": [
+          "ঘনিষ্ঠ বন্ধু বা পরিবারের সাথে এটি বললে অতিরিক্ত দূরত্ব তৈরি হয়; বন্ধুমহলে てくれる বা てくれ ব্যবহৃত হয়।"
+        ],
+        "examples": [
+          {
+            "ja": "もう一度[いちど]ゆっくり言[い]っていただけませんか。",
+            "bn": "আর একবার একটু ধীরে বলবেন কি?",
+            "en": "Could you please say it once more slowly?"
+          },
+          {
+            "ja": "写真[しゃしん]を撮[と]っていただけませんか。",
+            "bn": "একটি ছবি তুলে দেবেন কি?",
+            "en": "Could you please take a photo for me?"
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "টোকিও ওয়ার্ড অফিসে বিদেশী বাসিন্দা ও কর্মকর্তার মধ্যে ফর্ম পূরণ নিয়ে আলোচনা।",
+      "situation_en": "Discussion between a foreign resident and an official at a Tokyo ward office.",
+      "lines": [
+        {
+          "speaker_ja": "住民[じゅうみん]",
+          "speaker_en": "Resident",
+          "line_ja": "すみません、住所[じゅうしょ]の変更[へんこう]をしたいんですが、この用紙[ようし]の書[か]き方[かた]を教[おし]えていただけませんか。",
+          "line_bn": "ক্ষমা করবেন, ঠিকানা পরিবর্তন করতে চাই; এই ফর্মটি পূরণের নিয়ম একটু শিখিয়ে দেবেন কি?",
+          "line_en": "Excuse me, I would like to change my address. Could you please show me how to fill out this form?"
+        },
+        {
+          "speaker_ja": "窓口[まどぐち]の人[ひと]",
+          "speaker_en": "Counter Clerk",
+          "line_ja": "はい、こちらに新[あたら]しい住所[じゅうしょ]とお名前[なまえ]をカタカナで書[か]いてください。",
+          "line_bn": "অবশ্যই, এখানে নতুন ঠিকানা এবং আপনার নাম কাতাকানায় লিখুন।",
+          "line_en": "Sure, please write your new address and your name in Katakana here."
+        },
+        {
+          "speaker_ja": "住民[じゅうみん]",
+          "speaker_en": "Resident",
+          "line_ja": "ありがとうございます。在留[ざいりゅう]カードも必要[ひつよう]ですか。",
+          "line_bn": "ধন্যবাদ। রেসিডেন্স কার্ড কি প্রয়োজন হবে?",
+          "line_en": "Thank you. Is my residence card also required?"
+        },
+        {
+          "speaker_ja": "窓口[まどぐち]の人[ひと]",
+          "speaker_en": "Counter Clerk",
+          "line_ja": "はい、確認[かくにん]いたしますので、見[み]せていただけませんか。",
+          "line_bn": "হ্যাঁ, আমরা যাচাই করব, তাই অনুগ্রহ করে কার্ডটি একটু দেখাবেন কি?",
+          "line_en": "Yes, we will verify it, so could you please show it to us?"
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "ওয়ার্ড অফিসে (役所 - Yakusho) ভাষা সহায়তা ও ফুরিগানা চাওয়া",
+      "tip_bn": "জাপানের অধিকাংশ সিটি হলে বিদেশী নাগরিকদের সহায়তার জন্য বহুভাষিক কাউন্টার থাকে। জটিল কাঞ্জিযুক্ত ফর্ম বুঝতে সমস্যা হলে 'ふりがなを振っていただけませんか' (ফুরিগানা লিখে দেবেন কি?) বললে কর্মকর্তারা সাদরে সহায়তা করেন।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "案内[あんない]",
+        "romaji_input": "annai",
+        "target_display": "あんない",
+        "meaning_bn": "পথ দেখানো"
+      },
+      {
+        "prompt_ja": "確認[かくにん]",
+        "romaji_input": "kakunin",
+        "target_display": "かくにん",
+        "meaning_bn": "যাচাই"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L02-1",
+        "question_ja": "目上[めうえ]の人[ひと]に 最[もっと]も 丁寧[ていねい]に 頼[たの]む 表現[ひょうげん]は どれですか。",
+        "question_bn": "বয়োজ্যেষ্ঠ বা ঊর্ধ্বতন কর্মকর্তাকে সবচেয়ে মার্জিতভাবে অনুরোধের রূপ কোনটি?",
+        "options": [
+          "教えていただけませんか",
+          "教えてください",
+          "教えてくれ",
+          "教えてほしい"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "〜ていただけませんか রূপটি বিনম্রতার সর্বোচ্চ স্তর নির্দেশ করে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L03",
+      "lesson_number": 3,
+      "module_number": 1,
+      "module_name": "Explanations & Polite Requests",
+      "module_name_bn": "ব্যাখ্যা ও বিনীত অনুরোধ",
+      "title_ja": "どうしたらいいですか",
+      "title_en": "Seeking Advice (Question Word + ~tara ii desu ka)",
+      "title_bn": "পরামর্শ ও নির্দেশনা চাওয়া (প্রশ্নবোধক শব্দ + 〜たらいいですか)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "যখন আপনি কোনো কাজ কীভাবে করবেন, কোথায় যাবেন বা কার সাথে যোগাযোগ করবেন জানেন না এবং অন্য কারও পরামর্শ চান, তখন 'প্রশ্নবোধক শব্দ + ক্রিয়ার তারা-ফর্ম (たら) + いいですか' ব্যবহার করা হয়। যেমন: どこへ行ったらいいですか (কোথায় গেলে ভালো হয়?)।",
+      "core_concept_bn": "পরামর্শ প্রার্থনা: どこで買ったらいいですか (কোথায় কিনলে ভালো হয়?), 誰に聞いたらいいですか (কাকে জিজ্ঞাসা করা উচিত?)।",
+      "real_world_context_bn": "টোকিওর জটিল রেলওয়ে সিস্টেমে ট্রেন বদল করা, হারানো পাসপোর্ট উদ্ধার বা ট্যাক্স ফর্ম জমা দেওয়ার সঠিক দপ্তর জানার জন্য এই বাক্য গঠন অপরিহার্য।",
+      "key_takeaway_bn": "ক্রিয়ার অতীত সাধারণ রূপের (た形) সাথে ら যোগ করে たら গঠিত হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "拾[ひろ]う",
+        "romaji": "hirou",
+        "meaning_bn": "কুড়িয়ে পাওয়া",
+        "meaning_en": "to pick up / find",
+        "part_of_speech": "verb",
+        "example_ja": "道[みち]で財布[さいふ]を拾[ひろ]ったんですが、どうしたらいいですか。",
+        "example_bn": "রাস্তায় একটি মানিব্যাগ কুড়িয়ে পেয়েছি, এখন আমার কী করা উচিত?",
+        "example_en": "I found a wallet on the street, what should I do?"
+      },
+      {
+        "word_ja": "交番[こうばん]",
+        "romaji": "kouban",
+        "meaning_bn": "পুলিশ বক্স",
+        "meaning_en": "police box",
+        "part_of_speech": "noun",
+        "example_ja": "すぐ交番[こうばん]に届[とど]けてください。",
+        "example_bn": "অবিলম্বে পুলিশ বক্সে পৌঁছে দিন।",
+        "example_en": "Please report it to the police box right away."
+      },
+      {
+        "word_ja": "届[とど]ける",
+        "romaji": "todokeru",
+        "meaning_bn": "পৌঁছে দেওয়া / রিপোর্ট করা",
+        "meaning_en": "to deliver / report",
+        "part_of_speech": "verb",
+        "example_ja": "警察[けいさつ]に届[とど]けたらいいですか。",
+        "example_bn": "পুলিশে কি জমা দেওয়া উচিত?",
+        "example_en": "Should I report it to the police?"
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "拾",
+        "onyomi": "シュウ, ジュウ",
+        "kunyomi": "ひろ・う",
+        "meaning_bn": "কুড়ানো",
+        "meaning_en": "pick up / gather",
+        "stroke_count": 9,
+        "compounds": [
+          {
+            "word_ja": "拾[ひろ]う",
+            "meaning_bn": "কুড়ানো",
+            "meaning_en": "to pick up"
+          },
+          {
+            "word_ja": "拾得物[しゅうとくぶつ]",
+            "meaning_bn": "কুড়িয়ে পাওয়া জিনিস",
+            "meaning_en": "found property"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G03-1",
+        "pattern_ja": "疑問詞[ぎもんし] + 動詞[どうし] た形[けい] + らいいですか",
+        "pattern_bn": "প্রশ্নবোধক শব্দ + たらいいですか (পরামর্শ চাওয়া)",
+        "explanation_bn": "কোনো সমস্যার সর্বোত্তম সমাধান জানতে বক্তা শ্রোতার মতামত জানতে চায়। এর উত্তরে প্রায়শই 〜たらいいですよ বা 〜てください বলা হয়।",
+        "common_pitfalls": [
+          "কি করা উচিত জানতে '何を行きますか' বলা ভুল, বলতে হবে 'どうしたらいいですか'।"
+        ],
+        "examples": [
+          {
+            "ja": "切符[きっぷ]をなくしたんですが、誰[だれ]に言[い]ったらいいですか。",
+            "bn": "টিকিট হারিয়ে ফেলেছি, কাকে বলা উচিত?",
+            "en": "I lost my ticket, who should I talk to?"
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ট্রেন স্টেশনে পাস হারিয়ে ফেলার পর স্টেশন মাস্টারের পরামর্শ চাওয়া।",
+      "situation_en": "Asking for advice at a train station after losing a commute pass.",
+      "lines": [
+        {
+          "speaker_ja": "留学生[りゅうがくせい]",
+          "speaker_en": "International Student",
+          "line_ja": "すみません、定期券[ていきけん]を落[お]としたんですが、どこで探[さが]したらいいですか。",
+          "line_bn": "ক্ষমা করবেন, আমার কমিউটার পাস ফেলে এসেছি, কোথায় খুঁজলে ভালো হয়?",
+          "line_en": "Excuse me, I dropped my commuter pass. Where should I look for it?"
+        },
+        {
+          "speaker_ja": "駅員[えきいん]",
+          "speaker_en": "Station Attendant",
+          "line_ja": "お忘れ物[わすれもの]センターへ行[い]ってみてください。こちらで番号[ばんごう]をお調[しら]べします。",
+          "line_bn": "লস্ট অ্যান্ড ফাউন্ড সেন্টারে গিয়ে দেখুন। আমি এখান থেকে নম্বর যাচাই করে দিচ্ছি।",
+          "line_en": "Please try going to the Lost and Found Center. I will look up the number for you here."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের পুলিশ বক্স (Kouban) এবং হারানো জিনিস ফেরত পাওয়ার সংস্কৃতি",
+      "tip_bn": "জাপানে কোনো মূল্যবান সামগ্রী হারালে শতকরা ৮০ ভাগ ক্ষেত্রেই তা নিকটস্থ Kouban-এ অক্ষত অবস্থায় ফেরত পাওয়া যায়। কিছু হারালে দেরি না করে দ্রুত নিকটস্থ পুলিশ বক্সে একটি 'ইশিকুতসুতোদোকে' (遺失届 - Lost Property Report) দাখিল করতে হয়।",
+      "category": "Emergency"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "交番[こうばん]",
+        "romaji_input": "kouban",
+        "target_display": "こうばん",
+        "meaning_bn": "পুলিশ বক্স"
+      },
+      {
+        "prompt_ja": "届[とど]ける",
+        "romaji_input": "todokeru",
+        "target_display": "とどける",
+        "meaning_bn": "পৌঁছে দেওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L03-1",
+        "question_ja": "「日本[にほん]の マナーが よく 分からないんですが、どう（　　）いいですか」",
+        "question_bn": "খালি জায়গায় সঠিক ব্যাকরণ রূপ কোনটি?",
+        "options": [
+          "したら",
+          "して",
+          "すると",
+          "すれば"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "প্রশ্নবোধক শব্দের সাথে たらいいですか প্যাটার্ন হিসেবে どうしたらいいですか (কী করলে ভালো হয়?) সঠিক।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L04",
+      "lesson_number": 4,
+      "module_number": 1,
+      "module_name": "Explanations & Polite Requests",
+      "module_name_bn": "ব্যাখ্যা ও বিনীত অনুরোধ",
+      "title_ja": "名詞化[めいしか]の「の」",
+      "title_en": "Nominalization with 'no' (~no ga suki/tokui)",
+      "title_bn": "ক্রিয়াকে বিশেষ্যে রূপান্তর (ক্রিয়া + の + が好き / 得意)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় ক্রিয়ার সাথে সরাসরি বিশেষণ বা পার্টিকেল যুক্ত করা যায় না; ক্রিয়ার পর 'の' যুক্ত করে তাকে বিশেষ্য (Noun) রূপ দিতে হয়, যাকে Nominalization বলে। যেমন: 本を読む (বই পড়া) -> 本を読むの (বই পড়ার কাজ)। এর পর が好き (পছন্দ), が嫌い (অপছন্দ), が上手 (পারদর্শী), が遅い (দেরি) ইত্যাদি বসে।",
+      "core_concept_bn": "ক্রিয়ার সাধারণ রূপ (Dictionary form / Nai form) + の + が好きです / 得意です / 下手です।",
+      "real_world_context_bn": "চাকরির ইন্টারভিউ বা শখের কথায় 'আমার সিনেমা দেখতে ভালো লাগে' বা 'আমি দ্রুত টাইপ করতে পারি' প্রকাশ করা।",
+      "key_takeaway_bn": "বাংলায় যেমন 'খাওয়াটা পছন্দ করি' বলি, জাপানিতে সেই 'টা' বা ক্রিয়াকে বিশেষ্য করার কাজটি করে 'の'। "
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "得意[とくい]",
+        "romaji": "tokui",
+        "meaning_bn": "কোনো কাজে ভালো / পারদর্শী (নিজের ক্ষেত্রে)",
+        "meaning_en": "good at (humble/casual)",
+        "part_of_speech": "na-adjective",
+        "example_ja": "私[わたし]は料理[りょうり]を作[つく]るのが得意[とくい]です。",
+        "example_bn": "আমি রান্না করায় বেশ পারদর্শী।",
+        "example_en": "I am good at cooking."
+      },
+      {
+        "word_ja": "苦手[にがて]",
+        "romaji": "nigate",
+        "meaning_bn": "দুর্বল / অপছন্দীয়",
+        "meaning_en": "weak at / dislike",
+        "part_of_speech": "na-adjective",
+        "example_ja": "朝[あさ]早[はや]く起[お]きるのが苦手[にがて]です。",
+        "example_bn": "সকালে ভোরে ওঠা আমার জন্য বেশ কঠিন।",
+        "example_en": "I am bad at waking up early in the morning."
+      },
+      {
+        "word_ja": "興味[きょうみ]",
+        "romaji": "kyoumi",
+        "meaning_bn": "আগ্রহ / কৌতূহল",
+        "meaning_en": "interest",
+        "part_of_speech": "noun",
+        "example_ja": "日本[にほん]の文化[ぶんか]を学[まな]ぶのに興味[きょうみ]があります。",
+        "example_bn": "জাপানি সংস্কৃতি শেখার প্রতি আমার গভীর আগ্রহ আছে।",
+        "example_en": "I have an interest in learning Japanese culture."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "得",
+        "onyomi": "トク",
+        "kunyomi": "え・る",
+        "meaning_bn": "অর্জন / লাভ",
+        "meaning_en": "gain / acquire",
+        "stroke_count": 11,
+        "compounds": [
+          {
+            "word_ja": "得意[とくい]",
+            "meaning_bn": "পারদর্শী",
+            "meaning_en": "good at"
+          },
+          {
+            "word_ja": "納得[なっとく]",
+            "meaning_bn": "সন্তুষ্ট বা সম্মত হওয়া",
+            "meaning_en": "consent"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G04-1",
+        "pattern_ja": "動詞[どうし] 辞書形[じしょけい] + のが 好[す]き / 嫌[きら]い です",
+        "pattern_bn": "ক্রিয়া + のが 好き / 嫌い (পছন্দ ও অপছন্দ)",
+        "explanation_bn": "কোনো কাজ করতে ভালো লাগলে বা মন্দ লাগলে ক্রিয়ার পর のが যোগ করে বিশেষণ বসানো হয়।",
+        "common_pitfalls": [
+          "ক্রিয়া সরাসরি が 好き এর সাথে বসে না (e.g. 食べるが好きです ভুল; 食べるのが好きです সঠিক)।"
+        ],
+        "examples": [
+          {
+            "ja": "音楽[おんがく]を聞[き]くのが好[す]きです。",
+            "bn": "গান শোনা আমার পছন্দ।",
+            "en": "I like listening to music."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "জাপানি বন্ধুদের সাথে আড্ডায় শখ ও আগ্রহ বিনিময়।",
+      "situation_en": "Sharing hobbies and interests during a chat with Japanese friends.",
+      "lines": [
+        {
+          "speaker_ja": "けんた",
+          "speaker_en": "Kenta",
+          "line_ja": "週末[しゅうまつ]は何[なに]をして過[す]ごすのが好[す]きですか。",
+          "line_bn": "সাপ্তাহিক ছুটিতে কীভাবে সময় কাটাতে তোমার ভালো লাগে?",
+          "line_en": "How do you like spending your weekends?"
+        },
+        {
+          "speaker_ja": "アリフ",
+          "speaker_en": "Arif",
+          "line_ja": "私[わたし]は公園[こうえん]を散歩[さんぽ]するのが好[す]きです。時々[ときどき]写真[しゃしん]も撮[と]ります。",
+          "line_bn": "আমার পার্কে হাঁটাহাঁটি করতে ভালো লাগে। মাঝে মাঝে ছবিও তুলি।",
+          "line_en": "I like taking walks in the park. Sometimes I take photos too."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "বিনম্রতা বজায় রেখে '苦手です' (Nigate desu) দিয়ে অনিচ্ছা প্রকাশ",
+      "tip_bn": "জাপানে কেউ কোনো খাবার বা কাজ অফার করলে সরাসরি '嫌いです' (অপছন্দ করি) বললে তা অভদ্রতা মনে হয়। জাপানিরা বিনয়ের সাথে বলেন '〜はちょっと苦手です' (এটাতে আমার একটু সমস্যা হয়/অভ্যাস নেই)।",
+      "category": "Manners"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "得意[とくい]",
+        "romaji_input": "tokui",
+        "target_display": "とくい",
+        "meaning_bn": "পারদর্শী"
+      },
+      {
+        "prompt_ja": "苦手[にがて]",
+        "romaji_input": "nigate",
+        "target_display": "にがて",
+        "meaning_bn": "দুর্বল"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L04-1",
+        "question_ja": "「走る（　　）が 速[はや]いです」正しい 助詞は？",
+        "question_bn": "খালি জায়গায় সঠিক রূপ কোনটি?",
+        "options": [
+          "の",
+          "こと",
+          "に",
+          "を"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "ক্রিয়াকে বিশেষ্য করে 速い এর সাথে যুক্ত করতে 'の' ব্যবহৃত হয় (走るのが速いです)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L05",
+      "lesson_number": 5,
+      "module_number": 1,
+      "module_name": "Explanations & Polite Requests",
+      "module_name_bn": "ব্যাখ্যা ও বিনীত অনুরোধ",
+      "title_ja": "理由[りゆう]と接続表現[せつぞくひょうげん]",
+      "title_en": "Compound Sentences & Conjunctions (~node / ~noni)",
+      "title_bn": "কারণ ও বিপরীতমুখী সংযোগ (~ので ও ~のに)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় কারণ বর্ণনার জন্য から (kara) ও ので (node) ব্যবহৃত হয়। から ব্যক্তিগত মতামত বা আদেশ-অনুরোধে স্বাভাবিক, কিন্তু ので হলো বস্তুনিষ্ঠ, বাস্তবসম্মত এবং অধিক মার্জিত। অন্যদিকে, 'তা সত্ত্বেও' বা বিপরীত ফল বোঝাতে 〜のに (noni) ব্যবহৃত হয়।",
+      "core_concept_bn": "বস্তুনিষ্ঠ কারণ: 〜ので (যেহেতু / কারণে); অপ্রত্যাশিত বৈপরীত্য বা ক্ষোভ: 〜のに (তা সত্ত্বেও)।",
+      "real_world_context_bn": "ব্যবসায়িক ইমেইলে অনুপস্থিতি বা মিটিং পেছানোর কারণ জানাতে ので ব্যবহার করা শিষ্টাচার।",
+      "key_takeaway_bn": "な-বিশেষণ ও বিশেষ্যের পর ので ও のに এর সাথে な যুক্ত হয় (雨なので、静かなのに)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "約束[やくそく]",
+        "romaji": "yakusoku",
+        "meaning_bn": "প্রতিশ্রুতি / অ্যাপয়েন্টমেন্ট",
+        "meaning_en": "promise / appointment",
+        "part_of_speech": "noun",
+        "example_ja": "約束[やくそく]したのに、彼[かれ]は来[こ]なかったんです。",
+        "example_bn": "কথা দেওয়া সত্ত্বেও সে আসেনি।",
+        "example_en": "Even though he promised, he did not come."
+      },
+      {
+        "word_ja": "台風[たいふう]",
+        "romaji": "taifuu",
+        "meaning_bn": "টাইফুন / ঘূর্ণিঝড়",
+        "meaning_en": "typhoon",
+        "part_of_speech": "noun",
+        "example_ja": "台風[たいふう]が来[く]るので、電車[でんしゃ]が止[と]まります。",
+        "example_bn": "যেহেতু টাইফুন আসছে, ট্রেন চলাচল বন্ধ থাকবে।",
+        "example_en": "Because a typhoon is coming, the trains will stop."
+      },
+      {
+        "word_ja": "一生懸命[いっしょうけんめい]",
+        "romaji": "isshoukenmei",
+        "meaning_bn": "প্রাণপণ / কঠোর পরিশ্রমের সাথে",
+        "meaning_en": "with all one's might / hard",
+        "part_of_speech": "adverb",
+        "example_ja": "一生懸命[いっしょうけんめい]勉強[べんきょう]したのに、不合格[ふごうかく]でした。",
+        "example_bn": "প্রাণপণে পড়াশোনা করা সত্ত্বেও অকৃতকার্য হয়েছি।",
+        "example_en": "Even though I studied with all my might, I failed."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "約",
+        "onyomi": "ヤク",
+        "kunyomi": "-",
+        "meaning_bn": "প্রতিশ্রুতি / প্রায়",
+        "meaning_en": "promise / approximately",
+        "stroke_count": 9,
+        "compounds": [
+          {
+            "word_ja": "約束[やくそく]",
+            "meaning_bn": "প্রতিশ্রুতি",
+            "meaning_en": "promise"
+          },
+          {
+            "word_ja": "予約[よやく]",
+            "meaning_bn": "বুকিং",
+            "meaning_en": "reservation"
+          }
+        ]
+      },
+      {
+        "kanji": "束",
+        "onyomi": "ソク",
+        "kunyomi": "たば",
+        "meaning_bn": "আঁটি / বাঁধা",
+        "meaning_en": "bundle / tie",
+        "stroke_count": 7,
+        "compounds": [
+          {
+            "word_ja": "花束[はなたば]",
+            "meaning_bn": "ফুলের তোড়া",
+            "meaning_en": "bouquet"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G05-1",
+        "pattern_ja": "普通形[ふつうけい] + ので",
+        "pattern_bn": "সাধারণ রূপ + ので (নম্র ও বাস্তব কারণ)",
+        "explanation_bn": "যেহেতু এটি স্বাভাবিক কারণ ও ফলাফল প্রকাশ করে, তাই অফিসিয়াল বা বিনম্র পরিবেশে から এর চেয়ে ので বেশি গ্রহণযোগ্য।",
+        "common_pitfalls": [
+          "ので এর পর আদেশসূচক বাক্য (〜しろ) বা সরাসরি অনুরোধ সাধারণত বসে না।"
+        ],
+        "examples": [
+          {
+            "ja": "用事[ようじ]があるので、先[さき]に失礼[しつれい]します。",
+            "bn": "যেহেতু একটি জরুরি কাজ আছে, তাই আগেই বিদায় নিচ্ছি।",
+            "en": "Since I have an errand, I will take my leave early."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "খারাপ আবহাওয়ার কারণে সহকর্মীকে সতর্ক করা।",
+      "situation_en": "Warning a colleague about bad weather causing disruption.",
+      "lines": [
+        {
+          "speaker_ja": "先輩[せんぱい]",
+          "speaker_en": "Senior Colleague",
+          "line_ja": "大雨[おおあめ]が降[ふ]る予定[よてい]なので、今日[きょう]は早[はや]く帰[かえ]ったほうがいいですよ。",
+          "line_bn": "যেহেতু ভারী বৃষ্টির পূর্বাভাস আছে, তাই আজ তাড়াতাড়ি বাড়ি ফেরাটাই ভালো হবে।",
+          "line_en": "Since heavy rain is forecast, it is better to head home early today."
+        },
+        {
+          "speaker_ja": "後輩[こうはい]",
+          "speaker_en": "Junior Colleague",
+          "line_ja": "はい、そうします。アドバイスありがとうございます。",
+          "line_bn": "জি, আমি তা-ই করব। পরামর্শের জন্য অনেক ধন্যবাদ।",
+          "line_en": "Yes, I will do so. Thank you very much for the advice."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "টাইফুনের দিনে জাপানের ট্রেনের 'পরিকল্পিত বিরতি' (Keikaku Unkyuu)",
+      "tip_bn": "জাপানে শক্তিশালী টাইফুন আঘাত হানার আগের দিনই ট্রেন কোম্পানিগুলো '計画運休' (পরিকল্পিত ট্রেন বন্ধ) ঘোষণা করে। আবহাওয়া সংবাদের সাথে সাথে ইয়াহু ট্রানজিট বা জর্ডান অ্যাপে ট্রেনের অপারেশনাল স্ট্যাটাস চেক করে চলা উচিত।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "約束[やくそく]",
+        "romaji_input": "yakusoku",
+        "target_display": "やくそく",
+        "meaning_bn": "প্রতিশ্রুতি"
+      },
+      {
+        "prompt_ja": "台風[たいふう]",
+        "romaji_input": "taifuu",
+        "target_display": "たいふう",
+        "meaning_bn": "টাইফুন"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L05-1",
+        "question_ja": "薬[くすり]を 飲[の]んだ（　　）、まだ 熱[ねつ]が 下[さ]がりません。",
+        "question_bn": "ঔষধ খাওয়া সত্ত্বেও জ্বর নামেনি—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "のに",
+          "ので",
+          "から",
+          "でも"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "প্রত্যাশিত ফলের বিপরীত ঘটা বোঝাতে '〜のに' (তা সত্ত্বেও) ব্যবহৃত হয়।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L06",
+      "lesson_number": 6,
+      "module_number": 2,
+      "module_name": "Potential, Simultaneous Actions & Habits",
+      "module_name_bn": "সক্ষমতা, যুগপত্ কাজ ও অভ্যাস",
+      "title_ja": "動詞[どうし]の可能形[かのうけい]",
+      "title_en": "Potential Form (Can / Able to do)",
+      "title_bn": "সম্ভাবনাময় ও সক্ষমতার রূপ (পারার ক্ষমতা)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "N5-এ আমরা 'ক্রিয়ার ডিকশনারি ফর্ম + ことができます' দিয়ে সক্ষমতা প্রকাশ শিখেছিলাম। N4-এ ক্রিয়ার মূল রূপ পরিবর্তন করে 'সম্ভাবনাময় রূপ' (可能形 - Kanoukei) তৈরি করা হয়। যেমন: 書く (লেখা) -> 書ける (লিখতে পারা), 食べる (খাওয়া) -> 食べられる (খেতে পারা), する -> できる, 来る -> こられる। লক্ষ্যণীয়: সম্ভবনাময় রূপে কর্মের পার্টিকেল を সাধারণত が তে রূপান্তরিত হয়।",
+      "core_concept_bn": "Group 1: u-শব্দ e-শব্দে পরিবর্তন + る (話す -> 話せる); Group 2: る বাদ দিয়ে られる (見る -> 見られる); Group 3: できる, こられる। পার্টিকেল を -> が।",
+      "real_world_context_bn": "জাপানি রেস্তোরাঁয় অ্যালার্জি প্রকাশ (আমি শুয়োরের মাংস খেতে পারি না - 豚肉が食べられません) বা দোকানে জাপানি বলতে পারা বোঝাতে ব্যবহৃত হয়।",
+      "key_takeaway_bn": "সম্ভাবনাময় ক্রিয়ার সাথে সাধারণত を বসে না, が বসে (日本語が話せます)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "泳[およ]ぐ",
+        "romaji": "oyogu",
+        "meaning_bn": "সাঁতার কাটা",
+        "meaning_en": "to swim",
+        "part_of_speech": "verb",
+        "example_ja": "海[うみ]で５０メートル泳[およ]げます。",
+        "example_bn": "আমি সমুদ্রে ৫০ মিটার সাঁতার কাটতে পারি।",
+        "example_en": "I can swim 50 meters in the sea."
+      },
+      {
+        "word_ja": "運転[うんてん]する",
+        "romaji": "unten suru",
+        "meaning_bn": "গাড়ি চালানো / ড্রাইভ করা",
+        "meaning_en": "to drive",
+        "part_of_speech": "verb",
+        "example_ja": "車[くるま]の運転[うんてん]ができますか。",
+        "example_bn": "আপনি কি গাড়ি চালাতে পারেন?",
+        "example_en": "Can you drive a car?"
+      },
+      {
+        "word_ja": "漢字[かんじ]",
+        "romaji": "kanji",
+        "meaning_bn": "চীনা লিপি কাঞ্জি",
+        "meaning_en": "Chinese characters",
+        "part_of_speech": "noun",
+        "example_ja": "漢字[かんじ]が１００個[こ]読[よ]めます。",
+        "example_bn": "আমি ১০০টি কাঞ্জি পড়তে পারি।",
+        "example_en": "I can read 100 kanji."
+      },
+      {
+        "word_ja": "予約[よやく]する",
+        "romaji": "yoyaku suru",
+        "meaning_bn": "বুকিং বা রিজার্ভ করা",
+        "meaning_en": "to reserve",
+        "part_of_speech": "verb",
+        "example_ja": "ネットでホテルが予約[よやく]できます。",
+        "example_bn": "ইন্টারনেটে হোটেল বুকিং করা যায়।",
+        "example_en": "You can book hotels online."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "能",
+        "onyomi": "ノウ",
+        "kunyomi": "-",
+        "meaning_bn": "সক্ষমতা / প্রতিভা",
+        "meaning_en": "ability / talent",
+        "stroke_count": 10,
+        "compounds": [
+          {
+            "word_ja": "可能[かのう]",
+            "meaning_bn": "সম্ভব",
+            "meaning_en": "possible"
+          },
+          {
+            "word_ja": "能力[のうりょく]",
+            "meaning_bn": "সক্ষমতা",
+            "meaning_en": "ability"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G06-1",
+        "pattern_ja": "名詞[めいし] が + 可能形[かのうけい]動詞",
+        "pattern_bn": "বিশেষ্য が + সক্ষমতামূলক ক্রিয়া",
+        "explanation_bn": "সক্ষমতার ক্রিয়া দিয়ে কোনো কাজ করার যোগ্যতা বা পারিপার্শ্বিক সুযোগ বোঝায়।",
+        "common_pitfalls": [
+          "Group 2 ক্রিয়ায় ら বাদ দিয়ে বলা (কথ্য ভাষায় 'ら抜き言葉' যেমন 見れる) প্রচলিত হলেও লিখিত ও JLPT পরীক্ষায় られる লেখা আবশ্যক।"
+        ],
+        "examples": [
+          {
+            "ja": "私[わたし]は刺身[さしみ]が食[た]べられます。",
+            "bn": "আমি সাশিমি খেতে পারি।",
+            "en": "I can eat sashimi."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "জাপানি বন্ধুর সাথে খেলাধুলা ও সক্ষমতা নিয়ে আলোচনা।",
+      "situation_en": "Discussing sports and abilities with a Japanese friend.",
+      "lines": [
+        {
+          "speaker_ja": "サトウ",
+          "speaker_en": "Sato",
+          "line_ja": "スキーができますか。",
+          "line_bn": "তুমি কি স্কি করতে পারো?",
+          "line_en": "Can you ski?"
+        },
+        {
+          "speaker_ja": "カリム",
+          "speaker_en": "Karim",
+          "line_ja": "いいえ、できませんが、スケートなら滑[すべ]れます。",
+          "line_bn": "না, পারি না; তবে আইস স্কেটিং করতে পারি।",
+          "line_en": "No, I cannot, but I can ice skate."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "খাদ্যাভ্যাস ও হালাল খাবার সম্পর্কে রেস্তোরাঁয় জানানো",
+      "tip_bn": "জাপানে কোনো উপাদান বাদ দিয়ে খাবার চাইতে হলে '〜が食べられません' (আমি এটা খেতে পারি না) বা '豚肉やアルコールは入っていませんか' (এতে কি শুয়োরের মাংস বা অ্যালকোহল আছে?) বলা অত্যন্ত কার্যকর।",
+      "category": "Shopping"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "泳[およ]ぐ",
+        "romaji_input": "oyogu",
+        "target_display": "およぐ",
+        "meaning_bn": "সাঁতার কাটা"
+      },
+      {
+        "prompt_ja": "可能[かのう]",
+        "romaji_input": "kanou",
+        "target_display": "かのう",
+        "meaning_bn": "সম্ভব"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L06-1",
+        "question_ja": "「日本語[にほんご]の 新聞[しんぶん]（　　）読[よ]めます」正しい助詞は？",
+        "question_bn": "খালি জায়গায় সঠিক পার্টিকেল কোনটি?",
+        "options": [
+          "が",
+          "を",
+          "に",
+          "で"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "সম্ভাবনাময় ক্রিয়ার (可能動詞) সাথে কর্মের পার্টিকেল を এর স্থানে が বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L07",
+      "lesson_number": 7,
+      "module_number": 2,
+      "module_name": "Potential, Simultaneous Actions & Habits",
+      "module_name_bn": "সক্ষমতা, যুগপত্ কাজ ও অভ্যাস",
+      "title_ja": "知覚動詞[ちかくどうし]と可能[かのう]",
+      "title_en": "Perception vs Capability (Mieru/Mirareru & Kikoeru/Kikeru)",
+      "title_bn": "ইন্দ্রিয়গ্রাহ্যতা বনাম প্রচেষ্টা (চোখে পড়া ও দেখা / কানে আসা ও শোনা)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় 'দেখা' এবং 'শোনা'র দুটি করে সূক্ষ্ম রূপ রয়েছে। 見える (Mieru) এবং 聞こえる (Kikoeru) হলো কোনো প্রচেষ্টা ছাড়াই আপনা-আপনি চোখে পড়া বা কানে আসা (প্রাকৃতিক অনুভূতি)। আর 見られる (Mirareru) এবং 聞ける (Kikeru) হলো মানুষের চেষ্টা, টিকিট বা সুযোগ থাকার ফলে দেখা বা শোনার সক্ষমতা অর্জন।",
+      "core_concept_bn": "見える/聞こえる: প্রাকৃতিক অনুভূতি (কোনো ইচ্ছা ছাড়াই চোখে/কানে পৌঁছায়); 見られる/聞ける: সুযোগ বা সক্ষমতা (ইচ্ছাকৃত)।",
+      "real_world_context_bn": "টোকিও স্কাইট্রি থেকে মাউন্ট ফুজি দেখা যায় (富士山が見えます) বনাম সিনেমা হলে নতুন ছবি দেখতে পাওয়া (映画が見られます)।",
+      "key_takeaway_bn": "শব্দটি নিজে কানে এলে 聞こえます, আর রেডিও অন করে শুনলে 聞けます।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "富士山[ふじさん]",
+        "romaji": "fujisan",
+        "meaning_bn": "ফুজি পর্বত",
+        "meaning_en": "Mt. Fuji",
+        "part_of_speech": "noun",
+        "example_ja": "窓[まど]から富士山[ふじさん]が見[み]えます。",
+        "example_bn": "জানালা দিয়ে ফুজি পর্বত চোখে পড়ে।",
+        "example_en": "Mt. Fuji can be seen from the window."
+      },
+      {
+        "word_ja": "波[なみ]の音[おと]",
+        "romaji": "nami no oto",
+        "meaning_bn": "ঢেউয়ের শব্দ",
+        "meaning_en": "sound of waves",
+        "part_of_speech": "noun",
+        "example_ja": "部屋[へや]に波[なみ]の音[おと]が聞[き]こえます。",
+        "example_bn": "রুমে বসে ঢেউয়ের শব্দ কানে আসছে।",
+        "example_en": "The sound of waves can be heard in the room."
+      },
+      {
+        "word_ja": "鳥[とり]の 声[こえ]",
+        "romaji": "tori no koe",
+        "meaning_bn": "পাখির ডাক",
+        "meaning_en": "bird's chirp / voice",
+        "part_of_speech": "noun",
+        "example_ja": "朝[あさ]、鳥[とり]の声[こえ]が聞[き]こえて気持[きも]ちがいいです。",
+        "example_bn": "সকালে পাখির ডাক কানে ভেসে এলে মন ভালো লাগে।",
+        "example_en": "Hearing birds chirping in the morning feels pleasant."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "声",
+        "onyomi": "セイ, ショウ",
+        "kunyomi": "こえ, こわ",
+        "meaning_bn": "কণ্ঠস্বর / ডাক",
+        "meaning_en": "voice",
+        "stroke_count": 7,
+        "compounds": [
+          {
+            "word_ja": "声[こえ]",
+            "meaning_bn": "কণ্ঠ",
+            "meaning_en": "voice"
+          },
+          {
+            "word_ja": "大声[おおごえ]",
+            "meaning_bn": "উচ্চ কণ্ঠ",
+            "meaning_en": "loud voice"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G07-1",
+        "pattern_ja": "名詞[めいし] が 見[み]える / 聞[き]こえる",
+        "pattern_bn": "বিশেষ্য が চোখে পড়া / কানে আসা",
+        "explanation_bn": "স্বতঃস্ফূর্ত অনুভূতি প্রকাশ করে। বিষয়বস্তুর সাথে が বসে।",
+        "common_pitfalls": [
+          "সিনেমা দেখা বোঝাতে '映画が見える' বলা ভুল; সুযোগ বোঝাতে '映画が見られる' বলতে হবে।"
+        ],
+        "examples": [
+          {
+            "ja": "遠[とお]くで花火[はなび]が見[み]えます。",
+            "bn": "দূরে আতশবাজি দেখা যাচ্ছে।",
+            "en": "Fireworks can be seen in the distance."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "বাসা খোঁজার সময় রিয়েল এস্টেট এজেন্টের সাথে ফ্ল্যাট পরিদর্শন।",
+      "situation_en": "Inspecting an apartment with a real estate agent in Tokyo.",
+      "lines": [
+        {
+          "speaker_ja": "不動産屋[ふどうさんや]",
+          "speaker_en": "Real Estate Agent",
+          "line_ja": "この部屋[へや]のベランダからは東京[とうきょう]タワーが見[み]えますよ。",
+          "line_bn": "এই রুমের বারান্দা থেকে সরাসরি টোকিও টাওয়ার দেখা যায়।",
+          "line_en": "You can see Tokyo Tower from this room's balcony."
+        },
+        {
+          "speaker_ja": "客[きゃく]",
+          "speaker_en": "Customer",
+          "line_ja": "わあ、本当[ほんとう]ですね。車[くるま]の音[おと]も聞[き]こえなくて静[しず]かです。",
+          "line_bn": "বাহ্, সত্যিই তো! গাড়ির শব্দও কানে আসে না, বেশ শান্ত।",
+          "line_en": "Wow, indeed! Traffic noise isn't heard either, it's very quiet."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি অ্যাপার্টমেন্টে শব্দ দূষণ (騒音 - Souon) সচেতনতা",
+      "tip_bn": "জাপানের আবাসিক ভবনে দেয়াল প্রায়শই পাতলা হয়। রাত ১০টার পর উচ্চৈঃস্বরে কথা বলা, গান শোনা বা ওয়াশিং মেশিন চালানো নিষিদ্ধ; পাশের ফ্ল্যাটে শব্দ পৌঁছালে পুলিশ বা ম্যানেজমেন্টে অভিযোগ হতে পারে।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "富士山[ふじさん]",
+        "romaji_input": "fujisan",
+        "target_display": "ふじさん",
+        "meaning_bn": "ফুজি পর্বত"
+      },
+      {
+        "prompt_ja": "声[こえ]",
+        "romaji_input": "koe",
+        "target_display": "こえ",
+        "meaning_bn": "কণ্ঠস্বর"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L07-1",
+        "question_ja": "隣[となり]の部屋[へや]から ピアノの音[おと]が（　　）。",
+        "question_bn": "পাশের ঘর থেকে পিয়ানোর শব্দ ভেসে আসছে—সঠিক রূপ কোনটি?",
+        "options": [
+          "聞こえます",
+          "聞けます",
+          "見えます",
+          "見られます"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "চেষ্টা ছাড়াই শব্দ কানে আসাকে 聞こえます বলা হয়।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L08",
+      "lesson_number": 8,
+      "module_number": 2,
+      "module_name": "Potential, Simultaneous Actions & Habits",
+      "module_name_bn": "সক্ষমতা, যুগপত্ কাজ ও অভ্যাস",
+      "title_ja": "並行動作[へいこうどうさ]（ながら）",
+      "title_en": "Simultaneous Actions (~nagara)",
+      "title_bn": "একই সাথে দুটি কাজ করা (~নাগারা)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "একই ব্যক্তি একই সাথে দুটি কাজ সম্পন্ন করলে প্রথম ক্রিয়ার মাসু-ফর্ম থেকে ます বাদ দিয়ে ながら (nagara) যোগ করা হয়। লক্ষ্যণীয়: ながら যুক্ত ক্রিয়াটি হলো গৌণ কাজ, আর পেছনের মূল ক্রিয়াটি হলো প্রধান কাজ। গঠন: V1 (Masu stem) + ながら, V2।",
+      "core_concept_bn": "এক সাথে দুটি কাজ: 音楽を聞きながら勉強します (গান শুনতে শুনতে পড়াশোনা করি)।",
+      "real_world_context_bn": "জাপানে ট্রেনে হাঁটার সময় মোবাইল ব্যবহার (歩きスマホ - Aruki sumaho) বিপজ্জনক ও নিরুৎসাহিত করা হয়।",
+      "key_takeaway_bn": "দুটি কাজের কর্তা অবশ্যই একই ব্যক্তি হতে হবে।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "歩[ある]く",
+        "romaji": "aruku",
+        "meaning_bn": "হাঁটা",
+        "meaning_en": "to walk",
+        "part_of_speech": "verb",
+        "example_ja": "スマホを見[み]ながら歩[ある]いてはいけません。",
+        "example_bn": "মোবাইলের দিকে তাকাতে তাকাতে হাঁটা যাবে না।",
+        "example_en": "You must not walk while looking at your smartphone."
+      },
+      {
+        "word_ja": "働[はたら]く",
+        "romaji": "hataraku",
+        "meaning_bn": "কাজ করা / চাকরি করা",
+        "meaning_en": "to work",
+        "part_of_speech": "verb",
+        "example_ja": "働[はたら]きながら大学[だいがく]に通[かよ]っています。",
+        "example_bn": "চাকরি করার পাশাপাশি বিশ্ববিদ্যালয়ে যাতায়াত করছি।",
+        "example_en": "I attend university while working."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "歩",
+        "onyomi": "ホ, ブ",
+        "kunyomi": "ある・く, あゆ・む",
+        "meaning_bn": "হাঁটা / পদক্ষেপ",
+        "meaning_en": "walk / step",
+        "stroke_count": 8,
+        "compounds": [
+          {
+            "word_ja": "歩[ある]く",
+            "meaning_bn": "হাঁটা",
+            "meaning_en": "to walk"
+          },
+          {
+            "word_ja": "散歩[さんぽ]",
+            "meaning_bn": "ভ্রমণ / পায়চারি",
+            "meaning_en": "stroll"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G08-1",
+        "pattern_ja": "動詞[どうし] ます形[けい]語幹 + ながら",
+        "pattern_bn": "ক্রিয়া ます বাদ দিয়ে + ながら (করতে করতে)",
+        "explanation_bn": "V1 ながら V2 বাক্যে V2 হলো মূল লক্ষ্য বা প্রধান ক্রিয়া।",
+        "common_pitfalls": [
+          "দুটি ভিন্ন ব্যক্তির কাজের ক্ষেত্রে ながら বসে না; সেক্ষেত্রে 間 (aida) বসে।"
+        ],
+        "examples": [
+          {
+            "ja": "お茶[ちゃ]を飲[の]みながら話[はな]しましょう。",
+            "bn": "চা পান করতে করতে কথা বলি।",
+            "en": "Let's talk while drinking tea."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ভাষা স্কুলের বন্ধুদের সাথে অবসরের গল্প।",
+      "situation_en": "Chatting about pastimes with Japanese language school peers.",
+      "lines": [
+        {
+          "speaker_ja": "タニム",
+          "speaker_en": "Tanim",
+          "line_ja": "いつもどうやって日本語[にほんご]のリスニングを練習[れんしゅう]していますか。",
+          "line_bn": "তুমি কীভাবে সাধারণত জাপানি লিসেনিং অনুশীলন করো?",
+          "line_en": "How do you usually practice Japanese listening?"
+        },
+        {
+          "speaker_ja": "リン",
+          "speaker_en": "Lin",
+          "line_ja": "電車[でんしゃ]に乗[の]りながら、ポッドキャストを聞[き]いています。",
+          "line_bn": "ট্রেনে চড়ার সময় পডকাস্ট শুনি।",
+          "line_en": "I listen to podcasts while riding the train."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "হাঁটতে হাঁটতে ধূমপান বা মোবাইল চালানোয় জরিমানা",
+      "tip_bn": "টোকিওর শিনজুকু, চিয়োদা বা শিবুয়ায় রাস্তায় হাঁটতে হাঁটতে ধূমপান করলে ২,০০০ থেকে ৫,০০০ ইয়েন পর্যন্ত তাৎক্ষণিক জরিমানা হতে পারে। সবসময় নির্দিষ্ট 'Smoking Area' (喫煙所) ব্যবহার করতে হয়।",
+      "category": "Manners"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "歩[ある]く",
+        "romaji_input": "aruku",
+        "target_display": "あるく",
+        "meaning_bn": "হাঁটা"
+      },
+      {
+        "prompt_ja": "働[はたら]く",
+        "romaji_input": "hataraku",
+        "target_display": "はたらく",
+        "meaning_bn": "কাজ করা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L08-1",
+        "question_ja": "テレビを（　　）ながら ご飯を食べます。",
+        "question_bn": "টিভি দেখতে দেখতে খাবার খাই—খালি জায়গায় সঠিক রূপ কোনটি?",
+        "options": [
+          "見",
+          "見て",
+          "見る",
+          "見た"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "ます-ফর্মের গোড়া (Stem) এর সাথে ながら বসে; 見ます এর গোড়া হলো 見।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L09",
+      "lesson_number": 9,
+      "module_number": 2,
+      "module_name": "Potential, Simultaneous Actions & Habits",
+      "module_name_bn": "সক্ষমতা, যুগপত্ কাজ ও অভ্যাস",
+      "title_ja": "並列理由[へいれつりゆう]（〜し、〜し）",
+      "title_en": "Listing Multiple Reasons (~shi, ~shi)",
+      "title_bn": "একাধিক কারণ ও গুণের ধারাবাহিক তালিকা (~শি, ~শি)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "যখন কোনো সিদ্ধান্ত, পছন্দ বা পরিস্থিতির পেছনে একাধিক যুক্তি বা কারণ থাকে, তখন প্রতিটি কারণের সাধারণ রূপের (Plain form) পর 〜し যোগ করে তালিকা তৈরি করা হয়। বাংলায়: 'দোকানটি কাছেও, দামও সস্তা, তাই এখানে কেনাকাটা করি'। গঠন: বাক্য১ (সাধারণ রূপ) + し、বাক্য২ (সাধারণ রূপ) + し、(それに / だから) উপসংহার।",
+      "core_concept_bn": "কারণ পুঞ্জিভূত করা: 駅からも近いし、家賃も安いし、このアパートに決めました।",
+      "real_world_context_bn": "কোনো পণ্য কেনা বা চাকরি বেছে নেওয়ার পক্ষে যুক্তি উপস্থাপন করতে জাপানি ব্যবসায় এই প্যাটার্ন অত্যন্ত কার্যকর।",
+      "key_takeaway_bn": "な-বিশেষণ ও বিশেষ্যের পর だし বসে (親切だし、便利だし)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "家賃[やちん]",
+        "romaji": "yachin",
+        "meaning_bn": "বাড়ি ভাড়া",
+        "meaning_en": "house rent",
+        "part_of_speech": "noun",
+        "example_ja": "家賃[やちん]も安[やす]いし、駅[えき]から近[ちか]いです。",
+        "example_bn": "বাড়িভাড়াও কম, আবার স্টেশন থেকেও কাছে।",
+        "example_en": "The rent is cheap, and it's close to the station."
+      },
+      {
+        "word_ja": "給料[きゅうりょう]",
+        "romaji": "kyuuryou",
+        "meaning_bn": "বেতন / পারিশ্রমিক",
+        "meaning_en": "salary",
+        "part_of_speech": "noun",
+        "example_ja": "給料[きゅうりょう]もいいし、人間関係[にんげんかんけい]もいいです。",
+        "example_bn": "বেতনও ভালো, আবার কাজের পরিবেশ বা সহকর্মীদের সম্পর্কও চমৎকার।",
+        "example_en": "The salary is good, and interpersonal relationships are also great."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "賃",
+        "onyomi": "チン",
+        "kunyomi": "-",
+        "meaning_bn": "ভাড়া / মজুরি",
+        "meaning_en": "fare / rent",
+        "stroke_count": 13,
+        "compounds": [
+          {
+            "word_ja": "家賃[やちん]",
+            "meaning_bn": "বাড়ি ভাড়া",
+            "meaning_en": "house rent"
+          },
+          {
+            "word_ja": "運賃[うんちん]",
+            "meaning_bn": "যাতায়াত ভাড়া",
+            "meaning_en": "passenger fare"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G09-1",
+        "pattern_ja": "普通形[ふつうけい] + し、普通形 + し",
+        "pattern_bn": "সাধারণ রূপ + し (একাধিক কারণের সমাহার)",
+        "explanation_bn": "শ্রোতাকে বোঝানোর জন্য অন্তত দুটি কারণ উল্লেখ করে আরও কারণ ইঙ্গিত করা।",
+        "common_pitfalls": [
+          "না-বিশেষ্য ও বিশেষ্যে だ বাদ দেওয়া ভুল (親切し নয়, 親切だし)।"
+        ],
+        "examples": [
+          {
+            "ja": "この店[みせ]は美味[おい]しいし、値段[ねだん]も安[やす]いです。",
+            "bn": "এই দোকানের খাবার সুস্বাদুও, আবার দামেও সস্তা।",
+            "en": "This shop's food is delicious, and the prices are reasonable too."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "বাইতো (খণ্ডকালীন চাকরি) বাছাইয়ের কারণ ব্যাখ্যা।",
+      "situation_en": "Explaining reasons for choosing a part-time job.",
+      "lines": [
+        {
+          "speaker_ja": "田中[たなか]",
+          "speaker_en": "Tanaka",
+          "line_ja": "どうしてあのコンビニでバイトを始[はじ]めたんですか。",
+          "line_bn": "কেন ওই কনভিনিতে পার্টটাইম চাকরি শুরু করলে?",
+          "line_en": "Why did you start working part-time at that convenience store?"
+        },
+        {
+          "speaker_ja": "ハサン",
+          "speaker_en": "Hasan",
+          "line_ja": "店長[てんちょう]も優[やさ]しいし、シフトも自由[じゆう]だし、とても働[はたら]きやすいんです。",
+          "line_bn": "স্টোর ম্যানেজারও দয়ালু, শিফটের সময়ও সুবিধাজনক, তাই কাজ করা খুব সহজ।",
+          "line_en": "The store manager is kind, the shifts are flexible, so it is very easy to work there."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানে ছাত্রাবস্থায় সপ্তাহে সর্বোচ্চ ২৮ ঘণ্টা কাজের নিয়ম",
+      "tip_bn": "জাপানে স্টুডেন্ট ভিসায় অধ্যায়নরতদের '資格外活動許可' (অনুমোদিত কাজের পারমিট) অনুযায়ী সপ্তাহে সর্বোচ্চ ২৮ ঘণ্টা কাজের অনুমতি থাকে। ছুটি চলাকালীন এটি দিনে ৮ ঘণ্টা (সপ্তাহে ৪০ ঘণ্টা) পর্যন্ত বৈধ। সীমা লঙ্ঘন করলে ভিসা বাতিল হতে পারে।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "家賃[やちん]",
+        "romaji_input": "yachin",
+        "target_display": "やちん",
+        "meaning_bn": "বাড়ি ভাড়া"
+      },
+      {
+        "prompt_ja": "給料[きゅうりょう]",
+        "romaji_input": "kyuuryou",
+        "target_display": "きゅうりょう",
+        "meaning_bn": "বেতন"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L09-1",
+        "question_ja": "「あの先生は 親切（　　）し、教え方も 上手です」正しい接続は？",
+        "question_bn": "না-বিশেষণ 親切 এর সাথে し এর সঠিক সংযোগ কোনটি?",
+        "options": [
+          "だし",
+          "なし",
+          "いし",
+          "でし"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "না-বিশেষণ এর সাধারণ রূপের ক্ষেত্রে だし বসে (親切だし)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L10",
+      "lesson_number": 10,
+      "module_number": 2,
+      "module_name": "Potential, Simultaneous Actions & Habits",
+      "module_name_bn": "সক্ষমতা, যুগপত্ কাজ ও অভ্যাস",
+      "title_ja": "習慣[しゅうかん]と継続状態[けいぞくじょうたい]",
+      "title_en": "Habitual Actions & Ongoing States (~te imasu)",
+      "title_bn": "দীর্ঘমেয়াদী অভ্যাস ও পেশাগত অবস্থা (~তে ইমাসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "N5-এ 〜ています চলিত কাজ (Present continuous: খাচ্ছি, পড়ছি) নির্দেশ করত। N4-এ এর সবচেয়ে গুরুত্বপূর্ণ প্রয়োগ হলো: ১. দীর্ঘমেয়াদী পুনরাবৃত্তিমূলক অভ্যাস (Habitual action) এবং ২. স্থায়ী অবস্থা বা পেশা। যেমন: 毎朝ジョギングをしています (প্রতি সকালে জগিং করি) কিংবা トヨタで働いています (টয়োটায় চাকরি করি)।",
+      "core_concept_bn": "অভ্যাস: 毎日〜ています; কর্মসংস্থান ও পেশা: 会社に勤めています / 車を作っています।",
+      "real_world_context_bn": "জাপানি পরিচিত মহলে 'আপনি বর্তমানে কী পেশায় আছেন?' বা 'কোথায় থাকেন?' বোঝাতে 〜ています একমাত্র সঠিক প্রকাশ।",
+      "key_takeaway_bn": "বিগত কয়েক মাস বা বছর ধরে নিয়মিত যা করে আসছেন, তা সাধারণ ます এর বদলে ています দিয়ে প্রকাশ করা স্বাভাবিক।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "勤[つと]める",
+        "romaji": "tsutomeru",
+        "meaning_bn": "চাকরি করা / কর্মরত থাকা",
+        "meaning_en": "to work for / be employed",
+        "part_of_speech": "verb",
+        "example_ja": "IT企業[きぎょう]に勤[つと]めています。",
+        "example_bn": "আমি একটি আইটি কোম্পানিতে কর্মরত আছি।",
+        "example_en": "I am employed at an IT company."
+      },
+      {
+        "word_ja": "通[かよ]う",
+        "romaji": "kayou",
+        "meaning_bn": "নিয়মিত যাতায়াত করা",
+        "meaning_en": "to commute",
+        "part_of_speech": "verb",
+        "example_ja": "日本語[にほんご]学校[がっこう]に通[かよ]っています。",
+        "example_bn": "আমি জাপানি ভাষা স্কুলে নিয়মিত যাতায়াত করছি।",
+        "example_en": "I commute to a Japanese language school."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "勤",
+        "onyomi": "キン, ゴン",
+        "kunyomi": "つと・める",
+        "meaning_bn": "চাকরি / পরিশ্রম",
+        "meaning_en": "diligence / serve",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "通勤[つうきん]",
+            "meaning_bn": "অফিসে যাতায়াত",
+            "meaning_en": "commuting to work"
+          },
+          {
+            "word_ja": "勤務[きんむ]",
+            "meaning_bn": "ডিউটি / সেবা",
+            "meaning_en": "service / duty"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G10-1",
+        "pattern_ja": "動詞[どうし] て形[けい] + います（習慣[しゅうかん]）",
+        "pattern_bn": "ক্রিয়া て-ফর্ম + います (অভ্যাসগত ক্রিয়া)",
+        "explanation_bn": "দৈনন্দিন বা নিয়মিত পুনরাবৃত্ত কাজ বোঝাতে ব্যবহৃত হয়।",
+        "common_pitfalls": [
+          "কোম্পানিতে চাকরির ক্ষেত্রে পার্টিকেল に বসে (会社に勤めています); কিন্তু 会社で働いています এ で বসে।"
+        ],
+        "examples": [
+          {
+            "ja": "毎朝[まいあさ]、新聞[しんぶん]を読[よ]んでいます。",
+            "bn": "প্রতিদিন সকালে আমি পত্রিকা পড়ি।",
+            "en": "I read the newspaper every morning."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "পুরোনো বন্ধুর সাথে সাক্ষাৎ ও বর্তমান হালচাল বিনিময়।",
+      "situation_en": "Meeting an old friend and catching up on life.",
+      "lines": [
+        {
+          "speaker_ja": "やまぐち",
+          "speaker_en": "Yamaguchi",
+          "line_ja": "卒業[そつぎょう]してから、今[いま]は何[なに]をしていますか。",
+          "line_bn": "গ্র্যাজুয়েশনের পর এখন তুমি কী করছ?",
+          "line_en": "What are you doing now after graduation?"
+        },
+        {
+          "speaker_ja": "ナビル",
+          "speaker_en": "Nabil",
+          "line_ja": "貿易[ぼうえき]会社[がいしゃ]で働[はたら]いています。",
+          "line_bn": "একটি আন্তর্জাতিক বাণিজ্যিক কোম্পানিতে কাজ করছি।",
+          "line_en": "I am working at a trading company."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি বিজনেস কার্ড (名刺 - Meishi) আদান-প্রদানের নিয়ম",
+      "tip_bn": "জাপানে কর্মক্ষেত্রে প্রথম সাক্ষাতে দুহাত দিয়ে বিজনেস কার্ড গ্রহণ করতে হয় এবং সাথে সাথে '頂戴いたします' (ধন্যবাদ সহ গ্রহণ করলাম) বলতে হয়। কার্ডের ওপর হাত বা কলম দিয়ে কোনো কিছু লেখা গুরুতর অসৌজন্যতা।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "勤[つと]める",
+        "romaji_input": "tsutomeru",
+        "target_display": "つとめる",
+        "meaning_bn": "চাকরি করা"
+      },
+      {
+        "prompt_ja": "通[かよ]う",
+        "romaji_input": "kayou",
+        "target_display": "かよう",
+        "meaning_bn": "যাতায়াত করা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L10-1",
+        "question_ja": "「父[ちち]は 銀行[ぎんこう]（　　）勤[つと]めています」正しい助詞は？",
+        "question_bn": "勤める এর সাথে সঠিক পার্টিকেল কোনটি?",
+        "options": [
+          "に",
+          "で",
+          "を",
+          "へ"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "勤める ক্রিয়ার সাথে কর্মস্থলের ক্ষেত্রে 'に' পার্টিকেল বসে (銀行に勤めています)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L11",
+      "lesson_number": 11,
+      "module_number": 3,
+      "module_name": "Transitivity, Preparation & State",
+      "module_name_bn": "অকর্মক-সকর্মক, পূর্বপ্রস্তুতি ও অবস্থা",
+      "title_ja": "自動詞[じどうし]と他動詞[たどうし]",
+      "title_en": "Transitive vs Intransitive Verbs",
+      "title_bn": "সকর্মক ও অকর্মক ক্রিয়ার যুগলবন্দী (স্বয়ংক্রিয় বনাম কর্তার কাজ)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় অধিকাংশ ক্রিয়াই জোড়ায় জোড়ায় আসে: একটি সকর্মক ক্রিয়া (他動詞 - Tadoushi), যা কর্তা নিজে কোনো বস্তুর ওপর সম্পাদন করে (পার্টিকেল を); এবং অন্যটি অকর্মক ক্রিয়া (自動詞 - Jidoushi), যা কোনো বাহ্যিক হস্তক্ষেপ ছাড়া নিজে নিজেই ঘটে বা শুধু অবস্থা প্রকাশ করে (পার্টিকেল が)। যেমন: ドアを開ける (দরজা খোলা) বনাম ドアが開く (দরজা নিজে নিজেই খুলছে)।",
+      "core_concept_bn": "অন্যের ইচ্ছাকৃত কাজ: N を 他動詞 (電気を消す); প্রাকৃতিক বা স্বয়ংক্রিয় ঘটনা: N が 自動詞 (電気が消える)।",
+      "real_world_context_bn": "ট্রেনের দরজা স্বয়ংক্রিয়ভাবে খোলার সময় বলা হয়: ドアが開きます (Door ga akimasu)।",
+      "key_takeaway_bn": "자동사 (Jidoushi) এর সাথে সবসময় が বসে, আর 타동사 (Tadoushi) এর সাথে を বসে।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "開[あ]く",
+        "romaji": "aku",
+        "meaning_bn": "খোলা (নিজে নিজে)",
+        "meaning_en": "to open (intransitive)",
+        "part_of_speech": "verb",
+        "example_ja": "自動[じどう]ドアが開[あ]きました。",
+        "example_bn": "স্বয়ংক্রিয় দরজাটি খুলে গেল।",
+        "example_en": "The automatic door opened."
+      },
+      {
+        "word_ja": "開[あ]ける",
+        "romaji": "akeru",
+        "meaning_bn": "খোলা (কারও দ্বারা)",
+        "meaning_en": "to open (transitive)",
+        "part_of_speech": "verb",
+        "example_ja": "窓[まど]を開[あ]けてください。",
+        "example_bn": "দয়া করে জানালাটি খুলুন।",
+        "example_en": "Please open the window."
+      },
+      {
+        "word_ja": "閉[し]まる",
+        "romaji": "shimaru",
+        "meaning_bn": "বন্ধ হওয়া (নিজে নিজে)",
+        "meaning_en": "to close (intransitive)",
+        "part_of_speech": "verb",
+        "example_ja": "店[みせ]が閉[し]まっています。",
+        "example_bn": "দোকানটি বন্ধ হয়ে আছে।",
+        "example_en": "The shop is closed."
+      },
+      {
+        "word_ja": "消[き]える",
+        "romaji": "kieru",
+        "meaning_bn": "নিভে যাওয়া / বন্ধ হওয়া",
+        "meaning_en": "to go out / disappear (intransitive)",
+        "part_of_speech": "verb",
+        "example_ja": "電気[でんき]が消[き]えました。",
+        "example_bn": "বাতিটি নিভে গেল।",
+        "example_en": "The light went off."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "閉",
+        "onyomi": "ヘイ",
+        "kunyomi": "し・まる, し・める, と・じる",
+        "meaning_bn": "বন্ধ করা",
+        "meaning_en": "close / shut",
+        "stroke_count": 11,
+        "compounds": [
+          {
+            "word_ja": "閉館[へいかん]",
+            "meaning_bn": "ভবন বন্ধ হওয়া",
+            "meaning_en": "closing of a building"
+          },
+          {
+            "word_ja": "閉[し]める",
+            "meaning_bn": "বন্ধ করা",
+            "meaning_en": "to close"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G11-1",
+        "pattern_ja": "名詞[めいし] が 自動詞[じどうし] て形[けい] + います",
+        "pattern_bn": "বিশেষ্য が অকর্মক ক্রিয়া て-ফর্ম + います (চলমান অবস্থা)",
+        "explanation_bn": "কোনো কাজ শেষ হওয়ার পর বর্তমান দৃশ্যমান অবস্থা বর্ণনা করতে ব্যবহৃত হয়। যেমন: বাতিটি নিভে আছে (電気が消えています)।",
+        "common_pitfalls": [
+          "এখানে を ব্যবহার করলে অর্থ বদলে যাবে; অবস্থা নির্দেশ করতে が আবশ্যক।"
+        ],
+        "examples": [
+          {
+            "ja": "窓[まど]が割[わ]れています。",
+            "bn": "জানালাটি ভেঙে রয়েছে।",
+            "en": "The window is broken."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ক্লাসরুম বা অফিসে প্রবেশের সময় পরিস্থিতি পর্যবেক্ষণ।",
+      "situation_en": "Observing conditions when entering a classroom or office.",
+      "lines": [
+        {
+          "speaker_ja": "同僚[どうりょう]",
+          "speaker_en": "Colleague",
+          "line_ja": "あれ？会議室[かいぎしつ]のエアコンがついていますね。",
+          "line_bn": "আরে? মিটিং রুমের এসি চালু হয়ে আছে তো!",
+          "line_en": "Huh? The meeting room air conditioner is turned on."
+        },
+        {
+          "speaker_ja": "私[わたし]",
+          "speaker_en": "Me",
+          "line_ja": "誰[だれ]もいませんから、消[け]しておきますね。",
+          "line_bn": "যেহেতু কেউ নেই, আমি বন্ধ করে রাখছি।",
+          "line_en": "Since no one is here, I will turn it off."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের ট্রেনের দরজা ও প্ল্যাটফর্মের সতর্কবার্তা",
+      "tip_bn": "জাপানের ট্রেনে 'ドアが閉まります。ご注意ください' (দরজা বন্ধ হচ্ছে, সতর্ক থাকুন) এবং '白線の内側までお下がりください' (হলুদ দাগের ভেতরে থাকুন) এই ঘোষণাগুলো প্রতিদিন শোনানো হয়। দরজার খাঁজে ব্যাগ বা ছাতা আটকে যাওয়া বড় অপরাধ গণ্য করা হয়।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "開[あ]く",
+        "romaji_input": "aku",
+        "target_display": "あく",
+        "meaning_bn": "খোলা"
+      },
+      {
+        "prompt_ja": "閉[し]まる",
+        "romaji_input": "shimaru",
+        "target_display": "しまる",
+        "meaning_bn": "বন্ধ হওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L11-1",
+        "question_ja": "「寒[さむ]いので、窓[まど]（　　）閉[し]めてください」正しい助詞は？",
+        "question_bn": "সকর্মক ক্রিয়া 閉める এর সাথে সঠিক পার্টিকেল কোনটি?",
+        "options": [
+          "を",
+          "が",
+          "に",
+          "で"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "সকর্মক ক্রিয়া (他動詞) এর ক্ষেত্রে কর্মের সাথে 'を' পার্টিকেল বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L12",
+      "lesson_number": 12,
+      "module_number": 3,
+      "module_name": "Transitivity, Preparation & State",
+      "module_name_bn": "অকর্মক-সকর্মক, পূর্বপ্রস্তুতি ও অবস্থা",
+      "title_ja": "結果[けっか]の状態[じょうたい]（〜てある）",
+      "title_en": "Resultant State (~te arimasu)",
+      "title_bn": "উদ্দেশ্যমূলক সম্পাদিত অবস্থা (~তে আরিমাসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "যখন কেউ কোনো নির্দিষ্ট উদ্দেশ্য বা সুবিধার কথা চিন্তা করে কোনো কাজ সম্পন্ন করে রেখেছে এবং সেই কাজের ফলাফল এখনো বিদ্যমান রয়েছে, তখন 'সকর্মক ক্রিয়ার (他動詞) て-ফর্ম + あります' ব্যবহৃত হয়। যেমন: 壁にカレンダーが掛けてあります (দেয়ালে ক্যালেন্ডার ঝুলিয়ে রাখা আছে—যাতে সবাই তারিখ দেখতে পায়)।",
+      "core_concept_bn": "উদ্দেশ্যমূলক কাজের বিদ্যমান অবস্থা: N が 他動詞 て-ফর্ম + あります।",
+      "real_world_context_bn": "হোটেল রুমে আগে থেকেই তোয়ালে গুছিয়ে রাখা (タオルが置いてあります) বা মিটিং টেবিলে ফাইল সাজিয়ে রাখা।",
+      "key_takeaway_bn": "〜ています স্বাভাবিক অবস্থা নির্দেশ করে, আর 〜てあります পেছনের কোনো ব্যক্তির উদ্দেশ্যমূলক প্রস্তুতি তুলে ধরে।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "飾[かざ]る",
+        "romaji": "kazaru",
+        "meaning_bn": "সাজানো / প্রদর্শিত রাখা",
+        "meaning_en": "to decorate / display",
+        "part_of_speech": "verb",
+        "example_ja": "部屋[へや]にきれいな絵[え]が飾[かざ]ってあります。",
+        "example_bn": "ঘরে একটি সুন্দর ছবি সাজিয়ে রাখা আছে।",
+        "example_en": "A beautiful painting is displayed in the room."
+      },
+      {
+        "word_ja": "並[なら]べる",
+        "romaji": "naraberu",
+        "meaning_bn": "সারি করে সাজিয়ে রাখা",
+        "meaning_en": "to line up / arrange",
+        "part_of_speech": "verb",
+        "example_ja": "机[つくえ]の上[うえ]に資料[しりょう]が並[なら]べてあります。",
+        "example_bn": "টেবিলের উপর কাগজপত্র সারিবদ্ধ করে রাখা আছে।",
+        "example_en": "The documents are arranged neatly on the desk."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "並",
+        "onyomi": "ヘイ",
+        "kunyomi": "なら・ぶ, なら・べる",
+        "meaning_bn": "সারি / পাশাপাশি",
+        "meaning_en": "row / line up",
+        "stroke_count": 8,
+        "compounds": [
+          {
+            "word_ja": "並[なら]べる",
+            "meaning_bn": "সাজানো",
+            "meaning_en": "to line up"
+          },
+          {
+            "word_ja": "並木[なみき]",
+            "meaning_bn": "সারিবদ্ধ গাছ",
+            "meaning_en": "row of trees"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G12-1",
+        "pattern_ja": "名詞[めいし] が 他動詞[たどうし] て形[けい] + あります",
+        "pattern_bn": "বিশেষ্য が সকর্মক ক্রিয়া て-ফর্ম + あります",
+        "explanation_bn": "অতীতে কেউ কোনো উদ্দেশ্য নিয়ে কাজটি করে রেখেছে যা বর্তমানে বিদ্যমান।",
+        "common_pitfalls": [
+          "অকর্মক ক্রিয়ার সাথে あります বসে না (ドアが開いてあります ভুল; ドアが開けてあります সঠিক)।"
+        ],
+        "examples": [
+          {
+            "ja": "壁[かべ]に予定表[よていひょう]が貼[は]ってあります。",
+            "bn": "দেয়ালে রুটিন সাঁটিয়ে রাখা আছে।",
+            "en": "The schedule is pasted on the wall."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "হোটেল রুমে অতিথির আগমনের প্রস্তুতি।",
+      "situation_en": "Checking hotel room readiness for arriving guests.",
+      "lines": [
+        {
+          "speaker_ja": "スタッフA",
+          "speaker_en": "Staff A",
+          "line_ja": "３０２号室[ごうしつ]の準備[じゅんび]はどうですか。",
+          "line_bn": "৩০২ নম্বর রুমের প্রস্তুতি কেমন?",
+          "line_en": "How is the preparation for room 302?"
+        },
+        {
+          "speaker_ja": "スタッフB",
+          "speaker_en": "Staff B",
+          "line_ja": "水[みず]とお茶[ちゃ]が冷蔵庫[れいぞうこ]に入[い]れてあります。",
+          "line_bn": "পানি এবং চা ফ্রিজে রেখে দেওয়া হয়েছে।",
+          "line_en": "Water and tea have been placed in the refrigerator."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি হোটেল ও বাসায় 'ওমোতেনাশি' (Hospitality) সংস্কৃতি",
+      "tip_bn": "জাপানের সেবা খাতে আগে থেকেই সবকিছু নিখুঁতভাবে তৈরি করে রাখাকে 'おもてなし' (Omotenashi) বলা হয়। অতিথির অনুরোধের আগেই সব গুছিয়ে রাখা এই সমাজব্যবস্থার অন্যতম ভিত্তি।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "飾[かざ]る",
+        "romaji_input": "kazaru",
+        "target_display": "かざる",
+        "meaning_bn": "সাজানো"
+      },
+      {
+        "prompt_ja": "並[なら]べる",
+        "romaji_input": "naraberu",
+        "target_display": "ならべる",
+        "meaning_bn": "সাজিয়ে রাখা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L12-1",
+        "question_ja": "「黒板[こくばん]に 漢字[かんじ]が（　　）あります」正しい動詞は？",
+        "question_bn": "বোর্ডে কাঞ্জি লিখে রাখা আছে—সঠিক রূপ কোনটি?",
+        "options": [
+          "書いて",
+          "書いてい",
+          "書かれて",
+          "書く"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "他動詞 (সকর্মক ক্রিয়া) 書く এর て-ফর্ম 書いて এর সাথে あります বসে (書いてあります)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L13",
+      "lesson_number": 13,
+      "module_number": 3,
+      "module_name": "Transitivity, Preparation & State",
+      "module_name_bn": "অকর্মক-সকর্মক, পূর্বপ্রস্তুতি ও অবস্থা",
+      "title_ja": "準備[じゅんび]の表現[ひょうげん]（〜ておく）",
+      "title_en": "Actions in Preparation (~te okimasu)",
+      "title_bn": "ভবিষ্যতের জন্য পূর্বপ্রস্তুতিমূলক কাজ (~তে ওকিমাসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "ভবিষ্যতের কোনো ঘটনা, ভ্রমণ, পরীক্ষা বা প্রয়োজনের কথা ভেবে আগেভাগেই কোনো কাজ সম্পন্ন করে রাখাকে 〜ておきます (te okimasu) বলে। বাংলায়: 'করে রাখা' (যেমন: টিকিট কেটে রাখা, হোটেল বুক করে রাখা)। কথ্য ভাষায় এটিকে সংক্ষেপে 〜とく (toku) বলা হয় (যেমন: 買っとく)।",
+      "core_concept_bn": "ভবিষ্যতের সুবিধার জন্য কাজ আগে সম্পন্ন করা: 旅行の前に、切符を買っておきます (ভ্রমণের আগে টিকিট কেটে রাখব)।",
+      "real_world_context_bn": "জরুরি দুর্যোগ বা ভূমিকম্পের আগে পানি ও ব্যাটারি মজুত করে রাখা (準備しておく)।",
+      "key_takeaway_bn": "পরবর্তী ব্যবহারের সুবিধার্থে জিনিস আগের মতো রেখে দেওয়াও 〜ておきます দিয়ে বোঝায় (そのままにしておいてください)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "準備[じゅんび]する",
+        "romaji": "junbi suru",
+        "meaning_bn": "প্রস্তুতি নেওয়া",
+        "meaning_en": "to prepare",
+        "part_of_speech": "verb",
+        "example_ja": "明日[あした]の試験[しけん]のために、鉛筆[えんぴつ]を準備[じゅんび]しておきます。",
+        "example_bn": "আগামীকালের পরীক্ষার জন্য পেনসিল প্রস্তুত করে রাখব।",
+        "example_en": "I will prepare pencils for tomorrow's exam."
+      },
+      {
+        "word_ja": "片付[かたづ]ける",
+        "romaji": "katadukeru",
+        "meaning_bn": "পরিষ্কার করা / গুছিয়ে রাখা",
+        "meaning_en": "to tidy up",
+        "part_of_speech": "verb",
+        "example_ja": "使[つか]った後[あと]で、道具[どうぐ]を片付[かたづ]けておいてください。",
+        "example_bn": "ব্যবহারের পর যন্ত্রপাতিগুলো দয়া করে গুছিয়ে রাখুন।",
+        "example_en": "Please tidy up the tools after using them."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "置",
+        "onyomi": "チ",
+        "kunyomi": "お・く",
+        "meaning_bn": "রাখা / স্থাপন",
+        "meaning_en": "put / place",
+        "stroke_count": 13,
+        "compounds": [
+          {
+            "word_ja": "置[お]く",
+            "meaning_bn": "রাখা",
+            "meaning_en": "to put"
+          },
+          {
+            "word_ja": "位置[いち]",
+            "meaning_bn": "অবস্থান",
+            "meaning_en": "position"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G13-1",
+        "pattern_ja": "動詞[どうし] て形[けい] + おきます",
+        "pattern_bn": "ক্রিয়া て-ফর্ম + おきます (আগে থেকে করে রাখা)",
+        "explanation_bn": "১. ভবিষ্যৎ সুবিধার প্রস্তুতি; ২. পরবর্তী ব্যবহারের জন্য গুছিয়ে রাখা; ৩. বর্তমান অবস্থায় রেখে দেওয়া।",
+        "common_pitfalls": [
+          "কথ্য ভাষায় ておく সংকুচিত হয়ে とく হয় (買っておく -> 買っとく); পরীক্ষায় পূর্ণ রূপটি চেনা জরুরি।"
+        ],
+        "examples": [
+          {
+            "ja": "パーティーの 前[まえ]に 料理[りょうり]を 作[つく]っておきます。",
+            "bn": "পার্টির আগে রান্না করে রাখব।",
+            "en": "I will prepare food before the party."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "টোকিওতে বন্ধু আসার আগে প্রস্তুতি গ্রহণ।",
+      "situation_en": "Preparing before a friend's visit to Tokyo.",
+      "lines": [
+        {
+          "speaker_ja": "アキラ",
+          "speaker_en": "Akira",
+          "line_ja": "来週[らいしゅう]バングラデシュから友達[ともだち]が来[く]るんだって？",
+          "line_bn": "শুনলাম আগামী সপ্তাহে তোমার বাংলাদেশ থেকে বন্ধু আসছে?",
+          "line_en": "I heard your friend from Bangladesh is coming next week?"
+        },
+        {
+          "speaker_ja": "シャヒン",
+          "speaker_en": "Shahin",
+          "line_ja": "ええ、ですから新幹線[しんかんせん]のチケットを予約[よやく]しておきました。",
+          "line_bn": "হ্যাঁ, তাই আগে থেকেই বুলেট ট্রেনের টিকিট বুক করে রেখেছি।",
+          "line_en": "Yes, so I already reserved bullet train tickets in advance."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানে জরুরি দুর্যোগ মোকাবিলার 'ইমার্জেন্সি ব্যাগ' (非常用持ち出し袋)",
+      "tip_bn": "জাপানের প্রতিটি পরিবারে ভূমিকম্প ও ঝড়ের আশঙ্কায় অন্তত ৩ দিনের শুকনো খাবার, মিনারেল ওয়াটার, টর্চ ও প্রাথমিক চিকিৎসার ওষুধ সম্বলিত একটি ব্যাগ দরজার কাছে প্রস্তুত রাখা হয় (準備しておく)।",
+      "category": "Emergency"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "準備[じゅんび]",
+        "romaji_input": "junbi",
+        "target_display": "じゅんび",
+        "meaning_bn": "প্রস্তুতি"
+      },
+      {
+        "prompt_ja": "片付[かたづ]ける",
+        "romaji_input": "katadukeru",
+        "target_display": "かたづける",
+        "meaning_bn": "গুছিয়ে রাখা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L13-1",
+        "question_ja": "「授業[じゅぎょう]の まえに、新しい 言葉[ことば]を 調[しら]べ（　　）」正しい形は？",
+        "question_bn": "ক্লাসের আগে নতুন শব্দ অভিধানে খুঁজে রাখব—সঠিক রূপ কোনটি?",
+        "options": [
+          "ておきます",
+          "てあります",
+          "ています",
+          "てしまいます"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "পূর্বপ্রস্তুতি বোঝাতে ক্রিয়ার て-ফর্মের সাথে おきます বসে (調べておきます)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L14",
+      "lesson_number": 14,
+      "module_number": 3,
+      "module_name": "Transitivity, Preparation & State",
+      "module_name_bn": "অকর্মক-সকর্মক, পূর্বপ্রস্তুতি ও অবস্থা",
+      "title_ja": "アスペクト（まだ・もう）",
+      "title_en": "Aspect: Ongoing vs Completed (Mada & Mou)",
+      "title_bn": "কাজের পর্যায় ও সমাপ্তি (এখনো চলছে বনাম ইতিমধ্যে শেষ)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "কোনো কাজ এখনো চলছে নাকি এরই মধ্যে শেষ হয়ে গেছে তা প্রকাশ করাকে ক্রিয়ার Aspect বলে। ১. まだ + क्रिया ています: কাজ এখনো চলছে (যেমন: まだ雨が降っています - এখনো বৃষ্টি পড়ছে); ২. まだ + क्रिया ていません: কাজ এখনো সম্পন্ন হয়নি (যেমন: まだ昼ご飯を食べていません - এখনো দুপুরের খাবার খাইনি); ৩. もう + क्रिया ました: কাজ ইতিমধ্যে শেষ (যেমন: もう宿題を終わりました)।",
+      "core_concept_bn": "চলমান: まだ〜ています; অসম্পন্ন: まだ〜ていません; সমাপ্ত: もう〜ました।",
+      "real_world_context_bn": "অফিসে বা রেস্তোরাঁয় 'খাবার কি শেষ হয়েছে?' বা 'কাজ কি সম্পন্ন হয়েছে?' প্রশ্ন করার সময় এর ব্যবহার হয়।",
+      "key_takeaway_bn": "まだ এর উত্তরে সাধারণত 'はい、もう〜' অথবা 'いいえ、まだ〜ていません' হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "レポート",
+        "romaji": "repooto",
+        "meaning_bn": "প্রতিবেদন / রিপোর্ট",
+        "meaning_en": "report",
+        "part_of_speech": "noun",
+        "example_ja": "もうレポートを出[だ]しましたか。",
+        "example_bn": "ইতিমধ্যেই কি রিপোর্ট জমা দিয়ে দিয়েছেন?",
+        "example_en": "Have you already submitted the report?"
+      },
+      {
+        "word_ja": "残業[ざんぎょう]",
+        "romaji": "zangyou",
+        "meaning_bn": "অতিরিক্ত সময় কাজ (ওভারটাইম)",
+        "meaning_en": "overtime work",
+        "part_of_speech": "noun",
+        "example_ja": "まだ残業[ざんぎょう]をしています。",
+        "example_bn": "আমি এখনো ওভারটাইম করছি।",
+        "example_en": "I am still working overtime."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "残",
+        "onyomi": "ザン",
+        "kunyomi": "のこ・る, のこ・す",
+        "meaning_bn": "অবশিষ্ট / টিকে থাকা",
+        "meaning_en": "remain / leftover",
+        "stroke_count": 10,
+        "compounds": [
+          {
+            "word_ja": "残念[ざんねん]",
+            "meaning_bn": "আফসোস",
+            "meaning_en": "regrettable"
+          },
+          {
+            "word_ja": "残業[ざんぎょう]",
+            "meaning_bn": "ওভারটাইম",
+            "meaning_en": "overtime work"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G14-1",
+        "pattern_ja": "まだ + 動詞[どうし] て形[けい] + いません",
+        "pattern_bn": "এখনো কাজটি করিনি (অসম্পূর্ণ অবস্থা)",
+        "explanation_bn": "অতীত রূপ না দিয়ে 'ていません' ব্যবহার করতে হয় কারণ ভবিষ্যতে কাজটি সম্পন্ন করার ইচ্ছা থাকে।",
+        "common_pitfalls": [
+          "'まだ食べませんでした' বলা ব্যাকরণগত ভুল; বলতে হবে 'まだ食べていません'।"
+        ],
+        "examples": [
+          {
+            "ja": "いいえ、まだ 決[き]めていません。",
+            "bn": "না, এখনো সিদ্ধান্ত নিইনি।",
+            "en": "No, I haven't decided yet."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসে বসের সাথে প্রজেক্টের অগ্রগতির পর্যালোচনা।",
+      "situation_en": "Reviewing project progress with a manager at work.",
+      "lines": [
+        {
+          "speaker_ja": "課長[かちょう]",
+          "speaker_en": "Section Chief",
+          "line_ja": "田中[たなか]さん、会議[かいぎ]の資料[しりょう]はもうコピーしましたか。",
+          "line_bn": "তানাকা সাহেব, মিটিংয়ের কাগজপত্র কি ইতিমধ্যে ফটোকপি করেছেন?",
+          "line_en": "Mr. Tanaka, have you already copied the meeting materials?"
+        },
+        {
+          "speaker_ja": "田中[たなか]",
+          "speaker_en": "Tanaka",
+          "line_ja": "いいえ、まだしていません。今[いま]すぐやります。",
+          "line_bn": "না, এখনো করিনি। আমি এখনই করে দিচ্ছি।",
+          "line_en": "No, I haven't done it yet. I will do it right now."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের কাজের জগতে 'হোরেনসো' (Hou-Ren-So) নিয়ম",
+      "tip_bn": "জাপানি করপোরেট সংস্কৃতির সবচেয়ে বড় মূলমন্ত্র হলো 報連相 (Hou-Ren-So): 報告 (Houkoku - রিপোর্ট দেওয়া), 連絡 (Renraku - যোগাযোগ রাখা) এবং 相談 (Soudan - পরামর্শ করা)। কোনো কাজ শেষ হলে সাথে সাথে 'もう終わりました' বলে রিপোর্ট করা আবশ্যক।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "残業[ざんぎょう]",
+        "romaji_input": "zangyou",
+        "target_display": "ざんぎょう",
+        "meaning_bn": "ওভারটাইম"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L14-1",
+        "question_ja": "「もう 宿題[しゅくだい]を やりましたか」「いいえ、まだ（　　）」",
+        "question_bn": "খালি জায়গায় সঠিক উত্তর কোনটি?",
+        "options": [
+          "やっていません",
+          "やりませんでした",
+          "やりません",
+          "やったです"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অসম্পন্ন কাজের ক্ষেত্রে 'まだ〜ていません' বলা বাধ্যতামূলক।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L15",
+      "lesson_number": 15,
+      "module_number": 3,
+      "module_name": "Transitivity, Preparation & State",
+      "module_name_bn": "অকর্মক-সকর্মক, পূর্বপ্রস্তুতি ও অবস্থা",
+      "title_ja": "完了[かんりょう]と遺憾[いかん]（〜てしまう）",
+      "title_en": "Completion & Regret (~te shimau / ~chatta)",
+      "title_bn": "সম্পূর্ণ পরিসমাপ্তি ও আফসোসজনক ভুল (~তে শিমাউ)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "〜てしまう (te shimau) এর দুটি গুরুত্বপূর্ণ অর্থ রয়েছে: ১. সম্পূর্ণ সমাপ্তি (Completion): কোনো কাজ একবারে শেষ করে ফেলা (যেমন: 全部読んでしまいました - সম্পূর্ণ পড়ে ফেলেছি); ২. অনুতাপ বা অনিচ্ছাকৃত ভুল (Regret / Mistake): কোনো অনাকাঙ্ক্ষিত ঘটনা ঘটে যাওয়া বা ভুল করে ফেলা যাতে বক্তা মর্মাহত (যেমন: 財布を落としてしまいました - মানিব্যাগ হারিয়ে ফেলেছি)। কথ্য ভাষায় てしまう -> ちゃう (chau) এবং でしまう -> じゃう (jau) হয়।",
+      "core_concept_bn": "পরিপূর্ণ সমাপ্তি: 全部〜てしまいました; অনিচ্ছাকৃত ভুল বা দুঃখ: 〜てしまいました / 〜ちゃった।",
+      "real_world_context_bn": "জাপানে ট্রেনের ভেতর ছাতা ফেলে এলে বা পরীক্ষায় ভুল উত্তর দিলে জাপানিরা স্বাভাবিকভাবেই বলে '間違えちゃった!' (ভুল করে ফেললাম!)।",
+      "key_takeaway_bn": "অনুতাপের ক্ষেত্রে বক্তা স্বেচ্ছায় কাজটি করেননি, দুর্ঘটনাবশত ঘটেছে তা বোঝায়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "忘[わす]れる",
+        "romaji": "wasureru",
+        "meaning_bn": "ভুলে যাওয়া / ফেলে আসা",
+        "meaning_en": "to forget / leave behind",
+        "part_of_speech": "verb",
+        "example_ja": "電車[でんしゃ]の中[なか]に傘[かさ]を忘[わす]れてしまいました。",
+        "example_bn": "ট্রেনের ভেতর ছাতাটি ফেলে এসেছি (ভুল করে)।",
+        "example_en": "I accidentally left my umbrella on the train."
+      },
+      {
+        "word_ja": "なくす",
+        "romaji": "nakusu",
+        "meaning_bn": "হারিয়ে ফেলা",
+        "meaning_en": "to lose",
+        "part_of_speech": "verb",
+        "example_ja": "鍵[かぎ]をなくしてしまいました。",
+        "example_bn": "চাবিটি হারিয়ে ফেলেছি।",
+        "example_en": "I lost my key."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "忘",
+        "onyomi": "ボウ",
+        "kunyomi": "わす・れる",
+        "meaning_bn": "ভোলা",
+        "meaning_en": "forget",
+        "stroke_count": 7,
+        "compounds": [
+          {
+            "word_ja": "忘[わす]れる",
+            "meaning_bn": "ভুলে যাওয়া",
+            "meaning_en": "to forget"
+          },
+          {
+            "word_ja": "忘年会[ぼうねんかい]",
+            "meaning_bn": "বছরের বিদায়ী পার্টি",
+            "meaning_en": "year-end party"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G15-1",
+        "pattern_ja": "動詞[どうし] て形[けい] + しまいました",
+        "pattern_bn": "ক্রিয়া て-ফর্ম + しまいました (আফসোসজনক সমাপ্তি)",
+        "explanation_bn": "অনিচ্ছাকৃত ক্ষতি, ভুল বা সমস্যায় অনুশোচনা প্রকাশ করে।",
+        "common_pitfalls": [
+          "ভালো বা খুশির সংবাদের সাথে てしまいました বসালে ভুল অর্থ প্রকাশ পেতে পারে।"
+        ],
+        "examples": [
+          {
+            "ja": "宿題[しゅくだい]を 家[いえ]に 忘[わす]れてしまいました。",
+            "bn": "হোমওয়ার্ক বাসায় ফেলে এসেছি।",
+            "en": "I accidentally left my homework at home."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "রাস্তায় মানিব্যাগ হারানোর পর হতাশা প্রকাশ।",
+      "situation_en": "Expressing distress after losing a wallet on the street.",
+      "lines": [
+        {
+          "speaker_ja": "スマン",
+          "speaker_en": "Suman",
+          "line_ja": "大変[たいへん]です！財布[さいふ]をどこかで落[お]としてしまいました。",
+          "line_bn": "বিপদ ঘটে গেছে! মানিব্যাগটা কোথায় যেন ফেলে এসেছি।",
+          "line_en": "Oh no! I accidentally dropped my wallet somewhere."
+        },
+        {
+          "speaker_ja": "友人[ゆうじん]",
+          "speaker_en": "Friend",
+          "line_ja": "えっ、本当[ほんとう]に？中[なか]に在留[ざいりゅう]カードも入[はい]っていましたか。",
+          "line_bn": "অ্যাঁ, সত্যিই? ভেতরে কি রেসিডেন্স কার্ডও ছিল?",
+          "line_en": "What, really? Was your residence card in it too?"
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "বছরের শেষে জাপানিদের 'বনেঙ্কাই' (忘年会 - Year End Party) সংস্কৃতি",
+      "tip_bn": "ডিসেম্বর মাসে জাপানের সব কোম্পানি ও বন্ধুদের গ্রুপে 忘年会 (Bounenkai - বছরের সব দুঃখ-কষ্ট ভোলার পার্টি) অনুষ্ঠিত হয়। এর মূল দর্শন হলো বছরের ভুলত্রুটি ভুলে নতুন বছরে নতুন উদ্দীপনায় কাজ শুরু করা।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "忘[わす]れる",
+        "romaji_input": "wasureru",
+        "target_display": "わすれる",
+        "meaning_bn": "ভুলে যাওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L15-1",
+        "question_ja": "「大切な パスポートを（　　）しまいました」正しい動詞は？",
+        "question_bn": "গুরুত্বপূর্ণ পাসপোর্ট হারিয়ে ফেলেছি—সঠিক রূপ কোনটি?",
+        "options": [
+          "なくして",
+          "なくす",
+          "なくした",
+          "なくさないで"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "て-ফর্মের সাথে しまいました যুক্ত হয় (なくしてしまいました)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L16",
+      "lesson_number": 16,
+      "module_number": 4,
+      "module_name": "Intentions, Decisions & Advice",
+      "module_name_bn": "উদ্দেশ্য, পরিকল্পনা ও সুপরামর্শ",
+      "title_ja": "意向形[いこうけい]の活用[かつよう]",
+      "title_en": "Volitional Form (Casual Let's Do)",
+      "title_bn": "ইচ্ছাসূচক রূপ বা প্রস্তাব (ইকৌকেই: চলো করি)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "N5-এ আমরা বিনম্র প্রস্তাব হিসেবে 〜ましょう (যেমন: 食べましょう - চলুন খাই) শিখেছিলাম। ঘনিষ্ঠ বন্ধু বা সহকর্মীদের সাথে কথা বলার সময় এর অনানুষ্ঠানিক (Casual) রূপ হলো 'ইচ্ছাসূচক রূপ' বা 意向形 (Ikoukei)। যেমন: 行こう (চলো যাই), 食べよう (চলো খাই), 話そう (চলো কথা বলি)। গঠন: Group 1: u-শব্দ o-শব্দে পরিবর্তন করে う যোগ (行く -> 行こう); Group 2: る বাদ দিয়ে よう (食べる -> 食べよう); Group 3: する -> しよう, 来る -> こよう। এছাড়া মনে মনে সংকল্প প্রকাশ করতে '意向形 + と思っています' ব্যবহৃত হয়।",
+      "core_concept_bn": "প্রস্তাব: 映画を見に行こう (চলো সিনেমা দেখতে যাই); সংকল্প: 国へ帰ろうと思っています (দেশে ফেরার কথা ভাবছি)।",
+      "real_world_context_bn": "জাপানি বন্ধুদের সাথে আড্ডা বা লাঞ্চের সময় 'ご飯食べに行こう！' (চলো খেতে যাই!) সবচেয়ে বেশি ব্যবহৃত হয়।",
+      "key_takeaway_bn": "Group 1 ক্রিয়ায় উ-কার ও-কারে পরিণত হয়ে দীর্ঘ উ যোগ হয় (いこう、のもう)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "将来[しょうらい]",
+        "romaji": "shourai",
+        "meaning_bn": "ভবিষ্যত",
+        "meaning_en": "future",
+        "part_of_speech": "noun",
+        "example_ja": "将来[しょうらい]自分[じぶん]の会社[かいしゃ]を作[つく]ろうと思[おも]っています。",
+        "example_bn": "ভবিষ্যতে নিজের একটি কোম্পানি প্রতিষ্ঠা করার ইচ্ছা পোষণ করছি।",
+        "example_en": "I am thinking of starting my own company in the future."
+      },
+      {
+        "word_ja": "休[やす]む",
+        "romaji": "yasumu",
+        "meaning_bn": "বিশ্রাম নেওয়া / ছুটি কাটানো",
+        "meaning_en": "to rest / take time off",
+        "part_of_speech": "verb",
+        "example_ja": "少[すこ]し休[やす]もう。",
+        "example_bn": "চলো একটু বিশ্রাম নিই।",
+        "example_en": "Let's rest a bit."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "将",
+        "onyomi": "ショウ",
+        "kunyomi": "-",
+        "meaning_bn": "ভবিষ্যত / সেনাপতি",
+        "meaning_en": "future / commander",
+        "stroke_count": 10,
+        "compounds": [
+          {
+            "word_ja": "将来[しょうらい]",
+            "meaning_bn": "ভবিষ্যত",
+            "meaning_en": "future"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G16-1",
+        "pattern_ja": "動詞[どうし] 意向形[いこうけい] + と思[おも]っています",
+        "pattern_bn": "ইচ্ছাসূচক রূপ + と思っています (সংকল্প বা মনের ইচ্ছা)",
+        "explanation_bn": "কিছুদিন ধরে মনের ভেতর কোনো পরিকল্পনা লালন করা বোঝালে と思っています ব্যবহৃত হয়।",
+        "common_pitfalls": [
+          "হঠাৎ তাৎক্ষণিক সিদ্ধান্তের ক্ষেত্রে と思います বসে, আর দীর্ঘমেয়াদী চিন্তার ক্ষেত্রে と思っています বসে।"
+        ],
+        "examples": [
+          {
+            "ja": "週末[しゅうまつ]は 家[いえ]で ゆっくり 休[やす]もうと 思[おも]っています。",
+            "bn": "সাপ্তাহিক ছুটিতে বাসায় আরামে বিশ্রাম নেওয়ার কথা ভাবছি।",
+            "en": "I am thinking of relaxing and resting at home this weekend."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "সহকর্মীর সাথে কাজের পর ক্যাফেতে যাওয়ার প্রস্তাব।",
+      "situation_en": "Suggesting a café visit to a coworker after work.",
+      "lines": [
+        {
+          "speaker_ja": "ケン",
+          "speaker_en": "Ken",
+          "line_ja": "仕事[しごと]が終[お]わったね。コーヒーでも飲[の]みに行[い]こうか。",
+          "line_bn": "কাজ তো শেষ হলো। কফি খেতে যাবে নাকি?",
+          "line_en": "Work is finished. Shall we go drink some coffee?"
+        },
+        {
+          "speaker_ja": "タリク",
+          "speaker_en": "Tariq",
+          "line_ja": "いいね、そうしよう！駅前[えきまえ]のカフェに行[い]こう。",
+          "line_bn": "দারুণ প্রস্তাব, তা-ই করা যাক! চলো স্টেশনের সামনের ক্যাফেতে যাই।",
+          "line_en": "Sounds good, let's do that! Let's go to the café in front of the station."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি সহকর্মীদের সাথে অনানুষ্ঠানিক ভাষা (タメ口 - Tameguchi) ব্যবহারের সতর্কতা",
+      "tip_bn": "ইচ্ছাসূচক রূপ (意向形) ঘনিষ্ঠ বন্ধু বা ছোটদের সাথে ব্যবহার করা হয়। বস, সিনিয়র বা গ্রাহকদের সাথে ভুলেও '行こう' বলা যাবে না; তাদের ক্ষেত্রে সর্বদা '行きましょう' বা সম্মানজনক রূপ ব্যবহার করতে হবে।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "将来[しょうらい]",
+        "romaji_input": "shourai",
+        "target_display": "しょうらい",
+        "meaning_bn": "ভবিষ্যত"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L16-1",
+        "question_ja": "動詞「食[た]べます」の 意向形[いこうけい]は どれですか。",
+        "question_bn": "ক্রিয়া 食べます এর ইচ্ছাসূচক রূপ কোনটি?",
+        "options": [
+          "食べよう",
+          "食べろう",
+          "食べう",
+          "食べたろう"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "Group 2 ক্রিয়ায় ます বাদ দিয়ে よう যুক্ত হয় (食べよう)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L17",
+      "lesson_number": 17,
+      "module_number": 4,
+      "module_name": "Intentions, Decisions & Advice",
+      "module_name_bn": "উদ্দেশ্য, পরিকল্পনা ও সুপরামর্শ",
+      "title_ja": "意図[いと]と決意[けつい]（〜つもり）",
+      "title_en": "Definite Intention (~tsumori desu)",
+      "title_bn": "দৃঢ় সংকল্প ও ভবিষ্যৎ পরিকল্পনা (~সুমোরি দেসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "কোনো কাজ করার বিষয়ে যখন বক্তার মনে স্পষ্ট ও দৃঢ় ইচ্ছা থাকে, তখন 'ক্রিয়ার ডিকশনারি রূপ + つもりです' (tsumori desu) ব্যবহৃত হয়। বাংলায়: 'আমি করার ইচ্ছা রাখি / পরিকল্পনা করেছি'। আর কোনো কাজ না করার সংকল্প থাকলে 'নাই-ফর্ম + つもりです' বা 'ডিকশনারি রূপ + つもりはありません' ব্যবহৃত হয়।",
+      "core_concept_bn": "দৃঢ় ইচ্ছা: 辞書形 + つもりです (যেমন: 日本で就職するつもりです); নেতিবাচক ইচ্ছা: ない形 + つもりです / つもりはありません।",
+      "real_world_context_bn": "ভিসা এক্সটেনশনের ইন্টারভিউতে জাপানে উচ্চশিক্ষা বা চাকরির ভবিষ্যৎ লক্ষ্য ব্যাখ্যা করা।",
+      "key_takeaway_bn": "つもりです কেবল নিজের বা ঘনিষ্ঠ দলের ইচ্ছার ক্ষেত্রে প্রযোজ্য; তৃতীয় পক্ষের ইচ্ছা বর্ণনা করতে 〜つもりらしい বা 〜そうだ ব্যবহৃত হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "就職[しゅうしょく]する",
+        "romaji": "shuushoku suru",
+        "meaning_bn": "চাকরি পাওয়া / কর্মক্ষেত্রে প্রবেশ করা",
+        "meaning_en": "to find employment",
+        "part_of_speech": "verb",
+        "example_ja": "大学[だいがく]を出[で]たら、日本[にほん]で就職[しゅうしょく]するつもりです。",
+        "example_bn": "বিশ্ববিদ্যালয় শেষ করে জাপানে চাকরি নেওয়ার ইচ্ছা আমার আছে।",
+        "example_en": "I intend to find a job in Japan after graduating university."
+      },
+      {
+        "word_ja": "帰国[きこく]する",
+        "romaji": "kikoku suru",
+        "meaning_bn": "স্বদেশে ফেরা",
+        "meaning_en": "to return to one's home country",
+        "part_of_speech": "verb",
+        "example_ja": "来年[らいねん]国[くに]へ帰国[きこく]するつもりです。",
+        "example_bn": "আগামী বছর দেশে ফিরে যাওয়ার পরিকল্পনা রয়েছে।",
+        "example_en": "I plan to return to my home country next year."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "職",
+        "onyomi": "ショク",
+        "kunyomi": "-",
+        "meaning_bn": "পেশা / কর্ম",
+        "meaning_en": "employment / job",
+        "stroke_count": 18,
+        "compounds": [
+          {
+            "word_ja": "就職[しゅうしょく]",
+            "meaning_bn": "চাকরি পাওয়া",
+            "meaning_en": "finding employment"
+          },
+          {
+            "word_ja": "職業[しょくぎょう]",
+            "meaning_bn": "পেশা",
+            "meaning_en": "occupation"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G17-1",
+        "pattern_ja": "動詞[どうし] 辞書形[じしょけい] / ない形 + つもりです",
+        "pattern_bn": "ক্রিয়া ডিকশনারি/নাই রূপ + つもりです (পরিকল্পনা)",
+        "explanation_bn": "বক্তার অন্তরের অটল সিদ্ধান্ত নির্দেশ করে।",
+        "common_pitfalls": [
+          "উচ্চপদস্থ কারো ক্ষেত্রে 'আপনি কি করবেন?' জিজ্ঞেস করতে つもりですか ব্যবহার করা অসৌজন্যতা; পরিবর্তে ご予定ですか ব্যবহার করতে হয়।"
+        ],
+        "examples": [
+          {
+            "ja": "タバコは もう 吸[す]わないつもりです。",
+            "bn": "আর কখনো ধূমপান না করার দৃঢ় ইচ্ছা আমার আছে।",
+            "en": "I intend never to smoke cigarettes again."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ভাষা স্কুলের শিক্ষকের সাথে ক্যারিয়ার কাউন্সেলিং।",
+      "situation_en": "Career guidance consultation with a Japanese language school instructor.",
+      "lines": [
+        {
+          "speaker_ja": "先生[せんせい]",
+          "speaker_en": "Teacher",
+          "line_ja": "N2に合格[ごうかく]したら、どうするつもりですか。",
+          "line_bn": "এন২ পাস করার পর তোমার কী করার পরিকল্পনা?",
+          "line_en": "What do you intend to do once you pass N2?"
+        },
+        {
+          "speaker_ja": "ファルク",
+          "speaker_en": "Faruk",
+          "line_ja": "ITの専門[せんもん]学校[がっこう]に進学[しんがく]するつもりです。",
+          "line_bn": "আমি আইটি ভোকেশনাল কলেজে উচ্চশিক্ষা নেওয়ার ইচ্ছা করেছি।",
+          "line_en": "I intend to go on to an IT vocational college."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "ইমিগ্রেশন ইন্টারভিউতে ক্যারিয়ার পরিকল্পনা (Shuushoku Plan) পরিষ্কার রাখা",
+      "tip_bn": "জাপান ইমিগ্রেশন ব্যুরোতে স্টুডেন্ট বা ইঞ্জিনিয়ার ভিসা প্রক্রিয়ায় 'জাপানে আপনি কী করতে চান' (〜つもりです) প্রশ্নটি সাধারণ। সুস্পষ্ট প্রতিষ্ঠান ও লক্ষ্যের উল্লেখ ভিসা অনুমোদনের সম্ভাবনা বাড়িয়ে দেয়।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "就職[しゅうしょく]",
+        "romaji_input": "shuushoku",
+        "target_display": "しゅうしょく",
+        "meaning_bn": "চাকরি পাওয়া"
+      },
+      {
+        "prompt_ja": "帰国[きこく]",
+        "romaji_input": "kikoku",
+        "target_display": "きこく",
+        "meaning_bn": "স্বদেশে ফেরা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L17-1",
+        "question_ja": "「お酒[さけ]は もう 飲[の]まない（　　）です」正しい言葉は？",
+        "question_bn": "মদ আর না পানের সংকল্প—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "つもり",
+          "こと",
+          "もの",
+          "はず"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "নিজের অটল ইচ্ছা বা সংকল্প প্রকাশে '〜つもりです' ব্যবহৃত হয়।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L18",
+      "lesson_number": 18,
+      "module_number": 4,
+      "module_name": "Intentions, Decisions & Advice",
+      "module_name_bn": "উদ্দেশ্য, পরিকল্পনা ও সুপরামর্শ",
+      "title_ja": "予定[よてい]・計画[けいかく]の表現[ひょうげん]",
+      "title_en": "Scheduled Plans (~yotei desu)",
+      "title_bn": "পূর্বনির্ধারিত সময়সূচি ও অফিশিয়াল সূচি (~ইয়োতেই দেসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "つもりです যেখানে বক্তার নিজস্ব মানসিক ইচ্ছা নির্দেশ করে, 予定です (yotei desu) সেখানে কোনো কোম্পানি, ক্যালেন্ডার বা প্রাতিষ্ঠানিকভাবে ঠিক করা আনুষ্ঠানিক সময়সূচি প্রকাশ করে। গঠন: ক্রিয়ার ডিকশনারি রূপ + 予定です অথবা বিশেষ্য + の + 予定です। যেমন: 来週出張する予定です (আগামী সপ্তাহে অফিশিয়াল ট্যুরে যাওয়ার শিডিউল আছে)।",
+      "core_concept_bn": "আনুষ্ঠানিক শিডিউল: V (Dictionary) + 予定です; Noun + の予定です (যেমন: 会議は３時の予定です)।",
+      "real_world_context_bn": "ফ্লাইটের সময়সূচি, অফিসের মিটিং বা ট্রেন ছাড়ার সময় উল্লেখ করতে 予定です ব্যবহৃত হয়।",
+      "key_takeaway_bn": "এতে ব্যক্তিগত আবেগের চেয়ে পূর্বনির্ধারিত বাস্তবতা প্রাধান্য পায়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "出張[しゅっちょう]する",
+        "romaji": "shucchou suru",
+        "meaning_bn": "অফিশিয়াল ব্যবসায়িক সফর (বিজনেস ট্রিপ)",
+        "meaning_en": "to go on a business trip",
+        "part_of_speech": "verb",
+        "example_ja": "来月[らいげつ]大阪[おおさか]へ出張[しゅっちょう]する予定[よてい]です。",
+        "example_bn": "আগামী মাসে ওসাকাতে বিজনেস ট্রিপে যাওয়ার শিডিউল আছে।",
+        "example_en": "I am scheduled to go on a business trip to Osaka next month."
+      },
+      {
+        "word_ja": "結婚式[けっこんしき]",
+        "romaji": "kekkonshiki",
+        "meaning_bn": "বিয়ে অনুষ্ঠান",
+        "meaning_en": "wedding ceremony",
+        "part_of_speech": "noun",
+        "example_ja": "友[とも]だちの結婚式[けっこんしき]に参加[さんか]する予定[よてい]です。",
+        "example_bn": "বন্ধুর বিয়েতে যোগ দেওয়ার শিডিউল রয়েছে।",
+        "example_en": "I plan to attend my friend's wedding ceremony."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "張",
+        "onyomi": "チョウ",
+        "kunyomi": "は・る",
+        "meaning_bn": "টানা / প্রসারিত",
+        "meaning_en": "stretch / spread",
+        "stroke_count": 11,
+        "compounds": [
+          {
+            "word_ja": "出張[しゅっちょう]",
+            "meaning_bn": "বিজনেস ট্রিপ",
+            "meaning_en": "business trip"
+          },
+          {
+            "word_ja": "頑張[がんば]る",
+            "meaning_bn": "সর্বাত্মক চেষ্টা করা",
+            "meaning_en": "to do one's best"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G18-1",
+        "pattern_ja": "動詞[どうし] 辞書形[じしょけい] / 名詞[めいし] の + 予定[よてい]です",
+        "pattern_bn": "ক্রিয়া ডিকশনারি রূপ / বিশেষ্য の + 予定です (নির্ধারিত সূচি)",
+        "explanation_bn": "ক্যালেন্ডার বা প্রাতিষ্ঠানিকভাবে নির্ধারিত সময়সূচি জানাতে।",
+        "common_pitfalls": [
+          "বিশেষ্যের সাথে সরাসরি 予定です না বসিয়ে 'の' যোগ করা আবশ্যক (旅行の予定です)।"
+        ],
+        "examples": [
+          {
+            "ja": "飛行機[ひこうき]は 午後[ごご]２時[にじ]に 到着[とうちゃく]する予定[よてい]です。",
+            "bn": "বিমানটি দুপুর ২টায় পৌঁছানোর শিডিউল রয়েছে।",
+            "en": "The airplane is scheduled to arrive at 2:00 PM."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসে ক্লায়েন্ট মিটিংয়ের সময়সূচি নিশ্চিতকরণ।",
+      "situation_en": "Confirming client meeting schedule at work.",
+      "lines": [
+        {
+          "speaker_ja": "秘書[ひしょ]",
+          "speaker_en": "Secretary",
+          "line_ja": "社長[しゃちょう]、本日[ほんじつ]のミーティングは何時[なんじ]からでしょうか。",
+          "line_bn": "প্রেসিডেন্ট মহোদয়, আজকের মিটিংটি কয়টা থেকে অনুষ্ঠিত হবে?",
+          "line_en": "President, what time does today's meeting start?"
+        },
+        {
+          "speaker_ja": "社長[しゃちょう]",
+          "speaker_en": "President",
+          "line_ja": "３時[さんじ]からの予定[よてい]です。会議室[かいぎしつ]Aを押[お]さえておいてください。",
+          "line_bn": "বেলা ৩টা থেকে শিডিউল করা আছে। মিটিং রুম এ বুক করে রাখুন।",
+          "line_en": "It is scheduled for 3:00 PM. Please reserve meeting room A in advance."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের ব্যবসায় সময়ানুবর্তিতা (৫ মিনিট পূর্বে পৌঁছার নিয়ম)",
+      "tip_bn": "জাপানে কোনো মিটিং বা অ্যাপয়েন্টমেন্টের নির্ধারিত সময়ের ঠিক সময়ে পৌঁছানোকে অনানুষ্ঠানিক বিলম্ব ধরা হয়। ব্যবসায়িক শিষ্টাচার হলো কমপক্ষে ৫ থেকে ১০ মিনিট আগে হাজির থাকা (5分前行動)।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "出張[しゅっちょう]",
+        "romaji_input": "shucchou",
+        "target_display": "しゅっちょう",
+        "meaning_bn": "বিজনেস ট্রিপ"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L18-1",
+        "question_ja": "「卒業式[そつぎょうしき]（　　）予定[よてい]は 来月[らいげつ]です」正しい助詞は？",
+        "question_bn": "বিশেষ্যের সাথে 予定 এর সংযোগকারী পার্টিকেল কোনটি?",
+        "options": [
+          "の",
+          "に",
+          "を",
+          "で"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "বিশেষ্যের পর 予定 থাকলে সংযোগকারী পার্টিকেল 'の' বসে (卒業式の予定)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L19",
+      "lesson_number": 19,
+      "module_number": 4,
+      "module_name": "Intentions, Decisions & Advice",
+      "module_name_bn": "উদ্দেশ্য, পরিকল্পনা ও সুপরামর্শ",
+      "title_ja": "助言[じょげん]・アドバイス",
+      "title_en": "Giving Advice (~ta hou ga ii / ~nai hou ga ii)",
+      "title_bn": "সুপরামর্শ ও হিতোপদেশ (~তা হৌ গা ইই / ~নাই হৌ গা ইই)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "কাউকে কোনো নির্দিষ্ট কাজ করার পরামর্শ বা স্বাস্থ্য/নিরাপত্তার স্বার্থে উপদেশ দিতে 'ক্রিয়ার অতীত ইতিবাচক রূপ (た形) + ほうがいいです' ব্যবহৃত হয় (করাটা ভালো হবে)। আর কোনো ক্ষতিকর কাজ থেকে বিরত থাকার পরামর্শ দিতে 'ক্রিয়ার নাই-ফর্ম (ない形) + ほうがいいです' ব্যবহৃত হয় (না করাটাই শ্রেয়)।",
+      "core_concept_bn": "ইতিবাচক উপদেশ: た形 + ほうがいいです (病院へ行ったほうがいいです); নেতিবাচক উপদেশ: ない形 + ほうがいいです (お酒を飲まないほうがいいです)।",
+      "real_world_context_bn": "জাপানে অসুস্থ সহকর্মীকে ডাক্তারের কাছে যাওয়ার পরামর্শ বা শীতে উষ্ণ পোশাক পরার পরামর্শ দিতে নিত্য ব্যবহার্য।",
+      "key_takeaway_bn": "ইতিবাচক উপদেশে ক্রিয়ার বর্তমান রূপ (辞書形) এর চেয়ে た形 ব্যবহার ব্যাকরণগতভাবে মানসম্মত।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "無理[むり]をする",
+        "romaji": "muri o suru",
+        "meaning_bn": "মাত্রাতিরিক্ত ধকল নেওয়া / অসম্ভব চেষ্টা করা",
+        "meaning_en": "to overdo / push oneself too hard",
+        "part_of_speech": "verb",
+        "example_ja": "体[からだ]が大切[たいせつ]ですから、無理[むり]をしないほうがいいですよ。",
+        "example_bn": "শরীর অমূল্য, তাই অতিরিক্ত ধকল না নেওয়াটাই ভালো।",
+        "example_en": "Your health is important, so you shouldn't push yourself too hard."
+      },
+      {
+        "word_ja": "温[あたた]かい",
+        "romaji": "atatakai",
+        "meaning_bn": "উষ্ণ / আরামদায়ক",
+        "meaning_en": "warm",
+        "part_of_speech": "i-adjective",
+        "example_ja": "温[あたた]かいお風呂[ふろ]に入[はい]ったほうがいいです。",
+        "example_bn": "উষ্ণ পানিতে গোসল করে নেওয়াটা ভালো হবে।",
+        "example_en": "You had better take a warm bath."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "温",
+        "onyomi": "オン",
+        "kunyomi": "あたた・かい, あたた・まる",
+        "meaning_bn": "উষ্ণ / গরম",
+        "meaning_en": "warm",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "温泉[おんせん]",
+            "meaning_bn": "উষ্ণ প্রস্রবণ",
+            "meaning_en": "hot spring"
+          },
+          {
+            "word_ja": "温度[おんど]",
+            "meaning_bn": "তাপমাত্রা",
+            "meaning_en": "temperature"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G19-1",
+        "pattern_ja": "動詞[どうし] た形[けい] + ほうがいいです",
+        "pattern_bn": "ক্রিয়া た-ফর্ম + ほうがいいです (উপদেশ)",
+        "explanation_bn": "দুটি বিকল্পের মধ্যে শ্রেয়তর বিকল্পটি বেছে নেওয়ার পরামর্শ দিতে।",
+        "common_pitfalls": [
+          "উর্ধ্বতন কর্মকর্তাকে সরাসরি ほうがいいです বললে তা উদ্ধত শোনাতে পারে; সেক্ষেত্রে 〜てはいかがでしょうか ব্যবহার করা শ্রেয়।"
+        ],
+        "examples": [
+          {
+            "ja": "薬[くすり]を 飲[の]んで、早[はや]く 寝[ね]たほうがいいですよ。",
+            "bn": "ওষুধ খেয়ে তাড়াতাড়ি ঘুমিয়ে পড়াটাই ভালো হবে।",
+            "en": "You had better take medicine and go to bed early."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অসুস্থ বন্ধুর স্বাস্থ্য নিয়ে পরামর্শ ও সহমর্মিতা।",
+      "situation_en": "Advising a sick friend on taking care of health.",
+      "lines": [
+        {
+          "speaker_ja": "ユウキ",
+          "speaker_en": "Yuuki",
+          "line_ja": "ゴホゴホ…咳[せき]が止[と]まりません。",
+          "line_bn": "খকখক… কাশি কিছুতেই থামছে না।",
+          "line_en": "Cough, cough... My coughing won't stop."
+        },
+        {
+          "speaker_ja": "シャキブ",
+          "speaker_en": "Shakib",
+          "line_ja": "ひどい風邪[かぜ]ですね。今日[きょう]は仕事[しごと]を休[やす]んで病院[びょういん]へ行[い]ったほうがいいですよ。",
+          "line_bn": "মারাত্মক ঠান্ডা লেগেছে দেখছি। আজ কাজে ছুটি নিয়ে হাসপাতালে যাওয়াই সবচেয়ে ভালো হবে।",
+          "line_en": "That is a bad cold. You should take the day off from work and go to the clinic today."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের হেলথ ইনস্যুরেন্স ও ক্লিনিক ভিজিট (Hoken-shou)",
+      "tip_bn": "জাপানে জাতীয় স্বাস্থ্যবীমা (健康保険証) থাকলে যেকোনো হাসপাতালে চিকিৎসার খরচের ৭০% সরকার বহন করে, রোগীকে দিতে হয় মাত্র ৩০%। ডাক্তারের কাছে যাওয়ার সময় এই কার্ডটি সাথে রাখা আবশ্যক।",
+      "category": "Emergency"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "無理[むり]",
+        "romaji_input": "muri",
+        "target_display": "むり",
+        "meaning_bn": "অসম্ভব"
+      },
+      {
+        "prompt_ja": "温泉[おんせん]",
+        "romaji_input": "onsen",
+        "target_display": "おんせん",
+        "meaning_bn": "উষ্ণ প্রস্রবণ"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L19-1",
+        "question_ja": "「熱[ねつ]があるなら、無理[むり]をして（　　）ほうがいいですよ」",
+        "question_bn": "জ্বর থাকলে ধকল না নেওয়া ভালো—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "働かない",
+          "働く",
+          "働いた",
+          "働いて"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "নেতিবাচক উপদেশের ক্ষেত্রে 'ক্রিয়ার ない形 + ほうがいい' বসে (働かないほうがいい)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L20",
+      "lesson_number": 20,
+      "module_number": 4,
+      "module_name": "Intentions, Decisions & Advice",
+      "module_name_bn": "উদ্দেশ্য, পরিকল্পনা ও সুপরামর্শ",
+      "title_ja": "推量[すいりょう]と可能性[かのうせい]",
+      "title_en": "Conjecture & Possibility (~deshou & ~kamoshiremasen)",
+      "title_bn": "অনুমান ও সম্ভাবনা (~দেশৌ এবং ~কামুশিরেমাযেন)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "কোনো ঘটনা ঘটার সম্ভাব্যতা প্রকাশে জাপানি ভাষায় নিশ্চিততার মাত্রা অনুযায়ী দুটি ব্যাকরণ ব্যবহৃত হয়: ১. 〜でしょう (deshou): উচ্চ সম্ভাবনা (প্রায় ৭০-৮০% নিশ্চিত অনুমান; যেমন: 明日は雨が降るでしょう - আগামীকাল সম্ভবত বৃষ্টি হবে); ২. 〜かもしれません (kamoshiremasen): ক্ষীণ বা মাঝারি সম্ভাবনা (এমনকি ৩০-৫০% সম্ভাবনা হতে পারে; যেমন: 約束の時間に遅れるかもしれません - নির্ধারিত সময়ে হয়তো দেরি হতেও পারে)।",
+      "core_concept_bn": "উচ্চ সম্ভাবনা: 普通形 + でしょう; কম সম্ভাবনা / অনিশ্চয়তা: 普通形 + かもしれません। না-বিশেষ্য ও বিশেষ্যে だ উঠে যায় (暇でしょう、雨かもしれません)।",
+      "real_world_context_bn": "আবহাওয়া রিপোর্ট, ট্রাফিকের জ্যামের পূর্বাভাস বা শেয়ারবাজারের গতিবিধির আলোচনায়।",
+      "key_takeaway_bn": "〜かもしれません বাক্যে হয়তো কথাটির জাপানি রূপ 'もしかしたら' যুক্ত করলে বাক্য আরও জীবন্ত হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "渋滞[じゅうたい]",
+        "romaji": "juutai",
+        "meaning_bn": "যানজট / ট্রাফিক জ্যাম",
+        "meaning_en": "traffic congestion",
+        "part_of_speech": "noun",
+        "example_ja": "道[みち]が混[こ]んでいるので、渋滞[じゅうたい]になるかもしれません。",
+        "example_bn": "রাস্তায় গাড়ি বেশি থাকায় ট্রাফিক জ্যাম হতেও পারে।",
+        "example_en": "Because the road is crowded, there might be a traffic jam."
+      },
+      {
+        "word_ja": "合格[ごうかく]する",
+        "romaji": "goukaku suru",
+        "meaning_bn": "উত্তীর্ণ হওয়া / পাস করা",
+        "meaning_en": "to pass (an exam)",
+        "part_of_speech": "verb",
+        "example_ja": "一生懸命[いっしょうけんめい]頑張[がんば]ったから、試験[しけん]に合格[ごうかく]するでしょう。",
+        "example_bn": "প্রাণপণে পরিশ্রম করেছে, তাই পরীক্ষায় নিশ্চিত পাস করবে।",
+        "example_en": "Since he worked so hard, he will probably pass the exam."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "格",
+        "onyomi": "カク, コウ",
+        "kunyomi": "-",
+        "meaning_bn": "মর্যাদা / মানদণ্ড",
+        "meaning_en": "status / rank",
+        "stroke_count": 10,
+        "compounds": [
+          {
+            "word_ja": "合格[ごうかく]",
+            "meaning_bn": "পাস",
+            "meaning_en": "passing"
+          },
+          {
+            "word_ja": "性格[せいかく]",
+            "meaning_bn": "ব্যক্তিত্ব",
+            "meaning_en": "personality"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G20-1",
+        "pattern_ja": "普通形[ふつうけい] + かもしれません",
+        "pattern_bn": "সাধারণ রূপ + かもしれません (সম্ভাবনা)",
+        "explanation_bn": "ঘটনাটি ঘটতে পারে আবার নাও ঘটতে পারে—এমন সম্ভাবনা প্রকাশ করতে।",
+        "common_pitfalls": [
+          "না-বিশেষণ ও বিশেষ্যে だ যোগ করা যাবে না (雨だかもしれません ভুল; 雨かもしれません সঠিক)।"
+        ],
+        "examples": [
+          {
+            "ja": "明日[あした]は 雪[ゆき]が 降[ふ]るかもしれません。",
+            "bn": "আগামীকাল তুষারপাত হতেও পারে।",
+            "en": "It might snow tomorrow."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "সাপ্তাহিক ছুটির ভ্রমণের জন্য আবহাওয়া পর্যবেক্ষণ।",
+      "situation_en": "Checking weather forecast for a weekend trip.",
+      "lines": [
+        {
+          "speaker_ja": "ガイド",
+          "speaker_en": "Tour Guide",
+          "line_ja": "天気[てんき]予報[よほう]によると、午後[ごご]から雨[あめ]が降[ふ]るでしょう。",
+          "line_bn": "আবহাওয়া পূর্বাভাস অনুযায়ী বিকেল থেকে সম্ভবত বৃষ্টি হতে পারে।",
+          "line_en": "According to the weather forecast, it will probably rain from the afternoon."
+        },
+        {
+          "speaker_ja": "観光客[かんこうきゃく]",
+          "speaker_en": "Tourist",
+          "line_ja": "寒[さむ]くなるかもしれませんね。上着[うわぎ]を持[も]っていきます。",
+          "line_bn": "ঠান্ডা পড়তে পারে হয়তো। আমি একটি জ্যাকেট সাথে নিয়ে যাচ্ছি।",
+          "line_en": "It might get cold too. I will take a jacket along."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের আবহাওয়া সংবাদ ও ছাতার প্রয়োজনীয়তা",
+      "tip_bn": "জাপানি আবহাওয়া বার্তায় '降水確率' (বৃষ্টির সম্ভাবনা) শতাংশে দেখানো হয়। ৫০% এর বেশি সম্ভাবনা থাকলে জাপানিরা বাসা থেকেই ফোল্ডিং ছাতা (折りたたみ傘) ব্যাগে নিয়ে বের হন।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "渋滞[じゅうたい]",
+        "romaji_input": "juutai",
+        "target_display": "じゅうたい",
+        "meaning_bn": "যানজট"
+      },
+      {
+        "prompt_ja": "合格[ごうかく]",
+        "romaji_input": "goukaku",
+        "target_display": "ごうかく",
+        "meaning_bn": "পাস করা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L20-1",
+        "question_ja": "「約束[やくそく]の 時間[じかん]に（　　）かもしれません」正しい形は？",
+        "question_bn": "দেরি হতেও পারে—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "間に合わない",
+          "間に合わないだ",
+          "間に合わなくて",
+          "間に合いません"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "ক্রিয়ার সাধারণ রূপ (Plain form) এর সাথে সরাসরি かもしれません বসে (間に合わないかもしれません)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L21",
+      "lesson_number": 21,
+      "module_number": 5,
+      "module_name": "Imperatives, Giving/Receiving & Conditionals",
+      "module_name_bn": "আদেশ, নিষেধ, দেওয়া-নেওয়া ও শর্ত",
+      "title_ja": "命令[めいれい]・禁止[きんし]",
+      "title_en": "Imperative & Prohibitive Forms",
+      "title_bn": "কঠোর আদেশ ও স্পষ্ট নিষেধাজ্ঞা (মেইরেইকেই ও কিনশিকেই)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় জরুরি মুহূর্তে (যেমন: অগ্নিকাণ্ড, ট্রাফিকের বিপদ বা খেলাধুলার মাঠে উৎসাহ প্রদানে) আদেশ বা নিষেধের জন্য অত্যন্ত সংক্ষিপ্ত ও জোরালো রূপ ব্যবহৃত হয়: ১. আদেশ রূপ (命令形 - Meireikei): Group 1 ক্রিয়ায় u-শব্দ e-শব্দে পরিণত হয় (行く -> 行け, 止まる -> 止まれ); Group 2 তে ろ যুক্ত হয় (食べる -> 食べろ); Group 3 তে する -> しろ, 来る -> こい। ২. নিষেধাজ্ঞা রূপ (禁止形 - Kinshikei): ক্রিয়ার ডিকশনারি রূপের সাথে কেবল な যোগ হয় (飲むな - পান করবে না!, 入るな - ঢুকবে না!)।",
+      "core_concept_bn": "জরুরি আদেশ: 早く逃げろ (দ্রুত পালাও!); কঠোর নিষেধ: 触るな (হাত দিও না!); ট্রাফিক সাইন: 止まれ (থামুন)।",
+      "real_world_context_bn": "রাস্তার সাইনবোর্ড, কারখানার নিরাপত্তা সতর্কতা, অগ্নিনির্বাপণ বা ভূমিকম্পের জরুরি নির্দেশে ব্যবহৃত হয়।",
+      "key_takeaway_bn": "দৈনন্দিন ভদ্র আলাপে এই রূপগুলো ব্যবহার করা হয় না; কেবলমাত্র জরুরি অবস্থা, খেলাধুলার স্লোগান বা সাইনবোর্ডে দেখা যায়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "逃[に]げる",
+        "romaji": "nigeru",
+        "meaning_bn": "পালানো / নিরাপদ আশ্রয়ে যাওয়া",
+        "meaning_en": "to escape / flee",
+        "part_of_speech": "verb",
+        "example_ja": "火事[かじ]だ！早[はや]く逃[に]げろ！",
+        "example_bn": "আগুন লেগেছে! দ্রুত পালাও!",
+        "example_en": "Fire! Escape quickly!"
+      },
+      {
+        "word_ja": "触[さわ]る",
+        "romaji": "sawaru",
+        "meaning_bn": "স্পর্শ করা / হাত দেওয়া",
+        "meaning_en": "to touch",
+        "part_of_speech": "verb",
+        "example_ja": "危[あぶ]ないから、機械[きかい]に触[さわ]るな！",
+        "example_bn": "বিপজ্জনক, যন্ত্রে হাত দিও না!",
+        "example_en": "It's dangerous, do not touch the machine!"
+      },
+      {
+        "word_ja": "止[と]まる",
+        "romaji": "tomaru",
+        "meaning_bn": "থামা / বন্ধ হওয়া",
+        "meaning_en": "to stop",
+        "part_of_speech": "verb",
+        "example_ja": "道路[どうろ]に「止[と]まれ」と書[か]いてあります。",
+        "example_bn": "রাস্তায় 'থামুন' লেখা সাঁটানো রয়েছে।",
+        "example_en": "'Stop' is written on the road."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "禁",
+        "onyomi": "キン",
+        "kunyomi": "-",
+        "meaning_bn": "নিষেধ / বাধা",
+        "meaning_en": "prohibit / ban",
+        "stroke_count": 13,
+        "compounds": [
+          {
+            "word_ja": "禁止[きんし]",
+            "meaning_bn": "নিষেধাজ্ঞা",
+            "meaning_en": "prohibition"
+          },
+          {
+            "word_ja": "禁煙[きんえん]",
+            "meaning_bn": "ধূমপান নিষেধ",
+            "meaning_en": "no smoking"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G21-1",
+        "pattern_ja": "動詞[どうし] 辞書形[じしょけい] + な（禁止[きんし]）",
+        "pattern_bn": "ক্রিয়া ডিকশনারি রূপ + な (কঠোর নিষেধ)",
+        "explanation_bn": "কোনো কাজ করতে কঠোরভাবে নিষেধ করা।",
+        "common_pitfalls": [
+          "অনুরোধের '〜ないでください' এর সাথে ভুলিয়ে ফেলা যাবে না; '〜な' অত্যন্ত রূঢ় এবং জরুরি সাইনবোর্ডের ভাষা।"
+        ],
+        "examples": [
+          {
+            "ja": "ここに入[はい]るな！",
+            "bn": "এখানে ঢুকবে না!",
+            "en": "Do not enter here!"
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "কারখানায় নিরাপত্তা ট্রেইনিং ও জরুরি নির্দেশ।",
+      "situation_en": "Safety training and emergency instructions at a factory.",
+      "lines": [
+        {
+          "speaker_ja": "班長[はんちょう]",
+          "speaker_en": "Shift Leader",
+          "line_ja": "警報[けいほう]が鳴[な]ったら、すぐ作業[さぎょう]をやめろ！",
+          "line_bn": "সাইরেন বাজলে সাথে সাথে কাজ বন্ধ করো!",
+          "line_en": "If the alarm rings, stop work immediately!"
+        },
+        {
+          "speaker_ja": "作業員[さぎょういん]",
+          "speaker_en": "Worker",
+          "line_ja": "了解[りょうかい]しました！安全[あんぜん]を第一[だいいち]にします。",
+          "line_bn": "বুঝতে পেরেছি! সুরক্ষাকেই প্রথম অগ্রাধিকার দেব।",
+          "line_en": "Understood! We will put safety first."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের রাস্তার সাইন '止まれ' (Tomare) এর ট্রাফিক আইন",
+      "tip_bn": "জাপানের রাস্তায় সাদা ত্রিভুজাকৃতি '止まれ' সাইন থাকলে গাড়ি বা বাইসাইকেল চালককে একদম সম্পূর্ণ থেমে (Full stop) ডানে ও বামে দেখে তারপর চলতে হয়। না থামলে পুলিশ তৎক্ষণাৎ ট্রাফিক মামলা দেয়।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "禁止[きんし]",
+        "romaji_input": "kinshi",
+        "target_display": "きんし",
+        "meaning_bn": "নিষেধাজ্ঞা"
+      },
+      {
+        "prompt_ja": "逃[に]げる",
+        "romaji_input": "nigeru",
+        "target_display": "にげる",
+        "meaning_bn": "পালানো"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L21-1",
+        "question_ja": "「ここで 写真[しゃしん]を 撮[と]るな」という文の 意味[いみ]は？",
+        "question_bn": "এই বাক্যটির সঠিক অর্থ কোনটি?",
+        "options": [
+          "写真を撮ってはいけない",
+          "写真を撮ってください",
+          "写真を撮りましょう",
+          "写真を撮ってもいい"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "辞書形 + な হলো কঠোর নিষেধ (撮ってはいけない - ছবি তোলা যাবে না)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L22",
+      "lesson_number": 22,
+      "module_number": 5,
+      "module_name": "Imperatives, Giving/Receiving & Conditionals",
+      "module_name_bn": "আদেশ, নিষেধ, দেওয়া-নেওয়া ও শর্ত",
+      "title_ja": "伝聞[でんぶん]と意味[いみ]の伝達[でんたつ]",
+      "title_en": "Reported Speech & Meaning (~to itte imashita & ~to iu imi desu)",
+      "title_bn": "পরোক্ষ উক্তি ও শব্দের অর্থ ব্যাখ্যা (~তো ইত্তে ইমাশিতা এবং ~তো ইউ ইমি দেসু)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "অন্য কারো কথা তৃতীয় কোনো ব্যক্তিকে পৌঁছে দিতে 'সাধারণ রূপ + と言っていました' (বলেছিলেন / খবর দিয়েছেন) ব্যবহৃত হয়। যেমন: 田中さんは明日休むと言っていました (তানাকা সাহেব বলেছিলেন উনি কাল ছুটি নেবেন)। আর কোনো সাইনবোর্ড বা অপরিচিত শব্দের অর্থ জানতে ও ব্যাখ্যা করতে 'X は Y という意味です' (X-এর অর্থ হলো Y) ব্যবহৃত হয়।",
+      "core_concept_bn": "বার্তা জানানো: 普通形 + と言っていました; অর্থ ব্যাখ্যা: 〜という意味です।",
+      "real_world_context_bn": "জাপানি কাঞ্জি সাইন '立入禁止' বা '非常口' এর অর্থ বুঝতে জাপানিদের প্রশ্ন করতে বা সহকর্মীর বার্তা বসের কাছে পৌঁছাতে।",
+      "key_takeaway_bn": "উদ্ধৃতির ভেতরের বাক্যটি সর্বদা সাধারণ রূপে (Plain form) থাকে।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "意味[いみ]",
+        "romaji": "imi",
+        "meaning_bn": "অর্থ / তাৎপর্য",
+        "meaning_en": "meaning",
+        "part_of_speech": "noun",
+        "example_ja": "「立入禁止[たちいりきんし]」はどういう意味[いみ]ですか。",
+        "example_bn": "'তাচিইরি কিনশি' এর অর্থ কী?",
+        "example_en": "What does 'Tachiiri Kinshi' mean?"
+      },
+      {
+        "word_ja": "伝言[でんごん]",
+        "romaji": "dengon",
+        "meaning_bn": "মৌখিক বার্তা / মেসেজ",
+        "meaning_en": "verbal message",
+        "part_of_speech": "noun",
+        "example_ja": "伝言[でんごん]をお願[ねが]いできますか。",
+        "example_bn": "একটি বার্তা কি পৌঁছে দিতে পারবেন?",
+        "example_en": "Can I leave a message?"
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "伝",
+        "onyomi": "デン",
+        "kunyomi": "つた・わる, つた・える",
+        "meaning_bn": "প্রেরণ / জানানো",
+        "meaning_en": "transmit / report",
+        "stroke_count": 6,
+        "compounds": [
+          {
+            "word_ja": "伝言[でんごん]",
+            "meaning_bn": "বার্তা",
+            "meaning_en": "message"
+          },
+          {
+            "word_ja": "手伝[てつだ]う",
+            "meaning_bn": "সাহায্য করা",
+            "meaning_en": "to help"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G22-1",
+        "pattern_ja": "普通形[ふつうけい] + という意味[いみ]です",
+        "pattern_bn": "সাধারণ রূপ + という意味です (অর্থ হলো...)",
+        "explanation_bn": "শব্দ বা চিহ্নের অন্তর্নিহিত অর্থ ব্যাখ্যা করতে।",
+        "common_pitfalls": [
+          "সরাসরি '〜の意味です' না বলে '〜という意味です' বলা মার্জিত ব্যাকরণ।"
+        ],
+        "examples": [
+          {
+            "ja": "「使用中[しようちゅう]」は 今[いま] 使[つか]っている という意味[いみ]です。",
+            "bn": "'ব্যবহারাধীন' এর অর্থ হলো এখন এটি ব্যবহৃত হচ্ছে।",
+            "en": "'In use' means that it is currently being used."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসে ফোনে সহকর্মীর রেখে যাওয়া বার্তা গ্রহণ।",
+      "situation_en": "Taking a telephone message for a coworker at the office.",
+      "lines": [
+        {
+          "speaker_ja": "受付[うけつけ]",
+          "speaker_en": "Receptionist",
+          "line_ja": "先[さき]ほど山田[やまだ]様[さま]からお電話[でんわ]がありました。",
+          "line_bn": "একটু আগে ইয়ামাদা মহোদয়ের একটি ফোন এসেছিল।",
+          "line_en": "There was a phone call from Mr. Yamada a moment ago."
+        },
+        {
+          "speaker_ja": "私[わたし]",
+          "speaker_en": "Me",
+          "line_ja": "何[なに]か伝言[でんごん]はありましたか。",
+          "line_bn": "কোনো বার্তা রেখে গেছেন কি?",
+          "line_en": "Was there any message?"
+        },
+        {
+          "speaker_ja": "受付[うけつけ]",
+          "speaker_en": "Receptionist",
+          "line_ja": "午後[ごご]４時[よじ]にまた電話[でんわ]すると言[い]っていました。",
+          "line_bn": "উনি বলেছিলেন বিকেল ৪টায় আবার ফোন করবেন।",
+          "line_en": "He said that he would call again at 4:00 PM."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি অফিসে ফোন ধরার শিষ্টাচার (Denwa Outou)",
+      "tip_bn": "জাপানে অফিসে ফোন বেজে ওঠার ৩ বারের মধ্যেই রিসিভার তুলে 'お電話ありがとうございます、〇〇会社でございます' (ধন্যবাদ, অমুক কোম্পানি থেকে বলছি) বলা বাধ্যতামূলক। অন্য কারও বার্তা লিখতে Desk Memo ব্যবহার করা হয়।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "意味[いみ]",
+        "romaji_input": "imi",
+        "target_display": "いみ",
+        "meaning_bn": "অর্থ"
+      },
+      {
+        "prompt_ja": "伝言[でんごん]",
+        "romaji_input": "dengon",
+        "target_display": "でんごん",
+        "meaning_bn": "বার্তা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L22-1",
+        "question_ja": "「駐車禁止[ちゅうしゃきんし]」は 車[くるま]を 止[と]めては いけない（　　）意味[いみ]です。",
+        "question_bn": "খালি জায়গায় সঠিক সংযোগ রূপ কোনটি?",
+        "options": [
+          "という",
+          "の",
+          "と",
+          "な"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অর্থ প্রকাশের ব্যাকরণ হলো '〜という意味です' (to iu imi desu)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L23",
+      "lesson_number": 23,
+      "module_number": 5,
+      "module_name": "Imperatives, Giving/Receiving & Conditionals",
+      "module_name_bn": "আদেশ, নিষেধ, দেওয়া-নেওয়া ও শর্ত",
+      "title_ja": "指示通[しじどお]りと順序[じゅんじょ]",
+      "title_en": "Following Instructions & Chronological Order (~toori ni & ~ato de)",
+      "title_bn": "নির্দেশনা হুবহু অনুসরণ ও কাজের ধারাবাহিক ক্রম (~তোরি নি এবং ~আতো দে)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "১. 〜とおりに (toori ni): কোনো নকশা, রেসিপি বা নির্দেশ হুবহু অনুসরণ করে কাজ করা (যেমন: 私が言ったとおりに書いてください - আমি যেভাবে বললাম ঠিক সেভাবে লিখুন)। ২. 〜あとで (ato de): কোনো একটি কাজ সম্পূর্ণ শেষ করার পর দ্বিতীয় কাজটি শুরু করা (যেমন: ご飯を食べたあとで、薬を飲みます - খাবার খাওয়ার পর ওষুধ খাব)। গঠন: V (た形 / 辞書形) + とおりに / Noun + のとおりに; V (た形) + あとで / Noun + のあとで।",
+      "core_concept_bn": "নির্দেশমতো: 言ったとおりに; সম্পন্ন কাজের পরে: 食べたあとで (Te-form + kara এর সমতুল্য)।",
+      "real_world_context_bn": "কনভেনিয়েন্স স্টোরে পার্সেল পাঠানোর প্রক্রিয়া বা ফার্নিচার অ্যাসেম্বল নির্দেশিকায়।",
+      "key_takeaway_bn": "Noun এর পর とおりに বসলে তা প্রায়ই どおり (doori) উচ্চারিত হয় (予定通り - শিডিউল অনুযায়ী)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "説明書[せつめいしょ]",
+        "romaji": "setsumeisho",
+        "meaning_bn": "ব্যবহার নির্দেশিকা / ম্যানুয়াল",
+        "meaning_en": "instruction manual",
+        "part_of_speech": "noun",
+        "example_ja": "説明書[せつめいしょ]のとおりに組[く]み立[た]ててください。",
+        "example_bn": "ম্যানুয়ালের নির্দেশনা অনুযায়ী যন্ত্রাংশটি জোড়া দিন।",
+        "example_en": "Please assemble it according to the instruction manual."
+      },
+      {
+        "word_ja": "順番[じゅんばん]",
+        "romaji": "junban",
+        "meaning_bn": "ধারাবাহিক ক্রম / সিরিয়াল",
+        "meaning_en": "turn / order",
+        "part_of_speech": "noun",
+        "example_ja": "順番[じゅんばん]を守[まも]ってください。",
+        "example_bn": "দয়া করে সিরিয়াল বা লাইনের ক্রম বজায় রাখুন।",
+        "example_en": "Please maintain the order of the queue."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "順",
+        "onyomi": "ジュン",
+        "kunyomi": "-",
+        "meaning_bn": "ক্রম / আনুগত্য",
+        "meaning_en": "order / obey",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "順番[じゅんばん]",
+            "meaning_bn": "ক্রম",
+            "meaning_en": "order"
+          },
+          {
+            "word_ja": "順調[じゅんちょう]",
+            "meaning_bn": "মসৃণভাবে চলা",
+            "meaning_en": "smoothly"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G23-1",
+        "pattern_ja": "動詞[どうし] た形[けい] + あとで",
+        "pattern_bn": "ক্রিয়া た-ফর্ম + あとで (কাজের পরে)",
+        "explanation_bn": "প্রথম কাজটি সুসম্পন্ন হওয়ার পর দ্বিতীয় কাজ ঘটা।",
+        "common_pitfalls": [
+          "ক্রিয়া ডিকশনারি রূপের সাথে あとで বসে না; অবশ্যই অতীত রূপ (た形) দিতে হবে।"
+        ],
+        "examples": [
+          {
+            "ja": "仕事[しごと]が 終[お]わったあとで、飲[の]みに行[い]きましょう。",
+            "bn": "কাজ শেষ হওয়ার পর পান করতে যাব।",
+            "en": "Let's go for a drink after work is finished."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ইকিয়া বা নিটোরি থেকে কেনা আসবাবপত্র অ্যাসেম্বল করা।",
+      "situation_en": "Assembling furniture bought from Nitori or IKEA.",
+      "lines": [
+        {
+          "speaker_ja": "兄[あに]",
+          "speaker_en": "Older Brother",
+          "line_ja": "この棚[たな]、どうやって作[つく]るの？",
+          "line_bn": "এই বুকশেলফটা কীভাবে তৈরি করতে হবে?",
+          "line_en": "How do we make this shelf?"
+        },
+        {
+          "speaker_ja": "弟[おとうと]",
+          "speaker_en": "Younger Brother",
+          "line_ja": "図[ず]を見[み]て、番号[ばんごう]のとおりにネジをとめれば大丈夫[だいじょうぶ]だよ。",
+          "line_bn": "ছবি দেখে নম্বরের নির্দেশ অনুযায়ী স্ক্রু আঁটলেই হয়ে যাবে।",
+          "line_en": "Look at the diagram, if you tighten the screws according to the numbers, it will be fine."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের লাইন ধরার শিষ্টাচার (順番を守る)",
+      "tip_bn": "ট্রেনে ওঠা, বাসের জন্য অপেক্ষা বা টিকিট কাটার সময় লাইনে শৃঙ্খলাভঙ্গ করা জাপানে অত্যন্ত গর্হিত অপরাধ। লাইনে কাউকে ঢুকতে দেওয়া বা লাইন কাটা আইনিভাবেও দণ্ডনীয় হতে পারে।",
+      "category": "Manners"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "説明書[せつめいしょ]",
+        "romaji_input": "setsumeisho",
+        "target_display": "せつめいしょ",
+        "meaning_bn": "ম্যানুয়াল"
+      },
+      {
+        "prompt_ja": "順番[じゅんばん]",
+        "romaji_input": "junban",
+        "target_display": "じゅんばん",
+        "meaning_bn": "সিরিয়াল"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L23-1",
+        "question_ja": "「先生[せんせい]が 言[い]った（　　）発音[はつおん]してください」",
+        "question_bn": "শিক্ষক যেভাবে বললেন ঠিক সেভাবে উচ্চারণ করুন—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "とおりに",
+          "あとで",
+          "まえに",
+          "ために"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অনুরূপভাবে বা নির্দেশমতো অনুসরণ করতে '〜とおりに' ব্যবহৃত হয়।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L24",
+      "lesson_number": 24,
+      "module_number": 5,
+      "module_name": "Imperatives, Giving/Receiving & Conditionals",
+      "module_name_bn": "আদেশ, নিষেধ, দেওয়া-নেওয়া ও শর্ত",
+      "title_ja": "授受表現[じゅじゅひょうげん]の発展[はってん]",
+      "title_en": "Giving & Receiving Favors (~te ageru / ~te kureru / ~te morau)",
+      "title_bn": "উপকার দেওয়া ও গ্রহণের মার্জিত রূপ (আগেরু, কুরেরু ও মোরাউ)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "N5-এ আমরা কোনো বস্তু দেওয়া-নেওয়া শিখেছিলাম। N4-এ ক্রিয়ার মাধ্যমে উপকার বা অনুগ্রহ (Favors) আদান-প্রদান অত্যন্ত গুরুত্বপূর্ণ: ১. 〜てあげる: অন্য কাউকে কোনো উপকার করে দেওয়া (আমি তাকে শিখিয়ে দিলাম); ২. 〜てくれる: অন্য কেউ স্বয়ং আমাকে বা আমার দলের কাউকে কোনো অনুগ্রহ করে দেওয়া (উনি আমাকে দেখিয়ে দিলেন); ৩. 〜てもらう: অন্য কারো কাছ থেকে বিনম্রভাবে কোনো উপকার করিয়ে নেওয়া (আমি ওনার দ্বারা করিয়ে নিলাম)। মার্জিত রূপ: 〜てくださる (সম্মানীয় ব্যক্তি আমাকে করে দেওয়া), 〜ていただく (সম্মানীয় ব্যক্তি থেকে করিয়ে নেওয়া)।",
+      "core_concept_bn": "অন্যকে করা: 〜てあげる; আমাকে করা: 〜てくれる / 〜てくださる; করিয়ে নেওয়া: 〜てもらう / 〜ていただく।",
+      "real_world_context_bn": "টোকিওতে পথ হারিয়ে ফেললে কোনো জাপানি পথ দেখিয়ে দিলে বলা: 道を教えてくれました।",
+      "key_takeaway_bn": "〜てくれる এ যিনি সাহায্য করেছেন তিনি কর্তা (は/が); আর 〜てもらう এ যিনি সাহায্য গ্রহণ করেছেন তিনি কর্তা (は) এবং সাহায্যকারী (に)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "おごる",
+        "romaji": "ogoru",
+        "meaning_bn": "ট্রিট দেওয়া / বিল পরিশোধ করে দেওয়া",
+        "meaning_en": "to treat (someone to a meal)",
+        "part_of_speech": "verb",
+        "example_ja": "先輩[せんぱい]が昼[ひる]ご飯[はん]をおごってくれました。",
+        "example_bn": "সিনিয়র আমাকে দুপুরের খাবার ট্রিট দিয়েছেন।",
+        "example_en": "My senior treated me to lunch."
+      },
+      {
+        "word_ja": "手伝[てつだ]い",
+        "romaji": "tetsudai",
+        "meaning_bn": "সাহায্য / সহায়তা",
+        "meaning_en": "help / assistance",
+        "part_of_speech": "noun",
+        "example_ja": "引[ひ]っ越[こ]しを手伝[てつだ]ってもらいました。",
+        "example_bn": "বাসা পরিবর্তনের সময় বন্ধুদের কাছ থেকে সাহায্য করিয়ে নিয়েছি।",
+        "example_en": "I had my friends help me with moving."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "貸",
+        "onyomi": "タイ",
+        "kunyomi": "か・す",
+        "meaning_bn": "ধার দেওয়া",
+        "meaning_en": "lend",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "貸[か]す",
+            "meaning_bn": "ধার দেওয়া",
+            "meaning_en": "to lend"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G24-1",
+        "pattern_ja": "人[ひと] に / から 動詞[どうし] て形[けい] + もらいます",
+        "pattern_bn": "কারো দ্বারা কোনো কাজ করিয়ে নেওয়া",
+        "explanation_bn": "বক্তা উপকৃত হওয়ার জন্য কৃতজ্ঞতা প্রকাশ করে।",
+        "common_pitfalls": [
+          "উর্ধ্বতন কাউকে সাহায্য করার সময় সরাসরি 〜てあげます বললে তা অনুগ্রহ ফলানো মনে হয়; বলতে হয় 'お〜いたします'।"
+        ],
+        "examples": [
+          {
+            "ja": "日本[にほん]人[じん]の 友達[ともだち]に 日本語[にほんご]を 教[おし]えてもらいました。",
+            "bn": "জাপানি বন্ধুর দ্বারা আমি জাপানি ভাষা শিখিয়ে নিয়েছি।",
+            "en": "I had a Japanese friend teach me Japanese."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "বৃষ্টির দিনে স্টেশনে সহকর্মীর কাছ থেকে ছাতা সাহায্য পাওয়া।",
+      "situation_en": "Receiving umbrella assistance from a colleague on a rainy day.",
+      "lines": [
+        {
+          "speaker_ja": "アミン",
+          "speaker_en": "Amin",
+          "line_ja": "雨[あめ]が降[ふ]ってきたのに傘[かさ]がなくて困[こま]っていました。",
+          "line_bn": "বৃষ্টি শুরু হয়েছে অথচ ছাতা না থাকায় বিপদে পড়েছিলাম।",
+          "line_en": "It started raining and I was in trouble because I had no umbrella."
+        },
+        {
+          "speaker_ja": "同僚[どうりょう]",
+          "speaker_en": "Colleague",
+          "line_ja": "佐藤[さとう]さんが傘[かさ]を貸[か]してくれたんですね。よかったですね。",
+          "line_bn": "সাতো সাহেব আপনাকে ছাতা ধার দিয়েছেন দেখছি! খুব ভালো হয়েছে।",
+          "line_en": "Mr. Sato lent you an umbrella, didn't he? That was fortunate."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানে উপহারের প্রতিদানে 'ওকায়েশি' (お返し - Return Gift)",
+      "tip_bn": "জাপানে কারো কাছ থেকে উপহার বা বড় অনুগ্রহ পেলে তার প্রতিদানে কিছু উপহার ফেরত দেওয়াকে 'Okaeshi' বলে। সাধারণ সৌজন্যের ক্ষেত্রে মৌখিকভাবে '先日はありがとうございました' (সেদিনের জন্য ধন্যবাদ) বলে কৃতজ্ঞতা প্রকাশ করতে হয়।",
+      "category": "Manners"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "手伝[てつだ]い",
+        "romaji_input": "tetsudai",
+        "target_display": "てつだい",
+        "meaning_bn": "সাহায্য"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L24-1",
+        "question_ja": "「田中[たなか]さんが 私[わたし]に 写真[しゃしん]を（　　）」正しい授受動詞は？",
+        "question_bn": "তানাকা সাহেব আমাকে ছবি তুলে দিয়েছেন—সঠিক রূপ কোনটি?",
+        "options": [
+          "撮ってくれました",
+          "撮ってあげました",
+          "撮ってもらいました",
+          "撮ってやりました"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অন্য ব্যক্তি যখন বক্তাকে (私に) কোনো উপকার করে দেয় তখন '〜てくれました' বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L25",
+      "lesson_number": 25,
+      "module_number": 5,
+      "module_name": "Imperatives, Giving/Receiving & Conditionals",
+      "module_name_bn": "আদেশ, নিষেধ, দেওয়া-নেওয়া ও শর্ত",
+      "title_ja": "四[よ]つの条件表現[じょうけんひょうげん]",
+      "title_en": "The 4 Japanese Conditionals (~to, ~ba, ~tara, ~nara)",
+      "title_bn": "জাপানি ভাষার ৪টি শর্তবাচক প্রকাশ (তো, বা, তারা এবং নারা)",
+      "estimated_minutes": 40,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ব্যাকরণের অন্যতম সমৃদ্ধ অধ্যায় হলো শর্ত (Conditionals)। ১. 〜と: প্রাকৃতিক নিয়ম, যন্ত্রের বোতাম বা অপরিবর্তনীয় সত্য (বোতাম টিপলে টিকিট বের হয়); ২. 〜ば: তাত্ত্বিক যুক্তি বা অপরিহার্য শর্ত (বসন্ত এলে ফুল ফোটে / পড়লে পাস করবে); ৩. 〜たら: দৈনন্দিন জীবনের সাধারণ 'যদি/যখন', কালগত ক্রম এবং অতীতের অপ্রত্যাশিত ঘটনা (টাকা থাকলে কিনব); ৪. 〜なら: শ্রোতার কথার সূত্র ধরে পরামর্শ বা প্রেক্ষাপট (জাপানি খাবার হলে সুশি সেরা)।",
+      "core_concept_bn": "প্রাকৃতিক সত্য: 〜と; তাত্ত্বিক শর্ত: 〜ば; সাধারণ দৈনন্দিন শর্ত: 〜たら; প্রসঙ্গ গ্রহণ: 〜なら।",
+      "real_world_context_bn": "ভেন্ডিং মেশিন ব্যবহার (ボタンを押すとジュースが出ます) থেকে শুরু করে জাপানে ভ্রমণের পরামর্শে (京都へ行くなら新幹線が便利です)।",
+      "key_takeaway_bn": "পরামর্শ বা অনুরোধসূচক বাক্য শেষে থাকলে 〜と বা 〜ば বসে না, 〜たら বা 〜なら বসে।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "ボタン",
+        "romaji": "botan",
+        "meaning_bn": "বোতাম / সুইচ",
+        "meaning_en": "button",
+        "part_of_speech": "noun",
+        "example_ja": "このボタンを押[お]すと、お釣[つ]りが出[で]ます。",
+        "example_bn": "এই বোতামটি চাপলে ফেরত পয়সা বের হবে।",
+        "example_en": "If you press this button, the change will come out."
+      },
+      {
+        "word_ja": "両替[りょうがえ]する",
+        "romaji": "ryougae suru",
+        "meaning_bn": "টাকা বা মুদ্রা ভাঙানো",
+        "meaning_en": "to exchange money",
+        "part_of_speech": "verb",
+        "example_ja": "お金[かね]が足[た]りなければ、両替[りょうがえ]してください。",
+        "example_bn": "টাকা অপর্যাপ্ত হলে ভাঙিয়ে নিন।",
+        "example_en": "If you don't have enough money, please exchange some."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "押",
+        "onyomi": "オウ",
+        "kunyomi": "お・す, お・さえる",
+        "meaning_bn": "চাপা / ঠেলা",
+        "meaning_en": "push / press",
+        "stroke_count": 8,
+        "compounds": [
+          {
+            "word_ja": "押[お]す",
+            "meaning_bn": "চাপা",
+            "meaning_en": "to press"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G25-1",
+        "pattern_ja": "動詞[どうし] ば形[けい]（条件形[じょうけんけい]）",
+        "pattern_bn": "ক্রিয়া ば-ফর্ম (শর্তসূচক রূপ)",
+        "explanation_bn": "Group 1: u-শব্দ e-শব্দে পরিবর্তন + ば (行けば、読めば); Group 2: る তুলে れば (食べれば); Group 3: すれば、くれば।",
+        "common_pitfalls": [
+          "পেছনে অনুরোধ বা ইচ্ছা থাকলে ば ব্যবহার সীমিত (安ければ買ってください ভুল; 安かったら買ってください সঠিক)।"
+        ],
+        "examples": [
+          {
+            "ja": "春[はる]になれば、桜[さくら]が咲[さ]きます。",
+            "bn": "বসন্ত এলে চেরি ফুল ফোটে।",
+            "en": "When spring comes, cherry blossoms bloom."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "টোকিওতে সুস্বাদু খাবারের দোকান খোঁজার পরামর্শ।",
+      "situation_en": "Getting advice on finding good restaurants in Tokyo.",
+      "lines": [
+        {
+          "speaker_ja": "ビラル",
+          "speaker_en": "Bilal",
+          "line_ja": "美味[おい]しいラーメンを食[た]べたいんですが、どこがいいですか。",
+          "line_bn": "সুস্বাদু রামেন খেতে চাই, কোন দোকান ভালো হবে?",
+          "line_en": "I want to eat delicious ramen, which place is good?"
+        },
+        {
+          "speaker_ja": "タケシ",
+          "speaker_en": "Takeshi",
+          "line_ja": "ラーメンなら、駅[えき]の近[ちか]くの一蘭[いちらん]が一番[いちばん]ですよ。",
+          "line_bn": "রামেন যদি হয়, তবে স্টেশনের কাছের ইচিরান সবচেয়ে সেরা!",
+          "line_en": "If it's ramen you're after, Ichiran near the station is the best."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের ভেন্ডিং মেশিন (自動販売機) ব্যবহারে শর্ত",
+      "tip_bn": "জাপানে রাস্তাঘাটে লাখ লাখ ভেন্ডিং মেশিন রয়েছে। কয়েন বা সুইকা কার্ড টাচ করলে স্বয়ংক্রিয়ভাবে লাইট জ্বলে (タッチすると電気がつきます) এবং বোতাম চাপলেই ক্যান নিচে নেমে আসে।",
+      "category": "Shopping"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "ボタン",
+        "romaji_input": "botan",
+        "target_display": "ボタン",
+        "meaning_bn": "বোতাম"
+      },
+      {
+        "prompt_ja": "押[お]す",
+        "romaji_input": "osu",
+        "target_display": "おす",
+        "meaning_bn": "চাপা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L25-1",
+        "question_ja": "「この つまみを 右[みぎ]へ 回[まわ]す（　　）、音[おと]が 大[おお]きくなります」",
+        "question_bn": "এই নবটি ডানে ঘোরালে শব্দ বাড়ে (যন্ত্রের নিশ্চিত ফল)—খালি জায়গায় কোনটি বসবে?",
+        "options": [
+          "と",
+          "なら",
+          "たら",
+          "ば"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "যন্ত্রপাতির অপারেশন ও প্রাকৃতিক নিশ্চিত ফলাফলের ক্ষেত্রে '〜と' বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L26",
+      "lesson_number": 26,
+      "module_number": 6,
+      "module_name": "Passive, Causative & Respectful Keigo",
+      "module_name_bn": "কর্মবাচ্য, প্রযোজক রূপ ও সম্মানসূচক কেইগো",
+      "title_ja": "受身[うけみ]の構造[こうぞう]",
+      "title_en": "Passive Voice (Direct & Suffering Passive)",
+      "title_bn": "কর্মবাচ্যের কাঠামো (উকেমিকেই: প্রশংসিত হওয়া ও ভোগান্তির প্যাসিভ)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় প্যাসিভ ভয়েস বা কর্মবাচ্য (受身 - Ukemi) দুটি ক্ষেত্রে ব্যবহৃত হয়: ১. প্রত্যক্ষ কর্মবাচ্য: প্রশংসিত বা অভিনন্দিত হওয়া (先生に褒められました - শিক্ষকের দ্বারা প্রশংসিত হয়েছি); ২. ভোগান্তি বা কষ্টের প্যাসিভ (迷惑の受身 - Meiwaku no ukemi): অন্য কারও কোনো কাজের ফলে বক্তা ক্ষতিগ্রস্ত বা বিব্রত হলে (電車で足を踏まれました - ট্রেনে কেউ আমার পায়ে পাড়া দিয়েছে / 雨に降られました - বৃষ্টিতে ভিজে ভোগান্তি হয়েছে)। রূপান্তর: Group 1: u-শব্দ a-শব্দে পরিবর্তন + れる (叱る -> 叱られる); Group 2: られる (褒める -> 褒められる); Group 3: される, こられる।",
+      "core_concept_bn": "অন্যের দ্বারা হওয়া: A は B に 〜られる; ভোগান্তির প্যাসিভ: A は B に C を 〜られる।",
+      "real_world_context_bn": "জাপানের ব্যস্ত মেট্রোতে ধাক্কা খাওয়া বা অফিসে বসের বকা খাওয়ার অভিজ্ঞতা প্রকাশে।",
+      "key_takeaway_bn": "বাংলায় সাধারণত নির্জীব বস্তুর প্যাসিভ হয়, কিন্তু জাপানিতে সজীব ব্যক্তির আবেগ ও ভোগান্তি প্যাসিভে প্রবল।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "褒[ほ]める",
+        "romaji": "homeru",
+        "meaning_bn": "প্রশংসা করা",
+        "meaning_en": "to praise",
+        "part_of_speech": "verb",
+        "example_ja": "テストで満点[まんてん]を取[と]って、先生[せんせい]に褒[ほ]められました。",
+        "example_bn": "পরীক্ষায় পূর্ণ নম্বর পেয়ে শিক্ষকের দ্বারা প্রশংসিত হয়েছি।",
+        "example_en": "I got full marks on the test and was praised by the teacher."
+      },
+      {
+        "word_ja": "叱[しか]る",
+        "romaji": "shikaru",
+        "meaning_bn": "বকা দেওয়া / তিরস্কার করা",
+        "meaning_en": "to scold",
+        "part_of_speech": "verb",
+        "example_ja": "宿題[しゅくだい]を忘[わす]れて、部長[ぶちょう]に叱[しか]られました。",
+        "example_bn": "হোমওয়ার্ক ভুলে যাওয়ায় বসের দ্বারা বকা খেয়েছি।",
+        "example_en": "I forgot my assignment and was scolded by the director."
+      },
+      {
+        "word_ja": "踏[ふ]む",
+        "romaji": "fumu",
+        "meaning_bn": "পায়ে মাড়ানো / পাড়া দেওয়া",
+        "meaning_en": "to step on",
+        "part_of_speech": "verb",
+        "example_ja": "満員[まんいん]電車[でんしゃ]で足[あし]を踏[ふ]まれました。",
+        "example_bn": "ভিড় ট্রেনে আমার পায়ে অন্য একজন পাড়া দিয়েছে।",
+        "example_en": "Someone stepped on my foot on the crowded train."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "受",
+        "onyomi": "ジュ",
+        "kunyomi": "う・ける, う・かる",
+        "meaning_bn": "গ্রহণ করা / বরণ করা",
+        "meaning_en": "receive / accept",
+        "stroke_count": 8,
+        "compounds": [
+          {
+            "word_ja": "受身[うけみ]",
+            "meaning_bn": "কর্মবাচ্য",
+            "meaning_en": "passive"
+          },
+          {
+            "word_ja": "受験[じゅけん]",
+            "meaning_bn": "পরীক্ষা দেওয়া",
+            "meaning_en": "taking an exam"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G26-1",
+        "pattern_ja": "人[ひと] は 人[ひと] に + 動詞[どうし] 受身形[うけみけい]",
+        "pattern_bn": "ব্যক্তি は কর্তা に + প্যাসিভ ক্রিয়া",
+        "explanation_bn": "কার দ্বারা কাজটি করা হয়েছে তার সাথে 'に' পার্টিকেল বসে।",
+        "common_pitfalls": [
+          "কর্তার সাথে 'で' বা 'を' দিলে অর্থ ভুল হয়ে যাবে; সক্রিয় ব্যক্তির সাথে 'に' বসে।"
+        ],
+        "examples": [
+          {
+            "ja": "私[わたし]は 部長[ぶちょう]に 呼[よ]ばれました。",
+            "bn": "আমাকে ডিপার্টমেন্ট প্রধান ডেকে পাঠিয়েছেন।",
+            "en": "I was called by the department manager."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ভাষা স্কুলের ক্লাসরুমে উপস্থাপনার প্রশংসা পাওয়া।",
+      "situation_en": "Being praised for a classroom presentation at language school.",
+      "lines": [
+        {
+          "speaker_ja": "ハシナ",
+          "speaker_en": "Hasina",
+          "line_ja": "スピーチコンテスト、どうでしたか。",
+          "line_bn": "বক্তৃতা প্রতিযোগিতা কেমন হলো?",
+          "line_en": "How was the speech contest?"
+        },
+        {
+          "speaker_ja": "ラキブ",
+          "speaker_en": "Rakib",
+          "line_ja": "緊張[きんちょう]しましたが、校長[こうちょう]先生[せんせい]に発音[はつおん]を褒[ほ]められました！",
+          "line_bn": "নার্ভাস ছিলাম, কিন্তু প্রিন্সিপাল স্যার আমার উচ্চারণের প্রশংসা করেছেন!",
+          "line_en": "I was nervous, but the principal praised my pronunciation!"
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের ভিড় ট্রেনে অনিচ্ছাকৃত আঘাত ও ক্ষমা প্রার্থনা (Sumimasen)",
+      "tip_bn": "টোকিওর পিক আওয়ারের ট্রেনে অনিচ্ছাকৃতভাবে কারো পা বা ব্যাগে ধাক্কা লাগলে সাথে সাথে 'すみません' (Sumimasen) বলে মাথা কিছুটা নোয়ানো জাপানি সংস্কৃতির মৌলিক ভদ্রতা।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "褒[ほ]める",
+        "romaji_input": "homeru",
+        "target_display": "ほめる",
+        "meaning_bn": "প্রশংসা করা"
+      },
+      {
+        "prompt_ja": "受身[うけみ]",
+        "romaji_input": "ukemi",
+        "target_display": "うけみ",
+        "meaning_bn": "কর্মবাচ্য"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L26-1",
+        "question_ja": "「私[わたし]は 先生[せんせい]（　　）名前[なまえ]を 呼[よ]ばれました」正しい助詞は？",
+        "question_bn": "শিক্ষক দ্বারা আমার নাম ডাকা হয়েছে—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "に",
+          "を",
+          "で",
+          "が"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "প্যাসিভ বাক্যে মূল কার্যসম্পাদনকারীর সাথে 'に' পার্টিকেল বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L27",
+      "lesson_number": 27,
+      "module_number": 6,
+      "module_name": "Passive, Causative & Respectful Keigo",
+      "module_name_bn": "কর্মবাচ্য, প্রযোজক রূপ ও সম্মানসূচক কেইগো",
+      "title_ja": "使役[しえき]の表現[ひょうげん]",
+      "title_en": "Causative Form (Make or Let Someone Do)",
+      "title_bn": "প্রযোজক ক্রিয়ার রূপ (শিয়োকিকেই: করানো বা করতে অনুমতি দেওয়া)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় কাউকে কোনো কাজ করতে বাধ্য করা (Make someone do) অথবা কারো আগ্রহে তাকে কোনো কাজ করার অনুমতি দেওয়া (Let someone do) বোঝাতে প্রযোজক ক্রিয়া রূপ বা 使役形 (Shiekikei) ব্যবহৃত হয়। রূপান্তর: Group 1: u-শব্দ a-শব্দে পরিবর্তন + せる (行く -> 行かせる, 読む -> 読ませる); Group 2: させる (食べる -> 食べさせる); Group 3: させる, こさせる। বিনীত অনুমতির প্রার্থনা: 〜させていただけませんか (আমাকে দয়া করে করতে দেবেন কি?)।",
+      "core_concept_bn": "বাধ্য করা বা অনুমতি দেওয়া: A は B に/を 〜せる/させる; অনুমতি প্রার্থনা: 質問させてください (দয়া করে আমাকে প্রশ্ন করতে দিন)।",
+      "real_world_context_bn": "ছুটি নেওয়ার আবেদন (休ませてください) বা মিটিংয়ে মতামত প্রকাশের অনুমতি চাওয়ায়।",
+      "key_takeaway_bn": "অকর্মক ক্রিয়ার ক্ষেত্রে ব্যক্তিকে を এবং সকর্মক ক্রিয়ার ক্ষেত্রে ব্যক্তিকে に দিয়ে চিহ্নিত করা হয়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "習[なら]わせる",
+        "romaji": "narawaseru",
+        "meaning_bn": "শেখান / ক্লাসে ভর্তি করানো",
+        "meaning_en": "to make/let (someone) learn",
+        "part_of_speech": "verb",
+        "example_ja": "子供[こども]にピアノを習[なら]わせています。",
+        "example_bn": "সন্তানকে পিয়ানো শেখাচ্ছি (ক্লাস করাচ্ছি)।",
+        "example_en": "I am having my child take piano lessons."
+      },
+      {
+        "word_ja": "手伝[てつだ]わせる",
+        "romaji": "tetsudawaseru",
+        "meaning_bn": "সাহায্য করানো",
+        "meaning_en": "to make/let (someone) help",
+        "part_of_speech": "verb",
+        "example_ja": "妹[いもうと]に掃除[そうじ]を手伝[てつだ]わせました。",
+        "example_bn": "ছোট বোনকে ঘর পরিষ্কারের কাজে সাহায্য করিয়েছি।",
+        "example_en": "I made my little sister help with cleaning."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "役",
+        "onyomi": "ヤク, エキ",
+        "kunyomi": "-",
+        "meaning_bn": "ভূমিকা / দায়িত্ব",
+        "meaning_en": "role / service",
+        "stroke_count": 7,
+        "compounds": [
+          {
+            "word_ja": "使役[しえき]",
+            "meaning_bn": "প্রযোজক ক্রিয়া",
+            "meaning_en": "causative"
+          },
+          {
+            "word_ja": "役所[やくしょ]",
+            "meaning_bn": "সরকারি অফিস",
+            "meaning_en": "public office"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G27-1",
+        "pattern_ja": "動詞[どうし] 使役形[しえきけい] て形[けい] + ください / いただけませんか",
+        "pattern_bn": "প্রযোজক রূপ て-ফর্ম + いただけませんか (করার অনুমতি চাওয়া)",
+        "explanation_bn": "নিজের কোনো কাজের জন্য বিনম্রভাবে অনুমতি প্রার্থনা করতে।",
+        "common_pitfalls": [
+          "উর্ধ্বতন কাউকে দিয়ে কোনো কাজ করানোর ক্ষেত্রে 使役形 ব্যবহার করা তীব্র অসৌজন্যতা।"
+        ],
+        "examples": [
+          {
+            "ja": "気分[きぶん]が 悪[わる]いので、今日[きょう]は 早[はや]く 帰[かえ]らせてください。",
+            "bn": "শরীর খারাপ লাগায় আজকে আমাকে তাড়াতাড়ি বাড়ি ফিরতে দিন।",
+            "en": "Since I feel unwell, please allow me to go home early today."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসে ডাক্তারের অ্যাপয়েন্টমেন্টের জন্য আগে বের হওয়ার অনুমতি চাওয়া।",
+      "situation_en": "Asking permission to leave work early for a clinic appointment.",
+      "lines": [
+        {
+          "speaker_ja": "社員[しゃいん]",
+          "speaker_en": "Employee",
+          "line_ja": "部長[ぶちょう]、歯医者[はいしゃ]の予約[よやく]があるので、５時[ごじ]に帰[かえ]らせていただけませんか。",
+          "line_bn": "ম্যানেজার মহোদয়, ডেন্টিস্টের অ্যাপয়েন্টমেন্ট থাকায় আমাকে কি ৫টায় ছুটি নিতে অনুমতি দেবেন?",
+          "line_en": "Manager, I have a dentist appointment, could you please allow me to leave at 5:00 PM?"
+        },
+        {
+          "speaker_ja": "部長[ぶちょう]",
+          "speaker_en": "Department Manager",
+          "line_ja": "いいですよ。お大事[だいじ]にしてくださいね。",
+          "line_bn": "নিশ্চয়ই, যান। নিজের যত্ন নেবেন।",
+          "line_en": "Sure, go ahead. Take care of yourself."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি অফিসে ছুটি চাইতে '〜させていただけますか' এর ব্যবহার",
+      "tip_bn": "জাপানি করপোরেট শিষ্টাচারের সবচেয়ে বিখ্যাত ছুটি চাওয়ার বাক্য হলো '休暇を取らせていただきたいのですが' (আমাকে কি ছুটি নেওয়ার অনুমতি দেবেন?)। সরাসরি 'ছুটি চাই' না বলে নিজেকে অনুমতি প্রার্থী হিসেবে উপস্থাপন করাই রীতি।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "使役[しえき]",
+        "romaji_input": "shieki",
+        "target_display": "しえき",
+        "meaning_bn": "প্রযোজক ক্রিয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L27-1",
+        "question_ja": "「私[わたし]に 説明[せつめい]（　　）てください」正しい形は？",
+        "question_bn": "আমাকে ব্যাখ্যা করতে দিন—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "させて",
+          "して",
+          "されて",
+          "させられて"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "আমাকে করতে দিন (অনুমতি চাওয়া) এর রূপ হলো 使役形 + てください (説明させてください)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L28",
+      "lesson_number": 28,
+      "module_number": 6,
+      "module_name": "Passive, Causative & Respectful Keigo",
+      "module_name_bn": "কর্মবাচ্য, প্রযোজক রূপ ও সম্মানসূচক কেইগো",
+      "title_ja": "使役受身[しえきうけみ]",
+      "title_en": "Causative-Passive Form (Forced to Do)",
+      "title_bn": "অনিচ্ছাকৃত বাধ্যবাধকতার প্যাসিভ (শিয়োকি উকেমি: জোরপূর্বক করানো হওয়া)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "যখন বক্তা নিজের ইচ্ছার বিরুদ্ধে অন্য কারো চাপে বা পরিস্থিতিতে বাধ্য হয়ে কোনো অপ্রীতিকর কাজ করে, তখন প্রযোজক এবং কর্মবাচ্য একসাথে যুক্ত হয়ে '使役受身形' (Shieki-ukemi) গঠিত হয়। বাংলায়: 'আমাকে দিয়ে জোর করে কাজটি করানো হয়েছে'। রূপান্তর: Group 1: u-শব্দ a-শব্দে রূপান্তর + される (待つ -> 待たされる - অপেক্ষা করতে বাধ্য হওয়া, 歌う -> 歌わされる - গান গাইতে বাধ্য হওয়া); Group 2: させられる (食べる -> 食べさせられる - গিলতে বাধ্য হওয়া); Group 3: させられる, こさせられる।",
+      "core_concept_bn": "অনিচ্ছাকৃত বাধ্যবাধকতা: A は B に 〜させられる / 〜される (যেমন: 嫌いな野菜を食べさせられました)।",
+      "real_world_context_bn": "জাপানি নববর্ষের পার্টিতে জোরপূর্বক কারাওকেতে গান গাওয়ানো বা অতিরিক্ত ওভারটাইম করতে বাধ্য হওয়ার অনুভূতি প্রকাশে।",
+      "key_takeaway_bn": "Group 1 ক্রিয়ায় せられ সংকুচিত হয়ে され হয় (書かせられる -> 書かされる)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "待[ま]たされる",
+        "romaji": "matasareru",
+        "meaning_bn": "অপেক্ষা করতে বাধ্য হওয়া",
+        "meaning_en": "to be made to wait",
+        "part_of_speech": "verb",
+        "example_ja": "病院[びょういん]で２時間[じかん]も待[ま]たされました。",
+        "example_bn": "হাসপাতালে পুরো ২ ঘণ্টা অপেক্ষা করতে বাধ্য হয়েছি।",
+        "example_en": "I was made to wait for as long as 2 hours at the hospital."
+      },
+      {
+        "word_ja": "歌[うた]わされる",
+        "romaji": "utawasareru",
+        "meaning_bn": "গান গাইতে বাধ্য হওয়া",
+        "meaning_en": "to be forced to sing",
+        "part_of_speech": "verb",
+        "example_ja": "カラオケでみんなの前[まえ]で歌[うた]わされました。",
+        "example_bn": "কারাওকেতে সবার সামনে আমাকে গান গাইতে বাধ্য করা হয়েছিল।",
+        "example_en": "I was forced to sing in front of everyone at karaoke."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "歌",
+        "onyomi": "カ",
+        "kunyomi": "うた, うた・う",
+        "meaning_bn": "গান গাওয়া",
+        "meaning_en": "song / sing",
+        "stroke_count": 14,
+        "compounds": [
+          {
+            "word_ja": "歌[うた]う",
+            "meaning_bn": "গান গাওয়া",
+            "meaning_en": "to sing"
+          },
+          {
+            "word_ja": "歌手[かしゅ]",
+            "meaning_bn": "গায়ক",
+            "meaning_en": "singer"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G28-1",
+        "pattern_ja": "人[ひと] は 人[ひと] に + 使役受身形[しえきうけみけい]",
+        "pattern_bn": "ব্যক্তি は অন্য ব্যক্তির に দ্বারা বাধ্য হয়ে করা",
+        "explanation_bn": "নিজের অনিচ্ছা সত্ত্বেও কাজটি করার মনোকষ্ট প্রকাশ করে।",
+        "common_pitfalls": [
+          "Group 1 ক্রিয়ার ক্ষেত্রে す দিয়ে শেষ হওয়া ক্রিয়ায় সংক্ষেপণ হয় না (話させられる, 話さされる ভুল)।"
+        ],
+        "examples": [
+          {
+            "ja": "子供[こども]の時[とき]、母[はは]に ピアノを 練習[れんしゅう]させられました。",
+            "bn": "শৈশবে মায়ের কারণে পিয়ানো অনুশীলন করতে বাধ্য হয়েছিলাম।",
+            "en": "When I was a child, I was forced by my mother to practice piano."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "অফিসের ড্রিংকিং পার্টি (নোমিকাই) এর অভিজ্ঞতা নিয়ে সহকর্মীর সাথে আলাপ।",
+      "situation_en": "Discussing an office drinking party (Nomikai) experience with a peer.",
+      "lines": [
+        {
+          "speaker_ja": "タニア",
+          "speaker_en": "Tania",
+          "line_ja": "昨日[きのう]の飲み会[のみかい]はどうでしたか。",
+          "line_bn": "গতকালের পার্টির অভিজ্ঞতা কেমন ছিল?",
+          "line_en": "How was yesterday's drinking party?"
+        },
+        {
+          "speaker_ja": "リモン",
+          "speaker_en": "Rimon",
+          "line_ja": "課長[かちょう]に何曲[なんきょく]も歌[うた]わされて、声[こえ]がかれてしまいました。",
+          "line_bn": "ম্যানেজার জোর করে একের পর এক গান গাওয়ানোয় গলা ভেঙে গেছে।",
+          "line_en": "The section chief made me sing several songs, and my voice went hoarse."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানের নোমিকাইয়ে অ্যালকোহল ও জোরজবরদস্তি সংক্রান্ত আইন (Alcohol Harassment)",
+      "tip_bn": "পূর্বে জাপানে সিনিয়ররা জোর করে মদ পান করাতেন। তবে বর্তমানে একে 'アルハラ' (Aruhara - Alcohol Harassment) ঘোষণা করা হয়েছে। কেউ জোর করলে বিনীতভাবে '宗教上の理由で / 体質でお酒が飲めません' (ধর্মীয় বিধিনিষেধ বা শারীরিক কারণে পান করি না) বলা সম্পূর্ণ স্বীকৃত ও আইনি অধিকার।",
+      "category": "Manners"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "歌[うた]う",
+        "romaji_input": "utau",
+        "target_display": "うたう",
+        "meaning_bn": "গান গাওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L28-1",
+        "question_ja": "動詞「待[ま]ちます」の 使役受身形[しえきうけみけい]は どれですか。",
+        "question_bn": "待つ ক্রিয়ার অনিচ্ছাকৃত বাধ্যবাধকতার রূপ কোনটি?",
+        "options": [
+          "待たされる",
+          "待たせる",
+          "待たれる",
+          "待たさせられる"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "Group 1 ক্রিয়ায় a-শব্দ + される যুক্ত হয় (待つ -> 待たされる)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L29",
+      "lesson_number": 29,
+      "module_number": 6,
+      "module_name": "Passive, Causative & Respectful Keigo",
+      "module_name_bn": "কর্মবাচ্য, প্রযোজক রূপ ও সম্মানসূচক কেইগো",
+      "title_ja": "敬語[けいご]：尊敬語[そんけいご]",
+      "title_en": "Honorific Keigo: Respectful Language (Sonkeigo)",
+      "title_bn": "সম্মানসূচক ভাষা: সোনকেইগো (ঊর্ধ্বতন ও গ্রাহকের কাজের সম্মানজনক রূপ)",
+      "estimated_minutes": 40,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি কেইগো ব্যবস্থার সবচেয়ে গুরুত্বপূর্ণ স্তম্ভ হলো সোনকেইগো (尊敬語 - Sonkeigo)। এটি ব্যবহার করে ঊর্ধ্বতন ব্যক্তি (যেমন: শিক্ষক, বস, গ্রাহক বা অপরিচিত অতিথি)-এর কাজকে উচ্চ মর্যাদা দেওয়া হয়। কখনোই নিজের কাজের ক্ষেত্রে সোনকেইগো বলা যাবে না। প্রধান ৩টি রূপ: ১. বিশেষ রূপ (Irregular verbs): 行く/来る/いる -> いらっしゃる, 言う -> おっしゃる, 食べる/飲む -> 召し上がる, 見る -> ご覧になる, 知っている -> ご存じです; ২. সাধারণ রূপ: お + ます形語幹 + になります (例: お帰りになります); ৩. প্যাসিভ রূপ: 受身形 (例: 来られました)।",
+      "core_concept_bn": "অন্যের কাজকে সম্মান জানানো: 先生はおっしゃいました (শিক্ষক মহাশয় বলেছেন); 社長はいらっしゃいますか (প্রেসিডেন্ট মহোদয় আছেন কি?)।",
+      "real_world_context_bn": "জাপানি ব্যবসা, শোরুম, এয়ারলাইন্স ও কনভিনিতে গ্রাহকদের প্রতি সম্মান প্রদর্শনে সার্বক্ষণিক ব্যবহৃত হয়।",
+      "key_takeaway_bn": "নিজের ক্ষেত্রে কখনোই '私は召し上がります' বলা যাবে না; এটি শুধুই অন্য সম্মানিত ব্যক্তির বেলায় প্রযোজ্য।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "いらっしゃる",
+        "romaji": "irassharu",
+        "meaning_bn": "আছেন / যাচ্ছেন / আসছেন (সম্মানজনক রূপ)",
+        "meaning_en": "to be / come / go (respectful)",
+        "part_of_speech": "verb",
+        "example_ja": "社長[しゃちょう]は部屋[へや]にいらっしゃいます。",
+        "example_bn": "প্রেসিডেন্ট মহোদয় ওনার কক্ষে অবস্থান করছেন।",
+        "example_en": "The president is in his room."
+      },
+      {
+        "word_ja": "おっしゃる",
+        "romaji": "ossharu",
+        "meaning_bn": "বলছেন / বলেছেন (সম্মানজনক রূপ)",
+        "meaning_en": "to say (respectful)",
+        "part_of_speech": "verb",
+        "example_ja": "先生[せんせい]がそうおっしゃいました。",
+        "example_bn": "শিক্ষক মহাশয় এমনটিই বলেছিলেন।",
+        "example_en": "The teacher said so."
+      },
+      {
+        "word_ja": "召[め]し上[あ]がる",
+        "romaji": "meshiagaru",
+        "meaning_bn": "খাওয়া বা পান করা (সম্মানজনক রূপ)",
+        "meaning_en": "to eat / drink (respectful)",
+        "part_of_speech": "verb",
+        "example_ja": "どうぞ温[あたた]かいうちに召[め]し上[あ]がってください。",
+        "example_bn": "অনুগ্রহ করে গরম থাকা অবস্থাতেই গ্রহণ করুন।",
+        "example_en": "Please enjoy your meal while it is warm."
+      },
+      {
+        "word_ja": "ご覧[らん]になる",
+        "romaji": "goran ni naru",
+        "meaning_bn": "দেখা বা দর্শন করা (সম্মানজনক রূপ)",
+        "meaning_en": "to look / see (respectful)",
+        "part_of_speech": "verb",
+        "example_ja": "このカタログをご覧[らん]になりましたか。",
+        "example_bn": "এই ক্যাটালগটি কি দেখেছেন?",
+        "example_en": "Have you looked at this catalog?"
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "敬",
+        "onyomi": "ケイ",
+        "kunyomi": "うやま・う",
+        "meaning_bn": "শ্রদ্ধা / সম্মান",
+        "meaning_en": "respect / honor",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "敬語[けいご]",
+            "meaning_bn": "শ্রদ্ধাসূচক ভাষা",
+            "meaning_en": "honorific language"
+          },
+          {
+            "word_ja": "尊敬[そんけい]",
+            "meaning_bn": "শ্রদ্ধা",
+            "meaning_en": "respect"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G29-1",
+        "pattern_ja": "お + 動詞[どうし] ます形語幹 + になります",
+        "pattern_bn": "お + মাসু রূপের গোড়া + になります (নিয়মিত সম্মানজনক রূপ)",
+        "explanation_bn": "যেসব ক্রিয়ার বিশেষ অনিয়মিত সোনকেইগো নেই, সেগুলোর ক্ষেত্রে এই গঠনটি প্রযোজ্য।",
+        "common_pitfalls": [
+          "Group 3 ক্রিয়ায় ご + কাঞ্জি বিশেষ্য + なさいます হয় (ご案内なさいます)।"
+        ],
+        "examples": [
+          {
+            "ja": "部長[ぶちょう]は もう お帰[かえ]りになりました。",
+            "bn": "ডিপার্টমেন্ট প্রধান ইতিমধ্যে বাড়ি ফিরে গেছেন।",
+            "en": "The director has already gone home."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "গ্রাহককে দোকানে স্বাগত জানানো ও অফার প্রদর্শন।",
+      "situation_en": "Welcoming a customer and presenting products at a department store.",
+      "lines": [
+        {
+          "speaker_ja": "店員[てんいん]",
+          "speaker_en": "Clerk",
+          "line_ja": "いらっしゃいませ。何[なに]をお探[さが]しでしょうか。",
+          "line_bn": "স্বাগতম! কী খুঁজছেন স্যার?",
+          "line_en": "Welcome! What are you looking for?"
+        },
+        {
+          "speaker_ja": "客[きゃく]",
+          "speaker_en": "Customer",
+          "line_ja": "時計[とけい]を見[み]たいんですが。",
+          "line_bn": "ঘড়ি দেখতে চাচ্ছিলাম।",
+          "line_en": "I would like to see some watches."
+        },
+        {
+          "speaker_ja": "店員[てんいん]",
+          "speaker_en": "Clerk",
+          "line_ja": "こちらに新商品[しんしょうひん]がございます。どうぞご覧[らん]になってください。",
+          "line_bn": "এখানে নতুন কালেকশন রয়েছে। অনুগ্রহ করে দর্শন করুন।",
+          "line_en": "We have new arrivals here. Please take a look."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "গ্রাহকই জাপানে দেবতা (お客様は神様です - Okyakusama wa kamisama desu)",
+      "tip_bn": "জাপানের সেবা খাতে গ্রাহককে ঈশ্বরের সমতুল্য বিবেচনা করা হয়। দোকানে গ্রাহককে সম্বোধনের সময় কখনো 'あなた' না বলে 'お客様' (Okyaku-sama) এবং সোনকেইগো প্রয়োগ করা বাধ্যতামূলক।",
+      "category": "Shopping"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "敬語[けいご]",
+        "romaji_input": "keigo",
+        "target_display": "けいご",
+        "meaning_bn": "শ্রদ্ধাসূচক ভাষা"
+      },
+      {
+        "prompt_ja": "ご覧[らん]になる",
+        "romaji_input": "goranninaru",
+        "target_display": "ごらんになる",
+        "meaning_bn": "দর্শন করা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L29-1",
+        "question_ja": "「先生[せんせい]、もう お昼[ひる]ご飯[はん]を（　　）か」正しい尊敬語は？",
+        "question_bn": "স্যার, দুপুরের খাবার গ্রহণ করেছেন কি?—সঠিক সম্মানজনক রূপ কোনটি?",
+        "options": [
+          "召し上がりました",
+          "いただきました",
+          "食べられました",
+          "参りました"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অন্যের খাওয়ার সম্মানজনক রূপ (Sonkeigo) হলো '召し上がる' (召し上がりましたか)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L30",
+      "lesson_number": 30,
+      "module_number": 6,
+      "module_name": "Passive, Causative & Respectful Keigo",
+      "module_name_bn": "কর্মবাচ্য, প্রযোজক রূপ ও সম্মানসূচক কেইগো",
+      "title_ja": "敬語[けいご]：謙譲語[けんじょうご]",
+      "title_en": "Humble Keigo: Modest Language (Kenjougo)",
+      "title_bn": "বিনম্র ও বিনীত ভাষা: কেনজৌগো (নিজের কাজকে বিনম্র করে অপরকে মর্যাদা দান)",
+      "estimated_minutes": 40,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "সোনকেইগো যেখানে অন্য ব্যক্তিকে উঁচুতে তোলে, কেনজৌগো (謙譲語 - Kenjougo) সেখানে বক্তা নিজের বা নিজের দলের (ইন-গ্রুপ: যেমন নিজের পরিবারের সদস্য বা নিজের কোম্পানির সহকর্মী) কাজকে বিনীত ও নত করে প্রতিপক্ষকে সর্বোচ্চ সম্মান প্রদর্শন করে। প্রধান রূপ: ১. বিশেষ রূপ: 行く/来る -> 参る[まいる], いる -> おる, 言う -> 申す[もうす], 食べる/飲む -> いただく, 見る -> 拝見[はいけん]する, 会う -> お目にかかる, 知っている -> 存じております; ২. সাধারণ রূপ: お + ます形語幹 + します (例: お荷物をお持ちします - আপনার ব্যাগ বহন করে দিচ্ছি)।",
+      "core_concept_bn": "নিজের কাজকে বিনম্র করা: 私がご案内いたします (আমি আপনাকে পথ দেখিয়ে নিয়ে যাচ্ছি); 田中と申します (আমি তানাকা নামে পরিচিত)।",
+      "real_world_context_bn": "চাকরির ইন্টারভিউ, ক্লায়েন্ট ভিজিট এবং অফিসের টেলিফোন আলাপে নিজের পরিচিতি দিতে।",
+      "key_takeaway_bn": "বাইরের ক্লায়েন্টের সামনে নিজের বসের কথা বললেও কেনজৌগো ব্যবহার করতে হয়, কারণ অফিসের ভেতর বস আপনার উচি (Uchi - ইন-গ্রুপ)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "参[まい]る",
+        "romaji": "mairu",
+        "meaning_bn": "যাওয়া বা আসা (বিনীত রূপ)",
+        "meaning_en": "to go / come (humble)",
+        "part_of_speech": "verb",
+        "example_ja": "明日[あした]１０時[じゅうじ]に伺[うかが]います / 参[まい]ります。",
+        "example_bn": "আগামীকাল সকাল ১০টায় আমি আপনার অফিসে হাজির হব।",
+        "example_en": "I will come/visit at 10:00 AM tomorrow."
+      },
+      {
+        "word_ja": "申[もう]す",
+        "romaji": "mousu",
+        "meaning_bn": "বলা বা নাম ধারণ করা (বিনীত রূপ)",
+        "meaning_en": "to say / be called (humble)",
+        "part_of_speech": "verb",
+        "example_ja": "私[わたし]はアラムと申[もう]します。",
+        "example_bn": "আমি আলম বলে পরিচিত / আমার নাম আলম।",
+        "example_en": "My name is Alam."
+      },
+      {
+        "word_ja": "拝見[はいけん]する",
+        "romaji": "haiken suru",
+        "meaning_bn": "দেখা বা পাঠ করা (বিনীত রূপ)",
+        "meaning_en": "to look / see (humble)",
+        "part_of_speech": "verb",
+        "example_ja": "書類[しょるい]を拝見[はいけん]いたしました。",
+        "example_bn": "আমি বিনীতভাবে কাগজপত্র পর্যবেক্ষণ করেছি।",
+        "example_en": "I had a look at the documents."
+      },
+      {
+        "word_ja": "存[ぞん]じる",
+        "romaji_input": "zonjiru",
+        "meaning_bn": "জানা / ভাবা (বিনীত রূপ)",
+        "meaning_en": "to know / think (humble)",
+        "part_of_speech": "verb",
+        "example_ja": "その件[けん]はよく存[ぞん]じております。",
+        "example_bn": "সেই বিষয়টি আমার ভালোভাবেই জানা আছে।",
+        "example_en": "I am well aware of that matter."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "拝",
+        "onyomi": "ハイ",
+        "kunyomi": "おが・む",
+        "meaning_bn": "শ্রদ্ধা সহকারে দেখা / প্রণাম",
+        "meaning_en": "worship / humble",
+        "stroke_count": 8,
+        "compounds": [
+          {
+            "word_ja": "拝見[はいけん]",
+            "meaning_bn": "বিনম্র দর্শন",
+            "meaning_en": "looking humbly"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G30-1",
+        "pattern_ja": "お + 動詞[どうし] ます形語幹 + します / いたします",
+        "pattern_bn": "お + ます গোড়া + します (বিনীত সেবা নিবেদন)",
+        "explanation_bn": "শ্রোতার সুবিধার্থে নিজে কোনো কাজ এগিয়ে করে দেওয়া।",
+        "common_pitfalls": [
+          "শ্রোতার সাথে সম্পর্কহীন নিজের একাকী কাজের ক্ষেত্রে お〜します বলা যায় না।"
+        ],
+        "examples": [
+          {
+            "ja": "重[おも]そうですね。お持[も]ちしましょうか。",
+            "bn": "ভারী মনে হচ্ছে। আমি কি বহন করে দেব?",
+            "en": "It looks heavy. Shall I carry it for you?"
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ক্লায়েন্টের অফিসে ব্যবসায়িক সফরের প্রথম পরিচয়।",
+      "situation_en": "Self-introduction on a business visit to a client's office.",
+      "lines": [
+        {
+          "speaker_ja": "訪問者[ほうもんしゃ]",
+          "speaker_en": "Visitor",
+          "line_ja": "ABC商事[しょうじ]のラヒムと申[もう]します。本日[ほんじつ]はよろしくお願[ねが]いいたします。",
+          "line_bn": "এবিসি ট্রেডিং থেকে আমি রাহিম বলছি। আজকের সাক্ষাতে আপনার সান্নিধ্য কামনা করছি।",
+          "line_en": "I am Rahim from ABC Trading. Pleased to meet you today."
+        },
+        {
+          "speaker_ja": "取引先[とりひきさき]",
+          "speaker_en": "Client",
+          "line_ja": "こちらこそ。どうぞお入[はい]りください。",
+          "line_bn": "আমাদের তরফ থেকেও স্বাগতম। দয়া করে ভেতরে আসুন।",
+          "line_en": "Likewise. Please come inside."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি ইন-গ্রুপ ও আউট-গ্রুপ ধারণা (Uchi vs Soto)",
+      "tip_bn": "জাপানি কেইগো ব্যবহারের চাবিকাঠি হলো 内 (Uchi - নিজের দল) এবং 外 (Soto - বাইরের দল)। ক্লায়েন্ট বা অপরিচিত ব্যক্তির সামনে নিজের কোম্পানির প্রেসিডেন্টকে সম্বোধন করার সময়ও 'President' উপাধি বাদ দিয়ে সাধারণ নাম বলতে হয় (যেমন: '社長の山田' না বলে শুধু '山田は席を外しております')।",
+      "category": "Workplace"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "申[もう]す",
+        "romaji_input": "mousu",
+        "target_display": "もうす",
+        "meaning_bn": "বলা (বিনীত)"
+      },
+      {
+        "prompt_ja": "拝見[はいけん]",
+        "romaji_input": "haiken",
+        "target_display": "はいけん",
+        "meaning_bn": "দর্শন করা (বিনীত)"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L30-1",
+        "question_ja": "「私[わたし]が 荷物[にもつ]を（　　）」正しい謙譲語は？",
+        "question_bn": "আমি আপনার মালামাল বহন করে দিচ্ছি—সঠিক বিনম্র রূপ কোনটি?",
+        "options": [
+          "お持ちします",
+          "お持ちになります",
+          "持たれます",
+          "持っていらっしゃいます"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "অন্যের জন্য নিজের কাজের বিনীত নিবেদন (Kenjougo) হলো 'お持ちします' বা 'お持ちいたします'।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L31",
+      "lesson_number": 31,
+      "module_number": 7,
+      "module_name": "Nuance, Modals & N4 Capstone",
+      "module_name_bn": "বাহ্যিক রূপ, মাত্রা ও পূর্ণাঙ্গ N4 প্রস্তুতি",
+      "title_ja": "様態[ようたい]と伝聞[でんぶん]",
+      "title_en": "Conjecture by Appearance vs Hearsay (~sou desu)",
+      "title_bn": "বাহ্যিক দৃষ্টিতে অনুভূতি বনাম লোকমুখে শোনা তথ্য (~সৌক দেসু)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় 〜そうです (sou desu) দুটি সম্পূর্ণ ভিন্ন ব্যাকরণগত অর্থে ব্যবহৃত হয়: ১. বাহ্যিক রূপ বা অনুভূতি (様態 - Appearance): কোনো বস্তু দেখে মনে হওয়া তা সুস্বাদু, ভারী বা বৃষ্টি হতে চলেছে (ক্রিয়া ます形語幹 / বিশেষণ গোড়া + そうです; যেমন: 雨が降りそうです - বৃষ্টি নামার উপক্রম / 美味しそうです - দেখতে সুস্বাদু লাগছে); ২. শোনা কথা বা জনশ্রুতি (伝聞 - Hearsay): পত্রিকা, খবর বা অন্য কারো কাছ থেকে শোনা তথ্য হুবহু উদ্ধৃত করা (সাধারণ রূপ Plain form + そうです; যেমন: 明日は雨が降るそうです - শুনেছি কাল বৃষ্টি হবে)।",
+      "core_concept_bn": "দেখে মনে হওয়া: ます/い বাদ + そうです (美味しそう); শুনে বলা: 普通形 + そうです (美味しいそうです)।",
+      "real_world_context_bn": "রেস্তোরাঁর ডিসপ্লে দেখে খাবার অর্ডার করা (美味しそう!) এবং জাপানি বন্ধুদের কাছ থেকে আবহাওয়া বা ট্রেনের খবর শোনা।",
+      "key_takeaway_bn": "いい (ভালো) এর ক্ষেত্রে দৃশ্যমান অনুভূতি হলো よさそう (Yosasou)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "折[お]れる",
+        "romaji": "oreru",
+        "meaning_bn": "ভেঙে যাওয়া / মচকে যাওয়া",
+        "meaning_en": "to break / snap (branch/bone)",
+        "part_of_speech": "verb",
+        "example_ja": "風[かぜ]で木[き]の枝[えだ]が折[お]れそうです。",
+        "example_bn": "বাতাসে গাছের ডাল ভেঙে পড়ার উপক্রম হয়েছে।",
+        "example_en": "The tree branch looks like it's about to snap in the wind."
+      },
+      {
+        "word_ja": "落[お]ちる",
+        "romaji": "ochiru",
+        "meaning_bn": "নিচে পড়ে যাওয়া",
+        "meaning_en": "to fall / drop",
+        "part_of_speech": "verb",
+        "example_ja": "荷物[にもつ]が落[お]ちそうですよ。",
+        "example_bn": "মালামাল পড়ে যেতে পারে কিন্তু!",
+        "example_en": "The luggage looks like it's about to fall!"
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "様",
+        "onyomi": "ヨウ",
+        "kunyomi": "さま",
+        "meaning_bn": "অবস্থা / মহাসম্মানিত রূপ",
+        "meaning_en": "appearance / polite title",
+        "stroke_count": 14,
+        "compounds": [
+          {
+            "word_ja": "様子[ようす]",
+            "meaning_bn": "পরিস্থিতি / অবস্থা",
+            "meaning_en": "situation / aspect"
+          },
+          {
+            "word_ja": "皆様[みなさま]",
+            "meaning_bn": "উপস্থিত ভদ্রমণ্ডলী",
+            "meaning_en": "everyone (polite)"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G31-1",
+        "pattern_ja": "動詞[どうし] ます形語幹 / 形容詞[けいようし] 語幹 + そうです（様態[ようたい]）",
+        "pattern_bn": "ক্রিয়া ます গোড়া / বিশেষণ গোড়া + そうです (দেখে মনে হওয়া)",
+        "explanation_bn": "চোখের সামনে প্রত্যক্ষ লক্ষণ দেখে ভবিষ্যৎ ঘটনার তীব্র সম্ভাবনা বোঝালে।",
+        "common_pitfalls": [
+          "কখনো সুন্দর বা পরিষ্কার বিশেষণে 綺麗そうです বলা হয় না; সরাসরি 綺麗です বলা হয়।"
+        ],
+        "examples": [
+          {
+            "ja": "今[いま]にも 雨[あめ]が 降[ふ]りそうです。",
+            "bn": "এখনই যেন বৃষ্টি ঝরে পড়বে।",
+            "en": "It looks like it will start raining at any moment."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "রেস্তোরাঁয় খাদ্য তালিকায় অভিনব খাবার দেখা।",
+      "situation_en": "Looking at attractive food items on a restaurant menu.",
+      "lines": [
+        {
+          "speaker_ja": "マリ",
+          "speaker_en": "Mari",
+          "line_ja": "このケーキ、すごく美味[おい]しそう！",
+          "line_bn": "এই কেকটা দেখতে অসম্ভব সুস্বাদু লাগছে!",
+          "line_en": "This cake looks so delicious!"
+        },
+        {
+          "speaker_ja": "ナヒド",
+          "speaker_en": "Nahid",
+          "line_ja": "本当[ほんとう]だね。テレビで人気[にんき]があると言[い]っていたよ。頼[たの]んでみよう。",
+          "line_bn": "তাই তো! টিভিতে শুনেছিলাম এটা খুব জনপ্রিয়। অর্ডার করে দেখা যাক।",
+          "line_en": "Indeed! They said on TV that it's very popular. Let's try ordering it."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি রেস্তোরাঁর খাবার নমুনা (食品サンプル - Shokuhin Sample)",
+      "tip_bn": "জাপানের অধিকাংশ রেস্তোরাঁর প্রবেশদ্বারে হুবহু আসল খাবারের মতো মোমের তৈরি খাদ্য নমুনা প্রদর্শিত থাকে। ভাষা না জানলেও '美味しそう' বলে সেই প্লেট দেখিয়ে সহজেই খাবার অর্ডার করা যায়।",
+      "category": "Shopping"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "様子[ようす]",
+        "romaji_input": "yousu",
+        "target_display": "ようす",
+        "meaning_bn": "অবস্থা"
+      },
+      {
+        "prompt_ja": "折[お]れる",
+        "romaji_input": "oreru",
+        "target_display": "おれる",
+        "meaning_bn": "ভেঙে যাওয়া"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L31-1",
+        "question_ja": "「天気[てんき]予報[よほう]によると、明日[あした]は 晴[は]れる（　　）」伝聞の表現は？",
+        "question_bn": "আবহাওয়া সংবাদে শুনেছি কাল রোদ উঠবে (জনশ্রুতি)—সঠিক কোনটি?",
+        "options": [
+          "そうです",
+          "らしいです",
+          "ようです",
+          "そうでした"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "জনশ্রুতি বা সংবাদ উদ্ধৃত করতে সাধারণ রূপের (晴れる) সাথে 'そうです' বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L32",
+      "lesson_number": 32,
+      "module_number": 7,
+      "module_name": "Nuance, Modals & N4 Capstone",
+      "module_name_bn": "বাহ্যিক রূপ, মাত্রা ও পূর্ণাঙ্গ N4 প্রস্তুতি",
+      "title_ja": "過度[かど]と難易[なんい]",
+      "title_en": "Excessiveness, Ease & Difficulty (~sugiru, ~yasui, ~nikui)",
+      "title_bn": "মাত্রাতিরিক্ত তীব্রতা এবং সহজ ও কঠিনের মাত্রা (~সুগিরু, ~ইয়াসুই, ~নিকুই)",
+      "estimated_minutes": 30,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "১. 〜すぎます (sugimasu): কোনো কিছু মাত্রাতিরিক্ত বা সীমার বাইরে অতিক্রম করা, যাতে সাধারণত নেতিবাচক সমস্যা তৈরি হয় (ক্রিয়া ます形語幹 / বিশেষণ গোড়া + すぎます; যেমন: 食べすぎました - অতিরিক্ত খেয়ে পেট খারাপ হয়েছে / この靴は高すぎます - এই জুতোটি অতিরিক্ত দামি); ২. 〜やすい (yasui): কোনো কাজ করা সহজ বা কোনো বস্তুর স্বভাবজাত সহজ প্রবণতা (যেমন: このペンは書きやすいです - এই কলমে লেখা সহজ); ৩. 〜にくい (nikui): কোনো কাজ করা কঠিন বা জটিল (যেমন: この薬は苦くて飲みにくいです - এই ওষুধ তেতো হওয়ায় খাওয়া কষ্টকর)।",
+      "core_concept_bn": "মাত্রাতিরিক্ত: ます/い বাদ + すぎる; সহজ: ます বাদ + やすい; কঠিন: ます বাদ + にくい।",
+      "real_world_context_bn": "টোকিওতে জুতা বা কাপড়ের সাইজ বাছাই, পেনসিলের গ্রিপ বা ওষুধের সেবনযোগ্যতা মূল্যায়নে।",
+      "key_takeaway_bn": "〜やすい ও 〜にくい যুক্ত হওয়ার পর পুরো শব্দটি একটি い-বিশেষণে রূপান্তরিত হয় (যেমন: 読みやすかった)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "胃[い]",
+        "romaji": "i",
+        "meaning_bn": "পাকস্থলী / পেট",
+        "meaning_en": "stomach",
+        "part_of_speech": "noun",
+        "example_ja": "食[た]べすぎて、胃[い]が痛[いた]いです。",
+        "example_bn": "অতিরিক্ত খেয়ে ফেলায় পেট ব্যথা করছে।",
+        "example_en": "I ate too much and my stomach hurts."
+      },
+      {
+        "word_ja": "使[つか]いやすい",
+        "romaji": "tsukaiyasui",
+        "meaning_bn": "ব্যবহারবান্ধব / সহজে ব্যবহারযোগ্য",
+        "meaning_en": "user-friendly / easy to use",
+        "part_of_speech": "i-adjective",
+        "example_ja": "このアプリはとても使[つか]いやすいです。",
+        "example_bn": "এই অ্যাপটি অত্যন্ত সহজ ও ব্যবহারবান্ধব।",
+        "example_en": "This app is very easy to use."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "難",
+        "onyomi": "ナン",
+        "kunyomi": "むずか・しい, かた・い",
+        "meaning_bn": "কঠিন / দুর্যোগ",
+        "meaning_en": "difficult / trouble",
+        "stroke_count": 18,
+        "compounds": [
+          {
+            "word_ja": "困難[こんなん]",
+            "meaning_bn": "কঠিন পরিস্থিতি",
+            "meaning_en": "difficulty"
+          },
+          {
+            "word_ja": "難[むずか]しい",
+            "meaning_bn": "কঠিন",
+            "meaning_en": "difficult"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G32-1",
+        "pattern_ja": "動詞[どうし] ます形語幹 + やすい / にくい",
+        "pattern_bn": "ক্রিয়া ます গোড়া + やすい (সহজ) / にくい (কঠিন)",
+        "explanation_bn": "শারীরিক বা মানসিকভাবে কাজটি করার সহজসাধ্যতা ও জটিলতা তুলে ধরে।",
+        "common_pitfalls": [
+          "ডিকশনারি রূপের সাথে やすい বসালে ভুল হবে (使うやすい ভুল; 使いやすい সঠিক)।"
+        ],
+        "examples": [
+          {
+            "ja": "東京[とうきょう]の 地下鉄[ちかてつ]は 複雑[ふくざつ]で、乗[の]り換[か]えにくいです。",
+            "bn": "টোকিওর সাবওয়ে জটিল হওয়ায় ট্রেন পরিবর্তন করা কঠিন।",
+            "en": "Tokyo's subway is complicated and difficult to transfer."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "ইলেকট্রনিক্স দোকানে নতুন স্মার্টফোন বাছাই।",
+      "situation_en": "Selecting a new smartphone at an electronics store.",
+      "lines": [
+        {
+          "speaker_ja": "店員[てんいん]",
+          "speaker_en": "Salesperson",
+          "line_ja": "こちらのモデルはボタンが大[おお]きくて、お年寄[としよ]りにも使[つか]いやすいですよ。",
+          "line_bn": "এই মডেলটির বাটনগুলো বড় হওয়ায় বয়স্ক ব্যক্তিদের জন্যও সহজে ব্যবহারযোগ্য।",
+          "line_en": "This model has large buttons, making it easy to use even for elderly people."
+        },
+        {
+          "speaker_ja": "客[きゃく]",
+          "speaker_en": "Customer",
+          "line_ja": "画面[がめん]も見[み]やすくていいですね。これにします。",
+          "line_bn": "স্ক্রিনটাও দেখতে বেশ স্বস্তিকর। আমি এটিই নিচ্ছি।",
+          "line_en": "The screen is easy to view too. I will take this one."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "টোকিও মেট্রোর ট্রান্সফার ও রুটম্যাপ জটিলতা",
+      "tip_bn": "টোকিওর আন্ডারগ্রাউন্ড সাবওয়েতে ১৩টি লাইন একে অপরের সাথে ক্রস করে। রুট বদল করা যাতে কঠিন না হয় (乗り換えにくくないように), সেজন্য গুগল ম্যাপস বা জর্ডান অ্যাপে স্টেশনের এক্সিট নম্বর দেখে হাঁটা নিয়ম।",
+      "category": "Transport"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "使いやすい",
+        "romaji_input": "tsukaiyasui",
+        "target_display": "つかいやすい",
+        "meaning_bn": "ব্যবহারবান্ধব"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L32-1",
+        "question_ja": "「お酒[さけ]を 飲[の]み（　　）て、頭[あたま]が 痛[いた]いです」正しい形は？",
+        "question_bn": "অতিরিক্ত মদ পান করায় মাথা ধরেছে—সঠিক কোনটি?",
+        "options": [
+          "すぎ",
+          "やすい",
+          "にくい",
+          "そう"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "মাত্রাতিরিক্ততার ক্ষেত্রে ক্রিয়ার গোড়ার সাথে すぎる বসে (飲みすぎて)।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L33",
+      "lesson_number": 33,
+      "module_number": 7,
+      "module_name": "Nuance, Modals & N4 Capstone",
+      "module_name_bn": "বাহ্যিক রূপ, মাত্রা ও পূর্ণাঙ্গ N4 প্রস্তুতি",
+      "title_ja": "習慣化[しゅうかんか]と変化[へんか]",
+      "title_en": "Effort to Form Habits vs Gradual Change (~you ni suru & ~you ni naru)",
+      "title_bn": "সচেতন অভ্যাসের প্রচেষ্টা বনাম ধারাবাহিক পরিবর্তন (~ইয়ৌ নি সুরু ও ~ইয়ৌ নি নারু)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "১. 〜ようにする (you ni suru): কোনো স্বাস্থ্যকর বা ভালো অভ্যাস গড়ে তোলার জন্য নিয়মিত সচেতন প্রচেষ্টা করা (ক্রিয়ার ডিকশনারি রূপ / নাই-রূপ + ようにする; যেমন: 毎日野菜を食べるようにしています - প্রতিদিন শাকসবজি খাওয়ার সচেতন চেষ্টা করি); ২. 〜ようになる (you ni naru): ধারাবাহিক অনুশীলনের ফলে কোনো নতুন সক্ষমতা অর্জন করা বা প্রাকৃতিক পরিবর্তন ঘটা (যেমন: 日本語の新聞が読めるようになりました - এখন জাপানি খবরের কাগজ পড়তে সক্ষম হয়েছি)।",
+      "core_concept_bn": "সচেতন প্রচেষ্টা: 辞書形/ない形 + ようにする; অর্জিত পরিবর্তন বা সক্ষমতা: 可能形 + ようになる।",
+      "real_world_context_bn": "জাপানি ভাষা শেখার ধারাবাহিক রূপান্তর বা স্বাস্থ্যকর লাইফস্টাইল গঠনে।",
+      "key_takeaway_bn": "ようにする এ মানুষের সদিচ্ছা থাকে, আর ようになる এ অর্জিত ফলাফল বা সক্ষমতার রূপান্তর প্রকাশ পায়।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "運動[うんどう]する",
+        "romaji": "undou suru",
+        "meaning_bn": "ব্যায়াম বা শরীরচর্চা করা",
+        "meaning_en": "to exercise",
+        "part_of_speech": "verb",
+        "example_ja": "健康[けんこう]のために、毎朝[まいあさ]運動[うんどう]するようにしています。",
+        "example_bn": "সুস্বাস্থ্যের জন্য প্রতিদিন সকালে ব্যায়াম করার সচেতন চেষ্টা করছি।",
+        "example_en": "For my health, I make an effort to exercise every morning."
+      },
+      {
+        "word_ja": "習慣[しゅうかん]",
+        "romaji": "shuukan",
+        "meaning_bn": "অভ্যাস / সংস্কৃতি",
+        "meaning_en": "habit / custom",
+        "part_of_speech": "noun",
+        "example_ja": "良[よ]い習慣[しゅうかん]を身[み]につけましょう。",
+        "example_bn": "আসুন ভালো অভ্যাস আয়ত্ত করি।",
+        "example_en": "Let's adopt good habits."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "慣",
+        "onyomi": "カン",
+        "kunyomi": "な・れる, な・らす",
+        "meaning_bn": "অভ্যস্ত হওয়া",
+        "meaning_en": "accustomed / habit",
+        "stroke_count": 14,
+        "compounds": [
+          {
+            "word_ja": "習慣[しゅうかん]",
+            "meaning_bn": "অভ্যাস",
+            "meaning_en": "habit"
+          },
+          {
+            "word_ja": "慣[な]れる",
+            "meaning_bn": "অভ্যস্ত হওয়া",
+            "meaning_en": "to get used to"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G33-1",
+        "pattern_ja": "動詞[どうし] 可能形[かのうけい] + ようになりました",
+        "pattern_bn": "সম্ভাবনাময় ক্রিয়া + ようになりました (পারার যোগ্যতায় রূপান্তর)",
+        "explanation_bn": "পূর্বে যে কাজটি করা সম্ভব ছিল না, অনুশীলনের ফলে এখন তা করতে সক্ষম হওয়া।",
+        "common_pitfalls": [
+          "স্বাভাবিক পরিবর্তন বোঝাতে ようにする ব্যবহার ভুল; সচেষ্ট চেষ্টার ক্ষেত্রে ようにする বসে।"
+        ],
+        "examples": [
+          {
+            "ja": "日本[にほん]へ 来[き]てから、納豆[なっとう]が 食[た]べられるようになりました。",
+            "bn": "জাপানে আসার পর থেকে নাট্টো খেতে সক্ষম হয়েছি।",
+            "en": "Since coming to Japan, I have become able to eat natto."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "জাপানি শিক্ষকদের সাথে ১ বছরের ভাষাগত অগ্রগতির স্মৃতিচারণ।",
+      "situation_en": "Reflecting on one year of Japanese language progress with a teacher.",
+      "lines": [
+        {
+          "speaker_ja": "先生[せんせい]",
+          "speaker_en": "Teacher",
+          "line_ja": "日本[にほん]に来[き]て１年[いちねん]ですね。会話[かいわ]が上手[じょうず]になりましたね。",
+          "line_bn": "জাপানে এসে এক বছর হলো তোমার। কথোপকথন অনেক উন্নত হয়েছে!",
+          "line_en": "It has been a year since you came to Japan. Your conversation has improved greatly!"
+        },
+        {
+          "speaker_ja": "サイード",
+          "speaker_en": "Sayeed",
+          "line_ja": "ありがとうございます。アルバイトで毎日[まいにち]日本語[にほんご]を話[はな]すようにしています。",
+          "line_bn": "ধন্যবাদ স্যার। আমি পার্টটাইম জবে প্রতিদিন জাপানি বলার নিয়মিত সচেষ্ট চেষ্টা করি।",
+          "line_en": "Thank you. I make an effort to speak Japanese every day at my part-time job."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানি ঐতিহ্যবাহী গাঁজানো সয়াবিন 'নাট্টো' (納豆) এবং স্বাস্থ্য সচেতনতা",
+      "tip_bn": "জাপানিদের দীর্ঘায়ুর অন্যতম রহস্য হলো গাঁজানো সয়াবিন 納豆 (Natto)। তীব্র গন্ধের কারণে বিদেশীদের প্রথমে অদ্ভুত লাগলেও একবার অভ্যস্ত হয়ে গেলে (食べられるようになると) এটি প্রতিদিনের সুস্বাদু নাশতায় পরিণত হয়।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "習慣[しゅうかん]",
+        "romaji_input": "shuukan",
+        "target_display": "しゅうかん",
+        "meaning_bn": "অভ্যাস"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L33-1",
+        "question_ja": "「漢字[かんじ]が 辞書[じしょ]なしで 読める（　　）なりました」",
+        "question_bn": "অভিধান ছাড়াই কাঞ্জি পড়তে সক্ষম হয়েছি—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "ように",
+          "ために",
+          "とおりに",
+          "そうに"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "সক্ষমতা অর্জনের পরিবর্তনের ক্ষেত্রে '〜ようになりました' বসে。"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L34",
+      "lesson_number": 34,
+      "module_number": 7,
+      "module_name": "Nuance, Modals & N4 Capstone",
+      "module_name_bn": "বাহ্যিক রূপ, মাত্রা ও পূর্ণাঙ্গ N4 প্রস্তুতি",
+      "title_ja": "目的[もくてき]の表現[ひょうげん]",
+      "title_en": "Expressing Purpose: Volitional vs Non-Volitional (~tame ni vs ~you ni)",
+      "title_bn": "উদ্দেশ্য প্রকাশের দুই রূপ (ইচ্ছাধীন কর্ম বনাম লক্ষ্য অর্জনের প্রেক্ষাপট)",
+      "estimated_minutes": 35,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "জাপানি ভাষায় 'কোনো উদ্দেশ্যে' বোঝাতে দুটি গুরুত্বপূর্ণ প্যাটার্ন রয়েছে: ১. 〜ために (tame ni): কর্তার নিজের সরাসরি নিয়ন্ত্রণ ও ইচ্ছা থাকে এমন উদ্দেশ্য (ক্রিয়া ডিকশনারি রূপ / Noun + の + ために; যেমন: 家を買うために、貯金しています - বাড়ি কেনার উদ্দেশ্যে টাকা জমাচ্ছি); ২. 〜ように (you ni): উদ্দেশ্যটি কোনো প্রাকৃতিক অবস্থা, কারো সক্ষমতা বা অনিচ্ছাকৃত সম্ভাবনা বোঝায় যেখানে সরাসরি কর্তার নিয়ন্ত্রণ নেই (সম্ভাবনাময় ক্রিয়া / নাই-ফর্ম + ように; যেমন: 試験に合格できるように、勉強します - যাতে পরীক্ষায় পাস করতে পারি সেজন্য পড়াশোনা করছি / 風邪をひかないように、マスクをします - যাতে ঠান্ডা না লাগে সেজন্য মাস্ক পরি)।",
+      "core_concept_bn": "ইচ্ছাধীন কাজ: 辞書形 + ために; অনিয়ন্ত্রিত অবস্থা/সক্ষমতা/না-বোধক: 可能形/ない形 + ように।",
+      "real_world_context_bn": "টোকিওতে বাড়ি কেনা, উচ্চশিক্ষার জন্য সঞ্চয় বা পরীক্ষায় পাসের উদ্দেশ্যে প্রস্তুতির ক্ষেত্রে।",
+      "key_takeaway_bn": "কখনোই 可能形 এর সাথে ために বসে না (話せるために ভুল; 話せるように সঠিক)।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "貯金[ちょきん]する",
+        "romaji": "chokin suru",
+        "meaning_bn": "টাকা জমানো / সঞ্চয় করা",
+        "meaning_en": "to save money",
+        "part_of_speech": "verb",
+        "example_ja": "日本[にほん]へ留学[りゅうがく]するために、貯金[ちょきん]しています。",
+        "example_bn": "জাপানে উচ্চশিক্ষার জন্য টাকা জমাচ্ছি।",
+        "example_en": "I am saving money in order to study abroad in Japan."
+      },
+      {
+        "word_ja": "マスク",
+        "romaji": "masuku",
+        "meaning_bn": "মাস্ক / মুখাবরণ",
+        "meaning_en": "face mask",
+        "part_of_speech": "noun",
+        "example_ja": "風邪[かぜ]をひかないように、マスクを着[つ]けています。",
+        "example_bn": "যাতে সর্দি না লাগে সেজন্য মাস্ক পরে আছি।",
+        "example_en": "I wear a mask so that I don't catch a cold."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "貯",
+        "onyomi": "チョ",
+        "kunyomi": "た・める",
+        "meaning_bn": "সঞ্চয় / জমা করা",
+        "meaning_en": "savings / store",
+        "stroke_count": 12,
+        "compounds": [
+          {
+            "word_ja": "貯金[ちょきん]",
+            "meaning_bn": "সঞ্চয়",
+            "meaning_en": "savings"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G34-1",
+        "pattern_ja": "動詞[どうし] 可能形[かのうけい] / ない形 + ように",
+        "pattern_bn": "সম্ভাবনাময় / না-বোধক ক্রিয়া + ように (যাতে এমনটি হয়/না হয়)",
+        "explanation_bn": "একটি কাঙ্ক্ষিত পরিস্থিতি তৈরির উদ্দেশ্যে পেছনের কাজটি সম্পাদন করা।",
+        "common_pitfalls": [
+          "না-বোধক উদ্দেশ্যের ক্ষেত্রে 'ないために' এর চেয়ে 'ないように' বলা সর্বজনীন নিয়ম।"
+        ],
+        "examples": [
+          {
+            "ja": "忘[わす]れないように、メモを 取[と]っておきます。",
+            "bn": "যাতে ভুলে না যাই সেজন্য নোট লিখে রাখব।",
+            "en": "I will take notes so that I don't forget."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "জাপানে স্থায়ীভাবে বাড়ি কেনার স্বপ্ন ও সঞ্চয়ের পরিকল্পনা।",
+      "situation_en": "Discussing savings plans to buy a home in Japan.",
+      "lines": [
+        {
+          "speaker_ja": "妻[つま]",
+          "speaker_en": "Wife",
+          "line_ja": "将来[しょうらい]マイホームを買[か]うために、毎月[まいつき]いくら貯金[ちょきん]しましょうか。",
+          "line_bn": "ভবিষ্যতে নিজস্ব বাড়ি কেনার উদ্দেশ্যে প্রতি মাসে আমরা কত টাকা করে সঞ্চয় করব?",
+          "line_en": "How much should we save each month in order to buy our own home in the future?"
+        },
+        {
+          "speaker_ja": "夫[おっと]",
+          "speaker_en": "Husband",
+          "line_ja": "５万円[ごまんえん]ずつ貯[た]めよう。子供[こども]たちが広[ひろ]い部屋[へや]で遊[あそ]べるように頑張[がんば]ろう。",
+          "line_bn": "৫০ হাজার ইয়েন করে জমাই। বাচ্চারা যাতে বড় রুমে খেলতে পারে সেজন্য আসুন পরিশ্রম করি।",
+          "line_en": "Let's save 50,000 yen each month. Let's do our best so that the kids can play in spacious rooms."
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জাপানে ব্যাংক অ্যাকাউন্ট ও সঞ্চয়ী বই (通帳 - Tsuuchou)",
+      "tip_bn": "জাপানের ব্যাংকগুলোতে টাকা জমা বা তোলার পর পাসবই (通帳) এটিএম বুথে প্রবেশ করালে স্বয়ংক্রিয়ভাবে প্রিন্ট হয়ে সব হিসাব আপডেট হয়ে বেরিয়ে আসে। সঞ্চয়ের লক্ষ্যমাত্রা অর্জনে এই বই নিয়মিত আপডেট করা জাপানিদের ঐতিহ্য।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "貯金[ちょきん]",
+        "romaji_input": "chokin",
+        "target_display": "ちょきん",
+        "meaning_bn": "সঞ্চয়"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L34-1",
+        "question_ja": "「早[はや]く 日本語[にほんご]が 話[はな]せる（　　）、毎日[まいにち] 練習[れんしゅう]しています」",
+        "question_bn": "যাতে দ্রুত জাপানি বলতে পারি (সক্ষমতার উদ্দেশ্য)—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "ように",
+          "ために",
+          "とおりに",
+          "ので"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "সম্ভাবনাময় ক্রিয়ার (話せる) সাথে উদ্দেশ্য প্রকাশে 'ように' বসে।"
+      }
+    ]
+  },
+  {
+    "lesson_metadata": {
+      "lesson_id": "N4-L35",
+      "lesson_number": 35,
+      "module_number": 7,
+      "module_name": "Nuance, Modals & N4 Capstone",
+      "module_name_bn": "বাহ্যিক রূপ, মাত্রা ও পূর্ণাঙ্গ N4 প্রস্তুতি",
+      "title_ja": "N4 総[そう]まとめ・合格演習[ごうかくえんしゅう]",
+      "title_en": "JLPT N4 Comprehensive Capstone & Simulation",
+      "title_bn": "JLPT N4 চূড়ান্ত সমন্বয় ও পূর্ণাঙ্গ পরীক্ষা প্রস্তুতি",
+      "estimated_minutes": 45,
+      "difficulty": "Intermediate"
+    },
+    "bengali_bridge": {
+      "explanation_bn": "অভিনন্দন! আপনি সফলভাবে N4 কারিকুলামের ৩৫টি মৌলিক অধ্যায় সমাপ্ত করেছেন। এই সমাপনী অধ্যায়ে N4 স্তরের ব্যাকরণের সামগ্রিক সমন্বয়, কেইগো (সোনকেইগো ও কেনজৌগো), প্যাসিভ ও কজেটিভ প্যাসিভের সংমিশ্রণ, এবং বাস্তব রিডিং কমপ্রিহেনশন (読解) ও লিসেনিং (聴解) এর কৌশল পূর্ণাঙ্গভাবে অনুশীলন করানো হবে। N4 পাস করা মানে আপনি জাপানে স্বাধীনভাবে দৈনন্দিন জীবন ও প্রফেশনাল কমিউনিকেশনের প্রাথমিক ভিত মজবুত করেছেন।",
+      "core_concept_bn": "N4 ব্যাকরণ সমন্বয়: 敬語 (尊敬/謙譲), 受身/使役, 4つの条件 (と・ば・たら・なら), 複合表現 (〜ておく、〜てある、〜てしまう)।",
+      "real_world_context_bn": "JLPT N4 অফিসিয়াল পরীক্ষার হল, স্পেসিফাইড স্কিলড ওয়ার্কার (SSW/টোকুতেই গিনো) ভিসা ও জাইরিউ কার্ড নবায়নে।",
+      "key_takeaway_bn": "পরীক্ষায় প্রতিটি প্রশ্নের কনটেক্সট (কে কাকে বলছে এবং কী পরিস্থিতিতে বলছে) বোঝা সবচেয়ে গুরুত্বপূর্ণ।"
+    },
+    "vocabulary_scope": [
+      {
+        "word_ja": "合格[ごうかく]",
+        "romaji": "goukaku",
+        "meaning_bn": "কৃতকার্য / পরীক্ষায় উত্তীর্ণ",
+        "meaning_en": "passing an examination",
+        "part_of_speech": "noun",
+        "example_ja": "JLPT N4に必[かなら]ず合格[ごうかく]します！",
+        "example_bn": "আমি নিশ্চিতভাবেই জেএলপিটি এন৪ পরীক্ষায় পাস করব!",
+        "example_en": "I will definitely pass JLPT N4!"
+      },
+      {
+        "word_ja": "実力[じつりょく]",
+        "romaji": "jitsuryoku",
+        "meaning_bn": "প্রকৃত দক্ষতা বা যোগ্যতা",
+        "meaning_en": "true ability / merit",
+        "part_of_speech": "noun",
+        "example_ja": "試験[しけん]で自分[じぶん]の実力[じつりょく]を発揮[はっき]してください。",
+        "example_bn": "পরীক্ষায় আপনার নিজস্ব অর্জিত প্রকৃত দক্ষতার স্ফুরণ ঘটান।",
+        "example_en": "Please demonstrate your true ability on the exam."
+      },
+      {
+        "word_ja": "準備[じゅんび]万端[ばんたん]",
+        "romaji": "junbibantan",
+        "meaning_bn": "পরিপূর্ণ প্রস্তুত / সব ঠিকঠাক",
+        "meaning_en": "all set / fully prepared",
+        "part_of_speech": "noun",
+        "example_ja": "準備[じゅんび]万端[ばんたん]で本番[ほんばん]に臨[のぞ]みます。",
+        "example_bn": "পরিপূর্ণ প্রস্তুতি নিয়ে মূল পরীক্ষার মুখোমুখি হব।",
+        "example_en": "We will face the real exam fully prepared."
+      }
+    ],
+    "kanji_scope": [
+      {
+        "kanji": "試",
+        "onyomi": "シ",
+        "kunyomi": "こころ・みる, ため・す",
+        "meaning_bn": "পরীক্ষা / চেষ্টা",
+        "meaning_en": "test / try",
+        "stroke_count": 13,
+        "compounds": [
+          {
+            "word_ja": "試験[しけん]",
+            "meaning_bn": "পরীক্ষা",
+            "meaning_en": "exam"
+          },
+          {
+            "word_ja": "試合[しあい]",
+            "meaning_bn": "ম্যাচ / খেলা",
+            "meaning_en": "match / game"
+          }
+        ]
+      },
+      {
+        "kanji": "験",
+        "onyomi": "ケン, ゲン",
+        "kunyomi": "ため・す",
+        "meaning_bn": "অভিজ্ঞতা / প্রমাণ",
+        "meaning_en": "verification / testing",
+        "stroke_count": 18,
+        "compounds": [
+          {
+            "word_ja": "経験[けいけん]",
+            "meaning_bn": "অভিজ্ঞতা",
+            "meaning_en": "experience"
+          },
+          {
+            "word_ja": "実験[じっけん]",
+            "meaning_bn": "গবেষণাগারের পরীক্ষা",
+            "meaning_en": "experiment"
+          }
+        ]
+      }
+    ],
+    "grammar_points": [
+      {
+        "point_id": "N4-G35-1",
+        "pattern_ja": "N4 総合文法[そうごうぶんぽう] マスタリー",
+        "pattern_bn": "এন৪ পূর্ণাঙ্গ ব্যাকরণ সমন্বয়",
+        "explanation_bn": "বক্তার অবস্থান ও মর্যাদা অনুযায়ী সঠিক রূপ বাছাই (敬語、使役、受身)।",
+        "common_pitfalls": [
+          "উদ্ধৃতি ও সাধারণ বাক্যের সংযোগস্থলে ক্রিয়ার সময়কাল (Tense) গুলিয়ে না ফেলা।"
+        ],
+        "examples": [
+          {
+            "ja": "先生[せんせい]が おっしゃったとおりに 復習[ふくしゅう]すれば、必[かなら]ず 合格[ごうかく]できます。",
+            "bn": "শিক্ষক মহাশয় যেভাবে বলেছিলেন সেভাবে রিভিশন দিলে নিশ্চিত পাস করতে পারবেন।",
+            "en": "If you review just as the teacher advised, you will definitely be able to pass."
+          }
+        ]
+      }
+    ],
+    "dialogue_scenario": {
+      "situation_bn": "জেএলপিটি এন৪ পরীক্ষার আগের দিন শিক্ষক ও শিক্ষার্থীর অনুপ্রেরণামূলক বার্তা।",
+      "situation_en": "Encouraging exchange between teacher and student on the eve of the JLPT N4 exam.",
+      "lines": [
+        {
+          "speaker_ja": "田中[たなか]先生[せんせい]",
+          "speaker_en": "Tanaka Sensei",
+          "line_ja": "明日[あした]はいよいよJLPTですね。今[いま]まで一生懸命[いっしょうけんめい]頑張[がんば]ってきたから、自信[じしん]を持[も]って臨[のぞ]んでください。",
+          "line_bn": "আগামীকাল অবশেষে তোমাদের জেএলপিটি পরীক্ষা। এতদিন প্রাণপণে পরিশ্রম করেছ, তাই পূর্ণ আত্মবিশ্বাস নিয়ে পরীক্ষায় বসবে।",
+          "line_en": "Tomorrow is finally the JLPT. You have worked so hard up to now, so please face it with full confidence."
+        },
+        {
+          "speaker_ja": "生徒[せいと]たち",
+          "speaker_en": "Students",
+          "line_ja": "はい！先生[せんせい]、ご指導[しどう]ありがとうございました。合格[ごうかく]して良[よ]い報告[ほうこく]をいたします！",
+          "line_bn": "জি স্যার! আপনার দিকনির্দেশনার জন্য অসংখ্য ধন্যবাদ। পাস করে ভালো সংবাদ পৌঁছে দেব!",
+          "line_en": "Yes! Teacher, thank you for your guidance. We will pass and report good news to you!"
+        }
+      ]
+    },
+    "japan_survival_tip": {
+      "title_bn": "জেএলপিটি পরীক্ষার হলে প্রয়োজনীয় সামগ্রী ও সতর্কতা",
+      "tip_bn": "JLPT পরীক্ষার দিন প্রবেশপত্র (受験票 - Jukenhyou), পাসপোর্ট/রেসিডেন্স কার্ড, ২বি (2B) পেনসিল ও ভালো মানের ইরেজার সাথে রাখতে হবে। পরীক্ষার টেবিলে মোবাইল ফোন বা স্মার্টওয়াচ বেজে উঠলে বা ভাইব্রেট করলেও তাৎক্ষণিক পরীক্ষা বাতিল করা হয়।",
+      "category": "Daily Life"
+    },
+    "typing_practice": [
+      {
+        "prompt_ja": "合格[ごうかく]",
+        "romaji_input": "goukaku",
+        "target_display": "ごうかく",
+        "meaning_bn": "পরীক্ষায় পাস"
+      },
+      {
+        "prompt_ja": "実力[じつりょく]",
+        "romaji_input": "jitsuryoku",
+        "target_display": "じつりょく",
+        "meaning_bn": "প্রকৃত দক্ষতা"
+      }
+    ],
+    "quizzes": [
+      {
+        "quiz_id": "Q-N4-L35-1",
+        "question_ja": "「明日[あした]の 試験[しけん]、頑張[がんば]ってください」「はい、自分[じぶん]の 力[ちから]を（　　）ように いたします」",
+        "question_bn": "নিজের সক্ষমতা যাতে ফুটিয়ে তুলতে পারি তা-ই করব—খালি জায়গায় সঠিক কোনটি?",
+        "options": [
+          "出せる",
+          "出す",
+          "出そう",
+          "出された"
+        ],
+        "correct_index": 0,
+        "explanation_bn": "উদ্দেশ্যমূলক 'ように' এর সাথে সক্ষমতার রূপ (出せるように - যাতে প্রকাশ করতে পারি) বসে।"
+      }
+    ]
+  }
+]

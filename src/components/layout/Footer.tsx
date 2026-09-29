@@ -71,6 +71,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               N5 Free Trial (/start)
             </button>
             <button
+              onClick={() => onNavigate?.('world')}
+              className="hover:text-amber-500 transition-colors cursor-pointer text-amber-600 font-semibold"
+            >
+              Tokyo 3D World (Beta)
+            </button>
+            <button
               onClick={() => onNavigate?.('growth')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
             >

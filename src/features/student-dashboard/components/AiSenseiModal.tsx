@@ -20,6 +20,7 @@ import {
 import { speakJapanese, stopJapaneseSpeech, extractJapanesePhrases } from '../../../lib/tts';
 import { useAuth } from '../../../context/AuthContext';
 import { useSubscription } from '../../../hooks/useSubscription';
+import { getStoredToken, getOrGenerateGuestToken } from '../../../lib/api';
 
 interface AiMessage {
   id: string;
@@ -211,8 +212,12 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem('nihomi_token');
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const token = getStoredToken();
+      const guestId = getOrGenerateGuestToken();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'x-guest-session-id': guestId
+      };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
       const res = await fetch('/api/ai/coach', {
@@ -229,12 +234,25 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
         })
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        if (res.status === 403 && data.error?.includes('Daily quota')) {
+        if ((res.status === 402 || res.status === 403) && (data.paywall || data.code === 'AI_QUOTA_EXCEEDED')) {
           setQuotaExceeded(true);
-          throw new Error('দৈনিক ফ্রি প্রশ্নসীমা অতিক্রম করেছে। N5 Pro আপগ্রেড করুন।');
+          throw new Error('দৈনিক ফ্রি ৩টি প্রশ্নসীমা পূর্ণ হয়েছে। আনলিমিটেড AI কোচের জন্য N5 Pro আপগ্রেড করুন।');
+        }
+        if (res.status === 401) {
+          // Graceful guest handling if unauthenticated
+          const fallbackReply = 'こんにちは！Tanaka Sensei এখানে আছেন। জাপানি ভাষায় যেকোনো ব্যাকরণ বা শব্দার্থ সম্পর্কে প্রশ্ন করুন।';
+          const aiMsg: AiMessage = {
+            id: `ai-${Date.now()}`,
+            role: 'assistant',
+            content: fallbackReply,
+            japanesePhrases: ['こんにちは'],
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages((prev) => [...prev, aiMsg]);
+          return;
         }
         throw new Error(data.error || 'Sensei Tanaka এর সাথে যোগাযোগ করা যায়নি।');
       }

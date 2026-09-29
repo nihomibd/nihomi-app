@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             setIsOfflineReady(true);
           }
         }
-      } catch {}
+      } catch { }
     };
 
     checkOfflineReadiness();
@@ -190,15 +190,14 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             <button
               id="nav-tab-world"
               type="button"
-              onClick={() => onNavigate('landing')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                currentView === 'landing' || currentView === 'world' || currentView === 'canvas'
-                  ? 'bg-gradient-to-r from-rose-500/25 to-amber-500/25 text-amber-300 border border-amber-400/40 shadow-sm ring-1 ring-amber-400/20'
-                  : 'text-amber-300/90 hover:text-amber-200 hover:bg-amber-400/10 border border-amber-400/20'
-              }`}
+              onClick={() => onNavigate('world')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya'
+                ? 'bg-gradient-to-r from-rose-500/25 to-amber-500/25 text-amber-300 border border-amber-400/40 shadow-sm ring-1 ring-amber-400/20'
+                : 'text-amber-300/90 hover:text-amber-200 hover:bg-amber-400/10 border border-amber-400/20'
+                }`}
             >
               <Compass className="w-3.5 h-3.5 text-amber-400" />
-              <span>নিহোমি ওয়ার্ল্ড™</span>
+              <span>নিহোমি ওয়ার্ল্ড™ (3D)</span>
             </button>
 
             {/* TAB 1: কারিকুলাম ও শিক্ষা */}
@@ -211,17 +210,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 id="nav-tab-curriculum"
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === 'curriculum' ? null : 'curriculum')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isCurriculumActive || activeDropdown === 'curriculum'
-                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCurriculumActive || activeDropdown === 'curriculum'
+                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
+                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
               >
                 <span>কারিকুলাম ও শিক্ষা</span>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'curriculum' ? 'rotate-180 text-white' : ''
-                  }`}
+                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'curriculum' ? 'rotate-180 text-white' : ''
+                    }`}
                 />
               </button>
 
@@ -348,17 +345,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 id="nav-tab-readiness"
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === 'readiness' ? null : 'readiness')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isReadinessActive || activeDropdown === 'readiness'
-                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isReadinessActive || activeDropdown === 'readiness'
+                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
+                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
               >
                 <span>পরীক্ষা ও প্রস্তুতি</span>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'readiness' ? 'rotate-180 text-white' : ''
-                  }`}
+                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'readiness' ? 'rotate-180 text-white' : ''
+                    }`}
                 />
               </button>
 
@@ -460,17 +455,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 id="nav-tab-career"
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === 'career' ? null : 'career')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isCareerActive || activeDropdown === 'career'
-                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCareerActive || activeDropdown === 'career'
+                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
+                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
               >
                 <span>জাপান ক্যারিয়ার</span>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'career' ? 'rotate-180 text-white' : ''
-                  }`}
+                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'career' ? 'rotate-180 text-white' : ''
+                    }`}
                 />
               </button>
 
@@ -622,17 +615,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 id="nav-tab-pricing"
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === 'pricing' ? null : 'pricing')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isPricingActive || activeDropdown === 'pricing'
-                    ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                    : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isPricingActive || activeDropdown === 'pricing'
+                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
+                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
               >
                 <span>ফিচার ও অফার</span>
                 <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${
-                    activeDropdown === 'pricing' ? 'rotate-180 text-white' : ''
-                  }`}
+                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'pricing' ? 'rotate-180 text-white' : ''
+                    }`}
                 />
               </button>
 
@@ -756,11 +747,10 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                           setTheme(optId);
                           setActiveDropdown(null);
                         }}
-                        className={`w-full px-3 py-2 rounded-xl text-left font-medium flex items-center justify-between transition-colors cursor-pointer ${
-                          isSelected
-                            ? 'bg-white/[0.12] text-white font-bold'
-                            : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
-                        }`}
+                        className={`w-full px-3 py-2 rounded-xl text-left font-medium flex items-center justify-between transition-colors cursor-pointer ${isSelected
+                          ? 'bg-white/[0.12] text-white font-bold'
+                          : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
+                          }`}
                       >
                         <div className="flex items-center space-x-2">
                           {renderThemeIcon(optId)}
@@ -982,11 +972,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
       {/* 5. MOBILE DRAWER: FLUID ACCORDIONS WITH MINIMALIST FROSTED GLASS */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#0a0a12]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2.5 text-xs animate-in slide-in-from-top-2">
-          
+
           {/* Mobile Direct Entry: NIHOMI WORLD™ */}
           <button
             type="button"
-            onClick={() => handleDropdownSelect('landing')}
+            onClick={() => handleDropdownSelect('world')}
             className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500/20 via-amber-500/20 to-rose-500/10 border border-amber-400/40 text-amber-300 font-extrabold flex items-center justify-between shadow-lg"
           >
             <div className="flex items-center gap-2">
@@ -994,7 +984,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <span>নিহোমি ওয়ার্ল্ড™ (Real Japan Canvas)</span>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-400 text-zinc-950 font-black">
-              SHIBUYA
+              3D BETA
             </span>
           </button>
 

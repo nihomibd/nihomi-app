@@ -21,6 +21,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts';
+import { getStoredToken, getOrGenerateGuestToken } from '../../lib/api';
 
 export type LearningContextMode =
   | 'jlpt_n5'
@@ -284,9 +285,17 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
         ? `[PRONUNCIATION PRACTICE EVALUATION] Student spoke: "${spokenText.trim()}". Analyze Japanese pronunciation, mora timing, pitch accent accuracy, and give concise bilingual feedback in English and Bengali.`
         : spokenText.trim();
 
+      const token = getStoredToken();
+      const guestId = getOrGenerateGuestToken();
+      const reqHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'x-guest-session-id': guestId
+      };
+      if (token) reqHeaders['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch('/api/ai/coach', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: reqHeaders,
         body: JSON.stringify({
           message: prompt,
           mode: isJa ? 'voice_chat' : 'conversation',
@@ -375,9 +384,17 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
     setIsLoading(true);
 
     try {
+      const token = getStoredToken();
+      const guestId = getOrGenerateGuestToken();
+      const reqHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'x-guest-session-id': guestId
+      };
+      if (token) reqHeaders['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch('/api/ai/coach', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: reqHeaders,
         body: JSON.stringify({
           message: query.trim(),
           mode: 'grammar_explanation',

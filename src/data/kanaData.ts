@@ -59,9 +59,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
       { word: 'ありがとう', reading: 'arigatou', meaningBn: 'ধন্যবাদ (Thank you)', meaningEn: 'Thank you' }
     ],
     strokeDetails: [
-      { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'বাম থেকে ডানে হালকা বাঁকানো অনুভূমিক দাগ', descriptionEn: 'Horizontal stroke left to right', path: 'M 25 32 Q 50 30 75 32', startPoint: { x: 25, y: 32 } },
-      { strokeNumber: 2, direction: 'down', releaseType: 'harai', descriptionBn: 'উপর থেকে নিচে কিছুটা বক্রভাবে সোজা নামানো', descriptionEn: 'Vertical curving down stroke', path: 'M 50 16 Q 48 50 44 80', startPoint: { x: 50, y: 16 } },
-      { strokeNumber: 3, direction: 'circle', releaseType: 'harai', descriptionBn: 'কেন্দ্র থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)', descriptionEn: 'Curving loop around the cross with smooth harai finish', path: 'M 38 42 C 32 52 26 62 24 70 C 22 78 30 78 36 70 C 42 62 46 48 52 44 C 60 38 74 38 80 50 C 84 62 82 74 72 82 C 62 86 52 82 46 76', startPoint: { x: 38, y: 42 } }
+      { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ অনুভূমিক দাগ (MEXT)', descriptionEn: 'Stroke 1: Smooth horizontal crossbar left-to-right', path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 } },
+      { strokeNumber: 2, direction: 'down', releaseType: 'harai', descriptionBn: 'স্ট্রোক ২: উপর থেকে নিচে ১ম দাগ ভেদ করে বাঁকানো উলম্ব দাগ (MEXT)', descriptionEn: 'Stroke 2: Vertical piercing line with gentle curve', path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84', startPoint: { x: 47, y: 16 } },
+      { strokeNumber: 3, direction: 'circle', releaseType: 'harai', descriptionBn: 'স্ট্রোক ৩: কেন্দ্রের উপর থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ (MEXT)', descriptionEn: 'Stroke 3: Authentic MEXT loop and sweep forming lower-right belly', path: 'M 60.2 40.5 C 60.9 41.5 61.3 44.5 60.7 46.1 C 56.4 57.3 50.4 67.9 37.4 78.9 C 31.1 84.2 22.8 82.3 22.5 71.2 C 22.2 61.2 34.8 50.0 52.2 46.7 C 63.6 44.5 77.0 47.9 80.2 58.4 C 83.9 70.5 76.7 82.6 61.0 86.3', startPoint: { x: 60.2, y: 40.5 } }
     ]
   },
   {

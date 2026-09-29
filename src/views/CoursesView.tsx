@@ -16,12 +16,20 @@ import {
   Clock,
   Flame,
   Globe2,
-  Briefcase
+  Briefcase,
+  Search,
+  X,
+  GraduationCap
 } from 'lucide-react';
 import { Course, JLPTLevel } from '../types/nihomi';
 import { LessonPlayerModal } from '../components/learning/LessonPlayerModal';
 import { ZeroJapaneseGatewayModal } from '../components/onboarding/ZeroJapaneseGatewayModal';
+import { N5LessonDetailModal } from '../components/learning/N5LessonDetailModal';
 import { useAuth } from '../context/AuthContext';
+import n5MasterData from '../data/n5_master.json';
+import n4MasterData from '../data/n4_master.json';
+import { N5MasterLesson } from '../types/n5Master';
+import { FuriganaText } from '../utils/furigana';
 
 interface CoursesViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -31,7 +39,7 @@ const ALL_COURSES_CATALOG: Course[] = [
   {
     id: 'c1',
     title: 'Minna no Nihongo I (Grammar & Sentence Patterns)',
-    titleJa: 'みんなの日本語 初級I 文法・文型マスター',
+    titleJa: 'みんなの日本語 初級I 文法・基本文型',
     level: 'N5',
     progressPercent: 76,
     totalLessons: 25,
@@ -42,7 +50,7 @@ const ALL_COURSES_CATALOG: Course[] = [
   {
     id: 'c2',
     title: 'Essential 100 Foundational Kanji & Radicals Workshop',
-    titleJa: 'JLPT N5 必須漢字100字と部首書き順演習',
+    titleJa: 'JLPT N5 必須100漢字と部首・筆順演習',
     level: 'N5',
     progressPercent: 92,
     totalLessons: 12,
@@ -96,32 +104,25 @@ const ALL_COURSES_CATALOG: Course[] = [
   },
 ];
 
-const MINNA_NO_NIHONGO_LESSONS = [
-  { id: 'l1', num: 1, title: 'Self-Introduction & ~は ~です', titleJa: '自己紹介・国籍・職業', grammar: '~は ~です / ~じゃありません' },
-  { id: 'l2', num: 2, title: 'Demonstratives (This, That, Which)', titleJa: 'これ・それ・あれ・この・その', grammar: 'これ/それ/あれ / だれの' },
-  { id: 'l3', num: 3, title: 'Locations & Directions', titleJa: 'ここ・そこ・あそこ・どこ', grammar: 'ここ/そこ / いくら' },
-  { id: 'l4', num: 4, title: 'Time, Days & Verb Basics', titleJa: '時間・曜日・動詞現在形', grammar: '〜時〜分 / 〜ます・〜ません' },
-  { id: 'l5', num: 5, title: 'Going, Coming & Transportation', titleJa: '行く・来る・帰る・交通手段', grammar: '〜へ行きます / 〜で(手段)' },
-  { id: 'l6', num: 6, title: 'Daily Actions & Direct Objects', titleJa: '飲食・購買・目的語を', grammar: '〜を〜ます / 〜ませんか' },
-  { id: 'l7', num: 7, title: 'Giving, Receiving & Tool Particles', titleJa: 'あげる・もらう・道具で', grammar: '〜で(道具) / もう〜ました' },
-  { id: 'l8', num: 8, title: 'Adjectives (I-adj & Na-adj)', titleJa: 'い形容詞・な形容詞', grammar: '〜い / 〜な / とても・あまり' },
-  { id: 'l9', num: 9, title: 'Likes, Dislikes & Abilities', titleJa: '好き・嫌い・上手・下手・わかる', grammar: '〜がすきです / 〜がわかります' },
-  { id: 'l10', num: 10, title: 'Existence (あります & います)', titleJa: '物の存在・人や動物の存在', grammar: '〜に〜があります/います' },
-  { id: 'l11', num: 11, title: 'Counters & Quantity Express', titleJa: '助数詞・期間・数量', grammar: 'ひとつ〜とお / 〜に〜回' },
-  { id: 'l12', num: 12, title: 'Comparisons & Past Adjectives', titleJa: '比較・最上級・形容詞過去形', grammar: '〜より〜のほうが / いちばん' },
-  { id: 'l13', num: 13, title: 'Wants & Purpose of Movement', titleJa: '欲しい・〜たい・移動の目的', grammar: '〜がほしい / 〜へ〜に行きます' },
-  { id: 'l14', num: 14, title: 'Te-Form Conjugation & Requests', titleJa: 'て形・〜てください・進行中', grammar: '〜てください / 〜ましょうか' },
-  { id: 'l15', num: 15, title: 'Permission & Prohibition', titleJa: '〜てもいい・〜てはいけません', grammar: '〜てもいいですか / 〜ています(状態)' },
-  { id: 'l16', num: 16, title: 'Sequence of Actions & Modifiers', titleJa: '動作の連続・〜てから・特徴', grammar: '〜て、〜て / 〜てから' },
-  { id: 'l17', num: 17, title: 'Nai-Form & Obligation', titleJa: 'ない形・〜なければなりません', grammar: '〜ないでください / 〜なければ' },
-  { id: 'l18', num: 18, title: 'Dictionary Form & Capabilities', titleJa: '辞書形・〜ことができる・趣味', grammar: '〜ことができます / 〜まえに' },
-  { id: 'l19', num: 19, title: 'Ta-Form & Experience', titleJa: 'た形・経験〜たことがある', grammar: '〜たことがあります / 〜たり〜たり' },
-  { id: 'l20', num: 20, title: 'Casual Plain Speech Style', titleJa: '普通体・会話・タメ口', grammar: '普通形 / 敬体 vs 簡体' },
-  { id: 'l21', num: 21, title: 'Opinions & Quotations (~と思う)', titleJa: '意見・引用〜と思う・〜と言った', grammar: '〜と思います / 〜と言いました' },
-  { id: 'l22', num: 22, title: 'Noun Modification with Sentences', titleJa: '連体修飾・〜名詞', grammar: '動詞普通形 + 名詞' },
-  { id: 'l23', num: 23, title: 'Time Conditions (~とき, ~と)', titleJa: '〜とき・〜と(条件・道順)', grammar: '〜とき / 〜と、〜' },
-  { id: 'l24', num: 24, title: 'Giving & Receiving Favors', titleJa: '授受表現・〜てくれる・〜てもらう', grammar: '〜てくれます / 〜てもらいます' },
-  { id: 'l25', num: 25, title: 'Hypothetical Conditions (~たら, ~ても)', titleJa: '条件表現〜たら・〜ても・N5修了', grammar: '〜たら / 〜ても (N5 Capstone)' },
+export const N5_MODULES_LIST = [
+  { id: 0, code: 'MOD-0', titleEn: 'Script & Numbers', titleBn: 'বর্ণমালা ও সংখ্যা', titleJa: '文字と数字', lessonsRange: 'L01–L05', desc: 'あいうえお, かさたな, はまやらわ, カタカナ, এবং সংখ্যা ১-১০০০০' },
+  { id: 1, code: 'MOD-1', titleEn: 'Identity & Pointers', titleBn: 'পরিচয় ও নির্দেশক', titleJa: '自己紹介と指示詞', lessonsRange: 'L06–L10', desc: 'わたしは学生です, だれの本ですか, これもペンです, これそれあれ, ここは教室です' },
+  { id: 2, code: 'MOD-2', titleEn: 'Existence & Time', titleBn: 'অস্তিত্ব ও সময়', titleJa: '存在と時間', lessonsRange: 'L11–L15', desc: 'あります/います, 七時に起きます, から・まで, 一時間勉強します, 日曜日に行きます' },
+  { id: 3, code: 'MOD-3', titleEn: 'Movement & Transactions', titleBn: 'চলাচল ও লেনদেন', titleJa: '移動と行為', lessonsRange: 'L16–L20', desc: '日本へ行きます, バスで行きます, パンを食べます, デパートで買います, 友達に会います' },
+  { id: 4, code: 'MOD-4', titleEn: 'Adjectives & Preference', titleBn: 'বিশেষণ ও পছন্দ', titleJa: '形容詞と嗜好', lessonsRange: 'L21–L25', desc: '富士山は高いです, この町は静かです, 日本語が好きです, どれがいちばん好き, 水がほしいです' },
+  { id: 5, code: 'MOD-5', titleEn: 'Te-Form Revolution', titleBn: 'তে-ফর্ম বিপ্লব', titleJa: 'て形革命', lessonsRange: 'L26–L30', desc: '食べてください, 今何をしていますか, 入ってもいいですか, 食べてから行きます, 〜たり〜たりします' },
+  { id: 6, code: 'MOD-6', titleEn: 'Ability, Past & Casual', titleBn: 'সক্ষমতা, অতীত ও কথ্যরূপ', titleJa: '能力と過去', lessonsRange: 'L31–L35', desc: '読むことができます, 寝る前に本を読みます, 食べたことがあります, 〜たほうがいい, 普通形/Casual' },
+  { id: 7, code: 'MOD-7', titleEn: 'Decisions & Completion', titleBn: 'সিদ্ধান্ত ও সমাপন', titleJa: '判断と修了', lessonsRange: 'L36–L40', desc: '〜から〜です, 〜と思います, 〜でしょう, 〜と言いました, 〜ことになります / N5 Capstone' },
+];
+
+export const N4_MODULES_LIST = [
+  { id: 1, code: 'MOD-1', titleEn: 'Explanations & Requests', titleBn: 'ব্যাখ্যা ও বিনীত অনুরোধ', titleJa: '説明と依頼', lessonsRange: 'N4-L01–N4-L05', desc: '〜んです, 〜ていただけませんか, どうしたらいいですか, 名詞化の「の」, 理由と接続' },
+  { id: 2, code: 'MOD-2', titleEn: 'Potential & Habits', titleBn: 'সক্ষমতা ও অভ্যাস', titleJa: '能力と習慣', lessonsRange: 'N4-L06–N4-L10', desc: '動詞の可能形, 知覚動詞と可能, 並行動作（ながら）, 並列理由（〜し、〜し）, 習慣と継続状態' },
+  { id: 3, code: 'MOD-3', titleEn: 'Transitivity & State', titleBn: 'অকর্মক-সকর্মক ও প্রস্তুতি', titleJa: '自他動詞と状態', lessonsRange: 'N4-L11–N4-L15', desc: '自動詞と他動詞, 結果の状態（〜てある）, 準備の表現（〜ておく）, アスペクト, 完了と遺憾' },
+  { id: 4, code: 'MOD-4', titleEn: 'Intentions & Advice', titleBn: 'উদ্দেশ্য ও সুপরামর্শ', titleJa: '意図と助言', lessonsRange: 'N4-L16–N4-L20', desc: '意向形の活用, 意図と決意（〜つもり）, 予定・計画, 助言・アドバイス, 推量と可能性' },
+  { id: 5, code: 'MOD-5', titleEn: 'Conditionals & Favors', titleBn: 'আদেশ, শর্ত ও দেওয়া-নেওয়া', titleJa: '命令・条件・授受', lessonsRange: 'N4-L21–N4-L25', desc: '命令・禁止, 伝聞と意味の伝達, 指示通りと順序, 授受表現の発展, 四つの条件表現' },
+  { id: 6, code: 'MOD-6', titleEn: 'Passive, Causative & Keigo', titleBn: 'কর্মবাচ্য, প্রযোজক ও কেইগো', titleJa: '受身・使役・敬語', lessonsRange: 'N4-L26–N4-L30', desc: '受身の構造, 使役の表現, 使役受身, 敬語：尊敬語, 敬語：謙譲語' },
+  { id: 7, code: 'MOD-7', titleEn: 'Modals & N4 Capstone', titleBn: 'চূড়ান্ত প্রয়োগ ও N4 ক্যাপস্টোন', titleJa: '様態とN4総まとめ', lessonsRange: 'N4-L31–N4-L35', desc: '様態と伝聞, 過度と難易, 習慣化と変化, 目的の表現, N4 総まとめ・合格演習' },
 ];
 
 export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
@@ -137,10 +138,16 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     (user as any)?.subscriptionTier === 'pro' ||
     (user as any)?.subscriptionTier === 'japan_ready';
 
-  // Tab: 'pathways' (Structured Sequential Progression) vs 'catalog' (Browsing All)
+  // Primary State: Curriculum Level, Active Module, Search, and Lesson Modal
+  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4'>('N5');
+  const [activeModuleId, setActiveModuleId] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedLessonModal, setSelectedLessonModal] = useState<N5MasterLesson | null>(null);
+
+  // Tab: 'pathways' (Sequential 3-Milestone Progression) vs 'catalog' (Browsing All Electives)
   const [activeTab, setActiveTab] = useState<'pathways' | 'catalog'>('pathways');
 
-  // Milestone 1: Kana Foundation state from local storage / auth
+  // Milestone 1: Kana Foundation state
   const [isFoundationDone, setIsFoundationDone] = useState<boolean>(() => {
     try {
       return localStorage.getItem('nihomi_foundation_completed') === 'true';
@@ -149,13 +156,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     }
   });
 
-  // Modals state
+  // Modal triggers
   const [isKanaLabOpen, setIsKanaLabOpen] = useState(false);
   const [activeCourseToPlay, setActiveCourseToPlay] = useState<Course | null>(null);
 
   // Filters for catalog tab
-  const [selectedLevel, setSelectedLevel] = useState<JLPTLevel | 'ALL'>('ALL');
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [catalogLevelFilter, setCatalogLevelFilter] = useState<JLPTLevel | 'ALL'>('ALL');
+  const [catalogCategoryFilter, setCatalogCategoryFilter] = useState<string>('ALL');
 
   // Listen for foundation completion events
   useEffect(() => {
@@ -164,29 +171,75 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     };
     window.addEventListener('nihomi-foundation-unlocked', handleUnlock);
     window.addEventListener('storage', handleUnlock);
+
     return () => {
       window.removeEventListener('nihomi-foundation-unlocked', handleUnlock);
       window.removeEventListener('storage', handleUnlock);
     };
   }, []);
 
+  // Safe data loading with fallbacks
+  const n5Lessons: N5MasterLesson[] = (Array.isArray(n5MasterData) ? n5MasterData : []) as unknown as N5MasterLesson[];
+  const n4Lessons: N5MasterLesson[] = (Array.isArray(n4MasterData) ? n4MasterData : []) as unknown as N5MasterLesson[];
+
+  const currentLessonsList = selectedLevel === 'N5' ? n5Lessons : n4Lessons;
+  const activeModulesList = selectedLevel === 'N5' ? N5_MODULES_LIST : N4_MODULES_LIST;
+  const totalLessonsCount = selectedLevel === 'N5' ? 40 : 35;
+  const masterCompletedCount = selectedLevel === 'N5'
+    ? ((progress as any)?.completedLessonsCount || 0)
+    : ((progress as any)?.n4CompletedCount || 0);
+  const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
+  const activeModule = activeModulesList.find((m) => m.id === activeModuleId) || activeModulesList[0];
+  const masteryPercentage = totalLessonsCount > 0 ? Math.min(100, Math.round((masterCompletedCount / totalLessonsCount) * 100)) : 0;
+
+  // Level selector switch handler
+  const handleSelectLevel = (level: 'N5' | 'N4') => {
+    setSelectedLevel(level);
+    setActiveModuleId(level === 'N5' ? 0 : 1);
+    setSearchQuery('');
+  };
+
+  // Filtered master lessons based on active module & search
+  const filteredLessons = currentLessonsList.filter((lesson) => {
+    if (lesson.lesson_metadata.module_number !== activeModuleId) {
+      return false;
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const meta = lesson.lesson_metadata;
+      const matchesId = meta.lesson_id.toLowerCase().includes(q) || `lesson ${meta.lesson_number}`.toLowerCase().includes(q);
+      const matchesJa = meta.title_ja.toLowerCase().includes(q);
+      const matchesBn = meta.title_bn.toLowerCase().includes(q);
+      const matchesEn = meta.title_en.toLowerCase().includes(q);
+      const matchesMod = meta.module_name?.toLowerCase().includes(q) || meta.module_name_bn?.toLowerCase().includes(q);
+      const matchesConcept = lesson.bengali_bridge?.core_concept_bn?.toLowerCase().includes(q) || lesson.bengali_bridge?.explanation_bn?.toLowerCase().includes(q);
+      const matchesGrammar = lesson.grammar_points?.some((gp) =>
+        gp.pattern_ja?.toLowerCase().includes(q) || gp.pattern_bn?.toLowerCase().includes(q) || gp.explanation_bn?.toLowerCase().includes(q)
+      );
+      const matchesVocab = lesson.vocabulary_scope?.some((v) =>
+        v.word_ja?.toLowerCase().includes(q) || v.meaning_bn?.toLowerCase().includes(q) || v.romaji?.toLowerCase().includes(q)
+      );
+      return matchesId || matchesJa || matchesBn || matchesEn || matchesMod || matchesConcept || matchesGrammar || matchesVocab;
+    }
+    return true;
+  });
+
+  // Filtered electives for catalog tab
   const filteredCourses = ALL_COURSES_CATALOG.filter((c) => {
-    const matchesLevel = selectedLevel === 'ALL' || c.level === selectedLevel;
-    const matchesCat = selectedCategory === 'ALL' || c.category === selectedCategory;
+    const matchesLevel = catalogLevelFilter === 'ALL' || c.level === catalogLevelFilter;
+    const matchesCat = catalogCategoryFilter === 'ALL' || c.category === catalogCategoryFilter;
     return matchesLevel && matchesCat;
   });
 
-  const completedLessonsCount = progress?.completedLessonsCount || 1;
-
   return (
-    <div className="bg-[#FAF9F6] dark:bg-[#0a0a12] text-stone-900 dark:text-stone-100 min-h-screen pb-24 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors">
+    <div className="bg-[#FAF9F6] dark:bg-[#0D0D11] text-stone-900 dark:text-stone-100 min-h-screen pb-24 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors">
       
       {/* Top Hero Banner */}
-      <div className="bg-stone-900 dark:bg-[#0d0d15] text-white border-b border-stone-800 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="bg-stone-900 dark:bg-[#09090D] text-white border-b border-stone-800 py-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto space-y-4">
           <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-500/20 text-red-300 text-xs font-bold rounded-full border border-red-500/30">
             <Sparkles className="w-3.5 h-3.5 text-red-400" />
-            <span>CONTINUOUS JAPANESE JOURNEY • এক অবিচ্ছিন্ন যাত্রা</span>
+            <span>CONTINUOUS JAPANESE JOURNEY • জাপানি শিক্ষার রোডম্যাপ</span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -195,7 +248,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 Learning Pathways & Curriculum
               </h1>
               <p className="text-xs sm:text-sm text-stone-300 max-w-2xl mt-1.5 leading-relaxed">
-                পর্যায়ভিত্তিক ধারাবাহিক জাপানি শিক্ষা: বর্ণমালার ভিত্তি থেকে মিন্না নো নিহোঙ্গো ২৫টি পাঠ এবং টোকিও লাইফ ও ভিসা প্রস্তুতি।
+                আন্তর্জাতিক মানসম্মত জাপানি ভাষা শিক্ষা: বর্ণমালা থেকে শুরু করে মিন্না নো নিহোঙ্গো মাস্টারক্লাস এবং জাপানে ক্যারিয়ার গড়ার বাস্তবমুখী প্রস্তুতি।
               </p>
             </div>
 
@@ -210,7 +263,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 }`}
               >
                 <Compass className="w-3.5 h-3.5" />
-                <span>Sequential Pathways (ধারাবাহিক রোডম্যাপ)</span>
+                <span>Sequential Pathways (ধারাবাহিক পাঠ্যক্রম)</span>
               </button>
 
               <button
@@ -222,7 +275,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
-                <span>All Courses (ক্যাটালগ)</span>
+                <span>All Courses (সকল কোর্স)</span>
               </button>
             </div>
           </div>
@@ -239,34 +292,34 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
           <div className="space-y-8 animate-in fade-in duration-300">
             
             {/* Student Current Target Status Bar */}
-            <div className="bg-white dark:bg-[#12121a] p-5 rounded-3xl border border-stone-200 dark:border-stone-800/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-white dark:bg-[#15151E] p-5 rounded-3xl border border-stone-200 dark:border-stone-800/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center space-x-3.5">
                 <div className="w-12 h-12 rounded-2xl bg-red-600/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-lg shrink-0">
-                  N5
+                  {selectedLevel}
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs font-bold text-stone-500 dark:text-stone-400">বর্তমান লক্ষ্য:</span>
-                    <span className="text-xs font-mono font-bold text-red-600 dark:text-red-400 uppercase">JLPT N5 Foundation</span>
+                    <span className="text-xs font-mono font-bold text-red-600 dark:text-red-400 uppercase">JLPT {selectedLevel} Curriculum</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
-                      অ্যাক্টিভ ট্র্যাক
+                      অ্যাক্টিভ রোডম্যাপ
                     </span>
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-stone-900 dark:text-white mt-0.5">
-                    {isFoundationDone ? 'মাইলস্টোন ২: মিন্না নো নিহোঙ্গো ১ম পাঠ চলছে' : 'মাইলস্টোন ১: হিরাগানা ও কাতাকানা ভিত্তি চলছে'}
+                    {isFoundationDone ? `ধাপ ২: মিন্না নো নিহোঙ্গো ${selectedLevel} মাস্টারক্লাস` : 'ধাপ ১: হিরাগানা ও কাতাকানা বর্ণমালা ড্রিল'}
                   </h3>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4 text-xs font-medium text-stone-600 dark:text-stone-300">
                 <div className="text-right">
-                  <div className="text-[11px] text-stone-400">সামগ্রিক অগ্রগতি</div>
-                  <div className="text-stone-900 dark:text-white font-bold">{isFoundationDone ? '২৫%' : '৮%'} সম্পন্ন</div>
+                  <div className="text-[11px] text-stone-400">কারিকুলাম অগ্রগতি</div>
+                  <div className="text-stone-900 dark:text-white font-bold">{masteryPercentage}% সম্পন্ন</div>
                 </div>
                 <div className="w-24 bg-stone-100 dark:bg-stone-800 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-red-600 h-2 rounded-full transition-all duration-500"
-                    style={{ width: isFoundationDone ? '25%' : '8%' }}
+                    style={{ width: `${Math.max(4, masteryPercentage)}%` }}
                   ></div>
                 </div>
               </div>
@@ -279,7 +332,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               {/* MILESTONE 1: JAPANESE FOUNDATION (KANA LAB) */}
               {/* ------------------------------------------------------------- */}
               <div
-                className={`relative bg-white dark:bg-[#12121a] rounded-3xl p-6 sm:p-7 border-2 transition-all ${
+                className={`relative bg-white dark:bg-[#15151E] rounded-3xl p-6 sm:p-7 border-2 transition-all ${
                   isFoundationDone
                     ? 'border-emerald-500/40 shadow-xs'
                     : 'border-red-500/60 shadow-lg shadow-red-500/5'
@@ -292,7 +345,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       MILESTONE 1
                     </span>
                     <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold">
-                      স্টেজ ০: জাপানি ভাষার প্রবেশদ্বার
+                      জাপানি ফাউন্ডেশন: হিরাগানা ও কাতাকানা
                     </span>
                   </div>
 
@@ -352,160 +405,334 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               </div>
 
               {/* ------------------------------------------------------------- */}
-              {/* MILESTONE 2: MINNA NO NIHONGO N5 MASTER (LESSONS 01 TO 25) */}
+              {/* MILESTONE 2: JLPT MASTER CURRICULUM (N5 & N4) */}
               {/* ------------------------------------------------------------- */}
               <div
-                className={`relative bg-white dark:bg-[#12121a] rounded-3xl p-6 sm:p-7 border transition-all ${
+                className={`relative bg-white dark:bg-[#15151E] rounded-3xl p-6 sm:p-7 border transition-all ${
                   isFoundationDone
                     ? 'border-stone-300 dark:border-stone-700 shadow-md'
-                    : 'border-stone-200 dark:border-stone-800/80 opacity-95'
+                    : 'border-stone-200 dark:border-stone-800/80'
                 }`}
               >
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                {/* Header Badge & Level Switcher Pill */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 pb-4 border-b border-stone-200 dark:border-stone-800">
                   <div className="flex items-center space-x-2">
                     <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider font-mono bg-stone-900 text-white dark:bg-stone-800">
                       MILESTONE 2
                     </span>
                     <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold">
-                      JLPT N5 মূল কারিকুলাম (২৫টি পাঠ)
+                      {selectedLevel === 'N5'
+                        ? 'JLPT N5 মূল কারিকুলাম (৪০টি পাঠ — ৮টি মডিউল)'
+                        : 'JLPT N4 মূল কারিকুলাম (৩৫টি পাঠ — ৭টি মডিউল)'}
                     </span>
                   </div>
 
-                  {isFoundationDone ? (
-                    <span className="px-3 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center space-x-1.5 border border-blue-500/30">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>উন্মুক্ত ও চলমান (UNLOCKED)</span>
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 text-xs font-bold flex items-center space-x-1.5">
-                      <Lock className="w-3.5 h-3.5" />
-                      <span>কানা ভিত্তি শেষে উন্মুক্ত (PREVIEW AVAILABLE)</span>
-                    </span>
-                  )}
+                  {/* Level Switcher Pill: [JLPT N5 (40 Lessons)] | [JLPT N4 (35 Lessons)] */}
+                  <div className="inline-flex items-center p-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shrink-0">
+                    <button
+                      onClick={() => handleSelectLevel('N5')}
+                      className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        selectedLevel === 'N5'
+                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <GraduationCap className="w-3.5 h-3.5" />
+                      <span>JLPT N5 (40 Lessons)</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelectLevel('N4')}
+                      className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        selectedLevel === 'N4'
+                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                      <span>JLPT N4 (35 Lessons)</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white">
-                        Minna no Nihongo N5 Master — Lessons 01 to 25
-                      </h2>
-                      <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed mt-1">
-                        জাপানে উচ্চশিক্ষা ও চাকরির জন্য আন্তর্জাতিক মানদণ্ড মিন্না নো নিহোঙ্গো। প্রতিটি পাঠে ব্যাকরণ বিশ্লেষণ, নতুন শব্দার্থ, কানজি ও ডায়ালগ সিমুলেশন।
-                      </p>
+                  {/* TOP: Sleek Progress Overview */}
+                  <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-stone-950 via-stone-900 to-[#14141e] border border-stone-800 text-white shadow-xl relative overflow-hidden">
+                    <div className="pointer-events-none absolute -right-12 -top-12 w-48 h-48 bg-red-600/10 rounded-full blur-3xl" />
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-red-600/25 text-red-400 border border-red-500/30">
+                            STAGE-BASED CURRICULUM
+                          </span>
+                          <span className="text-xs text-stone-400">
+                            {selectedLevel === 'N5' ? '৮টি মডিউল • ৪০টি সম্পূর্ণ পাঠ' : '৭টি মডিউল • ৩৫টি সম্পূর্ণ পাঠ'}
+                          </span>
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                          Level {selectedLevel} Mastery: {masterCompletedCount}/{totalLessonsCount} Lessons
+                        </h2>
+                      </div>
+
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="px-3.5 py-2 rounded-2xl bg-white/[0.05] border border-white/[0.1] text-right">
+                          <span className="text-[10px] text-stone-400 uppercase tracking-wider block font-bold">Streak</span>
+                          <span className="text-sm font-black text-amber-400 flex items-center justify-end gap-1">
+                            <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            {streakDays} Days
+                          </span>
+                        </div>
+                        <div className="px-3.5 py-2 rounded-2xl bg-white/[0.05] border border-white/[0.1] text-right">
+                          <span className="text-[10px] text-stone-400 uppercase tracking-wider block font-bold">Current Focus</span>
+                          <span className="text-sm font-black text-rose-400">
+                            {activeModule.code}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                    <button
-                      onClick={() => {
-                        const course = ALL_COURSES_CATALOG[0];
-                        setActiveCourseToPlay(course);
-                      }}
-                      className="px-6 py-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-red-600/25 transition-all cursor-pointer shrink-0"
-                    >
-                      <Play className="w-4 h-4 fill-white" />
-                      <span>১ম পাঠ শুরু করুন (Launch Lesson 01)</span>
-                    </button>
+                    {/* Minimalist Glowing Progress Bar */}
+                    <div className="relative z-10">
+                      <div className="flex justify-between text-xs text-stone-400 font-mono mb-1.5">
+                        <span>Overall {selectedLevel} Progress</span>
+                        <span className="font-bold text-white">{masteryPercentage}%</span>
+                      </div>
+                      <div className="w-full h-2.5 rounded-full bg-stone-800/90 overflow-hidden border border-stone-700/60">
+                        <div
+                          className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 rounded-full transition-all duration-500 shadow-sm shadow-red-500/50"
+                          style={{ width: `${Math.max(4, masteryPercentage)}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  {/* 4 Phases of N5 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 space-y-1">
-                      <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400">PHASE A • LESSONS 1–7</span>
-                      <div className="text-xs font-bold text-stone-900 dark:text-white">মূল বাক্য গঠন ও স্ব-পরিচয়</div>
-                      <p className="text-[11px] text-stone-500">~は ~です, নির্দেশক ও দিকনির্দেশনা</p>
+                  {/* ACTIVE LEVEL TAB BAR: 8-Module tabs for N5 (0-7), 7-Module tabs for N4 (1-7) */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                        মডিউল নির্বাচন ({selectedLevel} Modules)
+                      </span>
+                      <span className="text-xs text-stone-400 font-mono">
+                        {activeModule.code} • {activeModule.lessonsRange}
+                      </span>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 space-y-1">
-                      <span className="text-[10px] font-mono font-bold text-stone-500">PHASE B • LESSONS 8–14</span>
-                      <div className="text-xs font-bold text-stone-900 dark:text-white">বিশেষণ ও নিত্যদিনের ক্রিয়া</div>
-                      <p className="text-[11px] text-stone-500">ই/না বিশেষণ, পছন্দ ও তে-ফর্ম সূচনা</p>
-                    </div>
-
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 space-y-1">
-                      <span className="text-[10px] font-mono font-bold text-stone-500">PHASE C • LESSONS 15–20</span>
-                      <div className="text-xs font-bold text-stone-900 dark:text-white">অনুমতি, বাধ্যবাধকতা ও অতীত</div>
-                      <p className="text-[11px] text-stone-500">~てもいい, নাই-ফর্ম ও তা-ফর্ম অভিজ্ঞতা</p>
-                    </div>
-
-                    <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 space-y-1">
-                      <span className="text-[10px] font-mono font-bold text-stone-500">PHASE D • LESSONS 21–25</span>
-                      <div className="text-xs font-bold text-stone-900 dark:text-white">যৌগিক বাক্য ও N5 ক্যাপস্টোন</div>
-                      <p className="text-[11px] text-stone-500">মত প্রকাশ ~と思う, শর্ত ~たら ও মক টেস্ট</p>
-                    </div>
-                  </div>
-
-                  {/* Sequential Lesson Scroller / Drawer */}
-                  <div className="border-t border-stone-200 dark:border-stone-800/80 pt-4">
-                    <div className="flex items-center justify-between mb-3 text-xs font-bold text-stone-700 dark:text-stone-300">
-                      <span>মিন্না নো নিহোঙ্গো ২৫টি পাঠের ধারাবাহিক সিলেবাস:</span>
-                      <span className="text-amber-600 dark:text-amber-400 font-medium">পাঠ ১–৫ সম্পূর্ণ ফ্রি • পাঠ ৬–২৫ নিহোমি প্রো</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
-                      {MINNA_NO_NIHONGO_LESSONS.map((l) => {
-                        const isFreeLesson = l.num <= 5;
-                        const isUnlocked = isFreeLesson || isPro;
-                        const isCurrent = l.num === 1;
-
+                    <div className={`grid grid-cols-2 sm:grid-cols-4 ${selectedLevel === 'N5' ? 'lg:grid-cols-8' : 'lg:grid-cols-7'} gap-2`}>
+                      {activeModulesList.map((mod) => {
+                        const isActive = activeModuleId === mod.id;
                         return (
-                          <div
-                            key={l.id}
+                          <button
+                            key={mod.id}
                             onClick={() => {
-                              onNavigate('lesson', { lessonId: `n5-l${l.num}` });
+                              setActiveModuleId(mod.id);
+                              setSearchQuery('');
                             }}
-                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                              isCurrent
-                                ? 'bg-red-500/10 border-red-500 text-red-700 dark:text-red-300 shadow-2xs'
-                                : isUnlocked
-                                ? 'bg-white dark:bg-stone-900/80 border-stone-200 dark:border-stone-800 hover:border-stone-400'
-                                : 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200/50 dark:border-stone-800/40 text-stone-400 hover:border-amber-400/50'
+                            className={`p-2.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer relative overflow-hidden group ${
+                              isActive
+                                ? 'bg-stone-900 dark:bg-[#1c1c28] border-red-500 shadow-md ring-1 ring-red-500/30'
+                                : 'bg-white dark:bg-[#15151E] border-stone-200 dark:border-stone-800/80 hover:border-stone-300 dark:hover:border-stone-700'
                             }`}
                           >
-                            <div className="flex items-center justify-between text-[11px] font-mono mb-1">
-                              <span className="font-bold">第{l.num}課</span>
-                              {isCurrent ? (
-                                <span className="text-[9px] px-1.5 py-0.2 bg-red-600 text-white rounded font-sans font-bold">চলমান</span>
-                              ) : isFreeLesson ? (
-                                <span className="text-[9px] px-1.5 py-0.2 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded font-sans font-bold">FREE</span>
-                              ) : isPro ? (
-                                <Check className="w-3 h-3 text-emerald-500" />
-                              ) : (
-                                <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.2 bg-amber-500/15 text-amber-500 border border-amber-500/30 rounded font-mono font-bold">
-                                  <Lock className="w-2.5 h-2.5" /> PRO
-                                </span>
-                              )}
+                            {isActive && (
+                              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500 via-rose-500 to-amber-500" />
+                            )}
+                            <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-0.5">
+                              <span className={isActive ? 'text-red-400 font-black' : 'text-stone-400'}>
+                                {mod.code}
+                              </span>
+                              <span className="text-stone-400 dark:text-stone-500 text-[9px]">
+                                {mod.lessonsRange}
+                              </span>
                             </div>
-                            <div className="text-xs font-semibold truncate text-stone-900 dark:text-stone-200">
-                              {l.title}
+                            <div className={`text-xs font-bold truncate ${isActive ? 'text-white' : 'text-stone-800 dark:text-stone-200'}`}>
+                              {mod.titleEn}
                             </div>
-                            <div className="text-[10px] text-stone-400 truncate mt-0.5 font-japanese">
-                              {l.grammar}
+                            <div className="text-[10px] text-stone-500 dark:text-stone-400 truncate mt-0.5 font-medium">
+                              {mod.titleBn}
                             </div>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
                   </div>
+
+                  {/* ACTIVE MODULE STAGE HEADER & SEARCH BAR */}
+                  <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#15151E] border border-stone-200 dark:border-stone-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-stone-900 dark:bg-stone-800 text-white">
+                          {activeModule.code}
+                        </span>
+                        <h3 className="text-sm sm:text-base font-bold text-stone-900 dark:text-white truncate">
+                          {activeModule.titleEn} — {activeModule.titleBn}
+                        </h3>
+                        <span className="text-xs font-japanese text-stone-400 shrink-0">
+                          ({activeModule.titleJa})
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1 line-clamp-1">
+                        {activeModule.desc}
+                      </p>
+                    </div>
+
+                    {/* Search Within Lessons */}
+                    <div className="relative w-full sm:w-64 shrink-0">
+                      <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                      <input
+                        type="text"
+                        placeholder="পাঠ বা ব্যাকরণ খুঁজুন..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-7 py-1.5 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-hidden focus:border-red-500 transition-colors"
+                      />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 cursor-pointer"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ACTIVE MODULE LESSONS GRID (COMPACT CARDS - ZERO ENDLESS SCROLL) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
+                    {filteredLessons.map((lesson) => {
+                      const isFreeLesson = selectedLevel === 'N5' ? lesson.lesson_metadata.lesson_number <= 5 : lesson.lesson_metadata.lesson_number <= 2;
+                      const isUnlocked = isFreeLesson || isPro;
+                      const lessonIdLower = lesson.lesson_metadata.lesson_id.toLowerCase();
+                      const conceptSummary = lesson.bengali_bridge?.core_concept_bn || lesson.bengali_bridge?.explanation_bn || '';
+
+                      return (
+                        <div
+                          key={lesson.lesson_metadata.lesson_id}
+                          className="group relative p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between bg-white dark:bg-[#15151E] border-stone-200 dark:border-stone-800/80 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/5 hover:-translate-y-0.5"
+                        >
+                          <div>
+                            {/* Top Row: Lesson ID & Access Badge */}
+                            <div className="flex items-center justify-between text-[11px] font-mono mb-2.5">
+                              <span className="px-2.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 font-bold text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700 shadow-2xs">
+                                {lesson.lesson_metadata.lesson_id}
+                              </span>
+
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] text-stone-400 font-sans">
+                                  ~{lesson.lesson_metadata.estimated_minutes} মি.
+                                </span>
+                                {isFreeLesson ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded font-sans font-bold">
+                                    FREE
+                                  </span>
+                                ) : isPro ? (
+                                  <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 bg-red-500/15 text-red-500 dark:text-red-400 border border-red-500/30 rounded font-mono font-bold">
+                                    <Sparkles className="w-2.5 h-2.5" /> PRO
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 bg-amber-500/15 text-amber-500 border border-amber-500/30 rounded font-mono font-bold">
+                                    <Lock className="w-2.5 h-2.5" /> PRO
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Japanese Title with Ruby Furigana Text */}
+                            <div className="text-sm font-bold text-stone-900 dark:text-white font-japanese leading-snug line-clamp-2 min-h-[2.5rem]">
+                              <FuriganaText text={lesson.lesson_metadata.title_ja} />
+                            </div>
+
+                            {/* Bengali Meaning */}
+                            <div className="text-xs font-semibold text-red-600 dark:text-red-400 mt-1 line-clamp-1">
+                              {lesson.lesson_metadata.title_bn}
+                            </div>
+
+                            {/* English Title */}
+                            <div className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 line-clamp-1">
+                              {lesson.lesson_metadata.title_en}
+                            </div>
+
+                            {/* Bengali Concept Summary */}
+                            {conceptSummary && (
+                              <div className="mt-2.5 p-2 rounded-xl bg-stone-50 dark:bg-stone-900/60 border border-stone-100 dark:border-stone-800/60 text-[11px] text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-2">
+                                {conceptSummary}
+                              </div>
+                            )}
+
+                            {/* Scope Badges */}
+                            <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-stone-100 dark:border-stone-800/60 text-[10px] text-stone-500 dark:text-stone-400">
+                              <span className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800/80">
+                                {lesson.vocabulary_scope?.length || 0} শব্দ
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800/80">
+                                {lesson.grammar_points?.length || 0} ব্যাকরণ
+                              </span>
+                              {(lesson.kanji_scope?.length || 0) > 0 && (
+                                <span className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800/80">
+                                  {lesson.kanji_scope.length} কাঞ্জি
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* High-Contrast Action Buttons: Details & Practice */}
+                          <div className="grid grid-cols-2 gap-2 mt-3.5 pt-2.5 border-t border-stone-100 dark:border-stone-800/60">
+                            <button
+                              onClick={() => setSelectedLessonModal(lesson)}
+                              className="py-1.5 px-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 cursor-pointer border border-stone-200/80 dark:border-stone-700"
+                            >
+                              <BookOpen className="w-3.5 h-3.5 text-stone-400" />
+                              <span>বিস্তারিত</span>
+                            </button>
+
+                            <button
+                              onClick={() => onNavigate('lesson', { lessonId: lessonIdLower })}
+                              className="py-1.5 px-2 rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
+                            >
+                              <Play className="w-3.5 h-3.5 fill-white text-white" />
+                              <span>অনুশীলন</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {filteredLessons.length === 0 && (
+                    <div className="text-center py-12 text-stone-400 space-y-2 bg-stone-50 dark:bg-stone-900/30 rounded-2xl border border-stone-200/60 dark:border-stone-800/60">
+                      <Search className="w-8 h-8 mx-auto opacity-30 text-stone-400" />
+                      <div className="text-sm font-semibold text-stone-800 dark:text-stone-200">
+                        এই মডিউলে কোনো পাঠ খুঁজে পাওয়া যায়নি
+                      </div>
+                      <p className="text-xs text-stone-500">
+                        অনুসন্ধান পরিবর্তন করুন বা অন্য মডিউল নির্বাচন করুন।
+                      </p>
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="mt-2 px-3 py-1.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-xs font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-700 cursor-pointer transition-colors"
+                      >
+                        অনুসন্ধান রিসেট করুন
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* ------------------------------------------------------------- */}
               {/* MILESTONE 3: TOKYO LIFE, BAITOOS & VISA READINESS LAB */}
               {/* ------------------------------------------------------------- */}
-              <div className="relative bg-white dark:bg-[#12121a] rounded-3xl p-6 sm:p-7 border border-stone-200 dark:border-stone-800/80 shadow-xs">
+              <div className="relative bg-white dark:bg-[#15151E] rounded-3xl p-6 sm:p-7 border border-stone-200 dark:border-stone-800/80 shadow-xs">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                   <div className="flex items-center space-x-2">
                     <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider font-mono bg-stone-900 text-white dark:bg-stone-800">
                       MILESTONE 3
                     </span>
                     <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold">
-                      বাস্তব প্রস্তুতি ও জাপানে বসবাস
+                      বাস্তবমুখী প্রস্তুতি ও জাপানে বসবাস
                     </span>
                   </div>
 
                   <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 text-xs font-bold flex items-center space-x-1.5 border border-amber-500/30">
                     <Briefcase className="w-3.5 h-3.5" />
-                    <span>জাপান রেডিনেস হাব (READY FOR EXPLORATION)</span>
+                    <span>জাপান কর্মজীবনের প্রস্তুতি (READY FOR EXPLORATION)</span>
                   </span>
                 </div>
 
@@ -515,11 +742,11 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       Tokyo Life, BaitoOS & Visa Readiness Lab
                     </h2>
                     <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-                      কেবল বইয়ের জাপানি নয়—টোকিওর সেভেন-ইলেভেন বা ফ্যামিলিমার্টের ক্যাশিয়ার সিমুলেশন (BaitoOS), জাপানি দূতাবাস ভিসা ইন্টারভিউ প্রশ্নোত্তর এবং জাপানে প্রথম মাসের আবাসন ও ব্যাংক অ্যাকাউন্ট খোলার বাস্তব গাইড।
+                      শ্রেণিকক্ষের বাইরে জাপানের বাস্তব জীবনযাত্রার মুখোমুখি হোন। কনভিনিয়েন্স স্টোরের ক্যাশিয়ার সিমুলেশন (BaitoOS), জাপানি সমাজে শিষ্টাচার, ট্রেনের টিকিট কাটা, বাড়ি ভাড়া নেওয়া এবং ভিসার জন্য প্রয়োজনীয় কাগজপত্র প্রস্তুতির প্র্যাকটিক্যাল গাইড।
                     </p>
                     <div className="flex flex-wrap gap-2 pt-1 text-xs">
                       <span className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-medium">
-                        🏪 কনবিনি POS রেজিস্টার সিমুলেশন
+                        🏪 কনভিনিয়েন্স স্টোর POS সিমুলেশন
                       </span>
                       <span className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-medium">
                         💼 বাইতো ইন্টারভিউ রোলপ্লে
@@ -557,16 +784,16 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
         {activeTab === 'catalog' && (
           <div className="space-y-6 animate-in fade-in duration-300">
             {/* Filters Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#12121a] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#15151E] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xs">
               
               {/* Level Filter */}
               <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
                 {(['ALL', 'N5', 'N4', 'N3', 'N2', 'N1'] as const).map((lvl) => (
                   <button
                     key={lvl}
-                    onClick={() => setSelectedLevel(lvl)}
+                    onClick={() => setCatalogLevelFilter(lvl)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      selectedLevel === lvl
+                      catalogLevelFilter === lvl
                         ? 'bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900 shadow-2xs'
                         : 'bg-stone-50 dark:bg-stone-800/80 hover:bg-stone-100 text-stone-600 dark:text-stone-400'
                     }`}
@@ -580,8 +807,8 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               <div className="flex items-center space-x-2 text-xs font-semibold text-stone-500 dark:text-stone-400">
                 <Filter className="w-3.5 h-3.5" />
                 <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  value={catalogCategoryFilter}
+                  onChange={(e) => setCatalogCategoryFilter(e.target.value)}
                   className="bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 px-3 py-1.5 rounded-xl text-stone-800 dark:text-stone-200 focus:outline-hidden font-medium cursor-pointer"
                 >
                   <option value="ALL">All Categories</option>
@@ -599,7 +826,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               {filteredCourses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white dark:bg-[#12121a] rounded-3xl p-6 border border-stone-200 dark:border-stone-800 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
+                  className="bg-white dark:bg-[#15151E] rounded-3xl p-6 border border-stone-200 dark:border-stone-800 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
                 >
                   <div className="space-y-3">
                     {/* Level & Category Badge */}
@@ -686,6 +913,22 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
         />
       )}
 
+      {/* N5 & N4 Master Lesson Detail Modal */}
+      {selectedLessonModal && (
+        <N5LessonDetailModal
+          isOpen={!!selectedLessonModal}
+          lesson={selectedLessonModal}
+          onClose={() => setSelectedLessonModal(null)}
+          onStartPractice={(lessonId) => {
+            setSelectedLessonModal(null);
+            onNavigate('lesson', { lessonId });
+          }}
+          isPro={isPro}
+        />
+      )}
+
     </div>
   );
 };
+
+export default CoursesView;

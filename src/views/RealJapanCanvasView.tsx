@@ -407,27 +407,37 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ তানাকা AI সেনসেই লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
           </p>
 
-          {/* Action: Clear "Start Journey" button */}
+          {/* Action: Clear high-converting CTA + Optional 3D exploration */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => {
                 worldAudio.playTokyoChime();
-                setIsJourneyStarted(true);
+                onNavigate('start');
               }}
               className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-4.5 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-base sm:text-lg rounded-2xl shadow-2xl shadow-red-600/40 hover:shadow-red-500/60 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer group"
               id="btn-start-journey"
             >
               <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
-              <span>Start Journey</span>
+              <span>Start 1-Min Diagnostic →</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button
-              onClick={() => onNavigate('dashboard')}
-              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+              onClick={() => {
+                worldAudio.playTokyoChime();
+                setIsJourneyStarted(true);
+              }}
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-amber-300 border border-amber-400/30 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Student Dashboard</span>
-              <ChevronRight className="w-4 h-4 text-zinc-400" />
+              <span>Explore 3D Shibuya (Beta)</span>
+              <ChevronRight className="w-4 h-4 text-amber-300" />
+            </button>
+
+            <button
+              onClick={() => onNavigate('landing')}
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Back to Home</span>
             </button>
           </div>
 

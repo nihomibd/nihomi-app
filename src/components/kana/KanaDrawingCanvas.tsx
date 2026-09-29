@@ -400,25 +400,36 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
 
         {/* Live Vector Stroke Order Animation Overlay */}
         {isAnimatingStroke && (
-          <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none p-4">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 w-full h-full pointer-events-none">
             {strokeSequence.slice(0, animStep + 1).map((s, idx) => (
               <g key={idx}>
+                {idx === animStep && (
+                  <path
+                    d={s.path}
+                    fill="none"
+                    stroke="#f97316"
+                    strokeWidth="11"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.35"
+                    className="animate-pulse"
+                  />
+                )}
                 <path
                   d={s.path}
                   fill="none"
-                  stroke={idx === animStep ? '#fbbf24' : '#38bdf8'}
-                  strokeWidth="7"
+                  stroke={idx === animStep ? '#f97316' : '#38bdf8'}
+                  strokeWidth="6.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={idx === animStep ? 'animate-pulse' : ''}
                 />
-                <circle cx={s.startPoint.x} cy={s.startPoint.y} r="4" fill="#ef4444" />
+                <circle cx={s.startPoint.x} cy={s.startPoint.y} r="4.5" fill={idx === animStep ? '#f97316' : '#0284c7'} />
                 <text
                   x={s.startPoint.x}
-                  y={s.startPoint.y + 2.5}
+                  y={s.startPoint.y + 1.8}
                   textAnchor="middle"
                   fill="#ffffff"
-                  fontSize="5.5"
+                  fontSize="4.8"
                   fontWeight="bold"
                 >
                   {s.strokeNumber}

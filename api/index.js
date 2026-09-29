@@ -8,6 +8,7994 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
+// src/data/n5_master.json
+var n5_master_default;
+var init_n5_master = __esm({
+  "src/data/n5_master.json"() {
+    n5_master_default = [
+      {
+        lesson_metadata: {
+          lesson_id: "L01",
+          lesson_number: 1,
+          module_number: 0,
+          module_name: "Script & Numbers",
+          module_name_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u0993 \u09B8\u0982\u0996\u09CD\u09AF\u09BE",
+          title_ja: "\u3042\u3044\u3046\u3048\u304A",
+          title_en: "Vowels & Kana Foundation (A-I-U-E-O)",
+          title_bn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993 \u0995\u09BE\u09A8\u09BE\u09B0 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF (\u0986-\u0987-\u0989-\u098F-\u0993)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AE\u09C2\u09B2 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF \u09B9\u09B2\u09CB \u09AA\u09BE\u0981\u099A\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3: \u3042 (a), \u3044 (i), \u3046 (u), \u3048 (e), \u304A (o)\u0964 \u09AC\u09BE\u0982\u09B2\u09BE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u09AE\u09A4\u09CB \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7\u0993 \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09AC\u09B0\u09CD\u09A3\u0997\u09C1\u09B2\u09CB \u098F\u0987 \u09AA\u09BE\u0981\u099A\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7 \u09AA\u09C2\u09B0\u09CD\u09A3 \u09A7\u09CD\u09AC\u09A8\u09BF \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09C7\u0964 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09A7\u09CD\u09AC\u09A8\u09BF\u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09B9\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u098F\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u0985\u0995\u09CD\u09B7\u09B0\u09C7\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0985\u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09A5\u09BE\u0995\u09C7\u0964",
+          core_concept_bn: "\u09AA\u09BE\u0981\u099A\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u09AC\u09BF\u09B6\u09C1\u09A6\u09CD\u09A7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0993 \u09B8\u09A0\u09BF\u0995 \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u0986\u09AF\u09BC\u09A4\u09CD\u09A4 \u0995\u09B0\u09BE\u0964",
+          real_world_context_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AE\u09C7\u099F\u09CD\u09B0\u09CB \u09B8\u09CD\u099F\u09C7\u09B6\u09A8, \u09B8\u09BE\u0987\u09A8\u09AC\u09CB\u09B0\u09CD\u09A1 \u09AC\u09BE \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09A8\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09A8\u09BE\u09AE \u0993 \u0985\u09AD\u09BF\u09AC\u09BE\u09A6\u09A8 \u09A8\u09BF\u09B0\u09CD\u09AD\u09C1\u09B2\u09AD\u09BE\u09AC\u09C7 \u09AA\u09A1\u09BC\u09BE \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF '\u3046' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u09C7 \u09AC\u09BE\u0982\u09B2\u09BE\u09B0 \u09AE\u09A4\u09CB \u09A0\u09CB\u0981\u099F \u0997\u09CB\u09B2 \u09A8\u09BE \u0995\u09B0\u09C7 \u09B6\u09BF\u09A5\u09BF\u09B2 \u0993 \u0995\u09BF\u099B\u09C1\u099F\u09BE \u09B8\u09AE\u09BE\u09A8\u09CD\u09A4\u09B0\u09BE\u09B2 \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u611B[\u3042\u3044]",
+            romaji: "ai",
+            meaning_bn: "\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE / \u09AA\u09CD\u09B0\u09C7\u09AE",
+            meaning_en: "love",
+            part_of_speech: "noun",
+            example_ja: "\u611B[\u3042\u3044]\u306F\u5927\u5207[\u305F\u3044\u305B\u3064]\u3067\u3059\u3002",
+            example_bn: "\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE \u09AE\u09C2\u09B2\u09CD\u09AF\u09AC\u09BE\u09A8\u0964",
+            example_en: "Love is precious."
+          },
+          {
+            word_ja: "\u5BB6[\u3044\u3048]",
+            romaji: "ie",
+            meaning_bn: "\u09AC\u09BE\u09A1\u09BC\u09BF / \u0998\u09B0",
+            meaning_en: "house, home",
+            part_of_speech: "noun",
+            example_ja: "\u3053\u3053\u304C\u79C1[\u308F\u305F\u3057]\u306E\u5BB6[\u3044\u3048]\u3067\u3059\u3002",
+            example_bn: "\u098F\u099F\u09BF \u0986\u09AE\u09BE\u09B0 \u09AC\u09BE\u09A1\u09BC\u09BF\u0964",
+            example_en: "This is my house."
+          },
+          {
+            word_ja: "\u4E0A[\u3046\u3048]",
+            romaji: "ue",
+            meaning_bn: "\u0989\u09AA\u09B0\u09C7",
+            meaning_en: "above, on top",
+            part_of_speech: "noun",
+            example_ja: "\u673A[\u3064\u304F\u3048]\u306E\u4E0A[\u3046\u3048]\u306B\u672C[\u307B\u3093]\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u0989\u09AA\u09B0 \u09AC\u0987 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a book on the desk."
+          },
+          {
+            word_ja: "\u9752[\u3042\u304A]",
+            romaji: "ao",
+            meaning_bn: "\u09A8\u09C0\u09B2 \u09B0\u0982",
+            meaning_en: "blue",
+            part_of_speech: "noun",
+            example_ja: "\u7A7A[\u305D\u3089]\u306E\u9752[\u3042\u304A]\u304C\u304D\u308C\u3044\u3067\u3059\u3002",
+            example_bn: "\u0986\u0995\u09BE\u09B6\u09C7\u09B0 \u09A8\u09C0\u09B2 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0\u0964",
+            example_en: "The blue of the sky is beautiful."
+          },
+          {
+            word_ja: "\u4F1A[\u3042]\u3046",
+            romaji: "au",
+            meaning_bn: "\u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "to meet",
+            part_of_speech: "verb",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u53CB\u9054[\u3068\u3082\u3060\u3061]\u306B\u4F1A[\u3042]\u3044\u307E\u3059\u3002",
+            example_bn: "\u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC\u0964",
+            example_en: "I will meet a friend tomorrow."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4E00",
+            onyomi: "\u30A4\u30C1, \u30A4\u30C4",
+            kunyomi: "\u3072\u3068\u30FB\u3064, \u3072\u3068",
+            meaning_bn: "\u098F\u0995",
+            meaning_en: "one",
+            stroke_count: 1,
+            compounds: [
+              {
+                word_ja: "\u4E00\u3064[\u3072\u3068\u3064]",
+                meaning_bn: "\u098F\u0995\u099F\u09BF",
+                meaning_en: "one thing"
+              },
+              {
+                word_ja: "\u4E00\u4EBA[\u3072\u3068\u308A]",
+                meaning_bn: "\u098F\u0995\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF / \u098F\u0995\u09BE\u0995\u09C0",
+                meaning_en: "one person / alone"
+              },
+              {
+                word_ja: "\u4E00\u65E5[\u3064\u3044\u305F\u3061]",
+                meaning_bn: "\u09AE\u09BE\u09B8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09A6\u09BF\u09A8",
+                meaning_en: "first day of the month"
+              }
+            ]
+          },
+          {
+            kanji: "\u4E8C",
+            onyomi: "\u30CB",
+            kunyomi: "\u3075\u305F\u30FB\u3064, \u3075\u305F",
+            meaning_bn: "\u09A6\u09C1\u0987",
+            meaning_en: "two",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u4E8C\u3064[\u3075\u305F\u3064]",
+                meaning_bn: "\u09A6\u09C1\u0987\u099F\u09BF",
+                meaning_en: "two things"
+              },
+              {
+                word_ja: "\u4E8C\u4EBA[\u3075\u305F\u308A]",
+                meaning_bn: "\u09A6\u09C1\u099C\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7",
+                meaning_en: "two people"
+              },
+              {
+                word_ja: "\u4E8C\u6708[\u306B\u304C\u3064]",
+                meaning_bn: "\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09AF\u09BC\u09BE\u09B0\u09BF \u09AE\u09BE\u09B8",
+                meaning_en: "February"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G01-1",
+            pattern_ja: "\u4E94\u6BCD\u97F3 (a-i-u-e-o) \u306E \u767A\u97F3[\u306F\u3064\u304A\u3093]",
+            pattern_bn: "\u09AA\u09BE\u0981\u099A\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B8\u09CD\u09AC\u09B0\u09A7\u09CD\u09AC\u09A8\u09BF\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u09A8\u09BF\u09AF\u09BC\u09AE",
+            explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u09AC\u09B0\u09CD\u09A3 \u09A0\u09BF\u0995 \u098F\u0995\u099F\u09BF \u09AE\u09CB\u09B0\u09BE (mora - \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09A4\u09BE\u09B2) \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09C7\u0964 \u09AC\u09BE\u0982\u09B2\u09BE \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AE\u09A4\u09CB \u0995\u09CB\u09A8\u09CB \u09AC\u09B0\u09CD\u09A3\u0995\u09C7 \u099F\u09C7\u09A8\u09C7 \u09B2\u09AE\u09CD\u09AC\u09BE \u0995\u09B0\u09BE \u09AF\u09BE\u09AF\u09BC \u09A8\u09BE \u09AF\u09A6\u09BF \u09A8\u09BE \u09A6\u09CD\u09AC\u09C8\u09A4 \u09B8\u09CD\u09AC\u09B0 \u09AC\u09BE \u09A6\u09C0\u09B0\u09CD\u0998 \u099A\u09BF\u09B9\u09CD\u09A8 \u09A5\u09BE\u0995\u09C7\u0964",
+            common_pitfalls: [
+              "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC '\u0989' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u09C7 \u09A0\u09CB\u0981\u099F \u0985\u09A4\u09BF\u09AE\u09BE\u09A4\u09CD\u09B0\u09BE\u09AF\u09BC \u0997\u09CB\u09B2 \u0995\u09B0\u09BE \u09B9\u09B2\u09C7\u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF '\u3046' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u09C7 \u09A0\u09CB\u0981\u099F \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AE\u09BE\u09A8 \u09A5\u09BE\u0995\u09C7\u0964",
+              "\u3048 \u0995\u09C7 \u09AC\u09BE\u0982\u09B2\u09BE\u09B0 '\u0985\u09CD\u09AF\u09BE' \u098F\u09B0 \u09AE\u09A4\u09CB \u099A\u0993\u09A1\u09BC\u09BE \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u09A8\u09BE \u0995\u09B0\u09C7 \u09B8\u09CD\u09AA\u09B7\u09CD\u099F '\u098F' \u09A7\u09CD\u09AC\u09A8\u09BF\u09A4\u09C7 \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u671D[\u3042\u3055]\u3001\u3042\u3055\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+                bn: "\u09B8\u0995\u09BE\u09B2\u09C7 \u09A8\u09BE\u09B6\u09A4\u09BE \u0996\u09BE\u0987\u0964",
+                en: "In the morning, I eat breakfast."
+              },
+              {
+                ja: "\u3044\u3044\u5929\u6C17[\u3066\u3093\u304D]\u3067\u3059\u306D\u3002",
+                bn: "\u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE, \u09A4\u09BE\u0987 \u09A8\u09BE?",
+                en: "It is nice weather, isn't it?"
+              }
+            ]
+          },
+          {
+            point_id: "G01-2",
+            pattern_ja: "\u7B46\u9806[\u3072\u3064\u3058\u3085\u3093] (\u66F8\u304D\u9806) \u306E \u57FA\u672C\u898F\u5247[\u304D\u307B\u3093\u304D\u305D\u304F]",
+            pattern_bn: "\u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0\u09C7\u09B0 \u09AE\u09CC\u09B2\u09BF\u0995 \u09A8\u09BF\u09AF\u09BC\u09AE\u09BE\u09AC\u09B2\u09C0",
+            explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09B0\u09CD\u09A3 \u09B2\u09C7\u0996\u09BE\u09B0 \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09A8\u09BF\u09AF\u09BC\u09AE: \u09E7. \u0989\u09AA\u09B0 \u09A5\u09C7\u0995\u09C7 \u09A8\u09BF\u099A\u09C7, \u09E8. \u09AC\u09BE\u09AE \u09A5\u09C7\u0995\u09C7 \u09A1\u09BE\u09A8\u09C7, \u09E9. \u0985\u09A8\u09C1\u09AD\u09C2\u09AE\u09BF\u0995 \u09B0\u09C7\u0996\u09BE \u0989\u09B2\u09CD\u09B2\u09AE\u09CD\u09AC \u09B0\u09C7\u0996\u09BE\u09B0 \u0986\u0997\u09C7 \u09B2\u09C7\u0996\u09BE \u09B9\u09AF\u09BC\u0964 \u09B8\u09A0\u09BF\u0995 \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0\u09C7 \u09B2\u09BF\u0996\u09B2\u09C7 \u09B9\u09BE\u09A4\u09C7\u09B0 \u09B2\u09C7\u0996\u09BE \u09B8\u09CD\u09AC\u09A4\u0983\u09B8\u09CD\u09AB\u09C2\u09B0\u09CD\u09A4 \u0993 \u09AA\u09BE\u09A0\u09AF\u09CB\u0997\u09CD\u09AF \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u0985\u0995\u09CD\u09B7\u09B0 \u0986\u0981\u0995\u09BE (drawing) \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE, \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1 \u0993 \u09B6\u09C7\u09B7 (\u6B62\u3081\u30FB\u306F\u306D\u30FB\u306F\u3089\u3044) \u09AC\u099C\u09BE\u09AF\u09BC \u09B0\u09C7\u0996\u09C7 \u09B2\u09BF\u0996\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964",
+              "\u3042 \u09B2\u09C7\u0996\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09AF\u09BC \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995\u099F\u09BF \u0989\u09B2\u09CD\u09B2\u09AE\u09CD\u09AC\u09AD\u09BE\u09AC\u09C7 \u0995\u09BF\u099B\u09C1\u099F\u09BE \u09AC\u09BE\u0981\u0995\u09BF\u09AF\u09BC\u09C7 \u09A4\u09C3\u09A4\u09C0\u09AF\u09BC \u09AC\u09C3\u09A4\u09CD\u09A4\u09BE\u0995\u09BE\u09B0 \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09AE\u099E\u09CD\u099C\u09B8\u09CD\u09AF \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6B63[\u305F\u3060]\u3057\u3044\u9806\u5E8F[\u3058\u3085\u3093\u3058\u3087]\u3067\u66F8[\u304B]\u304D\u307E\u3059\u3002",
+                bn: "\u09B8\u09A0\u09BF\u0995 \u0995\u09CD\u09B0\u09AE\u09C7 \u09B2\u09BF\u0996\u09BF\u0964",
+                en: "Write in the correct order."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09B8\u09CD\u0995\u09C1\u09B2\u09C7\u09B0 \u09B6\u09CD\u09B0\u09C7\u09A3\u09C0\u0995\u0995\u09CD\u09B7\u09C7 \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0993 \u09A8\u09A4\u09C1\u09A8 \u099B\u09BE\u09A4\u09CD\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09A6\u09BF\u09A8\u09C7\u09B0 \u09A7\u09CD\u09AC\u09A8\u09BF \u09A1\u09CD\u09B0\u09BF\u09B2\u0964",
+          situation_en: "First day phonetic drill in a Japanese language classroom between teacher and student.",
+          lines: [
+            {
+              speaker_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+              speaker_en: "Teacher",
+              line_ja: "\u307F\u306A\u3055\u3093\u3001\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A \u3092 \u767A\u97F3[\u306F\u3064\u304A\u3093]\u3057\u307E\u3057\u3087\u3046\u3002",
+              line_bn: "\u09B8\u09AC\u09BE\u0987, \u0986\u09B8\u09C1\u09A8 '\u0986-\u0987-\u0989-\u098F-\u0993' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09BF\u0964",
+              line_en: "Everyone, let's pronounce a-i-u-e-o."
+            },
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]",
+              speaker_en: "Student",
+              line_ja: "\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A\uFF01",
+              line_bn: "\u0986 - \u0987 - \u0989 - \u098F - \u0993!",
+              line_en: "A - I - U - E - O!"
+            },
+            {
+              speaker_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+              speaker_en: "Teacher",
+              line_ja: "\u4E0A\u624B[\u3058\u3087\u3046\u305A]\u3067\u3059\u306D\u3002\u53E3[\u304F\u3061]\u3092\u5927[\u304A\u304A]\u304D\u304F\u958B[\u3042]\u3051\u3066\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7\u0964 \u09AE\u09C1\u0996\u099F\u09BF \u098F\u0995\u099F\u09C1 \u09AC\u09A1\u09BC \u0995\u09B0\u09C7 \u0996\u09C1\u09B2\u09C1\u09A8\u0964",
+              line_en: "Very good! Please open your mouth clearly."
+            },
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]",
+              speaker_en: "Student",
+              line_ja: "\u306F\u3044\u3001\u5148\u751F[\u305B\u3093\u305B\u3044]\u3002\u304C\u3093\u3070\u308A\u307E\u3059\u3002",
+              line_bn: "\u099C\u09BF \u09B8\u09CD\u09AF\u09BE\u09B0, \u0986\u09AE\u09BF \u0986\u09A8\u09CD\u09A4\u09B0\u09BF\u0995\u09AD\u09BE\u09AC\u09C7 \u099A\u09C7\u09B7\u09CD\u099F\u09BE \u0995\u09B0\u09AC\u0964",
+              line_en: "Yes, teacher. I will do my best."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09BE\u09A5\u09BE \u09A8\u09BF\u099A\u09C1 \u0995\u09B0\u09C7 \u0985\u09AD\u09BF\u09AC\u09BE\u09A6\u09A8 (\u304A\u8F9E\u5100 - Ojigi) \u098F\u09B0 \u09AE\u09CC\u09B2\u09BF\u0995 \u0986\u09A6\u09AC\u0995\u09C7\u09A4\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09BE\u09B0\u0993 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u09B9\u09B2\u09C7 \u09B9\u09BE\u09A4 \u09AE\u09C7\u09B2\u09BE\u09A8\u09CB\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 \u09AE\u09BE\u09A5\u09BE \u09A8\u09BF\u099A\u09C1 \u0995\u09B0\u09C7 \u09AC\u09BF\u09A8\u09C0\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE (Ojigi) \u09AC\u09C7\u09B6\u09BF \u09AA\u09CD\u09B0\u09B6\u0982\u09B8\u09BF\u09A4\u0964 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0 \u09AC\u09BE \u09AA\u09B0\u09BF\u099A\u09BF\u09A4\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09E7\u09EB \u09A1\u09BF\u0997\u09CD\u09B0\u09BF (Eshaku) \u098F\u09AC\u0982 \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09AC\u09BE \u0995\u09B0\u09CD\u09AE\u09B8\u09CD\u09A5\u09B2\u09C7\u09B0 \u09B8\u09C1\u09AA\u09BE\u09B0\u09AD\u09BE\u0987\u099C\u09BE\u09B0\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09E9\u09E6 \u09A1\u09BF\u0997\u09CD\u09B0\u09BF (Keirei) \u09AE\u09BE\u09A5\u09BE \u09A8\u09BF\u099A\u09C1 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u099A\u09CB\u0996\u09C7 \u09A4\u09BE\u0995\u09BF\u09AF\u09BC\u09C7 \u09A5\u09BE\u0995\u09BE\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 \u0998\u09BE\u09A1\u09BC \u09B8\u09CB\u099C\u09BE \u09B0\u09C7\u0996\u09C7 \u09B6\u09B0\u09C0\u09B0 \u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF \u09A8\u09CB\u09AF\u09BC\u09BE\u09A8\u09CB \u09AD\u09A6\u09CD\u09B0\u09A4\u09BE\u09B0 \u09AA\u09CD\u09B0\u09A4\u09C0\u0995\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u611B[\u3042\u3044]",
+            romaji_input: "ai",
+            target_display: "\u3042\u3044",
+            meaning_bn: "\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE"
+          },
+          {
+            prompt_ja: "\u5BB6[\u3044\u3048]",
+            romaji_input: "ie",
+            target_display: "\u3044\u3048",
+            meaning_bn: "\u09AC\u09BE\u09A1\u09BC\u09BF"
+          },
+          {
+            prompt_ja: "\u4E0A[\u3046\u3048]",
+            romaji_input: "ue",
+            target_display: "\u3046\u3048",
+            meaning_bn: "\u0989\u09AA\u09B0\u09C7"
+          },
+          {
+            prompt_ja: "\u9752[\u3042\u304A]",
+            romaji_input: "ao",
+            target_display: "\u3042\u304A",
+            meaning_bn: "\u09A8\u09C0\u09B2"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L01-1",
+            question_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E \u4E94\u6BCD\u97F3[\u3054\u307C\u3044\u3093]\u306E \u6B63[\u305F\u3060]\u3057\u3044 \u9806\u5E8F[\u3058\u3085\u3093\u3058\u3087]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AA\u09BE\u0981\u099A\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u09B8\u09A0\u09BF\u0995 \u0995\u09CD\u09B0\u09AE \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A",
+              "\u3042\u30FB\u3046\u30FB\u3044\u30FB\u304A\u30FB\u3048",
+              "\u304B\u30FB\u304D\u30FB\u304F\u30FB\u3051\u30FB\u3053",
+              "\u3042\u30FB\u3048\u30FB\u3044\u30FB\u304A\u30FB\u3046"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u0997\u09CB\u099C\u09C1\u0993\u09A8 (\u4E94\u5341\u97F3) \u099B\u0995\u09C7 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u09B8\u09A0\u09BF\u0995 \u0995\u09CD\u09B0\u09AE \u09B9\u09B2\u09CB a, i, u, e, o (\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A)\u0964"
+          },
+          {
+            quiz_id: "Q-L01-2",
+            question_ja: "\u300C\u3044\u3048\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3044\u3048\u2019 (ie) \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09B8\u09A0\u09BF\u0995 \u0985\u09B0\u09CD\u09A5 \u0995\u09C0?",
+            options: [
+              "\u09AC\u09BE\u09A1\u09BC\u09BF / \u0998\u09B0 (House)",
+              "\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE (Love)",
+              "\u09A8\u09C0\u09B2 \u09B0\u0982 (Blue)",
+              "\u0989\u09AA\u09B0\u09C7 (Above)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3044\u3048 (\u5BB6) \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u0985\u09B0\u09CD\u09A5 \u09AC\u09BE\u09A1\u09BC\u09BF \u09AC\u09BE \u09AC\u09BE\u09B8\u09B8\u09CD\u09A5\u09BE\u09A8\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L02",
+          lesson_number: 2,
+          module_number: 0,
+          module_name: "Script & Numbers",
+          module_name_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u0993 \u09B8\u0982\u0996\u09CD\u09AF\u09BE",
+          title_ja: "\u304B\u3055\u305F\u306A",
+          title_en: "Ka, Sa, Ta, Na Rows & Dakuten Voicing",
+          title_bn: "\u0995\u09BE, \u09B8\u09BE, \u09A4\u09BE, \u09A8\u09BE \u09B8\u09BE\u09B0\u09BF \u098F\u09AC\u0982 \u09AF\u09C1\u0995\u09CD\u09A4\u09A7\u09CD\u09AC\u09A8\u09BF (\u09A6\u09BE\u0995\u09C1\u0993\u09A8)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09BE (ka), \u09B8\u09BE (sa), \u09A4\u09BE (ta) \u098F\u09AC\u0982 \u09A8\u09BE (na) \u09B8\u09BE\u09B0\u09BF\u09B0 \u09AE\u09CB\u099F \u09E8\u09E6\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09AC\u09B0\u09CD\u09A3\u0964 \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7\u6FC1\u97F3 (Dakuten \u309B) \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7 ka\u53D8\u4E3Aga, sa\u53D8\u4E3Aza \u098F\u09AC\u0982 ta\u53D8\u4E3Ada \u09A7\u09CD\u09AC\u09A8\u09BF \u09B8\u09C3\u09B7\u09CD\u099F\u09BF \u0995\u09B0\u09C7\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 \u0995 \u09A5\u09C7\u0995\u09C7 \u0997, \u099A \u09A5\u09C7\u0995\u09C7 \u099C \u09B9\u09AF\u09BC, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u0985\u0995\u09CD\u09B7\u09B0\u09C7\u09B0 \u0989\u09AA\u09B0\u09C7 \u09A6\u09C1\u099F\u09BF \u099B\u09CB\u099F \u099F\u09BE\u09A8 (\u309B) \u09A6\u09BF\u09AF\u09BC\u09C7 \u098F\u0987 \u09A7\u09CD\u09AC\u09A8\u09BF \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0998\u099F\u09C7\u0964",
+          core_concept_bn: "\u0995\u09A3\u09CD\u09A0\u09A8\u09BE\u09B2\u09C0\u09AF\u09BC \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09A7\u09CD\u09AC\u09A8\u09BF \u0993 \u09A6\u09BE\u0995\u09C1\u0993\u09A8 \u099A\u09BF\u09B9\u09CD\u09A8\u09C7\u09B0 \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7 \u09A7\u09CD\u09AC\u09A8\u09BF \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0986\u09A4\u09CD\u09AE\u09B8\u09CD\u09A5 \u0995\u09B0\u09BE\u0964",
+          real_world_context_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u099B\u09BE\u09A4\u09BE (kasa), \u09AE\u09BE\u099B (sakana), \u09AC\u09BE \u0998\u09A1\u09BC\u09BF (tokei) \u09B8\u09A0\u09BF\u0995\u09AD\u09BE\u09AC\u09C7 \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u3055 \u09B8\u09BE\u09B0\u09BF\u09B0 \u09E9\u09AF\u09BC \u09AC\u09B0\u09CD\u09A3\u099F\u09BF 'si' \u09A8\u09AF\u09BC \u09AC\u09B0\u0982 'shi' (\u3057) \u098F\u09AC\u0982 \u305F \u09B8\u09BE\u09B0\u09BF\u09B0 \u09E8\u09AF\u09BC \u0993 \u09E9\u09AF\u09BC \u09AC\u09B0\u09CD\u09A3 'chi' (\u3061) \u0993 'tsu' (\u3064)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u5098[\u304B\u3055]",
+            romaji: "kasa",
+            meaning_bn: "\u099B\u09BE\u09A4\u09BE",
+            meaning_en: "umbrella",
+            part_of_speech: "noun",
+            example_ja: "\u96E8[\u3042\u3081]\u3067\u3059\u304B\u3089\u3001\u5098[\u304B\u3055]\u3092\u6301[\u3082]\u3063\u3066\u3044\u304D\u307E\u3059\u3002",
+            example_bn: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u099A\u09CD\u099B\u09C7, \u099B\u09BE\u09A4\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u09AF\u09BE\u09AC\u0964",
+            example_en: "Since it is raining, I will take an umbrella."
+          },
+          {
+            word_ja: "\u9B5A[\u3055\u304B\u306A]",
+            romaji: "sakana",
+            meaning_bn: "\u09AE\u09BE\u099B",
+            meaning_en: "fish",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u9B5A[\u3055\u304B\u306A]\u306F\u304A\u3044\u3057\u3044\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AE\u09BE\u099B \u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1\u0964",
+            example_en: "Japanese fish is delicious."
+          },
+          {
+            word_ja: "\u8089[\u306B\u304F]",
+            romaji: "niku",
+            meaning_bn: "\u09AE\u09BE\u0982\u09B8",
+            meaning_en: "meat",
+            part_of_speech: "noun",
+            example_ja: "\u725B\u8089[\u304E\u3085\u3046\u306B\u304F]\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+            example_bn: "\u0997\u09B0\u09C1\u09B0 \u09AE\u09BE\u0982\u09B8 \u0996\u09BE\u0987\u0964",
+            example_en: "I eat beef."
+          },
+          {
+            word_ja: "\u732B[\u306D\u3053]",
+            romaji: "neko",
+            meaning_bn: "\u09AC\u09BF\u09A1\u09BC\u09BE\u09B2",
+            meaning_en: "cat",
+            part_of_speech: "noun",
+            example_ja: "\u767D[\u3057\u308D]\u3044\u732B[\u306D\u3053]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u098F\u0995\u099F\u09BF \u09B8\u09BE\u09A6\u09BE \u09AC\u09BF\u09A1\u09BC\u09BE\u09B2 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a white cat."
+          },
+          {
+            word_ja: "\u72AC[\u3044\u306C]",
+            romaji: "inu",
+            meaning_bn: "\u0995\u09C1\u0995\u09C1\u09B0",
+            meaning_en: "dog",
+            part_of_speech: "noun",
+            example_ja: "\u516C\u5712[\u3053\u3046\u3048\u3093]\u306B\u72AC[\u3044\u306C]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09BE\u09B0\u09CD\u0995\u09C7 \u0995\u09C1\u0995\u09C1\u09B0 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a dog in the park."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4E09",
+            onyomi: "\u30B5\u30F3",
+            kunyomi: "\u307F\u3063\u30FB\u3064, \u307F, \u307F\u30FB\u3064",
+            meaning_bn: "\u09A4\u09BF\u09A8",
+            meaning_en: "three",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u4E09\u3064[\u307F\u3063\u3064]",
+                meaning_bn: "\u09A4\u09BF\u09A8\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8",
+                meaning_en: "three items"
+              },
+              {
+                word_ja: "\u4E09\u4EBA[\u3055\u3093\u306B\u3093]",
+                meaning_bn: "\u09A4\u09BF\u09A8\u099C\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7",
+                meaning_en: "three people"
+              },
+              {
+                word_ja: "\u4E09\u6708[\u3055\u3093\u304C\u3064]",
+                meaning_bn: "\u09AE\u09BE\u09B0\u09CD\u099A \u09AE\u09BE\u09B8",
+                meaning_en: "March"
+              }
+            ]
+          },
+          {
+            kanji: "\u56DB",
+            onyomi: "\u30B7",
+            kunyomi: "\u3088\u3063\u30FB\u3064, \u3088\u3093, \u3088",
+            meaning_bn: "\u099A\u09BE\u09B0",
+            meaning_en: "four",
+            stroke_count: 5,
+            compounds: [
+              {
+                word_ja: "\u56DB\u3064[\u3088\u3063\u3064]",
+                meaning_bn: "\u099A\u09BE\u09B0\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8",
+                meaning_en: "four items"
+              },
+              {
+                word_ja: "\u56DB\u4EBA[\u3088\u306B\u3093]",
+                meaning_bn: "\u099A\u09BE\u09B0\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+                meaning_en: "four people"
+              },
+              {
+                word_ja: "\u56DB\u6708[\u3057\u304C\u3064]",
+                meaning_bn: "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2 \u09AE\u09BE\u09B8",
+                meaning_en: "April"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G02-1",
+            pattern_ja: "\u6FC1\u97F3[\u3060\u304F\u304A\u3093] (Dakuten \u309B) \u306E \u767A\u97F3\u898F\u5247[\u306F\u3064\u304A\u3093\u304D\u305D\u304F]",
+            pattern_bn: "\u09A6\u09BE\u0995\u09C1\u0993\u09A8 \u099A\u09BF\u09B9\u09CD\u09A8\u09C7\u09B0 \u09B8\u09CD\u09AC\u09B0 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0",
+            explanation_bn: "\u0995\u09BE, \u09B8\u09BE, \u09A4\u09BE \u09B8\u09BE\u09B0\u09BF\u0997\u09C1\u09B2\u09CB\u09B0 \u09A1\u09BE\u09A8\u09AA\u09BE\u09B6\u09C7 \u09A6\u09C1\u099F\u09BF \u09A6\u09BE\u0997 (\u309B) \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09B2\u09C7 \u0998\u09CB\u09B7 \u09A7\u09CD\u09AC\u09A8\u09BF\u09A4\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC: \u304B(ka)->\u304C(ga), \u3055(sa)->\u3056(za), \u305F(ta)->\u3060(da)\u0964",
+            common_pitfalls: [
+              "\u3058 (ji) \u098F\u09AC\u0982 \u3062 (ji/dji) \u098F\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u098F\u0995\u0987 \u09B9\u09B2\u09C7\u0993 \u0986\u09A7\u09C1\u09A8\u09BF\u0995 \u09AC\u09BE\u09A8\u09BE\u09A8\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u3058 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+              "\u305A (zu) \u098F\u09AC\u0982 \u3065 (zu/dzu) \u098F\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7\u0993 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u305A \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u307F\u305A - \u099C\u09B2)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u5927\u5B66[\u3060\u3044\u304C\u304F]\u306B\u884C[\u3044]\u304D\u307E\u3059\u3002",
+                bn: "\u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7 \u09AF\u09BE\u0987\u0964",
+                en: "I go to university."
+              },
+              {
+                ja: "\u6C34[\u307F\u305A]\u3092\u98F2[\u306E]\u307F\u307E\u3059\u3002",
+                bn: "\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF\u0964",
+                en: "I drink water."
+              }
+            ]
+          },
+          {
+            point_id: "G02-2",
+            pattern_ja: "\u4FC3\u97F3[\u305D\u304F\u304A\u3093] (\u5C0F[\u3061\u3044]\u3055\u3044\u300C\u3063\u300D) \u306E \u8A70[\u3064]\u307E\u308B \u97F3[\u304A\u3068]",
+            pattern_bn: "\u099B\u09CB\u099F '\u3063' (Sokuon) \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09A6\u09CD\u09AC\u09BF\u09A4\u09CD\u09AC \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09A7\u09CD\u09AC\u09A8\u09BF \u0997\u09A0\u09A8",
+            explanation_bn: "\u099B\u09CB\u099F '\u3063' \u098F\u0995\u09BE \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC \u09A8\u09BE, \u098F\u099F\u09BF \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1\u09A4\u09C7 \u098F\u0995 \u09AE\u09CB\u09B0\u09BE \u09AC\u09BF\u09B0\u09A4\u09BF \u09AC\u09BE \u09B6\u09CD\u09AC\u09BE\u09B8 \u099A\u09C7\u09AA\u09C7 \u09B0\u09BE\u0996\u09BE (glottal stop) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u304D\u3063\u3066 (kitte - \u09A1\u09BE\u0995\u099F\u09BF\u0995\u09BF\u099F), \u304D\u3063\u3077 (kippu - \u099F\u09BF\u0995\u09BF\u099F)\u0964",
+            common_pitfalls: [
+              "\u099B\u09CB\u099F \u3063 \u098F\u09AC\u0982 \u09AC\u09A1\u09BC \u3064 \u098F\u0995 \u0986\u0995\u09BE\u09B0\u09C7\u09B0 \u09B2\u09C7\u0996\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE; \u099B\u09CB\u099F \u3063 \u09AE\u09C2\u09B2 \u0985\u0995\u09CD\u09B7\u09B0\u09C7\u09B0 \u098F\u0995-\u099A\u09A4\u09C1\u09B0\u09CD\u09A5\u09BE\u0982\u09B6 \u0986\u0995\u09BE\u09B0\u09C7 \u09A8\u09BF\u099A\u09C7 \u09AC\u09B8\u09C7\u0964",
+              "\u09AC\u09BF\u09B0\u09A4\u09BF \u09A8\u09BE \u09A6\u09BF\u09B2\u09C7 '\u304D\u3066' (\u098F\u09B8\u09CB) \u098F\u09AC\u0982 '\u304D\u3063\u3066' (\u09A1\u09BE\u0995\u099F\u09BF\u0995\u09BF\u099F) \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0986\u09B2\u09BE\u09A6\u09BE \u0985\u09B0\u09CD\u09A5 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u5207\u7B26[\u304D\u3063\u3077]\u3092\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u3002",
+                bn: "\u099F\u09BF\u0995\u09BF\u099F \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964",
+                en: "I bought a ticket."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u099F\u09BF\u0995\u09BF\u099F \u0995\u09C7\u09A8\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B8\u09A0\u09BF\u0995 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u0964",
+          situation_en: "Purchasing train ticket at Tokyo station maintaining accurate pronunciation.",
+          lines: [
+            {
+              speaker_ja: "\u4E57\u5BA2[\u3058\u3087\u3046\u304D\u3083\u304F]",
+              speaker_en: "Passenger",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u65B0\u5BBF[\u3057\u3093\u3058\u3085\u304F]\u307E\u3067\u306E\u5207\u7B26[\u304D\u3063\u3077]\u3092\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u09B6\u09BF\u09A8\u099C\u09C1\u0995\u09C1\u09B0 \u099F\u09BF\u0995\u09BF\u099F \u09A6\u09BF\u09A8\u0964",
+              line_en: "Excuse me, please give me a ticket to Shinjuku."
+            },
+            {
+              speaker_ja: "\u99C5\u54E1[\u3048\u304D\u3044\u3093]",
+              speaker_en: "Station Staff",
+              line_ja: "\u306F\u3044\u3001\u4E8C\u767E\u5186[\u306B\u3072\u3083\u304F\u3048\u3093]\u3067\u3059\u3002",
+              line_bn: "\u099C\u09BF, \u09A6\u09C1\u0987\u09B6\u09A4 \u0987\u09AF\u09BC\u09C7\u09A8\u0964",
+              line_en: "Yes, it is 200 yen."
+            },
+            {
+              speaker_ja: "\u4E57\u5BA2[\u3058\u3087\u3046\u304D\u3083\u304F]",
+              speaker_en: "Passenger",
+              line_ja: "\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002",
+              line_bn: "\u0986\u09AA\u09A8\u09BE\u0995\u09C7 \u0985\u09A8\u09C7\u0995 \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6\u0964",
+              line_en: "Thank you very much."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09A8\u09C0\u09B0\u09AC\u09A4\u09BE \u0993 \u09AB\u09CB\u09A8\u09C7 \u0995\u09A5\u09BE \u09A8\u09BE \u09AC\u09B2\u09BE\u09B0 \u09AD\u09A6\u09CD\u09B0\u09A4\u09BE (Manner Mode)",
+          tip_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0993 \u09AC\u09BE\u09B8\u09C7 \u09AE\u09CB\u09AC\u09BE\u0987\u09B2 \u09AB\u09CB\u09A8 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09B8\u09BE\u0987\u09B2\u09C7\u09A8\u09CD\u099F \u09AC\u09BE 'Manner Mode' \u098F \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09AC\u09B8\u09C7 \u09AB\u09CB\u09A8\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE \u09AE\u09BE\u09B0\u09BE\u09A4\u09CD\u09AE\u0995 \u0985\u09AD\u09A6\u09CD\u09B0\u09A4\u09BE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u0997\u09A3\u09CD\u09AF \u09B9\u09AF\u09BC\u0964 \u09AF\u09A6\u09BF \u099C\u09B0\u09C1\u09B0\u09BF \u0995\u09B2 \u0986\u09B8\u09C7, \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09A8\u09C7\u09AE\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09AE\u09BE\u099C\u09C7\u09B0 \u0995\u09A0\u09CB\u09B0 \u0985\u09B2\u09BF\u0996\u09BF\u09A4 \u09A8\u09BF\u09AF\u09BC\u09AE\u0964",
+          category: "Transport"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u5098[\u304B\u3055]",
+            romaji_input: "kasa",
+            target_display: "\u304B\u3055",
+            meaning_bn: "\u099B\u09BE\u09A4\u09BE"
+          },
+          {
+            prompt_ja: "\u9B5A[\u3055\u304B\u306A]",
+            romaji_input: "sakana",
+            target_display: "\u3055\u304B\u306A",
+            meaning_bn: "\u09AE\u09BE\u099B"
+          },
+          {
+            prompt_ja: "\u5207\u7B26[\u304D\u3063\u3077]",
+            romaji_input: "kippu",
+            target_display: "\u304D\u3063\u3077",
+            meaning_bn: "\u099F\u09BF\u0995\u09BF\u099F"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L02-1",
+            question_ja: "\u300C\u3055\u304B\u306A\u300D\u306E \u6F22\u5B57[\u304B\u3093\u3058]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3055\u304B\u306A\u2019 (sakana) \u098F\u09B0 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u09AE\u09BE\u099B (Fish)",
+              "\u09AE\u09BE\u0982\u09B8 (Meat)",
+              "\u099B\u09BE\u09A4\u09BE (Umbrella)",
+              "\u0995\u09C1\u0995\u09C1\u09B0 (Dog)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3055\u304B\u306A (\u9B5A) \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u0985\u09B0\u09CD\u09A5 \u09AE\u09BE\u099B\u0964"
+          },
+          {
+            quiz_id: "Q-L02-2",
+            question_ja: "\u5C0F[\u3061\u3044]\u3055\u3044\u300C\u3063\u300D\u304C \u5165[\u306F\u3044]\u308B \u5358\u8A9E[\u305F\u3093\u3054]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u099B\u09CB\u099F '\u3063' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u5207\u7B26[\u304D\u3063\u3077]",
+              "\u306D\u3053",
+              "\u3044\u306C",
+              "\u3055\u304B\u306A"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u304D\u3063\u3077 (\u5207\u7B26) \u09B6\u09AC\u09CD\u09A6\u099F\u09BF\u09A4\u09C7 \u099B\u09CB\u099F '\u3063' (sokuon) \u09B0\u09AF\u09BC\u09C7\u099B\u09C7 \u09AF\u09BE 'pp' \u09A6\u09CD\u09AC\u09BF\u09A4\u09CD\u09AC \u09A7\u09CD\u09AC\u09A8\u09BF \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09C7\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L03",
+          lesson_number: 3,
+          module_number: 0,
+          module_name: "Script & Numbers",
+          module_name_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u0993 \u09B8\u0982\u0996\u09CD\u09AF\u09BE",
+          title_ja: "\u306F\u307E\u3084\u3089\u308F",
+          title_en: "Ha, Ma, Ya, Ra, Wa Rows & Handakuten",
+          title_bn: "\u09B9\u09BE, \u09AE\u09BE, \u0987\u09AF\u09BC\u09BE, \u09B0\u09BE, \u0993\u09AF\u09BC\u09BE \u09B8\u09BE\u09B0\u09BF \u0993 \u09B9\u09BE\u09A8\u09A6\u09BE\u0995\u09C1\u0993\u09A8",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE\u09B0 \u09B6\u09C7\u09B7\u09BE\u09B0\u09CD\u09A7: \u306F (ha), \u307E (ma), \u3084 (ya), \u3089 (ra), \u308F (wa) \u098F\u09AC\u0982 \u09AC\u09BF\u09B6\u09C7\u09B7 \u09A8\u09BE\u09B8\u09BF\u0995\u09CD\u09AF \u09A7\u09CD\u09AC\u09A8\u09BF \u3093 (n)\u0964 \u306F \u09B8\u09BE\u09B0\u09BF\u09B0 \u0989\u09AA\u09B0 \u099B\u09CB\u099F \u09AC\u09C3\u09A4\u09CD\u09A4 (\u309C- Handakuten) \u09AF\u09CB\u0997 \u09B9\u09AF\u09BC\u09C7 pa, pi, pu, pe, po \u09A7\u09CD\u09AC\u09A8\u09BF \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09C7\u0964 \u098F\u099B\u09BE\u09A1\u09BC\u09BE \u3084, \u3086, \u3088 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7 \u62D7\u97F3 (Y\u014Don) \u09AF\u09C7\u09AE\u09A8 \u304D\u3083 (kya), \u3057\u3085 (shu), \u3061\u3087 (cho) \u0997\u09A0\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09B9\u09BE\u09A8\u09A6\u09BE\u0995\u09C1\u0993\u09A8 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0, \u09A8\u09CD\u09AF\u09BE\u09B8\u09BE\u09B2 '\u3093' \u098F\u09B0 \u09AC\u09C8\u099A\u09BF\u09A4\u09CD\u09B0\u09CD\u09AF \u098F\u09AC\u0982 \u09AF\u09CC\u0997\u09BF\u0995 \u09A7\u09CD\u09AC\u09A8\u09BF (Y\u014Don) \u0986\u09AF\u09BC\u09A4\u09CD\u09A4 \u0995\u09B0\u09BE\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09A8\u09BE\u09AE, \u09A0\u09BF\u0995\u09BE\u09A8\u09BE, \u09AC\u0987 (hon), \u09AB\u09C1\u09B2 (hana) \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF\u09B0 \u09B8\u09A0\u09BF\u0995 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0993 \u09B2\u09BF\u09AA\u09BF\u0995\u09B0\u09A3\u0964",
+          key_takeaway_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF '\u3089' \u09B8\u09BE\u09B0\u09BF \u09AC\u09BE\u0982\u09B2\u09BE '\u09B0' \u098F\u09AC\u0982 '\u09B2' \u098F\u09B0 \u09AE\u09BE\u099D\u09BE\u09AE\u09BE\u099D\u09BF \u098F\u0995 \u0986\u09B2\u09A4\u09CB \u099C\u09BF\u09B9\u09CD\u09AC\u09BE\u09B0 \u099F\u09CB\u0995\u09BE\u09AF\u09BC \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC (Liquid tap)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u82B1[\u306F\u306A]",
+            romaji: "hana",
+            meaning_bn: "\u09AB\u09C1\u09B2",
+            meaning_en: "flower",
+            part_of_speech: "noun",
+            example_ja: "\u685C[\u3055\u304F\u3089]\u306E\u82B1[\u306F\u306A]\u304C\u304D\u308C\u3044\u3067\u3059\u3002",
+            example_bn: "\u099A\u09C7\u09B0\u09BF \u09AB\u09C1\u09B2 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0\u0964",
+            example_en: "Cherry blossoms are beautiful."
+          },
+          {
+            word_ja: "\u5C71[\u3084\u307E]",
+            romaji_input: "yama",
+            romaji: "yama",
+            meaning_bn: "\u09AA\u09BE\u09B9\u09BE\u09A1\u09BC / \u09AA\u09B0\u09CD\u09AC\u09A4",
+            meaning_en: "mountain",
+            part_of_speech: "noun",
+            example_ja: "\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306F\u9AD8[\u305F\u304B]\u3044\u5C71[\u3084\u307E]\u3067\u3059\u3002",
+            example_bn: "\u09AB\u09C1\u099C\u09BF \u098F\u0995\u099F\u09BF \u0989\u0981\u099A\u09C1 \u09AA\u09B0\u09CD\u09AC\u09A4\u0964",
+            example_en: "Mt. Fuji is a tall mountain."
+          },
+          {
+            word_ja: "\u5DDD[\u304B\u308F]",
+            romaji: "kawa",
+            meaning_bn: "\u09A8\u09A6\u09C0",
+            meaning_en: "river",
+            part_of_speech: "noun",
+            example_ja: "\u3053\u306E\u5DDD[\u304B\u308F]\u306E\u6C34[\u307F\u305A]\u306F\u51B7[\u3064\u3081]\u305F\u3044\u3067\u3059\u3002",
+            example_bn: "\u098F\u0987 \u09A8\u09A6\u09C0\u09B0 \u09AA\u09BE\u09A8\u09BF \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE\u0964",
+            example_en: "The water of this river is cold."
+          },
+          {
+            word_ja: "\u672C[\u307B\u3093]",
+            romaji: "hon",
+            meaning_bn: "\u09AC\u0987",
+            meaning_en: "book",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u307F\u307E\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AC\u0987 \u09AA\u09A1\u09BC\u09BF\u0964",
+            example_en: "I read a Japanese book."
+          },
+          {
+            word_ja: "\u79C1[\u308F\u305F\u3057]",
+            romaji: "watashi",
+            meaning_bn: "\u0986\u09AE\u09BF",
+            meaning_en: "I / me",
+            part_of_speech: "pronoun",
+            example_ja: "\u79C1[\u308F\u305F\u3057]\u306F\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5\u4EBA[\u3058\u3093]\u3067\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BF \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09BF\u0964",
+            example_en: "I am Bangladeshi."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4E94",
+            onyomi: "\u30B4",
+            kunyomi: "\u3044\u3064\u30FB\u3064, \u3044\u3064",
+            meaning_bn: "\u09AA\u09BE\u0981\u099A",
+            meaning_en: "five",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u4E94\u3064[\u3044\u3064\u3064]",
+                meaning_bn: "\u09AA\u09BE\u0981\u099A\u099F\u09BF",
+                meaning_en: "five items"
+              },
+              {
+                word_ja: "\u4E94\u4EBA[\u3054\u306B\u3093]",
+                meaning_bn: "\u09AA\u09BE\u0981\u099A\u099C\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7",
+                meaning_en: "five people"
+              },
+              {
+                word_ja: "\u4E94\u6708[\u3054\u304C\u3064]",
+                meaning_bn: "\u09AE\u09C7 \u09AE\u09BE\u09B8",
+                meaning_en: "May"
+              }
+            ]
+          },
+          {
+            kanji: "\u516D",
+            onyomi: "\u30ED\u30AF",
+            kunyomi: "\u3080\u3063\u30FB\u3064, \u3080\u3044",
+            meaning_bn: "\u099B\u09AF\u09BC",
+            meaning_en: "six",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u516D\u3064[\u3080\u3063\u3064]",
+                meaning_bn: "\u099B\u09AF\u09BC\u099F\u09BF",
+                meaning_en: "six items"
+              },
+              {
+                word_ja: "\u516D\u4EBA[\u308D\u304F\u306B\u3093]",
+                meaning_bn: "\u099B\u09AF\u09BC\u099C\u09A8 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+                meaning_en: "six people"
+              },
+              {
+                word_ja: "\u516D\u6708[\u308D\u304F\u304C\u3064]",
+                meaning_bn: "\u099C\u09C1\u09A8 \u09AE\u09BE\u09B8",
+                meaning_en: "June"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G03-1",
+            pattern_ja: "\u534A\u6FC1\u97F3[\u306F\u3093\u3060\u304F\u304A\u3093] (Handakuten \u309C) \u3068 \u62D7\u97F3[\u3088\u3046\u304A\u3093]",
+            pattern_bn: "\u09B9\u09BE\u09A8\u09A6\u09BE\u0995\u09C1\u0993\u09A8 \u0993 \u09AF\u09CC\u0997\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 (\u304D\u3083\u3001\u3057\u3085\u3001\u3061\u3087)",
+            explanation_bn: "\u306F \u09B8\u09BE\u09B0\u09BF\u09B0 \u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u0989\u09AA\u09B0 \u099B\u09CB\u099F \u09AC\u09C3\u09A4\u09CD\u09A4 (\u309C) \u09AC\u09B8\u09BF\u09AF\u09BC\u09C7 '\u09AA' \u09A7\u09CD\u09AC\u09A8\u09BF \u09A4\u09C8\u09B0\u09BF \u09B9\u09AF\u09BC (\u3071, \u3074, \u3077, \u307A, \u307D)\u0964 \u0986\u09B0 \u3044-\u0995\u09B2\u09BE\u09AE\u09C7\u09B0 \u09AC\u09B0\u09CD\u09A3\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u099B\u09CB\u099F \u3083, \u3085, \u3087 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7 \u09A6\u09CD\u09AC\u09C8\u09A4\u09A7\u09CD\u09AC\u09A8\u09BF \u09AC\u09BE \u0997\u09CD\u09B2\u09BE\u0987\u09A1 \u09A4\u09C8\u09B0\u09BF \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u099B\u09CB\u099F \u3083, \u3085, \u3087 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0986\u0995\u09BE\u09B0\u09C7\u09B0 \u09B2\u09BF\u0996\u09B2\u09C7 \u0985\u09B0\u09CD\u09A5 \u09AC\u09A6\u09B2\u09C7 \u09AF\u09BE\u09AC\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u3073\u3088\u3046\u3044\u3093 - \u09AC\u09BF\u0989\u099F\u09BF \u09AA\u09BE\u09B0\u09CD\u09B2\u09BE\u09B0 vs \u3073\u3087\u3046\u3044\u3093 - \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2)\u0964",
+              "\u3093 \u0995\u0996\u09A8\u09CB \u0995\u09CB\u09A8\u09CB \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1\u09A4\u09C7 \u09AC\u09B8\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7 \u09A8\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]\u306B\u884C[\u3044]\u304D\u307E\u3059\u3002",
+                bn: "\u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AF\u09BE\u09AC\u0964",
+                en: "I will go to the hospital."
+              },
+              {
+                ja: "\u304A\u8336[\u3061\u3083]\u3092\u98F2[\u306E]\u307F\u307E\u3059\u3002",
+                bn: "\u099A\u09BE \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF\u0964",
+                en: "I drink tea."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u09A6\u09BF\u0995\u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE \u099A\u09BE\u0993\u09AF\u09BC\u09BE\u0964",
+          situation_en: "Asking for directions to a hospital in Tokyo.",
+          lines: [
+            {
+              speaker_ja: "\u65C5\u884C\u8005[\u308A\u3087\u3053\u3046\u3057\u3083]",
+              speaker_en: "Traveler",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]\u306F\u3069\u3053\u3067\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?",
+              line_en: "Excuse me, where is the hospital?"
+            },
+            {
+              speaker_ja: "\u901A\u884C\u4EBA[\u3064\u3046\u3053\u3046\u306B\u3093]",
+              speaker_en: "Passerby",
+              line_ja: "\u3042\u305D\u3053\u306B\u5927[\u304A\u304A]\u304D\u306A\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]\u304C\u3042\u308A\u307E\u3059\u3088\u3002",
+              line_bn: "\u0990\u0996\u09BE\u09A8\u09C7 \u098F\u0995\u099F\u09BF \u09AC\u09A1\u09BC \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2 \u0986\u099B\u09C7\u0964",
+              line_en: "There is a large hospital over there."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0986\u09AC\u09B0\u09CD\u099C\u09A8\u09BE \u09AA\u09C3\u09A5\u0995\u09C0\u0995\u09B0\u09A3 (Gomi Bunbetsu - \u30B4\u30DF\u5206\u5225)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u09A1\u09C7 \u09AC\u09B0\u09CD\u099C\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u0995\u09CD\u09AF\u09BE\u099F\u09BE\u0997\u09B0\u09BF\u09A4\u09C7 \u09AB\u09C7\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC: \u09A6\u09BE\u09B9\u09CD\u09AF \u09AC\u09B0\u09CD\u099C\u09CD\u09AF (Moyeru gomi - \u09AA\u09CB\u09A1\u09BC\u09BE\u09A8\u09CB\u09B0 \u09AE\u09A4\u09CB), \u0985\u09A6\u09BE\u09B9\u09CD\u09AF (Moyenai gomi), \u09AA\u09CD\u09B2\u09BE\u09B8\u09CD\u099F\u09BF\u0995 \u09AC\u09CB\u09A4\u09B2 (PET bottles) \u098F\u09AC\u0982 \u0995\u09CD\u09AF\u09BE\u09A8\u0964 \u09AC\u09CB\u09A4\u09B2 \u09AB\u09C7\u09B2\u09BE\u09B0 \u0986\u0997\u09C7 \u09B2\u09C7\u09AC\u09C7\u09B2 \u0996\u09C1\u09B2\u09C7 \u0986\u09B2\u09BE\u09A6\u09BE \u09AC\u09BF\u09A8\u09C7 \u09AB\u09C7\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09B8\u09A0\u09BF\u0995\u09AD\u09BE\u09AC\u09C7 \u09AC\u09B0\u09CD\u099C\u09CD\u09AF \u09AA\u09C3\u09A5\u0995 \u09A8\u09BE \u0995\u09B0\u09B2\u09C7 \u0986\u09AC\u09B0\u09CD\u099C\u09A8\u09BE \u09B8\u0982\u0997\u09CD\u09B0\u09B9\u0995\u09BE\u09B0\u09C0 \u09A4\u09BE \u09B0\u09C7\u0996\u09C7 \u099A\u09B2\u09C7 \u09AF\u09BE\u09AF\u09BC\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u82B1[\u306F\u306A]",
+            romaji_input: "hana",
+            target_display: "\u306F\u306A",
+            meaning_bn: "\u09AB\u09C1\u09B2"
+          },
+          {
+            prompt_ja: "\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]",
+            romaji_input: "byouin",
+            target_display: "\u3073\u3087\u3046\u3044\u3093",
+            meaning_bn: "\u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2"
+          },
+          {
+            prompt_ja: "\u304A\u8336[\u3061\u3083]",
+            romaji_input: "ocha",
+            target_display: "\u304A\u3061\u3083",
+            meaning_bn: "\u099A\u09BE"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L03-1",
+            question_ja: "\u300C\u3073\u3087\u3046\u3044\u3093\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3073\u3087\u3046\u3044\u3093\u2019 (by\u014Din) \u098F\u09B0 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2 (Hospital)",
+              "\u09AC\u09BF\u0989\u099F\u09BF \u09AA\u09BE\u09B0\u09CD\u09B2\u09BE\u09B0 (Beauty salon)",
+              "\u0997\u09CD\u09B0\u09A8\u09CD\u09A5\u09BE\u0997\u09BE\u09B0 (Library)",
+              "\u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981 (Restaurant)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3073\u3087\u3046\u3044\u3093 (\u75C5\u9662) \u0985\u09B0\u09CD\u09A5 \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u0964 \u0985\u09A8\u09CD\u09AF\u09A6\u09BF\u0995\u09C7 \u3073\u3088\u3046\u3044\u3093 (\u7F8E\u5BB9\u9662) \u0985\u09B0\u09CD\u09A5 \u09B0\u09C2\u09AA\u099A\u09B0\u09CD\u099A\u09BE\u0995\u09C7\u09A8\u09CD\u09A6\u09CD\u09B0 \u09AC\u09BE \u09AA\u09BE\u09B0\u09CD\u09B2\u09BE\u09B0\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L04",
+          lesson_number: 4,
+          module_number: 0,
+          module_name: "Script & Numbers",
+          module_name_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u0993 \u09B8\u0982\u0996\u09CD\u09AF\u09BE",
+          title_ja: "\u30AB\u30BF\u30AB\u30CA",
+          title_en: "Katakana Script & Loanwords",
+          title_bn: "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE \u09B2\u09BF\u09AA\u09BF \u0993 \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09B6\u09AC\u09CD\u09A6\u09BE\u09AC\u09B2\u09C0",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE \u09B9\u09B2\u09CB \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09AF\u09BC \u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u09AF\u09BE \u09AE\u09C2\u09B2\u09A4 \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09AD\u09BE\u09B7\u09BE \u09A5\u09C7\u0995\u09C7 \u0986\u0997\u09A4 \u09B6\u09AC\u09CD\u09A6 (\u5916\u6765\u8A9E - Gairaigo), \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09AE\u09BE\u09A8\u09C1\u09B7\u09C7\u09B0 \u09A8\u09BE\u09AE, \u09A6\u09C7\u09B6 \u0993 \u09AC\u09CD\u09B0\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09C7\u09B0 \u09A8\u09BE\u09AE \u09B2\u09C7\u0996\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE\u09B0 \u09AE\u09A4\u09CB \u098F\u09A4\u09C7\u0993 \u09EA\u09EC\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09AC\u09B0\u09CD\u09A3 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u098F\u09B0 \u09B0\u09C2\u09AA \u0995\u09CB\u09A3\u09BE\u0995\u09C3\u09A4\u09BF\u09B0 \u0993 \u09B8\u09B0\u09B2\u09B0\u09C8\u0996\u09BF\u0995\u0964",
+          core_concept_bn: "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09B0 \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995, \u09A6\u09C0\u09B0\u09CD\u0998 \u099A\u09BF\u09B9\u09CD\u09A8 (\u30FC) \u098F\u09AC\u0982 \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u09AC\u09CB\u099D\u09BE\u0964",
+          real_world_context_bn: "\u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u09AF\u09BC \u09AE\u09C7\u09A8\u09C1 \u09AA\u09A1\u09BC\u09BE (\u0995\u09AB\u09BF, \u09B0\u09C1\u099F\u09BF, \u09AC\u09BE\u09B0\u09CD\u0997\u09BE\u09B0), \u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u09C7 \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09AA\u09A3\u09CD\u09AF \u0993 \u0993\u09B7\u09C1\u09A7\u09C7\u09B0 \u09B2\u09C7\u09AC\u09C7\u09B2 \u09AA\u09A1\u09BC\u09BE\u0964",
+          key_takeaway_bn: "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09AF\u09BC \u09A6\u09C0\u09B0\u09CD\u0998 \u09B8\u09CD\u09AC\u09B0\u09A7\u09CD\u09AC\u09A8\u09BF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u098F\u0995\u099F\u09BF \u09B8\u09B0\u09B2 \u09B8\u09CB\u099C\u09BE \u09A6\u09BE\u0997 (\u30FC - Ch\u014Donpu) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u30D1\u30F3",
+            romaji: "pan",
+            meaning_bn: "\u09AA\u09BE\u0989\u09B0\u09C1\u099F\u09BF",
+            meaning_en: "bread",
+            part_of_speech: "noun",
+            example_ja: "\u671D[\u3042\u3055]\u3001\u30D1\u30F3\u3068\u5375[\u305F\u307E\u3054]\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+            example_bn: "\u09B8\u0995\u09BE\u09B2\u09C7 \u09B0\u09C1\u099F\u09BF \u0993 \u09A1\u09BF\u09AE \u0996\u09BE\u0987\u0964",
+            example_en: "In the morning, I eat bread and eggs."
+          },
+          {
+            word_ja: "\u30B3\u30FC\u30D2\u30FC",
+            romaji: "k\u014Dh\u012B",
+            meaning_bn: "\u0995\u09AB\u09BF",
+            meaning_en: "coffee",
+            part_of_speech: "noun",
+            example_ja: "\u71B1[\u3042\u3064]\u3044\u30B3\u30FC\u30D2\u30FC\u3092\u98F2[\u306E]\u307F\u307E\u3059\u3002",
+            example_bn: "\u0997\u09B0\u09AE \u0995\u09AB\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF\u0964",
+            example_en: "I drink hot coffee."
+          },
+          {
+            word_ja: "\u30C6\u30EC\u30D3",
+            romaji: "terebi",
+            meaning_bn: "\u099F\u09C7\u09B2\u09BF\u09AD\u09BF\u09B6\u09A8",
+            meaning_en: "television",
+            part_of_speech: "noun",
+            example_ja: "\u90E8\u5C4B[\u3078\u3084]\u3067\u30C6\u30EC\u30D3\u3092\u898B[\u307F]\u307E\u3059\u3002",
+            example_bn: "\u09B0\u09C1\u09AE\u09C7 \u099F\u09C7\u09B2\u09BF\u09AD\u09BF\u09B6\u09A8 \u09A6\u09C7\u0996\u09BF\u0964",
+            example_en: "I watch TV in my room."
+          },
+          {
+            word_ja: "\u30AB\u30E1\u30E9",
+            romaji: "kamera",
+            meaning_bn: "\u0995\u09CD\u09AF\u09BE\u09AE\u09C7\u09B0\u09BE",
+            meaning_en: "camera",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u30AB\u30E1\u30E9\u306F\u6709\u540D[\u3086\u3046\u3081\u3044]\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0995\u09CD\u09AF\u09BE\u09AE\u09C7\u09B0\u09BE \u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4\u0964",
+            example_en: "Japanese cameras are famous."
+          },
+          {
+            word_ja: "\u30DB\u30C6\u30EB",
+            romaji: "hoteru",
+            meaning_bn: "\u09B9\u09CB\u099F\u09C7\u09B2",
+            meaning_en: "hotel",
+            part_of_speech: "noun",
+            example_ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u306E\u30DB\u30C6\u30EB\u306B\u6CCA[\u3068]\u307E\u308A\u307E\u3059\u3002",
+            example_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u098F\u0995\u099F\u09BF \u09B9\u09CB\u099F\u09C7\u09B2\u09C7 \u09A5\u09BE\u0995\u09AC\u0964",
+            example_en: "I will stay at a hotel in Tokyo."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4E03",
+            onyomi: "\u30B7\u30C1",
+            kunyomi: "\u306A\u306A\u30FB\u3064, \u306A\u306A, \u306A\u306E",
+            meaning_bn: "\u09B8\u09BE\u09A4",
+            meaning_en: "seven",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u4E03\u3064[\u306A\u306A\u3064]",
+                meaning_bn: "\u09B8\u09BE\u09A4\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8",
+                meaning_en: "seven items"
+              },
+              {
+                word_ja: "\u4E03\u6708[\u3057\u3061\u304C\u3064]",
+                meaning_bn: "\u099C\u09C1\u09B2\u09BE\u0987 \u09AE\u09BE\u09B8",
+                meaning_en: "July"
+              },
+              {
+                word_ja: "\u4E03\u65E5[\u306A\u306E\u304B]",
+                meaning_bn: "\u09AE\u09BE\u09B8\u09C7\u09B0 \u09ED \u09A4\u09BE\u09B0\u09BF\u0996",
+                meaning_en: "seventh day"
+              }
+            ]
+          },
+          {
+            kanji: "\u516B",
+            onyomi: "\u30CF\u30C1",
+            kunyomi: "\u3084\u3063\u30FB\u3064, \u3084, \u3088\u3046",
+            meaning_bn: "\u0986\u099F",
+            meaning_en: "eight",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u516B\u3064[\u3084\u3063\u3064]",
+                meaning_bn: "\u0986\u099F\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8",
+                meaning_en: "eight items"
+              },
+              {
+                word_ja: "\u516B\u6708[\u306F\u3061\u304C\u3064]",
+                meaning_bn: "\u0986\u0997\u09B8\u09CD\u099F \u09AE\u09BE\u09B8",
+                meaning_en: "August"
+              },
+              {
+                word_ja: "\u516B\u65E5[\u3088\u3046\u304B]",
+                meaning_bn: "\u09AE\u09BE\u09B8\u09C7\u09B0 \u09EE \u09A4\u09BE\u09B0\u09BF\u0996",
+                meaning_en: "eighth day"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G04-1",
+            pattern_ja: "\u9577\u97F3\u7B26\u53F7[\u3061\u3087\u3046\u304A\u3093\u3075\u3054\u3046]\u300C\u30FC\u300D\u306E \u5F79\u5272[\u3084\u304F\u308F\u308A]",
+            pattern_bn: "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09AF\u09BC \u09A6\u09C0\u09B0\u09CD\u0998\u09B8\u09CD\u09AC\u09B0 \u099A\u09BF\u09B9\u09CD\u09A8\u09C7\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE",
+            explanation_bn: "\u0987\u0982\u09B0\u09C7\u099C\u09BF \u09AC\u09BE \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09A6\u09C0\u09B0\u09CD\u0998 \u09B8\u09CD\u09AC\u09B0\u09A7\u09CD\u09AC\u09A8\u09BF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09AF\u09BC '\u30FC' \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u098F\u099F\u09BF \u0986\u0997\u09C7\u09B0 \u09B8\u09CD\u09AC\u09B0\u0995\u09C7 \u098F\u0995 \u09AE\u09CB\u09B0\u09BE \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3 \u09A6\u09C0\u09B0\u09CD\u0998\u09BE\u09AF\u09BC\u09BF\u09A4 \u0995\u09B0\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u30B3\u30FC\u30D2\u30FC = ko-o-hi-i)\u0964",
+            common_pitfalls: [
+              "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE\u09AF\u09BC \u09A6\u09C0\u09B0\u09CD\u0998\u09B8\u09CD\u09AC\u09B0\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC (\u3068\u3046\u304D\u3087\u3046), \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09AF\u09BC \u09B8\u09CB\u099C\u09BE \u09A6\u09BE\u0997 '\u30FC' \u09A6\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC (\u30BF\u30AF\u30B7\u30FC)\u0964",
+              "\u09A6\u09BE\u0997 \u09AC\u09BE\u09A6 \u09A6\u09BF\u09B2\u09C7 \u0985\u09B0\u09CD\u09A5 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u30D3\u30EB = \u09AC\u09B9\u09C1\u09A4\u09B2 \u09AD\u09AC\u09A8, \u30D3\u30FC\u30EB = \u09AC\u09BF\u09AF\u09BC\u09BE\u09B0)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u30B9\u30FC\u30D1\u30FC\u3067\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u3092\u3057\u307E\u3059\u3002",
+                bn: "\u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u0995\u09B0\u09BF\u0964",
+                en: "I shop at the supermarket."
+              },
+              {
+                ja: "\u30BF\u30AF\u30B7\u30FC\u306B\u4E57[\u306E]\u308A\u307E\u3059\u3002",
+                bn: "\u099F\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09BF\u09A4\u09C7 \u0989\u09A0\u09BF\u0964",
+                en: "I take a taxi."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u098F\u0995\u099F\u09BF \u0995\u09CD\u09AF\u09BE\u09AB\u09C7\u09A4\u09C7 \u0995\u09AB\u09BF \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u0995\u09B0\u09BE\u0964",
+          situation_en: "Ordering coffee at a cafe in Tokyo.",
+          lines: [
+            {
+              speaker_ja: "\u5E97\u54E1[\u3066\u3093\u3044\u3093]",
+              speaker_en: "Clerk",
+              line_ja: "\u3044\u3089\u3063\u3057\u3083\u3044\u307E\u305B\u3002\u3054\u6CE8[\u3061\u3085\u3046]\u6587[\u3082\u3093]\u306F\uFF1F",
+              line_bn: "\u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u0995\u09C0 \u09B9\u09AC\u09C7?",
+              line_en: "Welcome! What would you like to order?"
+            },
+            {
+              speaker_ja: "\u5BA2[\u304D\u3083\u304F]",
+              speaker_en: "Customer",
+              line_ja: "\u30DB\u30C3\u30C8\u30B3\u30FC\u30D2\u30FC\u3092\u4E00[\u3072\u3068]\u3064\u304A\u9858[\u306D\u304C]\u3044\u3057\u307E\u3059\u3002",
+              line_bn: "\u098F\u0995\u099F\u09BF \u0997\u09B0\u09AE \u0995\u09AB\u09BF \u09A6\u09BF\u09A8, \u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7\u0964",
+              line_en: "One hot coffee, please."
+            },
+            {
+              speaker_ja: "\u5E97\u54E1[\u3066\u3093\u3044\u3093]",
+              speaker_en: "Clerk",
+              line_ja: "\u304B\u3057\u3053\u307E\u308A\u307E\u3057\u305F\u3002\u5C11\u3005[\u3057\u3087\u3046\u3057\u3087\u3046]\u304A\u5F85[\u307E]\u3061\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u0985\u09AC\u09B6\u09CD\u09AF\u0987\u0964 \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u098F\u0995\u099F\u09C1 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964",
+              line_en: "Certainly. Please wait a moment."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF (\u30B3\u30F3\u30D3\u30CB) \u098F\u09B0 \u09AC\u09B9\u09C1\u09AE\u09C1\u0996\u09C0 \u09B8\u09C7\u09AC\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B8\u09C7\u09AD\u09C7\u09A8-\u0987\u09B2\u09C7\u09AD\u09C7\u09A8, \u09AB\u09CD\u09AF\u09BE\u09AE\u09BF\u09B2\u09BF\u09AE\u09BE\u09B0\u09CD\u099F \u09AC\u09BE \u09B2\u09B8\u09A8 \u0995\u09C7\u09AC\u09B2 \u09AE\u09C1\u09A6\u09BF \u09A6\u09CB\u0995\u09BE\u09A8 \u09A8\u09AF\u09BC\u0964 \u098F\u0996\u09BE\u09A8 \u09A5\u09C7\u0995\u09C7 \u098F\u099F\u09BF\u098F\u09AE \u09AC\u09C1\u09A5 \u09A5\u09C7\u0995\u09C7 \u099F\u09BE\u0995\u09BE \u09A4\u09CB\u09B2\u09BE, \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u099F\u09BF\u0995\u09BF\u099F \u09AC\u09BE \u0995\u09A8\u09B8\u09BE\u09B0\u09CD\u099F \u099F\u09BF\u0995\u09BF\u099F \u09AA\u09CD\u09B0\u09BF\u09A8\u09CD\u099F \u0995\u09B0\u09BE, \u0987\u0989\u099F\u09BF\u09B2\u09BF\u099F\u09BF \u09AC\u09BF\u09B2 \u09AA\u09B0\u09BF\u09B6\u09CB\u09A7 \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09A1\u09BE\u0995 \u09AA\u09BE\u09B0\u09CD\u09B8\u09C7\u09B2 \u09AA\u09BE\u09A0\u09BE\u09A8\u09CB \u09AF\u09BE\u09AF\u09BC\u0964 \u09E8\u09EA \u0998\u09A3\u09CD\u099F\u09BE\u0987 \u098F\u09B8\u09AC \u09B8\u09C7\u09AC\u09BE \u099A\u09BE\u09B2\u09C1 \u09A5\u09BE\u0995\u09C7\u0964",
+          category: "Shopping"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u30D1\u30F3",
+            romaji_input: "pan",
+            target_display: "\u30D1\u30F3",
+            meaning_bn: "\u09AA\u09BE\u0989\u09B0\u09C1\u099F\u09BF"
+          },
+          {
+            prompt_ja: "\u30B3\u30FC\u30D2\u30FC",
+            romaji_input: "ko-hi-",
+            target_display: "\u30B3\u30FC\u30D2\u30FC",
+            meaning_bn: "\u0995\u09AB\u09BF"
+          },
+          {
+            prompt_ja: "\u30C6\u30EC\u30D3",
+            romaji_input: "terebi",
+            target_display: "\u30C6\u30EC\u30D3",
+            meaning_bn: "\u099F\u09BF\u09AD\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L04-1",
+            question_ja: "\u5916\u6765\u8A9E[\u304C\u3044\u3089\u3044\u3054]\u3092 \u66F8[\u304B]\u304F \u6587\u5B57[\u3082\u3058]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09B6\u09AC\u09CD\u09A6 \u09B2\u09C7\u0996\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u0995\u09CB\u09A8 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B2\u09BF\u09AA\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC?",
+            options: [
+              "\u30AB\u30BF\u30AB\u30CA (Katakana)",
+              "\u3072\u3089\u304C\u306A (Hiragana)",
+              "\u6F22\u5B57[\u304B\u3093\u3058] (Kanji)",
+              "\u30ED\u30FC\u30DE\u5B57[\u3058] (Romaji)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09AD\u09BE\u09B7\u09BE \u09A5\u09C7\u0995\u09C7 \u0986\u09B8\u09BE \u09B6\u09AC\u09CD\u09A6 (\u09AF\u09C7\u09AE\u09A8: \u0995\u09AB\u09BF, \u09AA\u09BE\u0989\u09B0\u09C1\u099F\u09BF, \u099F\u09C7\u09B2\u09BF\u09AD\u09BF\u09B6\u09A8) \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE\u09AF\u09BC \u09B2\u09C7\u0996\u09BE \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L05",
+          lesson_number: 5,
+          module_number: 0,
+          module_name: "Script & Numbers",
+          module_name_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE \u0993 \u09B8\u0982\u0996\u09CD\u09AF\u09BE",
+          title_ja: "\u3059\u3046\u3058 1-10000",
+          title_en: "Japanese Numerals 1 to 10,000 & Money",
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u0996\u09CD\u09AF\u09BE \u09E7 \u09A5\u09C7\u0995\u09C7 \u09E7\u09E6,\u09E6\u09E6\u09E6 \u0993 \u09AE\u09C1\u09A6\u09CD\u09B0\u09BE\u09B0 \u09B9\u09BF\u09B8\u09BE\u09AC",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u0996\u09CD\u09AF\u09BE\u09B0 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF \u09A6\u09B6\u09AE\u09BF\u0995 \u09B9\u09B2\u09C7\u0993 \u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u098F\u0995\u099F\u09BF \u09AC\u09BF\u09B6\u09C7\u09B7 \u098F\u0995\u0995 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7 \u09AF\u09BE\u0995\u09C7 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC \u4E07 (\u09AE\u09BE\u09A8 - Man = 10,000)\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 \u09B9\u09BE\u099C\u09BE\u09B0 \u0993 \u09B2\u09BE\u0996 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u099A\u09BE\u09B0 \u09B6\u09C2\u09A8\u09CD\u09AF\u09C7\u09B0 \u09AA\u09B0 \u098F\u0995\u0995 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u09EB\u09E6,\u09E6\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 = \u09EB\u099F\u09BF \u09AE\u09BE\u09A8 (\u4E94\u4E07[\u3054\u307E\u3093]\u5186)\u0964",
+          core_concept_bn: "\u09E7 \u09A5\u09C7\u0995\u09C7 \u09E7\u09E6,\u09E6\u09E6\u09E6 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0997\u09CB\u09A8\u09BE, \u0985\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 (\u09E9\u09E6\u09E6, \u09EC\u09E6\u09E6, \u09EE\u09E6\u09E6) \u098F\u09AC\u0982 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09C1\u09A6\u09CD\u09B0\u09BE (\u5186)\u0964",
+          real_world_context_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u09AA\u09A3\u09CD\u09AF\u09C7\u09B0 \u09A6\u09BE\u09AE \u09AC\u09CB\u099D\u09BE, \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AD\u09BE\u09A1\u09BC\u09BE \u09B9\u09BF\u09B8\u09BE\u09AC \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AB\u09CB\u09A8 \u09A8\u09AE\u09CD\u09AC\u09B0 \u09AC\u09B2\u09BE\u0964",
+          key_takeaway_bn: "\u09E9\u09E6\u09E6 = \u3055\u3093\u3073\u3083\u304F (sanbyaku), \u09EC\u09E6\u09E6 = \u308D\u3063\u3074\u3083\u304F (roppyaku), \u09EE\u09E6\u09E6 = \u306F\u3063\u3074\u3083\u304F (happyaku)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u5186[\u3048\u3093]",
+            romaji: "en",
+            meaning_bn: "\u0987\u09AF\u09BC\u09C7\u09A8 (\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09C1\u09A6\u09CD\u09B0\u09BE)",
+            meaning_en: "Yen (Japanese currency)",
+            part_of_speech: "noun",
+            example_ja: "\u3053\u308C\u306F\u767E\u5186[\u3072\u3083\u304F\u3048\u3093]\u3067\u3059\u3002",
+            example_bn: "\u098F\u099F\u09BF \u098F\u0995\u09B6\u09A4 \u0987\u09AF\u09BC\u09C7\u09A8\u0964",
+            example_en: "This is 100 yen."
+          },
+          {
+            word_ja: "\u767E[\u3072\u3083\u304F]",
+            romaji: "hyaku",
+            meaning_bn: "\u098F\u0995\u09B6\u09A4",
+            meaning_en: "hundred",
+            part_of_speech: "noun",
+            example_ja: "\u4E09\u767E\u5186[\u3055\u3093\u3073\u3083\u304F\u3048\u3093]\u306E\u30EA\u30F3\u30B4\u3092\u8CB7[\u304B]\u3044\u307E\u3059\u3002",
+            example_bn: "\u09E9\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8\u09C7\u09B0 \u0986\u09AA\u09C7\u09B2 \u0995\u09BF\u09A8\u09BF\u0964",
+            example_en: "I buy an apple for 300 yen."
+          },
+          {
+            word_ja: "\u5343[\u305B\u3093]",
+            romaji: "sen",
+            meaning_bn: "\u098F\u0995 \u09B9\u09BE\u099C\u09BE\u09B0",
+            meaning_en: "thousand",
+            part_of_speech: "noun",
+            example_ja: "\u4E8C\u5343\u5186[\u306B\u305B\u3093\u3048\u3093]\u3092\u6255[\u306F\u3089]\u3044\u307E\u3059\u3002",
+            example_bn: "\u09E8\u09E6\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09AA\u09B0\u09BF\u09B6\u09CB\u09A7 \u0995\u09B0\u09BF\u0964",
+            example_en: "I pay 2,000 yen."
+          },
+          {
+            word_ja: "\u4E07[\u307E\u3093]",
+            romaji: "man",
+            meaning_bn: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0",
+            meaning_en: "ten thousand",
+            part_of_speech: "noun",
+            example_ja: "\u5BB6\u8CC3[\u3084\u3061\u3093]\u306F\u4E94\u4E07\u5186[\u3054\u307E\u3093\u3048\u3093]\u3067\u3059\u3002",
+            example_bn: "\u09AC\u09BE\u09A1\u09BC\u09BF \u09AD\u09BE\u09A1\u09BC\u09BE \u09EB\u09E6,\u09E6\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8\u0964",
+            example_en: "The rent is 50,000 yen."
+          },
+          {
+            word_ja: "\u3044\u304F\u3089",
+            romaji: "ikura",
+            meaning_bn: "\u0995\u09A4 \u09A6\u09BE\u09AE?",
+            meaning_en: "how much (price)",
+            part_of_speech: "pronoun",
+            example_ja: "\u3053\u306E\u5098[\u304B\u3055]\u306F\u3044\u304F\u3089\u3067\u3059\u304B\u3002",
+            example_bn: "\u098F\u0987 \u099B\u09BE\u09A4\u09BE\u099F\u09BF\u09B0 \u09A6\u09BE\u09AE \u0995\u09A4?",
+            example_en: "How much is this umbrella?"
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4E5D",
+            onyomi: "\u30AD\u30E5\u30A6, \u30AF",
+            kunyomi: "\u3053\u3053\u306E\u30FB\u3064, \u3053\u3053\u306E",
+            meaning_bn: "\u09A8\u09AF\u09BC",
+            meaning_en: "nine",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u4E5D\u3064[\u3053\u3053\u306E\u3064]",
+                meaning_bn: "\u09A8\u09AF\u09BC\u099F\u09BF",
+                meaning_en: "nine items"
+              },
+              {
+                word_ja: "\u4E5D\u6708[\u304F\u304C\u3064]",
+                meaning_bn: "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0 \u09AE\u09BE\u09B8",
+                meaning_en: "September"
+              }
+            ]
+          },
+          {
+            kanji: "\u5341",
+            onyomi: "\u30B8\u30E5\u30A6, \u30B8\u30C3",
+            kunyomi: "\u3068\u304A, \u3068",
+            meaning_bn: "\u09A6\u09B6",
+            meaning_en: "ten",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u5341[\u3068\u304A]",
+                meaning_bn: "\u09A6\u09B6\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8",
+                meaning_en: "ten items"
+              },
+              {
+                word_ja: "\u5341\u6708[\u3058\u3085\u3046\u304C\u3064]",
+                meaning_bn: "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0 \u09AE\u09BE\u09B8",
+                meaning_en: "October"
+              }
+            ]
+          },
+          {
+            kanji: "\u767E",
+            onyomi: "\u30D2\u30E3\u30AF",
+            kunyomi: "\u3082\u3082",
+            meaning_bn: "\u098F\u0995\u09B6\u09A4",
+            meaning_en: "hundred",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u767E[\u3072\u3083\u304F]",
+                meaning_bn: "\u098F\u0995\u09B6\u09A4",
+                meaning_en: "one hundred"
+              },
+              {
+                word_ja: "\u4E09\u767E[\u3055\u3093\u3073\u3083\u304F]",
+                meaning_bn: "\u09A4\u09BF\u09A8\u09B6\u09A4",
+                meaning_en: "three hundred"
+              }
+            ]
+          },
+          {
+            kanji: "\u5343",
+            onyomi: "\u30BB\u30F3",
+            kunyomi: "\u3061",
+            meaning_bn: "\u098F\u0995 \u09B9\u09BE\u099C\u09BE\u09B0",
+            meaning_en: "thousand",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u5343[\u305B\u3093]",
+                meaning_bn: "\u098F\u0995 \u09B9\u09BE\u099C\u09BE\u09B0",
+                meaning_en: "one thousand"
+              },
+              {
+                word_ja: "\u4E09\u5343[\u3055\u3093\u305C\u3093]",
+                meaning_bn: "\u09A4\u09BF\u09A8 \u09B9\u09BE\u099C\u09BE\u09B0",
+                meaning_en: "three thousand"
+              }
+            ]
+          },
+          {
+            kanji: "\u4E07",
+            onyomi: "\u30DE\u30F3, \u30D0\u30F3",
+            kunyomi: "\u3088\u308D\u305A",
+            meaning_bn: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0",
+            meaning_en: "ten thousand",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u4E00\u4E07[\u3044\u3061\u307E\u3093]",
+                meaning_bn: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0",
+                meaning_en: "ten thousand"
+              },
+              {
+                word_ja: "\u4E07\u56FD[\u3070\u3093\u3053\u304F]",
+                meaning_bn: "\u09B8\u09AC \u09A6\u09C7\u09B6",
+                meaning_en: "all nations"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G05-1",
+            pattern_ja: "\u56DB\u6841\u533A\u5207[\u3088\u3093\u3051\u305F\u304F\u3060]\u308A (\u4E07[\u307E\u3093]\u306E \u5358\u4F4D[\u305F\u3093\u3044]) \u306E \u6570[\u304B\u305E]\u3048\u65B9[\u304B\u305F]",
+            pattern_bn: "\u099A\u09BE\u09B0 \u0985\u0999\u09CD\u0995\u09C7\u09B0 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF\u09A4\u09C7 \u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0 (\u4E07) \u098F\u09B0 \u09B9\u09BF\u09B8\u09BE\u09AC",
+            explanation_bn: "\u0987\u0982\u09B0\u09C7\u099C\u09BF \u09AC\u09BE \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09A4\u09BF\u09A8 \u09B6\u09C2\u09A8\u09CD\u09AF\u09C7\u09B0 \u09AA\u09B0 \u0995\u09AE\u09BE \u09AC\u09B8\u09BF\u09AF\u09BC\u09C7 \u0997\u09A3\u09A8\u09BE \u0995\u09B0\u09BE \u09B9\u09B2\u09C7\u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u099A\u09BE\u09B0 \u09B6\u09C2\u09A8\u09CD\u09AF\u09C7\u09B0 \u09AA\u09B0 \u4E07 (Man) \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u09E7,\u09E6\u09E6,\u09E6\u09E6\u09E6 (\u09E7 \u09B2\u09BE\u0996) = \u09E7\u09E6\u099F\u09BF \u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0 = \u5341\u4E07[\u3058\u3085\u3046\u307E\u3093]\u0964",
+            common_pitfalls: [
+              "\u09E7\u09E6\u09E6 \u0995\u09C7 \u09B6\u09C1\u09A7\u09C1 \u3072\u3083\u304F \u098F\u09AC\u0982 \u09E7\u09E6\u09E6\u09E6 \u0995\u09C7 \u09B6\u09C1\u09A7\u09C1 \u305B\u3093 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC, \u3044\u3061\u3072\u3083\u304F \u09AC\u09BE \u3044\u3061\u305B\u3093 \u09AC\u09B2\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AD\u09C1\u09B2\u0964",
+              "\u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09E7\u09E6,\u09E6\u09E6\u09E6 \u098F\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u0985\u09AC\u09B6\u09CD\u09AF\u0987 \u3044\u3061\u307E\u3093 (ichiman) \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u306E\u30D1\u30BD\u30B3\u30F3\u306F\u5341\u4E07\u5186[\u3058\u3085\u3046\u307E\u3093\u3048\u3093]\u3067\u3059\u3002",
+                bn: "\u098F\u0987 \u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0\u099F\u09BF\u09B0 \u09A6\u09BE\u09AE \u09E7 \u09B2\u09BE\u0996 \u0987\u09AF\u09BC\u09C7\u09A8 (\u09E7\u09E6 \u09AE\u09BE\u09A8)\u0964",
+                en: "This computer is 100,000 yen."
+              }
+            ]
+          },
+          {
+            point_id: "G05-2",
+            pattern_ja: "\u4FA1\u683C[\u304B\u304B\u304F]\u3092 \u5C0B[\u305F\u305A]\u306D\u308B\u300C\u3044\u304F\u3089\u3067\u3059\u304B\u300D",
+            pattern_bn: "\u09AA\u09A3\u09CD\u09AF\u09C7\u09B0 \u09AE\u09C2\u09B2\u09CD\u09AF \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09BE: [\u09AC\u09B8\u09CD\u09A4\u09C1] \u306F \u3044\u304F\u3089\u3067\u3059\u304B",
+            explanation_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8\u09C7\u09B0 \u09A6\u09BE\u09AE \u099C\u09BE\u09A8\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF '\u301C\u306F\u3044\u304F\u3089\u3067\u3059\u304B' \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u0989\u09A4\u09CD\u09A4\u09B0\u09C7 [\u099F\u09BE\u0995\u09BE] + \u3067\u3059 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u099F\u09BE\u0995\u09BE\u09B0 \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3 \u09AC\u09B2\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B6\u09C7\u09B7\u09C7 \u5186 (en) \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09AD\u09C1\u09B2\u09AC\u09C7\u09A8 \u09A8\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u308C\u306F\u3044\u304F\u3089\u3067\u3059\u304B\u3002\u4E94\u767E\u5186[\u3054\u3072\u3083\u304F\u3048\u3093]\u3067\u3059\u3002",
+                bn: "\u098F\u099F\u09BF\u09B0 \u09A6\u09BE\u09AE \u0995\u09A4? \u09AA\u09BE\u0981\u099A\u09B6\u09A4 \u0987\u09AF\u09BC\u09C7\u09A8\u0964",
+                en: "How much is this? It is 500 yen."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0986\u0995\u09BF\u09B9\u09BE\u09AC\u09BE\u09B0\u09BE\u09B0 \u0987\u09B2\u09C7\u0995\u099F\u09CD\u09B0\u09A8\u09BF\u0995\u09CD\u09B8 \u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u09B9\u09C7\u09A1\u09AB\u09CB\u09A8\u09C7\u09B0 \u09A6\u09BE\u09AE \u099C\u09BE\u09A8\u09BE \u0993 \u0995\u09C7\u09A8\u09BE\u0964",
+          situation_en: "Asking price and buying headphones in an Akihabara electronics shop.",
+          lines: [
+            {
+              speaker_ja: "\u5BA2[\u304D\u3083\u304F]",
+              speaker_en: "Customer",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u3053\u306E\u30A4\u30E4\u30DB\u30F3\u306F\u3044\u304F\u3089\u3067\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u098F\u0987 \u0987\u09AF\u09BC\u09BE\u09B0\u09AB\u09CB\u09A8\u099F\u09BF\u09B0 \u09A6\u09BE\u09AE \u0995\u09A4?",
+              line_en: "Excuse me, how much are these earphones?"
+            },
+            {
+              speaker_ja: "\u5E97\u54E1[\u3066\u3093\u3044\u3093]",
+              speaker_en: "Clerk",
+              line_ja: "\u305D\u308C\u306F\u4E09\u5343\u4E94\u767E\u5186[\u3055\u3093\u305C\u3093\u3054\u3072\u3083\u304F\u3048\u3093]\u3067\u3059\u3002",
+              line_bn: "\u0993\u099F\u09BF \u09E9,\u09EB\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8\u0964",
+              line_en: "Those are 3,500 yen."
+            },
+            {
+              speaker_ja: "\u5BA2[\u304D\u3083\u304F]",
+              speaker_en: "Customer",
+              line_ja: "\u3058\u3083\u3001\u3053\u308C\u3092\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u09A4\u09BE\u09B9\u09B2\u09C7 \u098F\u099F\u09BF \u09A6\u09BF\u09A8 \u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7\u0964",
+              line_en: "Well then, please give me this one."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09C1\u09A6\u09CD\u09B0\u09BE\u09B0 \u0995\u09AF\u09BC\u09C7\u09A8 (\u09AA\u09AF\u09BC\u09B8\u09BE) \u0993 \u0995\u09CD\u09AF\u09BE\u09B6 \u099F\u09CD\u09B0\u09C7 (\u099F\u09CD\u09B0\u09C7\u09A4\u09C7 \u099F\u09BE\u0995\u09BE \u09B0\u09BE\u0996\u09BE)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0995\u09CD\u09AF\u09BE\u09B6 \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0\u09C7 \u099F\u09BE\u0995\u09BE \u09AC\u09BE \u0995\u09BE\u09B0\u09CD\u09A1 \u0995\u0996\u09A8\u09CB \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09AF\u09BC\u09BE\u09B0\u09C7\u09B0 \u09B9\u09BE\u09A4\u09C7 \u09A6\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC \u09A8\u09BE\u0964 \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0\u09C7 \u09B0\u09BE\u0996\u09BE \u099B\u09CB\u099F \u09AA\u09CD\u09B2\u09BE\u09B8\u09CD\u099F\u09BF\u0995 \u09AC\u09BE \u0995\u09BE\u09A0\u09C7\u09B0 \u099F\u09CD\u09B0\u09C7\u09A4\u09C7 (Tsurisen-tray) \u099F\u09BE\u0995\u09BE \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09AF\u09BC\u09BE\u09B0\u0993 \u09AC\u09BE\u09A1\u09BC\u09A4\u09BF \u09AA\u09AF\u09BC\u09B8\u09BE \u0993 \u09B0\u09B8\u09BF\u09A6 \u09B8\u09C7\u0987 \u099F\u09CD\u09B0\u09C7\u09A4\u09C7\u0987 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u0995\u09B0\u09C7 \u09B8\u09BE\u099C\u09BF\u09AF\u09BC\u09C7 \u09A6\u09C7\u09A8\u0964 \u09E7, \u09EB, \u09E7\u09E6, \u09EB\u09E6, \u09E7\u09E6\u09E6 \u0993 \u09EB\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8\u09C7\u09B0 \u09AE\u09CB\u099F \u09EC \u09A7\u09B0\u09A8\u09C7\u09B0 \u0995\u09AF\u09BC\u09C7\u09A8 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+          category: "Shopping"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u767E\u5186[\u3072\u3083\u304F\u3048\u3093]",
+            romaji_input: "hyakuen",
+            target_display: "\u3072\u3083\u304F\u3048\u3093",
+            meaning_bn: "\u098F\u0995\u09B6\u09A4 \u0987\u09AF\u09BC\u09C7\u09A8"
+          },
+          {
+            prompt_ja: "\u4E09\u5343\u5186[\u3055\u3093\u305C\u3093\u3048\u3093]",
+            romaji_input: "sanzen'en",
+            target_display: "\u3055\u3093\u305C\u3093\u3048\u3093",
+            meaning_bn: "\u09A4\u09BF\u09A8 \u09B9\u09BE\u099C\u09BE\u09B0 \u0987\u09AF\u09BC\u09C7\u09A8"
+          },
+          {
+            prompt_ja: "\u4E00\u4E07\u5186[\u3044\u3061\u307E\u3093\u3048\u3093]",
+            romaji_input: "ichiman'en",
+            target_display: "\u3044\u3061\u307E\u3093\u3048\u3093",
+            meaning_bn: "\u09A6\u09B6 \u09B9\u09BE\u099C\u09BE\u09B0 \u0987\u09AF\u09BC\u09C7\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L05-1",
+            question_ja: "\u300C\u3055\u3093\u3073\u3083\u304F\u300D\u306E \u6570\u5B57[\u3059\u3046\u3058]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3055\u3093\u3073\u3083\u304F\u2019 (sanbyaku) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09B8\u0982\u0996\u09CD\u09AF\u09BE \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "300",
+              "3000",
+              "30",
+              "30000"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3055\u3093\u3073\u3083\u304F (\u4E09\u767E) \u0985\u09B0\u09CD\u09A5 \u09E9\u09E6\u09E6\u0964 \u09A4\u09BF\u09A8\u09B6\u09A4 \u098F\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 'hyaku' \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7 'byaku' \u09B9\u09AF\u09BC\u0964"
+          },
+          {
+            quiz_id: "Q-L05-2",
+            question_ja: "\u300C10,000\u300D\u306E \u6B63[\u305F\u3060]\u3057\u3044 \u8AAD[\u3088]\u307F\u65B9[\u304B\u305F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u201810,000\u2019 \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u3044\u3061\u307E\u3093 (Ichiman)",
+              "\u307E\u3093 (Man)",
+              "\u3058\u3085\u3046\u305B\u3093 (J\u016Bsen)",
+              "\u3072\u3083\u304F\u305B\u3093 (Hyakusen)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09E7\u09E6,\u09E6\u09E6\u09E6 \u098F\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u0985\u09AC\u09B6\u09CD\u09AF\u0987 '\u3044\u3061\u307E\u3093' (ichiman) \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L06",
+          lesson_number: 6,
+          module_number: 1,
+          module_name: "Identity & Pointers",
+          module_name_bn: "\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995",
+          title_ja: "\u79C1[\u308F\u305F\u3057]\u306F\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059",
+          title_en: "N1 wa N2 desu (Identity & Polite Copula)",
+          title_bn: "\u0986\u09AE\u09BF \u098F\u0995\u099C\u09A8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 (\u0986\u09A4\u09CD\u09AE\u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u0993 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u0986\u09AE\u09B0\u09BE \u09AC\u09B2\u09BF '\u0986\u09AE\u09BF \u099B\u09BE\u09A4\u09CD\u09B0' (\u098F\u0996\u09BE\u09A8\u09C7 '\u09B9\u0987' \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u099F\u09BF \u0989\u09B9\u09CD\u09AF \u09A5\u09BE\u0995\u09C7)\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09B8\u09C2\u099A\u0995 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF\u09B8\u09C2\u099A\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u3067\u3059 (desu) \u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995\u0964 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09AE\u09C2\u09B2 \u09AC\u09BF\u09B7\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u306F (wa) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u0997\u09A0\u09A8: N1 \u306F N2 \u3067\u3059\u0964",
+          core_concept_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BE\u0995\u09CD\u09AF\u09B0\u09C0\u09A4\u09BF (SOV), \u09AC\u09BF\u09B7\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u306F (wa), \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF \u3067\u3059 \u098F\u09AC\u0982 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u3058\u3083\u3042\u308A\u307E\u305B\u3093\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09AA\u09B0 \u0987\u09AE\u09BF\u0997\u09CD\u09B0\u09C7\u09B6\u09A8, \u09AD\u09BE\u09B7\u09BE \u09B8\u09CD\u0995\u09C1\u09B2 \u09AC\u09BE \u09AA\u09BE\u09B0\u09CD\u099F\u099F\u09BE\u0987\u09AE \u099C\u09AC\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09A6\u09BF\u09A8\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u0993 \u09AA\u09C7\u09B6\u09BE \u09A4\u09C1\u09B2\u09C7 \u09A7\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u306F \u098F\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 '\u09B9\u09BE' \u09A8\u09BE \u09B9\u09AF\u09BC\u09C7 '\u0993\u09AF\u09BC\u09BE' \u09B9\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u79C1[\u308F\u305F\u3057]",
+            romaji: "watashi",
+            meaning_bn: "\u0986\u09AE\u09BF",
+            meaning_en: "I / me",
+            part_of_speech: "pronoun",
+            example_ja: "\u79C1[\u308F\u305F\u3057]\u306F\u30BF\u30CB\u30E0\u3067\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BF \u09A4\u09BE\u09A8\u09BF\u09AE\u0964",
+            example_en: "I am Tanim."
+          },
+          {
+            word_ja: "\u3042\u306A\u305F",
+            romaji: "anata",
+            meaning_bn: "\u0986\u09AA\u09A8\u09BF / \u09A4\u09C1\u09AE\u09BF",
+            meaning_en: "you",
+            part_of_speech: "pronoun",
+            example_ja: "\u3042\u306A\u305F\u306F\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u304B\u3002",
+            example_bn: "\u0986\u09AA\u09A8\u09BF \u0995\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0?",
+            example_en: "Are you a student?"
+          },
+          {
+            word_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]",
+            romaji: "gakusei",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 / \u099B\u09BE\u09A4\u09CD\u09B0",
+            meaning_en: "student",
+            part_of_speech: "noun",
+            example_ja: "\u79C1[\u308F\u305F\u3057]\u306F\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u0964",
+            example_en: "I am a Japanese language student."
+          },
+          {
+            word_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+            romaji: "sensei",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 / \u0993\u09B8\u09CD\u09A4\u09BE\u09A6",
+            meaning_en: "teacher / doctor",
+            part_of_speech: "noun",
+            example_ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306F\u5148\u751F[\u305B\u3093\u305B\u3044]\u3067\u3059\u3002",
+            example_bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u098F\u0995\u099C\u09A8 \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0964",
+            example_en: "Mr. Tanaka is a teacher."
+          },
+          {
+            word_ja: "\u4F1A\u793E\u54E1[\u304B\u3044\u3057\u3083\u3044\u3093]",
+            romaji: "kaishain",
+            meaning_bn: "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u099A\u09BE\u0995\u09B0\u09BF\u099C\u09C0\u09AC\u09C0",
+            meaning_en: "company employee",
+            part_of_speech: "noun",
+            example_ja: "\u7236[\u3061\u3061]\u306F\u4F1A\u793E\u54E1[\u304B\u3044\u3057\u3083\u3044\u3093]\u3067\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BE\u09B0 \u09AC\u09BE\u09AC\u09BE \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u099A\u09BE\u0995\u09B0\u09BF\u099C\u09C0\u09AC\u09C0\u0964",
+            example_en: "My father is a company employee."
+          },
+          {
+            word_ja: "\u65E5\u672C\u4EBA[\u306B\u307B\u3093\u3058\u3093]",
+            romaji: "nihonjin",
+            meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+            meaning_en: "Japanese person",
+            part_of_speech: "noun",
+            example_ja: "\u5C71\u7530[\u3084\u307E\u3060]\u3055\u3093\u306F\u65E5\u672C\u4EBA[\u306B\u307B\u3093\u3058\u3093]\u3067\u3059\u3002",
+            example_bn: "\u0987\u09AF\u09BC\u09BE\u09AE\u09BE\u09A6\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0964",
+            example_en: "Mr. Yamada is Japanese."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4EBA",
+            onyomi: "\u30B8\u30F3, \u30CB\u30F3",
+            kunyomi: "\u3072\u3068",
+            meaning_bn: "\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF / \u09AE\u09BE\u09A8\u09C1\u09B7",
+            meaning_en: "person",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u65E5\u672C\u4EBA[\u306B\u307B\u3093\u3058\u3093]",
+                meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+                meaning_en: "Japanese person"
+              },
+              {
+                word_ja: "\u4E09\u4EBA[\u3055\u3093\u306B\u3093]",
+                meaning_bn: "\u09A4\u09BF\u09A8\u099C\u09A8 \u09AE\u09BE\u09A8\u09C1\u09B7",
+                meaning_en: "three people"
+              },
+              {
+                word_ja: "\u5927\u4EBA[\u304A\u3068\u306A]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09BE\u09AA\u09CD\u09A4\u09AC\u09AF\u09BC\u09B8\u09CD\u0995",
+                meaning_en: "adult"
+              }
+            ]
+          },
+          {
+            kanji: "\u5B66",
+            onyomi: "\u30AC\u30AF",
+            kunyomi: "\u307E\u306A\u30FB\u3076",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE / \u09B6\u09C7\u0996\u09BE",
+            meaning_en: "study / learn",
+            stroke_count: 8,
+            compounds: [
+              {
+                word_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]",
+                meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0",
+                meaning_en: "student"
+              },
+              {
+                word_ja: "\u5927\u5B66[\u3060\u3044\u304C\u304F]",
+                meaning_bn: "\u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "university"
+              },
+              {
+                word_ja: "\u5B66\u6821[\u304C\u3063\u3053\u3046]",
+                meaning_bn: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "school"
+              }
+            ]
+          },
+          {
+            kanji: "\u751F",
+            onyomi: "\u30BB\u30A4, \u30B7\u30E7\u30A6",
+            kunyomi: "\u3044\u30FB\u304D\u308B, \u3046\u30FB\u307E\u308C\u308B",
+            meaning_bn: "\u099C\u09C0\u09AC\u09A8 / \u099C\u09A8\u09CD\u09AE",
+            meaning_en: "life / birth",
+            stroke_count: 5,
+            compounds: [
+              {
+                word_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+                meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995",
+                meaning_en: "teacher"
+              },
+              {
+                word_ja: "\u7559\u5B66\u751F[\u308A\u3085\u3046\u304C\u304F\u305B\u3044]",
+                meaning_bn: "\u0986\u09A8\u09CD\u09A4\u09B0\u09CD\u099C\u09BE\u09A4\u09BF\u0995 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0",
+                meaning_en: "foreign student"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G06-1",
+            pattern_ja: "N1 \u306F N2 \u3067\u3059",
+            pattern_bn: "N1 \u09B9\u09B2\u09CB N2 (\u09AC\u09BF\u09B7\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0993 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC)",
+            explanation_bn: "N1 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09AC\u09BF\u09B7\u09AF\u09BC (Topic), \u09AF\u09BE \u306F \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964 N2 \u09B9\u09B2\u09CB \u09A4\u09BE\u09B0 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u09AC\u09BE \u09AC\u09C8\u09B6\u09BF\u09B7\u09CD\u099F\u09CD\u09AF \u098F\u09AC\u0982 \u3067\u3059 \u09B9\u09B2\u09CB \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF\u09B8\u09C2\u099A\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u0964",
+            common_pitfalls: [
+              "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC '\u09B9\u09AF\u09BC' \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u0989\u09B9\u09CD\u09AF \u09B0\u09BE\u0996\u09BE \u0997\u09C7\u09B2\u09C7\u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u0995\u09A5\u09A8\u09C7 \u3067\u3059 \u0995\u0996\u09A8\u09CB \u09AC\u09BE\u09A6 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC \u09A8\u09BE\u0964",
+              "\u306F \u0995\u09C7 '\u09B9\u09BE' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE, \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC '\u0993\u09AF\u09BC\u09BE' \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C1\u09A8\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u79C1[\u308F\u305F\u3057]\u306F\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5\u4EBA[\u3058\u3093]\u3067\u3059\u3002",
+                bn: "\u0986\u09AE\u09BF \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09BF\u0964",
+                en: "I am Bangladeshi."
+              },
+              {
+                ja: "\u30DE\u30A4\u30AF\u3055\u3093\u306F\u30A8\u30F3\u30B8\u30CB\u30A2\u3067\u3059\u3002",
+                bn: "\u09AE\u09BE\u0987\u0995 \u09B8\u09BE\u09B9\u09C7\u09AC \u09AA\u09CD\u09B0\u0995\u09CC\u09B6\u09B2\u09C0\u0964",
+                en: "Mike is an engineer."
+              }
+            ]
+          },
+          {
+            point_id: "G06-2",
+            pattern_ja: "N1 \u306F N2 \u3058\u3083\u3042\u308A\u307E\u305B\u3093 (\u3067\u306F\u3042\u308A\u307E\u305B\u3093)",
+            pattern_bn: "N1, N2 \u09A8\u09AF\u09BC (\u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC)",
+            explanation_bn: "\u3067\u3059 \u098F\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u09B9\u09B2\u09CB \u3058\u3083\u3042\u308A\u307E\u305B\u3093 (\u0995\u09A5\u09CD\u09AF \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0) \u0985\u09A5\u09AC\u09BE \u3067\u306F\u3042\u308A\u307E\u305B\u3093 (\u0986\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09B2\u09BF\u0996\u09BF\u09A4 \u09B0\u09C2\u09AA)\u0964",
+            common_pitfalls: [
+              "\u3058\u3083\u3042\u308A\u307E\u305B\u3093 \u098F\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B6\u09C1\u09A7\u09C1 \u3042\u308A\u307E\u305B\u3093 \u09AC\u09B2\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE; \u09AA\u09C1\u09B0\u09CB \u09B0\u09C2\u09AA\u099F\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u79C1[\u308F\u305F\u3057]\u306F\u5148\u751F[\u305B\u3093\u305B\u3044]\u3058\u3083\u3042\u308A\u307E\u305B\u3093\u3002",
+                bn: "\u0986\u09AE\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09A8\u0987\u0964",
+                en: "I am not a teacher."
+              }
+            ]
+          },
+          {
+            point_id: "G06-3",
+            pattern_ja: "S + \u304B (\u7591\u554F\u6587[\u304E\u3082\u3093\u3076\u3093])",
+            pattern_bn: "\u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09AC\u09CB\u09A7\u0995 \u09AC\u09BE\u0995\u09CD\u09AF: \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u304B \u09AF\u09CB\u0997 \u0995\u09B0\u09BE",
+            explanation_bn: "\u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09AC\u09CB\u09A7\u0995 \u0985\u09AC\u09CD\u09AF\u09AF\u09BC \u304B \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7\u0987 \u09A4\u09BE \u09AD\u09A6\u09CD\u09B0\u09B8\u09CD\u09A5 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09C7 \u09AA\u09B0\u09BF\u09A3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u099A\u09BF\u09B9\u09CD\u09A8 (?) \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09AF\u09BC\u09CB\u099C\u09A8 \u09B9\u09AF\u09BC \u09A8\u09BE\u0964",
+            common_pitfalls: [
+              "\u0989\u09A4\u09CD\u09A4\u09B0\u09C7 \u09B9\u09CD\u09AF\u09BE\u0981 \u09B9\u09B2\u09C7 \u306F\u3044 (hai) \u098F\u09AC\u0982 \u09A8\u09BE \u09B9\u09B2\u09C7 \u3044\u3044\u3048 (iie) \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3042\u306A\u305F\u3082\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u304B\u3002",
+                bn: "\u0986\u09AA\u09A8\u09BF\u0993 \u0995\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0?",
+                en: "Are you also a student?"
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AD\u09BE\u09B7\u09BE \u09B8\u09CD\u0995\u09C1\u09B2\u09C7 \u09AA\u09CD\u09B0\u09A5\u09AE \u09A6\u09BF\u09A8 \u09A8\u09A4\u09C1\u09A8 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AA\u09CD\u09B0\u09BE\u09A5\u09AE\u09BF\u0995 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC\u0964",
+          situation_en: "First day self-introduction exchange with a classmate at a Tokyo language school.",
+          lines: [
+            {
+              speaker_ja: "\u30E9\u30D2\u30E0[\u3089\u3072\u3080]",
+              speaker_en: "Rahim",
+              line_ja: "\u521D[\u306F\u3058]\u3081\u307E\u3057\u3066\u3002\u79C1[\u308F\u305F\u3057]\u306F\u30E9\u30D2\u30E0\u3067\u3059\u3002\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5\u304B\u3089\u6765[\u304D]\u307E\u3057\u305F\u3002",
+              line_bn: "\u09AA\u09CD\u09B0\u09A5\u09AE \u09A6\u09C7\u0996\u09BE \u09B9\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u0986\u09A8\u09A8\u09CD\u09A6\u09BF\u09A4\u0964 \u0986\u09AE\u09BF \u09B0\u09B9\u09BF\u09AE\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6 \u09A5\u09C7\u0995\u09C7 \u098F\u09B8\u09C7\u099B\u09BF\u0964",
+              line_en: "Nice to meet you. I am Rahim. I came from Bangladesh."
+            },
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u521D[\u306F\u3058]\u3081\u307E\u3057\u3066\u3002\u30B1\u30F3\u3067\u3059\u3002\u3069\u3046\u305E\u3088\u308D\u3057\u304F\u304A\u9858[\u306D\u304C]\u3044\u3057\u307E\u3059\u3002",
+              line_bn: "\u0986\u09A8\u09A8\u09CD\u09A6\u09BF\u09A4 \u09B9\u09B2\u09BE\u09AE\u0964 \u0986\u09AE\u09BF \u0995\u09C7\u09A8\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09A6\u09AF\u09BC \u09B8\u09B9\u09AF\u09CB\u0997\u09BF\u09A4\u09BE \u0995\u09BE\u09AE\u09A8\u09BE \u0995\u09B0\u099B\u09BF\u0964",
+              line_en: "Nice to meet you. I am Ken. Pleased to meet you."
+            },
+            {
+              speaker_ja: "\u30E9\u30D2\u30E0[\u3089\u3072\u3080]",
+              speaker_en: "Rahim",
+              line_ja: "\u30B1\u30F3\u3055\u3093\u306F\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u304B\u3002",
+              line_bn: "\u0995\u09C7\u09A8 \u09B8\u09BE\u09B9\u09C7\u09AC, \u0986\u09AA\u09A8\u09BF \u0995\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0?",
+              line_en: "Ken-san, are you a student?"
+            },
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u3044\u3044\u3048\u3001\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3058\u3083\u3042\u308A\u307E\u305B\u3093\u3002\u4F1A\u793E\u54E1[\u304B\u3044\u3057\u3083\u3044\u3093]\u3067\u3059\u3002",
+              line_bn: "\u09A8\u09BE, \u0986\u09AE\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 \u09A8\u0987\u0964 \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u099A\u09BE\u0995\u09B0\u09BF\u099C\u09C0\u09AC\u09C0\u0964",
+              line_en: "No, I am not a student. I am a company employee."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u09AA\u09CD\u09B0\u09A5\u09AE \u09AA\u09B0\u09BF\u099A\u09AF\u09BC\u09C7 \u09B8\u09CD\u09AC-\u09AA\u09B0\u09BF\u099A\u09AF\u09BC\u09C7\u09B0 \u09B8\u09C2\u099A\u09A8\u09BE (\u521D[\u306F\u3058]\u3081\u307E\u3057\u3066) \u0993 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF (\u3088\u308D\u3057\u304F)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF\u09A4\u09C7 \u09B8\u09CD\u09AC-\u09AA\u09B0\u09BF\u099A\u09AF\u09BC\u0995\u09C7 \u81EA\u5DF1\u7D39\u4ECB (Jikoshoukai) \u09AC\u09B2\u09C7\u0964 \u098F\u099F\u09BF \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u521D\u3081\u307E\u3057\u3066 (Hajimemashite - \u09AA\u09CD\u09B0\u09A5\u09AE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09AE\u09A4\u09CB \u09A6\u09C7\u0996\u099B\u09BF) \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B6\u09C1\u09B0\u09C1 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u09B6\u09C7\u09B7\u09C7 \u09AE\u09BE\u09A5\u09BE \u09A8\u09BF\u099A\u09C1 \u0995\u09B0\u09C7 \u3069\u3046\u305E\u3088\u308D\u3057\u304F\u304A\u9858\u3044\u3057\u307E\u3059 (Douzo yoroshiku onegaishimasu - \u0986\u09AE\u09BE\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u09B0\u09BE\u0996\u09AC\u09C7\u09A8) \u09AC\u09B2\u09C7 \u09B6\u09C7\u09B7 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u098F\u0987 \u09A6\u09C1\u099F\u09BF \u09AC\u09BE\u0995\u09CD\u09AF \u0986\u09AF\u09BC\u09A4\u09CD\u09A4 \u0995\u09B0\u09B2\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A6\u09C7\u09B0 \u09AE\u09A8\u09C7 \u0997\u09AD\u09C0\u09B0 \u09B6\u09CD\u09B0\u09A6\u09CD\u09A7\u09BE \u09A4\u09C8\u09B0\u09BF \u09B9\u09AF\u09BC\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u79C1[\u308F\u305F\u3057]\u306F\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059",
+            romaji_input: "watashi wa gakusei desu",
+            target_display: "\u308F\u305F\u3057\u306F\u304C\u304F\u305B\u3044\u3067\u3059",
+            meaning_bn: "\u0986\u09AE\u09BF \u098F\u0995\u099C\u09A8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0"
+          },
+          {
+            prompt_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+            romaji_input: "sensei jaarimasen",
+            target_display: "\u305B\u3093\u305B\u3044\u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09A8\u0987"
+          },
+          {
+            prompt_ja: "\u65E5\u672C\u4EBA[\u306B\u307B\u3093\u3058\u3093]\u3067\u3059\u304B",
+            romaji_input: "nihonjin desu ka",
+            target_display: "\u306B\u307B\u3093\u3058\u3093\u3067\u3059\u304B",
+            meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u0995\u09BF?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L06-1",
+            question_ja: "\u79C1[\u308F\u305F\u3057]\u306F \u5B66\u751F[\u304C\u304F\u305B\u3044]\uFF08\u3000\uFF09\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09B8\u09AC\u09C7: \u308F\u305F\u3057\u306F \u304C\u304F\u305B\u3044\uFF08\u3000\uFF09",
+            options: [
+              "\u3067\u3059",
+              "\u307E\u3059",
+              "\u3067\u3057\u305F",
+              "\u307E\u305B\u3093"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 (Noun) \u09B8\u09BE\u09A5\u09C7 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8\u0995\u09BE\u09B2\u09C7\u09B0 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF\u09B8\u09C2\u099A\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u3067\u3059' \u09AC\u09B8\u09C7\u0964"
+          },
+          {
+            quiz_id: "Q-L06-2",
+            question_ja: "\u300C\u4F1A\u793E\u54E1[\u304B\u3044\u3057\u3083\u3044\u3093]\u3058\u3083\u3042\u308A\u307E\u305B\u3093\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304B\u3044\u3057\u3083\u3044\u3093\u3058\u3083\u3042\u308A\u307E\u305B\u3093\u2019 \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u0995\u09B0\u09CD\u09AE\u099A\u09BE\u09B0\u09C0 \u09A8\u0987 (Not a company employee)",
+              "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u0995\u09B0\u09CD\u09AE\u099A\u09BE\u09B0\u09C0 (A company employee)",
+              "\u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 \u09A8\u0987 (Not a student)",
+              "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09A8\u0987 (Not a teacher)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3058\u3083\u3042\u308A\u307E\u305B\u3093 \u09B9\u09B2\u09CB \u3067\u3059 \u098F\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA\u0964 \u09A4\u09BE\u0987 \u4F1A\u793E\u54E1\u3058\u3083\u3042\u308A\u307E\u305B\u3093 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u099A\u09BE\u0995\u09B0\u09BF\u099C\u09C0\u09AC\u09C0 \u09A8\u0987\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L07",
+          lesson_number: 7,
+          module_number: 1,
+          module_name: "Identity & Pointers",
+          module_name_bn: "\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995",
+          title_ja: "\u3060\u308C\u306E\u672C[\u307B\u3093]\u3067\u3059\u304B",
+          title_en: "Particle NO (Possession & Attribution)",
+          title_bn: "\u098F\u099F\u09BF \u0995\u09BE\u09B0 \u09AC\u0987? (\u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u0993 \u09B8\u09AE\u09CD\u09AC\u09A8\u09CD\u09A7 \u09AA\u09A6)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u306E (no) \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09B8\u09AE\u09CD\u09AC\u09A8\u09CD\u09A7 \u09AA\u09A6 \u09AC\u09BE \u09B7\u09B7\u09CD\u09A0\u09C0 \u09AC\u09BF\u09AD\u0995\u09CD\u09A4\u09BF (\u09B0 / \u098F\u09B0) \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u0986\u09AE\u09BE\u09B0' = \u79C1[\u308F\u305F\u3057]\u306E, '\u09AC\u09BE\u09AC\u09BE\u09B0' = \u7236[\u3061\u3061]\u306E\u0964 \u098F\u099B\u09BE\u09A1\u09BC\u09BE \u0995\u09CB\u09A8\u09CB \u09AC\u09C3\u09B9\u09CE \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09C7\u09B0 \u0985\u09A7\u09C0\u09A8\u09B8\u09CD\u09A5 \u09B6\u09BE\u0996\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7\u0993 \u306E \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0985\u09CD\u09AF\u09BE\u09AA\u09C7\u09B0 \u09B6\u09BF\u0995\u09CD\u09B7\u0995 = \u30CB\u30DB\u30DF\u306E\u5148\u751F[\u305B\u3093\u305B\u3044])\u0964",
+          core_concept_bn: "\u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE, \u0985\u09A8\u09CD\u09A4\u09B0\u09CD\u09AD\u09C1\u0995\u09CD\u09A4\u09BF \u098F\u09AC\u0982 '\u0995\u09BE\u09B0' (\u3060\u308C\u306E) \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09BE\u0964",
+          real_world_context_bn: "\u09B9\u09BE\u09B0\u09BF\u09AF\u09BC\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AC\u09CD\u09AF\u09BE\u0997 \u09AC\u09BE \u099A\u09BE\u09AC\u09BF \u0995\u09BE\u09B0 \u09A4\u09BE \u099C\u09BE\u09A8\u09BE, \u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC \u098F\u09AC\u0982 \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09C7\u09B0 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u09A6\u09C7\u0993\u09AF\u09BC\u09BE\u0964",
+          key_takeaway_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 \u0985\u09A7\u09BF\u0995\u09BE\u09B0\u09C0\u09B0 \u09AA\u09B0 '\u09B0' \u09AC\u09B8\u09C7, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7\u0993 \u09AE\u09BE\u09B2\u09BF\u0995 \u09AC\u09BE \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09C7\u09B0 \u09AA\u09B0\u09C7 \u306E \u09AC\u09B8\u09C7\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3060\u308C",
+            romaji: "dare",
+            meaning_bn: "\u0995\u09C7",
+            meaning_en: "who",
+            part_of_speech: "pronoun",
+            example_ja: "\u3042\u306E\u65B9\u306F\u3060\u308C\u3067\u3059\u304B\u3002",
+            example_bn: "\u0990 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u0995\u09C7?",
+            example_en: "Who is that person over there?"
+          },
+          {
+            word_ja: "\u672C[\u307B\u3093]",
+            romaji: "hon",
+            meaning_bn: "\u09AC\u0987",
+            meaning_en: "book",
+            part_of_speech: "noun",
+            example_ja: "\u3053\u308C\u306F\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u672C[\u307B\u3093]\u3067\u3059\u3002",
+            example_bn: "\u098F\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AC\u0987\u0964",
+            example_en: "This is a Japanese book."
+          },
+          {
+            word_ja: "\u8F9E\u66F8[\u3058\u3057\u3087]",
+            romaji: "jisho",
+            meaning_bn: "\u0985\u09AD\u09BF\u09A7\u09BE\u09A8 / \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF",
+            meaning_en: "dictionary",
+            part_of_speech: "noun",
+            example_ja: "\u96FB\u5B50\u8F9E\u66F8[\u3067\u3093\u3057\u3058\u3057\u3087]\u3092\u4F7F[\u3064\u304B]\u3044\u307E\u3059\u3002",
+            example_bn: "\u0987\u09B2\u09C7\u0995\u099F\u09CD\u09B0\u09A8\u09BF\u0995 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BF\u0964",
+            example_en: "I use an electronic dictionary."
+          },
+          {
+            word_ja: "\u96D1\u8A8C[\u3056\u3063\u3057]",
+            romaji: "zasshi",
+            meaning_bn: "\u09AE\u09CD\u09AF\u09BE\u0997\u09BE\u099C\u09BF\u09A8 / \u09B8\u09BE\u09AE\u09AF\u09BC\u09BF\u0995\u09C0",
+            meaning_en: "magazine",
+            part_of_speech: "noun",
+            example_ja: "\u8ECA[\u304F\u308B\u307E]\u306E\u96D1\u8A8C[\u3056\u3063\u3057]\u3092\u8AAD[\u3088]\u307F\u307E\u3059\u3002",
+            example_bn: "\u0997\u09BE\u09A1\u09BC\u09BF\u09B0 \u09AE\u09CD\u09AF\u09BE\u0997\u09BE\u099C\u09BF\u09A8 \u09AA\u09A1\u09BC\u09BF\u0964",
+            example_en: "I read a car magazine."
+          },
+          {
+            word_ja: "\u9375[\u304B\u304E]",
+            romaji: "kagi",
+            meaning_bn: "\u099A\u09BE\u09AC\u09BF",
+            meaning_en: "key",
+            part_of_speech: "noun",
+            example_ja: "\u90E8\u5C4B[\u3078\u3084]\u306E\u9375[\u304B\u304E]\u3092\u5931[\u306A]\u304F\u3057\u307E\u3057\u305F\u3002",
+            example_bn: "\u09B0\u09C1\u09AE\u09C7\u09B0 \u099A\u09BE\u09AC\u09BF \u09B9\u09BE\u09B0\u09BF\u09AF\u09BC\u09C7 \u09AB\u09C7\u09B2\u09C7\u099B\u09BF\u0964",
+            example_en: "I lost my room key."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u672C",
+            onyomi: "\u30DB\u30F3",
+            kunyomi: "\u3082\u3068",
+            meaning_bn: "\u09AC\u0987 / \u09AE\u09C2\u09B2",
+            meaning_en: "book / origin",
+            stroke_count: 5,
+            compounds: [
+              {
+                word_ja: "\u65E5\u672C[\u306B\u307B\u3093]",
+                meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8",
+                meaning_en: "Japan"
+              },
+              {
+                word_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]",
+                meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE",
+                meaning_en: "Japanese language"
+              },
+              {
+                word_ja: "\u672C\u5F53[\u307B\u3093\u3068\u3046]",
+                meaning_bn: "\u09B8\u09A4\u09CD\u09AF\u09BF / \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC\u09BF\u0995",
+                meaning_en: "truth / reality"
+              }
+            ]
+          },
+          {
+            kanji: "\u65E5",
+            onyomi: "\u30CB\u30C1, \u30B8\u30C4",
+            kunyomi: "\u3072, \u304B",
+            meaning_bn: "\u09B8\u09C2\u09B0\u09CD\u09AF / \u09A6\u09BF\u09A8",
+            meaning_en: "sun / day",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]",
+                meaning_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0",
+                meaning_en: "Sunday"
+              },
+              {
+                word_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8",
+                meaning_en: "every day"
+              },
+              {
+                word_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]",
+                meaning_bn: "\u0986\u099C",
+                meaning_en: "today"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G07-1",
+            pattern_ja: "N1 \u306E N2 (\u6240\u6709[\u3057\u3087\u3086\u3046]\u30FB\u6240\u5C5E[\u3057\u3087\u305E\u304F])",
+            pattern_bn: "N1 \u098F\u09B0 N2 (\u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u0993 \u09B8\u09AE\u09CD\u09AC\u09A8\u09CD\u09A7 \u09AA\u09A6)",
+            explanation_bn: "N1 \u09AF\u09A6\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u09B9\u09AF\u09BC, \u09A4\u09AC\u09C7 N2 \u09B9\u09B2\u09CB \u09A4\u09BE\u09B0 \u0985\u09A7\u09BF\u0995\u09BE\u09B0\u09AD\u09C1\u0995\u09CD\u09A4 \u09AC\u09B8\u09CD\u09A4\u09C1 (\u09AF\u09C7\u09AE\u09A8: \u79C1[\u308F\u305F\u3057]\u306E\u672C[\u307B\u3093] = \u0986\u09AE\u09BE\u09B0 \u09AC\u0987)\u0964 N1 \u09AF\u09A6\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8 \u09AC\u09BE \u09A6\u09C7\u09B6 \u09B9\u09AF\u09BC, \u09A4\u09AC\u09C7 N2 \u09A4\u09BE\u09B0 \u0985\u0982\u09B6 \u09AC\u09BE \u09AC\u09C8\u09B6\u09BF\u09B7\u09CD\u099F\u09CD\u09AF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            common_pitfalls: [
+              "\u0995\u09CD\u09B0\u09AE \u0995\u0996\u09A8\u09CB \u0989\u09B2\u09CD\u099F\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0964 '\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0997\u09BE\u09A1\u09BC\u09BF' \u09AC\u09B2\u09A4\u09C7 \u65E5\u672C[\u306B\u307B\u3093]\u306E\u8ECA[\u304F\u308B\u307E] \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7, \u8ECA\u306E\u65E5\u672C \u09AC\u09B2\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u308C\u306F\u5148\u751F[\u305B\u3093\u305B\u3044]\u306E\u8F9E\u66F8[\u3058\u3057\u3087]\u3067\u3059\u3002",
+                bn: "\u098F\u099F\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8\u0964",
+                en: "This is the teacher's dictionary."
+              }
+            ]
+          },
+          {
+            point_id: "G07-2",
+            pattern_ja: "\u3060\u308C\u306E N \u3067\u3059\u304B",
+            pattern_bn: "\u098F\u099F\u09BF \u0995\u09BE\u09B0 \u09AC\u09B8\u09CD\u09A4\u09C1? (\u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u099C\u09BE\u09A8\u09BE\u09B0 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8)",
+            explanation_bn: "\u0995\u09BE\u09B0 \u099C\u09BF\u09A8\u09BF\u09B8 \u09A4\u09BE \u099C\u09BE\u09A8\u09A4\u09C7 \u3060\u308C\u306E \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u0989\u09A4\u09CD\u09A4\u09B0\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF [\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306E \u3067\u3059 \u09AC\u09B2\u09BE \u09AF\u09BE\u09AF\u09BC (\u09AC\u09BE\u09B0\u09AC\u09BE\u09B0 Noun \u09AA\u09C1\u09A8\u09B0\u09BE\u09AC\u09C3\u09A4\u09CD\u09A4\u09BF \u09A8\u09BE \u0995\u09B0\u09C7)\u0964",
+            common_pitfalls: [
+              "\u0989\u09A4\u09CD\u09A4\u09B0\u09C7 '\u79C1[\u308F\u305F\u3057]\u306E\u3067\u3059' (\u0986\u09AE\u09BE\u09B0) \u09AC\u09B2\u09B2\u09C7 \u099A\u09B2\u09C7, '\u79C1[\u308F\u305F\u3057]\u306E\u672C[\u307B\u3093]\u3067\u3059' \u09AC\u09B2\u09BE\u0993 \u09B8\u09A0\u09BF\u0995\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u306E\u5098[\u304B\u3055]\u306F\u3060\u308C\u306E\u3067\u3059\u304B\u3002\u79C1[\u308F\u305F\u3057]\u306E\u3067\u3059\u3002",
+                bn: "\u098F\u0987 \u099B\u09BE\u09A4\u09BE\u099F\u09BF \u0995\u09BE\u09B0? \u0986\u09AE\u09BE\u09B0\u0964",
+                en: "Whose umbrella is this? It is mine."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09AC\u09C7\u099E\u09CD\u099A\u09C7 \u09AA\u09A1\u09BC\u09C7 \u09A5\u09BE\u0995\u09BE \u098F\u0995\u099F\u09BF \u09AC\u0987 \u0995\u09BE\u09B0 \u09A4\u09BE \u0996\u09C1\u0981\u099C\u09C7 \u09AC\u09C7\u09B0 \u0995\u09B0\u09BE\u0964",
+          situation_en: "Finding out who owns a book left on a desk in a classroom.",
+          lines: [
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]A",
+              speaker_en: "Student A",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u3053\u308C\u306F\u3060\u308C\u306E\u672C[\u307B\u3093]\u3067\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u098F\u099F\u09BF \u0995\u09BE\u09B0 \u09AC\u0987?",
+              line_en: "Excuse me, whose book is this?"
+            },
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]B",
+              speaker_en: "Student B",
+              line_ja: "\u3042\u3001\u305D\u308C\u306F\u79C1[\u308F\u305F\u3057]\u306E\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u672C[\u307B\u3093]\u3067\u3059\u3002\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002",
+              line_bn: "\u0986\u09B0\u09C7, \u0993\u099F\u09BF \u0986\u09AE\u09BE\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AC\u0987\u0964 \u0986\u09AA\u09A8\u09BE\u0995\u09C7 \u0985\u09A8\u09C7\u0995 \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6\u0964",
+              line_en: "Ah, that is my Japanese book. Thank you very much."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B9\u09BE\u09B0\u09BE\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8 \u09AB\u09BF\u09B0\u09C7 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09AC\u09CD\u09AF\u09AC\u09B8\u09CD\u09A5\u09BE (Koban - \u4EA4\u756A)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u09AE\u09C2\u09B2\u09CD\u09AF\u09AC\u09BE\u09A8 \u099C\u09BF\u09A8\u09BF\u09B8 (\u09AE\u09BE\u09A8\u09BF\u09AC\u09CD\u09AF\u09BE\u0997, \u09AA\u09BE\u09B8\u09AA\u09CB\u09B0\u09CD\u099F, \u099A\u09BE\u09AC\u09BF \u09AC\u09BE \u099B\u09BE\u09A4\u09BE) \u09B9\u09BE\u09B0\u09BF\u09AF\u09BC\u09C7 \u0997\u09C7\u09B2\u09C7 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C0\u09AF\u09BC \u09AA\u09C1\u09B2\u09BF\u09B6 \u09AC\u0995\u09CD\u09B8\u09C7 (K\u014Dban - \u4EA4\u756A) \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u0995\u09B0\u09C1\u09A8\u0964 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09A8\u09BE\u0997\u09B0\u09BF\u0995\u09B0\u09BE \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE\u09AF\u09BC \u0995\u09C1\u09A1\u09BC\u09BF\u09AF\u09BC\u09C7 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8 \u099C\u09AE\u09BE \u0995\u09B0\u09C7 \u09A6\u09C7\u09A8\u0964 \u09EF\u09E6% \u098F\u09B0\u0993 \u09AC\u09C7\u09B6\u09BF \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09B9\u09BE\u09B0\u09BE\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8 \u0985\u0995\u09CD\u09B7\u09A4 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09AF\u09BC \u09AB\u09C7\u09B0\u09A4 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u0964",
+          category: "Emergency"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3060\u308C\u306E\u672C[\u307B\u3093]\u3067\u3059\u304B",
+            romaji_input: "dare no hon desu ka",
+            target_display: "\u3060\u308C\u306E\u307B\u3093\u3067\u3059\u304B",
+            meaning_bn: "\u0995\u09BE\u09B0 \u09AC\u0987?"
+          },
+          {
+            prompt_ja: "\u79C1[\u308F\u305F\u3057]\u306E\u8F9E\u66F8[\u3058\u3057\u3087]\u3067\u3059",
+            romaji_input: "watashi no jisho desu",
+            target_display: "\u308F\u305F\u3057\u306E\u3058\u3057\u3087\u3067\u3059",
+            meaning_bn: "\u0986\u09AE\u09BE\u09B0 \u0985\u09AD\u09BF\u09A7\u09BE\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L07-1",
+            question_ja: "\u3053\u308C\u306F\uFF08\u3000\uFF09\u306E \u5098[\u304B\u3055]\u3067\u3059\u304B\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u3053\u308C\u306F\uFF08\u3000\uFF09\u306E \u304B\u3055\u3067\u3059\u304B",
+            options: [
+              "\u3060\u308C",
+              "\u3069\u3053",
+              "\u306A\u3093",
+              "\u3044\u304F\u3089"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09AE\u09BE\u09B2\u09BF\u0995\u09BE\u09A8\u09BE \u099C\u09BE\u09A8\u09A4\u09C7 '\u3060\u308C' (\u0995\u09C7/\u0995\u09BE\u09B0) \u09AC\u09B8\u09C7: \u3060\u308C\u306E\u304B\u3055\u3067\u3059\u304B (\u0995\u09BE\u09B0 \u099B\u09BE\u09A4\u09BE?)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L08",
+          lesson_number: 8,
+          module_number: 1,
+          module_name: "Identity & Pointers",
+          module_name_bn: "\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995",
+          title_ja: "\u3053\u308C\u3082\u30DA\u30F3\u3067\u3059",
+          title_en: "Particle MO (Inclusion 'Also / Too')",
+          title_bn: "\u098F\u099F\u09BF\u0993 \u098F\u0995\u099F\u09BF \u0995\u09B2\u09AE (\u0985\u09A8\u09CD\u09A4\u09B0\u09CD\u09AD\u09C1\u0995\u09CD\u09A4\u09BF \u0993 \u09B8\u09BE\u09A6\u09C3\u09B6\u09CD\u09AF)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u3082 (mo) \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC '\u0993' (also / too) \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u0996\u09A8 \u09AA\u09C2\u09B0\u09CD\u09AC\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u0995\u09CD\u09A4\u09AC\u09CD\u09AF\u09C7\u09B0 \u09AE\u09A4\u09CB \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u09BF\u09B7\u09AF\u09BC\u09C7\u0993 \u098F\u0995\u0987 \u09A4\u09A5\u09CD\u09AF \u09AA\u09CD\u09B0\u09AF\u09CB\u099C\u09CD\u09AF \u09B9\u09AF\u09BC, \u09A4\u0996\u09A8 \u306F \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 \u3082 \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: '\u09B0\u09B9\u09BF\u09AE \u09B8\u09BE\u09B9\u09C7\u09AC \u099B\u09BE\u09A4\u09CD\u09B0, \u09A4\u09BE\u09A8\u09BF\u09AE \u09B8\u09BE\u09B9\u09C7\u09AC\u0993 \u099B\u09BE\u09A4\u09CD\u09B0' -> \u30E9\u30D2\u30E0\u3055\u3093\u306F\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u3002\u30BF\u30CB\u30E0\u3055\u3093\u3082\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059\u3002",
+          core_concept_bn: "\u09B8\u09BE\u09A6\u09C3\u09B6\u09CD\u09AF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u0995 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u3082 (mo) \u098F\u09B0 \u09AA\u09CD\u09B0\u09AF\u09BC\u09CB\u0997 \u098F\u09AC\u0982 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7 '\u09A4\u09BF\u09A8\u09BF\u0993 \u09A8\u09A8'\u0964",
+          real_world_context_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE\u09AF\u09BC \u098F\u0995\u0987 \u09AA\u09A3\u09CD\u09AF \u098F\u0995\u09BE\u09A7\u09BF\u0995 \u0995\u09CD\u09B0\u09AF\u09BC \u0995\u09B0\u09BE \u09AC\u09BE \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09AC\u09C8\u09B6\u09BF\u09B7\u09CD\u099F\u09CD\u09AF \u0989\u09B2\u09CD\u09B2\u09C7\u0996 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u3082 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09B2\u09C7 \u306F \u09AC\u09BE \u3092 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AC\u09BF\u09B2\u09C1\u09AA\u09CD\u09A4 \u09B9\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u30DA\u30F3",
+            romaji: "pen",
+            meaning_bn: "\u0995\u09B2\u09AE",
+            meaning_en: "pen",
+            part_of_speech: "noun",
+            example_ja: "\u9ED2[\u304F\u308D]\u3044\u30DA\u30F3\u3067\u66F8[\u304B]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0995\u09BE\u09B2\u09CB \u0995\u09B2\u09AE \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B2\u09BF\u0996\u09BF\u0964",
+            example_en: "I write with a black pen."
+          },
+          {
+            word_ja: "\u624B\u5E33[\u3066\u3061\u3087\u3046]",
+            romaji: "tech\u014D",
+            meaning_bn: "\u09AA\u0995\u09C7\u099F \u09A1\u09BE\u09AF\u09BC\u09C7\u09B0\u09BF / \u09B6\u09BF\u09A1\u09BF\u0989\u09B2 \u09AC\u09C1\u0995",
+            meaning_en: "pocket notebook / planner",
+            part_of_speech: "noun",
+            example_ja: "\u624B\u5E33[\u3066\u3061\u3087\u3046]\u306B\u4E88\u5B9A[\u3088\u3066\u3044]\u3092\u66F8[\u304B]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09A1\u09BE\u09AF\u09BC\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AA\u09B0\u09BF\u0995\u09B2\u09CD\u09AA\u09A8\u09BE \u09B2\u09BF\u0996\u09BF\u0964",
+            example_en: "I write my schedule in my planner."
+          },
+          {
+            word_ja: "\u540D\u523A[\u3081\u3044\u3057]",
+            romaji: "meishi",
+            meaning_bn: "\u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1",
+            meaning_en: "business card",
+            part_of_speech: "noun",
+            example_ja: "\u540D\u523A[\u3081\u3044\u3057]\u3092\u4EA4\u63DB[\u3053\u3046\u304B\u3093]\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC \u0995\u09B0\u09BF\u0964",
+            example_en: "I exchange business cards."
+          },
+          {
+            word_ja: "\u6642\u8A08[\u3068\u3051\u3044]",
+            romaji: "tokei",
+            meaning_bn: "\u0998\u09A1\u09BC\u09BF",
+            meaning_en: "clock / watch",
+            part_of_speech: "noun",
+            example_ja: "\u3053\u306E\u6642\u8A08[\u3068\u3051\u3044]\u306F\u6B63\u78BA[\u305B\u3044\u304B\u304F]\u3067\u3059\u3002",
+            example_bn: "\u098F\u0987 \u0998\u09A1\u09BC\u09BF\u099F\u09BF \u09A8\u09BF\u09B0\u09CD\u09AD\u09C1\u09B2\u0964",
+            example_en: "This watch is accurate."
+          },
+          {
+            word_ja: "\u81EA\u52D5\u8ECA[\u3058\u3069\u3046\u3057\u3083]",
+            romaji: "jid\u014Dsha",
+            meaning_bn: "\u0997\u09BE\u09A1\u09BC\u09BF / \u0985\u099F\u09CB\u09AE\u09CB\u09AC\u09BE\u0987\u09B2",
+            meaning_en: "automobile / car",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u81EA\u52D5\u8ECA[\u3058\u3069\u3046\u3057\u3083]\u306F\u4EBA\u6C17[\u306B\u3093\u304D]\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0997\u09BE\u09A1\u09BC\u09BF\u09B0 \u09AC\u09CD\u09AF\u09BE\u09AA\u0995 \u099C\u09A8\u09AA\u09CD\u09B0\u09BF\u09AF\u09BC\u09A4\u09BE \u0986\u099B\u09C7\u0964",
+            example_en: "Japanese automobiles are popular."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u8ECA",
+            onyomi: "\u30B7\u30E3",
+            kunyomi: "\u304F\u308B\u307E",
+            meaning_bn: "\u0997\u09BE\u09A1\u09BC\u09BF / \u099A\u09BE\u0995\u09BE",
+            meaning_en: "car / vehicle",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u96FB\u8ECA[\u3067\u3093\u3057\u3083]",
+                meaning_bn: "\u09AC\u09C8\u09A6\u09CD\u09AF\u09C1\u09A4\u09BF\u0995 \u099F\u09CD\u09B0\u09C7\u09A8",
+                meaning_en: "electric train"
+              },
+              {
+                word_ja: "\u81EA\u52D5\u8ECA[\u3058\u3069\u3046\u3057\u3083]",
+                meaning_bn: "\u09AE\u09CB\u099F\u09B0\u0997\u09BE\u09A1\u09BC\u09BF",
+                meaning_en: "automobile"
+              },
+              {
+                word_ja: "\u81EA\u8EE2\u8ECA[\u3058\u3066\u3093\u3057\u3083]",
+                meaning_bn: "\u09AC\u09BE\u0987\u09B8\u09BE\u0987\u0995\u09C7\u09B2",
+                meaning_en: "bicycle"
+              }
+            ]
+          },
+          {
+            kanji: "\u540D",
+            onyomi: "\u30E1\u30A4, \u30DF\u30E7\u30A6",
+            kunyomi: "\u306A",
+            meaning_bn: "\u09A8\u09BE\u09AE / \u0996\u09CD\u09AF\u09BE\u09A4\u09BF",
+            meaning_en: "name / fame",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u540D\u524D[\u306A\u307E\u3048]",
+                meaning_bn: "\u09A8\u09BE\u09AE",
+                meaning_en: "name"
+              },
+              {
+                word_ja: "\u6709\u540D[\u3086\u3046\u3081\u3044]",
+                meaning_bn: "\u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4",
+                meaning_en: "famous"
+              },
+              {
+                word_ja: "\u540D\u523A[\u3081\u3044\u3057]",
+                meaning_bn: "\u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1",
+                meaning_en: "business card"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G08-1",
+            pattern_ja: "N \u3082 N \u3067\u3059 / \u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+            pattern_bn: "N-\u0993 N \u09B9\u09AF\u09BC / \u09A8\u09AF\u09BC (Inclusion Particle)",
+            explanation_bn: "\u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u0989\u09B2\u09CD\u09B2\u09C7\u0996\u09BF\u09A4 \u09AC\u0995\u09CD\u09A4\u09AC\u09CD\u09AF\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0985\u09AD\u09BF\u09A8\u09CD\u09A8\u09A4\u09BE \u09A5\u09BE\u0995\u09B2\u09C7 \u306F \u098F\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE\u09AF\u09BC \u3082 \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u79C1[\u308F\u305F\u3057]\u3082\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5\u4EBA[\u3058\u3093]\u3067\u3059 (\u0986\u09AE\u09BF\u0993 \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09BF)\u0964",
+            common_pitfalls: [
+              "\u306F \u098F\u09AC\u0982 \u3082 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\u306F\u3082 \u09AC\u09BE \u3082\u306F \u09AD\u09C1\u09B2)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3042\u308C\u3082\u79C1[\u308F\u305F\u3057]\u306E\u9784[\u304B\u3070\u3093]\u3067\u3059\u3002",
+                bn: "\u0990 \u09A6\u09C2\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u09CD\u09AF\u09BE\u0997\u099F\u09BF\u0993 \u0986\u09AE\u09BE\u09B0\u0964",
+                en: "That one over there is also my bag."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0985\u09AB\u09BF\u09B8\u09C7 \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AA\u09B0\u09BF\u099A\u09AF\u09BC \u0993 \u09AA\u09A6\u09AE\u09B0\u09CD\u09AF\u09BE\u09A6\u09BE \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4\u0995\u09B0\u09A3\u0964",
+          situation_en: "Introducing and confirming positions with colleagues in a Japanese office.",
+          lines: [
+            {
+              speaker_ja: "\u4F50\u85E4[\u3055\u3068\u3046]",
+              speaker_en: "Sato",
+              line_ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306F\u30A8\u30F3\u30B8\u30CB\u30A2\u3067\u3059\u3002\u9234\u6728[\u3059\u305A\u304D]\u3055\u3093\u3082\u30A8\u30F3\u30B8\u30CB\u30A2\u3067\u3059\u304B\u3002",
+              line_bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u09AA\u09CD\u09B0\u0995\u09CC\u09B6\u09B2\u09C0\u0964 \u09B8\u09C1\u099C\u09C1\u0995\u09BF \u09B8\u09BE\u09B9\u09C7\u09AC\u0993 \u0995\u09BF \u09AA\u09CD\u09B0\u0995\u09CC\u09B6\u09B2\u09C0?",
+              line_en: "Tanaka-san is an engineer. Is Suzuki-san also an engineer?"
+            },
+            {
+              speaker_ja: "\u9234\u6728[\u3059\u305A\u304D]",
+              speaker_en: "Suzuki",
+              line_ja: "\u306F\u3044\u3001\u79C1[\u308F\u305F\u3057]\u3082\u30A8\u30F3\u30B8\u30CB\u30A2\u3067\u3059\u3002",
+              line_bn: "\u09B9\u09CD\u09AF\u09BE\u0981, \u0986\u09AE\u09BF\u0993 \u098F\u0995\u099C\u09A8 \u09AA\u09CD\u09B0\u0995\u09CC\u09B6\u09B2\u09C0\u0964",
+              line_en: "Yes, I am also an engineer."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09AC\u09BF\u09A4\u09CD\u09B0 \u0995\u09BE\u09AF\u09BC\u09A6\u09BE (Meishi Koukan - \u540D\u523A\u4EA4\u63DB)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 \u09A6\u09C1\u0987 \u09B9\u09BE\u09A4\u09C7 \u09A7\u09B0\u09C7 \u09AE\u09BE\u09A5\u09BE \u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF \u09A8\u09BF\u099A\u09C1 \u0995\u09B0\u09C7 \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u0995\u09BE\u09B0\u09CD\u09A1 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0 \u09B8\u0999\u09CD\u0997\u09C7 \u09B8\u0999\u09CD\u0997\u09C7 \u09AA\u0995\u09C7\u099F\u09C7 \u09B0\u09BE\u0996\u09BE \u099A\u09B0\u09AE \u0985\u09AD\u09A6\u09CD\u09B0\u09A4\u09BE\u0964 \u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u0989\u09AA\u09B0 \u0995\u09BE\u09B0\u09CD\u09A1\u099F\u09BF \u09A8\u09BF\u099C\u09C7\u09B0 \u09B8\u09BE\u09AE\u09A8\u09C7 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u0995\u09B0\u09C7 \u09B8\u09BE\u099C\u09BF\u09AF\u09BC\u09C7 \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u09AE\u09BF\u099F\u09BF\u0982 \u09B6\u09C7\u09B7\u09C7 \u0995\u09BE\u09B0\u09CD\u09A1 \u09B9\u09CB\u09B2\u09CD\u09A1\u09BE\u09B0\u09C7 \u09AD\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3053\u308C\u3082\u30DA\u30F3\u3067\u3059",
+            romaji_input: "kore mo pen desu",
+            target_display: "\u3053\u308C\u3082\u30DA\u30F3\u3067\u3059",
+            meaning_bn: "\u098F\u099F\u09BF\u0993 \u0995\u09B2\u09AE"
+          },
+          {
+            prompt_ja: "\u79C1[\u308F\u305F\u3057]\u3082\u5B66\u751F[\u304C\u304F\u305B\u3044]\u3067\u3059",
+            romaji_input: "watashi mo gakusei desu",
+            target_display: "\u308F\u305F\u3057\u3082\u304C\u304F\u305B\u3044\u3067\u3059",
+            meaning_bn: "\u0986\u09AE\u09BF\u0993 \u099B\u09BE\u09A4\u09CD\u09B0"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L08-1",
+            question_ja: "\u300C\u79C1\u3082\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u308F\u305F\u3057\u3082\u2019 (watashi mo) \u098F\u09B0 \u09AC\u09BE\u0982\u09B2\u09BE \u0985\u09B0\u09CD\u09A5 \u0995\u09C0?",
+            options: [
+              "\u0986\u09AE\u09BF\u0993 (Me too / I also)",
+              "\u0986\u09AE\u09BE\u09B0 (Mine)",
+              "\u0986\u09AE\u09BE\u0995\u09C7 (To me)",
+              "\u0986\u09AE\u09BF \u09B6\u09C1\u09A7\u09C1 (Only me)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3082 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u0985\u09A8\u09CD\u09A4\u09B0\u09CD\u09AD\u09C1\u0995\u09CD\u09A4\u09BF\u09B8\u09C2\u099A\u0995 '\u0993' \u0985\u09B0\u09CD\u09A5 \u09A6\u09C7\u09AF\u09BC, \u09A4\u09BE\u0987 \u308F\u305F\u3057\u3082 \u0985\u09B0\u09CD\u09A5 '\u0986\u09AE\u09BF\u0993'\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L09",
+          lesson_number: 9,
+          module_number: 1,
+          module_name: "Identity & Pointers",
+          module_name_bn: "\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995",
+          title_ja: "\u3053\u308C\u30FB\u305D\u308C\u30FB\u3042\u308C",
+          title_en: "Demonstratives (Ko-So-A-Do System)",
+          title_bn: "\u098F\u0987, \u0990, \u09B8\u09C7\u0987 \u098F\u09AC\u0982 \u0995\u09CB\u09A8\u099F\u09BF (\u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09B8\u09B0\u09CD\u09AC\u09A8\u09BE\u09AE)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09AC\u09B8\u09CD\u09A4\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CB-\u09B8\u09CB-\u0986-\u09A6\u09CB (Ko-So-A-Do) \u09B8\u09BF\u09B8\u09CD\u099F\u09C7\u09AE \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC: \u09AC\u0995\u09CD\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7 \u09A5\u09BE\u0995\u09B2\u09C7 \u3053\u308C (kore - \u098F\u099F\u09BF), \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7 \u09A5\u09BE\u0995\u09B2\u09C7 \u305D\u308C (sore - \u0993\u099F\u09BF), \u098F\u09AC\u0982 \u0989\u09AD\u09AF\u09BC\u09C7\u09B0 \u09A5\u09C7\u0995\u09C7 \u09A6\u09C2\u09B0\u09C7 \u09A5\u09BE\u0995\u09B2\u09C7 \u3042\u308C (are - \u09B8\u09C7\u0987\u099F\u09BF)\u0964 \u0995\u09CB\u09A8\u099F\u09BF \u099C\u09BE\u09A8\u09A4\u09C7 \u099A\u09BE\u0987\u09B2\u09C7 \u3069\u308C (dore)\u0964 \u0986\u09B0 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09B2\u09C7 \u09B9\u09AF\u09BC \u3053\u306E/\u305D\u306E/\u3042\u306E + Noun\u0964",
+          core_concept_bn: "\u09A6\u09C2\u09B0\u09A4\u09CD\u09AC\u09AD\u09BF\u09A4\u09CD\u09A4\u09BF\u0995 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09B8\u09B0\u09CD\u09AC\u09A8\u09BE\u09AE (\u3053\u308C/\u305D\u308C/\u3042\u308C) \u09AC\u09A8\u09BE\u09AE \u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 (\u3053\u306E/\u305D\u306E/\u3042\u306E)\u0964",
+          real_world_context_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0986\u0999\u09C1\u09B2 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u099C\u09BF\u09A8\u09BF\u09B8 \u09A6\u09C7\u0996\u09BE\u09A8\u09CB \u09AC\u09BE \u09AE\u09C7\u09A8\u09C1 \u09A5\u09C7\u0995\u09C7 \u09AA\u099B\u09A8\u09CD\u09A6\u09C7\u09B0 \u0986\u0987\u099F\u09C7\u09AE \u09AC\u09BE\u099B\u09BE\u0987 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u3053\u308C/\u305D\u308C/\u3042\u308C \u098F\u0995\u09BE \u09AC\u09B8\u09C7 (Noun \u099B\u09BE\u09A1\u09BC\u09BE), \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u3053\u306E/\u305D\u306E/\u3042\u306E \u098F\u09B0 \u09A0\u09BF\u0995 \u09AA\u09B0\u09C7 \u098F\u0995\u099F\u09BF Noun \u09A5\u09BE\u0995\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3053\u308C",
+            romaji: "kore",
+            meaning_bn: "\u098F\u099F\u09BF (\u09AC\u0995\u09CD\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09BE\u0995\u09BE\u099B\u09BF)",
+            meaning_en: "this (near speaker)",
+            part_of_speech: "pronoun",
+            example_ja: "\u3053\u308C\u306F\u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            example_bn: "\u098F\u099F\u09BF \u0995\u09C0?",
+            example_en: "What is this?"
+          },
+          {
+            word_ja: "\u305D\u308C",
+            romaji: "sore",
+            meaning_bn: "\u0993\u099F\u09BF (\u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09BE\u0995\u09BE\u099B\u09BF)",
+            meaning_en: "that (near listener)",
+            part_of_speech: "pronoun",
+            example_ja: "\u305D\u308C\u306F\u79C1[\u308F\u305F\u3057]\u306E\u5098[\u304B\u3055]\u3067\u3059\u3002",
+            example_bn: "\u0993\u099F\u09BF \u0986\u09AE\u09BE\u09B0 \u099B\u09BE\u09A4\u09BE\u0964",
+            example_en: "That is my umbrella."
+          },
+          {
+            word_ja: "\u3042\u308C",
+            romaji: "are",
+            meaning_bn: "\u09B8\u09C7\u0987\u099F\u09BF (\u0989\u09AD\u09AF\u09BC\u09C7\u09B0 \u09A6\u09C2\u09B0\u09C7)",
+            meaning_en: "that over there (far from both)",
+            part_of_speech: "pronoun",
+            example_ja: "\u3042\u308C\u306F\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u30BF\u30EF\u30FC\u3067\u3059\u3002",
+            example_bn: "\u09B8\u09C7\u0987\u099F\u09BF \u099F\u09CB\u0995\u09BF\u0993 \u099F\u09BE\u0993\u09AF\u09BC\u09BE\u09B0\u0964",
+            example_en: "That over there is Tokyo Tower."
+          },
+          {
+            word_ja: "\u3069\u308C",
+            romaji: "dore",
+            meaning_bn: "\u0995\u09CB\u09A8\u099F\u09BF?",
+            meaning_en: "which one?",
+            part_of_speech: "pronoun",
+            example_ja: "\u3042\u306A\u305F\u306E\u304B\u3070\u3093\u306F\u3069\u308C\u3067\u3059\u304B\u3002",
+            example_bn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u09AC\u09CD\u09AF\u09BE\u0997 \u0995\u09CB\u09A8\u099F\u09BF?",
+            example_en: "Which one is your bag?"
+          },
+          {
+            word_ja: "\u3053\u306E\u672C[\u307B\u3093]",
+            romaji: "kono hon",
+            meaning_bn: "\u098F\u0987 \u09AC\u0987\u099F\u09BF",
+            meaning_en: "this book",
+            part_of_speech: "noun phrase",
+            example_ja: "\u3053\u306E\u672C[\u307B\u3093]\u306F\u3068\u3066\u3082\u9762\u767D[\u304A\u3082\u3057\u308D]\u3044\u3067\u3059\u3002",
+            example_bn: "\u098F\u0987 \u09AC\u0987\u099F\u09BF \u0996\u09C1\u09AC \u09AE\u099C\u09BE\u09B0\u0964",
+            example_en: "This book is very interesting."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5927",
+            onyomi: "\u30C0\u30A4, \u30BF\u30A4",
+            kunyomi: "\u304A\u304A\u30FB\u304D\u3044, \u304A\u304A\u30FB\u3044\u306B",
+            meaning_bn: "\u09AC\u09A1\u09BC / \u09AC\u09BF\u09B6\u09BE\u09B2",
+            meaning_en: "big / large",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u5927[\u304A\u304A]\u304D\u3044",
+                meaning_bn: "\u09AC\u09A1\u09BC",
+                meaning_en: "big"
+              },
+              {
+                word_ja: "\u5927\u5B66[\u3060\u3044\u304C\u304F]",
+                meaning_bn: "\u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "university"
+              },
+              {
+                word_ja: "\u5927\u4EBA[\u304A\u3068\u306A]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09BE\u09AA\u09CD\u09A4\u09AC\u09AF\u09BC\u09B8\u09CD\u0995",
+                meaning_en: "adult"
+              }
+            ]
+          },
+          {
+            kanji: "\u5C0F",
+            onyomi: "\u30B7\u30E7\u30A6",
+            kunyomi: "\u3061\u3044\u30FB\u3055\u3044, \u3053, \u304A",
+            meaning_bn: "\u099B\u09CB\u099F",
+            meaning_en: "small",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u5C0F[\u3061\u3044]\u3055\u3044",
+                meaning_bn: "\u099B\u09CB\u099F",
+                meaning_en: "small"
+              },
+              {
+                word_ja: "\u5C0F\u5B66\u6821[\u3057\u3087\u3046\u304C\u3063\u3053\u3046]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09BE\u09A5\u09AE\u09BF\u0995 \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "elementary school"
+              },
+              {
+                word_ja: "\u5C0F\u5DDD[\u304A\u304C\u308F]",
+                meaning_bn: "\u099B\u09CB\u099F \u09A8\u09A6\u09C0 / \u099D\u09BF\u09B0\u09BF",
+                meaning_en: "brook / stream"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G09-1",
+            pattern_ja: "\u3053\u308C / \u305D\u308C / \u3042\u308C \u306F N \u3067\u3059",
+            pattern_bn: "\u098F\u099F\u09BF / \u0993\u099F\u09BF / \u09B8\u09C7\u0987\u099F\u09BF \u09B9\u09B2\u09CB N",
+            explanation_bn: "\u09AC\u0995\u09CD\u09A4\u09BE\u09B0 \u09A8\u09BF\u099C\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09B8\u09BE\u09AA\u09C7\u0995\u09CD\u09B7\u09C7 \u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u09A6\u09C2\u09B0\u09A4\u09CD\u09AC \u0985\u09A8\u09C1\u09AF\u09BE\u09AF\u09BC\u09C0 \u3053\u308C (\u0995\u09BE\u099B\u09C7), \u305D\u308C (\u09B8\u09BE\u09AE\u09A8\u09C7 \u09A5\u09BE\u0995\u09BE \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u09B0 \u0995\u09BE\u099B\u09C7) \u098F\u09AC\u0982 \u3042\u308C (\u0989\u09AD\u09AF\u09BC \u09A5\u09C7\u0995\u09C7 \u09A6\u09C2\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u3053\u308C\u672C[\u307B\u3093] \u09AC\u09B2\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE; Noun \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09BE\u09A4\u09C7 \u09B9\u09B2\u09C7 \u5FC5\u305A \u3053\u306E\u672C[\u307B\u3093] \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u308C\u306F\u65E5\u672C[\u306B\u307B\u3093]\u306E\u304A\u571F\u7523[\u307F\u3084\u3052]\u3067\u3059\u3002",
+                bn: "\u098F\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B8\u09CD\u09AF\u09C1\u09AD\u09C7\u09A8\u09BF\u09B0 (\u0989\u09AA\u09B9\u09BE\u09B0)\u0964",
+                en: "This is a Japanese souvenir."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u09B8\u09C1\u09AD\u09C7\u09A8\u09BF\u09B0 \u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AB\u09CD\u09AF\u09BE\u09A8 (\u09AA\u09BE\u0996\u09BE) \u0995\u09C7\u09A8\u09BE\u0964",
+          situation_en: "Buying a traditional Japanese folding fan at a Tokyo souvenir shop.",
+          lines: [
+            {
+              speaker_ja: "\u5BA2[\u304D\u3083\u304F]",
+              speaker_en: "Customer",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u3042\u308C\u3092\u898B[\u307F]\u305B\u3066\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u0990 \u09A6\u09C2\u09B0\u09C7\u09B0\u099F\u09BF \u0986\u09AE\u09BE\u0995\u09C7 \u09A6\u09C7\u0996\u09BE\u09A8 \u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7\u0964",
+              line_en: "Excuse me, please show me that one over there."
+            },
+            {
+              speaker_ja: "\u5E97\u54E1[\u3066\u3093\u3044\u3093]",
+              speaker_en: "Clerk",
+              line_ja: "\u306F\u3044\u3001\u3069\u3046\u305E\u3002\u3053\u306E\u6247\u5B50[\u305B\u3093\u3059]\u3067\u3059\u306D\u3002",
+              line_bn: "\u099C\u09BF, \u098F\u0987 \u09A8\u09BF\u09A8\u0964 \u098F\u0987 \u09AB\u09CB\u09B2\u09CD\u09A1\u09BF\u0982 \u09AB\u09CD\u09AF\u09BE\u09A8\u099F\u09BF \u09A4\u09CB?",
+              line_en: "Yes, here you are. This folding fan, right?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0986\u0999\u09C1\u09B2 \u09A8\u09BE \u09A4\u09C1\u09B2\u09C7 \u09B9\u09BE\u09A4\u09C7\u09B0 \u09A4\u09BE\u09B2\u09C1 \u09AA\u09CD\u09B0\u09A6\u09B0\u09CD\u09B6\u09A8 (Pointing Manners)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u09AC\u09BE \u09AA\u09A3\u09CD\u09AF\u09C7\u09B0 \u09A6\u09BF\u0995\u09C7 \u09A4\u09B0\u09CD\u099C\u09A8\u09C0 (\u09B6\u09BE\u09B9\u09BE\u09A6\u09BE\u09A4 \u0986\u0999\u09C1\u09B2) \u09A6\u09BF\u09AF\u09BC\u09C7 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09BE \u0985\u09AD\u09A6\u09CD\u09B0\u09A4\u09BE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09AC\u09BF\u09AC\u09C7\u099A\u09A8\u09BE \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u0995\u09CB\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u09B9\u09B2\u09C7 \u09AA\u09C1\u09B0\u09CB \u09B9\u09BE\u09A4\u09C7\u09B0 \u09A4\u09BE\u09B2\u09C1 \u098A\u09B0\u09CD\u09A7\u09CD\u09AC\u09AE\u09C1\u0996\u09C0 \u0995\u09B0\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0\u09AD\u09BE\u09AC\u09C7 \u0987\u0999\u09CD\u0997\u09BF\u09A4 \u0995\u09B0\u09BE \u09AD\u09A6\u09CD\u09B0 \u09B8\u09AE\u09BE\u099C\u09C7\u09B0 \u09B0\u09C0\u09A4\u09BF\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3053\u308C\u306F\u4F55[\u306A\u3093]\u3067\u3059\u304B",
+            romaji_input: "kore wa nan desu ka",
+            target_display: "\u3053\u308C\u306F\u306A\u3093\u3067\u3059\u304B",
+            meaning_bn: "\u098F\u099F\u09BF \u0995\u09C0?"
+          },
+          {
+            prompt_ja: "\u305D\u306E\u672C[\u307B\u3093]\u3092\u304F\u3060\u3055\u3044",
+            romaji_input: "sono hon o kudasai",
+            target_display: "\u305D\u306E\u307B\u3093\u3092\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u0990 \u09AC\u0987\u099F\u09BF \u09A6\u09BF\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L09-1",
+            question_ja: "\u8A71[\u306F\u306A]\u3057\u624B[\u3066]\u3068 \u805E[\u304D]\u304D\u624B[\u3066]\u306E \u4E21\u65B9[\u308A\u3087\u3046\u307B\u3046]\u304B\u3089 \u9060[\u3068\u304A]\u3044 \u7269[\u3082\u306E]\u3092 \u6307[\u3055]\u3059 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09AC\u0995\u09CD\u09A4\u09BE \u0993 \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE \u0989\u09AD\u09AF\u09BC\u09C7\u09B0 \u09A5\u09C7\u0995\u09C7\u0987 \u09A6\u09C2\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u09B8\u09CD\u09A4\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09B8\u09C7?",
+            options: [
+              "\u3042\u308C (Are)",
+              "\u3053\u308C (Kore)",
+              "\u305D\u308C (Sore)",
+              "\u3069\u308C (Dore)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09AC\u0995\u09CD\u09A4\u09BE \u098F\u09AC\u0982 \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE \u09A6\u09C1\u099C\u09A8\u09C7\u09B0 \u09A5\u09C7\u0995\u09C7\u0987 \u09A6\u09C2\u09B0\u09C7 \u0985\u09AC\u09B8\u09CD\u09A5\u09BF\u09A4 \u09AC\u09B8\u09CD\u09A4\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 '\u3042\u308C' (That over there) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L10",
+          lesson_number: 10,
+          module_number: 1,
+          module_name: "Identity & Pointers",
+          module_name_bn: "\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995",
+          title_ja: "\u3053\u3053\u306F\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]\u3067\u3059",
+          title_en: "Locations & Facilities (Koko, Soko, Asoko, Doko)",
+          title_bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE (\u09B8\u09CD\u09A5\u09BE\u09A8 \u0993 \u09A6\u09BF\u0995\u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Beginner"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09B8\u09CD\u09A4\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09C7\u09B0 \u09AE\u09A4\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7\u0993 Ko-So-A-Do \u09B0\u09C0\u09A4\u09BF \u09AA\u09CD\u09B0\u09AF\u09CB\u099C\u09CD\u09AF: \u3053\u3053 (\u098F\u0996\u09BE\u09A8\u09C7), \u305D\u3053 (\u09B8\u09C7\u0996\u09BE\u09A8\u09C7), \u3042\u305D\u3053 (\u0990 \u09A6\u09C2\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7), \u098F\u09AC\u0982 \u3069\u3053 (\u0995\u09CB\u09A5\u09BE\u09AF\u09BC)\u0964 \u0986\u09B0\u0993 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09AC\u09BE \u09A6\u09BF\u0995 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u3053\u3061\u3089 (kochira), \u305D\u3061\u3089 (sochira), \u3042\u3061\u3089 (achira), \u3069\u3061\u3089 (dochira) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u098F\u09AC\u0982 \u099F\u09AF\u09BC\u09B2\u09C7\u099F, \u0985\u09AB\u09BF\u09B8, \u098F\u099F\u09BF\u098F\u09AE \u09AC\u09C1\u09A5 \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09BE\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F \u09AC\u09BE \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE, \u099F\u09BF\u0995\u09BF\u099F \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0 \u09AC\u09BE \u0987\u09A8\u09AB\u09B0\u09AE\u09C7\u09B6\u09A8 \u09A1\u09C7\u09B8\u09CD\u0995 \u0996\u09C1\u0981\u099C\u09C7 \u09AC\u09C7\u09B0 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u099F\u09AF\u09BC\u09B2\u09C7\u099F \u09AC\u09BE \u09B6\u09CC\u099A\u09BE\u0997\u09BE\u09B0\u0995\u09C7 \u09AD\u09A6\u09CD\u09B0 \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044] \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3053\u3053",
+            romaji: "koko",
+            meaning_bn: "\u098F\u0996\u09BE\u09A8\u09C7",
+            meaning_en: "here",
+            part_of_speech: "pronoun",
+            example_ja: "\u3053\u3053\u306F\u53D7\u4ED8[\u3046\u3051\u3064\u3051]\u3067\u3059\u3002",
+            example_bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u0985\u09AD\u09CD\u09AF\u09B0\u09CD\u09A5\u09A8\u09BE \u0995\u0995\u09CD\u09B7\u0964",
+            example_en: "Here is the reception desk."
+          },
+          {
+            word_ja: "\u305D\u3053",
+            romaji: "soko",
+            meaning_bn: "\u09B8\u09C7\u0996\u09BE\u09A8\u09C7",
+            meaning_en: "there",
+            part_of_speech: "pronoun",
+            example_ja: "\u305D\u3053\u306B\u5EA7[\u3059\u308F]\u3063\u3066\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u09B8\u09C7\u0996\u09BE\u09A8\u09C7 \u09AC\u09B8\u09C1\u09A8 \u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7\u0964",
+            example_en: "Please sit there."
+          },
+          {
+            word_ja: "\u3042\u305D\u3053",
+            romaji: "asoko",
+            meaning_bn: "\u0990 \u09A6\u09C2\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7",
+            meaning_en: "over there",
+            part_of_speech: "pronoun",
+            example_ja: "\u3042\u305D\u3053\u306B\u30B3\u30F3\u30D3\u30CB\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u0990\u0996\u09BE\u09A8\u09C7 \u098F\u0995\u099F\u09BF \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u09A6\u09CB\u0995\u09BE\u09A8 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a convenience store over there."
+          },
+          {
+            word_ja: "\u3069\u3053",
+            romaji: "doko",
+            meaning_bn: "\u0995\u09CB\u09A5\u09BE\u09AF\u09BC?",
+            meaning_en: "where?",
+            part_of_speech: "pronoun",
+            example_ja: "\u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044]\u306F\u3069\u3053\u3067\u3059\u304B\u3002",
+            example_bn: "\u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?",
+            example_en: "Where is the restroom?"
+          },
+          {
+            word_ja: "\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]",
+            romaji: "ky\u014Dshitsu",
+            meaning_bn: "\u09B6\u09CD\u09B0\u09C7\u09A3\u09C0\u0995\u0995\u09CD\u09B7 / \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE",
+            meaning_en: "classroom",
+            part_of_speech: "noun",
+            example_ja: "\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]\u306B\u5B66\u751F[\u304C\u304F\u305B\u3044]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 \u0986\u099B\u09C7\u0964",
+            example_en: "There are students in the classroom."
+          },
+          {
+            word_ja: "\u4E8B\u52D9\u6240[\u3058\u3080\u3057\u3087]",
+            romaji: "jimusho",
+            meaning_bn: "\u09A6\u09AA\u09CD\u09A4\u09B0 / \u0985\u09AB\u09BF\u09B8",
+            meaning_en: "office",
+            part_of_speech: "noun",
+            example_ja: "\u4E8B\u52D9\u6240[\u3058\u3080\u3057\u3087]\u306F\u4E8C\u968E[\u306B\u304B\u3044]\u3067\u3059\u3002",
+            example_bn: "\u0985\u09AB\u09BF\u09B8\u099F\u09BF \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09AF\u09BC \u09A4\u09B2\u09BE\u09AF\u09BC\u0964",
+            example_en: "The office is on the second floor."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5BA4",
+            onyomi: "\u30B7\u30C4",
+            kunyomi: "\u3080\u308D",
+            meaning_bn: "\u0998\u09B0 / \u0995\u0995\u09CD\u09B7",
+            meaning_en: "room",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]",
+                meaning_bn: "\u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7",
+                meaning_en: "classroom"
+              },
+              {
+                word_ja: "\u7814\u7A76\u5BA4[\u3051\u3093\u304D\u3085\u3046\u3057\u3064]",
+                meaning_bn: "\u0997\u09AC\u09C7\u09B7\u09A3\u09BE \u09B2\u09CD\u09AF\u09BE\u09AC",
+                meaning_en: "research lab"
+              },
+              {
+                word_ja: "\u5BA4\u5185[\u3057\u3064\u306A\u3044]",
+                meaning_bn: "\u0998\u09B0\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7",
+                meaning_en: "indoors"
+              }
+            ]
+          },
+          {
+            kanji: "\u6821",
+            onyomi: "\u30B3\u30A6",
+            kunyomi: "\u304B\u305B",
+            meaning_bn: "\u09B8\u09CD\u0995\u09C1\u09B2 / \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09AA\u09C0\u09A0",
+            meaning_en: "school",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u5B66\u6821[\u304C\u3063\u3053\u3046]",
+                meaning_bn: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "school"
+              },
+              {
+                word_ja: "\u9AD8\u6821[\u3053\u3046\u3053\u3046]",
+                meaning_bn: "\u0989\u099A\u09CD\u099A \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "high school"
+              },
+              {
+                word_ja: "\u6821\u9577[\u3053\u3046\u3061\u3087\u3046]",
+                meaning_bn: "\u0985\u09A7\u09CD\u09AF\u0995\u09CD\u09B7 / \u09B9\u09C7\u09A1\u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0",
+                meaning_en: "principal"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G10-1",
+            pattern_ja: "Place \u306F \u3053\u3053 / \u305D\u3053 / \u3042\u305D\u3053 / \u3069\u3053 \u3067\u3059",
+            pattern_bn: "[\u09B8\u09CD\u09A5\u09BE\u09A8/\u09B8\u09C1\u09AC\u09BF\u09A7\u09BE] \u09B9\u09B2\u09CB \u098F\u0996\u09BE\u09A8\u09C7/\u09B8\u09C7\u0996\u09BE\u09A8\u09C7/\u0995\u09CB\u09A5\u09BE\u09AF\u09BC",
+            explanation_bn: "\u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09AA\u09A8\u09BE \u09AC\u09BE \u09B0\u09C1\u09AE\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u099C\u09BE\u09A8\u09BE\u09A4\u09C7 \u098F\u0987 \u09AC\u09BE\u0995\u09CD\u09AF\u09B0\u09C0\u09A4\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u30C8\u30A4\u30EC\u306F\u3069\u3053\u3067\u3059\u304B (\u099F\u09AF\u09BC\u09B2\u09C7\u099F \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?) -> \u3042\u305D\u3053\u3067\u3059 (\u0990\u0996\u09BE\u09A8\u09C7)\u0964",
+            common_pitfalls: [
+              "\u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09A4\u09C7 \u3069\u3053 \u098F\u09B0 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09C7 \u3069\u3061\u3089 (dochira) \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u0989\u099A\u09BF\u09A4\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u30A8\u30EC\u30D9\u30FC\u30BF\u30FC\u306F\u3042\u3061\u3089\u3067\u3059\u3002",
+                bn: "\u09B2\u09BF\u09AB\u099F\u099F\u09BF \u0990 \u09A6\u09BF\u0995\u09C7\u0964",
+                en: "The elevator is in that direction."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993 \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7\u09B0 \u0995\u09CD\u09AF\u09BE\u09AE\u09CD\u09AA\u09BE\u09B8\u09C7 \u0986\u09A8\u09CD\u09A4\u09B0\u09CD\u099C\u09BE\u09A4\u09BF\u0995 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09B0 \u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE \u0996\u09C1\u0981\u099C\u09C7 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u0964",
+          situation_en: "International student asking for the restroom on the University of Tokyo campus.",
+          lines: [
+            {
+              speaker_ja: "\u7559\u5B66\u751F[\u308A\u3085\u3046\u304C\u304F\u305B\u3044]",
+              speaker_en: "Foreign Student",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044]\u306F\u3069\u3053\u3067\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?",
+              line_en: "Excuse me, where is the restroom?"
+            },
+            {
+              speaker_ja: "\u6848\u5185\u4FC2[\u3042\u3093\u306A\u3044\u304C\u304B\u308A]",
+              speaker_en: "Guide",
+              line_ja: "\u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044]\u306F\u3042\u3061\u3089\u3067\u3059\u3002\u968E\u6BB5[\u304B\u3044\u3060\u3093]\u306E\u96A3[\u3068\u306A\u308A]\u306B\u3042\u308A\u307E\u3059\u3002",
+              line_bn: "\u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE \u0990 \u09A6\u09BF\u0995\u09C7\u0964 \u09B8\u09BF\u0981\u09A1\u09BC\u09BF\u09B0 \u09AA\u09BE\u09B6\u09C7\u0987 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+              line_en: "The restroom is over there, next to the stairs."
+            },
+            {
+              speaker_ja: "\u7559\u5B66\u751F[\u308A\u3085\u3046\u304C\u304F\u305B\u3044]",
+              speaker_en: "Foreign Student",
+              line_ja: "\u3069\u3046\u3082\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002",
+              line_bn: "\u0986\u09AA\u09A8\u09BE\u0995\u09C7 \u0985\u09A8\u09C7\u0995 \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6\u0964",
+              line_en: "Thank you very much."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B9\u09BE\u0987-\u099F\u09C7\u0995 \u0993\u09AF\u09BC\u09BE\u09B6\u09B2\u09C7\u099F \u099F\u09AF\u09BC\u09B2\u09C7\u099F \u0993 \u099C\u09B0\u09C1\u09B0\u09BF \u09AC\u09BE\u099F\u09A8",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AC \u09AA\u09BE\u09AC\u09B2\u09BF\u0995 \u0993 \u09B9\u09CB\u09AE \u099F\u09AF\u09BC\u09B2\u09C7\u099F\u09C7 'Washlet' \u0987\u09B2\u09C7\u0995\u099F\u09CD\u09B0\u09A8\u09BF\u0995 \u0995\u09A8\u09CD\u099F\u09CD\u09B0\u09CB\u09B2 \u09AA\u09CD\u09AF\u09BE\u09A8\u09C7\u09B2 \u09A5\u09BE\u0995\u09C7\u0964 \u098F\u09A4\u09C7 \u09B8\u09CD\u09AA\u09CD\u09B0\u09C7 (Oshiri - \u304A\u3057\u308A), \u09AB\u09CD\u09B2\u09BE\u09B6 (Nagusu - \u6D41\u3059) \u098F\u09AC\u0982 \u09AB\u09CD\u09B2\u09BE\u09B6\u09C7\u09B0 \u09B6\u09AC\u09CD\u09A6 \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09BE\u09B0 \u09AC\u09BE\u099F\u09A8 (Otohime - \u97F3\u59EB) \u09A5\u09BE\u0995\u09C7 \u09AF\u09BE\u09A4\u09C7 \u09B2\u09BE\u099C\u09C1\u0995 \u09AC\u09CB\u09A7 \u09A8\u09BE \u09B9\u09AF\u09BC\u0964 \u09AD\u09C1\u09B2\u09C7\u0993 \u09B2\u09BE\u09B2 \u09B0\u0999\u09C7\u09B0 'Yobidashi' (\u547C\u3073\u51FA\u3057 - \u099C\u09B0\u09C1\u09B0\u09BF \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u0995\u09B2) \u09AC\u09BE\u099F\u09A8 \u099A\u09BE\u09AA\u09AC\u09C7\u09A8 \u09A8\u09BE!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3053\u3053\u306F\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]\u3067\u3059",
+            romaji_input: "koko wa kyoushitsu desu",
+            target_display: "\u3053\u3053\u306F\u304D\u3087\u3046\u3057\u3064\u3067\u3059",
+            meaning_bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE"
+          },
+          {
+            prompt_ja: "\u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044]\u306F\u3069\u3053\u3067\u3059\u304B",
+            romaji_input: "otearai wa doko desu ka",
+            target_display: "\u304A\u3066\u3042\u3089\u3044\u306F\u3069\u3053\u3067\u3059\u304B",
+            meaning_bn: "\u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE \u0995\u09CB\u09A5\u09BE\u09AF\u09BC?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L10-1",
+            question_ja: "\u300C\u304A\u624B\u6D17\u3044[\u304A\u3066\u3042\u3089\u3044]\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304A\u3066\u3042\u3089\u3044\u2019 (otearai) \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09B8\u09A0\u09BF\u0995 \u09AC\u09BE\u0982\u09B2\u09BE \u0985\u09B0\u09CD\u09A5 \u0995\u09C0?",
+            options: [
+              "\u0993\u09AF\u09BC\u09BE\u09B6\u09B0\u09C1\u09AE / \u09B6\u09CC\u099A\u09BE\u0997\u09BE\u09B0 (Restroom)",
+              "\u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7 (Classroom)",
+              "\u09A6\u09AA\u09CD\u09A4\u09B0 / \u0985\u09AB\u09BF\u09B8 (Office)",
+              "\u0995\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u09A8 (Canteen)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u304A\u624B\u6D17\u3044 (otearai) \u0985\u09B0\u09CD\u09A5 \u09AA\u09B0\u09BF\u099A\u09CD\u099B\u09A8\u09CD\u09A8\u09A4\u09BE\u09B0 \u0995\u0995\u09CD\u09B7 \u09AC\u09BE \u09B6\u09CC\u099A\u09BE\u0997\u09BE\u09B0 (\u099F\u09AF\u09BC\u09B2\u09C7\u099F)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L11",
+          lesson_number: 11,
+          module_number: 2,
+          module_name: "Existence & Time",
+          module_name_bn: "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0993 \u09B8\u09AE\u09DF",
+          title_ja: "\u3042\u308A\u307E\u3059 / \u3044\u307E\u3059",
+          title_en: "Arimasu & Imasu (Inanimate vs Animate Existence)",
+          title_bn: "\u0986\u099B\u09C7 \u098F\u09AC\u0982 \u0986\u099B\u09C7\u09A8 (\u099C\u09A1\u09BC \u09AC\u09A8\u09BE\u09AE \u099C\u09C0\u09AC\u09C7\u09B0 \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AC\u0987 \u0986\u099B\u09C7, \u0986\u09AC\u09BE\u09B0 \u09AE\u09BE\u09A8\u09C1\u09B7\u0993 \u0986\u099B\u09C7\u2014\u0989\u09AD\u09AF\u09BC \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u098F\u0995\u0987 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 '\u0986\u099B\u09C7' \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BF\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u09A6\u09C1\u099F\u09BF \u09B8\u09C1\u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7: \u0989\u09A6\u09CD\u09AD\u09BF\u09A6 \u0993 \u099C\u09A1\u09BC \u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u099C\u09A8\u09CD\u09AF \u3042\u308A\u307E\u3059 (arimasu) \u098F\u09AC\u0982 \u09AE\u09BE\u09A8\u09C1\u09B7 \u0993 \u099A\u09B2\u09A8\u0995\u09CD\u09B7\u09AE \u09AA\u09CD\u09B0\u09BE\u09A3\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u3044\u307E\u3059 (imasu)\u0964 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u09B8\u09CD\u09A5\u09BE\u09A8\u099F\u09BF\u09B0 \u09AA\u09B0 \u306B (ni) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u098F\u09AC\u0982 \u0989\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u09AA\u09B0 \u304C (ga) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964",
+          core_concept_bn: "\u099C\u09A1\u09BC \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC (\u3042\u308A\u307E\u3059) \u09AC\u09A8\u09BE\u09AE \u09B8\u099C\u09C0\u09AC \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC (\u3044\u307E\u3059) \u098F\u09AC\u0982 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09AC\u09BF\u09AD\u0995\u09CD\u09A4\u09BF \u306B (ni)\u0964",
+          real_world_context_bn: "\u09B0\u09C1\u09AE\u09C7 \u0986\u09B8\u09AC\u09BE\u09AC\u09AA\u09A4\u09CD\u09B0 \u0996\u09CB\u0981\u099C\u09BE, \u09AC\u09BE\u09B8\u09C7 \u09AC\u09BE \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09AE\u09BE\u09A8\u09C1\u09B7 \u0986\u099B\u09C7 \u0995\u09BF \u09A8\u09BE \u099C\u09BE\u09A8\u09BE, \u0985\u09A5\u09AC\u09BE \u09AA\u09CB\u09B7\u09BE \u09AA\u09CD\u09B0\u09BE\u09A3\u09C0 \u09B8\u09AE\u09CD\u09AA\u09B0\u09CD\u0995\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u0964",
+          key_takeaway_bn: "\u09B8\u09CD\u09A5\u09BE\u09A8 \u306B \u09AC\u09B8\u09CD\u09A4\u09C1/\u09AE\u09BE\u09A8\u09C1\u09B7 \u304C \u3042\u308A\u307E\u3059/\u3044\u307E\u3059 (\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 ... \u0986\u099B\u09C7)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u673A[\u3064\u304F\u3048]",
+            romaji: "tsukue",
+            meaning_bn: "\u099F\u09C7\u09AC\u09BF\u09B2 / \u09AA\u09A1\u09BC\u09BE\u09B0 \u09A1\u09C7\u09B8\u09CD\u0995",
+            meaning_en: "desk",
+            part_of_speech: "noun",
+            example_ja: "\u673A[\u3064\u304F\u3048]\u306E\u4E0A[\u3046\u3048]\u306B\u9375[\u304B\u304E]\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u0989\u09AA\u09B0 \u099A\u09BE\u09AC\u09BF \u0986\u099B\u09C7\u0964",
+            example_en: "There is a key on the desk."
+          },
+          {
+            word_ja: "\u6905\u5B50[\u3044\u3059]",
+            romaji: "isu",
+            meaning_bn: "\u099A\u09C7\u09AF\u09BC\u09BE\u09B0",
+            meaning_en: "chair",
+            part_of_speech: "noun",
+            example_ja: "\u90E8\u5C4B[\u3078\u3084]\u306B\u6905\u5B50[\u3044\u3059]\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u0998\u09B0\u09C7 \u099A\u09C7\u09AF\u09BC\u09BE\u09B0 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a chair in the room."
+          },
+          {
+            word_ja: "\u7537\u306E\u5B50[\u304A\u3068\u3053\u306E\u3053]",
+            romaji: "otokonoko",
+            meaning_bn: "\u099B\u09C7\u09B2\u09C7 \u09B6\u09BF\u09B6\u09C1 / \u09AC\u09BE\u09B2\u0995",
+            meaning_en: "boy",
+            part_of_speech: "noun",
+            example_ja: "\u5EAD[\u306B\u308F]\u306B\u7537\u306E\u5B50[\u304A\u3068\u3053\u306E\u3053]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09BE\u0997\u09BE\u09A8\u09C7 \u098F\u0995\u099F\u09BF \u099B\u09C7\u09B2\u09C7 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a boy in the garden."
+          },
+          {
+            word_ja: "\u5973\u306E\u5B50[\u304A\u3093\u306A\u306E\u3053]",
+            romaji: "onnanoko",
+            meaning_bn: "\u09AE\u09C7\u09AF\u09BC\u09C7 \u09B6\u09BF\u09B6\u09C1 / \u09AC\u09BE\u09B2\u09BF\u0995\u09BE",
+            meaning_en: "girl",
+            part_of_speech: "noun",
+            example_ja: "\u516C\u5712[\u3053\u3046\u3048\u3093]\u306B\u5973\u306E\u5B50[\u304A\u3093\u306A\u306E\u3053]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09BE\u09B0\u09CD\u0995\u09C7 \u098F\u0995\u099F\u09BF \u09AE\u09C7\u09AF\u09BC\u09C7 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a girl in the park."
+          },
+          {
+            word_ja: "\u732B[\u306D\u3053]",
+            romaji: "neko",
+            meaning_bn: "\u09AC\u09BF\u09A1\u09BC\u09BE\u09B2",
+            meaning_en: "cat",
+            part_of_speech: "noun",
+            example_ja: "\u30D9\u30C3\u30C9\u306E\u4E0B[\u3057\u305F]\u306B\u732B[\u306D\u3053]\u304C\u3044\u307E\u3059\u3002",
+            example_bn: "\u0996\u09BE\u099F\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7 \u09AC\u09BF\u09A1\u09BC\u09BE\u09B2 \u0986\u099B\u09C7\u0964",
+            example_en: "There is a cat under the bed."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u7537",
+            onyomi: "\u30C0\u30F3, \u30CA\u30F3",
+            kunyomi: "\u304A\u3068\u3053",
+            meaning_bn: "\u09AA\u09C1\u09B0\u09C1\u09B7 / \u099B\u09C7\u09B2\u09C7",
+            meaning_en: "man / male",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u7537\u306E\u5B50[\u304A\u3068\u3053\u306E\u3053]",
+                meaning_bn: "\u099B\u09C7\u09B2\u09C7 \u09B6\u09BF\u09B6\u09C1",
+                meaning_en: "boy"
+              },
+              {
+                word_ja: "\u7537\u6027[\u3060\u3093\u305B\u3044]",
+                meaning_bn: "\u09AA\u09C1\u09B0\u09C1\u09B7",
+                meaning_en: "male / gentleman"
+              },
+              {
+                word_ja: "\u9577\u7537[\u3061\u3087\u3046\u306A\u3093]",
+                meaning_bn: "\u099C\u09CD\u09AF\u09C7\u09B7\u09CD\u09A0 \u09AA\u09C1\u09A4\u09CD\u09B0",
+                meaning_en: "eldest son"
+              }
+            ]
+          },
+          {
+            kanji: "\u5973",
+            onyomi: "\u30B8\u30E7, \u30CB\u30E7",
+            kunyomi: "\u304A\u3093\u306A, \u3081",
+            meaning_bn: "\u09A8\u09BE\u09B0\u09C0 / \u09AE\u09C7\u09AF\u09BC\u09C7",
+            meaning_en: "woman / female",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u5973\u306E\u5B50[\u304A\u3093\u306A\u306E\u3053]",
+                meaning_bn: "\u09AE\u09C7\u09AF\u09BC\u09C7 \u09B6\u09BF\u09B6\u09C1",
+                meaning_en: "girl"
+              },
+              {
+                word_ja: "\u5973\u6027[\u3058\u3087\u305B\u3044]",
+                meaning_bn: "\u09A8\u09BE\u09B0\u09C0",
+                meaning_en: "female / lady"
+              },
+              {
+                word_ja: "\u5F7C\u5973[\u304B\u306E\u3058\u3087]",
+                meaning_bn: "\u09B8\u09C7 (\u09AE\u09B9\u09BF\u09B2\u09BE) / \u09AC\u09BE\u09A8\u09CD\u09A7\u09AC\u09C0",
+                meaning_en: "she / girlfriend"
+              }
+            ]
+          },
+          {
+            kanji: "\u5B50",
+            onyomi: "\u30B7, \u30B9",
+            kunyomi: "\u3053",
+            meaning_bn: "\u09B8\u09A8\u09CD\u09A4\u09BE\u09A8 / \u09B6\u09BF\u09B6\u09C1",
+            meaning_en: "child",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u5B50\u4F9B[\u3053\u3069\u3082]",
+                meaning_bn: "\u09AC\u09BE\u099A\u09CD\u099A\u09BE\u09B0\u09BE / \u09B6\u09BF\u09B6\u09C1",
+                meaning_en: "children"
+              },
+              {
+                word_ja: "\u96FB\u5B50[\u3067\u3093\u3057]",
+                meaning_bn: "\u0987\u09B2\u09C7\u0995\u099F\u09CD\u09B0\u09A8 / \u0987\u09B2\u09C7\u0995\u099F\u09CD\u09B0\u09A8\u09BF\u0995",
+                meaning_en: "electronic"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G11-1",
+            pattern_ja: "Place \u306B N \u304C \u3042\u308A\u307E\u3059 / \u3044\u307E\u3059",
+            pattern_bn: "[\u09B8\u09CD\u09A5\u09BE\u09A8] \u098F [\u09AC\u09B8\u09CD\u09A4\u09C1/\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u0986\u099B\u09C7 / \u0986\u099B\u09C7\u09A8",
+            explanation_bn: "\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u306B (\u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995) \u098F\u09AC\u0982 \u09AF\u09BE \u0989\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u0986\u099B\u09C7 \u09A4\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u304C \u09AC\u09B8\u09C7\u0964 \u099C\u09A1\u09BC \u09AC\u09B8\u09CD\u09A4\u09C1 \u09AC\u09BE \u0989\u09A6\u09CD\u09AD\u09BF\u09A6\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u3042\u308A\u307E\u3059 \u098F\u09AC\u0982 \u09AE\u09BE\u09A8\u09C1\u09B7 \u0993 \u09AA\u09B6\u09C1\u09AA\u09BE\u0996\u09BF\u09B0 \u099C\u09A8\u09CD\u09AF \u3044\u307E\u3059\u0964",
+            common_pitfalls: [
+              "\u09AE\u09BE\u09A8\u09C1\u09B7 \u09AC\u09BE \u09AC\u09BF\u09A1\u09BC\u09BE\u09B2\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09AD\u09C1\u09B2\u09C7\u0993 \u3042\u308A\u307E\u3059 \u09AC\u09B2\u09AC\u09C7\u09A8 \u09A8\u09BE (\xD7 \u732B\u304C\u3042\u308A\u307E\u3059, \u25CB \u732B\u304C\u3044\u307E\u3059)\u0964",
+              "\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3067 \u09A8\u09AF\u09BC, \u306B \u09AC\u09B8\u09AC\u09C7 \u0995\u09BE\u09B0\u09A3 \u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09B0\u09CD\u09AE \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09BF\u09A4 \u09B9\u099A\u09CD\u099B\u09C7 \u09A8\u09BE, \u0995\u09C7\u09AC\u09B2 \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09BF\u09A4 \u09B9\u099A\u09CD\u099B\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]\u306B\u5148\u751F[\u305B\u3093\u305B\u3044]\u304C\u3044\u307E\u3059\u3002",
+                bn: "\u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7\u09C7 \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0986\u099B\u09C7\u09A8\u0964",
+                en: "There is a teacher in the classroom."
+              },
+              {
+                ja: "\u673A[\u3064\u304F\u3048]\u306E\u4E0A[\u3046\u3048]\u306B\u30D1\u30BD\u30B3\u30F3\u304C\u3042\u308A\u307E\u3059\u3002",
+                bn: "\u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u0989\u09AA\u09B0 \u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0 \u0986\u099B\u09C7\u0964",
+                en: "There is a computer on the desk."
+              }
+            ]
+          },
+          {
+            point_id: "G11-2",
+            pattern_ja: "N \u306F Place \u306B \u3042\u308A\u307E\u3059 / \u3044\u307E\u3059",
+            pattern_bn: "N \u09B9\u09B2\u09CB [\u09B8\u09CD\u09A5\u09BE\u09A8] \u098F \u0985\u09AC\u09B8\u09CD\u09A5\u09BF\u09A4 (\u09AC\u09BF\u09B7\u09AF\u09BC\u0995\u09C7 \u0995\u09C7\u09A8\u09CD\u09A6\u09CD\u09B0 \u0995\u09B0\u09C7 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8)",
+            explanation_bn: "\u09AF\u0996\u09A8 \u0995\u09CB\u09A8\u09CB \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09AC\u09B8\u09CD\u09A4\u09C1 \u09AC\u09BE \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u0986\u0997\u09C7 \u09A5\u09C7\u0995\u09C7\u0987 \u0986\u09B2\u09CB\u099A\u09CD\u09AF \u09AC\u09BF\u09B7\u09AF\u09BC, \u09A4\u0996\u09A8 \u09A4\u09BE\u0995\u09C7 \u306F \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09C7 \u09AA\u09B0\u09C7 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u098F\u0996\u09BE\u09A8\u09C7 N \u306F \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B6\u09C1\u09B0\u09C1 \u09B9\u09B2\u09C7 N \u098F\u09B0 \u09AA\u09B0 \u304C \u09AC\u09B8\u09AC\u09C7 \u09A8\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306F\u4E8B\u52D9\u6240[\u3058\u3080\u3057\u3087]\u306B\u3044\u307E\u3059\u3002",
+                bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u0985\u09AB\u09BF\u09B8\u09C7 \u0986\u099B\u09C7\u09A8\u0964",
+                en: "Mr. Tanaka is in the office."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u0985\u09CD\u09AF\u09BE\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09C7 \u099A\u09BE\u09AC\u09BF \u0996\u09C1\u0981\u099C\u09C7 \u09A8\u09BE \u09AA\u09C7\u09AF\u09BC\u09C7 \u09B0\u09C1\u09AE\u09AE\u09C7\u099F\u09C7\u09B0 \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u099A\u09BE\u0993\u09AF\u09BC\u09BE\u0964",
+          situation_en: "Asking roommate for help locating apartment keys in Tokyo.",
+          lines: [
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u79C1[\u308F\u305F\u3057]\u306E\u90E8\u5C4B[\u3078\u3084]\u306E\u9375[\u304B\u304E]\u306F\u3069\u3053\u306B\u3042\u308A\u307E\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7, \u0986\u09AE\u09BE\u09B0 \u09B0\u09C1\u09AE\u09C7\u09B0 \u099A\u09BE\u09AC\u09BF\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u0986\u099B\u09C7?",
+              line_en: "Excuse me, where is my room key?"
+            },
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u30C6\u30EC\u30D3\u306E\u6A2A[\u3088\u3053]\u306B\u3042\u308A\u307E\u3059\u3088\u3002",
+              line_bn: "\u099F\u09C7\u09B2\u09BF\u09AD\u09BF\u09B6\u09A8\u09C7\u09B0 \u09AA\u09BE\u09B6\u09C7\u0987 \u0986\u099B\u09C7 \u09A4\u09CB\u0964",
+              line_en: "It is right next to the TV."
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3042\u3001\u672C\u5F53[\u307B\u3093\u3068\u3046]\u306B\u3042\u308A\u307E\u3057\u305F\u3002\u3042\u308A\u304C\u3068\u3046\uFF01",
+              line_bn: "\u0986\u09B0\u09C7, \u09B8\u09A4\u09CD\u09AF\u09BF\u0987 \u09A4\u09CB \u0986\u099B\u09C7! \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6!",
+              line_en: "Ah, it really is there. Thanks!"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0998\u09B0 \u0993 \u0986\u09AC\u09BE\u09B8\u09A8\u09C7 \u099C\u09C1\u09A4\u09CB \u0996\u09CB\u09B2\u09BE\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE (Genkan - \u7384\u95A2)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u09AC\u09BE\u09B8\u09BE, \u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u09A1\u09BF\u09B6\u09A8\u09BE\u09B2 \u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981 \u09AC\u09BE \u0995\u09BF\u099B\u09C1 \u0995\u09CD\u09B2\u09BF\u09A8\u09BF\u0995\u09C7 \u09AA\u09CD\u09B0\u09AC\u09C7\u09B6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09B0\u099C\u09BE\u09B0 \u09B8\u09AE\u09CD\u09AE\u09C1\u0996\u09AD\u09BE\u0997 (Genkan)-\u098F \u099C\u09C1\u09A4\u09CB \u0996\u09C1\u09B2\u09C7 \u09AB\u09C7\u09B2\u09BE\u09B0 \u0995\u09A0\u09CB\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE \u09B0\u09AF\u09BC\u09C7\u099B\u09C7\u0964 \u0998\u09B0\u09C7\u09B0 \u09AE\u09C7\u099D\u09C7\u09A4\u09C7 \u0993\u09A0\u09BE\u09B0 \u0986\u0997\u09C7 \u099C\u09C1\u09A4\u09CB \u099C\u09C7\u09A8\u0995\u09BE\u09A8\u09C7\u09B0 \u09A6\u09BF\u0995\u09C7 \u09AE\u09C1\u0996 \u0995\u09B0\u09C7 \u09B8\u09BE\u099C\u09BF\u09AF\u09BC\u09C7 \u09B0\u09BE\u0996\u09A4\u09C7 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u0998\u09B0\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09B0\u09BE\u0996\u09BE \u0985\u09AD\u09CD\u09AF\u09A8\u09CD\u09A4\u09B0\u09C0\u09A3 \u099A\u099F\u09BF (Uwabaki/Slippers) \u09AA\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09A4\u09AC\u09C7 \u09A4\u09BE\u09A4\u09BE\u09B6\u09BF \u09AE\u09BE\u09A6\u09C1\u09B0\u09C7\u09B0 \u0989\u09AA\u09B0 \u09B8\u09CD\u09B2\u09BF\u09AA\u09BE\u09B0\u0993 \u09AA\u09B0\u09BE \u09A8\u09BF\u09B7\u09BF\u09A6\u09CD\u09A7!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u732B[\u306D\u3053]\u304C\u3044\u307E\u3059",
+            romaji_input: "neko ga imasu",
+            target_display: "\u306D\u3053\u304C\u3044\u307E\u3059",
+            meaning_bn: "\u09AC\u09BF\u09A1\u09BC\u09BE\u09B2 \u0986\u099B\u09C7"
+          },
+          {
+            prompt_ja: "\u672C[\u307B\u3093]\u304C\u3042\u308A\u307E\u3059",
+            romaji_input: "hon ga arimasu",
+            target_display: "\u307B\u3093\u304C\u3042\u308A\u307E\u3059",
+            meaning_bn: "\u09AC\u0987 \u0986\u099B\u09C7"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L11-1",
+            question_ja: "\u90E8\u5C4B[\u3078\u3084]\u306B \u72AC[\u3044\u306C]\u304C\uFF08\u3000\uFF09\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09B8\u09AC\u09C7: \u3078\u3084\u306B \u3044\u306C\u304C\uFF08\u3000\uFF09",
+            options: [
+              "\u3044\u307E\u3059 (Imasu)",
+              "\u3042\u308A\u307E\u3059 (Arimasu)",
+              "\u3067\u3059 (Desu)",
+              "\u3057\u307E\u3059 (Shimasu)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0995\u09C1\u0995\u09C1\u09B0 (\u72AC) \u098F\u0995\u099F\u09BF \u099A\u09B2\u09A8\u0995\u09CD\u09B7\u09AE \u09AA\u09CD\u09B0\u09BE\u09A3\u09C0 (Animate Being), \u09A4\u09BE\u0987 \u098F\u09B0 \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3044\u307E\u3059' \u09AC\u09B8\u09AC\u09C7\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L12",
+          lesson_number: 12,
+          module_number: 2,
+          module_name: "Existence & Time",
+          module_name_bn: "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0993 \u09B8\u09AE\u09DF",
+          title_ja: "\u4E03\u6642[\u3057\u3061\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059",
+          title_en: "Daily Routine & Specific Time Particle NI",
+          title_bn: "\u09B8\u09BE\u09A4\u099F\u09BE\u09AF\u09BC \u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0989\u09A0\u09BF (\u09A6\u09C8\u09A8\u09A8\u09CD\u09A6\u09BF\u09A8 \u0995\u09BE\u099C \u0993 \u09B8\u09AE\u09AF\u09BC)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u0995\u09CB\u09A8\u09CB \u09B8\u09AE\u09AF\u09BC\u09C7 \u0995\u09B0\u09CD\u09AE \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09BF\u09A4 \u09B9\u09B2\u09C7 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09B0\u09C7 \u306B (ni) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u09B8\u09BE\u09A4\u099F\u09BE\u09AF\u09BC = \u4E03\u6642[\u3057\u3061\u3058]\u306B)\u0964 \u09A4\u09AC\u09C7 \u0986\u099C (\u4ECA\u65E5), \u0995\u09BE\u09B2 (\u660E\u65E5), \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 (\u6BCE\u65E5) \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF \u0986\u09AA\u09C7\u0995\u09CD\u09B7\u09BF\u0995 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09B0 \u306B \u09AC\u09B8\u09C7 \u09A8\u09BE\u0964 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u09B0\u09C2\u09AA \u301C\u307E\u3059 (masu) \u098F\u09AC\u0982 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u301C\u307E\u305B\u3093 (masen)\u0964",
+          core_concept_bn: "\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u306B, \u09A6\u09C8\u09A8\u09A8\u09CD\u09A6\u09BF\u09A8 \u09B0\u09C1\u099F\u09BF\u09A8 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 \u098F\u09AC\u0982 \u301C\u307E\u3059 \u09B0\u09C2\u09AA\u0964",
+          real_world_context_bn: "\u0995\u09BE\u099C\u09C7 \u09AC\u09BE \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09B8\u09AE\u09AF\u09BC\u09B8\u09C2\u099A\u09BF \u099C\u09BE\u09A8\u09BE\u09A8\u09CB \u098F\u09AC\u0982 \u09B8\u0995\u09BE\u09B2-\u09B8\u09A8\u09CD\u09A7\u09CD\u09AF\u09BE\u09B0 \u09B0\u09C1\u099F\u09BF\u09A8 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u0998\u09A1\u09BC\u09BF\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09B0 \u306B \u09AC\u09B8\u09C7, \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 '\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8' \u09AC\u09BE '\u0997\u09A4\u0995\u09BE\u09B2' \u098F\u09B0 \u09AA\u09B0 \u306B \u09AC\u09B8\u09C7 \u09A8\u09BE\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u8D77[\u304A]\u304D\u307E\u3059",
+            romaji: "okimasu",
+            meaning_bn: "\u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0993\u09A0\u09BE",
+            meaning_en: "to wake up / get up",
+            part_of_speech: "verb",
+            example_ja: "\u6BCE\u671D[\u307E\u3044\u3042\u3055]\u516D\u6642[\u308D\u304F\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B8\u0995\u09BE\u09B2\u09C7 \u09EC\u099F\u09BE\u09AF\u09BC \u0989\u09A0\u09BF\u0964",
+            example_en: "I wake up at 6 every morning."
+          },
+          {
+            word_ja: "\u5BDD[\u306D]\u307E\u3059",
+            romaji: "nemasu",
+            meaning_bn: "\u0998\u09C1\u09AE\u09BE\u09A8\u09CB",
+            meaning_en: "to sleep / go to bed",
+            part_of_speech: "verb",
+            example_ja: "\u591C[\u3088\u308B]\u5341\u4E00\u6642[\u3058\u3085\u3046\u3044\u3061\u3058]\u306B\u5BDD[\u306D]\u307E\u3059\u3002",
+            example_bn: "\u09B0\u09BE\u09A4 \u09E7\u09E7\u099F\u09BE\u09AF\u09BC \u0998\u09C1\u09AE\u09BE\u0987\u0964",
+            example_en: "I go to bed at 11 PM."
+          },
+          {
+            word_ja: "\u50CD[\u306F\u305F\u3089]\u304D\u307E\u3059",
+            romaji: "hatarakimasu",
+            meaning_bn: "\u0995\u09BE\u099C \u0995\u09B0\u09BE / \u099A\u09BE\u0995\u09B0\u09BF \u0995\u09B0\u09BE",
+            meaning_en: "to work",
+            part_of_speech: "verb",
+            example_ja: "\u30B3\u30F3\u30D3\u30CB\u3067\u50CD[\u306F\u305F\u3089]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0995\u09A8\u09AC\u09BF\u09A8\u09BF\u09A4\u09C7 \u0995\u09BE\u099C \u0995\u09B0\u09BF\u0964",
+            example_en: "I work at a convenience store."
+          },
+          {
+            word_ja: "\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059",
+            romaji: "benky\u014Dshimasu",
+            meaning_bn: "\u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "to study",
+            part_of_speech: "verb",
+            example_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u3092\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u0985\u09A7\u09CD\u09AF\u09AF\u09BC\u09A8 \u0995\u09B0\u09BF\u0964",
+            example_en: "I study Japanese."
+          },
+          {
+            word_ja: "\u7D42[\u304A]\u308F\u308A\u307E\u3059",
+            romaji: "owarimasu",
+            meaning_bn: "\u09B6\u09C7\u09B7 \u09B9\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to finish / end",
+            part_of_speech: "verb",
+            example_ja: "\u6388\u696D[\u3058\u3085\u304E\u3087\u3046]\u306F\u4E94\u6642[\u3054\u3058]\u306B\u7D42[\u304A]\u308F\u308A\u307E\u3059\u3002",
+            example_bn: "\u0995\u09CD\u09B2\u09BE\u09B8 \u09EB\u099F\u09BE\u09AF\u09BC \u09B6\u09C7\u09B7 \u09B9\u09AF\u09BC\u0964",
+            example_en: "Class finishes at 5 o'clock."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u6642",
+            onyomi: "\u30B8",
+            kunyomi: "\u3068\u304D",
+            meaning_bn: "\u09B8\u09AE\u09AF\u09BC / \u0998\u09A3\u09CD\u099F\u09BE",
+            meaning_en: "time / hour",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u4E03\u6642[\u3057\u3061\u3058]",
+                meaning_bn: "\u09ED\u099F\u09BE (\u0998\u09A3\u09CD\u099F\u09BE)",
+                meaning_en: "7 o'clock"
+              },
+              {
+                word_ja: "\u6642\u9593[\u3058\u304B\u3093]",
+                meaning_bn: "\u09B8\u09AE\u09AF\u09BC / \u0998\u09A3\u09CD\u099F\u09BE \u09AC\u09CD\u09AF\u09BE\u09AA\u09CD\u09A4\u09BF",
+                meaning_en: "time / hours"
+              },
+              {
+                word_ja: "\u6642\u3005[\u3068\u304D\u3069\u304D]",
+                meaning_bn: "\u09AE\u09BE\u099D\u09C7 \u09AE\u09BE\u099D\u09C7",
+                meaning_en: "sometimes"
+              }
+            ]
+          },
+          {
+            kanji: "\u5206",
+            onyomi: "\u30D6\u30F3, \u30D5\u30F3, \u30D7\u30F3",
+            kunyomi: "\u308F\u30FB\u3051\u308B, \u308F\u30FB\u304B\u308B",
+            meaning_bn: "\u09AE\u09BF\u09A8\u09BF\u099F / \u0985\u0982\u09B6 / \u09AC\u09CB\u099D\u09BE",
+            meaning_en: "minute / part / understand",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u5341\u5206[\u3058\u3085\u3063\u3077\u3093]",
+                meaning_bn: "\u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F",
+                meaning_en: "10 minutes"
+              },
+              {
+                word_ja: "\u534A\u5206[\u306F\u3093\u3076\u3093]",
+                meaning_bn: "\u0985\u09B0\u09CD\u09A7\u09C7\u0995",
+                meaning_en: "half"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G12-1",
+            pattern_ja: "Time \u306B V-\u307E\u3059",
+            pattern_bn: "[\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09AF\u09BC] \u098F [\u0995\u09BE\u099C] \u0995\u09B0\u09BF",
+            explanation_bn: "\u0998\u09A1\u09BC\u09BF\u09B0 \u0995\u09BE\u0981\u099F\u09BE\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u0982\u0996\u09CD\u09AF\u09BE\u09AF\u09C1\u0995\u09CD\u09A4 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u306B \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u4E03\u6642[\u3057\u3061\u3058]\u306B (\u09ED\u099F\u09BE\u09AF\u09BC), \u4E09\u5341\u5206[\u3055\u3093\u3058\u3085\u3063\u3077\u3093]\u306B (\u09E9\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F\u09C7)\u0964",
+            common_pitfalls: [
+              "\u09ED\u099F\u09BE \u0995\u09C7 \u306A\u306A\u3058 \u09AC\u09B2\u09BE \u09AD\u09C1\u09B2, \u09B8\u09A0\u09BF\u0995 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u3057\u3061\u3058 (shichiji)\u0964",
+              "\u09EA\u099F\u09BE \u0995\u09C7 \u3088\u3093\u3058 \u09A8\u09AF\u09BC, \u3057\u3058 (shiji)\u0964 \u09EF\u099F\u09BE \u0995\u09C7 \u304D\u3085\u3046\u3058 \u09A8\u09AF\u09BC, \u304F\u3058 (kuji)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u660E\u65E5[\u3042\u3057\u305F]\u4E5D\u6642[\u304F\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059\u3002",
+                bn: "\u0995\u09BE\u09B2 \u09EF\u099F\u09BE\u09AF\u09BC \u0998\u09C1\u09AE \u09A5\u09C7\u0995\u09C7 \u0989\u09A0\u09AC\u0964",
+                en: "I will wake up at 9 tomorrow."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09AE\u09AF\u09BC\u09B8\u09C2\u099A\u09BF \u09A8\u09BF\u09AF\u09BC\u09C7 \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          situation_en: "Discussing work schedule with a Japanese colleague.",
+          lines: [
+            {
+              speaker_ja: "\u540C\u50DA[\u3069\u3046\u308A\u3087\u3046]",
+              speaker_en: "Colleague",
+              line_ja: "\u6BCE\u671D[\u307E\u3044\u3042\u3055]\u4F55\u6642[\u306A\u3093\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059\u304B\u3002",
+              line_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B8\u0995\u09BE\u09B2\u09C7 \u0995\u09AF\u09BC\u099F\u09BE\u09AF\u09BC \u0993\u09A0\u09C7\u09A8?",
+              line_en: "What time do you wake up every morning?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u4E03\u6642[\u3057\u3061\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059\u3002\u516B\u6642\u534A[\u306F\u3061\u3058\u306F\u3093]\u306B\u4F1A\u793E[\u304B\u3044\u3057\u3083]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+              line_bn: "\u09B8\u09BE\u09A4\u099F\u09BE\u09AF\u09BC \u0989\u09A0\u09BF\u0964 \u09B8\u09BE\u09A1\u09BC\u09C7 \u0986\u099F\u099F\u09BE\u09AF\u09BC \u0985\u09AB\u09BF\u09B8\u09C7 \u09AF\u09BE\u0987\u0964",
+              line_en: "I wake up at 7. I go to work at 8:30."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u099A\u09B0\u09AE \u09B8\u09AE\u09AF\u09BC\u09A8\u09BF\u09B7\u09CD\u09A0\u09A4\u09BE (5 Minutes Before Rule - 5\u5206\u524D\u884C\u52D5)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09A0\u09BF\u0995 \u09AE\u09C1\u09B9\u09C2\u09B0\u09CD\u09A4\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u0995\u09C7 \u09A6\u09C7\u09B0\u09BF (Chikoku - \u9045\u523B) \u09AC\u09B2\u09C7 \u09AC\u09BF\u09AC\u09C7\u099A\u09A8\u09BE \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989, \u0995\u09CD\u09B2\u09BE\u09B8 \u09AC\u09BE \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u0985\u09A8\u09CD\u09A4\u09A4 \u09EB \u09A5\u09C7\u0995\u09C7 \u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u0989\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u09A5\u09BE\u0995\u09BE \u0985\u09B2\u09BF\u0996\u09BF\u09A4 \u09B8\u09BE\u09AE\u09BE\u099C\u09BF\u0995 \u09A8\u09BF\u09AF\u09BC\u09AE\u0964 \u0995\u09CB\u09A8\u09CB \u0985\u09A8\u09BF\u09AC\u09BE\u09B0\u09CD\u09AF \u0995\u09BE\u09B0\u09A3\u09C7 \u09E7 \u09AE\u09BF\u09A8\u09BF\u099F \u09A6\u09C7\u09B0\u09BF \u09B9\u09B2\u09C7\u0993 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09AB\u09CB\u09A8 \u0995\u09B0\u09C7 \u099C\u09BE\u09A8\u09BE\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u4E03\u6642[\u3057\u3061\u3058]\u306B\u8D77[\u304A]\u304D\u307E\u3059",
+            romaji_input: "shichiji ni okimasu",
+            target_display: "\u3057\u3061\u3058\u306B\u304A\u304D\u307E\u3059",
+            meaning_bn: "\u09ED\u099F\u09BE\u09AF\u09BC \u0989\u09A0\u09BF"
+          },
+          {
+            prompt_ja: "\u4F55\u6642[\u306A\u3093\u3058]\u306B\u5BDD[\u306D]\u307E\u3059\u304B",
+            romaji_input: "nanji ni nemasu ka",
+            target_display: "\u306A\u3093\u3058\u306B\u306D\u307E\u3059\u304B",
+            meaning_bn: "\u0995\u09AF\u09BC\u099F\u09BE\u09AF\u09BC \u0998\u09C1\u09AE\u09BE\u09A8?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L12-1",
+            question_ja: "\u300C7:00\u300D\u306E \u6B63[\u305F\u3060]\u3057\u3044 \u8AAD[\u3088]\u307F\u65B9[\u304B\u305F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u20187:00\u2019 (\u09ED\u099F\u09BE) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u3057\u3061\u3058 (Shichiji)",
+              "\u306A\u306A\u3058 (Nanaji)",
+              "\u304D\u3085\u3046\u3058 (Ky\u016Bji)",
+              "\u3088\u3093\u3058 (Yonji)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0998\u09A1\u09BC\u09BF\u09B0 \u09B8\u09AE\u09AF\u09BC \u09AC\u09B2\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09ED\u099F\u09BE \u0995\u09C7 '\u3057\u3061\u3058' (shichiji) \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L13",
+          lesson_number: 13,
+          module_number: 2,
+          module_name: "Existence & Time",
+          module_name_bn: "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0993 \u09B8\u09AE\u09DF",
+          title_ja: "\u301C\u304B\u3089\u301C\u307E\u3067",
+          title_en: "KARA and MADE (Time and Place Boundaries)",
+          title_bn: "...\u09A5\u09C7\u0995\u09C7...\u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 (\u09B8\u09AE\u09AF\u09BC \u0993 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u09AA\u09CD\u09A4\u09BF)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 \u0986\u09AE\u09B0\u09BE \u09AC\u09B2\u09BF '\u09B8\u0995\u09BE\u09B2 \u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09AC\u09BF\u0995\u09BE\u09B2 \u09EB\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4', \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC '\u09A5\u09C7\u0995\u09C7' \u098F\u09B0 \u0985\u09B0\u09CD\u09A5 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7 \u304B\u3089 (kara) \u098F\u09AC\u0982 '\u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4' \u098F\u09B0 \u0985\u09B0\u09CD\u09A5 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7 \u307E\u3067 (made)\u0964 \u098F\u099F\u09BF \u09B8\u09AE\u09AF\u09BC \u098F\u09AC\u0982 \u09B8\u09CD\u09A5\u09BE\u09A8 \u0989\u09AD\u09AF\u09BC\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1 \u0993 \u09B6\u09C7\u09B7 \u09B8\u09C0\u09AE\u09BE\u09A8\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AC\u09CD\u09AF\u09BE\u09AA\u0995\u09AD\u09BE\u09AC\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09B6\u09C1\u09B0\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u304B\u3089 \u098F\u09AC\u0982 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u307E\u3067 \u098F\u09B0 \u09A6\u09CD\u09AC\u09C8\u09A4 \u0993 \u098F\u0995\u0995 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0\u0964",
+          real_world_context_bn: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995, \u09A1\u09BE\u0995\u0998\u09B0 \u09AC\u09BE \u0995\u09CD\u09B2\u09BF\u09A8\u09BF\u0995\u09C7\u09B0 \u0996\u09CB\u09B2\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u099C\u09BE\u09A8\u09BE \u098F\u09AC\u0982 \u099F\u09CD\u09B0\u09C7\u09A8 \u0995\u09CB\u09A5\u09BE \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u09AF\u09BE\u09AF\u09BC \u09A4\u09BE \u09AC\u09CB\u099D\u09BE\u0964",
+          key_takeaway_bn: "[\u09B6\u09C1\u09B0\u09C1] \u304B\u3089 [\u09B6\u09C7\u09B7] \u307E\u3067 \u3067\u3059 / V-\u307E\u3059\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u4ECA[\u3044\u307E]",
+            romaji: "ima",
+            meaning_bn: "\u098F\u0996\u09A8",
+            meaning_en: "now",
+            part_of_speech: "noun",
+            example_ja: "\u4ECA[\u3044\u307E]\u3001\u4F55\u6642[\u306A\u3093\u3058]\u3067\u3059\u304B\u3002",
+            example_bn: "\u098F\u0996\u09A8 \u0995\u09AF\u09BC\u099F\u09BE \u09AC\u09BE\u099C\u09C7?",
+            example_en: "What time is it now?"
+          },
+          {
+            word_ja: "\u671D[\u3042\u3055]",
+            romaji: "asa",
+            meaning_bn: "\u09B8\u0995\u09BE\u09B2",
+            meaning_en: "morning",
+            part_of_speech: "noun",
+            example_ja: "\u671D[\u3042\u3055]\u304B\u3089\u96E8[\u3042\u3081]\u304C\u964D[\u3075]\u3063\u3066\u3044\u307E\u3059\u3002",
+            example_bn: "\u09B8\u0995\u09BE\u09B2 \u09A5\u09C7\u0995\u09C7 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09AA\u09A1\u09BC\u099B\u09C7\u0964",
+            example_en: "It has been raining since morning."
+          },
+          {
+            word_ja: "\u663C[\u3072\u308B]",
+            romaji: "hiru",
+            meaning_bn: "\u09A6\u09C1\u09AA\u09C1\u09B0 / \u09A6\u09BF\u09A8",
+            meaning_en: "noon / daytime",
+            part_of_speech: "noun",
+            example_ja: "\u663C\u4F11[\u3072\u308B\u3084\u3059]\u307F\u306F\u5341\u4E8C\u6642[\u3058\u3085\u3046\u306B\u3058]\u304B\u3089\u3067\u3059\u3002",
+            example_bn: "\u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u09AC\u09BF\u09B0\u09A4\u09BF \u09E7\u09E8\u099F\u09BE \u09A5\u09C7\u0995\u09C7\u0964",
+            example_en: "Lunch break is from 12 o'clock."
+          },
+          {
+            word_ja: "\u6669[\u3070\u3093]",
+            romaji: "ban",
+            meaning_bn: "\u09B0\u09BE\u09A4 / \u09B8\u09A8\u09CD\u09A7\u09CD\u09AF\u09BE",
+            meaning_en: "evening / night",
+            part_of_speech: "noun",
+            example_ja: "\u6BCE\u6669[\u307E\u3044\u3070\u3093]\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u3092\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF \u09B0\u09BE\u09A4\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u09A1\u09BC\u09BF\u0964",
+            example_en: "I study Japanese every night."
+          },
+          {
+            word_ja: "\u9280\u884C[\u304E\u3093\u3053\u3046]",
+            romaji: "gink\u014D",
+            meaning_bn: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995",
+            meaning_en: "bank",
+            part_of_speech: "noun",
+            example_ja: "\u9280\u884C[\u304E\u3093\u3053\u3046]\u306F\u4E5D\u6642[\u304F\u3058]\u304B\u3089\u4E09\u6642[\u3055\u3093\u3058]\u307E\u3067\u3067\u3059\u3002",
+            example_bn: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09B8\u0995\u09BE\u09B2 \u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09AC\u09BF\u0995\u09BE\u09B2 \u09E9\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4\u0964",
+            example_en: "The bank is open from 9 to 3."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4ECA",
+            onyomi: "\u30B3\u30F3, \u30AD\u30F3",
+            kunyomi: "\u3044\u307E",
+            meaning_bn: "\u098F\u0996\u09A8 / \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8",
+            meaning_en: "now / present",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]",
+                meaning_bn: "\u0986\u099C",
+                meaning_en: "today"
+              },
+              {
+                word_ja: "\u4ECA\u6708[\u3053\u3093\u3052\u3064]",
+                meaning_bn: "\u098F\u0987 \u09AE\u09BE\u09B8",
+                meaning_en: "this month"
+              },
+              {
+                word_ja: "\u4ECA\u5E74[\u3053\u3068\u3057]",
+                meaning_bn: "\u098F\u0987 \u09AC\u099B\u09B0",
+                meaning_en: "this year"
+              }
+            ]
+          },
+          {
+            kanji: "\u524D",
+            onyomi: "\u30BC\u30F3",
+            kunyomi: "\u307E\u3048",
+            meaning_bn: "\u09B8\u09BE\u09AE\u09A8\u09C7 / \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7",
+            meaning_en: "front / before",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u5348\u524D[\u3054\u305C\u3093]",
+                meaning_bn: "\u09B8\u0995\u09BE\u09B2 (AM)",
+                meaning_en: "morning / A.M."
+              },
+              {
+                word_ja: "\u540D\u524D[\u306A\u307E\u3048]",
+                meaning_bn: "\u09A8\u09BE\u09AE",
+                meaning_en: "name"
+              },
+              {
+                word_ja: "\u99C5\u524D[\u3048\u304D\u307E\u3048]",
+                meaning_bn: "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u09B8\u09BE\u09AE\u09A8\u09C7",
+                meaning_en: "in front of station"
+              }
+            ]
+          },
+          {
+            kanji: "\u5F8C",
+            onyomi: "\u30B4, \u30B3\u30A6",
+            kunyomi: "\u306E\u3061, \u3046\u3057\u30FB\u308D, \u3042\u3068",
+            meaning_bn: "\u09AA\u09C7\u099B\u09A8\u09C7 / \u09AA\u09B0\u09C7",
+            meaning_en: "back / after",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u5348\u5F8C[\u3054\u3054]",
+                meaning_bn: "\u09AC\u09BF\u0995\u09BE\u09B2 (PM)",
+                meaning_en: "afternoon / P.M."
+              },
+              {
+                word_ja: "\u5F8C[\u3042\u3068]\u3067",
+                meaning_bn: "\u098F\u0995\u099F\u09C1 \u09AA\u09B0\u09C7",
+                meaning_en: "later"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G13-1",
+            pattern_ja: "N1 \u304B\u3089 N2 \u307E\u3067",
+            pattern_bn: "N1 \u09A5\u09C7\u0995\u09C7 N2 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 (\u09B8\u09AE\u09AF\u09BC \u09AC\u09BE \u09B8\u09CD\u09A5\u09BE\u09A8)",
+            explanation_bn: "\u304B\u3089 \u09B6\u09C1\u09B0\u09C1 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7 \u098F\u09AC\u0982 \u307E\u3067 \u09B6\u09C7\u09B7 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 \u09A6\u09C1\u099F\u09BF \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0985\u09A5\u09AC\u09BE \u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u098F\u0995\u099F\u09BF \u09B8\u09CD\u09AC\u09A4\u09A8\u09CD\u09A4\u09CD\u09B0\u09AD\u09BE\u09AC\u09C7\u0993 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964",
+            common_pitfalls: [
+              "\u09B6\u09C1\u09A7\u09C1\u09AE\u09BE\u09A4\u09CD\u09B0 \u09B8\u09AE\u09AF\u09BC \u09A8\u09AF\u09BC, \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7\u0993 \u098F\u0995\u0987 \u09A8\u09BF\u09AF\u09BC\u09AE (\u09AF\u09C7\u09AE\u09A8: \u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u304B\u3089\u5927\u962A[\u304A\u304A\u3055\u304B]\u307E\u3067 - \u099F\u09CB\u0995\u09BF\u0993 \u09A5\u09C7\u0995\u09C7 \u0993\u09B8\u09BE\u0995\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\u306F\u4E5D\u6642[\u304F\u3058]\u304B\u3089\u4E94\u6642[\u3054\u3058]\u307E\u3067\u3067\u3059\u3002",
+                bn: "\u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF \u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09EB\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0996\u09CB\u09B2\u09BE\u0964",
+                en: "The library is open from 9 to 5."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09A1\u09BE\u0995\u0998\u09B0 (Post Office) \u0995\u09AF\u09BC\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0996\u09CB\u09B2\u09BE \u09A4\u09BE \u0985\u09A8\u09C1\u09B8\u09A8\u09CD\u09A7\u09BE\u09A8 \u0995\u09B0\u09BE\u0964",
+          situation_en: "Inquiring about opening hours at the post office.",
+          lines: [
+            {
+              speaker_ja: "\u5BA2[\u304D\u3083\u304F]",
+              speaker_en: "Customer",
+              line_ja: "\u90F5\u4FBF\u5C40[\u3086\u3046\u3073\u3093\u304D\u3087\u304F]\u306F\u4F55\u6642[\u306A\u3093\u3058]\u304B\u3089\u4F55\u6642[\u306A\u3093\u3058]\u307E\u3067\u3067\u3059\u304B\u3002",
+              line_bn: "\u09A1\u09BE\u0995\u0998\u09B0 \u0995\u09AF\u09BC\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u0995\u09AF\u09BC\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0996\u09CB\u09B2\u09BE?",
+              line_en: "What are the hours of the post office?"
+            },
+            {
+              speaker_ja: "\u6848\u5185[\u3042\u3093\u306A\u3044]",
+              speaker_en: "Information",
+              line_ja: "\u4E5D\u6642[\u304F\u3058]\u304B\u3089\u4E94\u6642[\u3054\u3058]\u307E\u3067\u3067\u3059\u3002",
+              line_bn: "\u09B8\u0995\u09BE\u09B2 \u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09AC\u09BF\u0995\u09BE\u09B2 \u09EB\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4\u0964",
+              line_en: "It is open from 9 to 5."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u0993 \u098F\u099F\u09BF\u098F\u09AE \u09B8\u09BE\u09B0\u09CD\u09AD\u09BF\u09B8 \u099A\u09BE\u09B0\u09CD\u099C\u09C7\u09B0 \u09B8\u09AE\u09AF\u09BC\u09B8\u09C0\u09AE\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09B6\u09BE\u0996\u09BE\u0997\u09C1\u09B2\u09CB \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u09A6\u09C1\u09AA\u09C1\u09B0 \u09E9\u099F\u09BE\u09AF\u09BC \u09AC\u09A8\u09CD\u09A7 \u09B9\u09AF\u09BC\u09C7 \u09AF\u09BE\u09AF\u09BC (\u09EF:\u09E6\u09E6-\u09E7\u09EB:\u09E6\u09E6)\u0964 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u09AC\u09BE \u09AC\u09CD\u09AF\u09BE\u0982\u0995\u09C7\u09B0 \u098F\u099F\u09BF\u098F\u09AE \u09AC\u09C1\u09A5 \u09A5\u09C7\u0995\u09C7 \u09B8\u09A8\u09CD\u09A7\u09CD\u09AF\u09BE\u09B0 \u09AA\u09B0 \u09AC\u09BE \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u099F\u09BE\u0995\u09BE \u09A4\u09C1\u09B2\u09A4\u09C7 \u0997\u09C7\u09B2\u09C7 \u09E7\u09E7\u09E6 \u09A5\u09C7\u0995\u09C7 \u09E9\u09E9\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AB\u09BF (Tesuuryou) \u0995\u09BE\u099F\u09C7\u0964 \u09A4\u09BE\u0987 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u0995\u09B0\u09CD\u09AE\u09A6\u09BF\u09AC\u09B8\u09C7\u09B0 \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7\u0987 \u09A8\u0997\u09A6 \u099F\u09BE\u0995\u09BE \u09A4\u09C1\u09B2\u09C7 \u09B0\u09BE\u0996\u09BE \u09AC\u09C1\u09A6\u09CD\u09A7\u09BF\u09AE\u09BE\u09A8\u09C7\u09B0 \u0995\u09BE\u099C\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u4E5D\u6642[\u304F\u3058]\u304B\u3089\u4E94\u6642[\u3054\u3058]\u307E\u3067",
+            romaji_input: "kuji kara goji made",
+            target_display: "\u304F\u3058\u304B\u3089\u3054\u3058\u307E\u3067",
+            meaning_bn: "\u09EF\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09EB\u099F\u09BE \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4"
+          },
+          {
+            prompt_ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u304B\u3089\u6765[\u304D]\u307E\u3057\u305F",
+            romaji_input: "toukyou kara kimashita",
+            target_display: "\u3068\u3046\u304D\u3087\u3046\u304B\u3089\u304D\u307E\u3057\u305F",
+            meaning_bn: "\u099F\u09CB\u0995\u09BF\u0993 \u09A5\u09C7\u0995\u09C7 \u098F\u09B8\u09C7\u099B\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L13-1",
+            question_ja: "\u300C\u304B\u3089\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304B\u3089\u2019 (kara) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09AC\u09BE\u0982\u09B2\u09BE \u0985\u09B0\u09CD\u09A5 \u0995\u09C0?",
+            options: [
+              "\u09B9\u09A4\u09C7 / \u09A5\u09C7\u0995\u09C7 (From / Since)",
+              "\u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 (Until)",
+              "\u098F / \u09AE\u09A7\u09CD\u09AF\u09C7 (In / At)",
+              "\u09A6\u09CD\u09AC\u09BE\u09B0\u09BE (By)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u304B\u3089 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8 \u09AC\u09BE \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1\u09B0 \u09AC\u09BF\u09A8\u09CD\u09A6\u09C1 (\u09B9\u09A4\u09C7 / \u09A5\u09C7\u0995\u09C7)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L14",
+          lesson_number: 14,
+          module_number: 2,
+          module_name: "Existence & Time",
+          module_name_bn: "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0993 \u09B8\u09AE\u09DF",
+          title_ja: "\u4E00\u6642\u9593[\u3044\u3061\u3058\u304B\u3093]\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059",
+          title_en: "Time Duration & Quantifiers",
+          title_bn: "\u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF (\u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2 \u0993 \u09AA\u09B0\u09BF\u09AE\u09BE\u09AA\u0995)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0998\u09A1\u09BC\u09BF\u09B0 \u09B8\u09AE\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u6642[\u3058] (\u09AF\u09C7\u09AE\u09A8: \u09ED\u099F\u09BE) \u09AC\u09B8\u09C7 \u098F\u09AC\u0982 \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u09AA\u09CD\u09A4\u09BF \u09AC\u09BE \u09AE\u09CB\u099F \u0995\u09A4 \u0998\u09A3\u09CD\u099F\u09BE \u09A4\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u6642\u9593[\u3058\u304B\u3093] (\u09AF\u09C7\u09AE\u09A8: \u09E7 \u0998\u09A3\u09CD\u099F\u09BE) \u09AC\u09B8\u09C7\u0964 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u099C\u09B0\u09C1\u09B0\u09BF \u09AC\u09BF\u09B7\u09AF\u09BC: \u09B8\u09AE\u09AF\u09BC\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u09AA\u09CD\u09A4\u09BF \u09AC\u09BE \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3\u09C7\u09B0 \u09A0\u09BF\u0995 \u09AA\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u09AC\u09BF\u09AD\u0995\u09CD\u09A4\u09BF \u09AC\u09BE \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 (\u306B) \u09AC\u09B8\u09C7 \u09A8\u09BE!",
+          core_concept_bn: "\u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2 (\u301C\u6642\u9593, \u301C\u5206\u9593), \u0995\u09A4\u0995\u09CD\u09B7\u09A3 (\u3069\u306E\u304F\u3089\u3044) \u098F\u09AC\u0982 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2\u09B9\u09C0\u09A8 \u09AA\u09CD\u09B0\u09AF\u09BC\u09CB\u0997\u0964",
+          real_world_context_bn: "\u09A6\u09C8\u09A8\u09BF\u0995 \u0995\u09BE\u099C\u09C7\u09B0 \u09B6\u09BF\u09AB\u099F \u09AC\u09BE \u09B8\u09CD\u099F\u09BE\u09A1\u09BF \u0986\u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u09B8 \u09B9\u09BF\u09B8\u09BE\u09AC \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09AF\u09BE\u09A4\u09BE\u09AF\u09BC\u09BE\u09A4\u09C7 \u0995\u09A4\u0995\u09CD\u09B7\u09A3 \u09B8\u09AE\u09AF\u09BC \u09B2\u09BE\u0997\u09C7 \u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          key_takeaway_bn: "\u0998\u09A1\u09BC\u09BF\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09AE\u09AF\u09BC\u09C7 \u306B \u09AC\u09B8\u09C7, \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09AE\u09CB\u099F \u0998\u09A3\u09CD\u099F\u09BE \u09AC\u09BE \u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09CB\u09A8\u09CB \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7 \u09A8\u09BE\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u4E00\u6642\u9593[\u3044\u3061\u3058\u304B\u3093]",
+            romaji: "ichijikan",
+            meaning_bn: "\u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE",
+            meaning_en: "one hour",
+            part_of_speech: "noun",
+            example_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]\u4E00\u6642\u9593[\u3044\u3061\u3058\u304B\u3093]\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u3092\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF\u0964",
+            example_en: "I study Japanese for one hour every day."
+          },
+          {
+            word_ja: "\u5206\u9593[\u3075\u3093\u304B\u3093]",
+            romaji: "funkan",
+            meaning_bn: "\u09AE\u09BF\u09A8\u09BF\u099F\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u09AA\u09CD\u09A4\u09BF",
+            meaning_en: "for ... minutes",
+            part_of_speech: "counter",
+            example_ja: "\u4E09\u5341\u5206\u9593[\u3055\u3093\u3058\u3085\u3063\u3077\u3093\u304B\u3093]\u6B69[\u3042\u308B]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09E9\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u09A7\u09B0\u09C7 \u09B9\u09BE\u0981\u099F\u09BF\u0964",
+            example_en: "I walk for 30 minutes."
+          },
+          {
+            word_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]",
+            romaji: "mainichi",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8",
+            meaning_en: "every day",
+            part_of_speech: "noun",
+            example_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]\u904B\u52D5[\u3046\u3093\u3069\u3046]\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09AC\u09CD\u09AF\u09BE\u09AF\u09BC\u09BE\u09AE \u0995\u09B0\u09BF\u0964",
+            example_en: "I exercise every day."
+          },
+          {
+            word_ja: "\u3069\u306E\u304F\u3089\u3044",
+            romaji: "donokurai",
+            meaning_bn: "\u0995\u09A4\u0995\u09CD\u09B7\u09A3? / \u0995\u09C0 \u09AA\u09B0\u09BF\u09AE\u09BE\u09A3?",
+            meaning_en: "how long? / how much?",
+            part_of_speech: "adverb",
+            example_ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u307E\u3067\u3069\u306E\u304F\u3089\u3044\u304B\u304B\u308A\u307E\u3059\u304B\u3002",
+            example_bn: "\u099F\u09CB\u0995\u09BF\u0993 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0995\u09A4\u0995\u09CD\u09B7\u09A3 \u09B8\u09AE\u09AF\u09BC \u09B2\u09BE\u0997\u09C7?",
+            example_en: "How long does it take to Tokyo?"
+          },
+          {
+            word_ja: "\u304B\u304B\u308A\u307E\u3059",
+            romaji: "kakarimasu",
+            meaning_bn: "\u09B8\u09AE\u09AF\u09BC \u09B2\u09BE\u0997\u09BE / \u0996\u09B0\u099A \u09B9\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to take (time / money)",
+            part_of_speech: "verb",
+            example_ja: "\u96FB\u8ECA[\u3067\u3093\u3057\u3083]\u3067\u56DB\u5341\u5206[\u3088\u3093\u3058\u3085\u3063\u3077\u3093]\u304B\u304B\u308A\u307E\u3059\u3002",
+            example_bn: "\u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09EA\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u09B2\u09BE\u0997\u09C7\u0964",
+            example_en: "It takes 40 minutes by train."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u9593",
+            onyomi: "\u30AB\u30F3, \u30B1\u30F3",
+            kunyomi: "\u3042\u3044\u3060, \u307E",
+            meaning_bn: "\u09AC\u09CD\u09AF\u09AC\u09A7\u09BE\u09A8\u09C7 / \u09AE\u09A7\u09CD\u09AF\u09AC\u09B0\u09CD\u09A4\u09C0 / \u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2",
+            meaning_en: "interval / space / between",
+            stroke_count: 12,
+            compounds: [
+              {
+                word_ja: "\u6642\u9593[\u3058\u304B\u3093]",
+                meaning_bn: "\u09B8\u09AE\u09AF\u09BC / \u0998\u09A3\u09CD\u099F\u09BE",
+                meaning_en: "time / hours"
+              },
+              {
+                word_ja: "\u4E00\u6642\u9593[\u3044\u3061\u3058\u304B\u3093]",
+                meaning_bn: "\u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE",
+                meaning_en: "one hour"
+              },
+              {
+                word_ja: "\u9593[\u3042\u3044\u3060]",
+                meaning_bn: "\u09AE\u09BE\u099D\u0996\u09BE\u09A8\u09C7",
+                meaning_en: "between"
+              }
+            ]
+          },
+          {
+            kanji: "\u6BCE",
+            onyomi: "\u30DE\u30A4",
+            kunyomi: "\u3054\u3068",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF / \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09B9",
+            meaning_en: "every",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8",
+                meaning_en: "every day"
+              },
+              {
+                word_ja: "\u6BCE\u9031[\u307E\u3044\u3057\u3085\u3046]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9",
+                meaning_en: "every week"
+              },
+              {
+                word_ja: "\u6BCE\u6708[\u307E\u3044\u3064\u304D]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8",
+                meaning_en: "every month"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G14-1",
+            pattern_ja: "Quantity / Duration + Verb (\u52A9\u8A5E[\u3058\u3087\u3057]\u306A\u3057)",
+            pattern_bn: "\u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2\u09C7\u09B0 \u09AA\u09B0 \u0995\u09CB\u09A8\u09CB \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7 \u09A8\u09BE",
+            explanation_bn: "\u0995\u09A4 \u09B8\u09AE\u09AF\u09BC \u09AC\u09BE \u0995\u09A4\u099F\u09BE \u0995\u09BE\u099C \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 \u09A4\u09BE \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7, \u0995\u09CB\u09A8\u09CB \u306B \u09AC\u09BE \u3067 \u09AF\u09CB\u0997 \u09B9\u09AF\u09BC \u09A8\u09BE\u0964 \u09AF\u09C7\u09AE\u09A8: \u4E8C\u6642\u9593[\u306B\u3058\u304B\u3093]\u5BDD[\u306D]\u307E\u3057\u305F (\u09E8 \u0998\u09A3\u09CD\u099F\u09BE \u0998\u09C1\u09AE\u09BF\u09AF\u09BC\u09C7\u099B\u09BF)\u0964",
+            common_pitfalls: [
+              "\u4E8C\u6642\u9593\u306B\u5BDD\u307E\u3057\u305F \u09AC\u09B2\u09B2\u09C7 \u09AC\u09CB\u099D\u09BE\u09AC\u09C7 '\u09E8\u099F\u09BE\u09AF\u09BC \u0998\u09C1\u09AE\u09BF\u09AF\u09BC\u09C7\u099B\u09BF'\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09E8 \u0998\u09A3\u09CD\u099F\u09BE \u0998\u09C1\u09AE\u09BE\u09A8\u09CB \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u4E8C\u6642\u9593\u5BDD\u307E\u3057\u305F \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6628\u65E5[\u304D\u306E\u3046]\u516B\u6642\u9593[\u306F\u3061\u3058\u304B\u3093]\u50CD[\u306F\u305F\u3089]\u304D\u307E\u3057\u305F\u3002",
+                bn: "\u0997\u09A4\u0995\u09BE\u09B2 \u09EE \u0998\u09A3\u09CD\u099F\u09BE \u0995\u09BE\u099C \u0995\u09B0\u09C7\u099B\u09BF\u0964",
+                en: "I worked for 8 hours yesterday."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09AA\u09BE\u09B0\u09CD\u099F\u099F\u09BE\u0987\u09AE \u099C\u09AC\u09C7 \u09AE\u09CD\u09AF\u09BE\u09A8\u09C7\u099C\u09BE\u09B0\u0995\u09C7 \u0995\u09A4\u0995\u09CD\u09B7\u09A3 \u0995\u09BE\u099C \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09AC\u09C7 \u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          situation_en: "Informing the manager about available part-time work hours.",
+          lines: [
+            {
+              speaker_ja: "\u5E97\u9577[\u3066\u3093\u3061\u3087\u3046]",
+              speaker_en: "Store Manager",
+              line_ja: "\u4E00\u65E5[\u3044\u3061\u306B\u3061]\u306B\u4F55\u6642\u9593[\u306A\u3093\u3058\u304B\u3093]\u50CD[\u306F\u305F\u3089]\u304F\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u304B\u3002",
+              line_bn: "\u09A6\u09BF\u09A8\u09C7 \u0995\u09A4 \u0998\u09A3\u09CD\u099F\u09BE \u0995\u09BE\u099C \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09AC\u09C7\u09A8?",
+              line_en: "How many hours can you work in a day?"
+            },
+            {
+              speaker_ja: "\u7559\u5B66\u751F[\u308A\u3085\u3046\u304C\u304F\u305B\u3044]",
+              speaker_en: "Foreign Student",
+              line_ja: "\u4E00\u65E5[\u3044\u3061\u306B\u3061]\u56DB\u6642\u9593[\u3088\u3058\u304B\u3093]\u50CD[\u306F\u305F\u3089]\u304F\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+              line_bn: "\u09A6\u09BF\u09A8\u09C7 \u099A\u09BE\u09B0 \u0998\u09A3\u09CD\u099F\u09BE \u0995\u09BE\u099C \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09AC\u0964",
+              line_en: "I can work four hours a day."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u0986\u09A8\u09CD\u09A4\u09B0\u09CD\u099C\u09BE\u09A4\u09BF\u0995 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u0995\u09BE\u099C\u09C7\u09B0 \u0986\u0987\u09A8\u0997\u09A4 \u09B8\u09AE\u09AF\u09BC\u09B8\u09C0\u09AE\u09BE (\u09E8\u09EE \u0998\u09A3\u09CD\u099F\u09BE \u09A8\u09BF\u09AF\u09BC\u09AE)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09CD\u099F\u09C1\u09A1\u09C7\u09A8\u09CD\u099F \u09AD\u09BF\u09B8\u09BE\u09AF\u09BC \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7 \u09B8\u09B0\u09CD\u09AC\u09CB\u099A\u09CD\u099A \u09E8\u09EE \u0998\u09A3\u09CD\u099F\u09BE (Shikakugai Katsudou Kyoka) \u09AA\u09BE\u09B0\u09CD\u099F\u099F\u09BE\u0987\u09AE \u099C\u09AC (Baito) \u0995\u09B0\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09A5\u09BE\u0995\u09C7\u0964 \u098F\u09B0 \u098F\u0995 \u09AE\u09BF\u09A8\u09BF\u099F \u09AC\u09C7\u09B6\u09BF \u0995\u09BE\u099C \u0995\u09B0\u09B2\u09C7\u0993 \u0987\u09AE\u09BF\u0997\u09CD\u09B0\u09C7\u09B6\u09A8 \u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F \u09AD\u09BF\u09B8\u09BE \u09A8\u09AC\u09BE\u09AF\u09BC\u09A8 \u09AC\u09BE\u09A4\u09BF\u09B2 \u0995\u09B0\u09C7 \u09A6\u09BF\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964 \u09A4\u09AC\u09C7 \u09B8\u09C7\u09AE\u09BF\u09B8\u09CD\u099F\u09BE\u09B0 \u099B\u09C1\u099F\u09BF\u09B0 \u09B8\u09AE\u09AF\u09BC \u09A6\u09C8\u09A8\u09BF\u0995 \u09EE \u0998\u09A3\u09CD\u099F\u09BE (\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7 \u09EA\u09E6 \u0998\u09A3\u09CD\u099F\u09BE) \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09C1\u09AF\u09CB\u0997 \u09A5\u09BE\u0995\u09C7\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u4E00\u6642\u9593[\u3044\u3061\u3058\u304B\u3093]\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059",
+            romaji_input: "ichijikan benkyoushimasu",
+            target_display: "\u3044\u3061\u3058\u304B\u3093\u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3059",
+            meaning_bn: "\u098F\u0995 \u0998\u09A3\u09CD\u099F\u09BE \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF"
+          },
+          {
+            prompt_ja: "\u3069\u306E\u304F\u3089\u3044\u304B\u304B\u308A\u307E\u3059\u304B",
+            romaji_input: "donokurai kakarimasu ka",
+            target_display: "\u3069\u306E\u304F\u3089\u3044\u304B\u304B\u308A\u307E\u3059\u304B",
+            meaning_bn: "\u0995\u09A4\u0995\u09CD\u09B7\u09A3 \u09B2\u09BE\u0997\u09AC\u09C7?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L14-1",
+            question_ja: "\u300C2\u6642\u9593[\u306B\u3058\u304B\u3093]\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3057\u305F\u300D\u306E \u6B63[\u305F\u3060]\u3057\u3044 \u52A9\u8A5E[\u3058\u3087\u3057]\u306E \u4F7F[\u3064\u304B]\u3044\u65B9[\u304B\u305F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u09E8 \u0998\u09A3\u09CD\u099F\u09BE \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09C7\u099B\u09BF\u2019 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7 \u09B8\u09A0\u09BF\u0995 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u0995\u09CB\u09A8\u099F\u09BF \u09B9\u09AC\u09C7?",
+            options: [
+              "\u0995\u09CB\u09A8\u09CB \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7 \u09A8\u09BE (No particle)",
+              "\u306B",
+              "\u3067",
+              "\u3092"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09B8\u09AE\u09AF\u09BC\u0995\u09BE\u09B2 \u09AC\u09BE \u09AE\u09C7\u09AF\u09BC\u09BE\u09A6\u09C7\u09B0 (Duration) \u09A0\u09BF\u0995 \u09AA\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u09AC\u09BF\u09AD\u0995\u09CD\u09A4\u09BF \u09AC\u09BE \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7 \u09A8\u09BE\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L15",
+          lesson_number: 15,
+          module_number: 2,
+          module_name: "Existence & Time",
+          module_name_bn: "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0993 \u09B8\u09AE\u09DF",
+          title_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306B\u884C[\u3044]\u304D\u307E\u3059",
+          title_en: "Days of the Week & Calendar Dates",
+          title_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0 \u09AF\u09BE\u09AC (\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u09AC\u09BE\u09B0 \u0993 \u0995\u09CD\u09AF\u09BE\u09B2\u09C7\u09A8\u09CD\u09A1\u09BE\u09B0)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u09B8\u09BE\u09A4 \u09A6\u09BF\u09A8\u09C7\u09B0 \u09A8\u09BE\u09AE \u09B8\u09CC\u09B0\u099C\u0997\u09A4\u09C7\u09B0 \u0997\u09CD\u09B0\u09B9 \u0993 \u09AA\u099E\u09CD\u099A\u09AD\u09C2\u09A4\u09C7\u09B0 \u09A8\u09BE\u09AE\u09C7 \u09B0\u09BE\u0996\u09BE \u09B9\u09AF\u09BC\u09C7\u099B\u09C7: \u09B8\u09C2\u09B0\u09CD\u09AF(\u09B0\u09AC\u09BF), \u099A\u09BE\u0981\u09A6(\u09B8\u09CB\u09AE), \u0986\u0997\u09C1\u09A8(\u09AE\u0999\u09CD\u0997\u09B2), \u099C\u09B2(\u09AC\u09C1\u09A7), \u0995\u09BE\u09A0(\u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF), \u09A7\u09BE\u09A4\u09C1/\u09B8\u09CD\u09AC\u09B0\u09CD\u09A3(\u09B6\u09C1\u0995\u09CD\u09B0), \u098F\u09AC\u0982 \u09AE\u09BE\u099F\u09BF/\u09AA\u09C3\u09A5\u09BF\u09AC\u09C0(\u09B6\u09A8\u09BF)\u0964 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u09AC\u09BE\u09B0\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u306B \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09AF\u09C7\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7 (\u0990\u099A\u09CD\u099B\u09BF\u0995)\u0964",
+          core_concept_bn: "\u09B8\u09BE\u09A4 \u09A6\u09BF\u09A8\u09C7\u09B0 \u09A8\u09BE\u09AE (\u66DC\u65E5 - Y\u014Dbi), \u0995\u09CD\u09AF\u09BE\u09B2\u09C7\u09A8\u09CD\u09A1\u09BE\u09B0\u09C7\u09B0 \u0985\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u09A6\u09BF\u09A8 (\u09E7 \u09A5\u09C7\u0995\u09C7 \u09E7\u09E6 \u09A4\u09BE\u09B0\u09BF\u0996) \u098F\u09AC\u0982 \u09AC\u09BE\u09B0 \u09B8\u0982\u0995\u09CD\u09B0\u09BE\u09A8\u09CD\u09A4 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u0964",
+          real_world_context_bn: "\u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0\u09C7\u09B0 \u0985\u09CD\u09AF\u09BE\u09AA\u09AF\u09BC\u09C7\u09A8\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F \u09A8\u09C7\u0993\u09AF\u09BC\u09BE, \u09B6\u09BF\u09A1\u09BF\u0989\u09B2 \u09AC\u09C1\u0995\u09BF\u0982 \u098F\u09AC\u0982 \u099B\u09C1\u099F\u09BF\u09B0 \u09AA\u09B0\u09BF\u0995\u09B2\u09CD\u09AA\u09A8\u09BE \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0 = \u65E5\u66DC\u65E5, \u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 = \u6708\u66DC\u65E5, \u09AE\u0999\u09CD\u0997\u09B2\u09AC\u09BE\u09B0 = \u706B\u66DC\u65E5, \u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 = \u6C34\u66DC\u65E5, \u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF\u09AC\u09BE\u09B0 = \u6728\u66DC\u65E5, \u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 = \u91D1\u66DC\u65E5, \u09B6\u09A8\u09BF\u09AC\u09BE\u09B0 = \u571F\u66DC\u65E5\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u6708\u66DC\u65E5[\u3052\u3064\u3088\u3046\u3073]",
+            romaji: "getsuy\u014Dbi",
+            meaning_bn: "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0",
+            meaning_en: "Monday",
+            part_of_speech: "noun",
+            example_ja: "\u6708\u66DC\u65E5[\u3052\u3064\u3088\u3046\u3073]\u304B\u3089\u30C6\u30B9\u30C8\u304C\u59CB[\u306F\u3058]\u307E\u308A\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 \u09A5\u09C7\u0995\u09C7 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u09B6\u09C1\u09B0\u09C1 \u09B9\u09AC\u09C7\u0964",
+            example_en: "The exam starts on Monday."
+          },
+          {
+            word_ja: "\u91D1\u66DC\u65E5[\u304D\u3093\u3088\u3046\u3073]",
+            romaji: "kin'y\u014Dbi",
+            meaning_bn: "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0",
+            meaning_en: "Friday",
+            part_of_speech: "noun",
+            example_ja: "\u91D1\u66DC\u65E5[\u304D\u3093\u3088\u3046\u3073]\u306E\u591C[\u3088\u308B]\u3001\u6620\u753B[\u3048\u3044\u304C]\u3092\u898B[\u307F]\u307E\u3059\u3002",
+            example_bn: "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 \u09B0\u09BE\u09A4\u09C7 \u09B8\u09BF\u09A8\u09C7\u09AE\u09BE \u09A6\u09C7\u0996\u09BF\u0964",
+            example_en: "I watch a movie on Friday night."
+          },
+          {
+            word_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]",
+            romaji: "nichiy\u014Dbi",
+            meaning_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0",
+            meaning_en: "Sunday",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306F\u4F11[\u3084\u3059]\u307F\u3067\u3059\u3002",
+            example_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0\u09C7 \u099B\u09C1\u099F\u09BF\u0964",
+            example_en: "Sunday is a holiday."
+          },
+          {
+            word_ja: "\u4F55\u66DC\u65E5[\u306A\u3093\u3088\u3046\u3073]",
+            romaji: "nan'y\u014Dbi",
+            meaning_bn: "\u0995\u09C0 \u09AC\u09BE\u09B0?",
+            meaning_en: "what day of the week?",
+            part_of_speech: "noun",
+            example_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]\u306F\u4F55\u66DC\u65E5[\u306A\u3093\u3088\u3046\u3073]\u3067\u3059\u304B\u3002",
+            example_bn: "\u0986\u099C \u0995\u09C0 \u09AC\u09BE\u09B0?",
+            example_en: "What day of the week is it today?"
+          },
+          {
+            word_ja: "\u884C[\u3044]\u304D\u307E\u3059",
+            romaji: "ikimasu",
+            meaning_bn: "\u09AF\u09BE\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to go",
+            part_of_speech: "verb",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u6E0B\u8C37[\u3057\u3076\u3084]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0995\u09BE\u09B2 \u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u09AF\u09BE\u09AC\u0964",
+            example_en: "I will go to Shibuya tomorrow."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u6708",
+            onyomi: "\u30B2\u30C4, \u30AC\u30C4",
+            kunyomi: "\u3064\u304D",
+            meaning_bn: "\u099A\u09BE\u0981\u09A6 / \u09AE\u09BE\u09B8",
+            meaning_en: "moon / month",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u6708\u66DC\u65E5[\u3052\u3064\u3088\u3046\u3073]",
+                meaning_bn: "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0",
+                meaning_en: "Monday"
+              },
+              {
+                word_ja: "\u4E00\u6708[\u3044\u3061\u304C\u3064]",
+                meaning_bn: "\u099C\u09BE\u09A8\u09C1\u09AF\u09BC\u09BE\u09B0\u09BF \u09AE\u09BE\u09B8",
+                meaning_en: "January"
+              },
+              {
+                word_ja: "\u4ECA\u6708[\u3053\u3093\u3052\u3064]",
+                meaning_bn: "\u099A\u09B2\u09A4\u09BF \u09AE\u09BE\u09B8",
+                meaning_en: "this month"
+              }
+            ]
+          },
+          {
+            kanji: "\u706B",
+            onyomi: "\u30AB",
+            kunyomi: "\u3072",
+            meaning_bn: "\u0986\u0997\u09C1\u09A8",
+            meaning_en: "fire",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u706B\u66DC\u65E5[\u304B\u3088\u3046\u3073]",
+                meaning_bn: "\u09AE\u0999\u09CD\u0997\u09B2\u09AC\u09BE\u09B0",
+                meaning_en: "Tuesday"
+              },
+              {
+                word_ja: "\u706B\u4E8B[\u304B\u3058]",
+                meaning_bn: "\u0985\u0997\u09CD\u09A8\u09BF\u0995\u09BE\u09A3\u09CD\u09A1",
+                meaning_en: "conflagration / fire"
+              }
+            ]
+          },
+          {
+            kanji: "\u6C34",
+            onyomi: "\u30B9\u30A4",
+            kunyomi: "\u307F\u305A",
+            meaning_bn: "\u09AA\u09BE\u09A8\u09BF / \u099C\u09B2",
+            meaning_en: "water",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u6C34\u66DC\u65E5[\u3059\u3044\u3088\u3046\u3073]",
+                meaning_bn: "\u09AC\u09C1\u09A7\u09AC\u09BE\u09B0",
+                meaning_en: "Wednesday"
+              },
+              {
+                word_ja: "\u6C34[\u307F\u305A]",
+                meaning_bn: "\u09AA\u09BE\u09A8\u09BF",
+                meaning_en: "water"
+              }
+            ]
+          },
+          {
+            kanji: "\u6728",
+            onyomi: "\u30E2\u30AF, \u30DC\u30AF",
+            kunyomi: "\u304D",
+            meaning_bn: "\u0997\u09BE\u099B / \u0995\u09BE\u09A0",
+            meaning_en: "tree / wood",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u6728\u66DC\u65E5[\u3082\u304F\u3088\u3046\u3073]",
+                meaning_bn: "\u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF\u09AC\u09BE\u09B0",
+                meaning_en: "Thursday"
+              }
+            ]
+          },
+          {
+            kanji: "\u91D1",
+            onyomi: "\u30AD\u30F3, \u30B3\u30F3",
+            kunyomi: "\u304B\u306D",
+            meaning_bn: "\u09B8\u09CD\u09AC\u09B0\u09CD\u09A3 / \u0985\u09B0\u09CD\u09A5",
+            meaning_en: "gold / money",
+            stroke_count: 8,
+            compounds: [
+              {
+                word_ja: "\u91D1\u66DC\u65E5[\u304D\u3093\u3088\u3046\u3073]",
+                meaning_bn: "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0",
+                meaning_en: "Friday"
+              },
+              {
+                word_ja: "\u304A\u91D1[\u304A\u304B\u306D]",
+                meaning_bn: "\u099F\u09BE\u0995\u09BE\u09AA\u09AF\u09BC\u09B8\u09BE",
+                meaning_en: "money"
+              }
+            ]
+          },
+          {
+            kanji: "\u571F",
+            onyomi: "\u30C9, \u30C8",
+            kunyomi: "\u3064\u3061",
+            meaning_bn: "\u09AE\u09BE\u099F\u09BF / \u09AA\u09C3\u09A5\u09BF\u09AC\u09C0",
+            meaning_en: "soil / earth",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u571F\u66DC\u65E5[\u3069\u3088\u3046\u3073]",
+                meaning_bn: "\u09B6\u09A8\u09BF\u09AC\u09BE\u09B0",
+                meaning_en: "Saturday"
+              },
+              {
+                word_ja: "\u571F\u5730[\u3068\u3061]",
+                meaning_bn: "\u099C\u09AE\u09BF",
+                meaning_en: "land"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G15-1",
+            pattern_ja: "Day of Week (\u306B) V-\u307E\u3059",
+            pattern_bn: "[\u09AC\u09BE\u09B0\u09C7\u09B0 \u09A8\u09BE\u09AE] \u098F [\u0995\u09BE\u099C] \u0995\u09B0\u09BF",
+            explanation_bn: "\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u09AC\u09BE\u09B0\u09C7\u09B0 \u09A8\u09BE\u09AE\u09C7\u09B0 \u09AA\u09B0 \u306B \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u0990\u099A\u09CD\u099B\u09BF\u0995 (Optional)\u0964 \u0985\u09B0\u09CD\u09A5\u09BE\u09CE \u65E5\u66DC\u65E5\u306B\u884C\u304D\u307E\u3059 \u098F\u09AC\u0982 \u65E5\u66DC\u65E5\u884C\u304D\u307E\u3059 \u0989\u09AD\u09AF\u09BC\u0987 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3\u0997\u09A4\u09AD\u09BE\u09AC\u09C7 \u09B6\u09C1\u09A6\u09CD\u09A7\u0964",
+            common_pitfalls: [
+              "\u0986\u099C (\u4ECA\u65E5), \u0995\u09BE\u09B2 (\u660E\u65E5), \u0997\u09A4 \u09AA\u09B0\u09B6\u09C1 (\u4E00\u6628\u65E5) \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09AD\u09C1\u09B2\u09C7\u0993 \u306B \u09B2\u09BE\u0997\u09BE\u09A8\u09CB \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u571F\u66DC\u65E5[\u3069\u3088\u3046\u3073]\u306B\u53CB\u9054[\u3068\u3082\u3060\u3061]\u3068\u904A[\u3042\u305D]\u3073\u307E\u3059\u3002",
+                bn: "\u09B6\u09A8\u09BF\u09AC\u09BE\u09B0 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0998\u09CB\u09B0\u09BE\u0998\u09C1\u09B0\u09BF \u0995\u09B0\u09BF\u0964",
+                en: "I hang out with my friend on Saturday."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09BE\u09A8\u09CD\u09A4\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE\u09AF\u09BC \u0998\u09C1\u09B0\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0\u09BF\u0995\u09B2\u09CD\u09AA\u09A8\u09BE\u0964",
+          situation_en: "Planning a weekend outing to Shibuya with a friend.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u4ECA\u9031[\u3053\u3093\u3057\u3085\u3046]\u306E\u571F\u66DC\u65E5[\u3069\u3088\u3046\u3073]\u3001\u3069\u3053\u304B\u3078\u884C[\u3044]\u304D\u307E\u305B\u3093\u304B\u3002",
+              line_bn: "\u098F\u0987 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09C7\u09B0 \u09B6\u09A8\u09BF\u09AC\u09BE\u09B0\u09C7 \u0995\u09CB\u09A5\u09BE\u0993 \u09AF\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?",
+              line_en: "Shall we go somewhere this Saturday?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u3044\u3044\u3067\u3059\u306D\u3002\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306B\u884C[\u3044]\u304D\u307E\u3057\u3087\u3046\u3002",
+              line_bn: "\u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u09A7\u09BE\u09B0\u09A3\u09BE\u0964 \u09B0\u09AC\u09BF\u09AC\u09BE\u09B0\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u0995\u0964",
+              line_en: "Sounds good! Let's go on Sunday."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099C\u09BE\u09A4\u09C0\u09AF\u09BC \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8 \u0993 \u0997\u09CB\u09B2\u09CD\u09A1\u09C7\u09A8 \u0989\u0987\u0995 (Golden Week - GW)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AC\u099B\u09B0\u09C7 \u09E7\u09EC\u099F\u09BF \u09B0\u09BE\u09B7\u09CD\u099F\u09CD\u09B0\u09C0\u09AF\u09BC \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8 (Shukujitsu) \u09A5\u09BE\u0995\u09C7\u0964 \u098F\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u098F\u09AA\u09CD\u09B0\u09BF\u09B2\u09C7\u09B0 \u09B6\u09C7\u09B7 \u09A5\u09C7\u0995\u09C7 \u09AE\u09C7 \u09AE\u09BE\u09B8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u099F\u09BE\u09A8\u09BE \u099B\u09C1\u099F\u09BF\u0995\u09C7 '\u0997\u09CB\u09B2\u09CD\u09A1\u09C7\u09A8 \u0989\u0987\u0995' (GW) \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC\u0964 \u098F \u09B8\u09AE\u09AF\u09BC \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099F\u09CD\u09B0\u09C7\u09A8, \u09B9\u09CB\u099F\u09C7\u09B2 \u0993 \u09A6\u09B0\u09CD\u09B6\u09A8\u09C0\u09AF\u09BC \u09B8\u09CD\u09A5\u09BE\u09A8\u0997\u09C1\u09B2\u09CB\u09A4\u09C7 \u099A\u09B0\u09AE \u09AD\u09BF\u09A1\u09BC \u09A5\u09BE\u0995\u09C7\u0964 \u09A4\u09BE\u0987 \u099F\u09BF\u0995\u09BF\u099F \u0993 \u09B9\u09CB\u099F\u09C7\u09B2 \u0995\u09AF\u09BC\u09C7\u0995 \u09AE\u09BE\u09B8 \u0986\u0997\u09C7 \u09AC\u09C1\u0995\u09BF\u0982 \u0995\u09B0\u09BE \u099C\u09B0\u09C1\u09B0\u09BF\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306B\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "nichiyoubi ni ikimasu",
+            target_display: "\u306B\u3061\u3088\u3046\u3073\u306B\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0 \u09AF\u09BE\u09AC"
+          },
+          {
+            prompt_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]\u306F\u4F55\u66DC\u65E5[\u306A\u3093\u3088\u3046\u3073]\u3067\u3059\u304B",
+            romaji_input: "kyou wa nanyoubi desu ka",
+            target_display: "\u304D\u3087\u3046\u306F\u306A\u3093\u3088\u3046\u3073\u3067\u3059\u304B",
+            meaning_bn: "\u0986\u099C \u0995\u09C0 \u09AC\u09BE\u09B0?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L15-1",
+            question_ja: "\u300C\u304D\u3093\u3088\u3046\u3073\u300D\u306E \u6F22\u5B57[\u304B\u3093\u3058]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304D\u3093\u3088\u3046\u3073\u2019 (kin'y\u014Dbi) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09A6\u09BF\u09A8 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 (Friday)",
+              "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 (Monday)",
+              "\u09AC\u09C1\u09A7\u09AC\u09BE\u09B0 (Wednesday)",
+              "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0 (Sunday)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u91D1\u66DC\u65E5 (\u304D\u3093\u3088\u3046\u3073) \u0985\u09B0\u09CD\u09A5 \u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L16",
+          lesson_number: 16,
+          module_number: 3,
+          module_name: "Movement & Transactions",
+          module_name_bn: "\u099A\u09B2\u09BE\u099A\u09B2 \u0993 \u09B2\u09C7\u09A8\u09A6\u09C7\u09A8",
+          title_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304D\u307E\u3059",
+          title_en: "Directional Verbs & Particle HE (e)",
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u09AC (\u09A6\u09BF\u0995 \u0993 \u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099A\u09B2\u09BE\u099A\u09B2\u09B8\u09C2\u099A\u0995 \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09A4\u09BF\u09A8\u099F\u09BF \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u09B9\u09B2\u09CB: \u884C[\u3044]\u304D\u307E\u3059 (\u09AF\u09BE\u0993\u09AF\u09BC\u09BE), \u6765[\u304D]\u307E\u3059 (\u0986\u09B8\u09BE), \u098F\u09AC\u0982 \u5E30[\u304B\u3048]\u308A\u307E\u3059 (\u09AC\u09BE\u09A1\u09BC\u09BF/\u09B8\u09CD\u09AC\u09A6\u09C7\u09B6\u09C7 \u09AB\u09C7\u09B0\u09BE)\u0964 \u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09AC\u09BE \u09A6\u09BF\u0995 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u3078 (\u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3: e) \u0985\u09A5\u09AC\u09BE \u306B (ni) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AF\u09BE\u09AC' -> \u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+          core_concept_bn: "\u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u3078 (e) \u098F\u09AC\u0982 \u09A4\u09BF\u09A8\u099F\u09BF \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u0997\u09A4\u09BF\u09B6\u09C0\u09B2 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE (\u884C\u304D\u307E\u3059\u30FB\u6765\u307E\u3059\u30FB\u5E30\u308A\u307E\u3059)\u0964",
+          real_world_context_bn: "\u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F\u09C7 \u0987\u09AE\u09BF\u0997\u09CD\u09B0\u09C7\u09B6\u09A8 \u09AA\u09BE\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE, \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u0995\u09CB\u09A8 \u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF\u09C7\u09B0 \u099F\u09CD\u09B0\u09C7\u09A8 \u09A4\u09BE \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09B8\u09CD\u09AC\u09A6\u09C7\u09B6\u09C7 \u09AB\u09C7\u09B0\u09BE\u09B0 \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          key_takeaway_bn: "\u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u3078 \u098F\u09B0 \u09AC\u09BE\u09A8\u09BE\u09A8 he \u09B9\u09B2\u09C7\u0993 \u098F\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC '\u098F' (e)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u884C[\u3044]\u304D\u307E\u3059",
+            romaji: "ikimasu",
+            meaning_bn: "\u09AF\u09BE\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to go",
+            part_of_speech: "verb",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0995\u09BE\u09B2 \u099F\u09CB\u0995\u09BF\u0993 \u09AF\u09BE\u09AC\u0964",
+            example_en: "I will go to Tokyo tomorrow."
+          },
+          {
+            word_ja: "\u6765[\u304D]\u307E\u3059",
+            romaji: "kimasu",
+            meaning_bn: "\u0986\u09B8\u09BE",
+            meaning_en: "to come",
+            part_of_speech: "verb",
+            example_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]\u304C\u5BB6[\u3044\u3048]\u3078\u6765[\u304D]\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1 \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u0986\u09B8\u09AC\u09C7\u0964",
+            example_en: "A friend is coming to my house."
+          },
+          {
+            word_ja: "\u5E30[\u304B\u3048]\u308A\u307E\u3059",
+            romaji: "kaerimasu",
+            meaning_bn: "\u09AB\u09C7\u09B0\u09BE (\u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AC\u09BE \u09A8\u09BF\u099C \u09A6\u09C7\u09B6\u09C7)",
+            meaning_en: "to return / go home",
+            part_of_speech: "verb",
+            example_ja: "\u516D\u6642[\u308D\u304F\u3058]\u306B\u3046\u3061\u3078\u5E30[\u304B\u3048]\u308A\u307E\u3059\u3002",
+            example_bn: "\u09EC\u099F\u09BE\u09AF\u09BC \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AB\u09BF\u09B0\u09BF\u0964",
+            example_en: "I go home at 6."
+          },
+          {
+            word_ja: "\u5B66\u6821[\u304C\u3063\u3053\u3046]",
+            romaji: "gakk\u014D",
+            meaning_bn: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC / \u09B8\u09CD\u0995\u09C1\u09B2",
+            meaning_en: "school",
+            part_of_speech: "noun",
+            example_ja: "\u671D[\u3042\u3055]\u5B66\u6821[\u304C\u3063\u3053\u3046]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09B8\u0995\u09BE\u09B2\u09C7 \u09B8\u09CD\u0995\u09C1\u09B2\u09C7 \u09AF\u09BE\u0987\u0964",
+            example_en: "I go to school in the morning."
+          },
+          {
+            word_ja: "\u7A7A\u6E2F[\u304F\u3046\u3053\u3046]",
+            romaji: "k\u016Bk\u014D",
+            meaning_bn: "\u09AC\u09BF\u09AE\u09BE\u09A8\u09AC\u09A8\u09CD\u09A6\u09B0 / \u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F",
+            meaning_en: "airport",
+            part_of_speech: "noun",
+            example_ja: "\u6210\u7530\u7A7A\u6E2F[\u306A\u308A\u305F\u304F\u3046\u3053\u3046]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09A8\u09BE\u09B0\u09BF\u09A4\u09BE \u09AC\u09BF\u09AE\u09BE\u09A8\u09AC\u09A8\u09CD\u09A6\u09B0\u09C7 \u09AF\u09BE\u0987\u0964",
+            example_en: "I go to Narita Airport."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u884C",
+            onyomi: "\u30B3\u30A6, \u30AE\u30E7\u30A6",
+            kunyomi: "\u3044\u30FB\u304F, \u3086\u30FB\u304F, \u304A\u3053\u306A\u30FB\u3046",
+            meaning_bn: "\u09AF\u09BE\u0993\u09AF\u09BC\u09BE / \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09A8",
+            meaning_en: "go / conduct",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u884C[\u3044]\u304D\u307E\u3059",
+                meaning_bn: "\u09AF\u09BE\u0987 / \u09AF\u09BE\u09AC",
+                meaning_en: "go"
+              },
+              {
+                word_ja: "\u9280\u884C[\u304E\u3093\u3053\u3046]",
+                meaning_bn: "\u09AC\u09CD\u09AF\u09BE\u0982\u0995",
+                meaning_en: "bank"
+              },
+              {
+                word_ja: "\u65C5\u884C[\u308A\u3087\u3053\u3046]",
+                meaning_bn: "\u09AD\u09CD\u09B0\u09AE\u09A3",
+                meaning_en: "travel"
+              }
+            ]
+          },
+          {
+            kanji: "\u6765",
+            onyomi: "\u30E9\u30A4",
+            kunyomi: "\u304F\u30FB\u308B, \u304D\u305F\u30FB\u308B",
+            meaning_bn: "\u0986\u09B8\u09BE / \u0986\u0997\u09AE\u09A8",
+            meaning_en: "come / next",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u6765[\u304D]\u307E\u3059",
+                meaning_bn: "\u0986\u09B8\u09BF / \u0986\u09B8\u09AC",
+                meaning_en: "come"
+              },
+              {
+                word_ja: "\u6765\u9031[\u3089\u3044\u3057\u3085\u3046]",
+                meaning_bn: "\u0986\u0997\u09BE\u09AE\u09C0 \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9",
+                meaning_en: "next week"
+              },
+              {
+                word_ja: "\u6765\u6708[\u3089\u3044\u3052\u3064]",
+                meaning_bn: "\u0986\u0997\u09BE\u09AE\u09C0 \u09AE\u09BE\u09B8",
+                meaning_en: "next month"
+              }
+            ]
+          },
+          {
+            kanji: "\u5E30",
+            onyomi: "\u30AD",
+            kunyomi: "\u304B\u3048\u30FB\u308B",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09BE\u09AC\u09B0\u09CD\u09A4\u09A8 / \u09AB\u09C7\u09B0\u09BE",
+            meaning_en: "return / go home",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u5E30[\u304B\u3048]\u308A\u307E\u3059",
+                meaning_bn: "\u09AB\u09C7\u09B0\u09BE",
+                meaning_en: "return"
+              },
+              {
+                word_ja: "\u5E30\u56FD[\u304D\u3053\u304F]",
+                meaning_bn: "\u09B8\u09CD\u09AC\u09A6\u09C7\u09B6\u09C7 \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09BE\u09AC\u09B0\u09CD\u09A4\u09A8",
+                meaning_en: "returning to home country"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G16-1",
+            pattern_ja: "Place \u3078 / \u306B \u884C\u304D\u307E\u3059 / \u6765\u307E\u3059 / \u5E30\u308A\u307E\u3059",
+            pattern_bn: "[\u09B8\u09CD\u09A5\u09BE\u09A8] \u098F \u09AF\u09BE\u0993\u09AF\u09BC\u09BE / \u0986\u09B8\u09BE / \u09AB\u09C7\u09B0\u09BE",
+            explanation_bn: "\u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u3078 \u0985\u09A5\u09AC\u09BE \u306B \u09AC\u09B8\u09C7\u0964 \u3078 \u0997\u09A4\u09BF \u0993 \u09A6\u09BF\u0995 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7 \u098F\u09AC\u0982 \u306B \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u099A\u09C2\u09A1\u09BC\u09BE\u09A8\u09CD\u09A4 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964",
+            common_pitfalls: [
+              "\u5E30\u308A\u307E\u3059 \u09B6\u09C1\u09A7\u09C1 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AC\u09BE\u09A1\u09BC\u09BF \u09AC\u09BE \u09A8\u09BF\u099C\u09C7\u09B0 \u09A6\u09C7\u09B6\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC; \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u0995\u09C7 \u5E30\u308A\u307E\u3059 \u09AC\u09B2\u09BE \u09AD\u09C1\u09B2, \u884C\u304D\u307E\u3059 \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6765\u5E74[\u3089\u3044\u306D\u3093]\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+                bn: "\u0986\u0997\u09BE\u09AE\u09C0 \u09AC\u099B\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u09AC\u0964",
+                en: "I will go to Japan next year."
+              }
+            ]
+          },
+          {
+            point_id: "G16-2",
+            pattern_ja: "\u3069\u3053\uFF08\u3078\uFF09\u3082 \u884C\u304D\u307E\u305B\u3093",
+            pattern_bn: "\u0995\u09CB\u09A5\u09BE\u0993 \u09AF\u09BE\u09AC \u09A8\u09BE (\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0985\u09B8\u09CD\u09AC\u09C0\u0995\u09C3\u09A4\u09BF)",
+            explanation_bn: "\u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09AC\u09CB\u09A7\u0995 \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3082 \u098F\u09AC\u0982 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0985\u09B0\u09CD\u09A5 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09AA\u09BE\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u8AB0\u3082\u3044\u307E\u305B\u3093 (\u0995\u09C7\u0989 \u09A8\u09C7\u0987), \u4F55\u3082\u98DF\u3079\u307E\u305B\u3093 (\u0995\u09BF\u099B\u09C1\u0987 \u0996\u09BE\u0987 \u09A8\u09BE)\u0964",
+            common_pitfalls: [
+              "\u098F\u0996\u09BE\u09A8\u09C7 \u3078 \u09AC\u09BE\u09A6 \u09A6\u09BF\u09AF\u09BC\u09C7 \u3069\u3053\u3082\u884C\u304D\u307E\u305B\u3093 \u09AC\u09B2\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B8\u09CD\u09AC\u09BE\u09AD\u09BE\u09AC\u09BF\u0995\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306F\u3069\u3053\u3082\u884C[\u3044]\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002",
+                bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0\u09C7 \u0995\u09CB\u09A5\u09BE\u0993 \u09AF\u09BE\u0987\u09A8\u09BF\u0964",
+                en: "I didn't go anywhere on Sunday."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09A8\u09BE\u09B0\u09BF\u09A4\u09BE \u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u0995\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          situation_en: "Welcoming a friend at Narita Airport in Tokyo.",
+          lines: [
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3088\u3046\u3053\u305D\u65E5\u672C[\u306B\u307B\u3093]\u3078\uFF01\u3044\u3064\u6765[\u304D]\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0995\u0996\u09A8 \u098F\u09B2\u09C7?",
+              line_en: "Welcome to Japan! When did you arrive?"
+            },
+            {
+              speaker_ja: "\u30B5\u30AD\u30D6[\u3055\u304D\u3076]",
+              speaker_en: "Sakib",
+              line_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]\u306E\u5348\u5F8C[\u3054\u3054]\u4E8C\u6642[\u306B\u3058]\u306B\u6765[\u304D]\u307E\u3057\u305F\u3002",
+              line_bn: "\u0986\u099C \u09A6\u09C1\u09AA\u09C1\u09B0 \u09E8\u099F\u09BE\u09AF\u09BC \u098F\u09B8\u09C7\u099B\u09BF\u0964",
+              line_en: "I arrived at 2 PM today."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u0986\u0987\u09B8\u09BF \u0995\u09BE\u09B0\u09CD\u09A1 (Suica / Pasmo) \u098F\u09AC\u0982 \u099F\u09BF\u0995\u09BF\u099F\u09B9\u09C0\u09A8 \u0997\u09A3\u09AA\u09B0\u09BF\u09AC\u09B9\u09A8",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AE\u09C7\u099F\u09CD\u09B0\u09CB \u0993 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u099A\u09A1\u09BC\u09A4\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09BE\u09B0 \u0995\u09BE\u0997\u099C\u09C7\u09B0 \u099F\u09BF\u0995\u09BF\u099F \u0995\u09BE\u099F\u09BE\u09B0 \u09A6\u09B0\u0995\u09BE\u09B0 \u09A8\u09C7\u0987\u0964 \u09B0\u09BF\u099A\u09BE\u09B0\u09CD\u099C\u09C7\u09AC\u09B2 \u0986\u0987\u09B8\u09BF \u0995\u09BE\u09B0\u09CD\u09A1 \u09AF\u09C7\u09AE\u09A8 'Suica' \u09AC\u09BE 'Pasmo' \u099F\u09BF\u0995\u09BF\u099F \u0997\u09C7\u099F\u09C7 \u098F\u0995 \u09B8\u09C7\u0995\u09C7\u09A8\u09CD\u09A1 \u099B\u09C1\u0981\u0987\u09AF\u09BC\u09C7 \u09A6\u09BF\u09B2\u09C7\u0987 \u09AD\u09BE\u09A1\u09BC\u09BE \u0995\u09C7\u099F\u09C7 \u0997\u09C7\u099F \u0996\u09C1\u09B2\u09C7 \u09AF\u09BE\u09AF\u09BC\u0964 \u098F\u09AE\u09A8\u0995\u09BF \u098F\u0987 \u0995\u09BE\u09B0\u09CD\u09A1 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09AD\u09C7\u09A8\u09CD\u09A1\u09BF\u0982 \u09AE\u09C7\u09B6\u09BF\u09A8 \u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF\u09A4\u09C7\u0993 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0995\u09B0\u09BE \u09AF\u09BE\u09AF\u09BC\u0964",
+          category: "Transport"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "nihon e ikimasu",
+            target_display: "\u306B\u307B\u3093\u3078\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u09AC"
+          },
+          {
+            prompt_ja: "\u3046\u3061\u3078\u5E30[\u304B\u3048]\u308A\u307E\u3059",
+            romaji_input: "uchi e kaerimasu",
+            target_display: "\u3046\u3061\u3078\u304B\u3048\u308A\u307E\u3059",
+            meaning_bn: "\u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AB\u09BF\u09B0\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L16-1",
+            question_ja: "\u300C\u65E5\u672C\u3078\u884C\u304D\u307E\u3059\u300D\u306E\u300C\u3078\u300D\u306E \u6B63[\u305F\u3060]\u3057\u3044 \u767A\u97F3[\u306F\u3064\u304A\u3093]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u306B\u307B\u3093\u3078\u3044\u304D\u307E\u3059\u2019 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7 \u2018\u3078\u2019 \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u3048 (e)",
+              "\u3078 (he)",
+              "\u306F (wa)",
+              "\u306B (ni)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09A6\u09BF\u0995 \u09AC\u09BE \u0997\u09A8\u09CD\u09A4\u09AC\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u3078' \u098F\u09B0 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 '\u098F' (e) \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L17",
+          lesson_number: 17,
+          module_number: 3,
+          module_name: "Movement & Transactions",
+          module_name_bn: "\u099A\u09B2\u09BE\u099A\u09B2 \u0993 \u09B2\u09C7\u09A8\u09A6\u09C7\u09A8",
+          title_ja: "\u30D0\u30B9\u3067\u884C[\u3044]\u304D\u307E\u3059",
+          title_en: "Means of Transportation & Tool Particle DE",
+          title_bn: "\u09AC\u09BE\u09B8\u09C7 \u0995\u09B0\u09C7 \u09AF\u09BE\u0987 (\u09AF\u09BE\u09A8\u09AC\u09BE\u09B9\u09A8 \u0993 \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09CB\u09A8\u09CB \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7 \u09AD\u09CD\u09B0\u09AE\u09A3 \u09AC\u09BE \u0995\u09CB\u09A8\u09CB \u09AF\u09A8\u09CD\u09A4\u09CD\u09B0/\u099F\u09C1\u09B2 \u09A6\u09BF\u09AF\u09BC\u09C7 \u0995\u09BE\u099C \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u3067 (de) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC, \u09AF\u09BE \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC '\u09A6\u09CD\u09AC\u09BE\u09B0\u09BE / \u09A6\u09BF\u09AF\u09BC\u09C7 / \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7' (\u09A4\u09C3\u09A4\u09C0\u09AF\u09BC\u09BE \u09AC\u09BF\u09AD\u0995\u09CD\u09A4\u09BF)\u0964 \u09AF\u09C7\u09AE\u09A8: \u09AC\u09BE\u09B8\u09C7 \u0995\u09B0\u09C7 = \u30D0\u30B9\u3067, \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 = \u96FB\u8ECA[\u3067\u3093\u3057\u3083]\u3067\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09B9\u09C7\u0981\u099F\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u3067 \u09AC\u09B8\u09C7 \u09A8\u09BE, \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u6B69[\u3042\u308B]\u3044\u3066 (aruite) \u09AC\u09B8\u09C7\u0964",
+          core_concept_bn: "\u09AE\u09BE\u09A7\u09CD\u09AF\u09AE \u09AC\u09BE \u0989\u09AA\u09BE\u09AF\u09BC\u09C7\u09B0 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u3067 (de) \u098F\u09AC\u0982 \u09AA\u09BE\u09AF\u09BC\u09C7 \u09B9\u09C7\u0981\u099F\u09C7 (\u6B69\u3044\u3066) \u098F\u09B0 \u09AC\u09CD\u09AF\u09A4\u09BF\u0995\u09CD\u09B0\u09AE\u0964",
+          real_world_context_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AA\u09BE\u09A4\u09BE\u09B2 \u09B0\u09C7\u09B2 (Chikatetsu), \u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8 (Shinkansen) \u09AC\u09BE \u09AC\u09BE\u09B8\u09C7 \u09AF\u09BE\u09A4\u09BE\u09AF\u09BC\u09BE\u09A4\u09C7\u09B0 \u09B0\u09C1\u099F \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          key_takeaway_bn: "\u09AF\u09BE\u09A8\u09AC\u09BE\u09B9\u09A8 + \u3067 (\u09A6\u09CD\u09AC\u09BE\u09B0\u09BE / \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7), \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09AA\u09BE\u09AF\u09BC\u09C7 \u09B9\u09C7\u0981\u099F\u09C7 \u0997\u09C7\u09B2\u09C7 \u09B6\u09C1\u09A7\u09C1 \u6B69[\u3042\u308B]\u3044\u3066\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u30D0\u30B9",
+            romaji: "basu",
+            meaning_bn: "\u09AC\u09BE\u09B8",
+            meaning_en: "bus",
+            part_of_speech: "noun",
+            example_ja: "\u30D0\u30B9\u3067\u5B66\u6821[\u304C\u3063\u3053\u3046]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09BE\u09B8\u09C7 \u0995\u09B0\u09C7 \u09B8\u09CD\u0995\u09C1\u09B2\u09C7 \u09AF\u09BE\u0987\u0964",
+            example_en: "I go to school by bus."
+          },
+          {
+            word_ja: "\u96FB\u8ECA[\u3067\u3093\u3057\u3083]",
+            romaji: "densha",
+            meaning_bn: "\u09AC\u09C8\u09A6\u09CD\u09AF\u09C1\u09A4\u09BF\u0995 \u099F\u09CD\u09B0\u09C7\u09A8",
+            meaning_en: "train",
+            part_of_speech: "noun",
+            example_ja: "\u96FB\u8ECA[\u3067\u3093\u3057\u3083]\u306F\u4FBF\u5229[\u3079\u3093\u308A]\u3067\u3059\u3002",
+            example_bn: "\u099F\u09CD\u09B0\u09C7\u09A8 \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995\u0964",
+            example_en: "Trains are convenient."
+          },
+          {
+            word_ja: "\u65B0\u5E79\u7DDA[\u3057\u3093\u304B\u3093\u305B\u3093]",
+            romaji: "shinkansen",
+            meaning_bn: "\u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8",
+            meaning_en: "bullet train",
+            part_of_speech: "noun",
+            example_ja: "\u65B0\u5E79\u7DDA[\u3057\u3093\u304B\u3093\u305B\u3093]\u3067\u4EAC\u90FD[\u304D\u3087\u3046\u3068]\u3078\u884C[\u3044]\u304D\u307E\u3057\u305F\u3002",
+            example_bn: "\u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0995\u09B0\u09C7 \u0995\u09BF\u09AF\u09BC\u09CB\u099F\u09CB \u0997\u09BF\u09AF\u09BC\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964",
+            example_en: "I went to Kyoto by bullet train."
+          },
+          {
+            word_ja: "\u81EA\u8EE2\u8ECA[\u3058\u3066\u3093\u3057\u3083]",
+            romaji: "jitensha",
+            meaning_bn: "\u09AC\u09BE\u0987\u09B8\u09BE\u0987\u0995\u09C7\u09B2",
+            meaning_en: "bicycle",
+            part_of_speech: "noun",
+            example_ja: "\u81EA\u8EE2\u8ECA[\u3058\u3066\u3093\u3057\u3083]\u3067\u99C5[\u3048\u304D]\u307E\u3067\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u099A\u09BE\u09B2\u09BF\u09AF\u09BC\u09C7 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AF\u09BE\u0987\u0964",
+            example_en: "I go to the station by bicycle."
+          },
+          {
+            word_ja: "\u6B69[\u3042\u308B]\u3044\u3066",
+            romaji: "aruite",
+            meaning_bn: "\u09AA\u09BE\u09AF\u09BC\u09C7 \u09B9\u09C7\u0981\u099F\u09C7",
+            meaning_en: "on foot / walking",
+            part_of_speech: "adverb",
+            example_ja: "\u5BB6[\u3044\u3048]\u304B\u3089\u99C5[\u3048\u304D]\u307E\u3067\u6B69[\u3042\u308B]\u3044\u3066\u4E94\u5206[\u3054\u3075\u3093]\u3067\u3059\u3002",
+            example_bn: "\u09AC\u09BE\u09A1\u09BC\u09BF \u09A5\u09C7\u0995\u09C7 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09B9\u09C7\u0981\u099F\u09C7 \u09EB \u09AE\u09BF\u09A8\u09BF\u099F\u0964",
+            example_en: "It is a 5-minute walk from home to the station."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u96FB",
+            onyomi: "\u30C7\u30F3",
+            kunyomi: "\u3044\u306A\u305A\u307E",
+            meaning_bn: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE / \u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE\u099A\u09BE\u09B2\u09BF\u09A4",
+            meaning_en: "electricity",
+            stroke_count: 13,
+            compounds: [
+              {
+                word_ja: "\u96FB\u8ECA[\u3067\u3093\u3057\u3083]",
+                meaning_bn: "\u099F\u09CD\u09B0\u09C7\u09A8",
+                meaning_en: "train"
+              },
+              {
+                word_ja: "\u96FB\u6C17[\u3067\u3093\u304D]",
+                meaning_bn: "\u09AC\u09BF\u09A6\u09CD\u09AF\u09C1\u09CE / \u09AC\u09BE\u09A4\u09BF",
+                meaning_en: "electricity / light"
+              },
+              {
+                word_ja: "\u96FB\u8A71[\u3067\u3093\u308F]",
+                meaning_bn: "\u099F\u09C7\u09B2\u09BF\u09AB\u09CB\u09A8",
+                meaning_en: "telephone"
+              }
+            ]
+          },
+          {
+            kanji: "\u6B69",
+            onyomi: "\u30DB, \u30D6",
+            kunyomi: "\u3042\u308B\u30FB\u304F, \u3042\u3086\u30FB\u3080",
+            meaning_bn: "\u09B9\u09BE\u0981\u099F\u09BE / \u09AA\u09A6\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE",
+            meaning_en: "walk / step",
+            stroke_count: 8,
+            compounds: [
+              {
+                word_ja: "\u6B69[\u3042\u308B]\u304D\u307E\u3059",
+                meaning_bn: "\u09B9\u09BE\u0981\u099F\u09BE",
+                meaning_en: "to walk"
+              },
+              {
+                word_ja: "\u6B69\u9053[\u307B\u3069\u3046]",
+                meaning_bn: "\u09AB\u09C1\u099F\u09AA\u09BE\u09A4",
+                meaning_en: "sidewalk / pedestrian path"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G17-1",
+            pattern_ja: "Vehicle \u3067 \u884C\u304D\u307E\u3059 / \u6765\u307E\u3059 / \u5E30\u308A\u307E\u3059",
+            pattern_bn: "[\u09AF\u09BE\u09A8\u09AC\u09BE\u09B9\u09A8] \u098F \u0995\u09B0\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE / \u0986\u09B8\u09BE",
+            explanation_bn: "\u09AF\u09BE\u09A4\u09BE\u09AF\u09BC\u09BE\u09A4\u09C7\u09B0 \u09AF\u09BE\u09A8\u09AC\u09BE\u09B9\u09A8\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3067 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964 \u098F\u099F\u09BF \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE \u09AC\u09BE \u0989\u09AA\u09BE\u09AF\u09BC \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964",
+            common_pitfalls: [
+              "\u6B69\u3044\u3066 \u098F\u09B0 \u09AA\u09B0 \u0995\u0996\u09A8\u09CB \u3067 \u09AC\u09B8\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE (\xD7 \u6B69\u3044\u3066\u3067\u884C\u304D\u307E\u3059, \u25CB \u6B69\u3044\u3066\u884C\u304D\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u4F55[\u306A\u3093]\u3067\u884C[\u3044]\u304D\u307E\u3059\u304B\u3002\u5730\u4E0B\u9244[\u3061\u304B\u3066\u3064]\u3067\u884C[\u3044]\u304D\u307E\u3059\u3002",
+                bn: "\u0995\u09C0\u09B8\u09C7 \u0995\u09B0\u09C7 \u09AF\u09BE\u09AC\u09C7\u09A8? \u09AA\u09BE\u09A4\u09BE\u09B2 \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09AF\u09BE\u09AC\u0964",
+                en: "How will you go? I will go by subway."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7 \u0995\u09C0\u09AD\u09BE\u09AC\u09C7 \u09AF\u09BE\u09AF\u09BC \u09A4\u09BE \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u0995\u09C7 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          situation_en: "Explaining how one commutes to university to a classmate.",
+          lines: [
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]A",
+              speaker_en: "Student A",
+              line_ja: "\u6BCE\u65E5[\u307E\u3044\u306B\u3061]\u4F55[\u306A\u3093]\u3067\u5927\u5B66[\u3060\u3044\u304C\u304F]\u3078\u6765[\u304D]\u307E\u3059\u304B\u3002",
+              line_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u0995\u09C0\u09B8\u09C7 \u0995\u09B0\u09C7 \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7 \u0986\u09B8\u09C7\u09A8?",
+              line_en: "How do you come to university every day?"
+            },
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]B",
+              speaker_en: "Student B",
+              line_ja: "\u81EA\u8EE2\u8ECA[\u3058\u3066\u3093\u3057\u3083]\u3067\u6765[\u304D]\u307E\u3059\u3002\u8FD1[\u3061\u304B]\u3044\u3067\u3059\u304B\u3089\u3002",
+              line_bn: "\u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u099A\u09BE\u09B2\u09BF\u09AF\u09BC\u09C7 \u0986\u09B8\u09BF\u0964 \u0995\u09BE\u09B0\u09A3 \u0995\u09BE\u099B\u09C7\u0987 \u09A5\u09BE\u0995\u09BF\u0964",
+              line_en: "I come by bicycle. Because it is close."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u099A\u09BE\u09B2\u09BE\u09A8\u09CB\u09B0 \u0995\u09A1\u09BC\u09BE \u099F\u09CD\u09B0\u09BE\u09AB\u09BF\u0995 \u0986\u0987\u09A8",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u099A\u09BE\u09B2\u09BE\u09A8\u09CB \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u099C\u09A8\u09AA\u09CD\u09B0\u09BF\u09AF\u09BC \u09B9\u09B2\u09C7\u0993 \u098F\u09B0 \u0986\u0987\u09A8 \u0996\u09C1\u09AC \u0995\u09A0\u09CB\u09B0\u0964 \u099B\u09BE\u09A4\u09BE \u09A7\u09B0\u09C7 \u09AC\u09BE \u0995\u09BE\u09A8\u09C7 \u09B9\u09C7\u09A1\u09AB\u09CB\u09A8 \u09B2\u09BE\u0997\u09BF\u09AF\u09BC\u09C7 \u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u099A\u09BE\u09B2\u09BE\u09B2\u09C7 \u09EB\u09E6,\u09E6\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u099C\u09B0\u09BF\u09AE\u09BE\u09A8\u09BE \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964 \u09B8\u09BE\u0987\u0995\u09C7\u09B2 \u0995\u09C7\u09A8\u09BE\u09B0 \u09AA\u09B0 \u09A5\u09BE\u09A8\u09BE\u09AF\u09BC \u0985\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF-\u09A5\u09C7\u09AB\u099F \u09B0\u09C7\u099C\u09BF\u09B8\u09CD\u099F\u09CD\u09B0\u09C7\u09B6\u09A8 (Bouhan Touroku) \u0995\u09B0\u09BE\u09A8\u09CB \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995 \u098F\u09AC\u0982 \u09AB\u09C1\u099F\u09AA\u09BE\u09A4\u09C7 \u09AA\u09A5\u099A\u09BE\u09B0\u09C0\u09A6\u09C7\u09B0 \u0985\u0997\u09CD\u09B0\u09BE\u09A7\u09BF\u0995\u09BE\u09B0 \u09A6\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Transport"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u30D0\u30B9\u3067\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "basu de ikimasu",
+            target_display: "\u30D0\u30B9\u3067\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u09AC\u09BE\u09B8\u09C7 \u09AF\u09BE\u09AC"
+          },
+          {
+            prompt_ja: "\u6B69[\u3042\u308B]\u3044\u3066\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "aruite ikimasu",
+            target_display: "\u3042\u308B\u3044\u3066\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u09B9\u09C7\u0981\u099F\u09C7 \u09AF\u09BE\u09AC"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L17-1",
+            question_ja: "\u96FB\u8ECA\uFF08\u3000\uFF09\u884C[\u3044]\u304D\u307E\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u3067\u3093\u3057\u3083\uFF08\u3000\uFF09\u3044\u304D\u307E\u3059",
+            options: [
+              "\u3067 (de)",
+              "\u306B (ni)",
+              "\u3078 (e)",
+              "\u3092 (o)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09AF\u09BE\u09A8\u09AC\u09BE\u09B9\u09A8\u09C7\u09B0 \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7 \u09AF\u09BE\u09A4\u09BE\u09AF\u09BC\u09BE\u09A4 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3067' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7: \u96FB\u8ECA\u3067\u884C\u304D\u307E\u3059 (\u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u0995\u09B0\u09C7 \u09AF\u09BE\u0987)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L18",
+          lesson_number: 18,
+          module_number: 3,
+          module_name: "Movement & Transactions",
+          module_name_bn: "\u099A\u09B2\u09BE\u099A\u09B2 \u0993 \u09B2\u09C7\u09A8\u09A6\u09C7\u09A8",
+          title_ja: "\u30D1\u30F3\u3092\u98DF[\u305F]\u3079\u307E\u3059",
+          title_en: "Transitive Verbs & Direct Object Particle O (wo)",
+          title_bn: "\u09B0\u09C1\u099F\u09BF \u0996\u09BE\u0987 (\u09B8\u0995\u09B0\u09CD\u09AE\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u0993 \u0995\u09B0\u09CD\u09AE\u0995\u09BE\u09B0\u0995)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09B8\u0995\u09B0\u09CD\u09AE\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u0995\u09B0\u09CD\u09AE (Direct Object) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u3092 (\u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3: o) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 '\u09AD\u09BE\u09A4 \u0996\u09BE\u0987' \u09AC\u09BE '\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF', \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u0995\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AA\u09B0\u09C7 \u3092 \u09AC\u09B8\u09C7: \u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3059\u0964 \u098F\u099B\u09BE\u09A1\u09BC\u09BE \u0995\u09BE\u0989\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC \u09A6\u09BF\u09A4\u09C7 \u301C\u307E\u305B\u3093\u304B (masen ka - \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u0995\u09B0\u09CD\u09AE\u0995\u09BE\u09B0\u0995\u09C7\u09B0 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u3092 (o), \u09B8\u0995\u09B0\u09CD\u09AE\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u098F\u09AC\u0982 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3 (\u301C\u307E\u305B\u3093\u304B)\u0964",
+          real_world_context_bn: "\u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u09AF\u09BC \u0996\u09BE\u09AC\u09BE\u09B0 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u0995\u09B0\u09BE, \u09AA\u09BE\u09A8\u09C0\u09AF\u09BC \u09AA\u09BE\u09A8 \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          key_takeaway_bn: "\u09AC\u09B8\u09CD\u09A4\u09C1 + \u3092 + \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE (V-\u307E\u3059)\u0964 \u3092 \u098F\u09B0 \u09AC\u09BE\u09A8\u09BE\u09A8 wo \u09B9\u09B2\u09C7\u0993 \u0986\u09A7\u09C1\u09A8\u09BF\u0995 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0996\u09BE\u0981\u099F\u09BF '\u0993' (o)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u98DF[\u305F]\u3079\u307E\u3059",
+            romaji: "tabemasu",
+            meaning_bn: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to eat",
+            part_of_speech: "verb",
+            example_ja: "\u671D[\u3042\u3055]\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+            example_bn: "\u09B8\u0995\u09BE\u09B2\u09C7\u09B0 \u09A8\u09BE\u09B6\u09A4\u09BE \u0996\u09BE\u0987\u0964",
+            example_en: "I eat breakfast."
+          },
+          {
+            word_ja: "\u98F2[\u306E]\u307F\u307E\u3059",
+            romaji: "nomimasu",
+            meaning_bn: "\u09AA\u09BE\u09A8 \u0995\u09B0\u09BE",
+            meaning_en: "to drink",
+            part_of_speech: "verb",
+            example_ja: "\u6C34[\u307F\u305A]\u3092\u98F2[\u306E]\u307F\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF\u0964",
+            example_en: "I drink water."
+          },
+          {
+            word_ja: "\u898B[\u307F]\u307E\u3059",
+            romaji: "mimasu",
+            meaning_bn: "\u09A6\u09C7\u0996\u09BE / \u09A6\u09B0\u09CD\u09B6\u09A8 \u0995\u09B0\u09BE",
+            meaning_en: "to see / watch",
+            part_of_speech: "verb",
+            example_ja: "\u30A2\u30CB\u30E1\u3092\u898B[\u307F]\u307E\u3059\u3002",
+            example_bn: "\u0985\u09CD\u09AF\u09BE\u09A8\u09BF\u09AE\u09C7 \u09A6\u09C7\u0996\u09BF\u0964",
+            example_en: "I watch anime."
+          },
+          {
+            word_ja: "\u805E[\u304D]\u304D\u307E\u3059",
+            romaji: "kikimasu",
+            meaning_bn: "\u09B6\u09CB\u09A8\u09BE / \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "to listen / hear / ask",
+            part_of_speech: "verb",
+            example_ja: "\u97F3\u697D[\u304A\u3093\u304C\u304F]\u3092\u805E[\u304D]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0997\u09BE\u09A8 \u09B6\u09C1\u09A8\u09BF\u0964",
+            example_en: "I listen to music."
+          },
+          {
+            word_ja: "\u8AAD[\u3088]\u307F\u307E\u3059",
+            romaji: "yomimasu",
+            meaning_bn: "\u09AA\u09A1\u09BC\u09BE",
+            meaning_en: "to read",
+            part_of_speech: "verb",
+            example_ja: "\u65B0\u805E[\u3057\u3093\u3076\u3093]\u3092\u8AAD[\u3088]\u307F\u307E\u3059\u3002",
+            example_bn: "\u09B8\u0982\u09AC\u09BE\u09A6\u09AA\u09A4\u09CD\u09B0 \u09AA\u09A1\u09BC\u09BF\u0964",
+            example_en: "I read the newspaper."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u98DF",
+            onyomi: "\u30B7\u30E7\u30AF",
+            kunyomi: "\u305F\u30FB\u3079\u308B, \u304F\u30FB\u3089\u3046",
+            meaning_bn: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE / \u0986\u09B9\u09BE\u09B0",
+            meaning_en: "eat / food",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u98DF[\u305F]\u3079\u307E\u3059",
+                meaning_bn: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE",
+                meaning_en: "to eat"
+              },
+              {
+                word_ja: "\u98DF\u5802[\u3057\u3087\u304F\u3069\u3046]",
+                meaning_bn: "\u09A1\u09BE\u0987\u09A8\u09BF\u0982 \u09B9\u09B2 / \u0995\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u09A8",
+                meaning_en: "cafeteria"
+              },
+              {
+                word_ja: "\u98DF\u4E8B[\u3057\u3087\u304F\u3058]",
+                meaning_bn: "\u0996\u09BE\u09AC\u09BE\u09B0 / \u0986\u09B9\u09BE\u09B0",
+                meaning_en: "meal"
+              }
+            ]
+          },
+          {
+            kanji: "\u98F2",
+            onyomi: "\u30A4\u30F3",
+            kunyomi: "\u306E\u30FB\u3080",
+            meaning_bn: "\u09AA\u09BE\u09A8 \u0995\u09B0\u09BE",
+            meaning_en: "drink",
+            stroke_count: 12,
+            compounds: [
+              {
+                word_ja: "\u98F2[\u306E]\u307F\u307E\u3059",
+                meaning_bn: "\u09AA\u09BE\u09A8 \u0995\u09B0\u09BE",
+                meaning_en: "to drink"
+              },
+              {
+                word_ja: "\u98F2[\u306E]\u307F\u7269[\u3082\u306E]",
+                meaning_bn: "\u09AA\u09BE\u09A8\u09C0\u09AF\u09BC",
+                meaning_en: "beverage / drink"
+              }
+            ]
+          },
+          {
+            kanji: "\u898B",
+            onyomi: "\u30B1\u30F3",
+            kunyomi: "\u307F\u30FB\u308B, \u307F\u30FB\u3048\u308B, \u307F\u30FB\u305B\u308B",
+            meaning_bn: "\u09A6\u09C7\u0996\u09BE / \u09A6\u09C3\u09B6\u09CD\u09AF\u09AE\u09BE\u09A8",
+            meaning_en: "see / look",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u898B[\u307F]\u307E\u3059",
+                meaning_bn: "\u09A6\u09C7\u0996\u09BE",
+                meaning_en: "to watch / see"
+              },
+              {
+                word_ja: "\u610F\u898B[\u3044\u3051\u3093]",
+                meaning_bn: "\u09AE\u09A4\u09BE\u09AE\u09A4",
+                meaning_en: "opinion"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G18-1",
+            pattern_ja: "N \u3092 V-\u307E\u3059",
+            pattern_bn: "N-\u0995\u09C7 \u0995\u09B0\u09CD\u09AE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09BE",
+            explanation_bn: "\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u099F\u09BF \u09AF\u09BE\u0981\u09B0 \u0993\u09AA\u09B0 \u09AA\u09CD\u09B0\u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC \u09A4\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3092 \u09AC\u09B8\u09C7\u0964 \u3092 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B6\u09C1\u09A7\u09C1\u09AE\u09BE\u09A4\u09CD\u09B0 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u0995\u09B0\u09CD\u09AE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09B8\u0982\u09B0\u0995\u09CD\u09B7\u09BF\u09A4, \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09AE\u09BE\u099D\u09C7 \u0995\u0996\u09A8\u09CB \u3092 \u09AC\u09B8\u09C7 \u09A8\u09BE\u0964",
+            common_pitfalls: [
+              "\u0995\u09C0\u09AC\u09CB\u09B0\u09CD\u09A1\u09C7 \u099F\u09BE\u0987\u09AA \u0995\u09B0\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC 'wo' \u099F\u09BE\u0987\u09AA \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC, \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3\u09C7 \u09B6\u09C1\u09A7\u09C1 'o' \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u663C[\u3072\u308B]\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3057\u305F\u304B\u3002",
+                bn: "\u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09C7\u09A8 \u0995\u09BF?",
+                en: "Did you eat lunch?"
+              }
+            ]
+          },
+          {
+            point_id: "G18-2",
+            pattern_ja: "V-\u307E\u305B\u3093\u304B (\u52E7\u8A98[\u304B\u3093\u3086\u3046])",
+            pattern_bn: "\u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF? (\u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC \u09AC\u09BE \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3)",
+            explanation_bn: "\u0995\u09BE\u0989\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u09AF\u09CB\u0997 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09BE\u09AC \u09A6\u09BF\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09B0\u09C2\u09AA \u301C\u307E\u305B\u3093\u304B \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u4E00\u7DD2[\u3044\u3063\u3057\u3087]\u306B\u98DF[\u305F]\u3079\u307E\u305B\u3093\u304B (\u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0996\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?)\u0964",
+            common_pitfalls: [
+              "\u098F\u099F\u09BF \u09AA\u09CD\u09B0\u0995\u09C3\u09A4 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u09A8\u09AF\u09BC, \u09AC\u09B0\u0982 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09AD\u09A6\u09CD\u09B0\u09B8\u09CD\u09A5 \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u4E00\u7DD2[\u3044\u3063\u3057\u3087]\u306B\u304A\u8336[\u3061\u3083]\u3092\u98F2[\u306E]\u307F\u307E\u305B\u3093\u304B\u3002",
+                bn: "\u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099A\u09BE \u0996\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?",
+                en: "Would you like to drink tea together?"
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0995\u09CD\u09AF\u09BE\u09AE\u09CD\u09AA\u09BE\u09B8\u09C7 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u0995\u09C7 \u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          situation_en: "Inviting a classmate to have lunch together on campus.",
+          lines: [
+            {
+              speaker_ja: "\u7530\u4E2D[\u305F\u306A\u304B]",
+              speaker_en: "Tanaka",
+              line_ja: "\u3082\u3046\u663C[\u3072\u308B]\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0995\u09BF \u0996\u09C7\u09AF\u09BC\u09C7 \u09AB\u09C7\u09B2\u09C7\u099B\u09C7\u09A8?",
+              line_en: "Have you already eaten lunch?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u3044\u3044\u3048\u3001\u307E\u3060\u3067\u3059\u3002\u3053\u308C\u304B\u3089\u98DF\u5802[\u3057\u3087\u304F\u3069\u3046]\u3078\u884C[\u3044]\u304D\u307E\u3059\u3002",
+              line_bn: "\u09A8\u09BE, \u098F\u0996\u09A8\u09CB \u0996\u09BE\u0987\u09A8\u09BF\u0964 \u098F\u0996\u09A8 \u0995\u09CD\u09AF\u09BE\u09A8\u09CD\u099F\u09BF\u09A8\u09C7 \u09AF\u09BE\u09AC\u0964",
+              line_en: "No, not yet. I am going to the cafeteria now."
+            },
+            {
+              speaker_ja: "\u7530\u4E2D[\u305F\u306A\u304B]",
+              speaker_en: "Tanaka",
+              line_ja: "\u3058\u3083\u3001\u4E00\u7DD2[\u3044\u3063\u3057\u3087]\u306B\u98DF[\u305F]\u3079\u307E\u305B\u3093\u304B\u3002",
+              line_bn: "\u09A4\u09BE\u09B9\u09B2\u09C7 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u0996\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?",
+              line_en: "Well then, shall we eat together?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u0997\u09C7\u09B0 (\u3044\u305F\u3060\u304D) \u0993 \u09AA\u09B0\u09C7\u09B0 (\u3054\u3061\u305D\u3046) \u09AA\u09AC\u09BF\u09A4\u09CD\u09B0 \u0985\u09AD\u09BF\u09AC\u09BE\u09A6\u09A8",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF\u09A4\u09C7 \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u0986\u0997\u09C7 \u09A6\u09C1\u0987 \u09B9\u09BE\u09A4 \u099C\u09CB\u09A1\u09BC \u0995\u09B0\u09C7 '\u3044\u305F\u3060\u304D\u307E\u3059' (Itadakimasu - \u0986\u09AE\u09BF \u09AC\u09BF\u09A8\u09C0\u09A4\u09AD\u09BE\u09AC\u09C7 \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u099B\u09BF) \u098F\u09AC\u0982 \u0996\u09BE\u0993\u09AF\u09BC\u09BE \u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 '\u3054\u3061\u305D\u3046\u3055\u307E\u3067\u3057\u305F' (Gochisousama deshita - \u09AD\u09CB\u099C\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6) \u09AC\u09B2\u09BE \u0985\u09AA\u09B0\u09BF\u09B9\u09BE\u09B0\u09CD\u09AF \u0995\u09BE\u09AF\u09BC\u09A6\u09BE\u0964 \u098F\u099F\u09BF \u0996\u09BE\u09A6\u09CD\u09AF \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u0995\u09BE\u09B0\u09C0 \u098F\u09AC\u0982 \u09AA\u09CD\u09B0\u0995\u09C3\u09A4\u09BF\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF \u0997\u09AD\u09C0\u09B0 \u0995\u09C3\u09A4\u099C\u09CD\u099E\u09A4\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09C7\u09B0 \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u30D1\u30F3\u3092\u98DF[\u305F]\u3079\u307E\u3059",
+            romaji_input: "pan o tabemasu",
+            target_display: "\u30D1\u30F3\u3092\u305F\u3079\u307E\u3059",
+            meaning_bn: "\u09B0\u09C1\u099F\u09BF \u0996\u09BE\u0987"
+          },
+          {
+            prompt_ja: "\u304A\u8336[\u3061\u3083]\u3092\u98F2[\u306E]\u307F\u307E\u305B\u3093\u304B",
+            romaji_input: "ocha o nomimasen ka",
+            target_display: "\u304A\u3061\u3083\u3092\u306E\u307F\u307E\u305B\u3093\u304B",
+            meaning_bn: "\u099A\u09BE \u0996\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L18-1",
+            question_ja: "\u6C34\uFF08\u3000\uFF09\u98F2[\u306E]\u307F\u307E\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u307F\u305A\uFF08\u3000\uFF09\u306E\u307F\u307E\u3059",
+            options: [
+              "\u3092 (o)",
+              "\u3067 (de)",
+              "\u306B (ni)",
+              "\u304C (ga)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09B8\u0995\u09B0\u09CD\u09AE\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0995\u09B0\u09CD\u09AE (Object) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 '\u3092' (o) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7: \u6C34\u3092\u98F2\u307F\u307E\u3059 (\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L19",
+          lesson_number: 19,
+          module_number: 3,
+          module_name: "Movement & Transactions",
+          module_name_bn: "\u099A\u09B2\u09BE\u099A\u09B2 \u0993 \u09B2\u09C7\u09A8\u09A6\u09C7\u09A8",
+          title_ja: "\u30C7\u30D1\u30FC\u30C8\u3067\u8CB7[\u304B]\u3044\u307E\u3059",
+          title_en: "Action Location Particle DE & Shopping",
+          title_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u0995\u09BF\u09A8\u09BF (\u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09A6\u09C1\u099F\u09BF \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7: \u306B (ni) \u098F\u09AC\u0982 \u3067 (de)\u0964 \u09AF\u0996\u09A8 \u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09B0\u09CD\u09AE \u09AC\u09BE \u0985\u09CD\u09AF\u09BE\u0995\u09B6\u09A8 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u0995\u09B0\u09BE, \u0996\u09BE\u0993\u09AF\u09BC\u09BE, \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BE), \u09A4\u0996\u09A8 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09AA\u09B0\u09C7 \u3067 \u09AC\u09B8\u09C7\u0964 \u0986\u09B0 \u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09CD\u09B0\u09C7\u09AB \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09A8 \u09AC\u09BE \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u09A5\u09BE\u0995\u09B2\u09C7 \u306B \u09AC\u09B8\u09C7\u0964",
+          core_concept_bn: "\u0995\u09B0\u09CD\u09AE \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09A8\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u3067 (de) \u09AC\u09A8\u09BE\u09AE \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u306B (ni)\u0964",
+          real_world_context_bn: "\u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u0995\u09B0\u09BE, \u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BE \u09AC\u09BE \u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u09AF\u09BC \u0996\u09BE\u09AC\u09BE\u09B0 \u0997\u09CD\u09B0\u09B9\u09A3 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "\u0995\u09B0\u09CD\u09AE \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09A8 = \u09B8\u09CD\u09A5\u09BE\u09A8 + \u3067 (\u09AF\u09C7\u09AE\u09A8: \u30C7\u30D1\u30FC\u30C8\u3067\u8CB7[\u304B]\u3044\u307E\u3059)\u0964 \u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC = \u09B8\u09CD\u09A5\u09BE\u09A8 + \u306B (\u90E8\u5C4B[\u3078\u3084]\u306B\u3044\u307E\u3059)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u8CB7[\u304B]\u3044\u307E\u3059",
+            romaji: "kaimasu",
+            meaning_bn: "\u0995\u09C7\u09A8\u09BE / \u0995\u09CD\u09B0\u09AF\u09BC \u0995\u09B0\u09BE",
+            meaning_en: "to buy",
+            part_of_speech: "verb",
+            example_ja: "\u30B7\u30E3\u30C4\u3092\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u3002",
+            example_bn: "\u09B6\u09BE\u09B0\u09CD\u099F \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964",
+            example_en: "I bought a shirt."
+          },
+          {
+            word_ja: "\u30C7\u30D1\u30FC\u30C8",
+            romaji: "dep\u0101to",
+            meaning_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0",
+            meaning_en: "department store",
+            part_of_speech: "noun",
+            example_ja: "\u30C7\u30D1\u30FC\u30C8\u3067\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u3092\u3057\u307E\u3059\u3002",
+            example_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u0995\u09B0\u09BF\u0964",
+            example_en: "I shop at a department store."
+          },
+          {
+            word_ja: "\u30B9\u30FC\u30D1\u30FC",
+            romaji: "s\u016Bp\u0101",
+            meaning_bn: "\u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F",
+            meaning_en: "supermarket",
+            part_of_speech: "noun",
+            example_ja: "\u30B9\u30FC\u30D1\u30FC\u3067\u91CE\u83DC[\u3084\u3055\u3044]\u3092\u8CB7[\u304B]\u3044\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u09C7 \u09B6\u09BE\u0995\u09B8\u09AC\u099C\u09BF \u0995\u09BF\u09A8\u09BF\u0964",
+            example_en: "I buy vegetables at the supermarket."
+          },
+          {
+            word_ja: "\u3069\u3053\u3067",
+            romaji: "dokode",
+            meaning_bn: "\u0995\u09CB\u09A5\u09BE\u09AF\u09BC? (\u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8)",
+            meaning_en: "where (action location)?",
+            part_of_speech: "pronoun phrase",
+            example_ja: "\u3069\u3053\u3067\u305D\u306E\u9774[\u304F\u3064]\u3092\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u304B\u3002",
+            example_bn: "\u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u0990 \u099C\u09C1\u09A4\u09CB \u0995\u09BF\u09A8\u09C7\u099B\u09C7\u09A8?",
+            example_en: "Where did you buy those shoes?"
+          },
+          {
+            word_ja: "\u9774[\u304F\u3064]",
+            romaji: "kutsu",
+            meaning_bn: "\u099C\u09C1\u09A4\u09CB",
+            meaning_en: "shoes",
+            part_of_speech: "noun",
+            example_ja: "\u65B0[\u3042\u305F\u3089]\u3057\u3044\u9774[\u304F\u3064]\u3092\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u3002",
+            example_bn: "\u09A8\u09A4\u09C1\u09A8 \u099C\u09C1\u09A4\u09CB \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964",
+            example_en: "I bought new shoes."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u8CB7",
+            onyomi: "\u30D0\u30A4",
+            kunyomi: "\u304B\u30FB\u3046",
+            meaning_bn: "\u0995\u09C7\u09A8\u09BE / \u0995\u09CD\u09B0\u09AF\u09BC",
+            meaning_en: "buy",
+            stroke_count: 12,
+            compounds: [
+              {
+                word_ja: "\u8CB7[\u304B]\u3044\u307E\u3059",
+                meaning_bn: "\u0995\u09C7\u09A8\u09BE",
+                meaning_en: "to buy"
+              },
+              {
+                word_ja: "\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]",
+                meaning_bn: "\u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE",
+                meaning_en: "shopping"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G19-1",
+            pattern_ja: "Place \u3067 V-\u307E\u3059",
+            pattern_bn: "[\u09B8\u09CD\u09A5\u09BE\u09A8] \u098F [\u0995\u09BE\u099C] \u0995\u09B0\u09BE (Action Location)",
+            explanation_bn: "\u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09B0\u09CD\u09AE \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09BF\u09A4 \u09B9\u09B2\u09C7 \u09B8\u09C7\u0987 \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09AA\u09B0 \u3067 \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\u3067\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059 (\u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF)\u0964",
+            common_pitfalls: [
+              "\u0985\u09B8\u09CD\u09A4\u09BF\u09A4\u09CD\u09AC \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE (\u3042\u308A\u307E\u3059 / \u3044\u307E\u3059) \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AD\u09C1\u09B2\u09C7\u0993 \u3067 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE, \u09B8\u09C7\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u306B \u09AC\u09B8\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u30EC\u30B9\u30C8\u30E9\u30F3\u3067\u6669[\u3070\u3093]\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+                bn: "\u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u09AF\u09BC \u09B0\u09BE\u09A4\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u09AC\u0964",
+                en: "I will eat dinner at a restaurant."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u099C\u09CD\u09AF\u09BE\u0995\u09C7\u099F \u09A6\u09C7\u0996\u09C7 \u0995\u09CB\u09A5\u09BE \u09A5\u09C7\u0995\u09C7 \u0995\u09C7\u09A8\u09BE \u09A4\u09BE \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09BE\u0964",
+          situation_en: "Asking a friend where they bought their stylish jacket.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u305D\u306E\u30B8\u30E3\u30B1\u30C3\u30C8\u3001\u7D20\u6575[\u3059\u3066\u304D]\u3067\u3059\u306D\u3002\u3069\u3053\u3067\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u0990 \u099C\u09CD\u09AF\u09BE\u0995\u09C7\u099F\u099F\u09BF \u0996\u09C1\u09AC \u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u09A4\u09CB! \u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u0995\u09BF\u09A8\u09C7\u099B\u09C7\u09A8?",
+              line_en: "That jacket is wonderful! Where did you buy it?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u65B0\u5BBF[\u3057\u3093\u3058\u3085\u304F]\u306E\u30C7\u30D1\u30FC\u30C8\u3067\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u3002",
+              line_bn: "\u09B6\u09BF\u09A8\u099C\u09C1\u0995\u09C1\u09B0 \u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964",
+              line_en: "I bought it at a department store in Shinjuku."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09B6\u09AA (Daiso / Seria) \u0993 \u09B8\u09BE\u09B6\u09CD\u09B0\u09AF\u09BC\u09C0 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09A8\u09A4\u09C1\u09A8 \u099C\u09C0\u09AC\u09A8 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u0997\u09C1\u09B0\u09C1\u09A4\u09CD\u09AC\u09AA\u09C2\u09B0\u09CD\u09A3 \u09A6\u09CB\u0995\u09BE\u09A8 \u09B9\u09B2\u09CB \u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09B6\u09AA (Daiso, Seria, Can Do)\u0964 \u09B9\u09BE\u0981\u09A1\u09BC\u09BF\u09AA\u09BE\u09A4\u09BF\u09B2, \u09A5\u09BE\u09B2\u09BE\u09AC\u09BE\u09B8\u09A8, \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09BE\u09B0\u09BF, \u099A\u09BE\u09B0\u09CD\u099C\u09BE\u09B0 \u0993 \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0\u09C7\u09B0 \u09B8\u09B0\u099E\u09CD\u099C\u09BE\u09AE \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AC\u0987 \u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 (\u099F\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09B8\u09B9 \u09E7\u09E7\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8)-\u098F \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u0964 \u09A8\u09A4\u09C1\u09A8 \u099B\u09BE\u09A4\u09CD\u09B0\u09A6\u09C7\u09B0 \u09B6\u09C1\u09B0\u09C1\u09A4\u09C7\u0987 \u09A6\u09BE\u09AE\u09BF \u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u09A8\u09BE \u0997\u09BF\u09AF\u09BC\u09C7 \u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09B6\u09AA\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u0985\u09B0\u09CD\u09A5 \u09AC\u09BE\u0981\u099A\u09BE\u09AF\u09BC\u0964",
+          category: "Shopping"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u30C7\u30D1\u30FC\u30C8\u3067\u8CB7[\u304B]\u3044\u307E\u3059",
+            romaji_input: "depa-to de kaimasu",
+            target_display: "\u30C7\u30D1\u30FC\u30C8\u3067\u304B\u3044\u307E\u3059",
+            meaning_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u0995\u09BF\u09A8\u09BF"
+          },
+          {
+            prompt_ja: "\u3069\u3053\u3067\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u304B",
+            romaji_input: "doko de kaimashita ka",
+            target_display: "\u3069\u3053\u3067\u304B\u3044\u307E\u3057\u305F\u304B",
+            meaning_bn: "\u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u0995\u09BF\u09A8\u09C7\u099B\u09C7\u09A8?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L19-1",
+            question_ja: "\u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\uFF08\u3000\uFF09\u672C[\u307B\u3093]\u3092 \u8AAD[\u3088]\u307F\u307E\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u3068\u3057\u3087\u304B\u3093\uFF08\u3000\uFF09\u307B\u3093\u3092 \u3088\u307F\u307E\u3059",
+            options: [
+              "\u3067 (de)",
+              "\u306B (ni)",
+              "\u3092 (o)",
+              "\u3078 (e)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AC\u0987 \u09AA\u09A1\u09BC\u09BE\u09B0 \u0995\u09B0\u09CD\u09AE (Action) \u09B8\u09AE\u09CD\u09AA\u09BE\u09A6\u09BF\u09A4 \u09B9\u099A\u09CD\u099B\u09C7, \u09A4\u09BE\u0987 \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u3067' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L20",
+          lesson_number: 20,
+          module_number: 3,
+          module_name: "Movement & Transactions",
+          module_name_bn: "\u099A\u09B2\u09BE\u099A\u09B2 \u0993 \u09B2\u09C7\u09A8\u09A6\u09C7\u09A8",
+          title_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]\u306B\u4F1A[\u3042]\u3044\u307E\u3059",
+          title_en: "Interaction Partner Particle NI & Meeting People",
+          title_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC (\u09B2\u0995\u09CD\u09B7\u09CD\u09AF \u0993 \u09AA\u09BE\u09B0\u09B8\u09CD\u09AA\u09B0\u09BF\u0995 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u0986\u09AE\u09B0\u09BE \u09AC\u09B2\u09BF '\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC'\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE (\u4F1A[\u3042]\u3044\u307E\u3059), \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u0995\u09B0\u09BE (\u805E[\u304D]\u304D\u307E\u3059), \u0985\u09A5\u09AC\u09BE \u099F\u09C7\u09B2\u09BF\u09AB\u09CB\u09A8 \u0995\u09B0\u09BE (\u96FB\u8A71[\u3067\u3093\u308F]\u3092\u304B\u3051\u307E\u3059) \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09B2\u0995\u09CD\u09B7\u09CD\u09AF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u099F\u09BF\u09B0 \u09AA\u09B0 \u306B (ni) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964 \u0997\u09A0\u09A8: [\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306B \u4F1A[\u3042]\u3044\u307E\u3059\u0964",
+          core_concept_bn: "\u09AE\u09BF\u09A5\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09B2\u0995\u09CD\u09B7\u09CD\u09AF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u306B (ni) \u098F\u09AC\u0982 \u09B8\u09BE\u09AE\u09BE\u099C\u09BF\u0995 \u09B8\u09AE\u09CD\u09AA\u09B0\u09CD\u0995\u09C7\u09B0 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u0964",
+          real_world_context_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u0995\u09CD\u09B7\u09BE\u09A4\u09C7\u09B0 \u09B8\u09AE\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09A3, \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0995\u09C7 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u0995\u09B2 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u306B \u4F1A[\u3042]\u3044\u307E\u3059 (\u0995\u09BE\u09B0\u0993 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE)\u0964 \u098F\u0996\u09BE\u09A8\u09C7 \u3068 \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 \u306B \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09AA\u09CD\u09B0\u09BE\u09A7\u09BE\u09A8\u09CD\u09AF \u09AA\u09BE\u09AF\u09BC\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u4F1A[\u3042]\u3044\u307E\u3059",
+            romaji: "aimasu",
+            meaning_bn: "\u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE / \u09B8\u09BE\u0995\u09CD\u09B7\u09BE\u09CE \u0995\u09B0\u09BE",
+            meaning_en: "to meet",
+            part_of_speech: "verb",
+            example_ja: "\u99C5[\u3048\u304D]\u3067\u53CB\u9054[\u3068\u3082\u3060\u3061]\u306B\u4F1A[\u3042]\u3044\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC\u0964",
+            example_en: "I will meet a friend at the station."
+          },
+          {
+            word_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+            romaji: "tomodachi",
+            meaning_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1 / \u09AC\u09BE\u09A8\u09CD\u09A7\u09AC\u09C0",
+            meaning_en: "friend",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3067\u53CB\u9054[\u3068\u3082\u3060\u3061]\u304C\u3067\u304D\u307E\u3057\u305F\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+            example_en: "I made friends in Japan."
+          },
+          {
+            word_ja: "\u96FB\u8A71[\u3067\u3093\u308F]",
+            romaji: "denwa",
+            meaning_bn: "\u099F\u09C7\u09B2\u09BF\u09AB\u09CB\u09A8 / \u09AB\u09CB\u09A8 \u0995\u09B2",
+            meaning_en: "telephone / phone call",
+            part_of_speech: "noun",
+            example_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u306B\u96FB\u8A71[\u3067\u3093\u308F]\u3092\u304B\u3051\u307E\u3059\u3002",
+            example_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0995\u09C7 \u09AB\u09CB\u09A8 \u0995\u09B2 \u0995\u09B0\u09BF\u0964",
+            example_en: "I call the teacher on the phone."
+          },
+          {
+            word_ja: "\u624B\u7D19[\u3066\u304C\u307F]",
+            romaji: "tegami",
+            meaning_bn: "\u099A\u09BF\u09A0\u09BF",
+            meaning_en: "letter",
+            part_of_speech: "noun",
+            example_ja: "\u5BB6\u65CF[\u304B\u305E\u304F]\u306B\u624B\u7D19[\u3066\u304C\u307F]\u3092\u66F8[\u304B]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09B0\u09BF\u09AC\u09BE\u09B0\u0995\u09C7 \u099A\u09BF\u09A0\u09BF \u09B2\u09BF\u0996\u09BF\u0964",
+            example_en: "I write a letter to my family."
+          },
+          {
+            word_ja: "\u30D7\u30EC\u30BC\u30F3\u30C8",
+            romaji: "purezento",
+            meaning_bn: "\u0989\u09AA\u09B9\u09BE\u09B0 / \u0997\u09BF\u09AB\u099F",
+            meaning_en: "present / gift",
+            part_of_speech: "noun",
+            example_ja: "\u6BCD[\u306F\u306F]\u306B\u30D7\u30EC\u30BC\u30F3\u30C8\u3092\u3042\u3052\u307E\u3059\u3002",
+            example_bn: "\u09AE\u09BE\u0995\u09C7 \u0989\u09AA\u09B9\u09BE\u09B0 \u09A6\u09BF\u0987\u0964",
+            example_en: "I give a present to my mother."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4F1A",
+            onyomi: "\u30AB\u30A4, \u30A8",
+            kunyomi: "\u3042\u30FB\u3046",
+            meaning_bn: "\u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE / \u09B8\u09AD\u09BE",
+            meaning_en: "meet / society",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u4F1A[\u3042]\u3044\u307E\u3059",
+                meaning_bn: "\u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE",
+                meaning_en: "to meet"
+              },
+              {
+                word_ja: "\u4F1A\u793E[\u304B\u3044\u3057\u3083]",
+                meaning_bn: "\u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF",
+                meaning_en: "company"
+              },
+              {
+                word_ja: "\u4F1A\u8A71[\u304B\u3044\u308F]",
+                meaning_bn: "\u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8",
+                meaning_en: "conversation"
+              }
+            ]
+          },
+          {
+            kanji: "\u53CB",
+            onyomi: "\u30E6\u30A6",
+            kunyomi: "\u3068\u3082",
+            meaning_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1 / \u09AE\u09BF\u09A4\u09CD\u09B0",
+            meaning_en: "friend",
+            stroke_count: 4,
+            compounds: [
+              {
+                word_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+                meaning_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1",
+                meaning_en: "friend"
+              },
+              {
+                word_ja: "\u53CB\u4EBA[\u3086\u3046\u3058\u3093]",
+                meaning_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1 (\u0986\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995)",
+                meaning_en: "friend (formal)"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G20-1",
+            pattern_ja: "Person \u306B \u4F1A\u3044\u307E\u3059",
+            pattern_bn: "[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE",
+            explanation_bn: "\u0995\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE \u09B9\u099A\u09CD\u099B\u09C7 \u09B8\u09C7\u0987 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0995\u09C7 \u306B \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC '\u09B8\u09BE\u09A5\u09C7' \u09B9\u09B2\u09C7\u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u3092 \u09AC\u09BE \u3068 \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 \u306B \u09AC\u09B8\u09C7\u0964",
+            common_pitfalls: [
+              "\u53CB\u9054\u3092\u4F1A\u3044\u307E\u3059 \u09AC\u09B2\u09BE \u09AD\u09C1\u09B2; \u5FC5\u305A \u53CB\u9054\u306B\u4F1A\u3044\u307E\u3059 \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u660E\u65E5[\u3042\u3057\u305F]\u5148\u751F[\u305B\u3093\u305B\u3044]\u306B\u4F1A[\u3042]\u3044\u307E\u3059\u3002",
+                bn: "\u0995\u09BE\u09B2 \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC\u0964",
+                en: "I will meet the teacher tomorrow."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE\u09B0 \u09B9\u09BE\u099A\u09BF\u0995\u09CB \u09AE\u09C2\u09B0\u09CD\u09A4\u09BF\u09B0 \u09B8\u09BE\u09AE\u09A8\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE\u09B0 \u09AA\u09CD\u09B0\u09A4\u09BF\u09B6\u09CD\u09B0\u09C1\u09A4\u09BF\u0964",
+          situation_en: "Arranging to meet a friend in front of the Hachiko statue in Shibuya.",
+          lines: [
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u3069\u3053\u3067\u4F1A[\u3042]\u3044\u307E\u3057\u3087\u3046\u304B\u3002",
+              line_bn: "\u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u0995\u09CB\u09A5\u09BE\u09AF\u09BC \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC?",
+              line_en: "Where shall we meet tomorrow?"
+            },
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u6E0B\u8C37[\u3057\u3076\u3084]\u306E\u30CF\u30C1\u516C\u524D[\u3053\u3046\u307E\u3048]\u3067\u4F1A[\u3042]\u3044\u307E\u3057\u3087\u3046\u3002",
+              line_bn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE\u09B0 \u09B9\u09BE\u099A\u09BF\u0995\u09CB \u09AE\u09C2\u09B0\u09CD\u09A4\u09BF\u09B0 \u09B8\u09BE\u09AE\u09A8\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE \u09AF\u09BE\u0995\u0964",
+              line_en: "Let's meet in front of Hachiko in Shibuya."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u099C\u09A8\u09AA\u09CD\u09B0\u09BF\u09AF\u09BC \u09B8\u09BE\u0995\u09CD\u09B7\u09BE\u09A4\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8: \u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u09B9\u09BE\u099A\u09BF\u0995\u09CB (\u30CF\u30C1\u516C)",
+          tip_bn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u09B9\u09BE\u099A\u09BF\u0995\u09CB \u098F\u0995\u09CD\u09B8\u09BF\u099F \u0993 \u09AC\u09BF\u09B6\u09CD\u09AC\u0996\u09CD\u09AF\u09BE\u09A4 \u09AC\u09BF\u09B6\u09CD\u09AC\u09B8\u09CD\u09A4 \u0995\u09C1\u0995\u09C1\u09B0 \u09B9\u09BE\u099A\u09BF\u0995\u09CB\u09B0 \u09AC\u09CD\u09B0\u09CB\u099E\u09CD\u099C \u09AE\u09C2\u09B0\u09CD\u09A4\u09BF \u099F\u09CB\u0995\u09BF\u0993 \u09B6\u09B9\u09B0\u09C7\u09B0 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4 \u09AE\u09BF\u09B2\u09A8\u09B8\u09CD\u09A5\u09B2 (Machiawase spot)\u0964 \u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u098F\u0996\u09BE\u09A8\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09B9\u09BE\u099C\u09BE\u09B0 \u09B9\u09BE\u099C\u09BE\u09B0 \u09AE\u09BE\u09A8\u09C1\u09B7 \u09B8\u09BE\u0995\u09CD\u09B7\u09BE\u09A4\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09A6\u09BE\u0981\u09A1\u09BC\u09BF\u09AF\u09BC\u09C7 \u09A5\u09BE\u0995\u09C7, \u09A4\u09BE\u0987 \u09B8\u09C1\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B2\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09AE\u09BE\u09B0\u09CD\u0995 \u09AF\u09C7\u09AE\u09A8 \u09B9\u09BE\u099A\u09BF\u0995\u09CB\u09B0 \u09A0\u09BF\u0995 \u09A1\u09BE\u09A8\u09C7 \u09AC\u09BE \u09AC\u09BE\u09AE\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u0995\u09B0\u09BE \u09AC\u09C1\u09A6\u09CD\u09A7\u09BF\u09AE\u09BE\u09A8\u09C7\u09B0 \u0995\u09BE\u099C\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]\u306B\u4F1A[\u3042]\u3044\u307E\u3059",
+            romaji_input: "tomodachi ni aimasu",
+            target_display: "\u3068\u3082\u3060\u3061\u306B\u3042\u3044\u307E\u3059",
+            meaning_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09AC"
+          },
+          {
+            prompt_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u306B\u96FB\u8A71[\u3067\u3093\u308F]\u3057\u307E\u3059",
+            romaji_input: "sensei ni denwashimasu",
+            target_display: "\u305B\u3093\u305B\u3044\u306B\u3067\u3093\u308F\u3057\u307E\u3059",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0995\u09C7 \u09AB\u09CB\u09A8 \u0995\u09B0\u09AC"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L20-1",
+            question_ja: "\u53CB\u9054\uFF08\u3000\uFF09\u4F1A[\u3042]\u3044\u307E\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u3068\u3082\u3060\u3061\uFF08\u3000\uFF09\u3042\u3044\u307E\u3059",
+            options: [
+              "\u306B (ni)",
+              "\u3092 (o)",
+              "\u3067 (de)",
+              "\u3078 (e)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0995\u09BE\u09B0\u0993 \u09B8\u09BE\u09A5\u09C7 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE (\u4F1A\u3044\u307E\u3059) \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09B2\u0995\u09CD\u09B7\u09CD\u09AF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u099F\u09BF\u09B0 \u09AA\u09B0 '\u306B' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L21",
+          lesson_number: 21,
+          module_number: 4,
+          module_name: "Adjectives & Preference",
+          module_name_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AA\u099B\u09A8\u09CD\u09A6",
+          title_ja: "\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306F\u9AD8[\u305F\u304B]\u3044\u3067\u3059",
+          title_en: "I-Adjectives & Conjugation",
+          title_bn: "\u09AB\u09C1\u099C\u09BF \u09AA\u09B0\u09CD\u09AC\u09A4 \u0989\u0981\u099A\u09C1 (\u0987-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09A6\u09C1\u0987 \u09AA\u09CD\u09B0\u0995\u09BE\u09B0: \u3044-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 (I-adjectives) \u098F\u09AC\u0982 \u306A-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 (Na-adjectives)\u0964 \u3044-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u0997\u09C1\u09B2\u09CB\u09B0 \u09B6\u09C7\u09B7\u09C7 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC '\u3044' \u09A5\u09BE\u0995\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u9AD8[\u305F\u304B]\u3044 - \u0989\u0981\u099A\u09C1, \u5B89[\u3084\u3059]\u3044 - \u09B8\u09B8\u09CD\u09A4\u09BE)\u0964 \u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BF\u099C\u09B8\u09CD\u09AC \u0985\u09A4\u09C0\u09A4 \u0993 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7: \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995\u09C7 \u3044 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7 \u301C\u304F\u306A\u3044\u3067\u3059 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u0985\u09A4\u09C0\u09A4\u09C7 \u301C\u304B\u3063\u305F\u3067\u3059 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u0987-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u0995\u09BE\u09B2 \u0993 \u09AD\u09BE\u09AC \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 (Affirmative: \u301C\u3044\u3067\u3059, Negative: \u301C\u304F\u306A\u3044\u3067\u3059, Past: \u301C\u304B\u3063\u305F\u3067\u3059)\u0964",
+          real_world_context_bn: "\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09A8\u09BE \u0997\u09B0\u09AE \u09A4\u09BE \u09AC\u09B2\u09BE, \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE\u09AF\u09BC \u09A6\u09BE\u09AE \u09B8\u09B8\u09CD\u09A4\u09BE \u09AC\u09BE \u09A6\u09BE\u09AE\u09BF \u09AC\u09BF\u099A\u09BE\u09B0 \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09B8\u09CD\u09AC\u09BE\u09A6 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE\u0964",
+          key_takeaway_bn: "\u9AD8[\u305F\u304B]\u3044\u3067\u3059 (\u0989\u0981\u099A\u09C1) -> \u9AD8[\u305F\u304B]\u304F\u306A\u3044\u3067\u3059 (\u0989\u0981\u099A\u09C1 \u09A8\u09AF\u09BC) -> \u9AD8[\u305F\u304B]\u304B\u3063\u305F\u3067\u3059 (\u0989\u0981\u099A\u09C1 \u099B\u09BF\u09B2)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u9AD8[\u305F\u304B]\u3044",
+            romaji: "takai",
+            meaning_bn: "\u0989\u0981\u099A\u09C1 / \u09A6\u09BE\u09AE\u09BF",
+            meaning_en: "tall / high / expensive",
+            part_of_speech: "i-adjective",
+            example_ja: "\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306F\u9AD8[\u305F\u304B]\u3044\u5C71[\u3084\u307E]\u3067\u3059\u3002",
+            example_bn: "\u09AB\u09C1\u099C\u09BF \u09AA\u09B0\u09CD\u09AC\u09A4 \u098F\u0995\u099F\u09BF \u0989\u0981\u099A\u09C1 \u09AA\u09B0\u09CD\u09AC\u09A4\u0964",
+            example_en: "Mt. Fuji is a high mountain."
+          },
+          {
+            word_ja: "\u5B89[\u3084\u3059]\u3044",
+            romaji: "yasui",
+            meaning_bn: "\u09B8\u09B8\u09CD\u09A4\u09BE / \u0995\u09AE \u09A6\u09BE\u09AE",
+            meaning_en: "cheap / inexpensive",
+            part_of_speech: "i-adjective",
+            example_ja: "\u3053\u306E\u5E97[\u307F\u305B]\u306E\u670D[\u3075\u304F]\u306F\u5B89[\u3084\u3059]\u3044\u3067\u3059\u3002",
+            example_bn: "\u098F\u0987 \u09A6\u09CB\u0995\u09BE\u09A8\u09C7\u09B0 \u099C\u09BE\u09AE\u09BE\u0995\u09BE\u09AA\u09A1\u09BC \u09B8\u09B8\u09CD\u09A4\u09BE\u0964",
+            example_en: "The clothes in this shop are cheap."
+          },
+          {
+            word_ja: "\u304A\u3044\u3057\u3044",
+            romaji: "oishii",
+            meaning_bn: "\u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1 / \u09AE\u099C\u09BE\u09A6\u09BE\u09B0",
+            meaning_en: "delicious / tasty",
+            part_of_speech: "i-adjective",
+            example_ja: "\u30E9\u30FC\u30E1\u30F3\u306F\u3068\u3066\u3082\u304A\u3044\u3057\u3044\u3067\u3059\u3002",
+            example_bn: "\u09B0\u09BE\u09AE\u09C7\u09A8 \u0996\u09C1\u09AC \u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1\u0964",
+            example_en: "Ramen is very delicious."
+          },
+          {
+            word_ja: "\u6691[\u3042\u3064]\u3044",
+            romaji: "atsui",
+            meaning_bn: "\u0997\u09B0\u09AE (\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE)",
+            meaning_en: "hot (weather)",
+            part_of_speech: "i-adjective",
+            example_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]\u306F\u3068\u3066\u3082\u6691[\u3042\u3064]\u3044\u3067\u3059\u3002",
+            example_bn: "\u0986\u099C \u0996\u09C1\u09AC \u0997\u09B0\u09AE\u0964",
+            example_en: "Today is very hot."
+          },
+          {
+            word_ja: "\u5BD2[\u3055\u3080]\u3044",
+            romaji: "samui",
+            meaning_bn: "\u09A0\u09BE\u09A8\u09CD\u09A1\u09BE (\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE)",
+            meaning_en: "cold (weather)",
+            part_of_speech: "i-adjective",
+            example_ja: "\u51AC[\u3075\u3086]\u306F\u3068\u3066\u3082\u5BD2[\u3055\u3080]\u3044\u3067\u3059\u3002",
+            example_bn: "\u09B6\u09C0\u09A4\u0995\u09BE\u09B2\u09C7 \u0996\u09C1\u09AC \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE\u0964",
+            example_en: "It is very cold in winter."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u9AD8",
+            onyomi: "\u30B3\u30A6",
+            kunyomi: "\u305F\u304B\u30FB\u3044, \u305F\u304B, \u305F\u304B\u30FB\u307E\u308B",
+            meaning_bn: "\u0989\u0981\u099A\u09C1 / \u09A6\u09BE\u09AE\u09BF",
+            meaning_en: "high / expensive",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u9AD8[\u305F\u304B]\u3044",
+                meaning_bn: "\u0989\u0981\u099A\u09C1 / \u09A6\u09BE\u09AE\u09BF",
+                meaning_en: "high / expensive"
+              },
+              {
+                word_ja: "\u9AD8\u6821[\u3053\u3046\u3053\u3046]",
+                meaning_bn: "\u0989\u099A\u09CD\u099A \u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC",
+                meaning_en: "high school"
+              },
+              {
+                word_ja: "\u5186\u9AD8[\u3048\u3093\u3060\u304B]",
+                meaning_bn: "\u0987\u09AF\u09BC\u09C7\u09A8\u09C7\u09B0 \u099A\u09A1\u09BC\u09BE \u09A6\u09BE\u09AE",
+                meaning_en: "strong yen"
+              }
+            ]
+          },
+          {
+            kanji: "\u5B89",
+            onyomi: "\u30A2\u30F3",
+            kunyomi: "\u3084\u3059\u30FB\u3044, \u3084\u3059\u30FB\u307E\u308B",
+            meaning_bn: "\u09B8\u09B8\u09CD\u09A4\u09BE / \u09B6\u09BE\u09A8\u09CD\u09A4 / \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6",
+            meaning_en: "cheap / safe / quiet",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u5B89[\u3084\u3059]\u3044",
+                meaning_bn: "\u09B8\u09B8\u09CD\u09A4\u09BE",
+                meaning_en: "cheap"
+              },
+              {
+                word_ja: "\u5B89\u5FC3[\u3042\u3093\u3057\u3093]",
+                meaning_bn: "\u09AE\u09BE\u09A8\u09B8\u09BF\u0995 \u09B6\u09BE\u09A8\u09CD\u09A4\u09BF",
+                meaning_en: "peace of mind"
+              },
+              {
+                word_ja: "\u5B89\u5168[\u3042\u3093\u305C\u3093]",
+                meaning_bn: "\u09A8\u09BF\u09B0\u09BE\u09AA\u09A6",
+                meaning_en: "safety"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G21-1",
+            pattern_ja: "I-Adj (\u301C\u304F\u306A\u3044\u3067\u3059 / \u301C\u304B\u3063\u305F\u3067\u3059)",
+            pattern_bn: "\u0987-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0993 \u0985\u09A4\u09C0\u09A4 \u0995\u09BE\u09B2 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0",
+            explanation_bn: "\u0987-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0995\u09B0\u09A4\u09C7 \u09B9\u09B2\u09C7 \u09B6\u09C7\u09B7\u09C7\u09B0 '\u3044' \u09A4\u09C1\u09B2\u09C7 \u09A6\u09BF\u09AF\u09BC\u09C7 '\u304F\u306A\u3044\u3067\u3059' \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u0985\u09A4\u09C0\u09A4 \u0995\u09B0\u09A4\u09C7 \u09B9\u09B2\u09C7 '\u3044' \u09A4\u09C1\u09B2\u09C7 \u09A6\u09BF\u09AF\u09BC\u09C7 '\u304B\u3063\u305F\u3067\u3059' \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u5BD2[\u3055\u3080]\u3044 -> \u5BD2[\u3055\u3080]\u304F\u306A\u3044\u3067\u3059 -> \u5BD2[\u3055\u3080]\u304B\u3063\u305F\u3067\u3059\u0964",
+            common_pitfalls: [
+              "\u09AC\u09CD\u09AF\u09A4\u09BF\u0995\u09CD\u09B0\u09AE: \u3044\u3044 (\u09AD\u09BE\u09B2\u09CB) \u098F\u09B0 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u3088\u3044 \u09A5\u09C7\u0995\u09C7 \u09B9\u09AF\u09BC: \u3088\u304F\u306A\u3044\u3067\u3059 (\u09AD\u09BE\u09B2\u09CB \u09A8\u09AF\u09BC), \u3088\u304B\u3063\u305F\u3067\u3059 (\u09AD\u09BE\u09B2\u09CB \u099B\u09BF\u09B2)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6628\u65E5[\u304D\u306E\u3046]\u306F\u5BD2[\u3055\u3080]\u304F\u306A\u304B\u3063\u305F\u3067\u3059\u3002",
+                bn: "\u0997\u09A4\u0995\u09BE\u09B2 \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u099B\u09BF\u09B2 \u09A8\u09BE\u0964",
+                en: "It was not cold yesterday."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09B0\u09BE\u09AE\u09C7\u09A8 \u09B6\u09AA\u09C7 \u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09B8\u09CD\u09AC\u09BE\u09A6 \u09A8\u09BF\u09AF\u09BC\u09C7 \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          situation_en: "Discussing the taste of ramen after dining at a Tokyo ramen shop.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u3053\u306E\u30E9\u30FC\u30E1\u30F3\u306F\u3069\u3046\u3067\u3059\u304B\u3002",
+              line_bn: "\u098F\u0987 \u09B0\u09BE\u09AE\u09C7\u09A8\u099F\u09BF \u0995\u09C7\u09AE\u09A8 \u09B2\u09BE\u0997\u099B\u09C7?",
+              line_en: "How is this ramen?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u3068\u3066\u3082\u304A\u3044\u3057\u3044\u3067\u3059\uFF01\u8F9B[\u304B\u3089]\u304F\u306A\u3044\u3067\u3059\u304B\u3089\u98DF[\u305F]\u3079\u3084\u3059\u3044\u3067\u3059\u3002",
+              line_bn: "\u0996\u09C1\u09AC \u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1! \u09AC\u09C7\u09B6\u09BF \u099D\u09BE\u09B2 \u09A8\u09BE \u09B9\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u0996\u09BE\u0993\u09AF\u09BC\u09BE \u09B8\u09B9\u099C\u0964",
+              line_en: "It is very delicious! Since it is not spicy, it is easy to eat."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AB\u09CB\u09B0-\u09B8\u09BF\u099C\u09A8\u09B8 (\u56DB\u5B63 - Shiki) \u0993 \u098B\u09A4\u09C1\u09AD\u09BF\u09A4\u09CD\u09A4\u09BF\u0995 \u09AA\u09CB\u09B6\u09BE\u0995 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099A\u09BE\u09B0\u099F\u09BF \u098B\u09A4\u09C1 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B8\u09CD\u09AA\u09B7\u09CD\u099F: \u09AC\u09B8\u09A8\u09CD\u09A4\u09C7\u09B0 \u099A\u09C7\u09B0\u09BF \u09AC\u09CD\u09B2\u09B8\u09AE (\u09AE\u09BE\u09B0\u09CD\u099A-\u09AE\u09C7), \u0997\u09CD\u09B0\u09C0\u09B7\u09CD\u09AE\u09C7\u09B0 \u09A4\u09C0\u09AC\u09CD\u09B0 \u0986\u09B0\u09CD\u09A6\u09CD\u09B0 \u0997\u09B0\u09AE (\u099C\u09C1\u09A8-\u0986\u0997\u09B8\u09CD\u099F), \u09B6\u09B0\u09A4\u09C7\u09B0 \u09B2\u09BE\u09B2 \u09AA\u09BE\u09A4\u09BE (\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0-\u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0), \u098F\u09AC\u0982 \u09B6\u09C0\u09A4\u09C7\u09B0 \u09A4\u09C0\u09AC\u09CD\u09B0 \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u0993 \u09A4\u09C1\u09B7\u09BE\u09B0\u09AA\u09BE\u09A4 (\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0-\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09AF\u09BC\u09BE\u09B0\u09BF)\u0964 \u09AC\u09BF\u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 \u099C\u09C1\u09B2\u09BE\u0987-\u0986\u0997\u09B8\u09CD\u099F\u09C7 \u09AA\u09BE\u09A8\u09BF\u09B6\u09C2\u09A8\u09CD\u09AF\u09A4\u09BE (Heatstroke - \u71B1\u4E2D\u75C7) \u09A5\u09C7\u0995\u09C7 \u09AC\u09BE\u0981\u099A\u09A4\u09C7 \u09AA\u09CD\u09B0\u099A\u09C1\u09B0 \u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BE \u09A6\u09B0\u0995\u09BE\u09B0\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306F\u9AD8[\u305F\u304B]\u3044\u3067\u3059",
+            romaji_input: "fujisan wa takai desu",
+            target_display: "\u3075\u3058\u3055\u3093\u306F\u305F\u304B\u3044\u3067\u3059",
+            meaning_bn: "\u09AB\u09C1\u099C\u09BF \u09AA\u09B0\u09CD\u09AC\u09A4 \u0989\u0981\u099A\u09C1"
+          },
+          {
+            prompt_ja: "\u5BD2[\u3055\u3080]\u304F\u306A\u3044\u3067\u3059",
+            romaji_input: "samukunai desu",
+            target_display: "\u3055\u3080\u304F\u306A\u3044\u3067\u3059",
+            meaning_bn: "\u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09A8\u09AF\u09BC"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L21-1",
+            question_ja: "\u300C\u304A\u3044\u3057\u3044\u300D\u306E \u5426\u5B9A\u5F62[\u3072\u3066\u3044\u3051\u3044]\uFF08Negative\uFF09\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304A\u3044\u3057\u3044\u2019 (\u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u304A\u3044\u3057\u304F\u306A\u3044\u3067\u3059",
+              "\u304A\u3044\u3057\u3044\u3058\u3083\u3042\u308A\u307E\u305B\u3093",
+              "\u304A\u3044\u3057\u304B\u3063\u305F\u3067\u3059",
+              "\u304A\u3044\u3057\u304F\u3042\u308A\u307E\u305B\u3093\u3067\u3057\u305F"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3044-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u09B9\u09B2\u09CB \u3044 \u09A4\u09C1\u09B2\u09C7 \u09A6\u09BF\u09AF\u09BC\u09C7 \u301C\u304F\u306A\u3044\u3067\u3059 \u09AF\u09CB\u0997 \u0995\u09B0\u09BE: \u304A\u3044\u3057\u304F\u306A\u3044\u3067\u3059 (\u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1 \u09A8\u09AF\u09BC)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L22",
+          lesson_number: 22,
+          module_number: 4,
+          module_name: "Adjectives & Preference",
+          module_name_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AA\u099B\u09A8\u09CD\u09A6",
+          title_ja: "\u3053\u306E\u753A[\u307E\u3061]\u306F\u9759[\u3057\u305A]\u304B\u3067\u3059",
+          title_en: "Na-Adjectives & Noun Modification",
+          title_bn: "\u098F\u0987 \u09B6\u09B9\u09B0\u099F\u09BF \u09B6\u09BE\u09A8\u09CD\u09A4 (\u09A8\u09BE-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09B0\u09C2\u09AA)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09A8\u09BE-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u0997\u09C1\u09B2\u09CB \u09A6\u09C7\u0996\u09A4\u09C7 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AE\u09A4\u09CB \u0986\u099A\u09B0\u09A3 \u0995\u09B0\u09C7\u0964 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u09AC\u09B8\u09B2\u09C7 \u3067\u3059 / \u3058\u3083\u3042\u308A\u307E\u305B\u3093 / \u3067\u3057\u305F \u09AC\u09B8\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u9759[\u3057\u305A]\u304B\u3067\u3059 - \u09B6\u09BE\u09A8\u09CD\u09A4)\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09B2\u09C7 \u098F\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u306A' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u9759[\u3057\u305A]\u304B\u306A\u753A[\u307E\u3061] - \u09B6\u09BE\u09A8\u09CD\u09A4 \u09B6\u09B9\u09B0)\u0964",
+          core_concept_bn: "\u09A8\u09BE-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u098F\u09AC\u0982 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u0986\u0997\u09C7 '\u306A' \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0\u09C7\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE\u0964",
+          real_world_context_bn: "\u09B6\u09B9\u09B0\u09C7\u09B0 \u09AA\u09B0\u09BF\u09AC\u09C7\u09B6, \u09A5\u09BE\u0995\u09BE\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE \u09AC\u09BE \u0995\u09CB\u09A8\u09CB \u09A6\u09B0\u09CD\u09B6\u09A8\u09C0\u09AF\u09BC \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE-\u0985\u09B8\u09C1\u09AC\u09BF\u09A7\u09BE \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "Predicative: \u753A[\u307E\u3061]\u306F\u9759[\u3057\u305A]\u304B\u3067\u3059\u3002 Attributive: \u9759[\u3057\u305A]\u304B\u306A\u753A[\u307E\u3061]\u3067\u3059\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u9759[\u3057\u305A]\u304B\uFF3B\u306A\uFF3D",
+            romaji: "shizuka [na]",
+            meaning_bn: "\u09B6\u09BE\u09A8\u09CD\u09A4 / \u0995\u09CB\u09B2\u09BE\u09B9\u09B2\u09AE\u09C1\u0995\u09CD\u09A4",
+            meaning_en: "quiet / peaceful",
+            part_of_speech: "na-adjective",
+            example_ja: "\u3053\u306E\u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\u306F\u9759[\u3057\u305A]\u304B\u3067\u3059\u3002",
+            example_bn: "\u098F\u0987 \u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u099F\u09BF \u09B6\u09BE\u09A8\u09CD\u09A4\u0964",
+            example_en: "This library is quiet."
+          },
+          {
+            word_ja: "\u306B\u304E\u3084\u304B\uFF3B\u306A\uFF3D",
+            romaji: "nigiyaka [na]",
+            meaning_bn: "\u0995\u09CB\u09B2\u09BE\u09B9\u09B2\u09AA\u09C2\u09B0\u09CD\u09A3 / \u09AA\u09CD\u09B0\u09BE\u09A3\u09AC\u09A8\u09CD\u09A4",
+            meaning_en: "lively / bustling",
+            part_of_speech: "na-adjective",
+            example_ja: "\u6E0B\u8C37[\u3057\u3076\u3084]\u306F\u306B\u304E\u3084\u304B\u306A\u753A[\u307E\u3061]\u3067\u3059\u3002",
+            example_bn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u098F\u0995\u099F\u09BF \u09AA\u09CD\u09B0\u09BE\u09A3\u09AC\u09A8\u09CD\u09A4 \u09B6\u09B9\u09B0\u0964",
+            example_en: "Shibuya is a bustling town."
+          },
+          {
+            word_ja: "\u4FBF\u5229[\u3079\u3093\u308A]\uFF3B\u306A\uFF3D",
+            romaji: "benri [na]",
+            meaning_bn: "\u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995",
+            meaning_en: "convenient",
+            part_of_speech: "na-adjective",
+            example_ja: "\u99C5[\u3048\u304D]\u306E\u8FD1[\u3061\u304B]\u304F\u306F\u4FBF\u5229[\u3079\u3093\u308A]\u3067\u3059\u3002",
+            example_bn: "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u0995\u09BE\u099B\u09C7 \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995\u0964",
+            example_en: "Near the station is convenient."
+          },
+          {
+            word_ja: "\u6709\u540D[\u3086\u3046\u3081\u3044]\uFF3B\u306A\uFF3D",
+            romaji: "y\u016Bmei [na]",
+            meaning_bn: "\u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4",
+            meaning_en: "famous",
+            part_of_speech: "na-adjective",
+            example_ja: "\u4EAC\u90FD[\u304D\u3087\u3046\u3068]\u306F\u6709\u540D[\u3086\u3046\u3081\u3044]\u306A\u753A[\u307E\u3061]\u3067\u3059\u3002",
+            example_bn: "\u0995\u09BF\u09AF\u09BC\u09CB\u099F\u09CB \u098F\u0995\u099F\u09BF \u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4 \u09B6\u09B9\u09B0\u0964",
+            example_en: "Kyoto is a famous city."
+          },
+          {
+            word_ja: "\u89AA\u5207[\u3057\u3093\u305B\u3064]\uFF3B\u306A\uFF3D",
+            romaji: "shinsetsu [na]",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE\u09B2\u09C1 / \u0985\u09AE\u09BE\u09AF\u09BC\u09BF\u0995",
+            meaning_en: "kind / helpful",
+            part_of_speech: "na-adjective",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u4EBA[\u3072\u3068]\u306F\u89AA\u5207[\u3057\u3093\u305B\u3064]\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AE\u09BE\u09A8\u09C1\u09B7 \u0985\u09AE\u09BE\u09AF\u09BC\u09BF\u0995\u0964",
+            example_en: "Japanese people are kind."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u753A",
+            onyomi: "\u30C1\u30E7\u30A6",
+            kunyomi: "\u307E\u3061",
+            meaning_bn: "\u09B6\u09B9\u09B0 / \u098F\u09B2\u09BE\u0995\u09BE",
+            meaning_en: "town / city",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u753A[\u307E\u3061]",
+                meaning_bn: "\u09B6\u09B9\u09B0 / \u099F\u09BE\u0989\u09A8",
+                meaning_en: "town"
+              },
+              {
+                word_ja: "\u4E0B\u753A[\u3057\u305F\u307E\u3061]",
+                meaning_bn: "\u0990\u09A4\u09BF\u09B9\u09CD\u09AF\u09AC\u09BE\u09B9\u09C0 \u09AA\u09CD\u09B0\u09BE\u099A\u09C0\u09A8 \u09B6\u09B9\u09B0\u09A4\u09B2\u09BF",
+                meaning_en: "downtown / historic area"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G22-1",
+            pattern_ja: "Na-Adj \u306A + Noun",
+            pattern_bn: "\u09A8\u09BE-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u0997\u09C1\u09A3 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6",
+            explanation_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u0986\u0997\u09C7 \u09AC\u09B8\u09B2\u09C7 \u306A-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995\u09AD\u09BE\u09AC\u09C7 '\u306A' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u9759[\u3057\u305A]\u304B\u306A\u90E8\u5C4B[\u3078\u3084] (\u098F\u0995\u099F\u09BF \u09B6\u09BE\u09A8\u09CD\u09A4 \u09B0\u09C1\u09AE), \u6709\u540D[\u3086\u3046\u3081\u3044]\u306A\u4EBA[\u3072\u3068] (\u09AC\u09BF\u0996\u09CD\u09AF\u09BE\u09A4 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF)\u0964",
+            common_pitfalls: [
+              "\u304D\u308C\u3044 (\u09B8\u09C1\u09A8\u09CD\u09A6\u09B0) \u098F\u09AC\u0982 \u304D\u3089\u3044 (\u0985\u09AA\u099B\u09A8\u09CD\u09A6) \u09A6\u09C7\u0996\u09A4\u09C7 \u3044 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B6\u09C7\u09B7 \u09B9\u09B2\u09C7\u0993 \u098F\u0997\u09C1\u09B2\u09CB \u306A-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 (\u304D\u308C\u3044\u306A\u82B1, \u304D\u3089\u3044\u306A\u7269)!"
+            ],
+            examples: [
+              {
+                ja: "\u304D\u308C\u3044\u306A\u82B1[\u306F\u306A]\u304C\u54B2[\u3055]\u304D\u307E\u3057\u305F\u3002",
+                bn: "\u09B8\u09C1\u09A8\u09CD\u09A6\u09B0 \u09AB\u09C1\u09B2 \u09AB\u09C1\u099F\u09C7\u099B\u09C7\u0964",
+                en: "Beautiful flowers bloomed."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u0986\u09AC\u09BE\u09B8\u09BF\u0995 \u098F\u09B2\u09BE\u0995\u09BE \u09B8\u09AE\u09CD\u09AA\u09B0\u09CD\u0995\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09AE\u09A4\u09BE\u09AE\u09A4 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u0964",
+          situation_en: "Sharing opinions about one's residential neighborhood in Tokyo.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u3042\u306A\u305F\u306E\u4F4F[\u3059]\u3093\u3067\u3044\u308B\u753A[\u307E\u3061]\u306F\u3069\u3046\u3067\u3059\u304B\u3002",
+              line_bn: "\u0986\u09AA\u09A8\u09BF \u09AF\u09C7 \u09B6\u09B9\u09B0\u09C7 \u09AC\u09BE\u09B8 \u0995\u09B0\u09C7\u09A8 \u09A4\u09BE \u0995\u09C7\u09AE\u09A8?",
+              line_en: "How is the town you live in?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u3068\u3066\u3082\u9759[\u3057\u305A]\u304B\u3067\u3001\u30B9\u30FC\u30D1\u30FC\u3082\u8FD1[\u3061\u304B]\u304F\u3066\u4FBF\u5229[\u3079\u3093\u308A]\u3067\u3059\u3088\u3002",
+              line_bn: "\u0996\u09C1\u09AC \u09B6\u09BE\u09A8\u09CD\u09A4, \u098F\u09AC\u0982 \u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u0993 \u0995\u09BE\u099B\u09C7 \u09B9\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u0996\u09C1\u09AC \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995\u0964",
+              line_en: "It is very quiet, and very convenient since the supermarket is close."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0986\u09AC\u09BE\u09B8\u09BF\u0995 \u098F\u09B2\u09BE\u0995\u09BE\u09AF\u09BC \u09B0\u09BE\u09A4\u09C7 \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u09B6\u09BF\u09B7\u09CD\u099F\u09BE\u099A\u09BE\u09B0 (Meiwaku - \u8FF7\u60D1)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0985\u09CD\u09AF\u09BE\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u0997\u09C1\u09B2\u09CB\u09B0 \u09A6\u09C7\u09AF\u09BC\u09BE\u09B2 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u09B9\u09BE\u09B2\u0995\u09BE \u09B9\u09AF\u09BC\u0964 \u09B0\u09BE\u09A4 \u09EF\u099F\u09BE\u09B0 \u09AA\u09B0 \u099C\u09CB\u09B0\u09C7 \u0997\u09BE\u09A8 \u09AC\u09BE\u099C\u09BE\u09A8\u09CB, \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09A8\u09BF\u09AF\u09BC\u09C7 \u0989\u099A\u09CD\u099A\u09B8\u09CD\u09AC\u09B0\u09C7 \u0986\u09A1\u09CD\u09A1\u09BE \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09AC\u09BE \u0998\u09B0\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0 \u09AD\u09BE\u09B0\u09C0 \u09AA\u09A6\u0995\u09CD\u09B7\u09C7\u09AA\u09C7 \u09B9\u09BE\u0981\u099F\u09BE \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09C7\u09B6\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09AC\u09BF\u09B0\u0995\u09CD\u09A4\u09BF\u09B0 (Meiwaku - \u0989\u09AA\u09A6\u09CD\u09B0\u09AC) \u0995\u09BE\u09B0\u09A3 \u09B9\u09AF\u09BC\u0964 \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09C7\u09B6\u09C0\u09B0\u09BE \u0985\u09A8\u09C7\u0995 \u09B8\u09AE\u09AF\u09BC \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09A8\u09BE \u09AC\u09B2\u09C7 \u09AA\u09C1\u09B2\u09BF\u09B6 \u09A1\u09C7\u0995\u09C7 \u0985\u09AD\u09BF\u09AF\u09CB\u0997 \u099C\u09BE\u09A8\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3053\u306E\u753A[\u307E\u3061]\u306F\u9759[\u3057\u305A]\u304B\u3067\u3059",
+            romaji_input: "kono machi wa shizuka desu",
+            target_display: "\u3053\u306E\u307E\u3061\u306F\u3057\u305A\u304B\u3067\u3059",
+            meaning_bn: "\u098F\u0987 \u09B6\u09B9\u09B0\u099F\u09BF \u09B6\u09BE\u09A8\u09CD\u09A4"
+          },
+          {
+            prompt_ja: "\u4FBF\u5229[\u3079\u3093\u308A]\u306A\u753A[\u307E\u3061]",
+            romaji_input: "benri na machi",
+            target_display: "\u3079\u3093\u308A\u306A\u307E\u3061",
+            meaning_bn: "\u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995 \u09B6\u09B9\u09B0"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L22-1",
+            question_ja: "\u9759[\u3057\u305A]\u304B\uFF08\u3000\uFF09\u753A[\u307E\u3061]\u3067\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u3057\u305A\u304B\uFF08\u3000\uFF09\u307E\u3061\u3067\u3059",
+            options: [
+              "\u306A",
+              "\u3044",
+              "\u306E",
+              "\u306B"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u09A8\u09BE-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u09AF\u0996\u09A8 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09AC\u09B8\u09C7, \u09A4\u0996\u09A8 '\u306A' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC: \u9759\u304B\u306A\u753A (\u09B6\u09BE\u09A8\u09CD\u09A4 \u09B6\u09B9\u09B0)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L23",
+          lesson_number: 23,
+          module_number: 4,
+          module_name: "Adjectives & Preference",
+          module_name_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AA\u099B\u09A8\u09CD\u09A6",
+          title_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u597D[\u3059]\u304D\u3067\u3059",
+          title_en: "Stative Object Marker GA (Likes, Dislikes, Skills)",
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF (\u09AA\u099B\u09A8\u09CD\u09A6 \u0993 \u09A6\u0995\u09CD\u09B7\u09A4\u09BE\u09B0 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u304C)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u0986\u09AE\u09B0\u09BE \u09AC\u09B2\u09BF '\u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF' (\u098F\u0996\u09BE\u09A8\u09C7 \u09AD\u09BE\u09B7\u09BE \u09B9\u09B2\u09CB \u0995\u09B0\u09CD\u09AE)\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09AA\u099B\u09A8\u09CD\u09A6 (\u597D[\u3059]\u304D), \u0985\u09AA\u099B\u09A8\u09CD\u09A6 (\u5ACC[\u304D\u3089]\u3044), \u09A6\u0995\u09CD\u09B7\u09A4\u09BE (\u4E0A\u624B[\u3058\u3087\u3046\u305A]), \u0985\u09A6\u0995\u09CD\u09B7\u09A4\u09BE (\u4E0B\u624B[\u3078\u305F]), \u098F\u09AC\u0982 \u099C\u09BE\u09A8\u09BE/\u09AC\u09CB\u099D\u09BE (\u5206[\u308F]\u304B\u308A\u307E\u3059) \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 \u09A8\u09AF\u09BC \u09AC\u09B0\u0982 \u09AE\u09BE\u09A8\u09B8\u09BF\u0995 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964 \u09A4\u09BE\u0987 \u098F\u09A6\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u3092 \u09A8\u09BE \u09AC\u09B8\u09C7 \u304C (ga) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7!",
+          core_concept_bn: "\u09AE\u09BE\u09A8\u09B8\u09BF\u0995 \u09B8\u09CD\u09A5\u09BF\u09A4\u09BF \u0993 \u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u304C (ga) \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2\u0964",
+          real_world_context_bn: "\u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989\u09A4\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u09B6\u0996 \u0993 \u09A6\u0995\u09CD\u09B7\u09A4\u09BE\u09B0 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE, \u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u09AF\u09BC \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u099C\u09BF \u09AC\u09BE \u0985\u09AA\u099B\u09A8\u09CD\u09A6\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          key_takeaway_bn: "[\u09AC\u09BF\u09B7\u09AF\u09BC] \u304C \u597D[\u3059]\u304D\u3067\u3059 (\u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF), [\u09AC\u09BF\u09B7\u09AF\u09BC] \u304C \u5206[\u308F]\u304B\u308A\u307E\u3059 (\u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u597D[\u3059]\u304D\uFF3B\u306A\uFF3D",
+            romaji: "suki [na]",
+            meaning_bn: "\u09AA\u099B\u09A8\u09CD\u09A6 / \u09AA\u09CD\u09B0\u09BF\u09AF\u09BC",
+            meaning_en: "liked / favorite",
+            part_of_speech: "na-adjective",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u30A2\u30CB\u30E1\u306E\u597D[\u3059]\u304D\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0985\u09CD\u09AF\u09BE\u09A8\u09BF\u09AE\u09C7 \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964",
+            example_en: "I like Japanese anime."
+          },
+          {
+            word_ja: "\u5ACC[\u304D\u3089]\u3044\uFF3B\u306A\uFF3D",
+            romaji: "kirai [na]",
+            meaning_bn: "\u0985\u09AA\u099B\u09A8\u09CD\u09A6",
+            meaning_en: "disliked / hated",
+            part_of_speech: "na-adjective",
+            example_ja: "\u8F9B[\u304B\u3089]\u3044\u98DF[\u305F]\u3079\u7269[\u3082\u306E]\u304C\u5ACC[\u304D\u3089]\u3044\u3067\u3059\u3002",
+            example_bn: "\u099D\u09BE\u09B2 \u0996\u09BE\u09AC\u09BE\u09B0 \u0985\u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964",
+            example_en: "I dislike spicy food."
+          },
+          {
+            word_ja: "\u4E0A\u624B[\u3058\u3087\u3046\u305A]\uFF3B\u306A\uFF3D",
+            romaji: "j\u014Dzu [na]",
+            meaning_bn: "\u09A6\u0995\u09CD\u09B7 / \u09AA\u099F\u09C1",
+            meaning_en: "skillful / good at",
+            part_of_speech: "na-adjective",
+            example_ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306F\u6599\u7406[\u308A\u3087\u3046\u308A]\u306E\u4E0A\u624B[\u3058\u3087\u3046\u305A]\u3067\u3059\u3002",
+            example_bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u09B0\u09BE\u09A8\u09CD\u09A8\u09BE\u09AF\u09BC \u09A6\u0995\u09CD\u09B7\u0964",
+            example_en: "Mr. Tanaka is good at cooking."
+          },
+          {
+            word_ja: "\u4E0B\u624B[\u3078\u305F]\uFF3B\u306A\uFF3D",
+            romaji: "heta [na]",
+            meaning_bn: "\u0985\u09A6\u0995\u09CD\u09B7 / \u0995\u09BE\u0981\u099A\u09BE",
+            meaning_en: "unskillful / poor at",
+            part_of_speech: "na-adjective",
+            example_ja: "\u6B4C[\u3046\u305F]\u304C\u4E0B\u624B[\u3078\u305F]\u3067\u3059\u3002",
+            example_bn: "\u0997\u09BE\u09A8 \u0997\u09BE\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u0985\u09A6\u0995\u09CD\u09B7\u0964",
+            example_en: "I am poor at singing."
+          },
+          {
+            word_ja: "\u5206[\u308F]\u304B\u308A\u307E\u3059",
+            romaji: "wakarimasu",
+            meaning_bn: "\u09AC\u09CB\u099D\u09BE / \u0989\u09AA\u09B2\u09AC\u09CD\u09A7\u09BF \u0995\u09B0\u09BE",
+            meaning_en: "to understand / comprehend",
+            part_of_speech: "verb",
+            example_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u5C11[\u3059\u3053]\u3057\u5206[\u308F]\u304B\u308A\u307E\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u0995\u09BF\u099B\u09C1\u099F\u09BE \u09AC\u09C1\u099D\u09BF\u0964",
+            example_en: "I understand Japanese a little."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u597D",
+            onyomi: "\u30B3\u30A6",
+            kunyomi: "\u3059\u30FB\u304F, \u3059\u30FB\u304D, \u3053\u306E\u30FB\u3080",
+            meaning_bn: "\u09AA\u099B\u09A8\u09CD\u09A6 / \u0985\u09A8\u09C1\u09B0\u09BE\u0997",
+            meaning_en: "like / fond",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u597D[\u3059]\u304D",
+                meaning_bn: "\u09AA\u099B\u09A8\u09CD\u09A6",
+                meaning_en: "liked"
+              },
+              {
+                word_ja: "\u5927\u597D[\u3060\u3044\u3059]\u304D",
+                meaning_bn: "\u0996\u09C1\u09AC \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6",
+                meaning_en: "love / greatly liked"
+              }
+            ]
+          },
+          {
+            kanji: "\u4E0A",
+            onyomi: "\u30B8\u30E7\u30A6, \u30B7\u30E7\u30A6",
+            kunyomi: "\u3046\u3048, \u3042\u30FB\u304C\u308B, \u306E\u307C\u30FB\u308B",
+            meaning_bn: "\u0989\u09AA\u09B0\u09C7 / \u09B6\u09CD\u09B0\u09C7\u09B7\u09CD\u09A0",
+            meaning_en: "up / above",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u4E0A\u624B[\u3058\u3087\u3046\u305A]",
+                meaning_bn: "\u09A6\u0995\u09CD\u09B7",
+                meaning_en: "skillful"
+              },
+              {
+                word_ja: "\u4E0A[\u3046\u3048]",
+                meaning_bn: "\u0989\u09AA\u09B0\u09C7",
+                meaning_en: "above"
+              }
+            ]
+          },
+          {
+            kanji: "\u4E0B",
+            onyomi: "\u30AB, \u30B2",
+            kunyomi: "\u3057\u305F, \u3055\u30FB\u304C\u308B, \u304F\u3060\u30FB\u308B",
+            meaning_bn: "\u09A8\u09BF\u099A\u09C7 / \u09A8\u09BF\u09AE\u09CD\u09A8",
+            meaning_en: "down / below",
+            stroke_count: 3,
+            compounds: [
+              {
+                word_ja: "\u4E0B\u624B[\u3078\u305F]",
+                meaning_bn: "\u0985\u09A6\u0995\u09CD\u09B7",
+                meaning_en: "unskillful"
+              },
+              {
+                word_ja: "\u4E0B[\u3057\u305F]",
+                meaning_bn: "\u09A8\u09BF\u099A\u09C7",
+                meaning_en: "below"
+              },
+              {
+                word_ja: "\u5730\u4E0B\u9244[\u3061\u304B\u3066\u3064]",
+                meaning_bn: "\u09AA\u09BE\u09A4\u09BE\u09B2 \u09B0\u09C7\u09B2",
+                meaning_en: "subway"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G23-1",
+            pattern_ja: "N \u304C \u597D\u304D\u3067\u3059 / \u4E0A\u624B\u3067\u3059 / \u5206\u304B\u308A\u307E\u3059",
+            pattern_bn: "N \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF / N \u098F \u09A6\u0995\u09CD\u09B7 / N \u09AC\u09C1\u099D\u09BF",
+            explanation_bn: "\u09AE\u09A8\u09CB\u09AD\u09BE\u09AC, \u09AA\u099B\u09A8\u09CD\u09A6 \u09AC\u09BE \u09A6\u0995\u09CD\u09B7\u09A4\u09BE\u09B0 \u09B2\u0995\u09CD\u09B7\u09CD\u09AF\u0995\u09C7 \u3092 \u098F\u09B0 \u09AC\u09A6\u09B2\u09C7 \u304C \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u30B9\u30DD\u30FC\u30C4\u304C\u597D\u304D\u3067\u3059 (\u0996\u09C7\u09B2\u09BE\u09A7\u09C1\u09B2\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF)\u0964",
+            common_pitfalls: [
+              "\u09A8\u09BF\u099C\u09C7\u09B0 \u09AA\u09CD\u09B0\u09B6\u0982\u09B8\u09BE\u09AF\u09BC \u4E0A\u624B\u3067\u3059 \u09AC\u09B2\u09BE \u0985\u09B9\u0982\u0995\u09BE\u09B0 \u09AC\u09CB\u099D\u09BE\u09AF\u09BC; \u09A8\u09BF\u099C\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC '\u307E\u3060\u307E\u3060\u3067\u3059' (\u098F\u0996\u09A8\u09CB \u0985\u09A8\u09C7\u0995 \u09AC\u09BE\u0995\u09BF) \u09AC\u09BE '\u4E0B\u624B\u3067\u3059'\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u597D[\u3059]\u304D\u3067\u3059\u304B\u3089\u3001\u6BCE\u65E5[\u307E\u3044\u306B\u3061]\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3059\u3002",
+                bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF \u09AC\u09B2\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u0995\u09B0\u09BF\u0964",
+                en: "Because I like Japanese, I study every day."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u09AA\u09CD\u09B0\u09BF\u09AF\u09BC \u09B6\u0996 \u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u0995\u09A5\u09BE\u09AC\u09BE\u09B0\u09CD\u09A4\u09BE\u0964",
+          situation_en: "Chatting with Japanese teacher about hobbies and Japanese language.",
+          lines: [
+            {
+              speaker_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+              speaker_en: "Teacher",
+              line_ja: "\u30BF\u30CB\u30E0\u3055\u3093\u306F\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u4F1A\u8A71[\u304B\u3044\u308F]\u304C\u4E0A\u624B[\u3058\u3087\u3046\u305A]\u3067\u3059\u306D\u3002",
+              line_bn: "\u09A4\u09BE\u09A8\u09BF\u09AE \u09B8\u09BE\u09B9\u09C7\u09AC, \u0986\u09AA\u09A8\u09BF \u09A4\u09CB \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8\u09C7 \u09AC\u09C7\u09B6 \u09A6\u0995\u09CD\u09B7!",
+              line_en: "Tanim-san, you are good at Japanese conversation!"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3044\u3044\u3048\u3001\u307E\u3060\u307E\u3060\u3067\u3059\u3002\u3067\u3082\u3001\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u597D[\u3059]\u304D\u3067\u3059\u3002",
+              line_bn: "\u09A8\u09BE, \u098F\u0996\u09A8\u09CB \u0985\u09A8\u09C7\u0995 \u09B6\u09C7\u0996\u09BE\u09B0 \u09AC\u09BE\u0995\u09BF\u0964 \u09A4\u09AC\u09C7 \u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF\u0964",
+              line_en: "No, not quite yet. But I do like Japanese."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BF\u09A8\u09AF\u09BC \u0993 \u09AA\u09CD\u09B0\u09B6\u0982\u09B8\u09BE \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0\u09AD\u09BE\u09AC\u09C7 \u0985\u09B8\u09CD\u09AC\u09C0\u0995\u09BE\u09B0 \u0995\u09B0\u09BE\u09B0 \u0995\u09BE\u09AF\u09BC\u09A6\u09BE (Kenjou - \u8B19\u905C)",
+          tip_bn: "\u0995\u09CB\u09A8\u09CB \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF \u09AF\u09A6\u09BF \u0986\u09AA\u09A8\u09BE\u09B0 \u09AD\u09BE\u09B7\u09BE \u09AC\u09BE \u0995\u09BE\u099C\u09C7\u09B0 \u09AA\u09CD\u09B0\u09B6\u0982\u09B8\u09BE \u0995\u09B0\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u65E5\u672C\u8A9E\u304C\u4E0A\u624B\u3067\u3059\u306D), \u09A4\u09AC\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09A5\u09C7 '\u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6' \u09A8\u09BE \u09AC\u09B2\u09C7 \u09B9\u09BE\u09A4 \u09A8\u09C7\u09A1\u09BC\u09C7 '\u3044\u3044\u3048\u3001\u307E\u3060\u307E\u3060\u3067\u3059' (\u09A8\u09BE \u09A8\u09BE, \u098F\u0996\u09A8\u09CB \u09B6\u09C7\u0996\u09BE\u09B0 \u0985\u09A8\u09C7\u0995 \u09AC\u09BE\u0995\u09BF) \u09AC\u09B2\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF\u09B0 \u09B8\u09B0\u09CD\u09AC\u09CB\u099A\u09CD\u099A \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B6\u09BF\u09B7\u09CD\u099F\u09BE\u099A\u09BE\u09B0\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u597D[\u3059]\u304D\u3067\u3059",
+            romaji_input: "nihongo ga suki desu",
+            target_display: "\u306B\u307B\u3093\u3054\u304C\u3059\u304D\u3067\u3059",
+            meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09BF"
+          },
+          {
+            prompt_ja: "\u6599\u7406[\u308A\u3087\u3046\u308A]\u306E\u4E0A\u624B[\u3058\u3087\u3046\u305A]\u3067\u3059",
+            romaji_input: "ryouri ga jouzu desu",
+            target_display: "\u308A\u3087\u3046\u308A\u304C\u3058\u3087\u3046\u305A\u3067\u3059",
+            meaning_bn: "\u09B0\u09BE\u09A8\u09CD\u09A8\u09BE\u09AF\u09BC \u09A6\u0995\u09CD\u09B7"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L23-1",
+            question_ja: "\u79C1[\u308F\u305F\u3057]\u306F \u65E5\u672C\u8A9E\uFF08\u3000\uFF09\u597D[\u3059]\u304D\u3067\u3059\u3002\u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u308F\u305F\u3057\u306F \u306B\u307B\u3093\u3054\uFF08\u3000\uFF09\u3059\u304D\u3067\u3059",
+            options: [
+              "\u304C (ga)",
+              "\u3092 (o)",
+              "\u3067 (de)",
+              "\u306B (ni)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u597D\u304D (\u09AA\u099B\u09A8\u09CD\u09A6) \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0985\u09AC\u099C\u09C7\u0995\u09CD\u099F \u09AE\u09BE\u09B0\u09CD\u0995\u09BE\u09B0 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u304C' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7: \u65E5\u672C\u8A9E\u304C\u597D\u304D\u3067\u3059\u3002"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L24",
+          lesson_number: 24,
+          module_number: 4,
+          module_name: "Adjectives & Preference",
+          module_name_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AA\u099B\u09A8\u09CD\u09A6",
+          title_ja: "\u3069\u308C\u304C\u3044\u3061\u3070\u3093\u597D[\u3059]\u304D",
+          title_en: "Comparisons & Superlatives (Yori, Hou ga, Ichiban)",
+          title_bn: "\u0995\u09CB\u09A8\u099F\u09BF \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6? (\u09A4\u09C1\u09B2\u09A8\u09BE \u0993 \u09B8\u09B0\u09CD\u09AC\u09CB\u09A4\u09CD\u09A4\u09AE)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09A6\u09C1\u099F\u09BF \u09AC\u09B8\u09CD\u09A4\u09C1\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09A4\u09C1\u09B2\u09A8\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u3088\u308A (yori - \u099A\u09C7\u09AF\u09BC\u09C7) \u098F\u09AC\u0982 \u306E\u307B\u3046\u304C (no hou ga - \u098F\u09B0 \u09A6\u09BF\u0995\u099F\u09BF \u09AC\u09C7\u09B6\u09BF) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u0995\u09AE\u09B2\u09BE\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 \u0986\u09AA\u09C7\u09B2 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6' -> \u307F\u304B\u3093\u3088\u308A\u308A\u3093\u3054\u306E\u307B\u3046\u304C\u597D[\u3059]\u304D\u3067\u3059\u0964 \u0986\u09B0 \u0995\u09CB\u09A8\u09CB \u0997\u09CD\u09B0\u09C1\u09AA \u09AC\u09BE \u0995\u09CD\u09AF\u09BE\u099F\u09BE\u0997\u09B0\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09B8\u09C7\u09B0\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u3044\u3061\u3070\u3093 (ichiban - \u09E7 \u09A8\u09AE\u09CD\u09AC\u09B0 / \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09A4\u09C1\u09B2\u09A8\u09BE\u09AE\u09C2\u09B2\u0995 \u09AC\u09BE\u0995\u09CD\u09AF (A \u3088\u308A B \u306E\u307B\u3046\u304C\u301C) \u098F\u09AC\u0982 \u09B8\u09C1\u09AA\u09BE\u09B0\u09B2\u09C7\u099F\u09BF\u09AD (\u3044\u3061\u3070\u3093\u301C)\u0964",
+          real_world_context_bn: "\u09B6\u09AA\u09BF\u0982\u09AF\u09BC\u09C7 \u09A6\u09C1\u099F\u09BF \u09AA\u09A3\u09CD\u09AF\u09C7\u09B0 \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE \u09A4\u09C1\u09B2\u09A8\u09BE \u0995\u09B0\u09BE, \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09AA\u099B\u09A8\u09CD\u09A6 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB \u098F\u09AC\u0982 \u09AC\u099B\u09B0\u09C7\u09B0 \u09B8\u09C7\u09B0\u09BE \u098B\u09A4\u09C1 \u09AC\u09BE\u099B\u09BE\u0987\u0964",
+          key_takeaway_bn: "A \u3088\u308A B \u306E\u307B\u3046\u304C [Adj] \u3067\u3059 (A \u098F\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 B \u09AC\u09C7\u09B6\u09BF [\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3])\u0964 \u3044\u3061\u3070\u3093 [Adj] \u3067\u3059 (\u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09C7\u09B6\u09BF)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3044\u3061\u3070\u3093",
+            romaji: "ichiban",
+            meaning_bn: "\u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09C7\u09B6\u09BF / \u098F\u0995 \u09A8\u09AE\u09CD\u09AC\u09B0",
+            meaning_en: "most / number one / best",
+            part_of_speech: "adverb",
+            example_ja: "\u5B63\u7BC0[\u304D\u305B\u3064]\u306E\u4E2D[\u306A\u304B]\u3067\u6625[\u306F\u308B]\u304C\u3044\u3061\u3070\u3093\u597D[\u3059]\u304D\u3067\u3059\u3002",
+            example_bn: "\u098B\u09A4\u09C1\u0997\u09C1\u09B2\u09CB\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09AC\u09B8\u09A8\u09CD\u09A4 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6\u0964",
+            example_en: "Among the seasons, I like spring the most."
+          },
+          {
+            word_ja: "\u3069\u3061\u3089",
+            romaji: "dochira",
+            meaning_bn: "\u0995\u09CB\u09A8\u099F\u09BF? (\u09A6\u09C1\u099F\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7)",
+            meaning_en: "which (between two)",
+            part_of_speech: "pronoun",
+            example_ja: "\u8089[\u306B\u304F]\u3068\u9B5A[\u3055\u304B\u306A]\u3068\u3069\u3061\u3089\u304C\u597D[\u3059]\u304D\u3067\u3059\u304B\u3002",
+            example_bn: "\u09AE\u09BE\u0982\u09B8 \u0993 \u09AE\u09BE\u099B\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6?",
+            example_en: "Which do you like better, meat or fish?"
+          },
+          {
+            word_ja: "\u305A\u3063\u3068",
+            romaji: "zutto",
+            meaning_bn: "\u0985\u09A8\u09C7\u0995 \u09AC\u09C7\u09B6\u09BF / \u09AC\u09B9\u09C1\u0997\u09C1\u09A3",
+            meaning_en: "by far / much more",
+            part_of_speech: "adverb",
+            example_ja: "\u65B0\u5E79\u7DDA[\u3057\u3093\u304B\u3093\u305B\u3093]\u306E\u307B\u3046\u304C\u305A\u3063\u3068\u901F[\u306F\u3084]\u3044\u3067\u3059\u3002",
+            example_bn: "\u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8 \u0985\u09A8\u09C7\u0995 \u09AC\u09C7\u09B6\u09BF \u09A6\u09CD\u09B0\u09C1\u09A4\u0997\u09BE\u09AE\u09C0\u0964",
+            example_en: "The bullet train is much faster."
+          },
+          {
+            word_ja: "\u30EA\u30F3\u30B4",
+            romaji: "ringo",
+            meaning_bn: "\u0986\u09AA\u09C7\u09B2",
+            meaning_en: "apple",
+            part_of_speech: "noun",
+            example_ja: "\u30EA\u30F3\u30B4\u3092\u8CB7[\u304B]\u3044\u307E\u3057\u305F\u3002",
+            example_bn: "\u0986\u09AA\u09C7\u09B2 \u0995\u09BF\u09A8\u09C7\u099B\u09BF\u0964",
+            example_en: "I bought an apple."
+          },
+          {
+            word_ja: "\u307F\u304B\u3093",
+            romaji: "mikan",
+            meaning_bn: "\u0995\u09AE\u09B2\u09BE\u09B2\u09C7\u09AC\u09C1",
+            meaning_en: "mandarin orange",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u307F\u304B\u3093\u306F\u7518[\u3042\u307E]\u3044\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0995\u09AE\u09B2\u09BE \u09AE\u09BF\u09B7\u09CD\u099F\u09BF\u0964",
+            example_en: "Japanese mandarin oranges are sweet."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u6625",
+            onyomi: "\u30B7\u30E5\u30F3",
+            kunyomi: "\u306F\u308B",
+            meaning_bn: "\u09AC\u09B8\u09A8\u09CD\u09A4\u0995\u09BE\u09B2",
+            meaning_en: "spring",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u6625[\u306F\u308B]",
+                meaning_bn: "\u09AC\u09B8\u09A8\u09CD\u09A4",
+                meaning_en: "spring"
+              },
+              {
+                word_ja: "\u9752\u6625[\u305B\u3044\u3057\u3085\u3093]",
+                meaning_bn: "\u09AF\u09CC\u09AC\u09A8\u0995\u09BE\u09B2",
+                meaning_en: "youth"
+              }
+            ]
+          },
+          {
+            kanji: "\u79CB",
+            onyomi: "\u30B7\u30E5\u30A6",
+            kunyomi: "\u3042\u304D",
+            meaning_bn: "\u09B6\u09B0\u09CE\u0995\u09BE\u09B2",
+            meaning_en: "autumn / fall",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u79CB[\u3042\u304D]",
+                meaning_bn: "\u09B6\u09B0\u09CE\u0995\u09BE\u09B2",
+                meaning_en: "autumn"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G24-1",
+            pattern_ja: "A \u3068 B \u3068 \u3069\u3061\u3089\u304C [Adj] \u3067\u3059\u304B",
+            pattern_bn: "A \u098F\u09AC\u0982 B \u098F\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09C7\u09B6\u09BF [\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3]?",
+            explanation_bn: "\u09A6\u09C1\u099F\u09BF \u09AC\u09BF\u0995\u09B2\u09CD\u09AA\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09A4\u09C1\u09B2\u09A8\u09BE \u0995\u09B0\u09A4\u09C7 \u3069\u3061\u3089\u304C \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u0989\u09A4\u09CD\u09A4\u09B0\u09C7 [\u09AC\u09BF\u0995\u09B2\u09CD\u09AA] \u306E\u307B\u3046\u304C [Adj] \u3067\u3059 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u09A6\u09C1\u099F\u09BF\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09AC\u09C7\u099B\u09C7 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u3069\u308C \u09A8\u09AF\u09BC, \u5FC5\u305A \u3069\u3061\u3089 (dochira) \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u30B3\u30FC\u30D2\u30FC\u3068\u7D05\u8336[\u3053\u3046\u3061\u3083]\u3068\u3069\u3061\u3089\u304C\u597D[\u3059]\u304D\u3067\u3059\u304B\u3002",
+                bn: "\u0995\u09AB\u09BF \u0993 \u099A\u09BE\u09AF\u09BC\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6?",
+                en: "Which do you prefer, coffee or black tea?"
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0997\u09CD\u09B0\u09C0\u09B7\u09CD\u09AE \u0993 \u09B6\u09C0\u09A4\u09C7\u09B0 \u09AA\u099B\u09A8\u09CD\u09A6\u09C7\u09B0 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u09A6\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09AC\u09BF\u09A4\u09B0\u09CD\u0995\u0964",
+          situation_en: "Discussing seasonal preferences between summer and winter with classmates.",
+          lines: [
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u590F[\u306A\u3064]\u3068\u51AC[\u3075\u3086]\u3068\u3069\u3061\u3089\u304C\u597D[\u3059]\u304D\u3067\u3059\u304B\u3002",
+              line_bn: "\u0997\u09CD\u09B0\u09C0\u09B7\u09CD\u09AE \u0993 \u09B6\u09C0\u09A4\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6?",
+              line_en: "Which do you like better, summer or winter?"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u51AC[\u3075\u3086]\u306E\u307B\u3046\u304C\u597D[\u3059]\u304D\u3067\u3059\u3002\u96EA[\u3086\u304D]\u304C\u898B[\u307F]\u3089\u308C\u307E\u3059\u304B\u3089\u3002",
+              line_bn: "\u09B6\u09C0\u09A4\u0995\u09BE\u09B2 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6\u0964 \u0995\u09BE\u09B0\u09A3 \u09A4\u09C1\u09B7\u09BE\u09B0\u09AA\u09BE\u09A4 \u09A6\u09C7\u0996\u09BE \u09AF\u09BE\u09AF\u09BC\u0964",
+              line_en: "I like winter better. Because I can see snow."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u098B\u09A4\u09C1\u09AD\u09BF\u09A4\u09CD\u09A4\u09BF\u0995 \u09AB\u09B2 \u0993 \u09AE\u09BF\u09B7\u09CD\u099F\u09BE\u09A8\u09CD\u09A8 (Seasonal Food)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09C1\u09AA\u09BE\u09B0\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F \u0993 \u09B0\u09C7\u09B8\u09CD\u09A4\u09CB\u09B0\u09BE\u0981\u0997\u09C1\u09B2\u09CB\u09AF\u09BC \u098B\u09A4\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09AB\u09B2 \u0993 \u09AE\u09C7\u09A8\u09C1 \u0986\u09AE\u09C2\u09B2 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964 \u09B6\u09C0\u09A4\u0995\u09BE\u09B2\u09C7 \u0995\u09AE\u09B2\u09BE (Mikan), \u09AC\u09B8\u09A8\u09CD\u09A4\u09C7 \u09B8\u09CD\u099F\u09CD\u09B0\u09AC\u09C7\u09B0\u09BF \u0993 \u09B8\u09BE\u0995\u09C1\u09B0\u09BE \u09AE\u09BF\u09B7\u09CD\u099F\u09BF, \u0997\u09CD\u09B0\u09C0\u09B7\u09CD\u09AE\u09C7 \u09A4\u09B0\u09AE\u09C1\u099C \u098F\u09AC\u0982 \u09B6\u09B0\u09A4\u09C7 \u0986\u09AA\u09C7\u09B2 \u0993 \u0986\u0996\u09B0\u09CB\u099F \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09A4\u09BE\u099C\u09BE \u0993 \u09B8\u09B8\u09CD\u09A4\u09BE\u09AF\u09BC \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u0964 \u098F\u0987 \u09B0\u09C0\u09A4\u09BF\u0995\u09C7 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC '\u09B6\u09C1\u09A8' (\u65EC - Shun)\u0964",
+          category: "Shopping"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u3069\u308C\u304C\u3044\u3061\u3070\u3093\u597D[\u3059]\u304D\u3067\u3059\u304B",
+            romaji_input: "dore ga ichiban suki desu ka",
+            target_display: "\u3069\u308C\u304C\u3044\u3061\u3070\u3093\u3059\u304D\u3067\u3059\u304B",
+            meaning_bn: "\u0995\u09CB\u09A8\u099F\u09BF \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6?"
+          },
+          {
+            prompt_ja: "\u51AC[\u3075\u3086]\u306E\u307B\u3046\u304C\u597D[\u3059]\u304D\u3067\u3059",
+            romaji_input: "fuyu no hou ga suki desu",
+            target_display: "\u3075\u3086\u306E\u307B\u3046\u304C\u3059\u304D\u3067\u3059",
+            meaning_bn: "\u09B6\u09C0\u09A4\u0995\u09BE\u09B2 \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L24-1",
+            question_ja: "\u300CA\u3088\u308AB\u306E\u307B\u3046\u304C\u597D\u304D\u3067\u3059\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018A \u3088\u308A B \u306E\u307B\u3046\u304C\u3059\u304D\u3067\u3059\u2019 \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "A \u098F\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 B \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6",
+              "B \u098F\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 A \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6",
+              "A \u098F\u09AC\u0982 B \u09A6\u09C1\u099F\u09CB\u0987 \u09B8\u09AE\u09BE\u09A8 \u09AA\u099B\u09A8\u09CD\u09A6",
+              "\u0995\u09CB\u09A8\u09CB\u099F\u09BE\u0987 \u09AA\u099B\u09A8\u09CD\u09A6 \u09A8\u09AF\u09BC"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u3088\u308A \u09AF\u09BE\u09B0 \u09AA\u09B0\u09C7 \u09A5\u09BE\u0995\u09C7 \u09A4\u09BE\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 \u09A4\u09C1\u09B2\u09A8\u09BE \u0995\u09B0\u09BE \u09B9\u09AF\u09BC, \u098F\u09AC\u0982 \u306E\u307B\u3046\u304C \u09AF\u09BE\u09B0 \u09AA\u09B0\u09C7 \u09A5\u09BE\u0995\u09C7 \u09A4\u09BE \u09AC\u09C7\u09B6\u09BF \u09AA\u09CD\u09B0\u09BE\u09A7\u09BE\u09A8\u09CD\u09AF \u09AA\u09BE\u09AF\u09BC (A \u098F\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 B \u09AC\u09C7\u09B6\u09BF \u09AA\u099B\u09A8\u09CD\u09A6)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L25",
+          lesson_number: 25,
+          module_number: 4,
+          module_name: "Adjectives & Preference",
+          module_name_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 \u0993 \u09AA\u099B\u09A8\u09CD\u09A6",
+          title_ja: "\u6C34[\u307F\u305A]\u304C\u307B\u3057\u3044\u3067\u3059",
+          title_en: "Desire (Hoshii & -tai) and Purpose of Movement",
+          title_bn: "\u09AA\u09BE\u09A8\u09BF \u099A\u09BE\u0987 (\u0986\u0995\u09BE\u0999\u09CD\u0995\u09CD\u09B7\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0993 \u0997\u09AE\u09A8\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09CB\u09A8\u09CB \u09AC\u09B8\u09CD\u09A4\u09C1 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u0995\u09BE\u0999\u09CD\u0995\u09CD\u09B7\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 Noun + \u304C \u307B\u3057\u3044\u3067\u3059 (\u099A\u09BE\u0987) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u0986\u09B0 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u0987\u099A\u09CD\u099B\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09AE\u09BE\u09B8\u09CD-\u09B8\u09CD\u099F\u09C7\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u301C\u305F\u3044\u3067\u3059 (\u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u0987 = \u98DF[\u305F]\u3079\u305F\u3044\u3067\u3059) \u09AC\u09B8\u09C7\u0964 \u098F\u099B\u09BE\u09A1\u09BC\u09BE \u0995\u09CB\u09A8\u09CB \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF\u09C7 \u0995\u09CB\u09A5\u09BE\u0993 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 [Verb-stem] \u306B \u884C[\u3044]\u304D\u307E\u3059 \u09AC\u09B8\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u0995\u09BF\u09A8\u09A4\u09C7 \u09AF\u09BE\u09AC = \u8CB7[\u304B]\u3044\u306B\u884C[\u3044]\u304D\u307E\u3059)\u0964",
+          core_concept_bn: "\u09AC\u09B8\u09CD\u09A4\u09C1 \u099A\u09BE\u0993\u09AF\u09BC\u09BE (\u307B\u3057\u3044), \u0995\u09BE\u099C \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u0993\u09AF\u09BC\u09BE (\u301C\u305F\u3044), \u098F\u09AC\u0982 \u0997\u09AE\u09A8\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF (V-stem \u306B \u884C\u304D\u307E\u3059)\u0964",
+          real_world_context_bn: "\u09A4\u09C3\u09B7\u09CD\u09A3\u09BE \u09AC\u09BE \u0995\u09CD\u09B7\u09C1\u09A7\u09BE\u09AF\u09BC \u0996\u09BE\u09AC\u09BE\u09B0 \u099A\u09BE\u0993\u09AF\u09BC\u09BE, \u099B\u09C1\u099F\u09BF\u09A4\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A5\u09BE\u0993 \u09AD\u09CD\u09B0\u09AE\u09A3\u09C7\u09B0 \u0987\u099A\u09CD\u099B\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "Noun \u304C \u307B\u3057\u3044\u3067\u3059 (\u099C\u09BF\u09A8\u09BF\u09B8 \u099A\u09BE\u0987)\u0964 V-stem \u305F\u3044\u3067\u3059 (\u0995\u09BE\u099C \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u0987)\u0964 V-stem \u306B \u884C\u304D\u307E\u3059 (\u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u0987)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u307B\u3057\u3044",
+            romaji: "hoshii",
+            meaning_bn: "\u099A\u09BE\u0987 / \u0995\u09BE\u09AE\u09A8\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "want / desire (something)",
+            part_of_speech: "i-adjective",
+            example_ja: "\u65B0[\u3042\u305F\u3089]\u3057\u3044\u30D1\u30BD\u30B3\u30F3\u304C\u307B\u3057\u3044\u3067\u3059\u3002",
+            example_bn: "\u098F\u0995\u099F\u09BF \u09A8\u09A4\u09C1\u09A8 \u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0 \u099A\u09BE\u0987\u0964",
+            example_en: "I want a new computer."
+          },
+          {
+            word_ja: "\u98DF[\u305F]\u3079\u305F\u3044",
+            romaji: "tabetai",
+            meaning_bn: "\u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u0987",
+            meaning_en: "want to eat",
+            part_of_speech: "i-adjective conjugate",
+            example_ja: "\u304A\u5BFF\u53F8[\u3059\u3057]\u304C\u98DF[\u305F]\u3079\u305F\u3044\u3067\u3059\u3002",
+            example_bn: "\u09B8\u09C1\u09B6\u09BF \u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u0987\u0964",
+            example_en: "I want to eat sushi."
+          },
+          {
+            word_ja: "\u884C[\u3044]\u304D\u305F\u3044",
+            romaji: "ikitai",
+            meaning_bn: "\u09AF\u09C7\u09A4\u09C7 \u099A\u09BE\u0987",
+            meaning_en: "want to go",
+            part_of_speech: "i-adjective conjugate",
+            example_ja: "\u4EAC\u90FD[\u304D\u3087\u3046\u3068]\u3078\u884C[\u3044]\u304D\u305F\u3044\u3067\u3059\u3002",
+            example_bn: "\u0995\u09BF\u09AF\u09BC\u09CB\u099F\u09CB \u09AF\u09C7\u09A4\u09C7 \u099A\u09BE\u0987\u0964",
+            example_en: "I want to go to Kyoto."
+          },
+          {
+            word_ja: "\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u306B\u884C[\u3044]\u304D\u307E\u3059",
+            romaji: "kaimono ni ikimasu",
+            meaning_bn: "\u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u09AC",
+            meaning_en: "go for shopping",
+            part_of_speech: "verb phrase",
+            example_ja: "\u30C7\u30D1\u30FC\u30C8\u3078\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u306B\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09BE\u09B2 \u09B8\u09CD\u099F\u09CB\u09B0\u09C7 \u09B6\u09AA\u09BF\u0982 \u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u09AC\u0964",
+            example_en: "I am going shopping at a department store."
+          },
+          {
+            word_ja: "\u904A[\u3042\u305D]\u3073\u306B\u884C[\u3044]\u304D\u307E\u3059",
+            romaji: "asobi ni ikimasu",
+            meaning_bn: "\u0998\u09C1\u09B0\u09A4\u09C7 / \u09AC\u09C7\u09A1\u09BC\u09BE\u09A4\u09C7 \u09AF\u09BE\u09AC",
+            meaning_en: "go to hang out / visit",
+            part_of_speech: "verb phrase",
+            example_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]\u306E\u5BB6[\u3044\u3048]\u3078\u904A[\u3042\u305D]\u3073\u306B\u884C[\u3044]\u304D\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AC\u09C7\u09A1\u09BC\u09BE\u09A4\u09C7 \u09AF\u09BE\u09AC\u0964",
+            example_en: "I go to hang out at my friend's house."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u65B0",
+            onyomi: "\u30B7\u30F3",
+            kunyomi: "\u3042\u305F\u3089\u30FB\u3057\u3044, \u3042\u3089\u30FB\u305F, \u306B\u3044",
+            meaning_bn: "\u09A8\u09A4\u09C1\u09A8",
+            meaning_en: "new",
+            stroke_count: 13,
+            compounds: [
+              {
+                word_ja: "\u65B0[\u3042\u305F\u3089]\u3057\u3044",
+                meaning_bn: "\u09A8\u09A4\u09C1\u09A8",
+                meaning_en: "new"
+              },
+              {
+                word_ja: "\u65B0\u805E[\u3057\u3093\u3076\u3093]",
+                meaning_bn: "\u09B8\u0982\u09AC\u09BE\u09A6\u09AA\u09A4\u09CD\u09B0",
+                meaning_en: "newspaper"
+              },
+              {
+                word_ja: "\u65B0\u5E74[\u3057\u3093\u306D\u3093]",
+                meaning_bn: "\u09A8\u09A4\u09C1\u09A8 \u09AC\u099B\u09B0",
+                meaning_en: "New Year"
+              }
+            ]
+          },
+          {
+            kanji: "\u53E4",
+            onyomi: "\u30B3",
+            kunyomi: "\u3075\u308B\u30FB\u3044, \u3075\u308B\u30FB\u3059",
+            meaning_bn: "\u09AA\u09C1\u09B0\u09CB\u09A8\u09CB / \u09AA\u09CD\u09B0\u09BE\u099A\u09C0\u09A8",
+            meaning_en: "old / antique",
+            stroke_count: 5,
+            compounds: [
+              {
+                word_ja: "\u53E4[\u3075\u308B]\u3044",
+                meaning_bn: "\u09AA\u09C1\u09B0\u09CB\u09A8\u09CB",
+                meaning_en: "old"
+              },
+              {
+                word_ja: "\u4E2D\u53E4[\u3061\u3085\u3046\u3053]",
+                meaning_bn: "\u09B8\u09C7\u0995\u09C7\u09A8\u09CD\u09A1-\u09B9\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1 / \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4",
+                meaning_en: "used / second-hand"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G25-1",
+            pattern_ja: "V-stem \u306B \u884C\u304D\u307E\u3059 / \u6765\u307E\u3059",
+            pattern_bn: "[\u0995\u09BE\u099C] \u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE / \u0986\u09B8\u09BE (\u0997\u09AE\u09A8\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF)",
+            explanation_bn: "\u0995\u09CB\u09A8\u09CB \u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0997\u09AE\u09A8\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u307E\u3059 \u09AC\u09BE\u09A6 \u09A6\u09BF\u09AF\u09BC\u09C7 \u306B \u098F\u09AC\u0982 \u09AA\u09B0\u09C7 \u884C\u304D\u307E\u3059/\u6765\u307E\u3059 \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u98DF[\u305F]\u3079\u306B\u884C[\u3044]\u304D\u307E\u3059 (\u0996\u09C7\u09A4\u09C7 \u09AF\u09BE\u0987), \u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u306B\u6765[\u304D]\u307E\u3057\u305F (\u09AA\u09A1\u09BC\u09A4\u09C7 \u098F\u09B8\u09C7\u099B\u09BF)\u0964",
+            common_pitfalls: [
+              "\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09AA\u09C1\u09B0\u09CB \u09B0\u09C2\u09AA \u09AC\u09B8\u09BE\u09A8\u09CB \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\xD7 \u98DF\u3079\u308B\u306B\u884C\u304D\u307E\u3059 \u09A8\u09AF\u09BC, \u25CB \u98DF\u3079\u306B\u884C\u304D\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\u3078\u672C[\u307B\u3093]\u3092\u501F[\u304B]\u308A\u306B\u884C[\u3044]\u304D\u307E\u3059\u3002",
+                bn: "\u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AC\u0987 \u09A7\u09BE\u09B0 \u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u09AC\u0964",
+                en: "I am going to the library to borrow books."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09BE\u0987\u09B0\u09C7 \u0996\u09C7\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8\u0964",
+          situation_en: "Conversation with friends about going out to eat on a holiday.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u304A\u8179[\u306A\u304B]\u304C\u7A7A[\u3059]\u304D\u307E\u3057\u305F\u306D\u3002\u4F55[\u306A\u306B]\u304B\u98DF[\u305F]\u3079\u306B\u884C[\u3044]\u304D\u307E\u305B\u3093\u304B\u3002",
+              line_bn: "\u0995\u09CD\u09B7\u09BF\u09A6\u09C7 \u09AA\u09C7\u09AF\u09BC\u09C7 \u0997\u09C7\u09B2 \u09A4\u09CB\u0964 \u0995\u09BF\u099B\u09C1 \u098F\u0995\u099F\u09BE \u0996\u09C7\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u0995 \u09A8\u09BE\u0995\u09BF?",
+              line_en: "I'm hungry! Shall we go eat something?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u8CDB\u6210[\u3055\u3093\u305B\u3044]\u3067\u3059\uFF01\u6E29[\u3042\u305F\u305F]\u304B\u3044\u30E9\u30FC\u30E1\u30F3\u304C\u98DF[\u305F]\u3079\u305F\u3044\u3067\u3059\u3002",
+              line_bn: "\u098F\u0995\u09AE\u09A4! \u098F\u0995 \u09AC\u09BE\u099F\u09BF \u0997\u09B0\u09AE \u09B0\u09BE\u09AE\u09C7\u09A8 \u0996\u09C7\u09A4\u09C7 \u099A\u09BE\u0987\u0964",
+              line_en: "Agreed! I want to eat warm ramen."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AD\u09C7\u09A8\u09CD\u09A1\u09BF\u0982 \u09AE\u09C7\u09B6\u09BF\u09A8\u09C7 \u0997\u09B0\u09AE (Red) \u0993 \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE (Blue) \u09AA\u09BE\u09A8\u09C0\u09AF\u09BC \u099A\u09C7\u09A8\u09BE\u09B0 \u0989\u09AA\u09BE\u09AF\u09BC",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE\u09AF\u09BC \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09B0\u09CD\u09AC\u09A4\u09CD\u09B0 \u09AD\u09C7\u09A8\u09CD\u09A1\u09BF\u0982 \u09AE\u09C7\u09B6\u09BF\u09A8 (Jidouhanbaiki) \u09A5\u09BE\u0995\u09C7\u0964 \u09AC\u09CB\u09A4\u09BE\u09AE\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7 \u09AF\u09A6\u09BF \u09B2\u09BE\u09B2 \u09B0\u0999\u09C7\u09B0 \u09B2\u09C7\u09AC\u09C7\u09B2 \u09AC\u09BE '\u3042\u305F\u305F\u304B\u3044' (Atatakai) \u09B2\u09C7\u0996\u09BE \u09A5\u09BE\u0995\u09C7 \u09A4\u09AC\u09C7 \u09A4\u09BE \u09AB\u09C1\u099F\u09A8\u09CD\u09A4 \u0997\u09B0\u09AE \u0995\u09AB\u09BF \u09AC\u09BE \u099A\u09BE \u09AC\u09C7\u09B0 \u0995\u09B0\u09AC\u09C7\u0964 \u0986\u09B0 \u09A8\u09C0\u09B2 \u09B0\u0999\u09C7\u09B0 '\u3064\u3081\u305F\u3044' (Tsumetai) \u09A5\u09BE\u0995\u09B2\u09C7 \u09A4\u09BE \u09AC\u09B0\u09AB \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09AA\u09BE\u09A8\u09C0\u09AF\u09BC\u0964 \u09AD\u09C1\u09B2 \u09AC\u09CB\u09A4\u09BE\u09AE \u099F\u09BF\u09AA\u09B2\u09C7 \u09AA\u09C1\u09A1\u09BC\u09C7 \u09AF\u09C7\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8 \u09AC\u09BE \u09B6\u09C0\u09A4\u09C7 \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u0996\u09C7\u09A4\u09C7 \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u6C34[\u307F\u305A]\u304C\u307B\u3057\u3044\u3067\u3059",
+            romaji_input: "mizu ga hoshii desu",
+            target_display: "\u307F\u305A\u304C\u307B\u3057\u3044\u3067\u3059",
+            meaning_bn: "\u09AA\u09BE\u09A8\u09BF \u099A\u09BE\u0987"
+          },
+          {
+            prompt_ja: "\u98DF[\u305F]\u3079\u306B\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "tabeni ikimasu",
+            target_display: "\u305F\u3079\u306B\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u0996\u09C7\u09A4\u09C7 \u09AF\u09BE\u0987"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L25-1",
+            question_ja: "\u300C\u304A\u8336[\u3061\u3083]\u3092 \u98F2[\u306E]\u307F\uFF08\u3000\uFF09\u884C[\u3044]\u304D\u307E\u3059\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09AC\u09C7: \u304A\u3061\u3083\u3092 \u306E\u307F\uFF08\u3000\uFF09\u3044\u304D\u307E\u3059",
+            options: [
+              "\u306B (ni)",
+              "\u3067 (de)",
+              "\u3078 (e)",
+              "\u3092 (o)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0997\u09AE\u09A8\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF (Purpose of movement) \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09B8\u09CD\u099F\u09C7\u09AE\u09C7\u09B0 \u09AA\u09B0 '\u306B' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7: \u98F2\u307F\u306B\u884C\u304D\u307E\u3059 (\u09AA\u09BE\u09A8 \u0995\u09B0\u09A4\u09C7 \u09AF\u09BE\u0987)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L26",
+          lesson_number: 26,
+          module_number: 5,
+          module_name: "Te-Form Revolution",
+          module_name_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09AC\u09BF\u09AA\u09CD\u09B2\u09AC",
+          title_ja: "\u98DF[\u305F]\u3079\u3066\u304F\u3060\u3055\u3044",
+          title_en: "Te-Form Conjugation & Polite Requests",
+          title_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0996\u09BE\u09A8 (\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0993 \u09AC\u09BF\u09A8\u09C0\u09A4 \u0985\u09A8\u09C1\u09B0\u09CB\u09A7)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3\u09C7\u09B0 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u0997\u09C1\u09B0\u09C1\u09A4\u09CD\u09AC\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AE\u09BE\u0987\u09B2\u09AB\u09B2\u0995 \u09B9\u09B2\u09CB '\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE' (\u3066\u5F62 - Te-form)\u0964 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u0995\u09C7 \u0997\u09CD\u09B0\u09C1\u09AA \u09E7, \u09E8 \u098F\u09AC\u0982 \u09E9 \u0985\u09A8\u09C1\u09AF\u09BE\u09AF\u09BC\u09C0 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u304F\u3060\u3055\u3044 (kudasai) \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09AC\u09BF\u09A8\u09C0\u09A4 \u0985\u09A8\u09C1\u09B0\u09CB\u09A7 \u09A4\u09C8\u09B0\u09BF \u09B9\u09AF\u09BC ('\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0995\u09B0\u09C1\u09A8')\u0964 \u09AF\u09C7\u09AE\u09A8: \u98DF[\u305F]\u3079\u307E\u3059 -> \u98DF[\u305F]\u3079\u3066\u304F\u3060\u3055\u3044 (\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0996\u09BE\u09A8)\u0964",
+          core_concept_bn: "\u0997\u09CD\u09B0\u09C1\u09AA \u09E7 (U-verbs), \u0997\u09CD\u09B0\u09C1\u09AA \u09E8 (Ru-verbs) \u0993 \u0997\u09CD\u09B0\u09C1\u09AA \u09E9 (Irregular) \u098F\u09B0 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u0997\u09A0\u09A8 \u098F\u09AC\u0982 \u301C\u3066\u304F\u3060\u3055\u3044\u0964",
+          real_world_context_bn: "\u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u099C\u09BF\u09A8\u09BF\u09B8 \u09A6\u09C7\u0996\u09A4\u09C7 \u099A\u09BE\u0993\u09AF\u09BC\u09BE, \u099F\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09BF \u09A1\u09CD\u09B0\u09BE\u0987\u09AD\u09BE\u09B0\u0995\u09C7 \u09A5\u09BE\u09AE\u09A4\u09C7 \u09AC\u09B2\u09BE \u098F\u09AC\u0982 \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u09C7\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE \u09B6\u09CB\u09A8\u09BE\u0964",
+          key_takeaway_bn: "Group 1: \u3044\u30FB\u3061\u30FB\u308A->\u3063\u3066, \u307F\u30FB\u3073\u30FB\u306B->\u3093\u3067, \u304D->\u3044\u3066, \u304E->\u3044\u3067, \u3057->\u3057\u3066\u3002 Group 2: \u307E\u3059->\u3066\u3002 Group 3: \u3057\u3066, \u304D\u3066\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u98DF[\u305F]\u3079\u3066\u304F\u3060\u3055\u3044",
+            romaji: "tabete kudasai",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0996\u09BE\u09A8",
+            meaning_en: "please eat",
+            part_of_speech: "expression",
+            example_ja: "\u3069\u3046\u305E\u98DF[\u305F]\u3079\u3066\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u0996\u09BE\u09A8\u0964",
+            example_en: "Please eat, go ahead."
+          },
+          {
+            word_ja: "\u5F85[\u307E]\u3061\u307E\u3059",
+            romaji: "machimasu",
+            meaning_bn: "\u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "to wait",
+            part_of_speech: "verb",
+            example_ja: "\u5C11\u3005[\u3057\u3087\u3046\u3057\u3087\u3046]\u304A\u5F85[\u307E]\u3061\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u0995\u09BF\u099B\u09C1\u0995\u09CD\u09B7\u09A3 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964",
+            example_en: "Please wait a moment."
+          },
+          {
+            word_ja: "\u898B[\u307F]\u305B\u3066\u304F\u3060\u3055\u3044",
+            romaji: "misete kudasai",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u09A6\u09C7\u0996\u09BE\u09A8",
+            meaning_en: "please show me",
+            part_of_speech: "expression",
+            example_ja: "\u30D1\u30B9\u30DD\u30FC\u30C8\u3092\u898B[\u307F]\u305B\u3066\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u09AA\u09BE\u09B8\u09AA\u09CB\u09B0\u09CD\u099F \u09A6\u09C7\u0996\u09BE\u09A8\u0964",
+            example_en: "Please show me your passport."
+          },
+          {
+            word_ja: "\u6559[\u304A\u3057]\u3048\u3066\u304F\u3060\u3055\u3044",
+            romaji: "oshiete kudasai",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u09AC\u09B2\u09C7 \u09A6\u09BF\u09A8 / \u09B6\u09BF\u0996\u09BF\u09AF\u09BC\u09C7 \u09A6\u09BF\u09A8",
+            meaning_en: "please teach / tell me",
+            part_of_speech: "expression",
+            example_ja: "\u96FB\u8A71\u756A\u53F7[\u3067\u3093\u308F\u3070\u3093\u3054\u3046]\u3092\u6559[\u304A\u3057]\u3048\u3066\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u09AB\u09CB\u09A8 \u09A8\u09AE\u09CD\u09AC\u09B0\u099F\u09BF \u09AC\u09B2\u09C1\u09A8\u0964",
+            example_en: "Please tell me your phone number."
+          },
+          {
+            word_ja: "\u6025[\u3044\u305D]\u304E\u307E\u3059",
+            romaji: "isogimasu",
+            meaning_bn: "\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u0995\u09B0\u09BE",
+            meaning_en: "to hurry",
+            part_of_speech: "verb",
+            example_ja: "\u6642\u9593[\u3058\u304B\u3093]\u304C\u3042\u308A\u307E\u305B\u3093\u304B\u3089\u3001\u6025[\u3044\u305D]\u3044\u3067\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u09B8\u09AE\u09AF\u09BC \u09A8\u09C7\u0987 \u09AC\u09B2\u09C7 \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u0995\u09B0\u09C1\u09A8\u0964",
+            example_en: "Please hurry, as there is no time."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5F85",
+            onyomi: "\u30BF\u30A4",
+            kunyomi: "\u307E\u30FB\u3064",
+            meaning_bn: "\u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "wait",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u5F85[\u307E]\u3061\u307E\u3059",
+                meaning_bn: "\u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09BE",
+                meaning_en: "to wait"
+              },
+              {
+                word_ja: "\u62DB\u5F85[\u3057\u3087\u3046\u305F\u3044]",
+                meaning_bn: "\u0986\u09AE\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3",
+                meaning_en: "invitation"
+              }
+            ]
+          },
+          {
+            kanji: "\u6559",
+            onyomi: "\u30AD\u30E7\u30A6",
+            kunyomi: "\u304A\u3057\u30FB\u3048\u308B, \u304A\u305D\u30FB\u308F\u308B",
+            meaning_bn: "\u09B6\u09C7\u0996\u09BE\u09A8\u09CB / \u0989\u09AA\u09A6\u09C7\u09B6",
+            meaning_en: "teach / tell",
+            stroke_count: 11,
+            compounds: [
+              {
+                word_ja: "\u6559[\u304A\u3057]\u3048\u307E\u3059",
+                meaning_bn: "\u09B6\u09C7\u0996\u09BE\u09A8\u09CB",
+                meaning_en: "to teach"
+              },
+              {
+                word_ja: "\u6559\u5BA4[\u304D\u3087\u3046\u3057\u3064]",
+                meaning_bn: "\u09B6\u09CD\u09B0\u09C7\u09A3\u09BF\u0995\u0995\u09CD\u09B7",
+                meaning_en: "classroom"
+              },
+              {
+                word_ja: "\u6559\u79D1\u66F8[\u304D\u3087\u3046\u304B\u3057\u3087]",
+                meaning_bn: "\u09AA\u09BE\u09A0\u09CD\u09AF\u09AC\u0987",
+                meaning_en: "textbook"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G26-1",
+            pattern_ja: "V-\u3066 \u304F\u3060\u3055\u3044",
+            pattern_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 [\u0995\u09BE\u099C] \u0995\u09B0\u09C1\u09A8 (Polite Request)",
+            explanation_bn: "\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AA\u09B0 \u304F\u3060\u3055\u3044 \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u09AC\u09BE \u0985\u09A8\u09C1\u09B0\u09CB\u09A7 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09AA\u09BE\u09AF\u09BC\u0964 \u098F\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09A6\u09C8\u09A8\u09A8\u09CD\u09A6\u09BF\u09A8 \u099C\u09C0\u09AC\u09A8\u09C7 \u09B8\u09B0\u09CD\u09AC\u09BE\u09A7\u09BF\u0995 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u098F\u0995\u09CD\u09B8\u09AA\u09CD\u09B0\u09C7\u09B6\u09A8\u0964",
+            common_pitfalls: [
+              "\u884C\u304D\u307E\u3059 \u098F\u09B0 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u884C\u3044\u3066 \u09A8\u09AF\u09BC, \u0985\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u09B0\u09C2\u09AA: \u884C\u3063\u3066 (itte)!"
+            ],
+            examples: [
+              {
+                ja: "\u3053\u3053\u306B\u304A\u540D\u524D[\u306A\u307E\u3048]\u3092\u66F8[\u304B]\u3044\u3066\u304F\u3060\u3055\u3044\u3002",
+                bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u09A8\u09BE\u09AE \u09B2\u09BF\u0996\u09C1\u09A8\u0964",
+                en: "Please write your name here."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B8\u09BF\u099F\u09BF \u0985\u09AB\u09BF\u09B8\u09C7 (Kuyakusho) \u09A0\u09BF\u0995\u09BE\u09A8\u09BE \u09A8\u09BF\u09AC\u09A8\u09CD\u09A7\u09A8\u09C7\u09B0 \u09AB\u09B0\u09CD\u09AE \u09AA\u09C2\u09B0\u09A3\u0964",
+          situation_en: "Filling out an address registration form at a Tokyo city office.",
+          lines: [
+            {
+              speaker_ja: "\u8077\u54E1[\u3057\u3087\u304F\u3044\u3093]",
+              speaker_en: "Official",
+              line_ja: "\u3053\u306E\u7528\u7D19[\u3088\u3046\u3057]\u306B\u4F4F\u6240[\u3058\u3085\u3046\u3057\u3087]\u3068\u540D\u524D[\u306A\u307E\u3048]\u3092\u66F8[\u304B]\u3044\u3066\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u098F\u0987 \u09AB\u09B0\u09CD\u09AE\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u09A0\u09BF\u0995\u09BE\u09A8\u09BE \u0993 \u09A8\u09BE\u09AE \u09B2\u09BF\u0996\u09C1\u09A8\u0964",
+              line_en: "Please write your address and name on this form."
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u306F\u3044\u3001\u5206[\u308F]\u304B\u308A\u307E\u3057\u305F\u3002\u9ED2[\u304F\u308D]\u3044\u30DA\u30F3\u3092\u4F7F[\u3064\u304B]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+              line_bn: "\u099C\u09BF, \u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09C7\u09B0\u09C7\u099B\u09BF\u0964 \u0995\u09BE\u09B2\u09CB \u0995\u09B2\u09AE \u0995\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+              line_en: "Yes, understood. May I use a black pen?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u09B8\u09BF\u099F\u09BF \u0985\u09AB\u09BF\u09B8\u09C7 \u09AC\u09B8\u09AC\u09BE\u09B8 \u09A8\u09BF\u09AC\u09A8\u09CD\u09A7\u09A8 (Juminhyo - \u4F4F\u6C11\u7968) \u0993 \u09AE\u09BE\u0987 \u09A8\u09BE\u09AE\u09CD\u09AC\u09BE\u09B0 \u0995\u09BE\u09B0\u09CD\u09A1",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09E7\u09EA \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u098F\u09B2\u09BE\u0995\u09BE\u09B0 \u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u09A1 \u0985\u09AB\u09BF\u09B8 \u09AC\u09BE \u09B8\u09BF\u099F\u09BF \u09B9\u09B2\u09C7 \u0997\u09BF\u09AF\u09BC\u09C7 \u09A0\u09BF\u0995\u09BE\u09A8\u09BE\u09B0 \u09A8\u09BF\u09AC\u09A8\u09CD\u09A7\u09A8 (Juusho Touroku) \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u098F\u09B0 \u09AB\u09B2\u09C7 \u09B0\u09C7\u09B8\u09BF\u09A1\u09C7\u09A8\u09CD\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1\u09C7\u09B0 \u09AA\u09C7\u099B\u09A8\u09C7 \u09A0\u09BF\u0995\u09BE\u09A8\u09BE \u09AA\u09CD\u09B0\u09BF\u09A8\u09CD\u099F \u09B9\u09AF\u09BC \u098F\u09AC\u0982 'My Number' \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u09A8\u09AE\u09CD\u09AC\u09B0 \u09AC\u09B0\u09BE\u09A6\u09CD\u09A6 \u09B9\u09AF\u09BC\u0964 \u098F\u099F\u09BF \u099B\u09BE\u09A1\u09BC\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F \u0996\u09CB\u09B2\u09BE \u09AC\u09BE \u09B8\u09BF\u09AE \u0995\u09BE\u09B0\u09CD\u09A1 \u0995\u09C7\u09A8\u09BE \u0985\u09B8\u09AE\u09CD\u09AD\u09AC!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u98DF[\u305F]\u3079\u3066\u304F\u3060\u3055\u3044",
+            romaji_input: "tabete kudasai",
+            target_display: "\u305F\u3079\u3066\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0996\u09BE\u09A8"
+          },
+          {
+            prompt_ja: "\u5F85[\u307E]\u3063\u3066\u304F\u3060\u3055\u3044",
+            romaji_input: "matte kudasai",
+            target_display: "\u307E\u3063\u3066\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L26-1",
+            question_ja: "\u300C\u66F8[\u304B]\u304D\u307E\u3059\u300D\u306E \u3066\u5F62[\u304C\u305F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304B\u304D\u307E\u3059\u2019 (\u09B2\u09C7\u0996\u09BE) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u304B\u3044\u3066 (Kaite)",
+              "\u304B\u3063\u3066 (Katte)",
+              "\u304B\u3057\u3066 (Kashite)",
+              "\u304B\u3093\u3067 (Kande)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0997\u09CD\u09B0\u09C1\u09AA \u09E7 \u098F\u09B0 '\u304D' \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7 '\u3044\u3066' \u09A4\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC: \u66F8\u304D\u307E\u3059 -> \u66F8\u3044\u3066\u3002"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L27",
+          lesson_number: 27,
+          module_number: 5,
+          module_name: "Te-Form Revolution",
+          module_name_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09AC\u09BF\u09AA\u09CD\u09B2\u09AC",
+          title_ja: "\u4ECA[\u3044\u307E]\u4F55[\u306A\u306B]\u3092\u3057\u3066\u3044\u307E\u3059\u304B",
+          title_en: "Present Continuous & Resultant States (-te imasu)",
+          title_bn: "\u098F\u0996\u09A8 \u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8? (\u0998\u099F\u09AE\u09BE\u09A8 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u0993 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3044\u307E\u3059 \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09A6\u09C1\u099F\u09BF \u0985\u09B0\u09CD\u09A5 \u09A4\u09C8\u09B0\u09BF \u09B9\u09AF\u09BC: \u09E7. \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u099A\u09B2\u09AE\u09BE\u09A8 \u09A5\u09BE\u0995\u09BE (\u0998\u099F\u09AE\u09BE\u09A8 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8: '\u09AA\u09A1\u09BC\u099B\u09BF' = \u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u3066\u3044\u307E\u3059), \u098F\u09AC\u0982 \u09E8. \u0985\u09A4\u09C0\u09A4\u09C7\u09B0 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u09AB\u09B2\u09BE\u09AB\u09B2 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8\u09C7 \u09B8\u09CD\u09A5\u09BE\u09AF\u09BC\u09C0 \u09B0\u09C2\u09AA \u09A7\u09BE\u09B0\u09A3 \u0995\u09B0\u09BE (\u0985\u09AC\u09B8\u09CD\u09A5\u09BE: '\u09AC\u09BF\u09AF\u09BC\u09C7 \u0995\u09B0\u09C7\u099B\u09BF' = \u7D50\u5A5A[\u3051\u3063\u3053\u3093]\u3057\u3066\u3044\u307E\u3059, '\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AC\u09BE\u09B8 \u0995\u09B0\u099B\u09BF' = \u4F4F[\u3059]\u3093\u3067\u3044\u307E\u3059)\u0964",
+          core_concept_bn: "\u0998\u099F\u09AE\u09BE\u09A8 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u0995\u09BE\u09B2 \u098F\u09AC\u0982 \u0985\u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8\u09C0\u09AF\u09BC \u09B8\u09CD\u09A5\u09BE\u09AF\u09BC\u09C0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE\u09B0 \u09B0\u09C2\u09AA \u301C\u3066\u3044\u307E\u3059\u0964",
+          real_world_context_bn: "\u09AB\u09CB\u09A8\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8 \u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB, \u09A8\u09BF\u099C\u09C7\u09B0 \u099A\u09BE\u0995\u09B0\u09BF \u09AC\u09BE \u09AC\u09BE\u09B8\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "V-\u3066 \u3044\u307E\u3059 (\u0998\u099F\u09AE\u09BE\u09A8 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u09AC\u09BE \u09AB\u09B2\u09BE\u09AB\u09B2\u09B8\u09C2\u099A\u0995 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3057\u3066\u3044\u307E\u3059",
+            romaji: "shite imasu",
+            meaning_bn: "\u0995\u09B0\u099B\u09BF / \u0995\u09B0\u099B\u09C7",
+            meaning_en: "is doing",
+            part_of_speech: "verb phrase",
+            example_ja: "\u4ECA[\u3044\u307E]\u4F55[\u306A\u306B]\u3092\u3057\u3066\u3044\u307E\u3059\u304B\u3002",
+            example_bn: "\u098F\u0996\u09A8 \u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8?",
+            example_en: "What are you doing now?"
+          },
+          {
+            word_ja: "\u4F4F[\u3059]\u3093\u3067\u3044\u307E\u3059",
+            romaji: "sunde imasu",
+            meaning_bn: "\u09AC\u09B8\u09AC\u09BE\u09B8 \u0995\u09B0\u099B\u09BF",
+            meaning_en: "living / residing",
+            part_of_speech: "verb phrase",
+            example_ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u306B\u4F4F[\u3059]\u3093\u3067\u3044\u307E\u3059\u3002",
+            example_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AC\u09BE\u09B8 \u0995\u09B0\u09BF\u0964",
+            example_en: "I live in Tokyo."
+          },
+          {
+            word_ja: "\u50CD[\u306F\u305F\u3089]\u3044\u3066\u3044\u307E\u3059",
+            romaji: "hataraite imasu",
+            meaning_bn: "\u0995\u09BE\u099C \u0995\u09B0\u099B\u09BF / \u0995\u09B0\u09CD\u09AE\u09B0\u09A4 \u0986\u099B\u09BF",
+            meaning_en: "working",
+            part_of_speech: "verb phrase",
+            example_ja: "IT\u4F1A\u793E[\u304B\u3044\u3057\u3083]\u3067\u50CD[\u306F\u305F\u3089]\u3044\u3066\u3044\u307E\u3059\u3002",
+            example_bn: "\u0986\u0987\u099F\u09BF \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u0995\u09BE\u099C \u0995\u09B0\u099B\u09BF\u0964",
+            example_en: "I am working at an IT company."
+          },
+          {
+            word_ja: "\u77E5[\u3057]\u3063\u3066\u3044\u307E\u3059",
+            romaji: "shitte imasu",
+            meaning_bn: "\u099C\u09BE\u09A8\u09BF / \u09AA\u09B0\u09BF\u099A\u09BF\u09A4",
+            meaning_en: "know / acquainted with",
+            part_of_speech: "verb phrase",
+            example_ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u3092\u77E5[\u3057]\u3063\u3066\u3044\u307E\u3059\u304B\u3002",
+            example_bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC\u0995\u09C7 \u099A\u09C7\u09A8\u09C7\u09A8 \u0995\u09BF?",
+            example_en: "Do you know Mr. Tanaka?"
+          },
+          {
+            word_ja: "\u6301[\u3082]\u3063\u3066\u3044\u307E\u3059",
+            romaji: "motte imasu",
+            meaning_bn: "\u0985\u09A7\u09BF\u0995\u09BE\u09B0\u09C0 \u09B9\u0993\u09AF\u09BC\u09BE / \u0995\u09BE\u099B\u09C7 \u09A5\u09BE\u0995\u09BE",
+            meaning_en: "have / possess",
+            part_of_speech: "verb phrase",
+            example_ja: "\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3092\u6301[\u3082]\u3063\u3066\u3044\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09CD\u09AE\u09BE\u09B0\u09CD\u099F\u09AB\u09CB\u09A8 \u0986\u099B\u09C7\u0964",
+            example_en: "I have a smartphone."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4F4F",
+            onyomi: "\u30B8\u30E5\u30A6",
+            kunyomi: "\u3059\u30FB\u3080, \u3059\u30FB\u307E\u3046",
+            meaning_bn: "\u09AC\u09B8\u09AC\u09BE\u09B8 / \u0986\u09AC\u09BE\u09B8\u09A8",
+            meaning_en: "dwell / live",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u4F4F[\u3059]\u3093\u3067\u3044\u307E\u3059",
+                meaning_bn: "\u09AC\u09BE\u09B8 \u0995\u09B0\u09BF",
+                meaning_en: "living"
+              },
+              {
+                word_ja: "\u4F4F\u6240[\u3058\u3085\u3046\u3057\u3087]",
+                meaning_bn: "\u09A0\u09BF\u0995\u09BE\u09A8\u09BE",
+                meaning_en: "address"
+              }
+            ]
+          },
+          {
+            kanji: "\u77E5",
+            onyomi: "\u30C1",
+            kunyomi: "\u3057\u30FB\u308B, \u3057\u30FB\u3089\u305B\u308B",
+            meaning_bn: "\u099C\u09BE\u09A8\u09BE / \u099C\u09CD\u099E\u09BE\u09A8",
+            meaning_en: "know / wisdom",
+            stroke_count: 8,
+            compounds: [
+              {
+                word_ja: "\u77E5[\u3057]\u3063\u3066\u3044\u307E\u3059",
+                meaning_bn: "\u099C\u09BE\u09A8\u09BF",
+                meaning_en: "know"
+              },
+              {
+                word_ja: "\u77E5\u4EBA[\u3061\u3058\u3093]",
+                meaning_bn: "\u09AA\u09B0\u09BF\u099A\u09BF\u09A4 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF",
+                meaning_en: "acquaintance"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G27-1",
+            pattern_ja: "V-\u3066 \u3044\u307E\u3059 (\u9032\u884C\u4E2D[\u3057\u3093\u3053\u3046\u3061\u3085\u3046] & \u72B6\u614B[\u3058\u3087\u3046\u305F\u3044])",
+            pattern_bn: "\u0998\u099F\u09AE\u09BE\u09A8 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u0995\u09BE\u09B2 \u0985\u09A5\u09AC\u09BE \u09AB\u09B2\u09BE\u09AB\u09B2\u09B8\u09C2\u099A\u0995 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE",
+            explanation_bn: "\u09E7. \u099A\u09B2\u09AE\u09BE\u09A8 \u0995\u09BE\u099C: \u4ECA[\u3044\u307E]\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u3093\u3067\u3044\u307E\u3059 (\u098F\u0996\u09A8 \u09AC\u0987 \u09AA\u09A1\u09BC\u099B\u09BF)\u0964 \u09E8. \u0985\u09AC\u09B8\u09CD\u09A5\u09BE: \u77E5[\u3057]\u3063\u3066\u3044\u307E\u3059 (\u099C\u09BE\u09A8\u09BF)\u0964 \u09A4\u09AC\u09C7 '\u099C\u09BE\u09A8\u09BF \u09A8\u09BE' \u098F\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u77E5\u308A\u307E\u305B\u3093 \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AF\u09BC (\u77E5\u3063\u3066\u3044\u307E\u305B\u3093 \u09A8\u09AF\u09BC)\u0964",
+            common_pitfalls: [
+              "\u77E5\u3063\u3066\u3044\u307E\u3059\u304B \u098F\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0989\u09A4\u09CD\u09A4\u09B0 '\u3044\u3044\u3048\u3001\u77E5\u308A\u307E\u305B\u3093' (\u3044\u3044\u3048\u3001\u77E5\u3063\u3066\u3044\u307E\u305B\u3093 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AD\u09C1\u09B2)!"
+            ],
+            examples: [
+              {
+                ja: "\u96E8[\u3042\u3081]\u304C\u964D[\u3075]\u3063\u3066\u3044\u307E\u3059\u3002",
+                bn: "\u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09AA\u09A1\u09BC\u099B\u09C7\u0964",
+                en: "It is raining."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09AB\u09CB\u09A8\u09C7 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u0995\u09BE\u099C \u09A8\u09BF\u09AF\u09BC\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u0964",
+          situation_en: "Phone conversation with a classmate about current activities.",
+          lines: [
+            {
+              speaker_ja: "\u30E9\u30D2\u30E0[\u3089\u3072\u3080]",
+              speaker_en: "Rahim",
+              line_ja: "\u3082\u3057\u3082\u3057\u3001\u4ECA[\u3044\u307E]\u4F55[\u306A\u306B]\u3092\u3057\u3066\u3044\u307E\u3059\u304B\u3002",
+              line_bn: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB, \u098F\u0996\u09A8 \u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8?",
+              line_en: "Hello, what are you doing right now?"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u306E\u5BBF\u984C[\u3057\u3085\u304F\u3060\u3044]\u3092\u3057\u3066\u3044\u307E\u3059\u3002\u305D\u3061\u3089\u306F\uFF1F",
+              line_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09B9\u09CB\u09AE\u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u0995 \u0995\u09B0\u099B\u09BF\u0964 \u0986\u09AA\u09A8\u09BF?",
+              line_en: "I am doing Japanese homework. How about you?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AB\u09CB\u09A8\u09C7 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u09B0 \u0985\u09AD\u09BF\u09AC\u09BE\u09A6\u09A8: \u09AE\u09CB\u09B6\u09BF\u09AE\u09CB\u09B6\u09BF (\u3082\u3057\u3082\u3057)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AB\u09CB\u09A8\u09C7 \u0995\u09B2 \u09B0\u09BF\u09B8\u09BF\u09AD \u0995\u09B0\u09B2\u09C7 \u09AC\u09BE \u0995\u09A5\u09BE \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC '\u3082\u3057\u3082\u3057' (Moshimoshi) \u09AC\u09B2\u09BE \u09B8\u09BE\u09B0\u09CD\u09AC\u099C\u09A8\u09C0\u09A8 \u09A8\u09BF\u09AF\u09BC\u09AE\u0964 \u09A4\u09AC\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u0986\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09AC\u09BE \u09AC\u09CD\u09AF\u09AC\u09B8\u09BE\u09AF\u09BC\u09BF\u0995 \u0995\u09B2\u09C7 '\u3082\u3057\u3082\u3057' \u09A8\u09BE \u09AC\u09B2\u09C7 '\u306F\u3044\u3001\u3007\u3007\u3067\u3054\u3056\u3044\u307E\u3059' (\u099C\u09BF, \u0986\u09AE\u09BF \u0985\u09AE\u09C1\u0995 \u09AC\u09B2\u099B\u09BF) \u09AC\u09B2\u09BE \u09AC\u09BF\u09A7\u09C7\u09AF\u09BC\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u4F55[\u306A\u306B]\u3092\u3057\u3066\u3044\u307E\u3059\u304B",
+            romaji_input: "nani o shite imasu ka",
+            target_display: "\u306A\u306B\u3092\u3057\u3066\u3044\u307E\u3059\u304B",
+            meaning_bn: "\u0995\u09C0 \u0995\u09B0\u099B\u09C7\u09A8?"
+          },
+          {
+            prompt_ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u306B\u4F4F[\u3059]\u3093\u3067\u3044\u307E\u3059",
+            romaji_input: "toukyou ni sunde imasu",
+            target_display: "\u3068\u3046\u304D\u3087\u3046\u306B\u3059\u3093\u3067\u3044\u307E\u3059",
+            meaning_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09A4\u09C7 \u09AC\u09BE\u09B8 \u0995\u09B0\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L27-1",
+            question_ja: "\u300C\u77E5[\u3057]\u3063\u3066\u3044\u307E\u3059\u304B\u300D\u306E \u5426\u5B9A[\u3072\u3066\u3044]\u306E \u8FD4\u4E8B[\u3078\u3093\u3058]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3057\u3063\u3066\u3044\u307E\u3059\u304B\u2019 (\u099C\u09BE\u09A8\u09C7\u09A8 \u0995\u09BF?) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0989\u09A4\u09CD\u09A4\u09B0 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u3044\u3044\u3048\u3001\u77E5[\u3057]\u308A\u307E\u305B\u3093",
+              "\u3044\u3044\u3048\u3001\u77E5[\u3057]\u3063\u3066\u3044\u307E\u305B\u3093",
+              "\u3044\u3044\u3048\u3001\u77E5[\u3057]\u3089\u306A\u3044\u3067\u3057\u305F",
+              "\u3044\u3044\u3048\u3001\u77E5[\u3057]\u308A\u307E\u305B\u3093\u3067\u3057\u305F"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u77E5\u3063\u3066\u3044\u307E\u3059 \u098F\u09B0 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u0989\u09A4\u09CD\u09A4\u09B0 \u09B9\u09AF\u09BC '\u3044\u3044\u3048\u3001\u77E5\u308A\u307E\u305B\u3093'\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L28",
+          lesson_number: 28,
+          module_number: 5,
+          module_name: "Te-Form Revolution",
+          module_name_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09AC\u09BF\u09AA\u09CD\u09B2\u09AC",
+          title_ja: "\u5165[\u306F\u3044]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B",
+          title_en: "Permission (-te mo ii desu ka) & Prohibition (-te wa ikemasen)",
+          title_bn: "\u09AA\u09CD\u09B0\u09AC\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF? (\u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u0993 \u09A8\u09BF\u09B7\u09C7\u09A7)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09BE\u09B0\u09CB \u0995\u09BE\u099B\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u099A\u09BE\u0987\u09A4\u09C7 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AA\u09B0 \u301C\u3082\u3044\u3044\u3067\u3059\u304B \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC ('\u0995\u09B0\u09B2\u09C7 \u0995\u09BF \u09AD\u09BE\u09B2\u09CB \u09B9\u09AF\u09BC/\u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u0986\u099B\u09C7?')\u0964 \u09AF\u09C7\u09AE\u09A8: '\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF?' -> \u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u0964 \u09AA\u0995\u09CD\u09B7\u09BE\u09A8\u09CD\u09A4\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09A0\u09CB\u09B0\u09AD\u09BE\u09AC\u09C7 \u09A8\u09BF\u09B7\u09BF\u09A6\u09CD\u09A7 \u0995\u09B0\u09A4\u09C7 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AA\u09B0 \u301C\u306F\u3044\u3051\u307E\u305B\u3093 (\u0995\u09B0\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE / \u09A8\u09BF\u09B7\u09C7\u09A7) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09AA\u09CD\u09B0\u09BE\u09B0\u09CD\u09A5\u09A8\u09BE (\u301C\u3066\u3082\u3044\u3044\u3067\u3059\u304B) \u09AC\u09A8\u09BE\u09AE \u0995\u09A0\u09CB\u09B0 \u09A8\u09BF\u09B7\u09C7\u09A7\u09BE\u099C\u09CD\u099E\u09BE (\u301C\u3066\u306F\u3044\u3051\u307E\u305B\u3093)\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09A6\u09C1\u0998\u09B0 \u09AC\u09BE \u09AE\u09A8\u09CD\u09A6\u09BF\u09B0\u09C7 \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09A8\u09C7\u0993\u09AF\u09BC\u09BE, \u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u0995\u09A5\u09BE \u09A8\u09BE \u09AC\u09B2\u09BE\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE \u098F\u09AC\u0982 \u09B6\u09CD\u09B0\u09C7\u09A3\u09C0\u0995\u0995\u09CD\u09B7\u09C7 \u09AA\u09CD\u09B0\u09AC\u09C7\u09B6\u0964",
+          key_takeaway_bn: "V-\u3066 \u3082\u3044\u3044\u3067\u3059\u304B (\u0985\u09A8\u09C1\u09AE\u09A4\u09BF)\u0964 V-\u3066 \u306F\u3044\u3051\u307E\u305B\u3093 (\u09A8\u09BF\u09B7\u09C7\u09A7)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u5165[\u306F\u3044]\u308A\u307E\u3059",
+            romaji: "hairimasu",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09AC\u09C7\u09B6 \u0995\u09B0\u09BE",
+            meaning_en: "to enter",
+            part_of_speech: "verb",
+            example_ja: "\u90E8\u5C4B[\u3078\u3084]\u306B\u5165[\u306F\u3044]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+            example_bn: "\u0998\u09B0\u09C7 \u0995\u09BF \u09AA\u09CD\u09B0\u09AC\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+            example_en: "May I enter the room?"
+          },
+          {
+            word_ja: "\u64AE[\u3068]\u308A\u307E\u3059",
+            romaji: "torimasu",
+            meaning_bn: "\u09A4\u09CB\u09B2\u09BE (\u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE)",
+            meaning_en: "to take (photo)",
+            part_of_speech: "verb",
+            example_ja: "\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+            example_bn: "\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF?",
+            example_en: "May I take a photo?"
+          },
+          {
+            word_ja: "\u5438[\u3059]\u3044\u307E\u3059",
+            romaji: "suimasu",
+            meaning_bn: "\u099F\u09BE\u09A8\u09BE / \u09B8\u09C7\u09AC\u09A8 \u0995\u09B0\u09BE (\u09A7\u09C2\u09AE\u09AA\u09BE\u09A8)",
+            meaning_en: "to smoke / inhale",
+            part_of_speech: "verb",
+            example_ja: "\u3053\u3053\u3067\u305F\u3070\u3053\u3092\u5438[\u3059]\u3063\u3066\u306F\u3044\u3051\u307E\u305B\u3093\u3002",
+            example_bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u09A7\u09C2\u09AE\u09AA\u09BE\u09A8 \u0995\u09B0\u09BE \u09A8\u09BF\u09B7\u09C7\u09A7\u0964",
+            example_en: "You must not smoke here."
+          },
+          {
+            word_ja: "\u4F7F[\u3064\u304B]\u3044\u307E\u3059",
+            romaji: "tsukaimasu",
+            meaning_bn: "\u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE",
+            meaning_en: "to use",
+            part_of_speech: "verb",
+            example_ja: "\u3053\u306E\u30DA\u30F3\u3092\u4F7F[\u3064\u304B]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u3088\u3002",
+            example_bn: "\u098F\u0987 \u0995\u09B2\u09AE\u099F\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8\u0964",
+            example_en: "You may use this pen."
+          },
+          {
+            word_ja: "\u5EA7[\u3059\u308F]\u308A\u307E\u3059",
+            romaji: "suwarimasu",
+            meaning_bn: "\u09AC\u09B8\u09BE",
+            meaning_en: "to sit down",
+            part_of_speech: "verb",
+            example_ja: "\u3053\u3053\u306B\u5EA7[\u3059\u308F]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+            example_bn: "\u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09BF \u09AC\u09B8\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+            example_en: "May I sit here?"
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5165",
+            onyomi: "\u30CB\u30E5\u30A6",
+            kunyomi: "\u306F\u3044\u30FB\u308B, \u3044\u30FB\u308B, \u3044\u30FB\u308C\u308B",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09AC\u09C7\u09B6 / \u09A2\u09CB\u0995\u09BE",
+            meaning_en: "enter / insert",
+            stroke_count: 2,
+            compounds: [
+              {
+                word_ja: "\u5165[\u306F\u3044]\u308A\u307E\u3059",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09AC\u09C7\u09B6 \u0995\u09B0\u09BE",
+                meaning_en: "to enter"
+              },
+              {
+                word_ja: "\u5165\u53E3[\u3044\u308A\u3050\u3061]",
+                meaning_bn: "\u09AA\u09CD\u09B0\u09AC\u09C7\u09B6\u09A6\u09CD\u09AC\u09BE\u09B0",
+                meaning_en: "entrance"
+              },
+              {
+                word_ja: "\u5165\u5B66[\u306B\u3085\u3046\u304C\u304F]",
+                meaning_bn: "\u09B8\u09CD\u0995\u09C1\u09B2/\u09AD\u09BE\u09B0\u09CD\u09B8\u09BF\u099F\u09BF\u09A4\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF",
+                meaning_en: "school admission"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G28-1",
+            pattern_ja: "V-\u3066 \u3082\u3044\u3044\u3067\u3059\u304B",
+            pattern_bn: "\u0995\u09B0\u09B2\u09C7 \u0995\u09BF \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u0986\u099B\u09C7? (Asking Permission)",
+            explanation_bn: "\u09AC\u09BF\u09A8\u09AE\u09CD\u09B0\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09B8\u09AC\u099A\u09C7\u09AF\u09BC\u09C7 \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6 \u09AD\u09BE\u09B7\u09BE\u0964 \u0989\u09A4\u09CD\u09A4\u09B0\u09C7 '\u306F\u3044\u3001\u3044\u3044\u3067\u3059\u3088' (\u09B9\u09CD\u09AF\u09BE\u0981, \u09AA\u09BE\u09B0\u09C7\u09A8) \u0985\u09A5\u09AC\u09BE \u09A8\u09BE \u09B9\u09B2\u09C7 '\u3059\u307F\u307E\u305B\u3093\u3001\u3061\u3087\u3063\u3068...' (\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u0986\u09B8\u09B2\u09C7...) \u09AC\u09B2\u09C7 \u0995\u09BE\u09B0\u09A3 \u09AC\u09CD\u09AF\u09BE\u0996\u09CD\u09AF\u09BE \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u09B8\u09B0\u09BE\u09B8\u09B0\u09BF '\u3044\u3044\u3048\u3001\u3060\u3081\u3067\u3059' \u09AC\u09B2\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09BF\u09B7\u09CD\u099F\u09BE\u099A\u09BE\u09B0\u09C7 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B0\u09C2\u09A2\u09BC \u09B6\u09CB\u09A8\u09BE\u09DF\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u7A93[\u307E\u3069]\u3092\u958B[\u3042]\u3051\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+                bn: "\u099C\u09BE\u09A8\u09BE\u09B2\u09BE\u099F\u09BF \u0995\u09BF \u0996\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+                en: "May I open the window?"
+              }
+            ]
+          },
+          {
+            point_id: "G28-2",
+            pattern_ja: "V-\u3066 \u306F\u3044\u3051\u307E\u305B\u3093",
+            pattern_bn: "\u0995\u09B0\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09A8\u09BF\u09B7\u09C7\u09A7 (Prohibition)",
+            explanation_bn: "\u0986\u0987\u09A8, \u09A8\u09BF\u09AF\u09BC\u09AE \u09AC\u09BE \u09AC\u09BF\u09A7\u09BF\u09A8\u09BF\u09B7\u09C7\u09A7 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09B8\u09BE\u0987\u09A8\u09AC\u09CB\u09B0\u09CD\u09A1 \u09AC\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE\u09AF\u09BC \u09AC\u09CD\u09AF\u09BE\u09AA\u0995\u09AD\u09BE\u09AC\u09C7 \u09A6\u09C7\u0996\u09BE \u09AF\u09BE\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u0989\u09B0\u09CD\u09A7\u09CD\u09AC\u09A4\u09A8 \u0995\u09BE\u0989\u0995\u09C7 \u09AC\u09BE \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09BF\u09A4 \u0985\u09A4\u09BF\u09A5\u09BF\u0995\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u3066\u306F\u3044\u3051\u307E\u305B\u3093 \u09AC\u09B2\u09BE \u0989\u099A\u09BF\u09A4 \u09A8\u09AF\u09BC\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u7F8E\u8853\u9928[\u3073\u3058\u3085\u3064\u304B\u3093]\u3067\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u3063\u3066\u306F\u3044\u3051\u307E\u305B\u3093\u3002",
+                bn: "\u0986\u09B0\u09CD\u099F \u09AE\u09BF\u0989\u099C\u09BF\u09AF\u09BC\u09BE\u09AE\u09C7 \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09A8\u09BF\u09B7\u09C7\u09A7\u0964",
+                en: "You must not take photos in the art museum."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u0986\u09B8\u09BE\u0995\u09C1\u09B8\u09BE \u09B8\u09C7\u09A8\u09B8\u09CB\u099C\u09BF \u09AE\u09A8\u09CD\u09A6\u09BF\u09B0\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7\u09B0 \u09B9\u09B2\u09B0\u09C1\u09AE\u09C7 \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE \u099C\u09BE\u09A8\u09BE\u0964",
+          situation_en: "Asking about photography rules inside Asakusa Sensoji Temple hall.",
+          lines: [
+            {
+              speaker_ja: "\u89B3\u5149\u5BA2[\u304B\u3093\u3053\u3046\u304D\u3083\u304F]",
+              speaker_en: "Tourist",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u3053\u3053\u3067\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09BF \u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+              line_en: "Excuse me, may I take pictures here?"
+            },
+            {
+              speaker_ja: "\u8B66\u5099\u54E1[\u3051\u3044\u3073\u3044\u3093]",
+              speaker_en: "Guard",
+              line_ja: "\u7533[\u3082\u3046]\u3057\u8A33[\u308F\u3051]\u3042\u308A\u307E\u305B\u3093\u304C\u3001\u672C\u5802[\u307B\u3093\u3069\u3046]\u306E\u4E2D[\u306A\u304B]\u3067\u306F\u64AE[\u3068]\u3063\u3066\u306F\u3044\u3051\u307E\u305B\u3093\u3002",
+              line_bn: "\u0986\u09A8\u09CD\u09A4\u09B0\u09BF\u0995 \u09A6\u09C1\u0983\u0996 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u099B\u09BF, \u09A4\u09AC\u09C7 \u09AE\u09C2\u09B2 \u09B9\u09B2\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7 \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE \u09A8\u09BF\u09B7\u09C7\u09A7\u0964",
+              line_en: "I am sorry, but taking photos is prohibited inside the main hall."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE\u09AF\u09BC \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09CD\u09AF \u09A7\u09C2\u09AE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0993\u09AA\u09B0 \u0995\u09A0\u09CB\u09B0 \u09A8\u09BF\u09B7\u09C7\u09A7\u09BE\u099C\u09CD\u099E\u09BE (Aruki-tabako)",
+          tip_bn: "\u099F\u09CB\u0995\u09BF\u0993 \u098F\u09AC\u0982 \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AC \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09B6\u09B9\u09B0\u09C7 \u09B0\u09BE\u09B8\u09CD\u09A4\u09BE\u09AF\u09BC \u09B9\u09BE\u0981\u099F\u09A4\u09C7 \u09B9\u09BE\u0981\u099F\u09A4\u09C7 \u09B8\u09BF\u0997\u09BE\u09B0\u09C7\u099F \u0996\u09BE\u0993\u09AF\u09BC\u09BE (Aruki-tabako) \u0986\u0987\u09A8\u09A4 \u09A6\u09A3\u09CD\u09A1\u09A8\u09C0\u09AF\u09BC \u0985\u09AA\u09B0\u09BE\u09A7\u0964 \u098F\u09B0 \u099C\u09A8\u09CD\u09AF \u09A8\u0997\u09A6 \u09E8,\u09E6\u09E6\u09E6 \u09A5\u09C7\u0995\u09C7 \u09E8\u09E6,\u09E6\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B8\u09CD\u09AA\u099F \u09AB\u09BE\u0987\u09A8 \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964 \u0995\u09C7\u09AC\u09B2 \u0995\u09BE\u0981\u099A\u0998\u09C7\u09B0\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09B8\u09CD\u09AE\u09CB\u0995\u09BF\u0982 \u099C\u09CB\u09A8\u09C7\u0987 (Kitsuen-jo - \u55AB\u7159\u6240) \u09A7\u09C2\u09AE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09B0\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u5165[\u306F\u3044]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B",
+            romaji_input: "haittemo ii desu ka",
+            target_display: "\u306F\u3044\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B",
+            meaning_bn: "\u09A2\u09C1\u0995\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF?"
+          },
+          {
+            prompt_ja: "\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u3063\u3066\u306F\u3044\u3051\u307E\u305B\u3093",
+            romaji_input: "shashin o totte wa ikemasen",
+            target_display: "\u3057\u3083\u3057\u3093\u3092\u3068\u3063\u3066\u306F\u3044\u3051\u307E\u305B\u3093",
+            meaning_bn: "\u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE \u09A8\u09BF\u09B7\u09C7\u09A7"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L28-1",
+            question_ja: "\u300C\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092 \u64AE[\u3068]\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u3057\u3083\u3057\u3093\u3092\u3068\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304B\u2019 \u098F\u09B0 \u09AC\u09BE\u0982\u09B2\u09BE \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF? (May I take a photo?)",
+              "\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09AC\u09C7\u09A8 \u09A8\u09BE (Do not take a photo)",
+              "\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u099A\u09BE\u0987 (I want to take a photo)",
+              "\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09C7\u099B\u09BF (I took a photo)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u301C\u3066\u3082\u3044\u3044\u3067\u3059\u304B \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0997\u09A0\u09A8, \u09A4\u09BE\u0987 \u09AC\u09BE\u0995\u09CD\u09AF\u099F\u09BF\u09B0 \u0985\u09B0\u09CD\u09A5 '\u099B\u09AC\u09BF \u09A4\u09C1\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF \u0995\u09BF?'\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L29",
+          lesson_number: 29,
+          module_number: 5,
+          module_name: "Te-Form Revolution",
+          module_name_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09AC\u09BF\u09AA\u09CD\u09B2\u09AC",
+          title_ja: "\u98DF[\u305F]\u3079\u3066\u304B\u3089\u884C[\u3044]\u304D\u307E\u3059",
+          title_en: "Sequential Actions (-te kara & clause chaining)",
+          title_bn: "\u0996\u09C7\u09AF\u09BC\u09C7 \u09A4\u09BE\u09B0\u09AA\u09B0 \u09AF\u09BE\u09AC (\u09A7\u09BE\u09B0\u09BE\u09AC\u09BE\u09B9\u09BF\u0995 \u0995\u09B0\u09CD\u09AE \u0993 \u09B8\u0982\u09AF\u09CB\u0997)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u098F\u0995\u09BE\u09A7\u09BF\u0995 \u0995\u09BE\u099C \u0995\u09CD\u09B0\u09AE\u09BE\u09A8\u09C1\u09B8\u09BE\u09B0\u09C7 \u098F\u0995\u09C7\u09B0 \u09AA\u09B0 \u098F\u0995 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u09B2\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB\u0995\u09C7 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE (\u301C\u3066\u3001\u301C\u3066) \u09A6\u09BF\u09AF\u09BC\u09C7 \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u0986\u09B0 \u0995\u09CB\u09A8\u09CB \u098F\u0995\u099F\u09BF \u0995\u09BE\u099C \u09B8\u09C1\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B6\u09C7\u09B7 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u0995\u09BE\u099C\u09C7 \u09B9\u09BE\u09A4 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 V-\u3066 \u304B\u3089 (\u0995\u09B0\u09BE\u09B0 \u09AA\u09B0) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u09B9\u09BE\u09A4 \u09A7\u09C1\u09AF\u09BC\u09C7 \u09A4\u09BE\u09B0\u09AA\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u0987' -> \u624B[\u3066]\u3092\u6D17[\u3042\u3089]\u3063\u3066\u304B\u3089\u98DF[\u305F]\u3079\u307E\u3059\u0964",
+          core_concept_bn: "\u09AC\u09BE\u0995\u09CD\u09AF \u09B8\u0982\u09AF\u09CB\u0997\u0995\u09BE\u09B0\u09C0 \u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u098F\u09AC\u0982 \u0995\u09BE\u09B2\u09BE\u09A8\u09C1\u0995\u09CD\u09B0\u09AE\u09BF\u0995 \u0995\u09BE\u099C \u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u0995\u09BE\u099C (\u301C\u3066\u304B\u3089)\u0964",
+          real_world_context_bn: "\u09A6\u09BF\u09A8\u09C7\u09B0 \u098F\u0995\u09BE\u09A7\u09BF\u0995 \u0995\u09BE\u099C\u09C7\u09B0 \u09B6\u09BF\u09A1\u09BF\u0989\u09B2 \u09A7\u09BE\u09B0\u09BE\u09AC\u09BE\u09B9\u09BF\u0995\u09AD\u09BE\u09AC\u09C7 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE \u0995\u09B0\u09BE \u0993 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE \u0985\u09A8\u09C1\u09B8\u09B0\u09A3\u0964",
+          key_takeaway_bn: "V1-\u3066\u304B\u3089 V2 (\u09E7\u09AE \u0995\u09BE\u099C \u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 \u09A4\u09AC\u09C7\u0987 \u09E8\u09AF\u09BC \u0995\u09BE\u099C)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u6D17[\u3042\u3089]\u3044\u307E\u3059",
+            romaji: "araimasu",
+            meaning_bn: "\u09A7\u09CB\u09AF\u09BC\u09BE / \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09BE",
+            meaning_en: "to wash",
+            part_of_speech: "verb",
+            example_ja: "\u624B[\u3066]\u3092\u6D17[\u3042\u3089]\u3063\u3066\u304B\u3089\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u307E\u3059\u3002",
+            example_bn: "\u09B9\u09BE\u09A4 \u09A7\u09C1\u09AF\u09BC\u09C7 \u09A4\u09BE\u09B0\u09AA\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u0987\u0964",
+            example_en: "I wash my hands and then eat a meal."
+          },
+          {
+            word_ja: "\u6D74[\u3042]\u3073\u307E\u3059",
+            romaji: "abimasu",
+            meaning_bn: "\u0997\u09CB\u09B8\u09B2 \u0995\u09B0\u09BE (\u099D\u09B0\u09A8\u09BE \u09A8\u09C7\u0993\u09AF\u09BC\u09BE)",
+            meaning_en: "to take (shower)",
+            part_of_speech: "verb",
+            example_ja: "\u30B7\u30E3\u30EF\u30FC\u3092\u6D74[\u3042]\u3073\u307E\u3059\u3002",
+            example_bn: "\u09B6\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09A8\u09BF\u0987\u0964",
+            example_en: "I take a shower."
+          },
+          {
+            word_ja: "\u51FA[\u3067]\u307E\u3059",
+            romaji: "demasu",
+            meaning_bn: "\u09AC\u09C7\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE / \u09AA\u09CD\u09B0\u09B8\u09CD\u09A5\u09BE\u09A8",
+            meaning_en: "to exit / leave",
+            part_of_speech: "verb",
+            example_ja: "\u4E03\u6642[\u3057\u3061\u3058]\u306B\u5BB6[\u3044\u3048]\u3092\u51FA[\u3067]\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09BE\u09A4\u099F\u09BE\u09AF\u09BC \u09AC\u09BE\u09A1\u09BC\u09BF \u09A5\u09C7\u0995\u09C7 \u09AC\u09C7\u09B0 \u09B9\u0987\u0964",
+            example_en: "I leave the house at 7."
+          },
+          {
+            word_ja: "\u4E57[\u306E]\u308A\u63DB[\u304B]\u3048\u307E\u3059",
+            romaji: "norikaemasu",
+            meaning_bn: "\u099F\u09CD\u09B0\u09C7\u09A8 / \u09AC\u09BE\u09B8 \u09AC\u09A6\u09B2 \u0995\u09B0\u09BE (\u099F\u09CD\u09B0\u09BE\u09A8\u09CD\u09B8\u09AB\u09BE\u09B0)",
+            meaning_en: "to transfer / change trains",
+            part_of_speech: "verb",
+            example_ja: "\u65B0\u5BBF[\u3057\u3093\u3058\u3085\u304F]\u3067\u96FB\u8ECA[\u3067\u3093\u3057\u3083]\u3092\u4E57[\u306E]\u308A\u63DB[\u304B]\u3048\u307E\u3059\u3002",
+            example_bn: "\u09B6\u09BF\u09A8\u099C\u09C1\u0995\u09C1\u09A4\u09C7 \u099F\u09CD\u09B0\u09C7\u09A8 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0995\u09B0\u09BF\u0964",
+            example_en: "I transfer trains at Shinjuku."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u51FA",
+            onyomi: "\u30B7\u30E5\u30C4, \u30B9\u30A4",
+            kunyomi: "\u3067\u30FB\u308B, \u3060\u30FB\u3059",
+            meaning_bn: "\u09AC\u09C7\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE / \u09AA\u09BE\u09A0\u09BE\u09A8\u09CB",
+            meaning_en: "exit / put out",
+            stroke_count: 5,
+            compounds: [
+              {
+                word_ja: "\u51FA[\u3067]\u307E\u3059",
+                meaning_bn: "\u09AC\u09C7\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE",
+                meaning_en: "to exit"
+              },
+              {
+                word_ja: "\u51FA\u53E3[\u3067\u3050\u3061]",
+                meaning_bn: "\u09AC\u09B9\u09BF\u09B0\u09CD\u0997\u09AE\u09A8 \u09AA\u09A5",
+                meaning_en: "exit"
+              },
+              {
+                word_ja: "\u51FA\u767A[\u3057\u3085\u3063\u3071\u3064]",
+                meaning_bn: "\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE \u09B6\u09C1\u09B0\u09C1 / \u09A1\u09BF\u09AA\u09BE\u09B0\u099A\u09BE\u09B0",
+                meaning_en: "departure"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G29-1",
+            pattern_ja: "V1-\u3066 \u304B\u3089\u3001V2",
+            pattern_bn: "V1 \u09B6\u09C7\u09B7 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 V2 \u0995\u09B0\u09BE",
+            explanation_bn: "V1 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u099F\u09BF \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0\u0987 V2 \u09B6\u09C1\u09B0\u09C1 \u09B9\u09AF\u09BC\u0964 \u09AA\u09C1\u09B0\u09CB \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u0995\u09BE\u09B2 (Present/Past) \u09B6\u09C7\u09B7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 V2 \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "V1 \u0995\u09C7 \u0995\u0996\u09A8\u09CB\u0987 \u0985\u09A4\u09C0\u09A4\u09C7 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\xD7 \u98DF\u3079\u305F\u304B\u3089\u884C\u304D\u307E\u3059 \u09A8\u09AF\u09BC, \u25CB \u98DF\u3079\u3066\u304B\u3089\u884C\u304D\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u56FD[\u304F\u306B]\u3078\u5E30[\u304B\u3048]\u3063\u3066\u304B\u3089\u3001\u4F1A\u793E[\u304B\u3044\u3057\u3083]\u3092\u4F5C[\u3064\u304F]\u308A\u305F\u3044\u3067\u3059\u3002",
+                bn: "\u09A6\u09C7\u09B6\u09C7 \u09AB\u09C7\u09B0\u09BE\u09B0 \u09AA\u09B0 \u098F\u0995\u099F\u09BF \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF \u0997\u09A1\u09BC\u09A4\u09C7 \u099A\u09BE\u0987\u0964",
+                en: "After returning to my country, I want to build a company."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0995\u09CD\u09B2\u09BE\u09B8 \u09B6\u09C7\u09B7\u09C7 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0\u09BF\u0995\u09B2\u09CD\u09AA\u09A8\u09BE\u0964",
+          situation_en: "Planning to go to the library together after class.",
+          lines: [
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u6388\u696D[\u3058\u3085\u304E\u3087\u3046]\u304C\u7D42[\u304A]\u308F\u3063\u3066\u304B\u3089\u3001\u56F3\u66F8\u9928[\u3068\u3057\u3087\u304B\u3093]\u3078\u884C[\u3044]\u304D\u307E\u305B\u3093\u304B\u3002",
+              line_bn: "\u0995\u09CD\u09B2\u09BE\u09B8 \u09B6\u09C7\u09B7 \u09B9\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0 \u09B2\u09BE\u0987\u09AC\u09CD\u09B0\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AF\u09BE\u09AC\u09C7\u09A8 \u09A8\u09BE\u0995\u09BF?",
+              line_en: "Shall we go to the library after class finishes?"
+            },
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u3044\u3044\u3067\u3059\u306D\u3002\u663C[\u3072\u308B]\u3054\u306F\u3093\u3092\u98DF[\u305F]\u3079\u3066\u304B\u3089\u884C[\u3044]\u304D\u307E\u3057\u3087\u3046\u3002",
+              line_bn: "\u099A\u09AE\u09CE\u0995\u09BE\u09B0\u0964 \u09A6\u09C1\u09AA\u09C1\u09B0\u09C7\u09B0 \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09C7\u09AF\u09BC\u09C7 \u09A4\u09BE\u09B0\u09AA\u09B0 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u0995\u0964",
+              line_en: "Sounds good! Let's eat lunch and then go."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099F\u09CB\u0995\u09BF\u0993 \u09AE\u09C7\u099F\u09CD\u09B0\u09CB\u09B0 \u099C\u099F\u09BF\u09B2 \u09B2\u09BE\u0987\u09A8 \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09A8 \u0993 \u099F\u09CD\u09B0\u09BE\u09A8\u09CD\u09B8\u09AB\u09BE\u09B0 \u099F\u09BF\u0995\u09BF\u099F",
+          tip_bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u09B8\u09BE\u09AC\u0993\u09AF\u09BC\u09C7 \u09A8\u09C7\u099F\u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u0995\u09C7 \u099F\u09CB\u0995\u09BF\u0993 \u09AE\u09C7\u099F\u09CD\u09B0\u09CB \u098F\u09AC\u0982 \u09A4\u09CB\u09AF\u09BC\u09C7\u0987 (Toei) \u09A6\u09C1\u099F\u09BF \u09AD\u09BF\u09A8\u09CD\u09A8 \u09AD\u09BF\u09A8\u09CD\u09A8 \u09B8\u09BE\u09AC\u0993\u09AF\u09BC\u09C7 \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u0964 \u098F\u0995 \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u09B2\u09BE\u0987\u09A8 \u09A5\u09C7\u0995\u09C7 \u0985\u09A8\u09CD\u09AF \u0995\u09CB\u09AE\u09CD\u09AA\u09BE\u09A8\u09BF\u09B0 \u09B2\u09BE\u0987\u09A8\u09C7 \u099F\u09CD\u09B0\u09BE\u09A8\u09CD\u09B8\u09AB\u09BE\u09B0 \u0995\u09B0\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u0995\u09AE\u09CD\u09AC\u09BE\u0987\u09A8\u09CD\u09A1 \u09A1\u09BF\u09B8\u0995\u09BE\u0989\u09A8\u09CD\u099F (70 \u0987\u09AF\u09BC\u09C7\u09A8 \u099B\u09BE\u09A1\u09BC) \u09A5\u09BE\u0995\u09C7\u0964 \u0986\u0987\u09B8\u09BF \u0995\u09BE\u09B0\u09CD\u09A1 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09B2\u09C7 \u098F\u099F\u09BF \u09B8\u09CD\u09AC\u09AF\u09BC\u0982\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09AD\u09BE\u09AC\u09C7 \u09B9\u09BF\u09B8\u09BE\u09AC \u09B9\u09AF\u09BC\u09C7 \u09AF\u09BE\u09AF\u09BC\u0964",
+          category: "Transport"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u98DF[\u305F]\u3079\u3066\u304B\u3089\u884C[\u3044]\u304D\u307E\u3059",
+            romaji_input: "tabetekara ikimasu",
+            target_display: "\u305F\u3079\u3066\u304B\u3089\u3044\u304D\u307E\u3059",
+            meaning_bn: "\u0996\u09C7\u09AF\u09BC\u09C7 \u09AF\u09BE\u09AC"
+          },
+          {
+            prompt_ja: "\u624B[\u3066]\u3092\u6D17[\u3042\u3089]\u3063\u3066\u304F\u3060\u3055\u3044",
+            romaji_input: "te o aratte kudasai",
+            target_display: "\u3066\u3092\u3042\u3089\u3063\u3066\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u09B9\u09BE\u09A4 \u09A7\u09C1\u09AF\u09BC\u09C7 \u09A8\u09BF\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L29-1",
+            question_ja: "\u300C\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u3066\uFF08\u3000\uFF09\u5BDD[\u306D]\u307E\u3059\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8 \u09B6\u09AC\u09CD\u09A6\u099F\u09BF \u09AC\u09B8\u09AC\u09C7: \u3079\u3093\u304D\u3087\u3046\u3057\u3066\uFF08\u3000\uFF09\u306D\u307E\u3059",
+            options: [
+              "\u304B\u3089 (kara)",
+              "\u307E\u3067 (made)",
+              "\u306E\u3067 (node)",
+              "\u3051\u3069 (kedo)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0995\u09BE\u099C \u09B6\u09C7\u09B7 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u301C\u3066\u304B\u3089' (te kara) \u09AC\u09B8\u09C7: \u52C9\u5F37\u3057\u3066\u304B\u3089\u5BDD\u307E\u3059 (\u09AA\u09A1\u09BC\u09BE\u09B6\u09CB\u09A8\u09BE \u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 \u0998\u09C1\u09AE\u09BE\u09AC)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L30",
+          lesson_number: 30,
+          module_number: 5,
+          module_name: "Te-Form Revolution",
+          module_name_bn: "\u09A4\u09C7-\u09AB\u09B0\u09CD\u09AE \u09AC\u09BF\u09AA\u09CD\u09B2\u09AC",
+          title_ja: "\u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059",
+          title_en: "Representative Activities (-tari -tari shimasu)",
+          title_bn: "\u0995\u0996\u09A8\u0993 \u098F\u099F\u09BE, \u0995\u0996\u09A8\u0993 \u0993\u099F\u09BE \u0995\u09B0\u09BF (\u09AA\u09CD\u09B0\u09A4\u09BF\u09A8\u09BF\u09A7\u09BF\u09A4\u09CD\u09AC\u09AE\u09C2\u09B2\u0995 \u09A4\u09BE\u09B2\u09BF\u0995\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Elementary"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u09AF\u0996\u09A8 \u0995\u09C7\u0989 \u0985\u09AC\u09B8\u09B0\u09C7 \u09AC\u09BE \u099B\u09C1\u099F\u09BF\u09A4\u09C7 \u0985\u09A8\u09C7\u0995\u0997\u09C1\u09B2\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09C7 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09B8\u09AC\u0997\u09C1\u09B2\u09CB \u09A8\u09BE \u09AC\u09B2\u09C7 \u0995\u09AF\u09BC\u09C7\u0995\u099F\u09BF \u0989\u09A6\u09BE\u09B9\u09B0\u09A3 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09A4\u09C1\u09B2\u09C7 \u09A7\u09B0\u09A4\u09C7 \u099A\u09BE\u09AF\u09BC, \u09A4\u0996\u09A8 \u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u098F\u09B0 \u0997\u09A0\u09A8 \u09B9\u09B2\u09CB \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u308A' \u09AF\u09CB\u0997 \u0995\u09B0\u09BE (V-\u305F + \u308A)\u0964 \u09AF\u09C7\u09AE\u09A8: '\u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u09AC\u0987 \u09AA\u09A1\u09BC\u09BF, \u0997\u09BE\u09A8 \u09B6\u09C1\u09A8\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF' -> \u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u3093\u3060\u308A\u97F3\u697D[\u304A\u3093\u304C\u304F]\u3092\u805E[\u304D]\u3044\u305F\u308A\u3057\u307E\u3059\u3002",
+          core_concept_bn: "\u0985\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u0995\u09BE\u099C\u09C7\u09B0 \u0989\u09A6\u09BE\u09B9\u09B0\u09A3 \u09A4\u09BE\u09B2\u09BF\u0995\u09BE (\u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059) \u09AC\u09A8\u09BE\u09AE \u0995\u09CD\u09B0\u09AE\u09BE\u09A8\u09CD\u09AC\u09AF\u09BC\u09BF\u0995 \u0995\u09BE\u099C (\u301C\u3066\u3001\u301C\u3066)\u0964",
+          real_world_context_bn: "\u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u0995\u09C0 \u0995\u09B0\u09C7\u099B\u09C7\u09A8 \u09AC\u09BE \u0985\u09AC\u09B8\u09B0\u09C7 \u0995\u09C0 \u0995\u09B0\u09A4\u09C7 \u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09C7\u09A8 \u09A4\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09AC\u09BE \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989\u09AF\u09BC\u09BE\u09B0\u0995\u09C7 \u09AC\u09CB\u099D\u09BE\u09A8\u09CB\u0964",
+          key_takeaway_bn: "V1-\u305F\u308A V2-\u305F\u308A \u3057\u307E\u3059/\u3057\u307E\u3057\u305F (\u09AA\u09CD\u09B0\u09A4\u09BF\u09A8\u09BF\u09A7\u09BF\u09A4\u09CD\u09AC\u09AE\u09C2\u09B2\u0995 \u0995\u09AF\u09BC\u09C7\u0995\u099F\u09BF \u0995\u09BE\u099C\u09C7\u09B0 \u09A6\u09C3\u09B7\u09CD\u099F\u09BE\u09A8\u09CD\u09A4)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u6383\u9664[\u305D\u3046\u3058]\u3057\u307E\u3059",
+            romaji: "s\u014Djishimasu",
+            meaning_bn: "\u0998\u09B0 \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09BE",
+            meaning_en: "to clean",
+            part_of_speech: "verb",
+            example_ja: "\u65E5\u66DC\u65E5[\u306B\u3061\u3088\u3046\u3073]\u306F\u90E8\u5C4B[\u3078\u3084]\u3092\u6383\u9664[\u305D\u3046\u3058]\u3057\u305F\u308A\u3057\u307E\u3059\u3002",
+            example_bn: "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0\u09C7 \u09B0\u09C1\u09AE \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF \u0995\u09B0\u09BF\u0964",
+            example_en: "On Sundays, I clean my room and such."
+          },
+          {
+            word_ja: "\u6D17\u6FEF[\u305B\u3093\u305F\u304F]\u3057\u307E\u3059",
+            romaji: "sentakushimasu",
+            meaning_bn: "\u0995\u09BE\u09AA\u09A1\u09BC \u09A7\u09CB\u09AF\u09BC\u09BE / \u09B2\u09A8\u09CD\u09A1\u09CD\u09B0\u09BF \u0995\u09B0\u09BE",
+            meaning_en: "to do laundry",
+            part_of_speech: "verb",
+            example_ja: "\u670D[\u3075\u304F]\u3092\u6D17\u6FEF[\u305B\u3093\u305F\u304F]\u3057\u305F\u308A\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u306B\u884C[\u3044]\u3063\u305F\u308A\u3057\u307E\u3057\u305F\u3002",
+            example_bn: "\u0995\u09BE\u09AA\u09A1\u09BC \u09A7\u09C1\u09AF\u09BC\u09C7\u099B\u09BF, \u09B6\u09AA\u09BF\u0982\u09AF\u09BC\u09C7 \u0997\u09BF\u09AF\u09BC\u09C7\u099B\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF\u0964",
+            example_en: "I did laundry, went shopping, and so on."
+          },
+          {
+            word_ja: "\u6563\u6B69[\u3055\u3093\u307D]\u3057\u307E\u3059",
+            romaji: "sanposhimasu",
+            meaning_bn: "\u09B9\u09BE\u0981\u099F\u09BE\u09B9\u09BE\u099F\u09BF \u0995\u09B0\u09BE / \u09AA\u09BE\u09AF\u09BC\u099A\u09BE\u09B0\u09BF \u0995\u09B0\u09BE",
+            meaning_en: "to take a walk / stroll",
+            part_of_speech: "verb",
+            example_ja: "\u516C\u5712[\u3053\u3046\u3048\u3093]\u3092\u6563\u6B69[\u3055\u3093\u307D]\u3057\u305F\u308A\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AA\u09BE\u09B0\u09CD\u0995\u09C7 \u09B9\u09BE\u0981\u099F\u09BE\u09B9\u09BE\u099F\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF \u0995\u09B0\u09BF\u0964",
+            example_en: "I take a walk in the park and things like that."
+          },
+          {
+            word_ja: "\u9031\u672B[\u3057\u3085\u3046\u307E\u3064]",
+            romaji: "sh\u016Bmatsu",
+            meaning_bn: "\u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09BE\u09A8\u09CD\u09A4 / \u0989\u0987\u0995\u098F\u09A8\u09CD\u09A1",
+            meaning_en: "weekend",
+            part_of_speech: "noun",
+            example_ja: "\u9031\u672B[\u3057\u3085\u3046\u307E\u3064]\u306F\u4F55[\u306A\u306B]\u3092\u3057\u307E\u3057\u305F\u304B\u3002",
+            example_bn: "\u0989\u0987\u0995\u098F\u09A8\u09CD\u09A1\u09C7 \u0995\u09C0 \u0995\u09B0\u09B2\u09C7\u09A8?",
+            example_en: "What did you do on the weekend?"
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u4F11",
+            onyomi: "\u30AD\u30E5\u30A6",
+            kunyomi: "\u3084\u3059\u30FB\u3080, \u3084\u3059\u30FB\u307E\u308B, \u3084\u3059\u30FB\u3081\u308B",
+            meaning_bn: "\u09AC\u09BF\u09B6\u09CD\u09B0\u09BE\u09AE / \u099B\u09C1\u099F\u09BF",
+            meaning_en: "rest / holiday",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u4F11[\u3084\u3059]\u307F",
+                meaning_bn: "\u099B\u09C1\u099F\u09BF / \u09AC\u09BF\u09B6\u09CD\u09B0\u09BE\u09AE",
+                meaning_en: "holiday / rest"
+              },
+              {
+                word_ja: "\u590F\u4F11[\u306A\u3064\u3084\u3059]\u307F",
+                meaning_bn: "\u0997\u09CD\u09B0\u09C0\u09B7\u09CD\u09AE\u0995\u09BE\u09B2\u09C0\u09A8 \u099B\u09C1\u099F\u09BF",
+                meaning_en: "summer vacation"
+              },
+              {
+                word_ja: "\u4F11\u65E5[\u304D\u3085\u3046\u3058\u3064]",
+                meaning_bn: "\u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8",
+                meaning_en: "day off"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G30-1",
+            pattern_ja: "V1-\u305F\u308A\u3001V2-\u305F\u308A \u3057\u307E\u3059 / \u3057\u307E\u3057\u305F",
+            pattern_bn: "\u0995\u0996\u09A8\u0993 V1, \u0995\u0996\u09A8\u0993 V2 \u0995\u09B0\u09BF / \u0995\u09B0\u09C7\u099B\u09BF (Listing Activities)",
+            explanation_bn: "\u0985\u09A8\u09C7\u0995\u0997\u09C1\u09B2\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF \u09A5\u09C7\u0995\u09C7 \u0995\u09AF\u09BC\u09C7\u0995\u099F\u09BF \u09A6\u09C3\u09B7\u09CD\u099F\u09BE\u09A8\u09CD\u09A4 \u09A4\u09C1\u09B2\u09C7 \u09A7\u09B0\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u305F-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u308A \u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u0995\u09BE\u09B2 \u0985\u09A8\u09C1\u09AF\u09BE\u09AF\u09BC\u09C0 \u3057\u307E\u3059 (\u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8/\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09CE) \u0985\u09A5\u09AC\u09BE \u3057\u307E\u3057\u305F (\u0985\u09A4\u09C0\u09A4) \u09AC\u09B8\u09C7\u0964",
+            common_pitfalls: [
+              "\u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u3057\u307E\u3059 \u09AC\u09BE \u3057\u307E\u3057\u305F \u09AC\u09BE\u09A6 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\xD7 \u8AAD\u3093\u3060\u308A\u805E\u3044\u305F\u308A \u09A8\u09AF\u09BC, \u25CB \u8AAD\u3093\u3060\u308A\u805E\u3044\u305F\u308A\u3057\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u4F11[\u3084\u3059]\u307F\u306E\u65E5\u306F\u30C6\u30EC\u30D3\u3092\u898B[\u307F]\u305F\u308A\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u3093\u3060\u308A\u3057\u307E\u3059\u3002",
+                bn: "\u099B\u09C1\u099F\u09BF\u09B0 \u09A6\u09BF\u09A8\u09C7 \u099F\u09BF\u09AD\u09BF \u09A6\u09C7\u0996\u09BF, \u09AC\u0987 \u09AA\u09A1\u09BC\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF \u0995\u09B0\u09BF\u0964",
+                en: "On days off, I watch TV, read books, and so forth."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0 \u09B8\u0995\u09BE\u09B2\u09C7 \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0989\u0987\u0995\u098F\u09A8\u09CD\u09A1 \u0995\u09C7\u09AE\u09A8 \u0995\u09BE\u099F\u09B2 \u09A4\u09BE \u09B6\u09C7\u09AF\u09BC\u09BE\u09B0 \u0995\u09B0\u09BE\u0964",
+          situation_en: "Sharing how the weekend went with friends on Monday morning in class.",
+          lines: [
+            {
+              speaker_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+              speaker_en: "Teacher",
+              line_ja: "\u307F\u306A\u3055\u3093\u3001\u9031\u672B[\u3057\u3085\u3046\u307E\u3064]\u306F\u4F55[\u306A\u306B]\u3092\u3057\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u09B8\u09AC\u09BE\u0987, \u09B8\u09AA\u09CD\u09A4\u09BE\u09B9\u09BE\u09A8\u09CD\u09A4\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0\u09BE \u0995\u09C0 \u0995\u09B0\u09B2\u09C7\u09A8?",
+              line_en: "Everyone, what did you do over the weekend?"
+            },
+            {
+              speaker_ja: "\u5B66\u751F[\u304C\u304F\u305B\u3044]",
+              speaker_en: "Student",
+              line_ja: "\u90E8\u5C4B[\u3078\u3084]\u3092\u6383\u9664[\u305D\u3046\u3058]\u3057\u305F\u308A\u3001\u53CB\u9054[\u3068\u3082\u3060\u3061]\u3068\u8CB7[\u304B]\u3044\u7269[\u3082\u306E]\u306B\u884C[\u3044]\u3063\u305F\u308A\u3057\u307E\u3057\u305F\u3002",
+              line_bn: "\u0998\u09B0 \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09C7\u099B\u09BF, \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B6\u09AA\u09BF\u0982\u09AF\u09BC\u09C7 \u0997\u09BF\u09AF\u09BC\u09C7\u099B\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF\u0964",
+              line_en: "I cleaned my room, went shopping with friends, and things like that."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u0995\u09AF\u09BC\u09C7\u09A8 \u09B2\u09A8\u09CD\u09A1\u09CD\u09B0\u09BF (Coin Laundry) \u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AC\u09B0\u09CD\u09B7\u09BE \u09AE\u09CC\u09B8\u09C1\u09AE (Tsuyu - \u6885\u96E8)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099C\u09C1\u09A8 \u09AE\u09BE\u09B8\u09C7 \u098F\u0995\u099F\u09BE\u09A8\u09BE \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u098F\u0995 \u09AE\u09BE\u09B8 \u09AC\u09B0\u09CD\u09B7\u09BE\u0995\u09BE\u09B2 (Tsuyu) \u09A5\u09BE\u0995\u09C7\u0964 \u098F \u09B8\u09AE\u09AF\u09BC \u09B0\u09CB\u09A6 \u09A8\u09BE \u09A5\u09BE\u0995\u09BE\u09AF\u09BC \u0998\u09B0\u09C7 \u0995\u09BE\u09AA\u09A1\u09BC \u09B6\u09C1\u0995\u09BE\u09A8\u09CB \u0995\u09A0\u09BF\u09A8 \u09B9\u09AF\u09BC\u09C7 \u09AA\u09A1\u09BC\u09C7\u0964 \u09A4\u09BE\u0987 \u0985\u09CD\u09AF\u09BE\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09B0 \u0986\u09B6\u09C7\u09AA\u09BE\u09B6\u09C7\u09B0 \u0995\u09AF\u09BC\u09C7\u09A8 \u09B2\u09A8\u09CD\u09A1\u09CD\u09B0\u09BF\u0997\u09C1\u09B2\u09CB\u09A4\u09C7 \u0993\u09AF\u09BC\u09BE\u09B6\u09BF\u0982 \u09AE\u09C7\u09B6\u09BF\u09A8 \u0993 \u09B6\u0995\u09CD\u09A4\u09BF\u09B6\u09BE\u09B2\u09C0 \u09A1\u09CD\u09B0\u09BE\u09AF\u09BC\u09BE\u09B0\u09C7 \u09E9\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09BE\u09AA\u09A1\u09BC \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B6\u09C1\u0995\u09BF\u09AF\u09BC\u09C7 \u09AB\u09C7\u09B2\u09BE \u09AF\u09BE\u09AF\u09BC\u0964 \u09E7\u09E6\u09E6 \u0987\u09AF\u09BC\u09C7\u09A8\u09C7\u09B0 \u0995\u09AF\u09BC\u09C7\u09A8 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4 \u09B0\u09BE\u0996\u09C1\u09A8\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u3093\u3060\u308A\u3057\u307E\u3059",
+            romaji_input: "hon o yondari shimasu",
+            target_display: "\u307B\u3093\u3092\u3088\u3093\u3060\u308A\u3057\u307E\u3059",
+            meaning_bn: "\u09AC\u0987 \u09AA\u09A1\u09BC\u09BF \u0987\u09A4\u09CD\u09AF\u09BE\u09A6\u09BF"
+          },
+          {
+            prompt_ja: "\u9031\u672B[\u3057\u3085\u3046\u307E\u3064]\u306F\u4F55[\u306A\u306B]\u3092\u3057\u307E\u3057\u305F\u304B",
+            romaji_input: "shuumatsu wa nani o shimashita ka",
+            target_display: "\u3057\u3085\u3046\u307E\u3064\u306F\u306A\u306B\u3092\u3057\u307E\u3057\u305F\u304B",
+            meaning_bn: "\u0989\u0987\u0995\u098F\u09A8\u09CD\u09A1\u09C7 \u0995\u09C0 \u0995\u09B0\u09C7\u099B\u09C7\u09A8?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L30-1",
+            question_ja: "\u300C\u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059\u300D\u306E \u6587\u6CD5[\u3076\u3093\u307D\u3046]\u306E \u5F79\u5272[\u3084\u304F\u308F\u308A]\u306F \u4F55[\u306A\u3093]\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059\u2019 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3\u09C7\u09B0 \u09AE\u09C2\u09B2 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF \u0995\u09C0?",
+            options: [
+              "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A8\u09BF\u09A7\u09BF\u09A4\u09CD\u09AC\u09AE\u09C2\u09B2\u0995 \u0995\u09BE\u099C\u09C7\u09B0 \u0995\u09AF\u09BC\u09C7\u0995\u099F\u09BF \u0989\u09A6\u09BE\u09B9\u09B0\u09A3 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE (Representative examples)",
+              "\u0995\u09A0\u09CB\u09B0 \u0995\u09CD\u09B0\u09AE \u09AE\u09C7\u09A8\u09C7 \u0995\u09BE\u099C \u0995\u09B0\u09BE (Strict sequential order)",
+              "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE (Asking permission)",
+              "\u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u09A8\u09BF\u09B7\u09BF\u09A6\u09CD\u09A7 \u0995\u09B0\u09BE (Prohibition)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u301C\u305F\u308A\u301C\u305F\u308A\u3057\u307E\u3059 \u098F\u0995\u09BE\u09A7\u09BF\u0995 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09BE\u099C\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF \u09A5\u09C7\u0995\u09C7 \u0995\u09AF\u09BC\u09C7\u0995\u099F\u09BF \u09A6\u09C3\u09B7\u09CD\u099F\u09BE\u09A8\u09CD\u09A4 \u09A4\u09C1\u09B2\u09C7 \u09A7\u09B0\u09A4\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L31",
+          lesson_number: 31,
+          module_number: 6,
+          module_name: "Ability, Past & Casual",
+          module_name_bn: "\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE, \u0985\u09A4\u09C0\u09A4 \u0993 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA",
+          title_ja: "\u8AAD[\u3088]\u3080\u3053\u3068\u304C\u3067\u304D\u307E\u3059",
+          title_en: "Expressing Potential (Dictionary Form + koto ga dekimasu)",
+          title_bn: "\u09AA\u09A1\u09BC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF (\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE \u0993 \u09A6\u0995\u09CD\u09B7\u09A4\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u09B8\u09BE\u09AE\u09B0\u09CD\u09A5\u09CD\u09AF \u09AC\u09BE \u09B8\u09AE\u09CD\u09AD\u09BE\u09AC\u09A8\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA\u09C7\u09B0 (\u8F9E\u66F8\u5F62 - Jishokei) \u09B8\u09BE\u09A5\u09C7 \u3053\u3068\u304C\u3067\u304D\u307E\u3059 \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3053\u3068 \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u0995\u09C7 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7 (Nominalization - \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u0995\u09B0\u09A3) \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u09AA\u09B0\u09C7 \u304C\u3067\u304D\u307E\u3059 (\u09AA\u09BE\u09B0\u09BF) \u09AC\u09B8\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: '\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AA\u09A1\u09BC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF' -> \u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u3092\u8AAD[\u3088]\u3080\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u0964",
+          core_concept_bn: "\u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA (Jishokei), \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u0995\u09B0\u09A3 (\u3053\u3068) \u098F\u09AC\u0982 \u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE (\u301C\u304C\u3067\u304D\u307E\u3059)\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099A\u09BE\u0995\u09B0\u09BF\u09B0 \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989\u09AF\u09BC\u09C7 \u09A1\u09CD\u09B0\u09BE\u0987\u09AD\u09BF\u0982 \u09B2\u09BE\u0987\u09B8\u09C7\u09A8\u09CD\u09B8, \u09AD\u09BE\u09B7\u09BE \u09A6\u0995\u09CD\u09B7\u09A4\u09BE \u09AC\u09BE \u0995\u09AE\u09CD\u09AA\u09BF\u0989\u099F\u09BE\u09B0 \u099A\u09BE\u09B2\u09A8\u09BE\u09B0 \u09AF\u09CB\u0997\u09CD\u09AF\u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          key_takeaway_bn: "V-dict \u3053\u3068\u304C\u3067\u304D\u307E\u3059 (\u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF)\u0964 Noun \u304C \u3067\u304D\u307E\u3059 (\u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7 \u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3067\u304D\u307E\u3059",
+            romaji: "dekimasu",
+            meaning_bn: "\u09AA\u09BE\u09B0\u09BE / \u09B8\u0995\u09CD\u09B7\u09AE \u09B9\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "can do / be able to",
+            part_of_speech: "verb",
+            example_ja: "\u30B9\u30AD\u30FC\u304C\u3067\u304D\u307E\u3059\u304B\u3002",
+            example_bn: "\u09B8\u09CD\u0995\u09BF \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8 \u0995\u09BF?",
+            example_en: "Can you ski?"
+          },
+          {
+            word_ja: "\u6CF3[\u304A\u3088]\u304E\u307E\u3059",
+            romaji: "oyogimasu",
+            meaning_bn: "\u09B8\u09BE\u0981\u09A4\u09BE\u09B0 \u0995\u09BE\u099F\u09BE",
+            meaning_en: "to swim",
+            part_of_speech: "verb",
+            example_ja: "\u4E94\u5341[\u3054\u3058\u3085\u3046]\u30E1\u30FC\u30C8\u30EB\u6CF3[\u304A\u3088]\u3050\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+            example_bn: "\u09EB\u09E6 \u09AE\u09BF\u099F\u09BE\u09B0 \u09B8\u09BE\u0981\u09A4\u09BE\u09B0 \u0995\u09BE\u099F\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964",
+            example_en: "I can swim 50 meters."
+          },
+          {
+            word_ja: "\u904B\u8EE2[\u3046\u3093\u3066\u3093]\u3057\u307E\u3059",
+            romaji: "untenshimasu",
+            meaning_bn: "\u0997\u09BE\u09A1\u09BC\u09BF \u099A\u09BE\u09B2\u09BE\u09A8\u09CB / \u09A1\u09CD\u09B0\u09BE\u0987\u09AD \u0995\u09B0\u09BE",
+            meaning_en: "to drive",
+            part_of_speech: "verb",
+            example_ja: "\u8ECA[\u304F\u308B\u307E]\u306E\u904B\u8EE2[\u3046\u3093\u3066\u3093]\u304C\u3067\u304D\u307E\u3059\u3002",
+            example_bn: "\u0997\u09BE\u09A1\u09BC\u09BF \u099A\u09BE\u09B2\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964",
+            example_en: "I can drive a car."
+          },
+          {
+            word_ja: "\u8DA3\u5473[\u3057\u3085\u307F]",
+            romaji: "shumi",
+            meaning_bn: "\u09B6\u0996",
+            meaning_en: "hobby",
+            part_of_speech: "noun",
+            example_ja: "\u79C1[\u308F\u305F\u3057]\u306E\u8DA3\u5473[\u3057\u3085\u307F]\u306F\u5199\u771F[\u3057\u3083\u3057\u3093]\u3092\u64AE[\u3068]\u308B\u3053\u3068\u3067\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BE\u09B0 \u09B6\u0996 \u09B9\u09B2\u09CB \u099B\u09AC\u09BF \u09A4\u09CB\u09B2\u09BE\u0964",
+            example_en: "My hobby is taking photographs."
+          },
+          {
+            word_ja: "\u6F22\u5B57[\u304B\u3093\u3058]",
+            romaji: "kanji",
+            meaning_bn: "\u0995\u09BE\u09A8\u099C\u09BF \u09B2\u09BF\u09AA\u09BF",
+            meaning_en: "Chinese characters / Kanji",
+            part_of_speech: "noun",
+            example_ja: "\u6F22\u5B57[\u304B\u3093\u3058]\u3092\u767E[\u3072\u3083\u304F]\u5B57[\u3058]\u66F8[\u304B]\u304F\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+            example_bn: "\u09E7\u09E6\u09E6\u099F\u09BF \u0995\u09BE\u09A8\u099C\u09BF \u09B2\u09BF\u0996\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964",
+            example_en: "I can write 100 kanji characters."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u6F22",
+            onyomi: "\u30AB\u30F3",
+            kunyomi: "\u304A\u3068\u3053",
+            meaning_bn: "\u099A\u09C0\u09A8\u09BE / \u0995\u09BE\u09A8\u099C\u09BF",
+            meaning_en: "Chinese / Han",
+            stroke_count: 13,
+            compounds: [
+              {
+                word_ja: "\u6F22\u5B57[\u304B\u3093\u3058]",
+                meaning_bn: "\u0995\u09BE\u09A8\u099C\u09BF \u09B2\u09BF\u09AA\u09BF",
+                meaning_en: "kanji characters"
+              }
+            ]
+          },
+          {
+            kanji: "\u5B57",
+            onyomi: "\u30B8",
+            kunyomi: "\u3042\u3056, \u3042\u3056\u306A",
+            meaning_bn: "\u0985\u0995\u09CD\u09B7\u09B0 / \u09B2\u09BF\u09AA\u09BF",
+            meaning_en: "character / letter",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u6F22\u5B57[\u304B\u3093\u3058]",
+                meaning_bn: "\u0995\u09BE\u09A8\u099C\u09BF",
+                meaning_en: "kanji"
+              },
+              {
+                word_ja: "\u6587\u5B57[\u3082\u3058]",
+                meaning_bn: "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE / \u099F\u09C7\u0995\u09CD\u09B8\u099F",
+                meaning_en: "letter / script"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G31-1",
+            pattern_ja: "V-dictionary \u3053\u3068\u304C\u3067\u304D\u307E\u3059",
+            pattern_bn: "[\u0995\u09BE\u099C] \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF (Expressing Potential)",
+            explanation_bn: "\u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u3053\u3068 \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09A4\u09BE '\u0995\u09B0\u09BE' \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7 \u09AA\u09B0\u09BF\u09A3\u09A4 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u304C \u3067\u304D\u307E\u3059 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u30D4\u30A2\u30CE\u3092\u5F3E[\u3072]\u304F\u3053\u3068\u304C\u3067\u304D\u307E\u3059 (\u09AA\u09BF\u09AF\u09BC\u09BE\u09A8\u09CB \u09AC\u09BE\u099C\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF)\u0964",
+            common_pitfalls: [
+              "\u307E\u3059-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3053\u3068 \u09AC\u09B8\u09BE\u09A8\u09CB \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\xD7 \u8AAD\u307F\u307E\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u3059 \u09A8\u09AF\u09BC, \u25CB \u8AAD\u3080\u3053\u3068\u304C\u3067\u304D\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u304A\u91D1[\u304B\u306D]\u3067\u6255[\u306F\u3089]\u3046\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u304B\u3002",
+                bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09C1\u09A6\u09CD\u09B0\u09BE\u09AF\u09BC \u0995\u09BF \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF?",
+                en: "Can I pay in Japanese currency?"
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09AA\u09BE\u09B0\u09CD\u099F\u099F\u09BE\u0987\u09AE \u099C\u09AC\u09C7\u09B0 \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989\u09A4\u09C7 \u09AE\u09CD\u09AF\u09BE\u09A8\u09C7\u099C\u09BE\u09B0\u0995\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AD\u09BE\u09B7\u09BE \u0993 \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u0964",
+          situation_en: "Explaining language and work abilities to the manager at a part-time job interview.",
+          lines: [
+            {
+              speaker_ja: "\u5E97\u9577[\u3066\u3093\u3061\u3087\u3046]",
+              speaker_en: "Store Manager",
+              line_ja: "\u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054]\u3067\u96FB\u8A71[\u3067\u3093\u308F]\u3092\u53D7[\u3046]\u3051\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u304B\u3002",
+              line_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u0995\u09BF \u09AB\u09CB\u09A8 \u0995\u09B2 \u09B0\u09BF\u09B8\u09BF\u09AD \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u09A8?",
+              line_en: "Can you take phone calls in Japanese?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u306F\u3044\u3001\u7C21\u5358[\u304B\u3093\u305F\u3093]\u306A\u4F1A\u8A71[\u304B\u3044\u308F]\u306A\u3089\u8A71[\u306F\u306A]\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+              line_bn: "\u099C\u09BF, \u09B8\u09B9\u099C \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B9\u09B2\u09C7 \u09AC\u09B2\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF\u0964",
+              line_en: "Yes, if it is simple conversation, I can speak."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0995\u09CD\u09AF\u09BE\u09B6\u09B2\u09C7\u09B8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F: PayPay, Suica \u0993 \u0995\u09CD\u09B0\u09C7\u09A1\u09BF\u099F \u0995\u09BE\u09B0\u09CD\u09A1",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u0990\u09A4\u09BF\u09B9\u09CD\u09AF\u0997\u09A4\u09AD\u09BE\u09AC\u09C7 \u09A8\u0997\u09A6 \u099F\u09BE\u0995\u09BE\u09B0 \u09A6\u09C7\u09B6 \u09B9\u09B2\u09C7\u0993 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8\u09C7 'PayPay' \u0995\u09BF\u0989\u0986\u09B0 \u0995\u09CB\u09A1 \u098F\u09AC\u0982 \u0986\u0987\u09B8\u09BF \u0995\u09BE\u09B0\u09CD\u09A1\u09C7\u09B0 \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u09C7 \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AC \u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u0995\u09CD\u09AF\u09BE\u09B6\u09B2\u09C7\u09B8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F (Kyasshuresu) \u0995\u09B0\u09BE \u09AF\u09BE\u09AF\u09BC\u0964 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF\u09A4\u09C7 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09A8\u09C7 'Barai' (\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u09AA\u09A6\u09CD\u09A7\u09A4\u09BF) \u09AC\u09C7\u099B\u09C7 \u09A8\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u09B8\u09CD\u09AE\u09BE\u09B0\u09CD\u099F\u09AB\u09CB\u09A8\u09C7\u09B0 \u09AC\u09BE\u09B0\u0995\u09CB\u09A1 \u09B8\u09CD\u0995\u09CD\u09AF\u09BE\u09A8 \u0995\u09B0\u09BE\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Shopping"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u8AAD[\u3088]\u3080\u3053\u3068\u304C\u3067\u304D\u307E\u3059",
+            romaji_input: "yomu koto ga dekimasu",
+            target_display: "\u3088\u3080\u3053\u3068\u304C\u3067\u304D\u307E\u3059",
+            meaning_bn: "\u09AA\u09A1\u09BC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF"
+          },
+          {
+            prompt_ja: "\u8ECA[\u304F\u308B\u307E]\u306E\u904B\u8EE2[\u3046\u3093\u3066\u3093]\u304C\u3067\u304D\u307E\u3059",
+            romaji_input: "kuruma no unten ga dekimasu",
+            target_display: "\u304F\u308B\u307E\u306E\u3046\u3093\u3066\u3093\u304C\u3067\u304D\u307E\u3059",
+            meaning_bn: "\u09A1\u09CD\u09B0\u09BE\u0987\u09AD\u09BF\u0982 \u0995\u09B0\u09A4\u09C7 \u09AA\u09BE\u09B0\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L31-1",
+            question_ja: "\u300C\u98DF[\u305F]\u3079\u307E\u3059\u300D\u306E \u8F9E\u66F8\u5F62[\u3058\u3057\u3087\u3051\u3044]\uFF08Dictionary form\uFF09\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u305F\u3079\u307E\u3059\u2019 \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA (\u8F9E\u66F8\u5F62) \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u305F\u3079\u308B (Taberu)",
+              "\u305F\u3079\u305F (Tabeta)",
+              "\u305F\u3079\u3066 (Tabete)",
+              "\u305F\u3079\u306A\u3044 (Tabenai)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0997\u09CD\u09B0\u09C1\u09AA \u09E8 \u098F\u09B0 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u98DF\u3079\u307E\u3059 \u098F\u09B0 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA \u09B9\u09B2\u09CB \u307E\u3059 \u09A4\u09C1\u09B2\u09C7 \u09A6\u09BF\u09AF\u09BC\u09C7 \u308B \u09AF\u09CB\u0997 \u0995\u09B0\u09BE: \u98DF\u3079\u308B (Taberu)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L32",
+          lesson_number: 32,
+          module_number: 6,
+          module_name: "Ability, Past & Casual",
+          module_name_bn: "\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE, \u0985\u09A4\u09C0\u09A4 \u0993 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA",
+          title_ja: "\u5BDD[\u306D]\u308B\u524D[\u307E\u3048]\u306B\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u307F\u307E\u3059",
+          title_en: "Before Doing an Action (V-dictionary + mae ni)",
+          title_bn: "\u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0986\u0997\u09C7 \u09AC\u0987 \u09AA\u09A1\u09BC\u09BF (\u09AA\u09C2\u09B0\u09CD\u09AC\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B8\u09AE\u09AF\u09BC \u0993 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u0986\u09B0\u09C7\u0995\u099F\u09BF \u0995\u09BE\u099C \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u09AF\u09BC \u09A4\u09BE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u524D[\u307E\u3048]\u306B (mae ni - \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7/\u0986\u0997\u09C7) \u09AC\u09B8\u09C7\u0964 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 Noun \u306E \u524D[\u307E\u3048]\u306B \u09B9\u09AF\u09BC (\u09AF\u09C7\u09AE\u09A8: \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 = \u98DF\u4E8B[\u3057\u3087\u304F\u3058]\u306E\u524D[\u307E\u3048]\u306B)\u0964 \u09B2\u0995\u09CD\u09B7\u09A3\u09C0\u09AF\u09BC \u09AC\u09BF\u09B7\u09AF\u09BC \u09B9\u09B2\u09CB, \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u0995\u09BE\u099C\u099F\u09BF \u0985\u09A4\u09C0\u09A4\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u09B2\u09C7\u0993 \u524D\u306B \u098F\u09B0 \u0986\u0997\u09C7\u09B0 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u099F\u09BF \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA\u09C7\u0987 \u09A5\u09BE\u0995\u09C7!",
+          core_concept_bn: "\u09B8\u09AE\u09AF\u09BC \u0985\u09A8\u09C1\u0995\u09CD\u09B0\u09AE: V-dict \u524D\u306B (\u0995\u09B0\u09BE\u09B0 \u0986\u0997\u09C7) \u098F\u09AC\u0982 Noun \u306E \u524D\u306B (\u098F\u09B0 \u0986\u0997\u09C7)\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u099A\u09C1\u0995\u09CD\u09A4\u09BF \u0995\u09B0\u09BE\u09B0 \u0986\u0997\u09C7 \u09A8\u09BF\u09AF\u09BC\u09AE\u09BE\u09AC\u09B2\u09BF \u09AA\u09A1\u09BC\u09BE, \u0996\u09BE\u09AC\u09BE\u09B0 \u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u0997\u09C7 \u09B9\u09BE\u09A4 \u09A7\u09CB\u09AF\u09BC\u09BE \u098F\u09AC\u0982 \u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0985\u09AD\u09CD\u09AF\u09BE\u09B8\u0964",
+          key_takeaway_bn: "V-dict \u524D\u306B V2 (V1 \u0995\u09B0\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 V2 \u0995\u09B0\u09BF)\u0964 \u0995\u0996\u09A8\u09CB\u0987 \u0985\u09A4\u09C0\u09A4\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u524D[\u307E\u3048]\u306B",
+            romaji: "mae ni",
+            meaning_bn: "\u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 / \u0986\u0997\u09C7",
+            meaning_en: "before / prior to",
+            part_of_speech: "expression",
+            example_ja: "\u5BDD[\u306D]\u308B\u524D[\u307E\u3048]\u306B\u65E5\u8A18[\u306B\u3063\u304D]\u3092\u66F8[\u304B]\u304D\u307E\u3059\u3002",
+            example_bn: "\u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0986\u0997\u09C7 \u09A1\u09BE\u09AF\u09BC\u09C7\u09B0\u09BF \u09B2\u09BF\u0996\u09BF\u0964",
+            example_en: "I write in my diary before sleeping."
+          },
+          {
+            word_ja: "\u98DF\u4E8B[\u3057\u3087\u304F\u3058]",
+            romaji: "shokuji",
+            meaning_bn: "\u0996\u09BE\u09AC\u09BE\u09B0 / \u09AD\u09CB\u099C",
+            meaning_en: "meal",
+            part_of_speech: "noun",
+            example_ja: "\u98DF\u4E8B[\u3057\u3087\u304F\u3058]\u306E\u524D[\u307E\u3048]\u306B\u624B[\u3066]\u3092\u6D17[\u3042\u3089]\u3044\u307E\u3059\u3002",
+            example_bn: "\u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u0997\u09C7 \u09B9\u09BE\u09A4 \u09A7\u09C1\u0987\u0964",
+            example_en: "I wash my hands before meals."
+          },
+          {
+            word_ja: "\u65C5\u884C[\u308A\u3087\u3053\u3046]\u3057\u307E\u3059",
+            romaji: "ryok\u014Dshimasu",
+            meaning_bn: "\u09AD\u09CD\u09B0\u09AE\u09A3 \u0995\u09B0\u09BE / \u099F\u09CD\u09AF\u09C1\u09B0 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to travel",
+            part_of_speech: "verb",
+            example_ja: "\u65C5\u884C[\u308A\u3087\u3053\u3046]\u306E\u524D[\u307E\u3048]\u306B\u30DB\u30C6\u30EB\u3092\u4E88\u7D04[\u3088\u3084\u304F]\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AD\u09CD\u09B0\u09AE\u09A3\u09C7\u09B0 \u0986\u0997\u09C7 \u09B9\u09CB\u099F\u09C7\u09B2 \u09AC\u09C1\u0995\u09BF\u0982 \u0995\u09B0\u09BF\u0964",
+            example_en: "I book a hotel before traveling."
+          },
+          {
+            word_ja: "\u4E88\u7D04[\u3088\u3084\u304F]\u3057\u307E\u3059",
+            romaji: "yoyakushimasu",
+            meaning_bn: "\u09AC\u09C1\u0995\u09BF\u0982 \u0995\u09B0\u09BE / \u09B0\u09BF\u099C\u09BE\u09B0\u09CD\u09AD\u09C7\u09B6\u09A8 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to reserve / book",
+            part_of_speech: "verb",
+            example_ja: "\u65B0\u5E79\u7DDA[\u3057\u3093\u304B\u3093\u305B\u3093]\u306E\u5E2D[\u305B\u304D]\u3092\u4E88\u7D04[\u3088\u3084\u304F]\u3057\u307E\u3057\u305F\u3002",
+            example_bn: "\u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09B8\u09BF\u099F \u09B0\u09BF\u099C\u09BE\u09B0\u09CD\u09AD \u0995\u09B0\u09C7\u099B\u09BF\u0964",
+            example_en: "I reserved a seat on the bullet train."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u65C5",
+            onyomi: "\u30EA\u30E7",
+            kunyomi: "\u305F\u3073",
+            meaning_bn: "\u09AD\u09CD\u09B0\u09AE\u09A3 / \u099F\u09CD\u09B0\u09BF\u09AA",
+            meaning_en: "trip / travel",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u65C5\u884C[\u308A\u3087\u3053\u3046]",
+                meaning_bn: "\u09AD\u09CD\u09B0\u09AE\u09A3",
+                meaning_en: "travel"
+              },
+              {
+                word_ja: "\u4E00\u4EBA\u65C5[\u3072\u3068\u308A\u305F\u3073]",
+                meaning_bn: "\u098F\u0995\u09BE\u0995\u09C0 \u09AD\u09CD\u09B0\u09AE\u09A3",
+                meaning_en: "solo travel"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G32-1",
+            pattern_ja: "V-dict \u524D\u306B / Noun \u306E \u524D\u306B",
+            pattern_bn: "[\u0995\u09BE\u099C \u09AC\u09BE \u09AC\u09BF\u09B7\u09AF\u09BC] \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7",
+            explanation_bn: "\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE \u09B9\u09B2\u09C7 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA + \u524D\u306B, \u0986\u09B0 \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF \u09B9\u09B2\u09C7 Noun + \u306E + \u524D\u306B\u0964 \u09AA\u09C1\u09B0\u09CB \u09AC\u09BE\u0995\u09CD\u09AF\u099F\u09BF \u0985\u09A4\u09C0\u09A4\u09C7 \u09B9\u09B2\u09C7\u0993 \u524D\u306B \u098F\u09B0 \u0986\u0997\u09C7\u09B0 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 \u0985\u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09A5\u09BE\u0995\u09C7\u0964",
+            common_pitfalls: [
+              "\xD7 \u5BDD\u305F\u524D\u306B \u09A8\u09AF\u09BC, \u5FC5\u305A \u25CB \u5BDD\u308B\u524D\u306B \u09AC\u09B2\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3078\u6765[\u304F]\u308B\u524D[\u307E\u3048]\u306B\u3001\u3072\u3089\u304C\u306A\u3092\u52C9\u5F37[\u3079\u3093\u304D\u3087\u3046]\u3057\u307E\u3057\u305F\u3002",
+                bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u0986\u09B8\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09B6\u09BF\u0996\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964",
+                en: "Before coming to Japan, I studied hiragana."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0\u0996\u09BE\u09A8\u09BE \u09A5\u09C7\u0995\u09C7 \u0993\u09B7\u09C1\u09A7 \u09B8\u09C7\u09AC\u09A8\u09C7\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u09A8\u09BE \u0997\u09CD\u09B0\u09B9\u09A3\u0964",
+          situation_en: "Receiving medicine intake instructions at a Tokyo clinic.",
+          lines: [
+            {
+              speaker_ja: "\u533B\u5E2B[\u3044\u3057]",
+              speaker_en: "Doctor",
+              line_ja: "\u3053\u306E\u85AC[\u304F\u3059\u308A]\u306F\u5BDD[\u306D]\u308B\u524D[\u307E\u3048]\u306B\u4E00\u9320[\u3044\u3061\u3058\u3087\u3046]\u98F2[\u306E]\u3093\u3067\u304F\u3060\u3055\u3044\u3002",
+              line_bn: "\u098F\u0987 \u0993\u09B7\u09C1\u09A7\u099F\u09BF \u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0986\u0997\u09C7 \u098F\u0995\u099F\u09BF \u099F\u09CD\u09AF\u09BE\u09AC\u09B2\u09C7\u099F \u0996\u09BE\u09AC\u09C7\u09A8\u0964",
+              line_en: "Please take one tablet of this medicine before going to bed."
+            },
+            {
+              speaker_ja: "\u60A3\u8005[\u304B\u3093\u3058\u3083]",
+              speaker_en: "Patient",
+              line_ja: "\u306F\u3044\u3001\u5206[\u308F]\u304B\u308A\u307E\u3057\u305F\u3002\u3054\u306F\u3093\u306E\u524D[\u307E\u3048]\u306B\u306F\u98F2[\u306E]\u307E\u306A\u3044\u3067\u3059\u306D\u3002",
+              line_bn: "\u099C\u09BF, \u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09C7\u09B0\u09C7\u099B\u09BF\u0964 \u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u0986\u0997\u09C7 \u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09A6\u09B0\u0995\u09BE\u09B0 \u09A8\u09C7\u0987 \u09A4\u09CB?",
+              line_en: "Yes, understood. Not before meals, right?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09C7\u09B8\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u0993 \u0993\u09B7\u09C1\u09A7\u09C7\u09B0 \u09A6\u09CB\u0995\u09BE\u09A8 (Chouzai Yakkyoku - \u8ABF\u5264\u85AC\u5C40)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CD\u09B2\u09BF\u09A8\u09BF\u0995\u09C7 \u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0 \u09A6\u09C7\u0996\u09BE\u09A8\u09CB\u09B0 \u09AA\u09B0 \u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0993\u09B7\u09C1\u09A7 \u09A6\u09C7\u09A8 \u09A8\u09BE\u0964 \u0995\u09CD\u09B2\u09BF\u09A8\u09BF\u0995 \u09A5\u09C7\u0995\u09C7 \u098F\u0995\u099F\u09BF \u0985\u09AB\u09BF\u09B8\u09BF\u09AF\u09BC\u09BE\u09B2 \u09AA\u09CD\u09B0\u09C7\u09B8\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 (Shohousen) \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09B9\u09AF\u09BC, \u09AF\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u09AA\u09BE\u09B6\u09C7\u09B0 'Chouzai Yakkyoku' (\u09AA\u09CD\u09B0\u09C7\u09B8\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AB\u09BE\u09B0\u09CD\u09AE\u09C7\u09B8\u09BF) \u09A4\u09C7 \u09AF\u09C7\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u099C\u09BE\u09A4\u09C0\u09AF\u09BC \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u09AC\u09C0\u09AE\u09BE (Kokumin Kenko Hoken) \u09A5\u09BE\u0995\u09B2\u09C7 \u0993\u09B7\u09C1\u09A7\u09C7\u09B0 \u0996\u09B0\u099A\u09C7\u09B0 \u09AE\u09BE\u09A4\u09CD\u09B0 \u09E9\u09E6% \u09A6\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u5BDD[\u306D]\u308B\u524D[\u307E\u3048]\u306B\u672C[\u307B\u3093]\u3092\u8AAD[\u3088]\u307F\u307E\u3059",
+            romaji_input: "neru mae ni hon o yomimasu",
+            target_display: "\u306D\u308B\u307E\u3048\u306B\u307B\u3093\u3092\u3088\u307F\u307E\u3059",
+            meaning_bn: "\u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u09B0 \u0986\u0997\u09C7 \u09AC\u0987 \u09AA\u09A1\u09BC\u09BF"
+          },
+          {
+            prompt_ja: "\u98DF\u4E8B[\u3057\u3087\u304F\u3058]\u306E\u524D[\u307E\u3048]\u306B",
+            romaji_input: "shokuji no mae ni",
+            target_display: "\u3057\u3087\u304F\u3058\u306E\u307E\u3048\u306B",
+            meaning_bn: "\u0996\u09BE\u09AC\u09BE\u09B0\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L32-1",
+            question_ja: "\u300C\u65E5\u672C\u3078\uFF08\u3000\uFF09\u524D\u306B\u3001\u65E5\u672C\u8A9E\u3092\u52C9\u5F37\u3057\u307E\u3057\u305F\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u306B\u307B\u3093\u3078\uFF08\u3000\uFF09\u307E\u3048\u306B\u3001\u306B\u307B\u3093\u3054\u3092 \u3079\u3093\u304D\u3087\u3046\u3057\u307E\u3057\u305F",
+            options: [
+              "\u6765[\u304F]\u308B (Kuru)",
+              "\u6765[\u304D]\u305F (Kita)",
+              "\u6765[\u304D]\u307E\u3059 (Kimasu)",
+              "\u6765[\u304D]\u3066 (Kite)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u524D\u306B \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA (Dictionary Form) \u09AC\u09B8\u09C7: \u65E5\u672C\u3078\u6765\u308B\u524D\u306B (\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0986\u09B8\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L33",
+          lesson_number: 33,
+          module_number: 6,
+          module_name: "Ability, Past & Casual",
+          module_name_bn: "\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE, \u0985\u09A4\u09C0\u09A4 \u0993 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA",
+          title_ja: "\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059",
+          title_en: "Past Personal Experience (Ta-Form + koto ga arimasu)",
+          title_bn: "\u0995\u0996\u09A8\u0993 \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09BF (\u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u0985\u09A4\u09C0\u09A4 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09C0\u09AC\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u0985\u09A8\u09CD\u09A4\u09A4 \u098F\u0995\u09AC\u09BE\u09B0 \u0995\u09B0\u09BE\u09B0 \u0985\u09A4\u09C0\u09A4 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u0985\u09A4\u09C0\u09A4 \u09AC\u09BE \u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 (\u305F\u5F62 - Ta-form) \u09B8\u09BE\u09A5\u09C7 \u3053\u3068\u304C\u3042\u308A\u307E\u3059 \u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC ('\u0995\u09B0\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7')\u0964 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0985\u09A4\u09C0\u09A4 (\u98DF[\u305F]\u3079\u307E\u3057\u305F - \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09BF\u09B2\u09BE\u09AE) \u098F\u09AC\u0982 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE\u09B0 (\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059 - \u099C\u09C0\u09AC\u09A8\u09C7 \u0995\u0996\u09A8\u0993 \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09BF) \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B8\u09C1\u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u09AA\u09BE\u09B0\u09CD\u09A5\u0995\u09CD\u09AF \u09B0\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+          core_concept_bn: "\u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u098F\u09AC\u0982 \u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u0985\u09A4\u09C0\u09A4 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE (V-\u305F \u3053\u3068\u304C\u3042\u308A\u307E\u3059)\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0996\u09BE\u09AC\u09BE\u09B0 (\u09B8\u09C1\u09B6\u09BF, \u09A8\u09BE\u09A4\u09CD\u09A4\u09CB), \u09AC\u09C1\u09B2\u09C7\u099F \u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u099A\u09A1\u09BC\u09BE \u09AC\u09BE \u09AE\u09BE\u0989\u09A8\u09CD\u099F \u09AB\u09C1\u099C\u09BF \u0986\u09B0\u09CB\u09B9\u09A3\u09C7\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC\u0964",
+          key_takeaway_bn: "V-\u305F \u3053\u3068\u304C\u3042\u308A\u307E\u3059 (\u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7)\u0964 V-\u305F \u3053\u3068\u304C\u3042\u308A\u307E\u305B\u3093 (\u0995\u0996\u09A8\u0993 \u0995\u09B0\u09BF\u09A8\u09BF)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u767B[\u306E\u307C]\u308A\u307E\u3059",
+            romaji: "noborimasu",
+            meaning_bn: "\u0986\u09B0\u09CB\u09B9\u09A3 \u0995\u09B0\u09BE / \u099A\u09A1\u09BC\u09BE (\u09AA\u09BE\u09B9\u09BE\u09A1\u09BC\u09C7)",
+            meaning_en: "to climb (a mountain)",
+            part_of_speech: "verb",
+            example_ja: "\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306B\u767B[\u306E\u307C]\u3063\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u09AE\u09BE\u0989\u09A8\u09CD\u099F \u09AB\u09C1\u099C\u09BF\u09A4\u09C7 \u099A\u09A1\u09BC\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7\u0964",
+            example_en: "I have climbed Mt. Fuji."
+          },
+          {
+            word_ja: "\u6CCA[\u3068]\u307E\u308A\u307E\u3059",
+            romaji: "tomarimasu",
+            meaning_bn: "\u09B0\u09BE\u09A4\u09CD\u09B0\u09BF\u09AF\u09BE\u09AA\u09A8 \u0995\u09B0\u09BE / \u09A5\u09BE\u0995\u09BE (\u09B9\u09CB\u099F\u09C7\u09B2)",
+            meaning_en: "to stay (at a hotel)",
+            part_of_speech: "verb",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u65C5\u9928[\u308A\u3087\u304B\u3093]\u306B\u6CCA[\u3068]\u307E\u3063\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u09A1\u09BF\u09B6\u09A8\u09BE\u09B2 \u09B8\u09B0\u09BE\u0987\u0996\u09BE\u09A8\u09BE\u09AF\u09BC \u09A5\u09BE\u0995\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7\u0964",
+            example_en: "I have stayed at a Japanese inn (Ryokan)."
+          },
+          {
+            word_ja: "\u4E00\u5EA6[\u3044\u3061\u3069]",
+            romaji: "ichido",
+            meaning_bn: "\u098F\u0995\u09AC\u09BE\u09B0",
+            meaning_en: "once / one time",
+            part_of_speech: "adverb",
+            example_ja: "\u4E00\u5EA6[\u3044\u3061\u3069]\u3082\u30B9\u30AD\u30FC\u3092\u3057\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u305B\u3093\u3002",
+            example_bn: "\u098F\u0995\u09AC\u09BE\u09B0\u0993 \u09B8\u09CD\u0995\u09BF \u0995\u09B0\u09BF\u09A8\u09BF\u0964",
+            example_en: "I have never skied even once."
+          },
+          {
+            word_ja: "\u5BFF\u53F8[\u3059\u3057]",
+            romaji: "sushi",
+            meaning_bn: "\u09B8\u09C1\u09B6\u09BF (\u0990\u09A4\u09BF\u09B9\u09CD\u09AF\u09AC\u09BE\u09B9\u09C0 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0996\u09BE\u09AC\u09BE\u09B0)",
+            meaning_en: "sushi",
+            part_of_speech: "noun",
+            example_ja: "\u5BFF\u53F8[\u3059\u3057]\u3092\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u304B\u3002",
+            example_bn: "\u0995\u0996\u09A8\u0993 \u0995\u09BF \u09B8\u09C1\u09B6\u09BF \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09C7\u09A8?",
+            example_en: "Have you ever eaten sushi?"
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5EA6",
+            onyomi: "\u30C9, \u30C8",
+            kunyomi: "\u305F\u3073",
+            meaning_bn: "\u09AC\u09BE\u09B0 / \u09A1\u09BF\u0997\u09CD\u09B0\u09BF",
+            meaning_en: "degree / times",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u4E00\u5EA6[\u3044\u3061\u3069]",
+                meaning_bn: "\u098F\u0995\u09AC\u09BE\u09B0",
+                meaning_en: "once"
+              },
+              {
+                word_ja: "\u4ECA\u5EA6[\u3053\u3093\u3069]",
+                meaning_bn: "\u098F\u09AC\u09BE\u09B0 / \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B8\u09AE\u09AF\u09BC\u09C7",
+                meaning_en: "this time / next time"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G33-1",
+            pattern_ja: "V-\u305F \u3053\u3068\u304C\u3042\u308A\u307E\u3059",
+            pattern_bn: "[\u0995\u09BE\u099C] \u0995\u09B0\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7 (Past Experience)",
+            explanation_bn: "\u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u305F-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE \u09B9\u09C1\u09AC\u09B9\u09C1 \u3066-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AE\u09A4\u09CB (\u09B6\u09C1\u09A7\u09C1 '\u3066' \u098F\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE\u09AF\u09BC '\u305F' \u098F\u09AC\u0982 '\u3067' \u098F\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE\u09AF\u09BC '\u3060' \u09AC\u09B8\u09C7)\u0964 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995\u09C7 \u3053\u3068\u304C\u3042\u308A\u307E\u305B\u3093 \u09AC\u09B8\u09C7\u0964",
+            common_pitfalls: [
+              "\u0997\u09A4\u0995\u09BE\u09B2 \u0995\u09CB\u09A8\u09CB \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0995\u09BE\u099C \u0995\u09B0\u09BE\u09B0 \u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u098F\u099F\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE (\xD7 \u6628\u65E5\u5BFF\u53F8\u3092\u98DF\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059 \u09A8\u09AF\u09BC, \u25CB \u6628\u65E5\u5BFF\u53F8\u3092\u98DF\u3079\u307E\u3057\u305F)\u0964 \u098F\u099F\u09BF \u0995\u09C7\u09AC\u09B2 \u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u0990\u09A4\u09BF\u09B9\u09BE\u09B8\u09BF\u0995 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u6E29\u6CC9[\u304A\u3093\u305B\u3093]\u306B\u5165[\u306F\u3044]\u3063\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u3002",
+                bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09BE\u0995\u09C3\u09A4\u09BF\u0995 \u0989\u09B7\u09CD\u09A3 \u09AA\u09CD\u09B0\u09B8\u09CD\u09B0\u09AC\u09A3\u09C7 (\u0985\u09A8\u09B8\u09C7\u09A8) \u0997\u09CB\u09B8\u09B2\u09C7\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7\u0964",
+                en: "I have experienced entering a Japanese hot spring."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09A8\u09BE\u09A4\u09CD\u09A4\u09CB (\u09AB\u09BE\u09B0\u09CD\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09A1 \u09B8\u09AF\u09BC\u09BE\u09AC\u09BF\u09A8) \u0996\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          situation_en: "Discussing the experience of eating Natto with Japanese classmates.",
+          lines: [
+            {
+              speaker_ja: "\u65E5\u672C\u4EBA[\u306B\u307B\u3093\u3058\u3093]",
+              speaker_en: "Japanese Friend",
+              line_ja: "\u7D0D\u8C46[\u306A\u3063\u3068\u3046]\u3092\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u304B\u3002",
+              line_bn: "\u0995\u0996\u09A8\u0993 \u09A8\u09BE\u09A4\u09CD\u09A4\u09CB \u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09C7\u09A8 \u0995\u09BF?",
+              line_en: "Have you ever eaten Natto?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u306F\u3044\u3001\u4E00\u5EA6[\u3044\u3061\u3069]\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u3002\u306B\u304A\u3044\u304C\u5F37[\u3064\u3088]\u3044\u3067\u3059\u306D\u3002",
+              line_bn: "\u099C\u09BF, \u098F\u0995\u09AC\u09BE\u09B0 \u0996\u09C7\u09AF\u09BC\u09C7 \u09A6\u09C7\u0996\u09C7\u099B\u09BF\u0964 \u0997\u09A8\u09CD\u09A7\u099F\u09BE \u09AC\u09C7\u09B6 \u09A4\u09C0\u09AC\u09CD\u09B0, \u09A4\u09BE\u0987 \u09A8\u09BE?",
+              line_en: "Yes, I have eaten it once. The smell is quite strong, isn't it?"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09BE\u0995\u09C3\u09A4\u09BF\u0995 \u0989\u09B7\u09CD\u09A3 \u09AA\u09CD\u09B0\u09B8\u09CD\u09B0\u09AC\u09A3 (Onsen - \u6E29\u6CC9) \u098F\u09B0 \u0986\u09A6\u09AC\u0995\u09C7\u09A4\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0997\u09B0\u09AE \u09AA\u09BE\u09A8\u09BF\u09B0 \u099D\u09B0\u09A8\u09BE \u09AC\u09BE \u0985\u09A8\u09B8\u09C7\u09A8\u09C7 \u09AA\u09CD\u09B0\u09AC\u09C7\u09B6\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09B6\u09B0\u09CD\u09A4: \u09AC\u09BE\u09A5\u099F\u09BE\u09AC\u09C7 \u09A8\u09BE\u09AE\u09BE\u09B0 \u0986\u0997\u09C7 \u09AC\u09BE\u0987\u09B0\u09C7\u09B0 \u09B6\u09BE\u0993\u09AF\u09BC\u09BE\u09B0\u09C7 \u09AA\u09C1\u09B0\u09CB \u09B6\u09B0\u09C0\u09B0 \u09B8\u09BE\u09AC\u09BE\u09A8 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09AA\u09C1\u09B0\u09CB\u09AA\u09C1\u09B0\u09BF \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0995\u09B0\u09C7 \u09A7\u09C1\u09AF\u09BC\u09C7 \u09A8\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964 \u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u09A4\u09CB\u09AF\u09BC\u09BE\u09B2\u09C7 \u09A8\u09BE\u09AE\u09BE\u09A8\u09CB \u09AC\u09BE \u09B8\u09BE\u0981\u09A4\u09BE\u09B0 \u0995\u09BE\u099F\u09BE \u09A8\u09BF\u09B7\u09C7\u09A7\u0964 \u0990\u09A4\u09BF\u09B9\u09BE\u09B8\u09BF\u0995\u09AD\u09BE\u09AC\u09C7 \u0985\u09A8\u09C7\u0995 \u0985\u09A8\u09B8\u09C7\u09A8\u09C7 \u0989\u09B2\u09CD\u0995\u09BF \u09AC\u09BE \u099F\u09CD\u09AF\u09BE\u099F\u09C1 (Irezumi) \u09A5\u09BE\u0995\u09B2\u09C7 \u09AA\u09CD\u09B0\u09AC\u09C7\u09B6\u09C7 \u09A8\u09BF\u09B7\u09C7\u09A7\u09BE\u099C\u09CD\u099E\u09BE \u09A5\u09BE\u0995\u09C7\u0964",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u98DF[\u305F]\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059",
+            romaji_input: "tabeta koto ga arimasu",
+            target_display: "\u305F\u3079\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059",
+            meaning_bn: "\u0996\u09C7\u09AF\u09BC\u09C7\u099B\u09BF (\u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7)"
+          },
+          {
+            prompt_ja: "\u4E00\u5EA6[\u3044\u3061\u3069]\u3082\u3042\u308A\u307E\u305B\u3093",
+            romaji_input: "ichidomo arimasen",
+            target_display: "\u3044\u3061\u3069\u3082\u3042\u308A\u307E\u305B\u3093",
+            meaning_bn: "\u098F\u0995\u09AC\u09BE\u09B0\u0993 \u09A8\u09C7\u0987"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L33-1",
+            question_ja: "\u300C\u5BCC\u58EB\u5C71[\u3075\u3058\u3055\u3093]\u306B\uFF08\u3000\uFF09\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u3075\u3058\u3055\u3093\u306B\uFF08\u3000\uFF09\u3053\u3068\u304C\u3042\u308A\u307E\u3059",
+            options: [
+              "\u767B[\u306E\u307C]\u3063\u305F (Nobotta)",
+              "\u767B[\u306E\u307C]\u308B (Noboru)",
+              "\u767B[\u306E\u307C]\u308A (Nobori)",
+              "\u767B[\u306E\u307C]\u3063\u3066 (Nobotte)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u305F-\u09AB\u09B0\u09CD\u09AE (Ta-form) \u09AC\u09B8\u09C7: \u767B\u3063\u305F\u3053\u3068\u304C\u3042\u308A\u307E\u3059 (\u0986\u09B0\u09CB\u09B9\u09A3 \u0995\u09B0\u09BE\u09B0 \u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE \u0986\u099B\u09C7)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L34",
+          lesson_number: 34,
+          module_number: 6,
+          module_name: "Ability, Past & Casual",
+          module_name_bn: "\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE, \u0985\u09A4\u09C0\u09A4 \u0993 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA",
+          title_ja: "\u301C\u305F\u307B\u3046\u304C\u3044\u3044",
+          title_en: "Giving Advice & Suggestions (-ta hou ga ii)",
+          title_bn: "\u0995\u09B0\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AC\u09C7 (\u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u0993 \u0989\u09AA\u09A6\u09C7\u09B6)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09BE\u0989\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u09B9\u09BF\u09A4\u0995\u09B0 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u09AC\u09BE \u0989\u09AA\u09A6\u09C7\u09B6 \u09A6\u09BF\u09A4\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6\u09C7\u09B0 \u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u307B\u3046\u304C\u3044\u3044\u3067\u3059 \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC ('\u0995\u09B0\u09B2\u09C7 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AF\u09BC')\u0964 \u0986\u09B0 \u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C \u09A8\u09BE \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u09A6\u09BF\u09A4\u09C7 \u09A8\u09BE\u0987-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 V-\u306A\u3044 \u307B\u3046\u304C\u3044\u3044\u3067\u3059 (\u09A8\u09BE \u0995\u09B0\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u0998\u09C1\u09AE\u09BE\u09B2\u09C7 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AF\u09BC' -> \u65E9[\u306F\u3084]\u304F\u5BDD[\u306D]\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u0964",
+          core_concept_bn: "\u0987\u09A4\u09BF\u09AC\u09BE\u099A\u0995 \u0989\u09AA\u09A6\u09C7\u09B6 (V-\u305F \u307B\u3046\u304C\u3044\u3044\u3067\u3059) \u09AC\u09A8\u09BE\u09AE \u09B8\u09A4\u09B0\u09CD\u0995\u09A4\u09BE\u09AE\u09C2\u09B2\u0995 \u0989\u09AA\u09A6\u09C7\u09B6 (V-\u306A\u3044 \u307B\u3046\u304C\u3044\u3044\u3067\u3059)\u0964",
+          real_world_context_bn: "\u0985\u09B8\u09C1\u09B8\u09CD\u09A5 \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0\u09C7\u09B0 \u0995\u09BE\u099B\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE, \u0996\u09BE\u09B0\u09BE\u09AA \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE\u09AF\u09BC \u099B\u09BE\u09A4\u09BE \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u0989\u09AA\u09A6\u09C7\u09B6\u0964",
+          key_takeaway_bn: "\u0987\u09A4\u09BF\u09AC\u09BE\u099A\u0995 \u0989\u09AA\u09A6\u09C7\u09B6: V-\u305F \u307B\u3046\u304C\u3044\u3044\u3002 \u09A8\u09BF\u09B7\u09C7\u09A7\u09AE\u09C2\u09B2\u0995 \u0989\u09AA\u09A6\u09C7\u09B6: V-\u306A\u3044 \u307B\u3046\u304C\u3044\u3044\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u85AC[\u304F\u3059\u308A]",
+            romaji: "kusuri",
+            meaning_bn: "\u0993\u09B7\u09C1\u09A7",
+            meaning_en: "medicine",
+            part_of_speech: "noun",
+            example_ja: "\u85AC[\u304F\u3059\u308A]\u3092\u98F2[\u306E]\u3093\u3060\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u3088\u3002",
+            example_bn: "\u0993\u09B7\u09C1\u09A7 \u0996\u09C7\u09AF\u09BC\u09C7 \u09A8\u09BF\u09B2\u09C7 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AF\u09BC\u0964",
+            example_en: "You had better take some medicine."
+          },
+          {
+            word_ja: "\u7121\u7406[\u3080\u308A]\uFF3B\u306A\uFF3D",
+            romaji: "muri [na]",
+            meaning_bn: "\u0985\u09B8\u09AE\u09CD\u09AD\u09AC / \u09AC\u09BE\u09A1\u09BC\u09BE\u09AC\u09BE\u09A1\u09BC\u09BF / \u0985\u09A4\u09BF\u09B0\u09BF\u0995\u09CD\u09A4 \u099A\u09BE\u09AA",
+            meaning_en: "impossible / overwork",
+            part_of_speech: "na-adjective",
+            example_ja: "\u7121\u7406[\u3080\u308A]\u3092\u3057\u306A\u3044\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u3002",
+            example_bn: "\u09AC\u09C7\u09B6\u09BF \u09AC\u09BE\u09A1\u09BC\u09BE\u09AC\u09BE\u09A1\u09BC\u09BF \u09AC\u09BE \u099A\u09BE\u09AA \u09A8\u09BE \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB\u0964",
+            example_en: "You had better not push yourself too hard."
+          },
+          {
+            word_ja: "\u71B1[\u306D\u3064]",
+            romaji: "netsu",
+            meaning_bn: "\u099C\u09CD\u09AC\u09B0 / \u09A4\u09BE\u09AA\u09AE\u09BE\u09A4\u09CD\u09B0\u09BE",
+            meaning_en: "fever / heat",
+            part_of_speech: "noun",
+            example_ja: "\u71B1[\u306D\u3064]\u304C\u3042\u308A\u307E\u3059\u304B\u3089\u3001\u4F11[\u3084\u3059]\u307F\u307E\u3059\u3002",
+            example_bn: "\u099C\u09CD\u09AC\u09B0 \u09A5\u09BE\u0995\u09BE\u09AF\u09BC \u09AC\u09BF\u09B6\u09CD\u09B0\u09BE\u09AE \u09A8\u09BF\u09AC\u0964",
+            example_en: "Since I have a fever, I will rest."
+          },
+          {
+            word_ja: "\u65E9[\u306F\u3084]\u304F",
+            romaji: "hayaku",
+            meaning_bn: "\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF / \u09A6\u09CD\u09B0\u09C1\u09A4",
+            meaning_en: "early / quickly",
+            part_of_speech: "adverb",
+            example_ja: "\u65E9[\u306F\u3084]\u304F\u5E30[\u304B\u3048]\u3063\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u3002",
+            example_bn: "\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AB\u09BF\u09B0\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AD\u09BE\u09B2\u09CB\u0964",
+            example_en: "You had better go home early."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u65E9",
+            onyomi: "\u30BD\u30A6, \u30B5\u30C3",
+            kunyomi: "\u306F\u3084\u30FB\u3044, \u306F\u3084\u30FB\u307E\u308B",
+            meaning_bn: "\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF / \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09C1\u09B7",
+            meaning_en: "early / fast",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u65E9[\u306F\u3084]\u304F",
+                meaning_bn: "\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF",
+                meaning_en: "early / fast"
+              },
+              {
+                word_ja: "\u65E9\u671D[\u305D\u3046\u3061\u3087\u3046]",
+                meaning_bn: "\u09AD\u09CB\u09B0\u09AC\u09C7\u09B2\u09BE",
+                meaning_en: "early morning"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G34-1",
+            pattern_ja: "V-\u305F \u307B\u3046\u304C\u3044\u3044\u3067\u3059 / V-\u306A\u3044 \u307B\u3046\u304C\u3044\u3044\u3067\u3059",
+            pattern_bn: "\u0995\u09B0\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AC\u09C7 / \u09A8\u09BE \u0995\u09B0\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AC\u09C7",
+            explanation_bn: "\u09A6\u09C1\u099F\u09BF \u09B8\u09AE\u09CD\u09AD\u09BE\u09AC\u09CD\u09AF \u0995\u09BE\u099C\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09AF\u09C7\u099F\u09BF \u09A4\u09C1\u09B2\u09A8\u09BE\u09AE\u09C2\u09B2\u0995 \u0995\u09B2\u09CD\u09AF\u09BE\u09A3\u0995\u09B0 \u09A4\u09BE \u09AC\u09C7\u099B\u09C7 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u09A6\u09C3\u09A2\u09BC \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6\u0964 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6\u09C7\u09B0 \u099A\u09C7\u09AF\u09BC\u09C7 \u098F\u099F\u09BF \u0995\u09BF\u099B\u09C1\u099F\u09BE \u099C\u09CB\u09B0\u09BE\u09B2\u09CB \u0989\u09AA\u09A6\u09C7\u09B6\u0964",
+            common_pitfalls: [
+              "\u0989\u09B0\u09CD\u09A7\u09CD\u09AC\u09A4\u09A8 \u0995\u09BE\u0989\u0995\u09C7 \u09AC\u09BE \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09BF\u09A4 \u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0995\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u301C\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059 \u09AC\u09B2\u09B2\u09C7 \u09A4\u09BE \u0989\u09A6\u09CD\u09A7\u09A4 \u09B6\u09CB\u09A8\u09BE\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]\u3078\u884C[\u3044]\u3063\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u3088\u3002",
+                bn: "\u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u099F\u09BE\u0987 \u09AC\u09C1\u09A6\u09CD\u09A7\u09BF\u09AE\u09BE\u09A8\u09C7\u09B0 \u0995\u09BE\u099C \u09B9\u09AC\u09C7\u0964",
+                en: "You had better go to the hospital."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0995\u09BE\u099C\u09C7\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE\u09AF\u09BC \u0985\u09B8\u09C1\u09B8\u09CD\u09A5 \u09AC\u09CB\u09A7 \u0995\u09B0\u09BE \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u09AC\u09BF\u09B6\u09CD\u09B0\u09BE\u09AE \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u09B0 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE\u0964",
+          situation_en: "Advising a sick colleague at work to take rest and go home.",
+          lines: [
+            {
+              speaker_ja: "\u540C\u50DA[\u3069\u3046\u308A\u3087\u3046]",
+              speaker_en: "Colleague",
+              line_ja: "\u9854\u8272[\u304B\u304A\u3044\u308D]\u304C\u60AA[\u308F\u308B]\u3044\u3067\u3059\u306D\u3002\u5927\u4E08\u592B[\u3060\u3044\u3058\u3087\u3046\u3076]\u3067\u3059\u304B\u3002",
+              line_bn: "\u099A\u09C7\u09B9\u09BE\u09B0\u09BE \u09AB\u09CD\u09AF\u09BE\u0995\u09BE\u09B6\u09C7 \u09B2\u09BE\u0997\u099B\u09C7 \u09A4\u09CB\u0964 \u09B6\u09B0\u09C0\u09B0 \u09A0\u09BF\u0995 \u0986\u099B\u09C7?",
+              line_en: "You look pale. Are you alright?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u5C11[\u3059\u3053]\u3057\u71B1[\u306D\u3064]\u304C\u3042\u308A\u307E\u3059\u3002",
+              line_bn: "\u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF \u099C\u09CD\u09AC\u09B0 \u098F\u09B8\u09C7\u099B\u09C7\u0964",
+              line_en: "I have a slight fever."
+            },
+            {
+              speaker_ja: "\u540C\u50DA[\u3069\u3046\u308A\u3087\u3046]",
+              speaker_en: "Colleague",
+              line_ja: "\u7121\u7406[\u3080\u308A]\u3092\u3057\u306A\u3044\u3067\u3001\u4ECA\u65E5[\u304D\u3087\u3046]\u306F\u65E9[\u306F\u3084]\u304F\u5E30[\u304B\u3048]\u3063\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u3088\u3002",
+              line_bn: "\u09AC\u09C7\u09B6\u09BF \u099A\u09BE\u09AA \u09A8\u09C7\u09AC\u09C7\u09A8 \u09A8\u09BE, \u0986\u099C \u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u09AC\u09BE\u09B8\u09BE\u09AF\u09BC \u09AB\u09BF\u09B0\u09C7 \u09AC\u09BF\u09B6\u09CD\u09B0\u09BE\u09AE \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB \u09B9\u09AC\u09C7\u0964",
+              line_en: "Don't push yourself, you had better go home early today."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u0985\u09B8\u09C1\u09B8\u09CD\u09A5\u09A4\u09BE\u09B0 \u099B\u09C1\u099F\u09BF (Kekkin - \u6B20\u52E4) \u0993 \u09A1\u09BE\u0995\u09CD\u09A4\u09BE\u09B0\u09A6\u09C7\u09B0 \u09A1\u09BE\u09AF\u09BC\u09BE\u0997\u09A8\u09B8\u09BF\u09B8 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0985\u09B8\u09C1\u09B8\u09CD\u09A5 \u09B9\u09AF\u09BC\u09C7 \u0995\u09BE\u099C\u09C7 \u09AC\u09BE \u09B8\u09CD\u0995\u09C1\u09B2\u09C7 \u0985\u09A8\u09C1\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u09A5\u09BE\u0995\u09B2\u09C7 '\u6B20\u52E4' (Kekkin) \u09AC\u09B2\u09C7\u0964 \u09A4\u09AC\u09C7 \u099F\u09BE\u09A8\u09BE \u09A6\u09C1\u0987 \u09AC\u09BE \u09A4\u09BF\u09A8 \u09A6\u09BF\u09A8 \u0985\u09A8\u09C1\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u09A5\u09BE\u0995\u09B2\u09C7 \u0995\u09CD\u09B2\u09BF\u09A8\u09BF\u0995 \u09AC\u09BE \u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2 \u09A5\u09C7\u0995\u09C7 \u099A\u09BF\u0995\u09BF\u09CE\u09B8\u0995\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09AF\u09BC\u09A8\u09AA\u09A4\u09CD\u09B0 (Shindansho - \u8A3A\u65AD\u66F8) \u099C\u09AE\u09BE \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995\u0964 \u098F\u099F\u09BF \u099B\u09BE\u09A1\u09BC\u09BE \u099A\u09BE\u0995\u09B0\u09BF \u09AC\u09BE \u09B8\u09CD\u0995\u09B2\u09BE\u09B0\u09B6\u09BF\u09AA\u09C7 \u099C\u099F\u09BF\u09B2\u09A4\u09BE \u09A4\u09C8\u09B0\u09BF \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u75C5\u9662[\u3073\u3087\u3046\u3044\u3093]\u3078\u884C[\u3044]\u3063\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059",
+            romaji_input: "byouin e itta hou ga ii desu",
+            target_display: "\u3073\u3087\u3046\u3044\u3093\u3078\u3044\u3063\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059",
+            meaning_bn: "\u09B9\u09BE\u09B8\u09AA\u09BE\u09A4\u09BE\u09B2\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE\u0987 \u09AD\u09BE\u09B2\u09CB"
+          },
+          {
+            prompt_ja: "\u7121\u7406[\u3080\u308A]\u3092\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044",
+            romaji_input: "muri o shinaide kudasai",
+            target_display: "\u3080\u308A\u3092\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u099A\u09BE\u09AA \u09A8\u09C7\u09AC\u09C7\u09A8 \u09A8\u09BE"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L34-1",
+            question_ja: "\u300C\u65E9[\u306F\u3084]\u304F \u5BDD[\u306D]\uFF08\u3000\uFF09\u307B\u3046\u304C\u3044\u3044\u3067\u3059\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u306F\u3084\u304F \u306D\uFF08\u3000\uFF09\u307B\u3046\u304C\u3044\u3044\u3067\u3059",
+            options: [
+              "\u305F",
+              "\u308B",
+              "\u3066",
+              "\u307E\u3059"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0987\u09A4\u09BF\u09AC\u09BE\u099A\u0995 \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u09AC\u09BE \u0989\u09AA\u09A6\u09C7\u09B6\u09C7\u09B0 \u0997\u09A0\u09A8\u09C7 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09B0 \u305F-\u09AB\u09B0\u09CD\u09AE \u09AC\u09B8\u09C7: \u65E9\u304F\u5BDD\u305F\u307B\u3046\u304C\u3044\u3044\u3067\u3059 (\u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u0998\u09C1\u09AE\u09BE\u09A8\u09CB\u0987 \u09AD\u09BE\u09B2\u09CB)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L35",
+          lesson_number: 35,
+          module_number: 6,
+          module_name: "Ability, Past & Casual",
+          module_name_bn: "\u09B8\u0995\u09CD\u09B7\u09AE\u09A4\u09BE, \u0985\u09A4\u09C0\u09A4 \u0993 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA",
+          title_ja: "\u666E\u901A\u5F62[\u3075\u3064\u3046\u3051\u3044] (Casual Plain Form)",
+          title_en: "Plain Form & Casual Speech (Futsuukei)",
+          title_bn: "\u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA \u0993 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA (\u09A4\u09BE\u09A4\u09CD\u0995\u09CD\u09B7\u09A3\u09BF\u0995 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09A6\u09C1\u0987 \u09A7\u09B0\u09A8\u09C7\u09B0 \u09AC\u09BE\u099A\u09A8\u09AD\u0999\u09CD\u0997\u09BF \u09B0\u09AF\u09BC\u09C7\u099B\u09C7: \u09E7. \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B0\u09C2\u09AA (\u4E01\u5BE7\u4F53 - Teineitai: \u3067\u3059/\u307E\u3059), \u09AF\u09BE \u0985\u09AA\u09B0\u09BF\u099A\u09BF\u09A4, \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09AC\u09BE \u099C\u09CD\u09AF\u09C7\u09B7\u09CD\u09A0\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC, \u098F\u09AC\u0982 \u09E8. \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09AC\u09BE \u0995\u09A5\u09CD\u09AF \u09B0\u09C2\u09AA (\u666E\u901A\u4F53 - Futs\u016Btai), \u09AF\u09BE \u09B8\u09AE\u09AC\u09AF\u09BC\u09B8\u09C0 \u09AC\u09A8\u09CD\u09A7\u09C1, \u09AA\u09B0\u09BF\u09AC\u09BE\u09B0 \u0993 \u0998\u09A8\u09BF\u09B7\u09CD\u09A0\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA, \u09A8\u09BE\u0987-\u09AB\u09B0\u09CD\u09AE, \u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE \u098F\u09AC\u0982 \u09A8\u09BE\u0995\u09BE\u09A4\u09CD\u09A4\u09BE-\u09AB\u09B0\u09CD\u09AE \u09AE\u09BF\u09B2\u09C7 \u098F\u0987 \u0995\u09A5\u09CD\u09AF \u09B0\u09C2\u09AA \u0997\u09A0\u09BF\u09A4 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u3067\u3059/\u307E\u3059 \u09AC\u09A8\u09BE\u09AE \u0995\u09A5\u09CD\u09AF \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA (Plain Form) \u098F\u09B0 \u099A\u09BE\u09B0 \u09B0\u09C2\u09AA\u09C7\u09B0 \u099B\u0995\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0985\u09A8\u09BE\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u0986\u09A1\u09CD\u09A1\u09BE, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09CB\u09B6\u09CD\u09AF\u09BE\u09B2 \u09AE\u09BF\u09A1\u09BF\u09AF\u09BC\u09BE \u0993 \u0985\u09CD\u09AF\u09BE\u09A8\u09BF\u09AE\u09C7\u09B0 \u09B8\u0982\u09B2\u09BE\u09AA \u09AC\u09CB\u099D\u09BE\u0964",
+          key_takeaway_bn: "Present: \u98DF\u3079\u308B / \u98DF\u3079\u306A\u3044\u3002 Past: \u98DF\u3079\u305F / \u98DF\u3079\u306A\u304B\u3063\u305F\u3002 Noun/Na-adj: \u3060 / \u3058\u3083\u306A\u3044 / \u3060\u3063\u305F / \u3058\u3083\u306A\u304B\u3063\u305F\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3046\u3093",
+            romaji: "un",
+            meaning_bn: "\u09B9\u09CD\u09AF\u09BE\u0981 (\u0995\u09A5\u09CD\u09AF/\u0985\u09A8\u09BE\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995)",
+            meaning_en: "yeah / yes (casual)",
+            part_of_speech: "interjection",
+            example_ja: "\u3046\u3093\u3001\u884C[\u3044]\u304F\uFF01",
+            example_bn: "\u09B9\u09CD\u09AF\u09BE\u0981, \u09AF\u09BE\u09AC!",
+            example_en: "Yeah, I'll go!"
+          },
+          {
+            word_ja: "\u3046\u3046\u3093",
+            romaji: "uun",
+            meaning_bn: "\u09A8\u09BE (\u0995\u09A5\u09CD\u09AF/\u0985\u09A8\u09BE\u09A8\u09C1\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995)",
+            meaning_en: "nah / no (casual)",
+            part_of_speech: "interjection",
+            example_ja: "\u3046\u3046\u3093\u3001\u884C[\u3044]\u304B\u306A\u3044\u3002",
+            example_bn: "\u09A8\u09BE, \u09AF\u09BE\u09AC \u09A8\u09BE\u0964",
+            example_en: "Nah, I won't go."
+          },
+          {
+            word_ja: "\u6687[\u3072\u307E]\uFF3B\u306A\uFF3D",
+            romaji: "hima [na]",
+            meaning_bn: "\u0985\u09AC\u09B8\u09B0 / \u0985\u09AB\u09C1\u09B0\u09A8\u09CD\u09A4 \u09B8\u09AE\u09AF\u09BC",
+            meaning_en: "free time / idle",
+            part_of_speech: "na-adjective",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u6687[\u3072\u307E]\uFF1F",
+            example_bn: "\u0995\u09BE\u09B2 \u0995\u09BF \u09AB\u09CD\u09B0\u09BF \u0986\u099B\u09BF\u09B8?",
+            example_en: "Are you free tomorrow?"
+          },
+          {
+            word_ja: "\u672C\u5F53[\u307B\u3093\u3068\u3046]\uFF1F",
+            romaji: "hont\u014D?",
+            meaning_bn: "\u09B8\u09A4\u09CD\u09AF\u09BF\u0987?",
+            meaning_en: "Really?",
+            part_of_speech: "expression",
+            example_ja: "\u672C\u5F53[\u307B\u3093\u3068\u3046]\uFF1F\u3059\u3054\u3044\u306D\uFF01",
+            example_bn: "\u09B8\u09A4\u09CD\u09AF\u09BF\u0987? \u09A6\u09BE\u09B0\u09C1\u09A3 \u09A4\u09CB!",
+            example_en: "Really? That's awesome!"
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u901A",
+            onyomi: "\u30C4\u30A6",
+            kunyomi: "\u3068\u304A\u30FB\u308B, \u304B\u3088\u30FB\u3046",
+            meaning_bn: "\u09AF\u09BE\u09A4\u09BE\u09AF\u09BC\u09BE\u09A4 / \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 / \u09AA\u09A5",
+            meaning_en: "pass through / commute",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u666E\u901A[\u3075\u3064\u3046]",
+                meaning_bn: "\u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 / \u09B8\u09CD\u09AC\u09BE\u09AD\u09BE\u09AC\u09BF\u0995",
+                meaning_en: "normal / ordinary"
+              },
+              {
+                word_ja: "\u4EA4\u901A[\u3053\u3046\u3064\u3046]",
+                meaning_bn: "\u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 / \u099F\u09CD\u09B0\u09BE\u09AB\u09BF\u0995",
+                meaning_en: "transportation"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G35-1",
+            pattern_ja: "\u666E\u901A\u4F53[\u3075\u3064\u3046\u305F\u3044] (Casual Conversational Style)",
+            pattern_bn: "\u0995\u09A5\u09CD\u09AF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09B0 \u09A8\u09BF\u09AF\u09BC\u09AE\u09BE\u09AC\u09B2\u09C0 (Plain Form)",
+            explanation_bn: "\u0995\u09A5\u09CD\u09AF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09AC\u09CB\u09A7\u0995 '\u304B' \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3\u09A4 \u09AC\u09BE\u09A6 \u09A6\u09BF\u09AF\u09BC\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7 \u09B8\u09CD\u09AC\u09B0 \u098A\u09B0\u09CD\u09A7\u09CD\u09AC\u09AE\u09C1\u0996\u09C0 (Rising intonation) \u0995\u09B0\u09C7 \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u3054\u306F\u3093\u98DF[\u305F]\u3079\u308B\uFF1F (\u09AD\u09BE\u09A4 \u0996\u09BE\u09AC\u09BF?)\u0964 Noun \u098F\u09B0 \u09B6\u09C7\u09B7\u09C7 '\u3060' \u0985\u09A8\u09C7\u0995 \u09B8\u09AE\u09AF\u09BC \u09AC\u09BE\u09A6 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09AC\u09BE \u09B8\u09C1\u09AA\u09BE\u09B0\u09AD\u09BE\u0987\u099C\u09BE\u09B0\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u0996\u09A8\u09CB \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0995\u09A5\u09CD\u09AF \u09B0\u09C2\u09AA (Tameguchi) \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09AC\u09C7\u09A8 \u09A8\u09BE, \u098F\u099F\u09BF \u099A\u09B0\u09AE \u0985\u09AD\u09A6\u09CD\u09B0\u09A4\u09BE\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u4ECA\u6669[\u3053\u3093\u3070\u3093]\u6620\u753B[\u3048\u3044\u304C]\u898B[\u307F]\u308B\uFF1F \u3046\u3093\u3001\u898B[\u307F]\u308B\uFF01",
+                bn: "\u0986\u099C \u09B0\u09BE\u09A4\u09C7 \u09B8\u09BF\u09A8\u09C7\u09AE\u09BE \u09A6\u09C7\u0996\u09AC\u09BF? \u09B9\u09CD\u09AF\u09BE\u0981, \u09A6\u09C7\u0996\u09AC!",
+                en: "Wanna watch a movie tonight? Yeah, I'll watch!"
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0995\u09CD\u09AF\u09BE\u09AE\u09CD\u09AA\u09BE\u09B8\u09C7 \u09A6\u09C1\u0987 \u0985\u09A8\u09CD\u09A4\u09B0\u0999\u09CD\u0997 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u0995\u09CD\u09AF\u09BE\u099C\u09C1\u09AF\u09BC\u09BE\u09B2 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8\u0964",
+          situation_en: "Casual chatting between close friends on university campus.",
+          lines: [
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u4ECA\u65E5[\u304D\u3087\u3046]\u306E\u30C6\u30B9\u30C8\u3001\u3069\u3046\u3060\u3063\u305F\uFF1F",
+              line_bn: "\u0986\u099C\u0995\u09C7\u09B0 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0995\u09C7\u09AE\u09A8 \u09B9\u09B2\u09CB \u09B0\u09C7?",
+              line_en: "How was today's exam?"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3061\u3087\u3063\u3068\u96E3[\u3080\u305A\u304B]\u3057\u304B\u3063\u305F\u3051\u3069\u3001\u5927\u4E08\u592B[\u3060\u3044\u3058\u3087\u3046\u3076]\u3060\u3063\u305F\u3002",
+              line_bn: "\u098F\u0995\u099F\u09C1 \u0995\u09A0\u09BF\u09A8 \u099B\u09BF\u09B2, \u09A4\u09AC\u09C7 \u09B8\u09BE\u09AE\u09B2\u09C7 \u09A8\u09BF\u09AF\u09BC\u09C7\u099B\u09BF\u0964",
+              line_en: "It was a bit difficult, but it was alright."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u0989\u09B0\u09CD\u09A7\u09CD\u09AC\u09A4\u09A8 \u09AC\u09A8\u09BE\u09AE \u09B8\u09AE\u09AC\u09AF\u09BC\u09B8\u09C0: \u09A4\u09BE\u09AE\u09C7\u0997\u09C1\u099A\u09BF (\u30BF\u30E1\u53E3) \u098F\u09B0 \u09B8\u09C0\u09AE\u09BE\u09B0\u09C7\u0996\u09BE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09AE\u09BE\u099C\u09C7 \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8 \u0993 \u09B8\u09AE\u09AC\u09AF\u09BC\u09B8\u09C0\u09A4\u09BE\u09B0 \u09A6\u09C7\u09AF\u09BC\u09BE\u09B2 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B8\u09C1\u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F\u0964 \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09AD\u09BE\u09B7\u09BE\u0995\u09C7 'Tameguchi' (\u30BF\u30E1\u53E3 - \u09B8\u09AE\u0995\u0995\u09CD\u09B7\u09C0\u09AF\u09BC \u09AD\u09BE\u09B7\u09BE) \u09AC\u09B2\u09C7\u0964 \u098F\u09AE\u09A8\u0995\u09BF \u09E7 \u09AC\u099B\u09B0\u09C7\u09B0 \u09B8\u09BF\u09A8\u09BF\u09AF\u09BC\u09B0 (Senpai - \u5148\u8F29) \u09B9\u09B2\u09C7\u0993 \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0 \u09AC\u09BE \u0995\u09CD\u09B2\u09BE\u09AC\u09C7 'Desu/Masu' \u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8\u09B8\u09C2\u099A\u0995 \u09AD\u09BE\u09B7\u09BE \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u6687[\u3072\u307E]\uFF1F",
+            romaji_input: "ashita hima?",
+            target_display: "\u3042\u3057\u305F\u3072\u307E\uFF1F",
+            meaning_bn: "\u0995\u09BE\u09B2 \u0995\u09BF \u09AB\u09CD\u09B0\u09BF \u0986\u099B\u09BF\u09B8?"
+          },
+          {
+            prompt_ja: "\u3046\u3093\u3001\u5206[\u308F]\u304B\u3063\u305F",
+            romaji_input: "un, wakatta",
+            target_display: "\u3046\u3093\u3001\u308F\u304B\u3063\u305F",
+            meaning_bn: "\u09B9\u09CD\u09AF\u09BE\u0981, \u09AC\u09C1\u099D\u09C7\u099B\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L35-1",
+            question_ja: "\u300C\u98DF[\u305F]\u3079\u307E\u305B\u3093\u300D\u306E \u666E\u901A\u5F62[\u3075\u3064\u3046\u3051\u3044]\uFF08Plain Form\uFF09\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u305F\u3079\u307E\u305B\u3093\u2019 \u098F\u09B0 \u0995\u09A5\u09CD\u09AF \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA (Plain Form) \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u305F\u3079\u306A\u3044 (Tabenai)",
+              "\u305F\u3079\u308B (Taberu)",
+              "\u305F\u3079\u305F (Tabeta)",
+              "\u305F\u3079\u306A\u304B\u3063\u305F (Tabenakatta)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u307E\u3059-\u09AB\u09B0\u09CD\u09AE\u09C7\u09B0 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8 \u09A8\u09BE-\u09AC\u09CB\u09A7\u0995 \u09B0\u09C2\u09AA \u301C\u307E\u305B\u3093 \u098F\u09B0 \u0995\u09A5\u09CD\u09AF \u09B0\u09C2\u09AA \u09B9\u09B2\u09CB \u301C\u306A\u3044 (\u09A8\u09BE\u0987-\u09AB\u09B0\u09CD\u09AE): \u98DF\u3079\u306A\u3044\u3002"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L36",
+          lesson_number: 36,
+          module_number: 7,
+          module_name: "Decisions & Completion",
+          module_name_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09AE\u09BE\u09AA\u09A8",
+          title_ja: "\u301C\u304B\u3089\u301C\u3067\u3059",
+          title_en: "Giving Reasons and Explanations (Clause + kara)",
+          title_bn: "\u0995\u09BE\u09B0\u09A3...\u09A4\u09BE\u0987... (\u09AF\u09C1\u0995\u09CD\u09A4\u09BF \u0993 \u0995\u09BE\u09B0\u09A3 \u09AA\u09CD\u09B0\u09A6\u09B0\u09CD\u09B6\u09A8)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7\u09B0 \u0995\u09BE\u09B0\u09A3 \u09AC\u09BE \u09B9\u09C7\u09A4\u09C1 \u09AC\u09CD\u09AF\u09BE\u0996\u09CD\u09AF\u09BE \u0995\u09B0\u09A4\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u09BE\u0982\u09B6\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u304B\u3089 (kara - \u0995\u09BE\u09B0\u09A3/\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1) \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u0964 \u0997\u09A0\u09A8: [\u0995\u09BE\u09B0\u09A3] \u304B\u3089\u3001[\u09AB\u09B2\u09BE\u09AB\u09B2]\u0964 \u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u0986\u09AE\u09B0\u09BE \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC\u0987 \u0995\u09BE\u09B0\u09A3 \u09AA\u09B0\u09C7 \u09AC\u09B2\u09BF ('\u09AF\u09BE\u09AC \u09A8\u09BE, \u0995\u09BE\u09B0\u09A3 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u099A\u09CD\u099B\u09C7'), \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09AF\u09BC \u0995\u09BE\u09B0\u09A3\u09AF\u09C1\u0995\u09CD\u09A4 \u09AC\u09BE\u0995\u09CD\u09AF\u099F\u09BF \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u0986\u0997\u09C7 \u09AC\u09B8\u09C7 ('\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u099A\u09CD\u099B\u09C7, \u09A4\u09BE\u0987 \u09AF\u09BE\u09AC \u09A8\u09BE' -> \u96E8[\u3042\u3081]\u3067\u3059\u304B\u3089\u3001\u884C[\u3044]\u304D\u307E\u305B\u3093)\u0964",
+          core_concept_bn: "\u0995\u09BE\u09B0\u09A3 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u0995 \u0995\u09CD\u09B2\u099C \u304B\u3089 (kara) \u098F\u09B0 \u09AC\u09BE\u0995\u09CD\u09AF \u0997\u09A0\u09A8 \u0993 \u09AF\u09C1\u0995\u09CD\u09A4\u09BF\u09B6\u09C3\u0999\u09CD\u0996\u09B2\u0964",
+          real_world_context_bn: "\u0985\u09AB\u09BF\u09B8\u09C7 \u09AC\u09BE \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u0985\u09A8\u09C1\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09B0 \u0995\u09BE\u09B0\u09A3 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB, \u0995\u09C7\u09A8 \u098F\u0995\u099F\u09BF \u099C\u09BF\u09A8\u09BF\u09B8 \u09AA\u099B\u09A8\u09CD\u09A6 \u09A4\u09BE \u09AC\u09CD\u09AF\u09BE\u0996\u09CD\u09AF\u09BE \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "[\u0995\u09BE\u09B0\u09A3] \u304B\u3089\u3001[\u09AB\u09B2\u09BE\u09AB\u09B2]\u0964 \u0995\u09BE\u09B0\u09A3 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09AB\u09B2\u09BE\u09AB\u09B2\u09C7\u09B0 \u0986\u0997\u09C7 \u0986\u09B8\u09C7\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3067\u3059\u304B\u3089",
+            romaji: "desukara",
+            meaning_bn: "\u0995\u09BE\u099C\u09C7\u0987 / \u09B8\u09C7\u0987\u099C\u09A8\u09CD\u09AF",
+            meaning_en: "therefore / so",
+            part_of_speech: "conjunction",
+            example_ja: "\u5FD9[\u3044\u305D\u304C]\u3057\u3044\u3067\u3059\u3002\u3067\u3059\u304B\u3089\u3001\u884C[\u3044]\u3051\u307E\u305B\u3093\u3002",
+            example_bn: "\u09AC\u09CD\u09AF\u09B8\u09CD\u09A4 \u0986\u099B\u09BF\u0964 \u09B8\u09C7\u0987\u099C\u09A8\u09CD\u09AF \u09AF\u09C7\u09A4\u09C7 \u09AA\u09BE\u09B0\u099B\u09BF \u09A8\u09BE\u0964",
+            example_en: "I am busy. Therefore, I cannot go."
+          },
+          {
+            word_ja: "\u3069\u3046\u3057\u3066",
+            romaji: "d\u014Dshite",
+            meaning_bn: "\u0995\u09C7\u09A8?",
+            meaning_en: "why?",
+            part_of_speech: "adverb",
+            example_ja: "\u3069\u3046\u3057\u3066\u6628\u65E5[\u304D\u306E\u3046]\u4F11[\u3084\u3059]\u307F\u307E\u3057\u305F\u304B\u3002",
+            example_bn: "\u0997\u09A4\u0995\u09BE\u09B2 \u0995\u09C7\u09A8 \u099B\u09C1\u099F\u09BF \u09A8\u09BF\u09AF\u09BC\u09C7\u099B\u09BF\u09B2\u09C7\u09A8?",
+            example_en: "Why were you absent yesterday?"
+          },
+          {
+            word_ja: "\u7528\u4E8B[\u3088\u3046\u3058]",
+            romaji: "y\u014Dji",
+            meaning_bn: "\u0995\u09BE\u099C / \u09AA\u09CD\u09B0\u09AF\u09BC\u09CB\u099C\u09A8\u09C0\u09AF\u09BC \u0995\u09BE\u099C",
+            meaning_en: "business / errand / things to do",
+            part_of_speech: "noun",
+            example_ja: "\u7528\u4E8B[\u3088\u3046\u3058]\u304C\u3042\u308A\u307E\u3059\u304B\u3089\u3001\u65E9[\u306F\u3084]\u304F\u5E30[\u304B\u3048]\u308A\u307E\u3059\u3002",
+            example_bn: "\u099C\u09B0\u09C1\u09B0\u09BF \u0995\u09BE\u099C \u09A5\u09BE\u0995\u09BE\u09AF\u09BC \u09A4\u09BE\u09A1\u09BC\u09BE\u09A4\u09BE\u09A1\u09BC\u09BF \u09AB\u09BF\u09B0\u09AC\u0964",
+            example_en: "Since I have errands, I will go home early."
+          },
+          {
+            word_ja: "\u982D[\u3042\u305F\u307E]\u304C\u75DB[\u3044\u305F]\u3044",
+            romaji: "atama ga itai",
+            meaning_bn: "\u09AE\u09BE\u09A5\u09BE\u09AC\u09CD\u09AF\u09A5\u09BE",
+            meaning_en: "headache",
+            part_of_speech: "expression",
+            example_ja: "\u982D[\u3042\u305F\u307E]\u304C\u75DB[\u3044\u305F]\u3044\u3067\u3059\u304B\u3089\u3001\u85AC[\u304F\u3059\u308A]\u3092\u98F2[\u306E]\u307F\u307E\u3059\u3002",
+            example_bn: "\u09AE\u09BE\u09A5\u09BE\u09AC\u09CD\u09AF\u09A5\u09BE \u0995\u09B0\u099B\u09C7 \u09AC\u09B2\u09C7 \u0993\u09B7\u09C1\u09A7 \u0996\u09BE\u09AC\u0964",
+            example_en: "Because my head hurts, I will take medicine."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u982D",
+            onyomi: "\u30C8\u30A6, \u30BA",
+            kunyomi: "\u3042\u305F\u307E, \u304B\u3057\u3089",
+            meaning_bn: "\u09AE\u09BE\u09A5\u09BE / \u09AE\u09B8\u09CD\u09A4\u0995",
+            meaning_en: "head",
+            stroke_count: 16,
+            compounds: [
+              {
+                word_ja: "\u982D[\u3042\u305F\u307E]",
+                meaning_bn: "\u09AE\u09BE\u09A5\u09BE",
+                meaning_en: "head"
+              },
+              {
+                word_ja: "\u982D\u75DB[\u305A\u3064\u3046]",
+                meaning_bn: "\u09AE\u09BE\u09A5\u09BE\u09AC\u09CD\u09AF\u09A5\u09BE",
+                meaning_en: "headache"
+              }
+            ]
+          },
+          {
+            kanji: "\u75DB",
+            onyomi: "\u30C4\u30A6",
+            kunyomi: "\u3044\u305F\u30FB\u3044, \u3044\u305F\u30FB\u3080",
+            meaning_bn: "\u09AC\u09CD\u09AF\u09A5\u09BE / \u09AF\u09A8\u09CD\u09A4\u09CD\u09B0\u09A3\u09BE",
+            meaning_en: "pain / hurt",
+            stroke_count: 12,
+            compounds: [
+              {
+                word_ja: "\u75DB[\u3044\u305F]\u3044",
+                meaning_bn: "\u09AC\u09CD\u09AF\u09A5\u09BE",
+                meaning_en: "painful"
+              },
+              {
+                word_ja: "\u75DB[\u3044\u305F]\u307F",
+                meaning_bn: "\u09AC\u09C7\u09A6\u09A8\u09BE",
+                meaning_en: "pain / ache"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G36-1",
+            pattern_ja: "Clause 1 \u304B\u3089\u3001Clause 2",
+            pattern_bn: "[\u0995\u09CD\u09B2\u099C \u09E7] \u098F\u09B0 \u0995\u09BE\u09B0\u09A3\u09C7, [\u0995\u09CD\u09B2\u099C \u09E8] \u09B9\u09AF\u09BC",
+            explanation_bn: "\u0995\u09CD\u09B2\u099C \u09E7 \u09B9\u09B2\u09CB \u0995\u09BE\u09B0\u09A3 \u09AC\u09BE \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF \u098F\u09AC\u0982 \u0995\u09CD\u09B2\u099C \u09E8 \u09B9\u09B2\u09CB \u09A4\u09BE\u09B0 \u09AB\u09B2\u09B6\u09CD\u09B0\u09C1\u09A4\u09BF\u0964 \u0995\u09C7\u09A8 \u0995\u09CB\u09A8\u09CB \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE \u09B9\u09B2\u09CB \u09A4\u09BE \u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u0995\u09B0\u09A4\u09C7 \u304B\u3089 \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B6\u0995\u09CD\u09A4\u09BF\u09B6\u09BE\u09B2\u09C0\u0964",
+            common_pitfalls: [
+              "\u09AC\u09BE\u0982\u09B2\u09BE\u09AF\u09BC \u09AF\u09C7\u09AE\u09A8 '\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1...\u09B8\u09C7\u09B9\u09C7\u09A4\u09C1' \u099C\u09CB\u09A1\u09BC\u09BE\u09AF\u09BC \u09AC\u09B8\u09C7, \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09A4\u09C7 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09B6\u09C1\u09B0\u09C1\u09A4\u09C7 '\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1' \u098F\u09B0 \u0986\u09B2\u09BE\u09A6\u09BE \u0995\u09CB\u09A8\u09CB \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09C7 \u09A8\u09BE, \u09B6\u09C1\u09A7\u09C1 \u0995\u09CD\u09B2\u099C\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u304B\u3089 \u09AC\u09B8\u09C7\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6642\u9593[\u3058\u304B\u3093]\u304C\u3042\u308A\u307E\u305B\u3093\u304B\u3089\u3001\u30BF\u30AF\u30B7\u30FC\u3067\u884C[\u3044]\u304D\u307E\u3057\u3087\u3046\u3002",
+                bn: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09B8\u09AE\u09AF\u09BC \u09A8\u09C7\u0987, \u099F\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09BF\u09A4\u09C7 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u0995\u0964",
+                en: "Since there is no time, let's go by taxi."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09B8\u09CD\u0995\u09C1\u09B2 \u09AC\u09BE \u0985\u09AB\u09BF\u09B8\u09C7 \u099B\u09C1\u099F\u09BF\u09B0 \u0995\u09BE\u09B0\u09A3 \u09B8\u09C1\u09AA\u09BE\u09B0\u09AD\u09BE\u0987\u099C\u09BE\u09B0\u0995\u09C7 \u0985\u09AC\u0997\u09A4 \u0995\u09B0\u09BE\u0964",
+          situation_en: "Explaining the reason for absence to a supervisor at school or work.",
+          lines: [
+            {
+              speaker_ja: "\u4E0A\u53F8[\u3058\u3087\u3046\u3057]",
+              speaker_en: "Supervisor",
+              line_ja: "\u3069\u3046\u3057\u3066\u6628\u65E5[\u304D\u306E\u3046]\u4F1A\u793E[\u304B\u3044\u3057\u3083]\u3092\u4F11[\u3084\u3059]\u307F\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u0997\u09A4\u0995\u09BE\u09B2 \u0995\u09C7\u09A8 \u0995\u09BE\u099C\u09C7 \u0985\u09A8\u09C1\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4 \u099B\u09BF\u09B2\u09C7\u09A8?",
+              line_en: "Why were you absent from work yesterday?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u3059\u307F\u307E\u305B\u3093\u3001\u98A8\u90AA[\u304B\u305C]\u3092\u3072\u3044\u3066\u71B1[\u306D\u3064]\u304C\u3042\u308A\u307E\u3057\u305F\u304B\u3089\u3002",
+              line_bn: "\u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8, \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09B2\u09C7\u0997\u09C7 \u099C\u09CD\u09AC\u09B0 \u09B9\u09AF\u09BC\u09C7\u099B\u09BF\u09B2 \u09AC\u09B2\u09C7\u0964",
+              line_en: "I am sorry, it was because I caught a cold and had a fever."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u09A6\u09C7\u09B0\u09BF \u09AC\u09BE \u099B\u09C1\u099F\u09BF\u09B0 \u099C\u09A8\u09CD\u09AF '\u09B9\u09CB\u09B0\u09C7\u09A8\u09B8\u09CB' (Hou-Ren-So - \u5831\u9023\u76F8) \u09A8\u09BF\u09AF\u09BC\u09AE",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0\u09C7 \u09B8\u09BE\u09AB\u09B2\u09CD\u09AF\u09C7\u09B0 \u09AE\u09C2\u09B2 \u099A\u09BE\u09AC\u09BF\u0995\u09BE\u09A0\u09BF \u09B9\u09B2\u09CB 'Hou-Ren-So': \u5831\u544A (Houkoku - \u09B0\u09BF\u09AA\u09CB\u09B0\u09CD\u099F \u0995\u09B0\u09BE), \u9023\u7D61 (Renraku - \u09AF\u09CB\u0997\u09BE\u09AF\u09CB\u0997 \u09B0\u09BE\u0996\u09BE), \u098F\u09AC\u0982 \u76F8\u8AC7 (Soudan - \u09AA\u09B0\u09BE\u09AE\u09B0\u09CD\u09B6 \u0995\u09B0\u09BE)\u0964 \u0995\u09CB\u09A8\u09CB \u09B8\u09AE\u09B8\u09CD\u09AF\u09BE \u09AC\u09BE \u0985\u09A8\u09C1\u09AA\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF \u09B9\u09B2\u09C7 \u0995\u09BE\u099C \u09B6\u09C1\u09B0\u09C1 \u09B9\u0993\u09AF\u09BC\u09BE\u09B0 \u0986\u0997\u09C7\u0987 \u09B8\u09C1\u09AA\u09BE\u09B0\u09AD\u09BE\u0987\u099C\u09BE\u09B0\u0995\u09C7 \u09AB\u09CB\u09A8 \u09AC\u09BE \u09AE\u09C7\u09B8\u09C7\u099C\u09C7 \u0995\u09BE\u09B0\u09A3\u09B8\u09B9 \u0987\u09A8\u09AB\u09B0\u09CD\u09AE \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u6642\u9593[\u3058\u304B\u3093]\u304C\u3042\u308A\u307E\u305B\u3093\u304B\u3089",
+            romaji_input: "jikan ga arimasen kara",
+            target_display: "\u3058\u304B\u3093\u304C\u3042\u308A\u307E\u305B\u3093\u304B\u3089",
+            meaning_bn: "\u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09B8\u09AE\u09AF\u09BC \u09A8\u09C7\u0987"
+          },
+          {
+            prompt_ja: "\u3069\u3046\u3057\u3066\u3067\u3059\u304B",
+            romaji_input: "doushite desu ka",
+            target_display: "\u3069\u3046\u3057\u3066\u3067\u3059\u304B",
+            meaning_bn: "\u0995\u09C7\u09A8?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L36-1",
+            question_ja: "\u7406\u7531[\u308A\u3086\u3046]\uFF08Reason\uFF09\u3092 \u8868[\u3042\u3089\u308F]\u3059 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u0995\u09BE\u09B0\u09A3 (Reason) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u09BE\u0982\u09B6\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u0995\u09CB\u09A8\u099F\u09BF \u09AC\u09B8\u09C7?",
+            options: [
+              "\u304B\u3089 (kara)",
+              "\u307E\u3067 (made)",
+              "\u3088\u308A (yori)",
+              "\u3051\u3069 (kedo)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0995\u09CD\u09B2\u099C\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 '\u304B\u3089' (kara) \u09AF\u09CB\u0997 \u0995\u09B0\u09B2\u09C7 \u09A4\u09BE \u0995\u09BE\u09B0\u09A3 \u09AC\u09BE \u09B9\u09C7\u09A4\u09C1 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7 (\u09AF\u09C7\u09AE\u09A8: \u5FD9\u3057\u3044\u3067\u3059\u304B\u3089 - \u09AF\u09C7\u09B9\u09C7\u09A4\u09C1 \u09AC\u09CD\u09AF\u09B8\u09CD\u09A4)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L37",
+          lesson_number: 37,
+          module_number: 7,
+          module_name: "Decisions & Completion",
+          module_name_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09AE\u09BE\u09AA\u09A8",
+          title_ja: "\u301C\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059",
+          title_en: "Expressing Thoughts & Opinions (Plain Form + to omoimasu)",
+          title_bn: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC... (\u09AE\u09A4\u09BE\u09AE\u09A4 \u0993 \u09A7\u09BE\u09B0\u09A3\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09B0\u09BE \u0995\u09CB\u09A8\u09CB \u09AC\u0995\u09CD\u09A4\u09AC\u09CD\u09AF\u0995\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09AC\u09BE \u09B0\u09C2\u09A2\u09BC\u09AD\u09BE\u09AC\u09C7 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09A8\u09BE \u0995\u09B0\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0\u09AD\u09BE\u09AC\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u09AE\u09A4\u09BE\u09AE\u09A4 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09A4\u09C1\u09B2\u09C7 \u09A7\u09B0\u09A4\u09C7 \u09AA\u099B\u09A8\u09CD\u09A6 \u0995\u09B0\u09C7\u0964 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AD\u09BE\u09AC\u09A8\u09BE \u09AC\u09BE \u09AE\u09A4\u09BE\u09AE\u09A4 \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u0995\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA\u09C7 (Plain form) \u09B0\u09C7\u0996\u09C7 \u09A4\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3068\u601D[\u304A\u3082]\u3044\u307E\u3059 (\u09AE\u09A8\u09C7 \u0995\u09B0\u09BF / \u0986\u09AE\u09BE\u09B0 \u09A7\u09BE\u09B0\u09A3\u09BE) \u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09B9\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: '\u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u09AC\u09C7 \u09AC\u09B2\u09C7 \u09AE\u09A8\u09C7 \u0995\u09B0\u09BF' -> \u660E\u65E5[\u3042\u3057\u305F]\u96E8[\u3042\u3081]\u304C\u964D[\u3075]\u308B\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u0964",
+          core_concept_bn: "\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u09AE\u09A4\u09BE\u09AE\u09A4 \u0993 \u09AD\u09BE\u09AC\u09A8\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09C7\u09B0 \u0995\u09BE\u09A0\u09BE\u09AE\u09CB [Plain Form] \u3068 \u601D\u3044\u307E\u3059\u0964",
+          real_world_context_bn: "\u09AE\u09BF\u099F\u09BF\u0982\u09AF\u09BC\u09C7 \u09AE\u09A4\u09BE\u09AE\u09A4 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE, \u0995\u09CB\u09A8\u09CB \u09AA\u09A3\u09CD\u09AF \u09AC\u09BE \u09B6\u09B9\u09B0\u09C7\u09B0 \u09B8\u09AE\u09CD\u09AA\u09B0\u09CD\u0995\u09C7 \u09A6\u09C3\u09B7\u09CD\u099F\u09BF\u09AD\u0999\u09CD\u0997\u09BF \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u098F\u09AC\u0982 \u0985\u09A8\u09C1\u09AE\u09BE\u09A8\u09C7\u09B0 \u0995\u09A5\u09BE \u09AC\u09B2\u09BE\u0964",
+          key_takeaway_bn: "[Plain Form] \u3068\u601D[\u304A\u3082]\u3044\u307E\u3059 (\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC...)\u0964 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u3068 \u098F\u0996\u09BE\u09A8\u09C7 \u0995\u09CB\u099F\u09C7\u09B6\u09A8 \u09AE\u09BE\u09B0\u09CD\u0995\u09BE\u09B0\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u601D[\u304A\u3082]\u3044\u307E\u3059",
+            romaji: "omoimasu",
+            meaning_bn: "\u09AE\u09A8\u09C7 \u0995\u09B0\u09BE / \u099A\u09BF\u09A8\u09CD\u09A4\u09BE \u0995\u09B0\u09BE",
+            meaning_en: "to think / feel",
+            part_of_speech: "verb",
+            example_ja: "\u305D\u3046\u601D[\u304A\u3082]\u3044\u307E\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BF\u0993 \u09A4\u09BE\u0987 \u09AE\u09A8\u09C7 \u0995\u09B0\u09BF\u0964",
+            example_en: "I think so too."
+          },
+          {
+            word_ja: "\u610F\u898B[\u3044\u3051\u3093]",
+            romaji: "iken",
+            meaning_bn: "\u09AE\u09A4\u09BE\u09AE\u09A4 / \u09A6\u09C3\u09B7\u09CD\u099F\u09BF\u09AD\u0999\u09CD\u0997\u09BF",
+            meaning_en: "opinion",
+            part_of_speech: "noun",
+            example_ja: "\u3042\u306A\u305F\u306F\u3069\u3046\u601D[\u304A\u3082]\u3044\u307E\u3059\u304B\u3002",
+            example_bn: "\u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09AE\u09A8\u09C7 \u0995\u09B0\u09C7\u09A8?",
+            example_en: "What do you think?"
+          },
+          {
+            word_ja: "\u305F\u3076\u3093",
+            romaji: "tabun",
+            meaning_bn: "\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 / \u09B9\u09AF\u09BC\u09A4\u09CB",
+            meaning_en: "probably / perhaps",
+            part_of_speech: "adverb",
+            example_ja: "\u305F\u3076\u3093\u660E\u65E5[\u3042\u3057\u305F]\u306F\u6674[\u306F]\u308C\u308B\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u3002",
+            example_bn: "\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u09B0\u09CB\u09A6 \u0989\u09A0\u09AC\u09C7 \u09AC\u09B2\u09C7 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC\u0964",
+            example_en: "I think it will probably be sunny tomorrow."
+          },
+          {
+            word_ja: "\u672C\u5F53[\u307B\u3093\u3068\u3046]\u306B",
+            romaji: "hont\u014D ni",
+            meaning_bn: "\u09B8\u09A4\u09CD\u09AF\u09BF\u0987 / \u09AA\u09CD\u09B0\u0995\u09C3\u09A4\u09AA\u0995\u09CD\u09B7\u09C7",
+            meaning_en: "really / truly",
+            part_of_speech: "adverb",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306F\u672C\u5F53[\u307B\u3093\u3068\u3046]\u306B\u5B89\u5168[\u3042\u3093\u305C\u3093]\u3060\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u3002",
+            example_bn: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC \u099C\u09BE\u09AA\u09BE\u09A8 \u09B8\u09A4\u09CD\u09AF\u09BF\u0987 \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6\u0964",
+            example_en: "I think Japan is truly safe."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u601D",
+            onyomi: "\u30B7",
+            kunyomi: "\u304A\u3082\u30FB\u3046",
+            meaning_bn: "\u099A\u09BF\u09A8\u09CD\u09A4\u09BE / \u09AD\u09BE\u09AC\u09A8\u09BE",
+            meaning_en: "think / thought",
+            stroke_count: 9,
+            compounds: [
+              {
+                word_ja: "\u601D[\u304A\u3082]\u3044\u307E\u3059",
+                meaning_bn: "\u09AE\u09A8\u09C7 \u0995\u09B0\u09BF",
+                meaning_en: "to think"
+              },
+              {
+                word_ja: "\u601D[\u304A\u3082]\u3044\u51FA[\u3067]",
+                meaning_bn: "\u09B8\u09CD\u09AE\u09C3\u09A4\u09BF",
+                meaning_en: "memory"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G37-1",
+            pattern_ja: "[Plain Form] \u3068 \u601D\u3044\u307E\u3059",
+            pattern_bn: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC \u09AF\u09C7... (Expressing Opinion / Conjecture)",
+            explanation_bn: "\u3068 \u098F\u09B0 \u09A0\u09BF\u0995 \u0986\u0997\u09C7 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u0995\u09A5\u09CD\u09AF\u09B0\u09C2\u09AA (Plain form) \u09AC\u09B8\u09AC\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u52D5\u8A5E (\u884C\u304F\u3068\u601D\u3044\u307E\u3059), \u3044\u5F62\u5BB9\u8A5E (\u9AD8\u3044\u3068\u601D\u3044\u307E\u3059), \u306A\u5F62\u5BB9\u8A5E/\u540D\u8A5E (\u4FBF\u5229\u3060\u3068\u601D\u3044\u307E\u3059 - \u306A \u098F\u09B0 \u099C\u09BE\u09AF\u09BC\u0997\u09BE\u09AF\u09BC \u3060 \u09AC\u09B8\u09C7)\u0964",
+            common_pitfalls: [
+              "Noun \u09AC\u09BE Na-adjective \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 '\u3060' \u09AC\u09BE\u09A6 \u09A6\u09BF\u09B2\u09C7 \u09AD\u09C1\u09B2 \u09B9\u09AC\u09C7 (\xD7 \u4FBF\u5229\u3068\u601D\u3044\u307E\u3059 \u09A8\u09AF\u09BC, \u25CB \u4FBF\u5229\u3060\u3068\u601D\u3044\u307E\u3059)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u7269\u4FA1[\u3076\u3063\u304B]\u306F\u9AD8[\u305F\u304B]\u3044\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u3002",
+                bn: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AA\u09A3\u09CD\u09AF\u09C7\u09B0 \u09A6\u09BE\u09AE \u099A\u09A1\u09BC\u09BE\u0964",
+                en: "I think prices in Japan are high."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099C\u09C0\u09AC\u09A8\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u09B8\u09B9\u09AA\u09BE\u09A0\u09C0\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AE\u09A4\u09BE\u09AE\u09A4 \u09AC\u09BF\u09A8\u09BF\u09AE\u09AF\u09BC\u0964",
+          situation_en: "Sharing opinions about living in Japan with a classmate.",
+          lines: [
+            {
+              speaker_ja: "\u30B1\u30F3[\u3051\u3093]",
+              speaker_en: "Ken",
+              line_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u306E\u751F\u6D3B[\u305B\u3044\u304B\u3064]\u306B\u3064\u3044\u3066\u3069\u3046\u601D[\u304A\u3082]\u3044\u307E\u3059\u304B\u3002",
+              line_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u099C\u09C0\u09AC\u09A8\u09AF\u09BE\u09AA\u09A8 \u09B8\u09AE\u09CD\u09AA\u09B0\u09CD\u0995\u09C7 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09C0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC?",
+              line_en: "What do you think about life in Japan?"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u3068\u3066\u3082\u4FBF\u5229[\u3079\u3093\u308A]\u3067\u5B89\u5168[\u3042\u3093\u305C\u3093]\u3060\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u3002",
+              line_bn: "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7 \u09B9\u09AF\u09BC \u098F\u099F\u09BF \u0985\u09A4\u09CD\u09AF\u09A8\u09CD\u09A4 \u09B8\u09C1\u09AC\u09BF\u09A7\u09BE\u099C\u09A8\u0995 \u098F\u09AC\u0982 \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6\u0964",
+              line_en: "I think it is very convenient and safe."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u09B8\u09B0\u09BE\u09B8\u09B0\u09BF '\u09A8\u09BE' \u09A8\u09BE \u09AC\u09B2\u09C7 \u09AE\u09A4\u09BE\u09AE\u09A4\u09C7 \u0995\u09CB\u09AE\u09B2\u09A4\u09BE \u0986\u09A8\u09BE (Kuuki wo Yomu - \u7A7A\u6C17\u3092\u8AAD\u3080)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u09B0\u09BE \u09A6\u09CD\u09AC\u09BF\u09AE\u09A4 \u09AA\u09CB\u09B7\u09A3 \u0995\u09B0\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF '\u0986\u09AA\u09A8\u09BF \u09AD\u09C1\u09B2' \u09AC\u09BE '\u09A8\u09BE' \u09AC\u09B2\u09C7 \u09A8\u09BE\u0964 \u09A4\u09BE\u09B0\u09BE '\u3061\u3087\u3063\u3068...' (\u098F\u0995\u099F\u09C1 \u09AF\u09C7\u09A8 \u0995\u09C7\u09AE\u09A8...) \u0985\u09A5\u09AC\u09BE '\u305D\u3046\u3067\u3059\u306D\u3001\u3067\u3082...' (\u09A4\u09BE \u09A0\u09BF\u0995, \u09A4\u09AC\u09C7...) \u09AC\u09B2\u09C7 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AD\u09BE\u09AC \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09C7\u0964 \u098F\u0995\u09C7 \u09AC\u09B2\u09BE \u09B9\u09AF\u09BC '\u09AC\u09BE\u09A4\u09BE\u09B8 \u09AA\u09A1\u09BC\u09BE' \u09AC\u09BE \u09AA\u09B0\u09CB\u0995\u09CD\u09B7 \u09AE\u09BE\u09A8\u09B8\u09BF\u0995\u09A4\u09BE (Kuuki wo yomu - \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF \u09AC\u09C1\u099D\u09C7 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE)\u0964",
+          category: "Manners"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u305D\u3046\u601D[\u304A\u3082]\u3044\u307E\u3059",
+            romaji_input: "sou omoimasu",
+            target_display: "\u305D\u3046\u304A\u3082\u3044\u307E\u3059",
+            meaning_bn: "\u09A4\u09BE\u0987 \u09AE\u09A8\u09C7 \u0995\u09B0\u09BF"
+          },
+          {
+            prompt_ja: "\u5B89\u5168[\u3042\u3093\u305C\u3093]\u3060\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059",
+            romaji_input: "anzen da to omoimasu",
+            target_display: "\u3042\u3093\u305C\u3093\u3060\u3068\u304A\u3082\u3044\u307E\u3059",
+            meaning_bn: "\u09A8\u09BF\u09B0\u09BE\u09AA\u09A6 \u09AC\u09B2\u09C7 \u09AE\u09A8\u09C7 \u0995\u09B0\u09BF"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L37-1",
+            question_ja: "\u300C\u660E\u65E5[\u3042\u3057\u305F]\u96E8[\u3042\u3081]\u304C\uFF08\u3000\uFF09\u3068\u601D[\u304A\u3082]\u3044\u307E\u3059\u300D\u306E \u7A7A\u6B04[\u304F\u3046\u3089\u3093]\u306B \u5165[\u306F\u3044]\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u8A00\u8449[\u3053\u3068\u3070]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09B6\u09C2\u09A8\u09CD\u09AF\u09B8\u09CD\u09A5\u09BE\u09A8\u09C7 \u09B8\u09A0\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6 \u09AC\u09B8\u09BE\u09A8: \u3042\u3057\u305F \u3042\u3081\u304C\uFF08\u3000\uFF09\u3068\u304A\u3082\u3044\u307E\u3059",
+            options: [
+              "\u964D[\u3075]\u308B (Furu)",
+              "\u964D[\u3075]\u308A\u307E\u3059 (Furimasu)",
+              "\u964D[\u3075]\u3063\u3066 (Futte)",
+              "\u964D[\u3075]\u308A (Furi)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u301C\u3068\u601D\u3044\u307E\u3059 \u098F\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA (Plain Form) \u09AC\u09B8\u09C7, \u09A4\u09BE\u0987 \u964D\u308B (\u09A1\u09BF\u0995\u09B6\u09A8\u09BE\u09B0\u09BF \u09B0\u09C2\u09AA) \u09AC\u09B8\u09AC\u09C7\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L38",
+          lesson_number: 38,
+          module_number: 7,
+          module_name: "Decisions & Completion",
+          module_name_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09AE\u09BE\u09AA\u09A8",
+          title_ja: "\u301C\u3067\u3057\u3087\u3046",
+          title_en: "Conjecture & Seeking Confirmation (-deshou)",
+          title_bn: "...\u09A4\u09BE\u0987 \u09A8\u09BE? / \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09B9\u09AC\u09C7 (\u09B8\u09AE\u09CD\u09AD\u09BE\u09AC\u09A8\u09BE \u0993 \u09B8\u09AE\u09CD\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u301C\u3067\u3057\u3087\u3046 (desh\u014D) \u098F\u09B0 \u09A6\u09C1\u099F\u09BF \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09AA\u09CD\u09B0\u09AF\u09BC\u09CB\u0997 \u09B0\u09AF\u09BC\u09C7\u099B\u09C7: \u09E7. \u098A\u09B0\u09CD\u09A7\u09CD\u09AC\u09AE\u09C1\u0996\u09C0 \u09B8\u09CD\u09AC\u09B0\u09C7 (Rising tone: \u3067\u3057\u3087\u3046\uFF1F) \u09AC\u09B2\u09B2\u09C7 \u09B6\u09CD\u09B0\u09CB\u09A4\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u09B8\u09AE\u09CD\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE \u09AC\u09CB\u099D\u09BE\u09AF\u09BC ('\u09A4\u09BE\u0987 \u09A8\u09BE? / \u09A8\u09BF\u09B6\u09CD\u099A\u09AF\u09BC\u0987?')\u0964 \u09E8. \u09B8\u09AE\u09BE\u09A8\u09CD\u09A4\u09B0\u09BE\u09B2 \u09AC\u09BE \u09A8\u09BF\u09AE\u09CD\u09A8\u09AE\u09C1\u0996\u09C0 \u09B8\u09CD\u09AC\u09B0\u09C7 \u09AC\u09B2\u09B2\u09C7 \u0985\u09A8\u09C1\u09AE\u09BE\u09A8 \u09AC\u09BE \u09B8\u09AE\u09CD\u09AD\u09BE\u09AC\u09CD\u09AF\u09A4\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u09AA\u09BE\u09AF\u09BC ('\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09B9\u09AC\u09C7' - \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09AD\u09BE\u09B8\u09C7\u09B0 \u09AE\u09A4\u09CB)\u0964",
+          core_concept_bn: "\u09B8\u09AE\u09CD\u09AE\u09A4\u09BF \u099A\u09BE\u0993\u09AF\u09BC\u09BE (\u099F\u09CD\u09AF\u09BE\u0997 \u0995\u09CB\u09AF\u09BC\u09C7\u09B6\u09CD\u099A\u09C7\u09A8) \u098F\u09AC\u0982 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u0993 \u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u09B8\u09AE\u09CD\u09AD\u09BE\u09AC\u09A8\u09BE \u0985\u09A8\u09C1\u09AE\u09BE\u09A8\u0964",
+          real_world_context_bn: "\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09AD\u09BE\u09B8 \u09A6\u09C7\u0996\u09BE, \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0995\u09CB\u09A8\u09CB \u09A4\u09A5\u09CD\u09AF \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09BE \u098F\u09AC\u0982 \u09AC\u09BF\u09A8\u09AE\u09CD\u09B0 \u0986\u09B2\u09CB\u099A\u09A8\u09BE\u0964",
+          key_takeaway_bn: "Rising tone: \u301C\u3067\u3057\u3087\u3046\u2197 (\u09A4\u09BE\u0987 \u09A8\u09BE?)\u0964 Falling tone: \u301C\u3067\u3057\u3087\u3046\u2198 (\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09B9\u09AC\u09C7)\u0964"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u3067\u3057\u3087\u3046",
+            romaji: "desh\u014D",
+            meaning_bn: "\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09B9\u09AC\u09C7 / \u09A4\u09BE\u0987 \u09A8\u09BE?",
+            meaning_en: "probably / right?",
+            part_of_speech: "auxiliary",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u306F\u6674[\u306F]\u308C\u308B\u3067\u3057\u3087\u3046\u3002",
+            example_bn: "\u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09B0\u09CB\u09A6 \u0989\u09A0\u09AC\u09C7\u0964",
+            example_en: "It will probably be sunny tomorrow."
+          },
+          {
+            word_ja: "\u5929\u6C17\u4E88\u5831[\u3066\u3093\u304D\u3088\u307B\u3046]",
+            romaji: "tenki yoh\u014D",
+            meaning_bn: "\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09AD\u09BE\u09B8",
+            meaning_en: "weather forecast",
+            part_of_speech: "noun",
+            example_ja: "\u5929\u6C17\u4E88\u5831[\u3066\u3093\u304D\u3088\u307B\u3046]\u3092\u898B[\u307F]\u307E\u3057\u305F\u304B\u3002",
+            example_bn: "\u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09AD\u09BE\u09B8 \u09A6\u09C7\u0996\u09C7\u099B\u09C7\u09A8 \u0995\u09BF?",
+            example_en: "Did you watch the weather forecast?"
+          },
+          {
+            word_ja: "\u6674[\u306F]\u308C",
+            romaji: "hare",
+            meaning_bn: "\u09B0\u09CC\u09A6\u09CD\u09B0\u09CB\u099C\u09CD\u099C\u09CD\u09AC\u09B2 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "sunny / clear weather",
+            part_of_speech: "noun",
+            example_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u306F\u6674[\u306F]\u308C\u3067\u3057\u3087\u3046\u3002",
+            example_bn: "\u0995\u09BE\u09B2 \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u0986\u0995\u09BE\u09B6 \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u09A5\u09BE\u0995\u09AC\u09C7\u0964",
+            example_en: "Tomorrow will probably be clear."
+          },
+          {
+            word_ja: "\u96E8[\u3042\u3081]",
+            romaji: "ame",
+            meaning_bn: "\u09AC\u09C3\u09B7\u09CD\u099F\u09BF",
+            meaning_en: "rain",
+            part_of_speech: "noun",
+            example_ja: "\u5348\u5F8C[\u3054\u3054]\u304B\u3089\u96E8[\u3042\u3081]\u3067\u3057\u3087\u3046\u3002",
+            example_bn: "\u09AC\u09BF\u0995\u09BE\u09B2 \u09A5\u09C7\u0995\u09C7 \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u09AC\u09C7\u0964",
+            example_en: "It will probably rain from the afternoon."
+          },
+          {
+            word_ja: "\u96EA[\u3086\u304D]",
+            romaji: "yuki",
+            meaning_bn: "\u09A4\u09C1\u09B7\u09BE\u09B0 / \u09AC\u09B0\u09AB\u09AA\u09BE\u09A4",
+            meaning_en: "snow",
+            part_of_speech: "noun",
+            example_ja: "\u5317\u6D77\u9053[\u307B\u3063\u304B\u3044\u3069\u3046]\u306F\u96EA[\u3086\u304D]\u3067\u3057\u3087\u3046\u3002",
+            example_bn: "\u09B9\u09CB\u0995\u09CD\u0995\u09BE\u0987\u09A1\u09CB\u09A4\u09C7 \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09A4\u09C1\u09B7\u09BE\u09B0\u09AA\u09BE\u09A4 \u09B9\u09AC\u09C7\u0964",
+            example_en: "It will probably snow in Hokkaido."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u6674",
+            onyomi: "\u30BB\u30A4",
+            kunyomi: "\u306F\u30FB\u308C\u308B, \u306F\u30FB\u3089\u3059",
+            meaning_bn: "\u09B0\u09CB\u09A6 / \u09AA\u09B0\u09BF\u09B7\u09CD\u0995\u09BE\u09B0 \u0986\u0995\u09BE\u09B6",
+            meaning_en: "clear up / sunny",
+            stroke_count: 12,
+            compounds: [
+              {
+                word_ja: "\u6674[\u306F]\u308C",
+                meaning_bn: "\u09B0\u09CC\u09A6\u09CD\u09B0\u09CB\u099C\u09CD\u099C\u09CD\u09AC\u09B2",
+                meaning_en: "sunny weather"
+              },
+              {
+                word_ja: "\u5FEB\u6674[\u304B\u3044\u305B\u3044]",
+                meaning_bn: "\u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u09A8\u09BF\u09B0\u09CD\u09AE\u09B2 \u0986\u0995\u09BE\u09B6",
+                meaning_en: "clear skies"
+              }
+            ]
+          },
+          {
+            kanji: "\u96E8",
+            onyomi: "\u30A6",
+            kunyomi: "\u3042\u3081, \u3042\u307E",
+            meaning_bn: "\u09AC\u09C3\u09B7\u09CD\u099F\u09BF",
+            meaning_en: "rain",
+            stroke_count: 8,
+            compounds: [
+              {
+                word_ja: "\u96E8[\u3042\u3081]",
+                meaning_bn: "\u09AC\u09C3\u09B7\u09CD\u099F\u09BF",
+                meaning_en: "rain"
+              },
+              {
+                word_ja: "\u5927\u96E8[\u304A\u304A\u3042\u3081]",
+                meaning_bn: "\u09AD\u09BE\u09B0\u09C0 \u09AC\u09B0\u09CD\u09B7\u09A3",
+                meaning_en: "heavy rain"
+              },
+              {
+                word_ja: "\u96E8\u671F[\u3046\u304D]",
+                meaning_bn: "\u09AC\u09B0\u09CD\u09B7\u09BE\u0995\u09BE\u09B2",
+                meaning_en: "rainy season"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G38-1",
+            pattern_ja: "[Plain Form / Noun] \u3067\u3057\u3087\u3046",
+            pattern_bn: "\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 [\u09B9\u09AC\u09C7 / \u0998\u099F\u09AC\u09C7] (Probability & Conjecture)",
+            explanation_bn: "Noun \u098F\u09AC\u0982 Na-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u3067\u3057\u3087\u3046 \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC (\u0995\u09CB\u09A8\u09CB '\u3060' \u09AC\u09B8\u09C7 \u09A8\u09BE)\u0964 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 \u0993 \u0987-\u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7\u09B0 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u3067\u3057\u3087\u3046 \u09AC\u09B8\u09C7\u0964",
+            common_pitfalls: [
+              "Noun + \u3060\u3067\u3057\u3087\u3046 \u09AC\u09B2\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AD\u09C1\u09B2 (\xD7 \u96E8\u3060\u3067\u3057\u3087\u3046 \u09A8\u09AF\u09BC, \u25CB \u96E8\u3067\u3057\u3087\u3046)\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u8A66\u9A13[\u3057\u3051\u3093]\u306F\u96E3[\u3080\u305A\u304B]\u3057\u3044\u3067\u3057\u3087\u3046\u3002",
+                bn: "\u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u0995\u09A0\u09BF\u09A8 \u09B9\u09AC\u09C7\u0964",
+                en: "The exam will probably be difficult."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2\u09C7\u09B0 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u09A8\u09BF\u09AF\u09BC\u09C7 \u09AC\u09A8\u09CD\u09A7\u09C1\u09A6\u09C7\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8\u0964",
+          situation_en: "Discussing tomorrow's weather with friends.",
+          lines: [
+            {
+              speaker_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]",
+              speaker_en: "Friend",
+              line_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u306E\u5929\u6C17[\u3066\u3093\u304D]\u306F\u3069\u3046\u3067\u3057\u3087\u3046\u3002",
+              line_bn: "\u0995\u09BE\u09B2\u0995\u09C7\u09B0 \u0986\u09AC\u09B9\u09BE\u0993\u09AF\u09BC\u09BE \u0995\u09C7\u09AE\u09A8 \u09B9\u09A4\u09C7 \u09AA\u09BE\u09B0\u09C7?",
+              line_en: "How do you think the weather will be tomorrow?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u30CB\u30E5\u30FC\u30B9\u306B\u3088\u308B\u3068\u3001\u5348\u5F8C[\u3054\u3054]\u304B\u3089\u96E8[\u3042\u3081]\u304C\u964D[\u3075]\u308B\u3067\u3057\u3087\u3046\u3002",
+              line_bn: "\u0996\u09AC\u09B0\u09C7\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09AD\u09BE\u09B8 \u0985\u09A8\u09C1\u09AF\u09BE\u09AF\u09BC\u09C0, \u09AC\u09BF\u0995\u09BE\u09B2 \u09A5\u09C7\u0995\u09C7 \u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF \u09B9\u09AC\u09C7\u0964",
+              line_en: "According to the news, it will probably rain from the afternoon."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09A6\u09C1\u09B0\u09CD\u09AF\u09CB\u0997 \u09B8\u09A4\u09B0\u09CD\u0995\u09A4\u09BE \u0993 \u09AD\u09C2\u09AE\u09BF\u0995\u09AE\u09CD\u09AA \u09B8\u09BE\u0987\u09B0\u09C7\u09A8 (J-Alert)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CB\u09A8\u09CB \u09B6\u0995\u09CD\u09A4\u09BF\u09B6\u09BE\u09B2\u09C0 \u09AD\u09C2\u09AE\u09BF\u0995\u09AE\u09CD\u09AA (Shindo 5+) \u09AC\u09BE \u099F\u09BE\u0987\u09AB\u09C1\u09A8 \u0986\u0998\u09BE\u09A4 \u09B9\u09BE\u09A8\u09BE\u09B0 \u0995\u09AF\u09BC\u09C7\u0995 \u09B8\u09C7\u0995\u09C7\u09A8\u09CD\u09A1 \u0986\u0997\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u09B8\u09CD\u09AE\u09BE\u09B0\u09CD\u099F\u09AB\u09CB\u09A8\u09C7 \u09AC\u09BF\u0995\u099F \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u09AE \u09B6\u09AC\u09CD\u09A6\u09B8\u09B9 'J-Alert' \u09AC\u09BE\u09B0\u09CD\u09A4\u09BE \u09AD\u09C7\u09B8\u09C7 \u0993\u09A0\u09C7\u0964 \u098F\u0987 \u09B6\u09AC\u09CD\u09A6 \u09B6\u09C1\u09A8\u09B2\u09C7\u0987 \u09A4\u09CE\u0995\u09CD\u09B7\u09A3\u09BE\u09CE \u09AE\u09BE\u09A5\u09BE \u09AC\u09BE\u0981\u099A\u09BF\u09AF\u09BC\u09C7 \u099F\u09C7\u09AC\u09BF\u09B2\u09C7\u09B0 \u09A8\u09BF\u099A\u09C7 \u0986\u09B6\u09CD\u09B0\u09AF\u09BC \u09A8\u09BF\u09A4\u09C7 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u0997\u09CD\u09AF\u09BE\u09B8\u09C7\u09B0 \u099A\u09C1\u09B2\u09BE \u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          category: "Emergency"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u306F\u6674[\u306F]\u308C\u308B\u3067\u3057\u3087\u3046",
+            romaji_input: "ashita wa hareru deshou",
+            target_display: "\u3042\u3057\u305F\u306F\u306F\u308C\u308B\u3067\u3057\u3087\u3046",
+            meaning_bn: "\u0995\u09BE\u09B2 \u09B9\u09AF\u09BC\u09A4\u09CB \u09B0\u09CB\u09A6 \u0989\u09A0\u09AC\u09C7"
+          },
+          {
+            prompt_ja: "\u304A\u3044\u3057\u3044\u3067\u3057\u3087\u3046\uFF1F",
+            romaji_input: "oishii deshou?",
+            target_display: "\u304A\u3044\u3057\u3044\u3067\u3057\u3087\u3046\uFF1F",
+            meaning_bn: "\u09B8\u09C1\u09B8\u09CD\u09AC\u09BE\u09A6\u09C1, \u09A4\u09BE\u0987 \u09A8\u09BE?"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L38-1",
+            question_ja: "\u540D\u8A5E[\u3081\u3044\u3057]\uFF08Noun\uFF09\u306B\u300C\u3067\u3057\u3087\u3046\u300D\u3092 \u4ED8[\u3064]\u3051\u308B \u6B63[\u305F\u3060]\u3057\u3044 \u5F62[\u304B\u305F\u3061]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF\u09C7\u09B0 (Noun) \u09B8\u09BE\u09A5\u09C7 \u2018\u3067\u3057\u3087\u3046\u2019 \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09BE\u09B0 \u09B8\u09A0\u09BF\u0995 \u09B0\u09C2\u09AA \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u96E8[\u3042\u3081]\u3067\u3057\u3087\u3046 (Ame deshou)",
+              "\u96E8[\u3042\u3081]\u3060\u3067\u3057\u3087\u3046 (Ame da deshou)",
+              "\u96E8[\u3042\u3081]\u306A\u3067\u3057\u3087\u3046 (Ame na deshou)",
+              "\u96E8[\u3042\u3081]\u306E\u3067\u3057\u3087\u3046 (Ame no deshou)"
+            ],
+            correct_index: 0,
+            explanation_bn: "Noun \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u0995\u09CB\u09A8\u09CB \u3060 \u09AC\u09BE \u306A \u099B\u09BE\u09A1\u09BC\u09BE '\u3067\u3057\u3087\u3046' \u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC: \u96E8\u3067\u3057\u3087\u3046 (\u09B8\u09AE\u09CD\u09AD\u09AC\u09A4 \u09AC\u09C3\u09B7\u09CD\u099F\u09BF)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L39",
+          lesson_number: 39,
+          module_number: 7,
+          module_name: "Decisions & Completion",
+          module_name_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09AE\u09BE\u09AA\u09A8",
+          title_ja: "\u301C\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F",
+          title_en: "Direct & Indirect Quotations (-to iimashita)",
+          title_bn: "...\u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 (\u0989\u0995\u09CD\u09A4\u09BF \u0993 \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u0995\u09CD\u09B7-\u09AA\u09B0\u09CB\u0995\u09CD\u09B7 \u0989\u09A6\u09CD\u09A7\u09C3\u09A4\u09BF)",
+          estimated_minutes: 25,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0985\u09A8\u09CD\u09AF \u0995\u09BE\u09B0\u09CB \u0989\u0995\u09CD\u09A4\u09BF \u09B9\u09C1\u09AC\u09B9\u09C1 (Direct Speech) \u09AC\u09BE \u09AA\u09B0\u09CB\u0995\u09CD\u09B7\u09AD\u09BE\u09AC\u09C7 (Indirect Speech) \u09AA\u09CD\u09B0\u0995\u09BE\u09B6 \u0995\u09B0\u09A4\u09C7 \u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F (\u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8) \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC\u0964 \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u0995\u09CD\u09B7 \u0989\u0995\u09CD\u09A4\u09BF\u09A4\u09C7 \u0989\u09A6\u09CD\u09A7\u09C3\u09A4\u09BF \u099A\u09BF\u09B9\u09CD\u09A8\u09C7\u09B0 (\u300C \u300D - \u0995\u09BE\u0997\u09BF\u0995\u09BE\u0995\u09CD\u0995\u09CB) \u09AD\u09C7\u09A4\u09B0\u09C7 \u09B9\u09C1\u09AC\u09B9\u09C1 \u0995\u09A5\u09BE\u099F\u09BF \u09AC\u09B8\u09C7\u0964 \u0986\u09B0 \u09AA\u09B0\u09CB\u0995\u09CD\u09B7 \u0989\u0995\u09CD\u09A4\u09BF\u09A4\u09C7 \u0995\u09A5\u09BE\u099F\u09BF\u0995\u09C7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09C7 (Plain form) \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09C7 \u3068\u8A00\u3044\u307E\u3057\u305F \u09AF\u09CB\u0997 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u0989\u09A6\u09CD\u09A7\u09C3\u09A4\u09BF \u099A\u09BF\u09B9\u09CD\u09A8 (\u300C \u300D) \u09AC\u09A8\u09BE\u09AE \u09AA\u09B0\u09CB\u0995\u09CD\u09B7 \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u3068\u8A00\u3044\u307E\u3057\u305F\u0964",
+          real_world_context_bn: "\u0985\u09AB\u09BF\u09B8\u09C7 \u09AC\u09B8\u09C7\u09B0 \u09AC\u09BE\u09B0\u09CD\u09A4\u09BE \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB, \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0995\u09CD\u09B2\u09BE\u09B8\u09C7 \u0995\u09C0 \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09A4\u09BE \u09B8\u09CD\u09AE\u09B0\u09A3 \u0995\u09B0\u09BE\u0964",
+          key_takeaway_bn: "Direct: \u300C...\u300D\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F\u3002 Indirect: [Plain Form] \u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F\u3002"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u8A00[\u3044]\u3044\u307E\u3059",
+            romaji: "iimasu",
+            meaning_bn: "\u09AC\u09B2\u09BE",
+            meaning_en: "to say / tell",
+            part_of_speech: "verb",
+            example_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u306F\u4F55[\u306A\u306B]\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F\u304B\u3002",
+            example_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0995\u09C0 \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8?",
+            example_en: "What did the teacher say?"
+          },
+          {
+            word_ja: "\u4F1D[\u3064\u305F]\u3048\u307E\u3059",
+            romaji: "tsutaemasu",
+            meaning_bn: "\u09AC\u09BE\u09B0\u09CD\u09A4\u09BE \u09AA\u09CC\u0981\u099B\u09C7 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE / \u099C\u09BE\u09A8\u09BE\u09A8\u09CB",
+            meaning_en: "to convey / tell",
+            part_of_speech: "verb",
+            example_ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306B\u4F1D[\u3064\u305F]\u3048\u3066\u304F\u3060\u3055\u3044\u3002",
+            example_bn: "\u09A6\u09AF\u09BC\u09BE \u0995\u09B0\u09C7 \u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC\u0995\u09C7 \u099C\u09BE\u09A8\u09BF\u09AF\u09BC\u09C7 \u09A6\u09C7\u09AC\u09C7\u09A8\u0964",
+            example_en: "Please convey this to Mr. Tanaka."
+          },
+          {
+            word_ja: "\u7D04\u675F[\u3084\u304F\u305D\u304F]",
+            romaji: "yakusoku",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09A4\u09BF\u09B6\u09CD\u09B0\u09C1\u09A4\u09BF / \u0993\u09AF\u09BC\u09BE\u09A6\u09BE",
+            meaning_en: "promise / appointment",
+            part_of_speech: "noun",
+            example_ja: "\u53CB\u9054[\u3068\u3082\u3060\u3061]\u3068\u7D04\u675F[\u3084\u304F\u305D\u304F]\u304C\u3042\u308A\u307E\u3059\u3002",
+            example_bn: "\u09AC\u09A8\u09CD\u09A7\u09C1\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u09B6\u09CD\u09B0\u09C1\u09A4 \u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE\u09B0 \u09B6\u09BF\u09A1\u09BF\u0989\u09B2 \u0986\u099B\u09C7\u0964",
+            example_en: "I have an appointment with a friend."
+          },
+          {
+            word_ja: "\u4F1A\u8B70[\u304B\u3044\u304E]",
+            romaji: "kaigi",
+            meaning_bn: "\u09B8\u09AD\u09BE / \u09AE\u09BF\u099F\u09BF\u0982",
+            meaning_en: "meeting / conference",
+            part_of_speech: "noun",
+            example_ja: "\u4F1A\u8B70[\u304B\u3044\u304E]\u306F\u5341\u6642[\u3058\u3085\u3046\u3058]\u304B\u3089\u59CB[\u306F\u3058]\u307E\u308A\u307E\u3059\u3002",
+            example_bn: "\u09AE\u09BF\u099F\u09BF\u0982 \u09E7\u09E6\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09B6\u09C1\u09B0\u09C1 \u09B9\u09AC\u09C7\u0964",
+            example_en: "The meeting starts from 10 o'clock."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u8A00",
+            onyomi: "\u30B2\u30F3, \u30B4\u30F3",
+            kunyomi: "\u3044\u30FB\u3046, \u3053\u3068",
+            meaning_bn: "\u0995\u09A5\u09BE / \u09AC\u09B2\u09BE",
+            meaning_en: "say / word",
+            stroke_count: 7,
+            compounds: [
+              {
+                word_ja: "\u8A00[\u3044]\u3044\u307E\u3059",
+                meaning_bn: "\u09AC\u09B2\u09BE",
+                meaning_en: "to say"
+              },
+              {
+                word_ja: "\u8A00\u8449[\u3053\u3068\u3070]",
+                meaning_bn: "\u09AD\u09BE\u09B7\u09BE / \u09B6\u09AC\u09CD\u09A6",
+                meaning_en: "word / language"
+              },
+              {
+                word_ja: "\u65B9\u8A00[\u307B\u3046\u3052\u3093]",
+                meaning_bn: "\u0986\u099E\u09CD\u099A\u09B2\u09BF\u0995 \u0989\u09AA\u09AD\u09BE\u09B7\u09BE",
+                meaning_en: "dialect"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G39-1",
+            pattern_ja: "Person \u306F [Plain Form] \u3068 \u8A00\u3044\u307E\u3057\u305F",
+            pattern_bn: "[\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF] \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09AF\u09C7...",
+            explanation_bn: "\u0985\u09A8\u09CD\u09AF\u09C7\u09B0 \u09AC\u0995\u09CD\u09A4\u09AC\u09CD\u09AF\u09C7\u09B0 \u09AA\u09B0\u09CB\u0995\u09CD\u09B7 \u09AC\u09B0\u09CD\u09A3\u09A8\u09BE\u09AF\u09BC \u0995\u09CB\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u09AD\u09C7\u09A4\u09B0\u09C7\u09B0 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u099F\u09BF \u09B8\u09BE\u09A7\u09BE\u09B0\u09A3 \u09B0\u09C2\u09AA\u09C7 (Plain form) \u09AA\u09B0\u09BF\u09AC\u09B0\u09CD\u09A4\u09BF\u09A4 \u09B9\u09AF\u09BC \u098F\u09AC\u0982 \u3068\u8A00\u3044\u307E\u3057\u305F \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09B6\u09C7\u09B7 \u09B9\u09AF\u09BC\u0964",
+            common_pitfalls: [
+              '\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0995\u09CB\u099F\u09C7\u09B6\u09A8 \u099A\u09BF\u09B9\u09CD\u09A8 \u0987\u0982\u09B0\u09C7\u099C\u09BF " " \u098F\u09B0 \u09AE\u09A4\u09CB \u09A8\u09AF\u09BC, \u098F\u099F\u09BF \u09B9\u09B2\u09CB \u300C \u300D (\u0995\u09BE\u0997\u09BF\u0995\u09BE\u0995\u09CD\u0995\u09CB)\u0964'
+            ],
+            examples: [
+              {
+                ja: "\u7530\u4E2D[\u305F\u306A\u304B]\u3055\u3093\u306F\u660E\u65E5[\u3042\u3057\u305F]\u4F11[\u3084\u3059]\u3080\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F\u3002",
+                bn: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09BE\u09B9\u09C7\u09AC \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09AF\u09C7 \u09A4\u09BF\u09A8\u09BF \u0986\u0997\u09BE\u09AE\u09C0\u0995\u09BE\u09B2 \u099B\u09C1\u099F\u09BF \u09A8\u09C7\u09AC\u09C7\u09A8\u0964",
+                en: "Mr. Tanaka said that he would take a day off tomorrow."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u0995\u09C7 \u09AE\u09CD\u09AF\u09BE\u09A8\u09C7\u099C\u09BE\u09B0\u09C7\u09B0 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u09AA\u09CC\u0981\u099B\u09C7 \u09A6\u09C7\u0993\u09AF\u09BC\u09BE\u0964",
+          situation_en: "Conveying the manager's instructions to a coworker.",
+          lines: [
+            {
+              speaker_ja: "\u540C\u50DA[\u3069\u3046\u308A\u3087\u3046]",
+              speaker_en: "Colleague",
+              line_ja: "\u90E8\u9577[\u3076\u3061\u3087\u3046]\u306F\u4F55[\u306A\u306B]\u304B\u8A00[\u3044]\u3063\u3066\u3044\u307E\u3057\u305F\u304B\u3002",
+              line_bn: "\u09A1\u09BF\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F \u09B9\u09C7\u09A1 \u0995\u09BF \u0995\u09BF\u099B\u09C1 \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8?",
+              line_en: "Did the department head say anything?"
+            },
+            {
+              speaker_ja: "\u81EA\u5206[\u3058\u3076\u3093]",
+              speaker_en: "Self",
+              line_ja: "\u306F\u3044\u3001\u4ECA\u65E5[\u304D\u3087\u3046]\u306E\u4F1A\u8B70[\u304B\u3044\u304E]\u306F\u4E09\u6642[\u3055\u3093\u3058]\u304B\u3089\u3060\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F\u3002",
+              line_bn: "\u099C\u09BF, \u09A4\u09BF\u09A8\u09BF \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8 \u09AF\u09C7 \u0986\u099C\u0995\u09C7\u09B0 \u09AE\u09BF\u099F\u09BF\u0982 \u09E9\u099F\u09BE \u09A5\u09C7\u0995\u09C7 \u09B9\u09AC\u09C7\u0964",
+              line_en: "Yes, he said that today's meeting would be from 3 o'clock."
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0985\u09AB\u09BF\u09B8\u09C7 \u09A6\u09BE\u09AF\u09BC\u09BF\u09A4\u09CD\u09AC \u09B9\u09B8\u09CD\u09A4\u09BE\u09A8\u09CD\u09A4\u09B0 \u0993 \u0993\u09A4\u09B8\u09C1\u0995\u09BE\u09B0\u09C7 (Otsukaresama - \u304A\u75B2\u308C\u69D8)",
+          tip_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0985\u09AB\u09BF\u09B8\u09C7 \u0995\u09BE\u099C \u09B6\u09C7\u09B7 \u0995\u09B0\u09C7 \u09AC\u09C7\u09B0 \u09B9\u0993\u09AF\u09BC\u09BE\u09B0 \u09B8\u09AE\u09AF\u09BC \u09B8\u09B9\u0995\u09B0\u09CD\u09AE\u09C0\u09A6\u09C7\u09B0 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09C7 '\u304A\u5148\u306B\u5931\u793C\u3057\u307E\u3059' (Osaki ni shitsurei shimasu - \u0986\u09AA\u09A8\u09BE\u09A6\u09C7\u09B0 \u0986\u0997\u09C7 \u09AC\u09BF\u09A6\u09BE\u09AF\u09BC \u09A8\u09BF\u099A\u09CD\u099B\u09BF \u09AE\u09BE\u09AB \u0995\u09B0\u09AC\u09C7\u09A8) \u098F\u09AC\u0982 \u09AF\u09BE\u09B0\u09BE \u09A5\u09BE\u0995\u099B\u09C7 \u09A4\u09BE\u09B0\u09BE \u0989\u09A4\u09CD\u09A4\u09B0\u09C7 '\u304A\u75B2\u308C\u69D8\u3067\u3057\u305F' (Otsukaresamadeshita - \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09A0\u09CB\u09B0 \u09AA\u09B0\u09BF\u09B6\u09CD\u09B0\u09AE\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6) \u09AC\u09B2\u09C7 \u0985\u09AD\u09BF\u09AC\u09BE\u09A6\u09A8 \u099C\u09BE\u09A8\u09BE\u09AF\u09BC\u0964 \u098F\u099F\u09BF \u0995\u09B0\u09CD\u09AE\u09B8\u09CD\u09A5\u09B2\u09C7\u09B0 \u09AD\u09BE\u09A4\u09C3\u09A4\u09CD\u09AC\u09AC\u09CB\u09A7\u09C7\u09B0 \u0985\u09B2\u0999\u09CD\u0998\u09A8\u09C0\u09AF\u09BC \u0985\u0982\u09B6\u0964",
+          category: "Workplace"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u660E\u65E5[\u3042\u3057\u305F]\u4F11[\u3084\u3059]\u3080\u3068\u8A00[\u3044]\u3044\u307E\u3057\u305F",
+            romaji_input: "ashita yasumu to iimashita",
+            target_display: "\u3042\u3057\u305F\u3084\u3059\u3080\u3068\u3044\u3044\u307E\u3057\u305F",
+            meaning_bn: "\u0995\u09BE\u09B2 \u099B\u09C1\u099F\u09BF \u09A8\u09C7\u09AC\u09C7\u09A8 \u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8"
+          },
+          {
+            prompt_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u306B\u4F1D[\u3064\u305F]\u3048\u3066\u304F\u3060\u3055\u3044",
+            romaji_input: "sensei ni tsutaete kudasai",
+            target_display: "\u305B\u3093\u305B\u3044\u306B\u3064\u305F\u3048\u3066\u304F\u3060\u3055\u3044",
+            meaning_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995\u0995\u09C7 \u099C\u09BE\u09A8\u09BF\u09AF\u09BC\u09C7 \u09A6\u09BF\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L39-1",
+            question_ja: "\u5F15\u7528[\u3044\u3093\u3088\u3046]\uFF08Quote\uFF09\u3092 \u8868[\u3042\u3089\u308F]\u3059 \u52A9\u8A5E[\u3058\u3087\u3057]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u0989\u09A6\u09CD\u09A7\u09C3\u09A4\u09BF (Quotation) \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09A4\u09C7 \u0995\u09CB\u09A8 \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC?",
+            options: [
+              "\u3068 (to)",
+              "\u3092 (o)",
+              "\u3067 (de)",
+              "\u306B (ni)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u0989\u09A6\u09CD\u09A7\u09C3\u09A4\u09BF \u09AC\u09BE \u0989\u0995\u09CD\u09A4\u09BF \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6\u0995 \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 '\u3068' \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u09AC\u09B8\u09C7: \u301C\u3068\u8A00\u3044\u307E\u3057\u305F (\u09AC\u09B2\u09C7\u099B\u09BF\u09B2\u09C7\u09A8)\u0964"
+          }
+        ]
+      },
+      {
+        lesson_metadata: {
+          lesson_id: "L40",
+          lesson_number: 40,
+          module_number: 7,
+          module_name: "Decisions & Completion",
+          module_name_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0993 \u09B8\u09AE\u09BE\u09AA\u09A8",
+          title_ja: "\u301C\u3053\u3068\u306B\u306A\u308A\u307E\u3059 (N5 Capstone)",
+          title_en: "Decisions, Arrangements & JLPT N5 Capstone Mastery",
+          title_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 (N5 \u09B8\u09BE\u09AE\u0997\u09CD\u09B0\u09BF\u0995 \u09B8\u09AE\u09BE\u09AA\u09A8 \u0993 \u0995\u09CD\u09AF\u09BE\u09AA\u09B8\u09CD\u099F\u09CB\u09A8)",
+          estimated_minutes: 30,
+          difficulty: "Intermediate"
+        },
+        bengali_bridge: {
+          explanation_bn: "\u0985\u09AD\u09BF\u09A8\u09A8\u09CD\u09A6\u09A8! \u098F\u099F\u09BF \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF N5 \u0995\u09BE\u09B0\u09BF\u0995\u09C1\u09B2\u09BE\u09AE\u09C7\u09B0 \u09B8\u09AE\u09BE\u09AA\u09A8\u09C0 \u09AA\u09BE\u09A0\u0964 \u098F\u0996\u09BE\u09A8\u09C7 \u09AA\u09CD\u09B0\u09BE\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09AC\u09BE \u09A8\u09BF\u09AF\u09BC\u09AE\u09A4\u09BE\u09A8\u09CD\u09A4\u09CD\u09B0\u09BF\u0995 \u09AC\u09CD\u09AF\u09AC\u09B8\u09CD\u09A5\u09BE \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09C7 V-dictionary + \u3053\u3068\u306B\u306A\u308A\u307E\u3059 (\u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 / \u099A\u09C2\u09A1\u09BC\u09BE\u09A8\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7) \u09B6\u09C7\u0996\u09BE \u09B9\u09AF\u09BC\u0964 \u098F\u09B0 \u09AA\u09BE\u09B6\u09BE\u09AA\u09BE\u09B6\u09BF \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8\u09C7\u09B0 \u09EE\u099F\u09BF \u09AE\u09A1\u09BF\u0989\u09B2\u09C7\u09B0 \u09EA\u09E6\u099F\u09BF \u09AA\u09BE\u09A0\u09C7\u09B0 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3, \u09EE\u09E6\u09E6\u099F\u09BF \u09B6\u09AC\u09CD\u09A6\u09BE\u09B0\u09CD\u09A5 \u098F\u09AC\u0982 \u09E7\u09E6\u09E6\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u0995\u09BE\u09A8\u099C\u09BF\u09B0 \u09B8\u09AE\u09A8\u09CD\u09AC\u09AF\u09BC\u09C7 \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC \u099C\u09BE\u09AA\u09BE\u09A8 \u0985\u09AD\u09BF\u09AF\u09BE\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u09AF\u09BC\u0964",
+          core_concept_bn: "\u09AA\u09CD\u09B0\u09BE\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 (\u301C\u3053\u3068\u306B\u306A\u308A\u307E\u3059) \u098F\u09AC\u0982 JLPT N5 \u098F\u09B0 \u09B8\u09AE\u09A8\u09CD\u09AC\u09BF\u09A4 \u09B8\u09AE\u09BE\u09AA\u09A8\u09C0 \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0 \u099F\u09C7\u09B8\u09CD\u099F\u0964",
+          real_world_context_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AD\u09BF\u09B8\u09BE \u09AA\u09BE\u0993\u09AF\u09BC\u09BE, \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE, \u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F\u09C7 \u0985\u09AC\u09A4\u09B0\u09A3 \u0993 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B8\u09CD\u09AC\u09BE\u09A7\u09C0\u09A8\u09AD\u09BE\u09AC\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u09AE\u09BE\u099C\u09C7 \u099A\u09B2\u09BE\u099A\u09B2\u09C7\u09B0 \u09B8\u09BE\u09AE\u09B0\u09CD\u09A5\u09CD\u09AF\u0964",
+          key_takeaway_bn: "V-dict \u3053\u3068\u306B\u306A\u308A\u307E\u3059 (\u09A8\u09BF\u09AF\u09BC\u09AE \u09AC\u09BE \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7)\u0964 \u65E5\u672C\u8A9E[\u306B\u307B\u3093\u3054] N5 \u5408\u683C[\u3054\u3046\u304B\u304F]\uFF01"
+        },
+        vocabulary_scope: [
+          {
+            word_ja: "\u5408\u683C[\u3054\u3046\u304B\u304F]\u3057\u307E\u3059",
+            romaji: "g\u014Dkakushimasu",
+            meaning_bn: "\u0989\u09A4\u09CD\u09A4\u09C0\u09B0\u09CD\u09A3 \u09B9\u0993\u09AF\u09BC\u09BE / \u09AA\u09BE\u09B8 \u0995\u09B0\u09BE",
+            meaning_en: "to pass (an exam)",
+            part_of_speech: "verb",
+            example_ja: "JLPT N5\u306B\u5408\u683C[\u3054\u3046\u304B\u304F]\u3057\u307E\u3057\u305F\uFF01",
+            example_bn: "\u099C\u09C7\u098F\u09B2\u09AA\u09BF\u099F\u09BF \u098F\u09A8\u09EB \u098F \u0989\u09A4\u09CD\u09A4\u09C0\u09B0\u09CD\u09A3 \u09B9\u09AF\u09BC\u09C7\u099B\u09BF!",
+            example_en: "I passed JLPT N5!"
+          },
+          {
+            word_ja: "\u6C7A[\u304D]\u307E\u308A\u307E\u3059",
+            romaji: "kimarimasu",
+            meaning_bn: "\u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE / \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE",
+            meaning_en: "to be decided",
+            part_of_speech: "verb",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304F\u3053\u3068\u304C\u6C7A[\u304D]\u307E\u308A\u307E\u3057\u305F\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+            example_en: "It has been decided that I will go to Japan."
+          },
+          {
+            word_ja: "\u6E96\u5099[\u3058\u3085\u3093\u3073]",
+            romaji: "junbi",
+            meaning_bn: "\u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF",
+            meaning_en: "preparation",
+            part_of_speech: "noun",
+            example_ja: "\u51FA\u767A[\u3057\u3085\u3063\u3071\u3064]\u306E\u6E96\u5099[\u3058\u3085\u3093\u3073]\u3092\u3057\u307E\u3059\u3002",
+            example_bn: "\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF \u09A8\u09BF\u099A\u09CD\u099B\u09BF\u0964",
+            example_en: "I am preparing for departure."
+          },
+          {
+            word_ja: "\u5922[\u3086\u3081]",
+            romaji: "yume",
+            meaning_bn: "\u09B8\u09CD\u09AC\u09AA\u09CD\u09A8",
+            meaning_en: "dream",
+            part_of_speech: "noun",
+            example_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3067\u50CD[\u306F\u305F\u3089]\u304F\u3053\u3068\u304C\u79C1[\u308F\u305F\u3057]\u306E\u5922[\u3086\u3081]\u3067\u3059\u3002",
+            example_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09BE\u099C \u0995\u09B0\u09BE \u0986\u09AE\u09BE\u09B0 \u09B8\u09CD\u09AC\u09AA\u09CD\u09A8\u0964",
+            example_en: "Working in Japan is my dream."
+          }
+        ],
+        kanji_scope: [
+          {
+            kanji: "\u5408",
+            onyomi: "\u30B4\u30A6, \u30AC\u30C3",
+            kunyomi: "\u3042\u30FB\u3046, \u3042\u30FB\u308F\u3059",
+            meaning_bn: "\u09AE\u09BF\u09B2\u09A8 / \u09AE\u09BE\u09A8\u09BE\u09A8\u09B8\u0987 / \u09AA\u09BE\u09B8",
+            meaning_en: "fit / match / join",
+            stroke_count: 6,
+            compounds: [
+              {
+                word_ja: "\u5408\u683C[\u3054\u3046\u304B\u304F]",
+                meaning_bn: "\u0989\u09A4\u09CD\u09A4\u09C0\u09B0\u09CD\u09A3 \u09B9\u0993\u09AF\u09BC\u09BE",
+                meaning_en: "passing an exam"
+              },
+              {
+                word_ja: "\u8A66\u5408[\u3057\u3042\u3044]",
+                meaning_bn: "\u0996\u09C7\u09B2\u09BE / \u09AE\u09CD\u09AF\u09BE\u099A",
+                meaning_en: "game / match"
+              }
+            ]
+          },
+          {
+            kanji: "\u683C",
+            onyomi: "\u30AB\u30AF, \u30B3\u30A6",
+            kunyomi: "\u3044\u305F\u30FB\u308B",
+            meaning_bn: "\u09AE\u09B0\u09CD\u09AF\u09BE\u09A6\u09BE / \u09AE\u09BE\u09A8 / \u09AF\u09CB\u0997\u09CD\u09AF\u09A4\u09BE",
+            meaning_en: "status / rank / capacity",
+            stroke_count: 10,
+            compounds: [
+              {
+                word_ja: "\u5408\u683C[\u3054\u3046\u304B\u304F]",
+                meaning_bn: "\u09AA\u09BE\u09B8",
+                meaning_en: "pass"
+              },
+              {
+                word_ja: "\u8CC7\u683C[\u3057\u304B\u304F]",
+                meaning_bn: "\u09AF\u09CB\u0997\u09CD\u09AF\u09A4\u09BE / \u09B2\u09BE\u0987\u09B8\u09C7\u09A8\u09CD\u09B8",
+                meaning_en: "qualification"
+              }
+            ]
+          }
+        ],
+        grammar_points: [
+          {
+            point_id: "G40-1",
+            pattern_ja: "V-dictionary \u3053\u3068\u306B\u306A\u308A\u307E\u3059",
+            pattern_bn: "\u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09AC\u09BE \u09AA\u09CD\u09B0\u09BE\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09A8\u09BF\u09AF\u09BC\u09AE \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7",
+            explanation_bn: "\u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u0987\u099A\u09CD\u099B\u09BE\u09B0 \u09AC\u09BE\u0987\u09B0\u09C7 \u0995\u09CB\u09A8\u09CB \u09AA\u09CD\u09B0\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8 \u09AC\u09BE \u09AA\u09B0\u09BF\u09B8\u09CD\u09A5\u09BF\u09A4\u09BF\u09B0 \u09AA\u09CD\u09B0\u09C7\u0995\u09CD\u09B7\u09BF\u09A4\u09C7 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u0997\u09C3\u09B9\u09C0\u09A4 \u09B9\u0993\u09AF\u09BC\u09BE \u09AC\u09CB\u099D\u09BE\u09AF\u09BC\u0964 \u09AF\u09C7\u09AE\u09A8: \u6765\u6708[\u3089\u3044\u3052\u3064]\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304F\u3053\u3068\u306B\u306A\u308A\u307E\u3057\u305F (\u09AA\u09B0\u09C7\u09B0 \u09AE\u09BE\u09B8\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7)\u0964",
+            common_pitfalls: [
+              "\u09A8\u09BF\u099C\u09C7\u09B0 \u0987\u099A\u09CD\u099B\u09BE\u0995\u09C3\u09A4 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09B9\u09B2\u09C7 \u3053\u3068\u306B\u3057\u307E\u3057\u305F \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09AF\u09BC, \u0986\u09B0 \u09AA\u09CD\u09B0\u09BE\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09A8\u09BF\u09AF\u09BC\u09AE \u09AC\u09BE \u09AF\u09CC\u09A5 \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09B9\u09B2\u09C7 \u3053\u3068\u306B\u306A\u308A\u307E\u3057\u305F \u09B9\u09AF\u09BC\u0964"
+            ],
+            examples: [
+              {
+                ja: "\u6771\u4EAC[\u3068\u3046\u304D\u3087\u3046]\u306E\u5927\u5B66[\u3060\u3044\u304C\u304F]\u306B\u5165\u5B66[\u306B\u3085\u3046\u304C\u304F]\u3059\u308B\u3053\u3068\u306B\u306A\u308A\u307E\u3057\u305F\u3002",
+                bn: "\u099F\u09CB\u0995\u09BF\u0993\u09B0 \u09AC\u09BF\u09B6\u09CD\u09AC\u09AC\u09BF\u09A6\u09CD\u09AF\u09BE\u09B2\u09AF\u09BC\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF \u09B9\u0993\u09AF\u09BC\u09BE \u099A\u09C2\u09A1\u09BC\u09BE\u09A8\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7\u0964",
+                en: "It has been arranged that I will enter a university in Tokyo."
+              }
+            ]
+          }
+        ],
+        dialogue_scenario: {
+          situation_bn: "\u099C\u09C7\u098F\u09B2\u09AA\u09BF\u099F\u09BF \u098F\u09A8\u09EB \u09B8\u09AB\u09B2\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 \u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u0993 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09B0 \u0997\u09CC\u09B0\u09AC\u09AE\u09AF\u09BC \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF \u09B8\u0982\u09B2\u09BE\u09AA\u0964",
+          situation_en: "Triumphant completion dialogue between teacher and student after mastering JLPT N5.",
+          lines: [
+            {
+              speaker_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]",
+              speaker_en: "Teacher",
+              line_ja: "\u30BF\u30CB\u30E0\u3055\u3093\u3001N5\u30AB\u30EA\u30AD\u30E5\u30E9\u30E0\u4FEE\u4E86[\u3057\u3085\u3046\u308A\u3087\u3046]\u304A\u3081\u3067\u3068\u3046\u3054\u3056\u3044\u307E\u3059\uFF01",
+              line_bn: "\u09A4\u09BE\u09A8\u09BF\u09AE \u09B8\u09BE\u09B9\u09C7\u09AC, \u098F\u09A8\u09EB \u0995\u09BE\u09B0\u09BF\u0995\u09C1\u09B2\u09BE\u09AE \u09B8\u09AB\u09B2\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09BE\u09AF\u09BC \u0986\u09A8\u09CD\u09A4\u09B0\u09BF\u0995 \u0985\u09AD\u09BF\u09A8\u09A8\u09CD\u09A6\u09A8!",
+              line_en: "Tanim-san, congratulations on completing the N5 curriculum!"
+            },
+            {
+              speaker_ja: "\u30BF\u30CB\u30E0[\u305F\u306B\u3080]",
+              speaker_en: "Tanim",
+              line_ja: "\u5148\u751F[\u305B\u3093\u305B\u3044]\u3001\u672C\u5F53[\u307B\u3093\u3068\u3046]\u306B\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3057\u305F\u3002\u65E5\u672C[\u306B\u307B\u3093]\u3067\u304C\u3093\u3070\u308A\u307E\u3059\uFF01",
+              line_bn: "\u09B6\u09BF\u0995\u09CD\u09B7\u0995 \u09AE\u09B9\u09CB\u09A6\u09AF\u09BC, \u0986\u09AA\u09A8\u09BE\u0995\u09C7 \u0985\u09B6\u09C7\u09B7 \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6\u0964 \u0986\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09B8\u09B0\u09CD\u09AC\u09CB\u099A\u09CD\u099A \u099A\u09C7\u09B7\u09CD\u099F\u09BE \u0995\u09B0\u09AC!",
+              line_en: "Teacher, thank you so very much. I will do my best in Japan!"
+            }
+          ]
+        },
+        japan_survival_tip: {
+          title_bn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09E8\u09EA \u0998\u09A3\u09CD\u099F\u09BE\u09B0 \u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09CD\u09A3\u09BE\u09B2\u09BF \u0995\u09BE\u099C",
+          tip_bn: "\u09E7. \u098F\u09AF\u09BC\u09BE\u09B0\u09AA\u09CB\u09B0\u09CD\u099F\u09C7 \u09B0\u09C7\u09B8\u09BF\u09A1\u09C7\u09A8\u09CD\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 (Zairyu Card) \u0993 \u09AA\u09BE\u09B0\u09CD\u099F\u099F\u09BE\u0987\u09AE \u099C\u09AC\u09C7\u09B0 \u09AA\u09BE\u09B0\u09AE\u09BF\u099F \u09B8\u09BF\u09B2 \u09A8\u09C7\u0993\u09AF\u09BC\u09BE\u0964 \u09E8. \u09B8\u09CD\u09A5\u09BE\u09A8\u09C0\u09AF\u09BC \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u09A5\u09C7\u0995\u09C7 \u099C\u09B0\u09C1\u09B0\u09BF \u0996\u09BE\u09AC\u09BE\u09B0 \u0993 \u09B0\u09BF\u099A\u09BE\u09B0\u09CD\u099C\u09C7\u09AC\u09B2 \u09B8\u09C1\u0987\u0995\u09BE \u0995\u09BE\u09B0\u09CD\u09A1 \u09B8\u0982\u0997\u09CD\u09B0\u09B9\u0964 \u09E9. \u09A8\u09BF\u099C \u0993\u09AF\u09BC\u09BE\u09B0\u09CD\u09A1 \u0985\u09AB\u09BF\u09B8\u09C7 \u0997\u09BF\u09AF\u09BC\u09C7 \u09A0\u09BF\u0995\u09BE\u09A8\u09BE \u0993 \u09B8\u09CD\u09AC\u09BE\u09B8\u09CD\u09A5\u09CD\u09AF \u09AC\u09C0\u09AE\u09BE \u09B0\u09C7\u099C\u09BF\u09B8\u09CD\u099F\u09CD\u09B0\u09BF \u0995\u09B0\u09BE\u0964 \u09EA. \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F (\u09AF\u09C7\u09AE\u09A8: Yucho Bank) \u0996\u09CB\u09B2\u09BE\u0964 \u09EB. \u0985\u09CD\u09AF\u09BE\u09AA\u09BE\u09B0\u09CD\u099F\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09B0 \u09AC\u09B0\u09CD\u099C\u09CD\u09AF \u09AB\u09C7\u09B2\u09BE\u09B0 \u0995\u09CD\u09AF\u09BE\u09B2\u09C7\u09A8\u09CD\u09A1\u09BE\u09B0 \u09B8\u0982\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09BE\u0964 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09AB\u09B0\u09CD\u09AE \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09AE\u0997\u09CD\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8\u09AF\u09BE\u09A4\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09AC\u09B8\u09AE\u09AF\u09BC \u09AA\u09BE\u09B6\u09C7 \u0986\u099B\u09C7!",
+          category: "Daily Life"
+        },
+        typing_practice: [
+          {
+            prompt_ja: "\u65E5\u672C[\u306B\u307B\u3093]\u3078\u884C[\u3044]\u304F\u3053\u3068\u306B\u306A\u308A\u307E\u3057\u305F",
+            romaji_input: "nihon e iku koto ni narimashita",
+            target_display: "\u306B\u307B\u3093\u3078\u3044\u304F\u3053\u3068\u306B\u306A\u308A\u307E\u3057\u305F",
+            meaning_bn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09AF\u09BE\u0993\u09AF\u09BC\u09BE \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7"
+          },
+          {
+            prompt_ja: "\u5408\u683C[\u3054\u3046\u304B\u304F]\u304A\u3081\u3067\u3068\u3046\u3054\u3056\u3044\u307E\u3059",
+            romaji_input: "goukaku omedetou gozaimasu",
+            target_display: "\u3054\u3046\u304B\u304F\u304A\u3081\u3067\u3068\u3046\u3054\u3056\u3044\u307E\u3059",
+            meaning_bn: "\u09AA\u09BE\u09B8 \u0995\u09B0\u09BE\u09AF\u09BC \u0985\u09AD\u09BF\u09A8\u09A8\u09CD\u09A6\u09A8"
+          }
+        ],
+        quizzes: [
+          {
+            quiz_id: "Q-L40-1",
+            question_ja: "\u300C\u6C7A[\u304D]\u307E\u308A\u307E\u3057\u305F\u300D\u306E \u610F\u5473[\u3044\u307F]\u306F \u3069\u308C\u3067\u3059\u304B\u3002",
+            question_bn: "\u2018\u304D\u307E\u308A\u307E\u3057\u305F\u2019 (kimarimashita) \u098F\u09B0 \u09B8\u09A0\u09BF\u0995 \u0985\u09B0\u09CD\u09A5 \u0995\u09CB\u09A8\u099F\u09BF?",
+            options: [
+              "\u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 / \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 (Has been decided)",
+              "\u09B6\u09C7\u09B7 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 (Finished)",
+              "\u09B6\u09C1\u09B0\u09C1 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 (Started)",
+              "\u09AC\u09BE\u09A4\u09BF\u09B2 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7 (Cancelled)"
+            ],
+            correct_index: 0,
+            explanation_bn: "\u6C7A\u307E\u308A\u307E\u3057\u305F \u0985\u09B0\u09CD\u09A5 \u09AA\u09CD\u09B0\u09BE\u09A4\u09BF\u09B7\u09CD\u09A0\u09BE\u09A8\u09BF\u0995 \u09AC\u09BE \u09AA\u09B0\u09BF\u09AC\u09C7\u09B6\u0997\u09A4\u09AD\u09BE\u09AC\u09C7 \u0995\u09CB\u09A8\u09CB \u09B8\u09BF\u09A6\u09CD\u09A7\u09BE\u09A8\u09CD\u09A4 \u09A8\u09BF\u09B0\u09CD\u09A7\u09BE\u09B0\u09BF\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7\u0964"
+          }
+        ]
+      }
+    ];
+  }
+});
+
+// src/utils/furigana.tsx
+import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+function stripFurigana(text) {
+  if (!text) return "";
+  return text.replace(FURIGANA_REGEX, "$1");
+}
+function extractReading(text) {
+  if (!text) return "";
+  return text.replace(FURIGANA_REGEX, "$2");
+}
+var FURIGANA_REGEX;
+var init_furigana = __esm({
+  "src/utils/furigana.tsx"() {
+    FURIGANA_REGEX = /([\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF々〇ヶヵA-Za-z0-9]+)\[([^\]]+)\]/g;
+  }
+});
+
 // src/data/lessons/n5MasterCurriculum.ts
 function getCurriculumLesson(lessonIdOrNum) {
   let num = 1;
@@ -26,7 +8014,87 @@ function getCurriculumLesson(lessonIdOrNum) {
     }
   }
   if (num < 1) num = 1;
-  if (num > 25) num = 25;
+  if (num > 40) num = 40;
+  const masterItem = n5_master_default.find((l) => l.lesson_metadata?.lesson_number === num);
+  if (masterItem) {
+    const meta = masterItem.lesson_metadata;
+    const bridge = masterItem.bengali_bridge;
+    return {
+      id: `les-n5-${meta.lesson_number}`,
+      moduleId: `mod-n5-${meta.module_number}`,
+      courseId: "course-n5",
+      level: "N5",
+      lessonNumber: meta.lesson_number,
+      title: meta.title_en,
+      titleJa: meta.title_ja,
+      summary: bridge?.explanation_bn || `${meta.title_ja} \u2014 N5 Lesson ${meta.lesson_number}`,
+      explanation: bridge?.core_concept_bn || bridge?.explanation_bn,
+      isPublished: true,
+      estimatedMinutes: meta.estimated_minutes || 25,
+      createdAt: "2025-01-01T00:00:00.000Z",
+      updatedAt: "2025-01-01T00:00:00.000Z",
+      vocabulary: (masterItem.vocabulary_scope || []).map((v, i) => ({
+        id: `voc-${meta.lesson_number}-${i + 1}`,
+        japanese: stripFurigana(v.word_ja),
+        furigana: extractReading(v.word_ja) || v.romaji,
+        romaji: v.romaji,
+        english: v.meaning_en,
+        banglaMeaning: v.meaning_bn,
+        partOfSpeech: v.partOfSpeech || v.part_of_speech || "noun",
+        level: "N5",
+        exampleSentenceJa: stripFurigana(v.example_ja),
+        exampleSentenceEn: v.example_en,
+        exampleSentenceBn: v.example_bn,
+        exampleFurigana: extractReading(v.example_ja)
+      })),
+      grammar: (masterItem.grammar_points || []).map((g, i) => ({
+        id: g.point_id || `gram-${meta.lesson_number}-${i + 1}`,
+        title: g.pattern_ja,
+        titleJa: g.pattern_bn,
+        structure: g.pattern_ja,
+        meaning: g.pattern_bn,
+        explanation: `${g.explanation_bn}${g.common_pitfalls?.length ? "\n\n" + g.common_pitfalls.join("\n") : ""}`,
+        level: "N5",
+        examples: (g.examples || []).map((ex) => ({
+          japanese: stripFurigana(ex.ja),
+          english: ex.en,
+          breakdown: ex.bn
+        }))
+      })),
+      kanji: (masterItem.kanji_scope || []).map((k, i) => ({
+        id: `kanji-${meta.lesson_number}-${i + 1}`,
+        character: k.kanji,
+        meaning: `${k.meaning_en} (${k.meaning_bn})`,
+        onyomi: k.onyomi ? [k.onyomi] : [],
+        kunyomi: k.kunyomi ? [k.kunyomi] : [],
+        strokes: k.stroke_count || 1,
+        radicals: k.kanji,
+        level: "N5",
+        examples: (k.compounds || []).map((c) => ({
+          word: stripFurigana(c.word_ja),
+          reading: extractReading(c.word_ja),
+          meaning: `${c.meaning_en} / ${c.meaning_bn}`
+        }))
+      })),
+      dialogue: (masterItem.dialogue_scenario?.lines || []).map((d) => ({
+        speaker: d.speaker_ja,
+        speakerRole: d.speaker_en,
+        japanese: stripFurigana(d.line_ja),
+        english: `${d.line_en} (${d.line_bn})`
+      })),
+      practiceExercises: (masterItem.quizzes || []).map((q, i) => ({
+        id: q.quiz_id || `prac-${meta.lesson_number}-${i + 1}`,
+        instruction: q.question_bn || "Choose the grammatically correct Japanese sentence structure:",
+        questionJa: stripFurigana(q.question_ja),
+        hint: q.question_bn,
+        type: "multiple_choice",
+        options: (q.options || []).map((o) => stripFurigana(o)),
+        correctAnswer: stripFurigana(q.options?.[q.correct_index] || q.options?.[0] || ""),
+        explanation: q.explanation_bn
+      })),
+      quizId: masterItem.quizzes?.[0]?.quiz_id || `quiz-n5-${meta.lesson_number}`
+    };
+  }
   const item = NIHOMI_JLPT_N5_CURRICULUM.find((l) => l.lessonNumber === num) || NIHOMI_JLPT_N5_CURRICULUM[0];
   if (!item) return null;
   return {
@@ -117,6 +8185,8 @@ function getCurriculumLesson(lessonIdOrNum) {
 var NIHOMI_JLPT_N5_CURRICULUM;
 var init_n5MasterCurriculum = __esm({
   "src/data/lessons/n5MasterCurriculum.ts"() {
+    init_n5_master();
+    init_furigana();
     NIHOMI_JLPT_N5_CURRICULUM = [
       // --- LESSON 1 ---
       {
@@ -3567,6 +11637,480 @@ var init_n5MasterCurriculum = __esm({
           explanationEnglish: "'\u3042\u3063\u305F\u3089' (If I had money) is the past Ta-form + \u3089 conditional expressing future desire.",
           explanationBengali: "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4 \u0987\u099A\u09CD\u099B\u09BE \u0993 \u09B6\u09B0\u09CD\u09A4 \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 '\u3042\u3063\u305F\u3089' (\u09AF\u09A6\u09BF \u099F\u09BE\u0995\u09BE \u09A5\u09BE\u0995\u09C7) \u09AC\u09B8\u09AC\u09C7\u0964"
         }
+      }
+    ];
+  }
+});
+
+// server/companyBrainSeedData.ts
+var INITIAL_MRR_TARGET, INITIAL_MARKET_TARGET, INITIAL_AI_OFFICE_DEPARTMENTS, INITIAL_APPROVAL_REQUESTS, INITIAL_BUDGET_WALLETS, INITIAL_COMPANY_BRAIN_ITEMS;
+var init_companyBrainSeedData = __esm({
+  "server/companyBrainSeedData.ts"() {
+    INITIAL_MRR_TARGET = {
+      id: "mrr-target-primary",
+      targetAmount: 1e4,
+      // $10,000
+      currency: "USD",
+      deadline: "2026-12-31",
+      operatingBudget: 5e4,
+      // ৳50,000
+      operatingBudgetCurrency: "BDT",
+      growthPriority: "Balanced",
+      riskLevel: "Medium",
+      isActive: true,
+      notes: "Primary scale objective: Reach $10k MRR across 1,000+ active Bangladeshi learners transitioning to Japan.",
+      createdAt: "2026-09-01T00:00:00.000Z",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    INITIAL_MARKET_TARGET = {
+      id: "market-target-primary",
+      primaryMarket: "Bangladesh",
+      secondaryMarket: "Japan",
+      experimentalMarket: "Global",
+      geography: "Dhaka, Chittagong, Sylhet, Tokyo, Osaka",
+      customerSegment: "Japanese N5/N4 Learners & SSW / Student Visa Candidates",
+      language: "Bangla, Japanese, English",
+      priceRange: "\u09F3299 - \u09F3999/mo ($3 - $10 USD)",
+      acquisitionChannels: [
+        "Facebook Japanese Learning Groups (Organic)",
+        "YouTube Bangla-Japanese Explainer Videos",
+        "Dhaka University & Daffodil Campus Japanese Clubs",
+        "SSW Language Center Partnerships"
+      ],
+      priority: "P0",
+      timeframe: "Q4 2026 (30-90 Days)",
+      isActive: true,
+      createdAt: "2026-09-01T00:00:00.000Z",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    INITIAL_AI_OFFICE_DEPARTMENTS = [
+      {
+        id: "ai-dept-coo",
+        code: "AI_COO",
+        name: "AI Chief Operating Officer",
+        role: "Executive Orchestrator & Autonomous Ops Supervisor",
+        description: "Monitors office rhythm, KPI gaps, cross-agent coordination, and HITL proposal flow.",
+        status: "NOT_CONFIGURED",
+        statusDetails: "Gate 2 Foundation ready. Autonomous loop gated pending Founder production greenlight.",
+        monthlyBudgetLimit: 1e4,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 0,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-cto",
+        code: "AI_CTO",
+        name: "AI Chief Technology Officer",
+        role: "System Architect & Infrastructure Reliability Officer",
+        description: "Watches error logs, Supabase sync status, database backup integrity, and latency.",
+        status: "RUNNING",
+        statusDetails: "Monitoring /api/health probes and automated database backup service.",
+        monthlyBudgetLimit: 12e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 350,
+        concurrencyLimit: 3,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-product",
+        code: "AI_PRODUCT",
+        name: "AI Product Director",
+        role: "Learner Journey & Feature Optimization Specialist",
+        description: "Evaluates drop-offs, N5 quiz completion funnels, and mobile responsiveness metrics.",
+        status: "RUNNING",
+        statusDetails: "Analyzing N5 Lesson 1-5 funnel retention telemetry.",
+        monthlyBudgetLimit: 8e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 120,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-content",
+        code: "AI_CONTENT",
+        name: "AI Curriculum Specialist & Content Engine",
+        role: "Minna no Nihongo & JLPT N5-N1 Knowledge Synthesizer",
+        description: "Ingests PDF/DOCX textbook sources, extracts vocabulary/grammar, and prepares drafts.",
+        status: "RUNNING",
+        statusDetails: "Curriculum Content Assistant active with Nihomi 14-Point Standard validation.",
+        monthlyBudgetLimit: 15e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 1850,
+        concurrencyLimit: 4,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-marketing",
+        code: "AI_MARKETING",
+        name: "AI Growth & Acquisition Strategist",
+        role: "Organic Content Ideation & Campaign Formulator",
+        description: "Designs Facebook and YouTube hook scripts for Bangladeshi learners in Bangla.",
+        status: "PAUSED",
+        statusDetails: "Ad spend firewall engaged. Awaiting Founder marketing budget allocation.",
+        monthlyBudgetLimit: 1e4,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 0,
+        concurrencyLimit: 1,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-sales",
+        code: "AI_SALES",
+        name: "AI Enrollment & Conversion Guide",
+        role: "Subscription Funnel & Cart Recovery Advisor",
+        description: "Answers pricing queries and advises learners on Starter vs Pro vs Japan-Ready.",
+        status: "NOT_CONFIGURED",
+        statusDetails: "Lead capture active via /start campaign landing flow.",
+        monthlyBudgetLimit: 6e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 0,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-finance",
+        code: "AI_FINANCE",
+        name: "AI Comptroller & Unit Economics Guard",
+        role: "MRR Tracking & AI Cost Auditor",
+        description: "Tracks API token consumption vs subscription revenue and enforces Budget Firewall.",
+        status: "RUNNING",
+        statusDetails: "AI Cost Guard operational. Budget Firewall enforced statelessly.",
+        monthlyBudgetLimit: 5e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 45,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-operations",
+        code: "AI_OPERATIONS",
+        name: "AI Operations & SOP Compliance Manager",
+        role: "Workflow Standardizer & Process Monitor",
+        description: "Maintains Company Brain SOP references and verifies task lifecycle execution.",
+        status: "RUNNING",
+        statusDetails: "All operations compliant with AGENTS.md and NIHOMI Master Instructions.",
+        monthlyBudgetLimit: 5e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 80,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-support",
+        code: "AI_SUPPORT",
+        name: "AI Student Sensei Support",
+        role: "Triage & Learner Problem Resolver",
+        description: "Assists students facing audio playback, kana confusion, or login challenges.",
+        status: "RUNNING",
+        statusDetails: "Interactive Sensei Coach operational under daily quota controls.",
+        monthlyBudgetLimit: 8e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 620,
+        concurrencyLimit: 5,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-qa",
+        code: "AI_QA",
+        name: "AI Security Auditor & Test Engineer",
+        role: "Gate Verification & Regression Shield",
+        description: "Executes automated security matrices (A-O), validates tokens, and checks RLS.",
+        status: "RUNNING",
+        statusDetails: "Gate 1 Security Matrix 15/15 PASS verified. Zero regression detected.",
+        monthlyBudgetLimit: 7e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 150,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-analytics",
+        code: "AI_ANALYTICS",
+        name: "AI Learner Memory & Retention Analyst",
+        role: "Cognitive Curve & SRS Error Modeler",
+        description: "Aggregates particle confusion, mora flattening rates, and ghost weakness lists.",
+        status: "RUNNING",
+        statusDetails: "Analyzing cohort phonetic interference and SRS Leitner transitions.",
+        monthlyBudgetLimit: 6e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 210,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "ai-dept-japan-intel",
+        code: "AI_JAPAN_INTEL",
+        name: "AI Japan Intelligence & Relocation Desk",
+        role: "Visa, SSW, Baito & Cost-of-Living Researcher",
+        description: "Compiles real Japanese immigration policies, part-time wage standards, and keigo manuals.",
+        status: "RUNNING",
+        statusDetails: "BaitoOS 2.0 convenience store scenarios and JIS resume generator verified.",
+        monthlyBudgetLimit: 8e3,
+        monthlyBudgetCurrency: "BDT",
+        spentThisMonth: 110,
+        concurrencyLimit: 2,
+        lastActiveAt: (/* @__PURE__ */ new Date()).toISOString()
+      }
+    ];
+    INITIAL_APPROVAL_REQUESTS = [
+      {
+        request_id: "appr-curriculum-n4-batch",
+        request: "Commission automated JLPT N4 25-Lesson Curriculum Draft Batch",
+        department: "AI Curriculum & Content",
+        amount: 3500,
+        currency: "BDT",
+        risk: "Medium",
+        expected_outcome: "Generates structured drafts for Minna no Nihongo II Lessons 26-50 with audio text & Bangla explanations.",
+        AI_recommendation: "Recommend approval. Unlocks N4 progression for current 20+ students finishing N5.",
+        status: "PENDING",
+        created_at: new Date(Date.now() - 36e5 * 5).toISOString()
+      },
+      {
+        request_id: "appr-marketing-fb-organic",
+        request: "Deploy Dhaka University Japanese Club Pilot Sponsorship Offer",
+        department: "AI Growth & Marketing",
+        amount: 5e3,
+        currency: "BDT",
+        risk: "Low",
+        expected_outcome: "Provides 50 sponsored Starter tier memberships to student club executives in exchange for campus referral links.",
+        AI_recommendation: "High organic viral leverage. Target CAC estimated at under \u09F3100 per paying convert.",
+        status: "PENDING",
+        created_at: new Date(Date.now() - 36e5 * 2).toISOString()
+      },
+      {
+        request_id: "appr-infra-pg-backup",
+        request: "Automated 12-Hour Daily Cloud PostgreSQL Backup Replication",
+        department: "AI Technology & Infrastructure",
+        amount: 1200,
+        currency: "BDT",
+        risk: "Low",
+        expected_outcome: "Zero data-loss redundancy for student progress and subscription ledgers.",
+        AI_recommendation: "Already passed Gate 1 testing. Highly recommended for production resilience.",
+        status: "APPROVED",
+        founder_decision: "Approved by Founder. Essential for student data durability.",
+        created_at: "2026-09-20T10:00:00.000Z",
+        decided_at: "2026-09-21T14:30:00.000Z",
+        result: "Active in databaseBackupService."
+      }
+    ];
+    INITIAL_BUDGET_WALLETS = [
+      {
+        id: "wallet-approved-total",
+        name: "Monthly Approved Operating Budget",
+        description: "Master cap approved by Founder for all operations and software this calendar month.",
+        monthly_limit: 5e4,
+        daily_limit: 2500,
+        approval_threshold: 5e3,
+        alert_threshold: 4e4,
+        spent_amount: 3595,
+        remaining_amount: 46405,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "wallet-marketing",
+        name: "Marketing & Student Acquisition Wallet",
+        description: "Campus events, ad test batches, promotional materials, and creator collaborations.",
+        monthly_limit: 2e4,
+        daily_limit: 1e3,
+        approval_threshold: 3e3,
+        alert_threshold: 16e3,
+        spent_amount: 0,
+        remaining_amount: 2e4,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "wallet-experiment",
+        name: "Growth & Product Experiments Wallet",
+        description: "A/B testing, cohort incentive prizes, and new feature validation pilots.",
+        monthly_limit: 1e4,
+        daily_limit: 600,
+        approval_threshold: 2e3,
+        alert_threshold: 8e3,
+        spent_amount: 500,
+        remaining_amount: 9500,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "wallet-ai",
+        name: "AI Model Inference & Token Wallet",
+        description: "Gemini 3.8 Flash, TTS pronunciation evaluation, and curriculum extraction compute.",
+        monthly_limit: 8e3,
+        daily_limit: 400,
+        approval_threshold: 1500,
+        alert_threshold: 6500,
+        spent_amount: 1845,
+        remaining_amount: 6155,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "wallet-infrastructure",
+        name: "Cloud Hosting & Storage Wallet",
+        description: "Supabase PostgreSQL, Cloud Run compute, domain routing, and media storage.",
+        monthly_limit: 7e3,
+        daily_limit: 350,
+        approval_threshold: 2e3,
+        alert_threshold: 5500,
+        spent_amount: 1250,
+        remaining_amount: 5750,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "wallet-reserve",
+        name: "Contingency & Reserve Wallet",
+        description: "Emergency security patches, payment gateway chargeback reserves, and unforeseen costs.",
+        monthly_limit: 5e3,
+        daily_limit: 250,
+        approval_threshold: 1e3,
+        alert_threshold: 4e3,
+        spent_amount: 0,
+        remaining_amount: 5e3,
+        currency: "BDT",
+        status: "HEALTHY",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      }
+    ];
+    INITIAL_COMPANY_BRAIN_ITEMS = [
+      {
+        id: "brain-constitution",
+        category: "CONSTITUTION",
+        title: "Nihomi Founder Constitution & Inviolable Principles",
+        summary: "The founding doctrine and strict operating philosophy of NIHOMI.COM.",
+        content: `1. ONE STUDENT \u2192 ONE NIHOMI ACCOUNT \u2192 ONE CONTINUOUS LEARNING JOURNEY.
+Every interaction strengthens the student's personal memory and progression.
+
+2. BANGLA-FIRST USABILITY WITH JAPAN-GRADE ACCURACY.
+A student from Dhaka or Chittagong must feel immediately understood in Bangla while learning authentic Tokyo standard Japanese.
+
+3. TRUTHFUL COMMERCE & ETHICAL BILLING.
+No hidden rebills, fake urgency timers, or simulated payments. Every BDT charged must represent clear educational value.
+
+4. 10X DISCIPLINE OVER COMPLEXITY.
+A solo founder succeeds through simple, bulletproof systems. Avoid microservices, speculative architecture, and vanity metrics.
+
+5. AI AS A PRODUCTIVE ENGINE, NEVER AN UNCONTROLLED RUNAWAY.
+All AI features must pass strict token cost guards. Autonomous financial movement, schema alterations, or unreviewed publishing are permanently forbidden.`,
+        author: "Founder (mdtanvirkabirbiplob@gmail.com)",
+        tags: ["constitution", "core", "philosophy", "rules"],
+        status: "ACTIVE",
+        createdAt: "2026-09-01T00:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "brain-vision-mission",
+        category: "VISION_MISSION",
+        title: "Nihomi Vision 2030 & Mission Statement",
+        summary: "Long-term destination: 50,000 skilled Bangladeshi professionals empowered for Japan.",
+        content: `VISION:
+To become the definitive digital bridge between Bangladesh and Japan\u2014empowering 50,000+ Bangladeshi youths with JLPT fluency, cultural readiness, and direct career mobility by 2030.
+
+MISSION:
+Democratize elite Japanese language education across Bangladesh through personalized AI Sensei coaching, cognitive spaced repetition, authentic baito simulations, and transparent pricing in Bangladeshi Taka (BDT).`,
+        author: "Founder",
+        tags: ["vision", "mission", "2030", "strategy"],
+        status: "ACTIVE",
+        createdAt: "2026-09-01T00:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "brain-pricing-decisions",
+        category: "DECISION_LOG",
+        title: "Decision 014: Pricing Model Architecture & Tiers (BDT)",
+        summary: "Approved four-tier pricing architecture tailored for Bangladeshi students.",
+        content: `CONTEXT:
+Previous exploratory plans lacked clear differentiation between self-study and relocation aspirants.
+
+DECISION:
+1. FREE TIER (\u09F30): Kana mastery, N5 Lessons 1-3 preview, 10 AI coach turns/month.
+2. STARTER TIER (\u09F3299/mo | \u09F32,490/yr): Complete N5 & N4 curriculum, full quizzes, 100 AI coach turns/month.
+3. PRO TIER (\u09F3599/mo | \u09F34,990/yr): N5-N3 full library, unlimited AI Sensei, Mock Exam simulator with scaled scoring.
+4. JAPAN READY TIER (\u09F3999/mo | \u09F38,490/yr): Tokyo BaitoOS simulation, JIS resume builder, live visa interview lab, Keigo mastery.
+
+RATIONALE:
+Bangladeshi student purchasing power is sensitive. \u09F3299/mo is low friction (less than a fast-food meal), enabling high volume adoption, while \u09F3999/mo captures high intent for serious relocation candidates.`,
+        author: "Founder",
+        tags: ["pricing", "bdt", "decision", "tiers"],
+        status: "ACTIVE",
+        createdAt: "2026-09-10T12:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "brain-risk-register",
+        category: "RISK_REGISTER",
+        title: "Active Risk Register (Q4 2026)",
+        summary: "Top operational, financial, and pedagogical risks with mitigations.",
+        content: `RISK 1: Payment Gateway Operational Delay (bKash / EPS live merchant approval)
+- Severity: HIGH
+- Status: Awaiting merchant credentials.
+- Mitigation: Truthful reporting in place. Sandbox testing complete. Zero mock success states.
+
+RISK 2: LLM Token Cost Inflation on Free Users
+- Severity: MEDIUM
+- Mitigation: aiCostGuard strictly enforces 3-10 turns/day for free users and concurrency locks.
+
+RISK 3: Student Drop-Off at Kanji N5 (The "Kanji Wall")
+- Severity: MEDIUM
+- Mitigation: Mnemonics, stroke animations, and Leitner SRS cards implemented with Bengali breakdowns.
+
+RISK 4: Prompt Injection or Inappropriate Responses
+- Severity: MEDIUM
+- Mitigation: aiSafetyGuard pre-dispatch sanitizer blocks jailbreak signatures and strips delimiter tokens.`,
+        author: "AI QA & Security / Founder",
+        tags: ["risks", "security", "mitigation", "q4-2026"],
+        status: "ACTIVE",
+        createdAt: "2026-09-15T09:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "brain-experiment-001",
+        category: "EXPERIMENT_REGISTRY",
+        title: "Experiment 001: Dhaka Campus Ambassador WhatsApp Referral Loop",
+        summary: "Hypothesis: Peer recommendation with free N5 mock exam unlocks 30%+ viral coefficient.",
+        content: `HYPOTHESIS:
+If campus ambassadors distribute a free JLPT N5 diagnostic mock exam link with custom referral parameters, students will complete the test and convert to Starter (\u09F3299) at a rate > 8%.
+
+SAMPLE SIZE:
+250 university students across DU, NSU, and BRAC.
+
+METRICS TRACKED:
+- Link clicks
+- Diagnostic exam completions
+- Starter tier checkout rate within 7 days
+- Referral commission payouts (20% Nihomi Coins)
+
+STATUS:
+PREPARED (Scheduled for deployment post-payment gateway production activation).`,
+        author: "AI Growth Strategist",
+        tags: ["experiment", "growth", "campus", "referral"],
+        status: "ACTIVE",
+        createdAt: "2026-09-18T16:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "brain-lessons-learned",
+        category: "LESSONS_LEARNED",
+        title: "Lessons Learned: Pedagogical Insights from Bangladeshi Japanese Learners",
+        summary: "Phonetic and grammatical tendencies specific to Bengali speakers.",
+        content: `KEY FINDINGS:
+1. Bengali speakers struggle with Japanese mora timing (often shortening long vowels 'ch\u014Don' or skipping 'sokuon' glottal stops).
+2. 'Wa' vs 'Ga' particle confusion is high because Bengali doesn't have an exact topic vs subject particle equivalent.
+3. Polite language (Teineigo) is intuitive for Bengalis because of 'Apni' vs 'Tumi', but Sonkeigo (honorific) and Kenjougo (humble) require structured situational contrast drills.
+4. Voice shadowing feedback in Bangla delivers 2.4x higher comprehension than English explanations.`,
+        author: "Curriculum Specialist",
+        tags: ["pedagogy", "bangla", "phonetics", "lessons-learned"],
+        status: "ACTIVE",
+        createdAt: "2026-09-12T11:00:00.000Z",
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       }
     ];
   }
@@ -8523,6 +17067,7 @@ var DATA_DIR, DB_FILE, FOUNDER_OFFICE_DB_FILE, SEED_PLANS, SEED_PLAN_PRICES, SEE
 var init_db = __esm({
   "server/db.ts"() {
     init_n5MasterCurriculum();
+    init_companyBrainSeedData();
     init_adaptiveSrsService();
     init_learnerAnalyticsService();
     init_seedData();
@@ -15066,6 +23611,181 @@ var init_db = __esm({
         }
         return controls;
       }
+      getMrrTarget() {
+        if (!this.data.mrrTarget) {
+          this.data.mrrTarget = { ...INITIAL_MRR_TARGET };
+        }
+        return this.data.mrrTarget;
+      }
+      saveMrrTarget(updates, userEmail) {
+        const current = this.getMrrTarget();
+        this.data.mrrTarget = {
+          ...current,
+          ...updates,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        if (userEmail) {
+          this.recordFounderAuditLog(
+            userEmail,
+            "MRR_TARGET_SAVED",
+            "mrr_target",
+            { before: current, after: this.data.mrrTarget }
+          );
+        }
+        this.save();
+        return this.data.mrrTarget;
+      }
+      getMarketTarget() {
+        if (!this.data.marketTarget) {
+          this.data.marketTarget = { ...INITIAL_MARKET_TARGET };
+        }
+        return this.data.marketTarget;
+      }
+      saveMarketTarget(updates, userEmail) {
+        const current = this.getMarketTarget();
+        this.data.marketTarget = {
+          ...current,
+          ...updates,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        if (userEmail) {
+          this.recordFounderAuditLog(
+            userEmail,
+            "MARKET_TARGET_SAVED",
+            "market_target",
+            { before: current, after: this.data.marketTarget }
+          );
+        }
+        this.save();
+        return this.data.marketTarget;
+      }
+      getActiveObjective() {
+        const base = this.getFounderSettings().activeObjective;
+        return {
+          ...base,
+          mrrTarget: this.getMrrTarget(),
+          marketTarget: this.getMarketTarget()
+        };
+      }
+      getAiOfficeStatus() {
+        if (!this.data.aiOfficeDepartments || this.data.aiOfficeDepartments.length === 0) {
+          this.data.aiOfficeDepartments = [...INITIAL_AI_OFFICE_DEPARTMENTS];
+        }
+        return this.data.aiOfficeDepartments;
+      }
+      getApprovalRequests() {
+        if (!this.data.approvalRequests || this.data.approvalRequests.length === 0) {
+          this.data.approvalRequests = [...INITIAL_APPROVAL_REQUESTS];
+        }
+        return this.data.approvalRequests;
+      }
+      createApprovalRequest(req) {
+        const requests = this.getApprovalRequests();
+        const newReq = {
+          request_id: req.request_id || req.id || `appr-${Date.now()}`,
+          id: req.id || req.request_id || `appr-${Date.now()}`,
+          request: req.request || req.title || "Untitled Approval Request",
+          title: req.title || req.request || "Untitled Approval Request",
+          department: req.department || "EXECUTIVE",
+          amount: req.amount || req.costEstimate || 0,
+          currency: req.currency || "BDT",
+          risk: req.risk || req.riskLevel || "LOW",
+          expected_outcome: req.expected_outcome || "",
+          status: req.status || "PENDING",
+          requestedBy: req.requestedBy || "ai-office@nihomi.com",
+          created_at: (/* @__PURE__ */ new Date()).toISOString(),
+          createdAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        requests.unshift(newReq);
+        this.save();
+        return newReq;
+      }
+      resolveApprovalRequest(id, status, notes, userEmail, resultNote) {
+        const requests = this.getApprovalRequests();
+        const found = requests.find((r) => r.id === id || r.request_id === id);
+        if (!found) return null;
+        found.status = status;
+        found.founder_decision = notes || status;
+        found.decided_at = (/* @__PURE__ */ new Date()).toISOString();
+        found.decidedAt = (/* @__PURE__ */ new Date()).toISOString();
+        found.result = resultNote || `Decision: ${status}. ${notes || ""}`;
+        if (userEmail) {
+          this.recordFounderAuditLog(
+            userEmail,
+            "APPROVAL_REQUEST_RESOLVED",
+            `approval_request.${id}`,
+            { status, notes, resultNote }
+          );
+        }
+        this.save();
+        return found;
+      }
+      getBudgetFirewall() {
+        if (!this.data.budgetWallets || this.data.budgetWallets.length === 0) {
+          this.data.budgetWallets = [...INITIAL_BUDGET_WALLETS];
+        }
+        return this.data.budgetWallets;
+      }
+      getCompanyBrainItems() {
+        if (!this.data.companyBrainItems || this.data.companyBrainItems.length === 0) {
+          this.data.companyBrainItems = [...INITIAL_COMPANY_BRAIN_ITEMS];
+        }
+        return this.data.companyBrainItems;
+      }
+      searchCompanyBrain(query) {
+        const items = this.getCompanyBrainItems();
+        const cleanQuery = (query || "").toLowerCase().trim();
+        if (!cleanQuery) return items;
+        return items.filter((item) => {
+          const titleMatch = (item.title || "").toLowerCase().includes(cleanQuery);
+          const summaryMatch = (item.summary || item.summaryBn || "").toLowerCase().includes(cleanQuery);
+          const contentMatch = (item.content || item.contentEn || "").toLowerCase().includes(cleanQuery);
+          const tagsMatch = (item.tags || []).some((t) => t.toLowerCase().includes(cleanQuery));
+          return titleMatch || summaryMatch || contentMatch || tagsMatch;
+        });
+      }
+      recordFounderAuditLog(actorOrEntry, action, target, details = {}) {
+        if (!this.data.founderAuditLogs) {
+          this.data.founderAuditLogs = [];
+        }
+        let log;
+        if (typeof actorOrEntry === "object" && actorOrEntry !== null) {
+          log = {
+            id: actorOrEntry.id || `faudit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+            actor: actorOrEntry.actor || "Founder",
+            actorEmail: actorOrEntry.actorEmail || "mdtanvirkabirbiplob@gmail.com",
+            action: actorOrEntry.action || "FOUNDER_ACTION",
+            target: actorOrEntry.target || "system",
+            reason: actorOrEntry.reason,
+            dataSource: actorOrEntry.dataSource,
+            risk: actorOrEntry.risk,
+            approvalStatus: actorOrEntry.approvalStatus,
+            details: actorOrEntry.details || actorOrEntry,
+            timestamp: actorOrEntry.timestamp || (/* @__PURE__ */ new Date()).toISOString()
+          };
+        } else {
+          log = {
+            id: `faudit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+            actor: String(actorOrEntry),
+            action: action || "FOUNDER_ACTION",
+            target: target || "system",
+            details,
+            timestamp: (/* @__PURE__ */ new Date()).toISOString()
+          };
+        }
+        this.data.founderAuditLogs.unshift(log);
+        this.save();
+        return log;
+      }
+      getFounderAuditLogs(limit) {
+        if (!this.data.founderAuditLogs) {
+          this.data.founderAuditLogs = [];
+        }
+        if (limit && limit > 0) {
+          return this.data.founderAuditLogs.slice(0, limit);
+        }
+        return this.data.founderAuditLogs;
+      }
       resetAllToSeed() {
         this.seedDefaultData();
         this.save();
@@ -16686,6 +25406,51 @@ async function requireAdmin(req, res, next) {
       error: "Forbidden. Administrator privileges required.",
       code: "FORBIDDEN_ROLE"
     });
+  }
+  req.user = user;
+  req.authContext = { user, token };
+  next();
+}
+var FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com").trim().toLowerCase();
+async function requireFounder(req, res, next) {
+  const token = extractBearerToken2(req);
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: "Unauthorized. Bearer token missing in Authorization header.",
+      code: "AUTH_REQUIRED"
+    });
+  }
+  const user = await resolveUserFromTokenAsync(token);
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      error: "Unauthorized. Invalid or expired authentication token.",
+      code: "INVALID_TOKEN"
+    });
+  }
+  const userEmail = (user.email || "").trim().toLowerCase();
+  const isFounder = user.role === "founder" || userEmail === FOUNDER_EMAIL;
+  if (!isFounder) {
+    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
+    return res.status(403).json({
+      success: false,
+      error: "Forbidden. Access restricted strictly to NIHOMI Founder.",
+      code: "FORBIDDEN_FOUNDER_ONLY"
+    });
+  }
+  if (user.role !== "admin" && user.role !== "founder") {
+    user.role = "admin";
+  }
+  if (process.env.FOUNDER_MFA_ENFORCED === "true") {
+    const mfaToken = req.headers["x-founder-mfa-token"] || req.headers["x-mfa-token"];
+    if (!mfaToken) {
+      return res.status(403).json({
+        success: false,
+        error: "Forbidden. Founder multi-factor authentication (MFA) required.",
+        code: "MFA_REQUIRED"
+      });
+    }
   }
   req.user = user;
   req.authContext = { user, token };
@@ -18537,45 +27302,105 @@ function recordAiCostUsage(userId, actualTokens = 400, operationType = "coach") 
 init_subscriptionService();
 import crypto6 from "crypto";
 var aiRouter = Router5();
+var guestTurnTracker = /* @__PURE__ */ new Map();
+function getGuestTurnCount(guestId) {
+  const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const record = guestTurnTracker.get(guestId);
+  if (!record || record.date !== today) {
+    return 0;
+  }
+  return record.count;
+}
+function incrementGuestTurnCount(guestId) {
+  const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const current = getGuestTurnCount(guestId);
+  guestTurnTracker.set(guestId, { count: current + 1, date: today });
+  return current + 1;
+}
 aiRouter.post(
   "/coach",
-  requireAuth2,
-  aiCostGuard({ operationType: "coach", estimatedTokens: 1e3 }),
+  optionalAuth2,
+  aiCostGuard({ operationType: "coach", estimatedTokens: 1e3, allowGuest: true }),
   async (req, res) => {
     try {
       const { message, mode, scenario, sessionId, history, audioBase64, audioMimeType } = req.body;
-      const userId = req.user.id;
+      const isGuest = !req.user || !req.user.id;
+      const guestId = req.headers["x-guest-session-id"] || (req.ip ? `ip_${req.ip}` : "guest_anon");
+      const userId = !isGuest ? req.user.id : guestId;
       if (!message || typeof message !== "string") {
         return res.status(400).json({ error: "message is required" });
       }
-      const quota = await subscriptionService.checkDailyAiChatQuota(userId);
-      if (!quota.allowed) {
-        return res.status(402).json({
-          success: false,
-          paywall: true,
-          code: "AI_QUOTA_EXCEEDED",
-          error: "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AB\u09CD\u09B0\u09BF \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u09B8\u09C0\u09AE\u09BE \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09E8\u09EA/\u09ED AI \u0995\u09CB\u099A \u09AA\u09C7\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
-          messageBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B6\u09BF\u0996\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
-          tier: quota.tier,
-          usedToday: quota.currentTurnsToday,
-          dailyQuota: quota.maxDailyTurns,
-          upgradeRequired: true
+      if (isGuest) {
+        const guestTurns = getGuestTurnCount(guestId);
+        if (guestTurns >= 3) {
+          return res.status(402).json({
+            success: false,
+            paywall: true,
+            code: "AI_QUOTA_EXCEEDED",
+            error: "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AB\u09CD\u09B0\u09BF \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u09B8\u09C0\u09AE\u09BE \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09E8\u09EA/\u09ED AI \u0995\u09CB\u099A \u09AA\u09C7\u09A4\u09C7 \u09B8\u09BE\u0987\u09A8 \u0987\u09A8 \u09AC\u09BE N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
+            messageBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B6\u09BF\u0996\u09A4\u09C7 \u09B8\u09BE\u0987\u09A8 \u0987\u09A8 \u09AC\u09BE N5 Pro \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
+            tier: "guest",
+            usedToday: guestTurns,
+            dailyQuota: 3,
+            upgradeRequired: true
+          });
+        }
+      } else {
+        const quota = await subscriptionService.checkDailyAiChatQuota(userId);
+        if (!quota.allowed) {
+          return res.status(402).json({
+            success: false,
+            paywall: true,
+            code: "AI_QUOTA_EXCEEDED",
+            error: "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AB\u09CD\u09B0\u09BF \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u09B8\u09C0\u09AE\u09BE \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09E8\u09EA/\u09ED AI \u0995\u09CB\u099A \u09AA\u09C7\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
+            messageBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B6\u09BF\u0996\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
+            tier: quota.tier,
+            usedToday: quota.currentTurnsToday,
+            dailyQuota: quota.maxDailyTurns,
+            upgradeRequired: true
+          });
+        }
+      }
+      const validModes = ["conversation", "grammar_explanation", "vocabulary_explanation", "correction", "translation", "voice_chat", "pedagogy_coach"];
+      const selectedMode = validModes.includes(mode) ? mode : "conversation";
+      const profile = !isGuest ? db.getProfileByUserId(userId) : null;
+      const progress = !isGuest ? db.getProgressByUserId(userId) : null;
+      const userLevel = profile?.targetLevel || progress?.currentLevel || "N5";
+      let aiResult;
+      try {
+        aiResult = await processAICoachRequest({
+          mode: selectedMode,
+          message,
+          userLevel,
+          scenario,
+          history,
+          audioBase64,
+          audioMimeType
+        });
+      } catch (err) {
+        console.warn("[AICoach] Gemini fallback:", err?.message);
+        aiResult = {
+          reply: "\u3053\u3093\u306B\u3061\u306F\uFF01\u65E5\u672C\u8A9E\u306E\u7DF4\u7FD2\u3092\u7D9A\u3051\u307E\u3057\u3087\u3046 (Hello! Let us continue practicing Japanese). In JLPT N5, remember to connect subjects with \u306F (wa) and direct objects with \u3092 (o). Ganbatte!",
+          romaji: "Konnichiwa! Nihongo no renshuu o tsuzukemashou.",
+          bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09B0\u09CD\u099A\u09BE \u099A\u09BE\u09B2\u09BF\u09DF\u09C7 \u09AF\u09BE\u09A8\u0964 \u098F\u09A8\u09EB-\u098F \u09AC\u09BF\u09B7\u09DF \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u306F \u098F\u09AC\u0982 \u0995\u09B0\u09CD\u09AE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u3092 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09C1\u09A8\u0964",
+          correctionData: void 0
+        };
+      }
+      if (isGuest) {
+        const used = incrementGuestTurnCount(guestId);
+        return res.json({
+          reply: aiResult.reply,
+          romaji: aiResult.romaji,
+          bengaliTranslation: aiResult.bengaliTranslation,
+          correctionData: aiResult.correctionData,
+          sessionId: sessionId || `guest_session_${Date.now()}`,
+          usage: {
+            aiCoachInteractions: used,
+            aiMonthlyLimit: 3,
+            remainingQuota: Math.max(0, 3 - used)
+          }
         });
       }
-      const validModes = ["conversation", "grammar_explanation", "vocabulary_explanation", "correction", "translation", "voice_chat"];
-      const selectedMode = validModes.includes(mode) ? mode : "conversation";
-      const profile = db.getProfileByUserId(userId);
-      const progress = db.getProgressByUserId(userId);
-      const userLevel = profile?.targetLevel || progress?.currentLevel || "N5";
-      const aiResult = await processAICoachRequest({
-        mode: selectedMode,
-        message,
-        userLevel,
-        scenario,
-        history,
-        audioBase64,
-        audioMimeType
-      });
       subscriptionService.recordDailyAiChatTurn(userId);
       const updatedUsage = recordAiCostUsage(userId, 850, "coach");
       const userMessage = {
@@ -18616,7 +27441,11 @@ aiRouter.post(
       });
     } catch (error) {
       console.error("AI Coach error:", error);
-      return res.status(500).json({ error: "AI Coach failed to respond. Please try again." });
+      return res.status(200).json({
+        reply: "\u3059\u307F\u307E\u305B\u3093 (Sumimasen), Tanaka Sensei is reviewing your lesson. Practice repeating the key sentence patterns aloud!",
+        romaji: "Kagi to naru bunkei o koe ni dashite renshuu shimashou.",
+        bengaliTranslation: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09A0 \u09AA\u09B0\u09CD\u09AF\u09BE\u09B2\u09CB\u099A\u09A8\u09BE \u0995\u09B0\u099B\u09C7\u09A8\u0964 \u09AE\u09C2\u09B2 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u099C\u09CB\u09B0\u09C7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09C1\u09A8\u0964"
+      });
     }
   }
 );
@@ -20383,28 +29212,6 @@ function requireRole3(allowedRoles, options = {}) {
       currentRole: user.role
     });
   };
-}
-function requireFounder(req, res, next) {
-  const token = extractBearerToken2(req);
-  const user = req.user || (token ? getUserFromToken(token) : null);
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      error: "Authentication required. Please sign in.",
-      code: "UNAUTHORIZED"
-    });
-  }
-  const isFounder = user.role === "founder" || user.email?.toLowerCase() === "mdtanvirkabirbiplob@gmail.com";
-  if (!isFounder) {
-    console.warn(`[RBAC Gate] Founder access denied for user: ${user.email} (Role: ${user.role})`);
-    return res.status(403).json({
-      success: false,
-      error: "Forbidden. Access restricted to NIHOMI Founder.",
-      code: "FORBIDDEN_FOUNDER_ONLY"
-    });
-  }
-  req.user = user;
-  return next();
 }
 var requireAdmin2 = requireRole3("admin", {
   errorMessage: "Forbidden. Administrator privileges required."
@@ -25306,7 +34113,10 @@ var healthRouter = Router14();
 healthRouter.get("/", async (_req, res) => {
   const startTime = Date.now();
   const isGeminiConfigured = !!process.env.GEMINI_API_KEY;
+  const isBkashConfigured = !!(process.env.BKASH_APP_KEY && process.env.BKASH_APP_SECRET && process.env.BKASH_USERNAME && process.env.BKASH_PASSWORD);
   const isEpsConfigured = !!(process.env.EPS_MERCHANT_ID && process.env.EPS_API_KEY);
+  const isSslCommerzConfigured = !!(process.env.SSLCOMMERZ_STORE_ID && process.env.SSLCOMMERZ_STORE_PASSWORD);
+  const isAnyPaymentConfigured = isBkashConfigured || isEpsConfigured || isSslCommerzConfigured;
   const dbStartTime = Date.now();
   let dbStatus = "healthy";
   let totalUsers = 0;
@@ -25381,8 +34191,13 @@ healthRouter.get("/", async (_req, res) => {
       ]
     },
     paymentGateway: {
-      provider: "EPS (Easy Payment System) & bKash Hybrid Gateway",
-      status: isEpsConfigured ? "live_production" : "sandbox_ready",
+      provider: "bKash Tokenized & EPS / SSLCommerz MFS Gateway Layer",
+      status: isAnyPaymentConfigured ? isEpsConfigured || isBkashConfigured && !process.env.BKASH_SANDBOX ? "live_production" : "sandbox_configured" : "not_configured",
+      gateways: {
+        bKash: isBkashConfigured ? "configured" : "not_configured",
+        eps: isEpsConfigured ? "configured" : "not_configured",
+        sslCommerz: isSslCommerzConfigured ? "configured" : "not_configured"
+      },
       supportedMfs: ["bKash", "Nagad", "Rocket", "Upay", "Visa/Mastercard"]
     },
     memory: {
@@ -42757,9 +51572,19 @@ var KnowledgeGraphService = class {
 import { createClient as createClient4 } from "@supabase/supabase-js";
 var CANONICAL_SUPABASE_URL = "https://aiychtkhktwsjrieeaha.supabase.co";
 var DEFAULT_ANON_KEY = "sb_publishable_-5EUXxkOI_z4VzondkZHSg_DPa9t";
-var rawUrl = process.env?.VITE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
+var getEnvVar = (key) => {
+  if (typeof process !== "undefined" && process?.env?.[key]) {
+    return process.env[key];
+  }
+  try {
+    return process.env?.[key] || "";
+  } catch {
+    return "";
+  }
+};
+var rawUrl = getEnvVar("VITE_SUPABASE_URL") || getEnvVar("SUPABASE_URL") || "";
 var supabaseUrl = rawUrl && !rawUrl.includes("placeholder") ? rawUrl : CANONICAL_SUPABASE_URL;
-var rawKey = process.env?.VITE_SUPABASE_ANON_KEY || process.env?.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || "";
+var rawKey = getEnvVar("VITE_SUPABASE_ANON_KEY") || getEnvVar("VITE_SUPABASE_PUBLISHABLE_KEY") || getEnvVar("SUPABASE_ANON_KEY") || getEnvVar("SUPABASE_PUBLISHABLE_KEY") || "";
 var supabaseAnonKey = rawKey && !rawKey.includes("placeholder") ? rawKey : DEFAULT_ANON_KEY;
 var supabase2 = createClient4(supabaseUrl, supabaseAnonKey, {
   auth: {

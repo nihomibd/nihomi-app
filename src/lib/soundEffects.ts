@@ -171,6 +171,10 @@ class SoundEngine {
     }
   }
 
+  public playLevelUp(): void {
+    this.playLessonCelebration();
+  }
+
   /**
    * Conbini POS Barcode Scanner Beep (High crisp beep 2400Hz)
    */

@@ -25,6 +25,48 @@ export interface KanjiStrokeInfo {
 }
 
 export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
+  'あ': {
+    kanji: 'あ',
+    strokeCount: 3,
+    radical: '安',
+    radicalName: 'あ (Hiragana A from Kanji 安)',
+    radicalMeaningBn: 'হিরাগানা স্বরবর্ণ আ',
+    onyomi: ['-'],
+    kunyomi: ['あ'],
+    meaningEn: 'Hiragana "a" (MEXT Standard Stroke Order)',
+    meaningBn: 'হিরাগানা "আ" (MEXT মানসম্মত স্ট্রোক অর্ডার)',
+    writingTipEn: 'Stroke 1: Horizontal line left-to-right. Stroke 2: Vertical crossing line top-to-bottom. Stroke 3: Continuous loop starting from center loop around to bottom right.',
+    writingTipBn: 'স্ট্রোক ১: বাম থেকে ডানে অনুভূমিক দাগ। স্ট্রোক ২: উপর থেকে নিচে ১ম দাগকে ভেদ করে বাঁকানো উলম্ব দাগ। স্ট্রোক ৩: কেন্দ্র থেকে শুরু হয়ে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করা।',
+    strokes: [
+      {
+        strokeNumber: 1,
+        type: 'Horizontal (横画)',
+        descriptionEn: 'Stroke 1: Smooth horizontal crossbar left-to-right',
+        descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ অনুভূমিক দাগ (MEXT)',
+        path: 'M 26 31 C 38 31 55 29 74 30',
+        startPoint: { x: 26, y: 31 },
+        direction: 'right'
+      },
+      {
+        strokeNumber: 2,
+        type: 'Vertical Crossing (縦画)',
+        descriptionEn: 'Stroke 2: Vertical piercing line with gentle curve',
+        descriptionBn: 'স্ট্রোক ২: উপর থেকে নিচে ১ম দাগ ভেদ করে বাঁকানো উলম্ব দাগ (MEXT)',
+        path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84',
+        startPoint: { x: 47, y: 16 },
+        direction: 'down'
+      },
+      {
+        strokeNumber: 3,
+        type: 'Continuous Loop (結び・円弧)',
+        descriptionEn: 'Stroke 3: Authentic MEXT loop and sweep forming lower-right belly',
+        descriptionBn: 'স্ট্রোক ৩: কেন্দ্রের উপর থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ (MEXT)',
+        path: 'M 60.2 40.5 C 60.9 41.5 61.3 44.5 60.7 46.1 C 56.4 57.3 50.4 67.9 37.4 78.9 C 31.1 84.2 22.8 82.3 22.5 71.2 C 22.2 61.2 34.8 50.0 52.2 46.7 C 63.6 44.5 77.0 47.9 80.2 58.4 C 83.9 70.5 76.7 82.6 61.0 86.3',
+        startPoint: { x: 60.2, y: 40.5 },
+        direction: 'down-right'
+      }
+    ]
+  },
   '日': {
     kanji: '日',
     strokeCount: 4,
