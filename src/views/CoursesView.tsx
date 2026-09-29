@@ -28,6 +28,7 @@ import { N5LessonDetailModal } from '../components/learning/N5LessonDetailModal'
 import { useAuth } from '../context/AuthContext';
 import n5MasterData from '../data/n5_master.json';
 import n4MasterData from '../data/n4_master.json';
+import n3MasterData from '../data/n3_master.json';
 import { N5MasterLesson } from '../types/n5Master';
 import { FuriganaText } from '../utils/furigana';
 
@@ -125,6 +126,18 @@ export const N4_MODULES_LIST = [
   { id: 7, code: 'MOD-7', titleEn: 'Modals & N4 Capstone', titleBn: 'চূড়ান্ত প্রয়োগ ও N4 ক্যাপস্টোন', titleJa: '様態とN4総まとめ', lessonsRange: 'N4-L31–N4-L35', desc: '様態と伝聞, 過度と難易, 習慣化と変化, 目的の表現, N4 総まとめ・合格演習' },
 ];
 
+export const N3_MODULES_LIST = [
+  { id: 1, code: 'MOD-1', titleEn: 'Timing & Sequence', titleBn: 'সময় ও ধারাবাহিকতা', titleJa: '時 (Timing & Sequence)', lessonsRange: 'N3-L01–N3-L05', desc: '〜うちに, 〜間・間に, 〜最中に, 〜たとたん, 〜たびに' },
+  { id: 2, code: 'MOD-2', titleEn: 'Reasoning & Expectations', titleBn: 'যৌক্তিক পরিণতি ও প্রত্যাশা', titleJa: '論理 (Reasoning & Expectations)', lessonsRange: 'N3-L06–N3-L10', desc: '〜わけだ・わけがない, 〜わけではない, 〜はずだ・はずがない, 〜べきだ, 〜に違いない' },
+  { id: 3, code: 'MOD-3', titleEn: 'Inference & Subjectivity', titleBn: 'অনুমান ও ভাবানুভূতি', titleJa: '推量 (Inference & Subjectivity)', lessonsRange: 'N3-L11–N3-L15', desc: '〜らしい, 〜っぽい, 〜ようだ・ように, 〜そうだ (様態・伝聞), 〜気がする' },
+  { id: 4, code: 'MOD-4', titleEn: 'Relationships & Perspectives', titleBn: 'সম্পর্ক ও দৃষ্টিভঙ্গি', titleJa: '関係 (Relationships & Perspectives)', lessonsRange: 'N3-L16–N3-L20', desc: '〜に対して, 〜に関して, 〜にとって, 〜を通じて・通して, 〜に基づいて' },
+  { id: 5, code: 'MOD-5', titleEn: 'Change, Effort & Intention', titleBn: 'পরিবর্তন, প্রচেষ্টা ও সংকল্প', titleJa: '変化 (Change, Effort & Intention)', lessonsRange: 'N3-L21–N3-L25', desc: '〜ようにする, 〜ようになる, 〜ことにする, 〜ことになる, 〜一方だ' },
+  { id: 6, code: 'MOD-6', titleEn: 'Cause, Effect & Outcomes', titleBn: 'কারণ ও ফলাফল', titleJa: '理由 (Cause, Effect & Outcomes)', lessonsRange: 'N3-L26–N3-L30', desc: '〜おかげで, 〜せいで, 〜ばかりに, 〜によって, 〜ため(に)' },
+  { id: 7, code: 'MOD-7', titleEn: 'Comparison & Limitations', titleBn: 'তুলনা ও সীমাবদ্ধতা', titleJa: '限定 (Comparison & Limitations)', lessonsRange: 'N3-L31–N3-L35', desc: '〜ばかり, 〜だけでなく, 〜に限る・限らず, 〜に比べて, 〜割に(は)' },
+  { id: 8, code: 'MOD-8', titleEn: 'Advanced Keigo & Interviews', titleBn: 'উন্নত কেইগো ও কর্মক্ষেত্র', titleJa: '敬語 (Advanced Keigo & Interviews)', lessonsRange: 'N3-L36–N3-L40', desc: '尊敬語 (お〜になる), 謙譲語 (お〜する/参る), ビジネス電話応対, メール・断り方, 就職面接・自己PR' },
+  { id: 9, code: 'MOD-9', titleEn: 'Mastery & N3 Capstone', titleBn: 'সার্বিক সংহতি ও সমাপনী কৌশল', titleJa: '統合 (Mastery & N3 Capstone)', lessonsRange: 'N3-L41–N3-L45', desc: '長文読解・情報検索, 聴解・即時応答, 複合動詞・コロケーション, 文法総整理, N3総合模試・N2への架け橋' },
+];
+
 export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
   const { user, subscription, progress } = useAuth();
 
@@ -139,7 +152,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     (user as any)?.subscriptionTier === 'japan_ready';
 
   // Primary State: Curriculum Level, Active Module, Search, and Lesson Modal
-  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4'>('N5');
+  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4' | 'N3'>('N5');
   const [activeModuleId, setActiveModuleId] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLessonModal, setSelectedLessonModal] = useState<N5MasterLesson | null>(null);
@@ -181,19 +194,22 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
   // Safe data loading with fallbacks
   const n5Lessons: N5MasterLesson[] = (Array.isArray(n5MasterData) ? n5MasterData : []) as unknown as N5MasterLesson[];
   const n4Lessons: N5MasterLesson[] = (Array.isArray(n4MasterData) ? n4MasterData : []) as unknown as N5MasterLesson[];
+  const n3Lessons: N5MasterLesson[] = (Array.isArray(n3MasterData) ? n3MasterData : []) as unknown as N5MasterLesson[];
 
-  const currentLessonsList = selectedLevel === 'N5' ? n5Lessons : n4Lessons;
-  const activeModulesList = selectedLevel === 'N5' ? N5_MODULES_LIST : N4_MODULES_LIST;
-  const totalLessonsCount = selectedLevel === 'N5' ? 40 : 35;
+  const currentLessonsList = selectedLevel === 'N5' ? n5Lessons : selectedLevel === 'N4' ? n4Lessons : n3Lessons;
+  const activeModulesList = selectedLevel === 'N5' ? N5_MODULES_LIST : selectedLevel === 'N4' ? N4_MODULES_LIST : N3_MODULES_LIST;
+  const totalLessonsCount = selectedLevel === 'N5' ? 40 : selectedLevel === 'N4' ? 35 : 45;
   const masterCompletedCount = selectedLevel === 'N5'
     ? ((progress as any)?.completedLessonsCount || 0)
-    : ((progress as any)?.n4CompletedCount || 0);
+    : selectedLevel === 'N4'
+    ? ((progress as any)?.n4CompletedCount || 0)
+    : ((progress as any)?.n3CompletedCount || 0);
   const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
   const activeModule = activeModulesList.find((m) => m.id === activeModuleId) || activeModulesList[0];
   const masteryPercentage = totalLessonsCount > 0 ? Math.min(100, Math.round((masterCompletedCount / totalLessonsCount) * 100)) : 0;
 
   // Level selector switch handler
-  const handleSelectLevel = (level: 'N5' | 'N4') => {
+  const handleSelectLevel = (level: 'N5' | 'N4' | 'N3') => {
     setSelectedLevel(level);
     setActiveModuleId(level === 'N5' ? 0 : 1);
     setSearchQuery('');
@@ -423,15 +439,17 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold">
                       {selectedLevel === 'N5'
                         ? 'JLPT N5 মূল কারিকুলাম (৪০টি পাঠ — ৮টি মডিউল)'
-                        : 'JLPT N4 মূল কারিকুলাম (৩৫টি পাঠ — ৭টি মডিউল)'}
+                        : selectedLevel === 'N4'
+                        ? 'JLPT N4 মূল কারিকুলাম (৩৫টি পাঠ — ৭টি মডিউল)'
+                        : 'JLPT N3 মূল কারিকুলাম (৪৫টি পাঠ — ৯টি মডিউল)'}
                     </span>
                   </div>
 
-                  {/* Level Switcher Pill: [JLPT N5 (40 Lessons)] | [JLPT N4 (35 Lessons)] */}
+                  {/* Level Switcher Pill: [JLPT N5 (40 Lessons)] | [JLPT N4 (35 Lessons)] | [JLPT N3 (45 Lessons)] */}
                   <div className="inline-flex items-center p-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shrink-0">
                     <button
                       onClick={() => handleSelectLevel('N5')}
-                      className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N5'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -442,7 +460,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N4')}
-                      className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N4'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -450,6 +468,17 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                       <span>JLPT N4 (35 Lessons)</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelectLevel('N3')}
+                      className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        selectedLevel === 'N3'
+                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Award className="w-3.5 h-3.5 text-amber-300" />
+                      <span>JLPT N3 (45 Lessons)</span>
                     </button>
                   </div>
                 </div>
@@ -465,7 +494,11 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                             STAGE-BASED CURRICULUM
                           </span>
                           <span className="text-xs text-stone-400">
-                            {selectedLevel === 'N5' ? '৮টি মডিউল • ৪০টি সম্পূর্ণ পাঠ' : '৭টি মডিউল • ৩৫টি সম্পূর্ণ পাঠ'}
+                            {selectedLevel === 'N5'
+                              ? '৮টি মডিউল • ৪০টি সম্পূর্ণ পাঠ'
+                              : selectedLevel === 'N4'
+                              ? '৭টি মডিউল • ৩৫টি সম্পূর্ণ পাঠ'
+                              : '৯টি মডিউল • ৪৫টি সম্পূর্ণ পাঠ'}
                           </span>
                         </div>
                         <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -505,7 +538,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </div>
                   </div>
 
-                  {/* ACTIVE LEVEL TAB BAR: 8-Module tabs for N5 (0-7), 7-Module tabs for N4 (1-7) */}
+                  {/* ACTIVE LEVEL TAB BAR: 8-Module tabs for N5 (0-7), 7-Module tabs for N4 (1-7), 9-Module tabs for N3 (1-9) */}
                   <div>
                     <div className="flex items-center justify-between mb-2.5">
                       <span className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
@@ -516,7 +549,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       </span>
                     </div>
 
-                    <div className={`grid grid-cols-2 sm:grid-cols-4 ${selectedLevel === 'N5' ? 'lg:grid-cols-8' : 'lg:grid-cols-7'} gap-2`}>
+                    <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ${
+                      selectedLevel === 'N5'
+                        ? 'lg:grid-cols-8'
+                        : selectedLevel === 'N4'
+                        ? 'lg:grid-cols-7'
+                        : 'lg:grid-cols-9'
+                    } gap-2`}>
                       {activeModulesList.map((mod) => {
                         const isActive = activeModuleId === mod.id;
                         return (

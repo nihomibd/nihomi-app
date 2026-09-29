@@ -389,7 +389,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
     setSrsDeck((prev) => ({ ...prev, [cardId]: updated }));
     const stage = getStageInfo(updated.stage);
 
-    setLastReviewFeedback(`Scheduled in ${updated.intervalDays} day(s) &bull; ${stage.label}`);
+    setLastReviewFeedback(`Scheduled in ${updated.intervalDays} day(s) • ${stage.label}`);
     setTimeout(() => setLastReviewFeedback(null), 2500);
 
     setIsFlipped(false);
@@ -704,7 +704,7 @@ export const VocabularyFlashcardsView: React.FC<VocabularyFlashcardsViewProps> =
                   {lastReviewFeedback && (
                     <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold text-center animate-in fade-in flex items-center justify-center gap-1.5 shadow-xs">
                       <Sparkles className="w-4 h-4 text-emerald-600" />
-                      <span dangerouslySetInnerHTML={{ __html: lastReviewFeedback }} />
+                      <span>{lastReviewFeedback}</span>
                     </div>
                   )}
 

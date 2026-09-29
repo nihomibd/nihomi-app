@@ -114,8 +114,12 @@ export interface N5MasterLesson {
   japan_survival_tip: N5SurvivalTip;
   typing_practice: N5TypingItem[];
   quizzes: N5QuizItem[];
+  copyright?: string;
+  brand?: string;
 }
 
 export type N4MasterLesson = N5MasterLesson;
+export type N3MasterLesson = N5MasterLesson;
 export type CurriculumMasterLesson = N5MasterLesson;
+
 

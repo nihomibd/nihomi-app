@@ -178,11 +178,16 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
         }
 
         // Fallback to our master curriculum
-        const fallbackLesson = getCurriculumLesson(`n5-l${selectedLessonNum}`);
+        const fallbackLesson = getCurriculumLesson(lessonId || `n5-l${selectedLessonNum}`);
         if (fallbackLesson) {
+          const courseTitle = fallbackLesson.level === 'N3'
+            ? 'JLPT N3 Intermediate Japanese Master Course'
+            : fallbackLesson.level === 'N4'
+            ? 'JLPT N4 Intermediate Japanese Course'
+            : 'JLPT N5 Complete Minna no Nihongo Course';
           const payload = {
             lesson: fallbackLesson,
-            courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
+            courseTitle,
             moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
             isCompleted: false,
             quizSummary: fallbackLesson.quizId ? { quizId: fallbackLesson.quizId, totalQuestions: 5 } : null
@@ -391,11 +396,16 @@ if (lessonId) {
           <div className="flex justify-center gap-2 pt-2">
             <button
               onClick={() => {
-                const fallbackLesson = getCurriculumLesson(`n5-l${selectedLessonNum}`);
+                const fallbackLesson = getCurriculumLesson(lessonId || `n5-l${selectedLessonNum}`);
                 if (fallbackLesson) {
+                  const courseTitle = fallbackLesson.level === 'N3'
+                    ? 'JLPT N3 Intermediate Japanese Master Course'
+                    : fallbackLesson.level === 'N4'
+                    ? 'JLPT N4 Intermediate Japanese Course'
+                    : 'JLPT N5 Complete Minna no Nihongo Course';
                   setLessonData({
                     lesson: fallbackLesson,
-                    courseTitle: 'JLPT N5 Complete Minna no Nihongo Course',
+                    courseTitle,
                     moduleTitle: `Module ${fallbackLesson.moduleId || '1'}`,
                     isCompleted: false
                   });

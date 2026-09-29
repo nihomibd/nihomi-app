@@ -1,5 +1,7 @@
 import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } from '../../types';
 import n5MasterData from '../n5_master.json';
+import n4MasterData from '../n4_master.json';
+import n3MasterData from '../n3_master.json';
 import { stripFurigana, extractReading } from '../../utils/furigana';
 
 export interface CurriculumVocab {
@@ -3547,10 +3549,16 @@ export const NIHOMI_JLPT_N5_CURRICULUM: LessonCurriculum[] = [
 
 export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | null {
   let num: number = 1;
+  let targetLevel: 'N5' | 'N4' | 'N3' = 'N5';
+
   if (typeof lessonIdOrNum === 'number') {
     num = lessonIdOrNum;
   } else {
-    const str = String(lessonIdOrNum).trim();
+    const str = String(lessonIdOrNum).trim().toLowerCase();
+    if (str.startsWith('n3')) targetLevel = 'N3';
+    else if (str.startsWith('n4')) targetLevel = 'N4';
+    else targetLevel = 'N5';
+
     const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
     if (lMatch) {
       num = parseInt(lMatch[1], 10);
@@ -3561,23 +3569,31 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
       }
     }
   }
-  if (num < 1) num = 1;
-  if (num > 40) num = 40;
 
-  // First check n5_master.json for complete 40 lessons
-  const masterItem = (n5MasterData as any[]).find((l: any) => l.lesson_metadata?.lesson_number === num);
+  const maxLessons = targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
+  if (num < 1) num = 1;
+  if (num > maxLessons) num = maxLessons;
+
+  // Select master dataset based on targetLevel
+  const dataset = targetLevel === 'N3'
+    ? (n3MasterData as any[])
+    : targetLevel === 'N4'
+    ? (n4MasterData as any[])
+    : (n5MasterData as any[]);
+
+  const masterItem = dataset.find((l: any) => l.lesson_metadata?.lesson_number === num);
   if (masterItem) {
     const meta = masterItem.lesson_metadata;
     const bridge = masterItem.bengali_bridge;
     return {
-      id: `les-n5-${meta.lesson_number}`,
-      moduleId: `mod-n5-${meta.module_number}`,
-      courseId: 'course-n5',
-      level: 'N5',
+      id: `les-${targetLevel.toLowerCase()}-${meta.lesson_number}`,
+      moduleId: `mod-${targetLevel.toLowerCase()}-${meta.module_number}`,
+      courseId: `course-${targetLevel.toLowerCase()}`,
+      level: targetLevel,
       lessonNumber: meta.lesson_number,
       title: meta.title_en,
       titleJa: meta.title_ja,
-      summary: bridge?.explanation_bn || `${meta.title_ja} — N5 Lesson ${meta.lesson_number}`,
+      summary: bridge?.explanation_bn || `${meta.title_ja} — ${targetLevel} Lesson ${meta.lesson_number}`,
       explanation: bridge?.core_concept_bn || bridge?.explanation_bn,
       isPublished: true,
       estimatedMinutes: meta.estimated_minutes || 25,
@@ -3591,7 +3607,7 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
         english: v.meaning_en,
         banglaMeaning: v.meaning_bn,
         partOfSpeech: v.partOfSpeech || v.part_of_speech || 'noun',
-        level: 'N5',
+        level: targetLevel,
         exampleSentenceJa: stripFurigana(v.example_ja),
         exampleSentenceEn: v.example_en,
         exampleSentenceBn: v.example_bn,
@@ -3604,31 +3620,31 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
         structure: g.pattern_ja,
         meaning: g.pattern_bn,
         explanation: `${g.explanation_bn}${g.common_pitfalls?.length ? '\n\n' + g.common_pitfalls.join('\n') : ''}`,
-        level: 'N5',
+        level: targetLevel,
         examples: (g.examples || []).map((ex: any) => ({
-          japanese: stripFurigana(ex.ja),
-          english: ex.en,
-          breakdown: ex.bn
+          japanese: stripFurigana(ex.ja || ex.sentence_ja || ''),
+          english: ex.en || ex.sentence_en || '',
+          breakdown: ex.bn || ex.sentence_bn || ''
         }))
       })),
       kanji: (masterItem.kanji_scope || []).map((k: any, i: number): KanjiItem => ({
         id: `kanji-${meta.lesson_number}-${i + 1}`,
         character: k.kanji,
-        meaning: `${k.meaning_en} (${k.meaning_bn})`,
+        meaning: `${k.meaning_en || k.meaning_bn} (${k.meaning_bn})`,
         onyomi: k.onyomi ? [k.onyomi] : [],
         kunyomi: k.kunyomi ? [k.kunyomi] : [],
         strokes: k.stroke_count || 1,
-        radicals: k.kanji,
-        level: 'N5',
-        examples: (k.compounds || []).map((c: any) => ({
+        radicals: k.radical || k.kanji,
+        level: targetLevel,
+        examples: (k.compounds || k.practical_examples || []).map((c: any) => ({
           word: stripFurigana(c.word_ja),
-          reading: extractReading(c.word_ja),
-          meaning: `${c.meaning_en} / ${c.meaning_bn}`
+          reading: c.reading_ja || extractReading(c.word_ja),
+          meaning: `${c.meaning_en || c.meaning_bn} / ${c.meaning_bn}`
         }))
       })),
       dialogue: (masterItem.dialogue_scenario?.lines || []).map((d: any): LessonDialogue => ({
-        speaker: d.speaker_ja,
-        speakerRole: d.speaker_en,
+        speaker: d.speaker || d.speaker_ja,
+        speakerRole: d.speaker_role || d.speaker_en,
         japanese: stripFurigana(d.line_ja),
         english: `${d.line_en} (${d.line_bn})`
       })),
@@ -3642,7 +3658,7 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
         correctAnswer: stripFurigana(q.options?.[q.correct_index] || q.options?.[0] || ''),
         explanation: q.explanation_bn
       })),
-      quizId: masterItem.quizzes?.[0]?.quiz_id || `quiz-n5-${meta.lesson_number}`
+      quizId: masterItem.quizzes?.[0]?.quiz_id || `quiz-${targetLevel.toLowerCase()}-${meta.lesson_number}`
     };
   }
 

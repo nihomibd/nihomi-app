@@ -1,15 +1,17 @@
 # NIHOMI™ (nihomi.com) — Robots Configuration & Search Engine Directives
 User-agent: *
 Allow: /
-Allow: /start
 Allow: /courses
+Allow: /kana
+Allow: /pricing
 Allow: /portal
 Allow: /baito
-Allow: /pricing
 Allow: /coordination
 Allow: /documents
 Allow: /credits
-Allow: /verify
+Allow: /terms
+Allow: /privacy
+Allow: /contact
 
 # Disallow Private Executive & Internal Admin Endpoints
 Disallow: /admin/*
