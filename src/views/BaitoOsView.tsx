@@ -648,7 +648,16 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
             >
-              <ConbiniPosCashierSimulator />
+              <ConbiniPosCashierSimulator
+                onCompleteOrder={(score) => {
+                  if (score >= 80) {
+                    setUserReadinessStats((prev) => ({
+                      ...prev,
+                      conbiniPassed: prev.conbiniPassed + 1
+                    }));
+                  }
+                }}
+              />
             </motion.div>
           )}
 

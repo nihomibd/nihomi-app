@@ -41150,6 +41150,20 @@ var init_baitoSeedData = __esm({
         needsChopsticks: false,
         wantsBentoHeated: false,
         paymentMethod: "credit"
+      },
+      {
+        id: "ord-5",
+        customerName: "Sato Office Worker (\u4F50\u85E4\u8AB2\u9577)",
+        customerType: "rush_hour",
+        customerSpeechJa: "\u6025\u304E\u3067\u304A\u9858\u3044\u3057\u307E\u3059\uFF01\u5F01\u5F53\u6E29\u3081\u3066\u3001\u888B\u306F\u5927\u3067\u3002\u30B9\u30D7\u30FC\u30F3\u3082\u3002\u4EA4\u901A\u7CFBIC\u3067\u6255\u3044\u307E\u3059\uFF01",
+        customerSpeechRomaji: "Isogi de onegai shimasu! Bentou atatamete, fukuro wa dai de. Supuun mo. Koutsuukei IC de haraimasu!",
+        customerSpeechBn: "\u0996\u09C1\u09AC \u09A4\u09BE\u09DC\u09BE\u09B9\u09C1\u09DC\u09CB \u0986\u099B\u09C7 \u09AD\u09BE\u0987! \u09AC\u09C7\u09A8\u09CD\u099F\u09CB \u0997\u09B0\u09AE \u0995\u09B0\u09C1\u09A8, \u09AC\u09DC \u09AC\u09CD\u09AF\u09BE\u0997 \u09A6\u09BF\u09A8, \u099A\u09BE\u09AE\u099A\u0993\u0964 \u099F\u09CD\u09B0\u09BE\u09A8\u099C\u09BF\u099F \u0986\u0987\u09B8\u09BF \u0995\u09BE\u09B0\u09CD\u09A1\u09C7 \u09AA\u09C7 \u0995\u09B0\u09AC!",
+        items: [INITIAL_CONBINI_PRODUCTS[0], INITIAL_CONBINI_PRODUCTS[1]],
+        hasPointCard: false,
+        needsBag: true,
+        needsChopsticks: true,
+        wantsBentoHeated: true,
+        paymentMethod: "suica"
       }
     ];
     INITIAL_DEFAULT_RIREKISHO = {

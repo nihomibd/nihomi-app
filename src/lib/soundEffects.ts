@@ -423,6 +423,242 @@ class SoundEngine {
       osc.stop(now + 0.035);
     } catch (e) {}
   }
+
+  /**
+   * Authentic Japanese Conbini commercial microwave completion triple-beep (ピー、ピー、ピー)
+   */
+  public playMicrowaveChime(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      const beeps = [0, 0.22, 0.44];
+
+      beeps.forEach((startOffset) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(2093.0, now + startOffset); // C7
+
+        gain.gain.setValueAtTime(0.001, now + startOffset);
+        gain.gain.linearRampToValueAtTime(0.18, now + startOffset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + startOffset + 0.16);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + startOffset);
+        osc.stop(now + startOffset + 0.18);
+      });
+    } catch (e) {
+      console.warn('Microwave chime failed:', e);
+    }
+  }
+
+  /**
+   * Heavy POS Cash Drawer release, slide & bell clunk
+   */
+  public playCashDrawerSound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // 1. Initial mechanical latch snap
+      const snapOsc = ctx.createOscillator();
+      const snapGain = ctx.createGain();
+      snapOsc.type = 'square';
+      snapOsc.frequency.setValueAtTime(880, now);
+      snapOsc.frequency.exponentialRampToValueAtTime(220, now + 0.04);
+      snapGain.gain.setValueAtTime(0.2, now);
+      snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+      snapOsc.connect(snapGain);
+      snapGain.connect(ctx.destination);
+      snapOsc.start(now);
+      snapOsc.stop(now + 0.05);
+
+      // 2. Heavy metal slide & tray bump
+      const slideOsc = ctx.createOscillator();
+      const slideGain = ctx.createGain();
+      slideOsc.type = 'triangle';
+      slideOsc.frequency.setValueAtTime(160, now + 0.03);
+      slideOsc.frequency.exponentialRampToValueAtTime(65, now + 0.18);
+      slideGain.gain.setValueAtTime(0.22, now + 0.03);
+      slideGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      slideOsc.connect(slideGain);
+      slideGain.connect(ctx.destination);
+      slideOsc.start(now + 0.03);
+      slideOsc.stop(now + 0.24);
+
+      // 3. Register bell ding
+      const bellOsc = ctx.createOscillator();
+      const bellGain = ctx.createGain();
+      bellOsc.type = 'sine';
+      bellOsc.frequency.setValueAtTime(1760, now + 0.08); // A6
+      bellGain.gain.setValueAtTime(0.12, now + 0.08);
+      bellGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      bellOsc.connect(bellGain);
+      bellGain.connect(ctx.destination);
+      bellOsc.start(now + 0.08);
+      bellOsc.stop(now + 0.38);
+    } catch (e) {
+      console.warn('Cash drawer sound failed:', e);
+    }
+  }
+
+  /**
+   * Authentic Japanese IC Transit Touch Chime (Suica / Pasmo "ピピッ")
+   */
+  public playIcCardChime(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Two-step crisp chime (G6: 1567.98Hz -> C7: 2093.00Hz)
+      const tones = [
+        { freq: 1567.98, time: 0, dur: 0.07 },
+        { freq: 2093.00, time: 0.085, dur: 0.16 }
+      ];
+
+      tones.forEach((t) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(t.freq, now + t.time);
+
+        gain.gain.setValueAtTime(0.01, now + t.time);
+        gain.gain.linearRampToValueAtTime(0.22, now + t.time + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + t.time + t.dur);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + t.time);
+        osc.stop(now + t.time + t.dur + 0.02);
+      });
+    } catch (e) {
+      console.warn('IC Card chime failed:', e);
+    }
+  }
+
+  /**
+   * Thermal Receipt Printer rapid paper feed & cut sound (ジジジッ)
+   */
+  public playReceiptPrinterSound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Rapid stepper motor ticks
+      const tickCount = 9;
+      for (let i = 0; i < tickCount; i++) {
+        const tickTime = now + (i * 0.035);
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800 + (i % 2) * 200, tickTime);
+
+        gain.gain.setValueAtTime(0.06, tickTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, tickTime + 0.025);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(tickTime);
+        osc.stop(tickTime + 0.028);
+      }
+
+      // Paper tear cut sound at end
+      const cutTime = now + (tickCount * 0.035) + 0.05;
+      const cutOsc = ctx.createOscillator();
+      const cutGain = ctx.createGain();
+      cutOsc.type = 'triangle';
+      cutOsc.frequency.setValueAtTime(1200, cutTime);
+      cutOsc.frequency.exponentialRampToValueAtTime(300, cutTime + 0.05);
+
+      cutGain.gain.setValueAtTime(0.12, cutTime);
+      cutGain.gain.exponentialRampToValueAtTime(0.001, cutTime + 0.06);
+
+      cutOsc.connect(cutGain);
+      cutGain.connect(ctx.destination);
+      cutOsc.start(cutTime);
+      cutOsc.stop(cutTime + 0.07);
+    } catch (e) {
+      console.warn('Receipt printer sound failed:', e);
+    }
+  }
+
+  /**
+   * PayPay / Code Payment smartphone scan chime
+   */
+  public playPayPaySound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Two joyful notes
+      const notes = [
+        { freq: 880.0, time: 0, dur: 0.12 },    // A5
+        { freq: 1318.5, time: 0.11, dur: 0.25 } // E6
+      ];
+
+      notes.forEach((n) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(n.freq, now + n.time);
+
+        gain.gain.setValueAtTime(0.01, now + n.time);
+        gain.gain.linearRampToValueAtTime(0.24, now + n.time + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + n.time);
+        osc.stop(now + n.time + n.dur + 0.02);
+      });
+    } catch (e) {
+      console.warn('PayPay sound failed:', e);
+    }
+  }
+
+  /**
+   * Credit Card Chip Reader insertion & authorization tone
+   */
+  public playCreditCardChipSound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Soft insertion mechanical click
+      const clickOsc = ctx.createOscillator();
+      const clickGain = ctx.createGain();
+      clickOsc.type = 'triangle';
+      clickOsc.frequency.setValueAtTime(600, now);
+      clickGain.gain.setValueAtTime(0.08, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      clickOsc.connect(clickGain);
+      clickGain.connect(ctx.destination);
+      clickOsc.start(now);
+      clickOsc.stop(now + 0.035);
+
+      // Terminal approved ping at +0.12s
+      const pingOsc = ctx.createOscillator();
+      const pingGain = ctx.createGain();
+      pingOsc.type = 'sine';
+      pingOsc.frequency.setValueAtTime(1046.5, now + 0.12); // C6
+      pingGain.gain.setValueAtTime(0.01, now + 0.12);
+      pingGain.gain.linearRampToValueAtTime(0.2, now + 0.14);
+      pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+      pingOsc.connect(pingGain);
+      pingGain.connect(ctx.destination);
+      pingOsc.start(now + 0.12);
+      pingOsc.stop(now + 0.4);
+    } catch (e) {
+      console.warn('Credit card chip sound failed:', e);
+    }
+  }
 }
 
 export const soundEffects = new SoundEngine();

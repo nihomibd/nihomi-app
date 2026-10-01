@@ -355,6 +355,20 @@ export const INITIAL_CONBINI_ORDERS: ConbiniCustomerOrder[] = [
     needsChopsticks: false,
     wantsBentoHeated: false,
     paymentMethod: 'credit'
+  },
+  {
+    id: 'ord-5',
+    customerName: 'Sato Office Worker (佐藤課長)',
+    customerType: 'rush_hour',
+    customerSpeechJa: '急ぎでお願いします！弁当温めて、袋は大で。スプーンも。交通系ICで払います！',
+    customerSpeechRomaji: 'Isogi de onegai shimasu! Bentou atatamete, fukuro wa dai de. Supuun mo. Koutsuukei IC de haraimasu!',
+    customerSpeechBn: 'খুব তাড়াহুড়ো আছে ভাই! বেন্টো গরম করুন, বড় ব্যাগ দিন, চামচও। ট্রানজিট আইসি কার্ডে পে করব!',
+    items: [INITIAL_CONBINI_PRODUCTS[0], INITIAL_CONBINI_PRODUCTS[1]],
+    hasPointCard: false,
+    needsBag: true,
+    needsChopsticks: true,
+    wantsBentoHeated: true,
+    paymentMethod: 'suica'
   }
 ];
 
