@@ -4,6 +4,8 @@ import { Footer } from './components/layout/Footer';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { LandingView } from './views/LandingView';
 import { AuthModal } from './components/auth/AuthModal';
+import { LearnerJourneyEngine } from './components/learning/LearnerJourneyEngine';
+import { NihomiMobileShowcase } from './components/showcase/NihomiMobileShowcase';
 
 // Code-split / Lazy-loaded views to optimize bundle sizes
 const StudentPortalView = lazy(() => import('./views/StudentPortalView').then(m => ({ default: m.StudentPortalView })));
