@@ -27,10 +27,13 @@ export default defineConfig({
     }
   },
   build: {
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 3000,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          if (id.includes('n5_master.json') || id.includes('n4_master.json') || id.includes('n3_master.json') || id.includes('n2_master.json') || id.includes('n1_master.json')) {
+            return 'curriculum-master-data';
+          }
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('lucide-react')) {
               return 'vendor-framework';

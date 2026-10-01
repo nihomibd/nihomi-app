@@ -293,6 +293,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               onClick={() => onNavigate('courses')}
               className="p-2 rounded-xl bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white transition-all cursor-pointer"
               title="পাঠ্যক্রমে ফিরে যান"
+              aria-label="পাঠ্যক্রমে ফিরে যান"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
@@ -357,6 +358,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   : 'bg-stone-900 border-stone-800 text-stone-500'
               }`}
               title={soundEnabled ? 'সাউন্ড অন' : 'সাউন্ড অফ'}
+              aria-label={soundEnabled ? 'সাউন্ড বন্ধ করুন' : 'সাউন্ড চালু করুন'}
             >
               {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4" />}
             </button>
@@ -415,6 +417,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   onClick={() => handleSpeak(currentQuiz.question_ja)}
                   className="p-3 rounded-2xl bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white transition-all cursor-pointer shrink-0 border border-stone-700/60 shadow-sm"
                   title="উচ্চারণ শুনুন"
+                  aria-label="জাপানি প্রশ্নের উচ্চারণ শুনুন"
                 >
                   <Volume2 className="w-5 h-5 text-red-400" />
                 </button>
@@ -449,6 +452,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                       disabled={isAnswerSubmitted}
                       onClick={() => handleSelectOption(optIdx)}
                       className={`p-4 rounded-2xl border text-left text-sm font-japanese transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${cardStyle}`}
+                      aria-label={`বিকল্প ${optIdx + 1}: ${stripFurigana(option)}`}
                     >
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 rounded-lg bg-stone-800/80 text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
@@ -505,6 +509,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                     disabled={selectedOptionIndex === null}
                     onClick={handleSubmitQuizAnswer}
                     className="px-6 py-3 rounded-2xl bg-red-600 hover:bg-red-500 disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 cursor-pointer flex items-center gap-2"
+                    aria-label="উত্তর নিশ্চিত করুন"
                   >
                     <span>উত্তর নিশ্চিত করুন (Submit)</span>
                     <ArrowRight className="w-4 h-4" />
@@ -513,6 +518,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     onClick={handleNextQuiz}
                     className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
+                    aria-label="পরবর্তী প্রশ্ন বা ড্রিল"
                   >
                     <span>
                       {currentQuizIndex + 1 < quizzes.length
@@ -577,6 +583,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                     onClick={() => handleSpeak(currentTyping.prompt_ja)}
                     className="p-3 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-white transition-all cursor-pointer border border-stone-700/60 shadow-sm"
                     title="উচ্চারণ শুনুন"
+                    aria-label="জাপানি অভিব্যক্তির উচ্চারণ শুনুন"
                   >
                     <Volume2 className="w-5 h-5 text-amber-400" />
                   </button>
@@ -584,6 +591,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     onClick={() => setIsHintRevealed((prev) => !prev)}
                     className="px-3 py-2.5 rounded-2xl bg-stone-800 hover:bg-stone-700 text-xs font-bold text-stone-300 hover:text-white transition-all cursor-pointer border border-stone-700/60 flex items-center gap-1.5"
+                    aria-label={isHintRevealed ? 'রোমাজি হিন্ট লুকান' : 'রোমাজি হিন্ট দেখুন'}
                   >
                     <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                     <span>{isHintRevealed ? 'হিন্ট লুকান' : 'রোমাজি হিন্ট'}</span>
@@ -675,6 +683,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                     disabled={!typingInput.trim()}
                     onClick={handleCheckTyping}
                     className="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-stone-950 font-bold text-sm transition-all shadow-lg shadow-amber-500/20 cursor-pointer flex items-center gap-2"
+                    aria-label="টাইপিং উত্তর যাচাই করুন"
                   >
                     <span>যাচাই করুন (Verify)</span>
                     <ArrowRight className="w-4 h-4" />
@@ -683,6 +692,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     onClick={handleNextTyping}
                     className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
+                    aria-label="পরবর্তী টাইপিং শব্দ অথবা ফলাফল"
                   >
                     <span>
                       {currentTypingIndex + 1 < typingItems.length
@@ -815,6 +825,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                 <button
                   onClick={handleRetry}
                   className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-white font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-2 border border-stone-700"
+                  aria-label="পুনরায় অনুশীলন শুরু করুন"
                 >
                   <RotateCcw className="w-4 h-4 text-stone-400" />
                   <span>পুনরায় অনুশীলন করুন (Retry)</span>
@@ -823,6 +834,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                 <button
                   onClick={() => onNavigate('courses')}
                   className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-red-600/30 cursor-pointer flex items-center justify-center gap-2"
+                  aria-label="পাঠ সম্পন্ন করুন ও পাঠ্যক্রমে ফিরুন"
                 >
                   <span>পাঠ সমাপ্ত করুন ও পাঠ্যক্রমে ফিরুন (Finish & Return)</span>
                   <ArrowRight className="w-4 h-4" />

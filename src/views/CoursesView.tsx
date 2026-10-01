@@ -525,9 +525,10 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                   </div>
 
                   {/* Level Switcher Pill: [JLPT N5 (40)] | [JLPT N4 (35)] | [JLPT N3 (45)] | [JLPT N2 (45)] | [JLPT N1 (45)] */}
-                  <div className="inline-flex items-center p-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shrink-0">
+                  <div className="flex flex-wrap sm:inline-flex items-center gap-1 p-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 max-w-full overflow-x-auto">
                     <button
                       onClick={() => handleSelectLevel('N5')}
+                      aria-label="JLPT N5 স্তর নির্বাচন করুন (৪০টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N5'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
@@ -539,6 +540,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N4')}
+                      aria-label="JLPT N4 স্তর নির্বাচন করুন (৩৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N4'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
@@ -550,6 +552,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N3')}
+                      aria-label="JLPT N3 স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N3'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
@@ -561,6 +564,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N2')}
+                      aria-label="JLPT N2 স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N2'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
@@ -572,6 +576,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N1')}
+                      aria-label="JLPT N1 সর্বোচ্চ স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N1'
                           ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
@@ -821,6 +826,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                           <div className="grid grid-cols-2 gap-2 mt-3.5 pt-2.5 border-t border-stone-100 dark:border-stone-800/60">
                             <button
                               onClick={() => setSelectedLessonModal(lesson)}
+                              aria-label={`বিস্তারিত তথ্য দেখুন: ${lesson.lesson_metadata.lesson_id}`}
                               className="py-1.5 px-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 cursor-pointer border border-stone-200/80 dark:border-stone-700"
                             >
                               <BookOpen className="w-3.5 h-3.5 text-stone-400" />
@@ -829,6 +835,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
 
                             <button
                               onClick={() => onNavigate('practice', { lessonId: lessonIdLower })}
+                              aria-label={`ইন্টারঅ্যাক্টিভ অনুশীলন শুরু করুন: ${lesson.lesson_metadata.lesson_id}`}
                               className="py-1.5 px-2 rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <Play className="w-3.5 h-3.5 fill-white text-white" />
