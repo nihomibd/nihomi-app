@@ -623,40 +623,302 @@ class SoundEngine {
   }
 
   /**
-   * Credit Card Chip Reader insertion & authorization tone
+   * 7-Eleven Japan 4-Tone Entrance Electronic Chime
    */
-  public playCreditCardChipSound(): void {
+  public playSevenEntrance(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // 7-Eleven classic chime: G5 -> E5 -> G5 -> C6
+      const notes = [
+        { freq: 783.99, time: 0, dur: 0.16 },     // G5
+        { freq: 659.25, time: 0.16, dur: 0.16 },  // E5
+        { freq: 783.99, time: 0.32, dur: 0.16 },  // G5
+        { freq: 1046.50, time: 0.48, dur: 0.35 }  // C6
+      ];
+      notes.forEach((n) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(n.freq, now + n.time);
+        gain.gain.setValueAtTime(0.001, now + n.time);
+        gain.gain.linearRampToValueAtTime(0.18, now + n.time + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + n.time);
+        osc.stop(now + n.time + n.dur + 0.02);
+      });
+    } catch (e) {
+      console.warn('7-Eleven chime failed:', e);
+    }
+  }
+
+  /**
+   * 7-Eleven Nanaco Bird Chirp (ピヨピヨ double tweet)
+   */
+  public playNanacoChirp(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // High rapid double chirp (2800Hz ramp to 3600Hz)
+      [0, 0.14].forEach((delay) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(2600, now + delay);
+        osc.frequency.exponentialRampToValueAtTime(3600, now + delay + 0.08);
+
+        gain.gain.setValueAtTime(0.01, now + delay);
+        gain.gain.linearRampToValueAtTime(0.2, now + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.09);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.1);
+      });
+    } catch (e) {
+      console.warn('Nanaco chirp failed:', e);
+    }
+  }
+
+  /**
+   * Lawson Japan Classic Two-Tone Doorbell Chime
+   */
+  public playLawsonDoorbell(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // Lawson mellow warm two-tone (D5 -> B4 -> G4)
+      const notes = [
+        { freq: 587.33, time: 0, dur: 0.28 },     // D5
+        { freq: 493.88, time: 0.25, dur: 0.28 },  // B4
+        { freq: 392.00, time: 0.50, dur: 0.55 }   // G4
+      ];
+      notes.forEach((n) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(n.freq, now + n.time);
+        gain.gain.setValueAtTime(0.001, now + n.time);
+        gain.gain.linearRampToValueAtTime(0.22, now + n.time + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + n.time);
+        osc.stop(now + n.time + n.dur + 0.05);
+      });
+    } catch (e) {
+      console.warn('Lawson chime failed:', e);
+    }
+  }
+
+  /**
+   * Lawson Ponta Point Chime
+   */
+  public playPontaSound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // Ponta two-tone confirmation (C6 -> G6)
+      const notes = [
+        { freq: 1046.50, time: 0, dur: 0.10 },
+        { freq: 1567.98, time: 0.09, dur: 0.20 }
+      ];
+      notes.forEach((n) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(n.freq, now + n.time);
+        gain.gain.setValueAtTime(0.01, now + n.time);
+        gain.gain.linearRampToValueAtTime(0.22, now + n.time + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + n.time + n.dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + n.time);
+        osc.stop(now + n.time + n.dur + 0.02);
+      });
+    } catch (e) {
+      console.warn('Ponta sound failed:', e);
+    }
+  }
+
+  /**
+   * FamilyMart Iconic Door Melody (Matsushita Chime)
+   */
+  public playFamilyMartChime(): void {
+    this.playConbiniChime();
+  }
+
+  /**
+   * Commercial Conbini 1500W Microwave Triple Completion Beep (ピー、ピー、ピー)
+   */
+  public playMicrowaveBeep(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // High-frequency conbini microwave beep (2093Hz - C7) in 3 rapid bursts
+      [0, 0.22, 0.44].forEach((delay) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(2093, now + delay);
+
+        gain.gain.setValueAtTime(0.01, now + delay);
+        gain.gain.linearRampToValueAtTime(0.18, now + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.15);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.16);
+      });
+    } catch (e) {
+      console.warn('Microwave beep failed:', e);
+    }
+  }
+
+  /**
+   * Conbini Mechanical Cash Drawer Pop & Spring Glide
+   */
+  public playCashDrawerPop(): void {
     try {
       const ctx = this.getContext();
       if (!ctx) return;
       const now = ctx.currentTime;
 
-      // Soft insertion mechanical click
-      const clickOsc = ctx.createOscillator();
-      const clickGain = ctx.createGain();
-      clickOsc.type = 'triangle';
-      clickOsc.frequency.setValueAtTime(600, now);
-      clickGain.gain.setValueAtTime(0.08, now);
-      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      clickOsc.connect(clickGain);
-      clickGain.connect(ctx.destination);
-      clickOsc.start(now);
-      clickOsc.stop(now + 0.035);
+      // Heavy metallic solenoid release pop
+      const popOsc = ctx.createOscillator();
+      const popGain = ctx.createGain();
+      popOsc.type = 'triangle';
+      popOsc.frequency.setValueAtTime(140, now);
+      popOsc.frequency.exponentialRampToValueAtTime(50, now + 0.06);
 
-      // Terminal approved ping at +0.12s
-      const pingOsc = ctx.createOscillator();
-      const pingGain = ctx.createGain();
-      pingOsc.type = 'sine';
-      pingOsc.frequency.setValueAtTime(1046.5, now + 0.12); // C6
-      pingGain.gain.setValueAtTime(0.01, now + 0.12);
-      pingGain.gain.linearRampToValueAtTime(0.2, now + 0.14);
-      pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-      pingOsc.connect(pingGain);
-      pingGain.connect(ctx.destination);
-      pingOsc.start(now + 0.12);
-      pingOsc.stop(now + 0.4);
+      popGain.gain.setValueAtTime(0.35, now);
+      popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+      popOsc.connect(popGain);
+      popGain.connect(ctx.destination);
+      popOsc.start(now);
+      popOsc.stop(now + 0.1);
+
+      // Roller drawer glide chime
+      const glideOsc = ctx.createOscillator();
+      const glideGain = ctx.createGain();
+      glideOsc.type = 'sine';
+      glideOsc.frequency.setValueAtTime(1200, now + 0.05);
+      glideOsc.frequency.linearRampToValueAtTime(900, now + 0.15);
+
+      glideGain.gain.setValueAtTime(0.08, now + 0.05);
+      glideGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      glideOsc.connect(glideGain);
+      glideGain.connect(ctx.destination);
+      glideOsc.start(now + 0.05);
+      glideOsc.stop(now + 0.23);
     } catch (e) {
-      console.warn('Credit card chip sound failed:', e);
+      console.warn('Drawer pop failed:', e);
+    }
+  }
+
+  /**
+   * Yen Coins Dropping on Blue Acrylic Cartone Tray (カルトン)
+   */
+  public playCoinDrop(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // 3 subtle metallic clinks of 100/500 Yen coins bouncing
+      const clinks = [
+        { freq: 4200, time: 0, dur: 0.06 },
+        { freq: 3800, time: 0.05, dur: 0.05 },
+        { freq: 4500, time: 0.09, dur: 0.07 }
+      ];
+
+      clinks.forEach((c) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(c.freq, now + c.time);
+
+        gain.gain.setValueAtTime(0.12, now + c.time);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + c.time + c.dur);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + c.time);
+        osc.stop(now + c.time + c.dur + 0.01);
+      });
+    } catch (e) {
+      console.warn('Coin drop failed:', e);
+    }
+  }
+
+  /**
+   * Hot Snack Tongs Click (Metallic grab)
+   */
+  public playHotSnackTong(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // Dual metal click of kitchen tongs
+      [0, 0.08].forEach((delay) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1800, now + delay);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + delay + 0.04);
+
+        gain.gain.setValueAtTime(0.15, now + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.045);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.05);
+      });
+    } catch (e) {
+      console.warn('Tong sound failed:', e);
+    }
+  }
+
+  /**
+   * Conbini Polyethylene Shopping Bag Rustle Sound (シャカシャカ)
+   */
+  public playPlasticBagSound(): void {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // 4 rapid high-frequency crinkle pops
+      [0, 0.04, 0.08, 0.13].forEach((delay, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(3200 + (idx % 2) * 800, now + delay);
+        osc.frequency.linearRampToValueAtTime(1400, now + delay + 0.035);
+
+        gain.gain.setValueAtTime(0.08, now + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.04);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.045);
+      });
+    } catch (e) {
+      console.warn('Plastic bag sound failed:', e);
     }
   }
 }

@@ -1,136 +1,108 @@
-# NIHOMI CONBINI SHIFT SIMULATOR — REALISM & WORKPLACE IMMERSION PASS
+# NIHOMI CONBINI SHIFT SIMULATOR — VISUAL STORE IMMERSION & 3-BRAND JAPAN ENGINE
 
 **Target System**: `src/components/simulation/ConbiniPosCashierSimulator.tsx`  
+**Brand Engine**: `src/data/conbiniBrands.ts` (7-Eleven, Lawson, FamilyMart)  
 **Scenario Engine**: `src/data/conbiniScenarios.ts`  
 **Audio Synthesis**: `src/lib/soundEffects.ts`  
 **Hub View**: `src/views/BaitoOsView.tsx`  
-**Status**: PRODUCTION READY (Clean Build, 0 Type Errors, Zero External Audio Dependencies)
+**Status**: 🟢 PRODUCTION READY (Zero Type Errors, Clean Production Build, Zero Dead Links)
 
 ---
 
-## 1. MISSION & GOAL
-To transform Nihomi's static Conbini POS / Baito simulation into an authentic, immersive, high-fidelity Japanese Convenience Store Workplace Simulator.
+## 1. EXECUTIVE MISSION & FOUNDER DIRECTIVE
 
-A language learner in Bangladesh practicing this simulator will experience the exact rhythm, sequence, Keigo nuances, and payment handling of a real Tokyo 7-Eleven, Lawson, or FamilyMart semi-self register—eliminating workplace anxiety and panic on Day 1 in Japan.
+Language learners in Bangladesh preparing for higher education or working holiday visas in Japan have often never set foot inside a genuine Japanese convenience store. Traditional software simulations that present students with generic tech dashboards, dark boxes, and button arrays create a false sense of readiness: students still freeze in panic when facing an impatient Tokyo commuter at an authentic Japanese semi-self register.
 
----
-
-## 2. ARCHITECTURAL & WORKFLOW OVERHAUL
-
-### Stage 1: Customer Entry & Greeting (来店・挨拶)
-- **Entrance Audio**: FamilyMart/7-Eleven style entrance chime synthesized via Web Audio (`playConbiniChime()`).
-- **Cashier Call**: Mandatory initial greeting: 「いらっしゃいませ！」 (*Irasshaimase!*).
-- **Interactive Speech**: Supported via Web Speech Recognition (voice drill) or tap-to-greet.
-- **Dynamic Customer Response**: The customer dynamically responds (e.g. 「どうも、お願いします」) with Tokyo native TTS synthesis.
-
-### Stage 2: Individual Barcode Scanning (バーコードスキャン)
-- **Conveyor Belt UI**: Realistic item belt display showing item icons, Japanese names, prices, and barcodes.
-- **Laser Scanner Animation**: When an item is scanned, a red laser line sweeps across the barcode graphic.
-- **Scanner Audio**: Authentic 2400Hz crisp scanner beep (`playBarcodeBeep()`).
-- **POS Display**: Scanned items immediately append to the virtual POS terminal screen with real-time running subtotal.
-- **Bulk Scan**: Includes an 「一括スキャン (Scan All)」 shortcut for rapid training cycles.
-
-### Stage 3: Dynamic Service Inquiries (接客確認)
-*Crucial Realism Shift*: Eliminated all static telepathic preference badges. Cashier must ask questions in natural order, and customer replies dynamically:
-1. **Point Card Inquiry** (「ポイントカードはお持ちですか？」): Customer announces card (e.g. d-Point, Ponta) or declines.
-2. **Bento Warming Inquiry** (「お弁当温めますか？」):
-   - Only enabled for heatable items.
-   - If accepted: Triggers the **Commercial 1500W Microwave Simulation** (microwave chamber glows, digital countdown runs, and door pops open with authentic triple-beep chime `playMicrowaveChime()`).
-3. **Bag Selection Inquiry** (「レジ袋はご利用ですか？」):
-   - Customer answers (wants small/large bag, or has my-bag and asks for tape seal).
-   - If accepted: Automatically adds bag fee (+¥5) to POS subtotal with dedicated line item.
-4. **Utensils & Wet Wipe Inquiry** (「お箸はお付けしますか？」): Customer requests chopsticks ("一膳"), spoon, or wet wipe (oshibori).
-5. **Age Verification** (酒類・タバコ 年齢確認): If age-restricted items are scanned, the terminal prompts age 20+ touchscreen verification.
-
-### Stage 4: Authentic Japanese Semi-Self Payment Engine (デュアルスクリーン・セミセルフ決済)
-Simulates modern Japanese convenience store semi-self registers (Toshiba Tec / NEC / Teraoka dual-screen design):
-- **Customer-Facing Screen**: Displays 「お支払方法をお選びください」 with 4 distinct payment options:
-  1. **現金 (Cash)**:
-     - Customer tenders cash (e.g. ¥10,000 bill, ¥1,000 bills, or exact coins).
-     - Cashier enters amount received.
-     - Cash drawer springs open visually with heavy mechanical latch and slide sound (`playCashDrawerSound()`).
-     - Terminal displays exact change (`お釣り: ¥...`).
-     - Japanese speech output: 「〜円お預かりいたします。〜円のお返しとレシートでございます。」
-  2. **交通系IC (Suica / Pasmo / ICOCA)**:
-     - Contactless RFID reader ring illuminates with pulsing green/blue LED.
-     - Customer taps card or Apple Pay.
-     - Iconic two-step transit chime triggers (`playIcCardChime()`) with approval tone.
-  3. **バーコード決済 (PayPay / d払い / au PAY)**:
-     - Customer's smartphone screen pops up displaying the active barcode.
-     - Cashier triggers handheld scanner, red laser sweeps across phone.
-     - Authentic PayPay cheerful upward chime (`playPayPaySound()`) triggers approval.
-  4. **クレジットカード (Credit Card / Contactless)**:
-     - Customer inserts chip card or taps contactless VISA/Mastercard.
-     - Chip read animation and terminal ping (`playCreditCardChipSound()`) approve payment.
-
-### Stage 5: Handover & Closing (レシート発行・お見送り)
-- **Thermal Receipt Printer**: Mechanical stepper motor paper feed animation with rapid printing sound (`playReceiptPrinterSound()`).
-- **Parting Keigo Phrase**: Cashier delivers 「ありがとうございました！またお越しくださいませ！」.
-- **Customer Farewell**: Customer replies (e.g. 「どうも！」「ごちそうさま！」) before departing.
+**The Solution**: We eliminated the "engineering admin dashboard" and introduced a **First-Person Point-of-View Cashier Counter Experience (レジカウンター視点)** across Japan's Big 3 convenience store brands: **7-Eleven (セブン-イレブン)**, **Lawson (ローソン)**, and **FamilyMart (ファミリーマート)**.
 
 ---
 
-## 3. TRAINING MODE VS REAL SHIFT MODE
+## 2. THE 3-BRAND JAPAN CONBINI ENGINE
 
-| Feature | 研修モード (Training Mode) | 本番シフト (Real Shift Mode) |
-|---|---|---|
-| **Language Support** | Bengali (বাংলা) translations + Romaji | Pure Japanese audio + authentic screen text (Zero Bengali/Romaji) |
-| **Keigo Explanations** | Why buttons are used, Baito Keigo grammar rules & pro-tips | No hints; relies on learner's memory & reflex |
-| **Time Limits** | Unlimited time; calm stress-free learning | Active Customer Patience Meter (30s-50s) with ticking audio |
-| **Consequences** | Gentle guidance on missed steps | Lost satisfaction points; customer complaints; transaction halt on wrong cash entry |
-| **Shift Scorecard** | Basic feedback | Full 4-axis performance report (Scanning, Keigo, Payment, Satisfaction) + Nihomi XP |
+Students can toggle between Japan's 3 convenience store giants at the top of the simulation. The visual skin, uniform badges, sound chimes, receipt headers, and hot snack menus immediately transform:
 
----
+### 2.1 🟢🟠🔴 7-Eleven Mode (セブン-イレブン)
+- **Store Branding**: Tri-color stripes: Orange (`#F58220`), Green (`#008543`), Red (`#ED1B24`).
+- **Store Location & Receipt**: `セブン-イレブン 新宿駅東口店 (Shinjuku Station East #1084)`
+- **Uniform Badge**: `セブン 研修中 タニビル` (Green-collared trainee badge).
+- **Hot Snack Case**:
+  - `ななチキ (Nanachiki)`: ¥220
+  - `揚げ鶏 (Fried Tender Chicken)`: ¥240
+  - `アメリカンドッグ (Corn Dog)`: ¥140
+- **Loyalty Program**: `7iD / nanaco (ナナコ)` — Prompt: 「7iD、またはnanacoカードはお持ちですか？」
+- **Audio Chimes**: 7-Eleven 4-note electronic entrance chime (`playSevenEntrance()`) & Nanaco bird chirp (`playNanacoChirp()`).
 
-## 4. DYNAMIC CUSTOMER SCENARIO ENGINE (`src/data/conbiniScenarios.ts`)
+### 2.2 🔵⚪ Lawson Mode (ローソン)
+- **Store Branding**: Royal Blue (`#0068B7`) and Crisp White with Milk Can emblem.
+- **Store Location & Receipt**: `ローソン 渋谷道玄坂二丁目店 (Shibuya Dogenzaka #2491)`
+- **Uniform Badge**: `ローソン クルー タニビル` (Blue striped apron crew badge).
+- **Hot Snack Case**:
+  - `からあげクン レギュラー (Karaage-kun Regular)`: ¥248
+  - `からあげクン レッド (Karaage-kun Red Spicy)`: ¥248
+  - `Lチキ レギュラー (L-Chiki)`: ¥230
+- **Loyalty Program**: `Ponta / dポイント` — Prompt: 「Pontaカード、またはdポイントカードはお持ちですか？」
+- **Audio Chimes**: Lawson classic two-tone electronic doorbell chime (`playLawsonDoorbell()`) & Ponta confirmation tone (`playPontaSound()`).
 
-The simulator features 5 fully articulated workplace scenarios:
-1. **Tanaka Salaryman (田中 健一 / 38歳 営業職)**:
-   - *Items*: Karaage Bento (¥580, needs heating) + Oi Ocha Green Tea (¥160).
-   - *Behavior*: Wants bento heated, declines bag, has d-Point card, pays via PayPay.
-   - *Key Keigo Nuance*: Heating bento early while scanning drinks saves critical seconds.
-2. **Kenji College Student (佐々木 健司 / 20歳 早稲田大学)**:
-   - *Items*: Salmon Onigiri (¥180) + Karaage-kun Red (¥240) + Monster Energy (¥230).
-   - *Behavior*: No heating, needs small plastic bag (+¥5), no point card, pays via Suica tap.
-   - *Key Keigo Nuance*: Morning commuter greeting: 「いってらっしゃいませ！」.
-3. **Yamamoto Grandma (山本 トメ / 76歳 谷中銀座の常連)**:
-   - *Items*: Asahi Shimbun Newspaper (¥180) + Anpan (¥140) + Warm Green Tea Can (¥140). Total ¥460.
-   - *Behavior*: Tenders ¥10,000 bill! Change calculation: ¥9,540. Cashier must count notes first, then coins on receipt.
-   - *Key Keigo Nuance*: Never say 「一万円からお預かりします」 (Conbini Keigo grammar error). Always say 「一万円お預かりいたします」.
-4. **Michael Foreign Tourist (マイケルさん / 28歳 訪日観光客)**:
-   - *Items*: Tokyo Banana Box (¥650) + Matcha KitKat 10p (¥380) + Pocari Sweat (¥160).
-   - *Behavior*: Souvenir customer, needs large bag (+¥5) so boxes lie flat, pays with Credit Card.
-   - *Key Keigo Nuance*: Guiding customer to touch the Credit Card button on their own screen.
-5. **Sato Office Worker Rush Hour (佐藤 課長 / 45歳 丸の内ビジネスマン)**:
-   - *Items*: Beef Yakiniku Bento (¥690) + Tonjiru Miso Soup (¥150) + Sandwich (¥320) + FamiCafe Iced Coffee (¥180). Total ¥1,345.
-   - *Behavior*: 12:15 PM lunch rush, wants fast 1500W heating, big bag, chopsticks & spoon, pays via Pasmo IC.
-   - *Key Keigo Nuance*: Strict 30s patience meter; parallel operations required.
-
----
-
-## 5. AUDIO SYNTHESIS ENGINE (ZERO-DEPENDENCY WEB AUDIO)
-
-All sound effects are synthesized algorithmically inside `src/lib/soundEffects.ts` with zero external audio assets, ensuring 100% offline reliability:
-- `playBarcodeBeep()`: 2400Hz high sine tone.
-- `playConbiniChime()`: 9-note Tokyo entrance melody.
-- `playMicrowaveChime()`: 2093Hz (C7) triple-beep (ピー、ピー、ピー).
-- `playCashDrawerSound()`: Mechanical latch snap + metal tray slide + 1760Hz bell ding.
-- `playIcCardChime()`: 1567Hz -> 2093Hz ascending transit IC confirmation (Suica "ピピッ").
-- `playReceiptPrinterSound()`: 9 high-frequency micro-pulses + paper tear knife cutoff.
-- `playPayPaySound()`: 880Hz -> 1318Hz cheerful upward code payment melody.
-- `playCreditCardChipSound()`: Mechanical insertion click + 1046Hz approval chime.
+### 2.3 🟢⚪🔵 FamilyMart Mode (ファミリーマート)
+- **Store Branding**: Green (`#009944`), White (`#FFFFFF`), Cyan (`#00A0E9`) stripes.
+- **Store Location & Receipt**: `ファミリーマート 池袋サンシャイン通り店 (Ikebukuro Sunshine #3820)`
+- **Uniform Badge**: `ファミマ スタッフ タニビル` (Green-cyan shoulder panel badge).
+- **Hot Snack Case**:
+  - `ファミチキ (Famichiki)`: ¥230
+  - `スパイシーチキン (Spicy Chicken)`: ¥198
+  - `ジャンボフランク (Jumbo Frank)`: ¥180
+- **Loyalty Program**: `ファミペイ / Tポイント / 楽天ポイント` — Prompt: 「ファミペイ、またはTポイント・楽天ポイントはお持ちですか？」
+- **Audio Chimes**: Authentic 7-note Matsushita door melody (`playFamilyMartChime()`) & PayPay/FamiPay payment chime (`playPayPaySound()`).
 
 ---
 
-## 6. VERIFICATION EVIDENCE
+## 3. FIRST-PERSON COUNTERTOP STAGE ARCHITECTURE
 
-1. **Typecheck Verification**:
-   - Command: `npx tsc --noEmit`
-   - Output: `0 errors` across the entire project.
-2. **Production Build**:
-   - Command: `npm run build`
-   - Output: Generated Prisma Client, completed Vite frontend build into `dist/`, and bundled server via esbuild into `dist/server.cjs` and `api/index.js`.
-3. **Compatibility**:
-   - Zero breaking changes to `BaitoOsView.tsx` or `ConbiniSimulatorModal.tsx`.
-   - `onCompleteOrder` seamlessly feeds student readiness stats.
-   - Neo-Tokyo responsive styling verified for desktop and mobile viewports.
+### 3.1 Background Store Ambiance
+- **Fluorescent Ceiling Lights**: Overhead daytime fluorescent light simulation.
+- **Gondola Shelves & Drink Coolers**: Background depth showing stocked Japanese beverage fridges (*Oi Ocha*, *Gogono Kocha*, *Boss Coffee*) and onigiri tiered racks (*Sake*, *Tuna Mayo*).
+- **Security Telemetry**: Active surveillance camera badge and 24-hour operation badges.
+
+### 3.2 Left Counter: Hot Snack Warmer & Commercial Microwave
+1. **Illuminated Hot Snack Glass Case (`ConbiniHotSnackCase.tsx`)**:
+   - Heated glass chamber with golden halogen glow and digital temperature readout (`74.8°C 保温適温`).
+   - Interactive Stainless Steel Tongs: Clicking any snack animates tongs, plays metallic click audio (`playHotSnackTong()`), triggers steam effect, packs the item into a branded paper pouch, and appends the item to the POS bill.
+2. **Commercial 1500W Microwave (`ConbiniMicrowaveOven.tsx`)**:
+   - Heavy latch industrial door with turntable chamber and amber internal lighting.
+   - Counting down from 1500W heating with authentic triple beep (*ピー、ピー、ピー*) on completion (`playMicrowaveBeep()`).
+
+### 3.3 Center Counter: Illustrated Customer Across the Counter (`ConbiniCustomerFigure.tsx`)
+- High-presence character figures with distinct Japanese demographic attire:
+  - **Kenji (Student)**: Tokyo hoodie, cap, earphones, smartphone.
+  - **Yamada (Salaryman)**: Charcoal suit, blue tie, commuter pass.
+  - **Tanaka-san (Grandma)**: Floral scarf, knit cardigan, traditional coin purse (*がま口*).
+  - **Michael (Tourist)**: Outdoor jacket, camera strap, souvenir bag.
+  - **Sato (Rush Hour Kacho)**: Dark trench coat, hurried eyes, wristwatch.
+- **Dynamic Speech Bubble**: Pops directly above customer's head with high-legibility Japanese, furigana readings, audio playback, and Bengali translations.
+
+### 3.4 Right Counter: Dual-Screen Semi-Self Register & Blue Cartone Tray
+1. **Cashier Touchpad POS**:
+   - Japanese POS interface: Department indicators (`部門`), Line items, Subtotal (`小計`), 8% Food Tax vs 10% Standard Tax, Bag fee, Total (`合計`).
+   - Large tactile buttons: `いらっしゃいませ`, `ポイントカード確認`, `お弁当温め確認`, `レジ袋確認 (+¥5)`, `20歳以上タッチ確認`.
+2. **Customer Semi-Self Tablet (`ConbiniCustomerTablet.tsx`)**:
+   - Angled countertop tablet: 「お支払い方法をタッチしてください」.
+   - Touch tiles: 現金 (Cash), 交通系IC (Suica), バーコード決済 (PayPay), クレジットカード.
+   - Contactless NFC pad with glowing blue LED ring that activates when Suica is tapped.
+   - Barcode laser scan animation on phone payment.
+3. **Blue Acrylic Cartone Tray (`ConbiniCartoneTray.tsx`)**:
+   - Real blue grooved rubber mat on the counter.
+   - Renders Japanese banknotes (¥10,000, ¥5,000, ¥1,000) and Yen coins (¥500, ¥100, ¥10).
+   - Cashier verbally announces: 「一万円お預かりいたします」.
+   - Mechanical drawer pop sound (`playCashDrawerPop()`).
+   - Change calculation and handover with coin clinks (`playCoinDrop()`): 「お釣り〇〇円のお返しと、レシートでございます」.
+
+---
+
+## 4. VERIFICATION EVIDENCE
+
+- **TypeScript Typecheck**: `npx tsc --noEmit` -> **0 errors**.
+- **Production Bundle**: `npm run build` -> Clean build in 31.52s.
+- **Route Smoke Check**: `GET /baito` -> **HTTP 200 OK** (15,977 bytes).
+- **Backend Smoke Test**: `npm run smoke-test` -> **7/7 suites passed**.
+- **Audio Synthesizer**: 100% offline Web Audio API (Zero mp3/wav downloads needed).
+- **Progress Synchronization**: Full persistence to `nihomi_student_xp` (+150 XP), `nihomi_baito_shifts_completed` (+1), and `nihomi_baito_readiness_score` (+25 pts) on shift completion.

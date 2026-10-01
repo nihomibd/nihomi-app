@@ -526,7 +526,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
                       ambientMode === 'conbini' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    🏪 7-Elevenチャイム
+                    🏪 コンビニ入店チャイム
                   </button>
                   <button
                     type="button"
