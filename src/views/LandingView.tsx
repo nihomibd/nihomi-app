@@ -33,6 +33,7 @@ import { VoiceSenseiPractice } from '../components/practice/VoiceSenseiPractice'
 import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { ZeroJapaneseGatewayModal } from '../components/onboarding/ZeroJapaneseGatewayModal';
+import { LearnerJourneyEngine } from '../components/learning/LearnerJourneyEngine';
 import { JLPTDiagnosticExamModal } from '../components/assessment/JLPTDiagnosticExamModal';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { updatePageMetaTags } from '../lib/seo';
@@ -132,6 +133,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isWritingActive, setIsWritingActive] = useState(false);
   const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
+  const [isJourneyEngineOpen, setIsJourneyEngineOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -325,8 +327,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           {/* 1. Primary CTA: Crimson / Rose Gradient with Sparkles */}
           <button
             onClick={() => {
-              trackNihomiEvent('zero_gateway_clicked', { source: 'landing_hero' });
-              setIsZeroGatewayOpen(true);
+              trackNihomiEvent('journey_start_clicked', { source: 'landing_hero' });
+              onNavigate('journey');
             }}
             className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 group"
           >
@@ -819,6 +821,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           isOpen={isWritingActive}
           onClose={() => setIsWritingActive(false)}
           targetKanji={{ kanji: '日', hiragana: 'にち・ひ', english: 'Sun, Day, Japan', strokes: 4 }}
+        />
+      )}
+
+      {isJourneyEngineOpen && (
+        <LearnerJourneyEngine
+          isOpen={isJourneyEngineOpen}
+          onClose={() => setIsJourneyEngineOpen(false)}
+          onNavigate={onNavigate}
         />
       )}
 

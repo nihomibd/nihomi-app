@@ -2,6 +2,7 @@ import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } f
 import n5MasterData from '../n5_master.json';
 import n4MasterData from '../n4_master.json';
 import n3MasterData from '../n3_master.json';
+import n2MasterData from '../n2_master.json';
 import { stripFurigana, extractReading } from '../../utils/furigana';
 
 export interface CurriculumVocab {
@@ -3549,13 +3550,14 @@ export const NIHOMI_JLPT_N5_CURRICULUM: LessonCurriculum[] = [
 
 export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | null {
   let num: number = 1;
-  let targetLevel: 'N5' | 'N4' | 'N3' = 'N5';
+  let targetLevel: 'N5' | 'N4' | 'N3' | 'N2' = 'N5';
 
   if (typeof lessonIdOrNum === 'number') {
     num = lessonIdOrNum;
   } else {
     const str = String(lessonIdOrNum).trim().toLowerCase();
-    if (str.startsWith('n3')) targetLevel = 'N3';
+    if (str.startsWith('n2')) targetLevel = 'N2';
+    else if (str.startsWith('n3')) targetLevel = 'N3';
     else if (str.startsWith('n4')) targetLevel = 'N4';
     else targetLevel = 'N5';
 
@@ -3570,12 +3572,14 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     }
   }
 
-  const maxLessons = targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
+  const maxLessons = targetLevel === 'N2' ? 45 : targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
   if (num < 1) num = 1;
   if (num > maxLessons) num = maxLessons;
 
   // Select master dataset based on targetLevel
-  const dataset = targetLevel === 'N3'
+  const dataset = targetLevel === 'N2'
+    ? (n2MasterData as any[])
+    : targetLevel === 'N3'
     ? (n3MasterData as any[])
     : targetLevel === 'N4'
     ? (n4MasterData as any[])

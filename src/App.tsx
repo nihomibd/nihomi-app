@@ -54,6 +54,7 @@ const ProgressView = lazy(() => import('./views/ProgressView').then(m => ({ defa
 const VocabularyView = lazy(() => import('./views/VocabularyView').then(m => ({ default: m.VocabularyView })));
 const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ default: m.AICoachView })));
 const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
+const LearnerJourneyEngine = lazy(() => import('./components/learning/LearnerJourneyEngine').then(m => ({ default: m.LearnerJourneyEngine })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -98,6 +99,7 @@ const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: stri
 );
 
 const KNOWN_VIEWS = new Set([
+  'journey', 'mission',
   'start', 'ad-campaign', 'campaign', 'ad',
   'growth', 'admin-growth', 'founder/growth',
   'landing', 'home', 'world', 'canvas', 'shibuya',
@@ -179,6 +181,9 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   const path = pathname.toLowerCase();
   const queryCert = searchParams.get('certId') || searchParams.get('id');
 
+  if (path === '/journey' || path === '/start-journey' || path === '/onboarding' || path === '/mission') {
+    return { view: 'journey', params: {} };
+  }
   if (path === '/start' || path === '/campaign' || path === '/ad') {
     return { view: 'start', params: {} };
   }
@@ -431,6 +436,7 @@ export const App: React.FC = () => {
   const isAdLanding = currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign';
   const isCanvasMode = currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya';
   const isDashboardRoute = currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard';
+  const isJourneyMode = currentView === 'journey';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
@@ -463,8 +469,8 @@ export const App: React.FC = () => {
       {/* Global Export Download Path Toast Notification */}
       <ExportToastNotification />
 
-      {/* Main Header (Hidden in Real Japan Canvas and Student Dashboard for unified minimal UX) */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && (
+      {/* Main Header (Hidden in Real Japan Canvas, Student Dashboard, and Journey for unified minimal UX) */}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && !isJourneyMode && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
@@ -473,7 +479,7 @@ export const App: React.FC = () => {
         />
       )}
       
-      <main className={`flex-grow w-full max-w-full overflow-x-hidden ${isFocusMode ? 'pt-8' : ''} ${isCanvasMode ? 'p-0 pb-0' : isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
+      <main className={`flex-grow w-full max-w-full ${isJourneyMode ? 'min-h-screen flex flex-col' : 'overflow-x-hidden'} ${isFocusMode ? 'pt-8' : ''} ${isCanvasMode || isJourneyMode ? 'p-0 pb-0' : isAdLanding ? 'p-0' : 'pb-16 md:pb-0'}`}>
         <GlobalErrorBoundary>
           <Suspense fallback={<ViewLoadingFallback />}>
           {(currentView === 'start' || currentView === 'ad-campaign' || currentView === 'campaign') && (
@@ -493,6 +499,13 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'courses' || currentView === 'pathways') && (
           <CoursesView onNavigate={handleNavigate} />
+        )}
+        {currentView === 'journey' && (
+          <LearnerJourneyEngine
+            isOpen={true}
+            onClose={() => handleNavigate('landing')}
+            onNavigate={handleNavigate}
+          />
         )}
         {currentView === 'lesson' && (
           <LessonView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
@@ -662,10 +675,10 @@ export const App: React.FC = () => {
         </GlobalErrorBoundary>
       </main>
 
-      {!isFocusMode && !isAdLanding && !isCanvasMode && <Footer onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && <Footer onNavigate={handleNavigate} />}
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && currentView !== 'dashboard' && currentView !== 'student-dashboard' && currentView !== 'portal-dashboard' && (
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && currentView !== 'dashboard' && currentView !== 'student-dashboard' && currentView !== 'portal-dashboard' && (
         <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />
       )}
 
@@ -694,13 +707,13 @@ export const App: React.FC = () => {
       <AuthModal />
 
       {/* Persistent AI Sensei Instant Grammar Floating Coach */}
-      {!isCanvasMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
+      {!isCanvasMode && !isJourneyMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
 
       {/* Official WhatsApp & Student Admission Helpline Widget */}
-      {!isFocusMode && !isCanvasMode && <WhatsAppHelpline />}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
-      {!isFocusMode && !isCanvasMode && <InstallPWA />}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && <InstallPWA />}
     </div>
   );
 };

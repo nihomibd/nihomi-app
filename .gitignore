@@ -11,3 +11,4 @@ server/data/content_sources/
 server/data/media/
 server/data/*.tmp*
 server/data/nihomi_db.json
+Book PDF/

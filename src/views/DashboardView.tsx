@@ -246,29 +246,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
                 <button
-                  onClick={() => onNavigate?.('lesson', { lessonId: 'l01' })}
+                  onClick={() => onNavigate?.('journey')}
                   className="px-7 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>লেসন ০১ শুরু করুন</span>
+                  <span>গাইডেড জার্নি মিশন শুরু করুন</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <div className="flex gap-2">
+                  <button
+                    onClick={() => onNavigate?.('lesson', { lessonId: 'l01' })}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-stone-300 hover:text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                    <span>লেসন ০১</span>
+                  </button>
+
                   <button
                     onClick={() => onNavigate?.('kana')}
                     className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-stone-300 hover:text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <PenTool className="w-3.5 h-3.5 text-rose-400" />
                     <span>কানা ল্যাব</span>
-                  </button>
-
-                  <button
-                    onClick={() => setIsAiSenseiOpen(true)}
-                    className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-stone-300 hover:text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <Bot className="w-3.5 h-3.5 text-amber-400" />
-                    <span>AI কোচ</span>
                   </button>
                 </div>
               </div>

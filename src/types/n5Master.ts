@@ -16,7 +16,7 @@ export interface N5LessonMetadata {
   title_en: string;
   title_bn: string;
   estimated_minutes: number;
-  difficulty: 'Beginner' | 'Elementary' | 'Intermediate';
+  difficulty: 'Beginner' | 'Elementary' | 'Intermediate' | 'Advanced';
 }
 
 export interface N5BengaliBridge {
@@ -120,6 +120,7 @@ export interface N5MasterLesson {
 
 export type N4MasterLesson = N5MasterLesson;
 export type N3MasterLesson = N5MasterLesson;
+export type N2MasterLesson = N5MasterLesson;
 export type CurriculumMasterLesson = N5MasterLesson;
 
 

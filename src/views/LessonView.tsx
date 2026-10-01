@@ -62,6 +62,8 @@ import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator.js'
 import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
 import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
+import { LessonJourneyClarityBar } from '../components/learning/LessonJourneyClarityBar';
+import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 
 interface LessonViewProps {
   lessonId?: string;
@@ -644,6 +646,15 @@ if (lessonId) {
 
         </div>
 
+        {/* Journey Clarity System Bar (Where am I? Why does this matter? What do I do now? What happens next?) */}
+        <LessonJourneyClarityBar
+          level="JLPT N5"
+          lessonNumber={selectedLessonNum}
+          lessonTitle={lesson.title}
+          activeTab={activeTab}
+          summary={lesson.summary}
+        />
+
         {/* Lesson Header Banner */}
         <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
           <div className="flex items-center gap-2">
@@ -805,6 +816,30 @@ if (lessonId) {
                         ))}
                       </div>
                     )}
+
+                    {/* Real-Life Japan Context Layer */}
+                    <div className="p-4 rounded-2xl bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-500/30 space-y-1.5 text-left">
+                      <div className="flex items-center gap-2 text-cyan-800 dark:text-cyan-400 text-xs font-mono font-bold">
+                        <span>🗼 REAL-LIFE TOKYO CONTEXT (বাস্তব জাপানিজ প্রয়োগ)</span>
+                      </div>
+                      <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                        {g.titleJa?.includes('は') || g.structure?.includes('は')
+                          ? 'টোকিওর কনবিনি, হোটেল কাউন্টার বা ইমিগ্রেশনে নিজের পরিচয় দিতে এই প্যাটার্নটি প্রথম ব্যবহৃত হয় (যেমন: 私は バングラデシュ人です - আমি বাংলাদেশি)।'
+                          : 'টোকিওর সাবওয়ে স্টেশন, কনবিনি ও রেস্তোরাঁয় বিনম্র যোগাযোগের জন্য এই ব্যাকরণ কাঠামো নিয়মিত ব্যবহৃত হয়।'}
+                      </p>
+                    </div>
+
+                    {/* Contextual AI Sensei Companion */}
+                    <ContextualSenseiCompanion
+                      currentConcept={{
+                        topic: g.title,
+                        reading: g.structure,
+                        meaningBn: g.meaning,
+                        japanContext: g.explanation,
+                        type: 'grammar'
+                      }}
+                      compact
+                    />
                   </div>
                 ))}
               </div>

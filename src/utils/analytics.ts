@@ -37,7 +37,11 @@ export type NihomiEventType =
   | 'nba_zero_kana_clicked'
   | 'nba_targeted_review_clicked'
   | 'nba_lesson_launched'
-  | 'nba_mock_exam_launched';
+  | 'nba_mock_exam_launched'
+  | 'journey_start_clicked'
+  | 'journey_calibrated'
+  | 'mission_started'
+  | 'lead_captured';
 
 export interface LandingPageViewPayload {
   pagePath?: string;
@@ -134,6 +138,10 @@ export type EventPayloadMap = {
   nba_targeted_review_clicked: Record<string, any>;
   nba_lesson_launched: Record<string, any>;
   nba_mock_exam_launched: Record<string, any>;
+  journey_start_clicked: Record<string, any>;
+  journey_calibrated: Record<string, any>;
+  mission_started: Record<string, any>;
+  lead_captured: Record<string, any>;
 };
 
 /**

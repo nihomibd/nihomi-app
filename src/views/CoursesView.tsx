@@ -29,6 +29,7 @@ import { useAuth } from '../context/AuthContext';
 import n5MasterData from '../data/n5_master.json';
 import n4MasterData from '../data/n4_master.json';
 import n3MasterData from '../data/n3_master.json';
+import n2MasterData from '../data/n2_master.json';
 import { N5MasterLesson } from '../types/n5Master';
 import { FuriganaText } from '../utils/furigana';
 
@@ -103,6 +104,17 @@ const ALL_COURSES_CATALOG: Course[] = [
     currentLessonTitle: 'Lesson 1: Formal Speech & Nuance Distinction',
     category: 'GRAMMAR',
   },
+  {
+    id: 'c7',
+    title: 'JLPT N2 Executive Business Japanese & Advanced Fluency',
+    titleJa: 'JLPT N2 上級総合・ビジネス折衝マスター',
+    level: 'N2',
+    progressPercent: 0,
+    totalLessons: 45,
+    completedLessons: 0,
+    currentLessonTitle: 'Lesson 1: Contrary to Expectations & Regulations (~に反して)',
+    category: 'GRAMMAR',
+  },
 ];
 
 export const N5_MODULES_LIST = [
@@ -138,6 +150,18 @@ export const N3_MODULES_LIST = [
   { id: 9, code: 'MOD-9', titleEn: 'Mastery & N3 Capstone', titleBn: 'সার্বিক সংহতি ও সমাপনী কৌশল', titleJa: '統合 (Mastery & N3 Capstone)', lessonsRange: 'N3-L41–N3-L45', desc: '長文読解・情報検索, 聴解・即時応答, 複合動詞・コロケーション, 文法総整理, N3総合模試・N2への架け橋' },
 ];
 
+export const N2_MODULES_LIST = [
+  { id: 1, code: 'MOD-1', titleEn: 'Opposition & Contrast', titleBn: 'বৈপরীত্য ও অপ্রত্যাশিত ফল', titleJa: '逆説と結果 (Opposition & Contrast)', lessonsRange: 'N2-L01–N2-L05', desc: '〜に反して, 〜にもかかわらず, 〜つつも, 〜からといって, 〜くせに' },
+  { id: 2, code: 'MOD-2', titleEn: 'Determination & Obligation', titleBn: 'অনিবার্য বাধ্যবাধকতা ও অনুভূতি', titleJa: '決意と義務 (Determination & Obligation)', lessonsRange: 'N2-L06–N2-L10', desc: '〜ざるを得ない, 〜てたまらない/てならない, 〜わけにはいかない, 〜かねない/かねる, 〜にほかならない' },
+  { id: 3, code: 'MOD-3', titleEn: 'Inference & Conviction', titleBn: 'দৃঢ় অনুমান, প্রত্যয় ও ঝুঁকি', titleJa: '推量と確信 (Inference & Conviction)', lessonsRange: 'N2-L11–N2-L15', desc: '〜に違いない, 〜に相違ない, 〜にすぎない, 〜っこない, 〜恐れがある' },
+  { id: 4, code: 'MOD-4', titleEn: 'Conditions & Hypotheses', titleBn: 'শর্ত, উপলক্ষ ও দীর্ঘ প্রক্রিয়া', titleJa: '条件と仮定 (Conditions & Hypotheses)', lessonsRange: 'N2-L16–N2-L20', desc: '〜さえ〜ば, 〜次第, 〜以上(は), 〜折(に), 〜末(に)' },
+  { id: 5, code: 'MOD-5', titleEn: 'Cause, Catalyst & Grounds', titleBn: 'সুযোগ, পটভূমি ও কারণ', titleJa: '理由と契機 (Cause & Catalyst)', lessonsRange: 'N2-L21–N2-L25', desc: '〜を契機に, 〜をきっかけに, 〜ばかりに, 〜からこそ, 〜につけ' },
+  { id: 6, code: 'MOD-6', titleEn: 'Standards & Relations', titleBn: 'মানদণ্ড, প্রাসঙ্গিকতা ও বিতর্ক', titleJa: '基準と関連 (Standards & Relations)', lessonsRange: 'N2-L26–N2-L30', desc: '〜に即して, 〜に基づいて, 〜を巡って, 〜を問わず, 〜に応じて' },
+  { id: 7, code: 'MOD-7', titleEn: 'Emphasis & Boundaries', titleBn: 'বিশেষ গুরুত্ব, পরিধি ও চরমতা', titleJa: '強調と限定 (Emphasis & Boundaries)', lessonsRange: 'N2-L31–N2-L35', desc: '〜のみならず, 〜ばかりか, 〜に限って, 〜どころか, 〜にとどまらず' },
+  { id: 8, code: 'MOD-8', titleEn: 'Advanced Keigo & Business', titleBn: 'উচ্চাঙ্গ কেইগো ও করপোরেট সংস্কৃতি', titleJa: '上級敬語とビジネス (Advanced Keigo & Business)', lessonsRange: 'N2-L36–N2-L40', desc: '高度敬意表現, 依頼・辞退のクッション言葉, 社外折衝, 稟議書・ビジネス文書, 危機管理・謝罪対応' },
+  { id: 9, code: 'MOD-9', titleEn: 'Integration & Bridge to N1', titleBn: 'N2 সার্বিক সমাপনী ও N1 উত্তরণ', titleJa: 'N2統合演習・読解・N1への架け橋', lessonsRange: 'N2-L41–N2-L45', desc: '評論文長文読解, 総合聴解・即時応答, 複合語・高度コロケーション, 文法総整理, N2総合模試・N1への展望' },
+];
+
 export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
   const { user, subscription, progress } = useAuth();
 
@@ -152,7 +176,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
     (user as any)?.subscriptionTier === 'japan_ready';
 
   // Primary State: Curriculum Level, Active Module, Search, and Lesson Modal
-  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4' | 'N3'>('N5');
+  const [selectedLevel, setSelectedLevel] = useState<'N5' | 'N4' | 'N3' | 'N2'>('N5');
   const [activeModuleId, setActiveModuleId] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLessonModal, setSelectedLessonModal] = useState<N5MasterLesson | null>(null);
@@ -195,21 +219,40 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
   const n5Lessons: N5MasterLesson[] = (Array.isArray(n5MasterData) ? n5MasterData : []) as unknown as N5MasterLesson[];
   const n4Lessons: N5MasterLesson[] = (Array.isArray(n4MasterData) ? n4MasterData : []) as unknown as N5MasterLesson[];
   const n3Lessons: N5MasterLesson[] = (Array.isArray(n3MasterData) ? n3MasterData : []) as unknown as N5MasterLesson[];
+  const n2Lessons: N5MasterLesson[] = (Array.isArray(n2MasterData) ? n2MasterData : []) as unknown as N5MasterLesson[];
 
-  const currentLessonsList = selectedLevel === 'N5' ? n5Lessons : selectedLevel === 'N4' ? n4Lessons : n3Lessons;
-  const activeModulesList = selectedLevel === 'N5' ? N5_MODULES_LIST : selectedLevel === 'N4' ? N4_MODULES_LIST : N3_MODULES_LIST;
-  const totalLessonsCount = selectedLevel === 'N5' ? 40 : selectedLevel === 'N4' ? 35 : 45;
-  const masterCompletedCount = selectedLevel === 'N5'
-    ? ((progress as any)?.completedLessonsCount || 0)
-    : selectedLevel === 'N4'
-    ? ((progress as any)?.n4CompletedCount || 0)
-    : ((progress as any)?.n3CompletedCount || 0);
+  const currentLessonsList =
+    selectedLevel === 'N5'
+      ? n5Lessons
+      : selectedLevel === 'N4'
+      ? n4Lessons
+      : selectedLevel === 'N3'
+      ? n3Lessons
+      : n2Lessons;
+  const activeModulesList =
+    selectedLevel === 'N5'
+      ? N5_MODULES_LIST
+      : selectedLevel === 'N4'
+      ? N4_MODULES_LIST
+      : selectedLevel === 'N3'
+      ? N3_MODULES_LIST
+      : N2_MODULES_LIST;
+  const totalLessonsCount =
+    selectedLevel === 'N5' ? 40 : selectedLevel === 'N4' ? 35 : 45;
+  const masterCompletedCount =
+    selectedLevel === 'N5'
+      ? ((progress as any)?.completedLessonsCount || 0)
+      : selectedLevel === 'N4'
+      ? ((progress as any)?.n4CompletedCount || 0)
+      : selectedLevel === 'N3'
+      ? ((progress as any)?.n3CompletedCount || 0)
+      : ((progress as any)?.n2CompletedCount || 0);
   const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
   const activeModule = activeModulesList.find((m) => m.id === activeModuleId) || activeModulesList[0];
   const masteryPercentage = totalLessonsCount > 0 ? Math.min(100, Math.round((masterCompletedCount / totalLessonsCount) * 100)) : 0;
 
   // Level selector switch handler
-  const handleSelectLevel = (level: 'N5' | 'N4' | 'N3') => {
+  const handleSelectLevel = (level: 'N5' | 'N4' | 'N3' | 'N2') => {
     setSelectedLevel(level);
     setActiveModuleId(level === 'N5' ? 0 : 1);
     setSearchQuery('');
@@ -441,11 +484,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                         ? 'JLPT N5 মূল কারিকুলাম (৪০টি পাঠ — ৮টি মডিউল)'
                         : selectedLevel === 'N4'
                         ? 'JLPT N4 মূল কারিকুলাম (৩৫টি পাঠ — ৭টি মডিউল)'
-                        : 'JLPT N3 মূল কারিকুলাম (৪৫টি পাঠ — ৯টি মডিউল)'}
+                        : selectedLevel === 'N3'
+                        ? 'JLPT N3 মূল কারিকুলাম (৪৫টি পাঠ — ৯টি মডিউল)'
+                        : 'JLPT N2 মূল কারিকুলাম (৪৫টি পাঠ — ৯টি মডিউল)'}
                     </span>
                   </div>
 
-                  {/* Level Switcher Pill: [JLPT N5 (40 Lessons)] | [JLPT N4 (35 Lessons)] | [JLPT N3 (45 Lessons)] */}
+                  {/* Level Switcher Pill: [JLPT N5 (40)] | [JLPT N4 (35)] | [JLPT N3 (45)] | [JLPT N2 (45)] */}
                   <div className="inline-flex items-center p-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shrink-0">
                     <button
                       onClick={() => handleSelectLevel('N5')}
@@ -456,7 +501,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       }`}
                     >
                       <GraduationCap className="w-3.5 h-3.5" />
-                      <span>JLPT N5 (40 Lessons)</span>
+                      <span>JLPT N5 (40)</span>
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N4')}
@@ -467,7 +512,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       }`}
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                      <span>JLPT N4 (35 Lessons)</span>
+                      <span>JLPT N4 (35)</span>
                     </button>
                     <button
                       onClick={() => handleSelectLevel('N3')}
@@ -478,7 +523,18 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       }`}
                     >
                       <Award className="w-3.5 h-3.5 text-amber-300" />
-                      <span>JLPT N3 (45 Lessons)</span>
+                      <span>JLPT N3 (45)</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelectLevel('N2')}
+                      className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        selectedLevel === 'N2'
+                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Zap className="w-3.5 h-3.5 text-amber-300" />
+                      <span>JLPT N2 (45)</span>
                     </button>
                   </div>
                 </div>
