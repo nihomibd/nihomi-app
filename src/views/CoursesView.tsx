@@ -828,7 +828,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                             </button>
 
                             <button
-                              onClick={() => onNavigate('lesson', { lessonId: lessonIdLower })}
+                              onClick={() => onNavigate('practice', { lessonId: lessonIdLower })}
                               className="py-1.5 px-2 rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <Play className="w-3.5 h-3.5 fill-white text-white" />
@@ -1065,7 +1065,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
           onClose={() => setSelectedLessonModal(null)}
           onStartPractice={(lessonId) => {
             setSelectedLessonModal(null);
-            onNavigate('lesson', { lessonId });
+            onNavigate('practice', { lessonId });
           }}
           isPro={isPro}
         />

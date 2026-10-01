@@ -95,7 +95,14 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
     return 1; // Default to Lesson 1
   });
 
-  const lessonId = `n5-l${selectedLessonNum}`;
+  const rawId = String(propLessonId || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('id') || new URLSearchParams(window.location.search).get('lessonId') || 'n5-l1' : 'n5-l1')).toLowerCase().trim();
+  let targetLvl = 'n5';
+  if (rawId.startsWith('n1')) targetLvl = 'n1';
+  else if (rawId.startsWith('n2')) targetLvl = 'n2';
+  else if (rawId.startsWith('n3')) targetLvl = 'n3';
+  else if (rawId.startsWith('n4')) targetLvl = 'n4';
+
+  const lessonId = `${targetLvl}-l${selectedLessonNum}`;
 
   const { user, refreshProgress } = useAuth();
   const { syncLessonCompletion } = useProgressSync();
@@ -183,7 +190,11 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
         // Fallback to our master curriculum
         const fallbackLesson = getCurriculumLesson(lessonId || `n5-l${selectedLessonNum}`);
         if (fallbackLesson) {
-          const courseTitle = fallbackLesson.level === 'N3'
+          const courseTitle = fallbackLesson.level === 'N1'
+            ? 'JLPT N1 Executive Japanese Master Course'
+            : fallbackLesson.level === 'N2'
+            ? 'JLPT N2 Advanced Business Japanese Course'
+            : fallbackLesson.level === 'N3'
             ? 'JLPT N3 Intermediate Japanese Master Course'
             : fallbackLesson.level === 'N4'
             ? 'JLPT N4 Intermediate Japanese Course'
@@ -1124,6 +1135,25 @@ if (lessonId) {
             {/* TAB 7: Practice Exercises with Instant Feedback */}
             {activeTab === 'practice' && (
               <div className="space-y-4">
+                {/* Interactive Practice Engine Launcher Banner */}
+                <div className="p-6 rounded-3xl bg-linear-to-r from-red-950/40 via-stone-900 to-amber-950/30 border border-red-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 shadow-xl">
+                  <div className="space-y-1 text-left">
+                    <div className="flex items-center gap-2 text-xs font-bold text-red-400 uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4" />
+                      <span>ইন্টারঅ্যাক্টিভ প্র্যাকটিস ইঞ্জিন • INTERACTIVE DRILL ENGINE</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-white">পূর্ণাঙ্গ MCQ কুইজ ও টাইピング ড্রিল শুরু করুন</h3>
+                    <p className="text-xs text-stone-300">ইনস্ট্যান্ট ফিডব্যাক, উচ্চারণ অডিও ও স্কোর ট্র্যাকারসহ বাস্তবসম্মত অনুশীলন।</p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate('practice', { lessonId })}
+                    className="px-6 py-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-red-600/30 transition-all flex items-center gap-2 cursor-pointer shrink-0"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>ফুলস্ক্রিন প্র্যাকটিস শুরু করুন</span>
+                  </button>
+                </div>
+
                 {lesson.practiceExercises && lesson.practiceExercises.length > 0 ? (
                   lesson.practiceExercises.map((ex: any, pIdx: number) => {
                     const fb = practiceFeedback[ex.id];

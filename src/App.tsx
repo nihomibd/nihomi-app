@@ -55,6 +55,7 @@ const VocabularyView = lazy(() => import('./views/VocabularyView').then(m => ({ 
 const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ default: m.AICoachView })));
 const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
 const LearnerJourneyEngine = lazy(() => import('./components/learning/LearnerJourneyEngine').then(m => ({ default: m.LearnerJourneyEngine })));
+const LessonPracticeView = lazy(() => import('./views/LessonPracticeView').then(m => ({ default: m.LessonPracticeView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -106,7 +107,7 @@ const KNOWN_VIEWS = new Set([
   'classic',
   'dashboard', 'student-dashboard', 'portal-dashboard',
   'courses', 'curriculum', 'pathways',
-  'lesson',
+  'lesson', 'practice', 'lesson-practice',
   'portal', 'portal-settings', 'portal-subscription',
   'credits',
   'coordination',
@@ -509,6 +510,9 @@ export const App: React.FC = () => {
         )}
         {currentView === 'lesson' && (
           <LessonView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'practice' || currentView === 'lesson-practice') && (
+          <LessonPracticeView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
         )}
         {currentView === 'portal' && (
           <StudentPortalView initialTab="dashboard" onNavigate={handleNavigate} />
