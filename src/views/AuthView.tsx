@@ -412,7 +412,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
 
           <div className="pt-2">
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => onNavigate('landing')}
               className="text-[11px] text-stone-400 hover:text-stone-600 font-medium"
             >
               &larr; Back to Nihomi Home

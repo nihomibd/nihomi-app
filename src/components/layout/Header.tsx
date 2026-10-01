@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const streak = progress?.streakDays || progress?.currentStreak || user?.streakDays || 1;
 
   // Active Category Detection for the 4 core pillars
-  const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
+  const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'journey', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
   const isReadinessActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests', 'baito', 'baito-os', 'study-plan', 'roadmap', 'quizzes', 'quiz-runner'].includes(currentView);
   const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community', 'cloud', 'nihomi-cloud', 'locker', 'rirekisho', 'cv-builder', 'resume', 'jis-rirekisho'].includes(currentView);
   const isPricingActive = ['pricing', 'plans', 'contact', 'credits', 'subscription'].includes(currentView);
@@ -232,6 +232,31 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     কারিকুলাম ও ফাউন্ডেশন
                   </div>
 
+                  {/* 0. লার্নার জার্নি (Journey Engine) */}
+                  <button
+                    id="nav-item-learner-journey"
+                    type="button"
+                    onClick={() => handleDropdownSelect('journey')}
+                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
+                          লার্নার জার্নি (Journey Engine)
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-semibold">
+                          ৫ মিনিট মিশন
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
+                        টোকিও এন্ট্রি জার্নি, বর্ণমালা ও প্রথম বাক্য
+                      </p>
+                    </div>
+                  </button>
+
                   {/* 1. বর্ণমালা (Kana) */}
                   <button
                     id="nav-item-kana-lab"
@@ -392,7 +417,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     </div>
                   </button>
 
-                  {/* 2. NIHOMI WORKOS™ সিমুলেটর */}
+                  {/* 2. NIHOMI WORKOS™ / টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর */}
                   <button
                     id="nav-item-baito-sim"
                     type="button"
@@ -405,14 +430,14 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          নিহোমি ওয়ার্কওএস™ (Nihomi WorkOS™)
+                          টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর
                         </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-300 font-mono font-semibold">
-                          Work Simulation
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-bold">
+                          Baito POS
                         </span>
                       </div>
                       <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        Experience Japan. Before You Arrive. (টোকিও কর্মক্ষেত্র সিমুলেশন)
+                        Experience Japan Before You Arrive (Tokyo Workplace Simulation)
                       </p>
                     </div>
                   </button>
@@ -1006,6 +1031,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
                 <button
                   type="button"
+                  onClick={() => handleDropdownSelect('journey')}
+                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-amber-300 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-amber-300">লার্নার জার্নি (Journey Engine)</div>
+                    <div className="text-[10px] text-white/50">টোকিও এন্ট্রি জার্নি ও ফার্স্ট ওয়ার্ড</div>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+                </button>
+                <button
+                  type="button"
                   onClick={() => handleDropdownSelect('kana')}
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
@@ -1085,8 +1121,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-white">নিহোমি ওয়ার্কওএস™ (WorkOS™)</div>
-                    <div className="text-[10px] text-white/50">Experience Japan. Before You Arrive.</div>
+                    <div className="text-xs font-bold text-amber-300">টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর (Baito POS)</div>
+                    <div className="text-[10px] text-white/50">Experience Japan Before You Arrive</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>

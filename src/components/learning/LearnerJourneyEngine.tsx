@@ -378,6 +378,30 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
         savedAt: new Date().toISOString()
       };
       localStorage.setItem('nihomi_demo_lead', JSON.stringify(demoLeadPayload));
+      localStorage.setItem('nihomi_foundation_completed', 'true');
+      localStorage.setItem('nihomi_mission_001_done', 'true');
+
+      // Sync lesson completion for Lesson 1
+      try {
+        const raw = localStorage.getItem('nihomi_completed_lessons');
+        const currentCompleted: string[] = raw ? JSON.parse(raw) : [];
+        if (!currentCompleted.includes('n5-l1')) {
+          currentCompleted.push('n5-l1');
+          localStorage.setItem('nihomi_completed_lessons', JSON.stringify(currentCompleted));
+        }
+
+        const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+        const nextXp = prevXp + 100;
+        localStorage.setItem('nihomi_student_xp', nextXp.toString());
+
+        window.dispatchEvent(new CustomEvent('nihomi:progress-updated', {
+          detail: { type: 'journey', lessonId: 'n5-l1', xp: 100, totalXp: nextXp }
+        }));
+        window.dispatchEvent(new CustomEvent('nihomi-foundation-unlocked'));
+      } catch (syncErr) {
+        console.warn('[JourneySync] Progress sync failed:', syncErr);
+      }
+
       setIsLeadSaved(true);
       setLeadError(null);
       soundEffects.playLessonCelebration();
@@ -714,7 +738,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
 
                 {/* Progress to Stage 5 once solved */}
                 {isKonbiniSolved && (
-                  <div className="pt-1 animate-in fade-in">
+                  <div className="pt-1 space-y-2 animate-in fade-in">
                     <button
                       type="button"
                       onClick={() => {
@@ -725,6 +749,18 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     >
                       <span>মিশন ০১ সম্পন্ন করো</span>
                       <IconRocket3D className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        soundEffects.playButtonTap();
+                        if (onNavigate) onNavigate('baito');
+                        onClose?.();
+                      }}
+                      className="w-full py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                    >
+                      <Store className="w-3.5 h-3.5 text-amber-400" />
+                      <span>টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর ট্রাই করো (Experience Conbini Shift)</span>
                     </button>
                   </div>
                 )}
@@ -862,7 +898,18 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     className="flex-1 py-3 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <BookOpen className="w-4 h-4" />
-                    <span>পরের মিশন শুরু করো (Start Mission 02)</span>
+                    <span>পরের মিশন শুরু করো (Mission 02)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigate) onNavigate('baito');
+                      onClose?.();
+                    }}
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Store className="w-4 h-4" />
+                    <span>কনবিনি শিফট সিমুলেটর</span>
                   </button>
                   <button
                     type="button"
@@ -872,7 +919,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     }}
                     className="px-4 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-stone-200 text-xs sm:text-sm font-bold cursor-pointer"
                   >
-                    ড্যাশবোর্ডে চলো
+                    ড্যাশবোর্ড
                   </button>
                 </div>
               </div>

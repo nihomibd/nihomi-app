@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   ArrowRight,
@@ -14,7 +14,10 @@ import {
   RotateCcw,
   Zap,
   BookmarkCheck,
-  Compass
+  Compass,
+  Store,
+  Briefcase,
+  Award
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
@@ -103,16 +106,93 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
-  // Student metrics
+  // Reactive student metrics synced from localStorage & Auth state
   const studentName = user?.name || 'Nihomi Student';
   const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
-  const completedLessonsCount = (progress as any)?.completedLessonsCount || 0;
+
+  const [completedLessonsCount, setCompletedLessonsCount] = useState<number>(() => {
+    try {
+      const raw = localStorage.getItem('nihomi_completed_lessons');
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) return arr.length;
+      }
+    } catch {}
+    return (progress as any)?.completedLessonsCount || 1;
+  });
+
+  const [baitoShiftsCount, setBaitoShiftsCount] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem('nihomi_baito_shifts_completed') || '0', 10);
+    } catch {
+      return 0;
+    }
+  });
+
+  const [baitoReadinessScore, setBaitoReadinessScore] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '75', 10);
+    } catch {
+      return 75;
+    }
+  });
+
+  const [studentXp, setStudentXp] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem('nihomi_student_xp') || '350', 10);
+    } catch {
+      return 350;
+    }
+  });
+
+  // Listen for shift completion & lesson completion events across engines
+  useEffect(() => {
+    const handleShiftCompleted = (e: any) => {
+      const detail = e.detail;
+      if (detail?.shiftsCompleted !== undefined) {
+        setBaitoShiftsCount(detail.shiftsCompleted);
+      } else {
+        setBaitoShiftsCount((prev) => prev + 1);
+      }
+      if (detail?.readinessScore !== undefined) {
+        setBaitoReadinessScore(detail.readinessScore);
+      }
+      if (detail?.totalXp !== undefined) {
+        setStudentXp(detail.totalXp);
+      }
+    };
+
+    const handleProgressUpdated = (e: any) => {
+      try {
+        const raw = localStorage.getItem('nihomi_completed_lessons');
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr)) setCompletedLessonsCount(arr.length);
+        }
+        const xp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+        if (xp) setStudentXp(xp);
+      } catch {}
+    };
+
+    window.addEventListener('nihomi:baito-shift-completed', handleShiftCompleted);
+    window.addEventListener('nihomi:progress-updated', handleProgressUpdated);
+    window.addEventListener('nihomi:lesson-completed', handleProgressUpdated);
+    window.addEventListener('storage', handleProgressUpdated);
+
+    return () => {
+      window.removeEventListener('nihomi:baito-shift-completed', handleShiftCompleted);
+      window.removeEventListener('nihomi:progress-updated', handleProgressUpdated);
+      window.removeEventListener('nihomi:lesson-completed', handleProgressUpdated);
+      window.removeEventListener('storage', handleProgressUpdated);
+    };
+  }, []);
+
   const kanaMasteredCount = 46; // Foundational
   const kanjiMasteredCount = 24; // N5 progress
 
   const kanaPercent = 100;
   const kanjiPercent = Math.round((kanjiMasteredCount / 100) * 100);
-  const grammarPercent = Math.round((completedLessonsCount / 40) * 100);
+  const grammarPercent = Math.min(100, Math.round((completedLessonsCount / 40) * 100));
 
   // Spaced repetition review bank sample items
   const srsReviewItems = [
@@ -294,7 +374,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <ProgressRing
               percentage={kanaPercent}
               label="Kana Foundations"
@@ -327,6 +407,50 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               textColor="text-emerald-400"
               onClick={() => onNavigate?.('courses')}
             />
+
+            <ProgressRing
+              percentage={baitoReadinessScore}
+              label="Workplace Readiness"
+              labelBn="টোকিও কনবিনি ও বাইতো"
+              countText={`${baitoShiftsCount}টি শিফট সম্পন্ন`}
+              color="#f59e0b"
+              bgColor="#fef3c7"
+              textColor="text-amber-400"
+              onClick={() => onNavigate?.('baito')}
+            />
+          </div>
+
+          {/* NIHOMI WORKOS™ / CONBINI SHIFT BANNER */}
+          <div className="rounded-3xl bg-gradient-to-r from-amber-500/10 via-[#151322] to-amber-500/5 border border-amber-500/30 p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-start gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                <Store className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-white">Workplace Readiness & Baito Skills</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold">
+                    {baitoShiftsCount > 0 ? `${baitoShiftsCount} Shift${baitoShiftsCount > 1 ? 's' : ''} Completed` : 'Shift Simulator Ready'}
+                  </span>
+                </div>
+                <p className="text-xs text-stone-300">
+                  টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর — বারকোড স্ক্যানিং, কাস্টমার কেইগো ও সেমি-সেলফ রেজিস্টার মহড়া।
+                </p>
+                <div className="flex items-center gap-3 text-[11px] font-mono text-stone-400 pt-0.5">
+                  <span className="text-amber-400 font-bold">Readiness Score: {baitoReadinessScore}%</span>
+                  <span>•</span>
+                  <span className="text-emerald-400 font-bold">Total Score: {studentXp} XP</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onNavigate?.('baito')}
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 cursor-pointer transition active:scale-95 shrink-0"
+            >
+              <Store className="w-4 h-4" />
+              <span>{baitoShiftsCount > 0 ? 'পরের শিফটে যোগ দিন →' : 'কনবিনি শিফট শুরু করুন (+150 XP)'}</span>
+            </button>
           </div>
         </section>
 

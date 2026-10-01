@@ -237,16 +237,51 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
       : selectedLevel === 'N3'
       ? N3_MODULES_LIST
       : N2_MODULES_LIST;
+  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem('nihomi_completed_lessons');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    const handleProgressUpdate = () => {
+      try {
+        const raw = localStorage.getItem('nihomi_completed_lessons');
+        if (raw) setCompletedLessonIds(JSON.parse(raw));
+      } catch {}
+    };
+    window.addEventListener('nihomi:progress-updated', handleProgressUpdate);
+    window.addEventListener('nihomi:lesson-completed', handleProgressUpdate);
+    window.addEventListener('storage', handleProgressUpdate);
+    return () => {
+      window.removeEventListener('nihomi:progress-updated', handleProgressUpdate);
+      window.removeEventListener('nihomi:lesson-completed', handleProgressUpdate);
+      window.removeEventListener('storage', handleProgressUpdate);
+    };
+  }, []);
+
   const totalLessonsCount =
     selectedLevel === 'N5' ? 40 : selectedLevel === 'N4' ? 35 : 45;
-  const masterCompletedCount =
+
+  const levelCompletedCount = completedLessonIds.filter(id => {
+    const normalized = id.toLowerCase();
+    if (selectedLevel === 'N5') return normalized.startsWith('n5') || normalized.startsWith('l');
+    return normalized.startsWith(selectedLevel.toLowerCase());
+  }).length;
+
+  const masterCompletedCount = Math.max(
     selectedLevel === 'N5'
       ? ((progress as any)?.completedLessonsCount || 0)
       : selectedLevel === 'N4'
       ? ((progress as any)?.n4CompletedCount || 0)
       : selectedLevel === 'N3'
       ? ((progress as any)?.n3CompletedCount || 0)
-      : ((progress as any)?.n2CompletedCount || 0);
+      : ((progress as any)?.n2CompletedCount || 0),
+    levelCompletedCount
+  );
   const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
   const activeModule = activeModulesList.find((m) => m.id === activeModuleId) || activeModulesList[0];
   const masteryPercentage = totalLessonsCount > 0 ? Math.min(100, Math.round((masterCompletedCount / totalLessonsCount) * 100)) : 0;
@@ -696,12 +731,27 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       const isFreeLesson = selectedLevel === 'N5' ? lesson.lesson_metadata.lesson_number <= 5 : lesson.lesson_metadata.lesson_number <= 2;
                       const isUnlocked = isFreeLesson || isPro;
                       const lessonIdLower = lesson.lesson_metadata.lesson_id.toLowerCase();
+                      const lessonNum = lesson.lesson_metadata.lesson_number;
+                      const isCompleted = completedLessonIds.some(id => {
+                        const norm = id.toLowerCase();
+                        return (
+                          norm === lessonIdLower ||
+                          norm === `${selectedLevel.toLowerCase()}-l${lessonNum}` ||
+                          norm === `l${lessonNum}` ||
+                          norm === `lesson-${lessonNum}` ||
+                          norm === `n5-l${lessonNum}`
+                        );
+                      });
                       const conceptSummary = lesson.bengali_bridge?.core_concept_bn || lesson.bengali_bridge?.explanation_bn || '';
 
                       return (
                         <div
                           key={lesson.lesson_metadata.lesson_id}
-                          className="group relative p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between bg-white dark:bg-[#15151E] border-stone-200 dark:border-stone-800/80 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/5 hover:-translate-y-0.5"
+                          className={`group relative p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between bg-white dark:bg-[#15151E] ${
+                            isCompleted
+                              ? 'border-emerald-500/40 hover:border-emerald-500 shadow-xs'
+                              : 'border-stone-200 dark:border-stone-800/80 hover:border-red-500/50'
+                          } hover:shadow-lg hover:-translate-y-0.5`}
                         >
                           <div>
                             {/* Top Row: Lesson ID & Access Badge */}
@@ -711,6 +761,11 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                               </span>
 
                               <div className="flex items-center gap-1.5">
+                                {isCompleted && (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 rounded font-sans font-bold flex items-center gap-0.5">
+                                    <Check className="w-2.5 h-2.5" /> সম্পন্ন
+                                  </span>
+                                )}
                                 <span className="text-[10px] text-stone-400 font-sans">
                                   ~{lesson.lesson_metadata.estimated_minutes} মি.
                                 </span>
@@ -780,10 +835,14 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
 
                             <button
                               onClick={() => onNavigate('lesson', { lessonId: lessonIdLower })}
-                              className="py-1.5 px-2 rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
+                              className={`py-1.5 px-2 rounded-xl active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer ${
+                                isCompleted
+                                  ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20'
+                                  : 'bg-red-600 hover:bg-red-500 shadow-red-600/20'
+                              }`}
                             >
-                              <Play className="w-3.5 h-3.5 fill-white text-white" />
-                              <span>অনুশীলন</span>
+                              {isCompleted ? <Check className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white text-white" />}
+                              <span>{isCompleted ? 'পুনরায় পড়ুন' : 'অনুশীলন'}</span>
                             </button>
                           </div>
                         </div>

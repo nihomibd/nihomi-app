@@ -1792,7 +1792,7 @@ export interface ConbiniPosProduct {
 export interface ConbiniCustomerOrder {
   id: string;
   customerName: string;
-  customerType: 'salaryman' | 'student' | 'grandma' | 'foreigner';
+  customerType: 'salaryman' | 'student' | 'grandma' | 'foreigner' | 'rush_hour';
   customerSpeechJa: string;
   customerSpeechRomaji: string;
   customerSpeechBn: string;

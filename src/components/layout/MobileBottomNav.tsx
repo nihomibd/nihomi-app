@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Home,
   Compass,
   BookOpen,
-  LayoutDashboard,
-  Award,
-  Briefcase
+  Store,
+  LayoutDashboard
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
@@ -44,32 +44,32 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ currentView, o
     {
       id: 'landing',
       label: t('nav_home') || 'Home',
+      icon: Home,
+      activeViews: ['landing'],
+    },
+    {
+      id: 'journey',
+      label: 'Journey',
       icon: Compass,
-      activeViews: ['landing', 'home'],
+      activeViews: ['journey', 'mission'],
     },
     {
       id: 'courses',
       label: t('nav_courses') || 'Courses',
       icon: BookOpen,
-      activeViews: ['courses', 'lesson'],
+      activeViews: ['courses', 'curriculum', 'lesson', 'pathways'],
     },
     {
-      id: 'portal',
+      id: 'baito',
+      label: 'Baito OS',
+      icon: Store,
+      activeViews: ['baito', 'baito-os', 'simulation', 'workos', 'work-os'],
+    },
+    {
+      id: 'dashboard',
       label: t('nav_portal') || 'Dashboard',
       icon: LayoutDashboard,
-      activeViews: ['portal', 'portal-settings', 'portal-subscription'],
-    },
-    {
-      id: 'quizzes',
-      label: t('nav_quizzes') || 'Tests',
-      icon: Award,
-      activeViews: ['quizzes', 'quiz-runner'],
-    },
-    {
-      id: 'coordination',
-      label: t('nav_coordination') || 'Coordination',
-      icon: Briefcase,
-      activeViews: ['coordination', 'baito', 'documents', 'passport'],
+      activeViews: ['dashboard', 'student-dashboard', 'portal', 'portal-settings', 'portal-subscription'],
     },
   ];
 
@@ -104,7 +104,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ currentView, o
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
-                {item.id === 'portal' && user && (
+                {(item.id === 'dashboard' || item.id === 'portal') && user && (
                   <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-600 ring-2 ring-white dark:ring-stone-900" />
                 )}
               </div>

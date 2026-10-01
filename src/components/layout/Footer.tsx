@@ -41,46 +41,52 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Quick Clean Navigation Links */}
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-semibold text-stone-600">
             <button
-              onClick={() => onNavigate?.('courses')}
+              onClick={() => onNavigate?.('landing')}
               className="hover:text-stone-950 transition-colors cursor-pointer"
             >
-              Pathways
+              Home
+            </button>
+            <button
+              onClick={() => onNavigate?.('journey')}
+              className="hover:text-stone-950 transition-colors cursor-pointer text-amber-600 font-bold"
+            >
+              Learner Journey
+            </button>
+            <button
+              onClick={() => onNavigate?.('courses')}
+              className="hover:text-stone-950 transition-colors cursor-pointer font-bold text-stone-800"
+            >
+              JLPT Courses
+            </button>
+            <button
+              onClick={() => onNavigate?.('baito')}
+              className="hover:text-amber-500 transition-colors cursor-pointer text-amber-600 font-bold"
+            >
+              Tokyo Conbini Simulator
+            </button>
+            <button
+              onClick={() => onNavigate?.('dashboard')}
+              className="hover:text-stone-950 transition-colors cursor-pointer font-bold"
+            >
+              Student Dashboard
+            </button>
+            <button
+              onClick={() => onNavigate?.('pricing')}
+              className="hover:text-rose-600 transition-colors cursor-pointer text-rose-600 font-bold"
+            >
+              Pricing & Plans (৳৪৯৯)
             </button>
             <button
               onClick={() => onNavigate?.('japan-twin')}
-              className="hover:text-stone-950 transition-colors cursor-pointer text-rose-600 font-bold"
+              className="hover:text-stone-950 transition-colors cursor-pointer text-stone-500"
             >
               JapanTwin™
             </button>
             <button
-              onClick={() => onNavigate?.('memory-os')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
-            >
-              MemoryOS™
-            </button>
-            <button
-              onClick={() => onNavigate?.('portal')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => onNavigate?.('start')}
-              className="hover:text-stone-950 transition-colors cursor-pointer text-red-600 font-semibold"
-            >
-              N5 Free Trial (/start)
-            </button>
-            <button
               onClick={() => onNavigate?.('world')}
-              className="hover:text-amber-500 transition-colors cursor-pointer text-amber-600 font-semibold"
+              className="hover:text-amber-500 transition-colors cursor-pointer text-stone-500"
             >
-              Tokyo 3D World (Beta)
-            </button>
-            <button
-              onClick={() => onNavigate?.('growth')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
-            >
-              Growth Center
+              Tokyo 3D World
             </button>
             <button
               onClick={() => onNavigate?.('terms')}

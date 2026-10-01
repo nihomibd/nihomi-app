@@ -634,6 +634,62 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     if (currentScenarioIndex < scenarios.length - 1) {
       setCurrentScenarioIndex((prev) => prev + 1);
     } else {
+      // Full shift completed! Persist rewards (+150 XP, +25 Readiness points)
+      try {
+        const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+        const nextXp = prevXp + 150;
+        localStorage.setItem('nihomi_student_xp', nextXp.toString());
+
+        const prevShifts = parseInt(localStorage.getItem('nihomi_baito_shifts_completed') || '0', 10);
+        const nextShifts = prevShifts + 1;
+        localStorage.setItem('nihomi_baito_shifts_completed', nextShifts.toString());
+
+        const prevReadiness = parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '75', 10);
+        const nextReadiness = Math.min(100, Math.max(75, prevReadiness + 25));
+        localStorage.setItem('nihomi_baito_readiness_score', nextReadiness.toString());
+
+        localStorage.setItem('nihomi_conbini_passed', 'true');
+
+        // Dispatch global sync events for Dashboard and Course roadmaps
+        window.dispatchEvent(new CustomEvent('nihomi:baito-shift-completed', {
+          detail: {
+            xp: 150,
+            totalXp: nextXp,
+            readinessPoints: 25,
+            readinessScore: nextReadiness,
+            shiftsCompleted: nextShifts,
+            timestamp: Date.now()
+          }
+        }));
+
+        window.dispatchEvent(new CustomEvent('nihomi:progress-updated', {
+          detail: {
+            type: 'baito',
+            xp: 150,
+            readinessPoints: 25,
+            shiftsCompleted: nextShifts
+          }
+        }));
+
+        // Graceful API persist attempt
+        if (typeof window !== 'undefined' && window.fetch) {
+          fetch('/api/baito/shift/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              shiftsCompleted: nextShifts,
+              earnedXp: 150,
+              readinessScore: nextReadiness,
+              totalSalesYen: shiftStats.totalSalesYen
+            })
+          }).catch(() => {
+            // Silently handled on static/offline edge deployments
+          });
+        }
+      } catch (err) {
+        console.warn('[ConbiniSync] Failed to persist shift rewards:', err);
+      }
+
       setShowShiftScorecardModal(true);
     }
   };

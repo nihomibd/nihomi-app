@@ -78,7 +78,7 @@ export const WorkDetailView: React.FC<WorkDetailViewProps> = ({ id, itemId, onNa
       <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] flex flex-col items-center justify-center p-8 space-y-4">
         <p className="text-sm font-bold text-stone-700">Work Japanese module not found.</p>
         <button
-          onClick={() => onNavigate('work')}
+          onClick={() => onNavigate('baito')}
           className="px-4 py-2 rounded-xl bg-red-600 text-white font-bold text-xs"
         >
           Back to Work Hub
@@ -102,7 +102,7 @@ export const WorkDetailView: React.FC<WorkDetailViewProps> = ({ id, itemId, onNa
         {/* Navigation Bar */}
         <div className="flex items-center justify-between">
           <button
-            onClick={() => onNavigate('work')}
+            onClick={() => onNavigate('baito')}
             className="inline-flex items-center gap-2 text-xs font-bold text-stone-600 hover:text-red-600 transition-colors bg-white px-3.5 py-2 rounded-xl border border-stone-200 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />

@@ -312,43 +312,86 @@ if (lessonId) {
   }, [isListenOnlyActive, currentWordIndex, playbackSpeed, isLooping, lessonData]);
 
   const handleCompleteLesson = async () => {
-    if (!user || !lessonData) return;
+    if (!lessonData || !lessonData.lesson) return;
     setIsCompleting(true);
+
+    const lId = lessonData.lesson.id;
+    const xpReward = lessonData.lesson.xpReward || 50;
+    const estMinutes = lessonData.lesson.estimatedMinutes || 15;
+
+    // 1. Local Persistence (Instant zero-latency feedback for all learners)
     try {
-      await apiRequest('/api/progress/complete-lesson', {
-        method: 'POST',
-        body: JSON.stringify({
-          lessonId: lessonData.lesson.id,
-          studyMinutes: lessonData.lesson.estimatedMinutes || 15
-        })
-      });
-      // Synchronize to Supabase database (lesson_progress + learning_progress + activity_logs)
-      await syncLessonCompletion(
-        lessonData.lesson.id,
-        100,
-        (lessonData.lesson.estimatedMinutes || 15) * 60,
-        lessonData.lesson.xpReward || 50
-      );
-      trackNihomiEvent('first_lesson_completed', {
-        lessonId: lessonData.lesson.id,
-        title: lessonData.lesson.title,
-        studyMinutes: lessonData.lesson.estimatedMinutes || 15,
-        xpReward: lessonData.lesson.xpReward || 50
-      });
-      setCompletedSuccess(true);
-      soundEffects.playLessonCelebration();
-      await refreshProgress();
-      if (lessonData) {
-        setLessonData({ ...lessonData, isCompleted: true });
+      const raw = localStorage.getItem('nihomi_completed_lessons');
+      const currentCompleted: string[] = raw ? JSON.parse(raw) : [];
+      if (!currentCompleted.includes(lId)) {
+        currentCompleted.push(lId);
+        localStorage.setItem('nihomi_completed_lessons', JSON.stringify(currentCompleted));
       }
-      // Open AI Lesson Feedback Modal and Session Summary
-      setIsFeedbackModalOpen(true);
-      setIsSessionReportOpen(true);
+
+      const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+      const nextXp = prevXp + xpReward;
+      localStorage.setItem('nihomi_student_xp', nextXp.toString());
+
+      // Global sync events for Course roadmaps and Student Dashboard
+      window.dispatchEvent(new CustomEvent('nihomi:progress-updated', {
+        detail: {
+          type: 'lesson',
+          lessonId: lId,
+          xp: xpReward,
+          totalXp: nextXp,
+          completedCount: currentCompleted.length
+        }
+      }));
+
+      window.dispatchEvent(new CustomEvent('nihomi:lesson-completed', {
+        detail: {
+          lessonId: lId,
+          xp: xpReward,
+          totalXp: nextXp
+        }
+      }));
     } catch (err) {
-      console.error('Failed to complete lesson:', err);
-    } finally {
-      setIsCompleting(false);
+      console.warn('[LessonSync] Failed local lesson storage:', err);
     }
+
+    setCompletedSuccess(true);
+    soundEffects.playLessonCelebration();
+    if (lessonData) {
+      setLessonData({ ...lessonData, isCompleted: true });
+    }
+
+    // 2. Authenticated Cloud & Database Sync
+    if (user) {
+      try {
+        await apiRequest('/api/progress/complete-lesson', {
+          method: 'POST',
+          body: JSON.stringify({
+            lessonId: lId,
+            studyMinutes: estMinutes
+          })
+        });
+        await syncLessonCompletion(
+          lId,
+          100,
+          estMinutes * 60,
+          xpReward
+        );
+        trackNihomiEvent('first_lesson_completed', {
+          lessonId: lId,
+          title: lessonData.lesson.title,
+          studyMinutes: estMinutes,
+          xpReward: xpReward
+        });
+        await refreshProgress();
+      } catch (err) {
+        console.warn('[LessonSync] Authenticated cloud sync degraded gracefully:', err);
+      }
+    }
+
+    // Open AI Lesson Feedback Modal and Session Summary
+    setIsFeedbackModalOpen(true);
+    setIsSessionReportOpen(true);
+    setIsCompleting(false);
   };
 
   const handleSrsReview = (kanjiChar: string, rating: SrsRating) => {
