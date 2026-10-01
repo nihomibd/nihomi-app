@@ -121,6 +121,7 @@ export interface N5MasterLesson {
 export type N4MasterLesson = N5MasterLesson;
 export type N3MasterLesson = N5MasterLesson;
 export type N2MasterLesson = N5MasterLesson;
+export type N1MasterLesson = N5MasterLesson;
 export type CurriculumMasterLesson = N5MasterLesson;
 
 

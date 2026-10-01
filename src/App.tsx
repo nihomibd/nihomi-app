@@ -4,6 +4,8 @@ import { Footer } from './components/layout/Footer';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { LandingView } from './views/LandingView';
 import { AuthModal } from './components/auth/AuthModal';
+import { LearnerJourneyEngine } from './components/learning/LearnerJourneyEngine';
+import { NihomiMobileShowcase } from './components/showcase/NihomiMobileShowcase';
 
 // Code-split / Lazy-loaded views to optimize bundle sizes
 const StudentPortalView = lazy(() => import('./views/StudentPortalView').then(m => ({ default: m.StudentPortalView })));
@@ -43,7 +45,6 @@ const KanaView = lazy(() => import('./views/KanaView').then(m => ({ default: m.K
 const KanjiView = lazy(() => import('./views/KanjiView').then(m => ({ default: m.KanjiView })));
 const ListeningLabView = lazy(() => import('./views/ListeningLabView').then(m => ({ default: m.ListeningLabView })));
 const NihomiCloudView = lazy(() => import('./views/NihomiCloudView').then(m => ({ default: m.NihomiCloudView })));
-const NihomiMobileShowcase = lazy(() => import('./components/showcase/NihomiMobileShowcase').then(m => ({ default: m.NihomiMobileShowcase })));
 const DashboardView = lazy(() => import('./views/DashboardView').then(m => ({ default: m.DashboardView })));
 const RealJapanCanvasView = lazy(() => import('./views/RealJapanCanvasView').then(m => ({ default: m.RealJapanCanvasView })));
 const MemoryOsView = lazy(() => import('./views/MemoryOsView').then(m => ({ default: m.MemoryOsView })));
@@ -54,7 +55,7 @@ const ProgressView = lazy(() => import('./views/ProgressView').then(m => ({ defa
 const VocabularyView = lazy(() => import('./views/VocabularyView').then(m => ({ default: m.VocabularyView })));
 const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ default: m.AICoachView })));
 const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
-const LearnerJourneyEngine = lazy(() => import('./components/learning/LearnerJourneyEngine').then(m => ({ default: m.LearnerJourneyEngine })));
+const LessonPracticeView = lazy(() => import('./views/LessonPracticeView').then(m => ({ default: m.LessonPracticeView })));
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -65,34 +66,50 @@ const ViewLoadingFallback: React.FC = () => (
   </div>
 );
 
-const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: string) => void }> = ({ currentView, onNavigate }) => (
+const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: string, params?: Record<string, any>) => void }> = ({ currentView, onNavigate }) => (
   <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center max-w-lg mx-auto" id="route-recovery-view">
-    <div className="w-16 h-16 rounded-3xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 font-black text-2xl mb-4 shadow-sm select-none">
-      日
+    <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-red-600 via-rose-500 to-amber-500 p-0.5 shadow-2xl shadow-red-600/30 mb-4 animate-pulse">
+      <div className="w-full h-full bg-[#0e0e18] rounded-[22px] flex items-center justify-center">
+        <span className="font-mono text-3xl font-black text-white">404</span>
+      </div>
     </div>
-    <span className="px-2.5 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-mono font-bold mb-3">
+    <span className="px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-mono font-bold mb-3 border border-stone-200 dark:border-stone-700">
       Route: /{currentView}
     </span>
-    <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight mb-2">
-      পৃষ্ঠাটি লোড করা যাচ্ছে না (Page Relocated)
+    <h2 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight mb-2">
+      পৃষ্ঠাটি খুঁজে পাওয়া যায়নি (Page Not Found)
     </h2>
-    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
-      আপনি যে পৃষ্ঠাটিতে প্রবেশের চেষ্টা করছেন সেটি স্থানান্তরিত বা প্রস্তুত করা হচ্ছে। সরাসরি ড্যাশবোর্ড বা হোমে ফিরে যান।
+    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mb-6 leading-relaxed max-w-md">
+      আপনি যে পৃষ্ঠাটিতে প্রবেশের চেষ্টা করছেন সেটি স্থানান্তরিত বা প্রস্তুত করা হচ্ছে। নিচের লিংকগুলোর সাহায্যে সরাসরি আপনার ক্লাসরুম বা ড্যাশবোর্ডে ফিরে যান।
     </p>
-    <div className="flex flex-wrap items-center justify-center gap-3">
-      <button
-        type="button"
-        onClick={() => onNavigate('dashboard')}
-        className="btn-haptic px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs shadow-sm cursor-pointer"
-      >
-        ← Student Dashboard
-      </button>
+    <div className="grid grid-cols-2 gap-2.5 w-full max-w-md">
       <button
         type="button"
         onClick={() => onNavigate('landing')}
-        className="btn-haptic px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-800 dark:text-stone-200 font-bold text-xs cursor-pointer border border-stone-200 dark:border-stone-700"
+        className="btn-haptic p-3 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5 dark:bg-stone-800 dark:hover:bg-stone-700"
       >
-        Go to Home
+        <span>🏠 হোম পেজ</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onNavigate('courses')}
+        className="btn-haptic p-3 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-md shadow-red-600/30 cursor-pointer flex items-center justify-center gap-1.5"
+      >
+        <span>📚 পাঠ্যক্রম (Courses)</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onNavigate('dashboard')}
+        className="btn-haptic p-3 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs cursor-pointer border border-stone-200 dark:border-stone-800"
+      >
+        <span>📊 ড্যাশবোর্ড</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onNavigate('practice', { lessonId: 'n5-l1' })}
+        className="btn-haptic p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 font-bold text-xs cursor-pointer border border-amber-500/30"
+      >
+        <span>🎯 কুইজ প্র্যাকটিস</span>
       </button>
     </div>
   </div>
@@ -106,7 +123,7 @@ const KNOWN_VIEWS = new Set([
   'classic',
   'dashboard', 'student-dashboard', 'portal-dashboard',
   'courses', 'curriculum', 'pathways',
-  'lesson',
+  'lesson', 'practice', 'lesson-practice',
   'portal', 'portal-settings', 'portal-subscription',
   'credits',
   'coordination',
@@ -176,6 +193,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { ZenSoundscapeType } from './lib/zenAudio';
+import { updatePageMetaTags } from './lib/seo';
 
 const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { view: string; params: Record<string, any> } => {
   const path = pathname.toLowerCase();
@@ -215,6 +233,11 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     const lessonFromPath = path.replace(/^\/lesson\/?/, '');
     const targetLesson = lessonFromPath || searchParams.get('id') || searchParams.get('lessonId') || 'n5-l1';
     return { view: 'lesson', params: { lessonId: targetLesson } };
+  }
+  if (path.startsWith('/practice/') || path === '/practice' || path === '/lesson-practice') {
+    const practiceFromPath = path.replace(/^\/practice\/?/, '').replace(/^\/lesson-practice\/?/, '');
+    const targetLesson = practiceFromPath || searchParams.get('id') || searchParams.get('lessonId') || 'n5-l1';
+    return { view: 'practice', params: { lessonId: targetLesson } };
   }
   if (path === '/kana' || path === '/hiragana' || path === '/katakana' || path === '/kana-lab') {
     return { view: 'kana', params: {} };
@@ -352,6 +375,9 @@ export const App: React.FC = () => {
     if (view.startsWith('lesson/')) {
       targetView = 'lesson';
       targetParams.lessonId = view.replace('lesson/', '');
+    } else if (view.startsWith('practice/')) {
+      targetView = 'practice';
+      targetParams.lessonId = view.replace('practice/', '');
     } else if (view.startsWith('quiz/') || view.startsWith('quizzes/')) {
       targetView = 'quiz-runner';
       targetParams.quizId = view.split('/')[1];
@@ -389,6 +415,60 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Dynamic SEO & Accessibility Language Engine
+  useEffect(() => {
+    let title = 'Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম';
+    let description =
+      'বাংলায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসেই, অথেনটিক মিন্না নো নিহোঙ্গো ও JLPT N5, N4, N3, N2, N1 সম্পূর্ণ ২১০টি মাস্টার পাঠ্যক্রম ও টোকিও জব সিমুলেশন।';
+
+    if (currentView === 'courses' || currentView === 'curriculum' || currentView === 'pathways') {
+      title = 'JLPT N5–N1 Curriculum & Masterclass Roadmap (২১০টি পাঠ) | Nihomi';
+      description =
+        'JLPT N5, N4, N3, N2 এবং N1 স্তরের ২১টি সম্পূর্ণ মডিউল ও ২১০টি মাস্টার পাঠ। বাস্তবমুখী ব্যাকরণ, কাঞ্জি ও কেইগো ড্রিল।';
+    } else if (currentView === 'practice' || currentView === 'lesson-practice') {
+      const lessonLabel = (viewParams.lessonId || 'N5-L01').toUpperCase();
+      title = `Practice ${lessonLabel} — Interactive MCQ & Typing Drills | Nihomi`;
+      description = `${lessonLabel} এর জন্য ইন্টারঅ্যাক্টিভ কুইজ, টাইপিং পরীক্ষা এবং তাত্ক্ষণিক স্কোর পর্যালোচনা।`;
+    } else if (currentView === 'lesson') {
+      const lessonLabel = (viewParams.lessonId || 'N5-L01').toUpperCase();
+      title = `Lesson ${lessonLabel} — Master Japanese Curriculum | Nihomi`;
+      description = `${lessonLabel} এর পূর্ণাঙ্গ ব্যাকরণ নোট, নতুন শব্দভান্ডার, কাঞ্জি স্ট্রোক এবং বাস্তব জীবনের কথোপকথন।`;
+    } else if (currentView === 'quizzes' || currentView === 'quiz' || currentView === 'quiz-runner') {
+      title = 'Interactive Japanese Quizzes & Flash Drills | Nihomi';
+      description = 'JLPT পরীক্ষার আদলে তৈরি বিশেষ কুইজ এবং তাত্ক্ষণিক স্কোরিং ব্যবস্থা।';
+    } else if (currentView === 'kana' || currentView === 'hiragana' || currentView === 'katakana') {
+      title = 'Tactile Kana Lab (হিরাগানা ও কাতাকানা স্ট্রোক ল্যাব) | Nihomi';
+      description = 'হাতে-কলমে বর্ণমালা আঁকা, অ্যানিমেটেড স্ট্রোক অর্ডার এবং উচ্চারণ প্র্যাকটিস।';
+    } else if (currentView === 'kanji') {
+      title = 'Essential Kanji Lab & Radical Breakdown | Nihomi';
+      description = 'কাঞ্জি স্ট্রোক অর্ডার অ্যানিমেশন, ওন-ইওমি, কুন-ইওমি ও বাস্তব যৌক্তিক শব্দ।';
+    } else if (currentView === 'listening') {
+      title = 'Tokyo Listening & Kaiwa Lab | Nihomi';
+      description = 'জাপানিদের স্বাভাবিক বাচনভঙ্গি, দ্রুত শ্রবণ পরীক্ষা এবং বাস্তব সংলাপ।';
+    } else if (currentView === 'baito' || currentView === 'interview') {
+      title = 'Tokyo Baito OS & Workplace Japanese Simulator | Nihomi';
+      description = 'কনবিনি পিওএস ক্যাশিয়ার সিমুলেটর, ভিসা ইন্টারভিউ ডিফেন্স ও পার্ট-টাইম কাজের প্রস্তুতি।';
+    } else if (currentView === 'dashboard') {
+      title = 'Student Dashboard | Nihomi Japanese Learning OS';
+      description = 'আপনার প্রতিদিনের স্টাডি স্ট্রিক, অগ্রগতি ও পরবর্তী পাঠ পর্যবেক্ষণ করুন।';
+    } else if (currentView === 'pricing') {
+      title = 'Plans & Pricing (সাশ্রয়ী সাবস্ক্রিপশন) | Nihomi';
+      description = '২৪/৭ সেনসেই AI, ফুল কারিকুলাম এক্সেস এবং টোকিও ইন্টারভিউ কোচিং।';
+    }
+
+    updatePageMetaTags({
+      title,
+      description,
+      ogTitle: title,
+      ogDescription: description,
+      canonicalUrl: `https://nihomi.com/${currentView === 'landing' ? '' : currentView}`
+    });
+
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = 'bn';
+    }
+  }, [currentView, viewParams]);
 
   // Global Keyboard Shortcut Listener (Cmd+K, ?, Escape, and Ctrl/Cmd helper)
   useEffect(() => {
@@ -509,6 +589,9 @@ export const App: React.FC = () => {
         )}
         {currentView === 'lesson' && (
           <LessonView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
+        )}
+        {(currentView === 'practice' || currentView === 'lesson-practice') && (
+          <LessonPracticeView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
         )}
         {currentView === 'portal' && (
           <StudentPortalView initialTab="dashboard" onNavigate={handleNavigate} />

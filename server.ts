@@ -36,62 +36,75 @@ import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
 import { stateIntegrityService } from './server/services/stateIntegrityService.js';
 
-// Initialize recurring background subscription lifecycle & grace-period monitor
-setInterval(() => {
+// Defer background subscription lifecycle and database backup to avoid blocking server boot
+setTimeout(() => {
   try {
     db.processSubscriptionLifecycle();
   } catch (err) {
     console.error('[Lifecycle Engine] Error during scheduled lifecycle evaluation:', err);
   }
-}, 60 * 1000);
 
-// Initialize automated daily database backup interval (every 24 hours)
-const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
-setInterval(async () => {
-  try {
-    console.log('[Automated Backup] Running scheduled daily database backup...');
-    await databaseBackupService.createBackup({
-      type: 'daily',
-      triggeredBy: 'automated_cron_daily'
-    });
-  } catch (err) {
-    console.error('[Automated Backup] Daily backup error:', err);
-  }
-}, TWENTY_FOUR_HOURS_MS);
+  setInterval(() => {
+    try {
+      db.processSubscriptionLifecycle();
+    } catch (err) {
+      console.error('[Lifecycle Engine] Error during scheduled lifecycle evaluation:', err);
+    }
+  }, 60 * 1000);
 
-// Initialize automated weekly database backup interval (every 7 days)
-const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
-setInterval(async () => {
-  try {
-    console.log('[Automated Backup] Running scheduled weekly database backup...');
-    await databaseBackupService.createBackup({
-      type: 'weekly',
-      triggeredBy: 'automated_cron_weekly'
-    });
-  } catch (err) {
-    console.error('[Automated Backup] Weekly backup error:', err);
-  }
-}, SEVEN_DAYS_MS);
+  // Initialize automated daily database backup interval (every 24 hours)
+  const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+  setInterval(async () => {
+    try {
+      console.log('[Automated Backup] Running scheduled daily database backup...');
+      await databaseBackupService.createBackup({
+        type: 'daily',
+        triggeredBy: 'automated_cron_daily'
+      });
+    } catch (err) {
+      console.error('[Automated Backup] Daily backup error:', err);
+    }
+  }, TWENTY_FOUR_HOURS_MS);
 
-// On server startup: Ensure a baseline backup exists and perform initial health check
-(async () => {
+  // Initialize automated weekly database backup interval (every 7 days)
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  setInterval(async () => {
+    try {
+      console.log('[Automated Backup] Running scheduled weekly database backup...');
+      await databaseBackupService.createBackup({
+        type: 'weekly',
+        triggeredBy: 'automated_cron_weekly'
+      });
+    } catch (err) {
+      console.error('[Automated Backup] Weekly backup error:', err);
+    }
+  }, SEVEN_DAYS_MS);
+
+  // Ensure a baseline backup exists
   try {
     const status = databaseBackupService.getLatestBackupStatus();
     if (!status.hasBackup) {
       console.log('[Automated Backup] No existing backups detected. Creating baseline startup snapshot...');
-      await databaseBackupService.createBackup({
+      databaseBackupService.createBackup({
         type: 'daily',
         triggeredBy: 'system_startup_baseline'
-      });
+      }).catch((err) => console.warn('[Automated Backup] Startup baseline backup warning:', err));
     }
   } catch (err) {
     console.warn('[Automated Backup] Startup baseline backup warning:', err);
   }
-})();
+}, 5000);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+
+  // Parse CLI flags and environment variables for port and host
+  const portArgIndex = process.argv.indexOf('--port');
+  const hostArgIndex = process.argv.indexOf('--host');
+  const portArg = portArgIndex !== -1 ? parseInt(process.argv[portArgIndex + 1], 10) : NaN;
+  const hostArg = hostArgIndex !== -1 ? process.argv[hostArgIndex + 1] : '';
+  const PORT = Number.isInteger(portArg) ? portArg : (parseInt(process.env.DEFAULT_APP_PORT || '', 10) || 3000);
+  const HOST = hostArg || '0.0.0.0';
 
   // Enable CORS for web, mobile, and edge proxy environments
   app.use(cors({
@@ -154,7 +167,8 @@ async function startServer() {
     next();
   });
 
-  // API Routes & Production Health Check
+  // Health & Readiness Probes (Root and API namespaces)
+  app.use('/health', healthRouter);
   app.use('/api/health', healthRouter);
 
   app.use('/api/auth', authRouter);
@@ -331,19 +345,38 @@ ${allUrls
 
   // Vite middleware for development vs Static files for production
   if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
+    const vitePromise = createViteServer({
       server: {
         middlewareMode: true,
-        hmr: false
+        hmr: false,
+        ws: false,
+        host: '0.0.0.0',
+        allowedHosts: true,
+        watch: {
+          ignored: ['**/storage/**', '**/FOUNDER-OFFICE/**', '**/dist/**', '**/*.tmp*', '**/scratch_*/**', '**/node_modules/**']
+        }
       },
       appType: 'spa'
     });
-    app.use(vite.middlewares);
-    app.use('*', async (req, res, next) => {
-      if (req.originalUrl.startsWith('/api')) {
+
+    app.use(async (req, res, next) => {
+      if (req.originalUrl.startsWith('/api') || req.originalUrl === '/health') {
         return next();
       }
       try {
+        const vite = await vitePromise;
+        vite.middlewares(req, res, next);
+      } catch (err) {
+        next(err);
+      }
+    });
+
+    app.use('*', async (req, res, next) => {
+      if (req.originalUrl.startsWith('/api') || req.originalUrl === '/health') {
+        return next();
+      }
+      try {
+        const vite = await vitePromise;
         const url = req.originalUrl;
         const fs = await import('fs');
         const indexPath = path.resolve(process.cwd(), 'index.html');
@@ -351,7 +384,10 @@ ${allUrls
         template = await vite.transformIndexHtml(url, template);
         res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
       } catch (e: any) {
-        vite.ssrFixStacktrace(e);
+        try {
+          const vite = await vitePromise;
+          vite.ssrFixStacktrace(e);
+        } catch (_) {}
         next(e);
       }
     });
@@ -392,10 +428,35 @@ ${allUrls
     next(err);
   });
 
-  const HOST = '0.0.0.0';
-  app.listen(PORT, HOST, () => {
+  const server = app.listen(PORT, HOST, () => {
     console.log(`[Nihomi] Server running on http://${HOST}:${PORT}`);
+    console.log(`  ➜  Local:   http://localhost:${PORT}/`);
+    console.log(`  ➜  Network: http://${HOST}:${PORT}/`);
     console.log(`[Nihomi] Ready for browser access: http://${HOST}:${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`[Nihomi] Port ${PORT} temporarily in use. Retrying in 1s...`);
+      setTimeout(() => {
+        try {
+          server.close();
+        } catch (_) {}
+        server.listen(PORT, HOST);
+      }, 1000);
+    } else {
+      console.error('[Nihomi] Server listener error:', err);
+    }
+  });
+
+  process.on('SIGTERM', () => {
+    console.log('[Nihomi] SIGTERM received. Closing HTTP server...');
+    server.close(() => process.exit(0));
+  });
+
+  process.on('SIGINT', () => {
+    console.log('[Nihomi] SIGINT received. Closing HTTP server...');
+    server.close(() => process.exit(0));
   });
 }
 

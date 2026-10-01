@@ -1,8 +1,10 @@
 import type { Lesson, VocabularyItem, GrammarItem, KanjiItem, LessonDialogue } from '../../types';
+import type { N5MasterLesson } from '../../types/n5Master';
 import n5MasterData from '../n5_master.json';
 import n4MasterData from '../n4_master.json';
 import n3MasterData from '../n3_master.json';
 import n2MasterData from '../n2_master.json';
+import n1MasterData from '../n1_master.json';
 import { stripFurigana, extractReading } from '../../utils/furigana';
 
 export interface CurriculumVocab {
@@ -3550,13 +3552,14 @@ export const NIHOMI_JLPT_N5_CURRICULUM: LessonCurriculum[] = [
 
 export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | null {
   let num: number = 1;
-  let targetLevel: 'N5' | 'N4' | 'N3' | 'N2' = 'N5';
+  let targetLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' = 'N5';
 
   if (typeof lessonIdOrNum === 'number') {
     num = lessonIdOrNum;
   } else {
     const str = String(lessonIdOrNum).trim().toLowerCase();
-    if (str.startsWith('n2')) targetLevel = 'N2';
+    if (str.startsWith('n1')) targetLevel = 'N1';
+    else if (str.startsWith('n2')) targetLevel = 'N2';
     else if (str.startsWith('n3')) targetLevel = 'N3';
     else if (str.startsWith('n4')) targetLevel = 'N4';
     else targetLevel = 'N5';
@@ -3572,12 +3575,14 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     }
   }
 
-  const maxLessons = targetLevel === 'N2' ? 45 : targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
+  const maxLessons = targetLevel === 'N1' ? 45 : targetLevel === 'N2' ? 45 : targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
   if (num < 1) num = 1;
   if (num > maxLessons) num = maxLessons;
 
   // Select master dataset based on targetLevel
-  const dataset = targetLevel === 'N2'
+  const dataset = targetLevel === 'N1'
+    ? (n1MasterData as any[])
+    : targetLevel === 'N2'
     ? (n2MasterData as any[])
     : targetLevel === 'N3'
     ? (n3MasterData as any[])
@@ -3754,6 +3759,49 @@ export function getCurriculumLesson(lessonIdOrNum: string | number): Lesson | nu
     quizId: item.practiceQuiz.id
   };
 }
+
+export function getMasterLesson(lessonIdOrNum: string | number): N5MasterLesson | null {
+  let num: number = 1;
+  let targetLevel: 'N5' | 'N4' | 'N3' | 'N2' | 'N1' = 'N5';
+
+  if (typeof lessonIdOrNum === 'number') {
+    num = lessonIdOrNum;
+  } else {
+    const str = String(lessonIdOrNum).trim().toLowerCase();
+    if (str.startsWith('n1')) targetLevel = 'N1';
+    else if (str.startsWith('n2')) targetLevel = 'N2';
+    else if (str.startsWith('n3')) targetLevel = 'N3';
+    else if (str.startsWith('n4')) targetLevel = 'N4';
+    else targetLevel = 'N5';
+
+    const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+    if (lMatch) {
+      num = parseInt(lMatch[1], 10);
+    } else {
+      const allMatches = str.match(/\d+/g);
+      if (allMatches && allMatches.length > 0) {
+        num = parseInt(allMatches[allMatches.length - 1], 10);
+      }
+    }
+  }
+
+  const maxLessons = targetLevel === 'N1' ? 45 : targetLevel === 'N2' ? 45 : targetLevel === 'N3' ? 45 : targetLevel === 'N4' ? 35 : 40;
+  if (num < 1) num = 1;
+  if (num > maxLessons) num = maxLessons;
+
+  const dataset = targetLevel === 'N1'
+    ? (n1MasterData as any[])
+    : targetLevel === 'N2'
+    ? (n2MasterData as any[])
+    : targetLevel === 'N3'
+    ? (n3MasterData as any[])
+    : targetLevel === 'N4'
+    ? (n4MasterData as any[])
+    : (n5MasterData as any[]);
+
+  return dataset.find((l: any) => l.lesson_metadata?.lesson_number === num) || null;
+}
+
 
 
 

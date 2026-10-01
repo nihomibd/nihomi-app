@@ -5,6 +5,8 @@ import { TokyoPitchWaveform } from '../../../components/voice/TokyoPitchWaveform
 import { TokyoPitchAccentLab } from '../../../components/voice/TokyoPitchAccentLab';
 import { SrsVocabularyService } from '../../../lib/srsService';
 import { SrsRating } from '../../../lib/srs';
+import { haptic } from '../../../lib/haptic';
+import { soundEffects } from '../../../lib/soundEffects';
 
 interface VocabFlashcardModalProps {
   isOpen: boolean;
@@ -56,12 +58,25 @@ export const VocabFlashcardModal: React.FC<VocabFlashcardModalProps> = ({ isOpen
   const card = CARDS[index];
 
   const rateCard = (rating: SrsRating) => {
+    if (rating === 'again') {
+      soundEffects.playIncorrectSoft();
+      haptic.incorrect();
+    } else if (rating === 'hard') {
+      soundEffects.playButtonTap();
+      haptic.trigger('warning');
+    } else {
+      soundEffects.playCorrectPing();
+      haptic.correct();
+    }
+
     // Record in Leitner SRS service
     SrsVocabularyService.reviewVocabulary(card.word, rating);
 
     const nextReviewed = reviewed + (rating === 'again' ? 0 : 1);
     setReviewed(nextReviewed);
     if (index === CARDS.length - 1) {
+      soundEffects.playLessonCelebration();
+      haptic.pass();
       setIsSaving(true);
       void onComplete(nextReviewed).then(() => {
         setIsSaving(false);
@@ -189,7 +204,7 @@ export const VocabFlashcardModal: React.FC<VocabFlashcardModalProps> = ({ isOpen
               <button
                 type="button"
                 onClick={() => rateCard('again')}
-                className="rounded-xl border border-red-200 bg-red-50 px-2 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors flex flex-col items-center"
+                className="btn-haptic rounded-xl border border-red-200 bg-red-50 px-2 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors flex flex-col items-center cursor-pointer"
               >
                 <span>Again</span>
                 <span className="text-[10px] font-mono text-red-500">&lt; 1 Day</span>
@@ -197,7 +212,7 @@ export const VocabFlashcardModal: React.FC<VocabFlashcardModalProps> = ({ isOpen
               <button
                 type="button"
                 onClick={() => rateCard('hard')}
-                className="rounded-xl border border-amber-200 bg-amber-50 px-2 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition-colors flex flex-col items-center"
+                className="btn-haptic rounded-xl border border-amber-200 bg-amber-50 px-2 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition-colors flex flex-col items-center cursor-pointer"
               >
                 <span>Hard</span>
                 <span className="text-[10px] font-mono text-amber-600">Repeat</span>
@@ -205,7 +220,7 @@ export const VocabFlashcardModal: React.FC<VocabFlashcardModalProps> = ({ isOpen
               <button
                 type="button"
                 onClick={() => rateCard('good')}
-                className="rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition-colors flex flex-col items-center"
+                className="btn-haptic rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition-colors flex flex-col items-center cursor-pointer"
               >
                 <span>Good</span>
                 <span className="text-[10px] font-mono text-emerald-600">+1 Box</span>
@@ -214,7 +229,7 @@ export const VocabFlashcardModal: React.FC<VocabFlashcardModalProps> = ({ isOpen
                 type="button"
                 onClick={() => rateCard('easy')}
                 disabled={isSaving}
-                className="rounded-xl border border-sky-200 bg-sky-50 px-2 py-2.5 text-xs font-bold text-sky-700 hover:bg-sky-100 disabled:opacity-50 transition-colors flex flex-col items-center"
+                className="btn-haptic rounded-xl border border-sky-200 bg-sky-50 px-2 py-2.5 text-xs font-bold text-sky-700 hover:bg-sky-100 disabled:opacity-50 transition-colors flex flex-col items-center cursor-pointer"
               >
                 <span>Easy</span>
                 <span className="text-[10px] font-mono text-sky-600">Fast Box</span>

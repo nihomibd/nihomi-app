@@ -25,6 +25,7 @@ import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { soundEffects } from '../../lib/soundEffects';
 import { memoryOS } from '../canvas3d/engine/MemoryOSEngine';
+import { haptic } from '../../lib/haptic';
 
 export interface NextExperienceData {
   id: string;
@@ -231,12 +232,14 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
         if (data.isCorrect) {
           setStep('success');
           soundEffects.playLessonCelebration();
+          haptic.correct();
           triggerCelebrationConfetti();
           onSuccessReward?.(data.coinsAwarded || expData.rewardCoins, data.xpAwarded || expData.rewardXp);
           onMasteryComplete?.();
         } else {
           setStep('retry');
           soundEffects.playIncorrectSoft();
+          haptic.incorrect();
         }
       } else {
         // Graceful Client-side fallback for static/edge deployment
@@ -252,6 +255,7 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
     if (isClose) {
       setStep('success');
       soundEffects.playLessonCelebration();
+      haptic.correct();
       triggerCelebrationConfetti();
       setEvaluation({
         isCorrect: true,
@@ -265,6 +269,7 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
     } else {
       setStep('retry');
       soundEffects.playIncorrectSoft();
+      haptic.incorrect();
       setEvaluation({
         isCorrect: false,
         feedbackJa: 'もう一度声に出して練習してみましょう。',

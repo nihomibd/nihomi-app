@@ -6,11 +6,14 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 3000,
     strictPort: false,
+    hmr: false,
+    ws: false,
+    allowedHosts: true,
     watch: {
-      ignored: ['**/scratch_*/**', '**/screenshot*', '**/*.tmp*']
+      ignored: ['**/storage/**', '**/FOUNDER-OFFICE/**', '**/dist/**', '**/*.tmp*', '**/scratch_*/**', '**/node_modules/**']
     }
   },
   optimizeDeps: {
@@ -24,10 +27,13 @@ export default defineConfig({
     }
   },
   build: {
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 3000,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          if (id.includes('n5_master.json') || id.includes('n4_master.json') || id.includes('n3_master.json') || id.includes('n2_master.json') || id.includes('n1_master.json')) {
+            return 'curriculum-master-data';
+          }
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('lucide-react')) {
               return 'vendor-framework';

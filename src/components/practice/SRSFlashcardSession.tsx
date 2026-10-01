@@ -21,6 +21,8 @@ import { SrsRating } from '../../lib/srs';
 import { TokyoPitchWaveform } from '../voice/TokyoPitchWaveform';
 import { TokyoPitchAccentLab } from '../voice/TokyoPitchAccentLab';
 import { studentService } from '../../features/student-dashboard/studentService';
+import { haptic } from '../../lib/haptic';
+import { soundEffects } from '../../lib/soundEffects';
 
 interface SRSFlashcardSessionProps {
   isOpen: boolean;
@@ -75,6 +77,17 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
   };
 
   const handleSrsReview = (rating: SrsRating) => {
+    if (rating === 'again') {
+      soundEffects.playIncorrectSoft();
+      haptic.incorrect();
+    } else if (rating === 'hard') {
+      soundEffects.playButtonTap();
+      haptic.trigger('warning');
+    } else {
+      soundEffects.playCorrectPing();
+      haptic.correct();
+    }
+
     const updated = SrsVocabularyService.reviewVocabulary(currentCard.id, rating);
     const newCount = reviewedCount + 1;
     setReviewedCount(newCount);
@@ -97,6 +110,8 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
       if (currentIndex < cards.length - 1) {
         setCurrentIndex((prev) => prev + 1);
       } else {
+        soundEffects.playLessonCelebration();
+        haptic.pass();
         setSessionCompleted(true);
         // Award XP and coins
         studentService.completeVocabularyPractice(newCount);
@@ -276,7 +291,7 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSrsReview('again')}
-                    className="py-2 px-1 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-950/80 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
+                    className="btn-haptic py-2 px-1 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-950/80 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
                   >
                     <span>Again</span>
                     <span className="text-[10px] text-red-500 font-mono">1 Day</span>
@@ -285,7 +300,7 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSrsReview('hard')}
-                    className="py-2 px-1 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 dark:hover:bg-amber-950/80 border border-amber-200 dark:border-amber-900 text-amber-800 dark:text-amber-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
+                    className="btn-haptic py-2 px-1 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 dark:hover:bg-amber-950/80 border border-amber-200 dark:border-amber-900 text-amber-800 dark:text-amber-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
                   >
                     <span>Hard</span>
                     <span className="text-[10px] text-amber-600 font-mono">Box {currentCard.leitnerBox || 1}</span>
@@ -294,7 +309,7 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSrsReview('good')}
-                    className="py-2 px-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
+                    className="btn-haptic py-2 px-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
                   >
                     <span>Good</span>
                     <span className="text-[10px] text-emerald-600 font-mono">+1 Box</span>
@@ -303,7 +318,7 @@ export const SRSFlashcardSession: React.FC<SRSFlashcardSessionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSrsReview('easy')}
-                    className="py-2 px-1 rounded-xl bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/50 dark:hover:bg-sky-950/80 border border-sky-200 dark:border-sky-900 text-sky-800 dark:text-sky-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
+                    className="btn-haptic py-2 px-1 rounded-xl bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/50 dark:hover:bg-sky-950/80 border border-sky-200 dark:border-sky-900 text-sky-800 dark:text-sky-300 font-bold text-xs flex flex-col items-center gap-0.5 cursor-pointer transition-colors"
                   >
                     <span>Easy</span>
                     <span className="text-[10px] text-sky-600 font-mono">Fast Boost</span>

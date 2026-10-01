@@ -21,6 +21,7 @@ import { BaitoScenarioItem, BaitoInterviewMessage, BaitoEvaluationResponse } fro
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 import { TokyoPrincipalVisaInterviewDrill } from './TokyoPrincipalVisaInterviewDrill';
+import { haptic } from '../../lib/haptic';
 
 export const SCENARIO_QUICK_CHIPS: Record<string, Array<{ textJa: string; labelBn: string; level: string }>> = {
   restaurant_izakaya: [
@@ -223,7 +224,13 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
       const data: BaitoEvaluationResponse = await res.json();
 
       if (data && data.success) {
-        soundEffects.playCorrectPing();
+        if (data.evaluation.overallScore >= 75) {
+          soundEffects.playCorrectPing();
+          haptic.correct();
+        } else {
+          soundEffects.playIncorrectSoft();
+          haptic.incorrect();
+        }
 
         // Update student message with evaluation results
         setMessages((prev) =>
@@ -263,6 +270,7 @@ export const InterviewVoiceTwinLab: React.FC<InterviewVoiceTwinLabProps> = ({
         if (data.isFinished && data.finalReadinessScore) {
           setFinalReadiness(data.finalReadinessScore);
           soundEffects.playLessonCelebration();
+          haptic.pass();
           if (onFinished) {
             onFinished(data.finalReadinessScore);
           }

@@ -40,7 +40,7 @@ This report documents the comprehensive integration, navigation stabilization, p
 ### 2.2 Purged Routes & Dead Links Cleanup
 - **Zero Dead Links**: Checked codebase for references to the 11 purged legacy views (`/about`, `/admin`, `/day1`, `/home`, `/work`, etc.).
 - Refactored stale navigations:
-  - `src/views/WorkDetailView.tsx`: Updated `onNavigate('work')` to canonical `onNavigate('baito')`.
+  - `src/views/WorkDetailView.tsx`: Safely purged in favor of `/baito`.
   - `src/views/AuthView.tsx`: Updated `onNavigate('home')` to canonical `onNavigate('landing')`.
 
 ---
@@ -73,7 +73,7 @@ This report documents the comprehensive integration, navigation stabilization, p
 ## 4. Phase 3: Automated Curriculum Data Integrity Audit
 
 Deterministic script `scripts/validateCurriculum.ts` executed with 0 errors:
-- **Scope**: Scanned master curriculum datasets (`n5_master.json`, `n4_master.json`, `n3_master.json`, `n2_master.json`).
+- **Scope**: Scanned master curriculum datasets (`n5_master.json`, `n4_master.json`, `n3_master.json`, `n2_master.json`, `n1_master.json`).
 - **Validation Rules**:
   - Unique lesson IDs and required bilingual fields (`title`, `title_ja`, `title_bn`).
   - Valid vocabulary items with non-empty Japanese, reading, and Bengali translations.

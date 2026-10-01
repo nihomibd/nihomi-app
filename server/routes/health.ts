@@ -31,7 +31,7 @@ healthRouter.get('/', async (_req, res) => {
   let isSupabaseActive = false;
 
   try {
-    totalUsers = db.getAllUsers().length;
+    totalUsers = (db.data.users || []).length;
     totalLessons = (db.data.lessons || []).length;
     totalQuizzes = (db.data.quizzes || []).length;
     isSupabaseActive = !!db.getSupabaseClient();

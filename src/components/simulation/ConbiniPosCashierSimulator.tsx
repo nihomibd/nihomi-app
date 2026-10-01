@@ -41,6 +41,7 @@ import { ConbiniPosProduct, ConbiniCustomerOrder } from '../../types';
 import { CONBINI_SCENARIOS, ConbiniScenarioItem } from '../../data/conbiniScenarios';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
+import { haptic } from '../../lib/haptic';
 
 interface ConbiniPosCashierSimulatorProps {
   onCompleteOrder?: (score: number, yenTotal: number) => void;
@@ -750,6 +751,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
       setSpeechEvaluation({ score, text: transcript || targetPhraseJa });
       soundEffects.playCorrectPing();
+      haptic.correct();
       onMatchAction();
     };
 
