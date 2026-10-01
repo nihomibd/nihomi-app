@@ -50,6 +50,7 @@ import { SpeechPracticeWidget } from '../components/SpeechPracticeWidget.js';
 import { motion } from 'motion/react';
 import { cacheLessonOffline, getCachedLessonOffline } from '../lib/offlineDb.js';
 import { soundEffects } from '../lib/soundEffects.js';
+import { haptic } from '../lib/haptic.js';
 import {
   isLessonDownloaded,
   saveLessonOffline,
@@ -366,8 +367,10 @@ if (lessonId) {
 
     if (isCorrect) {
       soundEffects.playCorrectPing();
+      haptic.correct();
     } else {
       soundEffects.playErrorBuzzer();
+      haptic.incorrect();
       if (user?.id) {
         try {
           await apiRequest('/api/progress/record-mistake', {
@@ -1143,8 +1146,11 @@ if (lessonId) {
                             return (
                               <button
                                 key={oIdx}
-                                onClick={() => setPracticeAnswers((prev) => ({ ...prev, [ex.id]: opt }))}
-                                className={`p-3.5 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                                onClick={() => {
+                                  haptic.selection();
+                                  setPracticeAnswers((prev) => ({ ...prev, [ex.id]: opt }));
+                                }}
+                                className={`btn-haptic p-3.5 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                                   isChosen
                                     ? 'bg-red-50 border-red-500 text-red-950 font-bold ring-2 ring-red-500/20'
                                     : 'bg-stone-50 hover:bg-stone-100 border-stone-200 text-stone-800'
@@ -1161,7 +1167,7 @@ if (lessonId) {
                           <button
                             disabled={!selected}
                             onClick={() => checkPracticeAnswer(ex.id, selected, ex.correctAnswer)}
-                            className="px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white font-bold text-xs cursor-pointer transition-all"
+                            className="btn-haptic px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white font-bold text-xs cursor-pointer transition-all"
                           >
                             Check Answer
                           </button>

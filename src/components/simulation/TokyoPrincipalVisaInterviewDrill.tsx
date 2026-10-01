@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
+import { haptic } from '../../lib/haptic';
 
 export interface HighStakesQuestion {
   stepNum: number;
@@ -340,6 +341,10 @@ export const TokyoPrincipalVisaInterviewDrill: React.FC<TokyoPrincipalVisaInterv
 
       if (isPassed) {
         soundEffects.playCorrectPing();
+        haptic.correct();
+      } else {
+        soundEffects.playIncorrectSoft();
+        haptic.incorrect();
       }
     } catch (err) {
       console.warn('Evaluation failed:', err);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Sparkles, CheckCircle2, XCircle, ArrowRight, RefreshCw, Volume2, Flame, Award } from 'lucide-react';
 import { speakJapanese } from '../lib/tts';
+import { haptic } from '../lib/haptic';
+import { soundEffects } from '../lib/soundEffects';
 
 export const QuickQuizWidget: React.FC = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -74,17 +76,23 @@ export const QuickQuizWidget: React.FC = () => {
     setSelectedOption(idx);
     setIsAnswered(true);
     if (idx === q.correctIdx) {
+      soundEffects.playCorrectPing();
+      haptic.correct();
       setStreak(s => {
         const next = s + 1;
         if (next > bestStreak) setBestStreak(next);
         return next;
       });
     } else {
+      soundEffects.playIncorrectSoft();
+      haptic.incorrect();
       setStreak(0);
     }
   };
 
   const handleNext = () => {
+    soundEffects.playClickSoft();
+    haptic.selection();
     setSelectedOption(null);
     setIsAnswered(false);
     setTimeLeft(30);
@@ -173,7 +181,7 @@ export const QuickQuizWidget: React.FC = () => {
               type="button"
               onClick={() => handleSelect(idx)}
               disabled={isAnswered}
-              className={`p-4 rounded-2xl border text-center transition font-semibold text-sm cursor-pointer ${btnStyle}`}
+              className={`btn-haptic p-4 rounded-2xl border text-center transition font-semibold text-sm cursor-pointer ${btnStyle}`}
             >
               {opt}
             </button>
@@ -201,7 +209,7 @@ export const QuickQuizWidget: React.FC = () => {
           <button
             type="button"
             onClick={handleNext}
-            className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-red-600/20 text-sm cursor-pointer"
+            className="btn-haptic w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-red-600/20 text-sm cursor-pointer"
           >
             <span>পরবর্তী প্রশ্ন &rarr;</span>
             <ArrowRight className="w-4 h-4" />

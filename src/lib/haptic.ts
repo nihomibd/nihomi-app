@@ -18,8 +18,57 @@ export type HapticPattern =
   | 'streak_flame';
 
 class HapticFeedbackService {
-  private isSupported(): boolean {
-    return typeof window !== 'undefined' && 'navigator' in window && 'vibrate' in navigator;
+  public isSupported(): boolean {
+    return typeof window !== 'undefined' && 'navigator' in window && typeof navigator.vibrate === 'function';
+  }
+
+  /**
+   * Directly vibrate using custom pattern or duration
+   */
+  public vibrate(pattern: number | number[]): boolean {
+    if (!this.isSupported()) return false;
+    try {
+      return navigator.vibrate(pattern);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Tactile confirmation for a correct quiz / exercise answer
+   * Distinct positive double-tap pulse sequence: 25ms buzz, 30ms gap, 45ms confirmation
+   */
+  public correct(): void {
+    this.trigger('success');
+  }
+
+  /**
+   * Tactile confirmation for an incorrect / mistake answer
+   * Distinct sharp double-buzz error pulse: 60ms buzz, 50ms pause, 60ms buzz
+   */
+  public incorrect(): void {
+    this.trigger('error');
+  }
+
+  /**
+   * Subtle tactile response for selecting a quiz option or tapping an interactive element
+   */
+  public selection(): void {
+    this.trigger('light');
+  }
+
+  /**
+   * Subtle touch tap (synonym for selection)
+   */
+  public tap(): void {
+    this.trigger('light');
+  }
+
+  /**
+   * Celebratory vibration sequence when a quiz or test is passed
+   */
+  public pass(): void {
+    this.trigger('quiz_pass');
   }
 
   /**
@@ -77,7 +126,7 @@ class HapticFeedbackService {
         default:
           navigator.vibrate(20);
       }
-    } catch (e) {
+    } catch {
       // Non-blocking catch for devices where vibrate is restricted by user interaction policies
     }
   }

@@ -27,6 +27,8 @@ import { SentenceStarComposer } from '../components/mockExam/SentenceStarCompose
 import { MockExamOfficialCertificate } from '../components/mockExam/MockExamOfficialCertificate';
 import { stopJapaneseSpeech } from '../lib/tts';
 import { useAuth } from '../context/AuthContext';
+import { haptic } from '../lib/haptic';
+import { soundEffects } from '../lib/soundEffects';
 
 interface MockExamRunnerViewProps {
   examId: string;
@@ -156,6 +158,8 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
   };
 
   const handleSelectOption = (questionId: string, optionIndex: number) => {
+    soundEffects.playClickSoft();
+    haptic.selection();
     setUserAnswers((prev) => ({
       ...prev,
       [questionId]: optionIndex
@@ -163,6 +167,7 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
   };
 
   const toggleBookmark = (qId: string) => {
+    haptic.tap();
     setBookmarkedQuestionIds((prev) => {
       const next = new Set(prev);
       if (next.has(qId)) next.delete(qId);
@@ -200,7 +205,12 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
 
       setSubmissionResult(result);
       if (result.attempt.isPassed) {
+        soundEffects.playLessonCelebration();
+        haptic.pass();
         setReviewActiveTab('certificate');
+      } else {
+        soundEffects.playIncorrectSoft();
+        haptic.incorrect();
       }
       await onAttemptCompleted?.(result.attempt, result.reviewSections);
       setStage('review');
@@ -518,7 +528,7 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
                       key={optIdx}
                       type="button"
                       onClick={() => handleSelectOption(currentQuestion.id, optIdx)}
-                      className={`w-full p-4 rounded-2xl text-left border font-japanese font-medium text-sm sm:text-base transition-all flex items-center justify-between group ${
+                      className={`btn-haptic w-full p-4 rounded-2xl text-left border font-japanese font-medium text-sm sm:text-base transition-all flex items-center justify-between group cursor-pointer ${
                         isSelected
                           ? 'bg-gradient-to-r from-rose-600/20 to-amber-600/20 border-rose-500 text-white shadow-lg ring-1 ring-rose-500'
                           : 'bg-slate-950/60 hover:bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700'

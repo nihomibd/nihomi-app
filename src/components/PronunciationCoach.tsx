@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { speakJapanese } from '../lib/tts';
 import { soundEffects } from '../lib/soundEffects';
+import { haptic } from '../lib/haptic';
 
 export interface PronunciationSentence {
   id: string;
@@ -242,8 +243,10 @@ export const PronunciationCoach: React.FC<PronunciationCoachProps> = ({
         setHistoryScores((prev) => [data.assessment.clarityScore, ...prev.slice(0, 4)]);
         if (data.assessment.clarityScore >= 80) {
           soundEffects.playCorrectPing();
+          haptic.correct();
         } else {
           soundEffects.playIncorrectSoft();
+          haptic.incorrect();
         }
         if (onSentenceComplete) {
           onSentenceComplete(data.assessment.clarityScore);

@@ -6,11 +6,14 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 3000,
     strictPort: false,
+    hmr: false,
+    ws: false,
+    allowedHosts: true,
     watch: {
-      ignored: ['**/scratch_*/**', '**/screenshot*', '**/*.tmp*']
+      ignored: ['**/storage/**', '**/FOUNDER-OFFICE/**', '**/dist/**', '**/*.tmp*', '**/scratch_*/**', '**/node_modules/**']
     }
   },
   optimizeDeps: {

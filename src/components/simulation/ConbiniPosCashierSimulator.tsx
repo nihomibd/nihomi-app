@@ -28,6 +28,7 @@ import {
 import { ConbiniPosProduct, ConbiniCustomerOrder } from '../../types';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
+import { haptic } from '../../lib/haptic';
 
 export interface TokyoDialogueDrill {
   id: 'greeting' | 'point_card' | 'bento_heat' | 'bag_select' | 'payment_receipt';
@@ -426,6 +427,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       }));
 
       soundEffects.playCorrectPing();
+      haptic.correct();
 
       // Trigger respective cashier action
       if (drill.id === 'greeting') {

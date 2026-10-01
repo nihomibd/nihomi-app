@@ -217,6 +217,9 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
 
   const handleSelectOption = (questionId: string, optionIndex: number) => {
     if (submissionResult) return; // Prevent change after submit
+    soundEffects.playClickSoft();
+    haptic.selection();
+
     setSelectedAnswers((prev) => ({
       ...prev,
       [questionId]: optionIndex
@@ -224,8 +227,6 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
 
     // In speed challenge mode, reward fast answer with sound & reset timer for next item
     if (quizIntensity === 'speed_challenge') {
-      soundEffects.playClickSoft();
-      haptic.trigger('light');
       setActiveQuestionIndex((prev) => prev + 1);
       setQuestionTimeLeft(15);
       setSpeedStreak((prev) => prev + 1);
@@ -254,13 +255,13 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
 
       if (res?.attempt?.passed) {
         soundEffects.playLessonCelebration();
-        haptic.trigger('quiz_pass');
+        haptic.pass();
       } else if (res?.results?.some((r: any) => r.isCorrect)) {
         soundEffects.playCorrectPing();
-        haptic.trigger('success');
+        haptic.correct();
       } else {
         soundEffects.playIncorrectSoft();
-        haptic.trigger('error');
+        haptic.incorrect();
       }
 
       // Synchronize quiz attempt to Supabase database (quiz_attempts + learning_progress + activity_logs)
@@ -939,7 +940,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                         key={optIdx}
                         disabled={!!submissionResult}
                         onClick={() => handleSelectOption(q.id, optIdx)}
-                        className={`p-3.5 rounded-xl border text-xs font-bold text-left transition-all flex items-center justify-between ${
+                        className={`btn-haptic p-3.5 rounded-xl border text-xs font-bold text-left transition-all flex items-center justify-between cursor-pointer ${
                           isCorrectAnswer
                             ? 'bg-emerald-100 border-emerald-500 text-emerald-950 font-bold'
                             : isWrongSelection
@@ -1111,7 +1112,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || answeredCount === 0}
-              className="w-full sm:w-auto px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center space-x-2"
+              className="btn-haptic w-full sm:w-auto px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center space-x-2 cursor-pointer"
             >
               <span>{isSubmitting ? 'Evaluating...' : 'Submit Quiz'}</span>
               <ArrowRight className="w-4 h-4" />

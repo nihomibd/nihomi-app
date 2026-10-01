@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { speakJapanese } from '../../lib/tts';
+import { haptic } from '../../lib/haptic';
+import { soundEffects } from '../../lib/soundEffects';
 
 interface JLPTDiagnosticExamModalProps {
   isOpen: boolean;
@@ -121,6 +123,8 @@ export const JLPTDiagnosticExamModal: React.FC<JLPTDiagnosticExamModalProps> = (
 
   const handleSelectOption = (index: number) => {
     if (isAnswerSubmitted) return;
+    soundEffects.playClickSoft();
+    haptic.selection();
     setSelectedOption(index);
   };
 
@@ -132,8 +136,12 @@ export const JLPTDiagnosticExamModal: React.FC<JLPTDiagnosticExamModalProps> = (
     setUserAnswers((prev) => ({ ...prev, [currentQ.id]: selectedOption }));
 
     if (isOptionCorrect) {
+      soundEffects.playCorrectPing();
+      haptic.correct();
       speakJapanese(currentQ.promptJa);
     } else {
+      soundEffects.playIncorrectSoft();
+      haptic.incorrect();
       // Record mistake silently into learning memoryOS in background
       fetch('/api/progress/record-mistake', {
         method: 'POST',
@@ -150,10 +158,14 @@ export const JLPTDiagnosticExamModal: React.FC<JLPTDiagnosticExamModalProps> = (
 
   const handleNext = () => {
     if (currentIdx < totalQuestions - 1) {
+      soundEffects.playClickSoft();
+      haptic.selection();
       setCurrentIdx((prev) => prev + 1);
       setSelectedOption(null);
       setIsAnswerSubmitted(false);
     } else {
+      soundEffects.playLessonCelebration();
+      haptic.pass();
       setIsExamCompleted(true);
       trackNihomiEvent('diagnostic_exam_completed', {
         score: calculateScore()
@@ -291,7 +303,7 @@ export const JLPTDiagnosticExamModal: React.FC<JLPTDiagnosticExamModalProps> = (
                       key={i}
                       onClick={() => handleSelectOption(i)}
                       disabled={isAnswerSubmitted}
-                      className={`w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${cardStyle}`}
+                      className={`btn-haptic w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${cardStyle}`}
                     >
                       <div>
                         <span className="text-sm font-bold block">{opt.text}</span>
@@ -382,14 +394,14 @@ export const JLPTDiagnosticExamModal: React.FC<JLPTDiagnosticExamModalProps> = (
                 <button
                   onClick={handleSubmitAnswer}
                   disabled={selectedOption === null}
-                  className="px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-stone-950 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-amber-500/20 transition-all cursor-pointer"
+                  className="btn-haptic px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-stone-950 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-amber-500/20 transition-all cursor-pointer"
                 >
                   উত্তর জমা দিন
                 </button>
               ) : (
                 <button
                   onClick={handleNext}
-                  className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-red-600/20 transition-all flex items-center space-x-2 cursor-pointer group"
+                  className="btn-haptic px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-red-600/20 transition-all flex items-center space-x-2 cursor-pointer group"
                 >
                   <span>{currentIdx < totalQuestions - 1 ? 'পরবর্তী প্রশ্ন' : 'রিপোর্ট দেখুন'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

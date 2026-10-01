@@ -24,6 +24,7 @@ import { speakJapanese } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { logKanaMistake } from '../../lib/kanaMemorySync';
+import { haptic } from '../../lib/haptic';
 
 interface KanaDrawingCanvasProps {
   kana: KanaCharacter;
@@ -164,6 +165,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
       // Prevent scrolling while drawing on touchscreen
       e.stopPropagation();
     }
+    haptic.trigger('kanji_stroke');
     const point = getCanvasCoords(e);
     setIsDrawing(true);
     setCurrentStroke([point]);
@@ -298,6 +300,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
 
     if (calculated >= 75) {
       soundEffects.playLevelUp();
+      haptic.correct();
       triggerCelebrationConfetti();
       setAccuracyFeedback(`অসাধারণ! ${calculated}% নির্ভুল স্ট্রোক ও চমৎকার ব্যালান্স।`);
 
@@ -312,6 +315,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
       }
     } else {
       soundEffects.playIncorrectSoft();
+      haptic.incorrect();
       const failType = strokeDiff > 0 ? 'stroke_count' : 'accuracy';
       logKanaMistake(kana, calculated, failType);
 
@@ -519,7 +523,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
         <button
           type="button"
           onClick={evaluateWriting}
-          className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
+          className="btn-haptic px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Check className="w-4 h-4" />
           <span>যাচাই</span>

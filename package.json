@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "prisma generate && tsx server.ts",
+    "dev": "tsx server.ts",
     "build": "prisma generate && vite build && esbuild server.ts --bundle --define:import.meta.env=process.env --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs && esbuild server/api-serverless.ts --bundle --define:import.meta.env=process.env --platform=node --format=esm --packages=external --sourcemap --outfile=api/index.js",
     "start": "node dist/server.cjs",
     "smoke-test": "tsx server/scripts/productionSmokeTest.ts",
