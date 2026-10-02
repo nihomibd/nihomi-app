@@ -42,6 +42,7 @@ import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } fr
 import { Plan } from '../types';
 import { NihomiMobileShowcase } from '../components/showcase/NihomiMobileShowcase';
 import { HanabiBackground } from '../components/HanabiBackground';
+import { ValueRevealCarousel } from '../components/landing/ValueRevealCarousel';
 
 interface LandingViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -111,6 +112,7 @@ const N5_PRO_PLAN: Plan = {
     'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
     'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
+    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
     'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
     '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
     '২৪/৭ আনলিমিটেড Nihomi Sensei AI™ লাইভ টিউটর',
@@ -118,6 +120,32 @@ const N5_PRO_PLAN: Plan = {
   ],
   aiMonthlyLimit: 500,
   entitlements: ['n5', 'quizzes', 'ai_coach', 'jlpt_pro', 'certificates', 'japan_ready'],
+  isPublished: true
+};
+
+// Pre-configured All-Access Unlimited Annual Plan for instant checkout
+const ALL_ACCESS_ANNUAL_PLAN: Plan = {
+  id: 'pro',
+  name: 'All-Access Unlimited Annual',
+  displayNameJa: '全レベル見放題・プロ年間プラン',
+  tagline: 'Complete JLPT N5-N1 mastery with continuous career companion',
+  description: 'Full access to all N5-N1 courses, Business Keigo, JIS Rirekisho & Shokumu Keirekisho, and 1,000 AI Coach turns/month',
+  monthlyPrice: 599,
+  yearlyPrice: 4990,
+  currency: 'BDT',
+  badge: 'সর্বোচ্চ ভ্যালু',
+  isRecommended: false,
+  order: 2,
+  features: [
+    'N5 থেকে N1 পর্যন্ত সকল ডিজিটাল কোর্স ও ২১০+ লেসন',
+    'JIS 履歴書 ও 職務経歴書 আনলিমিটেড Pro PDF এক্সপোর্ট',
+    'টোকিও কাস্টমার সার্ভিস ও বিজনেস কেইগো ড্রিল',
+    '১,০০০টি এআই সেনসেই কোচিং ইন্টারঅ্যাকশন প্রতি মাসে',
+    '১৮০ মার্কসের অফিসিয়াল ফুল সিমুলেটেড মক টেস্ট ইঞ্জিন',
+    'টোকিও ভিসা ও জব অ্যাপ্লিকেশন ক্যারিয়ার সাপোর্ট'
+  ],
+  aiMonthlyLimit: 1000,
+  entitlements: ['n5', 'n4', 'n3', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro', 'certificates', 'japan_ready'],
   isPublished: true
 };
 
@@ -136,6 +164,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [isJourneyEngineOpen, setIsJourneyEngineOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [checkoutTargetPlan, setCheckoutTargetPlan] = useState<Plan>(N5_PRO_PLAN);
+  const [checkoutTargetInterval, setCheckoutTargetInterval] = useState<'monthly' | 'yearly'>('yearly');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Dynamic OpenGraph SEO & JSON-LD updates on landing
@@ -219,70 +249,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     {
       question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
       answer: 'আমাদের কারিকুলাম সরাসরি অফিশিয়াল JLPT ও NAT-TEST স্ট্যান্ডার্ড অনুযায়ী তৈরি। পাশাপাশি টোকিও কনবিনি জব সিমুলেশন (Nihomi WorkOS™) ও রিয়েল-লাইফ বাইতো কনভারসেশন ড্রিল থাকায় ভিসা ইন্টারভিউ ও জাপানে কাজের ক্ষেত্রে দারুণ আত্মবিশ্বাস তৈরি হয়।'
-    }
-  ];
-
-  // 6-Step Continuous Learning Path configuration
-  const learningSteps = [
-    {
-      step: '01',
-      title: 'Kana 46 Lab',
-      titleJa: 'ひらがな・カタカナ基礎',
-      desc: '৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক অর্ডার, বাংলা উচ্চারণ ও টাচ ক্যানভাসে ড্রয়িং।',
-      duration: '৩-৫ দিন',
-      icon: PenTool,
-      view: 'kana',
-      color: 'rose'
-    },
-    {
-      step: '02',
-      title: 'Minna no Nihongo 1–25',
-      titleJa: 'みんなの日本語 第1-25課',
-      desc: 'N5 এর ২৫টি পূর্ণ অধ্যায়, বাংলা ব্যাকরণ নিয়ম, ভোকাবুলারি ও বাস্তব বাক্যের প্রয়োগ।',
-      duration: '৪-৬ সপ্তাহ',
-      icon: BookOpen,
-      view: 'curriculum',
-      color: 'red'
-    },
-    {
-      step: '03',
-      title: 'Kanji 100 Master',
-      titleJa: '漢字100字マスター',
-      desc: 'N5 পরীক্ষার জন্য ১০০টি মৌলিক কাঞ্জি, ওনিওমি/কুনিওমি ও ইন্টারেক্টিভ ফ্ল্যাশকার্ড।',
-      duration: '২ সপ্তাহ',
-      icon: Target,
-      view: 'kanji',
-      color: 'amber'
-    },
-    {
-      step: '04',
-      title: 'Tokyo Listening Lab',
-      titleJa: '東京リスニングラボ (聴解)',
-      desc: 'তোশিবা নেটিভ স্পিকারদের নিখুঁত উচ্চারণে ২৫টি লেসনের Choukai অডিও ও রোমাজি ফিল্টার।',
-      duration: 'প্রতিদিন ১৫ মিনিট',
-      icon: Headphones,
-      view: 'listening-lab',
-      color: 'indigo'
-    },
-    {
-      step: '05',
-      title: 'Nihomi WorkOS™ Conbini Shift',
-      titleJa: 'コンビニ接客・レジ演習',
-      desc: 'টোকিও ৭-ইলেভেন ও লসন ক্যাশিয়ার সিমুলেটর, কেইগো ডায়ালগ ও বাস্তব কাস্টমার সার্ভিস।',
-      duration: '১ সপ্তাহ',
-      icon: Store,
-      view: 'baito',
-      color: 'emerald'
-    },
-    {
-      step: '06',
-      title: '180-Mark JLPT N5 Simulation',
-      titleJa: 'JLPT N5 本番模試 180点',
-      desc: 'আসল পরীক্ষার ৩টি সেকশন (মোজী-গোই, বুনপো, চৌকাই), লাইভ টাইমার ও ভেরিফাইড সনদ।',
-      duration: 'পরীক্ষার পূর্বে',
-      icon: Award,
-      view: 'mock-exams',
-      color: 'cyan'
     }
   ];
 
@@ -502,76 +468,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 2: 6-STEP CONTINUOUS LEARNING PATH (The Nihomi OS Architecture)    */}
+      {/* SECTION 2: TAPO-STYLE 6-CARD VALUE REVEAL CAROUSEL (Nihomi OS Pillars)    */}
       {/* ========================================================================= */}
-      <section className="relative z-10 py-16 bg-[#0f0f1b]/90 border-t border-white/10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold mb-3 border border-red-500/20">
-              <Zap className="w-3.5 h-3.5" />
-              <span>নিহোমি ওএস আর্কিটেকচার</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-              ৬ ধাপে সম্পূর্ণ জাপানিজ প্রস্তুতি <span className="text-red-500">(Step 1 → Step 6)</span>
-            </h2>
-            <p className="text-xs sm:text-sm text-stone-400 mt-2">
-              শূন্য বর্ণমালা থেকে শুরু করে তোশিবা নেটিভ অডিও, টোকিও কনবিনি জব ড্রিল ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট
-            </p>
-          </div>
-
-          {/* 6-Step Visual Interactive Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {learningSteps.map((item) => {
-              const IconComponent = item.icon;
-              return (
-                <div
-                  key={item.step}
-                  className="p-6 rounded-3xl bg-[#161626]/90 hover:bg-[#1a1a2e] border border-white/10 hover:border-red-500/40 hover:shadow-xl transition-all flex flex-col justify-between group backdrop-blur-md"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="w-8 h-8 rounded-xl bg-stone-900 border border-white/10 text-white font-mono font-bold text-xs flex items-center justify-center">
-                        {item.step}
-                      </span>
-                      <span className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-stone-300 text-[10px] font-bold font-mono">
-                        {item.duration}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center text-red-400 shadow-sm group-hover:scale-105 transition-transform">
-                        <IconComponent className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-base text-white group-hover:text-red-400 transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-[11px] text-stone-400 font-japanese font-medium">
-                          {item.titleJa}
-                        </p>
-                      </div>
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-6 mt-3">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => onNavigate(item.view)}
-                    className="w-full py-2.5 px-4 bg-stone-900 hover:bg-red-600 text-white border border-white/10 hover:border-red-500/40 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm active:scale-95"
-                  >
-                    <span>এই ধাপে প্রবেশ করুন</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-
-        </div>
-      </section>
+      <ValueRevealCarousel
+        onNavigate={onNavigate}
+        onOpenSenseiVoice={() => setIsVoiceActive(true)}
+        onOpenWritingCanvas={() => setIsWritingActive(true)}
+      />
 
       {/* ========================================================================= */}
       {/* NIHOMI MOBILE STUDIO SHOWCASE (Three Photorealistic Flagship Phones)      */}
@@ -579,10 +482,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       <NihomiMobileShowcase />
 
       {/* ========================================================================= */}
-      {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free Starter vs Pro)   */}
+      {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free vs N5 Pro vs All-Access) */}
       {/* ========================================================================= */}
       <section className="relative z-10 py-16 bg-[#0a0a12] border-t border-white/10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           
           <div className="text-center max-w-xl mx-auto mb-12">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold mb-3 border border-emerald-500/20">
@@ -593,14 +496,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               সহজ মূল্যতালিকা • <span className="text-red-500">কোনো গোপন চার্জ নেই</span>
             </h2>
             <p className="text-xs sm:text-sm text-stone-400 mt-2">
-              ফ্রি স্টার্টার দিয়ে পরখ করুন অথবা ৳৪৯৯-এ আজীবন অ্যাক্সেস নিয়ে JLPT N5 এর সম্পূর্ণ প্রস্তুতি নিন
+              ফ্রি স্টার্টার দিয়ে পরখ করুন, ৳৪৯৯-এ আজীবন N5 প্রিপারেশন নিন অথবা ৳৪,৯৯০-এ সকল লেভেলের অল-এক্সেস পান
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
             
             {/* 1. Free Starter Tier */}
-            <div className="p-7 rounded-3xl bg-[#12121e]/90 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md">
+            <div className="p-6 sm:p-7 rounded-3xl bg-[#12121e]/90 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="px-3 py-1 rounded-full bg-stone-800 text-stone-300 text-xs font-bold font-mono">
@@ -611,7 +514,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
                 <div className="mb-6">
                   <div className="flex items-baseline space-x-1">
-                    <span className="text-3xl sm:text-4xl font-black text-white">৳০</span>
+                    <span className="text-3xl font-black text-white">৳০</span>
                     <span className="text-xs text-stone-400">/ আজীবন ফ্রি</span>
                   </div>
                   <p className="text-xs text-stone-400 mt-1">জাপানিজ বর্ণমালা ও প্রাথমিক শব্দ শেখার জন্য উপযুক্ত</p>
@@ -621,7 +524,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   {[
                     '৪৬টি হিরাগানা ও ৪৬টি কাতাকানা সম্পূর্ণ স্ট্রোক ল্যাব',
                     'মিন্না নো নিহোঙ্গো লেসন ০১ থেকে ০৫ সম্পূর্ণ ফ্রি',
-                    '১০০টি N5 কাঞ্জি ফ্রি ট্রেসিং ও প্র্যাকটিস',
+                    '১০০টি N5 কাঞ্জি ফ্রি ট্রেসিং ও ক্যানভাস',
                     'প্রাথমিক প্র্যাকটিস কুইজ ও স্কোরকার্ড',
                     '১০টি এআই সেনসেই প্রশ্ন প্রতি মাসে',
                     'ফ্রি ৫০ নিহোমি কয়েন সাইন-আপ বোনাস'
@@ -643,7 +546,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             </div>
 
             {/* 2. N5 Pro Lifetime Tier (Highlighted) */}
-            <div className="p-7 rounded-3xl bg-[#161626]/90 border-2 border-red-500 shadow-2xl shadow-red-500/15 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
+            <div className="p-6 sm:p-7 rounded-3xl bg-[#161626]/95 border-2 border-red-500 shadow-2xl shadow-red-500/15 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
               <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
                 সর্বাধিক জনপ্রিয়
               </div>
@@ -658,22 +561,22 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
                 <div className="mb-6">
                   <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl sm:text-4xl font-black text-white">৳৪৯৯</span>
+                    <span className="text-3xl font-black text-white">৳৪৯৯</span>
                     <span className="text-sm text-stone-400 line-through">৳১,৪৯৯</span>
                     <span className="text-xs text-stone-400">/ এককালীন ফি</span>
                   </div>
-                  <p className="text-xs text-stone-400 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, বাইতো ও মক টেস্টে আজীবন অ্যাক্সেস</p>
+                  <p className="text-xs text-stone-400 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, কনবিনি ও JIS সিভিতে আজীবন অ্যাক্সেস</p>
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
                   {[
-                    'মিন্না নো নিহোঙ্গো লেসন ০৬–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
+                    'মিন্না নো নিহোঙ্গো লেসন ০১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
                     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
-                    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
-                    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
+                    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (Choukai)',
+                    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
+                    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
                     '১৮০ মার্কসের অফিশিয়াল মক টেস্ট ও ভেরিফাইড সনদ',
-                    '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
-                    'দেশীয় bKash ও Nagad এ দ্রুত ট্রানজেকশন ভেরিফিকেশন ও অ্যাক্টিভেশন'
+                    '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর'
                   ].map((feat, idx) => (
                     <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-200 font-medium">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -686,15 +589,91 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <button
                 onClick={() => {
                   trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
+                  setCheckoutTargetPlan(N5_PRO_PLAN);
+                  setCheckoutTargetInterval('yearly');
                   setIsCheckoutOpen(true);
                 }}
                 className="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
               >
-                <span>এনরোল করুন — ৳৪৯৯ (bKash / Nagad)</span>
+                <span>এনরোল করুন — ৳৪৯৯ (bKash)</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
+            {/* 3. All-Access Unlimited Annual Pass */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-[#141426]/90 border border-indigo-500/40 shadow-xl flex flex-col justify-between backdrop-blur-md">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold font-mono border border-indigo-500/30">
+                    All-Access বাৎসরিক
+                  </span>
+                  <span className="text-xs text-indigo-400 font-bold">৩০% সাশ্রয়</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-3xl font-black text-white">৳৪,৯৯০</span>
+                    <span className="text-xs text-stone-400">/ বছর (~৳৪১৫/মাস)</span>
+                  </div>
+                  <p className="text-xs text-stone-400 mt-1">N5 থেকে N1 পর্যন্ত সকল কোর্স, বিজনেস কেইগো ও ক্যারিয়ার সাপোর্ট</p>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
+                  {[
+                    'N5, N4, N3, N2, N1 এর ২১০+ ডিজিটাল লেসন ও লাইব্রেরি',
+                    'টোকিও কাস্টমার সার্ভিস ও বিজনেস কেইগো ড্রিল',
+                    'JIS規格 履歴書 ও 職務経歴書 আনলিমিটেড Pro PDF এক্সপোর্ট',
+                    '১,০০০টি AI সেনসেই ইন্টারেকশন প্রতি মাসে',
+                    'সকল লেভেলের অফিশিয়াল ফুল সিমুলেটেড মক এক্সাম',
+                    'টোকিও ভিসা ও পার্ট-টাইম জব ক্যারিয়ার কম্প্যানিয়ন'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-200">
+                      <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    trackNihomiEvent('subscription_checkout_started', { planId: 'all_access', amountBDT: 4990 });
+                    setCheckoutTargetPlan(ALL_ACCESS_ANNUAL_PLAN);
+                    setCheckoutTargetInterval('yearly');
+                    setIsCheckoutOpen(true);
+                  }}
+                  className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
+                >
+                  <span>বাৎসরিক পাস নিন — ৳৪,৯৯০</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onNavigate('pricing')}
+                  className="w-full py-2 text-[11px] text-stone-400 hover:text-white text-center font-medium transition-colors cursor-pointer"
+                >
+                  মাসিক ও অন্যান্য প্ল্যান দেখুন →
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Bottom Clarification & Navigation Banner */}
+          <div className="mt-8 p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-300">
+            <div className="flex items-center space-x-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>
+                <strong>নিশ্চিন্ত ভর্তি গ্যারান্টি:</strong> bKash বা Nagad এ পেমেন্ট করার ৫-১৫ মিনিটের মধ্যে কোর্স সক্রিয় হয়।
+              </span>
+            </div>
+            <button
+              onClick={() => onNavigate('pricing')}
+              className="text-red-400 hover:text-red-300 font-bold flex items-center gap-1 shrink-0 cursor-pointer"
+            >
+              <span>বিস্তারিত প্রাইসিং ও ফিচার তুলনা দেখুন</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
         </div>
@@ -859,8 +838,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
         <CheckoutModal
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
-          plan={N5_PRO_PLAN}
-          selectedPlan={N5_PRO_PLAN}
+          plan={checkoutTargetPlan}
+          selectedPlan={checkoutTargetPlan}
+          initialInterval={checkoutTargetInterval}
           onSuccess={() => {
             setIsCheckoutOpen(false);
             onNavigate('dashboard');

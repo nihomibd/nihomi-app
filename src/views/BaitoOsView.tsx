@@ -24,12 +24,14 @@ import {
   Zap,
   MapPin,
   Clock,
-  TrendingUp
+  TrendingUp,
+  Layers
 } from 'lucide-react';
 import { BaitoScenarioItem, BaitoScenarioType } from '../types';
 import { ConbiniPosCashierSimulator } from '../components/simulation/ConbiniPosCashierSimulator';
 import { InterviewVoiceTwinLab } from '../components/simulation/InterviewVoiceTwinLab';
 import { JisRirekishoStudio } from '../components/simulation/JisRirekishoStudio';
+import { ShokumuKeirekishoStudio } from '../components/simulation/ShokumuKeirekishoStudio';
 import { VoiceTwinPitchLab } from '../components/simulation/VoiceTwinPitchLab';
 import { soundEffects } from '../lib/soundEffects';
 
@@ -272,11 +274,11 @@ export const DEFAULT_BAITO_SCENARIOS: BaitoScenarioItem[] = [
 interface BaitoOsViewProps {
   onNavigate?: (view: string, params?: Record<string, any>) => void;
   initialScenarioId?: string;
-  initialTab?: 'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab';
+  initialTab?: 'pos_terminal' | 'interview_lab' | 'rirekisho' | 'keirekisho' | 'pitch_lab';
 }
 
 export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialScenarioId, initialTab }) => {
-  const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'pitch_lab'>(initialTab || 'pos_terminal');
+  const [activeTab, setActiveTab] = useState<'pos_terminal' | 'interview_lab' | 'rirekisho' | 'keirekisho' | 'pitch_lab'>(initialTab || 'pos_terminal');
   const [scenarios, setScenarios] = useState<BaitoScenarioItem[]>(() => DEFAULT_BAITO_SCENARIOS);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(initialScenarioId || 'sc-conbini-pos');
   const [ambientMode, setAmbientMode] = useState<'off' | 'conbini' | 'cafe' | 'factory'>('off');
@@ -476,7 +478,22 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
                 }`}
               >
                 <FileText className="w-4 h-4" />
-                <span>📝 JIS日本標準 履歴書 (Rirekisho Studio)</span>
+                <span>📝 JIS日本標準 履歴書 (Rirekisho)</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setActiveTab('keirekisho');
+                }}
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 ${
+                  activeTab === 'keirekisho'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-[1.02]'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                <span>💼 職務経歴書 (Shokumu Studio)</span>
               </button>
 
               <button
@@ -680,6 +697,17 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSce
               exit={{ opacity: 0, y: -15 }}
             >
               <JisRirekishoStudio onNavigate={onNavigate} />
+            </motion.div>
+          )}
+
+          {activeTab === 'keirekisho' && (
+            <motion.div
+              key="keirekisho"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+            >
+              <ShokumuKeirekishoStudio onNavigate={onNavigate} />
             </motion.div>
           )}
 

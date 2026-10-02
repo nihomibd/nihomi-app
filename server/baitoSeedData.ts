@@ -1,4 +1,4 @@
-import { BaitoScenarioItem, ConbiniPosProduct, ConbiniCustomerOrder, JisRirekishoData } from './types.js';
+import { BaitoScenarioItem, ConbiniPosProduct, ConbiniCustomerOrder, JisRirekishoData, ShokumuKeirekishoData } from './types.js';
 
 export const INITIAL_BAITO_SCENARIOS: BaitoScenarioItem[] = [
   {
@@ -446,3 +446,59 @@ export const INITIAL_DEFAULT_RIREKISHO: JisRirekishoData = {
   hankoStampUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=tanvir_seal',
   updatedAt: new Date().toISOString()
 };
+
+export const INITIAL_DEFAULT_KEIREKISHO: ShokumuKeirekishoData = {
+  id: 'keirekisho-default',
+  userId: 'usr-current',
+  fullName: 'MD TANVIR HOSSAIN',
+  submissionDate: '2026年10月3日',
+  careerSummary: '大学卒業後、フロントエンドエンジニアおよびデータアシスタントとしてWebアプリケーション開発とデータ処理業務に従事。TypeScript/Reactを用いたUI設計、チーム内の報連相、アジャイル開発の実務経験を有します。現在、東京の日本語学校にてビジネス日本語と日本企業の商習慣を習得中。',
+  careerSummaryPolished: 'これまでの実務において、フロントエンド開発およびデータ処理を中心に品質向上とチームの課題解決に努めてまいりました。異文化環境においても円滑なコミュニケーションを保ち、業務の効率化と組織の成果創出に主体的に寄与してまいります。',
+  technicalSkills: [
+    {
+      category: '語学・日本語力 (Languages)',
+      skills: ['日本語 (JLPT N5合格・N4学習中)', '英語 (ビジネスレベル / IELTS 7.5)', 'ベンガル語 (母国語)'],
+      yearsOfExperience: '学習歴2年'
+    },
+    {
+      category: 'プログラミング・技術 (Technical Skills)',
+      skills: ['TypeScript', 'JavaScript (ES6+)', 'React', 'HTML5 / CSS3', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
+      yearsOfExperience: '実務2年'
+    },
+    {
+      category: 'ツール・開発環境 (Tools & Environment)',
+      skills: ['Git / GitHub', 'VS Code', 'Figma', 'Docker (Basic)', 'Slack', 'Notion'],
+      yearsOfExperience: '実務2年'
+    }
+  ],
+  certifications: [
+    { date: '2025年12月', title: '日本語能力試験 (JLPT) N5 合格' },
+    { date: '2026年03月', title: 'IELTS Academic Overall Band 7.5' },
+    { date: '2022年10月', title: 'ダッカ大学 コンピュータサイエンス学士 (B.Sc in CSE)' }
+  ],
+  projects: [
+    {
+      id: 'proj-1',
+      startDate: '2023年1月',
+      endDate: '2024年2月',
+      companyName: 'Tech Innovations Ltd. (ダッカ)',
+      department: '開発部 フロントエンドチーム',
+      role: 'ジュニアフロントエンドエンジニア',
+      businessSummary: '中小企業向けクラウドERPおよびECプラットフォームの受託開発',
+      responsibilities: [
+        'React / TypeScriptを用いたレスポンシブWeb管理画面のコンポーネント実装',
+        'RESTful APIとの非同期通信連携及びエラーハンドリング実装',
+        'UI/UXデザイナーと連携したアクセシビリティ向上と表示速度の改善'
+      ],
+      achievements: [
+        '注文管理ダッシュボードの描画パフォーマンスを30%改善',
+        '再利用可能なUIコンポーネントライブラリを20種以上構築しチームの開発工数を削減'
+      ],
+      technologiesUsed: ['React', 'TypeScript', 'Tailwind CSS', 'Git', 'REST API']
+    }
+  ],
+  selfPr: '私の強みは「異文化への高い適応力」と「課題に対する粘り強さ」です。未経験の技術や異文化の職場環境にも素早く順応し、常に時間厳守と誠実なコミュニケーションを心がけています。日本のものづくり精神と品質に対する高いこだわりに深く共感しており、即戦力として貴社チームに貢献いたします。',
+  selfPrPolished: '私の最大の長所は、異文化環境における高い適応力と誠実な継続力です。時間厳守と明瞭な挨拶を信条とし、何事にも責任感を持って粘り強く取り組みます。チームの一員として協調性を発揮し、円滑な業務遂行に貢献いたします。',
+  updatedAt: new Date().toISOString()
+};
+

@@ -50817,7 +50817,7 @@ var init_mockExamSeedData = __esm({
 });
 
 // server/baitoSeedData.ts
-var INITIAL_BAITO_SCENARIOS, INITIAL_CONBINI_PRODUCTS, INITIAL_CONBINI_ORDERS, INITIAL_DEFAULT_RIREKISHO;
+var INITIAL_BAITO_SCENARIOS, INITIAL_CONBINI_PRODUCTS, INITIAL_CONBINI_ORDERS, INITIAL_DEFAULT_RIREKISHO, INITIAL_DEFAULT_KEIREKISHO;
 var init_baitoSeedData = __esm({
   "server/baitoSeedData.ts"() {
     INITIAL_BAITO_SCENARIOS = [
@@ -51261,6 +51261,60 @@ var init_baitoSeedData = __esm({
       dependentsCount: 0,
       hasSpouse: false,
       hankoStampUrl: "https://api.dicebear.com/7.x/identicon/svg?seed=tanvir_seal",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    INITIAL_DEFAULT_KEIREKISHO = {
+      id: "keirekisho-default",
+      userId: "usr-current",
+      fullName: "MD TANVIR HOSSAIN",
+      submissionDate: "2026\u5E7410\u67083\u65E5",
+      careerSummary: "\u5927\u5B66\u5352\u696D\u5F8C\u3001\u30D5\u30ED\u30F3\u30C8\u30A8\u30F3\u30C9\u30A8\u30F3\u30B8\u30CB\u30A2\u304A\u3088\u3073\u30C7\u30FC\u30BF\u30A2\u30B7\u30B9\u30BF\u30F3\u30C8\u3068\u3057\u3066Web\u30A2\u30D7\u30EA\u30B1\u30FC\u30B7\u30E7\u30F3\u958B\u767A\u3068\u30C7\u30FC\u30BF\u51E6\u7406\u696D\u52D9\u306B\u5F93\u4E8B\u3002TypeScript/React\u3092\u7528\u3044\u305FUI\u8A2D\u8A08\u3001\u30C1\u30FC\u30E0\u5185\u306E\u5831\u9023\u76F8\u3001\u30A2\u30B8\u30E3\u30A4\u30EB\u958B\u767A\u306E\u5B9F\u52D9\u7D4C\u9A13\u3092\u6709\u3057\u307E\u3059\u3002\u73FE\u5728\u3001\u6771\u4EAC\u306E\u65E5\u672C\u8A9E\u5B66\u6821\u306B\u3066\u30D3\u30B8\u30CD\u30B9\u65E5\u672C\u8A9E\u3068\u65E5\u672C\u4F01\u696D\u306E\u5546\u7FD2\u6163\u3092\u7FD2\u5F97\u4E2D\u3002",
+      careerSummaryPolished: "\u3053\u308C\u307E\u3067\u306E\u5B9F\u52D9\u306B\u304A\u3044\u3066\u3001\u30D5\u30ED\u30F3\u30C8\u30A8\u30F3\u30C9\u958B\u767A\u304A\u3088\u3073\u30C7\u30FC\u30BF\u51E6\u7406\u3092\u4E2D\u5FC3\u306B\u54C1\u8CEA\u5411\u4E0A\u3068\u30C1\u30FC\u30E0\u306E\u8AB2\u984C\u89E3\u6C7A\u306B\u52AA\u3081\u3066\u307E\u3044\u308A\u307E\u3057\u305F\u3002\u7570\u6587\u5316\u74B0\u5883\u306B\u304A\u3044\u3066\u3082\u5186\u6ED1\u306A\u30B3\u30DF\u30E5\u30CB\u30B1\u30FC\u30B7\u30E7\u30F3\u3092\u4FDD\u3061\u3001\u696D\u52D9\u306E\u52B9\u7387\u5316\u3068\u7D44\u7E54\u306E\u6210\u679C\u5275\u51FA\u306B\u4E3B\u4F53\u7684\u306B\u5BC4\u4E0E\u3057\u3066\u307E\u3044\u308A\u307E\u3059\u3002",
+      technicalSkills: [
+        {
+          category: "\u8A9E\u5B66\u30FB\u65E5\u672C\u8A9E\u529B (Languages)",
+          skills: ["\u65E5\u672C\u8A9E (JLPT N5\u5408\u683C\u30FBN4\u5B66\u7FD2\u4E2D)", "\u82F1\u8A9E (\u30D3\u30B8\u30CD\u30B9\u30EC\u30D9\u30EB / IELTS 7.5)", "\u30D9\u30F3\u30AC\u30EB\u8A9E (\u6BCD\u56FD\u8A9E)"],
+          yearsOfExperience: "\u5B66\u7FD2\u6B742\u5E74"
+        },
+        {
+          category: "\u30D7\u30ED\u30B0\u30E9\u30DF\u30F3\u30B0\u30FB\u6280\u8853 (Technical Skills)",
+          skills: ["TypeScript", "JavaScript (ES6+)", "React", "HTML5 / CSS3", "Tailwind CSS", "Node.js", "PostgreSQL"],
+          yearsOfExperience: "\u5B9F\u52D92\u5E74"
+        },
+        {
+          category: "\u30C4\u30FC\u30EB\u30FB\u958B\u767A\u74B0\u5883 (Tools & Environment)",
+          skills: ["Git / GitHub", "VS Code", "Figma", "Docker (Basic)", "Slack", "Notion"],
+          yearsOfExperience: "\u5B9F\u52D92\u5E74"
+        }
+      ],
+      certifications: [
+        { date: "2025\u5E7412\u6708", title: "\u65E5\u672C\u8A9E\u80FD\u529B\u8A66\u9A13 (JLPT) N5 \u5408\u683C" },
+        { date: "2026\u5E7403\u6708", title: "IELTS Academic Overall Band 7.5" },
+        { date: "2022\u5E7410\u6708", title: "\u30C0\u30C3\u30AB\u5927\u5B66 \u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30B5\u30A4\u30A8\u30F3\u30B9\u5B66\u58EB (B.Sc in CSE)" }
+      ],
+      projects: [
+        {
+          id: "proj-1",
+          startDate: "2023\u5E741\u6708",
+          endDate: "2024\u5E742\u6708",
+          companyName: "Tech Innovations Ltd. (\u30C0\u30C3\u30AB)",
+          department: "\u958B\u767A\u90E8 \u30D5\u30ED\u30F3\u30C8\u30A8\u30F3\u30C9\u30C1\u30FC\u30E0",
+          role: "\u30B8\u30E5\u30CB\u30A2\u30D5\u30ED\u30F3\u30C8\u30A8\u30F3\u30C9\u30A8\u30F3\u30B8\u30CB\u30A2",
+          businessSummary: "\u4E2D\u5C0F\u4F01\u696D\u5411\u3051\u30AF\u30E9\u30A6\u30C9ERP\u304A\u3088\u3073EC\u30D7\u30E9\u30C3\u30C8\u30D5\u30A9\u30FC\u30E0\u306E\u53D7\u8A17\u958B\u767A",
+          responsibilities: [
+            "React / TypeScript\u3092\u7528\u3044\u305F\u30EC\u30B9\u30DD\u30F3\u30B7\u30D6Web\u7BA1\u7406\u753B\u9762\u306E\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u5B9F\u88C5",
+            "RESTful API\u3068\u306E\u975E\u540C\u671F\u901A\u4FE1\u9023\u643A\u53CA\u3073\u30A8\u30E9\u30FC\u30CF\u30F3\u30C9\u30EA\u30F3\u30B0\u5B9F\u88C5",
+            "UI/UX\u30C7\u30B6\u30A4\u30CA\u30FC\u3068\u9023\u643A\u3057\u305F\u30A2\u30AF\u30BB\u30B7\u30D3\u30EA\u30C6\u30A3\u5411\u4E0A\u3068\u8868\u793A\u901F\u5EA6\u306E\u6539\u5584"
+          ],
+          achievements: [
+            "\u6CE8\u6587\u7BA1\u7406\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u306E\u63CF\u753B\u30D1\u30D5\u30A9\u30FC\u30DE\u30F3\u30B9\u309230%\u6539\u5584",
+            "\u518D\u5229\u7528\u53EF\u80FD\u306AUI\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u30E9\u30A4\u30D6\u30E9\u30EA\u309220\u7A2E\u4EE5\u4E0A\u69CB\u7BC9\u3057\u30C1\u30FC\u30E0\u306E\u958B\u767A\u5DE5\u6570\u3092\u524A\u6E1B"
+          ],
+          technologiesUsed: ["React", "TypeScript", "Tailwind CSS", "Git", "REST API"]
+        }
+      ],
+      selfPr: "\u79C1\u306E\u5F37\u307F\u306F\u300C\u7570\u6587\u5316\u3078\u306E\u9AD8\u3044\u9069\u5FDC\u529B\u300D\u3068\u300C\u8AB2\u984C\u306B\u5BFE\u3059\u308B\u7C98\u308A\u5F37\u3055\u300D\u3067\u3059\u3002\u672A\u7D4C\u9A13\u306E\u6280\u8853\u3084\u7570\u6587\u5316\u306E\u8077\u5834\u74B0\u5883\u306B\u3082\u7D20\u65E9\u304F\u9806\u5FDC\u3057\u3001\u5E38\u306B\u6642\u9593\u53B3\u5B88\u3068\u8AA0\u5B9F\u306A\u30B3\u30DF\u30E5\u30CB\u30B1\u30FC\u30B7\u30E7\u30F3\u3092\u5FC3\u304C\u3051\u3066\u3044\u307E\u3059\u3002\u65E5\u672C\u306E\u3082\u306E\u3065\u304F\u308A\u7CBE\u795E\u3068\u54C1\u8CEA\u306B\u5BFE\u3059\u308B\u9AD8\u3044\u3053\u3060\u308F\u308A\u306B\u6DF1\u304F\u5171\u611F\u3057\u3066\u304A\u308A\u3001\u5373\u6226\u529B\u3068\u3057\u3066\u8CB4\u793E\u30C1\u30FC\u30E0\u306B\u8CA2\u732E\u3044\u305F\u3057\u307E\u3059\u3002",
+      selfPrPolished: "\u79C1\u306E\u6700\u5927\u306E\u9577\u6240\u306F\u3001\u7570\u6587\u5316\u74B0\u5883\u306B\u304A\u3051\u308B\u9AD8\u3044\u9069\u5FDC\u529B\u3068\u8AA0\u5B9F\u306A\u7D99\u7D9A\u529B\u3067\u3059\u3002\u6642\u9593\u53B3\u5B88\u3068\u660E\u77AD\u306A\u6328\u62F6\u3092\u4FE1\u6761\u3068\u3057\u3001\u4F55\u4E8B\u306B\u3082\u8CAC\u4EFB\u611F\u3092\u6301\u3063\u3066\u7C98\u308A\u5F37\u304F\u53D6\u308A\u7D44\u307F\u307E\u3059\u3002\u30C1\u30FC\u30E0\u306E\u4E00\u54E1\u3068\u3057\u3066\u5354\u8ABF\u6027\u3092\u767A\u63EE\u3057\u3001\u5186\u6ED1\u306A\u696D\u52D9\u9042\u884C\u306B\u8CA2\u732E\u3044\u305F\u3057\u307E\u3059\u3002",
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
   }
@@ -51877,6 +51931,7 @@ var init_db = __esm({
           conbiniProducts: INITIAL_CONBINI_PRODUCTS,
           conbiniOrders: INITIAL_CONBINI_ORDERS,
           rirekishoProfiles: [INITIAL_DEFAULT_RIREKISHO],
+          keirekishoProfiles: [INITIAL_DEFAULT_KEIREKISHO],
           // Adaptive SRS & Learner Telemetry
           srsCards: [],
           srsLogs: [],
@@ -57513,6 +57568,52 @@ var init_db = __esm({
         this.save();
         return updated;
       }
+      getKeirekisho(userId) {
+        if (!this.data.keirekishoProfiles) {
+          this.data.keirekishoProfiles = [];
+        }
+        let found = this.data.keirekishoProfiles.find((k) => k.userId === userId);
+        if (!found) {
+          const userProfile = this.getProfileByUserId(userId);
+          found = {
+            ...INITIAL_DEFAULT_KEIREKISHO,
+            id: `keirekisho-${userId}`,
+            userId,
+            fullName: userProfile?.displayName || "Nihomi Professional Candidate",
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.data.keirekishoProfiles.push(found);
+          this.save();
+        }
+        return found;
+      }
+      saveKeirekisho(userId, updateData) {
+        if (!this.data.keirekishoProfiles) {
+          this.data.keirekishoProfiles = [];
+        }
+        const idx = this.data.keirekishoProfiles.findIndex((k) => k.userId === userId);
+        let updated;
+        if (idx >= 0) {
+          updated = {
+            ...this.data.keirekishoProfiles[idx],
+            ...updateData,
+            userId,
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.data.keirekishoProfiles[idx] = updated;
+        } else {
+          updated = {
+            ...INITIAL_DEFAULT_KEIREKISHO,
+            ...updateData,
+            id: `keirekisho-${userId}`,
+            userId,
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.data.keirekishoProfiles.push(updated);
+        }
+        this.save();
+        return updated;
+      }
       polishRirekishoText(text, fieldType) {
         const trimmed = text.trim();
         if (!trimmed) {
@@ -58539,14 +58640,16 @@ var init_subscriptionService = __esm({
         id: "n5_lifetime",
         name: "N5 Lifetime Pass",
         nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u09AA\u09BE\u09B8",
-        priceBdt: 1499,
+        priceBdt: 499,
         interval: "lifetime",
         descriptionBn: "\u0986\u099C\u09C0\u09AC\u09A8 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8, \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F \u0993 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF",
         featuresBn: [
           "\u0986\u099C\u09C0\u09AC\u09A8 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8 (\u0995\u09CB\u09A8\u09CB \u09AE\u09BE\u09B8\u09BF\u0995 \u09A8\u09AC\u09BE\u09DF\u09A8 \u09AB\u09BF \u09A8\u09C7\u0987)",
+          "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09E7\u2013\u09E8\u09EB \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0995\u09BE\u09B0\u09BF\u0995\u09C1\u09B2\u09BE\u09AE \u0993 \u0985\u09A1\u09BF\u0993 \u09B2\u09CD\u09AF\u09BE\u09AC",
+          "JIS\u898F\u683C \u5C65\u6B74\u66F8 \u0993 \u8077\u52D9\u7D4C\u6B74\u66F8 Pro PDF \u098F\u0995\u09CD\u09B8\u09AA\u09CB\u09B0\u09CD\u099F",
+          "Nihomi WorkOS\u2122 \u099F\u09CB\u0995\u09BF\u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0 \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u099F\u09B0",
           "\u09B8\u09CD\u09AE\u09BE\u09B0\u09CD\u099F SRS \u09B8\u09CD\u09AA\u09C7\u09B8\u09A1 \u09B0\u09BF\u09AA\u09BF\u099F\u09BF\u09B6\u09A8 \u09AB\u09CD\u09B2\u09CD\u09AF\u09BE\u09B6 \u0995\u09BE\u09B0\u09CD\u09A1 \u0987\u099E\u09CD\u099C\u09BF\u09A8",
-          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09AB\u09C1\u09B2 JLPT N5 \u09AE\u0995 \u099F\u09C7\u09B8\u09CD\u099F \u0993 \u09AC\u09BF\u09B8\u09CD\u09A4\u09BE\u09B0\u09BF\u09A4 \u09AB\u09B2\u09BE\u09AB\u09B2",
-          "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0985\u09AB\u09BF\u09B8\u09BF\u09DF\u09BE\u09B2 \u0995\u09CB\u09B0\u09CD\u09B8 \u0995\u09AE\u09AA\u09CD\u09B2\u09BF\u09B6\u09A8 \u09AD\u09C7\u09B0\u09BF\u09AB\u09BE\u09DF\u09C7\u09A1 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F",
+          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09AB\u09C1\u09B2 JLPT N5 \u09AE\u0995 \u099F\u09C7\u09B8\u09CD\u099F \u0993 \u09AD\u09C7\u09B0\u09BF\u09AB\u09BE\u09DF\u09C7\u09A1 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F",
           "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u09B8\u0995\u09B2 N5 \u0986\u09AA\u09A1\u09C7\u099F \u0993 \u098F\u0995\u09CD\u09B8\u0995\u09CD\u09B2\u09C1\u09B8\u09BF\u09AD \u09B8\u09CD\u099F\u09BE\u09A1\u09BF \u09AE\u09CD\u09AF\u09BE\u099F\u09C7\u09B0\u09BF\u09DF\u09BE\u09B2"
         ],
         limits: {
@@ -61626,6 +61729,91 @@ Identified weak areas: ${JSON.stringify(data.weakCategories || ["Particles (\u30
       }
     ]
   };
+}
+async function processKeigoPolisherRequest(req) {
+  const client = getAIClient();
+  const trimmed = req.text?.trim() || "";
+  const getFallback = () => {
+    if (req.fieldType === "motivation") {
+      const clean = trimmed.replace(/[。！？\.\!\?]+$/, "");
+      const polishedJa = clean ? `\u8CB4\u793E\u306E\u4E8B\u696D\u7406\u5FF5\u3068\u8AA0\u5B9F\u306A\u30C1\u30FC\u30E0\u30EF\u30FC\u30AF\u306B\u6DF1\u304F\u611F\u9298\u3092\u53D7\u3051\u3001${clean}\u3068\u3044\u3046\u5F37\u3044\u5FD7\u671B\u52D5\u6A5F\u3092\u6301\u3063\u3066\u5FDC\u52DF\u3044\u305F\u3057\u307E\u3057\u305F\u3002\u65E5\u672C\u306E\u30CF\u30A4\u30EC\u30D9\u30EB\u306A\u63A5\u5BA2\u30DE\u30CA\u30FC\u304A\u3088\u3073\u6CD5\u4EE4\u3067\u5B9A\u3081\u3089\u308C\u305F\u5C31\u52B4\u898F\u5247\u3092\u53B3\u683C\u306B\u9075\u5B88\u3057\u3001\u660E\u308B\u3044\u7B11\u9854\u3068\u6B63\u78BA\u306A\u656C\u8A9E\u3092\u7528\u3044\u3066\u3001\u5E97\u8217\u304A\u3088\u3073\u4F01\u696D\u306E\u4FE1\u983C\u5411\u4E0A\u306B\u8AA0\u5FC3\u8AA0\u610F\u8CA2\u732E\u3059\u308B\u6240\u5B58\u3067\u3059\u3002` : `\u65E5\u672C\u306E\u304D\u3081\u7D30\u3084\u304B\u306A\u63A5\u5BA2\u6587\u5316\u3068\u8AA0\u5B9F\u306A\u30C1\u30FC\u30E0\u30EF\u30FC\u30AF\u306B\u6DF1\u304F\u611F\u9298\u3092\u53D7\u3051\u3066\u304A\u308A\u307E\u3059\u3002\u6CD5\u4EE4\u3067\u5B9A\u3081\u3089\u308C\u305F\u5C31\u52B4\u898F\u5247\u3092\u53B3\u683C\u306B\u9075\u5B88\u3057\u3001\u660E\u308B\u3044\u7B11\u9854\u3068\u6B63\u78BA\u306A\u656C\u8A9E\u3092\u7528\u3044\u3066\u3001\u8CB4\u5E97\u306E\u4FE1\u983C\u5411\u4E0A\u3068\u5186\u6ED1\u306A\u5E97\u8217\u904B\u55B6\u306B\u8CA2\u732E\u3057\u305F\u3044\u3068\u8003\u3048\u5FD7\u671B\u3044\u305F\u3057\u307E\u3057\u305F\u3002`;
+      return {
+        success: true,
+        polishedJa,
+        explanationBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u09AE\u09C2\u09B2 \u09AC\u0995\u09CD\u09A4\u09AC\u09CD\u09AF \u09AC\u099C\u09BE\u09DF \u09B0\u09C7\u0996\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u0995\u09B0\u09AA\u09CB\u09B0\u09C7\u099F \u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1 Kenjougo (\u09A8\u09AE\u09CD\u09B0 \u09AD\u09BE\u09B7\u09BE) \u0993 Teineigo \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09C7\u099B\u09C7\u0964",
+        formalityLevel: "Business Kenjougo"
+      };
+    } else if (req.fieldType === "career_summary") {
+      const clean = trimmed.replace(/[。！？\.\!\?]+$/, "");
+      const polishedJa = clean ? `\u3053\u308C\u307E\u3067\u306E\u30AD\u30E3\u30EA\u30A2\u306B\u304A\u3044\u3066\u3001${clean}\u3092\u4E2D\u5FC3\u3068\u3057\u305F\u5B9F\u52D9\u7D4C\u9A13\u3092\u7A4D\u307F\u3001\u54C1\u8CEA\u5411\u4E0A\u3068\u30C1\u30FC\u30E0\u306E\u8AB2\u984C\u89E3\u6C7A\u306B\u52AA\u3081\u3066\u307E\u3044\u308A\u307E\u3057\u305F\u3002\u7570\u6587\u5316\u74B0\u5883\u306B\u304A\u3044\u3066\u3082\u5186\u6ED1\u306A\u30B3\u30DF\u30E5\u30CB\u30B1\u30FC\u30B7\u30E7\u30F3\u3092\u4FDD\u3061\u3001\u696D\u52D9\u306E\u52B9\u7387\u5316\u3068\u7D44\u7E54\u306E\u6210\u679C\u5275\u51FA\u306B\u4E3B\u4F53\u7684\u306B\u5BC4\uC5EC\u3057\u3066\u307E\u3044\u308A\u307E\u3059\u3002` : `\u3053\u308C\u307E\u3067\u306E\u5B9F\u52D9\u306B\u304A\u3044\u3066\u3001\u8FC5\u901F\u306A\u8AB2\u984C\u89E3\u6C7A\u3068\u30C1\u30FC\u30E0\u9023\u643A\u3092\u6700\u512A\u5148\u306B\u53D6\u308A\u7D44\u3093\u3067\u307E\u3044\u308A\u307E\u3057\u305F\u3002\u65E5\u672C\u8A9E\u80FD\u529B\u306E\u5411\u4E0A\u306B\u65E5\u3005\u52B1\u307F\u3064\u3064\u3001\u6B63\u78BA\u306A\u5831\u9023\u76F8\uFF08\u5831\u544A\u30FB\u9023\u7D61\u30FB\u76F8\u8AC7\uFF09\u3092\u5FB9\u5E95\u3057\u3001\u8CB4\u793E\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u63A8\u9032\u306B\u5373\u6226\u529B\u3068\u3057\u3066\u8CA2\u732E\u3044\u305F\u3057\u307E\u3059\u3002`;
+      return {
+        success: true,
+        polishedJa,
+        explanationBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09B0\u09CD\u09AE\u0985\u09AD\u09BF\u099C\u09CD\u099E\u09A4\u09BE\u09B0 \u09B8\u09BE\u09B0\u09BE\u0982\u09B6\u0995\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1 \u8077\u52D9\u7D4C\u6B74\u66F8 (Shokumu Keirekisho) \u098F\u0995\u09CD\u09B8\u09BF\u0995\u09BF\u0989\u099F\u09BF\u09AD \u09AB\u09B0\u09AE\u09CD\u09AF\u09BE\u099F\u09C7 \u09AA\u09B2\u09BF\u09B6 \u0995\u09B0\u09BE \u09B9\u09DF\u09C7\u099B\u09C7\u0964",
+        formalityLevel: "Executive Keigo"
+      };
+    } else {
+      const clean = trimmed.replace(/[。！？\.\!\?]+$/, "");
+      const polishedJa = clean ? `\u79C1\u306E\u9577\u6240\u306F\u3001${clean}\u3068\u3044\u3046\u70B9\u306B\u3042\u308A\u307E\u3059\u3002\u56F0\u96E3\u306A\u8AB2\u984C\u306B\u5BFE\u3057\u3066\u3082\u7C98\u308A\u5F37\u304F\u8AA0\u5B9F\u306B\u5411\u304D\u5408\u3044\u3001\u6642\u9593\u53B3\u5B88\u3068\u660E\u77AD\u306A\u6328\u62F6\u3092\u4FE1\u6761\u3068\u3057\u3066\u304A\u308A\u307E\u3059\u3002\u5468\u56F2\u3068\u5354\u8ABF\u3057\u306A\u304C\u3089\u81EA\u767A\u7684\u306B\u884C\u52D5\u3057\u3001\u8CB4\u793E\u306E\u4FE1\u983C\u306B\u5FDC\u3048\u308B\u3079\u304F\u5168\u529B\u3067\u8077\u52D9\u306B\u9081\u9032\u3044\u305F\u3057\u307E\u3059\u3002` : `\u79C1\u306E\u6700\u5927\u306E\u9577\u6240\u306F\u3001\u7570\u6587\u5316\u74B0\u5883\u306B\u304A\u3051\u308B\u9AD8\u3044\u9069\u5FDC\u529B\u3068\u8AA0\u5B9F\u306A\u7D99\u7D9A\u529B\u3067\u3059\u3002\u6642\u9593\u53B3\u5B88\u3068\u660E\u77AD\u306A\u6328\u62F6\u3092\u4FE1\u6761\u3068\u3057\u3001\u4F55\u4E8B\u306B\u3082\u8CAC\u4EFB\u611F\u3092\u6301\u3063\u3066\u7C98\u308A\u5F37\u304F\u53D6\u308A\u7D44\u307F\u307E\u3059\u3002\u30C1\u30FC\u30E0\u306E\u4E00\u54E1\u3068\u3057\u3066\u5354\u8ABF\u6027\u3092\u767A\u63EE\u3057\u3001\u5186\u6ED1\u306A\u696D\u52D9\u9042\u884C\u306B\u8CA2\u732E\u3044\u305F\u3057\u307E\u3059\u3002`;
+      return {
+        success: true,
+        polishedJa,
+        explanationBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u09A4\u09CD\u09AE\u09AA\u09B0\u09BF\u099A\u09DF \u0993 \u09B6\u0995\u09CD\u09A4\u09BF\u0995\u09C7 \u0986\u0995\u09B0\u09CD\u09B7\u09A3\u09C0\u09DF, \u09AE\u09BE\u09B0\u09CD\u099C\u09BF\u09A4 \u098F\u09AC\u0982 \u09AC\u09BF\u09B6\u09CD\u09AC\u09BE\u09B8\u09AF\u09CB\u0997\u09CD\u09AF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09C7\u099B\u09C7\u0964",
+        formalityLevel: "Professional Teineigo"
+      };
+    }
+  };
+  if (!client || !trimmed) {
+    return getFallback();
+  }
+  const prompt = `
+You are the Executive Japanese Business & Keigo Consultant for NIHOMI.COM in Tokyo.
+Refine and polish the applicant's raw input for an official Japanese JIS Resume (\u5C65\u6B74\u66F8) or Career Details (\u8077\u52D9\u7D4C\u6B74\u66F8).
+
+Input Draft: "${trimmed}"
+Field Type: "${req.fieldType}" (${req.fieldType === "motivation" ? "\u5FD7\u671B\u52D5\u6A5F / Reason for Application" : req.fieldType === "career_summary" ? "\u8077\u52D9\u8981\u7D04 / Career Summary" : "\u81EA\u5DF1PR / Self PR"})
+Target Role: "${req.targetRole || "General employment / IT / Baito in Japan"}"
+
+Requirements:
+1. Elevate into authentic, flawless Japanese business Keigo (\u8B19\u8B72\u8A9E\u30FB\u5C0A\u656C\u8A9E\u30FB\u4E01\u5BE7\u8A9E).
+2. Maintain humble yet confident demeanor showing strong work ethic, punctuality (\u6642\u9593\u53B3\u5B88), and trustworthiness (\u4FE1\u983C\u6027).
+3. Do not invent false experience; amplify their stated strengths naturally.
+4. Provide a 1-2 sentence Bengali (\u09AC\u09BE\u0982\u09B2\u09BE) explanation of the improvements made.
+5. Return JSON only:
+{
+  "polishedJa": "elevated Japanese text",
+  "explanationBn": "Bengali explanation of the polished nuances",
+  "formalityLevel": "Business Formal (\u8B19\u8B72\u8A9E\u30FB\u4E01\u5BE7\u8A9E)"
+}
+`;
+  for (const modelName of CANDIDATE_MODELS) {
+    try {
+      const res = await client.models.generateContent({
+        model: modelName,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: {
+          responseMimeType: "application/json",
+          temperature: 0.3
+        }
+      });
+      const txt = res.text?.trim();
+      if (txt) {
+        const cleaned = txt.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+        const parsed = JSON.parse(cleaned);
+        if (parsed.polishedJa && parsed.polishedJa.length > 10) {
+          return {
+            success: true,
+            polishedJa: parsed.polishedJa,
+            explanationBn: parsed.explanationBn || "\u0986\u09AA\u09A8\u09BE\u09B0 \u09AE\u09C2\u09B2 \u0989\u09A6\u09CD\u09A6\u09C7\u09B6\u09CD\u09AF \u09AC\u099C\u09BE\u09DF \u09B0\u09C7\u0996\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u0995\u09B0\u09AA\u09CB\u09B0\u09C7\u099F \u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1 \u0995\u09C7\u0987\u0997\u09CB\u09A4\u09C7 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09C7\u099B\u09C7\u0964",
+            formalityLevel: parsed.formalityLevel || "Business Formal"
+          };
+        }
+      }
+    } catch (err) {
+      console.warn(`[KeigoPolisher] Model ${modelName} call failed:`, err.message);
+    }
+  }
+  return getFallback();
 }
 
 // server/middleware/aiCostGuard.ts
@@ -67148,8 +67336,8 @@ paymentRouter.get("/manual/instructions", (_req, res) => {
       },
       {
         id: "n5_lifetime",
-        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u09AA\u09BE\u09B8",
-        amountBdt: 1499,
+        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u09AA\u09BE\u09B8 (\u09AC\u09BF\u09B6\u09C7\u09B7 \u099B\u09BE\u09DC)",
+        amountBdt: 499,
         interval: "lifetime"
       }
     ],
@@ -86554,12 +86742,42 @@ baitoSimulationRouter.post("/rirekisho/save", optionalAuth2, (req, res) => {
     message: "Rirekisho saved successfully"
   });
 });
-baitoSimulationRouter.post("/rirekisho/polish", optionalAuth2, (req, res) => {
-  const { text, fieldType } = req.body;
-  const polished = db.polishRirekishoText(text || "", fieldType || "motivation");
+baitoSimulationRouter.post("/rirekisho/polish", optionalAuth2, async (req, res) => {
+  const { text, fieldType, targetRole } = req.body;
+  try {
+    const polished = await processKeigoPolisherRequest({
+      text: text || "",
+      fieldType: fieldType || "motivation",
+      targetRole: targetRole || "Japan Workplace Candidate"
+    });
+    return res.json({
+      success: true,
+      ...polished
+    });
+  } catch (err) {
+    console.warn("[bKash/Baito] Falling back to procedural Keigo template:", err.message);
+    const fallback = db.polishRirekishoText(text || "", fieldType || "motivation");
+    return res.json({
+      success: true,
+      ...fallback
+    });
+  }
+});
+baitoSimulationRouter.get("/keirekisho", optionalAuth2, (req, res) => {
+  const userId = req.user?.id || "usr_default";
+  const keirekisho = db.getKeirekisho(userId);
   return res.json({
     success: true,
-    ...polished
+    keirekisho
+  });
+});
+baitoSimulationRouter.post("/keirekisho/save", optionalAuth2, (req, res) => {
+  const userId = req.user?.id || "usr_default";
+  const updated = db.saveKeirekisho(userId, req.body);
+  return res.json({
+    success: true,
+    keirekisho: updated,
+    message: "Shokumu Keirekisho saved successfully"
   });
 });
 

@@ -384,8 +384,8 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
       },
       {
         id: 'n5_lifetime',
-        nameBn: 'N5 লাইফটাইম পাস',
-        amountBdt: 1499,
+        nameBn: 'N5 লাইফটাইম পাস (বিশেষ ছাড়)',
+        amountBdt: 499,
         interval: 'lifetime',
       },
     ],

@@ -99,6 +99,7 @@ import {
   BaitoInterviewMessage,
   BaitoEvaluationResponse,
   JisRirekishoData,
+  ShokumuKeirekishoData,
   ConbiniPosProduct,
   ConbiniCustomerOrder,
   BaitoScenarioType,
@@ -138,7 +139,8 @@ import {
   INITIAL_BAITO_SCENARIOS,
   INITIAL_CONBINI_PRODUCTS,
   INITIAL_CONBINI_ORDERS,
-  INITIAL_DEFAULT_RIREKISHO
+  INITIAL_DEFAULT_RIREKISHO,
+  INITIAL_DEFAULT_KEIREKISHO
 } from './baitoSeedData.js';
 import { ContentDiffService } from './services/contentDiffService.js';
 import { prisma, isDatabaseConfigured } from './prisma.js';
@@ -532,6 +534,7 @@ class Database {
     conbiniProducts: INITIAL_CONBINI_PRODUCTS,
     conbiniOrders: INITIAL_CONBINI_ORDERS,
     rirekishoProfiles: [INITIAL_DEFAULT_RIREKISHO],
+    keirekishoProfiles: [INITIAL_DEFAULT_KEIREKISHO],
 
     // Adaptive SRS & Learner Telemetry
     srsCards: [],
@@ -7459,6 +7462,54 @@ class Database {
         updatedAt: new Date().toISOString()
       };
       this.data.rirekishoProfiles.push(updated);
+    }
+    this.save();
+    return updated;
+  }
+
+  public getKeirekisho(userId: string): ShokumuKeirekishoData {
+    if (!this.data.keirekishoProfiles) {
+      this.data.keirekishoProfiles = [];
+    }
+    let found = this.data.keirekishoProfiles.find((k) => k.userId === userId);
+    if (!found) {
+      const userProfile = this.getProfileByUserId(userId);
+      found = {
+        ...INITIAL_DEFAULT_KEIREKISHO,
+        id: `keirekisho-${userId}`,
+        userId,
+        fullName: userProfile?.displayName || 'Nihomi Professional Candidate',
+        updatedAt: new Date().toISOString()
+      };
+      this.data.keirekishoProfiles.push(found);
+      this.save();
+    }
+    return found;
+  }
+
+  public saveKeirekisho(userId: string, updateData: Partial<ShokumuKeirekishoData>): ShokumuKeirekishoData {
+    if (!this.data.keirekishoProfiles) {
+      this.data.keirekishoProfiles = [];
+    }
+    const idx = this.data.keirekishoProfiles.findIndex((k) => k.userId === userId);
+    let updated: ShokumuKeirekishoData;
+    if (idx >= 0) {
+      updated = {
+        ...this.data.keirekishoProfiles[idx],
+        ...updateData,
+        userId,
+        updatedAt: new Date().toISOString()
+      };
+      this.data.keirekishoProfiles[idx] = updated;
+    } else {
+      updated = {
+        ...INITIAL_DEFAULT_KEIREKISHO,
+        ...updateData,
+        id: `keirekisho-${userId}`,
+        userId,
+        updatedAt: new Date().toISOString()
+      };
+      this.data.keirekishoProfiles.push(updated);
     }
     this.save();
     return updated;

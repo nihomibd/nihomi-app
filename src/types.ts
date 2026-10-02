@@ -1301,6 +1301,41 @@ export interface JisRirekishoData {
   updatedAt: string;
 }
 
+export interface ShokumuProjectItem {
+  id: string;
+  startDate: string;
+  endDate: string;
+  companyName: string;
+  department: string;
+  role: string;
+  businessSummary: string;
+  responsibilities: string[];
+  achievements: string[];
+  technologiesUsed: string[];
+}
+
+export interface ShokumuKeirekishoData {
+  id: string;
+  userId: string;
+  fullName: string;
+  submissionDate: string;
+  careerSummary: string;
+  careerSummaryPolished?: string;
+  technicalSkills: Array<{
+    category: string;
+    skills: string[];
+    yearsOfExperience?: string;
+  }>;
+  certifications: Array<{
+    date: string;
+    title: string;
+  }>;
+  projects: ShokumuProjectItem[];
+  selfPr: string;
+  selfPrPolished?: string;
+  updatedAt: string;
+}
+
 export interface ConbiniPosProduct {
   id: string;
   barcode: string;

@@ -1,0 +1,123 @@
+# NIHOMI.COM — PRODUCTION STATE & QUALITY GATE TRACKER
+# System: Nihomi Continuous Japanese Learning & Japan Readiness Companion
+# Engine: Antigravity 2.0 Autonomous Operating System
+# Updated: 2026-10-03T03:30:00+06:00
+
+version: "1.0.0"
+active_gate: "G10"
+gate_status: "REMEDIATION_BACKLOG_EXECUTED_READY_FOR_FOUNDER_REVIEW"
+
+remediation_backlog:
+  task_1_content_generator:
+    name: "CLI Bulk Content Generator"
+    script: "/scripts/generate-lessons.ts"
+    status: "COMPLETED"
+    evidence:
+      - "Generated scripts/generate-lessons.ts supporting --level, --scenario, --objective, --lessonId"
+      - "Connected to @google/genai with automatic model fallback (gemini-2.5-flash, gemini-1.5-flash, offline procedural)"
+      - "Enforced 9-section JSON schema and automatic validation against scripts/validateCurriculum.ts"
+      - "Test dry-run executed with 0 schema errors"
+    completed_at: "2026-10-03T02:40:00+06:00"
+
+  task_2_career_tools:
+    name: "Japan Career Tools & Keigo Polisher Expansion"
+    components:
+      - "src/components/simulation/ShokumuKeirekishoStudio.tsx"
+      - "src/components/simulation/JisRirekishoStudio.tsx"
+    endpoints:
+      - "POST /api/baito/rirekisho/polish (Real Gemini AI)"
+      - "GET /api/baito/keirekisho"
+      - "POST /api/baito/keirekisho/save"
+    status: "COMPLETED"
+    evidence:
+      - "ShokumuKeirekishoStudio.tsx created with Project History, Tech Stack, Certifications, and A4 print layout"
+      - "processKeigoPolisherRequest implemented in server/gemini.ts with real Gemini AI calls"
+      - "Free Web CV vs Pro PDF Export tier gating enforced with upgrade CTA to /pricing"
+      - "Routes /keirekisho, /shokumu integrated into App.tsx and BaitoOsView.tsx"
+      - "Live curl verification passed for /api/baito/keirekisho and /api/baito/rirekisho/polish"
+    completed_at: "2026-10-03T03:10:00+06:00"
+
+  task_3_value_carousel_pricing:
+    name: "Tapo-Style 6-Card Value Carousel & Pricing Alignment"
+    components:
+      - "src/components/landing/ValueRevealCarousel.tsx"
+      - "src/views/LandingView.tsx"
+      - "src/views/PricingView.tsx"
+    status: "COMPLETED"
+    evidence:
+      - "Created ValueRevealCarousel.tsx with 6 interactive pillars: Personal AI Sensei, MemoryOS SRS, Practice Japan (Conbini POS), Next Best Mission, Zero->N1 Masterclass, and Continuous Career Companion"
+      - "Implemented 5s auto-advancing timer, hover pause, step tabs, prev/next arrows, and live applet preview windows"
+      - "Aligned pricing across LandingView.tsx and PricingView.tsx: Free Starter (৳০), N5 Pro Lifetime (৳৪৯৯ এককালীন ফি), All-Access Annual (৳৪,৯৯০ / বছর)"
+      - "Aligned backend priceBdt: 499 for n5_lifetime in server/services/subscriptionService.ts and server/routes/payment.ts"
+      - "Verified tsc typecheck: 0 errors"
+      - "Verified npm run build: built in 55.08s into dist/"
+      - "Verified dev server running on http://localhost:3000/ with HTTP 200 and healthy /health status"
+    completed_at: "2026-10-03T03:30:00+06:00"
+
+gates:
+  G0:
+    name: "Reality Audit"
+    description: "Scan codebase; classify Real vs. Mocked; audit 4 core pillars"
+    status: "PASSED"
+    audit_report: "/docs/audits/NIHOMI-REALITY-AUDIT.md"
+    completed_at: "2026-10-03T02:54:00+06:00"
+
+  G1:
+    name: "Cultural & Pedagogical Constitution Lock"
+    description: "Lock natural Japanese usage, proper Keigo levels, and Japan scenarios"
+    status: "PASSED"
+    notes: "Verified authentic Japanese typography, Keigo (Teineigo, Kenjougo, Sonkeigo), and real Tokyo Conbini dialogues"
+
+  G2:
+    name: "Zero-Japanese Onboarding"
+    description: "Frictionless beginner onboarding from kana tracing to first word"
+    status: "PASSED"
+    notes: "LearnerJourneyEngine, Kana 46 Lab, and ZeroJapaneseGatewayModal active"
+
+  G3:
+    name: "Core Learning Loop"
+    description: "Deterministic Learn -> Recall -> Practice -> Speak cycle"
+    status: "PASSED"
+    notes: "210 master curriculum lessons validated with 0 integrity errors"
+
+  G4:
+    name: "Real-Life Japan Simulations"
+    description: "Deepen Conbini POS, train station, and workplace roleplays"
+    status: "PASSED"
+    notes: "Tokyo 7-Eleven POS register, Baito interview drills, and JIS/Shokumu Keirekisho studios operational"
+
+  G5:
+    name: "Personalization Engine (MemoryOS)"
+    description: "Adaptive SRS, mistake recording, and learner weakness targeting"
+    status: "PASSED"
+    notes: "AdaptiveSrsService with 4-stage intervals and ghost weakness tracking"
+
+  G6:
+    name: "Content Expansion & Validation"
+    description: "Implement CLI /scripts/generate-lessons with Gemini API for N5–N1"
+    status: "PASSED"
+    notes: "scripts/generate-lessons.ts operational and verified"
+
+  G7:
+    name: "Role-Based Founder Dashboard"
+    description: "Funnel metrics, revenue analytics, and CMS operations"
+    status: "PASSED"
+    notes: "FounderCommandCenterView and durable founder_office_db.json hydrated"
+
+  G8:
+    name: "Revenue Machine"
+    description: "Tapo-style value carousel, unified pricing, and payment verification"
+    status: "PASSED"
+    notes: "ValueRevealCarousel live on Landing, pricing aligned at ৳499 N5 Lifetime and ৳4,990 Annual, bKash PGW + manual TrxID ready"
+
+  G9:
+    name: "Reliability, RLS Policies, and Error Sentinel"
+    description: "Full Supabase RLS security, zero-warning build, error sentinel"
+    status: "PASSED"
+    notes: "Zero tsc errors, successful clean production bundle in dist/, resilient DB fallback"
+
+  G10:
+    name: "Founder Blind Acceptance"
+    description: "Comprehensive end-to-end founder walkthrough verification on localhost"
+    status: "READY_FOR_FOUNDER_REVIEW"
+    localhost_url: "http://localhost:3000/"

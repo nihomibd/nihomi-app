@@ -24,12 +24,15 @@ import {
   Check,
   Briefcase,
   ArrowRight,
-  Loader2
+  Loader2,
+  Lock,
+  Crown
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { JisRirekishoData } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
+import { useAuth } from '../../context/AuthContext';
 
 const DEFAULT_JIS_RIREKISHO: JisRirekishoData = {
   id: 'rirekisho-default',
@@ -85,6 +88,9 @@ interface JisRirekishoStudioProps {
 }
 
 export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved, onNavigate }) => {
+  const { activePlanId } = useAuth();
+  const isPro = activePlanId !== 'free';
+
   const [formData, setFormData] = useState<JisRirekishoData>(() => {
     try {
       const saved = localStorage.getItem('nihomi_jis_rirekisho');
@@ -183,6 +189,12 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
   const handleDownloadPdf = async () => {
     soundEffects.playButtonTap();
+
+    if (!isPro) {
+      setShowLeadMagnetModal(true);
+      return;
+    }
+
     setIsGeneratingPdf(true);
 
     try {
@@ -1229,14 +1241,14 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
             </div>
 
             <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold">
-                JIS RESUME GENERATED (100% FREE)
+              <span className="inline-block px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-bold">
+                JIS RESUME (PRO CAREER EXPORT)
               </span>
               <h3 className="text-xl font-black text-slate-100">
-                আপনার অফিসিয়াল জাপানিজ JIS সিভি সফলভাবে তৈরি হয়েছে!
+                অফিসিয়াল JIS Z 8303 A4 PDF এক্সপোর্ট
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                জাপানে পার্ট-টাইম (Baito) বা ফুল-টাইম জবের ইন্টারভিউতে সফল হতে বেসিক হিরাগানা, কাতাকানা ও কাঞ্জি অনুশীলন করুন।
+                জাপানে পার্ট-টাইম বা ফুল-টাইম জবের জন্য অফিশিয়াল জাপানিজ ফরম্যাটে A4 PDF এক্সপোর্ট, ভেরিফাইড সিল ও আনলিমিটেড AI কেইগো পলিশ আনলক করতে নিহোমি প্রো-তে আপগ্রেড করুন।
               </p>
             </div>
 
@@ -1247,13 +1259,27 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
                   soundEffects.playButtonTap();
                   setShowLeadMagnetModal(false);
                   if (onNavigate) {
-                    onNavigate('kana');
+                    onNavigate('pricing');
                   }
                 }}
                 className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm shadow-xl shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Start Free Kana & Kanji Practice</span>
+                <span>Unlock Pro PDF Export (৳৪৯৯)</span>
                 <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playButtonTap();
+                  setShowLeadMagnetModal(false);
+                  if (onNavigate) {
+                    onNavigate('kana');
+                  }
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition border border-slate-700 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Start Free Kana & Kanji Practice</span>
               </button>
 
               <button

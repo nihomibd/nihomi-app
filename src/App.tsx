@@ -154,6 +154,7 @@ const KNOWN_VIEWS = new Set([
   'baito', 'baito-os', 'simulation', 'relocation', 'workos', 'work-os',
   'interview', 'interview-lab', 'visa-defense',
   'rirekisho', 'cv-builder', 'resume', 'jis-rirekisho',
+  'keirekisho', 'shokumu', 'shokumu-keirekisho',
   'verify-cert', 'verify', 'certificate-verification',
   'kana', 'hiragana', 'katakana', 'kana-lab',
   'kanji', 'kanji-lab', 'kanji-100', 'n5-kanji',
@@ -704,6 +705,12 @@ export const App: React.FC = () => {
           <BaitoOsView
             onNavigate={handleNavigate}
             initialTab="rirekisho"
+          />
+        )}
+        {(currentView === 'keirekisho' || currentView === 'shokumu' || currentView === 'shokumu-keirekisho') && (
+          <BaitoOsView
+            onNavigate={handleNavigate}
+            initialTab="keirekisho"
           />
         )}
         {(currentView === 'verify-cert' || currentView === 'verify' || currentView === 'certificate-verification') && (

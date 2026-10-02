@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
+import { processKeigoPolisherRequest } from '../gemini.js';
 
 export const baitoSimulationRouter = Router();
 
@@ -75,12 +76,47 @@ baitoSimulationRouter.post('/rirekisho/save', optionalAuth, (req: AuthenticatedR
   });
 });
 
-// 8. AI Keigo Polisher for Motivation & Self-PR
-baitoSimulationRouter.post('/rirekisho/polish', optionalAuth, (req: AuthenticatedRequest, res) => {
-  const { text, fieldType } = req.body;
-  const polished = db.polishRirekishoText(text || '', fieldType || 'motivation');
+// 8. AI Keigo Polisher (Powered by Gemini API & Real Business Standards)
+baitoSimulationRouter.post('/rirekisho/polish', optionalAuth, async (req: AuthenticatedRequest, res) => {
+  const { text, fieldType, targetRole } = req.body;
+  try {
+    const polished = await processKeigoPolisherRequest({
+      text: text || '',
+      fieldType: fieldType || 'motivation',
+      targetRole: targetRole || 'Japan Workplace Candidate'
+    });
+    return res.json({
+      success: true,
+      ...polished
+    });
+  } catch (err: any) {
+    console.warn('[bKash/Baito] Falling back to procedural Keigo template:', err.message);
+    const fallback = db.polishRirekishoText(text || '', fieldType || 'motivation');
+    return res.json({
+      success: true,
+      ...fallback
+    });
+  }
+});
+
+// 9. Get Shokumu Keirekisho (職務経歴書) Profile
+baitoSimulationRouter.get('/keirekisho', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  const keirekisho = db.getKeirekisho(userId);
   return res.json({
     success: true,
-    ...polished
+    keirekisho
   });
 });
+
+// 10. Save / Update Shokumu Keirekisho (職務経歴書) Profile
+baitoSimulationRouter.post('/keirekisho/save', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  const updated = db.saveKeirekisho(userId, req.body);
+  return res.json({
+    success: true,
+    keirekisho: updated,
+    message: 'Shokumu Keirekisho saved successfully'
+  });
+});
+

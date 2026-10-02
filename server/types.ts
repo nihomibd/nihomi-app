@@ -1008,6 +1008,7 @@ export interface DatabaseSchema {
   conbiniProducts?: ConbiniPosProduct[];
   conbiniOrders?: ConbiniCustomerOrder[];
   rirekishoProfiles?: JisRirekishoData[];
+  keirekishoProfiles?: ShokumuKeirekishoData[];
 
   // P1-04: Adaptive SRS (Spaced Repetition System) Engine Tables
   srsCards?: SrsCardRecord[];
@@ -1773,6 +1774,41 @@ export interface JisRirekishoData {
   dependentsCount: number;
   hasSpouse: boolean;
   hankoStampUrl?: string;
+  updatedAt: string;
+}
+
+export interface ShokumuProjectItem {
+  id: string;
+  startDate: string;
+  endDate: string;
+  companyName: string;
+  department: string;
+  role: string;
+  businessSummary: string;
+  responsibilities: string[];
+  achievements: string[];
+  technologiesUsed: string[];
+}
+
+export interface ShokumuKeirekishoData {
+  id: string;
+  userId: string;
+  fullName: string;
+  submissionDate: string;
+  careerSummary: string;
+  careerSummaryPolished?: string;
+  technicalSkills: Array<{
+    category: string;
+    skills: string[];
+    yearsOfExperience?: string;
+  }>;
+  certifications: Array<{
+    date: string;
+    title: string;
+  }>;
+  projects: ShokumuProjectItem[];
+  selfPr: string;
+  selfPrPolished?: string;
   updatedAt: string;
 }
 
