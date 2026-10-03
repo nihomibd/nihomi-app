@@ -36,13 +36,13 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     meaningEn: 'Hiragana "a" (MEXT Standard Stroke Order)',
     meaningBn: 'হিরাগানা "আ" (MEXT মানসম্মত স্ট্রোক অর্ডার)',
     writingTipEn: 'Stroke 1: Horizontal line left-to-right. Stroke 2: Vertical crossing line top-to-bottom. Stroke 3: Continuous loop starting from center loop around to bottom right.',
-    writingTipBn: 'স্ট্রোক ১: বাম থেকে ডানে অনুভূমিক দাগ। স্ট্রোক ২: উপর থেকে নিচে ১ম দাগকে ভেদ করে বাঁকানো উলম্ব দাগ। স্ট্রোক ৩: কেন্দ্র থেকে শুরু হয়ে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করা।',
+    writingTipBn: 'টান ১: বাম থেকে ডানে সোজা দাগ। টান ২: উপর থেকে নিচে ১ম দাগ কেটে বাঁকানো খাড়া দাগ। টান ৩: মাঝখান থেকে শুরু করে পেট গোল করে ডানে ঘুরিয়ে শেষ করো।',
     strokes: [
       {
         strokeNumber: 1,
         type: 'Horizontal (横画)',
         descriptionEn: 'Stroke 1: Smooth horizontal crossbar left-to-right',
-        descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ অনুভূমিক দাগ (MEXT)',
+        descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ আড়াআড়ি দাগ (MEXT)',
         path: 'M 26 31 C 38 31 55 29 74 30',
         startPoint: { x: 26, y: 31 },
         direction: 'right'
@@ -51,7 +51,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
         strokeNumber: 2,
         type: 'Vertical Crossing (縦画)',
         descriptionEn: 'Stroke 2: Vertical piercing line with gentle curve',
-        descriptionBn: 'স্ট্রোক ২: উপর থেকে নিচে ১ম দাগ ভেদ করে বাঁকানো উলম্ব দাগ (MEXT)',
+        descriptionBn: 'স্ট্রোক ২: উপর থেকে নিচে ১ম দাগ কেটে বাঁকানো খাড়া দাগ (MEXT)',
         path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84',
         startPoint: { x: 47, y: 16 },
         direction: 'down'
@@ -81,7 +81,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     writingTipBn: 'প্রথমে বামের খাড়া দাগ, এরপর উপরের ডানমুখী বাঁকানো দাগ, মাঝে দাগ এবং শেষে নিচের বন্ধনী।',
     strokes: [
       { strokeNumber: 1, type: 'Vertical', descriptionEn: 'Left vertical bar from top to bottom', descriptionBn: 'বামের খাড়া সোজা দাগ উপর থেকে নিচে', path: 'M 25 20 L 25 80', startPoint: { x: 25, y: 20 }, direction: 'down' },
-      { strokeNumber: 2, type: 'Horizontal-Vertical Fold', descriptionEn: 'Top horizontal then turn sharply down to bottom right', descriptionBn: 'উপরের অনুভূমিক দাগ টেনে ডান থেকে নিচে কোণা করে নামানো', path: 'M 25 20 L 75 20 L 75 80', startPoint: { x: 25, y: 20 }, direction: 'right' },
+      { strokeNumber: 2, type: 'Horizontal-Vertical Fold', descriptionEn: 'Top horizontal then turn sharply down to bottom right', descriptionBn: 'উপরের সোজা দাগ টেনে ডান থেকে নিচে কোণা করে নামানো', path: 'M 25 20 L 75 20 L 75 80', startPoint: { x: 25, y: 20 }, direction: 'right' },
       { strokeNumber: 3, type: 'Horizontal', descriptionEn: 'Middle horizontal line from left to right', descriptionBn: 'মাঝখানের সমান্তরাল দাগ বাম থেকে ডানে', path: 'M 25 50 L 75 50', startPoint: { x: 25, y: 50 }, direction: 'right' },
       { strokeNumber: 4, type: 'Horizontal', descriptionEn: 'Bottom closing horizontal line from left to right', descriptionBn: 'নিচের সমান্তরাল দাগ বাম থেকে ডানে জুড়ে বন্ধ করা', path: 'M 25 80 L 75 80', startPoint: { x: 25, y: 80 }, direction: 'right' }
     ]
@@ -97,13 +97,13 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     meaningEn: 'Book / Origin / Main',
     meaningBn: 'বই / মূল / উৎস',
     writingTipEn: 'Write 木 (Tree) first, then add the short horizontal stroke across the trunk to mark origin.',
-    writingTipBn: 'আগে 木 (গাছ) লিখুন, তারপর কান্ডের মাঝ বরাবর ছোট অনুভূমিক দাগ দিয়ে মূল বোঝান।',
+    writingTipBn: 'আগে 木 (গাছ) লেখো, তারপর কান্ডের মাঝ বরাবর ছোট আড়াআড়ি দাগ দিয়ে মূল বোঝাও।',
     strokes: [
       { strokeNumber: 1, type: 'Horizontal', descriptionEn: 'Upper horizontal bar left to right', descriptionBn: 'উপরের সমান্তরাল দাগ বাম থেকে ডানে', path: 'M 20 32 L 80 32', startPoint: { x: 20, y: 32 }, direction: 'right' },
       { strokeNumber: 2, type: 'Vertical Hook', descriptionEn: 'Central vertical pillar straight down', descriptionBn: 'মাঝের মূল খাড়া দাগ উপর থেকে নিচে', path: 'M 50 15 L 50 85', startPoint: { x: 50, y: 15 }, direction: 'down' },
       { strokeNumber: 3, type: 'Left Slant', descriptionEn: 'Diagonal sweep sweeping out to lower left', descriptionBn: 'বাঁকা দাগ মাঝ থেকে বামে ছড়িয়ে পড়া', path: 'M 50 32 Q 35 55 18 75', startPoint: { x: 50, y: 32 }, direction: 'down-left' },
       { strokeNumber: 4, type: 'Right Slant', descriptionEn: 'Diagonal stroke sweeping out to lower right', descriptionBn: 'বাঁকা দাগ মাঝ থেকে ডানে ছড়িয়ে পড়া', path: 'M 50 32 Q 65 55 82 75', startPoint: { x: 50, y: 32 }, direction: 'down-right' },
-      { strokeNumber: 5, type: 'Short Horizontal', descriptionEn: 'Short horizontal indicator across lower trunk', descriptionBn: 'কান্ডের নিচে ছোট অনুভূমিক দাগ', path: 'M 32 66 L 68 66', startPoint: { x: 32, y: 66 }, direction: 'right' }
+      { strokeNumber: 5, type: 'Short Horizontal', descriptionEn: 'Short horizontal indicator across lower trunk', descriptionBn: 'কান্ডের নিচে ছোট আড়াআড়ি দাগ', path: 'M 32 66 L 68 66', startPoint: { x: 32, y: 66 }, direction: 'right' }
     ]
   },
   '人': {
@@ -159,7 +159,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
       { strokeNumber: 2, type: 'Dot Slant', descriptionEn: 'Top middle dot slanted right', descriptionBn: 'মাঝের বিন্দু ডানে বাঁকানো', path: 'M 50 12 L 50 25', startPoint: { x: 50, y: 12 }, direction: 'down' },
       { strokeNumber: 3, type: 'Dot Slant', descriptionEn: 'Top right dot angled left', descriptionBn: 'উপরের ডান পাশের বিন্দু', path: 'M 72 15 L 65 27', startPoint: { x: 72, y: 15 }, direction: 'down-left' },
       { strokeNumber: 4, type: 'Crown Left', descriptionEn: 'Roof left vertical drop', descriptionBn: 'ছাদের বাম পাশের ছোট দাগ', path: 'M 22 34 L 20 44', startPoint: { x: 22, y: 34 }, direction: 'down' },
-      { strokeNumber: 5, type: 'Crown Roof Fold', descriptionEn: 'Roof horizontal fold with hook', descriptionBn: 'ছাদের অনুভূমিক দাগ ডানে ও হুকসহ নামা', path: 'M 20 36 L 80 36 L 76 46', startPoint: { x: 20, y: 36 }, direction: 'hook' },
+      { strokeNumber: 5, type: 'Crown Roof Fold', descriptionEn: 'Roof horizontal fold with hook', descriptionBn: 'ছাদের আড়াআড়ি দাগ ডানে ও হুকসহ নামা', path: 'M 20 36 L 80 36 L 76 46', startPoint: { x: 20, y: 36 }, direction: 'hook' },
       { strokeNumber: 6, type: 'Child Top Hook', descriptionEn: 'Top hook of child radical', descriptionBn: '子 র উপরের হুক ও বাঁক', path: 'M 38 52 L 62 52 L 40 68', startPoint: { x: 38, y: 52 }, direction: 'right' },
       { strokeNumber: 7, type: 'Curved Spine Hook', descriptionEn: 'Curved central spine of child ending in upward hook', descriptionBn: '子 র মাঝের বাঁকা মেরুদণ্ড ও উপরের দিকে হুক', path: 'M 50 64 Q 60 76 56 86 Q 52 92 42 90', startPoint: { x: 50, y: 64 }, direction: 'hook' },
       { strokeNumber: 8, type: 'Horizontal Bar', descriptionEn: 'Long horizontal crossbar cutting through child', descriptionBn: '子 র পেট বরাবর লম্বা সমান্তরাল দাগ', path: 'M 18 68 L 84 68', startPoint: { x: 18, y: 68 }, direction: 'right' }
@@ -176,7 +176,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     meaningEn: 'Life / Birth / Genuine',
     meaningBn: 'জীবন / জন্ম / ছাত্র (学生)',
     writingTipEn: 'Top-left slant first, top horizontal, central vertical, middle horizontal, then long bottom base.',
-    writingTipBn: 'উপরের বামের বাঁকা দাগ, ১ম অনুভূমিক, মাঝের খাড়া দাগ, ২য় অনুভূমিক, সবশেষে নিচের লম্বা দাগ।',
+    writingTipBn: 'উপরের বামের বাঁকা দাগ, ১ম আড়াআড়ি, মাঝের খাড়া দাগ, ২য় আড়াআড়ি, সবশেষে নিচের লম্বা দাগ।',
     strokes: [
       { strokeNumber: 1, type: 'Left Slant', descriptionEn: 'Top left slant stroke', descriptionBn: 'উপরের বামের বাঁকা স্ট্রোক', path: 'M 40 16 L 25 36', startPoint: { x: 40, y: 16 }, direction: 'down-left' },
       { strokeNumber: 2, type: 'Horizontal', descriptionEn: 'Top horizontal line', descriptionBn: 'উপরের ১ম সমান্তরাল দাগ', path: 'M 30 35 L 75 35', startPoint: { x: 30, y: 35 }, direction: 'right' },
@@ -196,12 +196,12 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     meaningEn: 'Previous / Ahead / Future',
     meaningBn: 'পূর্ববর্তী / আগে / শিক্ষক (先生)',
     writingTipEn: 'Short top slant, horizontal bar, vertical center, long horizontal bar, then two curved legs below.',
-    writingTipBn: 'ছোট বাঁকা দাগ, অনুভূমিক, খাড়া দাগ, নিচের লম্বা অনুভূমিক, এরপর নিচের দুই পা।',
+    writingTipBn: 'ছোট বাঁকা দাগ, আড়াআড়ি দাগ, খাড়া দাগ, নিচের লম্বা আড়াআড়ি দাগ, এরপর নিচের দুই পা।',
     strokes: [
       { strokeNumber: 1, type: 'Left Slant', descriptionEn: 'Top left slant tick', descriptionBn: 'উপরের ছোট বাঁকা দাগ', path: 'M 48 12 L 36 26', startPoint: { x: 48, y: 12 }, direction: 'down-left' },
       { strokeNumber: 2, type: 'Horizontal', descriptionEn: 'Upper horizontal bar', descriptionBn: 'উপরের সমান্তরাল দাগ', path: 'M 26 28 L 74 28', startPoint: { x: 26, y: 28 }, direction: 'right' },
       { strokeNumber: 3, type: 'Vertical', descriptionEn: 'Short central vertical drop', descriptionBn: 'মাঝের ছোট খাড়া দাগ', path: 'M 50 28 L 50 48', startPoint: { x: 50, y: 28 }, direction: 'down' },
-      { strokeNumber: 4, type: 'Horizontal Base', descriptionEn: 'Long middle crossbar', descriptionBn: 'মাঝখানের দীর্ঘ অনুভূমিক দাগ', path: 'M 16 48 L 84 48', startPoint: { x: 16, y: 48 }, direction: 'right' },
+      { strokeNumber: 4, type: 'Horizontal Base', descriptionEn: 'Long middle crossbar', descriptionBn: 'মাঝখানের লম্বা আড়াআড়ি দাগ', path: 'M 16 48 L 84 48', startPoint: { x: 16, y: 48 }, direction: 'right' },
       { strokeNumber: 5, type: 'Left Leg Slant', descriptionEn: 'Left leg sweeping down-left', descriptionBn: 'বাম পা নিচের বামে বাঁকা হয়ে নামা', path: 'M 42 50 Q 36 68 20 86', startPoint: { x: 42, y: 50 }, direction: 'down-left' },
       { strokeNumber: 6, type: 'Right Curved Leg', descriptionEn: 'Right leg curving down and hooking up', descriptionBn: 'ডান পা নিচে নেমে ডানে বাঁকিয়ে উপরে হুক', path: 'M 54 50 L 54 75 Q 54 86 68 86 Q 78 86 82 78', startPoint: { x: 54, y: 50 }, direction: 'hook' }
     ]
@@ -244,7 +244,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
       { strokeNumber: 2, type: 'Horizontal Fold', descriptionEn: 'Horizontal then fold down-left', descriptionBn: 'সমান্তরাল হয়ে নিচের দিকে বাঁকা', path: 'M 18 36 L 38 36 L 24 60', startPoint: { x: 18, y: 36 }, direction: 'down-left' },
       { strokeNumber: 3, type: 'Vertical Spine', descriptionEn: 'Vertical spine of left radical', descriptionBn: 'বামের অংশের মূল খাড়া দাগ', path: 'M 28 42 L 28 86', startPoint: { x: 28, y: 42 }, direction: 'down' },
       { strokeNumber: 4, type: 'Right Dot', descriptionEn: 'Right tick of left radical', descriptionBn: 'বামের অংশের ডানপাশের ছোট বিন্দু', path: 'M 34 52 L 42 66', startPoint: { x: 34, y: 52 }, direction: 'down-right' },
-      { strokeNumber: 5, type: 'Horizontal', descriptionEn: 'Right 土 top horizontal', descriptionBn: 'ডানের 土 র উপরের অনুভূমিক দাগ', path: 'M 52 42 L 80 42', startPoint: { x: 52, y: 42 }, direction: 'right' },
+      { strokeNumber: 5, type: 'Horizontal', descriptionEn: 'Right 土 top horizontal', descriptionBn: 'ডানের 土 র উপরের আড়াআড়ি দাগ', path: 'M 52 42 L 80 42', startPoint: { x: 52, y: 42 }, direction: 'right' },
       { strokeNumber: 6, type: 'Vertical Center', descriptionEn: 'Right 土 central vertical pillar', descriptionBn: 'ডানের 土 র মাঝখানের খাড়া দাগ', path: 'M 66 22 L 66 84', startPoint: { x: 66, y: 22 }, direction: 'down' },
       { strokeNumber: 7, type: 'Horizontal Base', descriptionEn: 'Right 土 long base line', descriptionBn: 'ডানের 土 র দীর্ঘ ভিত্তি রেখা', path: 'M 46 84 L 88 84', startPoint: { x: 46, y: 84 }, direction: 'right' }
     ]
@@ -260,7 +260,7 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     meaningEn: 'Big / Large / Great',
     meaningBn: 'বড় / বিশাল',
     writingTipEn: 'Horizontal bar first, then center stroke sweeps left, then third stroke sweeps right.',
-    writingTipBn: 'আগে অনুভূমিক দাগ, এরপর মাঝের দাগ বামে ছড়িয়ে পড়া, এবং ৩য় দাগ ডানে ছড়িয়ে পড়া।',
+    writingTipBn: 'আগে আড়াআড়ি দাগ, এরপর মাঝের দাগ বামে ছড়িয়ে যাওয়া, এবং ৩য় দাগ ডানে ছড়িয়ে যাওয়া।',
     strokes: [
       { strokeNumber: 1, type: 'Horizontal', descriptionEn: 'Broad horizontal bar left to right', descriptionBn: 'বাম থেকে ডানে বিস্তৃত সমান্তরাল দাগ', path: 'M 16 38 L 84 38', startPoint: { x: 16, y: 38 }, direction: 'right' },
       { strokeNumber: 2, type: 'Left Slant', descriptionEn: 'Central vertical curving deeply down-left', descriptionBn: 'মাঝখান থেকে শুরু করে বামে নেমে যাওয়া বাঁকা দাগ', path: 'M 50 16 Q 44 48 18 86', startPoint: { x: 50, y: 16 }, direction: 'down-left' },
@@ -319,10 +319,10 @@ export const KANJI_STROKE_REGISTRY: Record<string, KanjiStrokeInfo> = {
     writingTipEn: 'Top horizontal, two inner upper dots, long middle horizontal, vertical center, two lower slants.',
     writingTipBn: 'উপরের সমান্তরাল দাগ, ভেতরে ২ বিন্দু, দীর্ঘ সমান্তরাল দাগ, খাড়া দাগ, নিচের ২ পা।',
     strokes: [
-      { strokeNumber: 1, type: 'Horizontal', descriptionEn: 'Top horizontal line', descriptionBn: 'উপরের ছোট অনুভূমিক দাগ', path: 'M 28 20 L 72 20', startPoint: { x: 28, y: 20 }, direction: 'right' },
+      { strokeNumber: 1, type: 'Horizontal', descriptionEn: 'Top horizontal line', descriptionBn: 'উপরের ছোট আড়াআড়ি দাগ', path: 'M 28 20 L 72 20', startPoint: { x: 28, y: 20 }, direction: 'right' },
       { strokeNumber: 2, type: 'Left Dot', descriptionEn: 'Inner left dot', descriptionBn: 'ভেতরের বামের বিন্দু', path: 'M 36 28 L 30 38', startPoint: { x: 36, y: 28 }, direction: 'down-left' },
       { strokeNumber: 3, type: 'Right Dot', descriptionEn: 'Inner right dot', descriptionBn: 'ভেতরের ডানের বিন্দু', path: 'M 64 28 L 70 38', startPoint: { x: 64, y: 28 }, direction: 'down-right' },
-      { strokeNumber: 4, type: 'Long Horizontal', descriptionEn: 'Long middle crossbar', descriptionBn: 'মাঝখানের দীর্ঘ অনুভূমিক দাগ', path: 'M 16 45 L 84 45', startPoint: { x: 16, y: 45 }, direction: 'right' },
+      { strokeNumber: 4, type: 'Long Horizontal', descriptionEn: 'Long middle crossbar', descriptionBn: 'মাঝখানের লম্বা আড়াআড়ি দাগ', path: 'M 16 45 L 84 45', startPoint: { x: 16, y: 45 }, direction: 'right' },
       { strokeNumber: 5, type: 'Vertical Pillar', descriptionEn: 'Central vertical pillar straight down', descriptionBn: 'মাঝের মূল খাড়া দাগ', path: 'M 50 20 L 50 86', startPoint: { x: 50, y: 20 }, direction: 'down' },
       { strokeNumber: 6, type: 'Lower Left Slant', descriptionEn: 'Lower left diagonal branch', descriptionBn: 'নিচের বামের বাঁকা ডাল', path: 'M 50 48 Q 36 66 22 84', startPoint: { x: 50, y: 48 }, direction: 'down-left' },
       { strokeNumber: 7, type: 'Lower Right Slant', descriptionEn: 'Lower right diagonal branch', descriptionBn: 'নিচের ডানের বাঁকা ডাল', path: 'M 50 48 Q 64 66 78 84', startPoint: { x: 50, y: 48 }, direction: 'down-right' }

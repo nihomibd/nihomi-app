@@ -15,26 +15,26 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   // HIRAGANA (46 SEION CHARACTERS)
   // ==========================================
   'あ': [
-    { strokeNumber: 1, path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বাম থেকে ডানে মসৃণ অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84', startPoint: { x: 47, y: 16 }, direction: 'down', releaseType: 'harai', instructionBn: '২. উপর থেকে নিচে ১ম দাগ ভেদ করে বাঁকানো উলম্ব দাগ' },
-    { strokeNumber: 3, path: 'M 60.2 40.5 C 60.9 41.5 61.3 44.5 60.7 46.1 C 56.4 57.3 50.4 67.9 37.4 78.9 C 31.1 84.2 22.8 82.3 22.5 71.2 C 22.2 61.2 34.8 50.0 52.2 46.7 C 63.6 44.5 77.0 47.9 80.2 58.4 C 83.9 70.5 76.7 82.6 61.0 86.3', startPoint: { x: 60.2, y: 40.5 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. কেন্দ্রের উপর থেকে নিচে বাঁকা লুপ তুলে ডানে বড় বৃত্তাকারে ঘুরিয়ে নিচে শেষ করুন (হরই)' }
+    { strokeNumber: 1, path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বাম থেকে ডানে সোজা দাগ' },
+    { strokeNumber: 2, path: 'M 47 16 C 48 20 44 55 43 72 C 43 77 44 82 46 84', startPoint: { x: 47, y: 16 }, direction: 'down', releaseType: 'harai', instructionBn: '২. ওপর থেকে নিচে সোজা নামিয়ে হালকা বাঁক' },
+    { strokeNumber: 3, path: 'M 60.2 40.5 C 60.9 41.5 61.3 44.5 60.7 46.1 C 56.4 57.3 50.4 67.9 37.4 78.9 C 31.1 84.2 22.8 82.3 22.5 71.2 C 22.2 61.2 34.8 50.0 52.2 46.7 C 63.6 44.5 77.0 47.9 80.2 58.4 C 83.9 70.5 76.7 82.6 61.0 86.3', startPoint: { x: 60.2, y: 40.5 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. পেট গোল করে সুন্দর একটা লুপ' }
   ],
   'い': [
-    { strokeNumber: 1, path: 'M 30 26 C 26 50 28 68 36 78 Q 40 80 44 74', startPoint: { x: 30, y: 26 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামে বাঁকিয়ে নিচে এনে শেষের হুক' },
-    { strokeNumber: 2, path: 'M 68 36 C 72 52 70 60 66 68', startPoint: { x: 68, y: 36 }, direction: 'down', releaseType: 'tome', instructionBn: '২. ডানের ছোট সমান্তরাল দাগ' }
+    { strokeNumber: 1, path: 'M 30 26 C 26 50 28 68 36 78 Q 40 80 44 74', startPoint: { x: 30, y: 26 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামের দাগ নামিয়ে শেষে ছোট্ট হুক' },
+    { strokeNumber: 2, path: 'M 68 36 C 72 52 70 60 66 68', startPoint: { x: 68, y: 36 }, direction: 'down', releaseType: 'tome', instructionBn: '২. ডানের ছোট সোজা দাগ' }
   ],
   'う': [
-    { strokeNumber: 1, path: 'M 44 20 Q 52 24 58 26', startPoint: { x: 44, y: 20 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. উপরের ছোট তির্যক ফোঁটা' },
-    { strokeNumber: 2, path: 'M 36 42 Q 68 34 68 56 Q 68 76 40 82', startPoint: { x: 36, y: 42 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. নিচের বড় ধনুকের মতো বাঁক' }
+    { strokeNumber: 1, path: 'M 44 20 Q 52 24 58 26', startPoint: { x: 44, y: 20 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. মাথার ওপর ছোট্ট ফোঁটা' },
+    { strokeNumber: 2, path: 'M 36 42 Q 68 34 68 56 Q 68 76 40 82', startPoint: { x: 36, y: 42 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. নিচে চাঁদের মতো বড় বাঁক' }
   ],
   'え': [
-    { strokeNumber: 1, path: 'M 46 18 Q 54 22 58 24', startPoint: { x: 46, y: 18 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. উপরের শীর্ষ বিন্দু' },
-    { strokeNumber: 2, path: 'M 32 38 L 66 38 L 30 76 Q 52 68 72 74', startPoint: { x: 32, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. Z-আকৃতি এঁকে নিচে ঢেউ' }
+    { strokeNumber: 1, path: 'M 46 18 Q 54 22 58 24', startPoint: { x: 46, y: 18 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. ওপরে ছোট্ট একটা টান' },
+    { strokeNumber: 2, path: 'M 32 38 L 66 38 L 30 76 Q 52 68 72 74', startPoint: { x: 32, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. Z অক্ষরের মতো গিয়ে নিচে ঢেউ' }
   ],
   'お': [
-    { strokeNumber: 1, path: 'M 24 36 L 56 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের ছোট অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 42 20 L 42 56 Q 30 62 34 74 Q 44 84 60 78 Q 74 68 68 50', startPoint: { x: 42, y: 20 }, direction: 'loop', releaseType: 'harai', instructionBn: '২. খাড়া নেমে ছোট লুপ ও ডানে বড় বাঁক' },
-    { strokeNumber: 3, path: 'M 72 32 Q 78 38 76 44', startPoint: { x: 72, y: 32 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. উপরের ডানদিকের ফোঁটা' }
+    { strokeNumber: 1, path: 'M 24 36 L 56 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. সোজা ডানে একটি দাগ' },
+    { strokeNumber: 2, path: 'M 42 20 L 42 56 Q 30 62 34 74 Q 44 84 60 78 Q 74 68 68 50', startPoint: { x: 42, y: 20 }, direction: 'loop', releaseType: 'harai', instructionBn: '২. নিচে নেমে গোল লুপ ঘুরে ডানে বড় বাঁক' },
+    { strokeNumber: 3, path: 'M 72 32 Q 78 38 76 44', startPoint: { x: 72, y: 32 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. ডান পাশে ছোট্ট একটা ফোঁটা' }
   ],
   'か': [
     { strokeNumber: 1, path: 'M 28 34 L 54 34 Q 58 56 50 78 Q 46 80 40 74', startPoint: { x: 28, y: 34 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. ডানে টেনে নিচে নামিয়ে হুক' },
@@ -42,8 +42,8 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 3, path: 'M 70 34 Q 76 40 74 46', startPoint: { x: 70, y: 34 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. ডানের ফোঁটা' }
   ],
   'き': [
-    { strokeNumber: 1, path: 'M 30 32 L 68 32', startPoint: { x: 30, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 26 46 L 72 46', startPoint: { x: 26, y: 46 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 30 32 L 68 32', startPoint: { x: 30, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
+    { strokeNumber: 2, path: 'M 26 46 L 72 46', startPoint: { x: 26, y: 46 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের আড়াআড়ি দাগ' },
     { strokeNumber: 3, path: 'M 54 20 L 46 64 Q 42 70 38 68', startPoint: { x: 54, y: 20 }, direction: 'down-left', releaseType: 'hane', instructionBn: '৩. খাড়া তীর্যক দাগ ও হালকা হুক' },
     { strokeNumber: 4, path: 'M 36 74 Q 52 82 66 76', startPoint: { x: 36, y: 74 }, direction: 'curve', releaseType: 'harai', instructionBn: '৪. নিচের অর্ধবৃত্তাকার বাঁক' }
   ],
@@ -52,7 +52,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'け': [
     { strokeNumber: 1, path: 'M 32 20 Q 28 50 32 78 Q 36 80 40 74', startPoint: { x: 32, y: 20 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামের খাড়া দাগ ও হুক' },
-    { strokeNumber: 2, path: 'M 48 36 L 76 36', startPoint: { x: 48, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '২. ডানের অনুভূমিক দাগ' },
+    { strokeNumber: 2, path: 'M 48 36 L 76 36', startPoint: { x: 48, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '২. ডানের আড়াআড়ি দাগ' },
     { strokeNumber: 3, path: 'M 64 22 Q 64 54 58 78', startPoint: { x: 64, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. ডানের খাড়া নামানো দাগ' }
   ],
   'こ': [
@@ -60,7 +60,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 30 68 Q 50 72 70 66', startPoint: { x: 30, y: 68 }, direction: 'curve', releaseType: 'tome', instructionBn: '২. নিচের বাঁকানো সমান্তরাল দাগ' }
   ],
   'さ': [
-    { strokeNumber: 1, path: 'M 28 34 L 70 34', startPoint: { x: 28, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 28 34 L 70 34', startPoint: { x: 28, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ডানে আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 54 18 L 44 60 Q 40 66 36 64', startPoint: { x: 54, y: 18 }, direction: 'down-left', releaseType: 'hane', instructionBn: '২. তীর্যক দাগ ও হুক' },
     { strokeNumber: 3, path: 'M 34 70 Q 52 80 66 72', startPoint: { x: 34, y: 70 }, direction: 'curve', releaseType: 'harai', instructionBn: '৩. নিচের বাঁকানো অর্ধবৃত্ত' }
   ],
@@ -68,11 +68,11 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 1, path: 'M 38 22 L 38 66 Q 38 82 66 78', startPoint: { x: 38, y: 22 }, direction: 'hook', releaseType: 'harai', instructionBn: '১. খাড়া নেমে মাছের বড়শির মতো বাঁক' }
   ],
   'す': [
-    { strokeNumber: 1, path: 'M 24 36 L 76 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 54 18 L 54 52 Q 44 56 46 66 Q 50 74 62 70 L 54 84', startPoint: { x: 54, y: 18 }, direction: 'loop', releaseType: 'harai', instructionBn: '২. খাড়া নেমে লুপ তৈরি করে লেজ নামান' }
+    { strokeNumber: 1, path: 'M 24 36 L 76 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
+    { strokeNumber: 2, path: 'M 54 18 L 54 52 Q 44 56 46 66 Q 50 74 62 70 L 54 84', startPoint: { x: 54, y: 18 }, direction: 'loop', releaseType: 'harai', instructionBn: '২. খাড়া নেমে লুপ তৈরি করে লেজ নামাও' },
   ],
   'せ': [
-    { strokeNumber: 1, path: 'M 26 40 L 74 40', startPoint: { x: 26, y: 40 }, direction: 'right', releaseType: 'tome', instructionBn: '১. অনুভূমিক সোজা দাগ' },
+    { strokeNumber: 1, path: 'M 26 40 L 74 40', startPoint: { x: 26, y: 40 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ডানে সোজা দাগ' },
     { strokeNumber: 2, path: 'M 64 24 L 64 68 Q 62 74 54 74', startPoint: { x: 64, y: 24 }, direction: 'down', releaseType: 'hane', instructionBn: '২. ডানের খাড়া দাগ ও নিচে বাঁক' },
     { strokeNumber: 3, path: 'M 40 28 L 40 70 L 68 70', startPoint: { x: 40, y: 28 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. বামের খাড়া দাগ নেমে ডানে মোড়' }
   ],
@@ -80,13 +80,13 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 1, path: 'M 34 26 L 66 26 L 34 52 L 66 52 Q 62 76 36 78', startPoint: { x: 34, y: 26 }, direction: 'curve', releaseType: 'harai', instructionBn: '১. এক টানে জিগজ্যাগ ও নিচের বড় বাঁক' }
   ],
   'た': [
-    { strokeNumber: 1, path: 'M 26 36 L 56 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 26 36 L 56 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 44 20 L 34 62', startPoint: { x: 44, y: 20 }, direction: 'down-left', releaseType: 'harai', instructionBn: '২. তীর্যক দাগ' },
     { strokeNumber: 3, path: 'M 54 42 L 72 42', startPoint: { x: 54, y: 42 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. ডানের উপরের দাগ' },
     { strokeNumber: 4, path: 'M 52 64 Q 64 68 74 62', startPoint: { x: 52, y: 64 }, direction: 'curve', releaseType: 'tome', instructionBn: '৪. ডানের নিচের দাগ' }
   ],
   'ち': [
-    { strokeNumber: 1, path: 'M 34 28 L 68 28', startPoint: { x: 34, y: 28 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 34 28 L 68 28', startPoint: { x: 34, y: 28 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 50 18 L 36 50 Q 64 42 66 64 Q 66 78 40 82', startPoint: { x: 50, y: 18 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. তীর্যক নেমে ইংরেজি ৫ এর মতো বাঁক' }
   ],
   'つ': [
@@ -100,7 +100,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 64 36 Q 34 50 48 76 Q 58 84 72 74', startPoint: { x: 64, y: 36 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. ডানের বড় C আকৃতির বাঁক' }
   ],
   'な': [
-    { strokeNumber: 1, path: 'M 26 38 L 52 38', startPoint: { x: 26, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 26 38 L 52 38', startPoint: { x: 26, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 42 22 L 34 66', startPoint: { x: 42, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '২. তীর্যক লম্বা দাগ' },
     { strokeNumber: 3, path: 'M 64 28 L 70 34', startPoint: { x: 64, y: 28 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. উপরের ডানদিকের ফোঁটা' },
     { strokeNumber: 4, path: 'M 60 52 L 60 68 Q 54 74 58 80 Q 66 80 72 72', startPoint: { x: 60, y: 52 }, direction: 'loop', releaseType: 'harai', instructionBn: '৪. নিচের ছোট লুপের মতো দাগ' }
@@ -123,7 +123,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'は': [
     { strokeNumber: 1, path: 'M 30 22 L 30 76 Q 34 80 38 76', startPoint: { x: 30, y: 22 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামের খাড়া দাগ ও হুক' },
-    { strokeNumber: 2, path: 'M 48 38 L 76 38', startPoint: { x: 48, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. ডানের অনুভূমিক দাগ' },
+    { strokeNumber: 2, path: 'M 48 38 L 76 38', startPoint: { x: 48, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. ডানের আড়াআড়ি দাগ' },
     { strokeNumber: 3, path: 'M 62 24 L 62 66 Q 52 72 54 80 Q 62 82 72 72', startPoint: { x: 62, y: 24 }, direction: 'loop', releaseType: 'harai', instructionBn: '৩. খাড়া নেমে নিচের গোল লুপ' }
   ],
   'ひ': [
@@ -140,7 +140,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'ほ': [
     { strokeNumber: 1, path: 'M 28 22 L 28 76 Q 32 80 36 76', startPoint: { x: 28, y: 22 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. বামের খাড়া দাগ ও হুক' },
-    { strokeNumber: 2, path: 'M 44 32 L 76 32', startPoint: { x: 44, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '২. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 2, path: 'M 44 32 L 76 32', startPoint: { x: 44, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '২. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 3, path: 'M 46 48 L 74 48', startPoint: { x: 46, y: 48 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. নিচের সমান্তরাল দাগ' },
     { strokeNumber: 4, path: 'M 60 24 L 60 66 Q 50 72 52 80 Q 60 82 70 72', startPoint: { x: 60, y: 24 }, direction: 'loop', releaseType: 'harai', instructionBn: '৪. উপর থেকে কেটে নেমে লুপ তৈরি' }
   ],
@@ -154,7 +154,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 66 40 Q 56 62 48 80', startPoint: { x: 66, y: 40 }, direction: 'down-left', releaseType: 'harai', instructionBn: '২. ডানের তীর্যক কেটে নামানো দাগ' }
   ],
   'む': [
-    { strokeNumber: 1, path: 'M 24 38 L 56 38', startPoint: { x: 24, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 24 38 L 56 38', startPoint: { x: 24, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '১. বামের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 44 22 L 44 66 Q 36 74 44 78 Q 54 78 70 66 Q 74 72 70 78', startPoint: { x: 44, y: 22 }, direction: 'loop', releaseType: 'hane', instructionBn: '২. খাড়া নেমে ছোট লুপ ও ডানে হুক' },
     { strokeNumber: 3, path: 'M 68 30 L 74 36', startPoint: { x: 68, y: 30 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. উপরের ডানদিকের ফোঁটা' }
   ],
@@ -164,8 +164,8 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'も': [
     { strokeNumber: 1, path: 'M 48 20 L 48 70 Q 52 82 72 76', startPoint: { x: 48, y: 20 }, direction: 'hook', releaseType: 'harai', instructionBn: '১. খাড়া নেমে মাছের বড়শির মতো বাঁক' },
-    { strokeNumber: 2, path: 'M 30 38 L 68 38', startPoint: { x: 30, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. উপরের অনুভূমিক দাগ' },
-    { strokeNumber: 3, path: 'M 28 54 L 70 54', startPoint: { x: 28, y: 54 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. নিচের অনুভূমিক দাগ' }
+    { strokeNumber: 2, path: 'M 30 38 L 68 38', startPoint: { x: 30, y: 38 }, direction: 'right', releaseType: 'tome', instructionBn: '২. উপরের আড়াআড়ি দাগ' },
+    { strokeNumber: 3, path: 'M 28 54 L 70 54', startPoint: { x: 28, y: 54 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. নিচের আড়াআড়ি দাগ' }
   ],
   'や': [
     { strokeNumber: 1, path: 'M 28 42 Q 62 30 64 50 Q 64 64 54 62', startPoint: { x: 28, y: 42 }, direction: 'curve', releaseType: 'hane', instructionBn: '১. ডানে গিয়ে ধনুকের মতো হুক' },
@@ -177,7 +177,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 54 18 L 54 82', startPoint: { x: 54, y: 18 }, direction: 'down', releaseType: 'harai', instructionBn: '২. মাঝখান দিয়ে খাড়া ছেদকারী দাগ' }
   ],
   'よ': [
-    { strokeNumber: 1, path: 'M 30 36 L 54 36', startPoint: { x: 30, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ছোট অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 30 36 L 54 36', startPoint: { x: 30, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ছোট আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 54 20 L 54 64 Q 44 72 46 80 Q 56 82 68 74', startPoint: { x: 54, y: 20 }, direction: 'loop', releaseType: 'harai', instructionBn: '২. খাড়া নেমে নিচের ছোট গোল লুপ' }
   ],
   'ら': [
@@ -203,7 +203,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 24 38 L 58 38 L 32 68 Q 68 50 68 72 Q 64 82 44 80', startPoint: { x: 24, y: 38 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. Z এঁকে বড় গোলাকার পেট তৈরি' }
   ],
   'を': [
-    { strokeNumber: 1, path: 'M 26 34 L 70 34', startPoint: { x: 26, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 26 34 L 70 34', startPoint: { x: 26, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 48 18 L 36 56 Q 64 48 64 66 Q 64 78 44 80', startPoint: { x: 48, y: 18 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. তীর্যক নেমে C আকৃতির বাঁক' },
     { strokeNumber: 3, path: 'M 32 64 Q 52 56 68 76', startPoint: { x: 32, y: 64 }, direction: 'down-right', releaseType: 'harai', instructionBn: '৩. নিচ দিয়ে কেটে যাওয়া ধনুকের টান' }
   ],
@@ -225,15 +225,15 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   'ウ': [
     { strokeNumber: 1, path: 'M 50 16 L 50 28', startPoint: { x: 50, y: 16 }, direction: 'down', releaseType: 'tome', instructionBn: '১. উপরের শীর্ষ বিন্দু' },
     { strokeNumber: 2, path: 'M 30 38 L 30 52', startPoint: { x: 30, y: 38 }, direction: 'down', releaseType: 'tome', instructionBn: '২. বামের খাড়া ছোট দাগ' },
-    { strokeNumber: 3, path: 'M 30 40 L 72 40 L 44 80', startPoint: { x: 30, y: 40 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. অনুভূমিক গিয়ে বামে নামানো ছাতা' }
+    { strokeNumber: 3, path: 'M 30 40 L 72 40 L 44 80', startPoint: { x: 30, y: 40 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. ডানে গিয়ে বামে নামানো ছাতা' }
   ],
   'エ': [
-    { strokeNumber: 1, path: 'M 34 26 L 66 26', startPoint: { x: 34, y: 26 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 34 26 L 66 26', startPoint: { x: 34, y: 26 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 50 26 L 50 74', startPoint: { x: 50, y: 26 }, direction: 'down', releaseType: 'tome', instructionBn: '২. মাঝের খাড়া সংযোগকারী স্তম্ভ' },
-    { strokeNumber: 3, path: 'M 24 74 L 76 74', startPoint: { x: 24, y: 74 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. নিচের দীর্ঘ অনুভূমিক ভিত্তি' }
+    { strokeNumber: 3, path: 'M 24 74 L 76 74', startPoint: { x: 24, y: 74 }, direction: 'right', releaseType: 'tome', instructionBn: '৩. নিচের লম্বা আড়াআড়ি দাগ' }
   ],
   'オ': [
-    { strokeNumber: 1, path: 'M 24 36 L 76 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. অনুভূমিক সরলরেখা' },
+    { strokeNumber: 1, path: 'M 24 36 L 76 36', startPoint: { x: 24, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ডানে সোজা দাগ' },
     { strokeNumber: 2, path: 'M 50 18 L 50 76 Q 46 80 38 72', startPoint: { x: 50, y: 18 }, direction: 'hook', releaseType: 'hane', instructionBn: '২. খাড়া সোজা দাগ ও নিচের হুক' },
     { strokeNumber: 3, path: 'M 48 42 Q 34 62 24 74', startPoint: { x: 48, y: 42 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. বামপাশের তীর্যক ডানা' }
   ],
@@ -252,7 +252,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'ケ': [
     { strokeNumber: 1, path: 'M 44 20 Q 34 38 26 48', startPoint: { x: 44, y: 20 }, direction: 'down-left', releaseType: 'harai', instructionBn: '১. উপরের বামের তীর্যক দাগ' },
-    { strokeNumber: 2, path: 'M 26 46 L 76 46', startPoint: { x: 26, y: 46 }, direction: 'right', releaseType: 'tome', instructionBn: '২. অনুভূমিক দীর্ঘ রেখা' },
+    { strokeNumber: 2, path: 'M 26 46 L 76 46', startPoint: { x: 26, y: 46 }, direction: 'right', releaseType: 'tome', instructionBn: '২. লম্বা আড়াআড়ি রেখা' },
     { strokeNumber: 3, path: 'M 58 36 Q 56 62 44 82', startPoint: { x: 58, y: 36 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. ডানের তীর্যক বাঁকা রেখা' }
   ],
   'コ': [
@@ -260,7 +260,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 30 72 L 72 72', startPoint: { x: 30, y: 72 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের সমান্তরাল বন্ধনী' }
   ],
   'サ': [
-    { strokeNumber: 1, path: 'M 26 36 L 74 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. দীর্ঘ অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 26 36 L 74 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. লম্বা আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 40 22 L 38 52', startPoint: { x: 40, y: 22 }, direction: 'down', releaseType: 'tome', instructionBn: '২. বামের ছোট খাড়া দাগ' },
     { strokeNumber: 3, path: 'M 60 22 Q 60 52 54 78', startPoint: { x: 60, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. ডানের নিচে বাঁকানো লম্বা দাগ' }
   ],
@@ -275,7 +275,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'セ': [
     { strokeNumber: 1, path: 'M 30 38 L 70 38 L 70 66 Q 70 74 62 74', startPoint: { x: 30, y: 38 }, direction: 'hook', releaseType: 'hane', instructionBn: '১. ডানে গিয়ে নিচে নেমে ছোট হুক' },
-    { strokeNumber: 2, path: 'M 46 22 L 46 64 L 72 64', startPoint: { x: 46, y: 22 }, direction: 'down-right', releaseType: 'tome', instructionBn: '২. সোজা নেমে ডানে অনুভূমিক মোড়' }
+    { strokeNumber: 2, path: 'M 46 22 L 46 64 L 72 64', startPoint: { x: 46, y: 22 }, direction: 'down-right', releaseType: 'tome', instructionBn: '২. সোজা নেমে ডানে আড়াআড়ি মোড়' }
   ],
   'ソ': [
     { strokeNumber: 1, path: 'M 38 28 L 48 38', startPoint: { x: 38, y: 28 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. উপরের বামের ফোঁটা' },
@@ -287,8 +287,8 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 3, path: 'M 42 54 L 60 64', startPoint: { x: 42, y: 54 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. মাঝের ভিতরের ছোট দাগ' }
   ],
   'チ': [
-    { strokeNumber: 1, path: 'M 64 22 L 36 30', startPoint: { x: 64, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '১. উপরের ঢালু অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 26 48 L 74 48', startPoint: { x: 26, y: 48 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের অনুভূমিক সমান্তরাল দাগ' },
+    { strokeNumber: 1, path: 'M 64 22 L 36 30', startPoint: { x: 64, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '১. উপরের ঢালু আড়াআড়ি দাগ' },
+    { strokeNumber: 2, path: 'M 26 48 L 74 48', startPoint: { x: 26, y: 48 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের আড়াআড়ি সমান্তরাল দাগ' },
     { strokeNumber: 3, path: 'M 52 32 Q 46 62 34 80', startPoint: { x: 52, y: 32 }, direction: 'down-left', releaseType: 'harai', instructionBn: '৩. উপর থেকে নিচে তীর্যক বাঁকানো দাগ' }
   ],
   'ツ': [
@@ -306,12 +306,12 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 44 42 L 70 54', startPoint: { x: 44, y: 42 }, direction: 'down-right', releaseType: 'tome', instructionBn: '২. ডানের তীর্যক শাখা ডাল' }
   ],
   'ナ': [
-    { strokeNumber: 1, path: 'M 26 36 L 74 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. অনুভূমিক সরলরেখা' },
+    { strokeNumber: 1, path: 'M 26 36 L 74 36', startPoint: { x: 26, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. ডানে সোজা দাগ' },
     { strokeNumber: 2, path: 'M 54 22 Q 46 54 28 78', startPoint: { x: 54, y: 22 }, direction: 'down-left', releaseType: 'harai', instructionBn: '২. রেখা ছেদ করে বামে দীর্ঘ টান' }
   ],
   'ニ': [
-    { strokeNumber: 1, path: 'M 34 36 L 66 36', startPoint: { x: 34, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট অনুভূমিক দাগ' },
-    { strokeNumber: 2, path: 'M 26 68 L 74 68', startPoint: { x: 26, y: 68 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের দীর্ঘ অনুভূমিক ভিত্তি' }
+    { strokeNumber: 1, path: 'M 34 36 L 66 36', startPoint: { x: 34, y: 36 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট আড়াআড়ি দাগ' },
+    { strokeNumber: 2, path: 'M 26 68 L 74 68', startPoint: { x: 26, y: 68 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের লম্বা আড়াআড়ি দাগ' }
   ],
   'ヌ': [
     { strokeNumber: 1, path: 'M 32 32 L 68 32 L 34 76', startPoint: { x: 32, y: 32 }, direction: 'down-left', releaseType: 'harai', instructionBn: '১. ডানে গিয়ে কোনাকুণি নিচে বড় টান' },
@@ -331,7 +331,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 60 30 Q 68 54 74 72', startPoint: { x: 60, y: 30 }, direction: 'down-right', releaseType: 'harai', instructionBn: '২. ডানের নিচের দিকে ছড়ানো ডানা' }
   ],
   'ヒ': [
-    { strokeNumber: 1, path: 'M 34 30 L 62 30', startPoint: { x: 34, y: 30 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 34 30 L 62 30', startPoint: { x: 34, y: 30 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 34 26 L 34 70 L 68 70', startPoint: { x: 34, y: 26 }, direction: 'down-right', releaseType: 'tome', instructionBn: '২. খাড়া নেমে নিচে ডানমুখী মোড়' }
   ],
   'フ': [
@@ -341,7 +341,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 1, path: 'M 26 56 L 48 32 L 76 64', startPoint: { x: 26, y: 56 }, direction: 'curve', releaseType: 'harai', instructionBn: '১. এক টানে পাহাড়ি চূড়ার মতো উপরে উঠে নিচে নামা' }
   ],
   'ホ': [
-    { strokeNumber: 1, path: 'M 30 32 L 70 32', startPoint: { x: 30, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 30 32 L 70 32', startPoint: { x: 30, y: 32 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 50 20 L 50 78 Q 46 82 40 76', startPoint: { x: 50, y: 20 }, direction: 'hook', releaseType: 'hane', instructionBn: '২. খাড়া সোজা স্তম্ভ ও নিচের হুক' },
     { strokeNumber: 3, path: 'M 38 48 L 28 66', startPoint: { x: 38, y: 48 }, direction: 'down-left', releaseType: 'tome', instructionBn: '৩. বামপাশের তীর্যক ফোঁটা' },
     { strokeNumber: 4, path: 'M 62 48 L 72 66', startPoint: { x: 62, y: 48 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৪. ডানপাশের তীর্যক ফোঁটা' }
@@ -356,7 +356,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 3, path: 'M 30 64 L 68 74', startPoint: { x: 30, y: 64 }, direction: 'down-right', releaseType: 'harai', instructionBn: '৩. নিচের দীর্ঘ সমান্তরাল তীর্যক দাগ' }
   ],
   'ム': [
-    { strokeNumber: 1, path: 'M 52 24 L 30 64 L 72 64', startPoint: { x: 52, y: 24 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. কোণাকুণি নেমে ডানে অনুভূমিক রেখা' },
+    { strokeNumber: 1, path: 'M 52 24 L 30 64 L 72 64', startPoint: { x: 52, y: 24 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. কোণাকুণি নেমে ডানে আড়াআড়ি রেখা' },
     { strokeNumber: 2, path: 'M 58 48 L 68 58', startPoint: { x: 58, y: 48 }, direction: 'down-right', releaseType: 'tome', instructionBn: '২. ডানদিকের ছোট তীর্যক ফোঁটা' }
   ],
   'メ': [
@@ -364,7 +364,7 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 38 38 L 70 70', startPoint: { x: 38, y: 38 }, direction: 'down-right', releaseType: 'harai', instructionBn: '২. মাঝখান দিয়ে ছেদকারী বিপরীত তীর্যক' }
   ],
   'モ': [
-    { strokeNumber: 1, path: 'M 32 34 L 68 34', startPoint: { x: 32, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক সমান্তরাল দাগ' },
+    { strokeNumber: 1, path: 'M 32 34 L 68 34', startPoint: { x: 32, y: 34 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি সমান্তরাল দাগ' },
     { strokeNumber: 2, path: 'M 26 52 L 74 52', startPoint: { x: 26, y: 52 }, direction: 'right', releaseType: 'tome', instructionBn: '২. নিচের দীর্ঘ সমান্তরাল দাগ' },
     { strokeNumber: 3, path: 'M 48 20 L 48 70 Q 52 74 68 74', startPoint: { x: 48, y: 20 }, direction: 'down-right', releaseType: 'tome', instructionBn: '৩. খাড়া নেমে ডানে ভিত্তি রেখা' }
   ],
@@ -374,14 +374,14 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
   ],
   'ユ': [
     { strokeNumber: 1, path: 'M 36 28 L 36 68 L 66 68', startPoint: { x: 36, y: 28 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. খাড়া নেমে ডানে ৯০ ডিগ্রিতে মোড়' },
-    { strokeNumber: 2, path: 'M 26 48 L 74 48', startPoint: { x: 26, y: 48 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের অনুভূমিক ছেদকারী রেখা' }
+    { strokeNumber: 2, path: 'M 26 48 L 74 48', startPoint: { x: 26, y: 48 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের আড়াআড়ি দাগ' }
   ],
   'ヨ': [
     { strokeNumber: 1, path: 'M 34 28 L 68 28 L 68 74 L 34 74', startPoint: { x: 34, y: 28 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. ডানে গিয়ে নিচে নেমে বামে মোড়' },
-    { strokeNumber: 2, path: 'M 34 51 L 68 51', startPoint: { x: 34, y: 51 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের অনুভূমিক সমান্তরাল দাগ' }
+    { strokeNumber: 2, path: 'M 34 51 L 68 51', startPoint: { x: 34, y: 51 }, direction: 'right', releaseType: 'tome', instructionBn: '২. মাঝের আড়াআড়ি সমান্তরাল দাগ' }
   ],
   'ラ': [
-    { strokeNumber: 1, path: 'M 36 26 L 62 26', startPoint: { x: 36, y: 26 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 36 26 L 62 26', startPoint: { x: 36, y: 26 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের ছোট আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 48 28 L 48 46 L 68 46 Q 62 68 42 80', startPoint: { x: 48, y: 28 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. নিচে নেমে ডানে গিয়ে বাঁকানো বড় লেজ' }
   ],
   'リ': [
@@ -405,9 +405,9 @@ export const KANA_STROKE_PATHS: Record<string, KanaVectorStroke[]> = {
     { strokeNumber: 2, path: 'M 32 34 L 68 34 Q 64 56 46 76', startPoint: { x: 32, y: 34 }, direction: 'curve', releaseType: 'harai', instructionBn: '২. ডানে গিয়ে বামে দীর্ঘ ধনুকাকার বাঁক' }
   ],
   'ヲ': [
-    { strokeNumber: 1, path: 'M 30 30 L 70 30', startPoint: { x: 30, y: 30 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের অনুভূমিক দাগ' },
+    { strokeNumber: 1, path: 'M 30 30 L 70 30', startPoint: { x: 30, y: 30 }, direction: 'right', releaseType: 'tome', instructionBn: '১. উপরের আড়াআড়ি দাগ' },
     { strokeNumber: 2, path: 'M 46 30 L 36 56', startPoint: { x: 46, y: 30 }, direction: 'down-left', releaseType: 'tome', instructionBn: '২. মাঝের তীর্যক নামানো দাগ' },
-    { strokeNumber: 3, path: 'M 30 56 L 72 56 Q 64 74 44 80', startPoint: { x: 30, y: 56 }, direction: 'curve', releaseType: 'harai', instructionBn: '৩. নিচের অনুভূমিক ও বাঁকা লেজ' }
+    { strokeNumber: 3, path: 'M 30 56 L 72 56 Q 64 74 44 80', startPoint: { x: 30, y: 56 }, direction: 'curve', releaseType: 'harai', instructionBn: '৩. নিচের আড়াআড়ি ও বাঁকা লেজ' }
   ],
   'ン': [
     { strokeNumber: 1, path: 'M 36 32 L 46 38', startPoint: { x: 36, y: 32 }, direction: 'down-right', releaseType: 'tome', instructionBn: '১. উপরের ছোট ফোঁটা' },

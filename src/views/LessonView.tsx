@@ -63,7 +63,7 @@ import { KanjiStrokeAnimator } from '../components/kanji/KanjiStrokeAnimator.js'
 import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
 import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
-import { LessonJourneyClarityBar } from '../components/learning/LessonJourneyClarityBar';
+import { ZenLearningCanvas } from '../components/learning/ZenLearningCanvas.js';
 import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 
 interface LessonViewProps {
@@ -446,12 +446,28 @@ if (lessonId) {
   };
 
 
+  if (selectedLessonNum === 1) {
+    return (
+      <div className="min-h-screen bg-[#0B0F17] text-white py-6 px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <ZenLearningCanvas
+            onBack={() => onNavigate('courses')}
+            onNextLesson={() => {
+              setSelectedLessonNum(2);
+              onNavigate('lesson', { lessonId: 'n5-l2' });
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading || !lessonData || !lessonData.lesson) {
     return (
-      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-8">
-        <div className="text-center space-y-3 bg-white p-8 rounded-3xl border border-stone-200 shadow-sm max-w-sm">
-          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-stone-600">Loading Lesson {selectedLessonNum}...</p>
+      <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center p-8 text-white">
+        <div className="text-center space-y-3 bg-[#131926] p-8 rounded-3xl border border-slate-800 shadow-xl max-w-sm">
+          <div className="w-8 h-8 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs font-bold text-slate-300">Loading Lesson {selectedLessonNum}...</p>
           <div className="flex justify-center gap-2 pt-2">
             <button
               onClick={() => {
@@ -471,7 +487,7 @@ if (lessonId) {
                   setIsLoading(false);
                 }
               }}
-              className="px-3 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-semibold hover:bg-stone-800 transition"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition"
             >
               সরাসরি লোড করুন (Direct Load)
             </button>
@@ -484,215 +500,51 @@ if (lessonId) {
   const { lesson, courseTitle, moduleTitle, quizSummary, isCompleted } = lessonData;
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#0B0F17] text-stone-100 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto space-y-6">
         
-        {/* INSTANT LESSON SWITCHER BAR (১ থেকে ২৫ লেসন বদলানোর ইনস্ট্যান্ট ড্রপডাউন) */}
-        <div className="bg-stone-900 text-white p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-md">
+        {/* Sleek Minimalist Top Bar */}
+        <div className="bg-[#131926] border border-slate-800 text-white p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-4 shadow-lg">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-400">
-              ⚡ Instant Lesson Switcher:
-            </span>
+            <button
+              onClick={() => onNavigate('courses')}
+              className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 cursor-pointer transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Courses</span>
+            </button>
+            <span className="text-slate-700">|</span>
             <select
               value={selectedLessonNum}
               onChange={(e) => setSelectedLessonNum(parseInt(e.target.value, 10))}
-              className="bg-stone-800 text-white border border-stone-700 px-4 py-2 rounded-xl text-xs font-bold cursor-pointer focus:outline-none focus:border-red-500"
+              className="bg-slate-900 text-white border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer focus:outline-none focus:border-red-500"
             >
               {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
                 <option key={num} value={num}>
-                  Lesson {num} {num <= 5 ? '(Free)' : '(Pro)'}
+                  Lesson {num} {num === 1 ? '(Zen Canvas)' : num <= 5 ? '(Free)' : '(Pro)'}
                 </option>
               ))}
             </select>
           </div>
 
-          <button
-            onClick={() => onNavigate('courses')}
-            className="text-xs font-bold text-stone-300 hover:text-white flex items-center gap-1.5 cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Courses</span>
-          </button>
-{/* Mobile 1-Row Compact Action Toolbar */}
-          <div className="flex sm:hidden items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full shrink-0">
-            {/* Focus Mode Pill */}
-            <button
-              id="btn-lesson-focus-mode-mobile"
-              onClick={() => setIsFocusMode(!isFocusMode)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer whitespace-nowrap ${
-                isFocusMode
-                  ? 'bg-amber-500 text-stone-950 border-amber-400 font-extrabold ring-2 ring-amber-400/30'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200 shadow-xs'
-              }`}
-            >
-              <span>🎯</span>
-              <span>{isFocusMode ? 'ফোকাস অন' : 'ফোকাস'}</span>
-            </button>
-
-            {/* AI Feedback / Sensei Pill */}
-            <button
-              id="btn-lesson-ai-feedback-mobile"
-              onClick={() => setIsFeedbackModalOpen(true)}
-              className="shrink-0 px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
-            >
-              <span>🤖</span>
-              <span>সেনসেই</span>
-            </button>
-
-            {/* Offline Download Pill */}
-            <button
-              id="btn-lesson-offline-mobile"
-              onClick={handleToggleOfflineDownload}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer whitespace-nowrap ${
-                isDownloaded
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200 shadow-xs'
-              }`}
-            >
-              <span>{isDownloaded ? '✓' : '📥'}</span>
-              <span>{isDownloaded ? 'অফলাইন রেডি' : 'অফলাইন'}</span>
-            </button>
-
-            {/* Quick Notes Pill */}
-            <button
-              id="btn-lesson-notes-mobile"
-              onClick={() => setIsNotesOpen(true)}
-              className="shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
-            >
-              <span>📝</span>
-              <span>নোট</span>
-            </button>
-
-            {/* Mark as Completed Pill */}
-            {user && (
-              <button
-                id="btn-lesson-complete-mobile"
-                onClick={handleCompleteLesson}
-                disabled={isCompleting || isCompleted}
-                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  isCompleted
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-red-600 hover:bg-red-700 text-white'
-                }`}
-              >
-                <span>✓</span>
-                <span>{isCompleted ? 'সম্পন্ন' : isCompleting ? 'সেভ হচ্ছে...' : 'সম্পন্ন করুন'}</span>
-              </button>
-            )}
-
-            {/* Optional Quiz Pill */}
+          <div className="flex items-center gap-2.5">
             {quizSummary && (
               <button
                 onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
-                className="shrink-0 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer whitespace-nowrap"
+                className="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
-                <span>🏆</span>
-                <span>কুইজ</span>
+                <Award className="w-4 h-4 text-amber-400" />
+                <span className="hidden sm:inline">Take Quiz</span>
               </button>
             )}
-
-            {/* Optional Pro Pill */}
-            {!isPro && (
-              <button
-                onClick={() => setIsProModalOpen(true)}
-                className="shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-extrabold text-xs shadow-xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-              >
-                <span>👑</span>
-                <span>প্রো</span>
-              </button>
-            )}
-          </div>
-
-          {/* Desktop Actions Toolbar */}
-          <div className="hidden sm:flex flex-wrap items-center gap-2.5">
-            {/* Focus Mode Toggle Button */}
-            <button
-              id="btn-lesson-focus-mode"
-              onClick={() => setIsFocusMode(!isFocusMode)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
-                isFocusMode
-                  ? 'bg-amber-500 text-stone-950 border-amber-400 font-extrabold ring-2 ring-amber-400/30'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-              title={isFocusMode ? 'Exit Distraction-Free Focus Mode' : 'Enter Focus Mode (Zen Study)'}
-            >
-              {isFocusMode ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4 text-amber-600" />}
-              <span>{isFocusMode ? 'Exit Focus' : 'Focus Mode'}</span>
-            </button>
-
-            {/* AI Feedback Button */}
-            <button
-              onClick={() => setIsFeedbackModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-              title="Get AI Sensei Feedback"
-            >
-              <Bot className="w-4 h-4 text-purple-600" />
-              <span>AI Feedback</span>
-            </button>
-
-            {/* Download for Offline Button */}
-            <button
-              id="btn-lesson-offline-download"
-              onClick={handleToggleOfflineDownload}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer border ${
-                isDownloaded
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-              title={isDownloaded ? 'Saved for offline study. Click to remove' : 'Download lesson for offline study'}
-            >
-              {isDownloaded ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-600" />
-                  <span>Offline Ready</span>
-                </>
-              ) : (
-                <>
-                  <DownloadCloud className="w-4 h-4 text-stone-500" />
-                  <span>Download for Offline</span>
-                </>
-              )}
-            </button>
-
-            {/* Quick Notes Toggle Button */}
-            <button
-              id="btn-lesson-quick-notes"
-              onClick={() => setIsNotesOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-            >
-              <FileText className="w-4 h-4 text-red-600" />
-              <span>Quick Notes</span>
-            </button>
-
-            {quizSummary && (
-              <button
-                onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
-                className="px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
-              >
-                <Award className="w-4 h-4 text-amber-600" />
-                <span>Take Lesson Quiz</span>
-              </button>
-            )}
-
-            {!isPro && (
-              <button
-                id="btn-lesson-upgrade-pro"
-                onClick={() => setIsProModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Crown className="w-4 h-4 text-stone-950" />
-                <span>Upgrade to PRO</span>
-              </button>
-            )}
-
             {user && (
               <button
                 onClick={handleCompleteLesson}
                 disabled={isCompleting || isCompleted}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer ${
                   isCompleted
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-red-600 hover:bg-red-700 text-white'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                    : 'bg-red-600 hover:bg-red-500 text-white shadow-md shadow-red-600/30'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" />
@@ -700,31 +552,21 @@ if (lessonId) {
               </button>
             )}
           </div>
-
         </div>
 
-        {/* Journey Clarity System Bar (Where am I? Why does this matter? What do I do now? What happens next?) */}
-        <LessonJourneyClarityBar
-          level="JLPT N5"
-          lessonNumber={selectedLessonNum}
-          lessonTitle={lesson.title}
-          activeTab={activeTab}
-          summary={lesson.summary}
-        />
-
         {/* Lesson Header Banner */}
-        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
+        <div className="bg-[#131926] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-950/60 text-red-400 border border-red-800/40">
               JLPT N5
             </span>
-            <span className="text-xs text-stone-500 font-semibold">
+            <span className="text-xs text-slate-400 font-semibold">
               Lesson {selectedLessonNum} &bull; Minna no Nihongo
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">{lesson.title}</h1>
-          <p className="text-sm font-serif text-red-600">{lesson.titleJa}</p>
-          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl">{lesson.summary}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-white">{lesson.title}</h1>
+          <p className="text-sm font-serif text-red-400">{lesson.titleJa}</p>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">{lesson.summary}</p>
         </div>
 
         {/* If lesson >= 6 and student is not Pro, show Pro lock screen */}

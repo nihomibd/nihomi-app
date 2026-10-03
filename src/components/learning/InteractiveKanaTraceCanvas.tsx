@@ -555,7 +555,7 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
           </div>
 
           <p className="text-[11px] text-stone-400 text-center">
-            হালকা জলছাপের উপর আঙুল বা মাউস দিয়ে ৩টি টানে হাত ঘোরান
+            জলছাপের ওপর মাউস বা আঙুল ঘুরিয়ে সুন্দর করে লিখে ফেলো!
           </p>
 
           {/* Celebratory Victory Message & First Win CTA */}
