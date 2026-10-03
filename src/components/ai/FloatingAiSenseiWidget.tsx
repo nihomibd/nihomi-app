@@ -392,12 +392,15 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
       };
       if (token) reqHeaders['Authorization'] = `Bearer ${token}`;
 
+      const isGrammarExplicit = /\b(explain|grammar|particle|structure|rule|difference|vs|কেন|কীভাবে|নিয়ম|পার্থক্য)\b/i.test(query);
+      const queryMode = isGrammarExplicit ? 'grammar_explanation' : 'conversation';
+
       const res = await fetch('/api/ai/coach', {
         method: 'POST',
         headers: reqHeaders,
         body: JSON.stringify({
           message: query.trim(),
-          mode: 'grammar_explanation',
+          mode: queryMode,
           scenario: `${activeContextConfig.shortLabel}: ${currentContext?.lessonTitle || currentContext?.currentTopic || 'General Study'}`,
           learningContext: {
             mode: activeContextConfig.id,

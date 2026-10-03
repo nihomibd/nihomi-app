@@ -54,9 +54,7 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'Looks like an Apple with a stem and a round body.',
     mnemonicBn: 'আপেলের মতো গোল পেট এবং উপরে ডাঁটাযুক্ত আকৃতি।',
     exampleVocab: [
-      { word: 'あい', reading: 'ai', meaningBn: 'ভালোবাসা (Love)', meaningEn: 'Love' },
-      { word: 'あお', reading: 'ao', meaningBn: 'নীল (Blue)', meaningEn: 'Blue' },
-      { word: 'あう', reading: 'au', meaningBn: 'দেখা করা / মেলা (Meet)', meaningEn: 'Meet / Fit' }
+      { word: 'あ', reading: 'a', meaningBn: 'মৌলিক স্বরবর্ণ (Foundation Vowel Sound)', meaningEn: 'Foundation Vowel Sound' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ আড়াআড়ি দাগ (MEXT)', descriptionEn: 'Stroke 1: Smooth horizontal crossbar left-to-right', path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 } },
@@ -76,9 +74,8 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'Two Eels swimming side-by-side.',
     mnemonicBn: 'পাশাপাশি সাঁতার কাটা দুটি ইল মাছ।',
     exampleVocab: [
-      { word: 'いえ', reading: 'ie', meaningBn: 'বাড়ি (House)', meaningEn: 'House' },
-      { word: 'いい', reading: 'ii', meaningBn: 'ভালো (Good)', meaningEn: 'Good' },
-      { word: 'いう', reading: 'iu', meaningBn: 'বলা (Say)', meaningEn: 'Say' }
+      { word: 'あい', reading: 'ai', meaningBn: 'ভালোবাসা (Love)', meaningEn: 'Love' },
+      { word: 'いい', reading: 'ii', meaningBn: 'ভালো (Good)', meaningEn: 'Good' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'hook', releaseType: 'hane', descriptionBn: 'বামের বড় বাঁকানো রেখা ও শেষের হুক', descriptionEn: 'Left curve down with an upward hook', path: 'M 32 24 Q 28 55 34 76 Q 38 78 44 72', startPoint: { x: 32, y: 24 } },
@@ -97,9 +94,8 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'A person bent over carrying a heavy load.',
     mnemonicBn: 'ভারী বোঝা বহন করতে গিয়ে ঝুঁকে পড়া এক ব্যক্তি।',
     exampleVocab: [
-      { word: 'うえ', reading: 'ue', meaningBn: 'উপরে (Up / Above)', meaningEn: 'Up / Above' },
-      { word: 'いう', reading: 'iu', meaningBn: 'বলা (Say)', meaningEn: 'Say' },
-      { word: 'あう', reading: 'au', meaningBn: 'দেখা করা (Meet)', meaningEn: 'Meet' }
+      { word: 'いう', reading: 'iu', meaningBn: 'বলা (Say / To say)', meaningEn: 'Say' },
+      { word: 'あう', reading: 'au', meaningBn: 'দেখা করা / মেলা (Meet)', meaningEn: 'Meet' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'down-right', releaseType: 'tome', descriptionBn: 'উপরের ছোট তীর্যক ফোটা বা ড্যাশ', descriptionEn: 'Short slanted top stroke', path: 'M 44 20 Q 52 24 58 26', startPoint: { x: 44, y: 20 } },
@@ -118,9 +114,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'An Exotic bird on a branch.',
     mnemonicBn: 'ডালে বসে থাকা একটি চমৎকার পাখি।',
     exampleVocab: [
-      { word: 'え', reading: 'e', meaningBn: 'ছবি / চিত্র (Picture)', meaningEn: 'Picture / Painting' },
       { word: 'いえ', reading: 'ie', meaningBn: 'বাড়ি (House)', meaningEn: 'House' },
-      { word: 'うえ', reading: 'ue', meaningBn: 'উপরে (Up / Above)', meaningEn: 'Up / Above' }
+      { word: 'うえ', reading: 'ue', meaningBn: 'উপরে (Up / Above)', meaningEn: 'Up / Above' },
+      { word: 'え', reading: 'e', meaningBn: 'ছবি / চিত্র (Picture)', meaningEn: 'Picture / Painting' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'down-right', releaseType: 'tome', descriptionBn: 'উপরের ছোট মাথার দাগ', descriptionEn: 'Top slanted dash', path: 'M 46 18 Q 54 22 58 24', startPoint: { x: 46, y: 18 } },

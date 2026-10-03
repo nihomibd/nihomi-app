@@ -613,7 +613,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                   symbol: 'あ',
                   reading: 'a',
                   meaningBn: 'আ',
-                  japanContext: 'টোকিওতে আন্তরিক অভিবাদন ও ভালোবাসা: あい (Ai)',
+                  japanContext: 'জাপানি ভাষার সর্বপ্রথম মৌলিক স্বরবর্ণ: あ (a)। এটি সব জাপানি শব্দের ভিত্তি।',
                   type: 'kana'
                 }}
               />
@@ -660,7 +660,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     <span className="text-emerald-400 font-black text-base sm:text-lg">ভালোবাসা (Love)</span>
                   </div>
                   <p className="text-xs text-stone-300 mt-0.5 leading-relaxed">
-                    এখানে আমাদের চেনা <span className="text-amber-300 font-bold">'あ'</span> (আ) এবং পরবর্তী স্বরবর্ণ <span className="text-amber-300 font-bold">'い'</span> (ই) মিলে তৈরি হয়েছে <span className="font-japanese font-bold text-white">あい</span> (ভালোবাসা)। কোনো অপ্রয়োজনীয় ব্যঞ্জনবর্ণ ছাড়াই খাঁটি স্বরবর্ণের শব্দ!
+                    আগের ধাপে শেখা <span className="text-amber-300 font-bold">'あ'</span> (আ) এবং নতুন স্বরবর্ণ <span className="text-amber-300 font-bold">'い'</span> (ই) যুক্ত হয়ে তৈরি হয়েছে <span className="font-japanese font-bold text-white">あい</span> (ভালোবাসা)। কোনো অপ্রয়োজনীয় ব্যঞ্জনবর্ণ ছাড়াই খাঁটি স্বরবর্ণের শব্দ!
                   </p>
                 </div>
               </div>

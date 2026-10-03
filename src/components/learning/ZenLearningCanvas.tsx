@@ -9,7 +9,9 @@ import {
   CheckCircle2,
   Check,
   Award,
-  ChevronLeft
+  ChevronLeft,
+  HelpCircle,
+  X
 } from 'lucide-react';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
@@ -45,14 +47,14 @@ export const HIRAGANA_VOWELS: VowelData[] = [
     strokeCount: 3,
     listenPrompt: "প্রথমে কান দিয়ে শোনো: 'আ' (あ)।",
     watchPrompt: "দেখো কীভাবে জাপানিরা ৩টি টানে 'আ' লিখে—উপর থেকে নিচে সোজা দাগ, আর পেট গোল!",
-    practiceCoaching: "এবার আঙুল বা মাউস দিয়ে ওপর থেকে নিচে একটা সোজা দাগ টানো, তারপর পেটটা গোল করে দাও। খাতায় একবার লিখে দেখো! ভুল হলে কোনো সমস্যা নেই, আবার মুছে চেষ্টা করো!",
+    practiceCoaching: "এবার আঙুল বা মাউস দিয়ে ওপর থেকে নিচে একটা সোজা দাগ টানো, তারপর পেটটা গোল করে দাও। ভুল হলে কোনো সমস্যা নেই, আবার মুছে চেষ্টা করো!",
     feedbackPraise: "সাবাশ! চমৎকার হয়েছে!",
     realLifeWord: {
-      ja: 'あい',
-      romaji: 'Ai',
-      meaningBn: 'ভালোবাসা'
+      ja: 'あ',
+      romaji: 'a',
+      meaningBn: 'মৌলিক স্বরবর্ণ'
     },
-    realLifeQuote: "জাপানি ভাষায় 'Ai' (あい) মানে ভালোবাসা! দুটি খাঁটি স্বরবর্ণ 'あ' এবং 'い' মিলেই তৈরি হয়ে যায় চমৎকার এই অর্থপূর্ণ শব্দটি।"
+    realLifeQuote: "জাপানি বর্ণমালার সর্বপ্রথম ও ভিত্তিমূল স্বরবর্ণ হলো 'あ' (আ)। এখনো কোনো দ্বিতীয় বর্ণ শেখা হয়নি, তাই কোনো মিশ্র শব্দ নয়—শুধু 'あ' ধ্বনিটি স্পষ্ট মুক্ত কণ্ঠে আত্মস্থ করো!"
   },
   {
     char: 'い',
@@ -64,11 +66,11 @@ export const HIRAGANA_VOWELS: VowelData[] = [
     practiceCoaching: "খুব সহজ! বামের দাগটা একটু বাঁকিয়ে নিচে নামিয়ে ওপরে তোলো, আর ডানে ছোট একটা দাগ দাও। চেষ্টা করে দেখো!",
     feedbackPraise: "দারুণ! একেবারে পারফেক্ট!",
     realLifeWord: {
-      ja: 'いえ',
-      romaji: 'Ie',
-      meaningBn: 'বাড়ি / ঘর'
+      ja: 'あい',
+      romaji: 'Ai',
+      meaningBn: 'ভালোবাসা (Love)'
     },
-    realLifeQuote: "জাপানি ভাষায় 'Ie' (いえ) মানে বাড়ি। কিংবা 'Ii' (いい) মানে ভালো। দুটি শব্দই খাঁটি স্বরবর্ণ দিয়ে গঠিত!"
+    realLifeQuote: "প্রথম শব্দ আনলক! আগে শেখা 'あ' আর নতুন 'い' যুক্ত হয়ে তৈরি হলো তোমার জীবনের প্রথম সম্পূর্ণ জাপানি শব্দ: 'あい' (Ai - ভালোবাসা)! কোনো অপরিচিত ব্যঞ্জনবর্ণ ছাড়া খাঁটি স্বরবর্ণের মিলন!"
   },
   {
     char: 'う',
@@ -80,11 +82,11 @@ export const HIRAGANA_VOWELS: VowelData[] = [
     practiceCoaching: "প্রথমে মাথায় ছোট একটা টান দাও, তারপর নিচে চাঁদের মতো গোল করে নামিয়ে দাও। একদম ইজি!",
     feedbackPraise: "অসাধারণ! দারুণ হাত ঘুরেছে!",
     realLifeWord: {
-      ja: 'うえ',
-      romaji: 'Ue',
-      meaningBn: 'উপরে / শীর্ষ'
+      ja: 'いう',
+      romaji: 'Iu',
+      meaningBn: 'বলা (To say)'
     },
-    realLifeQuote: "জাপানি ভাষায় 'Ue' (うえ) মানে উপরে বা শীর্ষ। 'উ' আর 'এ' মিলেই কোনো ব্যঞ্জনবর্ণ ছাড়া তৈরি এই শব্দ!"
+    realLifeQuote: "নতুন শব্দ আনলক! আগে শেখা 'い' আর নতুন 'う' যুক্ত হয়ে তৈরি হলো দৈনন্দিন অত্যন্ত প্রয়োজনীয় শব্দ: 'いう' (Iu - বলা)। এছাড়াও 'あう' (Au - দেখা করা / মেলা)-ও তুমি পড়তে পারো!"
   },
   {
     char: 'え',
@@ -96,11 +98,11 @@ export const HIRAGANA_VOWELS: VowelData[] = [
     practiceCoaching: "উপরে ছোট্ট একটা টান দিয়ে নিচে ইংরেজি 'Z' অক্ষরের মতো যাও, শেষে নিচে সুন্দর একটা ঢেউ খেলিয়ে দাও। তুমি পারবে!",
     feedbackPraise: "চমৎকার! দারুণ এগিয়ে যাচ্ছো!",
     realLifeWord: {
-      ja: 'え',
-      romaji: 'E',
-      meaningBn: 'ছবি / চিত্র'
+      ja: 'いえ',
+      romaji: 'Ie',
+      meaningBn: 'বাড়ি / ঘর (House)'
     },
-    realLifeQuote: "জাপানি ভাষায় 'E' (え) সরাসরি একটি একক বর্ণ যা একটি পূর্ণাঙ্গ শব্দ—যার অর্থ 'ছবি' বা পেইন্টিং!"
+    realLifeQuote: "আগে শেখা 'い' এবং নতুন 'え' যুক্ত হয়ে তৈরি হলো 'いえ' (Ie - বাড়ি)! এছাড়া আগে শেখা 'う' ও 'え' মিলে তৈরি 'うえ' (Ue - উপরে) শব্দটিও এখন তোমার চেনা!"
   },
   {
     char: 'お',
@@ -110,13 +112,94 @@ export const HIRAGANA_VOWELS: VowelData[] = [
     listenPrompt: "ভালো করে শোনো: 'ও' (お)।",
     watchPrompt: "সোজা ডানে দাগ, নিচে নেমে গোল লুপ ঘুরে ডানে বড় বাঁক, আর ওপরে একটা ফোঁটা।",
     practiceCoaching: "সোজা ডানে একটা দাগ টানো, তারপর নিচে নেমে গোল করে ডানে ঘুরিয়ে দাও। সবশেষে ওপরে ছোট্ট একটা ফোঁটা দাও। চেষ্টা করো!",
-    feedbackPraise: "সাবাশ! তুমি করে দেখিয়েছো!",
+    feedbackPraise: "সাবাশ! তুমি ৫টি স্বরবর্ণই জয় করেছো!",
     realLifeWord: {
-      ja: 'おおい',
-      romaji: 'Ooi',
-      meaningBn: 'অনেক / প্রচুর'
+      ja: 'あお',
+      romaji: 'Ao',
+      meaningBn: 'নীল (Blue)'
     },
-    realLifeQuote: "জাপানি ভাষায় 'Ooi' (おおい) মানে অনেক বা প্রচুর। 'অ' এবং 'ই' খাঁটি স্বরবর্ণের সমন্বয়ে তৈরি প্রতিদিনের শব্দ!"
+    realLifeQuote: "প্রথম শেখা 'あ' আর আজকের 'お' মিলে তৈরি হলো সুন্দর শব্দ 'あお' (Ao - নীল)! এছাড়াও 'おおい' (Ooi - অনেক / প্রচুর) শব্দটিও খাঁটি স্বরবর্ণ দিয়ে তৈরি!"
+  }
+];
+
+export interface MilestoneQuizQuestion {
+  id: number;
+  questionBn: string;
+  subPrompt: string;
+  audioPromptJa?: string;
+  options: {
+    textJa: string;
+    subText: string;
+    isCorrect: boolean;
+  }[];
+  explanationBn: string;
+}
+
+export const MILESTONE_VOWEL_QUIZ: MilestoneQuizQuestion[] = [
+  {
+    id: 1,
+    questionBn: "ধ্বনি ও বর্ণ যাচাই: নিচের কোনটি 'あ' (আ) বর্ণের সঠিক রূপ?",
+    subPrompt: "প্রথম শেখা ভিত্তিমূল স্বরবর্ণটি শনাক্ত করো",
+    audioPromptJa: "あ",
+    options: [
+      { textJa: "あ", subText: "a (আ)", isCorrect: true },
+      { textJa: "い", subText: "i (ই)", isCorrect: false },
+      { textJa: "う", subText: "u (উ)", isCorrect: false },
+      { textJa: "お", subText: "o (ও)", isCorrect: false }
+    ],
+    explanationBn: "সঠিক! 'あ' হলো জাপানি বর্ণমালার সর্বপ্রথম ও সবচেয়ে মৌলিক স্বরবর্ণ।"
+  },
+  {
+    id: 2,
+    questionBn: "প্রথম শব্দ গঠন: 'あ' (আ) এবং 'い' (ই) মিলে কোন আসল জাপানি শব্দটি গঠিত হয়?",
+    subPrompt: "কোনো ব্যঞ্জনবর্ণ ছাড়া খাঁটি স্বরবর্ণের প্রথম শব্দ",
+    audioPromptJa: "あい",
+    options: [
+      { textJa: "あい", subText: "Ai • ভালোবাসা (Love)", isCorrect: true },
+      { textJa: "いう", subText: "Iu • বলা (Say)", isCorrect: false },
+      { textJa: "いえ", subText: "Ie • বাড়ি (House)", isCorrect: false },
+      { textJa: "あお", subText: "Ao • নীল (Blue)", isCorrect: false }
+    ],
+    explanationBn: "চমৎকার! 'あ' + 'い' মিলে তৈরি হয় 'あい' (Ai), যার অর্থ ভালোবাসা!"
+  },
+  {
+    id: 3,
+    questionBn: "অর্থ যাচাই: 'いえ' (Ie) শব্দটির সঠিক বাংলা অর্থ কোনটি?",
+    subPrompt: "স্বরবর্ণ 'い' এবং 'え' এর সমন্বয়ে তৈরি শব্দ",
+    audioPromptJa: "いえ",
+    options: [
+      { textJa: "いえ", subText: "বাড়ি / ঘর (House)", isCorrect: true },
+      { textJa: "あお", subText: "নীল (Blue)", isCorrect: false },
+      { textJa: "うえ", subText: "উপরে (Up / Above)", isCorrect: false },
+      { textJa: "いう", subText: "বলা (Say)", isCorrect: false }
+    ],
+    explanationBn: "অসাধারণ! 'いえ' (Ie) অর্থ বাড়ি বা ঘর।"
+  },
+  {
+    id: 4,
+    questionBn: "রং যাচাই: জাপানি ভাষায় 'নীল' (Blue) বোঝাতে কোন শব্দটি ব্যবহৃত হয়?",
+    subPrompt: "স্বরবর্ণ 'あ' এবং 'お' দিয়ে গঠিত শব্দ",
+    audioPromptJa: "あお",
+    options: [
+      { textJa: "あお", subText: "Ao • নীল (Blue)", isCorrect: true },
+      { textJa: "うえ", subText: "Ue • উপরে (Above)", isCorrect: false },
+      { textJa: "あい", subText: "Ai • ভালোবাসা (Love)", isCorrect: false },
+      { textJa: "いう", subText: "Iu • বলা (To say)", isCorrect: false }
+    ],
+    explanationBn: "একদম ঠিক! 'あお' (Ao) মানে নীল রঙ।"
+  },
+  {
+    id: 5,
+    questionBn: "দিক ও অবস্থান: 'うえ' (Ue) শব্দটির সঠিক বাংলা অর্থ কী?",
+    subPrompt: "স্বরবর্ণ 'う' এবং 'え' দিয়ে গঠিত শব্দ",
+    audioPromptJa: "うえ",
+    options: [
+      { textJa: "うえ", subText: "উপরে / শীর্ষ (Up / Above)", isCorrect: true },
+      { textJa: "あい", subText: "ভালোবাসা (Love)", isCorrect: false },
+      { textJa: "いえ", subText: "বাড়ি (House)", isCorrect: false },
+      { textJa: "あお", subText: "নীল (Blue)", isCorrect: false }
+    ],
+    explanationBn: "সাবাশ! 'うえ' (Ue) মানে উপরে বা শীর্ষভাগ।"
   }
 ];
 
@@ -160,6 +243,11 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
     return [];
   });
   const [isMilestoneReached, setIsMilestoneReached] = useState<boolean>(false);
+  const [isQuizActive, setIsQuizActive] = useState<boolean>(false);
+  const [quizQuestionIndex, setQuizQuestionIndex] = useState<number>(0);
+  const [quizSelectedOption, setQuizSelectedOption] = useState<number | null>(null);
+  const [quizIsAnswerSubmitted, setQuizIsAnswerSubmitted] = useState<boolean>(false);
+  const [quizScore, setQuizScore] = useState<number>(0);
 
   // Canvas drawing state
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -543,16 +631,167 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
       // Check if this was the last vowel 'お'
       if (currentVowelIndex >= HIRAGANA_VOWELS.length - 1) {
-        setIsMilestoneReached(true);
-        soundEffects.playLessonCelebration();
-        triggerCelebrationConfetti();
-        markLessonComplete();
+        // Trigger 5-Vowel Milestone Review Quiz before milestone completion
+        setIsQuizActive(true);
+        setQuizQuestionIndex(0);
+        setQuizSelectedOption(null);
+        setQuizIsAnswerSubmitted(false);
+        setQuizScore(0);
+        soundEffects.playButtonTap();
       } else {
         // Continuous flow: advance to next character instantly without page reload!
         setCurrentVowelIndex((prev) => prev + 1);
       }
     }
   };
+
+  // =========================================================================
+  // 5-VOWEL MILESTONE REVIEW QUIZ RENDERER
+  // =========================================================================
+  if (isQuizActive) {
+    const currentQ = MILESTONE_VOWEL_QUIZ[quizQuestionIndex];
+    const isLastQuestion = quizQuestionIndex === MILESTONE_VOWEL_QUIZ.length - 1;
+
+    const handleSelectQuizOption = (optIdx: number) => {
+      if (quizIsAnswerSubmitted) return;
+      setQuizSelectedOption(optIdx);
+      setQuizIsAnswerSubmitted(true);
+
+      const isCorrect = currentQ.options[optIdx].isCorrect;
+      if (isCorrect) {
+        setQuizScore((prev) => prev + 1);
+        soundEffects.playCorrectPing();
+      } else {
+        soundEffects.playButtonTap();
+      }
+    };
+
+    const handleAdvanceQuiz = () => {
+      soundEffects.playButtonTap();
+      if (isLastQuestion) {
+        setIsQuizActive(false);
+        setIsMilestoneReached(true);
+        soundEffects.playLessonCelebration();
+        triggerCelebrationConfetti();
+        markLessonComplete();
+      } else {
+        setQuizQuestionIndex((prev) => prev + 1);
+        setQuizSelectedOption(null);
+        setQuizIsAnswerSubmitted(false);
+      }
+    };
+
+    return (
+      <div className={`w-full max-w-2xl mx-auto p-6 sm:p-8 rounded-3xl bg-[#131926] border border-amber-500/35 text-center shadow-2xl space-y-6 ${className}`}>
+        {/* Quiz Header */}
+        <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>৫-স্বরবর্ণ মাস্টার রিভিউ কুইজ</span>
+          </div>
+
+          <div className="text-xs font-mono font-bold text-slate-400">
+            প্রশ্ন <span className="text-amber-400 text-sm font-black">{quizQuestionIndex + 1}</span> / {MILESTONE_VOWEL_QUIZ.length}
+          </div>
+        </div>
+
+        {/* Question Prompt */}
+        <div className="space-y-2 text-left">
+          <h2 className="text-lg sm:text-xl font-black text-white leading-snug">
+            {currentQ.questionBn}
+          </h2>
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>{currentQ.subPrompt}</span>
+            {currentQ.audioPromptJa && (
+              <button
+                type="button"
+                onClick={() => speakJapanese(currentQ.audioPromptJa!)}
+                className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-rose-300 text-xs font-bold flex items-center gap-1 border border-slate-700 cursor-pointer"
+                title="উচ্চারণ শুনুন"
+              >
+                <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                <span>শুনুন</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Options Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          {currentQ.options.map((opt, idx) => {
+            const isSelected = quizSelectedOption === idx;
+            let btnStyle = "bg-[#161D2B] border-slate-800 text-slate-200 hover:border-slate-700";
+
+            if (quizIsAnswerSubmitted) {
+              if (opt.isCorrect) {
+                btnStyle = "bg-emerald-950/70 border-emerald-500 text-emerald-200 shadow-md shadow-emerald-500/20";
+              } else if (isSelected && !opt.isCorrect) {
+                btnStyle = "bg-rose-950/70 border-rose-500 text-rose-200";
+              } else {
+                btnStyle = "bg-[#161D2B] border-slate-800 text-slate-400 opacity-60";
+              }
+            } else if (isSelected) {
+              btnStyle = "bg-amber-500/15 border-amber-500 text-amber-200";
+            }
+
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleSelectQuizOption(idx)}
+                disabled={quizIsAnswerSubmitted}
+                className={`p-4 rounded-2xl border text-left flex items-center justify-between gap-3 transition-all cursor-pointer ${btnStyle} ${!quizIsAnswerSubmitted ? 'active:scale-98' : ''}`}
+              >
+                <div className="space-y-0.5">
+                  <div className="font-japanese font-black text-2xl tracking-wide text-white">
+                    {opt.textJa}
+                  </div>
+                  <div className="text-xs font-medium text-slate-300">
+                    {opt.subText}
+                  </div>
+                </div>
+
+                {quizIsAnswerSubmitted && (
+                  <div>
+                    {opt.isCorrect ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    ) : isSelected ? (
+                      <X className="w-5 h-5 text-rose-400 shrink-0" />
+                    ) : null}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Feedback explanation box after submission */}
+        {quizIsAnswerSubmitted && (
+          <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs leading-relaxed text-slate-200 space-y-1 animate-in fade-in duration-200">
+            <div className="flex items-center gap-1.5 font-bold text-amber-400">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>ব্যাখ্যা:</span>
+            </div>
+            <p>{currentQ.explanationBn}</p>
+          </div>
+        )}
+
+        {/* Advance Button */}
+        {quizIsAnswerSubmitted && (
+          <div className="pt-2 animate-in fade-in duration-200">
+            <button
+              type="button"
+              onClick={handleAdvanceQuiz}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm shadow-xl shadow-emerald-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <span>{isLastQuestion ? 'ফলাফল দেখুন ও মিশন সম্পন্ন করুন →' : 'পরবর্তী প্রশ্ন →'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   // Milestone Complete Card
   if (isMilestoneReached) {
@@ -563,9 +802,15 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
         </div>
 
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>মিশন ০১ সম্পন্ন • +৫০ XP অর্জিত</span>
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>মিশন ০১ সম্পন্ন • +৫০ XP অর্জিত</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>রিভিউ কুইজ স্কোর: {quizScore}/5</span>
+            </div>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white">
             অভিনন্দন! তুমি জাপানিজ ভাষার প্রথম ৫টি মৌলিক স্বরবর্ণ শিখে ফেলেছো!
@@ -608,15 +853,31 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             <ArrowRight className="w-5 h-5" />
           </button>
 
-          <button
-            onClick={() => {
-              setIsMilestoneReached(false);
-              setCurrentVowelIndex(0);
-            }}
-            className="text-xs text-slate-400 hover:text-white font-medium transition cursor-pointer"
-          >
-            আবার 'あ' থেকে রিভিশন করি 🔄
-          </button>
+          <div className="flex items-center justify-center gap-4 pt-1">
+            <button
+              onClick={() => {
+                setIsMilestoneReached(false);
+                setIsQuizActive(true);
+                setQuizQuestionIndex(0);
+                setQuizSelectedOption(null);
+                setQuizIsAnswerSubmitted(false);
+                setQuizScore(0);
+              }}
+              className="text-xs text-amber-300 hover:text-amber-200 font-bold transition cursor-pointer"
+            >
+              রিভিউ কুইজ আবার দিই 🎯
+            </button>
+            <span className="text-slate-600">•</span>
+            <button
+              onClick={() => {
+                setIsMilestoneReached(false);
+                setCurrentVowelIndex(0);
+              }}
+              className="text-xs text-slate-400 hover:text-white font-medium transition cursor-pointer"
+            >
+              আবার 'あ' থেকে রিভিশন করি 🔄
+            </button>
+          </div>
         </div>
       </div>
     );
