@@ -57,7 +57,7 @@ const VALUE_CARDS: ValueCard[] = [
     categoryJa: 'AI専属教師',
     categoryBn: '২৪/৭ এআই টিউটর',
     titleEn: 'Personal AI Sensei',
-    titleJa: '24時間専属 AI先生 (Tanaka Sensei)',
+    titleJa: '24時間専属 AI先生 (Nihomi Sensei AI™)',
     titleBn: '২৪/৭ নিবেদিত জাপানিজ সেনসেই',
     taglineBn: 'যেকোনো মুহূর্তে সঠিক ব্যাকরণ সংশোধন, বাস্তব কেইগো বিশ্লেষণ এবং লাইভ স্পিচ ফিডব্যাক।',
     accentColor: 'text-rose-400',
@@ -412,14 +412,14 @@ export const ValueRevealCarousel: React.FC<ValueRevealCarouselProps> = ({
                       </div>
                     </div>
 
-                    {/* Tanaka Sensei AI Response */}
+                    {/* Nihomi Sensei AI™ Response */}
                     <div className="flex items-start space-x-2.5">
                       <div className="w-7 h-7 rounded-xl bg-red-600 text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-md">
                         先
                       </div>
                       <div className="p-3.5 rounded-2xl bg-gradient-to-br from-red-950/40 to-stone-900 border border-red-500/30 text-xs text-stone-100 space-y-2">
                         <div className="flex items-center justify-between text-[11px] text-red-400 font-bold">
-                          <span>Tanaka Sensei AI™ (田中先生)</span>
+                          <span>Nihomi Sensei AI™ (にほみ先生)</span>
                           <span className="flex items-center gap-1 text-emerald-400 text-[10px]">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                             Active

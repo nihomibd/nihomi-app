@@ -68,9 +68,9 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
       id: 'welcome',
       role: 'assistant',
       content:
-        'こんにちは！ (Konnichiwa!) আমি Sensei Tanaka (田中先生) — আপনার ব্যক্তিগত জাপানি শিক্ষক।\n' +
+        'こんにちは！ (Konnichiwa!) আমি Nihomi Sensei AI™ (にほみ先生) — আপনার ব্যক্তিগত জাপানি শিক্ষক।\n' +
         'যেকোনো জাপানি শব্দ, ব্যাকরণ (যেমন は vs が), কাঞ্জি কিংবা জাপানে বসবাসের নিয়মাবলী সম্পর্কে বাংলায় জিজ্ঞাসা করুন। প্রতিটি জাপানি শব্দের সঠিক টোকিও উচ্চারণ শুনতে 🔊 স্পিকার আইকনে ট্যাপ করুন।',
-      japanesePhrases: ['こんにちは', '田中先生'],
+      japanesePhrases: ['こんにちは', 'にほみ先生'],
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -226,7 +226,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
         body: JSON.stringify({
           message: trimmed,
           mode: 'conversation',
-          scenario: 'N5 Japanese tutoring with Sensei Tanaka',
+          scenario: 'N5 Japanese tutoring with Nihomi Sensei AI™',
           history: nextMessages.slice(-6).map((m) => ({
             role: m.role,
             content: m.content
@@ -243,7 +243,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
         }
         if (res.status === 401) {
           // Graceful guest handling if unauthenticated
-          const fallbackReply = 'こんにちは！Tanaka Sensei এখানে আছেন। জাপানি ভাষায় যেকোনো ব্যাকরণ বা শব্দার্থ সম্পর্কে প্রশ্ন করুন।';
+          const fallbackReply = 'こんにちは！Nihomi Sensei AI™ এখানে আছেন। জাপানি ভাষায় যেকোনো ব্যাকরণ বা শব্দার্থ সম্পর্কে প্রশ্ন করুন।';
           const aiMsg: AiMessage = {
             id: `ai-${Date.now()}`,
             role: 'assistant',
@@ -254,7 +254,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
           setMessages((prev) => [...prev, aiMsg]);
           return;
         }
-        throw new Error(data.error || 'Sensei Tanaka এর সাথে যোগাযোগ করা যায়নি।');
+        throw new Error(data.error || 'Nihomi Sensei AI™ এর সাথে যোগাযোগ করা যায়নি।');
       }
 
       const replyContent =
@@ -292,13 +292,13 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
       }}
     >
       <div className="relative w-full h-full sm:h-[92vh] sm:max-h-[760px] sm:max-w-2xl flex flex-col sm:rounded-3xl border-0 sm:border sm:border-rose-500/30 bg-[#0a0a12] text-slate-100 shadow-2xl overflow-hidden pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
-        {/* Header with Sensei Tanaka Avatar, Title, Audio Toggle & Close */}
+        {/* Header with Nihomi Sensei AI™ Avatar, Title, Audio Toggle & Close */}
         <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 sm:py-4 border-b border-slate-800/80 bg-gradient-to-r from-[#141424] via-[#0f0f1c] to-[#0a0a12] shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <div className="relative shrink-0">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 p-0.5 shadow-lg shadow-rose-500/20">
                 <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                  <span className="font-japanese font-black text-rose-400 text-sm sm:text-base">田中</span>
+                  <span className="font-japanese font-black text-rose-400 text-sm sm:text-base">にほみ</span>
                 </div>
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a12]" />
@@ -308,7 +308,7 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <h3 className="text-sm sm:text-base font-bold text-white leading-tight">Nihomi Sensei AI™</h3>
                 <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/30">
-                  Tanaka
+                  Sensei
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 truncate max-w-[170px] sm:max-w-xs">
@@ -438,11 +438,11 @@ export const AiSenseiModal: React.FC<AiSenseiModalProps> = ({
             <div className="flex items-end gap-2.5 max-w-[85%] animate-in fade-in slide-in-from-bottom-2 duration-200">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 p-0.5 shrink-0 shadow-md">
                 <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                  <span className="font-japanese font-black text-rose-400 text-[10px]">田中</span>
+                  <span className="font-japanese font-black text-rose-400 text-[10px]">にほみ</span>
                 </div>
               </div>
               <div className="bg-[#18182e] border border-slate-800/80 rounded-2xl rounded-bl-xs px-4 py-3 shadow-lg flex items-center gap-2.5">
-                <span className="text-[11px] text-slate-300 font-medium">Sensei Tanaka is typing</span>
+                <span className="text-[11px] text-slate-300 font-medium">Nihomi Sensei AI™ is typing</span>
                 <div className="flex items-center gap-1 pt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-typing-dot" style={{ animationDelay: '0ms' }} />
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-typing-dot" style={{ animationDelay: '200ms' }} />

@@ -54,9 +54,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'Looks like an Apple with a stem and a round body.',
     mnemonicBn: 'আপেলের মতো গোল পেট এবং উপরে ডাঁটাযুক্ত আকৃতি।',
     exampleVocab: [
-      { word: 'あさ', reading: 'asa', meaningBn: 'সকাল (Morning)', meaningEn: 'Morning' },
-      { word: 'あめ', reading: 'ame', meaningBn: 'বৃষ্টি / ক্যান্ডি', meaningEn: 'Rain / Candy' },
-      { word: 'ありがとう', reading: 'arigatou', meaningBn: 'ধন্যবাদ (Thank you)', meaningEn: 'Thank you' }
+      { word: 'あい', reading: 'ai', meaningBn: 'ভালোবাসা (Love)', meaningEn: 'Love' },
+      { word: 'あお', reading: 'ao', meaningBn: 'নীল (Blue)', meaningEn: 'Blue' },
+      { word: 'あう', reading: 'au', meaningBn: 'দেখা করা / মেলা (Meet)', meaningEn: 'Meet / Fit' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'স্ট্রোক ১: বাম থেকে ডানে মসৃণ আড়াআড়ি দাগ (MEXT)', descriptionEn: 'Stroke 1: Smooth horizontal crossbar left-to-right', path: 'M 26 31 C 38 31 55 29 74 30', startPoint: { x: 26, y: 31 } },
@@ -76,9 +76,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'Two Eels swimming side-by-side.',
     mnemonicBn: 'পাশাপাশি সাঁতার কাটা দুটি ইল মাছ।',
     exampleVocab: [
-      { word: 'いぬ', reading: 'inu', meaningBn: 'কুকুর (Dog)', meaningEn: 'Dog' },
       { word: 'いえ', reading: 'ie', meaningBn: 'বাড়ি (House)', meaningEn: 'House' },
-      { word: 'いま', reading: 'ima', meaningBn: 'এখন (Now)', meaningEn: 'Now' }
+      { word: 'いい', reading: 'ii', meaningBn: 'ভালো (Good)', meaningEn: 'Good' },
+      { word: 'いう', reading: 'iu', meaningBn: 'বলা (Say)', meaningEn: 'Say' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'hook', releaseType: 'hane', descriptionBn: 'বামের বড় বাঁকানো রেখা ও শেষের হুক', descriptionEn: 'Left curve down with an upward hook', path: 'M 32 24 Q 28 55 34 76 Q 38 78 44 72', startPoint: { x: 32, y: 24 } },
@@ -97,9 +97,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'A person bent over carrying a heavy load.',
     mnemonicBn: 'ভারী বোঝা বহন করতে গিয়ে ঝুঁকে পড়া এক ব্যক্তি।',
     exampleVocab: [
-      { word: 'うみ', reading: 'umi', meaningBn: 'সমুদ্র (Sea)', meaningEn: 'Sea / Ocean' },
-      { word: 'うし', reading: 'ushi', meaningBn: 'গরু (Cow)', meaningEn: 'Cow' },
-      { word: 'うた', reading: 'uta', meaningBn: 'গান (Song)', meaningEn: 'Song' }
+      { word: 'うえ', reading: 'ue', meaningBn: 'উপরে (Up / Above)', meaningEn: 'Up / Above' },
+      { word: 'いう', reading: 'iu', meaningBn: 'বলা (Say)', meaningEn: 'Say' },
+      { word: 'あう', reading: 'au', meaningBn: 'দেখা করা (Meet)', meaningEn: 'Meet' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'down-right', releaseType: 'tome', descriptionBn: 'উপরের ছোট তীর্যক ফোটা বা ড্যাশ', descriptionEn: 'Short slanted top stroke', path: 'M 44 20 Q 52 24 58 26', startPoint: { x: 44, y: 20 } },
@@ -118,9 +118,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'An Exotic bird on a branch.',
     mnemonicBn: 'ডালে বসে থাকা একটি চমৎকার পাখি।',
     exampleVocab: [
-      { word: 'えき', reading: 'eki', meaningBn: 'রেল স্টেশন (Station)', meaningEn: 'Train Station' },
-      { word: 'えんぴつ', reading: 'enpitsu', meaningBn: 'পেন্সিল (Pencil)', meaningEn: 'Pencil' },
-      { word: 'えいが', reading: 'eiga', meaningBn: 'চলচ্চিত্র (Movie)', meaningEn: 'Movie' }
+      { word: 'え', reading: 'e', meaningBn: 'ছবি / চিত্র (Picture)', meaningEn: 'Picture / Painting' },
+      { word: 'いえ', reading: 'ie', meaningBn: 'বাড়ি (House)', meaningEn: 'House' },
+      { word: 'うえ', reading: 'ue', meaningBn: 'উপরে (Up / Above)', meaningEn: 'Up / Above' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'down-right', releaseType: 'tome', descriptionBn: 'উপরের ছোট মাথার দাগ', descriptionEn: 'Top slanted dash', path: 'M 46 18 Q 54 22 58 24', startPoint: { x: 46, y: 18 } },
@@ -139,9 +139,9 @@ export const HIRAGANA_SEION: KanaCharacter[] = [
     mnemonicEn: 'A golfer crying "Oh!" after hitting a ball.',
     mnemonicBn: 'গলফ খেলে বলের দিকে তাকিয়ে "ওহ!" বলা।',
     exampleVocab: [
-      { word: 'お茶 (おちゃ)', reading: 'ocha', meaningBn: 'সবুজ চা (Green Tea)', meaningEn: 'Green Tea' },
-      { word: 'お金 (おかね)', reading: 'okane', meaningBn: 'টাকা / অর্থ (Money)', meaningEn: 'Money' },
-      { word: 'おにぎり', reading: 'onigiri', meaningBn: 'রাইস বল (Rice ball)', meaningEn: 'Rice Ball' }
+      { word: 'おおい', reading: 'ooi', meaningBn: 'অনেক / প্রচুর (Many)', meaningEn: 'Many / Numerous' },
+      { word: 'あお', reading: 'ao', meaningBn: 'নীল (Blue)', meaningEn: 'Blue' },
+      { word: 'おおう', reading: 'oou', meaningBn: 'ঢেকে রাখা (To cover)', meaningEn: 'To cover' }
     ],
     strokeDetails: [
       { strokeNumber: 1, direction: 'right', releaseType: 'tome', descriptionBn: 'বামের ছোট আড়াআড়ি দাগ', descriptionEn: 'Horizontal line left to right', path: 'M 24 36 L 56 36', startPoint: { x: 24, y: 36 } },

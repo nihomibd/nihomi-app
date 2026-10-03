@@ -327,12 +327,12 @@ export const ContextualPaywallModal: React.FC<ContextualPaywallModalProps> = ({
             {/* Header: AI Sensei Contextual Interruption */}
             <div className="flex items-start gap-3.5 mb-4">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-rose-900/30 flex-shrink-0">
-                田
+                に
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                    TANAKA AI SENSEI RECOMMENDATION
+                    NIHOMI SENSEI AI™ RECOMMENDATION
                   </span>
                   <span className="text-[11px] text-zinc-400 font-mono">Shibuya Campus Gateway</span>
                 </div>
@@ -556,7 +556,7 @@ export const ContextualPaywallModal: React.FC<ContextualPaywallModalProps> = ({
               নিহোমি কয়েন টপ-আপ করুন
             </h2>
             <p className="text-xs text-zinc-400 mt-0.5 mb-5">
-              তানাকা সেনসেইয়ের রিয়েল-টাইম ভয়েস কোচিং, রেস্তোরাঁ ও কনবিনি সিমুলেশন সরাসরি আনলক করতে কয়েন প্যাক রিচার্জ করুন।
+              Nihomi Sensei AI™-র রিয়েল-টাইম ভয়েস কোচিং, রেস্তোরাঁ ও কনবিনি সিমুলেশন সরাসরি আনলক করতে কয়েন প্যাক রিচার্জ করুন।
             </p>
 
             {/* 3 Coin Packages Grid */}

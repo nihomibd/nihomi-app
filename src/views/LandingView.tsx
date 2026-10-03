@@ -135,7 +135,7 @@ const HERO_DIALOGUES: HeroDialogue[] = [
     contextJa: 'レストランでの席予約',
     badge: 'Tokyo Restaurant Roleplay',
     sensei: {
-      name: '田中 先生 (Tanaka Sensei)',
+      name: 'Nihomi Sensei AI™ (にほみ先生)',
       textJa: 'いらっしゃいませ！何名様ですか？',
       textRomaji: 'Irasshaimase! Nanmei-sama desu ka?',
       textBn: 'স্বাগতম! আপনারা কতজন?'
@@ -747,7 +747,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           <div className="bg-[#161D2B] rounded-3xl border border-slate-800 shadow-xl p-4 sm:p-5 text-left space-y-3 backdrop-blur-xl">
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>তানাকা AI সেনসেইকে যেকোনো ব্যাকরণ বা শব্দ জিজ্ঞাসা করুন:</span>
+              <span>Nihomi Sensei AI™-কে যেকোনো ব্যাকরণ বা শব্দ জিজ্ঞাসা করুন:</span>
             </div>
             
             <div className="flex items-center gap-2">

@@ -94,14 +94,14 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     targetAudienceBn: 'প্রথমবার JLPT N5 পরীক্ষার্থী ও জাপানে স্টুডেন্ট ভিসার আবেদনকারী',
     features: [
       'Full JLPT N5 Curriculum (Lessons 1–25)',
-      'Tanaka AI Sensei Text & Voice Q&A (100 Monthly Coins)',
+      'Nihomi Sensei AI™ Text & Voice Q&A (100 Monthly Coins)',
       'Digital Student ID & Verifiable Attendance',
       'All Shibuya 3D Workplace Simulations',
       'Mistake Recovery Ghost Mode'
     ],
     featuresBn: [
       'সম্পূর্ণ JLPT N5 সিলেবাস (লেসন ১-২৫)',
-      'তানাকা AI সেনসেই টেক্সট ও ভয়েস চ্যাট (১০০ মাসিক কয়েন)',
+      'Nihomi Sensei AI™ টেক্সট ও ভয়েস চ্যাট (১০০ মাসিক কয়েন)',
       'ডিজিটাল স্টুডেন্ট আইডি ও উপস্থিতি ট্র্যাকার',
       'শিবুয়া ৩ডি সকল কর্মক্ষেত্র সিমুলেশন অ্যাক্সেস',
       'মিস্টেক রিকভারি ঘোস্ট মোড'
@@ -124,7 +124,7 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     features: [
       'Complete JLPT N5 + N4 Curriculum (Minna no Nihongo 1–50)',
       '500 Monthly Nihomi Coins for AI Simulations',
-      'High-Speed Tanaka Sensei Audio Pronunciation Lab',
+      'High-Speed Nihomi Sensei AI™ Audio Pronunciation Lab',
       'Full Learning DNA Diagnostic & Weakness Fixer',
       'WorkOS™ POS Terminal & Izakaya Roleplay Included',
       'JLPT Official Mock Exam Scoring Engine'
@@ -132,7 +132,7 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     featuresBn: [
       'সম্পূর্ণ JLPT N5 + N4 সিলেবাস (মিন্না নো নিহোঙ্গো ১-৫০)',
       '৫০০ মাসিক নিহোমি কয়েন (AI সিমুলেশনের জন্য)',
-      'হাই-স্পিড তানাকা সেনসেই অডিও প্রোনাউন্সিয়েশন ল্যাব',
+      'হাই-স্পিড Nihomi Sensei AI™ অডিও প্রোনাউন্সিয়েশন ল্যাব',
       'লার্নিং DNA ডায়াগনস্টিক ও দুর্বলতা সমাধান ইঞ্জিন',
       'WorkOS™ কনবিনি POS ও ইজাকায়া রোলপ্লে অন্তর্ভুক্ত',
       'JLPT অফিসিয়াল ফুল মক এক্সাম ইঞ্জিন'
@@ -217,7 +217,7 @@ export const JAPAN_TRIP_PASSES: Record<string, JapanTripPassPlan> = {
     targetAudienceBn: 'দুই সপ্তাহের পূর্ণ জাপান ভ্রমণকারী ও ব্যবসায়িক প্রতিনিধি',
     features: [
       '14 Days Unlimited Access to All Spatial Hotspots',
-      '500 Nihomi Coins for Live Tanaka AI Voice Coaching',
+      '500 Nihomi Coins for Live Nihomi Sensei AI™ Voice Coaching',
       'Traditional Izakaya & Ramen Dining Dialogue Simulators',
       'Shinkansen (Bullet Train) Booking & Hotel Check-in Guide',
       'Live Japanese Restaurant Menu OCR Kanji Decoder',
@@ -225,7 +225,7 @@ export const JAPAN_TRIP_PASSES: Record<string, JapanTripPassPlan> = {
     ],
     featuresBn: [
       '১৪ দিন আনলিমিটেড ৩ডি স্পাশিয়াল হটস্পট অ্যাক্সেস',
-      '৫০০টি নিহোমি কয়েন (তানাকা সেনসেইয়ের লাইভ কোচিং)',
+      '৫০০টি নিহোমি কয়েন (Nihomi Sensei AI™-র লাইভ কোচিং)',
       'ঐতিহ্যবাহী ইজাকায়া ও রামেন ডাইনিং ডায়ালগ সিমুলেটর',
       'শিনকানসেন বুলেট ট্রেন টিকিট ও হোটেল চেক-ইন গাইড',
       'রেস্তোরাঁর মেনু রিডার ও কাঞ্জি ডিকোডার',

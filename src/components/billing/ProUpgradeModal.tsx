@@ -397,7 +397,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                        <span>Tanaka AI সেনসেই আনলিমিটেড</span>
+                        <span>Nihomi Sensei AI™ আনলিমিটেড</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />

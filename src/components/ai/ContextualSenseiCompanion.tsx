@@ -182,7 +182,7 @@ function resolveContextualResponse(actionKey: string, concept: ContextualSenseiP
 
     default:
       return {
-        text: `তানাকা সেনসেই আপনার সাথে আছেন। "${sym}" মনোযোগ দিয়ে অনুশীলন করুন!`,
+        text: `Nihomi Sensei AI™ আপনার সাথে আছেন। "${sym}" মনোযোগ দিয়ে অনুশীলন করুন!`,
         audioPhrase: sym
       };
   }
@@ -229,7 +229,7 @@ export const ContextualSenseiCompanion: React.FC<ContextualSenseiProps> = ({
           <Bot className="w-2.5 h-2.5" />
         </div>
         <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
-        <span>তানাকা সেনসেই (Tanaka Sensei Tips)</span>
+        <span>Nihomi Sensei AI™ (টিপস ও গাইড)</span>
         {isOpen ? <ChevronUp className="w-3.5 h-3.5 text-stone-400" /> : <ChevronDown className="w-3.5 h-3.5 text-stone-400" />}
       </button>
 
@@ -240,11 +240,11 @@ export const ContextualSenseiCompanion: React.FC<ContextualSenseiProps> = ({
           <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3 mb-3">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-lg bg-red-600 flex items-center justify-center text-white text-xs font-bold">
-                田
+                に
               </div>
               <div>
                 <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <span>Tanaka Sensei</span>
+                  <span>Nihomi Sensei AI™</span>
                   <span className="text-[10px] text-amber-400 font-normal">・ জাপানিজ লার্নিং মেন্টর</span>
                 </div>
               </div>
@@ -286,7 +286,7 @@ export const ContextualSenseiCompanion: React.FC<ContextualSenseiProps> = ({
           {isThinking && (
             <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center gap-2 text-xs text-stone-400 animate-pulse">
               <Loader2 className="w-3.5 h-3.5 animate-spin text-red-400" />
-              <span>সেনসেই বিশ্লেষণ করছেন...</span>
+              <span>Nihomi Sensei AI™ বিশ্লেষণ করছেন...</span>
             </div>
           )}
 

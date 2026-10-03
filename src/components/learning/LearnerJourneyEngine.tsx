@@ -46,11 +46,11 @@ export interface LearnerJourneyEngineProps {
 }
 
 // 5 Canonical Stages of Mandate v6.0 Blueprint
-// Flow: START -> 'あ' KANA ENGINE -> FIRST WORD ('あさ') -> TOKYO KONBINI -> MISSION COMPLETE & WHATSAPP ACCOUNT
+// Flow: START -> 'あ' KANA ENGINE -> FIRST WORD ('あい') -> TOKYO KONBINI -> MISSION COMPLETE & WHATSAPP ACCOUNT
 type GoldenJourneyStage =
   | 'start'             // 1. START (Welcome to Tokyo, Mt. Fuji Sunset Panorama)
   | 'kana_engine'       // 2. 'あ' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)
-  | 'word_asa'          // 3. FIRST REAL WORD ('あさ' - Asa • Pure Hiragana, NO kanji 朝!)
+  | 'word_ai'           // 3. FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, NO consonants!)
   | 'konbini'           // 4. TOKYO KONBINI SCENARIO (Zero Cut-Off, Widescreen 7-Eleven)
   | 'mission_complete'; // 5. MISSION 01 COMPLETE & WHATSAPP INSTANT ACCOUNT
 
@@ -63,13 +63,13 @@ interface StageMeta {
 const GOLDEN_STAGES: StageMeta[] = [
   { id: 'start', label: 'শুরু', Icon: IconSprout3D },
   { id: 'kana_engine', label: "'あ' লেখা", Icon: IconBrush3D },
-  { id: 'word_asa', label: 'প্রথম শব্দ', Icon: IconSun3D },
+  { id: 'word_ai', label: 'প্রথম শব্দ', Icon: IconSun3D },
   { id: 'konbini', label: 'কনবিনি', Icon: IconKonbini3D },
   { id: 'mission_complete', label: 'সম্পন্ন', Icon: IconTrophy3D }
 ];
 
 // ============================================================================
-// FULL-BLEED JAPANESE PANORAMA: Mt. Fuji Sunset, Tokyo Skyline & Tanaka Sensei
+// FULL-BLEED JAPANESE PANORAMA: Mt. Fuji Sunset, Tokyo Skyline & Nihomi Sensei AI™
 // ============================================================================
 const TokyoScenicPanorama: React.FC<{ isCompact?: boolean }> = ({ isCompact = false }) => (
   <div className={`relative w-full max-w-2xl lg:max-w-3xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-b from-[#161233] via-[#241744] to-[#0e0a1c] border border-amber-500/25 shadow-2xl flex items-center justify-center ${isCompact ? 'h-36 sm:h-40 max-h-40' : 'h-36 sm:h-44 md:h-48 max-h-48 md:max-h-52'}`}>
@@ -163,7 +163,7 @@ const TokyoScenicPanorama: React.FC<{ isCompact?: boolean }> = ({ isCompact = fa
         </g>
       </g>
 
-      {/* Cheerful Tanaka Sensei Character Vector (Friendly & Animated Waving) */}
+      {/* Cheerful Nihomi Sensei AI™ Character Vector (Friendly & Animated Waving) */}
       <g transform="translate(300, 100)">
         <rect x="-18" y="55" width="36" height="55" rx="10" fill="#1e1b4b" />
         <polygon points="-6,55 0,65 6,55 0,58" fill="#ffffff" />
@@ -602,7 +602,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
               ]}
               onAdvanceToNext={() => {
                 soundEffects.playButtonTap();
-                setCurrentStage('word_asa');
+                setCurrentStage('word_ai');
               }}
             />
 
@@ -613,7 +613,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                   symbol: 'あ',
                   reading: 'a',
                   meaningBn: 'আ',
-                  japanContext: 'Tokyo 7-Eleven: ありがとう (Arigatou - ধন্যবাদ)',
+                  japanContext: 'টোকিওতে আন্তরিক অভিবাদন ও ভালোবাসা: あい (Ai)',
                   type: 'kana'
                 }}
               />
@@ -622,9 +622,9 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
         )}
 
         {/* ----------------------------------------------------------------------- */}
-        {/* STAGE 3: FIRST REAL WORD ('あさ' - Asa • Pure Hiragana, NO kanji 朝!)    */}
+        {/* STAGE 3: FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, NO consonants!) */}
         {/* ----------------------------------------------------------------------- */}
-        {currentStage === 'word_asa' && (
+        {currentStage === 'word_ai' && (
           <div className="space-y-3 sm:space-y-4 max-w-lg mx-auto text-center animate-in zoom-in-95 duration-200 my-auto">
             {/* Real Word Card with Morning Sunrise Warmth */}
             <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-[#1a1532] via-[#201940] to-[#120f26] border border-amber-500/35 text-left space-y-3.5 shadow-2xl">
@@ -635,12 +635,12 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                 </span>
                 <button
                   type="button"
-                  onClick={() => speakJapanese('あさ')}
+                  onClick={() => speakJapanese('あい')}
                   className="px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition border border-amber-500/30"
-                  title="শব্দটি শুনুন (Asa!)"
+                  title="শব্দটি শুনুন (Ai!)"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
-                  <span>Asa!</span>
+                  <span>Ai!</span>
                 </button>
               </div>
 
@@ -653,14 +653,14 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="font-japanese font-black text-4xl sm:text-5xl text-white tracking-wide">
-                      あさ
+                      あい
                     </span>
-                    <span className="font-mono text-sm text-stone-300 font-bold">asa</span>
+                    <span className="font-mono text-sm text-stone-300 font-bold">ai</span>
                     <span className="text-stone-500">•</span>
-                    <span className="text-emerald-400 font-black text-base sm:text-lg">সকাল (Morning)</span>
+                    <span className="text-emerald-400 font-black text-base sm:text-lg">ভালোবাসা (Love)</span>
                   </div>
                   <p className="text-xs text-stone-300 mt-0.5 leading-relaxed">
-                    এখানে আমাদের চেনা <span className="text-amber-300 font-bold">'あ'</span> আর 'さ' মিলে হয়েছে <span className="font-japanese font-bold text-white">あさ</span>।
+                    এখানে আমাদের চেনা <span className="text-amber-300 font-bold">'あ'</span> (আ) এবং পরবর্তী স্বরবর্ণ <span className="text-amber-300 font-bold">'い'</span> (ই) মিলে তৈরি হয়েছে <span className="font-japanese font-bold text-white">あい</span> (ভালোবাসা)। কোনো অপ্রয়োজনীয় ব্যঞ্জনবর্ণ ছাড়াই খাঁটি স্বরবর্ণের শব্দ!
                   </p>
                 </div>
               </div>

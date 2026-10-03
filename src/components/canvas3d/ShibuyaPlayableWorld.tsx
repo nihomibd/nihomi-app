@@ -1105,7 +1105,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
                   <h3 className="text-sm font-bold text-white">
                     {dialogue.speaker === 'manager'
                       ? 'Store Manager Tanaka (店長 田中)'
-                      : 'Tanaka AI Sensei (Keigo Coach)'}
+                      : 'Nihomi Sensei AI™ (Keigo Coach)'}
                   </h3>
                   <p className="text-[11px] text-slate-400">7-Eleven Shibuya Udagawacho Branch</p>
                 </div>

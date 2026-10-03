@@ -40,7 +40,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'こんにちは! আমি Sensei Tanaka (田中先生) — আপনার AI সেনসেই। বাংলা বা ইংরেজিতে জাপানিজ ব্যাকরণ, কাঞ্জি ও ভোকাবুলারি নিয়ে যেকোনো প্রশ্ন করুন।',
+      content: 'こんにちは! আমি Nihomi Sensei AI™ (にほみ先生) — আপনার AI সেনসেই। বাংলা বা ইংরেজিতে জাপানিজ ব্যাকরণ, কাঞ্জি ও ভোকাবুলারি নিয়ে যেকোনো প্রশ্ন করুন।',
     },
   ]);
 
@@ -171,7 +171,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
         speakJapanese(reply);
       }
     } catch {
-      setError('Sensei-র সঙ্গে সংযোগ করা যায়নি। আপনার credit ব্যবহার হয়েছে, পরে আবার চেষ্টা করুন।');
+      setError('Nihomi Sensei AI™-র সঙ্গে সংযোগ করা যায়নি। আপনার credit ব্যবহার হয়েছে, পরে আবার চেষ্টা করুন।');
     } finally {
       setIsLoading(false);
     }
@@ -197,7 +197,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
             <div className="relative shrink-0">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 p-0.5 shadow-md shadow-rose-500/20">
                 <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                  <span className="font-japanese font-black text-rose-400 text-sm">田中</span>
+                  <span className="font-japanese font-black text-rose-400 text-sm">にほみ</span>
                 </div>
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a12]" />
@@ -272,7 +272,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
           {isLoading && (
             <div className="flex items-center gap-2 p-3 rounded-2xl bg-[#131322] border border-slate-800 text-slate-400 text-xs w-fit animate-pulse">
               <div className="w-4 h-4 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
-              <span>Sensei উত্তর লিখছেন...</span>
+              <span>Nihomi Sensei AI™ উত্তর লিখছেন...</span>
             </div>
           )}
           {error && <p className="rounded-xl bg-rose-500/10 border border-rose-500/30 px-3 py-2 text-xs font-semibold text-rose-300" role="alert">{error}</p>}

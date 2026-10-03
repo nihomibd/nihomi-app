@@ -190,7 +190,7 @@ export function generateStudentSummaryPdf(data: StudentReportData): void {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(71, 85, 105);
   doc.text(`Affiliated Center: ${data.institutionName || "bdTrip24 Global Learning Ecosystem"}`, 20, y + 17);
-  doc.text(`Assigned Head Instructor: ${data.assignedTeacher || "Sensei Tanaka Kenji, Nihomi Academic Lead"}`, 20, y + 23);
+  doc.text(`Assigned Head Instructor: ${data.assignedTeacher || "Nihomi Sensei AI™, Academic Lead"}`, 20, y + 23);
   doc.text('Verification Portal: https://nihomi.com/verify/student-record', 20, y + 29);
 
   // Decorative Seal Box

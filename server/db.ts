@@ -312,7 +312,7 @@ export const SEED_PLANS: Plan[] = [
     aiMonthlyLimit: 500,
     features: [
       '14 Days unlimited access to all spatial hotspots',
-      '500 Nihomi Coins for live Tanaka Sensei voice coaching',
+      '500 Nihomi Coins for live Nihomi Sensei AI™ voice coaching',
       'Izakaya dining roleplay simulator included',
       'Shinkansen bullet train booking guide',
       'Offline audio phrase packs'

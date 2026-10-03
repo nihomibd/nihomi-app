@@ -184,9 +184,9 @@ aiRouter.post(
     } catch (error: any) {
       console.error('AI Coach error:', error);
       return res.status(200).json({
-        reply: 'すみません (Sumimasen), Tanaka Sensei is reviewing your lesson. Practice repeating the key sentence patterns aloud!',
+        reply: 'すみません (Sumimasen), Nihomi Sensei AI™ is reviewing your lesson. Practice repeating the key sentence patterns aloud!',
         romaji: 'Kagi to naru bunkei o koe ni dashite renshuu shimashou.',
-        bengaliTranslation: 'তানাকা সেনসেই আপনার পাঠ পর্যালোচনা করছেন। মূল বাক্যগুলো জোরে উচ্চারণ করে অনুশীলন করুন।'
+        bengaliTranslation: 'Nihomi Sensei AI™ আপনার পাঠ পর্যালোচনা করছেন। মূল বাক্যগুলো জোরে উচ্চারণ করে অনুশীলন করুন।'
       });
     }
   }

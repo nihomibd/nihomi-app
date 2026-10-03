@@ -51744,7 +51744,7 @@ var init_db = __esm({
         aiMonthlyLimit: 500,
         features: [
           "14 Days unlimited access to all spatial hotspots",
-          "500 Nihomi Coins for live Tanaka Sensei voice coaching",
+          "500 Nihomi Coins for live Nihomi Sensei AI\u2122 voice coaching",
           "Izakaya dining roleplay simulator included",
           "Shinkansen bullet train booking guide",
           "Offline audio phrase packs"
@@ -62107,9 +62107,9 @@ aiRouter.post(
     } catch (error) {
       console.error("AI Coach error:", error);
       return res.status(200).json({
-        reply: "\u3059\u307F\u307E\u305B\u3093 (Sumimasen), Tanaka Sensei is reviewing your lesson. Practice repeating the key sentence patterns aloud!",
+        reply: "\u3059\u307F\u307E\u305B\u3093 (Sumimasen), Nihomi Sensei AI\u2122 is reviewing your lesson. Practice repeating the key sentence patterns aloud!",
         romaji: "Kagi to naru bunkei o koe ni dashite renshuu shimashou.",
-        bengaliTranslation: "\u09A4\u09BE\u09A8\u09BE\u0995\u09BE \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09A0 \u09AA\u09B0\u09CD\u09AF\u09BE\u09B2\u09CB\u099A\u09A8\u09BE \u0995\u09B0\u099B\u09C7\u09A8\u0964 \u09AE\u09C2\u09B2 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u099C\u09CB\u09B0\u09C7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09C1\u09A8\u0964"
+        bengaliTranslation: "Nihomi Sensei AI\u2122 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09A0 \u09AA\u09B0\u09CD\u09AF\u09BE\u09B2\u09CB\u099A\u09A8\u09BE \u0995\u09B0\u099B\u09C7\u09A8\u0964 \u09AE\u09C2\u09B2 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u099C\u09CB\u09B0\u09C7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09C1\u09A8\u0964"
       });
     }
   }

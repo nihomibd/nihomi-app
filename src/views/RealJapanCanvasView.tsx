@@ -144,7 +144,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   const [diagAnswers, setDiagAnswers] = useState<Record<number, number>>({});
   const [diagCompleted, setDiagCompleted] = useState(false);
 
-  // Tanaka AI Sensei Instant Voice Q&A state
+  // Nihomi Sensei AI™ Instant Voice Q&A state
   const [senseiQuery, setSenseiQuery] = useState('');
   const [senseiResponse, setSenseiResponse] = useState<string | null>(null);
   const [isSenseiThinking, setIsSenseiThinking] = useState(false);
@@ -258,14 +258,14 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     }
   };
 
-  // Tanaka AI Sensei Instant Conversation (Redeem 10 Coins)
+  // Nihomi Sensei AI™ Instant Conversation (Redeem 10 Coins)
   const handleAskSensei = async () => {
     if (!senseiQuery.trim()) return;
     if (coins < 10) {
       setPaywallConfig({
         mode: 'coin_topup',
-        hotspotTitle: 'Tanaka AI Sensei Voice Coaching',
-        hotspotTitleJa: '田中先生 リアルタイム音声指導',
+        hotspotTitle: 'Nihomi Sensei AI™ Voice Coaching',
+        hotspotTitleJa: 'にほみ先生 リアルタイム音声指導',
         onUnlockSuccess: () => {
           try {
             const stored = localStorage.getItem('nihomi_student_coins');
@@ -286,8 +286,8 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
     // Pre-structured contextual responses for ultra-fast, offline-resilient immersion
     setTimeout(() => {
-      let replyJa = 'はい、田中先生です。渋谷での生活とアルバイトで一番大切なのは、明るい挨拶と時間厳守です！';
-      let replyBn = 'হ্যাঁ, তানাকা সেনসেই শুনছি। শিবুয়াতে কাজ ও দৈনন্দিন জীবনে সবচেয়ে জরুরি হলো প্রাণবন্ত অভিবাদন এবং সময়ানুবর্তিতা!';
+      let replyJa = 'はい、にほみ先生です。渋谷での生活とアルバイトで一番大切なのは、明るい挨拶と時間厳守です！';
+      let replyBn = 'হ্যাঁ, Nihomi Sensei AI™ শুনছি। শিবুয়াতে কাজ ও দৈনন্দিন জীবনে সবচেয়ে জরুরি হলো প্রাণবন্ত অভিবাদন এবং সময়ানুবর্তিতা!';
 
       const qLower = query.toLowerCase();
       if (qLower.includes('conbini') || qLower.includes('7-eleven') || query.includes('コンビニ')) {
@@ -404,7 +404,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
           {/* Description */}
           <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto font-normal leading-relaxed">
-            টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ তানাকা AI সেনসেই লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+            টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
           </p>
 
           {/* Action: Clear high-converting CTA + Optional 3D exploration */}
@@ -450,7 +450,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
               <span className="text-lg block mb-1">🤖</span>
-              <p className="text-xs font-bold text-white">Tanaka AI Sensei</p>
+              <p className="text-xs font-bold text-white">Nihomi Sensei AI™</p>
               <p className="text-[11px] text-zinc-400">বাংলায় ২৪/৭ ব্যাকরণ টিউটর</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
@@ -637,7 +637,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             <span className="hidden sm:inline">{!isAudioMuted ? 'Tokyo Live' : 'Sound'}</span>
           </button>
 
-          {/* Tanaka AI Sensei Instant Chat Launcher */}
+          {/* Nihomi Sensei AI™ Instant Chat Launcher */}
           <button
             onClick={() => setIsSenseiChatOpen(true)}
             className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 text-xs font-bold text-zinc-200 transition-all flex items-center gap-1.5"
@@ -686,12 +686,12 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
           <div className="p-4 sm:p-5 rounded-2xl bg-zinc-950/90 border border-white/15 backdrop-blur-xl shadow-2xl shadow-black/90">
             <div className="flex items-start gap-3.5 mb-3.5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center flex-shrink-0 shadow-md">
-                <span className="text-white font-extrabold text-sm">田</span>
+                <span className="text-white font-extrabold text-sm">に</span>
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-white">Tanaka Sensei • Nihomi Sensei AI™ (田中先生)</h3>
+                    <h3 className="text-sm font-bold text-white">Nihomi Sensei AI™ (にほみ先生)</h3>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Live in Tokyo 360°
@@ -1204,7 +1204,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   সারভাইভাল রেটিং: Grade A (Tokyo Workplace Ready)
                 </p>
                 <p className="text-xs text-zinc-300 mt-3 leading-relaxed">
-                  আপনার অর্জিত ৫০টি নিহোমি কয়েন দিয়ে আপনি সরাসরি তানাকা সেনসেইয়ের লাইভ এআই কোচিং ও কনবিনি সিমুলেশন আনলক করতে পারবেন।
+                  আপনার অর্জিত ৫০টি নিহোমি কয়েন দিয়ে আপনি সরাসরি Nihomi Sensei AI™য়ের লাইভ এআই কোচিং ও কনবিনি সিমুলেশন আনলক করতে পারবেন।
                 </p>
 
                 {/* If user not logged in, prompt seamless in-canvas login to save */}
@@ -1254,7 +1254,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
         </div>
       )}
 
-      {/* 8. TANAKA AI SENSEI IN-CANVAS VOICE & CHAT DRAWER (COIN REDEMPTION UTILITY) */}
+      {/* 8. NIHOMI SENSEI AI™ IN-CANVAS VOICE & CHAT DRAWER (COIN REDEMPTION UTILITY) */}
       {isSenseiChatOpen && (
         <div className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-zinc-950/95 border-l border-white/10 backdrop-blur-2xl z-40 p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-right duration-300">
           <div>
@@ -1262,7 +1262,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-extrabold text-sm">
-                  田
+                  に
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">Tanaka Sensei • Nihomi Sensei AI™ (田中先生)</h3>
@@ -1292,7 +1292,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             {/* Conversation Area */}
             <div className="mt-5 space-y-4 max-h-[50vh] overflow-y-auto pr-1">
               <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-300 leading-relaxed">
-                こんにちは！田中先生です。渋谷でのアルバイトや日本語の挨拶、日常会話について何でも聞いてください。（1回の質問で10コイン消費）
+                こんにちは！にほみ先生です。渋谷でのアルバイトや日本語の挨拶、日常会話について何でも聞いてください。（1回の質問で10コイン消費）
               </div>
 
               {senseiResponse && (
@@ -1315,11 +1315,11 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                 <div className="flex items-end gap-2.5 p-3 rounded-2xl bg-white/5 border border-white/10 animate-in fade-in">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 p-0.5 shrink-0 shadow-xs">
                     <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                      <span className="font-japanese font-black text-amber-400 text-[9px]">田中</span>
+                      <span className="font-japanese font-black text-amber-400 text-[9px]">に</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-300 font-medium">Tanaka Sensei is typing</span>
+                    <span className="text-xs text-zinc-300 font-medium">Nihomi Sensei AI™ is typing</span>
                     <div className="flex items-center gap-1 pt-0.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '0ms' }} />
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '200ms' }} />
