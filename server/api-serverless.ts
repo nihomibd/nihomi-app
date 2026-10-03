@@ -157,4 +157,9 @@ app.use((err: any, _req: Request, res: Response, _next: any) => {
   });
 });
 
-export default app;
+const handler = (req: Request, res: Response) => {
+  return app(req, res);
+};
+
+export default handler;
+export { app };

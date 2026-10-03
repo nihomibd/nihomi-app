@@ -51508,29 +51508,58 @@ var init_contentDiffService = __esm({
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+function getPrismaClient() {
+  if (globalForPrisma.prisma) return globalForPrisma.prisma;
+  const dbUrl = process.env.DATABASE_URL?.trim();
+  if (!dbUrl) return null;
+  if (!_initAttempted) {
+    _initAttempted = true;
+    try {
+      const pool = globalForPrisma.pgPool ?? new Pool({
+        connectionString: dbUrl,
+        max: process.env.NODE_ENV === "production" ? 10 : 5,
+        idleTimeoutMillis: 3e4,
+        connectionTimeoutMillis: 5e3
+      });
+      const adapter = new PrismaPg(pool);
+      const client = new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"]
+      });
+      globalForPrisma.prisma = client;
+      globalForPrisma.pgPool = pool;
+      return client;
+    } catch (err) {
+      console.warn("[Prisma] Database initialization deferred or unavailable:", err);
+      return null;
+    }
+  }
+  return null;
+}
 function isDatabaseConfigured() {
   return Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "");
 }
-var globalForPrisma, connectionString, pool, adapter, prisma;
+var globalForPrisma, _initAttempted, prisma;
 var init_prisma = __esm({
   "server/prisma.ts"() {
     globalForPrisma = globalThis;
-    connectionString = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/nihomi_db?schema=public";
-    pool = globalForPrisma.pgPool ?? new Pool({
-      connectionString,
-      max: process.env.NODE_ENV === "production" ? 20 : 5,
-      idleTimeoutMillis: 3e4,
-      connectionTimeoutMillis: 5e3
+    _initAttempted = false;
+    prisma = new Proxy({}, {
+      get(_target, prop) {
+        const client = getPrismaClient();
+        if (!client) {
+          return new Proxy({}, {
+            get(_t, subProp) {
+              return (..._args) => {
+                console.warn(`[Prisma] Operation "${String(prop)}.${String(subProp)}" skipped (DATABASE_URL not configured).`);
+                return Promise.resolve(null);
+              };
+            }
+          });
+        }
+        return client[prop];
+      }
     });
-    adapter = new PrismaPg(pool);
-    prisma = globalForPrisma.prisma ?? new PrismaClient({
-      adapter,
-      log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"]
-    });
-    if (process.env.NODE_ENV !== "production") {
-      globalForPrisma.prisma = prisma;
-      globalForPrisma.pgPool = pool;
-    }
   }
 });
 
@@ -81340,8 +81369,8 @@ var BackgroundJobQueueService = class {
       return publishResult;
     });
   }
-  registerHandler(type, handler) {
-    this.handlers.set(type, handler);
+  registerHandler(type, handler2) {
+    this.handlers.set(type, handler2);
   }
   enqueueJob(params) {
     const job = db.createBackgroundJob({
@@ -81457,8 +81486,8 @@ var BackgroundJobQueueService = class {
   }
   async executeJob(job) {
     const startTime = Date.now();
-    const handler = this.handlers.get(job.type);
-    if (!handler) {
+    const handler2 = this.handlers.get(job.type);
+    if (!handler2) {
       const err = new Error(`No registered handler found for job type '${job.type}'`);
       logger.error("HANDLER_NOT_FOUND", err.message, err, { jobId: job.id, type: job.type });
       db.updateBackgroundJob(job.id, {
@@ -81483,7 +81512,7 @@ var BackgroundJobQueueService = class {
         type: job.type,
         targetId: job.targetId
       });
-      const result = await handler(job, updateProgress);
+      const result = await handler2(job, updateProgress);
       const durationMs = Date.now() - startTime;
       db.updateBackgroundJob(job.id, {
         status: "completed",
@@ -95338,8 +95367,12 @@ app.use((err, _req, res, _next) => {
     code: err?.code || "SERVER_ERROR"
   });
 });
-var api_serverless_default = app;
+var handler = (req, res) => {
+  return app(req, res);
+};
+var api_serverless_default = handler;
 export {
+  app,
   api_serverless_default as default
 };
 //# sourceMappingURL=index.js.map

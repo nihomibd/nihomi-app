@@ -13,35 +13,58 @@ const globalForPrisma = globalThis as unknown as {
   pgPool?: Pool;
 };
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  'postgresql://postgres:postgres@localhost:5432/nihomi_db?schema=public';
+let _initAttempted = false;
 
-const pool =
-  globalForPrisma.pgPool ??
-  new Pool({
-    connectionString,
-    max: process.env.NODE_ENV === 'production' ? 20 : 5,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 5000,
-  });
+function getPrismaClient(): PrismaClient | null {
+  if (globalForPrisma.prisma) return globalForPrisma.prisma;
+  const dbUrl = process.env.DATABASE_URL?.trim();
+  if (!dbUrl) return null;
 
-const adapter = new PrismaPg(pool);
+  if (!_initAttempted) {
+    _initAttempted = true;
+    try {
+      const pool =
+        globalForPrisma.pgPool ??
+        new Pool({
+          connectionString: dbUrl,
+          max: process.env.NODE_ENV === 'production' ? 10 : 5,
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 5000,
+        });
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    adapter,
-    log:
-      process.env.NODE_ENV === 'development'
-        ? ['query', 'error', 'warn']
-        : ['error'],
-  });
+      const adapter = new PrismaPg(pool);
+      const client = new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+      });
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-  globalForPrisma.pgPool = pool;
+      globalForPrisma.prisma = client;
+      globalForPrisma.pgPool = pool;
+      return client;
+    } catch (err) {
+      console.warn('[Prisma] Database initialization deferred or unavailable:', err);
+      return null;
+    }
+  }
+  return null;
 }
+
+export const prisma: any = new Proxy({}, {
+  get(_target, prop) {
+    const client = getPrismaClient();
+    if (!client) {
+      return new Proxy({}, {
+        get(_t, subProp) {
+          return (..._args: any[]) => {
+            console.warn(`[Prisma] Operation "${String(prop)}.${String(subProp)}" skipped (DATABASE_URL not configured).`);
+            return Promise.resolve(null);
+          };
+        }
+      });
+    }
+    return (client as any)[prop];
+  }
+});
 
 /**
  * Checks if DATABASE_URL is configured in the environment.
