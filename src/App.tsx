@@ -8,6 +8,7 @@ import { LearnerJourneyEngine } from './components/learning/LearnerJourneyEngine
 import { NihomiMobileShowcase } from './components/showcase/NihomiMobileShowcase';
 
 // Code-split / Lazy-loaded views to optimize bundle sizes
+const JourneyView = lazy(() => import('./views/JourneyView').then(m => ({ default: m.JourneyView })));
 const StudentPortalView = lazy(() => import('./views/StudentPortalView').then(m => ({ default: m.StudentPortalView })));
 const DocumentsView = lazy(() => import('./views/DocumentsView').then(m => ({ default: m.DocumentsView })));
 const EmailSignatureView = lazy(() => import('./views/EmailSignatureView').then(m => ({ default: m.EmailSignatureView })));
@@ -582,11 +583,7 @@ export const App: React.FC = () => {
           <CoursesView onNavigate={handleNavigate} />
         )}
         {currentView === 'journey' && (
-          <LearnerJourneyEngine
-            isOpen={true}
-            onClose={() => handleNavigate('landing')}
-            onNavigate={handleNavigate}
-          />
+          <JourneyView onNavigate={handleNavigate} />
         )}
         {currentView === 'lesson' && (
           <LessonView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />

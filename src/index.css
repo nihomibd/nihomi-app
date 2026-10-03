@@ -241,4 +241,26 @@ html.sepia .text-slate-500 {
     border-bottom: 1px solid #e5e7eb !important;
     padding: 8px 6px !important;
   }
+
+  /* Strict A4 Document Print Isolation (Hides all site wrappers, menus, headers, buttons) */
+  header, nav, footer, .print-hidden, [data-print-hidden="true"], button {
+    display: none !important;
+  }
+
+  #jis-resume-paper,
+  #shokumu-paper,
+  [data-resume-paper="true"] {
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+  }
 }
+

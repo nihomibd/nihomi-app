@@ -113,6 +113,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
   const [saveSuccessNotice, setSaveSuccessNotice] = useState(false);
   const [viewMode, setViewMode] = useState<'editor' | 'preview'>('editor');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const paperRef = useRef<HTMLDivElement>(null);
 
   // Load user's Rirekisho from API with resilient non-blocking fallback
   useEffect(() => {
@@ -203,10 +204,10 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         await new Promise((resolve) => setTimeout(resolve, 300));
       }
 
-      const paperElement = document.getElementById('jis-resume-paper');
+      const paperElement = paperRef.current || document.getElementById('jis-resume-paper');
       if (!paperElement) {
-        window.print();
-        setShowLeadMagnetModal(true);
+        console.warn('Resume paper element not found for export');
+        setIsGeneratingPdf(false);
         return;
       }
 
@@ -215,7 +216,9 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         useCORS: true,
         allowTaint: false,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        scrollX: 0,
+        scrollY: 0
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.98);
@@ -247,9 +250,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       soundEffects.playLessonCelebration();
       setShowLeadMagnetModal(true);
     } catch (err) {
-      console.warn('html2canvas/jspdf fallback to browser print dialog:', err);
-      window.print();
-      setShowLeadMagnetModal(true);
+      console.warn('JIS PDF export failed:', err);
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -1040,6 +1041,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
           <div
             id="jis-resume-paper"
+            ref={paperRef}
+            data-resume-paper="true"
             className="bg-white text-slate-950 p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border-2 sm:border-4 border-slate-400 font-serif max-w-4xl mx-auto space-y-6 overflow-x-auto"
           >
             {/* Header */}

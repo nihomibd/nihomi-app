@@ -104,10 +104,17 @@ aiRouter.post(
         });
       } catch (err: any) {
         console.warn('[AICoach] Gemini fallback:', err?.message);
+        const isGreeting = /^(hello|hi|hey|konnichiwa|こんにちは|হ্যালো|সালাম|good morning|おはよう)/i.test((message || '').trim());
         aiResult = {
-          reply: 'こんにちは！日本語の練習を続けましょう (Hello! Let us continue practicing Japanese). In JLPT N5, remember to connect subjects with は (wa) and direct objects with を (o). Ganbatte!',
-          romaji: 'Konnichiwa! Nihongo no renshuu o tsuzukemashou.',
-          bengaliTranslation: 'হ্যালো! জাপানি চর্চা চালিয়ে যান। এন৫-এ বিষয় বোঝাতে は এবং কর্ম বোঝাতে を ব্যবহার করুন।',
+          reply: isGreeting
+            ? 'こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী নিয়ে অনুশীলন করতে চান?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)'
+            : `こんにちは！(Konnichiwa!) আপনি লিখেছেন: "${message}". নিহোমি সেনসেই সর্বদা আপনার পাশে আছে। আসুন একসাথে জাপানি ভাষা চর্চা করি!`,
+          romaji: isGreeting
+            ? 'Konnichiwa! Nihomi Sensei no kurasuruumu e youkoso.'
+            : 'Konnichiwa! Issho ni nihongo o manabimashou.',
+          bengaliTranslation: isGreeting
+            ? 'হ্যালো! নিহোমি সেনসেই ক্লাসরুমে স্বাগতম। আজ কী নিয়ে অনুশীলন করতে চান?'
+            : 'হ্যালো! আসুন একসাথে জাপানি ভাষা চর্চা করি।',
           correctionData: undefined
         };
       }

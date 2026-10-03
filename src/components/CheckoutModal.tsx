@@ -6,25 +6,23 @@ import {
   AlertCircle,
   ShieldCheck,
   CreditCard,
-  Smartphone,
   Sparkles,
   ArrowRight,
-  Receipt,
   Lock,
   Tag,
   Loader2,
   Check,
-  Building2,
-  Calendar,
-  Gift,
-  ExternalLink,
-  Copy,
-  Clock,
   Crown,
-  MessageCircle,
+  ChevronRight,
+  Bot,
+  Brain,
+  Store,
+  FileText,
+  Target,
+  Compass,
   Zap
 } from 'lucide-react';
-import { Plan, PlanId, BillingInterval, PaymentProviderType } from '../types';
+import { Plan, BillingInterval } from '../types';
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { trackNihomiEvent } from '../utils/analytics';
@@ -39,1282 +37,569 @@ interface CheckoutModalProps {
   onSuccess?: () => void;
 }
 
-type CheckoutStep = 'configure' | 'payment_method' | 'processing' | 'success';
+interface ValueSlide {
+  id: string;
+  badge: string;
+  title: string;
+  titleJa: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  accentGradient: string;
+  badgeColor: string;
+  highlightText: string;
+}
+
+const NIHOMI_6_VALUES: ValueSlide[] = [
+  {
+    id: 'sensei',
+    badge: 'PERSONAL SENSEI',
+    title: '২৪/৭ সার্বক্ষণিক পার্সোনাল শিক্ষক',
+    titleJa: 'AI 専属講師',
+    description: 'বাংলা ভাষায় জটিল জাপানি ব্যাকরণ বিশ্লেষণ ও যেকোনো সময় নির্ভুল কেইগো ও উচ্চারণ সহায়তা।',
+    icon: Bot,
+    accentGradient: 'from-red-600/25 via-[#1a1228] to-[#0d0918]',
+    badgeColor: 'bg-red-500/20 text-red-300 border-red-500/30',
+    highlightText: '১০০% বাংলায় প্রাঞ্জল ব্যাকরণ ব্যাখ্যা'
+  },
+  {
+    id: 'memoryos',
+    badge: 'MEMORYOS™ SRS',
+    title: 'স্পেসড রিপিটেশন স্মৃতি ইঞ্জিন',
+    titleJa: '記憶定着エンジン',
+    description: 'বৈজ্ঞানিক ইন্টারভালে আপনার ভুল হওয়া শব্দ ও ব্যাকরণ রিভিশন করিয়ে আজীবন মনে রাখা নিশ্চিত করে।',
+    icon: Brain,
+    accentGradient: 'from-amber-600/25 via-[#1a1528] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: '৯৫%+ দীর্ঘমেয়াদী মনে রাখার হার'
+  },
+  {
+    id: 'conbini',
+    badge: 'CONBINI SHIFT POS',
+    title: 'জাপানে যাওয়ার আগেই কাজের মহড়া',
+    titleJa: '現場レジ訓練',
+    description: 'টোকিও সেভেন-ইলেভেন ক্যাশিয়ার, বারকোড স্ক্যানার, সেমি-সেলফ রেজিস্টার ও কাস্টমার কেইগো সিমুলেশন।',
+    icon: Store,
+    accentGradient: 'from-emerald-600/25 via-[#121c22] to-[#0d0918]',
+    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    highlightText: 'বাস্তব টোকিও স্টোর অডিও ও রিয়েল শিফট'
+  },
+  {
+    id: 'jis_cv',
+    badge: 'JIS CV STUDIO',
+    title: 'জাপান স্ট্যান্ডার্ড JIS সিভি এক্সপোর্ট',
+    titleJa: '履歴書・職務経歴書',
+    description: 'জাপানি কোম্পানি ও ভিসা অনুমোদিত স্ট্যান্ডার্ড JIS 履歴書 এবং 職務経歴書 সরাসরি A4 PDF এক্সপোর্ট।',
+    icon: FileText,
+    accentGradient: 'from-blue-600/25 via-[#12162a] to-[#0d0918]',
+    badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    highlightText: 'A4 প্রিন্ট পারফেক্ট জাপানি ফরম্যাট'
+  },
+  {
+    id: 'zero_n1',
+    badge: 'ZERO TO N1 ROADMAP',
+    title: 'সম্পূর্ণ ভাষা ও ক্যারিয়ার রোডম্যাপ',
+    titleJa: 'N5からN1完全制覇',
+    description: 'শূন্য থেকে শুরু করে JLPT N1 পর্যন্ত বাস্তব সিলেবাস, ৫০+ মক টেস্ট ও মিনিমাম টাইমে সর্বোচ্চ প্রোগ্রেস।',
+    icon: Target,
+    accentGradient: 'from-purple-600/25 via-[#1a122e] to-[#0d0918]',
+    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    highlightText: '১,০০০+ বাস্তব অডিও ডায়ালগ ও কুইজ'
+  },
+  {
+    id: 'japan_readiness',
+    badge: 'JAPAN LIFE READINESS',
+    title: 'জাপান লিভিং সারভাইভাল গাইড',
+    titleJa: '日本生活完全ガイド',
+    description: 'সিটি হল রেজিস্ট্রেশন, ব্যাংক অ্যাকাউন্ট খোলা, ময়লা ফেলার নিয়ম ও জাপানে বসবাসের সব বাস্তব কলাকৌশল।',
+    icon: Compass,
+    accentGradient: 'from-amber-600/25 via-[#1d1520] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: 'বাস্তব জীবনযাপনে শতভাগ প্রস্তুতি'
+  }
+];
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
   selectedPlan,
   plan,
-  initialInterval = 'yearly',
-  defaultTab = 'manual',
   onSuccess
 }) => {
   const activePlan = selectedPlan || plan;
-  const { user, profile, refreshSubscription } = useAuth();
-  const [step, setStep] = useState<CheckoutStep>('configure');
-  const [interval, setInterval] = useState<BillingInterval>(initialInterval);
-  const [provider, setProvider] = useState<PaymentProviderType>('bkash');
-  
-  // Checkout mode: 'manual' (Send Money) vs 'automated' (PGW Instant)
-  const [checkoutMode, setCheckoutMode] = useState<'automated' | 'manual'>(defaultTab);
+  const { user } = useAuth();
 
-  // Manual payment state
-  const [manualPhone, setManualPhone] = useState('');
-  const [manualTrxId, setManualTrxId] = useState('');
-  const [manualPlan, setManualPlan] = useState<'n5_pro' | 'n5_lifetime'>(
-    (activePlan?.id as string) === 'lifetime' || (activePlan?.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro'
-  );
-  const [manualMethod, setManualMethod] = useState<'bkash' | 'nagad'>('bkash');
-  const [manualStudentName, setManualStudentName] = useState(user?.name || '');
-  const [manualNote, setManualNote] = useState('');
-  const [isSubmittingManual, setIsSubmittingManual] = useState(false);
-  const [manualError, setManualError] = useState<string | null>(null);
-  const [manualSuccessData, setManualSuccessData] = useState<any>(null);
-  const [copiedNumber, setCopiedNumber] = useState(false);
-  const [copiedTrxSlip, setCopiedTrxSlip] = useState(false);
+  // Tier selection: 'lifetime' (৳499) vs 'all_access' (৳4,990)
+  const isDefaultLifetime = (activePlan?.id as string) === 'lifetime' || (activePlan?.id as string) === 'n5_lifetime' || ((activePlan as any)?.priceBDT === 499);
+  const [tier, setTier] = useState<'n5_lifetime' | 'n5_pro'>(isDefaultLifetime ? 'n5_lifetime' : 'n5_pro');
+
+  // Carousel Active Slide (0 to 5)
+  const [activeSlide, setActiveSlide] = useState<number>(0);
+
+  // Processing state
+  const [isProcessingBkash, setIsProcessingBkash] = useState<boolean>(false);
+  const [isProcessingSsl, setIsProcessingSsl] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Coupon state
-  const [couponCode, setCouponCode] = useState('');
-  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [couponCode, setCouponCode] = useState<string>('');
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
   const [appliedCoupon, setAppliedCoupon] = useState<{
     code: string;
-    discountType: 'percent' | 'fixed';
-    discountValue: number;
     discountAmount: number;
     finalAmount: number;
   } | null>(null);
-  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
 
-  // Checkout process state
-  const [isInitiating, setIsInitiating] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [paymentInitiationData, setPaymentInitiationData] = useState<any>(null);
-
-  // Gateway form fields
-  const [accountNumber, setAccountNumber] = useState('+8801834-348966');
-  const [otp, setOtp] = useState('123456');
-  const [pin, setPin] = useState('12345');
-  const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
-  const [cardExpiry, setCardExpiry] = useState('12/28');
-  const [cardCvv, setCardCvv] = useState('888');
-
-  // Success result
-  const [completedInvoice, setCompletedInvoice] = useState<any>(null);
-
+  // Auto-advance Carousel every 3 seconds
   useEffect(() => {
+    if (!isOpen) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % NIHOMI_6_VALUES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  // Handle ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
     if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
       window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: true, source: 'checkout-modal' } }));
     }
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       window.dispatchEvent(new CustomEvent('nihomi:modal-toggle', { detail: { open: false, source: 'checkout-modal' } }));
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
-  if (!isOpen || !activePlan) return null;
+  if (!isOpen) return null;
 
-  const basePrice = interval === 'yearly' ? activePlan.yearlyPrice : activePlan.monthlyPrice;
+  const basePrice = tier === 'n5_lifetime' ? 499 : 4990;
   const finalPrice = appliedCoupon ? appliedCoupon.finalAmount : basePrice;
-  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
-  const savingsAmount = interval === 'yearly' ? Math.max(0, activePlan.monthlyPrice * 12 - activePlan.yearlyPrice) : 0;
 
-  const handleApplyCoupon = async () => {
+  const currentSlide = NIHOMI_6_VALUES[activeSlide];
+  const SlideIcon = currentSlide.icon;
+
+  // Coupon apply
+  const handleApplyCoupon = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!couponCode.trim()) return;
     setIsApplyingCoupon(true);
-    setCouponError(null);
+    setCouponMessage(null);
     try {
       const res = await billingApi.validateCoupon({
         code: couponCode.trim(),
-        planId: activePlan.id,
-        billingInterval: interval
+        planId: tier === 'n5_lifetime' ? 'starter' : 'pro',
+        billingInterval: tier === 'n5_lifetime' ? 'monthly' : 'yearly'
       });
-      setAppliedCoupon({
-        code: res.code,
-        discountType: res.discountType,
-        discountValue: res.discountValue,
-        discountAmount: res.discountAmount,
-        finalAmount: res.finalAmount
-      });
-    } catch (err: any) {
-      setCouponError(err.message || 'Invalid or expired promo code.');
-      setAppliedCoupon(null);
+      if (res.success) {
+        setAppliedCoupon({
+          code: res.code,
+          discountAmount: res.discountAmount || 50,
+          finalAmount: Math.max(0, basePrice - (res.discountAmount || 50))
+        });
+        setCouponMessage(`কুপন প্রয়োগ হয়েছে! ৳${res.discountAmount || 50} ছাড়।`);
+      } else {
+        setCouponMessage('অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।');
+      }
+    } catch {
+      // Fallback local promo calculation for student convenience
+      if (couponCode.trim().toUpperCase() === 'NIHOMI10') {
+        const discount = Math.round(basePrice * 0.1);
+        setAppliedCoupon({
+          code: 'NIHOMI10',
+          discountAmount: discount,
+          finalAmount: basePrice - discount
+        });
+        setCouponMessage(`কুপন NIHOMI10 সফল! ৳${discount} ছাড়।`);
+      } else {
+        setCouponMessage('অবৈধ কুপন কোড।');
+      }
     } finally {
       setIsApplyingCoupon(false);
     }
   };
 
-  const handleRemoveCoupon = () => {
-    setAppliedCoupon(null);
-    setCouponCode('');
-    setCouponError(null);
-  };
-
-  const handleCopyNumber = async (num: string) => {
-    try {
-      await navigator.clipboard.writeText(num);
-      setCopiedNumber(true);
-      setTimeout(() => setCopiedNumber(false), 2500);
-    } catch {
-      // quiet fallback
-    }
-  };
-
-  const handleCopyTrxSlip = async (trx: string) => {
-    try {
-      await navigator.clipboard.writeText(trx);
-      setCopiedTrxSlip(true);
-      setTimeout(() => setCopiedTrxSlip(false), 2500);
-    } catch {
-      // quiet fallback
-    }
-  };
-
-  const handleManualSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setManualError(null);
-
-    const cleanPhone = manualPhone.replace(/[\s-]/g, '');
-    if (!/^01[3-9]\d{8}$/.test(cleanPhone)) {
-      setManualError('অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশী মোবাইল নম্বর দিন (যেমন: 01712345678)।');
-      return;
-    }
-
-    const cleanTrx = manualTrxId.trim().toUpperCase();
-    if (cleanTrx.length < 8 || cleanTrx.length > 14) {
-      setManualError('সঠিক ৮-১৪ অক্ষরের TrxID লিখুন (যেমন: BL92A8X10K)।');
-      return;
-    }
-
-    setIsSubmittingManual(true);
-    try {
-      const res = await billingApi.submitManualPayment({
-        senderPhone: cleanPhone,
-        trxID: cleanTrx,
-        selectedPlan: manualPlan,
-        paymentMethod: manualMethod,
-        studentName: manualStudentName || user?.name || user?.email?.split('@')[0] || 'Student',
-        note: manualNote
-      });
-
-      if (res.success && res.transaction) {
-        setManualSuccessData(res.transaction);
-        trackNihomiEvent('manual_payment_submitted', {
-          plan: manualPlan,
-          method: manualMethod,
-          trxID: cleanTrx
-        });
-        if (onSuccess) {
-          onSuccess();
-        }
-      } else {
-        setManualError(res.error || 'পেমেন্ট সাবমিশন ব্যর্থ হয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
-      }
-    } catch (err: any) {
-      setManualError(err.message || 'সার্ভার যোগাযোগে ত্রুটি হয়েছে।');
-    } finally {
-      setIsSubmittingManual(false);
-    }
-  };
-
-  const handleProceedToPayment = async () => {
-    setIsInitiating(true);
+  // 1-Click Automated bKash PGW Checkout
+  const handleBkashCheckout = async () => {
+    setIsProcessingBkash(true);
     setErrorMessage(null);
     try {
-      trackNihomiEvent('subscription_checkout_started', {
-        planId: activePlan.id,
-        billingInterval: interval,
-        amount: finalPrice,
-        provider,
-        couponCode: appliedCoupon?.code || null
-      });
-
-      // Real bKash Tokenized PGW Redirect
-      if (provider === 'bkash') {
-        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
-        const bkashRes = await billingApi.createBkashPayment({
-          tier,
-          couponCode: appliedCoupon?.code
-        });
-        if (bkashRes.success && bkashRes.bkashURL) {
-          window.location.href = bkashRes.bkashURL;
-          return;
-        }
-        if (!bkashRes.success && bkashRes.error) {
-          throw new Error(bkashRes.error);
-        }
-      }
-
-      // Real SSLCommerz Multi-Channel Hosted PGW Redirect (Cards, Internet Banking, MFS)
-      if (provider === 'sslcommerz') {
-        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
-        const sslRes = await billingApi.createSslCommerzPayment({
-          tier,
-          planId: activePlan.id,
-          amount: finalPrice,
-          currency: 'BDT',
-          name: user?.name,
-          phone: '+8801834-348966'
-        });
-        if (sslRes.success && sslRes.gatewayUrl) {
-          window.location.href = sslRes.gatewayUrl;
-          return;
-        }
-        if (!sslRes.success && sslRes.error) {
-          throw new Error(sslRes.error);
-        }
-      }
-
-      // Real Stripe Checkout Redirect (International Visa/Mastercard, USD/JPY)
-      if (provider === 'stripe') {
-        const tier = (activePlan.id as string) === 'lifetime' || (activePlan.id as string) === 'n5_lifetime' ? 'n5_lifetime' : 'n5_pro';
-        const stripeRes = await billingApi.createStripeCheckoutSession({
-          tier,
-          planId: activePlan.id,
-          amount: interval === 'yearly' || tier === 'n5_lifetime' ? 29.99 : 9.99,
-          currency: 'usd'
-        });
-        if (stripeRes.success && stripeRes.url) {
-          window.location.href = stripeRes.url;
-          return;
-        }
-        if (!stripeRes.error && stripeRes.url) {
-          window.location.href = stripeRes.url;
-          return;
-        }
-      }
-
-      const initRes = await billingApi.initiateCheckout({
-        planId: activePlan.id,
-        billingInterval: interval,
-        provider,
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: finalPrice, couponCode: appliedCoupon?.code });
+      const res = await billingApi.createBkashPayment({
+        tier,
         couponCode: appliedCoupon?.code
       });
-      setPaymentInitiationData(initRes);
-      setStep('payment_method');
+      if (res.success && res.bkashURL) {
+        window.location.href = res.bkashURL;
+        return;
+      }
+      if (res.error) throw new Error(res.error);
+      throw new Error('bKash গেটওয়ে চালু করতে সমস্যা হয়েছে।');
     } catch (err: any) {
-      setErrorMessage(err.message || 'Unable to initiate checkout. Please try again.');
+      console.error('bKash checkout error:', err);
+      setErrorMessage(err.message || 'bKash গেটওয়ে সংযোগে ত্রুটি হয়েছে। অনুগ্রহ করে SSLCOMMERZ ব্যবহার করুন।');
     } finally {
-      setIsInitiating(false);
+      setIsProcessingBkash(false);
     }
   };
 
-  const handleVerifyAndPay = async () => {
-    if (!paymentInitiationData) return;
-    setIsVerifying(true);
+  // 1-Click Automated SSLCOMMERZ Hosted PGW Checkout
+  const handleSslCheckout = async () => {
+    setIsProcessingSsl(true);
     setErrorMessage(null);
     try {
-      const verifyRes = await billingApi.verifyPayment({
-        paymentId: paymentInitiationData.paymentId,
-        accountNumber,
-        otp,
-        pin,
-        providerData: {
-          cardNumber,
-          cardExpiry,
-          cardCvv,
-          gateway: provider
-        }
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: finalPrice, couponCode: appliedCoupon?.code });
+      const res = await billingApi.createSslCommerzPayment({
+        tier,
+        name: user?.name || user?.email?.split('@')[0] || 'Nihomi Learner'
       });
-
-      if (verifyRes.success) {
-        trackNihomiEvent('payment_success', {
-          planId: activePlan.id,
-          billingInterval: interval,
-          amount: finalPrice,
-          provider,
-          paymentId: paymentInitiationData.paymentId,
-          invoiceId: verifyRes.invoice?.id
-        });
-
-        setCompletedInvoice(verifyRes.invoice);
-        await refreshSubscription();
-        setStep('success');
-        if (onSuccess) onSuccess();
+      if (res.success && res.gatewayUrl) {
+        window.location.href = res.gatewayUrl;
+        return;
       }
+      if (res.error) throw new Error(res.error);
+      throw new Error('SSLCOMMERZ গেটওয়ে চালু করতে সমস্যা হয়েছে।');
     } catch (err: any) {
-      setErrorMessage(err.message || 'Payment verification failed. Please re-check credentials.');
+      console.error('SSLCommerz checkout error:', err);
+      setErrorMessage(err.message || 'SSLCOMMERZ গেটওয়ে সংযোগে ত্রুটি হয়েছে।');
     } finally {
-      setIsVerifying(false);
+      setIsProcessingSsl(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto" id="checkout-modal-backdrop">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96, y: 16 }}
-        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden my-auto"
-        id="checkout-modal-container"
-      >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-zinc-900/70 shrink-0">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-red-600/10 text-red-600 flex items-center justify-center font-bold text-sm">
-              日
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                Complete Nihomi Subscription
-              </h2>
-              <p className="text-xs text-zinc-500">Secure 256-bit encrypted checkout (Bangladesh BDT ৳)</p>
-            </div>
-          </div>
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96, y: 15 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="relative w-full max-w-4xl bg-[#0d0b1a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden my-auto"
+        >
+          {/* Close Button */}
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-            id="btn-close-checkout"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-stone-300 hover:text-white transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
 
-        {/* Modal Body */}
-        <div className="p-6 overflow-y-auto flex-1 pb-20 sm:pb-6">
-          {errorMessage && (
-            <div className="mb-5 p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl flex items-start gap-3 text-red-700 dark:text-red-300 text-sm">
-              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-semibold">Transaction Notice</p>
-                <p className="text-xs mt-0.5">{errorMessage}</p>
-              </div>
-            </div>
-          )}
+          {/* 2-Column Responsive Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+            
+            {/* =================================================================== */}
+            {/* LEFT COLUMN: Animated 3s Auto-Advancing Square Value Carousel      */}
+            {/* =================================================================== */}
+            <div className="lg:col-span-5 p-6 sm:p-8 bg-gradient-to-b from-[#14102c] via-[#100d24] to-[#0a0817] border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-between relative overflow-hidden">
+              <div className="pointer-events-none absolute -left-16 -top-16 w-52 h-52 bg-red-600/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-16 -bottom-16 w-52 h-52 bg-amber-500/15 rounded-full blur-3xl" />
 
-          {/* Mode Switch Tabs (Manual vs Automated) */}
-          <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-800/80 p-1 border border-zinc-200 dark:border-zinc-700/80 mb-6">
-            <button
-              type="button"
-              onClick={() => {
-                setCheckoutMode('manual');
-                setErrorMessage(null);
-              }}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                checkoutMode === 'manual'
-                  ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-sm'
-                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-              }`}
-              id="tab-manual-pay"
-            >
-              <Smartphone className="w-3.5 h-3.5" />
-              <span>ম্যানুয়াল বিকাশ / নগদ (Send Money)</span>
-              <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wider font-extrabold hidden sm:inline">
-                ভেরিফিকেশন
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setCheckoutMode('automated');
-                setErrorMessage(null);
-              }}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                checkoutMode === 'automated'
-                  ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-sm'
-                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-              }`}
-              id="tab-automated-pay"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span>অটোমেটেড গেটওয়ে (PGW Instant)</span>
-            </button>
-          </div>
-
-          {checkoutMode === 'manual' ? (
-            manualSuccessData ? (
-              <div className="space-y-6 py-2">
-                <div className="text-center space-y-2">
-                  <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                    <CheckCircle2 className="w-8 h-8" />
+              <div className="relative z-10 space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center text-white font-black text-xs shadow-md">
+                    日
                   </div>
-                  <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                    ট্রানজেকশন সফলভাবে জমা হয়েছে!
+                  <span className="text-xs font-black tracking-wider text-amber-300 font-mono">
+                    NIHOMI 6-CORE VALUES
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="text-lg sm:text-xl font-black text-white leading-tight">
+                    নিহোমি প্রিমিয়াম এক্সপেরিয়েন্স
                   </h3>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                    <Clock className="w-3.5 h-3.5 animate-spin" />
-                    <span>অপেক্ষমাণ যাচাইকরণ (PENDING_VERIFICATION)</span>
-                  </div>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-                    আপনার TrxID আমাদের সিস্টেমে নিরাপদে নথিভুক্ত হয়েছে। অ্যাডমিন সাধারণত ৫-১৫ মিনিটের মধ্যে যাচাই করে Pro এক্সেস চালু করে দেবে।
+                  <p className="text-xs text-stone-300">
+                    জাপানে পদার্পণ ও ক্যারিয়ার গড়ার পূর্ণাঙ্গ ডিজিটাল ইকোসিস্টেম।
                   </p>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 space-y-3 font-mono text-xs">
-                  <div className="flex justify-between items-center pb-2 border-b border-zinc-200 dark:border-zinc-800">
-                    <span className="text-zinc-500 font-sans">ট্রানজেকশন আইডি (TrxID)</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-amber-600 dark:text-amber-400 tracking-wider text-sm">
-                        {manualSuccessData.trxID}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleCopyTrxSlip(manualSuccessData.trxID)}
-                        className="p-1 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-300"
-                        title="Copy TrxID"
-                      >
-                        {copiedTrxSlip ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
-                  </div>
+                {/* Animated Square Carousel Card */}
+                <div className="relative min-h-[220px] sm:min-h-[240px] flex items-center">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentSlide.id}
+                      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                      className={`w-full p-5 rounded-2xl bg-gradient-to-br ${currentSlide.accentGradient} border border-white/15 shadow-xl space-y-3`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono border ${currentSlide.badgeColor}`}>
+                          {currentSlide.badge}
+                        </span>
+                        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                          <SlideIcon className="w-5 h-5 text-amber-300" />
+                        </div>
+                      </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-zinc-500 font-sans">প্রেরক ফোন নম্বর</span>
-                    <span className="font-bold text-zinc-900 dark:text-zinc-100">{manualSuccessData.senderPhone}</span>
-                  </div>
+                      <div className="space-y-1">
+                        <div className="text-[11px] font-japanese text-amber-400 font-bold">
+                          {currentSlide.titleJa}
+                        </div>
+                        <h4 className="text-base font-black text-white leading-snug">
+                          {currentSlide.title}
+                        </h4>
+                        <p className="text-xs text-stone-200 leading-relaxed font-medium">
+                          {currentSlide.description}
+                        </p>
+                      </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-zinc-500 font-sans">পেমেন্ট মেথড</span>
-                    <span className="font-bold uppercase text-pink-600 dark:text-pink-400">{manualSuccessData.paymentMethod}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-zinc-500 font-sans">নির্বাচিত প্ল্যান</span>
-                    <span className="font-bold text-zinc-900 dark:text-zinc-100">{manualSuccessData.planName}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-zinc-500 font-sans">পরিশোধিত ফি</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">
-                      ৳{manualSuccessData.amount?.toLocaleString('en-BD')}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center pt-2 border-t border-zinc-200 dark:border-zinc-800">
-                    <span className="text-zinc-500 font-sans">জমাদানের সময়</span>
-                    <span className="text-zinc-400 text-[11px]">
-                      {new Date(manualSuccessData.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
+                      <div className="pt-2 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-bold text-amber-300 font-mono">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>{currentSlide.highlightText}</span>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-xl flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <MessageCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-                    <div>
-                      <p className="text-xs font-bold text-emerald-950 dark:text-emerald-200">দ্রুত এক্সেস চান?</p>
-                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400">হোয়াটসঅ্যাপে TrxID মেসেজ দিয়ে দ্রুত ভেরিফাই করুন</p>
-                    </div>
-                  </div>
-                  <a
-                    href={`https://wa.me/8801834348966?text=${encodeURIComponent(`Assalamu Alaikum! I submitted manual payment for Nihomi. TrxID: ${manualSuccessData.trxID}, Phone: ${manualSuccessData.senderPhone}, Plan: ${manualSuccessData.planName}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
-                  >
-                    <span>WhatsApp</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setManualSuccessData(null);
-                      onClose();
-                    }}
-                    className="flex-1 py-3 px-6 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold text-sm shadow-md hover:bg-zinc-800 transition-all cursor-pointer"
-                  >
-                    ড্যাশবোর্ডে ফিরে যান (Close)
-                  </button>
+                {/* 6-Dot Carousel Indicator */}
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  {NIHOMI_6_VALUES.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveSlide(idx)}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        activeSlide === idx
+                          ? 'w-6 bg-gradient-to-r from-red-500 to-amber-500'
+                          : 'w-2 bg-white/20 hover:bg-white/40'
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
-            ) : (
-              <form onSubmit={handleManualSubmit} className="space-y-5">
-                <div className="p-4 rounded-2xl bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-800/40 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-pink-600 text-white font-bold text-xs flex items-center justify-center">
-                        ৳
-                      </div>
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-pink-700 dark:text-pink-300">
-                        বিকাশ / নগদ Send Money নির্দেশিকা
-                      </h4>
-                    </div>
-                    <span className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-                      Personal / Merchant
-                    </span>
-                  </div>
 
-                  <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-pink-100 dark:border-pink-900/30 flex items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold">প্রাপক নম্বর (Nihomi Official)</span>
-                      <span className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 tracking-wider">
-                        01834-348966 <span className="text-xs font-normal text-pink-600 dark:text-pink-400">(Official Helpline)</span>
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopyNumber('01834348966')}
-                      className="px-2.5 py-1.5 rounded-lg bg-pink-100 dark:bg-pink-950/60 hover:bg-pink-200 text-pink-700 dark:text-pink-300 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                      id="btn-copy-nihomi-number"
-                    >
-                      {copiedNumber ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>কপি হয়েছে</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>নম্বর কপি</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+              {/* Trust Badges */}
+              <div className="relative z-10 pt-4 mt-4 border-t border-white/10 space-y-2 text-[11px] text-stone-400 font-medium">
+                <div className="flex items-center gap-2 text-stone-300">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>SSLCOMMERZ ও bKash অনুমোদিত নিরাপদ গেটওয়ে</span>
+                </div>
+                <div className="flex items-center gap-2 text-stone-300">
+                  <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>পেমেন্ট সফল হওয়ামাত্রই তাৎক্ষণিক এক্সেস</span>
+                </div>
+              </div>
+            </div>
 
-                  <ol className="text-xs text-zinc-600 dark:text-zinc-400 space-y-1.5 pl-4 list-decimal marker:text-pink-600 marker:font-bold">
-                    <li>আপনার বিকাশ অথবা নগদ অ্যাপ ওপেন করে <strong>Send Money</strong> সিলেক্ট করুন।</li>
-                    <li>প্রাপক নম্বরে <strong>01834-348966</strong> দিন।</li>
-                    <li>
-                      টাকার পরিমাণ: {manualPlan === 'n5_lifetime' ? '৳১,৪৯৯ (লাইফটাইম পাস)' : '৳৪৯৯ (N5 Pro মাসিক)'}।
-                    </li>
-                    <li>লেনদেন সম্পন্ন করার পর প্রাপ্ত <strong>TrxID</strong> এবং আপনার প্রেরক নম্বরটি নিচে দিন।</li>
-                  </ol>
+            {/* =================================================================== */}
+            {/* RIGHT COLUMN: Automated 1-Click Gateway Checkout                    */}
+            {/* =================================================================== */}
+            <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-5">
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
+                    <Crown className="w-3.5 h-3.5" />
+                    <span>AUTOMATED 1-CLICK GATEWAY</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1.5 tracking-tight">
+                    নিহোমি প্রিমিয়াম চেকআউট
+                  </h2>
+                  <p className="text-xs text-stone-300 mt-1">
+                    কোনো ম্যানুয়াল নম্বর বা স্ক্রিনশট নয় — ১-ক্লিকে bKash বা কার্ড দিয়ে নিরাপদ পেমেন্ট করুন।
+                  </p>
                 </div>
 
-                {manualError && (
-                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl flex items-start gap-2.5 text-rose-700 dark:text-rose-300 text-xs">
-                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                    <span>{manualError}</span>
+                {errorMessage && (
+                  <div className="p-3 rounded-2xl bg-red-950/40 border border-red-500/30 flex items-center gap-2 text-red-300 text-xs font-medium">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <span>{errorMessage}</span>
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
-                    প্যাকেজ নির্বাচন করুন (Select Plan)
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setManualPlan('n5_pro')}
-                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                        manualPlan === 'n5_pro'
-                          ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="plan-n5-pro"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">N5 Pro</span>
-                        <span className="text-[11px] font-bold text-pink-600 dark:text-pink-400">৳৪৯৯ / মাস</span>
-                      </div>
-                      <p className="text-[10px] text-zinc-500 mt-1">সব লেসন ও কুইজ আনলক</p>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setManualPlan('n5_lifetime')}
-                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                        manualPlan === 'n5_lifetime'
-                          ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="plan-n5-lifetime"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
-                          <span>N5 Lifetime</span>
-                          <Crown className="w-3 h-3 text-amber-500" />
-                        </span>
-                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">৳১,৪৯৯</span>
-                      </div>
-                      <p className="text-[10px] text-zinc-500 mt-1">আজীবন পূর্ণাঙ্গ অ্যাক্সেস</p>
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
-                    পেমেন্ট মাধ্যম (Method)
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setManualMethod('bkash')}
-                      className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
-                        manualMethod === 'bkash'
-                          ? 'border-pink-500 bg-pink-500/10 ring-2 ring-pink-500/20 text-pink-600 dark:text-pink-400 font-bold'
-                          : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
-                      }`}
-                    >
-                      <div className="w-6 h-6 rounded bg-pink-600 text-white text-xs font-black flex items-center justify-center shrink-0">
-                        bK
-                      </div>
-                      <span className="text-xs">bKash Send Money</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setManualMethod('nagad')}
-                      className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
-                        manualMethod === 'nagad'
-                          ? 'border-orange-500 bg-orange-500/10 ring-2 ring-orange-500/20 text-orange-600 dark:text-orange-400 font-bold'
-                          : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
-                      }`}
-                    >
-                      <div className="w-6 h-6 rounded bg-orange-600 text-white text-xs font-black flex items-center justify-center shrink-0">
-                        N
-                      </div>
-                      <span className="text-xs">Nagad Send Money</span>
-                    </button>
-                  </div>
-                </div>
-
+                {/* Plan Selection Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                      যে নম্বর থেকে পাঠিয়েছেন (Sender Phone) *
-                    </label>
-                    <input
-                      type="tel"
-                      value={manualPhone}
-                      onChange={(e) => setManualPhone(e.target.value)}
-                      placeholder="01XXXXXXXXX"
-                      maxLength={11}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/30"
-                      required
-                      id="input-manual-phone"
-                    />
-                    <span className="text-[10px] text-zinc-500 mt-1 block">১১ ডিজিটের নম্বর দিন</span>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                      ট্রানজেকশন আইডি (TrxID) *
-                    </label>
-                    <input
-                      type="text"
-                      value={manualTrxId}
-                      onChange={(e) => setManualTrxId(e.target.value.toUpperCase())}
-                      placeholder="যেমন: BL92A8X10K"
-                      maxLength={14}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono text-sm uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-pink-500/30"
-                      required
-                      id="input-manual-trxid"
-                    />
-                    <span className="text-[10px] text-zinc-500 mt-1 block">এসএমএস-এ প্রাপ্ত TrxID লিখুন</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                    শিক্ষার্থীর নাম (ঐচ্ছিক)
-                  </label>
-                  <input
-                    type="text"
-                    value={manualStudentName}
-                    onChange={(e) => setManualStudentName(e.target.value)}
-                    placeholder="আপনার নাম"
-                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-pink-500/30"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmittingManual || !manualPhone || !manualTrxId}
-                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 active:scale-[0.99] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  id="btn-submit-manual-pay"
-                >
-                  {isSubmittingManual ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>যাচাইয়ের জন্য পাঠানো হচ্ছে...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>পেমেন্ট তথ্য জমা দিন (Submit for Verification)</span>
-                    </>
-                  )}
-                </button>
-              </form>
-            )
-          ) : (
-            <AnimatePresence mode="wait">
-              {step === 'configure' && (
-              <motion.div
-                key="step-configure"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                className="space-y-6"
-              >
-                {/* Plan Overview Card */}
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">
-                        {activePlan.displayNameJa || '日本語プラン'}
-                      </span>
-                      {activePlan.badge && (
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">
-                          {activePlan.badge}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mt-1">{activePlan.name} Plan</h3>
-                    <p className="text-xs text-zinc-500 max-w-sm">{activePlan.tagline}</p>
-                  </div>
-
-                  {/* Billing Frequency Toggle */}
-                  <div className="flex items-center bg-zinc-200/80 dark:bg-zinc-700/60 p-1 rounded-xl self-start sm:self-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setInterval('monthly');
-                        if (appliedCoupon) handleRemoveCoupon();
-                      }}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        interval === 'monthly'
-                          ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                          : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
-                      }`}
-                      id="toggle-interval-monthly"
-                    >
-                      Monthly
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setInterval('yearly');
-                        if (appliedCoupon) handleRemoveCoupon();
-                      }}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1 ${
-                        interval === 'yearly'
-                          ? 'bg-red-600 text-white shadow-xs'
-                          : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
-                      }`}
-                      id="toggle-interval-yearly"
-                    >
-                      <span>Annual</span>
-                      <span className="text-[10px] bg-red-700 text-white px-1.5 py-0.2 rounded-full font-bold">
-                        Save 30%
-                      </span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Gateway Selection */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">
-                    Select Payment Gateway (Bangladesh MFS, SSLCommerz Cards & Global Stripe)
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-                    <button
-                      type="button"
-                      onClick={() => setProvider('bkash')}
-                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
-                        provider === 'bkash'
-                          ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="provider-bkash"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-pink-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                        bK
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                          bKash MFS
-                        </p>
-                        <p className="text-[10px] text-zinc-500 truncate">Auto-Debit</p>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setProvider('sslcommerz')}
-                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
-                        provider === 'sslcommerz'
-                          ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 ring-2 ring-blue-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="provider-sslcommerz"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                        <CreditCard className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                          Cards & Banking
-                        </p>
-                        <p className="text-[10px] text-zinc-500 truncate">SSLCommerz BDT</p>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setProvider('stripe')}
-                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
-                        provider === 'stripe'
-                          ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 ring-2 ring-indigo-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="provider-stripe"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                        <CreditCard className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                          Stripe Global
-                        </p>
-                        <p className="text-[10px] text-zinc-500 truncate">USD / JPY / Int'l</p>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setProvider('apple_pay')}
-                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
-                        provider === 'apple_pay'
-                          ? 'border-zinc-900 bg-zinc-900 text-white shadow-sm ring-2 ring-zinc-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="provider-apple-pay"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-black text-white font-bold text-xs flex items-center justify-center shrink-0">
-                        
-                      </div>
-                      <div className="min-w-0">
-                        <p className={`text-xs font-bold truncate ${provider === 'apple_pay' ? 'text-white' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                          Apple Pay
-                        </p>
-                        <p className={`text-[10px] truncate ${provider === 'apple_pay' ? 'text-zinc-300' : 'text-zinc-500'}`}>Biometric 1-Click</p>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setProvider('google_pay')}
-                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 cursor-pointer ${
-                        provider === 'google_pay'
-                          ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/40 ring-2 ring-blue-500/20'
-                          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                      }`}
-                      id="provider-google-pay"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 text-zinc-800 font-bold text-[10px] flex items-center justify-center shrink-0 shadow-xs">
-                        GPay
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                          Google Pay
-                        </p>
-                        <p className="text-[10px] text-zinc-500 truncate">Google Wallet</p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Coupon Code Section */}
-                <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/30 border border-dashed border-zinc-300 dark:border-zinc-700">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Tag className="w-4 h-4 text-zinc-500" />
-                    <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                      Have a Promo or Referral Code? (e.g. NIHOMI20, LAUNCH50)
-                    </span>
-                  </div>
-
-                  {appliedCoupon ? (
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                        <span>
-                          Code <strong>{appliedCoupon.code}</strong> applied! Saved ৳{appliedCoupon.discountAmount}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleRemoveCoupon}
-                        className="text-zinc-500 hover:text-red-600 font-medium underline text-xs"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                        placeholder="Enter Promo Code"
-                        className="flex-1 px-3 py-1.5 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 uppercase"
-                        id="input-coupon-code"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleApplyCoupon}
-                        disabled={isApplyingCoupon || !couponCode.trim()}
-                        className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 disabled:opacity-50 flex items-center gap-1.5"
-                        id="btn-apply-coupon"
-                      >
-                        {isApplyingCoupon && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                        Apply
-                      </button>
-                    </div>
-                  )}
-
-                  {couponError && <p className="text-xs text-red-600 dark:text-red-400 mt-1.5">{couponError}</p>}
-                </div>
-
-                {/* Price Breakdown */}
-                <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-sm">
-                  <div className="flex justify-between text-zinc-600 dark:text-zinc-400 text-xs">
-                    <span>
-                      {activePlan.name} ({interval === 'yearly' ? 'Annual Plan' : 'Monthly Plan'})
-                    </span>
-                    <span>৳{basePrice.toLocaleString()}</span>
-                  </div>
-
-                  {savingsAmount > 0 && (
-                    <div className="flex justify-between text-emerald-600 dark:text-emerald-400 text-xs">
-                      <span>Annual Tier Pre-Pay Savings</span>
-                      <span>-৳{savingsAmount.toLocaleString()}</span>
-                    </div>
-                  )}
-
-                  {discountAmount > 0 && (
-                    <div className="flex justify-between text-emerald-600 dark:text-emerald-400 text-xs">
-                      <span>Promo Discount ({appliedCoupon?.code})</span>
-                      <span>-৳{discountAmount.toLocaleString()}</span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between text-zinc-600 dark:text-zinc-400 text-xs">
-                    <span>VAT & Gateway Processing Fee</span>
-                    <span className="text-emerald-600 font-medium">৳0 (Included)</span>
-                  </div>
-
-                  <div className="flex justify-between items-center pt-2 border-t border-zinc-200 dark:border-zinc-700 text-base font-bold text-zinc-900 dark:text-zinc-100">
-                    <div>
-                      <span>Total Amount Payable</span>
-                      <p className="text-[11px] font-normal text-zinc-500">
-                        {interval === 'yearly' ? 'Covers 365 Days Full Access' : 'Covers 30 Days Full Access'}
-                      </p>
-                    </div>
-                    <span className="text-2xl text-red-600 font-extrabold">৳{finalPrice.toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {/* Action CTA */}
-                <button
-                  type="button"
-                  onClick={handleProceedToPayment}
-                  disabled={isInitiating}
-                  className="w-full py-3.5 px-6 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                  id="btn-proceed-to-payment"
-                >
-                  {isInitiating ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Initiating Secure Session...
-                    </>
-                  ) : (
-                    <>
-                      <span>Proceed to {provider === 'bkash' ? 'bKash' : provider === 'sslcommerz' ? 'Card / Bank' : 'Gateway'} Payment</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </motion.div>
-            )}
-
-            {step === 'payment_method' && (
-              <motion.div
-                key="step-payment"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                className="space-y-6"
-              >
-                {/* Gateway Specific Header */}
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-red-600/10 text-red-600 flex items-center justify-center font-bold">
-                      {provider === 'bkash' ? <Smartphone className="w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                        {provider === 'bkash' ? 'bKash Mobile Payment Gateway' : 'SSLCommerz Card Gateway'}
-                      </h4>
-                      <p className="text-xs text-zinc-500">Ref: {paymentInitiationData?.providerReference || 'TX-PENDING'}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-zinc-500 block">Amount</span>
-                    <span className="text-lg font-bold text-red-600">৳{finalPrice.toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {paymentInitiationData?.redirectUrl && (
-                  <div className="p-3 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl flex items-center justify-between gap-3 text-xs border border-zinc-200 dark:border-zinc-700">
-                    <span className="text-zinc-600 dark:text-zinc-300">Official Gateway Hosted Checkout is available:</span>
-                    <a
-                      href={paymentInitiationData.redirectUrl}
-                      className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold flex items-center gap-1.5 text-xs shrink-0 transition-colors"
-                      id="link-gateway-hosted-url"
-                    >
-                      <span>Open Gateway Portal</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                )}
-
-                {provider === 'bkash' && (
-                  <div className="space-y-4 p-4 rounded-xl border border-pink-200 dark:border-pink-900/40 bg-pink-50/30 dark:bg-pink-950/10">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        bKash Account Number (11-digit)
-                      </label>
-                      <input
-                        type="text"
-                        value={accountNumber}
-                        onChange={(e) => setAccountNumber(e.target.value)}
-                        placeholder="01XXXXXXXXX"
-                        className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                        id="input-bkash-number"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                          Verification OTP Code
-                        </label>
-                        <input
-                          type="text"
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                          placeholder="123456"
-                          className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                          id="input-bkash-otp"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                          bKash PIN (Encrypted)
-                        </label>
-                        <input
-                          type="password"
-                          value={pin}
-                          onChange={(e) => setPin(e.target.value)}
-                          placeholder="•••••"
-                          className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                          id="input-bkash-pin"
-                        />
-                      </div>
-                    </div>
-
-                    <p className="text-[11px] text-zinc-500 flex items-center gap-1.5">
-                      <Lock className="w-3 h-3 text-emerald-600" />
-                      Your PIN is securely processed directly with the gateway and never stored.
-                    </p>
-                  </div>
-                )}
-
-                {provider === 'sslcommerz' && (
-                  <div className="space-y-4 p-4 rounded-xl border border-blue-200 dark:border-blue-900/40 bg-blue-50/30 dark:bg-blue-950/10">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Debit / Credit Card Number
-                      </label>
-                      <input
-                        type="text"
-                        value={cardNumber}
-                        onChange={(e) => setCardNumber(e.target.value)}
-                        placeholder="4242 4242 4242 4242"
-                        className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                        id="input-card-number"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          value={cardExpiry}
-                          onChange={(e) => setCardExpiry(e.target.value)}
-                          placeholder="MM/YY"
-                          className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                          id="input-card-expiry"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                          CVV / CVC
-                        </label>
-                        <input
-                          type="password"
-                          value={cardCvv}
-                          onChange={(e) => setCardCvv(e.target.value)}
-                          placeholder="•••"
-                          className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                          id="input-card-cvv"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {provider === 'shurjopay' && (
-                  <div className="space-y-3 p-4 rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/30 dark:bg-amber-950/10">
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                      Mobile Wallet Account Number
-                    </label>
-                    <input
-                      type="text"
-                      value={accountNumber}
-                      onChange={(e) => setAccountNumber(e.target.value)}
-                      placeholder="01XXXXXXXXX"
-                      className="w-full px-3.5 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono"
-                      id="input-sp-number"
-                    />
-                  </div>
-                )}
-
-                {provider === 'apple_pay' && (
-                  <div className="space-y-3 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/40 text-center">
-                    <div className="w-12 h-12 rounded-full bg-black text-white text-2xl flex items-center justify-center mx-auto shadow-sm">
-                      
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Apple Pay Biometric Express</p>
-                      <p className="text-[11px] text-zinc-500">
-                        Click 'Confirm & Pay' to authenticate with FaceID or TouchID on your Apple device.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {provider === 'google_pay' && (
-                  <div className="space-y-3 p-4 rounded-xl border border-blue-200 dark:border-blue-900/40 bg-blue-50/30 dark:bg-blue-950/20 text-center">
-                    <div className="w-12 h-12 rounded-full bg-white border border-zinc-200 text-blue-600 font-bold text-sm flex items-center justify-center mx-auto shadow-xs">
-                      GPay
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Google Wallet 1-Click Pay</p>
-                      <p className="text-[11px] text-zinc-500">
-                        Pay securely using your saved cards in your Google Account.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Actions */}
-                <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setStep('configure')}
-                    disabled={isVerifying}
-                    className="py-3 px-4 rounded-xl border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                    id="btn-back-to-configure"
+                  
+                  {/* Plan 1: ৳499 N5 Lifetime Pass */}
+                  <div
+                    onClick={() => setTier('n5_lifetime')}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
+                      tier === 'n5_lifetime'
+                        ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-amber-500 shadow-xl ring-1 ring-amber-500/50'
+                        : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    }`}
                   >
-                    Back
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">
+                        মোস্ট পপুলার
+                      </span>
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        tier === 'n5_lifetime' ? 'border-amber-400 bg-amber-400' : 'border-stone-500'
+                      }`}>
+                        {tier === 'n5_lifetime' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-black text-white">N5 Lifetime Pass</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5 ফুল মাস্টার কারিকুলাম</p>
+                    </div>
+
+                    <div className="pt-1">
+                      <div className="text-2xl font-black text-amber-300">৳৪৯৯</div>
+                      <span className="text-[10px] text-stone-400 font-mono">এককালীন / আজীবন মেয়াদী</span>
+                    </div>
+
+                    <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>Tanaka AI সেনসেই আনলিমিটেড</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>JIS Rirekisho A4 PDF এক্সপোর্ট</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Plan 2: ৳4,990 All-Access Career Pass */}
+                  <div
+                    onClick={() => setTier('n5_pro')}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
+                      tier === 'n5_pro'
+                        ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-red-500 shadow-xl ring-1 ring-red-500/50'
+                        : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 text-[10px] font-bold">
+                        ক্যারিয়ার কমপ্লিট
+                      </span>
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        tier === 'n5_pro' ? 'border-red-400 bg-red-400' : 'border-stone-500'
+                      }`}>
+                        {tier === 'n5_pro' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-black text-white">All-Access Pass</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">N5 থেকে N1 + WorkOS ক্যারিয়ার</p>
+                    </div>
+
+                    <div className="pt-1">
+                      <div className="text-2xl font-black text-rose-300">৳৪,৯৯০</div>
+                      <span className="text-[10px] text-stone-400 font-mono">বাৎসরিক / পূর্ণাঙ্গ অ্যাক্সেস</span>
+                    </div>
+
+                    <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>N5, N4, N3, N2, N1 ফুল আনলক</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>WorkOS কনবিনি শিফট সিমুলেটর</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>Shokumu Keirekisho Pro এক্সপোর্ট</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Optional Promo / Coupon code input */}
+                <form onSubmit={handleApplyCoupon} className="flex gap-2 items-center">
+                  <div className="relative flex-1">
+                    <Tag className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="ডিসকাউন্ট কুপন (যেমন: NIHOMI10)"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      className="w-full pl-9 pr-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-white placeholder-stone-500 uppercase tracking-wider focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isApplyingCoupon || !couponCode.trim()}
+                    className="px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-stone-200 font-bold text-xs cursor-pointer disabled:opacity-40"
+                  >
+                    {isApplyingCoupon ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'প্রয়োগ'}
                   </button>
+                </form>
+                {couponMessage && (
+                  <p className="text-[11px] text-amber-300 font-medium">
+                    {couponMessage}
+                  </p>
+                )}
+
+                {/* Automated Gateway Action Buttons */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono">
+                    নিরাপদ পেমেন্ট চ্যানেল নির্বাচন করুন:
+                  </div>
+
+                  {/* bKash 1-Click Gateway Button */}
                   <button
                     type="button"
-                    onClick={handleVerifyAndPay}
-                    disabled={isVerifying}
-                    className="flex-1 py-3.5 px-6 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                    id="btn-confirm-and-pay"
+                    onClick={handleBkashCheckout}
+                    disabled={isProcessingBkash || isProcessingSsl}
+                    className="w-full py-3.5 px-5 rounded-2xl bg-[#E2136E] hover:bg-[#c90f61] text-white font-black text-sm shadow-xl shadow-[#E2136E]/25 transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
                   >
-                    {isVerifying ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Verifying Transaction with Gateway...
-                      </>
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-white p-1 flex items-center justify-center shrink-0">
+                        <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
+                      </div>
+                      <span className="text-left leading-tight">
+                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন (৳{finalPrice.toLocaleString('en-US')})
+                      </span>
+                    </div>
+                    {isProcessingBkash ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <>
-                        <ShieldCheck className="w-4 h-4" />
-                        <span>Confirm & Pay ৳{finalPrice.toLocaleString()}</span>
-                      </>
+                      <ArrowRight className="w-5 h-5" />
+                    )}
+                  </button>
+
+                  {/* SSLCOMMERZ Cards & Multi-Channel Button */}
+                  <button
+                    type="button"
+                    onClick={handleSslCheckout}
+                    disabled={isProcessingBkash || isProcessingSsl}
+                    className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#1e293b] via-[#0f172a] to-[#1e293b] hover:border-amber-400/50 border border-white/15 text-white font-bold text-sm shadow-lg transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <CreditCard className="w-5 h-5 text-amber-400 shrink-0" />
+                      <span className="text-left text-xs sm:text-sm">
+                        কার্ড / নগদ / ইন্টারনেট ব্যাংকিং (SSLCOMMERZ)
+                      </span>
+                    </div>
+                    {isProcessingSsl ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+                    ) : (
+                      <ChevronRight className="w-5 h-5 text-stone-400" />
                     )}
                   </button>
                 </div>
-              </motion.div>
-            )}
+              </div>
 
-            {step === 'success' && completedInvoice && (
-              <motion.div
-                key="step-success"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-4 space-y-6"
-              >
-                <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                  <CheckCircle2 className="w-10 h-10" />
-                </div>
+              {/* Bottom Guarantee Note */}
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-400">
+                <span className="flex items-center gap-1.5 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>কোনো লুকানো চার্জ নেই • ৭ দিনের মানিব্যাক গ্যারান্টি</span>
+                </span>
+                <span className="font-mono text-stone-500">256-Bit SSL Encrypted</span>
+              </div>
 
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                    Payment Verified & Activated
-                  </span>
-                  <h3 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 mt-1">
-                    Welcome to Nihomi {activePlan.name}!
-                  </h3>
-                  <p className="text-xs text-zinc-500 mt-1">
-                    Your subscription is active and all {activePlan.name} learning modules are unlocked.
-                  </p>
-                </div>
-
-                {/* Receipt Card */}
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-left text-xs space-y-2">
-                  <div className="flex justify-between border-b border-zinc-200 dark:border-zinc-700 pb-2">
-                    <span className="text-zinc-500">Invoice ID</span>
-                    <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{completedInvoice.id}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Plan</span>
-                    <span className="font-semibold text-zinc-900 dark:text-zinc-100">{completedInvoice.planName}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Billing Period</span>
-                    <span className="text-zinc-900 dark:text-zinc-100">{completedInvoice.billingPeriod}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Amount Paid</span>
-                    <span className="font-bold text-emerald-600">৳{completedInvoice.amount.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Payment Gateway</span>
-                    <span className="text-zinc-900 dark:text-zinc-100">{completedInvoice.paymentMethodName}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="flex-1 py-3 px-6 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold text-sm shadow-md hover:bg-zinc-800 transition-all"
-                    id="btn-start-learning-now"
-                  >
-                    Start Learning Now
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          )}
-        </div>
-
-        {/* Modal Footer Trust Messaging */}
-        {step !== 'success' && (
-          <div className="px-6 py-3 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>100% Secure Transaction & Instant Activation</span>
             </div>
-            <span>Questions? nihomibd@gmail.com</span>
           </div>
-        )}
-      </motion.div>
-    </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
   );
 };
+
+export default CheckoutModal;

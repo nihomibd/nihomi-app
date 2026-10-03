@@ -208,7 +208,7 @@ export class MockExamPersistenceService {
     // 2. Query PostgreSQL if not in local memory and database is configured
     if (isDatabaseConfigured()) {
       try {
-        const rows = await prisma.$queryRawUnsafe<any[]>(
+        const rows: any[] = await (prisma.$queryRawUnsafe as any)(
           'SELECT * FROM mock_exam_results WHERE certificate_id = $1 LIMIT 1',
           certificateId
         );

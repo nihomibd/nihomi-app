@@ -90,10 +90,10 @@ export interface SentenceDnaResponse {
 }
 
 const CANDIDATE_MODELS = [
-  'gemini-3.7-flash',
-  'gemini-3.1-flash-lite',
-  'gemini-flash-latest',
-  'gemini-3.1-pro-preview'
+  'gemini-2.5-flash',
+  'gemini-1.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-pro'
 ];
 
 async function sleep(ms: number) {
@@ -207,13 +207,18 @@ export async function processAICoachRequest(req: AICoachRequest): Promise<AICoac
   const client = getAIClient();
   const level = req.userLevel || 'N5';
 
-  let systemInstruction = `You are "Nihomi Sensei", an expert Japanese language coach and cultural mentor on Nihomi.com.
+  let systemInstruction = `You are "Nihomi Sensei" (にほみ先生), a warm, encouraging, and culturally authentic Japanese language mentor on Nihomi.com.
+You mentor students learning Japanese, bridging Japanese with Bengali (বাংলা) and English.
 Target Student JLPT Level: ${level}.
-Always respond warmly, clearly, and encouragingly.
-Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (বাংলা) translations.`;
+
+CORE TEACHING PERSONA:
+1. Warm, Empathetic & Natural: Greet the learner warmly when they say "hello", "hi", "こんにちは", or casually message you. E.g., "こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী নিয়ে অনুশীলন করতে চান?"
+2. No Unsolicited Grammar Dumps: NEVER dump rigid grammar tables, particle lists, or textbook rules unless the student specifically asks for grammar explanations!
+3. Bilingual Mentor: Provide natural Japanese (with furigana/romaji where helpful) followed by clear, friendly Bengali (বাংলা) guidance.
+4. Keep Conversation Flowing: Keep responses concise, warm, and ask an engaging question in Japanese to encourage the student to practice.`;
 
   if (req.mode === 'conversation') {
-    systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || 'General daily conversation'}". Respond naturally in Japanese appropriate for JLPT ${level}, then give a polite English and Bengali translation below. Ask an engaging follow-up question in Japanese to keep the conversation flowing.`;
+    systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || 'General daily conversation'}". Respond naturally in Japanese appropriate for JLPT ${level}, followed by a polite English and Bengali translation below. Ask an engaging follow-up question to keep the chat lively.`;
   } else if (req.mode === 'correction') {
     systemInstruction += ` Strictly analyze and correct the user's Japanese sentence. Format response with:
 [USER SENTENCE] The original sentence
@@ -221,7 +226,7 @@ Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (বাং�
 [WHY IT IS INCORRECT] Grammatical explanation of errors
 [NATURAL ALTERNATIVE] How a native speaker in Tokyo expresses this naturally`;
   } else if (req.mode === 'voice_chat') {
-    systemInstruction += ` The user is speaking Japanese voice message. Analyze their pronunciation flow, provide immediate friendly voice-tailored reply with furigana and romaji.`;
+    systemInstruction += ` The user is speaking Japanese voice message. Analyze their pronunciation flow, provide an immediate warm, voice-tailored reply with furigana and romaji.`;
   }
 
   if (client) {
@@ -290,9 +295,21 @@ Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (বাং�
     }
   }
 
+  const trimmed = req.message?.trim().toLowerCase() || '';
+  const isGreeting = ['hello', 'hi', 'hey', 'こんにちは', 'konnichiwa', 'সালাম', 'হ্যালো', 'good morning', 'おはよう'].some((g) => trimmed.includes(g));
+
+  if (isGreeting) {
+    return {
+      reply: 'こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী নিয়ে অনুশীলন করতে চান?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)',
+      romaji: 'Konnichiwa! Nihomi Sensei e youkoso. Kyou wa nani o renshuu shitai desu ka?',
+      bengaliTranslation: 'হ্যালো! নিহোমি সেনসেই ক্লাসরুমে স্বাগতম। আজ কী নিয়ে অনুশীলন করতে চান?'
+    };
+  }
+
   return {
-    reply: `こんにちは！(Hello!) Nihomi Sensei is ready to guide your Japanese learning journey. Keep practicing!`,
-    bengaliTranslation: 'হ্যালো! নিহোমি সেনসেই আপনার জাপানি ভাষা শেখার যাত্রায় সাহায্য করতে প্রস্তুত।'
+    reply: `はい、よく分かりました！(Hai, yoku wakarimashita!) আপনি লিখেছেন: 「${req.message}」。\n\nNihomi Sensei আপনার সাথে আছে। জাপানি ভাষায় আরও কিছু বলতে চাইলে লিখুন!`,
+    romaji: 'Hai, yoku wakarimashita! Nihongo de hanashite mimashou.',
+    bengaliTranslation: 'হ্যাঁ, খুব ভালো হয়েছে! আসুন একসাথে জাপানি চর্চা চালিয়ে যাই।'
   };
 }
 

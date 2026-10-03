@@ -61071,10 +61071,10 @@ function getAIClient() {
   return aiClient;
 }
 var CANDIDATE_MODELS = [
-  "gemini-3.7-flash",
-  "gemini-3.1-flash-lite",
-  "gemini-flash-latest",
-  "gemini-3.1-pro-preview"
+  "gemini-2.5-flash",
+  "gemini-1.5-flash",
+  "gemini-2.0-flash",
+  "gemini-1.5-pro"
 ];
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -61175,12 +61175,17 @@ function generateProceduralSentenceDna(sentence, userLevel = "N5") {
 async function processAICoachRequest(req) {
   const client = getAIClient();
   const level = req.userLevel || "N5";
-  let systemInstruction = `You are "Nihomi Sensei", an expert Japanese language coach and cultural mentor on Nihomi.com.
+  let systemInstruction = `You are "Nihomi Sensei" (\u306B\u307B\u307F\u5148\u751F), a warm, encouraging, and culturally authentic Japanese language mentor on Nihomi.com.
+You mentor students learning Japanese, bridging Japanese with Bengali (\u09AC\u09BE\u0982\u09B2\u09BE) and English.
 Target Student JLPT Level: ${level}.
-Always respond warmly, clearly, and encouragingly.
-Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (\u09AC\u09BE\u0982\u09B2\u09BE) translations.`;
+
+CORE TEACHING PERSONA:
+1. Warm, Empathetic & Natural: Greet the learner warmly when they say "hello", "hi", "\u3053\u3093\u306B\u3061\u306F", or casually message you. E.g., "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?"
+2. No Unsolicited Grammar Dumps: NEVER dump rigid grammar tables, particle lists, or textbook rules unless the student specifically asks for grammar explanations!
+3. Bilingual Mentor: Provide natural Japanese (with furigana/romaji where helpful) followed by clear, friendly Bengali (\u09AC\u09BE\u0982\u09B2\u09BE) guidance.
+4. Keep Conversation Flowing: Keep responses concise, warm, and ask an engaging question in Japanese to encourage the student to practice.`;
   if (req.mode === "conversation") {
-    systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || "General daily conversation"}". Respond naturally in Japanese appropriate for JLPT ${level}, then give a polite English and Bengali translation below. Ask an engaging follow-up question in Japanese to keep the conversation flowing.`;
+    systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || "General daily conversation"}". Respond naturally in Japanese appropriate for JLPT ${level}, followed by a polite English and Bengali translation below. Ask an engaging follow-up question to keep the chat lively.`;
   } else if (req.mode === "correction") {
     systemInstruction += ` Strictly analyze and correct the user's Japanese sentence. Format response with:
 [USER SENTENCE] The original sentence
@@ -61188,7 +61193,7 @@ Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (\u09AC\u09B
 [WHY IT IS INCORRECT] Grammatical explanation of errors
 [NATURAL ALTERNATIVE] How a native speaker in Tokyo expresses this naturally`;
   } else if (req.mode === "voice_chat") {
-    systemInstruction += ` The user is speaking Japanese voice message. Analyze their pronunciation flow, provide immediate friendly voice-tailored reply with furigana and romaji.`;
+    systemInstruction += ` The user is speaking Japanese voice message. Analyze their pronunciation flow, provide an immediate warm, voice-tailored reply with furigana and romaji.`;
   }
   if (client) {
     const contents = [];
@@ -61253,9 +61258,21 @@ Provide Japanese with Hiragana/Kanji, Romaji, and English + Bengali (\u09AC\u09B
       }
     }
   }
+  const trimmed = req.message?.trim().toLowerCase() || "";
+  const isGreeting = ["hello", "hi", "hey", "\u3053\u3093\u306B\u3061\u306F", "konnichiwa", "\u09B8\u09BE\u09B2\u09BE\u09AE", "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB", "good morning", "\u304A\u306F\u3088\u3046"].some((g) => trimmed.includes(g));
+  if (isGreeting) {
+    return {
+      reply: "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)",
+      romaji: "Konnichiwa! Nihomi Sensei e youkoso. Kyou wa nani o renshuu shitai desu ka?",
+      bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u099C \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?"
+    };
+  }
   return {
-    reply: `\u3053\u3093\u306B\u3061\u306F\uFF01(Hello!) Nihomi Sensei is ready to guide your Japanese learning journey. Keep practicing!`,
-    bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0986\u09AA\u09A8\u09BE\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09B6\u09C7\u0996\u09BE\u09B0 \u09AF\u09BE\u09A4\u09CD\u09B0\u09BE\u09AF\u09BC \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u0995\u09B0\u09A4\u09C7 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u0964"
+    reply: `\u306F\u3044\u3001\u3088\u304F\u5206\u304B\u308A\u307E\u3057\u305F\uFF01(Hai, yoku wakarimashita!) \u0986\u09AA\u09A8\u09BF \u09B2\u09BF\u0996\u09C7\u099B\u09C7\u09A8: \u300C${req.message}\u300D\u3002
+
+Nihomi Sensei \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0986\u099B\u09C7\u0964 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u0986\u09B0\u0993 \u0995\u09BF\u099B\u09C1 \u09AC\u09B2\u09A4\u09C7 \u099A\u09BE\u0987\u09B2\u09C7 \u09B2\u09BF\u0996\u09C1\u09A8!`,
+    romaji: "Hai, yoku wakarimashita! Nihongo de hanashite mimashou.",
+    bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u0981, \u0996\u09C1\u09AC \u09AD\u09BE\u09B2\u09CB \u09B9\u09DF\u09C7\u099B\u09C7! \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09B0\u09CD\u099A\u09BE \u099A\u09BE\u09B2\u09BF\u09DF\u09C7 \u09AF\u09BE\u0987\u0964"
   };
 }
 async function processVisionSenseiRequest(req) {
@@ -62026,10 +62043,11 @@ aiRouter.post(
         });
       } catch (err) {
         console.warn("[AICoach] Gemini fallback:", err?.message);
+        const isGreeting = /^(hello|hi|hey|konnichiwa|こんにちは|হ্যালো|সালাম|good morning|おはよう)/i.test((message || "").trim());
         aiResult = {
-          reply: "\u3053\u3093\u306B\u3061\u306F\uFF01\u65E5\u672C\u8A9E\u306E\u7DF4\u7FD2\u3092\u7D9A\u3051\u307E\u3057\u3087\u3046 (Hello! Let us continue practicing Japanese). In JLPT N5, remember to connect subjects with \u306F (wa) and direct objects with \u3092 (o). Ganbatte!",
-          romaji: "Konnichiwa! Nihongo no renshuu o tsuzukemashou.",
-          bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09B0\u09CD\u099A\u09BE \u099A\u09BE\u09B2\u09BF\u09DF\u09C7 \u09AF\u09BE\u09A8\u0964 \u098F\u09A8\u09EB-\u098F \u09AC\u09BF\u09B7\u09DF \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u306F \u098F\u09AC\u0982 \u0995\u09B0\u09CD\u09AE \u09AC\u09CB\u099D\u09BE\u09A4\u09C7 \u3092 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09C1\u09A8\u0964",
+          reply: isGreeting ? "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)" : `\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u0986\u09AA\u09A8\u09BF \u09B2\u09BF\u0996\u09C7\u099B\u09C7\u09A8: "${message}". \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u09B8\u09B0\u09CD\u09AC\u09A6\u09BE \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09B6\u09C7 \u0986\u099B\u09C7\u0964 \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u099A\u09B0\u09CD\u099A\u09BE \u0995\u09B0\u09BF!`,
+          romaji: isGreeting ? "Konnichiwa! Nihomi Sensei no kurasuruumu e youkoso." : "Konnichiwa! Issho ni nihongo o manabimashou.",
+          bengaliTranslation: isGreeting ? "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u099C \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?" : "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u099A\u09B0\u09CD\u099A\u09BE \u0995\u09B0\u09BF\u0964",
           correctionData: void 0
         };
       }

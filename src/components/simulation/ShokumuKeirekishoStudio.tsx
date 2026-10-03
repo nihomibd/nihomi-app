@@ -110,6 +110,7 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
   });
 
   const [viewMode, setViewMode] = useState<'editor' | 'preview'>('editor');
+  const paperRef = useRef<HTMLDivElement>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [isPolishingSummary, setIsPolishingSummary] = useState(false);
@@ -187,12 +188,13 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
     try {
       if (viewMode !== 'preview') {
         setViewMode('preview');
-        await new Promise((r) => setTimeout(r, 350));
+        await new Promise((r) => setTimeout(r, 300));
       }
 
-      const element = document.getElementById('shokumu-paper');
+      const element = paperRef.current || document.getElementById('shokumu-paper');
       if (!element) {
-        window.print();
+        console.warn('Shokumu paper element not found for export');
+        setIsGeneratingPdf(false);
         return;
       }
 
@@ -201,7 +203,9 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
         useCORS: true,
         allowTaint: false,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        scrollX: 0,
+        scrollY: 0
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.98);
@@ -231,8 +235,7 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
       pdf.save(`Nihomi_Shokumu_Keirekisho_${safeName}.pdf`);
       soundEffects.playLessonCelebration();
     } catch (err) {
-      console.warn('PDF export fallback:', err);
-      window.print();
+      console.warn('PDF export error:', err);
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -648,6 +651,8 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
         <div className="flex justify-center p-2 sm:p-6 bg-slate-950/90 rounded-2xl border border-slate-800 overflow-x-auto">
           <div
             id="shokumu-paper"
+            ref={paperRef}
+            data-resume-paper="true"
             className="w-[210mm] min-h-[297mm] bg-white text-slate-950 p-[18mm] shadow-2xl font-serif text-[11px] leading-relaxed flex flex-col justify-between shrink-0"
             style={{ fontFamily: '"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif' }}
           >

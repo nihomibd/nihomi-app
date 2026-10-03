@@ -4,20 +4,26 @@ import {
   X,
   CheckCircle2,
   AlertCircle,
-  Copy,
-  Check,
-  Smartphone,
   Sparkles,
   Zap,
   ShieldCheck,
-  MessageSquare,
   ArrowRight,
-  ExternalLink,
-  Crown
+  Bot,
+  Brain,
+  Store,
+  FileText,
+  Target,
+  Compass,
+  Crown,
+  Lock,
+  Loader2,
+  CreditCard,
+  ChevronRight,
+  Check
 } from 'lucide-react';
-import { NIHOMI_CONTACT } from '../../config/contact';
 import { billingApi } from '../../lib/billingApi';
 import { useAuth } from '../../context/AuthContext';
+import { trackNihomiEvent } from '../../utils/analytics';
 
 interface ProUpgradeModalProps {
   isOpen: boolean;
@@ -26,30 +32,118 @@ interface ProUpgradeModalProps {
   defaultPlanInterval?: 'monthly' | 'yearly';
 }
 
+interface ValueSlide {
+  id: string;
+  badge: string;
+  title: string;
+  titleJa: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  accentGradient: string;
+  badgeColor: string;
+  highlightText: string;
+}
+
+const NIHOMI_6_VALUES: ValueSlide[] = [
+  {
+    id: 'sensei',
+    badge: 'PERSONAL SENSEI',
+    title: '২৪/৭ সার্বক্ষণিক পার্সোনাল শিক্ষক',
+    titleJa: 'AI 専属講師',
+    description: 'বাংলা ভাষায় জটিল জাপানি ব্যাকরণ বিশ্লেষণ ও যেকোনো সময় নির্ভুল কেইগো ও উচ্চারণ সহায়তা।',
+    icon: Bot,
+    accentGradient: 'from-red-600/25 via-[#1a1228] to-[#0d0918]',
+    badgeColor: 'bg-red-500/20 text-red-300 border-red-500/30',
+    highlightText: '১০০% বাংলায় প্রাঞ্জল ব্যাকরণ ব্যাখ্যা'
+  },
+  {
+    id: 'memoryos',
+    badge: 'MEMORYOS™ SRS',
+    title: 'স্পেসড রিপিটেশন স্মৃতি ইঞ্জিন',
+    titleJa: '記憶定着エンジン',
+    description: 'বৈজ্ঞানিক ইন্টারভালে আপনার ভুল হওয়া শব্দ ও ব্যাকরণ রিভিশন করিয়ে আজীবন মনে রাখা নিশ্চিত করে।',
+    icon: Brain,
+    accentGradient: 'from-amber-600/25 via-[#1a1528] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: '৯৫%+ দীর্ঘমেয়াদী মনে রাখার হার'
+  },
+  {
+    id: 'conbini',
+    badge: 'CONBINI SHIFT POS',
+    title: 'জাপানে যাওয়ার আগেই কাজের মহড়া',
+    titleJa: '現場レジ訓練',
+    description: 'টোকিও সেভেন-ইলেভেন ক্যাশিয়ার, বারকোড স্ক্যানার, সেমি-সেলফ রেজিস্টার ও কাস্টমার কেইগো সিমুলেশন।',
+    icon: Store,
+    accentGradient: 'from-emerald-600/25 via-[#121c22] to-[#0d0918]',
+    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    highlightText: 'বাস্তব টোকিও স্টোর অডিও ও রিয়েল শিফট'
+  },
+  {
+    id: 'jis_cv',
+    badge: 'JIS CV STUDIO',
+    title: 'জাপান স্ট্যান্ডার্ড JIS সিভি এক্সপোর্ট',
+    titleJa: '履歴書・職務経歴書',
+    description: 'জাপানি কোম্পানি ও ভিসা অনুমোদিত স্ট্যান্ডার্ড JIS 履歴書 এবং 職務経歴書 সরাসরি A4 PDF এক্সপোর্ট।',
+    icon: FileText,
+    accentGradient: 'from-blue-600/25 via-[#12162a] to-[#0d0918]',
+    badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    highlightText: 'A4 প্রিন্ট পারফেক্ট জাপানি ফরম্যাট'
+  },
+  {
+    id: 'zero_n1',
+    badge: 'ZERO TO N1 ROADMAP',
+    title: 'সম্পূর্ণ ভাষা ও ক্যারিয়ার রোডম্যাপ',
+    titleJa: 'N5からN1完全制覇',
+    description: 'শূন্য থেকে শুরু করে JLPT N1 পর্যন্ত বাস্তব সিলেবাস, ৫০+ মক টেস্ট ও মিনিমাম টাইমে সর্বোচ্চ প্রোগ্রেস।',
+    icon: Target,
+    accentGradient: 'from-purple-600/25 via-[#1a122e] to-[#0d0918]',
+    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    highlightText: '১,০০০+ বাস্তব অডিও ডায়ালগ ও কুইজ'
+  },
+  {
+    id: 'japan_readiness',
+    badge: 'JAPAN LIFE READINESS',
+    title: 'জাপান লিভিং সারভাইভাল গাইড',
+    titleJa: '日本生活完全ガイド',
+    description: 'সিটি হল রেজিস্ট্রেশন, ব্যাংক অ্যাকাউন্ট খোলা, ময়লা ফেলার নিয়ম ও জাপানে বসবাসের সব বাস্তব কলাকৌশল।',
+    icon: Compass,
+    accentGradient: 'from-amber-600/25 via-[#1d1520] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: 'বাস্তব জীবনযাপনে শতভাগ প্রস্তুতি'
+  }
+];
+
 export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
   isOpen,
   onClose,
-  onSuccess,
-  defaultPlanInterval = 'yearly'
+  onSuccess
 }) => {
-  const { user, profile, refreshSubscription } = useAuth();
+  const { user } = useAuth();
   
-  const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>(defaultPlanInterval);
-  const [trxId, setTrxId] = useState('');
-  const [studentPhone, setStudentPhone] = useState('');
-  const [copied, setCopied] = useState(false);
-  
-  // Submission state
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedTrxId, setSubmittedTrxId] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
+  // Selected Plan: 'lifetime' (৳499) vs 'all_access' (৳4,990)
+  const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'all_access'>('lifetime');
 
+  // Carousel Active Slide (0 to 5)
+  const [activeSlide, setActiveSlide] = useState<number>(0);
+
+  // Gateway Processing State
+  const [isProcessingBkash, setIsProcessingBkash] = useState<boolean>(false);
+  const [isProcessingSsl, setIsProcessingSsl] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Auto-advance Carousel every 3 seconds
+  useEffect(() => {
+    if (!isOpen) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % NIHOMI_6_VALUES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  // Handle ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
+      if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
@@ -63,312 +157,367 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
 
   if (!isOpen) return null;
 
-  const currentPrice = billingInterval === 'yearly' ? 4990 : 599;
-  const planPeriodText = billingInterval === 'yearly' ? '৳৪,৯৯০ / বছর' : '৳৫৯৯ / মাস';
+  const currentSlide = NIHOMI_6_VALUES[activeSlide];
+  const SlideIcon = currentSlide.icon;
 
-  const handleCopyBkashNumber = () => {
-    navigator.clipboard.writeText(NIHOMI_CONTACT.bkashNumber);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleSubmitTrxId = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanTrx = trxId.trim().toUpperCase();
-    if (!cleanTrx) {
-      setErrorMessage('অনুগ্রহ করে bKash ট্রানজেকশন আইডি (TrxID) প্রদান করুন।');
-      return;
-    }
-    if (cleanTrx.length < 8) {
-      setErrorMessage('সঠিক bKash ট্রানজেকশন আইডি লিখুন (যেমন: BL92A8X10K)।');
-      return;
-    }
-
-    setIsSubmitting(true);
+  // 1-Click Automated bKash PGW Checkout
+  const handleBkashCheckout = async () => {
+    setIsProcessingBkash(true);
     setErrorMessage(null);
-
     try {
-      const res = await billingApi.submitBkashTrxId({
-        trxId: cleanTrx,
-        planId: 'pro',
-        billingInterval,
-        studentName: profile?.displayName || user?.displayName || user?.email?.split('@')[0],
-        studentPhone: studentPhone.trim() || undefined,
-        userId: user?.id
-      });
-
-      if (res.success) {
-        setSubmittedTrxId(cleanTrx);
-        setIsSuccess(true);
-        if (refreshSubscription) {
-          try {
-            await refreshSubscription();
-          } catch (e) {
-            console.warn('Subscription refresh caught:', e);
-          }
-        }
-        if (onSuccess) onSuccess();
-      } else {
-        setErrorMessage(res.message || 'যাচাইকরণ সফল হয়নি। আবার চেষ্টা করুন।');
+      const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 499 : 4990 });
+      
+      const res = await billingApi.createBkashPayment({ tier });
+      if (res.success && res.bkashURL) {
+        window.location.href = res.bkashURL;
+        return;
       }
+      if (res.error) {
+        throw new Error(res.error);
+      }
+      throw new Error('bKash গেটওয়ে চালু করতে সমস্যা হয়েছে।');
     } catch (err: any) {
-      console.error('Backend verification error:', err);
-      setErrorMessage(err?.message || 'সার্ভার কানেকশন এরর। অনুগ্রহ করে আপনার ইন্টারনেট কানেকশন চেক করে আবার চেষ্টা করুন।');
+      console.error('bKash error:', err);
+      setErrorMessage(err.message || 'bKash গেটওয়ে চালু করতে ব্যর্থ হয়েছে। অনুগ্রহ করে SSLCOMMERZ চেষ্টা করুন।');
     } finally {
-      setIsSubmitting(false);
+      setIsProcessingBkash(false);
     }
   };
 
-  const whatsappVerificationUrl = NIHOMI_CONTACT.getWhatsAppTrxVerificationUrl(
-    submittedTrxId || trxId || '',
-    billingInterval === 'yearly' ? 'Pro Yearly' : 'Pro Monthly'
-  );
+  // 1-Click Automated SSLCOMMERZ Hosted PGW Checkout
+  const handleSslCheckout = async () => {
+    setIsProcessingSsl(true);
+    setErrorMessage(null);
+    try {
+      const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 499 : 4990 });
+
+      const res = await billingApi.createSslCommerzPayment({
+        tier,
+        name: user?.name || user?.email?.split('@')[0] || 'Nihomi Learner'
+      });
+      if (res.success && res.gatewayUrl) {
+        window.location.href = res.gatewayUrl;
+        return;
+      }
+      if (res.error) {
+        throw new Error(res.error);
+      }
+      throw new Error('SSLCOMMERZ গেটওয়ে চালু করতে সমস্যা হয়েছে।');
+    } catch (err: any) {
+      console.error('SSLCommerz error:', err);
+      setErrorMessage(err.message || 'SSLCOMMERZ গেটওয়ে চালু করতে ব্যর্থ হয়েছে।');
+    } finally {
+      setIsProcessingSsl(false);
+    }
+  };
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          initial={{ opacity: 0, scale: 0.96, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto bg-[#0f0f1c] border border-slate-800 rounded-3xl shadow-2xl text-slate-100 my-auto"
+          exit={{ opacity: 0, scale: 0.96, y: 15 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="relative w-full max-w-4xl bg-[#0d0b1a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden my-auto"
         >
-          {/* Top Header Glow */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-pink-500 to-amber-500" />
-
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="btn-haptic absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors z-10 cursor-pointer"
-            aria-label="Close"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-stone-300 hover:text-white transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="p-6 sm:p-8 space-y-6">
-            {/* Modal Title & Value Proposition */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold mb-2">
-                <Crown className="w-3.5 h-3.5" />
-                <span>Nihomi Pro™ আনলিমিটেড অ্যাক্সেস</span>
+          {/* 2-Column Responsive Layout: Left Carousel, Right Automated Checkout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+            
+            {/* =================================================================== */}
+            {/* LEFT COLUMN: Animated 3s Auto-Advancing Square Value Carousel      */}
+            {/* =================================================================== */}
+            <div className="lg:col-span-5 p-6 sm:p-8 bg-gradient-to-b from-[#14102c] via-[#100d24] to-[#0a0817] border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-between relative overflow-hidden">
+              {/* Subtle Tokyo Neon Ambient Bloom */}
+              <div className="pointer-events-none absolute -left-16 -top-16 w-52 h-52 bg-red-600/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-16 -bottom-16 w-52 h-52 bg-amber-500/15 rounded-full blur-3xl" />
+
+              <div className="relative z-10 space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center text-white font-black text-xs shadow-md">
+                    日
+                  </div>
+                  <span className="text-xs font-black tracking-wider text-amber-300 font-mono">
+                    NIHOMI 6-CORE VALUES
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="text-lg sm:text-xl font-black text-white leading-tight">
+                    কেন নিহোমি প্রিমিয়াম?
+                  </h3>
+                  <p className="text-xs text-stone-300">
+                    জাপানে পদার্পণ ও ক্যারিয়ার গড়ার পূর্ণাঙ্গ ডিজিটাল ইকোসিস্টেম।
+                  </p>
+                </div>
+
+                {/* Animated Square Carousel Card */}
+                <div className="relative min-h-[220px] sm:min-h-[240px] flex items-center">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentSlide.id}
+                      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                      className={`w-full p-5 rounded-2xl bg-gradient-to-br ${currentSlide.accentGradient} border border-white/15 shadow-xl space-y-3`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono border ${currentSlide.badgeColor}`}>
+                          {currentSlide.badge}
+                        </span>
+                        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                          <SlideIcon className="w-5 h-5 text-amber-300" />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="text-[11px] font-japanese text-amber-400 font-bold">
+                          {currentSlide.titleJa}
+                        </div>
+                        <h4 className="text-base font-black text-white leading-snug">
+                          {currentSlide.title}
+                        </h4>
+                        <p className="text-xs text-stone-200 leading-relaxed font-medium">
+                          {currentSlide.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-bold text-amber-300 font-mono">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>{currentSlide.highlightText}</span>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* 6-Dot Carousel Indicator */}
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  {NIHOMI_6_VALUES.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveSlide(idx)}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        activeSlide === idx
+                          ? 'w-6 bg-gradient-to-r from-red-500 to-amber-500'
+                          : 'w-2 bg-white/20 hover:bg-white/40'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                সহজ bKash পেমেন্টে প্রো অ্যাক্টিভেশন
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                মডেল টেস্ট, এআই সেনসেই টিউটরিং এবং ফুল ২৫ লেসন আনলক করুন সরাসরি bKash-এ পেমেন্ট করে।
-              </p>
+
+              {/* Trust Badges */}
+              <div className="relative z-10 pt-4 mt-4 border-t border-white/10 space-y-2 text-[11px] text-stone-400 font-medium">
+                <div className="flex items-center gap-2 text-stone-300">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>SSLCOMMERZ ও bKash অনুমোদিত নিরাপদ গেটওয়ে</span>
+                </div>
+                <div className="flex items-center gap-2 text-stone-300">
+                  <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>পেমেন্ট সফল হওয়ামাত্রই তাৎক্ষণিক লাইফটাইম এক্সেস</span>
+                </div>
+              </div>
             </div>
 
-            {!isSuccess ? (
-              <>
-                {/* 1. Subscription Plan Selector */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Monthly Plan */}
-                  <div
-                    onClick={() => setBillingInterval('monthly')}
-                    className={`btn-haptic cursor-pointer rounded-2xl p-4 border transition-all relative ${
-                      billingInterval === 'monthly'
-                        ? 'border-red-500/80 bg-red-500/10 shadow-lg shadow-red-500/10'
-                        : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
-                    }`}
-                  >
-                    <p className="text-xs font-medium text-slate-400">PRO Monthly</p>
-                    <p className="text-lg font-bold text-white mt-1">৳৫৯৯ <span className="text-xs font-normal text-slate-400">/ মাস</span></p>
-                    <p className="text-[11px] text-slate-400 mt-1">মাসিক নমনীয় শিখন</p>
+            {/* =================================================================== */}
+            {/* RIGHT COLUMN: Automated 1-Click Gateway Checkout                    */}
+            {/* =================================================================== */}
+            <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-5">
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
+                    <Crown className="w-3.5 h-3.5" />
+                    <span>AUTOMATED SECURE CHECKOUT</span>
                   </div>
-
-                  {/* Yearly Plan (Best Value) */}
-                  <div
-                    onClick={() => setBillingInterval('yearly')}
-                    className={`btn-haptic cursor-pointer rounded-2xl p-4 border transition-all relative ${
-                      billingInterval === 'yearly'
-                        ? 'border-red-500/80 bg-red-500/10 shadow-lg shadow-red-500/10'
-                        : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="absolute -top-2.5 right-2 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-500 text-black text-[10px] font-extrabold rounded-full uppercase tracking-wider shadow">
-                      Save 30%
-                    </div>
-                    <p className="text-xs font-medium text-slate-400">PRO Yearly</p>
-                    <p className="text-lg font-bold text-white mt-1">৳৪,৯৯০ <span className="text-xs font-normal text-slate-400">/ বছর</span></p>
-                    <p className="text-[11px] text-emerald-400 mt-1">৳২,১৯৮ সাশ্রয় (সেরা মান)</p>
-                  </div>
-                </div>
-
-                {/* 2. Official bKash Number Box */}
-                <div className="p-4 rounded-2xl bg-[#16162a] border border-slate-700/80 space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-300">
-                    <span className="flex items-center gap-1.5 font-medium text-pink-400">
-                      <Smartphone className="w-4 h-4" />
-                      অফিসিয়াল bKash পেমেন্ট নম্বর:
-                    </span>
-                    <span className="text-[11px] text-slate-400">Send Money / Payment</span>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-[#0a0a14] px-4 py-3 rounded-xl border border-slate-800">
-                    <span className="font-mono text-base sm:text-lg font-bold text-white tracking-wider">
-                      {NIHOMI_CONTACT.bkashNumberFormatted}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopyBkashNumber}
-                      className="btn-haptic inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold transition-all cursor-pointer shadow"
-                    >
-                      {copied ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-white" />
-                          <span>কপি হয়েছে!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>নম্বর কপি করুন</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <p className="text-[11px] text-slate-400 text-center pt-1">
-                    মোট প্রদেয় অ্যামাউন্ট: <strong className="text-amber-400">{planPeriodText}</strong>
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1.5 tracking-tight">
+                    প্ল্যান নির্বাচন ও ইনস্ট্যান্ট অ্যাক্টিভেশন
+                  </h2>
+                  <p className="text-xs text-stone-300 mt-1">
+                    কোনো ম্যানুয়াল অপেক্ষা নয় — ১-ক্লিকে bKash বা কার্ড দিয়ে শুরু করুন।
                   </p>
                 </div>
 
-                {/* 3. Step-by-Step Guide in Bengali */}
-                <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800/80 space-y-2.5">
-                  <p className="text-xs font-semibold text-slate-300">সহজ ৩ ধাপের পেমেন্ট গাইড:</p>
-                  <ol className="space-y-2 text-xs text-slate-300 pl-1">
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
-                        ১
+                {errorMessage && (
+                  <div className="p-3 rounded-2xl bg-red-950/40 border border-red-500/30 flex items-center gap-2 text-red-300 text-xs font-medium">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                {/* Plan Selection Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  
+                  {/* Plan 1: ৳499 N5 Lifetime Pass */}
+                  <div
+                    onClick={() => setSelectedPlan('lifetime')}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
+                      selectedPlan === 'lifetime'
+                        ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-amber-500 shadow-xl ring-1 ring-amber-500/50'
+                        : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">
+                        মোস্ট পপুলার
                       </span>
-                      <span>bKash অ্যাপে যান এবং <strong>'Send Money'</strong> করুন ({NIHOMI_CONTACT.bkashNumberFormatted})।</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
-                        ২
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        selectedPlan === 'lifetime' ? 'border-amber-400 bg-amber-400' : 'border-stone-500'
+                      }`}>
+                        {selectedPlan === 'lifetime' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-black text-white">N5 Lifetime Pass</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5 ফুল মাস্টার কারিকুলাম</p>
+                    </div>
+
+                    <div className="pt-1">
+                      <div className="text-2xl font-black text-amber-300">৳৪৯৯</div>
+                      <span className="text-[10px] text-stone-400 font-mono">এককালীন / আজীবন মেয়াদী</span>
+                    </div>
+
+                    <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>Tanaka AI সেনসেই আনলিমিটেড</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>JIS Rirekisho A4 PDF এক্সপোর্ট</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Plan 2: ৳4,990 All-Access Career Pass */}
+                  <div
+                    onClick={() => setSelectedPlan('all_access')}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
+                      selectedPlan === 'all_access'
+                        ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-red-500 shadow-xl ring-1 ring-red-500/50'
+                        : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 text-[10px] font-bold">
+                        ক্যারিয়ার কমপ্লিট
                       </span>
-                      <span>রেফারেন্সে আপনার স্টুডেন্ট নাম অথবা মোবাইল নম্বর লিখুন।</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
-                        ৩
-                      </span>
-                      <span>পেমেন্ট সফল হলে এসএমএস থেকে <strong>TrxID</strong> টি নিচের বক্সে পেস্ট করে জমা দিন।</span>
-                    </li>
-                  </ol>
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                        selectedPlan === 'all_access' ? 'border-red-400 bg-red-400' : 'border-stone-500'
+                      }`}>
+                        {selectedPlan === 'all_access' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-black text-white">All-Access Pass</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">N5 থেকে N1 + WorkOS ক্যারিয়ার</p>
+                    </div>
+
+                    <div className="pt-1">
+                      <div className="text-2xl font-black text-rose-300">৳৪,৯৯০</div>
+                      <span className="text-[10px] text-stone-400 font-mono">বাৎসরিক / পূর্ণাঙ্গ অ্যাক্সেস</span>
+                    </div>
+
+                    <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>N5, N4, N3, N2, N1 ফুল আনলক</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>WorkOS কনবিনি শিফট সিমুলেটর</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span>Shokumu Keirekisho Pro এক্সপোর্ট</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
-                {/* 4. TrxID Submission Form */}
-                <form onSubmit={handleSubmitTrxId} className="space-y-4">
-                  {errorMessage && (
-                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-2 text-xs text-red-400">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      <span>{errorMessage}</span>
-                    </div>
-                  )}
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                      <span>bKash Transaction ID (TrxID) *</span>
-                      <span className="text-[11px] text-slate-500 font-normal">উদা: BL92A8X10K</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={trxId}
-                      onChange={(e) => setTrxId(e.target.value.toUpperCase())}
-                      placeholder="এখানে ট্রানজেকশন আইডি লিখুন"
-                      className="w-full px-4 py-3 bg-[#0a0a14] border border-slate-700 rounded-xl text-white font-mono text-sm placeholder:text-slate-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 uppercase tracking-widest"
-                      maxLength={16}
-                      required
-                    />
+                {/* Automated Gateway Action Buttons */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono">
+                    ১-ক্লিক অনলাইন গেটওয়ে নির্বাচন করুন:
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300">
-                      আপনার bKash নম্বর (ঐচ্ছিক - ট্র্যাকিংয়ের জন্য)
-                    </label>
-                    <input
-                      type="tel"
-                      value={studentPhone}
-                      onChange={(e) => setStudentPhone(e.target.value)}
-                      placeholder="017XXXXXXXX"
-                      className="w-full px-4 py-2.5 bg-[#0a0a14] border border-slate-700 rounded-xl text-white text-xs placeholder:text-slate-600 focus:outline-none focus:border-red-500"
-                      maxLength={15}
-                    />
-                  </div>
-
+                  {/* bKash 1-Click Gateway Button */}
                   <button
-                    type="submit"
-                    disabled={isSubmitting || !trxId.trim()}
-                    className="btn-haptic w-full py-3.5 px-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-xl shadow-lg shadow-red-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    type="button"
+                    onClick={handleBkashCheckout}
+                    disabled={isProcessingBkash || isProcessingSsl}
+                    className="w-full py-3.5 px-5 rounded-2xl bg-[#E2136E] hover:bg-[#c90f61] text-white font-black text-sm shadow-xl shadow-[#E2136E]/25 transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
                   >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>যাচাই ও অ্যাক্টিভেশন প্রক্রিয়াধীন...</span>
-                      </>
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-white p-1 flex items-center justify-center shrink-0">
+                        <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
+                      </div>
+                      <span className="text-left leading-tight">
+                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন ({selectedPlan === 'lifetime' ? '৳৪৯৯' : '৳৪,৯৯০'})
+                      </span>
+                    </div>
+                    {isProcessingBkash ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <>
-                        <Zap className="w-4 h-4 text-amber-300" />
-                        <span>Submit & Activate (সাবমিট ও অ্যাক্টিভ করুন)</span>
-                      </>
+                      <ArrowRight className="w-5 h-5" />
                     )}
                   </button>
-                </form>
-              </>
-            ) : (
-              /* 5. Success Screen + Instant WhatsApp Bridge */
-              <div className="space-y-6 py-2 text-center">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">
-                    ধন্যবাদ! TrxID সফলভাবে গৃহীত হয়েছে
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-                    আপনার ট্রানজেকশন আইডি <strong className="font-mono text-emerald-400">{submittedTrxId}</strong> সিস্টেমে সংরক্ষিত হয়েছে এবং অ্যাকাউন্ট অ্যাক্টিভেশন সম্পন্ন হয়েছে।
-                  </p>
-                </div>
-
-                {/* Instant WhatsApp Confirmation Button */}
-                <div className="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 space-y-3 text-left">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>দ্রুততম অ্যাক্টিভেশন নিশ্চিত করতে ১-ক্লিক হোয়াটসঅ্যাপ লিঙ্ক:</span>
-                  </div>
-
-                  <a
-                    href={whatsappVerificationUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-haptic w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
-                  >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>WhatsApp-এ TrxID নিশ্চিত করুন</span>
-                    <ExternalLink className="w-3.5 h-3.5 ml-1" />
-                  </a>
-
-                  <p className="text-[11px] text-slate-400 text-center">
-                    অফিসিয়াল হেল্পলাইন: {NIHOMI_CONTACT.phoneFormatted}
-                  </p>
-                </div>
-
-                <div className="pt-2">
+                  {/* SSLCOMMERZ Cards & Multi-Channel Button */}
                   <button
-                    onClick={onClose}
-                    className="btn-haptic px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition-colors cursor-pointer"
+                    type="button"
+                    onClick={handleSslCheckout}
+                    disabled={isProcessingBkash || isProcessingSsl}
+                    className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#1e293b] via-[#0f172a] to-[#1e293b] hover:border-amber-400/50 border border-white/15 text-white font-bold text-sm shadow-lg transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
                   >
-                    পড়াশোনায় ফিরে যান
+                    <div className="flex items-center gap-3">
+                      <CreditCard className="w-5 h-5 text-amber-400 shrink-0" />
+                      <span className="text-left text-xs sm:text-sm">
+                        কার্ড / নগদ / ইন্টারনেট ব্যাংকিং (SSLCOMMERZ)
+                      </span>
+                    </div>
+                    {isProcessingSsl ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+                    ) : (
+                      <ChevronRight className="w-5 h-5 text-stone-400" />
+                    )}
                   </button>
                 </div>
               </div>
-            )}
+
+              {/* Bottom Guarantee Note */}
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-400">
+                <span className="flex items-center gap-1.5 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>কোনো লুকানো চার্জ নেই • ৭ দিনের মানিব্যাক গ্যারান্টি</span>
+                </span>
+                <span className="font-mono text-stone-500">256-Bit SSL Encrypted</span>
+              </div>
+
+            </div>
           </div>
         </motion.div>
       </div>
     </AnimatePresence>
   );
 };
+
+export default ProUpgradeModal;
