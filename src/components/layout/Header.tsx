@@ -150,7 +150,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#0a0a12]/80 border-b border-white/[0.08] text-white select-none transition-colors">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#0B0F17]/90 border-b border-slate-800 text-white select-none transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
@@ -200,7 +200,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <span>নিহোমি ওয়ার্ল্ড™ (3D)</span>
             </button>
 
-            {/* TAB 1: কারিকুলাম ও শিক্ষা */}
+            {/* TAB 1: লেসন (Lessons) */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('curriculum')}
@@ -209,13 +209,19 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <button
                 id="nav-tab-curriculum"
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'curriculum' ? null : 'curriculum')}
+                onClick={() => {
+                  if (activeDropdown === 'curriculum') {
+                    setActiveDropdown(null);
+                  } else {
+                    onNavigate('courses');
+                  }
+                }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCurriculumActive || activeDropdown === 'curriculum'
                   ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
               >
-                <span>কারিকুলাম ও শিক্ষা</span>
+                <span>লেসন (Lessons)</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'curriculum' ? 'rotate-180 text-white' : ''
                     }`}
@@ -360,7 +366,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* TAB 2: পরীক্ষা ও প্রস্তুতি */}
+            {/* TAB 2: পরিস্থিতি (Scenarios) */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('readiness')}
@@ -369,13 +375,19 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <button
                 id="nav-tab-readiness"
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'readiness' ? null : 'readiness')}
+                onClick={() => {
+                  if (activeDropdown === 'readiness') {
+                    setActiveDropdown(null);
+                  } else {
+                    onNavigate('baito');
+                  }
+                }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isReadinessActive || activeDropdown === 'readiness'
                   ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
               >
-                <span>পরীক্ষা ও প্রস্তুতি</span>
+                <span>পরিস্থিতি (Scenarios)</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'readiness' ? 'rotate-180 text-white' : ''
                     }`}
@@ -470,7 +482,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* TAB 3: জাপান ক্যারিয়ার */}
+            {/* TAB 3: জাপান সিভি (CV Studio) */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('career')}
@@ -479,13 +491,19 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <button
                 id="nav-tab-career"
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'career' ? null : 'career')}
+                onClick={() => {
+                  if (activeDropdown === 'career') {
+                    setActiveDropdown(null);
+                  } else {
+                    onNavigate('shokumu');
+                  }
+                }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCareerActive || activeDropdown === 'career'
                   ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
               >
-                <span>জাপান ক্যারিয়ার</span>
+                <span>জাপান সিভি (CV Studio)</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'career' ? 'rotate-180 text-white' : ''
                     }`}
@@ -630,7 +648,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* TAB 4: ফিচার ও অফার */}
+            {/* TAB 4: প্রাইসিং (Pricing) */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('pricing')}
@@ -639,13 +657,19 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               <button
                 id="nav-tab-pricing"
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'pricing' ? null : 'pricing')}
+                onClick={() => {
+                  if (activeDropdown === 'pricing') {
+                    setActiveDropdown(null);
+                  } else {
+                    onNavigate('pricing');
+                  }
+                }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isPricingActive || activeDropdown === 'pricing'
                   ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
               >
-                <span>ফিচার ও অফার</span>
+                <span>প্রাইসিং (Pricing)</span>
                 <ChevronDown
                   className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'pricing' ? 'rotate-180 text-white' : ''
                     }`}
@@ -732,15 +756,16 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               </div>
             )}
 
-            {/* GEMINI STYLE GLOWING GOLDEN-GRADIENT CTA PILL */}
+            {/* RIGHT CTA: MINIMALIST PINGO / WANIKANI STYLE "শুরু করুন (Free)" */}
             <button
-              id="header-btn-unlock-pro"
+              id="header-btn-start-free"
               type="button"
-              onClick={() => onNavigate('courses')}
-              className="relative group overflow-hidden px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 hover:from-amber-500/30 hover:via-orange-500/30 hover:to-rose-500/30 border border-amber-400/40 text-amber-200 text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_25px_rgba(245,158,11,0.3)] transition-all duration-300 flex items-center gap-1.5 active:scale-95 cursor-pointer"
+              onClick={() => onNavigate('journey')}
+              className="relative group overflow-hidden px-4 py-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white text-xs font-bold shadow-md shadow-red-600/25 hover:shadow-red-600/40 transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse group-hover:rotate-12 transition-transform" />
-              <span className="whitespace-nowrap font-semibold">N5 Pro আনলক ৳৪৯৯</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-200 animate-pulse group-hover:rotate-12 transition-transform" />
+              <span className="whitespace-nowrap font-bold">শুরু করুন (Free)</span>
+              <ChevronRight className="w-3.5 h-3.5 text-white/80 group-hover:translate-x-0.5 transition-transform" />
             </button>
 
             {/* THEME TOGGLE */}
@@ -1013,7 +1038,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             </span>
           </button>
 
-          {/* Mobile Group 1: কারিকুলাম ও শিক্ষা */}
+          {/* Mobile Group 1: লেসন (Lessons) */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -1022,7 +1047,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-red-400" />
-                <span>কারিকুলাম ও শিক্ষা</span>
+                <span>লেসন (Lessons)</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'curriculum' ? 'rotate-180' : ''}`} />
             </button>
@@ -1088,7 +1113,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* Mobile Group 2: পরীক্ষা ও প্রস্তুতি */}
+          {/* Mobile Group 2: পরিস্থিতি (Scenarios) */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -1097,7 +1122,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <Award className="w-4 h-4 text-amber-400" />
-                <span>পরীক্ষা ও প্রস্তুতি</span>
+                <span>পরিস্থিতি (Scenarios)</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'readiness' ? 'rotate-180' : ''}`} />
             </button>
@@ -1141,7 +1166,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* Mobile Group 3: জাপান ক্যারিয়ার */}
+          {/* Mobile Group 3: জাপান সিভি (CV Studio) */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -1150,7 +1175,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-indigo-400" />
-                <span>জাপান ক্যারিয়ার</span>
+                <span>জাপান সিভি (CV Studio)</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'career' ? 'rotate-180' : ''}`} />
             </button>
@@ -1203,11 +1228,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDropdownSelect('rirekisho')}
+                  onClick={() => handleDropdownSelect('shokumu')}
                   className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-amber-300">জাপানিজ সিভি বিল্ডার (JIS Rirekisho)</div>
+                    <div className="text-xs font-bold text-amber-300">জাপানিজ সিভি বিল্ডার (JIS Rirekisho & Shokumu)</div>
                     <div className="text-[10px] text-white/50">১০০% ফ্রি অফিশিয়াল A4 PDF ফরম্যাট</div>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-white/40" />
@@ -1216,7 +1241,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* Mobile Group 4: ফিচার ও অফার */}
+          {/* Mobile Group 4: প্রাইসিং (Pricing) */}
           <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
             <button
               type="button"
@@ -1225,7 +1250,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             >
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-rose-400" />
-                <span>ফিচার ও অফার</span>
+                <span>প্রাইসিং (Pricing)</span>
               </div>
               <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'pricing' ? 'rotate-180' : ''}`} />
             </button>
@@ -1258,14 +1283,14 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
             )}
           </div>
 
-          {/* Mobile N5 Pro CTA Button */}
+          {/* Mobile Start Free CTA Button */}
           <button
             type="button"
-            onClick={() => handleDropdownSelect('courses')}
-            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500/30 via-orange-500/30 to-rose-500/30 border border-amber-400/40 text-amber-200 font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 active:scale-98 cursor-pointer"
+            onClick={() => handleDropdownSelect('journey')}
+            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-red-500 border border-red-500/40 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 active:scale-98 cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>N5 Pro আনলক করুন (৳৪৯৯) — লাইফটাইম অ্যাক্সেস</span>
+            <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
+            <span>শুরু করুন (Free) →</span>
           </button>
         </div>
       )}

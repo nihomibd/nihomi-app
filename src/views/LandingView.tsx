@@ -24,7 +24,16 @@ import {
   Store,
   BookOpen,
   Zap,
-  Check
+  Check,
+  ChevronRight,
+  Play,
+  RotateCcw,
+  Briefcase,
+  FileText,
+  Flame,
+  Star,
+  Users,
+  Printer
 } from 'lucide-react';
 import { NIHOMI_CONTACT } from '../config/contact';
 import { useAuth } from '../context/AuthContext';
@@ -40,7 +49,6 @@ import { updatePageMetaTags } from '../lib/seo';
 import { trackNihomiEvent } from '../utils/analytics';
 import { captureReferralFromUrl, getStoredReferralCode, claimReferralReward } from '../utils/referral';
 import { Plan } from '../types';
-import { NihomiMobileShowcase } from '../components/showcase/NihomiMobileShowcase';
 import { HanabiBackground } from '../components/HanabiBackground';
 import { ValueRevealCarousel } from '../components/landing/ValueRevealCarousel';
 
@@ -95,6 +103,260 @@ Keep answers concise, structured, and practical.`;
   }
 }
 
+// Hero Interactive Roleplay Dialogues (Pingo AI Style)
+interface HeroDialogue {
+  id: string;
+  contextBn: string;
+  contextJa: string;
+  badge: string;
+  sensei: {
+    name: string;
+    textJa: string;
+    textRomaji: string;
+    textBn: string;
+  };
+  learner: {
+    textJa: string;
+    textRomaji: string;
+    textBn: string;
+    pitchAccent: string;
+  };
+  chips: {
+    label: string;
+    textJa: string;
+    textBn: string;
+  }[];
+}
+
+const HERO_DIALOGUES: HeroDialogue[] = [
+  {
+    id: 'restaurant',
+    contextBn: 'টোকিও রেস্তোরাঁয় টেবিল বুকিং',
+    contextJa: 'レストランでの席予約',
+    badge: 'Tokyo Restaurant Roleplay',
+    sensei: {
+      name: '田中 先生 (Tanaka Sensei)',
+      textJa: 'いらっしゃいませ！何名様ですか？',
+      textRomaji: 'Irasshaimase! Nanmei-sama desu ka?',
+      textBn: 'স্বাগতম! আপনারা কতজন?'
+    },
+    learner: {
+      textJa: '二人です。禁煙席をお願いします。',
+      textRomaji: "Futari desu. Kin'enseki o onegaishimasu.",
+      textBn: 'দুজন। ধূমপানমুক্ত টেবিল দিন।',
+      pitchAccent: 'HL / LH Pitch-Accent'
+    },
+    chips: [
+      {
+        label: 'কাউন্টার সিট',
+        textJa: 'カウンター席でお願いします。',
+        textBn: 'কাউন্টার টেবিলে বসা যাবে?'
+      },
+      {
+        label: 'বুকিং আছে',
+        textJa: '予約した田中と申します。',
+        textBn: 'আমি বুকিং করা তানাকা।'
+      },
+      {
+        label: 'জানালা সিট',
+        textJa: '窓側の席は空いていますか？',
+        textBn: 'জানালার পাশের সিট আছে কি?'
+      }
+    ]
+  },
+  {
+    id: 'conbini',
+    contextBn: 'টোকিও কনবিনি ক্যাশিয়ার কাউন্টার',
+    contextJa: 'コンビニのレジ対応',
+    badge: 'Tokyo Conbini Roleplay',
+    sensei: {
+      name: '佐藤 先生 (Sato Sensei)',
+      textJa: 'いらっしゃいませ！ポイントカードはお持ちですか？',
+      textRomaji: 'Irasshaimase! Pointo kaado wa omochi desu ka?',
+      textBn: 'স্বাগতম! আপনার পয়েন্ট কার্ড আছে কি?'
+    },
+    learner: {
+      textJa: '持っていません。袋も１枚お願いします。',
+      textRomaji: 'Motte imasen. Fukuro mo ichimai onegaishimasu.',
+      textBn: 'নেই। একটি পলিথিন ব্যাগও দিন।',
+      pitchAccent: 'LH / HL Pitch-Accent'
+    },
+    chips: [
+      {
+        label: 'অ্যাপ আছে',
+        textJa: 'あ、アプリの画面を見せます。',
+        textBn: 'হ্যাঁ, অ্যাপের বারকোড দেখাচ্ছি।'
+      },
+      {
+        label: 'ব্যাগ লাগবে না',
+        textJa: '袋は結構です、このままで。',
+        textBn: 'ব্যাগ লাগবে না, এভাবেই দিন।'
+      },
+      {
+        label: 'সুইকা পেমেন্ট',
+        textJa: 'Suicaで支払います。',
+        textBn: 'সুইকা কার্ডে পেমেন্ট করব।'
+      }
+    ]
+  },
+  {
+    id: 'station',
+    contextBn: 'শিনজুকু স্টেশন ট্রেন নেভিগেশন',
+    contextJa: '駅の案内・乗り換え',
+    badge: 'Shinjuku Station Roleplay',
+    sensei: {
+      name: '駅員 (Station Officer)',
+      textJa: 'はい、どちらまで行かれますか？',
+      textRomaji: 'Hai, dochira made ikaremasu ka?',
+      textBn: 'হ্যাঁ বলুন, আপনি কোথায় যাবেন?'
+    },
+    learner: {
+      textJa: '渋谷まで行きたいです。山手線は何番線ですか？',
+      textRomaji: 'Shibuya made ikitai desu. Yamanotesen wa nan-bansen desu ka?',
+      textBn: 'শিবুইয়া যাব। ইয়ামানতে লাইন কত নম্বর প্ল্যাটফর্মে?',
+      pitchAccent: 'HL / LH Pitch-Accent'
+    },
+    chips: [
+      {
+        label: 'পরবর্তী ট্রেন',
+        textJa: '次の電車は何時何分ですか？',
+        textBn: 'পরবর্তী ট্রেন কয়টায় ছাড়বে?'
+      },
+      {
+        label: 'এক্সপ্রেস ট্রেন',
+        textJa: 'この電車は渋谷に止まりますか？',
+        textBn: 'এই ট্রেন কি শিবুইয়াতে থামবে?'
+      },
+      {
+        label: 'টিকেট রিচার্জ',
+        textJa: 'ICカードのチャージはどこですか？',
+        textBn: 'আইসি কার্ড রিচার্জ মেশিন কোথায়?'
+      }
+    ]
+  }
+];
+
+// 4 Real-Life Roleplay Scenarios
+const ROLEPLAY_SCENARIOS = [
+  {
+    id: 'conbini',
+    title: 'টোকিও কনবিনি ক্যাশিয়ার',
+    sub: '7-Eleven & Lawson POS Dialogue',
+    desc: 'পয়েন্ট কার্ড, খাবার গরম করা, প্লাস্টিক ব্যাগ ও বিভিন্ন পেমেন্ট মেথড ডায়ালগ',
+    phraseJa: '温めますか？袋はおつけしますか？',
+    phraseBn: 'খাবার কি গরম করে দেব? সাথে ব্যাগ লাগবে?',
+    tags: ['অফিসিয়াল কেইগো', 'Baito POS'],
+    color: 'from-amber-500/20 to-orange-500/10 border-amber-500/30 text-amber-400',
+    icon: Store,
+    view: 'baito'
+  },
+  {
+    id: 'station',
+    title: 'শিনজুকু স্টেশন নেভিগেশন',
+    sub: 'JR Yamanote & Subway Transfer',
+    desc: 'ট্রেন মিস হলে রি-রুট, টিকিট কাউন্টারে অনুসন্ধান ও সঠিক প্ল্যাটফর্ম জিজ্ঞাসা',
+    phraseJa: 'すみません、山手線は何番線ですか？',
+    phraseBn: 'মাফ করবেন, ইয়ামানতে লাইন কত নম্বর প্ল্যাটফর্মে?',
+    tags: ['দিকনির্দেশনা', 'লিসেনিং ড্রিল'],
+    color: 'from-sky-500/20 to-blue-500/10 border-sky-500/30 text-sky-400',
+    icon: Compass,
+    view: 'baito'
+  },
+  {
+    id: 'ramen',
+    title: 'রামেন শপ টিকেট মেশিন',
+    sub: 'Ticket Vending & Customization',
+    desc: 'টিকেট মেশিন রিডিং, নুডলসের কঠোরতা ও অতিরিক্ত টপিং অর্ডার করা',
+    phraseJa: '麺の硬さはどうなさいますか？カタメで！',
+    phraseBn: 'নুডলস কেমন চান? একটু শক্ত করে দিন!',
+    tags: ['ফুড ও মেনু', 'কাঞ্জি রিডিং'],
+    color: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/30 text-emerald-400',
+    icon: Zap,
+    view: 'baito'
+  },
+  {
+    id: 'interview',
+    title: 'জাপান পার্ট-টাইম ও ভিসা ইন্টারভিউ',
+    sub: 'Baito & Visa Defense Coaching',
+    desc: 'স্ব-পরিচয় (Jikoshoukai), কাজের ইচ্ছা ও শিফট টাইম ব্যাখ্যা করার ফ্লুয়েন্সি',
+    phraseJa: 'はじめまして、一生懸命頑張ります！',
+    phraseBn: 'পরিচিত হয়ে খুশি হলাম, আমি মন দিয়ে পরিশ্রম করব!',
+    tags: ['জব ইন্টারভিউ', 'ভিসা প্রস্তুতি'],
+    color: 'from-rose-500/20 to-red-500/10 border-rose-500/30 text-rose-400',
+    icon: Briefcase,
+    view: 'interview'
+  }
+];
+
+// WaniKani-Style Stepped JLPT Progression Ladder
+const WANIKANI_LEVELS = [
+  {
+    level: 'N5',
+    title: 'Foundations (ভিত্তি)',
+    color: 'from-emerald-500 to-teal-600',
+    badgeBg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
+    borderColor: 'border-emerald-500/30',
+    accentColor: 'text-emerald-400',
+    stats: '২১০ শব্দ • ১০০ কাঞ্জি • লেসন ০১–২৫',
+    description: 'হিরাগানা, কাতাকানা, প্রাথমিক অভিবাদন ও টোকিও কনবিনি কেনাকাটার ডায়ালগ।',
+    status: 'ফ্রি স্টার্টার / Pro',
+    actionText: 'শেখা শুরু করুন →',
+    view: 'courses'
+  },
+  {
+    level: 'N4',
+    title: 'Independent Daily (দৈনন্দিন)',
+    color: 'from-cyan-500 to-blue-600',
+    badgeBg: 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300',
+    borderColor: 'border-cyan-500/30',
+    accentColor: 'text-cyan-400',
+    stats: '৩০০ শব্দ • ১৮০ কাঞ্জি • লেসন ২৬–৫০',
+    description: 'সাবলীল সাধারণ কথোপকথন, দিকনির্দেশনা, ভ্রমণ ও জাপানে প্রতিদিনের কাজ।',
+    status: 'বেসিক পাস',
+    actionText: 'কারিকুলাম দেখুন →',
+    view: 'courses'
+  },
+  {
+    level: 'N3',
+    title: 'Work Ready (কর্মক্ষেত্রে সক্ষম)',
+    color: 'from-blue-600 to-indigo-600',
+    badgeBg: 'bg-blue-500/20 border-blue-500/40 text-blue-300',
+    borderColor: 'border-blue-500/30',
+    accentColor: 'text-blue-400',
+    stats: '৬৫০ শব্দ • ৩৫০ কাঞ্জি • বাইতো স্পেশাল',
+    description: 'পার্ট-টাইম বাইতো (Baito), কাস্টমার সার্ভিস, শপকিপিং ও জরুরি সমস্যার সমাধান।',
+    status: 'জাপান বাইতো রেডি',
+    actionText: 'বাইতো সিমুলেটর →',
+    view: 'baito'
+  },
+  {
+    level: 'N2',
+    title: 'Corporate Business (করপোরেট)',
+    color: 'from-purple-600 to-violet-700',
+    badgeBg: 'bg-purple-500/20 border-purple-500/40 text-purple-300',
+    borderColor: 'border-purple-500/30',
+    accentColor: 'text-purple-400',
+    stats: '১২০০ শব্দ • ১০০০ কাঞ্জি • বিজনেস কেইগো',
+    description: 'অফিশিয়াল কেইগো (Keigo), বিজনেস ইমেইল, করপোরেট মিটিং ও স্কিলড জব ভিসা।',
+    status: 'করপোরেট রেডি',
+    actionText: 'সিভি ও কেইগো →',
+    view: 'shokumu'
+  },
+  {
+    level: 'N1',
+    title: 'Fluency (নেটিভ সাবলীলতা)',
+    color: 'from-rose-600 to-red-600',
+    badgeBg: 'bg-rose-500/20 border-rose-500/40 text-rose-300',
+    borderColor: 'border-rose-500/30',
+    accentColor: 'text-rose-400',
+    stats: '২০০০+ শব্দ • ২০০০ কাঞ্জি • অ্যাডভান্সড',
+    description: 'ন্যাচারাল নেটিভ লেভেল ফ্লুয়েন্সি, টেকনিক্যাল ডকুমেন্ট ও জাপানিজ নিউজপেপার রিডিং।',
+    status: 'টপ টায়ার',
+    actionText: 'মক টেস্ট দিন →',
+    view: 'mock-exams'
+  }
+];
+
 // Pre-configured N5 Pro Lifetime Plan for instant checkout
 const N5_PRO_PLAN: Plan = {
   id: 'pro',
@@ -125,7 +387,7 @@ const N5_PRO_PLAN: Plan = {
 
 // Pre-configured All-Access Unlimited Annual Plan for instant checkout
 const ALL_ACCESS_ANNUAL_PLAN: Plan = {
-  id: 'pro',
+  id: 'japan_ready',
   name: 'All-Access Unlimited Annual',
   displayNameJa: '全レベル見放題・プロ年間プラン',
   tagline: 'Complete JLPT N5-N1 mastery with continuous career companion',
@@ -150,11 +412,25 @@ const ALL_ACCESS_ANNUAL_PLAN: Plan = {
 };
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
-  const { openAuthModal, loginWithGoogle, user } = useAuth();
+  const { openAuthModal, user } = useAuth();
+  
+  // Interactive Hero Roleplay State
+  const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
+  const currentDialogue = HERO_DIALOGUES[activeDialogueIndex];
+  const [learnerActiveTextJa, setLearnerActiveTextJa] = useState(currentDialogue.learner.textJa);
+  const [learnerActiveTextBn, setLearnerActiveTextBn] = useState(currentDialogue.learner.textBn);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  // Sync roleplay states on dialogue change
+  useEffect(() => {
+    setLearnerActiveTextJa(currentDialogue.learner.textJa);
+    setLearnerActiveTextBn(currentDialogue.learner.textBn);
+  }, [activeDialogueIndex, currentDialogue]);
+
+  // AI Prompt Hub state
   const [queryInput, setQueryInput] = useState('');
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [isAnswering, setIsAnswering] = useState(false);
-  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
 
   // Modals state
   const [isVoiceActive, setIsVoiceActive] = useState(false);
@@ -174,43 +450,24 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
     trackNihomiEvent('landing_page_view', {
       pagePath: '/',
-      source: 'landing_hero'
+      source: 'landing_hero_pingo_wanikani'
     });
 
     updatePageMetaTags({
-      title: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI (ニホミ)',
-      description: 'Master JLPT N5 with 24/7 Gemini 2.5 AI Sensei in Bengali. Minna no Nihongo curriculum, Tokyo Conbini simulation, and verified digital credentials.',
-      ogTitle: 'শূন্য থেকে JLPT N5 — জাপানিজ ভাষা শেখার আধুনিক AI প্ল্যাটফর্ম | NIHOMI',
-      ogDescription: '১ ক্লিকে গুগল দিয়ে শুরু করুন সম্পূর্ণ ফ্রিতে। পাচ্ছেন ফ্রি ৫০ কয়েন ও ১০০ AI ক্রেডিট।',
+      title: 'মুখে বলে জাপানিজ শিখুন — শূন্য থেকে টোকিওতে কর্মজীবন | NIHOMI (にほみ)',
+      description: 'Pingo AI ও WaniKani হাইব্রিড জাপানিজ লার্নিং প্ল্যাটফর্ম। মিন্না নো নিহোঙ্গো কারিকুলাম, টোকিও কনবিনি সিমুলেশন এবং অফিসিয়াল JIS রেজুমে বিল্ডার।',
+      ogTitle: 'মুখে বলে জাপানিজ শিখুন — শূন্য থেকে টোকিওতে কর্মজীবন | NIHOMI',
+      ogDescription: 'মুখে বলে প্র্যাকটিস করুন এবং মাত্র ৬০-৯০ দিনে JLPT N5 প্রস্তুত হোন।',
       ogImage: 'https://nihomi.com/assets/og-nihomi-banner.png'
     });
   }, []);
 
-  const handleGoogleCTA = async () => {
-    if (user) {
-      onNavigate('dashboard');
-      return;
-    }
-    trackNihomiEvent('signup_started', { method: 'google' });
-    setIsGoogleSigningIn(true);
-    try {
-      const ok = await loginWithGoogle();
-      if (ok) {
-        trackNihomiEvent('signup_completed', { method: 'google' });
-        const storedRef = getStoredReferralCode();
-        if (storedRef) {
-          claimReferralReward(storedRef).catch(() => {});
-        }
-        onNavigate('dashboard');
-      } else {
-        openAuthModal('register');
-      }
-    } catch (err) {
-      console.warn('[LandingView] Google 1-click fallback to AuthModal:', err);
-      openAuthModal('register');
-    } finally {
-      setIsGoogleSigningIn(false);
-    }
+  const handlePlayVoice = (text: string) => {
+    setIsPlayingAudio(true);
+    speakJapanese(text);
+    setTimeout(() => {
+      setIsPlayingAudio(false);
+    }, 2200);
   };
 
   const handleSearch = async (text: string) => {
@@ -232,7 +489,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
     },
     {
       question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
-      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও Nagad পেমেন্ট সাপোর্ট করে। লেসন ০১ থেকে ০৫ সবার জন্য সম্পূর্ণ ফ্রি। লেসন ০৬ থেকে ২৫ ও অন্যান্য প্রো ফিচারের জন্য আমাদের বিকাশ বা নগদ নম্বরে (01834348966) সেন্ড মানি করে ট্রানজেকশন আইডি (TrxID) সাবমিট করলেই দ্রুত ভেরিফিকেশন সাপেক্ষে সম্পূর্ণ N5 কোর্স, লিসেনিং অডিও ল্যাব ও AI সেনসেই ফিচার আনলক হয়ে যাবে।'
+      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও SSLCommerz অনলাইন পেমেন্ট সাপোর্ট করে। লেসন ০১ থেকে ০৫ সবার জন্য সম্পূর্ণ ফ্রি। লেসন ০৬ থেকে ২৫ ও অন্যান্য প্রো ফিচারের জন্য আমাদের বিকাশ বা কার্ড গেটওয়ে দিয়ে ১-ক্লিকে পে করতে পারবেন এবং তাৎক্ষণিকভাবে অ্যাকাউন্ট অ্যাক্টিভেট হবে।'
     },
     {
       question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
@@ -243,8 +500,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       answer: 'হ্যাঁ! একবার এনরোল করার পর আপনি আজীবন যেকোনো ডিভাইস (স্মার্টফোন, ট্যাবলেট, ল্যাপটপ) থেকে সব পাঠ, তোশিবা নেটিভ অডিও ডায়ালগ, কানজি ক্যানভাস এবং ১৮০ মার্কসের অফিশিয়াল মক টেস্ট প্র্যাকটিস করতে পারবেন। কোনো হিডেন রিনিউয়াল চার্জ নেই।'
     },
     {
-      question: 'ক্লাস কি নির্দিষ্ট সময়ে লাইভ হবে নাকি নিজের সুবিধাজনক সময়ে?',
-      answer: 'নিহোমি সম্পূর্ণ সেলফ-পেসড ও ইন্টারেক্টিভ লার্নিং প্ল্যাটফর্ম। আপনার সুবিধাজনক যেকোনো দিন বা রাতে পাঠগুলো শিখতে পারবেন। আর যেকোনো ব্যাকরণ বা উচ্চারণের সংশয়ের জন্য রয়েছে ২৪/৭ তানাকা এআই সেনসেই লাইভ টিউটর।'
+      question: 'JIS 履歴書 ও 職務経歴書 সিভি বিল্ডার কীভাবে কাজ করে?',
+      answer: 'নিহোমিতে রয়েছে জাপানের সরকারি স্ট্যান্ডার্ড JIS规格 রেজুমে ও শকুমু কেইরেকিষো বিল্ডার। আপনি সাধারণ তথ্য বাংলায় বা রোমাজিতে দিলে আমাদের বিল্ট-ইন AI Keigo Polisher সেটিকে অফিসিয়াল জাপানিজ বিজনেস কেইগোতে রূপান্তর করে এবং তাৎক্ষণিক প্রিন্ট-রেডি A4 সাইজ PDF ডাউনলোড করতে পারবেন।'
     },
     {
       question: 'জাপানে স্টুডেন্ট ভিসা বা কাজের (SSW / TITP) জন্য এটি কতটা সহায়ক?',
@@ -253,148 +510,259 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a12] text-white selection:bg-red-500 selection:text-white overflow-hidden">
+    <div className="relative min-h-screen bg-[#0B0F17] text-slate-100 selection:bg-rose-600 selection:text-white overflow-hidden">
       {/* Subtle Japanese festival fireworks canvas background */}
       <HanabiBackground />
 
-      {/* Ambient Red / Amber Glow Orbs */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-red-600/15 via-rose-600/10 to-transparent blur-[120px] rounded-full z-0" />
-      <div className="pointer-events-none absolute top-96 -left-40 w-96 h-96 bg-amber-500/10 blur-[100px] rounded-full z-0" />
+      {/* Ambient Red / Blue Glow Orbs (Subtle, No Aggressive Neon) */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[750px] h-[450px] bg-gradient-to-b from-rose-600/10 via-red-600/5 to-transparent blur-[140px] rounded-full z-0" />
+      <div className="pointer-events-none absolute top-[550px] -left-32 w-80 h-80 bg-blue-600/5 blur-[120px] rounded-full z-0" />
 
       {/* ========================================================================= */}
-      {/* SECTION 1: HERO & PROMPT HUB (Neo-Tokyo Dark Obsidian Aesthetic)          */}
+      {/* SECTION 1: HERO (PINGO AI CONVERSATIONAL SHOWCASE)                        */}
       {/* ========================================================================= */}
-      <section className="relative z-10 pt-16 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        
-        {/* Top Capsule Badge */}
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.12] text-stone-300 text-xs font-semibold mb-6 shadow-sm backdrop-blur-md">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-          <span className="font-mono text-[11px] tracking-wider text-stone-200">NIHOMI AI™ • NEXT-GEN JAPANESE PLATFORM</span>
-        </div>
-
-        {/* Master Headline: Screenshot 2 Exact Visual Dialogue */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-2">
-          Nihomi AI™
-        </h1>
-        <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">
-          You don't just learn Japanese.
-        </p>
-        <p className="text-2xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-500 mb-6 tracking-tight">
-          You experience it.
-        </p>
-
-        {/* Subtitle */}
-        <p className="text-sm sm:text-base md:text-lg text-stone-300 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
-          টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ তানাকা AI সেনসেই লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
-        </p>
-
-        {/* Primary CTAs matching Screenshot 2: Start Journey + Student Dashboard */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-4 max-w-xl mx-auto">
-          {/* 1. Primary CTA: Crimson / Rose Gradient with Sparkles */}
-          <button
-            onClick={() => {
-              trackNihomiEvent('journey_start_clicked', { source: 'landing_hero' });
-              onNavigate('journey');
-            }}
-            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 group"
-          >
-            <Sparkles className="w-4 h-4 text-amber-200 animate-pulse shrink-0" />
-            <span>Start Journey →</span>
-          </button>
-
-          {/* 2. Secondary CTA: Dark Button */}
-          <button
-            onClick={() => {
-              if (user) {
-                onNavigate('dashboard');
-              } else {
-                openAuthModal();
-              }
-            }}
-            className="w-full sm:w-auto px-7 py-3.5 bg-stone-900/90 hover:bg-stone-800 text-stone-200 hover:text-white border border-stone-800 hover:border-stone-700 rounded-2xl text-sm sm:text-base font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 backdrop-blur-md"
-          >
-            <span>Student Dashboard &gt;</span>
-          </button>
-        </div>
-
-        {/* 1-Minute Quiz Promotion Banner */}
-        <div 
-          onClick={() => {
-            trackNihomiEvent('landing_campaign_banner_clicked', { source: 'landing_hero' });
-            onNavigate('start');
-          }}
-          className="cursor-pointer max-w-xl mx-auto mb-8 p-2.5 sm:p-3 bg-white/[0.04] hover:bg-white/[0.08] border border-red-500/25 rounded-2xl transition-all flex items-center justify-between gap-3 text-left shadow-lg backdrop-blur-md group"
-        >
-          <div className="flex items-center space-x-2.5">
-            <span className="flex h-7 w-7 rounded-xl bg-red-600/80 text-white items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-              ⚡
-            </span>
-            <div>
-              <p className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
-                ১-মিনিটে N5 এলিজিবিলিটি টেস্ট দিন
-                <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">ফ্রি ৫০ কয়েন</span>
-              </p>
-              <p className="text-[11px] text-stone-400 hidden sm:block">
-                টোকিও ভিসা ও স্কলারশিপ রেডিনেস স্কোরকার্ড তাৎক্ষণিক ডাউনলোড করুন
-              </p>
-            </div>
-          </div>
-          <span className="text-xs font-bold text-red-400 group-hover:translate-x-0.5 transition-transform shrink-0 flex items-center">
-            টেস্ট দিন →
-          </span>
-        </div>
-
-        {/* Dark Glassmorphism AI Prompt / Search Bar */}
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-[#12121e]/90 rounded-3xl border border-white/10 shadow-2xl hover:border-white/20 transition-all p-4 sm:p-5 text-left space-y-4 backdrop-blur-xl">
+      <section className="relative z-10 pt-16 sm:pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* LEFT COLUMN: VALUE PROPOSITION (7 Cols) */}
+          <div className="lg:col-span-7 text-left space-y-6">
             
-            {/* Input Line */}
-            <input
-              type="text"
-              value={queryInput}
-              onChange={(e) => setQueryInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch(queryInput)}
-              placeholder="Ask Nihomi AI Sensei anything in English, বাংলা, or 日本語 (e.g. particle rules, baito keigo)..."
-              className="w-full bg-transparent text-sm sm:text-base text-white placeholder:text-stone-500 focus:outline-hidden leading-relaxed"
-            />
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-slate-300 text-xs font-semibold backdrop-blur-md shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span>🇯🇵 জাপান সরকার ও JLPT স্ট্যান্ডার্ড কারিকুলাম • Minna no Nihongo সমর্থিত</span>
+            </div>
 
-            {/* Bottom Actions Row: 3 Trigger Buttons + Send Arrow */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/10">
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
+              মুখে বলে জাপানিজ শিখুন — <br className="hidden sm:inline" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-400">
+                শূন্য থেকে টোকিওতে কর্মজীবন।
+              </span>
+            </h1>
+
+            {/* Subheadline */}
+            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl">
+              মুখস্থ নয়, বাস্তব পরিস্থিতিতে কথা বলে জাপানিজ আয়ত্ত করুন। N5 থেকে N1 পর্যন্ত ইন্টারেক্টিভ অডিও লেসন, পিঙ্গো-স্টাইল লাইভ রোলপ্লে এবং অফিসিয়াল JIS রেজুমে বিল্ডার।
+            </p>
+
+            {/* Action CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+              <button
+                onClick={() => {
+                  trackNihomiEvent('journey_start_clicked', { source: 'landing_hero' });
+                  onNavigate('journey');
+                }}
+                className="px-7 py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-xl shadow-red-600/25 hover:shadow-red-600/40 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
+              >
+                <Sparkles className="w-4 h-4 text-amber-200 animate-pulse shrink-0" />
+                <span>বিনামূল্যে শেখা শুরু করুন →</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('baito')}
+                className="px-6 py-4 bg-[#161D2B] hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 rounded-2xl text-sm sm:text-base font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              >
+                <Store className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>কনবিনি সিমুলেটর ট্রাই করুন</span>
+              </button>
+            </div>
+
+            {/* Micro-Proof Points */}
+            <div className="pt-2 flex flex-wrap items-center gap-y-2 gap-x-4 text-xs font-medium text-slate-400">
+              <div className="flex items-center gap-1.5">
+                <span className="text-amber-400">⚡</span>
+                <span>৫ মিনিট দৈনিক প্র্যাকটিস</span>
+              </div>
+              <span className="text-slate-700">•</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-rose-400">🎙️</span>
+                <span>রিয়েল-টাইম পিচ-অ্যাকসেন্ট কারেকশন</span>
+              </div>
+              <span className="text-slate-700">•</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-emerald-400">💳</span>
+                <span>বিকাশ ও কার্ডে নিরাপদ পেমেন্ট</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT COLUMN: INTERACTIVE PINGO AI CONVERSATIONAL VOICE CARD (5 Cols) */}
+          <div className="lg:col-span-5">
+            <div className="relative rounded-3xl bg-[#161D2B] border border-slate-800 p-5 sm:p-6 shadow-2xl backdrop-blur-xl">
               
-              <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-0.5">
+              {/* Card Header & Scenario Selector */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+                  <span className="text-xs font-bold text-white tracking-wide">
+                    {currentDialogue.badge}
+                  </span>
+                </div>
+                
+                {/* Switch dialogue button */}
                 <button
-                  type="button"
-                  onClick={() => setIsVoiceActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
+                  onClick={() => setActiveDialogueIndex((prev) => (prev + 1) % HERO_DIALOGUES.length)}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-[11px] font-medium border border-slate-700 transition-colors cursor-pointer"
+                  title="অন্য রোলপ্লে দেখুন"
                 >
-                  <Mic className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                  <span>Voice</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsCameraActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
-                >
-                  <Camera className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                  <span>Photo OCR</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsWritingActive(true)}
-                  className="inline-flex items-center space-x-1.5 whitespace-nowrap text-xs font-medium shrink-0 px-2.5 py-1.5 bg-stone-800/80 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-xl border border-white/10 transition-colors cursor-pointer"
-                >
-                  <PenTool className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Kanji Canvas</span>
+                  <RotateCcw className="w-3 h-3 text-amber-400" />
+                  <span>দৃশ্য পরিবর্তন</span>
                 </button>
               </div>
 
-              {/* Submit Arrow Button */}
+              {/* Scenario Context Banner */}
+              <div className="mb-4 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-slate-400 font-medium">পরিস্থিতি:</span>
+                <span className="text-amber-300 font-bold">{currentDialogue.contextBn}</span>
+              </div>
+
+              {/* Speech Conversation Thread */}
+              <div className="space-y-4">
+                
+                {/* 1. SENSEI MESSAGE BUBBLE */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-red-500 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-md">
+                    田
+                  </div>
+                  <div className="flex-1 bg-[#1A2333] border border-slate-700/70 rounded-2xl rounded-tl-xs p-3.5 shadow-sm text-left">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[11px] font-bold text-rose-400">{currentDialogue.sensei.name}</span>
+                      <button
+                        onClick={() => handlePlayVoice(currentDialogue.sensei.textJa)}
+                        className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700/50 cursor-pointer"
+                        title="জাপানিজ উচ্চারণ শুনুন"
+                      >
+                        <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                      </button>
+                    </div>
+                    <p className="text-sm sm:text-base font-bold text-white font-japanese tracking-wide leading-relaxed">
+                      {currentDialogue.sensei.textJa}
+                    </p>
+                    <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+                      {currentDialogue.sensei.textRomaji}
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1 border-t border-slate-700/50 pt-1 font-medium">
+                      বাংলা: {currentDialogue.sensei.textBn}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. LEARNER MESSAGE BUBBLE (TALKPAL / PINGO VOICE FORMAT) */}
+                <div className="flex items-start gap-3 flex-row-reverse">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-md">
+                    You
+                  </div>
+                  <div className="flex-1 bg-gradient-to-br from-blue-950/40 via-[#1A2333] to-[#161D2B] border border-blue-500/40 rounded-2xl rounded-tr-xs p-3.5 shadow-sm text-left">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono font-bold border border-blue-500/30">
+                        {currentDialogue.learner.pitchAccent}
+                      </span>
+                      <button
+                        onClick={() => handlePlayVoice(learnerActiveTextJa)}
+                        className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700/50 cursor-pointer"
+                        title="উচ্চারণ শুনুন"
+                      >
+                        <Volume2 className="w-3.5 h-3.5 text-blue-400" />
+                      </button>
+                    </div>
+                    <p className="text-sm sm:text-base font-bold text-white font-japanese tracking-wide leading-relaxed">
+                      {learnerActiveTextJa}
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1 border-t border-slate-700/50 pt-1 font-medium">
+                      বাংলা: {learnerActiveTextBn}
+                    </p>
+
+                    {/* Animated Visual Audio Waveforms */}
+                    <div className="flex items-center gap-1 pt-2.5">
+                      {[40, 75, 55, 90, 60, 80, 45, 95, 65, 50, 85, 40].map((height, i) => (
+                        <div
+                          key={i}
+                          style={{ height: isPlayingAudio ? `${height * 0.28}px` : '4px' }}
+                          className={`w-1 rounded-full transition-all duration-200 ${
+                            isPlayingAudio ? 'bg-rose-500 animate-pulse' : 'bg-slate-700'
+                          }`}
+                        />
+                      ))}
+                      <span className="text-[10px] text-slate-400 font-mono ml-2">
+                        {isPlayingAudio ? 'Play 2.1s' : 'Audio Ready'}
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Interactive Reply Suggestion Chips */}
+              <div className="mt-4 pt-3 border-t border-slate-800">
+                <div className="flex items-center justify-between text-xs text-slate-400 mb-2 font-medium">
+                  <span>বিকল্প উত্তরের পরামর্শ (ক্লিক করুন):</span>
+                  <span className="text-[10px] text-amber-400 font-mono">1-Click Voice</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {currentDialogue.chips.map((chip, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setLearnerActiveTextJa(chip.textJa);
+                        setLearnerActiveTextBn(chip.textBn);
+                        handlePlayVoice(chip.textJa);
+                      }}
+                      className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 text-[11px] text-slate-200 hover:text-white transition-all cursor-pointer text-left flex items-center gap-1.5 group"
+                    >
+                      <Play className="w-2.5 h-2.5 text-blue-400 group-hover:text-rose-400 shrink-0" />
+                      <span>{chip.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom Interactive Voice Trigger */}
+              <div className="mt-4 pt-3 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setIsVoiceActive(true)}
+                  className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600/90 to-rose-600/90 hover:from-red-600 hover:to-rose-600 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-red-600/20"
+                >
+                  <Mic className="w-3.5 h-3.5" />
+                  <span>মুখে বলে উত্তর দিন (Mic)</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('baito')}
+                  className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <span>বাইতো মোড</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        {/* AI Quick Query Search Bar */}
+        <div className="mt-14 max-w-3xl mx-auto">
+          <div className="bg-[#161D2B] rounded-3xl border border-slate-800 shadow-xl p-4 sm:p-5 text-left space-y-3 backdrop-blur-xl">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>তানাকা AI সেনসেইকে যেকোনো ব্যাকরণ বা শব্দ জিজ্ঞাসা করুন:</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={queryInput}
+                onChange={(e) => setQueryInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch(queryInput)}
+                placeholder="যেমন: は (wa) vs が (ga) এর পার্থক্য, কনবিনি কেইগো..."
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-hidden"
+              />
               <button
                 onClick={() => handleSearch(queryInput)}
                 disabled={isAnswering || !queryInput.trim()}
-                className="w-9 h-9 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+                className="w-9 h-9 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-md"
                 aria-label="Send Query"
               >
                 {isAnswering ? (
@@ -403,330 +771,559 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   <ArrowRight className="w-4 h-4 text-white" />
                 )}
               </button>
-
             </div>
 
-          </div>
-
-          {/* Quick Suggestions Chips */}
-          <div className="flex items-center justify-center flex-wrap gap-2 text-xs text-stone-400 pt-4">
-            <span className="font-semibold text-stone-500 text-xs">Try:</span>
-            {[
-              'は (wa) vs が (ga)',
-              '〜てください vs 〜てくださいませんか',
-              'Tokyo Baito Keigo',
-              'Kanji: 日本語',
-            ].map((q, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSearch(q)}
-                className="px-3.5 py-1.5 bg-stone-900/80 hover:bg-stone-800 border border-white/10 text-stone-300 hover:text-white rounded-full text-xs font-medium transition-colors cursor-pointer shadow-sm"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
-          {/* AI Response Output Box */}
-          {aiAnswer && (
-            <div className="mt-4 bg-[#12121e]/95 rounded-3xl p-6 border border-white/15 shadow-2xl animate-in fade-in space-y-3 text-left backdrop-blur-xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-7 h-7 rounded-lg bg-red-600 text-white font-bold text-xs flex items-center justify-center">
-                    日
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-white block">নিহোমি AI সেনসেই</span>
-                    <span className="text-[10px] text-stone-400 font-mono">লাইভ ব্যাকরণ সমাধান</span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1.5">
-                  <button
-                    onClick={() => speakJapanese(aiAnswer)}
-                    className="p-1.5 text-stone-400 hover:text-white rounded-lg hover:bg-white/10 cursor-pointer"
-                    title="উচ্চারণ শুনুন"
-                  >
-                    <Volume2 className="w-4 h-4 text-red-400" />
-                  </button>
-                  <button
-                    onClick={() => setAiAnswer(null)}
-                    className="p-1.5 text-stone-400 hover:text-white rounded-lg hover:bg-white/10 cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="text-xs sm:text-sm text-stone-200 leading-relaxed font-sans whitespace-pre-line">
-                {aiAnswer}
-              </div>
+            {/* Quick Suggestions Chips */}
+            <div className="flex items-center flex-wrap gap-2 text-xs text-slate-400 pt-1">
+              <span className="text-slate-500 text-[11px]">পরামর্শ:</span>
+              {[
+                'は (wa) vs が (ga)',
+                '〜てください vs 〜てくださいませんか',
+                'Tokyo Baito Keigo',
+                'Kanji: 日本語',
+              ].map((q, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSearch(q)}
+                  className="px-2.5 py-1 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-lg text-[11px] transition-colors cursor-pointer"
+                >
+                  {q}
+                </button>
+              ))}
             </div>
-          )}
 
+            {/* AI Response Box */}
+            {aiAnswer && (
+              <div className="mt-3 bg-slate-900/95 rounded-2xl p-4 border border-slate-700/80 shadow-lg animate-in fade-in space-y-2 text-left">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold text-rose-400">নিহোমি AI সেনসেই সমাধান</span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => speakJapanese(aiAnswer)}
+                      className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 cursor-pointer"
+                      title="উচ্চারণ শুনুন"
+                    >
+                      <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                    </button>
+                    <button
+                      onClick={() => setAiAnswer(null)}
+                      className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+                <div className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
+                  {aiAnswer}
+                </div>
+              </div>
+            )}
+
+          </div>
         </div>
 
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 2: TAPO-STYLE 6-CARD VALUE REVEAL CAROUSEL (Nihomi OS Pillars)    */}
+      {/* SECTION 2: PINGO-STYLE REAL-LIFE ROLEPLAY SCENARIOS                       */}
       {/* ========================================================================= */}
-      <ValueRevealCarousel
-        onNavigate={onNavigate}
-        onOpenSenseiVoice={() => setIsVoiceActive(true)}
-        onOpenWritingCanvas={() => setIsWritingActive(true)}
-      />
-
-      {/* ========================================================================= */}
-      {/* NIHOMI MOBILE STUDIO SHOWCASE (Three Photorealistic Flagship Phones)      */}
-      {/* ========================================================================= */}
-      <NihomiMobileShowcase />
-
-      {/* ========================================================================= */}
-      {/* SECTION 3: TRANSPARENT PRICING & COURSE ENROLLMENT (Free vs N5 Pro vs All-Access) */}
-      {/* ========================================================================= */}
-      <section className="relative z-10 py-16 bg-[#0a0a12] border-t border-white/10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative z-10 py-18 bg-[#0F141C] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           
-          <div className="text-center max-w-xl mx-auto mb-12">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold mb-3 border border-emerald-500/20">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>স্বচ্ছ কোর্স ফি ও ইনস্ট্যান্ট এক্টিভেশন</span>
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold">
+              <span>🇯🇵 রিয়েল-লাইফ সিচুয়েশন</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-              সহজ মূল্যতালিকা • <span className="text-red-500">কোনো গোপন চার্জ নেই</span>
+              জাপান যাওয়ার আগেই জাপানের বাস্তব অভিজ্ঞতা
             </h2>
-            <p className="text-xs sm:text-sm text-stone-400 mt-2">
-              ফ্রি স্টার্টার দিয়ে পরখ করুন, ৳৪৯৯-এ আজীবন N5 প্রিপারেশন নিন অথবা ৳৪,৯৯০-এ সকল লেভেলের অল-এক্সেস পান
+            <p className="text-sm sm:text-base text-slate-400">
+              জাপানের দৈনন্দিন ৪টি বাস্তব পরিস্থিতির জন্য নিজেকে নিখুঁতভাবে তৈরি করুন
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-            
-            {/* 1. Free Starter Tier */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-[#12121e]/90 border border-white/10 shadow-lg flex flex-col justify-between backdrop-blur-md">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-stone-800 text-stone-300 text-xs font-bold font-mono">
-                    ফ্রি স্টার্টার
-                  </span>
-                  <span className="text-xs text-stone-400 font-medium">বেসিক অ্যাক্সেস</span>
-                </div>
-
-                <div className="mb-6">
-                  <div className="flex items-baseline space-x-1">
-                    <span className="text-3xl font-black text-white">৳০</span>
-                    <span className="text-xs text-stone-400">/ আজীবন ফ্রি</span>
-                  </div>
-                  <p className="text-xs text-stone-400 mt-1">জাপানিজ বর্ণমালা ও প্রাথমিক শব্দ শেখার জন্য উপযুক্ত</p>
-                </div>
-
-                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
-                  {[
-                    '৪৬টি হিরাগানা ও ৪৬টি কাতাকানা সম্পূর্ণ স্ট্রোক ল্যাব',
-                    'মিন্না নো নিহোঙ্গো লেসন ০১ থেকে ০৫ সম্পূর্ণ ফ্রি',
-                    '১০০টি N5 কাঞ্জি ফ্রি ট্রেসিং ও ক্যানভাস',
-                    'প্রাথমিক প্র্যাকটিস কুইজ ও স্কোরকার্ড',
-                    '১০টি এআই সেনসেই প্রশ্ন প্রতি মাসে',
-                    'ফ্রি ৫০ নিহোমি কয়েন সাইন-আপ বোনাস'
-                  ].map((feat, idx) => (
-                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-300">
-                      <Check className="w-4 h-4 text-stone-500 shrink-0 mt-0.5" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={handleGoogleCTA}
-                className="w-full py-3.5 bg-stone-800/90 hover:bg-stone-700 text-white rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center border border-white/10"
-              >
-                ফ্রি শুরু করুন (১-ক্লিক সাইন ইন)
-              </button>
-            </div>
-
-            {/* 2. N5 Pro Lifetime Tier (Highlighted) */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-[#161626]/95 border-2 border-red-500 shadow-2xl shadow-red-500/15 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
-              <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
-                সর্বাধিক জনপ্রিয়
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-bold font-mono border border-red-500/30">
-                    N5 Pro লাইফটাইম
-                  </span>
-                  <span className="text-xs text-red-400 font-bold">৬৭% ছাড়</span>
-                </div>
-
-                <div className="mb-6">
-                  <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl font-black text-white">৳৪৯৯</span>
-                    <span className="text-sm text-stone-400 line-through">৳১,৪৯৯</span>
-                    <span className="text-xs text-stone-400">/ এককালীন ফি</span>
-                  </div>
-                  <p className="text-xs text-stone-400 mt-1">পূর্ণ এন৫ কোর্স, লিসেনিং, কনবিনি ও JIS সিভিতে আজীবন অ্যাক্সেস</p>
-                </div>
-
-                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
-                  {[
-                    'মিন্না নো নিহোঙ্গো লেসন ০১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
-                    '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
-                    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (Choukai)',
-                    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
-                    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
-                    '১৮০ মার্কসের অফিশিয়াল মক টেস্ট ও ভেরিফাইড সনদ',
-                    '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর'
-                  ].map((feat, idx) => (
-                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-200 font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={() => {
-                  trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
-                  setCheckoutTargetPlan(N5_PRO_PLAN);
-                  setCheckoutTargetInterval('yearly');
-                  setIsCheckoutOpen(true);
-                }}
-                className="w-full py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
-              >
-                <span>এনরোল করুন — ৳৪৯৯ (bKash)</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* 3. All-Access Unlimited Annual Pass */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-[#141426]/90 border border-indigo-500/40 shadow-xl flex flex-col justify-between backdrop-blur-md">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold font-mono border border-indigo-500/30">
-                    All-Access বাৎসরিক
-                  </span>
-                  <span className="text-xs text-indigo-400 font-bold">৩০% সাশ্রয়</span>
-                </div>
-
-                <div className="mb-6">
-                  <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl font-black text-white">৳৪,৯৯০</span>
-                    <span className="text-xs text-stone-400">/ বছর (~৳৪১৫/মাস)</span>
-                  </div>
-                  <p className="text-xs text-stone-400 mt-1">N5 থেকে N1 পর্যন্ত সকল কোর্স, বিজনেস কেইগো ও ক্যারিয়ার সাপোর্ট</p>
-                </div>
-
-                <div className="space-y-3 pt-4 border-t border-white/10 mb-8">
-                  {[
-                    'N5, N4, N3, N2, N1 এর ২১০+ ডিজিটাল লেসন ও লাইব্রেরি',
-                    'টোকিও কাস্টমার সার্ভিস ও বিজনেস কেইগো ড্রিল',
-                    'JIS規格 履歴書 ও 職務経歴書 আনলিমিটেড Pro PDF এক্সপোর্ট',
-                    '১,০০০টি AI সেনসেই ইন্টারেকশন প্রতি মাসে',
-                    'সকল লেভেলের অফিশিয়াল ফুল সিমুলেটেড মক এক্সাম',
-                    'টোকিও ভিসা ও পার্ট-টাইম জব ক্যারিয়ার কম্প্যানিয়ন'
-                  ].map((feat, idx) => (
-                    <div key={idx} className="flex items-start space-x-2.5 text-xs text-stone-200">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    trackNihomiEvent('subscription_checkout_started', { planId: 'all_access', amountBDT: 4990 });
-                    setCheckoutTargetPlan(ALL_ACCESS_ANNUAL_PLAN);
-                    setCheckoutTargetInterval('yearly');
-                    setIsCheckoutOpen(true);
-                  }}
-                  className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-95"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {ROLEPLAY_SCENARIOS.map((sc, idx) => {
+              const IconComponent = sc.icon;
+              return (
+                <div
+                  key={sc.id}
+                  className="rounded-3xl bg-[#161D2B] border border-slate-800 hover:border-slate-700 p-6 flex flex-col justify-between transition-all hover:-translate-y-1 shadow-lg group"
                 >
-                  <span>বাৎসরিক পাস নিন — ৳৪,৯৯০</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => onNavigate('pricing')}
-                  className="w-full py-2 text-[11px] text-stone-400 hover:text-white text-center font-medium transition-colors cursor-pointer"
-                >
-                  মাসিক ও অন্যান্য প্ল্যান দেখুন →
-                </button>
-              </div>
-            </div>
+                  <div className="space-y-4">
+                    
+                    {/* Header with icon and tags */}
+                    <div className="flex items-center justify-between">
+                      <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${sc.color} flex items-center justify-center border shadow-xs`}>
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {sc.tags.map((t, i) => (
+                          <span key={i} className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-mono font-medium">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-          </div>
+                    {/* Titles */}
+                    <div>
+                      <h3 className="text-base font-bold text-white group-hover:text-rose-400 transition-colors">
+                        {sc.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 font-medium mt-0.5">{sc.sub}</p>
+                    </div>
 
-          {/* Bottom Clarification & Navigation Banner */}
-          <div className="mt-8 p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-300">
-            <div className="flex items-center space-x-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>
-                <strong>নিশ্চিন্ত ভর্তি গ্যারান্টি:</strong> bKash বা Nagad এ পেমেন্ট করার ৫-১৫ মিনিটের মধ্যে কোর্স সক্রিয় হয়।
-              </span>
-            </div>
-            <button
-              onClick={() => onNavigate('pricing')}
-              className="text-red-400 hover:text-red-300 font-bold flex items-center gap-1 shrink-0 cursor-pointer"
-            >
-              <span>বিস্তারিত প্রাইসিং ও ফিচার তুলনা দেখুন</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {sc.desc}
+                    </p>
+
+                    {/* Real Japanese Phrase Sample */}
+                    <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800/80 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500 uppercase font-mono font-bold">Key Dialogue</span>
+                        <button
+                          onClick={() => handlePlayVoice(sc.phraseJa)}
+                          className="p-1 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 cursor-pointer"
+                          title="শুনুন"
+                        >
+                          <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                        </button>
+                      </div>
+                      <p className="text-xs font-bold text-white font-japanese">
+                        {sc.phraseJa}
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        {sc.phraseBn}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* Action Link */}
+                  <div className="pt-6 border-t border-slate-800 mt-6">
+                    <button
+                      onClick={() => onNavigate(sc.view)}
+                      className="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-600 text-slate-200 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                    >
+                      <span>অনুশীলন শুরু করুন</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                </div>
+              );
+            })}
           </div>
 
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 4: MINIMALIST FAQ & DIRECT HELPLINE (WhatsApp 01834348966)         */}
+      {/* SECTION 3: WANIKANI-STYLE N5 TO N1 PROGRESSION LADDER                     */}
       {/* ========================================================================= */}
-      <section className="relative z-10 py-16 bg-[#0f0f1b]/95 border-t border-white/10 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-20 bg-[#0B0F17] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
+              <span>📈 বিজ্ঞানসম্মত মাইলস্টোন</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              JLPT N5 থেকে N1: আপনার জাপান যাত্রার রোডম্যাপ
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              ওয়াজিকানির মতো রঙ-চিহ্নিত ও পর্যায়ক্রমিক লার্নিং সিস্টেম
+            </p>
+
+            {/* High-level stats pill */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300">
+              <span className="text-rose-400 font-mono">২১০+ লেসন</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-emerald-400 font-mono">৯৫০+ শব্দভাণ্ডার</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-blue-400 font-mono">৫০+ লাইভ কনভার্সেশন</span>
+            </div>
+          </div>
+
+          {/* Stepped 5-Level Visual Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 lg:gap-5">
+            {WANIKANI_LEVELS.map((item, index) => (
+              <div
+                key={item.level}
+                className={`rounded-3xl bg-[#161D2B] border ${item.borderColor} p-5 flex flex-col justify-between shadow-xl relative overflow-hidden transition-all hover:-translate-y-1.5`}
+              >
+                {/* Level Tag Header */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className={`px-2.5 py-1 rounded-xl font-black text-sm font-mono border ${item.badgeBg}`}>
+                      {item.level}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-bold">
+                      ধাপ 0{index + 1}
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-black text-white mb-1">
+                    {item.title}
+                  </h3>
+                  
+                  <div className="text-[11px] font-mono text-slate-400 mb-3 pb-2 border-b border-slate-800">
+                    {item.stats}
+                  </div>
+
+                  <p className="text-xs text-slate-300 leading-relaxed font-normal mb-4">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Level Status & Action */}
+                <div className="pt-3 border-t border-slate-800/80 space-y-2">
+                  <div className="text-[10px] text-slate-400 flex items-center justify-between">
+                    <span>স্ট্যাটাস:</span>
+                    <span className={`font-bold ${item.accentColor}`}>{item.status}</span>
+                  </div>
+                  <button
+                    onClick={() => onNavigate(item.view)}
+                    className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <span>{item.actionText}</span>
+                  </button>
+                </div>
+
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 4: JAPAN CAREER & CV BUILDER TEASER                               */}
+      {/* ========================================================================= */}
+      <section className="relative z-10 py-20 bg-[#0F141C] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+              <span>📄 অফিশিয়াল ক্যারিয়ার টুলস</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              জাপান স্ট্যান্ডার্ড JIS রেজুমে ও AI কেইগো পলিশার
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              জাপানে পার্ট-টাইম ও ফুল-টাইম জবের জন্য অফিশিয়াল জাপানিজ ফরম্যাটে সিভি তৈরি করুন
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual A4 Document Preview Card (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="rounded-3xl bg-[#161D2B] border border-slate-800 p-6 shadow-2xl relative">
+                
+                {/* Paper Window Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-red-500/80" />
+                    <span className="w-3 h-3 rounded-full bg-amber-500/80" />
+                    <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                    <span className="font-mono text-slate-400 ml-2">JIS_Standard_A4_Rirekisho.pdf</span>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold">
+                    JIS 規格準拠
+                  </span>
+                </div>
+
+                {/* Simulated A4 White Paper Sheet */}
+                <div className="bg-white text-zinc-950 rounded-2xl p-6 sm:p-8 shadow-inner border border-stone-300 font-japanese text-left select-none relative overflow-hidden">
+                  
+                  {/* Top Bar with Stamp & Title */}
+                  <div className="flex items-start justify-between border-b-2 border-zinc-950 pb-4 mb-4">
+                    <div>
+                      <h4 className="text-2xl sm:text-3xl font-black tracking-widest text-zinc-950">
+                        履 歴 書
+                      </h4>
+                      <p className="text-[10px] text-zinc-600 font-sans tracking-wide mt-1">
+                        (JIS規格 日本標準履歴書様式 • A4判)
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      {/* Photo Box */}
+                      <div className="w-16 h-20 border border-zinc-400 rounded-sm flex flex-col items-center justify-center text-[9px] text-zinc-500 font-sans bg-zinc-50">
+                        <span>写 真</span>
+                        <span>40mm x 30mm</span>
+                      </div>
+                      {/* Hanko Stamp */}
+                      <div className="w-10 h-10 rounded-full border-2 border-red-600 text-red-600 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                        印
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Motivation / Self PR Section */}
+                  <div className="space-y-3 font-sans">
+                    <div className="bg-zinc-50 p-3 rounded-lg border border-zinc-200">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] font-bold text-zinc-900 font-japanese">志望動機 (আবেদনের কারণ)</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold font-mono">
+                          ✓ AI Keigo Polished
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-700 leading-relaxed font-japanese">
+                        貴社の企業理念に深く共感し、日本での実務経験を通じて貢献したいと考え志望いたしました。誠心誠意努めてまいります。
+                      </p>
+                    </div>
+
+                    <div className="bg-zinc-50 p-3 rounded-lg border border-zinc-200">
+                      <span className="text-[11px] font-bold text-zinc-900 font-japanese block mb-1">自己PR (নিজের শক্তি ও অভিজ্ঞতা)</span>
+                      <p className="text-xs text-zinc-700 leading-relaxed font-japanese">
+                        責任感が強く、時間厳守を徹底しております。日本語学習にも日々励み、チームワークを重んじて業務を遂行します。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Watermark Tag */}
+                  <div className="mt-4 pt-3 border-t border-zinc-200 flex items-center justify-between text-[10px] text-zinc-500 font-mono">
+                    <span>Generated via Nihomi Japan Career Engine</span>
+                    <span>100% Free JIS A4 Export</span>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            {/* 3 Core Breakthrough Features (5 cols) */}
+            <div className="lg:col-span-5 space-y-5 text-left">
+              
+              <div className="p-5 rounded-3xl bg-[#161D2B] border border-slate-800 hover:border-slate-700 transition-colors">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs">
+                    01
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-white">
+                    ১-ক্লিকে বাংলা থেকে খাঁটি বিজনেস কেইগো
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed pl-11">
+                  বাংলা বা সাধারণ ভাষায় আপনার অভিজ্ঞতা লিখুন; আমাদের সেনসেই AI সেটিকে অফিসিয়াল Sonkeigo ও Kenjougo সমৃদ্ধ জাপানিজ বাক্যে রূপান্তর করবে।
+                </p>
+              </div>
+
+              <div className="p-5 rounded-3xl bg-[#161D2B] border border-slate-800 hover:border-slate-700 transition-colors">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">
+                    02
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-white">
+                    অফিসিয়াল A4 সাইজ জাপানিজ প্রিন্ট-রেডি PDF
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed pl-11">
+                  জাপানের ৭-ইলেভেন বা ফ্যামিলিমার্ট কনবিনি প্রিন্টারে বা কোম্পানিতে ইমেইল পাঠাতে পারবেন কোনো ফরমেটিং ভাঙা ছাড়াই।
+                </p>
+              </div>
+
+              <div className="p-5 rounded-3xl bg-[#161D2B] border border-slate-800 hover:border-slate-700 transition-colors">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                    03
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-white">
+                    জাপানিজ ইন্টারভিউ কমন প্রশ্নোত্তর গাইড
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed pl-11">
+                  সিভির পাশাপাশি ভাইভা বোর্ডে জিজ্ঞেস করা ২৫টি কমন প্রশ্ন এবং জাপানিজ অভিবাদন ম্যানারিজম গাইড পেয়ে যাবেন।
+                </p>
+              </div>
+
+              {/* CTAs */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => onNavigate('shokumu')}
+                  className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-red-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>সিভি স্টুডিও ওপেন করুন (Free JIS A4) →</span>
+                </button>
+                <button
+                  onClick={() => onNavigate('interview')}
+                  className="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Briefcase className="w-4 h-4 text-amber-400" />
+                  <span>ইন্টারভিউ ড্রিল</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 5: TAPO-STYLE VALUE REVEAL & ৳৪৯৯ SPECIAL PASS                    */}
+      {/* ========================================================================= */}
+      <section className="relative z-10 py-16 bg-[#0B0F17] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-16">
+          
+          {/* Embedded Tapo-Style 6-Card Value Reveal Carousel */}
+          <ValueRevealCarousel
+            onNavigate={onNavigate}
+            onOpenSenseiVoice={() => setIsVoiceActive(true)}
+            onOpenWritingCanvas={() => setIsWritingActive(true)}
+          />
+
+          {/* Dedicated High-Converting ৳৪৯৯ N5 Lifetime Pass Card */}
+          <div className="max-w-4xl mx-auto">
+            <div className="rounded-3xl bg-gradient-to-br from-[#161D2B] via-[#1A2333] to-[#161D2B] border-2 border-rose-500/80 p-6 sm:p-10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+              
+              {/* Highlight Ribbon */}
+              <div className="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-bold px-5 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-md">
+                🔥 সর্বোচ্চ জনপ্রিয় • লাইফটাইম অ্যাক্সেস
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                
+                {/* Left Description (7 cols) */}
+                <div className="md:col-span-7 space-y-4 text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-mono font-bold border border-rose-500/30">
+                    JLPT N5 Complete Mastery
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-black text-white">
+                    N5 Pro লাইফটাইম পাস — মাত্র ৳৪৯৯
+                  </h3>
+
+                  <div className="flex items-baseline gap-3 pt-1">
+                    <span className="text-3xl sm:text-4xl font-black text-white">৳৪৯৯</span>
+                    <span className="text-base text-slate-400 line-through">৳১,৪৯৯</span>
+                    <span className="text-xs text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded-md">
+                      ৬৭% ছাড় • এককালীন ফি
+                    </span>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম, তোশিবা নেটিভ লিসেনিং ল্যাব, ১০০ কাঞ্জি ড্রয়িং এবং অফিসিয়াল ১৮০ মার্কসের আনলিমিটেড মক টেস্ট।
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                    {[
+                      'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ পাঠ',
+                      '১০০টি N5 কাঞ্জি স্ট্রোক ক্যানভাস',
+                      'লিসেনিং অডিও ল্যাব (第1-25課 Choukai)',
+                      'JIS 履歴書 ও 職務経歴書 A4 PDF',
+                      'টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
+                      '১৮০ মার্কসের অফিসিয়াল মক টেস্ট ও সনদ',
+                      '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
+                      'আজীবন অ্যাক্সেস (কোনো মাসিক ফি নেই)'
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+
+                {/* Right Action Box (5 cols) */}
+                <div className="md:col-span-5 bg-slate-900/90 rounded-2xl p-6 border border-slate-800 text-center space-y-4 shadow-xl">
+                  
+                  <div className="space-y-1">
+                    <div className="text-xs font-bold text-slate-300">ইনস্ট্যান্ট বিকাশ ও অনলাইন চেকআউট</div>
+                    <div className="text-[11px] text-slate-400">পেমেন্ট করার সাথে সাথেই পুরো N5 আনলক</div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
+                      setCheckoutTargetPlan(N5_PRO_PLAN);
+                      setCheckoutTargetInterval('yearly');
+                      setIsCheckoutOpen(true);
+                    }}
+                    className="w-full py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm font-bold shadow-xl shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                  >
+                    <span>১-ক্লিকে এনরোল করুন — ৳৪৯৯</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 text-[11px] text-emerald-400 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>bKash & SSLCommerz ভেরিফাইড মার্চেন্ট</span>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800">
+                    <button
+                      onClick={() => onNavigate('pricing')}
+                      className="text-xs text-slate-400 hover:text-white font-medium transition-colors cursor-pointer"
+                    >
+                      বাৎসরিক অল-এক্সেস (৳৪,৯৯০) বা অন্যান্য প্ল্যান দেখুন →
+                    </button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 6: FAQS & DIRECT SUPPORT HELPLINE                                 */}
+      {/* ========================================================================= */}
+      <section className="relative z-10 py-20 bg-[#0F141C] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-stone-800 text-stone-300 text-xs font-bold mb-3 border border-stone-700">
-              <HelpCircle className="w-3.5 h-3.5 text-red-400" />
+          <div className="text-center mb-12 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold border border-slate-700">
+              <HelpCircle className="w-3.5 h-3.5 text-rose-400" />
               <span>সাধারণ জিজ্ঞাসাসমূহ</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
             </h2>
-            <p className="text-xs sm:text-sm text-stone-400 mt-2">
+            <p className="text-xs sm:text-sm text-slate-400">
               নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে প্রয়োজনীয় তথ্য
             </p>
           </div>
 
-          {/* Minimalist Collapsible Accordion */}
+          {/* Minimalist Accordion */}
           <div className="space-y-3 mb-14">
             {faqs.map((faq, index) => {
               const isExpanded = openFaqIndex === index;
               return (
                 <div
                   key={index}
-                  className="border border-white/10 rounded-2xl overflow-hidden bg-[#161626]/80 transition-all backdrop-blur-md"
+                  className="border border-slate-800 rounded-2xl overflow-hidden bg-[#161D2B] transition-all"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(isExpanded ? null : index)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between space-x-4 cursor-pointer hover:bg-white/[0.04] transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between space-x-4 cursor-pointer hover:bg-slate-800/50 transition-colors"
                     aria-expanded={isExpanded}
                   >
                     <span className="font-bold text-sm sm:text-base text-white flex items-center gap-2.5">
-                      <span className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 text-xs flex items-center justify-center font-mono font-bold shrink-0 border border-red-500/30">
+                      <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-xs flex items-center justify-center font-mono font-bold shrink-0 border border-rose-500/30">
                         {index + 1}
                       </span>
                       <span>{faq.question}</span>
                     </span>
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-stone-400 shrink-0" />
+                      <ChevronUp className="w-5 h-5 text-slate-400 shrink-0" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-stone-400 shrink-0" />
+                      <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
                     )}
                   </button>
 
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-stone-300 leading-relaxed border-t border-white/10 animate-in fade-in duration-200">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/80 animate-in fade-in duration-200">
                       <p className="pl-8 sm:pl-8.5">{faq.answer}</p>
                     </div>
                   )}
@@ -736,20 +1333,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </div>
 
           {/* Direct WhatsApp & Farmgate Office Badge Banner */}
-          <div className="rounded-3xl bg-stone-950 text-white p-6 sm:p-8 border border-stone-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="rounded-3xl bg-[#161D2B] text-white p-6 sm:p-8 border border-slate-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 text-left">
             <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-red-600/30 border border-red-500/40 text-red-300 text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-600/20 border border-rose-500/30 text-rose-300 text-xs font-bold">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>সরাসরি কাউন্সেলিং ও ভর্তি সহায়তা</span>
+                <span>সরাসরি কাউন্সেলিং ও সহায়তা</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-white">
                 যেকোনো প্রয়োজনে আমরা আছি আপনার সাথে
               </h3>
-              <p className="text-xs sm:text-sm text-stone-300">
+              <p className="text-xs sm:text-sm text-slate-300">
                 ভর্তি বা কোর্স সংক্রান্ত তথ্যের জন্য সরাসরি হোয়াটসঅ্যাপে মেসেজ দিন বা কল করুন।
               </p>
-              <div className="text-xs text-stone-400 flex items-center justify-center md:justify-start gap-1.5 pt-1">
-                <MapPin className="w-3.5 h-3.5 text-red-400 shrink-0" />
+              <div className="text-xs text-slate-400 flex items-center justify-center md:justify-start gap-1.5 pt-1">
+                <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                 <span>ঢাকা অফিস: {NIHOMI_CONTACT.officeLocationBn}</span>
               </div>
             </div>
@@ -759,7 +1356,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                 href={`https://wa.me/${NIHOMI_CONTACT.whatsappNumber}?text=${encodeURIComponent('হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তি হতে চাই / পেমেন্ট সংক্রান্ত তথ্য জানতে চাই।')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+                className="py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 fill-current" />
                 <span>WhatsApp: {NIHOMI_CONTACT.phone}</span>
@@ -767,9 +1364,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
               <a
                 href={`tel:${NIHOMI_CONTACT.phone}`}
-                className="py-3 px-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all cursor-pointer"
+                className="py-3 px-5 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                <Phone className="w-4 h-4 text-stone-300" />
+                <Phone className="w-4 h-4 text-slate-300" />
                 <span>হটলাইন কল</span>
               </a>
             </div>

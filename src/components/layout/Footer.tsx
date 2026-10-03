@@ -23,117 +23,99 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
-    <footer className="w-full bg-[#FAF9F6] border-t border-stone-200/80 py-12 px-4 sm:px-6 lg:px-8 text-xs text-stone-500 font-sans antialiased">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <footer className="w-full bg-[#0B0F17] border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8 text-xs text-slate-400 font-sans antialiased">
+      <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Top Centered Brand Identity */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-stone-200/60">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
           <div className="flex items-center space-x-3">
             <NihomiMonogram size={26} />
             <div className="flex items-baseline space-x-1.5">
-              <span className="font-black text-stone-950 text-base tracking-tight">NIHOMI</span>
-              <span className="text-[11px] font-japanese font-medium text-stone-500">日本語</span>
+              <span className="font-black text-white text-base tracking-tight">NIHOMI</span>
+              <span className="text-[11px] font-japanese font-medium text-slate-400">日本語</span>
             </div>
-            <span className="text-stone-300">•</span>
-            <span className="text-xs text-stone-600 font-medium">Continuous Learning OS</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-xs text-slate-400 font-medium">Continuous Japanese Learning OS</span>
           </div>
 
           {/* Quick Clean Navigation Links */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-semibold text-stone-600">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-semibold text-slate-400">
             <button
               onClick={() => onNavigate?.('landing')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
+              className="hover:text-white transition-colors cursor-pointer"
             >
-              Home
-            </button>
-            <button
-              onClick={() => onNavigate?.('journey')}
-              className="hover:text-stone-950 transition-colors cursor-pointer text-amber-600 font-bold"
-            >
-              Learner Journey
+              হোম
             </button>
             <button
               onClick={() => onNavigate?.('courses')}
-              className="hover:text-stone-950 transition-colors cursor-pointer font-bold text-stone-800"
+              className="hover:text-white transition-colors cursor-pointer text-slate-300 font-bold"
             >
-              JLPT Courses
+              লেসন (Lessons)
             </button>
             <button
               onClick={() => onNavigate?.('baito')}
-              className="hover:text-amber-500 transition-colors cursor-pointer text-amber-600 font-bold"
+              className="hover:text-amber-400 transition-colors cursor-pointer text-amber-400/90 font-bold"
             >
-              Tokyo Conbini Simulator
+              পরিস্থিতি (Scenarios)
             </button>
             <button
-              onClick={() => onNavigate?.('dashboard')}
-              className="hover:text-stone-950 transition-colors cursor-pointer font-bold"
+              onClick={() => onNavigate?.('shokumu')}
+              className="hover:text-blue-400 transition-colors cursor-pointer text-blue-400/90 font-bold"
             >
-              Student Dashboard
+              জাপান সিভি (CV Studio)
             </button>
             <button
               onClick={() => onNavigate?.('pricing')}
-              className="hover:text-rose-600 transition-colors cursor-pointer text-rose-600 font-bold"
+              className="hover:text-rose-400 transition-colors cursor-pointer text-rose-400/90 font-bold"
             >
-              Pricing & Plans (৳৪৯৯)
-            </button>
-            <button
-              onClick={() => onNavigate?.('japan-twin')}
-              className="hover:text-stone-950 transition-colors cursor-pointer text-stone-500"
-            >
-              JapanTwin™
-            </button>
-            <button
-              onClick={() => onNavigate?.('world')}
-              className="hover:text-amber-500 transition-colors cursor-pointer text-stone-500"
-            >
-              Tokyo 3D World
+              প্রাইসিং (৳৪৯৯)
             </button>
             <button
               onClick={() => onNavigate?.('terms')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
+              className="hover:text-slate-200 transition-colors cursor-pointer text-slate-500"
             >
-              Terms of Service
+              শর্তাবলী
             </button>
             <button
               onClick={() => onNavigate?.('privacy')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
+              className="hover:text-slate-200 transition-colors cursor-pointer text-slate-500"
             >
-              Privacy Policy
+              প্রাইভেসি পলিসি
             </button>
             <button
               onClick={() => onNavigate?.('refund-policy')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
+              className="hover:text-slate-200 transition-colors cursor-pointer text-slate-500"
             >
-              Refund Policy
+              রিফান্ড পলিসি
             </button>
             <button
               onClick={() => onNavigate?.('contact')}
-              className="hover:text-stone-950 transition-colors cursor-pointer"
+              className="hover:text-slate-200 transition-colors cursor-pointer text-slate-500"
             >
-              Contact Support
+              সাপোর্ট
             </button>
           </div>
         </div>
 
         {/* Institutional Backing Notice */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-stone-400 border-b border-stone-200/60 pb-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 border-b border-slate-800/80 pb-6">
           <p className="text-center sm:text-left">
-            Ecosystem Partner: bdTrip24 Global Relocation & Travel Logistics • bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215
+            ইকোসিস্টেম পার্টনার: bdTrip24 Global Relocation & Travel Logistics • bti Central Plaza, 7th Floor, 95 Green Rd, Farmgate, Dhaka 1215
           </p>
           <div className="flex items-center gap-3">
-            <span className="text-emerald-600 font-medium">bKash & SSLCommerz Merchant Verified</span>
+            <span className="text-emerald-400 font-medium">bKash & SSLCommerz Merchant Verified</span>
           </div>
         </div>
 
         {/* Bottom Legal & Philosophy Row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-stone-400">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
           <div>
             © {new Date().getFullYear()} NIHOMI.COM. All rights reserved.
           </div>
           <div className="flex items-center space-x-2">
             <span>Adaptive JLPT Intelligence</span>
             <span>•</span>
-            <span>N∞O Learning DNA</span>
+            <span>Pingo & WaniKani Hybrid Learning Engine</span>
           </div>
         </div>
 
