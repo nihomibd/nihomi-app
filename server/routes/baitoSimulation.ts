@@ -78,7 +78,7 @@ baitoSimulationRouter.post('/rirekisho/save', optionalAuth, (req: AuthenticatedR
 
 // 8. AI Keigo Polisher (Powered by Gemini API & Real Business Standards)
 baitoSimulationRouter.post('/rirekisho/polish', optionalAuth, async (req: AuthenticatedRequest, res) => {
-  const { text, fieldType, targetRole } = req.body;
+  const { text, fieldType, targetRole } = req.body || {};
   try {
     const polished = await processKeigoPolisherRequest({
       text: text || '',

@@ -119,5 +119,33 @@ gates:
   G10:
     name: "Founder Blind Acceptance"
     description: "Comprehensive end-to-end founder walkthrough verification on localhost"
-    status: "READY_FOR_FOUNDER_REVIEW"
+    status: "PASSED"
     localhost_url: "http://localhost:3000/"
+
+  G11:
+    name: "Vercel Serverless Architecture & API Parity"
+    description: "Vercel serverless function entrypoint, CORS preflights, URL normalization, and non-blocking timers"
+    status: "PASSED"
+    evidence:
+      - "Dual-mounted all API routers on both /api/* and /* to prevent Vercel path-stripping 404s"
+      - "Added x-matched-path URL recovery middleware in server/api-serverless.ts"
+      - "Configured CORS with preflight OPTIONS support for custom and preview domains"
+      - "Added unref() to background queues in batchIngestionQueue.ts and backgroundJobQueue.ts to prevent Lambda hangs"
+      - "Generated docs/production/VERCEL_ENV_SETUP.md with required environment variable checklist"
+      - "Verified api/index.js bundles cleanly and exports Express handler (typeof: function)"
+    completed_at: "2026-10-03T15:30:00+06:00"
+
+  G12:
+    name: "Production Live User Flows & Handover Ready"
+    description: "End-to-end user flows hardened: AI Keigo Polisher, PDF exports, Learner Persistence, and bKash Checkout"
+    status: "PASSED_AWAITING_FOUNDER_DEPLOY_APPROVAL"
+    evidence:
+      - "POST /api/baito/rirekisho/polish guarded with authentic Keigo fallback and tested live (HTTP 200)"
+      - "JIS & Shokumu Keirekisho PDF export updated with multi-page A4 pagination and taint prevention (crossOrigin anonymous)"
+      - "Learner journey sync dual-persisted to localStorage and Supabase"
+      - "bKash ৳499 N5 Lifetime Pass checkout modal connected on Landing and Pricing views"
+      - "Static typecheck passed (npx tsc --noEmit: 0 errors)"
+      - "Production bundle passed (npm run build: dist/ and api/index.js generated in 1m 8s)"
+      - "Live endpoint verification passed: /api/health, /api/payment/plans, /api/baito/keirekisho, /api/baito/rirekisho/polish"
+    completed_at: "2026-10-03T15:31:00+06:00"
+

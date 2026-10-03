@@ -213,6 +213,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       const canvas = await html2canvas(paperElement, {
         scale: 2,
         useCORS: true,
+        allowTaint: false,
         logging: false,
         backgroundColor: '#ffffff'
       });
@@ -224,10 +225,22 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         format: 'a4'
       });
 
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = (canvas.height * pageWidth) / canvas.width;
+      const pdfPageWidth = pdf.internal.pageSize.getWidth();
+      const pdfPageHeight = pdf.internal.pageSize.getHeight();
+      const imgHeight = (canvas.height * pdfPageWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-      pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfPageWidth, imgHeight);
+      heightLeft -= pdfPageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfPageWidth, imgHeight);
+        heightLeft -= pdfPageHeight;
+      }
+
       const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
       pdf.save(`Nihomi_JIS_Rirekisho_${safeName}.pdf`);
 
@@ -479,6 +492,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
                       src={formData.photoUrl}
                       alt="Student Portrait"
                       className="w-full h-full object-cover"
+                      crossOrigin="anonymous"
                     />
                   ) : (
                     <div className="text-center p-2">
@@ -1043,6 +1057,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
                       src={formData.photoUrl}
                       alt="Candidate Portrait"
                       className="w-full h-full object-cover"
+                      crossOrigin="anonymous"
                     />
                   ) : (
                     <div className="p-2 leading-tight">

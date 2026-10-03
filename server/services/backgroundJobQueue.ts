@@ -246,6 +246,9 @@ export class BackgroundJobQueueService {
     this.pollInterval = setInterval(() => {
       this.triggerProcessing();
     }, intervalMs);
+    if (this.pollInterval && typeof this.pollInterval.unref === 'function') {
+      this.pollInterval.unref();
+    }
   }
 
   public stopQueueWorker(): void {

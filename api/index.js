@@ -59507,6 +59507,19 @@ var init_senseiNextExperienceService = __esm({
   }
 });
 
+// server/env.ts
+import dotenv from "dotenv";
+dotenv.config();
+function getRequiredJwtSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || typeof secret !== "string" || secret.trim().length === 0) {
+    throw new Error(
+      "[CRITICAL SECURITY FATAL ERROR] JWT_SECRET environment variable is not defined or empty. Nihomi.com production security policy strictly forbids hardcoded JWT secret fallbacks. Please configure JWT_SECRET in your environment before starting the application."
+    );
+  }
+  return secret.trim();
+}
+
 // server/polyfill.ts
 if (typeof globalThis.DOMMatrix === "undefined") {
   globalThis.DOMMatrix = class DOMMatrix {
@@ -59573,6 +59586,7 @@ if (typeof globalThis.DOMMatrix === "undefined") {
 
 // server/api-serverless.ts
 import express2 from "express";
+import cors from "cors";
 
 // server/routes/auth.ts
 init_db();
@@ -59581,21 +59595,6 @@ import { Router } from "express";
 // server/authHelper.ts
 init_db();
 import crypto3 from "crypto";
-
-// server/env.ts
-import dotenv from "dotenv";
-dotenv.config();
-function getRequiredJwtSecret() {
-  const secret = process.env.JWT_SECRET;
-  if (!secret || typeof secret !== "string" || secret.trim().length === 0) {
-    throw new Error(
-      "[CRITICAL SECURITY FATAL ERROR] JWT_SECRET environment variable is not defined or empty. Nihomi.com production security policy strictly forbids hardcoded JWT secret fallbacks. Please configure JWT_SECRET in your environment before starting the application."
-    );
-  }
-  return secret.trim();
-}
-
-// server/authHelper.ts
 function base64UrlEncode(str) {
   return Buffer.from(str, "utf-8").toString("base64").replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 }
@@ -81406,6 +81405,9 @@ var BackgroundJobQueueService = class {
     this.pollInterval = setInterval(() => {
       this.triggerProcessing();
     }, intervalMs);
+    if (this.pollInterval && typeof this.pollInterval.unref === "function") {
+      this.pollInterval.unref();
+    }
   }
   stopQueueWorker() {
     if (this.pollInterval) {
@@ -83452,6 +83454,9 @@ var BatchIngestionQueueService = class {
     this.pollerTimer = setInterval(() => {
       this.processNextJobs();
     }, 2e3);
+    if (this.pollerTimer && typeof this.pollerTimer.unref === "function") {
+      this.pollerTimer.unref();
+    }
   }
   stopWorker() {
     if (this.pollerTimer) {
@@ -86743,7 +86748,7 @@ baitoSimulationRouter.post("/rirekisho/save", optionalAuth2, (req, res) => {
   });
 });
 baitoSimulationRouter.post("/rirekisho/polish", optionalAuth2, async (req, res) => {
-  const { text, fieldType, targetRole } = req.body;
+  const { text, fieldType, targetRole } = req.body || {};
   try {
     const polished = await processKeigoPolisherRequest({
       text: text || "",
@@ -95230,6 +95235,13 @@ founderRouter.post("/ai-coo/escalate-risk", (req, res) => {
 
 // server/api-serverless.ts
 var app = express2();
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "X-Request-Id"]
+}));
+app.options("*", cors());
 app.use(express2.json({
   limit: "25mb",
   verify: (req, _res, buf) => {
@@ -95243,43 +95255,89 @@ app.use(express2.urlencoded({
     req.rawBody = buf;
   }
 }));
-app.use("/api/health", healthRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/payment", paymentRouter);
-app.use("/api/billing", billingRouter);
-app.use("/api/learning", learningRouter);
+app.use((req, _res, next) => {
+  const matchedPath = req.headers["x-matched-path"] || req.headers["x-now-route-matches"] || req.headers["x-invoke-path"];
+  if (matchedPath && (req.url === "/api/index.js" || req.url === "/api" || req.url.startsWith("/api/index.js?"))) {
+    req.url = matchedPath;
+  }
+  next();
+});
+app.get(["/", "/health", "/api/health"], (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "nihomi-api-serverless",
+    timestamp: (/* @__PURE__ */ new Date()).toISOString()
+  });
+});
+var mountRouter = (basePath, router2) => {
+  app.use(`/api${basePath}`, router2);
+  app.use(basePath, router2);
+};
+mountRouter("/health", healthRouter);
+mountRouter("/auth", authRouter);
+mountRouter("/payment", paymentRouter);
+mountRouter("/billing", billingRouter);
+mountRouter("/learning", learningRouter);
+mountRouter("/quizzes", quizzesRouter);
+mountRouter("/work-japanese", workRouter);
+mountRouter("/ai", aiRouter);
+mountRouter("/sensei-ai", aiRouter);
+mountRouter("/admin", adminRouter);
+mountRouter("/founder", founderRouter);
+mountRouter("/coordination", coordinationRouter);
+mountRouter("/japan-twin", japanTwinRouter);
+mountRouter("/ghost-mode", ghostModeRouter);
+mountRouter("/mock-exams", mockExamsRouter);
+mountRouter("/mock-exam", mockExamsRouter);
+mountRouter("/system-health", systemHealthRouter);
+mountRouter("/content", contentEngineRouter);
+mountRouter("/content-engine", contentEngineRouter);
+mountRouter("/content-studio", contentStudioRouter);
+mountRouter("/branding", whiteLabelRouter);
+mountRouter("/white-label", whiteLabelRouter);
+mountRouter("/study-plan", studyPlanRouter);
+mountRouter("/study-planner", studyPlanRouter);
+mountRouter("/baito", baitoSimulationRouter);
+mountRouter("/simulation", baitoSimulationRouter);
+mountRouter("/baito-simulation", baitoSimulationRouter);
+mountRouter("/workos", baitoSimulationRouter);
+mountRouter("/work-os", baitoSimulationRouter);
+mountRouter("/srs", srsRouter);
+mountRouter("/analytics", analyticsRouter);
+mountRouter("/voice", voiceRouter);
+mountRouter("/referral", referralRouter);
+mountRouter("/referrals", referralRouter);
+mountRouter("/dashboard", dashboardRouter);
+mountRouter("/cloud", cloud_default);
 app.use("/api", learningRouter);
-app.use("/api/quizzes", quizzesRouter);
-app.use("/api/work-japanese", workRouter);
-app.use("/api/ai", aiRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/coordination", coordinationRouter);
-app.use("/api/japan-twin", japanTwinRouter);
-app.use("/api/ghost-mode", ghostModeRouter);
-app.use("/api/mock-exams", mockExamsRouter);
-app.use("/api/mock-exam", mockExamsRouter);
-app.use("/api/system-health", systemHealthRouter);
-app.use("/api/content", contentEngineRouter);
-app.use("/api/content-engine", contentEngineRouter);
-app.use("/api/content-studio", contentStudioRouter);
-app.use("/api/branding", whiteLabelRouter);
-app.use("/api/white-label", whiteLabelRouter);
-app.use("/api/study-plan", studyPlanRouter);
-app.use("/api/study-planner", studyPlanRouter);
-app.use("/api/baito", baitoSimulationRouter);
-app.use("/api/simulation", baitoSimulationRouter);
-app.use("/api/baito-simulation", baitoSimulationRouter);
-app.use("/api/workos", baitoSimulationRouter);
-app.use("/api/work-os", baitoSimulationRouter);
-app.use("/api/sensei-ai", aiRouter);
-app.use("/api/srs", srsRouter);
-app.use("/api/analytics", analyticsRouter);
-app.use("/api/voice", voiceRouter);
-app.use("/api/referral", referralRouter);
-app.use("/api/referrals", referralRouter);
-app.use("/api/dashboard", dashboardRouter);
-app.use("/api/cloud", cloud_default);
-app.use("/api/founder", founderRouter);
+app.get(["/api/public/verify-certificate/:certId", "/public/verify-certificate/:certId"], (req, res) => {
+  try {
+    const { certId } = req.params;
+    const result = SpeakingReadinessCertService.verifyCertificate(certId);
+    return res.json({
+      success: true,
+      ...result
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: `API route not found: ${req.method} ${req.url}`,
+    code: "ROUTE_NOT_FOUND"
+  });
+});
+app.use((err, _req, res, _next) => {
+  console.error("[API Serverless Error]", err);
+  const status = typeof err.status === "number" ? err.status : typeof err.statusCode === "number" ? err.statusCode : 500;
+  res.status(status).json({
+    success: false,
+    error: err?.message || "Internal Server Error",
+    code: err?.code || "SERVER_ERROR"
+  });
+});
 var api_serverless_default = app;
 export {
   api_serverless_default as default

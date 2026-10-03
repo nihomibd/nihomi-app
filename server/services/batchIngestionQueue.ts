@@ -81,6 +81,9 @@ export class BatchIngestionQueueService {
     this.pollerTimer = setInterval(() => {
       this.processNextJobs();
     }, 2000);
+    if (this.pollerTimer && typeof this.pollerTimer.unref === 'function') {
+      this.pollerTimer.unref();
+    }
   }
 
   public stopWorker() {

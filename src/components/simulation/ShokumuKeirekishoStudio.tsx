@@ -199,6 +199,7 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
+        allowTaint: false,
         logging: false,
         backgroundColor: '#ffffff'
       });
@@ -210,10 +211,22 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
         format: 'a4'
       });
 
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = (canvas.height * pageWidth) / canvas.width;
+      const pdfPageWidth = pdf.internal.pageSize.getWidth();
+      const pdfPageHeight = pdf.internal.pageSize.getHeight();
+      const imgHeight = (canvas.height * pdfPageWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-      pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfPageWidth, imgHeight);
+      heightLeft -= pdfPageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfPageWidth, imgHeight);
+        heightLeft -= pdfPageHeight;
+      }
+
       const safeName = formData.fullName.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'candidate';
       pdf.save(`Nihomi_Shokumu_Keirekisho_${safeName}.pdf`);
       soundEffects.playLessonCelebration();
