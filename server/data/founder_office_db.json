@@ -16027,6 +16027,2406 @@
       },
       "id": "log-aa52f509",
       "createdAt": "2026-10-04T20:08:56.198Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-436c88",
+      "details": {
+        "draftId": "draft-0da003bd",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-75963a60",
+      "createdAt": "2026-10-04T20:49:34.250Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-49fc4d",
+      "details": {
+        "draftId": "draft-13cd32ec",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-c3e834ed",
+      "createdAt": "2026-10-04T20:49:34.611Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1f0801",
+      "details": {
+        "draftId": "draft-ac03d70e",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-5f907e54",
+      "createdAt": "2026-10-04T20:49:35.083Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-8df9d4",
+      "details": {
+        "draftId": "draft-af14e62f",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-3bc9e9f9",
+      "createdAt": "2026-10-04T20:49:35.868Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a6a67c",
+      "details": {
+        "draftId": "draft-5884eb3a",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-cbd8b3e1",
+      "createdAt": "2026-10-04T20:49:36.325Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f2458e",
+      "details": {
+        "draftId": "draft-2ef1290f",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-76873aa7",
+      "createdAt": "2026-10-04T20:49:36.673Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e54a3c",
+      "details": {
+        "draftId": "draft-30831662",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-9eb8fbdd",
+      "createdAt": "2026-10-04T20:49:36.975Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-08acd6",
+      "details": {
+        "draftId": "draft-65441f37",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-9817f749",
+      "createdAt": "2026-10-04T20:49:37.284Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1aa0ed",
+      "details": {
+        "draftId": "draft-1399b372",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-e5164f26",
+      "createdAt": "2026-10-04T20:49:37.669Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-701c2c",
+      "details": {
+        "draftId": "draft-6ca033b0",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-df44a00f",
+      "createdAt": "2026-10-04T20:49:38.305Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c7b35d",
+      "details": {
+        "draftId": "draft-95b8733a",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-365289d2",
+      "createdAt": "2026-10-04T20:49:38.783Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f1d107",
+      "details": {
+        "draftId": "draft-93e7e02c",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-5bc88f45",
+      "createdAt": "2026-10-04T20:49:39.375Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-eb0f04",
+      "details": {
+        "draftId": "draft-f244074a",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-10103c0b",
+      "createdAt": "2026-10-04T20:49:39.853Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-25cd76",
+      "details": {
+        "draftId": "draft-37c5d784",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-b0f054a2",
+      "createdAt": "2026-10-04T20:49:40.294Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-81dda6",
+      "details": {
+        "draftId": "draft-caed76bb",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-cab69b8f",
+      "createdAt": "2026-10-04T20:49:41.112Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e87d24",
+      "details": {
+        "draftId": "draft-98ccd908",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-cc062119",
+      "createdAt": "2026-10-04T20:49:41.708Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-74c715",
+      "details": {
+        "draftId": "draft-0a27101d",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-0e0f8ec8",
+      "createdAt": "2026-10-04T20:49:42.183Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4e3290",
+      "details": {
+        "draftId": "draft-acb5a228",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-d969097f",
+      "createdAt": "2026-10-04T20:49:42.535Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-63d2ba",
+      "details": {
+        "draftId": "draft-1fb4fe13",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-26a61d83",
+      "createdAt": "2026-10-04T20:49:42.946Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a42b3e",
+      "details": {
+        "draftId": "draft-7744d849",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-0b4a5b1b",
+      "createdAt": "2026-10-04T20:49:43.463Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-15f6cc",
+      "details": {
+        "draftId": "draft-83512d49",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-a6e144b5",
+      "createdAt": "2026-10-04T20:49:44.322Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-92b147",
+      "details": {
+        "draftId": "draft-e5eb81cc",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-3a9ce5c6",
+      "createdAt": "2026-10-04T20:49:45.129Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-add3bf",
+      "details": {
+        "draftId": "draft-fffd5161",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-4e2bcb71",
+      "createdAt": "2026-10-04T20:49:45.905Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-48d8b8",
+      "details": {
+        "draftId": "draft-9b149855",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-1e741356",
+      "createdAt": "2026-10-04T20:49:46.478Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-ad3565",
+      "details": {
+        "draftId": "draft-4a7699f8",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-1e2b0e92",
+      "createdAt": "2026-10-04T20:49:47.012Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-0f68db",
+      "details": {
+        "draftId": "draft-419d76b9",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-b618f452",
+      "createdAt": "2026-10-04T20:51:27.635Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d473eb",
+      "details": {
+        "draftId": "draft-3022b15a",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-5bb1f6f7",
+      "createdAt": "2026-10-04T20:51:28.158Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-83f4fe",
+      "details": {
+        "draftId": "draft-d1974b72",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-abb65539",
+      "createdAt": "2026-10-04T20:51:28.620Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c68a43",
+      "details": {
+        "draftId": "draft-ff593ef3",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-4b944b89",
+      "createdAt": "2026-10-04T20:51:29.129Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-911abc",
+      "details": {
+        "draftId": "draft-7e31a1d2",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-3c2295a7",
+      "createdAt": "2026-10-04T20:51:29.469Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-356770",
+      "details": {
+        "draftId": "draft-c506dd82",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-69c0736e",
+      "createdAt": "2026-10-04T20:51:29.799Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d84c59",
+      "details": {
+        "draftId": "draft-04888e7a",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-ac338e78",
+      "createdAt": "2026-10-04T20:51:30.126Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-842e92",
+      "details": {
+        "draftId": "draft-cdecff3c",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-f2e37ae1",
+      "createdAt": "2026-10-04T20:51:30.459Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-03470b",
+      "details": {
+        "draftId": "draft-66f2a2bc",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-a5b8bd4c",
+      "createdAt": "2026-10-04T20:51:30.844Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c4ab4c",
+      "details": {
+        "draftId": "draft-a5a93e63",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-5064ade6",
+      "createdAt": "2026-10-04T20:51:31.737Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2b7c69",
+      "details": {
+        "draftId": "draft-a0a4e2b4",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-d578ee30",
+      "createdAt": "2026-10-04T20:51:32.552Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-85e71b",
+      "details": {
+        "draftId": "draft-f628813a",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-2c97b212",
+      "createdAt": "2026-10-04T20:51:33.117Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f09bf2",
+      "details": {
+        "draftId": "draft-24a76bea",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-4cd300a0",
+      "createdAt": "2026-10-04T20:51:33.841Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a54837",
+      "details": {
+        "draftId": "draft-5e4a7f56",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-990a5b78",
+      "createdAt": "2026-10-04T20:51:34.239Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c0cd01",
+      "details": {
+        "draftId": "draft-422724e9",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-457c3abc",
+      "createdAt": "2026-10-04T20:51:34.645Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4816d9",
+      "details": {
+        "draftId": "draft-5d0b6956",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-c2f82522",
+      "createdAt": "2026-10-04T20:51:35.394Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e8ff6b",
+      "details": {
+        "draftId": "draft-0649e159",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-06969d62",
+      "createdAt": "2026-10-04T20:51:35.869Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-76afa7",
+      "details": {
+        "draftId": "draft-1614dde3",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-d7529dbf",
+      "createdAt": "2026-10-04T20:51:36.464Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-018f64",
+      "details": {
+        "draftId": "draft-a135a4ee",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-bad95570",
+      "createdAt": "2026-10-04T20:51:36.857Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2f7e59",
+      "details": {
+        "draftId": "draft-c5bb8681",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-af5843a8",
+      "createdAt": "2026-10-04T20:51:37.261Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-37d5e0",
+      "details": {
+        "draftId": "draft-7d1ff4c0",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-563285d9",
+      "createdAt": "2026-10-04T20:51:38.051Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2ee85f",
+      "details": {
+        "draftId": "draft-9dc56053",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-c7ec4065",
+      "createdAt": "2026-10-04T20:51:38.754Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3842bf",
+      "details": {
+        "draftId": "draft-0cf4d5ac",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-b6e8c60d",
+      "createdAt": "2026-10-04T20:51:40.090Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e7a520",
+      "details": {
+        "draftId": "draft-6bf47235",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-2b29058b",
+      "createdAt": "2026-10-04T20:51:41.902Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1170ec",
+      "details": {
+        "draftId": "draft-401ac1be",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-0054f09a",
+      "createdAt": "2026-10-04T20:51:42.840Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f4c2bd",
+      "details": {
+        "draftId": "draft-4b3c099e",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-5bbd49f6",
+      "createdAt": "2026-10-04T20:54:15.755Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-81775f",
+      "details": {
+        "draftId": "draft-9adfefdf",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-7c8d201d",
+      "createdAt": "2026-10-04T20:54:16.109Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-48b83c",
+      "details": {
+        "draftId": "draft-3d786555",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-611accc3",
+      "createdAt": "2026-10-04T20:54:16.568Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-51d802",
+      "details": {
+        "draftId": "draft-055dc6fc",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-263894af",
+      "createdAt": "2026-10-04T20:54:17.290Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-79476b",
+      "details": {
+        "draftId": "draft-c137f284",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-8e7106ff",
+      "createdAt": "2026-10-04T20:54:17.707Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4a91c2",
+      "details": {
+        "draftId": "draft-d53620ff",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-06d5d0e9",
+      "createdAt": "2026-10-04T20:54:18.263Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4f67b2",
+      "details": {
+        "draftId": "draft-298f622a",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-faa7b352",
+      "createdAt": "2026-10-04T20:54:18.594Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a9402b",
+      "details": {
+        "draftId": "draft-8fc74a31",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-9b4902bc",
+      "createdAt": "2026-10-04T20:54:18.933Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-86bbb6",
+      "details": {
+        "draftId": "draft-7e3d9cd2",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-84d0c723",
+      "createdAt": "2026-10-04T20:54:19.282Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a54948",
+      "details": {
+        "draftId": "draft-85173ddc",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-5c2f4e88",
+      "createdAt": "2026-10-04T20:54:19.629Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-5a3dce",
+      "details": {
+        "draftId": "draft-edf5a3b2",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-28c1fc40",
+      "createdAt": "2026-10-04T20:54:20.077Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-fbbd48",
+      "details": {
+        "draftId": "draft-3d0c2690",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-d5030e95",
+      "createdAt": "2026-10-04T20:54:20.939Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-07154c",
+      "details": {
+        "draftId": "draft-855b8d92",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-3983ee80",
+      "createdAt": "2026-10-04T20:54:21.358Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-6b867d",
+      "details": {
+        "draftId": "draft-ea32098e",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-e653128d",
+      "createdAt": "2026-10-04T20:54:21.963Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-493823",
+      "details": {
+        "draftId": "draft-6684db03",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-08a3733d",
+      "createdAt": "2026-10-04T20:54:22.336Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3769a7",
+      "details": {
+        "draftId": "draft-513cd26e",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-37e42504",
+      "createdAt": "2026-10-04T20:54:22.675Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-6c8755",
+      "details": {
+        "draftId": "draft-592cbaec",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-1cdcc427",
+      "createdAt": "2026-10-04T20:54:23.052Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-cb9a6c",
+      "details": {
+        "draftId": "draft-e3e1adc9",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-fbe8e761",
+      "createdAt": "2026-10-04T20:54:23.794Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-0d803a",
+      "details": {
+        "draftId": "draft-68ae5b84",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-7e0966b5",
+      "createdAt": "2026-10-04T20:54:24.413Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-298700",
+      "details": {
+        "draftId": "draft-f2c5e72b",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-a324ac46",
+      "createdAt": "2026-10-04T20:54:25.065Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f8d2fa",
+      "details": {
+        "draftId": "draft-117b49d0",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-2a81178d",
+      "createdAt": "2026-10-04T20:54:25.603Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-51d6be",
+      "details": {
+        "draftId": "draft-fb33fc66",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-8f01db32",
+      "createdAt": "2026-10-04T20:54:26.611Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-8f1d99",
+      "details": {
+        "draftId": "draft-e0d00254",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-5f99453f",
+      "createdAt": "2026-10-04T20:54:27.355Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-629749",
+      "details": {
+        "draftId": "draft-bb3b9fc7",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-4dbbbd48",
+      "createdAt": "2026-10-04T20:54:28.011Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-52e6e7",
+      "details": {
+        "draftId": "draft-fefe3f17",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-25554c35",
+      "createdAt": "2026-10-04T20:54:28.444Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1c22e3",
+      "details": {
+        "draftId": "draft-f3236c8b",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-4df25b88",
+      "createdAt": "2026-10-04T20:58:15.112Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c66d95",
+      "details": {
+        "draftId": "draft-80f50d40",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-467cd023",
+      "createdAt": "2026-10-04T20:58:15.531Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a1a1e7",
+      "details": {
+        "draftId": "draft-2de53642",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-c9c1047b",
+      "createdAt": "2026-10-04T20:58:15.911Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d06a20",
+      "details": {
+        "draftId": "draft-685c3872",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-08d38818",
+      "createdAt": "2026-10-04T20:58:16.589Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-92d9ba",
+      "details": {
+        "draftId": "draft-c56837a8",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-72843e96",
+      "createdAt": "2026-10-04T20:58:17.085Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d7ae11",
+      "details": {
+        "draftId": "draft-001e58a6",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-266f9d2b",
+      "createdAt": "2026-10-04T20:58:17.629Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-613196",
+      "details": {
+        "draftId": "draft-ac8fe40e",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-923498b0",
+      "createdAt": "2026-10-04T20:58:18.051Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1e0616",
+      "details": {
+        "draftId": "draft-466512e6",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-9a7e20b2",
+      "createdAt": "2026-10-04T20:58:18.387Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d27f0d",
+      "details": {
+        "draftId": "draft-8535b195",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-724bc1a8",
+      "createdAt": "2026-10-04T20:58:18.723Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3ea508",
+      "details": {
+        "draftId": "draft-77b8f842",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-a7e87578",
+      "createdAt": "2026-10-04T20:58:19.071Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-297ecf",
+      "details": {
+        "draftId": "draft-345cc8a4",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-862a313a",
+      "createdAt": "2026-10-04T20:58:19.496Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-86ebf1",
+      "details": {
+        "draftId": "draft-9a365c57",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-3fdd0056",
+      "createdAt": "2026-10-04T20:58:20.373Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-8583dc",
+      "details": {
+        "draftId": "draft-15113822",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-cb78de2a",
+      "createdAt": "2026-10-04T20:58:20.918Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-974c18",
+      "details": {
+        "draftId": "draft-6f558916",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-3eb506b6",
+      "createdAt": "2026-10-04T20:58:21.536Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-8cc356",
+      "details": {
+        "draftId": "draft-a7fca6bc",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-632a380a",
+      "createdAt": "2026-10-04T20:58:21.913Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-0c953c",
+      "details": {
+        "draftId": "draft-a4fbfb9c",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-3cf44d47",
+      "createdAt": "2026-10-04T20:58:22.292Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-aec206",
+      "details": {
+        "draftId": "draft-1bcac64f",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-dbded0ae",
+      "createdAt": "2026-10-04T20:58:22.657Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a66e69",
+      "details": {
+        "draftId": "draft-320bc53b",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-b80ded86",
+      "createdAt": "2026-10-04T20:58:23.042Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-5363f8",
+      "details": {
+        "draftId": "draft-de133e61",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-d30ac342",
+      "createdAt": "2026-10-04T20:58:23.817Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3fa20b",
+      "details": {
+        "draftId": "draft-83897328",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-ba57d6b5",
+      "createdAt": "2026-10-04T20:58:24.471Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4ae480",
+      "details": {
+        "draftId": "draft-86c8db6a",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-33792dbb",
+      "createdAt": "2026-10-04T20:58:25.280Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-733dc2",
+      "details": {
+        "draftId": "draft-72d6e6ef",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-b5c87c9f",
+      "createdAt": "2026-10-04T20:58:25.833Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-0a31e9",
+      "details": {
+        "draftId": "draft-2bc0a889",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-5421f4d8",
+      "createdAt": "2026-10-04T20:58:26.380Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-6cb572",
+      "details": {
+        "draftId": "draft-26766e79",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-9edd23d8",
+      "createdAt": "2026-10-04T20:58:26.986Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-4e4429",
+      "details": {
+        "draftId": "draft-c866b1a3",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-ea875758",
+      "createdAt": "2026-10-04T20:58:28.231Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2ff9ea",
+      "details": {
+        "draftId": "draft-8550865e",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-4bf485c6",
+      "createdAt": "2026-10-04T21:35:09.209Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3e5762",
+      "details": {
+        "draftId": "draft-478ed5df",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-ca37bf42",
+      "createdAt": "2026-10-04T21:35:09.474Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-3e4da3",
+      "details": {
+        "draftId": "draft-8de609d1",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-e75e5e60",
+      "createdAt": "2026-10-04T21:35:09.758Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-185810",
+      "details": {
+        "draftId": "draft-059479d5",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-fbd690f2",
+      "createdAt": "2026-10-04T21:35:10.078Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-001dbc",
+      "details": {
+        "draftId": "draft-0baf84e8",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-716c6b52",
+      "createdAt": "2026-10-04T21:35:10.512Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e879f6",
+      "details": {
+        "draftId": "draft-5dd44cc3",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-51739a6d",
+      "createdAt": "2026-10-04T21:35:11.331Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-137524",
+      "details": {
+        "draftId": "draft-53d402db",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-4993455e",
+      "createdAt": "2026-10-04T21:35:11.778Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-92cf8f",
+      "details": {
+        "draftId": "draft-a8145ebb",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-6808d0c9",
+      "createdAt": "2026-10-04T21:35:12.355Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-96deb9",
+      "details": {
+        "draftId": "draft-ba64f6fa",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-0242fa90",
+      "createdAt": "2026-10-04T21:35:12.684Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f7061c",
+      "details": {
+        "draftId": "draft-6b6b352f",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-2c763257",
+      "createdAt": "2026-10-04T21:35:13.030Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-001a1b",
+      "details": {
+        "draftId": "draft-96ab1d1c",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-82dbbeb5",
+      "createdAt": "2026-10-04T21:35:13.393Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-7dc122",
+      "details": {
+        "draftId": "draft-4b45ec4f",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-02573385",
+      "createdAt": "2026-10-04T21:35:13.756Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-91b0b9",
+      "details": {
+        "draftId": "draft-382e55a3",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-881030d1",
+      "createdAt": "2026-10-04T21:35:14.224Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-12c2d0",
+      "details": {
+        "draftId": "draft-8cc07088",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-7f3bf5ac",
+      "createdAt": "2026-10-04T21:35:15.072Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f9d986",
+      "details": {
+        "draftId": "draft-f0c85b15",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-c86b691c",
+      "createdAt": "2026-10-04T21:35:15.710Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2800cf",
+      "details": {
+        "draftId": "draft-8dfa74a3",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-d26480c7",
+      "createdAt": "2026-10-04T21:35:16.241Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-9273dd",
+      "details": {
+        "draftId": "draft-d87fda42",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-dd1f3763",
+      "createdAt": "2026-10-04T21:35:16.598Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c54dd7",
+      "details": {
+        "draftId": "draft-062273d4",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-d8d76520",
+      "createdAt": "2026-10-04T21:35:17.062Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-7ad996",
+      "details": {
+        "draftId": "draft-98c7c982",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-c335f32d",
+      "createdAt": "2026-10-04T21:35:17.461Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-9c4e7f",
+      "details": {
+        "draftId": "draft-d85bfa13",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-752f97c8",
+      "createdAt": "2026-10-04T21:35:18.194Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-c7244c",
+      "details": {
+        "draftId": "draft-8b8697fd",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-df77f3b0",
+      "createdAt": "2026-10-04T21:35:18.841Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-e3a249",
+      "details": {
+        "draftId": "draft-5c12bf14",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-14ccf912",
+      "createdAt": "2026-10-04T21:35:19.524Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a0e1e8",
+      "details": {
+        "draftId": "draft-f1471ab2",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-b0687582",
+      "createdAt": "2026-10-04T21:35:19.960Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d1bf4a",
+      "details": {
+        "draftId": "draft-5d2344a1",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-04b24f51",
+      "createdAt": "2026-10-04T21:35:20.376Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-992ae5",
+      "details": {
+        "draftId": "draft-5231d484",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-d5e0d19c",
+      "createdAt": "2026-10-04T21:35:20.839Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-483138",
+      "details": {
+        "draftId": "draft-f1cddfc9",
+        "version": 1,
+        "checksum": "61458136c08dfd4fb06a71dd50ad6171190ae76e9dc24938c8011bcd24801051",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 1: Self-Introductions & Core Particles (第1課 はじめまして)"
+      },
+      "id": "log-e6cf0fa8",
+      "createdAt": "2026-10-04T22:17:16.570Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f109ff",
+      "details": {
+        "draftId": "draft-0769b776",
+        "version": 1,
+        "checksum": "9982a058f4fd0e1d768705d9583b3e76290d4c16cb57cafa4b7b54fd9ff3f820",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 2: Demonstratives & Belongings (第2課 これ・それ・あれ)"
+      },
+      "id": "log-ef1c1646",
+      "createdAt": "2026-10-04T22:17:17.900Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-866310",
+      "details": {
+        "draftId": "draft-4ac921c5",
+        "version": 1,
+        "checksum": "c2126c978ee55af05ce3a110afec69b06374b62f9d8b11be6856e9ddcdf2983f",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 3: Places, Direction & Price Inquiry (第3課 ここ・そこ・あそこ)"
+      },
+      "id": "log-124ea6e9",
+      "createdAt": "2026-10-04T22:17:18.812Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-326ffe",
+      "details": {
+        "draftId": "draft-e92b3d8e",
+        "version": 1,
+        "checksum": "00826124048d6115b7228903fb8cd6b6b3f5eb3ad138b0bb13b179592971cab8",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 4: Time, Daily Schedule & Verb Forms (第4課 今何時ですか)"
+      },
+      "id": "log-c58b8d53",
+      "createdAt": "2026-10-04T22:17:19.871Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a4bac8",
+      "details": {
+        "draftId": "draft-85ed1e5a",
+        "version": 1,
+        "checksum": "b690ee6bcc42a7e5c12072045e99d8afe5d7cc8b3076b83b0f7e881155258172",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 5: Transit, Direction & Calendar Dates (第5課 どこへ行きますか)"
+      },
+      "id": "log-64c9f39e",
+      "createdAt": "2026-10-04T22:17:20.467Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-25a75c",
+      "details": {
+        "draftId": "draft-01f35b67",
+        "version": 1,
+        "checksum": "25af7ada47b149d02bbf96a162d4e5ca84311a1516899c54c434c510592e6bef",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 6: Action Objects & Invitation (第6課 ご飯を食べます)"
+      },
+      "id": "log-4e8aa528",
+      "createdAt": "2026-10-04T22:17:22.167Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-dc866c",
+      "details": {
+        "draftId": "draft-cd53112e",
+        "version": 1,
+        "checksum": "dc664805d84c25bcedf0709b3f9b797e66e51b0fd4144fdf8ecd522bed6218f6",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 7: Tools, Instruments & Giving/Receiving (第7課 スプーンで食べます)"
+      },
+      "id": "log-d46daaa6",
+      "createdAt": "2026-10-04T22:17:23.249Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-d0ed4e",
+      "details": {
+        "draftId": "draft-2ef5d384",
+        "version": 1,
+        "checksum": "231368e865b5e97b2f570ea0d69d8f35d101a461dac5ad95dd8d2f96abf83be4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 8: Adjectives & Descriptions (第8課 桜はきれいです)"
+      },
+      "id": "log-260fb488",
+      "createdAt": "2026-10-04T22:17:25.005Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-11fa9a",
+      "details": {
+        "draftId": "draft-ed9f4c80",
+        "version": 1,
+        "checksum": "374495083bcbceb5b3fb07f3e3452ced2a980e9b5610a66b6e590c958c6cd76e",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 9: Preferences, Abilities & Reasons (第9課 日本料理が好きです)"
+      },
+      "id": "log-008e57ec",
+      "createdAt": "2026-10-04T22:17:26.806Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-7efc8c",
+      "details": {
+        "draftId": "draft-2c149b47",
+        "version": 1,
+        "checksum": "2b30baf97f2c9c469809bb21d8d5d5744e9dbb5f8d9c8f6df1c2d9928b3c8d02",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 10: Existence & Spatial Locations (第10課 机の上に本があります)"
+      },
+      "id": "log-b801ea2e",
+      "createdAt": "2026-10-04T22:17:28.402Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-5c8785",
+      "details": {
+        "draftId": "draft-42b78f38",
+        "version": 1,
+        "checksum": "2d3d07f3a123417bb006a47f8d72cdb43fa38dab98da3ade35886030fb0ff843",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 11: Counters, Quantifiers & Frequency (第11課 りんごを幾つ買いましたか)"
+      },
+      "id": "log-29ec5743",
+      "createdAt": "2026-10-04T22:17:29.463Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-effe38",
+      "details": {
+        "draftId": "draft-8a0c4455",
+        "version": 1,
+        "checksum": "a41f6eb6972db866dc1ee06c17bbbadbbf50bb203f5494ba402ef69f34711d45",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 12: Past Adjectives & Comparisons (第12課 京都は静かでした)"
+      },
+      "id": "log-2d31ad71",
+      "createdAt": "2026-10-04T22:17:30.852Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-63f0e8",
+      "details": {
+        "draftId": "draft-a37cd009",
+        "version": 1,
+        "checksum": "f0d3d7c98469e78f9fc217c8eaef0a9e306f27bdd12fb8964504c19fe8d05c68",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 13: Desires & Purpose of Motion (第13課 映画を見に行きます)"
+      },
+      "id": "log-cdf47125",
+      "createdAt": "2026-10-04T22:17:32.151Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-2e27dc",
+      "details": {
+        "draftId": "draft-db0f8b31",
+        "version": 1,
+        "checksum": "c34925acfe4e0709ca0f5f142f4441512f0b5b463a9ce51980705f986f970200",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 14: The Te-Form & Polite Requests (第14課 ちょっと待ってください)"
+      },
+      "id": "log-191fbb5b",
+      "createdAt": "2026-10-04T22:17:33.343Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f3f6e4",
+      "details": {
+        "draftId": "draft-9aa9724b",
+        "version": 1,
+        "checksum": "6d9c6f82199f64fba5ca485526574090c134a11a5a97413e725f244995740156",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 15: Permission, Prohibition & States (第15課 写真を撮ってもいいですか)"
+      },
+      "id": "log-d9c8960b",
+      "createdAt": "2026-10-04T22:17:34.416Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-f2123e",
+      "details": {
+        "draftId": "draft-0bce2ec1",
+        "version": 1,
+        "checksum": "932035ee427754e007b1dc355ab5974830098068df567d44511ce22c771d1cc7",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 16: Sequencing Actions & Connections (第16課 朝起きて、散歩します)"
+      },
+      "id": "log-1cb264d5",
+      "createdAt": "2026-10-04T22:17:35.640Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-9b3668",
+      "details": {
+        "draftId": "draft-df974164",
+        "version": 1,
+        "checksum": "6abfe9d106cc351747e21bed426717a870a30b58295326fd140a4641c9038ec3",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 17: The Nai-Form & Obligations (第17課 忘れないでください)"
+      },
+      "id": "log-198c707b",
+      "createdAt": "2026-10-04T22:17:36.603Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-1b142d",
+      "details": {
+        "draftId": "draft-0a8e3776",
+        "version": 1,
+        "checksum": "b87a3f04f5e8e649a2697d495266e3573475a527e0c7fa46f5bb8f30f108c601",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 18: The Dictionary Form, Abilities & Hobbies (第18課 スキーができます)"
+      },
+      "id": "log-c36c0d1b",
+      "createdAt": "2026-10-04T22:17:37.915Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-a649a9",
+      "details": {
+        "draftId": "draft-ba9c6b37",
+        "version": 1,
+        "checksum": "72f1b435faa5e836ec1596e10d955f3e5a01715dc0031dd6a313c016ff3e6411",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 19: The Ta-Form, Experiences & Changes (第19課 富士山に登ったことがあります)"
+      },
+      "id": "log-22114e67",
+      "createdAt": "2026-10-04T22:17:38.873Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-46981e",
+      "details": {
+        "draftId": "draft-d6a0e49f",
+        "version": 1,
+        "checksum": "c3cd5196fd1c67c2876a82fa160bdf4e846a25c01ad1bc3e3245d744fbeedba4",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 20: The Plain Style & Casual Speech (第20課 一緒に行かない？)"
+      },
+      "id": "log-08657940",
+      "createdAt": "2026-10-04T22:17:40.364Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-973dce",
+      "details": {
+        "draftId": "draft-9b178e77",
+        "version": 1,
+        "checksum": "f049855a5b7b1fc3832cbbe6c6733ce6203d50f4221f718424cae89687966c3b",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 21: Opinions, Thoughts & Quotes (第21課 日本は物価が高いと思います)"
+      },
+      "id": "log-c83dfd35",
+      "createdAt": "2026-10-04T22:17:41.705Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-badbe2",
+      "details": {
+        "draftId": "draft-4b3a7cda",
+        "version": 1,
+        "checksum": "e4f4125b98e98b26397ad0a5a046a31997e8993a12b5487b4f4f358037ec6de2",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 22: Relative Clauses & Clothing (第22課 これは母が作ったケーキです)"
+      },
+      "id": "log-efaf916a",
+      "createdAt": "2026-10-04T22:17:42.550Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-342719",
+      "details": {
+        "draftId": "draft-1769a1e3",
+        "version": 1,
+        "checksum": "4589b8e8d03339dc6b008ab39aa15c71e054e2de49ccbaeb95b0e8d84632f700",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 23: Time Clauses & Natural Result (第23課 右へ曲がると郵便局があります)"
+      },
+      "id": "log-97a63dc6",
+      "createdAt": "2026-10-04T22:17:43.933Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-0c5171",
+      "details": {
+        "draftId": "draft-c5f5afd5",
+        "version": 1,
+        "checksum": "7e9b4517427cc5abdb3a754f8633eb1d5ab30164616212b20ed38830512c5d32",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 24: Giving & Receiving Favors (第24課 友達が傘を貸してくれました)"
+      },
+      "id": "log-9f9f3eb4",
+      "createdAt": "2026-10-04T22:17:45.212Z"
+    },
+    {
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "nihomibd@gmail.com",
+      "action": "PUBLISH_CONTENT_DRAFT",
+      "targetResource": "lesson:les-48ac9f",
+      "details": {
+        "draftId": "draft-fcfe7e64",
+        "version": 1,
+        "checksum": "08e5e92e8485922ad499ad71bc8a5ea533b620df74d95947b66eb8fa0ea48e89",
+        "courseId": "course-n5",
+        "moduleId": "mod-n5-1",
+        "title": "Lesson 25: The Tara Conditionals & N5 Mastery (第25課 雨が降ったら行きません)"
+      },
+      "id": "log-db0f658c",
+      "createdAt": "2026-10-04T22:17:46.068Z"
     }
   ],
   "aiActionLedger": [

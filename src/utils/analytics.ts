@@ -41,6 +41,15 @@ export type NihomiEventType =
   | 'journey_start_clicked'
   | 'journey_calibrated'
   | 'mission_started'
+  | 'next_best_mission_impression'
+  | 'next_best_mission_clicked'
+  | 'placement_test_started'
+  | 'placement_test_completed'
+  | 'placement_applied'
+  | 'foundation_gate_blocked'
+  | 'premium_preview_shown'
+  | 'premium_upgrade_intent'
+  | 'free_chapter_completed'
   | 'lead_captured';
 
 export interface LandingPageViewPayload {
@@ -141,6 +150,15 @@ export type EventPayloadMap = {
   journey_start_clicked: Record<string, any>;
   journey_calibrated: Record<string, any>;
   mission_started: Record<string, any>;
+  next_best_mission_impression: Record<string, any>;
+  next_best_mission_clicked: Record<string, any>;
+  placement_test_started: Record<string, any>;
+  placement_test_completed: Record<string, any>;
+  placement_applied: Record<string, any>;
+  foundation_gate_blocked: Record<string, any>;
+  premium_preview_shown: Record<string, any>;
+  premium_upgrade_intent: Record<string, any>;
+  free_chapter_completed: Record<string, any>;
   lead_captured: Record<string, any>;
 };
 

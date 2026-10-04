@@ -211,20 +211,33 @@ interface Point {
 }
 
 export interface ZenLearningCanvasProps {
+  initialChar?: string;
   onBack?: () => void;
   onNextLesson?: () => void;
   className?: string;
 }
 
 export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
+  initialChar,
   onBack,
   onNextLesson,
   className = ''
 }) => {
   const { user, refreshProgress } = useAuth();
 
-  // Load persisted vowel index from localStorage if exists
+  // Load vowel index from initialChar, URL ?char param, or localStorage
   const [currentVowelIndex, setCurrentVowelIndex] = useState<number>(() => {
+    if (initialChar) {
+      const idx = HIRAGANA_VOWELS.findIndex(v => v.char === initialChar);
+      if (idx >= 0) return idx;
+    }
+    if (typeof window !== 'undefined') {
+      const charParam = new URLSearchParams(window.location.search).get('char');
+      if (charParam) {
+        const idx = HIRAGANA_VOWELS.findIndex(v => v.char === charParam);
+        if (idx >= 0) return idx;
+      }
+    }
     try {
       const saved = localStorage.getItem('nihomi_zen_vowel_index');
       if (saved !== null) {
@@ -565,6 +578,15 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
     try {
       localStorage.setItem('nihomi_foundation_completed', 'true');
       localStorage.setItem('nihomi_mission_001_done', 'true');
+      const kState = loadLearnerKnowledgeState();
+      if (!kState.masteredSkills.includes('vowels_5_mastered')) {
+        kState.masteredSkills.push('vowels_5_mastered');
+      }
+      if (!kState.masteredSkills.includes('5_vowels_gate')) {
+        kState.masteredSkills.push('5_vowels_gate');
+      }
+      saveLearnerKnowledgeState(kState);
+
       const raw = localStorage.getItem('nihomi_completed_lessons');
       const currentCompleted: string[] = raw ? JSON.parse(raw) : [];
       if (!currentCompleted.includes('n5-l1')) {
@@ -629,6 +651,19 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
         setCompletedVowels(nextList);
         try {
           localStorage.setItem('nihomi_completed_vowels', JSON.stringify(nextList));
+          const kState = loadLearnerKnowledgeState();
+          addLearnedKana(kState, currentVowel.char);
+          if (currentVowel.char === 'い') {
+            addLearnedVocabulary(kState, 'あい');
+          } else if (currentVowel.char === 'う') {
+            addLearnedVocabulary(kState, 'いう');
+            addLearnedVocabulary(kState, 'あう');
+          } else if (currentVowel.char === 'え') {
+            addLearnedVocabulary(kState, 'いえ');
+            addLearnedVocabulary(kState, 'うえ');
+          } else if (currentVowel.char === 'お') {
+            addLearnedVocabulary(kState, 'あお');
+          }
         } catch {}
       }
 
@@ -963,26 +998,30 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
           </div>
         </div>
 
-        {/* 5 Vowel Step Indicator Beads */}
+        {/* 5 Vowel Step Indicator Beads (Strict Lattice: untaught vowels are locked & masked) */}
         <div className="flex items-center gap-1.5 shrink-0">
           {HIRAGANA_VOWELS.map((v, idx) => {
             const isCurrent = idx === currentVowelIndex;
-            const isDone = completedVowels.includes(v.char) || idx < currentVowelIndex;
+            const isDone = completedVowels.includes(v.char);
+            const isLocked = !isCurrent && !isDone;
 
             return (
               <button
                 key={v.char}
-                onClick={() => setCurrentVowelIndex(idx)}
-                className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition cursor-pointer font-japanese ${
+                disabled={isLocked}
+                onClick={() => {
+                  if (!isLocked) setCurrentVowelIndex(idx);
+                }}
+                className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition font-japanese ${
                   isCurrent
-                    ? 'bg-rose-600 text-white shadow-md ring-2 ring-rose-400/40'
+                    ? 'bg-rose-600 text-white shadow-md ring-2 ring-rose-400/40 cursor-default'
                     : isDone
-                    ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-slate-900 text-slate-500 border border-slate-800'
+                    ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 cursor-pointer hover:bg-emerald-900/60'
+                    : 'bg-slate-900/60 text-slate-600 border border-slate-800/80 cursor-not-allowed opacity-50'
                 }`}
-                title={`${v.soundBn} (${v.char})`}
+                title={isLocked ? `ধাপ ${idx + 1} (লক করা)` : `${v.soundBn} (${v.char})`}
               >
-                {isDone && !isCurrent ? <Check className="w-3.5 h-3.5" /> : v.char}
+                {isDone ? <Check className="w-3.5 h-3.5" /> : isCurrent ? v.char : '•'}
               </button>
             );
           })}

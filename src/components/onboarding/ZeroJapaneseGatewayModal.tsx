@@ -40,8 +40,8 @@ const FOUNDATIONAL_VOWELS: KanaVowel[] = [
     bn: 'আ',
     strokes: 3,
     strokeDirections: ['১. বাম থেকে ডানে আনুভূমিক দাগ', '২. উপর থেকে নিচে উল্লম্ব বাঁকা দাগ', '৩. বৃত্তাকার লুপ'],
-    exampleWord: 'あさ (Asa)',
-    exampleMeaningBn: 'সকাল'
+    exampleWord: 'あ (a)',
+    exampleMeaningBn: 'মৌলিক স্বরবর্ণ'
   },
   {
     char: 'い',
@@ -49,8 +49,8 @@ const FOUNDATIONAL_VOWELS: KanaVowel[] = [
     bn: 'ই',
     strokes: 2,
     strokeDirections: ['১. বামের দীর্ঘ বাঁকা দাগ ও হুক', '২. ডানের ছোট সমান্তরাল দাগ'],
-    exampleWord: 'いぬ (Inu)',
-    exampleMeaningBn: 'কুকুর'
+    exampleWord: 'あい (Ai)',
+    exampleMeaningBn: 'ভালোবাসা'
   },
   {
     char: 'う',
@@ -58,8 +58,8 @@ const FOUNDATIONAL_VOWELS: KanaVowel[] = [
     bn: 'উ',
     strokes: 2,
     strokeDirections: ['১. উপরের ছোট তির্যক বিন্দু', '২. নিচের বাঁকা খিলান'],
-    exampleWord: 'うみ (Umi)',
-    exampleMeaningBn: 'সমুদ্র'
+    exampleWord: 'いう (Iu)',
+    exampleMeaningBn: 'বলা'
   },
   {
     char: 'え',
@@ -67,8 +67,8 @@ const FOUNDATIONAL_VOWELS: KanaVowel[] = [
     bn: 'এ',
     strokes: 2,
     strokeDirections: ['১. উপরের তির্যক টান', '২. জিগ-জ্যাগ ও নিচের সমতল টান'],
-    exampleWord: 'えき (Eki)',
-    exampleMeaningBn: 'রেলওয়ে স্টেশন'
+    exampleWord: 'いえ (Ie)',
+    exampleMeaningBn: 'বাড়ি / ঘর'
   },
   {
     char: 'お',
@@ -76,8 +76,8 @@ const FOUNDATIONAL_VOWELS: KanaVowel[] = [
     bn: 'ও',
     strokes: 3,
     strokeDirections: ['১. বাম থেকে ডানে আনুভূমিক টান', '২. উল্লম্ব টান ও বড় লুপ', '৩. উপরের ডানদিকের ফোঁটা'],
-    exampleWord: 'おかね (Okane)',
-    exampleMeaningBn: 'টাকা / অর্থ'
+    exampleWord: 'あお (Ao)',
+    exampleMeaningBn: 'নীল'
   }
 ];
 
@@ -146,10 +146,10 @@ const RECOGNITION_QUESTIONS: RecognitionQuestion[] = [
     promptBn: "'お' (o) বর্ণের সঠিক ধ্বনি কোনটি?",
     targetChar: 'o',
     options: [
-      { char: 'o', label: 'ও (o) যেমন おかね' },
-      { char: 'a', label: 'আ (a) যেমন あさ' },
-      { char: 'u', label: 'উ (u) যেমন うみ' },
-      { char: 'i', label: 'ই (i) যেমন いぬ' }
+      { char: 'o', label: 'ও (o) যেমন あお' },
+      { char: 'a', label: 'আ (a) যেমন মৌলিক স্বরবর্ণ' },
+      { char: 'u', label: 'উ (u) যেমন いう' },
+      { char: 'i', label: 'ই (i) যেমন あい' }
     ],
     explanationBn: "১০০% নির্ভুল! 'お' উচ্চারিত হয় 'ও' (o) হিসেবে।"
   }

@@ -1,36 +1,50 @@
-# NIHOMI PRODUCTION RELEASE GATE
-# Canonical Release Checklist & Quality Standard — Version 1.0.0
-
-## 1. QUALITY MANDATE: "NO EVIDENCE = NO DONE"
-A release cannot be marked as production-ready based solely on clean compilation or visual impressions. Every phase must provide unambiguous empirical evidence across functional, pedagogical, performance, and security dimensions.
+# 🛡️ NIHOMI PRODUCTION RELEASE GATE
+## The Inviolable Pre-Deployment & Verification Protocol
+**Version:** 1.0.0  
+**Status:** Mandatory for Every Release  
 
 ---
 
-## 2. THE 24 PRODUCTION GATES (MANDATORY VERIFICATION MATRIX)
+## 1. RELEASE INTEGRITY POLICY
+No feature branch, pull request, or hotfix may be merged or deployed to production without passing all 5 Automated Quality Gates described herein. Zero exceptions.
 
-| # | Production Gate Dimension | Required Standard | Status | Evidence Source |
-|---|---------------------------|-------------------|:------:|-----------------|
-| 1 | **PRODUCT JOURNEY** | Seamless Zero Japanese → Tokyo Ready flow with continuous Next Best Mission navigation. | PASS | Headless Chrome CDP e2e flow |
-| 2 | **CURRICULUM ARCHITECTURE** | Centralized `ContentEligibilityEngine` controls all content exposure. | PASS | `src/core/curriculum/` |
-| 3 | **STRICT CUMULATIVE LATTICE**| Zero untaught characters appear in learner content; prerequisite gates strictly verified. | PASS | `scripts/validate-curriculum.ts` |
-| 4 | **HIRAGANA FOUNDATION** | Stage 1 (`あ`), Stage 2 (`い` + `あい`), Stage 3 (`う`), Stage 4 (`え`), Stage 5 (`お`). | PASS | Automated lattice test |
-| 5 | **KATAKANA PROGRESSION** | 46 Seion Katakana mapped with loanword & brand context. | PASS | `kanaData.ts` & KanaView |
-| 6 | **READING FOUNDATION** | Character → Pair → Controlled Word → Phrase Reading progression. | PASS | `ZenLearningCanvas.tsx` |
-| 7 | **VOCABULARY OS** | All vocabulary items bound to required phonetic prerequisites. | PASS | `validate-curriculum.ts` |
-| 8 | **KANJI OS** | Kanji attached to real vocabulary meanings with stroke animations. | PASS | `kanji100Data.ts` |
-| 9 | **GRAMMAR OS** | Communication-oriented Minna no Nihongo 1-25 patterns. | PASS | `n5MasterCurriculum.ts` |
-| 10 | **REAL-LIFE MISSIONS** | Tokyo 7-Eleven Konbini, Station, and Baito simulations active. | PASS | `LearnerJourneyEngine.tsx` |
-| 11 | **MISTAKE RECOVERY** | Error diagnosis + warm Bengali micro-coaching + simplified retry. | PASS | `MistakeRecoveryEngine.ts` |
-| 12 | **ADAPTIVE NEXT BEST MISSION**| Runtime `getNextBestMission` calculates next action from learner state. | PASS | `journeyEngine.ts` |
-| 13 | **NIHOMI SENSEI AI** | Contextualized Gemini queries with bilingual Japanese + Bengali output. | PASS | `/api/ai/coach` integration test |
-| 14 | **AUTHENTICATION EXPERIENCE**| Value-first soft login trigger ("তোমার progress save করে রাখবো?"). | PASS | `useAuth()` & AuthModal |
-| 15 | **LEAD JOURNEY** | Trust-led conversion without coercive paywalls. | PASS | `LandingView.tsx` |
-| 16 | **ANALYTICS & TELEMETRY** | Core events tracked (`journey_started`, `word_unlocked`, etc.). | PASS | `analytics.ts` telemetry audit |
-| 17 | **MOBILE UX** | 100% responsive, no overflow, touch targets >= 44px on mobile viewports. | PASS | Chrome viewport 390x844 test |
-| 18 | **DESKTOP UX** | Full-bleed widescreen canvas with Neo-Tokyo obsidian aesthetics. | PASS | Chrome viewport 1280x900 test |
-| 19 | **ACCESSIBILITY** | Contrast compliant, screen-reader labels, accessible keyboard controls. | PASS | DOM aria-label audit |
-| 20 | **CURRICULUM VALIDATOR** | `npm run validate:curriculum` runs and passes with 0 violations. | PASS | `validate-curriculum.ts` CLI |
-| 21 | **AUTOMATED TESTS** | Hard lattice assertions A through I verified. | PASS | Test suite exit code 0 |
-| 22 | **TYPECHECK** | `npx tsc --noEmit` produces 0 type errors. | PASS | TypeScript compiler check |
-| 23 | **BUILD INTEGRITY** | `npm run build` produces complete `dist/` and `api/` bundles. | PASS | Vite & Esbuild bundle check |
-| 24 | **RUNTIME HEALTH** | Production server runs on `http://localhost:3000` (`HTTP 200 OK`). | PASS | Live daemon HTTP check |
+---
+
+## 2. THE 5 PRODUCTION GATES
+
+### GATE 1: STATIC TYPE INTEGRITY (ZERO COMPILATION DEFECTS)
+- **Command:** `npx tsc --noEmit`
+- **Standard:** 0 errors, 0 warnings.
+- **Rule:** No use of `@ts-ignore` to silence broken interfaces or missing properties.
+
+### GATE 2: PRODUCTION BUILD & CLOUDFLARE/EDGE VERIFICATION
+- **Command:** `npm run build`
+- **Output:** Clean bundle generated in `dist/`.
+- **Standard:** All route imports and dynamic modules build without missing chunk errors or static 405 endpoint issues.
+
+### GATE 3: CANONICAL CURRICULUM LATTICE UNIT ASSERTIONS
+- **Command:** `npx tsx scripts/validate-curriculum.ts`
+- **Coverage:**
+  1. Strict Vowel Ladder: `あ → い → あい → う → え → お`.
+  2. Zero premature words before prerequisites are met (e.g. `あさ` prohibited in Vowel phase).
+  3. Milestone quiz gate enforcement.
+  4. Grammar eligibility requirements (100% kana foundation prerequisite).
+  5. Placement engine retroactive prerequisite hydration.
+  6. Monetization boundary enforcement (Chapters 1–5 free, 6+ Pro).
+
+### GATE 4: REAL HEADLESS CHROME E2E DOM VERIFICATION (5 PERSONAS)
+- **Command:** `node scripts/verify-global-journey-browser.cjs`
+- **Mandatory Verified Scenarios:**
+  - **Persona A (Zero Learner):** Traces `あ`, unlocks `い`, combines `あい`, receives value-first Google auth invitation, lands on Dashboard with Next Best Mission = `う`.
+  - **Persona B (Experienced Placement):** Takes diagnostic test, achieves score, gets placed at `grammar-n5-lesson-01` with full prerequisite hydration.
+  - **Persona C (Memory Continuity):** Full state reload, localStorage persistence, streak and XP preserved.
+  - **Persona D (Monetization Gate):** Accesses Lesson 6 on free tier, verifies Pro Preview Modal renders with details, state remains uncorrupted.
+  - **Persona E (Route Tampering Defense):** Fresh learner loads `/lesson?id=2` directly via URL, verifies `PrerequisiteFoundationGate` blocks premature grammar and points to `kana-a`.
+
+### GATE 5: AI COST & SECURITY GUARD AUDIT
+- All AI endpoints must pass through `aiCostGuard` middleware.
+- Guest sessions restricted to 3 daily turns.
+- Generated text validated with `assertSenseiOutputEligible`.
+
+---
+*Signed by Lead Autonomous Production Engineer, Nihomi.com.*

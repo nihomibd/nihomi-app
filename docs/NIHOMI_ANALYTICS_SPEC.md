@@ -1,68 +1,80 @@
-# NIHOMI ANALYTICS & TELEMETRY SPECIFICATION
-# Canonical System of Record — Version 1.0.0
+# 📊 NIHOMI ANALYTICS & TELEMETRY SPECIFICATION
+## Comprehensive Event Taxonomy & Behavioral Measurement
+**Version:** 1.0.0  
+**Status:** Canonical & Locked  
 
-## 1. PURPOSE
-The analytics engine answers the Founder's core questions:
-1. *Where are learners experiencing their First Aha moment?*
-2. *Where do learners struggle or experience cognitive friction?*
-3. *How effectively does the Mistake Recovery Engine restore confidence?*
-4. *At what point in the journey do learners choose to save their progress?*
+---
+
+## 1. ARCHITECTURAL OVERVIEW
+The Nihomi Analytics Engine captures real learner behavior across:
+- **GA4 (Google Analytics 4)**: Global conversion tracking & acquisition campaigns.
+- **Meta Pixel**: Facebook/Instagram campaign attribution in Bangladesh.
+- **Internal System Telemetry**: Learning fidelity, mistake rates, and curriculum progression diagnostics.
+
+### Privacy-Safe Law:
+Telemetry **NEVER** logs:
+- Raw passwords or authentication secrets.
+- bKash/Nagad PINs or OTP tokens.
+- Personal identifiable contact numbers without consent.
 
 ---
 
 ## 2. CANONICAL EVENT TAXONOMY
 
-### A. Journey & Acquisition Funnel
-- `journey_started`: Triggered when visitor clicks "বিনামূল্যে শুরু করি" or enters `/journey`.
-  - Properties: `source` ('hero', 'cta', 'direct'), `timestamp`, `guestId`.
-- `first_aha_completed`: Triggered upon completing character 'あ' (Listen + Trace + Audio).
-  - Properties: `character`: 'あ', `timeToCompleteSec`, `strokeScore`.
-- `word_unlocked`: Triggered when first word combination is discovered.
-  - Properties: `word`: 'あい', `meaningBn`: 'ভালোবাসা', `stepIndex`: 2.
-- `save_journey_clicked`: Triggered when student taps "progress save করে রাখবো?".
-  - Properties: `completedItems`: string[], `earnedXp`: number.
-- `signup_completed`: Triggered upon Google or Email account persistence.
-  - Properties: `method`: 'google' | 'email', `studentId`.
+### 2.1 Discovery & Onboarding Funnel
+| Event Name | Trigger Moment | Key Parameters |
+|---|---|---|
+| `landing_page_view` | User visits home page | `pagePath`, `source`, `campaign` |
+| `zero_gateway_clicked` | "জিরো থেকে শুরু করুন" button clicked | `ctaSource`, `utm_medium` |
+| `journey_start_clicked` | Beginner enters Kana tracing studio | `targetChar: 'あ'` |
+| `first_lesson_started` | First interactive step initiated | `lessonId: 'kana-a'` |
 
-### B. Kana & Cognitive Practice
-- `kana_started`: Triggered when starting any kana character.
-- `kana_character_learned`: Triggered upon completing all 4 micro-steps (listen, watch, practice, use).
-- `kana_trace_completed`: Triggered upon completing tactile drawing on Hosho paper canvas.
-  - Properties: `char`, `strokeCount`, `accuracyScore`.
-- `kana_pronunciation_completed`: Triggered upon listening/producing audio.
+### 2.2 The "First Aha" Value-First Auth Funnel
+| Event Name | Trigger Moment | Key Parameters |
+|---|---|---|
+| `kana_a_mastered` | Traced and heard 'あ' | `strokes: 3`, `xpGained: 15` |
+| `kana_i_mastered` | Traced and heard 'い' | `strokes: 2`, `xpGained: 15` |
+| `word_ai_unlocked` | First word unlock modal renders | `word: 'あい'`, `meaning: 'Love'` |
+| `signup_started` | Google 1-Tap or email prompt clicked | `method: 'google' \| 'email'` |
+| `signup_completed` | Account created and state synced | `userId`, `method`, `initialXp` |
 
-### C. Quizzes & Mistake Recovery
-- `quiz_started`: Triggered when 5-vowel milestone quiz launches.
-- `quiz_question_answered`: Triggered on selecting an option.
-  - Properties: `questionId`, `selectedText`, `isCorrect`.
-- `quiz_failed`: Triggered when an incorrect option is chosen.
-  - Properties: `questionId`, `errorType`: 'visual_confusion' | 'phonetic_confusion', `mistakeCount`.
-- `quiz_recovered`: Triggered when learner reviews explanation and answers recovery drill successfully.
-- `milestone_gate_passed`: Triggered upon scoring passing marks on the 5-Vowel Gate.
-  - Properties: `score`: number, `totalQuestions`: 5, `xpAwarded`: 50.
+### 2.3 Authoritative Next-Best-Mission Telemetry
+| Event Name | Trigger Moment | Key Parameters |
+|---|---|---|
+| `next_best_mission_impression` | Dashboard hero renders canonical card | `missionId`, `phase`, `titleBn` |
+| `next_best_mission_clicked` | Hero CTA button pressed | `missionId`, `targetRoute` |
+| `foundation_gate_blocked` | Learner attempts to jump to locked grammar | `requestedLessonId`, `missingSkills` |
 
-### D. AI Sensei Coach
-- `sensei_opened`: Triggered upon clicking Floating Sensei Widget.
-- `sensei_message_sent`: Triggered on user query.
-  - Properties: `mode`: 'conversation' | 'grammar_explanation' | 'voice_chat', `queryLength`.
-- `sensei_successful_response`: Triggered when Gemini returns validated response.
-  - Properties: `latencyMs`, `bilingualOutput`: boolean.
+### 2.4 Placement Diagnostic Funnel
+| Event Name | Trigger Moment | Key Parameters |
+|---|---|---|
+| `placement_test_started` | Placement test modal opened | `source: 'dashboard'` |
+| `placement_test_completed` | All 5 diagnostic questions answered | `score`, `tier`, `placedNode` |
+| `placement_applied` | "এই লেভেলে যাত্রা শুরু করি" clicked | `tier`, `startingNodeId` |
+
+### 2.5 Commercial & Monetization Funnel
+| Event Name | Trigger Moment | Key Parameters |
+|---|---|---|
+| `free_chapter_completed` | Lessons 1 to 5 completed | `chapterNumber: 1..5` |
+| `premium_preview_shown` | Learner attempts to open Lesson 6+ on free tier | `lessonId`, `chapterNumber` |
+| `premium_upgrade_intent` | "N5 Pro আপগ্রেড করি" clicked in preview | `chapterNumber`, `source` |
+| `subscription_checkout_started`| Payment modal opened | `tier: 'pro' \| 'lifetime'`, `amount` |
+| `payment_success` | Verified bKash/Nagad/SSL payment | `transactionId`, `amount`, `planId` |
 
 ---
 
-## 3. FUNNEL CONVERSION BENCHMARKS
+## 3. DISPATCH IMPLEMENTATION PATTERN
+
+```typescript
+import { trackNihomiEvent } from '../utils/analytics';
+
+// Example: Tracking Next Best Mission Click
+trackNihomiEvent('next_best_mission_clicked', {
+  missionId: canonicalMission.id,
+  phase: canonicalMission.phase,
+  route: canonicalMission.viewRoute
+});
 ```
-[Landing Hero]
-     ↓ (Target: >35% CTR)
-[Journey Start / First Aha 'あ']
-     ↓ (Target: >85% Completion)
-[First Word Unlock 'あい']
-     ↓ (Target: >80% Completion)
-[5-Vowel Gate Passed]
-     ↓ (Target: >70% Completion)
-[Save Journey / Auth]
-     ↓ (Target: >45% Conversion)
-[Tokyo 7-Eleven Reality Simulation]
-     ↓ (Target: >60% Engagement)
-[N5 Pro Upgrade Exploration]
-```
+
+---
+*Maintained by the Nihomi Growth & Product Intelligence Team.*

@@ -352,8 +352,22 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
 };
 
 export const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<string>('landing');
-  const [viewParams, setViewParams] = useState<Record<string, any>>({});
+  const [currentView, setCurrentView] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const search = new URLSearchParams(window.location.search);
+      const { view } = resolveViewFromUrl(window.location.pathname, search);
+      return view || 'landing';
+    }
+    return 'landing';
+  });
+  const [viewParams, setViewParams] = useState<Record<string, any>>(() => {
+    if (typeof window !== 'undefined') {
+      const search = new URLSearchParams(window.location.search);
+      const { params } = resolveViewFromUrl(window.location.pathname, search);
+      return params || {};
+    }
+    return {};
+  });
   const [isDictionaryOpen, setIsDictionaryOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -586,7 +600,7 @@ export const App: React.FC = () => {
           <JourneyView onNavigate={handleNavigate} />
         )}
         {currentView === 'lesson' && (
-          <LessonView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
+          <LessonView lessonId={viewParams.lessonId || 'n5-l1'} char={viewParams.char} onNavigate={handleNavigate} />
         )}
         {(currentView === 'practice' || currentView === 'lesson-practice') && (
           <LessonPracticeView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />

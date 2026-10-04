@@ -20,6 +20,9 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
 import { MemoryOsView } from './MemoryOsView';
+import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
+import { getNextBestMission, isGrammarEligible } from '../core/curriculum/journeyEngine';
+import { PlacementDiagnosticModal } from '../components/learning/PlacementDiagnosticModal';
 
 interface DashboardViewProps {
   onNavigate?: (view: string, params?: Record<string, any>) => void;
@@ -46,6 +49,8 @@ const N5_CURRICULUM_PATHWAY: MilestoneLesson[] = [
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const { user, progress } = useAuth();
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
+  const [isPlacementOpen, setIsPlacementOpen] = useState<boolean>(false);
+  const [knowledgeVersion, setKnowledgeVersion] = useState<number>(0);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
   // Student metrics synced from localStorage & Auth state
@@ -60,22 +65,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         if (Array.isArray(arr) && arr.length > 0) return arr;
       }
     } catch {}
-    return ['n5-l1'];
+    return [];
   });
 
   const [studentXp, setStudentXp] = useState<number>(() => {
     try {
-      return parseInt(localStorage.getItem('nihomi_student_xp') || '450', 10);
+      return parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
     } catch {
-      return 450;
+      return 0;
     }
   });
 
   const [baitoReadinessScore, setBaitoReadinessScore] = useState<number>(() => {
     try {
-      return parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '80', 10);
+      return parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '0', 10);
     } catch {
-      return 80;
+      return 0;
     }
   });
 
@@ -91,20 +96,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         const xp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
         if (xp) setStudentXp(xp);
       } catch {}
+      setKnowledgeVersion(v => v + 1);
     };
 
     window.addEventListener('nihomi:progress-updated', handleProgressUpdated);
     window.addEventListener('nihomi:lesson-completed', handleProgressUpdated);
+    window.addEventListener('nihomi:knowledge-state-updated', handleProgressUpdated);
     window.addEventListener('storage', handleProgressUpdated);
 
     return () => {
       window.removeEventListener('nihomi:progress-updated', handleProgressUpdated);
       window.removeEventListener('nihomi:lesson-completed', handleProgressUpdated);
+      window.removeEventListener('nihomi:knowledge-state-updated', handleProgressUpdated);
       window.removeEventListener('storage', handleProgressUpdated);
     };
   }, []);
 
-  // Determine current active lesson
+  // Determine authoritative mission & curriculum status
+  const kState = loadLearnerKnowledgeState();
+  const canonicalMission = getNextBestMission(kState);
+  const grammarStatus = isGrammarEligible(kState);
   const currentLessonNum = Math.min(6, completedLessons.length + 1);
   const activeMission = N5_CURRICULUM_PATHWAY.find((l) => l.num === currentLessonNum) || N5_CURRICULUM_PATHWAY[0];
 
@@ -202,26 +213,37 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
               <div className="space-y-2">
                 <div className="text-xs text-amber-400/90 font-japanese font-bold tracking-wider">
-                  JLPT N5 • LESSON 0{activeMission.num} ({activeMission.titleJa})
+                  JLPT N5 • {canonicalMission.titleBn}
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-snug">
-                  {activeMission.titleBn}
+                  {canonicalMission.titleBn}
                 </h1>
                 <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-2xl font-medium">
-                  মূল প্যাটার্ন: <span className="text-amber-300 font-japanese font-bold">{activeMission.topic}</span> — নেটিভ টোকিও অডিও, রিয়েল লাইফ সিচুয়েশন ড্রিল ও কুইজ।
+                  {canonicalMission.whyItMattersBn}
                 </p>
               </div>
 
-              {/* ONE Prominent Hero CTA Button */}
-              <div className="pt-2">
+              {/* ONE Prominent Hero CTA Button + Placement Fast-Track */}
+              <div className="pt-2 flex flex-wrap items-center gap-4">
                 <button
                   type="button"
-                  onClick={() => onNavigate?.('lesson', { lessonId: activeMission.id })}
+                  id="btn-dashboard-start-next-mission"
+                  onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
                   className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  <span>আজকের মিশন শুরু করুন (Next Best Mission — {activeMission.estimatedMinutes} min)</span>
+                  <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                </button>
+
+                <button
+                  type="button"
+                  id="btn-dashboard-placement-test"
+                  onClick={() => setIsPlacementOpen(true)}
+                  className="px-5 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <Compass className="w-4 h-4 text-amber-400" />
+                  <span>আগে জাপানি জানা আছে? প্লেসমেন্ট টেস্ট দিন</span>
                 </button>
               </div>
             </div>
@@ -254,24 +276,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {N5_CURRICULUM_PATHWAY.map((lesson) => {
-              const isCompleted = completedLessons.includes(lesson.id) || lesson.num < currentLessonNum;
-              const isActive = lesson.num === currentLessonNum;
-              const isUpcoming = lesson.num > currentLessonNum;
+              const isCompleted = completedLessons.includes(lesson.id);
+              const isGrammarBlocked = lesson.num > 1 && !grammarStatus.eligible;
+              const isUpcoming = isGrammarBlocked || (!isCompleted && lesson.num > completedLessons.length + 1);
+              const isActive = !isCompleted && !isGrammarBlocked && (lesson.num === 1 || lesson.num === completedLessons.length + 1);
 
               return (
                 <div
                   key={lesson.id}
                   onClick={() => {
-                    if (!isUpcoming) {
-                      onNavigate?.('lesson', { lessonId: lesson.id });
-                    }
+                    onNavigate?.('lesson', { lessonId: lesson.id });
                   }}
                   className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 relative flex flex-col justify-between ${
                     isActive
                       ? 'bg-gradient-to-b from-[#1c1737] to-[#120f26] border-amber-500/50 shadow-xl shadow-amber-950/30 ring-1 ring-amber-500/40 cursor-pointer'
                       : isCompleted
                       ? 'bg-white/[0.03] hover:bg-white/[0.06] border-emerald-500/30 cursor-pointer'
-                      : 'bg-white/[0.02] border-white/[0.06] opacity-60 cursor-not-allowed'
+                      : 'bg-white/[0.02] border-white/[0.06] opacity-60 cursor-pointer'
                   }`}
                 >
                   <div className="space-y-2">
@@ -427,6 +448,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           onClose={() => setIsAiSenseiOpen(false)}
         />
       )}
+
+      {/* Placement Diagnostic Modal */}
+      <PlacementDiagnosticModal
+        isOpen={isPlacementOpen}
+        onClose={() => setIsPlacementOpen(false)}
+        onPlacementApplied={(nodeId, viewRoute, viewParams) => {
+          setIsPlacementOpen(false);
+          onNavigate?.(viewRoute, viewParams);
+        }}
+      />
     </div>
   );
 };

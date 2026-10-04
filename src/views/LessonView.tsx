@@ -41,6 +41,8 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
+import { ChapterPremiumPreviewModal } from '../components/monetization/ChapterPremiumPreviewModal';
+import { checkMonetizationGate } from '../core/monetization/monetizationGate';
 import { SentenceDnaModal } from '../components/SentenceDnaModal.js';
 import { LessonQuickNotes } from '../components/LessonQuickNotes.js';
 import { CanvasWritingPractice } from '../components/CanvasWritingPractice.js';
@@ -65,13 +67,17 @@ import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
 import { ZenLearningCanvas } from '../components/learning/ZenLearningCanvas.js';
 import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
+import { PrerequisiteFoundationGate } from '../components/learning/PrerequisiteFoundationGate';
+import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
+import { getNextBestMission, getLessonGateStatus } from '../core/curriculum/journeyEngine';
 
 interface LessonViewProps {
   lessonId?: string;
+  char?: string;
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, onNavigate }) => {
+export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, char: propChar, onNavigate }) => {
   // লোকাল স্টেট দিয়ে ইউজার যে লেসন সিলেক্ট করবে তা ইনস্ট্যান্ট পরিবর্তন করার ব্যবস্থা
   const [selectedLessonNum, setSelectedLessonNum] = useState<number>(() => {
     if (propLessonId) {
@@ -145,8 +151,10 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
     user?.planId === 'japan_ready' ||
     (user as any)?.subscription?.planId === 'pro';
 
-  const isLockedForNonPro = selectedLessonNum >= 6 && !isPro;
+  const monetizationStatus = checkMonetizationGate(`n5-l${selectedLessonNum}`, isPro);
+  const isLockedForNonPro = monetizationStatus.isRestricted;
   const [isProModalOpen, setIsProModalOpen] = useState(false);
+  const [isPremiumPreviewOpen, setIsPremiumPreviewOpen] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -446,16 +454,45 @@ if (lessonId) {
   };
 
 
+  const targetChar = propChar || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('char') || undefined : undefined);
+
   if (selectedLessonNum === 1) {
     return (
       <div className="min-h-screen bg-[#0B0F17] text-white py-6 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <ZenLearningCanvas
+            initialChar={targetChar}
             onBack={() => onNavigate('courses')}
             onNextLesson={() => {
-              setSelectedLessonNum(2);
-              onNavigate('lesson', { lessonId: 'n5-l2' });
+              const kState = loadLearnerKnowledgeState();
+              const nextMission = getNextBestMission(kState);
+              if (nextMission.viewRoute === 'lesson') {
+                onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l1' });
+              } else if (nextMission.viewRoute === 'journey') {
+                onNavigate('journey', nextMission.viewParams);
+              } else {
+                onNavigate(nextMission.viewRoute, nextMission.viewParams);
+              }
             }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // AUTHORITATIVE CURRICULUM GATE: Check if learner meets prerequisites for this lesson
+  const kState = loadLearnerKnowledgeState();
+  const gateStatus = getLessonGateStatus(lessonId, kState);
+
+  if (gateStatus.isLocked) {
+    return (
+      <div className="min-h-screen bg-[#0B0F17] text-white py-6 px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <PrerequisiteFoundationGate
+            gateStatus={gateStatus}
+            requestedLessonId={lessonId}
+            knowledgeState={kState}
+            onNavigate={onNavigate}
           />
         </div>
       </div>
@@ -582,7 +619,8 @@ if (lessonId) {
               </p>
             </div>
             <button
-              onClick={() => setIsProModalOpen(true)}
+              id="btn-lesson-pro-unlock"
+              onClick={() => setIsPremiumPreviewOpen(true)}
               className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 inline-flex items-center gap-2 cursor-pointer transition-all"
             >
               <Crown className="w-5 h-5" />
@@ -1132,6 +1170,16 @@ if (lessonId) {
           isOpen={isProModalOpen}
           onClose={() => setIsProModalOpen(false)}
           onSuccess={() => setIsProModalOpen(false)}
+        />
+
+        <ChapterPremiumPreviewModal
+          isOpen={isPremiumPreviewOpen}
+          status={monetizationStatus}
+          onClose={() => setIsPremiumPreviewOpen(false)}
+          onUpgrade={() => {
+            setIsPremiumPreviewOpen(false);
+            setIsProModalOpen(true);
+          }}
         />
 
         {dnaSentence && (

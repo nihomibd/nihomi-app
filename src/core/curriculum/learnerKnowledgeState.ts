@@ -9,6 +9,11 @@ export type MistakeType =
   | 'recall_failure'
   | 'grammar_construction';
 
+export const JOURNEY_CONSTITUTION_VERSION = '1.0.0';
+export const CURRICULUM_GRAPH_VERSION = '1.0.0';
+export const CONTENT_SCHEMA_VERSION = '1.0.0';
+export const LEARNER_STATE_VERSION = '1.0.0';
+
 export interface MistakeRecord {
   item: string;
   mistakeType: MistakeType;
@@ -27,6 +32,7 @@ export interface ReviewQueueItem {
 }
 
 export interface LearnerKnowledgeState {
+  version?: string;
   knownHiragana: string[];
   knownKatakana: string[];
   knownDakuten: string[];
@@ -50,6 +56,7 @@ const STORAGE_KEY = 'nihomi_learner_knowledge_state_v1';
 
 export function createInitialKnowledgeState(): LearnerKnowledgeState {
   return {
+    version: LEARNER_STATE_VERSION,
     knownHiragana: [],
     knownKatakana: [],
     knownDakuten: [],

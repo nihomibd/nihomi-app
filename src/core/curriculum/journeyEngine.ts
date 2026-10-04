@@ -1,40 +1,85 @@
 // src/core/curriculum/journeyEngine.ts
-// Canonical Journey Engine — "Next Best Mission" Determinator
+// Canonical Journey Engine — Authoritative "Next Best Mission" Determinator
+// Single Source of Truth for Global Learner Progression
 
 import { LearnerKnowledgeState } from './learnerKnowledgeState';
+import {
+  CurriculumNode,
+  CurriculumPhase,
+  CurriculumNodeType,
+  CURRICULUM_GRAPH
+} from './curriculumGraph';
 
-export interface NextBestMission {
-  id: string;
-  type: 'kana' | 'word_unlock' | 'milestone_quiz' | 'reading_drill' | 'konbini_simulation' | 'lesson_module' | 'mistake_repair';
-  titleBn: string;
-  subTitleBn: string;
-  actionLabelBn: string;
-  whyItMattersBn: string;
-  japanConnectionBn: string;
-  targetChar?: string;
-  targetWord?: string;
-  targetLessonId?: string;
-  viewRoute: string;
-  viewParams?: Record<string, any>;
-  xpReward: number;
+export interface NextBestMission extends CurriculumNode {}
+
+export interface LessonGateStatus {
+  isLocked: boolean;
+  gateType?: 'grammar_prerequisite_unmet' | 'kana_prerequisite_unmet';
+  reasonBn: string;
+  requiredSkills: string[];
+  nextBestMission: NextBestMission;
 }
 
-const HIRAGANA_CANONICAL_ORDER = [
-  'あ', 'い', 'う', 'え', 'お',
-  'か', 'き', 'く', 'け', 'こ',
-  'さ', 'し', 'す', 'せ', 'そ',
-  'た', 'ち', 'つ', 'て', 'と',
-  'な', 'に', 'ぬ', 'ね', 'の',
-  'は', 'ひ', 'ふ', 'へ', 'ほ',
-  'ま', 'み', 'む', 'め', 'も',
-  'や', 'ゆ', 'よ',
-  'ら', 'り', 'る', 'れ', 'ろ',
-  'わ', 'を', 'ん'
-];
+const HIRAGANA_VOWELS = ['あ', 'い', 'う', 'え', 'お'];
 
 /**
- * Computes the single most pedagogically useful next action for the learner.
- * Never makes the learner guess what to do next.
+ * Evaluates whether the learner satisfies the foundational prerequisites for Grammar.
+ * Inviolable Law: Grammar requires 100% mastery of Hiragana vowels, core consonants,
+ * and reading foundation before any grammar rules or particles are encountered.
+ */
+export function isGrammarEligible(state: LearnerKnowledgeState): {
+  eligible: boolean;
+  unmetReasonBn: string;
+  missingPrerequisites: string[];
+} {
+  const missing: string[] = [];
+
+  // 1. Must have mastered all 5 foundational vowels
+  const knownHiragana = new Set(state.knownHiragana);
+  const missingVowels = HIRAGANA_VOWELS.filter(v => !knownHiragana.has(v));
+  if (missingVowels.length > 0) {
+    missing.push(`মৌলিক স্বরবর্ণ [${missingVowels.join(', ')}]`);
+  }
+
+  // 2. Must have passed 5-Vowels gate
+  const hasVowelGate = state.masteredSkills.includes('vowels_5_mastered') ||
+    state.masteredSkills.includes('5_vowels_gate') ||
+    (typeof window !== 'undefined' && localStorage.getItem('nihomi_foundation_completed') === 'true');
+  if (!hasVowelGate && missingVowels.length === 0) {
+    missing.push('৫-স্বরবর্ণ মাস্টার রিভিউ কুইজ');
+  }
+
+  // 3. Must have dual reading foundation for grammar
+  const hasReadingFoundation = state.masteredSkills.includes('kana_dual_mastered') ||
+    state.masteredSkills.includes('reading_foundation_verified') ||
+    state.masteredSkills.includes('hiragana_core_mastered');
+  if (!hasReadingFoundation) {
+    missing.push('হিরাগানা ব্যঞ্জনবর্ণ ও রিডিং প্রস্তুতি');
+  }
+
+  const eligible = missing.length === 0;
+  let unmetReasonBn = '';
+  if (!eligible) {
+    unmetReasonBn = `জাপানি ব্যাকরণে (Grammar) প্রবেশ করার আগে আপনার প্রয়োজনীয় ভিত্তি এখনো অসম্পূর্ণ: ${missing.join(', ')}। আগে অক্ষর ও শব্দ চেনা নিশ্চিত করুন, যাতে ব্যাকরণের বাক্য পড়তে কোনো জড়তা না থাকে।`;
+  }
+
+  return {
+    eligible,
+    unmetReasonBn,
+    missingPrerequisites: missing
+  };
+}
+
+/**
+ * Computes the single authoritative next best mission for the learner.
+ * Follows the strict mastery priority:
+ *   1. Critical mistake recovery (supportive repair drill)
+ *   2. Required unfinished prerequisite (vowel ladder: あ → い → あい → う → え → お)
+ *   3. 5-Vowel Review Milestone Gate
+ *   4. Controlled Tokyo Real-world Scenario
+ *   5. Hiragana Core Consonants
+ *   6. Reading Mechanics & Dual Kana Reading
+ *   7. ONLY THEN: Grammar (Phase 10)
  */
 export function getNextBestMission(state: LearnerKnowledgeState): NextBestMission {
   // 1. Priority 0: Unresolved repeated mistakes trigger supportive repair drill
@@ -43,172 +88,163 @@ export function getNextBestMission(state: LearnerKnowledgeState): NextBestMissio
     const recent = unresolvedMistakes[0];
     return {
       id: `repair-${recent.item}`,
+      phase: 'phase_1_hiragana_foundation',
       type: 'mistake_repair',
       titleBn: `'${recent.item}' বিশেষ রিভিশন ও প্র্যাকটিস`,
       subTitleBn: 'একটু থেমে বিভ্রান্তি দূর করে আবার ঝালিয়ে নিই',
       actionLabelBn: 'রিভিশন শুরু করি →',
-      whyItMattersBn: 'ভুল হওয়া শেখার সবচেয়ে স্বাভাবিক ও জরুরি অংশ। একবার স্পষ্ট করে নিলেই আত্মবিশ্বাস ফিরে আসবে।',
+      whyItMattersBn: 'ভুল হওয়া শেখার সবচেয়ে স্বাভাবিক ও প্রয়োজনীয় অংশ। একবার স্পষ্ট করে নিলেই আত্মবিশ্বাস ফিরে আসবে।',
       japanConnectionBn: 'সঠিক বর্ণ চেনা টোকিওর সাবওয়ে ও দোকানের সাইনবোর্ড পড়ার আসল চাবিকাঠি।',
       targetChar: recent.item,
+      prerequisites: [],
+      unlocks: [],
       viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
+      viewParams: { lessonId: 'n5-l1', char: recent.item },
       xpReward: 15
     };
   }
 
-  // 2. Vowel Foundation Ladder
   const known = new Set(state.knownHiragana);
+  const knownVocab = new Set(state.knownVocabulary);
 
+  // 2. Strict Vowel Foundation Ladder (Phase 1)
   if (!known.has('あ')) {
-    return {
-      id: 'mission-001-a',
-      type: 'kana',
-      titleBn: "ভিত্তি স্বরবর্ণ 'あ' (আ) জয় করা",
-      subTitleBn: 'জাপানি ভাষার প্রথম ও প্রধান ধ্বনি',
-      actionLabelBn: "'あ' শেখা শুরু করি →",
-      whyItMattersBn: "সমস্ত জাপানি শব্দের ভিত্তিমূল হলো 'あ'। কোনো জটিলতা ছাড়াই ৩টি সহজ টানে লেখা সম্ভব।",
-      japanConnectionBn: "টোকিও পৌঁছালে 'ありがとう' (ধন্যবাদ)-এর প্রথম ধ্বনিতেই এটি শুনতে পাবে।",
-      targetChar: 'あ',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 20
-    };
+    return CURRICULUM_GRAPH['kana-a'];
   }
 
   if (!known.has('い')) {
-    return {
-      id: 'mission-002-i',
-      type: 'word_unlock',
-      titleBn: "দ্বিতীয় স্বরবর্ণ 'い' ও প্রথম শব্দ 'あい' (ভালোবাসা) আনলক",
-      subTitleBn: 'দুটি বর্ণ যুক্ত করে জীবনের প্রথম আসল জাপানি শব্দ গঠন',
-      actionLabelBn: 'প্রথম শব্দ আনলক করি →',
-      whyItMattersBn: "আগে শেখা 'あ' আর নতুন 'い' মিলে তৈরি হবে তোমার প্রথম জাপানি শব্দ!",
-      japanConnectionBn: "জাপানি ভাষায় খাঁটি স্বরবর্ণ দিয়ে শত শত দৈনন্দিন শব্দ তৈরি হয়।",
-      targetChar: 'い',
-      targetWord: 'あい',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 25
-    };
+    return CURRICULUM_GRAPH['kana-i'];
   }
 
+  // After both あ and い are known: First Word Unlock あい
+  if (!knownVocab.has('あい')) {
+    return CURRICULUM_GRAPH['word-ai'];
+  }
+
+  // Next: Third Vowel う
   if (!known.has('う')) {
-    return {
-      id: 'mission-003-u',
-      type: 'kana',
-      titleBn: "তৃতীয় স্বরবর্ণ 'う' ও 'いう' (বলা) শব্দ আনলক",
-      subTitleBn: 'বামে ঝুঁকে পড়া সুন্দর ২-টানের বর্ণ',
-      actionLabelBn: "'う' শেখা শুরু করি →",
-      whyItMattersBn: "'い' আর 'う' মিলে তৈরি হয় দৈনন্দিন ক্রিয়াপদ 'いう' (বলা / Say)।",
-      japanConnectionBn: "টোকিওর রেস্তোরাঁয় বা বন্ধুদের সাথে কথা বলতে 'いう' প্রতিনিয়ত কাজে লাগে।",
-      targetChar: 'う',
-      targetWord: 'いう',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 20
-    };
+    return CURRICULUM_GRAPH['kana-u'];
   }
 
+  // Next: Fourth Vowel え
   if (!known.has('え')) {
-    return {
-      id: 'mission-004-e',
-      type: 'kana',
-      titleBn: "চতুর্থ স্বরবর্ণ 'え' ও 'いえ' (বাড়ি) / 'うえ' (উপরে) আনলক",
-      subTitleBn: 'জেড (Z) আকৃতির ছন্দময় জাপানি বর্ণ',
-      actionLabelBn: "'え' শেখা শুরু করি →",
-      whyItMattersBn: "'いえ' (Ie - বাড়ি) এবং 'うえ' (Ue - উপরে) দুটি অতিপ্রয়োজনীয় শব্দ আনলক হবে।",
-      japanConnectionBn: "জাপানে বাসা খোঁজা বা দিকনির্দেশনা বোঝার মূল শব্দ 'いえ'।",
-      targetChar: 'え',
-      targetWord: 'いえ',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 20
-    };
+    return CURRICULUM_GRAPH['kana-e'];
   }
 
+  // Next: Fifth Vowel お
   if (!known.has('お')) {
-    return {
-      id: 'mission-005-o',
-      type: 'kana',
-      titleBn: "পঞ্চম স্বরবর্ণ 'お' ও 'あお' (নীল) / 'おおい' (অনেক) আনলক",
-      subTitleBn: 'লুপ ও ফোঁটাযুক্ত বৃত্তাকার বর্ণ',
-      actionLabelBn: "'お' শেখা শুরু করি →",
-      whyItMattersBn: "৫টি স্বরবর্ণ পূর্ণ হবে এবং 'あお' (Ao - নীল) শব্দটি আয়ত্তে আসবে।",
-      japanConnectionBn: "টোকিওর আকাশ ও নীল সাইনবোর্ডে 'あお' সর্বত্র দৃশ্যমান।",
-      targetChar: 'お',
-      targetWord: 'あお',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 25
-    };
+    return CURRICULUM_GRAPH['kana-o'];
   }
 
   // 3. 5-Vowels mastered -> Check Milestone Quiz completion
-  const hasPassedVowelGate = state.masteredSkills.includes('5_vowels_gate') || 
+  const hasPassedVowelGate = state.masteredSkills.includes('vowels_5_mastered') ||
+    state.masteredSkills.includes('5_vowels_gate') ||
     (typeof window !== 'undefined' && localStorage.getItem('nihomi_foundation_completed') === 'true');
 
   if (!hasPassedVowelGate) {
-    return {
-      id: 'mission-006-vowel-gate',
-      type: 'milestone_quiz',
-      titleBn: '৫-স্বরবর্ণ মাস্টার রিভিউ কুইজ',
-      subTitleBn: 'あ, い, う, え, お এবং তাদের সমন্বয়ে গঠিত শব্দের চূড়ান্ত যাচাই',
-      actionLabelBn: 'রিভিউ কুইজ দিই →',
-      whyItMattersBn: 'মৌলিক স্বরবর্ণ মজবুত থাকলে পরবর্তী সব ব্যঞ্জনবর্ণ খুব দ্রুত মুখস্থ হয়ে যায়।',
-      japanConnectionBn: 'জাপানি উচ্চারণের শুদ্ধতা এই ৫টি স্বরবর্ণের ওপরই নির্ভরশীল।',
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l1' },
-      xpReward: 50
-    };
+    return CURRICULUM_GRAPH['vowel-mastery-gate'];
   }
 
   // 4. Tokyo Konbini Scenario & Real-Life Practice
   const hasDoneKonbini = state.masteredSkills.includes('konbini_mission_1');
   if (!hasDoneKonbini) {
-    return {
-      id: 'mission-007-konbini',
-      type: 'konbini_simulation',
-      titleBn: 'টোকিও সেভেন-ইলেভেন কনবিনি মিশন',
-      subTitleBn: 'ক্যাশিয়ার কেনজি-সান থেকে ওনিগিরি কেনার বাস্তব সংলাপ',
-      actionLabelBn: 'কনবিনি মিশনে প্রবেশ করি →',
-      whyItMattersBn: 'শেখা জাপানি শব্দ বাস্তবে কেনাকাটায় কাজে লাগিয়ে আত্মবিশ্বাস বাড়ানো।',
-      japanConnectionBn: 'টোকিওতে যেকোনো কনবিনিতে কেনাকাটার জীবন্ত পরিস্থিতি।',
-      viewRoute: 'journey',
-      xpReward: 60
-    };
+    return CURRICULUM_GRAPH['konbini-mission-01'];
   }
 
-  // 5. Next Kana Series: 'か' (Ka) Family
+  // 5. Phase 2: Hiragana Core Consonants (か〜ん)
   const kaFamily = ['か', 'き', 'く', 'け', 'こ'];
-  const nextKa = kaFamily.find(k => !known.has(k));
-  if (nextKa) {
+  const hasAllKa = kaFamily.every(k => known.has(k));
+  if (!hasAllKa) {
+    return CURRICULUM_GRAPH['kana-ka-family'];
+  }
+
+  const saFamily = ['さ', 'し', 'す', 'せ', 'そ'];
+  const hasAllSa = saFamily.every(s => known.has(s));
+  if (!hasAllSa) {
+    return CURRICULUM_GRAPH['kana-sa-family'];
+  }
+
+  const hasCoreComplete = state.masteredSkills.includes('hiragana_core_mastered');
+  if (!hasCoreComplete) {
+    return CURRICULUM_GRAPH['kana-core-complete'];
+  }
+
+  // 6. Phase 3 & 4: Mechanics and Reading Mastery
+  const hasMechanics = state.masteredSkills.includes('hiragana_mechanics_mastered');
+  if (!hasMechanics) {
+    return CURRICULUM_GRAPH['hiragana-mechanics'];
+  }
+
+  const hasReadingMastery = state.masteredSkills.includes('hiragana_reading_mastered');
+  if (!hasReadingMastery) {
+    return CURRICULUM_GRAPH['hiragana-reading-mastery'];
+  }
+
+  // 7. Phase 5 & 6: Katakana
+  const hasKatakanaFoundation = state.masteredSkills.includes('katakana_foundation_mastered');
+  if (!hasKatakanaFoundation) {
+    return CURRICULUM_GRAPH['katakana-foundation'];
+  }
+
+  const hasKatakanaMastery = state.masteredSkills.includes('katakana_mastered');
+  if (!hasKatakanaMastery) {
+    return CURRICULUM_GRAPH['katakana-mastery'];
+  }
+
+  // 8. Phase 7: Reading Foundation Verification
+  const hasReadingFoundationComplete = state.masteredSkills.includes('kana_dual_mastered') ||
+    state.masteredSkills.includes('reading_foundation_verified');
+  if (!hasReadingFoundationComplete) {
+    return CURRICULUM_GRAPH['reading-foundation-complete'];
+  }
+
+  // 9. Phase 10: Grammar ONLY after reading foundation is satisfied
+  const hasGrammarL1 = state.masteredSkills.includes('grammar_n5_l1_mastered');
+  if (!hasGrammarL1) {
+    return CURRICULUM_GRAPH['grammar-n5-lesson-01'];
+  }
+
+  return CURRICULUM_GRAPH['grammar-n5-lesson-02'];
+}
+
+/**
+ * Determines whether a requested lesson route or module is locked
+ * by prerequisite rules and provides the authoritative next action.
+ */
+export function getLessonGateStatus(lessonId: string, state: LearnerKnowledgeState): LessonGateStatus {
+  const normId = String(lessonId || '').toLowerCase().trim();
+  const nextMission = getNextBestMission(state);
+
+  // Lesson 1 is the Kana vowel foundation and is always open to start
+  if (normId === 'n5-l1' || normId === '1' || normId === 'lesson-1') {
     return {
-      id: `mission-ka-${nextKa}`,
-      type: 'kana',
-      titleBn: `'か' সিরিজ: নতুন বর্ণ '${nextKa}' আয়ত্ত করা`,
-      subTitleBn: 'ক-বর্গের প্রথম ব্যঞ্জনবর্ণের যাত্রা',
-      actionLabelBn: `'${nextKa}' শিখি →`,
-      whyItMattersBn: "'か' যোগ হলেই 'あかい' (লাল), 'かお' (মুখ) সহ ডজনখানেক নতুন শব্দ আনলক হবে!",
-      japanConnectionBn: "জাপানের সাইনবোর্ড ও ট্রেনের স্টেশনে সবচেয়ে বেশি ব্যবহৃত বর্ণমালা।",
-      targetChar: nextKa,
-      viewRoute: 'lesson',
-      viewParams: { lessonId: 'n5-l2' },
-      xpReward: 25
+      isLocked: false,
+      reasonBn: 'মৌলিক স্বরবর্ণ পাঠ উন্মুক্ত।',
+      requiredSkills: [],
+      nextBestMission: nextMission
     };
   }
 
-  // 6. Default to Lesson 2 Curriculum
+  // Any Grammar lessons (n5-l2 through n5-l25 or explicit grammar IDs)
+  const isGrammarLesson = /^n5-l([2-9]|1\d|2\d)/i.test(normId) || normId.includes('grammar');
+
+  if (isGrammarLesson) {
+    const grammarCheck = isGrammarEligible(state);
+    if (!grammarCheck.eligible) {
+      return {
+        isLocked: true,
+        gateType: 'grammar_prerequisite_unmet',
+        reasonBn: grammarCheck.unmetReasonBn,
+        requiredSkills: grammarCheck.missingPrerequisites,
+        nextBestMission: nextMission
+      };
+    }
+  }
+
   return {
-    id: 'mission-lesson-02',
-    type: 'lesson_module',
-    titleBn: 'লেসন ০২: প্রাথমিক কথোপকথন ও বস্তু পরিচিতি',
-    subTitleBn: 'Minna no Nihongo Lesson 2 (これ、それ、あれ)',
-    actionLabelBn: 'লেসন ০২ শুরু করি →',
-    whyItMattersBn: 'কোনো জিনিসের নাম জানতে জাপানিরা কীভাবে প্রশ্ন করে তা শিখবে।',
-    japanConnectionBn: 'টোকিওর দোকানে যেকোনো পণ্য নির্দেশ করতে এই প্যাটার্ন অপরিহার্য।',
-    targetLessonId: 'n5-l2',
-    viewRoute: 'lesson',
-    viewParams: { lessonId: 'n5-l2' },
-    xpReward: 80
+    isLocked: false,
+    reasonBn: 'পাঠটি আপনার জন্য উন্মুক্ত।',
+    requiredSkills: [],
+    nextBestMission: nextMission
   };
 }

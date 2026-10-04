@@ -14,6 +14,8 @@ interface Point {
 export interface InteractiveKanaTraceCanvasProps {
   char?: string;
   romaji?: string;
+  phoneticBn?: string;
+  mnemonicBn?: string;
   strokeCount?: number;
   strokeDirections?: string[];
   onComplete?: () => void;
@@ -25,6 +27,8 @@ export interface InteractiveKanaTraceCanvasProps {
 export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProps> = ({
   char = 'あ',
   romaji = 'a',
+  phoneticBn,
+  mnemonicBn,
   strokeCount = 3,
   strokeDirections,
   onComplete,
@@ -32,6 +36,14 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
   onStrokeDrawn,
   className = ''
 }) => {
+  const resolvedPhoneticBn = phoneticBn || (char === 'い' ? 'ই' : char === 'う' ? 'উ' : char === 'え' ? 'এ' : char === 'お' ? 'ও' : 'আ');
+  const resolvedMnemonicBn = mnemonicBn || (
+    char === 'い'
+      ? 'সহজ ছবি মনে রাখো: পাশাপাশি দুটি ইল মাছ = ই (i)'
+      : char === 'あ'
+      ? 'সহজ ছবি মনে রাখো: আপেলের গোল পেট আর ডাঁটা = আ (a)'
+      : `${char} এর সহজ মেমরি কিউ`
+  );
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -375,7 +387,7 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
                   <span>শুনুন (Listen)</span>
                 </button>
                 <span className="text-xs font-mono text-stone-300 font-bold ml-0.5">
-                  উচ্চারণ: <span className="text-amber-400 font-bold">{romaji}</span> (আ)
+                  উচ্চারণ: <span className="text-amber-400 font-bold">{romaji}</span> ({resolvedPhoneticBn})
                 </span>
               </div>
             </div>
@@ -396,7 +408,7 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
             </button>
           </div>
 
-          {/* Apple Memory Cue (Mandate v7.0 3D Shaded Vector & Clean Copy) */}
+          {/* Memory Cue (Mandate v7.0 3D Shaded Vector & Clean Copy) */}
           <div className="flex items-start gap-3 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-[#17142b] to-[#120f24] border border-red-500/25 shadow-md">
             {char === 'あ' ? (
               <div className="w-9 h-9 rounded-2xl bg-red-600/20 border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm">
@@ -410,12 +422,8 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
 
             <div>
               <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
-                <IconApple3D className="w-4 h-4 shrink-0" />
-                <span>
-                  {char === 'あ'
-                    ? 'সহজ ছবি মনে রাখো: আপেলের গোল পেট আর ডাঁটা = আ (a)'
-                    : `${char} এর সহজ মেমরি কিউ`}
-                </span>
+                {char === 'あ' ? <IconApple3D className="w-4 h-4 shrink-0" /> : <IconLightbulb3D className="w-4 h-4 shrink-0 text-amber-400" />}
+                <span>{resolvedMnemonicBn}</span>
               </div>
               <p className="text-[11px] text-stone-300 mt-0.5 leading-relaxed">
                 ভয় পাওয়ার কিচ্ছু নেই, চলো ডান পাশের ক্যানভাসে হাত ঘুরিয়ে লিখি!
@@ -563,11 +571,12 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
               <div className="p-3 rounded-2xl bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 font-bold text-xs flex items-center justify-center gap-2 shadow-lg">
                 <Sparkles className="w-4 h-4 text-amber-300 shrink-0 animate-bounce" />
-                <span>সাবাশ! তুমি প্রথম জাপানি বর্ণ লিখে ফেলেছ!</span>
+                <span>সাবাশ! তুমি জাপানি বর্ণ '{char}' সুন্দর করে লিখে ফেলেছ!</span>
               </div>
 
               {onAdvanceToNext && (
                 <button
+                  id="btn-kana-advance-next"
                   type="button"
                   onClick={onAdvanceToNext}
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm shadow-xl shadow-red-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
@@ -576,6 +585,19 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               )}
+            </div>
+          )}
+
+          {!hasCelebrated && onAdvanceToNext && (
+            <div className="pt-1">
+              <button
+                id="btn-kana-skip-to-next"
+                type="button"
+                onClick={onAdvanceToNext}
+                className="w-full py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-stone-400 hover:text-stone-200 font-bold text-xs border border-white/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span>পরের ধাপে যান (অক্ষর চেনা হয়ে গেলে) →</span>
+              </button>
             </div>
           )}
         </div>

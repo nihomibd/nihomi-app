@@ -25,6 +25,13 @@ import { trackNihomiEvent } from '../../utils/analytics';
 import { ContextualSenseiCompanion } from '../ai/ContextualSenseiCompanion';
 import { InteractiveKanaTraceCanvas } from './InteractiveKanaTraceCanvas';
 import {
+  loadLearnerKnowledgeState,
+  saveLearnerKnowledgeState,
+  addLearnedKana,
+  addLearnedVocabulary
+} from '../../core/curriculum/learnerKnowledgeState';
+import { getNextBestMission } from '../../core/curriculum/journeyEngine';
+import {
   IconSprout3D,
   IconBrush3D,
   IconSun3D,
@@ -45,14 +52,15 @@ export interface LearnerJourneyEngineProps {
   isModal?: boolean;
 }
 
-// 5 Canonical Stages of Mandate v6.0 Blueprint
-// Flow: START -> 'あ' KANA ENGINE -> FIRST WORD ('あい') -> TOKYO KONBINI -> MISSION COMPLETE & WHATSAPP ACCOUNT
+// 6 Canonical Stages of Strict Cumulative Lattice:
+// Flow: START -> 'あ' KANA -> 'い' KANA -> FIRST WORD ('あい') -> TOKYO KONBINI -> MISSION COMPLETE & ACCOUNT
 type GoldenJourneyStage =
   | 'start'             // 1. START (Welcome to Tokyo, Mt. Fuji Sunset Panorama)
-  | 'kana_engine'       // 2. 'あ' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)
-  | 'word_ai'           // 3. FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, NO consonants!)
-  | 'konbini'           // 4. TOKYO KONBINI SCENARIO (Zero Cut-Off, Widescreen 7-Eleven)
-  | 'mission_complete'; // 5. MISSION 01 COMPLETE & WHATSAPP INSTANT ACCOUNT
+  | 'kana_a'            // 2. 'あ' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)
+  | 'kana_i'            // 3. 'い' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)
+  | 'word_ai'           // 4. FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, ONLY after あ and い are learned!)
+  | 'konbini'           // 5. TOKYO KONBINI SCENARIO (Zero Cut-Off, Widescreen 7-Eleven)
+  | 'mission_complete'; // 6. MISSION 01 COMPLETE & WHATSAPP INSTANT ACCOUNT
 
 interface StageMeta {
   id: GoldenJourneyStage;
@@ -62,7 +70,8 @@ interface StageMeta {
 
 const GOLDEN_STAGES: StageMeta[] = [
   { id: 'start', label: 'শুরু', Icon: IconSprout3D },
-  { id: 'kana_engine', label: "'あ' লেখা", Icon: IconBrush3D },
+  { id: 'kana_a', label: "'あ' লেখা", Icon: IconBrush3D },
+  { id: 'kana_i', label: "'い' লেখা", Icon: IconBrush3D },
   { id: 'word_ai', label: 'প্রথম শব্দ', Icon: IconSun3D },
   { id: 'konbini', label: 'কনবিনি', Icon: IconKonbini3D },
   { id: 'mission_complete', label: 'সম্পন্ন', Icon: IconTrophy3D }
@@ -414,12 +423,24 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
     }
   };
 
-  // Direct Route to Mission 02 (Tokyo Dialogue & Lesson 02)
-  const handleStartMission02 = () => {
+  // Authoritative Next Best Mission Router
+  const handleStartNextMission = () => {
     soundEffects.playButtonTap();
     syncProgressToStorage();
+    const kState = loadLearnerKnowledgeState();
+    if (!kState.masteredSkills.includes('konbini_mission_1')) {
+      kState.masteredSkills.push('konbini_mission_1');
+      saveLearnerKnowledgeState(kState);
+    }
+    const nextMission = getNextBestMission(kState);
     if (onNavigate) {
-      onNavigate('lesson', { lessonId: 'n5-l2' });
+      if (nextMission.viewRoute === 'lesson') {
+        onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l1' });
+      } else if (nextMission.viewRoute === 'journey') {
+        onNavigate('journey', nextMission.viewParams);
+      } else {
+        onNavigate(nextMission.viewRoute, nextMission.viewParams);
+      }
     }
     onClose?.();
   };
@@ -529,7 +550,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <IconComp className="w-3.5 h-3.5 shrink-0" />
                     <span className={isCurrent ? 'text-amber-300 font-black' : isPast ? 'text-emerald-400' : 'text-stone-500 hidden sm:inline'}>
-                      {s.label}
+                      {isCurrent || isPast ? s.label : `ধাপ ০${idx + 1}`}
                     </span>
                   </div>
                 </div>
@@ -573,9 +594,9 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  trackNihomiEvent('journey_start_clicked', { stage: 'kana_engine' });
+                  trackNihomiEvent('journey_start_clicked', { stage: 'kana_a' });
                   soundEffects.playButtonTap();
-                  setCurrentStage('kana_engine');
+                  setCurrentStage('kana_a');
                 }}
                 className="w-full sm:w-auto px-8 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
               >
@@ -589,11 +610,12 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
         {/* ----------------------------------------------------------------------- */}
         {/* STAGE 2: 'あ' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)        */}
         {/* ----------------------------------------------------------------------- */}
-        {currentStage === 'kana_engine' && (
+        {currentStage === 'kana_a' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             <InteractiveKanaTraceCanvas
               char="あ"
               romaji="a"
+              phoneticBn="আ"
               strokeCount={3}
               strokeDirections={[
                 '১. বাম থেকে ডানে হালকা দাগ',
@@ -602,7 +624,9 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
               ]}
               onAdvanceToNext={() => {
                 soundEffects.playButtonTap();
-                setCurrentStage('word_ai');
+                const kState = loadLearnerKnowledgeState();
+                addLearnedKana(kState, 'あ');
+                setCurrentStage('kana_i');
               }}
             />
 
@@ -622,7 +646,44 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
         )}
 
         {/* ----------------------------------------------------------------------- */}
-        {/* STAGE 3: FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, NO consonants!) */}
+        {/* STAGE 3: 'い' KANA ENGINE (Touch, Hear, Trace on Hosho Paper Canvas)        */}
+        {/* ----------------------------------------------------------------------- */}
+        {currentStage === 'kana_i' && (
+          <div className="space-y-4 animate-in fade-in duration-200">
+            <InteractiveKanaTraceCanvas
+              char="い"
+              romaji="i"
+              phoneticBn="ই"
+              strokeCount={2}
+              strokeDirections={[
+                '১. বামের দীর্ঘ বাঁকা দাগ ও হুক',
+                '২. ডানের ছোট সমান্তরাল দাগ'
+              ]}
+              onAdvanceToNext={() => {
+                soundEffects.playButtonTap();
+                const kState = loadLearnerKnowledgeState();
+                addLearnedKana(kState, 'い');
+                setCurrentStage('word_ai');
+              }}
+            />
+
+            {/* Collapsible Sensei Companion Pill */}
+            <div className="pt-1">
+              <ContextualSenseiCompanion
+                currentConcept={{
+                  symbol: 'い',
+                  reading: 'i',
+                  meaningBn: 'ই',
+                  japanContext: 'জাপানি ভাষার দ্বিতীয় মৌলিক স্বরবর্ণ: い (i)। এটি পূর্বের あ এর সাথে যুক্ত হয়ে তৈরি করবে তোমার প্রথম আসল জাপানি শব্দ!',
+                  type: 'kana'
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* ----------------------------------------------------------------------- */}
+        {/* STAGE 4: FIRST REAL WORD ('あい' - Ai • Pure Hiragana Vowels, NO consonants!) */}
         {/* ----------------------------------------------------------------------- */}
         {currentStage === 'word_ai' && (
           <div className="space-y-3 sm:space-y-4 max-w-lg mx-auto text-center animate-in zoom-in-95 duration-200 my-auto">
@@ -644,7 +705,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                 </button>
               </div>
 
-              {/* Pure Hiragana Word Display (Strictly NO Kanji 朝) */}
+              {/* Pure Hiragana Word Display (Strictly NO unlearned letters) */}
               <div className="flex items-center gap-4 py-1">
                 <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-lg p-2">
                   <IconSun3D className="w-10 h-10" size={40} />
@@ -660,28 +721,49 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     <span className="text-emerald-400 font-black text-base sm:text-lg">ভালোবাসা (Love)</span>
                   </div>
                   <p className="text-xs text-stone-300 mt-0.5 leading-relaxed">
-                    আগের ধাপে শেখা <span className="text-amber-300 font-bold">'あ'</span> (আ) এবং নতুন স্বরবর্ণ <span className="text-amber-300 font-bold">'い'</span> (ই) যুক্ত হয়ে তৈরি হয়েছে <span className="font-japanese font-bold text-white">あい</span> (ভালোবাসা)। কোনো অপ্রয়োজনীয় ব্যঞ্জনবর্ণ ছাড়াই খাঁটি স্বরবর্ণের শব্দ!
+                    আগের দুটি ধাপে শেখা <span className="text-amber-300 font-bold">'あ'</span> (আ) এবং <span className="text-amber-300 font-bold">'い'</span> (ই) যুক্ত হয়ে তৈরি হয়েছে তোমার জীবনের প্রথম আসল জাপানি শব্দ: <span className="font-japanese font-bold text-white">あい</span> (ভালোবাসা)। কোনো অপরিচিত ব্যঞ্জনবর্ণ ছাড়াই খাঁটি স্বরবর্ণের শব্দ!
                   </p>
                 </div>
               </div>
 
-              {/* Emotional Outcome Banner (Mandate v6.0 Blueprint copy) */}
+              {/* Emotional Outcome Banner */}
               <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 text-xs text-stone-200 flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>আমি শুধু একটা অক্ষর না — একটা আসল জাপানি শব্দ বুঝতে শুরু করেছি!</span>
+                <span>আমি শুধু অক্ষর নয় — দুটো পরিচিত অক্ষর দিয়ে একটা আসল জাপানি শব্দ বুঝতে শুরু করেছি!</span>
               </div>
 
-              <div className="pt-1">
+              <div className="pt-1 space-y-2">
                 <button
                   type="button"
+                  id="btn-journey-use-in-tokyo"
                   onClick={() => {
                     soundEffects.playButtonTap();
+                    const kState = loadLearnerKnowledgeState();
+                    addLearnedVocabulary(kState, 'あい');
                     setCurrentStage('konbini');
                   }}
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-red-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
                 >
                   <span>টোকিও কনবিনিতে ব্যবহার করি (Use in Tokyo)</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  type="button"
+                  id="btn-journey-next-kana-u"
+                  onClick={() => {
+                    soundEffects.playButtonTap();
+                    const kState = loadLearnerKnowledgeState();
+                    addLearnedVocabulary(kState, 'あい');
+                    const next = getNextBestMission(kState);
+                    if (onNavigate) {
+                      onNavigate(next.viewRoute, next.viewParams);
+                    }
+                    onClose?.();
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-stone-300 hover:text-white font-bold text-xs border border-white/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>পরের স্বরবর্ণ 'う' শিখি (Reading Power বাড়াই) →</span>
                 </button>
               </div>
             </div>
@@ -845,7 +927,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                 <span>তোমার আজকের শেখাটা সেভ হয়েছে</span>
               </div>
               <p className="text-[11px] text-stone-300">
-                লোকাল ডিভাইসে সংরক্ষিত: বর্ণ 'あ', শব্দ 'あさ', মিশন ০১।
+                লোকাল ডিভাইসে সংরক্ষিত: বর্ণ 'あ', 'い', শব্দ 'あい', মিশন ০১।
               </p>
             </div>
 
@@ -934,46 +1016,53 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
               )}
             </div>
 
-            {/* Mission 02 Direct Journey CTA: Tokyo Dialogue & Lesson 02 */}
-            <div className="space-y-3 animate-in fade-in">
-              <div className="p-4 rounded-3xl bg-gradient-to-br from-[#181432] to-[#0d0b1a] border border-amber-500/40 text-left space-y-2 shadow-2xl">
-                <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-amber-300">
-                  <span className="flex items-center gap-1.5">
-                    <IconTokyoMap3D className="w-4 h-4" />
-                    <span>পরের মিশন: টোকিও ডায়ালগ ও লেসন ০২</span>
-                  </span>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300">
-                    Mission 02
-                  </span>
-                </div>
-                <p className="text-xs text-stone-300 leading-relaxed">
-                  টোকিও কনবিনিতে 'い' (i) দিয়ে সম্ভাষণ ও বাস্তব কথোপকথন শুরু করো। কোন বিরতি ছাড়াই সরাসরি লেসন ০২-এ প্রবেশ করো!
-                </p>
-              </div>
+            {/* Authoritative Next Best Mission Card */}
+            {(() => {
+              const kState = loadLearnerKnowledgeState();
+              const nextM = getNextBestMission(kState);
+              return (
+                <div className="space-y-3 animate-in fade-in">
+                  <div className="p-4 rounded-3xl bg-gradient-to-br from-[#181432] to-[#0d0b1a] border border-amber-500/40 text-left space-y-2 shadow-2xl">
+                    <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-amber-300">
+                      <span className="flex items-center gap-1.5">
+                        <IconTokyoMap3D className="w-4 h-4" />
+                        <span>পরের মিশন: {nextM.titleBn}</span>
+                      </span>
+                      <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono">
+                        Next Mission
+                      </span>
+                    </div>
+                    <p className="text-xs text-stone-300 leading-relaxed">
+                      {nextM.whyItMattersBn}
+                    </p>
+                  </div>
 
-              <div className="flex flex-col sm:flex-row gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={handleStartMission02}
-                  className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer transition transform active:scale-98"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  <span>মিশন ০২ শুরু করুন (টোকিও ডায়ালগ ও লেসন ০২)</span>
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onNavigate) onNavigate('baito');
-                    onClose?.();
-                  }}
-                  className="px-4 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] text-stone-200 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer transition"
-                >
-                  <Store className="w-4 h-4 text-amber-400" />
-                  <span>কনবিনি সিমুলেটর</span>
-                </button>
-              </div>
-            </div>
+                  <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                    <button
+                      type="button"
+                      id="btn-journey-start-next-mission"
+                      onClick={handleStartNextMission}
+                      className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer transition transform active:scale-98"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      <span>{nextM.actionLabelBn || 'পরের মিশন শুরু করুন →'}</span>
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onNavigate) onNavigate('baito');
+                        onClose?.();
+                      }}
+                      className="px-4 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] text-stone-200 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer transition"
+                    >
+                      <Store className="w-4 h-4 text-amber-400" />
+                      <span>কনবিনি সিমুলেটর</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 
