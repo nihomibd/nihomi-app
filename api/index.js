@@ -61184,6 +61184,14 @@ CORE TEACHING PERSONA:
 2. No Unsolicited Grammar Dumps: NEVER dump rigid grammar tables, particle lists, or textbook rules unless the student specifically asks for grammar explanations!
 3. Bilingual Mentor: Provide natural Japanese (with furigana/romaji where helpful) followed by clear, friendly Bengali (\u09AC\u09BE\u0982\u09B2\u09BE) guidance.
 4. Keep Conversation Flowing: Keep responses concise, warm, and ask an engaging question in Japanese to encourage the student to practice.`;
+  if (req.knownHiragana && req.knownHiragana.length > 0) {
+    systemInstruction += `
+
+STRICT CUMULATIVE PEDAGOGICAL LATTICE:
+The student currently only knows these Hiragana: [${req.knownHiragana.join(", ")}].
+Unlocked words: [${(req.knownVocabulary || []).join(", ")}].
+When presenting Japanese words or practice targets to this learner, do NOT introduce untaught characters without immediately accompanying them with furigana, romaji, and friendly Bengali guidance. Reinforce their unlocked vocabulary.`;
+  }
   if (req.mode === "conversation") {
     systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || "General daily conversation"}". Respond naturally in Japanese appropriate for JLPT ${level}, followed by a polite English and Bengali translation below. Ask an engaging follow-up question to keep the chat lively.`;
   } else if (req.mode === "correction") {
@@ -61987,7 +61995,7 @@ aiRouter.post(
   aiCostGuard({ operationType: "coach", estimatedTokens: 1e3, allowGuest: true }),
   async (req, res) => {
     try {
-      const { message, mode, scenario, sessionId, history, audioBase64, audioMimeType } = req.body;
+      const { message, mode, scenario, sessionId, history, audioBase64, audioMimeType, knownHiragana, knownVocabulary, currentMissionId } = req.body;
       const isGuest = !req.user || !req.user.id;
       const guestId = req.headers["x-guest-session-id"] || (req.ip ? `ip_${req.ip}` : "guest_anon");
       const userId = !isGuest ? req.user.id : guestId;
@@ -62039,7 +62047,10 @@ aiRouter.post(
           scenario,
           history,
           audioBase64,
-          audioMimeType
+          audioMimeType,
+          knownHiragana: Array.isArray(knownHiragana) ? knownHiragana : void 0,
+          knownVocabulary: Array.isArray(knownVocabulary) ? knownVocabulary : void 0,
+          currentMissionId: typeof currentMissionId === "string" ? currentMissionId : void 0
         });
       } catch (err) {
         console.warn("[AICoach] Gemini fallback:", err?.message);

@@ -10,7 +10,8 @@
     "smoke-test": "tsx server/scripts/productionSmokeTest.ts",
     "verify-rc": "tsx scripts/verify-release-candidate.ts",
     "clean": "node -e \"try { fs.rmSync('dist', { recursive: true, force: true }); } catch (e) {}\"",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "validate:curriculum": "tsx scripts/validate-curriculum.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

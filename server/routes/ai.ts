@@ -42,7 +42,7 @@ aiRouter.post(
   aiCostGuard({ operationType: 'coach', estimatedTokens: 1000, allowGuest: true }),
   async (req: AuthenticatedRequest, res) => {
     try {
-      const { message, mode, scenario, sessionId, history, audioBase64, audioMimeType } = req.body;
+      const { message, mode, scenario, sessionId, history, audioBase64, audioMimeType, knownHiragana, knownVocabulary, currentMissionId } = req.body;
       const isGuest = !req.user || !req.user.id;
       const guestId = (req.headers['x-guest-session-id'] as string) || (req.ip ? `ip_${req.ip}` : 'guest_anon');
       const userId = !isGuest ? req.user!.id : guestId;
@@ -100,7 +100,10 @@ aiRouter.post(
           scenario,
           history,
           audioBase64,
-          audioMimeType
+          audioMimeType,
+          knownHiragana: Array.isArray(knownHiragana) ? knownHiragana : undefined,
+          knownVocabulary: Array.isArray(knownVocabulary) ? knownVocabulary : undefined,
+          currentMissionId: typeof currentMissionId === 'string' ? currentMissionId : undefined
         });
       } catch (err: any) {
         console.warn('[AICoach] Gemini fallback:', err?.message);

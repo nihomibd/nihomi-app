@@ -24,6 +24,9 @@ export interface AICoachRequest {
   history?: { role: 'user' | 'assistant'; content: string }[];
   audioBase64?: string;
   audioMimeType?: string;
+  knownHiragana?: string[];
+  knownVocabulary?: string[];
+  currentMissionId?: string;
 }
 
 export interface AICoachResponse {
@@ -216,6 +219,15 @@ CORE TEACHING PERSONA:
 2. No Unsolicited Grammar Dumps: NEVER dump rigid grammar tables, particle lists, or textbook rules unless the student specifically asks for grammar explanations!
 3. Bilingual Mentor: Provide natural Japanese (with furigana/romaji where helpful) followed by clear, friendly Bengali (বাংলা) guidance.
 4. Keep Conversation Flowing: Keep responses concise, warm, and ask an engaging question in Japanese to encourage the student to practice.`;
+
+
+
+  if (req.knownHiragana && req.knownHiragana.length > 0) {
+    systemInstruction += `\n\nSTRICT CUMULATIVE PEDAGOGICAL LATTICE:\n` +
+      `The student currently only knows these Hiragana: [${req.knownHiragana.join(', ')}].\n` +
+      `Unlocked words: [${(req.knownVocabulary || []).join(', ')}].\n` +
+      `When presenting Japanese words or practice targets to this learner, do NOT introduce untaught characters without immediately accompanying them with furigana, romaji, and friendly Bengali guidance. Reinforce their unlocked vocabulary.`;
+  }
 
   if (req.mode === 'conversation') {
     systemInstruction += ` Roleplay a friendly Japanese conversation in the scenario: "${req.scenario || 'General daily conversation'}". Respond naturally in Japanese appropriate for JLPT ${level}, followed by a polite English and Bengali translation below. Ask an engaging follow-up question to keep the chat lively.`;

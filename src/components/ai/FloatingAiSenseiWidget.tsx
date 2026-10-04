@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { speakJapanese } from '../../lib/tts';
 import { getStoredToken, getOrGenerateGuestToken } from '../../lib/api';
+import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 export type LearningContextMode =
   | 'jlpt_n5'
@@ -305,6 +306,9 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             tone: activeContextConfig.tone,
             curriculumFocus: activeContextConfig.curriculumFocus
           },
+          knownHiragana: typeof window !== 'undefined' ? loadLearnerKnowledgeState().knownHiragana : [],
+          knownVocabulary: typeof window !== 'undefined' ? loadLearnerKnowledgeState().knownVocabulary : [],
+          currentMissionId: typeof window !== 'undefined' ? loadLearnerKnowledgeState().currentMissionId : 'mission-001-vowels',
           history: messages.slice(-4).map((m) => ({
             role: m.sender === 'user' ? 'user' : 'assistant',
             content: m.text
@@ -407,6 +411,9 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             tone: activeContextConfig.tone,
             curriculumFocus: activeContextConfig.curriculumFocus
           },
+          knownHiragana: typeof window !== 'undefined' ? loadLearnerKnowledgeState().knownHiragana : [],
+          knownVocabulary: typeof window !== 'undefined' ? loadLearnerKnowledgeState().knownVocabulary : [],
+          currentMissionId: typeof window !== 'undefined' ? loadLearnerKnowledgeState().currentMissionId : 'mission-001-vowels',
           history: messages.slice(-4).map((m) => ({
             role: m.sender === 'user' ? 'user' : 'assistant',
             content: m.text

@@ -19,6 +19,8 @@ import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { getKanaStrokeSequence, KanaVectorStroke } from '../../data/kanaStrokePaths';
 import { useAuth } from '../../context/AuthContext';
 import { apiRequest } from '../../lib/api';
+import { diagnoseMistake, MistakeDiagnostic } from '../../core/curriculum/mistakeRecoveryEngine';
+import { loadLearnerKnowledgeState, saveLearnerKnowledgeState, addLearnedKana, addLearnedVocabulary, recordLearnerMistake, resolveLearnerMistake } from '../../core/curriculum/learnerKnowledgeState';
 
 export type MicroStep = 'listen' | 'watch' | 'practice' | 'use';
 
@@ -248,6 +250,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
   const [quizSelectedOption, setQuizSelectedOption] = useState<number | null>(null);
   const [quizIsAnswerSubmitted, setQuizIsAnswerSubmitted] = useState<boolean>(false);
   const [quizScore, setQuizScore] = useState<number>(0);
+  const [quizDiagnostic, setQuizDiagnostic] = useState<MistakeDiagnostic | null>(null);
 
   // Canvas drawing state
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -657,12 +660,28 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       setQuizSelectedOption(optIdx);
       setQuizIsAnswerSubmitted(true);
 
-      const isCorrect = currentQ.options[optIdx].isCorrect;
+      const selected = currentQ.options[optIdx];
+      const isCorrect = selected.isCorrect;
+      const correctOpt = currentQ.options.find(o => o.isCorrect);
+      const targetText = correctOpt ? correctOpt.textJa : currentQ.audioPromptJa || '';
+      const chosenText = selected.textJa;
+
       if (isCorrect) {
         setQuizScore((prev) => prev + 1);
+        setQuizDiagnostic(null);
         soundEffects.playCorrectPing();
+        try {
+          const kState = loadLearnerKnowledgeState();
+          resolveLearnerMistake(kState, targetText);
+        } catch {}
       } else {
         soundEffects.playButtonTap();
+        const diag = diagnoseMistake(targetText, chosenText, 'quiz');
+        setQuizDiagnostic(diag);
+        try {
+          const kState = loadLearnerKnowledgeState();
+          recordLearnerMistake(kState, targetText, diag.category, diag.diagnosisBn);
+        } catch {}
       }
     };
 
@@ -678,6 +697,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
         setQuizQuestionIndex((prev) => prev + 1);
         setQuizSelectedOption(null);
         setQuizIsAnswerSubmitted(false);
+        setQuizDiagnostic(null);
       }
     };
 
@@ -765,12 +785,44 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
           })}
         </div>
 
-        {/* Feedback explanation box after submission */}
-        {quizIsAnswerSubmitted && (
+        {/* Diagnostic Recovery Coaching Box if mistake was made */}
+        {quizIsAnswerSubmitted && quizDiagnostic && (
+          <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/40 text-left text-xs leading-relaxed text-slate-200 space-y-2.5 animate-in fade-in duration-200 shadow-lg shadow-amber-500/5">
+            <div className="flex items-center justify-between gap-2 border-b border-amber-500/20 pb-2">
+              <div className="flex items-center gap-2 font-black text-amber-300">
+                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>নিহোমি সেনসেই AI • ডায়াগনস্টিক কোচিং</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold text-amber-300">
+                {quizDiagnostic.category === 'visual_confusion' ? 'আকৃতিগত পার্থক্য' : 'অর্থ ও ধ্বনি সংযোগ'}
+              </span>
+            </div>
+            
+            <p className="text-slate-100 font-medium">{quizDiagnostic.diagnosisBn}</p>
+            <p className="text-amber-200/90 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">{quizDiagnostic.recoveryPromptBn}</p>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <span className="text-slate-400 text-[11px]">{quizDiagnostic.recommendedNextStep}</span>
+              {quizDiagnostic.audioReplayChar && (
+                <button
+                  type="button"
+                  onClick={() => speakJapanese(quizDiagnostic.audioReplayChar!)}
+                  className="px-3 py-1 rounded-full bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition active:scale-95"
+                >
+                  <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                  <span>সঠিক উচ্চারণ শুনুন ({quizDiagnostic.audioReplayChar})</span>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Feedback explanation box after submission if correct */}
+        {quizIsAnswerSubmitted && !quizDiagnostic && (
           <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-left text-xs leading-relaxed text-slate-200 space-y-1 animate-in fade-in duration-200">
-            <div className="flex items-center gap-1.5 font-bold text-amber-400">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>ব্যাখ্যা:</span>
+            <div className="flex items-center gap-1.5 font-bold text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>চমৎকার! সঠিক ব্যাখ্যা:</span>
             </div>
             <p>{currentQ.explanationBn}</p>
           </div>
