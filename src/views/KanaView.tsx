@@ -41,6 +41,7 @@ import {
   toggleMasteredKana
 } from '../data/kanaData';
 import { KanaDrawingCanvas } from '../components/kana/KanaDrawingCanvas';
+import { ConstitutionalKanaLabModal } from '../components/kana/ConstitutionalKanaLabModal';
 import { speakJapanese } from '../lib/tts';
 import { getKanaMistakes, KanaMistakeRecord } from '../lib/kanaMemorySync';
 
@@ -56,6 +57,7 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
   const [viewLayout, setViewLayout] = useState<'studio' | 'grid'>('studio');
   const [masteredList, setMasteredList] = useState<string[]>([]);
   const [recentMistakes, setRecentMistakes] = useState<KanaMistakeRecord[]>([]);
+  const [isKanaLabOpen, setIsKanaLabOpen] = useState<boolean>(false);
 
   // Refresh mastery and memory-os logs
   const refreshMasteryAndLogs = () => {
@@ -515,6 +517,16 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
                 className="w-full max-w-md mx-auto"
                 autoAdvance={true}
               />
+
+              {/* Constitutional 8-Stage Lab Trigger */}
+              <button
+                type="button"
+                onClick={() => setIsKanaLabOpen(true)}
+                className="btn-haptic mt-3 w-full max-w-md py-3 px-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-500 hover:from-red-500 hover:to-rose-500 text-white font-black text-xs shadow-lg shadow-red-600/25 flex items-center justify-center gap-2 cursor-pointer transition active:scale-95"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>সম্পূর্ণ ৮-ধাপ কন্সটিটিউশনাল ল্যাবে শিখি (8-Stage Lab) →</span>
+              </button>
             </div>
 
             {/* Right Information & Guide Panel (5 columns) */}
@@ -640,6 +652,14 @@ export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
         )}
 
       </div>
+
+      <ConstitutionalKanaLabModal
+        isOpen={isKanaLabOpen}
+        kana={selectedKana}
+        onClose={() => setIsKanaLabOpen(false)}
+        onComplete={() => refreshMasteryAndLogs()}
+        onNextKana={handleNextInSequence}
+      />
     </div>
   );
 };

@@ -19,6 +19,7 @@ import {
   Clock
 } from 'lucide-react';
 import { Plan, BillingInterval, PlanId } from '../types';
+import { calculateDailyCost, getPlanPriceForInterval, JourneyInterval } from '../core/billing/priceCalculator';
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { CheckoutModal } from '../components/CheckoutModal';
@@ -62,7 +63,7 @@ const N5_LIFETIME_PLAN: Plan = {
 export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNavigate }) => {
   const { user, activePlanId, refreshSubscription } = useAuth();
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [interval, setInterval] = useState<BillingInterval>('yearly');
+  const [interval, setInterval] = useState<JourneyInterval>('quarterly');
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<Plan | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isBkashProModalOpen, setIsBkashProModalOpen] = useState(false);
@@ -149,7 +150,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
           selectedPlan={selectedPlanForCheckout}
-          initialInterval={interval}
+          initialInterval={interval === 'yearly' ? 'yearly' : 'monthly'}
           onSuccess={() => {
             setIsCheckoutOpen(false);
             if (onNavigate) onNavigate('dashboard');
@@ -161,7 +162,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
       <ProUpgradeModal
         isOpen={isBkashProModalOpen}
         onClose={() => setIsBkashProModalOpen(false)}
-        defaultPlanInterval={interval}
+        defaultPlanInterval={interval === 'yearly' ? 'yearly' : 'monthly'}
         onSuccess={() => {
           setIsBkashProModalOpen(false);
           if (onNavigate) onNavigate('dashboard');
@@ -305,34 +306,49 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             </p>
           </div>
 
-          {/* Monthly / Annual Toggle */}
+          {/* Monthly / 3-Month / Annual Toggle */}
           <div className="pt-4 flex items-center justify-center">
-            <div className="bg-zinc-200 dark:bg-zinc-800 p-1.5 rounded-2xl flex items-center shadow-inner">
+            <div className="bg-zinc-200 dark:bg-zinc-800 p-1.5 rounded-2xl flex flex-wrap items-center justify-center gap-1 shadow-inner">
               <button
                 type="button"
                 onClick={() => setInterval('monthly')}
-                className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${
+                className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
                   interval === 'monthly'
                     ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-md'
                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
                 }`}
                 id="pricing-toggle-monthly"
               >
-                Monthly Billing
+                ১ মাস (Monthly)
+              </button>
+              <button
+                type="button"
+                onClick={() => setInterval('quarterly')}
+                className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
+                  interval === 'quarterly'
+                    ? 'bg-amber-600 text-white shadow-md'
+                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+                }`}
+                id="pricing-toggle-quarterly"
+              >
+                <span>৩ মাস (12-Week N5 Pass)</span>
+                <span className="text-[10px] bg-amber-700 text-white px-2 py-0.5 rounded-full font-extrabold">
+                  জনপ্রিয়
+                </span>
               </button>
               <button
                 type="button"
                 onClick={() => setInterval('yearly')}
-                className={`px-5 py-2 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
+                className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
                   interval === 'yearly'
                     ? 'bg-red-600 text-white shadow-md'
                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
                 }`}
                 id="pricing-toggle-yearly"
               >
-                <span>Annual Billing</span>
-                <span className="text-[11px] bg-red-700 text-white px-2 py-0.5 rounded-full font-extrabold">
-                  Save up to 30%
+                <span>১২ মাস (Full Japan Ready 🇯🇵)</span>
+                <span className="text-[10px] bg-red-700 text-white px-2 py-0.5 rounded-full font-extrabold">
+                  Save 30%
                 </span>
               </button>
             </div>
@@ -360,8 +376,8 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           {plans.map((plan) => {
             const isPopular = plan.isPopular;
             const isCurrent = activePlanId === plan.id;
-            const price = interval === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
-            const monthlyEquivalent = interval === 'yearly' ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice;
+            const price = getPlanPriceForInterval(plan.monthlyPrice, plan.yearlyPrice, interval);
+            const dailyReport = calculateDailyCost(price, interval);
 
             return (
               <motion.div
@@ -402,20 +418,33 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 min-h-[36px]">{plan.tagline}</p>
 
                   {/* Price */}
-                  <div className="mt-6 mb-6">
+                  <div className="mt-5 mb-5 space-y-2">
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-zinc-100">
                         {plan.id === 'free' ? '৳0' : `৳${price.toLocaleString()}`}
                       </span>
-                      <span className="text-xs text-zinc-500">
-                        {plan.id === 'free' ? '/forever' : interval === 'yearly' ? '/year' : '/month'}
+                      <span className="text-xs text-zinc-500 font-medium">
+                        {plan.id === 'free'
+                          ? '/আজীবন ফ্রি'
+                          : interval === 'yearly'
+                          ? '/১২ মাস'
+                          : interval === 'quarterly'
+                          ? '/৩ মাস'
+                          : '/মাস'}
                       </span>
                     </div>
 
-                    {plan.id !== 'free' && interval === 'yearly' && (
-                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
-                        Equivalent to only ৳{monthlyEquivalent}/month
-                      </p>
+                    {plan.id !== 'free' && (
+                      <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-left space-y-0.5">
+                        <div className="text-xs font-black text-amber-500 dark:text-amber-400">
+                          {dailyReport.dailyLabelBn}
+                        </div>
+                        {dailyReport.comparisonBadgeBn && (
+                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                            ☕ {dailyReport.comparisonBadgeBn}
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
 
@@ -495,6 +524,76 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
               </motion.div>
             );
           })}
+        </div>
+
+        {/* ========================================================================= */}
+        {/* CONSTITUTIONAL JOURNEY ROADMAP: 12-WEEK N5 PASS VS 12-MONTH JAPAN READY   */}
+        {/* ========================================================================= */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#111022] border border-zinc-200 dark:border-white/10 shadow-xl space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>বাস্তব কারিকুলাম ও মাইলস্টোন অঙ্গীকার</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white">
+              {interval === 'quarterly'
+                ? '১২ সপ্তাহের সম্পূর্ণ N5 রোডম্যাপ (12-Week N5 Roadmap)'
+                : '১২ মাসের সম্পূর্ণ জাপান ক্যারিয়ার ও লাইফ প্রিপারেশন রোডম্যাপ'}
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-stone-400">
+              {interval === 'quarterly'
+                ? 'কোনো অতিরঞ্জিত প্রতিশ্রুতি নয়—মিন্না নো নিহোঙ্গো ১–২৫, ৫টি বাস্তব মিশন এবং ১০০ কাঞ্জির সুনির্দিষ্ট সপ্তাহভিত্তিক অগ্রগতি।'
+                : 'হিরাগানা থেকে শুরু করে N5, N4, বাইতো কাস্টমার সার্ভিস, JIS রিজিউমে এবং ভিসা ইন্টারভিউ পর্যন্ত সামগ্রিক প্রস্তুতি।'}
+            </p>
+          </div>
+
+          {interval === 'quarterly' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-red-500 uppercase">সপ্তাহ ১–৩ • ধাপ ০১</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">বর্ণ ও মৌলিক উচ্চারণ</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">৪৬ হিরাগানা, ৪৬ কাতাকানা ও প্রথম ৩০টি প্রাথমিক জাপানি শব্দ।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-amber-500 uppercase">সপ্তাহ ৪–৬ • ধাপ ০২</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">N5 প্রাথমিক পাঠ ১–৮</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">নিজের পরিচয়, বস্তু, স্থান, সময়, দৈনন্দিন কাজ ও বিশেষণের ব্যবহার।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-blue-500 uppercase">সপ্তাহ ৭–৯ • ধাপ ০৩</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">টোকিও কনবিনি ও স্টেশন</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">তে-ফর্ম (〜てください), বাস্তব কেনাকাটা, ট্রেনের টিকিট ও লিসেনিং।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-emerald-500 uppercase">সপ্তাহ ১০–১২ • ধাপ ০৪</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">N5 পূর্ণাঙ্গ জয় ও মক এক্সাম</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">লেসন ৯–২৫ সমাপ্তি, ১০০ কাঞ্জি, ১৮০ নম্বরের মক টেস্ট ও ভেরিফাইড সনদ।</p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-red-500 uppercase">মাস ১–৩ • কোয়ার্টার ০১</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">N5 ভিত্তি ও দৈনন্দিন জাপানিজ</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">মৌলিক ব্যাকরণ, হিরাগানা/কাতাকানা ও প্রথম ৩টি বাস্তব জীবন মিশন।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-amber-500 uppercase">মাস ৪–৬ • কোয়ার্টার ০২</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">N4 পাথওয়ে ও লিসেনিং ল্যাব</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">শর্তবাচক বাক্য (〜たら), অনুমতি/নিষেধ, ১০০ কাঞ্জি ও সাবলীল শ্রবণ।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-blue-500 uppercase">মাস ৭–৯ • কোয়ার্টার ০৩</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">Nihomi Baito POS ও JIS CV</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">টোকিও সেভেন-ইলেভেন ক্যাশিয়ার সিমুলেশন ও অফিশিয়াল A4 রিজিউমে এক্সপোর্ট।</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
+                <div className="text-[10px] font-mono font-bold text-emerald-500 uppercase">মাস ১০–১২ • কোয়ার্টার ০৪</div>
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">ইন্টারভিউ ও ফুল জাপান রেডি</div>
+                <p className="text-xs text-zinc-600 dark:text-stone-400">ভিসা ইন্টারভিউ, কেইগো শিষ্টাচার এবং বিমানে ওঠার শতভাগ প্রস্তুতি 🇯🇵।</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Trust Badges: Bangladesh Gateways */}

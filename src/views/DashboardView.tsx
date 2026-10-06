@@ -26,6 +26,7 @@ import { getNextBestMission, isGrammarEligible } from '../core/curriculum/journe
 import { PlacementDiagnosticModal } from '../components/learning/PlacementDiagnosticModal';
 import { TokyoKonbiniFirstMissionModal, REAL_LIFE_MISSIONS } from '../components/missions/TokyoKonbiniFirstMissionModal';
 import { calculateJapanReadiness, getSavedOnboardingAnswers } from '../core/onboarding/onboardingStorage';
+import { calculateJapanReadinessReport, READINESS_DIMENSIONS_META } from '../core/learning/japanReadinessEngine';
 import { trackNihomiEvent } from '../utils/analytics';
 
 interface DashboardViewProps {
@@ -147,6 +148,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const isKonbiniDone = typeof window !== 'undefined' && localStorage.getItem('nihomi_mission_konbini_completed') === 'true';
   const savedAnswers = getSavedOnboardingAnswers();
   const readiness = calculateJapanReadiness(savedAnswers);
+  const readinessReport = calculateJapanReadinessReport(kState, isKonbiniDone ? 1 : 0);
 
   if (showMemoryOs) {
     return (
@@ -187,7 +189,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                 </span>
               </div>
               <p className="text-[11px] text-stone-400 font-medium hidden sm:block">
-                ようこそ, {studentName} • Spaced Repetition Active
+                Welcome back, Nihomian 🇯🇵 • {studentName} • Spaced Repetition Active
               </p>
             </div>
           </div>
@@ -256,6 +258,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                     ? 'টোকিওর সেভেন-ইলেভেন বা লসনে প্রথম কেনাকাটার অভিজ্ঞতা। প্লাস্টিক ব্যাগ ও ক্যাশিয়ারের প্রশ্নের দ্রুত সমাধান।'
                     : canonicalMission.whyItMattersBn}
                 </p>
+
+                {/* Constitutional Explainable "Why this mission?" Box */}
+                <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs text-stone-300 space-y-1 mt-2">
+                  <div className="text-[11px] font-mono text-amber-400 font-bold flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <span>কেন এই মিশন? (Why this mission?):</span>
+                  </div>
+                  <p className="text-stone-300">
+                    {!isKonbiniDone
+                      ? 'টোকিওতে পা রেখে প্রথম দিনই আপনার কনবিনি ক্যাশিয়ারের সাথে সাবলীল কথা বলা ও ব্যাগ চাওয়ার দক্ষতা প্রয়োজন হবে।'
+                      : canonicalMission.whyItMattersBn}
+                  </p>
+                  {canonicalMission.japanConnectionBn && (
+                    <div className="text-[11px] text-amber-200/80 pt-0.5 border-t border-white/5">
+                      🇯🇵 বাস্তব সংযোগ: {canonicalMission.japanConnectionBn}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* ONE Prominent Hero CTA Button + Placement Fast-Track */}
@@ -302,92 +322,164 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         </section>
 
         {/* ========================================================================= */}
-        {/* JAPAN READINESS™ SCORE BREAKDOWN                                          */}
+        {/* JAPAN READINESS™ SCORE BREAKDOWN (9 CANONICAL DIMENSIONS)                 */}
         {/* ========================================================================= */}
         <section aria-label="Japan Readiness Breakdown" className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-sm font-black text-white flex items-center gap-2">
-                <Target className="w-4 h-4 text-emerald-400" />
-                <span>Japan Readiness Score™ (প্রস্তুতি সূচক)</span>
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-black text-white flex items-center gap-2">
+                  <Target className="w-4 h-4 text-emerald-400" />
+                  <span>Japan Readiness Score™ (প্রস্তুতি সূচক)</span>
+                </h2>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold font-mono">
+                  {readinessReport.readinessBadge}
+                </span>
+              </div>
               <p className="text-xs text-stone-400 mt-0.5">
-                জাপানে উচ্চশিক্ষা, কাজ ও বসবাসের জন্য প্রয়োজনীয় ৪টি মূল দক্ষতার সমন্বিত স্কোর।
+                {readinessReport.levelTitleBn} • {readinessReport.nextReadinessMilestoneBn}
               </p>
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono font-black text-sm shadow-lg shadow-emerald-500/10">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>{readiness.overallScore}% রেডি</span>
+              <span>{readinessReport.overallScore}% রেডি</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {/* 1. Foundation */}
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {/* 1. Japanese Foundation */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-stone-300">Foundation (বর্ণ ও ব্যাকরণ)</span>
-                <span className="font-mono font-bold text-red-400">{readiness.foundationScore}%</span>
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.japaneseFoundation.labelBn}</span>
+                <span className="font-mono font-bold text-red-400">{readinessReport.dimensions.japaneseFoundation}%</span>
               </div>
-              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full transition-all duration-500"
-                  style={{ width: `${readiness.foundationScore}%` }}
+                  style={{ width: `${readinessReport.dimensions.japaneseFoundation}%` }}
                 />
               </div>
-              <p className="text-[11px] text-stone-400 leading-snug">
-                হিরাগানা, কাতাকানা ও মিন্না নো নিহোঙ্গো N5 ব্যাকরণ ভিত্তি।
-              </p>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.japaneseFoundation.descriptionBn}</p>
             </div>
 
-            {/* 2. Speaking */}
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+            {/* 2. Listening Reflex */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-stone-300">Speaking (কথোপকথন)</span>
-                <span className="font-mono font-bold text-amber-400">{readiness.speakingScore}%</span>
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.listening.labelBn}</span>
+                <span className="font-mono font-bold text-blue-400">{readinessReport.dimensions.listening}%</span>
               </div>
-              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.listening}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.listening.descriptionBn}</p>
+            </div>
+
+            {/* 3. Reading Reflex */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.reading.labelBn}</span>
+                <span className="font-mono font-bold text-purple-400">{readinessReport.dimensions.reading}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.reading}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.reading.descriptionBn}</p>
+            </div>
+
+            {/* 4. Oral Speaking */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.speaking.labelBn}</span>
+                <span className="font-mono font-bold text-amber-400">{readinessReport.dimensions.speaking}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-500"
-                  style={{ width: `${readiness.speakingScore}%` }}
+                  style={{ width: `${readinessReport.dimensions.speaking}%` }}
                 />
               </div>
-              <p className="text-[11px] text-stone-400 leading-snug">
-                টোকিও পিচ অ্যাকসেন্ট, স্বতঃস্ফূর্ত কথা বলা ও জড়তাহীন উচ্চারণ।
-              </p>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.speaking.descriptionBn}</p>
             </div>
 
-            {/* 3. Daily Life */}
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+            {/* 5. Daily Life Navigation */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-stone-300">Daily Life (দৈনন্দিন জীবন)</span>
-                <span className="font-mono font-bold text-cyan-400">{readiness.dailyLifeScore}%</span>
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.dailyLife.labelBn}</span>
+                <span className="font-mono font-bold text-emerald-400">{readinessReport.dimensions.dailyLife}%</span>
               </div>
-              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
-                  style={{ width: `${readiness.dailyLifeScore}%` }}
-                />
-              </div>
-              <p className="text-[11px] text-stone-400 leading-snug">
-                কনবিনি কেনাকাটা, ট্রেন সাবওয়ে, দিকনির্দেশনা ও রেস্তোরাঁ অর্ডার।
-              </p>
-            </div>
-
-            {/* 4. Survival */}
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-stone-300">Survival (জরুরি পরিস্থিতি)</span>
-                <span className="font-mono font-bold text-emerald-400">{readiness.survivalScore}%</span>
-              </div>
-              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
-                  style={{ width: `${readiness.survivalScore}%` }}
+                  style={{ width: `${readinessReport.dimensions.dailyLife}%` }}
                 />
               </div>
-              <p className="text-[11px] text-stone-400 leading-snug">
-                জরুরি সাহায্য চাওয়া, ডাক্তারের কাছে সমস্যা বলা ও বিনয়ী কেইগো।
-              </p>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.dailyLife.descriptionBn}</p>
+            </div>
+
+            {/* 6. Japan Survival & Emergency */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.japanSurvival.labelBn}</span>
+                <span className="font-mono font-bold text-rose-400">{readinessReport.dimensions.japanSurvival}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-rose-500 to-red-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.japanSurvival}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.japanSurvival.descriptionBn}</p>
+            </div>
+
+            {/* 7. Study Readiness */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.studyReadiness.labelBn}</span>
+                <span className="font-mono font-bold text-indigo-400">{readinessReport.dimensions.studyReadiness}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-indigo-500 to-violet-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.studyReadiness}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.studyReadiness.descriptionBn}</p>
+            </div>
+
+            {/* 8. Work & Baito Readiness */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.workReadiness.labelBn}</span>
+                <span className="font-mono font-bold text-teal-400">{readinessReport.dimensions.workReadiness}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.workReadiness}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.workReadiness.descriptionBn}</p>
+            </div>
+
+            {/* 9. Communication Confidence */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-200">{READINESS_DIMENSIONS_META.communicationConfidence.labelBn}</span>
+                <span className="font-mono font-bold text-yellow-400">{readinessReport.dimensions.communicationConfidence}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-yellow-500 to-amber-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readinessReport.dimensions.communicationConfidence}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400">{READINESS_DIMENSIONS_META.communicationConfidence.descriptionBn}</p>
             </div>
           </div>
         </section>

@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { NIHOMI_CONTACT } from '../config/contact';
 import { Plan, BillingInterval } from '../types';
+import { calculateDailyCost } from '../core/billing/priceCalculator';
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { trackNihomiEvent } from '../utils/analytics';
@@ -563,6 +564,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   {CHECKOUT_PLANS.map((p) => {
                     const isSelected = tier === p.id;
                     const price = billingInterval === 'yearly' ? p.yearlyPrice : p.monthlyPrice;
+                    const dailyReport = calculateDailyCost(price, billingInterval === 'yearly' ? 'yearly' : 'monthly');
+
                     return (
                       <div
                         key={p.id}
@@ -590,11 +593,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           </div>
                         </div>
 
-                        <div className="pt-1 border-t border-white/10">
+                        <div className="pt-1.5 border-t border-white/10 space-y-0.5">
                           <div className="text-base font-black text-amber-300">৳{price.toLocaleString('en-US')}</div>
-                          <span className="text-[9px] text-stone-400 font-mono">
+                          <div className="text-[9px] text-stone-400 font-mono">
                             {billingInterval === 'yearly' ? '/ বছর' : '/ মাস'}
-                          </span>
+                          </div>
+                          <div className="text-[10px] font-bold text-amber-400">
+                            {dailyReport.dailyLabelBn}
+                          </div>
+                          {dailyReport.comparisonBadgeBn && (
+                            <div className="text-[9px] text-emerald-400 font-semibold">
+                              ☕ {dailyReport.comparisonBadgeBn}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );

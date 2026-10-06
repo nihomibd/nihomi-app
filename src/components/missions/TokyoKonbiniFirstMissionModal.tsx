@@ -504,13 +504,27 @@ export const TokyoKonbiniFirstMissionModal: React.FC<TokyoKonbiniFirstMissionMod
               })}
             </div>
 
-            {/* Bengali Feedback for wrong answer */}
+            {/* Constitutional Patient Failure Recovery */}
             {isEvaluated && selectedOption && !currentMission.options.find(o => o.id === selectedOption)?.isCorrect && (
-              <div className="p-3.5 rounded-2xl bg-red-500/10 border border-red-500/20 text-xs text-red-300 space-y-1 animate-in fade-in">
-                <span className="font-bold">পুনরায় চেষ্টা করো:</span>
-                <p>
+              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 space-y-2 animate-in fade-in">
+                <div className="flex items-center gap-2 font-bold text-amber-300">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>কোনো চিন্তা নেই! ভুল হওয়াই শেখার স্বাভাবিক অংশ 🌸</span>
+                </div>
+                <p className="text-stone-300 leading-relaxed">
                   {currentMission.options.find(o => o.id === selectedOption)?.explanationBn || currentMission.senseiTipBn}
                 </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEvaluated(false);
+                    setSelectedOption(null);
+                  }}
+                  className="mt-1 px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs cursor-pointer transition active:scale-95 flex items-center gap-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>আবার সহজ করে চেষ্টা করি (Try Again)</span>
+                </button>
               </div>
             )}
           </div>

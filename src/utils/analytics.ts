@@ -17,6 +17,27 @@ declare global {
 
 export type NihomiEventType =
   | 'landing_page_view'
+  | 'landing_viewed'
+  | 'journey_started'
+  | 'onboarding_question_answered'
+  | 'onboarding_completed'
+  | 'google_auth_started'
+  | 'google_auth_completed'
+  | 'journey_generated'
+  | 'journey_viewed'
+  | 'first_mission_started'
+  | 'first_mission_completed'
+  | 'skill_started'
+  | 'skill_mastery_changed'
+  | 'review_started'
+  | 'next_best_mission_shown'
+  | 'next_best_mission_started'
+  | 'japan_readiness_viewed'
+  | 'pricing_viewed'
+  | 'plan_selected'
+  | 'checkout_started'
+  | 'checkout_completed'
+  | 'subscription_started'
   | 'landing_campaign_banner_clicked'
   | 'signup_started'
   | 'signup_completed'
@@ -39,8 +60,6 @@ export type NihomiEventType =
   | 'nba_lesson_launched'
   | 'nba_mock_exam_launched'
   | 'journey_start_clicked'
-  | 'journey_started'
-  | 'onboarding_completed'
   | 'auth_completed'
   | 'journey_calibrated'
   | 'mission_started'
@@ -129,7 +148,7 @@ export interface ScorecardLinkCopiedPayload {
   score?: number;
 }
 
-export type EventPayloadMap = {
+export interface SpecificEventPayloadMap {
   landing_page_view: LandingPageViewPayload;
   landing_campaign_banner_clicked: Record<string, any>;
   signup_started: SignupStartedPayload;
@@ -143,33 +162,12 @@ export type EventPayloadMap = {
   scorecard_shared_facebook: ScorecardSharedPayload;
   scorecard_shared_whatsapp: ScorecardSharedPayload;
   scorecard_link_copied: ScorecardLinkCopiedPayload;
-  zero_gateway_clicked: Record<string, any>;
-  zero_gateway_quiz_success: Record<string, any>;
-  zero_gateway_completed: Record<string, any>;
-  diagnostic_exam_clicked: Record<string, any>;
-  diagnostic_exam_completed: Record<string, any>;
-  nba_zero_kana_clicked: Record<string, any>;
-  nba_targeted_review_clicked: Record<string, any>;
-  nba_lesson_launched: Record<string, any>;
-  nba_mock_exam_launched: Record<string, any>;
-  journey_start_clicked: Record<string, any>;
-  journey_started: Record<string, any>;
-  onboarding_completed: Record<string, any>;
-  auth_completed: Record<string, any>;
-  journey_calibrated: Record<string, any>;
-  mission_started: Record<string, any>;
-  mission_completed: Record<string, any>;
-  checkout_viewed: Record<string, any>;
-  next_best_mission_impression: Record<string, any>;
-  next_best_mission_clicked: Record<string, any>;
-  placement_test_started: Record<string, any>;
-  placement_test_completed: Record<string, any>;
-  placement_applied: Record<string, any>;
-  foundation_gate_blocked: Record<string, any>;
-  premium_preview_shown: Record<string, any>;
-  premium_upgrade_intent: Record<string, any>;
-  free_chapter_completed: Record<string, any>;
-  lead_captured: Record<string, any>;
+}
+
+export type EventPayloadMap = {
+  [K in NihomiEventType]: K extends keyof SpecificEventPayloadMap
+    ? SpecificEventPayloadMap[K]
+    : Record<string, any>;
 };
 
 /**
