@@ -52,7 +52,19 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
 
-    console.log(`[PaymentRouter] Initiating bKash checkout for ${resolvedEmail}, tier: ${selectedTier}, amount: ৳${amount}`);
+    const isBkashStub = !process.env.BKASH_APP_KEY || process.env.BKASH_APP_KEY.includes('placeholder') || process.env.BKASH_APP_KEY === 'bkash_nihomi_live_app_key';
+    if (isBkashStub) {
+      console.log('[PaymentRouter] bKash gateway in connecting/stub mode. Returning connecting status.');
+      return res.json({
+        success: false,
+        connecting: true,
+        message: 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)',
+        contact: {
+          phone: '+880 1834-348966',
+          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`হ্যালো নিহোমি! আমি ${planConfig.nameBn} প্ল্যানে ভর্তি হতে চাই।`)}`
+        }
+      });
+    }
 
     // Call bKash Tokenized Checkout Create API
     const bkashRes = await bKashService.createPayment({
@@ -624,6 +636,20 @@ paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRe
     const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
     const resolvedName = name || user?.name || resolvedEmail.split('@')[0];
     const resolvedPhone = phone || (user as any)?.phone || '+8801834-348966';
+
+    const isSslStub = !process.env.SSLCOMMERZ_STORE_ID || process.env.SSLCOMMERZ_STORE_ID.includes('placeholder') || process.env.SSLCOMMERZ_STORE_ID === 'nihomi_live_store';
+    if (isSslStub) {
+      console.log('[PaymentRouter] SSLCommerz in connecting/stub mode. Returning connecting status.');
+      return res.json({
+        success: false,
+        connecting: true,
+        message: 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)',
+        contact: {
+          phone: '+880 1834-348966',
+          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`হ্যালো নিহোমি! আমি কার্ড/এসএসএলকমার্স দিয়ে ভর্তি হতে চাই।`)}`
+        }
+      });
+    }
 
     const result = await sslCommerzService.initSession({
       amount,
