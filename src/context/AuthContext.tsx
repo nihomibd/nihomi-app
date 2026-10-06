@@ -195,11 +195,11 @@ const AuthContext = createContext<AuthContextType>({
   progress: null,
   subscription: null,
   subscriptionDetails: null,
-  activePlanId: 'starter',
+  activePlanId: 'free',
   learningDNA: null,
   coinWallet: null,
-  loading: false,
-  isLoading: false,
+  loading: true,
+  isLoading: true,
   isAuthModalOpen: false,
   openAuthModal: () => {},
   openLoginModal: () => {},
@@ -267,6 +267,7 @@ const bootstrapDefaultLearningPath = (userId: string) => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => getStoredToken());
+  const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(() => {
     try {
       const saved = safeStorage.getItem('nihomi_user');
@@ -294,8 +295,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       userId: 'guest',
       currentLevel: 'N5',
       streakDays: 0,
+      currentStreak: 0,
+      longestStreak: 0,
       totalHours: 0,
+      totalStudyMinutes: 0,
       completedLessonsCount: 0,
+      completedLessonIds: [],
     };
   });
 
@@ -309,27 +314,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       planId: 'free',
       planName: 'Nihomi Free Basic',
       status: 'active',
-      validUntil: '2026-12-31',
+      validUntil: '2099-12-31',
       billingCycle: 'monthly',
-      aiCreditsRemaining: 100,
-      paymentMethod: 'bkash',
+      aiCreditsRemaining: 0,
+      paymentMethod: 'free',
     };
   });
 
-  const [learningDNA] = useState<LearningDNAData | null>({
-    userId: user?.id || 'default_user',
-    vocabMasteryRate: 78,
-    grammarMasteryRate: 82,
-    kanjiMasteryRate: 65,
-    listeningScore: 74,
-    speakingScore: 80,
-    learningVelocity: 1.25,
-    diagnosedWeaknesses: [
-      { category: 'Grammar', item: 'Particle に vs で', description: 'Action location vs destination context', frequency: 3 },
-      { category: 'Kanji', item: 'Time & Days', description: 'Onyomi/Kunyomi confusion on 日 and 月', frequency: 2 }
-    ],
-    lastPracticedAt: new Date().toISOString(),
-  });
+  const [learningDNA] = useState<LearningDNAData | null>(null);
 
   const [coinWallet, setCoinWallet] = useState<CoinWalletData | null>(() => {
     try {
@@ -356,44 +348,74 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
   const setUserData = (newUser: User) => {
-    // Ensure Digital Student ID and Nihomi Account ID
     if (!newUser.studentId) {
-      newUser.studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
+      newUser.studentId = 'NHO-' + (newUser.id ? newUser.id.slice(0, 6).toUpperCase() : Math.floor(100000 + Math.random() * 900000));
     }
     if (!newUser.nihomiAccountId) {
       newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
-    }
-    // Allocate starter 50 Coins + 100 AI Credits for all new students
-    if (!safeStorage.getItem('nihomi_student_coins')) {
-      safeStorage.setItem('nihomi_student_coins', '50');
-    }
-    if (!safeStorage.getItem('nihomi_ai_credits')) {
-      safeStorage.setItem('nihomi_ai_credits', '100');
     }
     setUser(newUser);
     safeStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };
 
-  // Listen to Supabase Session & extract Google Avatar
+  // Authoritative Session Verification against /api/auth/me
   useEffect(() => {
-    // Check initial stored token and verify with /api/auth/me
-    const initialToken = getStoredToken();
-    if (initialToken) {
-      apiRequest('/api/auth/me')
-        .then((res) => {
-          if (res?.authenticated && res.user) {
-            if (res.token) {
-              setStoredToken(res.token);
-              setToken(res.token);
-              safeStorage.setItem('nihomi_auth_token', res.token);
-            }
-            setUserData(res.user);
-            if (res.profile) setProfile(res.profile);
-            if (res.progress) setProgress(res.progress);
+    let isMounted = true;
+
+    const verifyServerSession = async (tokenToUse?: string) => {
+      try {
+        const res = await apiRequest('/api/auth/me');
+        if (!isMounted) return;
+        if (res?.authenticated && res.user) {
+          if (res.token) {
+            setStoredToken(res.token);
+            setToken(res.token);
+            safeStorage.setItem('nihomi_auth_token', res.token);
           }
-        })
-        .catch(() => {});
-    }
+          setUserData(res.user);
+          if (res.profile) {
+            setProfile(res.profile);
+            safeStorage.setItem('nihomi_profile', JSON.stringify(res.profile));
+          }
+          if (res.progress) {
+            setProgress(res.progress);
+            safeStorage.setItem('nihomi_progress', JSON.stringify(res.progress));
+          }
+          if (res.wallet) {
+            setCoinWallet({
+              userId: res.user.id,
+              coinBalance: res.wallet.coinBalance ?? 0,
+              lifetimeEarned: res.wallet.lifetimeEarned ?? 0,
+              lifetimeSpent: res.wallet.lifetimeSpent ?? 0,
+            });
+            safeStorage.setItem('nihomi_student_coins', String(res.wallet.coinBalance ?? 0));
+          }
+          if (res.subscription) {
+            setSubscription(res.subscription);
+            safeStorage.setItem('nihomi_subscription', JSON.stringify(res.subscription));
+          }
+          bootstrapDefaultLearningPath(res.user.id);
+        } else {
+          clearAllStoredAuthData();
+          setUser(null);
+          setStoredToken(null);
+          setToken(null);
+          setProfile(null);
+          setProgress(null);
+          setSubscription(null);
+          setCoinWallet({
+            userId: 'guest',
+            coinBalance: 0,
+            lifetimeEarned: 0,
+            lifetimeSpent: 0,
+          });
+        }
+      } catch {
+        // Fallback or offline: preserve local token if valid
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
 
     if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -402,124 +424,75 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setToken(session.access_token);
           safeStorage.setItem('nihomi_auth_token', session.access_token);
           window.history.replaceState({}, document.title, window.location.pathname);
+          verifyServerSession(session.access_token);
+        } else {
+          if (isMounted) setLoading(false);
         }
+      }).catch(() => {
+        if (isMounted) setLoading(false);
+      });
+      return;
+    }
+
+    const initialToken = getStoredToken();
+    if (initialToken) {
+      verifyServerSession(initialToken);
+    } else {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user && session.access_token) {
+          setStoredToken(session.access_token);
+          setToken(session.access_token);
+          safeStorage.setItem('nihomi_auth_token', session.access_token);
+          verifyServerSession(session.access_token);
+        } else {
+          if (isMounted) setLoading(false);
+        }
+      }).catch(() => {
+        if (isMounted) setLoading(false);
       });
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         if (session.access_token) {
           setStoredToken(session.access_token);
           setToken(session.access_token);
           safeStorage.setItem('nihomi_auth_token', session.access_token);
         }
-        const u = session.user;
-        const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
-        const avatar =
-          u.user_metadata?.avatar_url ||
-          u.user_metadata?.picture ||
-          u.user_metadata?.avatar ||
-          undefined;
-
-        const activeUser: User = {
-          id: u.id,
-          email: u.email || 'nihomibd@gmail.com',
-          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
-          avatarUrl: avatar,
-          role: isFounder ? 'founder' : 'student',
-          planId: isFounder ? 'japan_ready' : 'free',
-          status: 'ACTIVE',
-          studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
-          nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
-          createdAt: u.created_at || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        bootstrapDefaultLearningPath(activeUser.id);
-        setUserData(activeUser);
-
-        // Sync with backend /api/auth/me to populate verified profile & progress
-        apiRequest('/api/auth/me').then((res) => {
-          if (res?.authenticated && res.user) {
-            if (res.token) {
-              setStoredToken(res.token);
-              setToken(res.token);
-              safeStorage.setItem('nihomi_auth_token', res.token);
-            }
-            if (res.user) setUserData(res.user);
-            if (res.profile) setProfile(res.profile);
-            if (res.progress) setProgress(res.progress);
-          }
-        }).catch(() => {});
-
+        await verifyServerSession(session.access_token);
         const savedAnswers = getSavedOnboardingAnswers();
         if (savedAnswers) {
           syncOnboardingToProfile(savedAnswers).catch(() => {});
         }
         if (checkAndConsumeOAuthPendingOnboarding()) {
-          trackNihomiEvent('auth_completed', { method: 'google', userId: u.id });
+          trackNihomiEvent('auth_completed', { method: 'google', userId: session.user.id });
         }
-      }
-    });
-
-    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        if (session.access_token) {
-          setStoredToken(session.access_token);
-          setToken(session.access_token);
-          safeStorage.setItem('nihomi_auth_token', session.access_token);
-        }
-        const u = session.user;
-        const isFounder = u.email === 'mdtanvirkabirbiplob@gmail.com';
-        const avatar =
-          u.user_metadata?.avatar_url ||
-          u.user_metadata?.picture ||
-          u.user_metadata?.avatar ||
-          undefined;
-
-        const activeUser: User = {
-          id: u.id,
-          email: u.email || 'nihomibd@gmail.com',
-          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
-          avatarUrl: avatar,
-          role: isFounder ? 'founder' : 'student',
-          planId: isFounder ? 'japan_ready' : 'free',
-          status: 'ACTIVE',
-          studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
-          nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
-          createdAt: u.created_at || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        bootstrapDefaultLearningPath(activeUser.id);
-        setUserData(activeUser);
-
-        // Sync with backend /api/auth/me
-        apiRequest('/api/auth/me').then((res) => {
-          if (res?.authenticated && res.user) {
-            if (res.user) setUserData(res.user);
-            if (res.profile) setProfile(res.profile);
-            if (res.progress) setProgress(res.progress);
-          }
-        }).catch(() => {});
-
-        const savedAnswers = getSavedOnboardingAnswers();
-        if (savedAnswers) {
-          syncOnboardingToProfile(savedAnswers).catch(() => {});
-        }
-        if (checkAndConsumeOAuthPendingOnboarding()) {
-          trackNihomiEvent('auth_completed', { method: 'google', userId: u.id });
-        }
-      } else if (_event === 'SIGNED_OUT') {
+      } else if (event === 'SIGNED_OUT') {
         clearAllStoredAuthData();
+        safeStorage.removeItem('nihomi_user');
+        safeStorage.removeItem('nihomi_profile');
+        safeStorage.removeItem('nihomi_progress');
+        safeStorage.removeItem('nihomi_subscription');
+        safeStorage.removeItem('nihomi_student_coins');
+        safeStorage.removeItem('nihomi_ai_credits');
         setUser(null);
         setStoredToken(null);
         setToken(null);
         setProfile(null);
         setProgress(null);
         setSubscription(null);
+        setCoinWallet({
+          userId: 'guest',
+          coinBalance: 0,
+          lifetimeEarned: 0,
+          lifetimeSpent: 0,
+        });
+        if (isMounted) setLoading(false);
       }
     });
 
     return () => {
+      isMounted = false;
       authListener?.unsubscribe();
     };
   }, []);
@@ -549,11 +522,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithToken = async (idToken: string): Promise<boolean> => {
     if (!idToken) return false;
     try {
+      setLoading(true);
       const res = await apiRequest<{
         token: string;
         user: User;
         profile: UserProfile;
         progress: UserProgress;
+        wallet?: CoinWalletData;
       }>('/api/auth/google', {
         method: 'POST',
         body: JSON.stringify({ googleToken: idToken })
@@ -561,6 +536,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (res.token) {
         setStoredToken(res.token);
         setToken(res.token);
+        safeStorage.setItem('nihomi_auth_token', res.token);
       }
       if (res.user) {
         setUserData(res.user);
@@ -571,20 +547,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (res.progress) {
         setProgress(res.progress);
+        safeStorage.setItem('nihomi_progress', JSON.stringify(res.progress));
       }
+      if (res.wallet) {
+        setCoinWallet(res.wallet);
+      }
+      setLoading(false);
       return true;
     } catch (err: any) {
       console.error('[Google ID Token Login Error]:', err);
+      setLoading(false);
       return false;
     }
   };
 
   const logout = async () => {
+    setLoading(true);
     try {
       await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
     } catch {}
     await supabase.auth.signOut().catch(() => {});
     clearAllStoredAuthData();
+    safeStorage.removeItem('nihomi_user');
+    safeStorage.removeItem('nihomi_profile');
+    safeStorage.removeItem('nihomi_progress');
+    safeStorage.removeItem('nihomi_subscription');
+    safeStorage.removeItem('nihomi_student_coins');
+    safeStorage.removeItem('nihomi_ai_credits');
     setStoredToken(null);
     setToken(null);
     setUser(null);
@@ -597,6 +586,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       lifetimeEarned: 0,
       lifetimeSpent: 0,
     });
+    setLoading(false);
   };
 
   const updateProfileData = async (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => {
@@ -644,13 +634,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     safeStorage.setItem('nihomi_subscription', JSON.stringify(updatedSub));
 
     if (coinsGranted > 0) {
-      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '0', 10);
       const newBalance = storedCoins + coinsGranted;
       safeStorage.setItem('nihomi_student_coins', newBalance.toString());
       setCoinWallet(prev => ({
         userId: user?.id || 'guest',
         coinBalance: newBalance,
-        lifetimeEarned: (prev?.lifetimeEarned || 420) + coinsGranted,
+        lifetimeEarned: (prev?.lifetimeEarned || 0) + coinsGranted,
         lifetimeSpent: prev?.lifetimeSpent || 0
       }));
     }
@@ -671,13 +661,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (packId === 'pack_200') coinsToAdd = 250;
     else if (packId === 'pack_500') coinsToAdd = 650;
 
-    const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+    const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '0', 10);
     const newBalance = storedCoins + coinsToAdd;
     safeStorage.setItem('nihomi_student_coins', newBalance.toString());
     setCoinWallet(prev => ({
       userId: user?.id || 'guest',
       coinBalance: newBalance,
-      lifetimeEarned: (prev?.lifetimeEarned || 420) + coinsToAdd,
+      lifetimeEarned: (prev?.lifetimeEarned || 0) + coinsToAdd,
       lifetimeSpent: prev?.lifetimeSpent || 0
     }));
 
@@ -687,11 +677,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email?: string, password?: string): Promise<boolean> => {
     if (!email || !password) return false;
     try {
+      setLoading(true);
       const data = await apiRequest<{
         token: string;
         user: User;
         profile: UserProfile;
         progress: UserProgress;
+        wallet?: CoinWalletData;
+        subscription?: UserSubscription;
       }>('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password })
@@ -700,6 +693,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.token) {
         setStoredToken(data.token);
         setToken(data.token);
+        safeStorage.setItem('nihomi_auth_token', data.token);
       }
       if (data.user) {
         setUserData(data.user);
@@ -710,10 +704,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (data.progress) {
         setProgress(data.progress);
+        safeStorage.setItem('nihomi_progress', JSON.stringify(data.progress));
       }
+      if (data.wallet) {
+        setCoinWallet(data.wallet);
+        safeStorage.setItem('nihomi_student_coins', String(data.wallet.coinBalance ?? 0));
+      }
+      if (data.subscription) {
+        setSubscription(data.subscription);
+        safeStorage.setItem('nihomi_subscription', JSON.stringify(data.subscription));
+      }
+      setLoading(false);
       return true;
     } catch (err: any) {
       console.error('[AuthContext Login Error]:', err);
+      setLoading(false);
       return false;
     }
   };
@@ -721,11 +726,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (regData?: any): Promise<boolean> => {
     if (!regData || !regData.email || !regData.password) return false;
     try {
+      setLoading(true);
       const data = await apiRequest<{
         token: string;
         user: User;
         profile: UserProfile;
         progress: UserProgress;
+        wallet?: CoinWalletData;
+        subscription?: UserSubscription;
       }>('/api/auth/register', {
         method: 'POST',
         body: JSON.stringify(regData)
@@ -734,6 +742,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.token) {
         setStoredToken(data.token);
         setToken(data.token);
+        safeStorage.setItem('nihomi_auth_token', data.token);
       }
       if (data.user) {
         setUserData(data.user);
@@ -744,10 +753,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       if (data.progress) {
         setProgress(data.progress);
+        safeStorage.setItem('nihomi_progress', JSON.stringify(data.progress));
       }
+      if (data.wallet) {
+        setCoinWallet(data.wallet);
+        safeStorage.setItem('nihomi_student_coins', String(data.wallet.coinBalance ?? 0));
+      }
+      if (data.subscription) {
+        setSubscription(data.subscription);
+        safeStorage.setItem('nihomi_subscription', JSON.stringify(data.subscription));
+      }
+      setLoading(false);
       return true;
     } catch (err: any) {
       console.error('[AuthContext Register Error]:', err);
+      setLoading(false);
       return false;
     }
   };
@@ -769,6 +789,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await apiRequest('/api/billing/subscription');
       if (res && res.subscription) {
         setSubscription(res.subscription);
+        safeStorage.setItem('nihomi_subscription', JSON.stringify(res.subscription));
       }
     } catch {}
   }, []);
@@ -780,6 +801,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await apiRequest('/api/learning/progress');
       if (res && res.progress) {
         setProgress(res.progress);
+        safeStorage.setItem('nihomi_progress', JSON.stringify(res.progress));
       }
     } catch {}
   }, []);
@@ -791,8 +813,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await apiRequest('/api/auth/me');
       if (res && res.user) {
         setUserData(res.user);
-        if (res.profile) setProfile(res.profile);
-        if (res.progress) setProgress(res.progress);
+        if (res.profile) {
+          setProfile(res.profile);
+          safeStorage.setItem('nihomi_profile', JSON.stringify(res.profile));
+        }
+        if (res.progress) {
+          setProgress(res.progress);
+          safeStorage.setItem('nihomi_progress', JSON.stringify(res.progress));
+        }
+        if (res.wallet) {
+          setCoinWallet(res.wallet);
+          safeStorage.setItem('nihomi_student_coins', String(res.wallet.coinBalance ?? 0));
+        }
+        if (res.subscription) {
+          setSubscription(res.subscription);
+          safeStorage.setItem('nihomi_subscription', JSON.stringify(res.subscription));
+        }
       }
     } catch {}
   }, []);
@@ -815,8 +851,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         activePlanId: user?.planId || 'free',
         learningDNA,
         coinWallet,
-        loading: false,
-        isLoading: false,
+        loading,
+        isLoading: loading,
         isAuthModalOpen,
         openAuthModal,
         openLoginModal: openAuthModal,

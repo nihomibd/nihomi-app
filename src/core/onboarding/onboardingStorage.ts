@@ -15,15 +15,39 @@ export const DEFAULT_ONBOARDING_ANSWERS: OnboardingAnswers = {
   dailyMinutes: 20
 };
 
-export function saveOnboardingAnswers(answers: OnboardingAnswers): void {
+function getAnswersKey(userId?: string): string {
+  if (userId && userId !== 'guest') return `${ONBOARDING_ANSWERS_KEY}_${userId}`;
+  try {
+    const rawUser = localStorage.getItem('nihomi_user');
+    if (rawUser) {
+      const u = JSON.parse(rawUser);
+      if (u?.id && u.id !== 'guest') return `${ONBOARDING_ANSWERS_KEY}_${u.id}`;
+    }
+  } catch {}
+  return ONBOARDING_ANSWERS_KEY;
+}
+
+function getCompletedKey(userId?: string): string {
+  if (userId && userId !== 'guest') return `${ONBOARDING_COMPLETED_KEY}_${userId}`;
+  try {
+    const rawUser = localStorage.getItem('nihomi_user');
+    if (rawUser) {
+      const u = JSON.parse(rawUser);
+      if (u?.id && u.id !== 'guest') return `${ONBOARDING_COMPLETED_KEY}_${u.id}`;
+    }
+  } catch {}
+  return ONBOARDING_COMPLETED_KEY;
+}
+
+export function saveOnboardingAnswers(answers: OnboardingAnswers, userId?: string): void {
   try {
     if (typeof window !== 'undefined') {
       const payload = {
         ...answers,
         completedAt: answers.completedAt || new Date().toISOString()
       };
-      localStorage.setItem(ONBOARDING_ANSWERS_KEY, JSON.stringify(payload));
-      localStorage.setItem(ONBOARDING_COMPLETED_KEY, 'true');
+      localStorage.setItem(getAnswersKey(userId), JSON.stringify(payload));
+      localStorage.setItem(getCompletedKey(userId), 'true');
       
       const readiness = calculateJapanReadiness(payload);
       localStorage.setItem(READINESS_SCORE_KEY, JSON.stringify(readiness));
@@ -34,10 +58,10 @@ export function saveOnboardingAnswers(answers: OnboardingAnswers): void {
   }
 }
 
-export function getSavedOnboardingAnswers(): OnboardingAnswers | null {
+export function getSavedOnboardingAnswers(userId?: string): OnboardingAnswers | null {
   try {
     if (typeof window !== 'undefined') {
-      const raw = localStorage.getItem(ONBOARDING_ANSWERS_KEY);
+      const raw = localStorage.getItem(getAnswersKey(userId));
       if (raw) {
         return JSON.parse(raw);
       }
@@ -46,10 +70,10 @@ export function getSavedOnboardingAnswers(): OnboardingAnswers | null {
   return null;
 }
 
-export function isOnboardingCompleted(): boolean {
+export function isOnboardingCompleted(userId?: string): boolean {
   try {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem(ONBOARDING_COMPLETED_KEY) === 'true';
+      return localStorage.getItem(getCompletedKey(userId)) === 'true';
     }
   } catch {}
   return false;

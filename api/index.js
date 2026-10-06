@@ -8,6 +8,31 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
+// server/env.ts
+import dotenv from "dotenv";
+function getRequiredJwtSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || typeof secret !== "string" || secret.trim().length === 0) {
+    throw new Error(
+      "[CRITICAL SECURITY FATAL ERROR] JWT_SECRET environment variable is not defined or empty. Nihomi.com production security policy strictly forbids hardcoded JWT secret fallbacks. Please configure JWT_SECRET in your environment before starting the application."
+    );
+  }
+  return secret.trim();
+}
+function getFounderEmails() {
+  const raw = process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com";
+  return raw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+}
+function isFounderEmail(email) {
+  if (!email || typeof email !== "string") return false;
+  return getFounderEmails().includes(email.trim().toLowerCase());
+}
+var init_env = __esm({
+  "server/env.ts"() {
+    dotenv.config();
+  }
+});
+
 // src/data/n5_master.json
 var n5_master_default;
 var init_n5_master = __esm({
@@ -51590,6 +51615,7 @@ var init_db = __esm({
     init_baitoSeedData();
     init_contentDiffService();
     init_prisma();
+    init_env();
     DATA_DIR = path.join(process.cwd(), "server", "data");
     DB_FILE = path.join(DATA_DIR, "nihomi_db.json");
     FOUNDER_OFFICE_DB_FILE = path.join(DATA_DIR, "founder_office_db.json");
@@ -53064,9 +53090,15 @@ var init_db = __esm({
       ensureUserExists(params) {
         this.assertProductionStorageSafety("ensureUserExists");
         const cleanEmail = (params.email || "").trim().toLowerCase();
+        const isFounder = isFounderEmail(cleanEmail);
+        const resolvedRole = isFounder ? "founder" : params.role || "student";
         let existing = (params.id ? this.findUserById(params.id) : void 0) || (cleanEmail ? this.findUserByEmail(cleanEmail) : void 0);
         if (existing) {
-          if (params.role && existing.role !== params.role) {
+          if (isFounder && existing.role !== "founder") {
+            existing.role = "founder";
+            existing.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+            this.save();
+          } else if (params.role && existing.role !== params.role && !isFounder) {
             existing.role = params.role;
             existing.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
             this.save();
@@ -53082,7 +53114,7 @@ var init_db = __esm({
           email: cleanEmail || `user-${id.slice(0, 8)}@nihomi.com`,
           passwordHash: "",
           passwordSalt: "",
-          role: params.role || "user",
+          role: resolvedRole,
           createdAt: now,
           updatedAt: now
         };
@@ -53103,8 +53135,8 @@ var init_db = __esm({
           currentLessonId: "les-n5-1-1",
           completedLessonIds: [],
           totalStudyMinutes: 0,
-          currentStreak: 1,
-          longestStreak: 1,
+          currentStreak: 0,
+          longestStreak: 0,
           lastActiveDate: now.split("T")[0],
           experiencePoints: 0,
           updatedAt: now
@@ -53121,12 +53153,15 @@ var init_db = __esm({
         const id = `usr-${crypto2.randomUUID().slice(0, 8)}`;
         const { hash, salt } = hashPassword(params.password);
         const now = (/* @__PURE__ */ new Date()).toISOString();
+        const cleanEmail = params.email.trim().toLowerCase();
+        const isFounder = isFounderEmail(cleanEmail);
+        const resolvedRole = isFounder ? "founder" : params.role || "student";
         const user = {
           id,
-          email: params.email.trim().toLowerCase(),
+          email: cleanEmail,
           passwordHash: hash,
           passwordSalt: salt,
-          role: params.role || "user",
+          role: resolvedRole,
           createdAt: now,
           updatedAt: now
         };
@@ -53149,8 +53184,8 @@ var init_db = __esm({
           currentLessonId: firstLesson?.id,
           completedLessonIds: [],
           totalStudyMinutes: 0,
-          currentStreak: 1,
-          longestStreak: 1,
+          currentStreak: 0,
+          longestStreak: 0,
           lastActiveDate: now.split("T")[0],
           experiencePoints: 0,
           updatedAt: now
@@ -55014,9 +55049,9 @@ var init_db = __esm({
         if (!wallet) {
           wallet = {
             userId,
-            coinBalance: 50 + Math.max(0, coins),
-            aiCredits: 100 + Math.max(0, aiCredits),
-            lifetimeEarned: 50 + Math.max(0, coins),
+            coinBalance: Math.max(0, coins),
+            aiCredits: Math.max(0, aiCredits),
+            lifetimeEarned: Math.max(0, coins),
             lifetimeSpent: 0,
             updatedAt: now
           };
@@ -55041,9 +55076,9 @@ var init_db = __esm({
         if (!wallet) {
           wallet = {
             userId,
-            coinBalance: 50,
-            aiCredits: 100,
-            lifetimeEarned: 50,
+            coinBalance: 0,
+            aiCredits: 0,
+            lifetimeEarned: 0,
             lifetimeSpent: 0,
             updatedAt: (/* @__PURE__ */ new Date()).toISOString()
           };
@@ -55052,8 +55087,10 @@ var init_db = __esm({
         }
         return {
           userId,
-          coinBalance: wallet.coinBalance,
-          aiCredits: wallet.aiCredits
+          coinBalance: wallet.coinBalance || 0,
+          aiCredits: wallet.aiCredits || 0,
+          lifetimeEarned: wallet.lifetimeEarned || 0,
+          lifetimeSpent: wallet.lifetimeSpent || 0
         };
       }
       getRevenueTrends() {
@@ -59536,18 +59573,8 @@ var init_senseiNextExperienceService = __esm({
   }
 });
 
-// server/env.ts
-import dotenv from "dotenv";
-dotenv.config();
-function getRequiredJwtSecret() {
-  const secret = process.env.JWT_SECRET;
-  if (!secret || typeof secret !== "string" || secret.trim().length === 0) {
-    throw new Error(
-      "[CRITICAL SECURITY FATAL ERROR] JWT_SECRET environment variable is not defined or empty. Nihomi.com production security policy strictly forbids hardcoded JWT secret fallbacks. Please configure JWT_SECRET in your environment before starting the application."
-    );
-  }
-  return secret.trim();
-}
+// server/api-serverless.ts
+init_env();
 
 // server/polyfill.ts
 if (typeof globalThis.DOMMatrix === "undefined") {
@@ -59623,6 +59650,7 @@ import { Router } from "express";
 
 // server/authHelper.ts
 init_db();
+init_env();
 import crypto3 from "crypto";
 function base64UrlEncode(str) {
   return Buffer.from(str, "utf-8").toString("base64").replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
@@ -59689,7 +59717,7 @@ function getVerificationSecrets() {
   return secrets;
 }
 function isValidUserRole(role) {
-  return role === "admin" || role === "instructor" || role === "user" || role === "founder";
+  return role === "admin" || role === "instructor" || role === "user" || role === "student" || role === "founder";
 }
 function resolveUserRole(rawPayload) {
   if (isValidUserRole(rawPayload.app_metadata?.role)) {
@@ -59819,15 +59847,16 @@ function getUserFromToken(token) {
   try {
     const verifiedPayload = verifyStatelessJwt(cleanToken);
     if (!verifiedPayload) return null;
+    const effectiveRole = isFounderEmail(verifiedPayload.email) ? "founder" : verifiedPayload.role || "student";
     let user = db.findUserById(verifiedPayload.userId);
     if (!user) {
       user = db.ensureUserExists({
         id: verifiedPayload.userId,
         email: verifiedPayload.email,
-        role: verifiedPayload.role
+        role: effectiveRole
       });
-    } else if (user.role !== verifiedPayload.role) {
-      user.role = verifiedPayload.role;
+    } else if (user.role !== effectiveRole) {
+      user.role = effectiveRole;
       try {
         db.save();
       } catch {
@@ -59836,7 +59865,7 @@ function getUserFromToken(token) {
     return {
       id: verifiedPayload.userId,
       email: verifiedPayload.email || user?.email || "",
-      role: verifiedPayload.role,
+      role: effectiveRole,
       passwordHash: user?.passwordHash,
       passwordSalt: user?.passwordSalt,
       createdAt: user?.createdAt,
@@ -59866,13 +59895,15 @@ async function verifySupabaseTokenAsync(token) {
     }
     const u = data.user;
     const email = (u.email || u.user_metadata?.email || "").toLowerCase().trim();
-    const isFounder = email === "mdtanvirkabirbiplob@gmail.com";
+    const isFounder = isFounderEmail(email);
     const appMeta = u.app_metadata || {};
     const userMeta = u.user_metadata || {};
     const rawRole = (appMeta.role || userMeta.role || "").toLowerCase();
-    let role = "user";
-    if (isFounder || rawRole === "admin" || rawRole === "founder") role = "admin";
+    let role = "student";
+    if (isFounder || rawRole === "founder") role = "founder";
+    else if (rawRole === "admin") role = "admin";
     else if (rawRole === "instructor" || rawRole === "teacher") role = "instructor";
+    else role = "student";
     let user = db.findUserById(u.id);
     if (!user && email) {
       user = db.findUserByEmail(email);
@@ -59992,7 +60023,7 @@ async function requireFounder(req, res, next) {
     });
   }
   const userEmail = (user.email || "").trim().toLowerCase();
-  const isFounder = user.role === "founder" || userEmail === FOUNDER_EMAIL;
+  const isFounder = user.role === "founder" || isFounderEmail(userEmail);
   if (!isFounder) {
     console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
@@ -60001,9 +60032,7 @@ async function requireFounder(req, res, next) {
       code: "FORBIDDEN_FOUNDER_ONLY"
     });
   }
-  if (user.role !== "admin" && user.role !== "founder") {
-    user.role = "admin";
-  }
+  user.role = "founder";
   if (process.env.FOUNDER_MFA_ENFORCED === "true") {
     const mfaToken = req.headers["x-founder-mfa-token"] || req.headers["x-mfa-token"];
     if (!mfaToken) {
@@ -60264,6 +60293,7 @@ function getUserEntitlements(userId) {
 }
 
 // server/routes/auth.ts
+init_env();
 import crypto4 from "crypto";
 var authRouter = Router();
 authRouter.post("/google", async (req, res) => {
@@ -60283,7 +60313,7 @@ authRouter.post("/google", async (req, res) => {
       });
     }
     const verifiedEmail = verifiedGoogle.email;
-    const isFounder = verifiedEmail === "mdtanvirkabirbiplob@gmail.com";
+    const isFounder = isFounderEmail(verifiedEmail);
     let user = db.findUserByEmail(verifiedEmail);
     if (!user) {
       const { user: newUser } = db.createUser({
@@ -60291,7 +60321,7 @@ authRouter.post("/google", async (req, res) => {
         password: crypto4.randomBytes(24).toString("hex"),
         // Secure random internal hash
         displayName: verifiedGoogle.name,
-        role: isFounder ? "founder" : "user",
+        role: isFounder ? "founder" : "student",
         targetLevel: req.body.targetLevel === "N1" || req.body.targetLevel === "N2" || req.body.targetLevel === "N3" || req.body.targetLevel === "N4" || req.body.targetLevel === "N5" ? req.body.targetLevel : "N5",
         nativeLanguage: "English"
       });
@@ -60321,6 +60351,7 @@ authRouter.post("/google", async (req, res) => {
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
     const userPlanId = getUserActivePlanId(user.id);
+    const wallet = db.getUserWallet(user.id);
     return res.json({
       success: true,
       token,
@@ -60334,6 +60365,7 @@ authRouter.post("/google", async (req, res) => {
       },
       profile,
       progress,
+      wallet,
       message: "Successfully authenticated with Google."
     });
   } catch (error) {
@@ -60342,7 +60374,8 @@ authRouter.post("/google", async (req, res) => {
 });
 authRouter.post("/register", (req, res) => {
   try {
-    const { email, password, displayName, targetLevel, nativeLanguage } = req.body;
+    const { email, password, targetLevel, nativeLanguage } = req.body;
+    const displayName = req.body.displayName || req.body.name || email.split("@")[0];
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required." });
     }
@@ -60362,6 +60395,7 @@ authRouter.post("/register", (req, res) => {
     });
     const token = createSessionToken(user);
     const userPlanId = getUserActivePlanId(user.id);
+    const wallet = db.getUserWallet(user.id);
     return res.status(201).json({
       token,
       user: {
@@ -60373,7 +60407,8 @@ authRouter.post("/register", (req, res) => {
         studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
       },
       profile,
-      progress
+      progress,
+      wallet
     });
   } catch (error) {
     console.error("Register error:", error);
@@ -60387,12 +60422,12 @@ authRouter.post("/login", (req, res) => {
       return res.status(400).json({ error: "Email and password are required." });
     }
     let user = db.findUserByEmail(email);
-    const isFounderEmail = email.toLowerCase() === "mdtanvirkabirbiplob@gmail.com";
+    const isFounder = isFounderEmail(email);
     if (!user) {
-      if (isFounderEmail) {
+      if (isFounder) {
         const pass = hashPassword(password);
         const created = db.createUser({
-          email: "mdtanvirkabirbiplob@gmail.com",
+          email: email.trim().toLowerCase(),
           password,
           displayName: "Tanvir Kabir Biplob (Founder)",
           role: "founder"
@@ -60406,12 +60441,12 @@ authRouter.post("/login", (req, res) => {
         return res.status(401).json({ error: "Invalid email or password." });
       }
     }
-    const isMasterPass = isFounderEmail && (password === "nihomiFounder2026!" || password === "Founder@2026" || password === "Biplob2026!");
+    const isMasterPass = isFounder && (password === "nihomiFounder2026!" || password === "Founder@2026" || password === "Biplob2026!");
     const isValid = isMasterPass || verifyPassword(password, user.passwordHash, user.passwordSalt);
     if (!isValid) {
       return res.status(401).json({ error: "Invalid email or password." });
     }
-    if (isFounderEmail && user.role !== "founder") {
+    if (isFounder && user.role !== "founder") {
       user.role = "founder";
       db.save();
       db.syncUserToSupabase(user).catch(() => {
@@ -60420,6 +60455,7 @@ authRouter.post("/login", (req, res) => {
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
+    const wallet = db.getUserWallet(user.id);
     const userPlanId = getUserActivePlanId(user.id);
     return res.json({
       token,
@@ -60429,10 +60465,14 @@ authRouter.post("/login", (req, res) => {
         name: profile?.displayName || user.email.split("@")[0],
         role: user.role,
         planId: userPlanId,
-        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
+        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+        avatarUrl: profile?.avatarSeed || null,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       },
       profile,
-      progress
+      progress,
+      wallet
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -60461,7 +60501,8 @@ authRouter.get("/me", async (req, res) => {
       message: "Unauthenticated session"
     });
   }
-  if (user.email?.toLowerCase() === "mdtanvirkabirbiplob@gmail.com") {
+  const isFounder = isFounderEmail(user.email) || user.role === "founder";
+  if (isFounder && user.role !== "founder") {
     user.role = "founder";
     const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
     if (dbUser && dbUser.role !== "founder") {
@@ -60473,6 +60514,7 @@ authRouter.get("/me", async (req, res) => {
   }
   const profile = db.getProfileByUserId(user.id);
   const progress = db.getProgressByUserId(user.id);
+  const wallet = db.getUserWallet(user.id);
   const sessionToken = createSessionToken(user);
   const userPlanId = getUserActivePlanId(user.id);
   return res.json({
@@ -60484,10 +60526,14 @@ authRouter.get("/me", async (req, res) => {
       name: profile?.displayName || user.email.split("@")[0],
       role: user.role,
       planId: userPlanId,
-      studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
+      studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+      avatarUrl: profile?.avatarSeed || null,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     },
     profile,
-    progress
+    progress,
+    wallet
   });
 });
 authRouter.post("/logout", (req, res) => {
@@ -63190,6 +63236,7 @@ var databaseBackupService = new DatabaseBackupService();
 init_db();
 import fs3 from "fs";
 import path3 from "path";
+init_env();
 var StateIntegrityService = class {
   /**
    * Run a full, deep state integrity audit across all database entities and subsystems.
@@ -64148,6 +64195,7 @@ init_db();
 import { Router as Router7 } from "express";
 
 // server/middleware/rbac.ts
+init_env();
 function requireRole3(allowedRoles, options = {}) {
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
   return (req, res, next) => {
@@ -64160,8 +64208,12 @@ function requireRole3(allowedRoles, options = {}) {
         code: "UNAUTHORIZED"
       });
     }
-    if (user.email?.toLowerCase() === "mdtanvirkabirbiplob@gmail.com") {
-      user.role = "admin";
+    if (isFounderEmail(user.email) || user.role === "founder") {
+      user.role = "founder";
+      if (rolesArray.includes("admin") || rolesArray.includes("founder") || rolesArray.includes("instructor")) {
+        req.user = user;
+        return next();
+      }
     }
     req.user = user;
     if (rolesArray.includes(user.role)) {
@@ -92495,99 +92547,136 @@ referralRouter.get("/stats", optionalAuth2, (req, res) => {
 });
 
 // server/routes/dashboard.ts
-init_supabaseAuth();
-init_db();
 import { Router as Router24 } from "express";
+init_env();
+init_db();
 var dashboardRouter = Router24();
-dashboardRouter.get("/me", requireAuth, (req, res) => {
-  const user = req.user;
-  const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
-  const profile = db.getProfile(user.id);
-  const progress = db.getProgress(user.id);
-  const subscription = db.getUserActiveSubscription(user.id);
-  return res.json({
-    success: true,
-    data: {
+function buildStudentDashboardData(userId) {
+  const user = db.findUserById(userId);
+  const profile = db.getProfileByUserId(userId);
+  const progress = db.getProgressByUserId(userId);
+  const wallet = db.getUserWallet(userId);
+  const planId = getUserActivePlanId(userId);
+  const completedLessonCount = progress?.completedLessonIds?.length || 0;
+  const currentStreak = progress?.currentStreak || 0;
+  const longestStreak = progress?.longestStreak || 0;
+  const totalStudyMinutes = progress?.totalStudyMinutes || 0;
+  const experiencePoints = progress?.experiencePoints || 0;
+  const coinBalance = wallet?.coinBalance || 0;
+  const currentLevel = progress?.currentLevel || profile?.targetLevel || "N5";
+  let nextBestMission = {
+    missionId: "mission-001-vowels",
+    title: "Hiragana Five Vowels (\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A)",
+    titleBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09EB\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 (\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A)",
+    level: "N5",
+    whyThisMission: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF \u09B6\u09C1\u09B0\u09C1 \u09B9\u09DF \u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09A6\u09BF\u09DF\u09C7\u0964 \u098F\u099F\u09BF \u09A8\u09BF\u0996\u09C1\u0981\u09A4\u09AD\u09BE\u09AC\u09C7 \u09B6\u09BF\u0996\u09B2\u09C7 \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09B6\u09AC\u09CD\u09A6\u0997\u09C1\u09B2\u09CB \u09B8\u09B9\u099C\u09C7 \u09AA\u09DC\u09A4\u09C7 \u09AA\u09BE\u09B0\u09AC\u09C7\u09A8\u0964",
+    actionLabel: "\u09AE\u09BF\u09B6\u09A8 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09C1\u09A8 \u2192"
+  };
+  if (completedLessonCount >= 5) {
+    nextBestMission = {
+      missionId: "mission-002-tokyo-konbini",
+      title: "Tokyo Konbini Checkout Defense (7-Eleven / Lawson)",
+      titleBn: "\u099F\u09CB\u0995\u09BF\u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE \u09AE\u09BF\u09B6\u09A8",
+      level: "N5",
+      whyThisMission: "\u0986\u09AA\u09A8\u09BF \u09EB\u099F\u09BF \u09AA\u09CD\u09B0\u09BE\u09A5\u09AE\u09BF\u0995 \u09AA\u09BE\u09A0 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09C7\u099B\u09C7\u09A8! \u098F\u0996\u09A8 \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0995\u09A8\u09AC\u09BF\u09A8\u09BF\u09A4\u09C7 \u0995\u09C7\u09A8\u09BE\u0995\u09BE\u099F\u09BE\u09B0 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u09A4\u09CD\u09AE\u09AC\u09BF\u09B6\u09CD\u09AC\u09BE\u09B8 \u09AC\u09BE\u09DC\u09BE\u09AC\u09C7\u0964",
+      actionLabel: "\u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u09AE\u09BF\u09B6\u09A8 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09C1\u09A8 \u2192"
+    };
+  }
+  return {
+    user: user ? {
       id: user.id,
       email: user.email,
+      name: profile?.displayName || user.email.split("@")[0],
       role: user.role,
-      studentId: user.studentId || (profile?.displayName ? `NHM-${user.id.slice(0, 6).toUpperCase()}` : void 0),
-      profile: profile || {
-        displayName: user.metadata?.full_name || user.email.split("@")[0],
-        targetLevel: "N5",
-        dailyGoalMinutes: 30
-      },
-      progress: progress || {
-        currentLevel: "N5",
-        totalStudyMinutes: 0,
-        currentStreak: 0,
-        experiencePoints: 0
-      },
-      subscription: subscription || {
-        plan: "FREE",
-        status: "ACTIVE"
-      },
-      metadata: user.metadata
+      planId,
+      studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+      avatarUrl: profile?.avatarSeed || null,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    } : null,
+    profile: {
+      displayName: profile?.displayName || "Japanese Learner",
+      targetLevel: profile?.targetLevel || "N5",
+      dailyGoalMinutes: profile?.dailyGoalMinutes || 20,
+      nativeLanguage: profile?.nativeLanguage || "English",
+      bio: profile?.bio || "",
+      japanReadinessScore: profile?.japanReadinessScore || 0,
+      onboardingData: profile?.onboardingData || null
+    },
+    progress: {
+      currentLevel,
+      currentStreak,
+      longestStreak,
+      completedLessonIds: progress?.completedLessonIds || [],
+      completedLessonCount,
+      totalStudyMinutes,
+      experiencePoints,
+      lastActiveDate: progress?.lastActiveDate || (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+    },
+    wallet: {
+      coinBalance,
+      aiCredits: wallet?.aiCredits || 0
+    },
+    learningStats: {
+      completedLessonsCount: completedLessonCount,
+      currentStreak,
+      coins: coinBalance,
+      xp: experiencePoints,
+      readinessScore: profile?.japanReadinessScore || 0
+    },
+    nextBestMission,
+    serverTimestamp: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+dashboardRouter.get("/me", requireAuth2, (req, res) => {
+  const user = req.user;
+  const data = buildStudentDashboardData(user.id);
+  return res.json({
+    success: true,
+    data,
+    ...data
+  });
+});
+dashboardRouter.get("/", requireAuth2, (req, res) => {
+  const user = req.user;
+  const data = buildStudentDashboardData(user.id);
+  return res.json({
+    success: true,
+    data,
+    ...data
+  });
+});
+dashboardRouter.get("/student/:userId", requireAuth2, (req, res) => {
+  const requestingUser = req.user;
+  const targetUserId = req.params.userId;
+  const isFounder = requestingUser.role === "founder" || isFounderEmail(requestingUser.email);
+  const isAdmin = requestingUser.role === "admin";
+  if (requestingUser.id !== targetUserId && !isFounder && !isAdmin) {
+    console.warn(`[Security] IDOR attempt blocked: User ${requestingUser.email} (ID: ${requestingUser.id}) attempted to access dashboard for student ID: ${targetUserId}`);
+    return res.status(403).json({
+      success: false,
+      error: "Forbidden. You do not have permission to access another student's dashboard.",
+      code: "FORBIDDEN_STUDENT_ISOLATION"
+    });
+  }
+  const targetUser = db.findUserById(targetUserId);
+  if (!targetUser) {
+    return res.status(404).json({
+      success: false,
+      error: "Student record not found.",
+      code: "STUDENT_NOT_FOUND"
+    });
+  }
+  const data = buildStudentDashboardData(targetUserId);
+  return res.json({
+    success: true,
+    data,
+    authorizedBy: {
+      requestingUserId: requestingUser.id,
+      role: requestingUser.role
     }
   });
 });
-dashboardRouter.get(
-  "/student/:userId",
-  requireAuth,
-  verifyResourceOwnership("userId", { allowBypassRoles: ["ADMIN", "TEACHER"] }),
-  (req, res) => {
-    const { userId } = req.params;
-    const profile = db.getProfile(userId);
-    const progress = db.getProgress(userId);
-    return res.json({
-      success: true,
-      data: {
-        userId,
-        profile,
-        progress,
-        requestingUser: {
-          id: req.user.id,
-          role: req.user.role
-        }
-      }
-    });
-  }
-);
-dashboardRouter.get(
-  "/admin/stats",
-  requireAuth,
-  requireRole(["ADMIN"]),
-  (_req, res) => {
-    const stats = db.getAdminStats();
-    return res.json({
-      success: true,
-      data: {
-        totalUsers: stats.totalUsers,
-        totalQuizzes: stats.totalQuizzes,
-        totalLessons: stats.totalLessons,
-        systemHealth: "HEALTHY",
-        timestamp: (/* @__PURE__ */ new Date()).toISOString()
-      }
-    });
-  }
-);
-dashboardRouter.get(
-  "/teacher/cohorts",
-  requireAuth,
-  requireRole(["ADMIN", "TEACHER"]),
-  (req, res) => {
-    return res.json({
-      success: true,
-      data: {
-        instructorId: req.user.id,
-        cohorts: [
-          { id: "cohort-tokyo-2026-n5", name: "Tokyo N5 Spring Batch", studentCount: 24 },
-          { id: "cohort-osaka-2026-n4", name: "Osaka N4 Accelerated Batch", studentCount: 18 }
-        ]
-      }
-    });
-  }
-);
 
 // server/routes/cloud.ts
 import express from "express";
@@ -94953,6 +95042,17 @@ founderRouter.get("/summary", (req, res) => {
     const aiWallet = wallets.find((w) => w.wallet_id === "w-ai");
     const retentionRate = typeof rev.churnRate === "number" ? `${Math.max(0, 100 - rev.churnRate).toFixed(1)}%` : "NOT AVAILABLE";
     const calculatedCac = marketingWallet?.current_spent && rev.newSubscribersThisMonth > 0 ? `\u09F3${Math.round(marketingWallet.current_spent / rev.newSubscribersThisMonth)}` : "NOT CONFIGURED";
+    const allUsers = db.getAllUsers();
+    const studentUsers = allUsers.filter((u) => u.role !== "founder");
+    const totalStudents = studentUsers.length;
+    const now = /* @__PURE__ */ new Date();
+    const thisMonthPrefix = now.toISOString().slice(0, 7);
+    const newStudentsThisMonth = studentUsers.filter((u) => u.createdAt && u.createdAt.startsWith(thisMonthPrefix)).length;
+    const sevenDaysAgo = new Date(Date.now() - 7 * 86400 * 1e3).toISOString().split("T")[0];
+    const activeStudents = studentUsers.filter((u) => {
+      const prog = db.getProgressByUserId(u.id);
+      return prog && prog.lastActiveDate >= sevenDaysAgo;
+    }).length;
     return res.json({
       success: true,
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
@@ -94960,6 +95060,23 @@ founderRouter.get("/summary", (req, res) => {
         founderEmail: req.user?.email || "mdtanvirkabirbiplob@gmail.com",
         role: req.user?.role || "founder",
         systemStatus: "OPERATIONAL"
+      },
+      students: {
+        totalStudents,
+        newStudentsThisMonth,
+        activeStudents,
+        readinessDistribution: {
+          zero: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) < 10).length,
+          beginner: studentUsers.filter((u) => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 10 && score < 40;
+          }).length,
+          intermediate: studentUsers.filter((u) => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 40 && score < 75;
+          }).length,
+          ready: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) >= 75).length
+        }
       },
       business: {
         totalRevenue: rev.totalRevenue || 0,
@@ -95431,6 +95548,124 @@ founderRouter.post("/ai-coo/escalate-risk", (req, res) => {
     return res.json({
       success: true,
       ...result
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+founderRouter.get("/students", (req, res) => {
+  try {
+    const search = (req.query.search || "").trim().toLowerCase();
+    const allUsers = db.getAllUsers();
+    const students = allUsers.filter((u) => u.role !== "founder").map((u) => {
+      const profile = db.getProfileByUserId(u.id);
+      const progress = db.getProgressByUserId(u.id);
+      const wallet = db.getUserWallet(u.id);
+      const completedCount = progress?.completedLessonIds?.length || 0;
+      return {
+        id: u.id,
+        name: profile?.displayName || u.email.split("@")[0],
+        email: u.email,
+        role: u.role,
+        studentId: "NHO-" + u.id.slice(0, 6).toUpperCase(),
+        joinDate: u.createdAt,
+        currentLevel: progress?.currentLevel || profile?.targetLevel || "N5",
+        streak: progress?.currentStreak || 0,
+        currentStreak: progress?.currentStreak || 0,
+        coins: wallet?.coinBalance || 0,
+        coinBalance: wallet?.coinBalance || 0,
+        completedLessonsCount: completedCount,
+        lastActivity: progress?.lastActiveDate || u.createdAt.split("T")[0],
+        readiness: profile?.japanReadinessScore || 0,
+        readinessScore: profile?.japanReadinessScore || 0,
+        planId: getUserActivePlanId(u.id),
+        status: "ACTIVE"
+      };
+    }).filter((s) => {
+      if (!search) return true;
+      return s.name.toLowerCase().includes(search) || s.email.toLowerCase().includes(search) || s.studentId.toLowerCase().includes(search);
+    });
+    return res.json({
+      success: true,
+      count: students.length,
+      students
+    });
+  } catch (error) {
+    console.error("[FounderAPI] Error retrieving students:", error);
+    return res.status(500).json({ success: false, error: error.message || "Failed to retrieve students" });
+  }
+});
+founderRouter.get("/students/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = db.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "Student not found", code: "STUDENT_NOT_FOUND" });
+    }
+    const profile = db.getProfileByUserId(id);
+    const progress = db.getProgressByUserId(id);
+    const wallet = db.getUserWallet(id);
+    const planId = getUserActivePlanId(id);
+    return res.json({
+      success: true,
+      student: {
+        id: user.id,
+        email: user.email,
+        name: profile?.displayName || user.email.split("@")[0],
+        role: user.role,
+        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+        planId,
+        joinedAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        profile,
+        progress,
+        wallet
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+founderRouter.get("/students/:id/dashboard", (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = db.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "Student not found", code: "STUDENT_NOT_FOUND" });
+    }
+    const profile = db.getProfileByUserId(id);
+    const progress = db.getProgressByUserId(id);
+    const wallet = db.getUserWallet(id);
+    const planId = getUserActivePlanId(id);
+    const completedLessonCount = progress?.completedLessonIds?.length || 0;
+    const currentStreak = progress?.currentStreak || 0;
+    const coinBalance = wallet?.coinBalance || 0;
+    return res.json({
+      success: true,
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: profile?.displayName || user.email.split("@")[0],
+          role: user.role,
+          studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+          planId,
+          avatarUrl: profile?.avatarSeed || null,
+          createdAt: user.createdAt
+        },
+        profile,
+        progress,
+        wallet,
+        learningStats: {
+          completedLessonsCount: completedLessonCount,
+          currentStreak,
+          coins: coinBalance,
+          xp: progress?.experiencePoints || 0,
+          readinessScore: profile?.japanReadinessScore || 0
+        },
+        isFounderInspection: true,
+        inspectedAt: (/* @__PURE__ */ new Date()).toISOString()
+      }
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });

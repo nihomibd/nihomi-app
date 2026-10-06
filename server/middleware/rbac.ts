@@ -2,6 +2,8 @@ import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest, getUserFromToken, extractBearerToken } from '../authHelper.js';
 import { UserRole } from '../types.js';
 
+import { isFounderEmail } from '../env.js';
+
 export interface RbacOptions {
   errorMessage?: string;
   allowSelf?: {
@@ -33,9 +35,14 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
       });
     }
 
-    // Auto-promote verified founder to admin
-    if (user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') {
-      user.role = 'admin';
+    // Auto-recognize verified founder
+    if (isFounderEmail(user.email) || user.role === 'founder') {
+      user.role = 'founder';
+      // Founder has super-admin permissions across admin and instructor endpoints
+      if (rolesArray.includes('admin') || rolesArray.includes('founder') || rolesArray.includes('instructor')) {
+        req.user = user;
+        return next();
+      }
     }
 
     req.user = user;

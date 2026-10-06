@@ -16,7 +16,8 @@ import {
   Layers,
   Award,
   Play,
-  Target
+  Target,
+  Coins
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
@@ -71,7 +72,7 @@ export const N5_CURRICULUM_PATHWAY: MilestoneLesson[] = [
 ];
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
-  const { user, progress } = useAuth();
+  const { user, progress, coinWallet } = useAuth();
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [isPlacementOpen, setIsPlacementOpen] = useState<boolean>(false);
   const [isKonbiniModalOpen, setIsKonbiniModalOpen] = useState<boolean>(false);
@@ -80,13 +81,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const [knowledgeVersion, setKnowledgeVersion] = useState<number>(0);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
-  // Student metrics synced from localStorage & Auth state
+  // Student metrics synced from authenticated state & user-scoped storage
   const studentName = user?.name || user?.email?.split('@')[0] || 'শিক্ষার্থী';
-  const streakDays = user?.streakDays || (progress as any)?.streakDays || 1;
+  const streakDays = progress?.currentStreak ?? progress?.streakDays ?? user?.streakDays ?? 0;
 
   const [completedLessons, setCompletedLessons] = useState<string[]>(() => {
+    if (progress?.completedLessonIds && progress.completedLessonIds.length > 0) {
+      return progress.completedLessonIds;
+    }
     try {
-      const raw = localStorage.getItem('nihomi_completed_lessons');
+      const storageKey = user?.id ? `nihomi_completed_lessons_${user.id}` : 'nihomi_completed_lessons';
+      const raw = localStorage.getItem(storageKey);
       if (raw) {
         const arr = JSON.parse(raw);
         if (Array.isArray(arr) && arr.length > 0) return arr;
@@ -96,8 +101,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   });
 
   const [studentXp, setStudentXp] = useState<number>(() => {
+    if (typeof progress?.experiencePoints === 'number') {
+      return progress.experiencePoints;
+    }
     try {
-      return parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+      const storageKey = user?.id ? `nihomi_student_xp_${user.id}` : 'nihomi_student_xp';
+      return parseInt(localStorage.getItem(storageKey) || '0', 10);
     } catch {
       return 0;
     }
@@ -105,22 +114,35 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
   const [baitoReadinessScore, setBaitoReadinessScore] = useState<number>(() => {
     try {
-      return parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '0', 10);
+      const storageKey = user?.id ? `nihomi_baito_readiness_score_${user.id}` : 'nihomi_baito_readiness_score';
+      return parseInt(localStorage.getItem(storageKey) || '0', 10);
     } catch {
       return 0;
     }
   });
 
+  // Sync state if authenticated progress updates
+  useEffect(() => {
+    if (progress?.completedLessonIds) {
+      setCompletedLessons(progress.completedLessonIds);
+    }
+    if (typeof progress?.experiencePoints === 'number') {
+      setStudentXp(progress.experiencePoints);
+    }
+  }, [progress]);
+
   // Listen for progress updates
   useEffect(() => {
     const handleProgressUpdated = () => {
       try {
-        const raw = localStorage.getItem('nihomi_completed_lessons');
+        const storageKey = user?.id ? `nihomi_completed_lessons_${user.id}` : 'nihomi_completed_lessons';
+        const raw = localStorage.getItem(storageKey);
         if (raw) {
           const arr = JSON.parse(raw);
           if (Array.isArray(arr)) setCompletedLessons(arr);
         }
-        const xp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
+        const xpKey = user?.id ? `nihomi_student_xp_${user.id}` : 'nihomi_student_xp';
+        const xp = parseInt(localStorage.getItem(xpKey) || '0', 10);
         if (xp) setStudentXp(xp);
       } catch {}
       setKnowledgeVersion(v => v + 1);
@@ -203,6 +225,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
               <span>{studentXp} XP</span>
             </div>
+            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400">
+              <Coins className="w-3.5 h-3.5 text-amber-400" />
+              <span>{coinWallet?.coinBalance ?? 0} কয়েন</span>
+            </div>
             <button
               onClick={() => setIsAiSenseiOpen(true)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white transition-all shadow-md shadow-red-600/20 cursor-pointer"
@@ -216,7 +242,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       {/* Main Learning Canvas */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
-        
+        {/* Founder View Active Banner */}
+        {user?.role === 'founder' && (
+          <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-rose-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 text-lg">
+                👑
+              </div>
+              <div>
+                <div className="text-xs font-bold text-amber-300">Executive Founder View Active</div>
+                <p className="text-[11px] text-stone-300">Viewing your personal learner profile, progress, and readiness score.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate?.('founder')}
+              className="btn-haptic px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-amber-500/20 cursor-pointer shrink-0"
+            >
+              <span>Founder Control Center →</span>
+            </button>
+          </div>
+        )}
+
         {/* ========================================================================= */}
         {/* HERO CTA: ONE PROMINENT NEXT BEST MISSION CARD                            */}
         {/* ========================================================================= */}

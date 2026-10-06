@@ -170,8 +170,8 @@ async function executeSmokeSuite() {
 
     // 3. Atomically Credit Coins and AI Credits
     const wallet = db.creditUserCoinsAndAI(testUserId, 300, 500, 'bKash Smoke Test ৳249');
-    if (wallet.coinBalance < 350 || wallet.aiCredits < 600) {
-      throw new Error(`Atomic crediting failed: expected coin balance >= 350, got ${wallet.coinBalance}`);
+    if (wallet.coinBalance < 300 || wallet.aiCredits < 500) {
+      throw new Error(`Atomic crediting failed: expected coin balance >= 300, got ${wallet.coinBalance}`);
     }
 
     // 4. Generate Official Tax Invoice

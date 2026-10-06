@@ -3,6 +3,7 @@ import { db, verifyPassword, hashPassword } from '../db.js';
 import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, resolveUserFromTokenAsync, extractBearerToken, AuthenticatedRequest } from '../authHelper.js';
 import { verifyGoogleIdToken } from '../services/googleAuth.js';
 import { getUserActivePlanId } from '../services/entitlements.js';
+import { isFounderEmail } from '../env.js';
 import crypto from 'crypto';
 
 export const authRouter = Router();
@@ -31,7 +32,7 @@ authRouter.post('/google', async (req, res) => {
     }
 
     const verifiedEmail = verifiedGoogle.email;
-    const isFounder = verifiedEmail === 'mdtanvirkabirbiplob@gmail.com';
+    const isFounder = isFounderEmail(verifiedEmail);
     let user = db.findUserByEmail(verifiedEmail);
 
     if (!user) {
@@ -40,7 +41,7 @@ authRouter.post('/google', async (req, res) => {
         email: verifiedEmail,
         password: crypto.randomBytes(24).toString('hex'), // Secure random internal hash
         displayName: verifiedGoogle.name,
-        role: isFounder ? 'founder' : 'user',
+        role: isFounder ? 'founder' : 'student',
         targetLevel: (req.body.targetLevel === 'N1' || req.body.targetLevel === 'N2' || req.body.targetLevel === 'N3' || req.body.targetLevel === 'N4' || req.body.targetLevel === 'N5') ? req.body.targetLevel : 'N5',
         nativeLanguage: 'English'
       });
@@ -77,6 +78,8 @@ authRouter.post('/google', async (req, res) => {
 
     const userPlanId = getUserActivePlanId(user.id);
 
+    const wallet = db.getUserWallet(user.id);
+
     return res.json({
       success: true,
       token,
@@ -90,6 +93,7 @@ authRouter.post('/google', async (req, res) => {
       },
       profile,
       progress,
+      wallet,
       message: 'Successfully authenticated with Google.'
     });
   } catch (error: any) {
@@ -101,7 +105,8 @@ authRouter.post('/google', async (req, res) => {
 // Register new user
 authRouter.post('/register', (req, res) => {
   try {
-    const { email, password, displayName, targetLevel, nativeLanguage } = req.body;
+    const { email, password, targetLevel, nativeLanguage } = req.body;
+    const displayName = req.body.displayName || req.body.name || email.split('@')[0];
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required.' });
@@ -125,8 +130,8 @@ authRouter.post('/register', (req, res) => {
     });
 
     const token = createSessionToken(user);
-
     const userPlanId = getUserActivePlanId(user.id);
+    const wallet = db.getUserWallet(user.id);
 
     return res.status(201).json({
       token,
@@ -139,7 +144,8 @@ authRouter.post('/register', (req, res) => {
         studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
       },
       profile,
-      progress
+      progress,
+      wallet
     });
   } catch (error: any) {
     console.error('Register error:', error);
@@ -157,13 +163,13 @@ authRouter.post('/login', (req, res) => {
     }
 
     let user = db.findUserByEmail(email);
-    const isFounderEmail = email.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+    const isFounder = isFounderEmail(email);
 
     if (!user) {
-      if (isFounderEmail) {
+      if (isFounder) {
         const pass = hashPassword(password);
         const created = db.createUser({
-          email: 'mdtanvirkabirbiplob@gmail.com',
+          email: email.trim().toLowerCase(),
           password: password,
           displayName: 'Tanvir Kabir Biplob (Founder)',
           role: 'founder'
@@ -178,7 +184,7 @@ authRouter.post('/login', (req, res) => {
       }
     }
 
-    const isMasterPass = isFounderEmail && (
+    const isMasterPass = isFounder && (
       password === 'nihomiFounder2026!' ||
       password === 'Founder@2026' ||
       password === 'Biplob2026!'
@@ -188,7 +194,7 @@ authRouter.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
-    if (isFounderEmail && user.role !== 'founder') {
+    if (isFounder && user.role !== 'founder') {
       user.role = 'founder';
       db.save();
       db.syncUserToSupabase(user).catch(() => {});
@@ -197,6 +203,7 @@ authRouter.post('/login', (req, res) => {
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
+    const wallet = db.getUserWallet(user.id);
 
     const userPlanId = getUserActivePlanId(user.id);
 
@@ -208,10 +215,14 @@ authRouter.post('/login', (req, res) => {
         name: profile?.displayName || user.email.split('@')[0],
         role: user.role,
         planId: userPlanId,
-        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+        avatarUrl: profile?.avatarSeed || null,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       },
       profile,
-      progress
+      progress,
+      wallet
     });
   } catch (error: any) {
     console.error('Login error:', error);
@@ -248,7 +259,8 @@ authRouter.get('/me', async (req: AuthenticatedRequest, res) => {
     });
   }
 
-  if (user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') {
+  const isFounder = isFounderEmail(user.email) || user.role === 'founder';
+  if (isFounder && user.role !== 'founder') {
     user.role = 'founder';
     const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
     if (dbUser && dbUser.role !== 'founder') {
@@ -260,24 +272,28 @@ authRouter.get('/me', async (req: AuthenticatedRequest, res) => {
 
   const profile = db.getProfileByUserId(user.id);
   const progress = db.getProgressByUserId(user.id);
+  const wallet = db.getUserWallet(user.id);
   const sessionToken = createSessionToken(user);
+  const userPlanId = getUserActivePlanId(user.id);
 
-    const userPlanId = getUserActivePlanId(user.id);
-
-    return res.json({
-      authenticated: true,
-      token: sessionToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: profile?.displayName || user.email.split('@')[0],
-        role: user.role,
-        planId: userPlanId,
-        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
-      },
-      profile,
-      progress
-    });
+  return res.json({
+    authenticated: true,
+    token: sessionToken,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: profile?.displayName || user.email.split('@')[0],
+      role: user.role,
+      planId: userPlanId,
+      studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+      avatarUrl: profile?.avatarSeed || null,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    },
+    profile,
+    progress,
+    wallet
+  });
 });
 
 // Logout

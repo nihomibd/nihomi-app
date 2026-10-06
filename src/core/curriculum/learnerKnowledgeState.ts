@@ -52,7 +52,21 @@ export interface LearnerKnowledgeState {
   lastActiveDate: string;
 }
 
-const STORAGE_KEY = 'nihomi_learner_knowledge_state_v1';
+function getStorageKey(userId?: string): string {
+  if (userId && userId !== 'guest') {
+    return `nihomi_knowledge_state_${userId}`;
+  }
+  try {
+    const rawUser = localStorage.getItem('nihomi_user');
+    if (rawUser) {
+      const u = JSON.parse(rawUser);
+      if (u?.id && u.id !== 'guest') {
+        return `nihomi_knowledge_state_${u.id}`;
+      }
+    }
+  } catch {}
+  return 'nihomi_learner_knowledge_state_guest';
+}
 
 export function createInitialKnowledgeState(): LearnerKnowledgeState {
   return {
@@ -72,55 +86,31 @@ export function createInitialKnowledgeState(): LearnerKnowledgeState {
     recentMistakes: [],
     reviewQueue: [],
     totalXp: 0,
-    streakDays: 1,
+    streakDays: 0,
     lastActiveDate: new Date().toISOString().split('T')[0]
   };
 }
 
-export function loadLearnerKnowledgeState(): LearnerKnowledgeState {
+export function loadLearnerKnowledgeState(userId?: string): LearnerKnowledgeState {
   if (typeof window === 'undefined') return createInitialKnowledgeState();
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey(userId);
+    const raw = localStorage.getItem(key);
     if (raw) {
-      const parsed = JSON.parse(raw);
-      // Ensure backward-compatibility with older vowel array key if present
-      const legacyVowels = localStorage.getItem('nihomi_completed_vowels');
-      if (legacyVowels) {
-        const vowels: string[] = JSON.parse(legacyVowels);
-        vowels.forEach(v => {
-          if (!parsed.knownHiragana.includes(v)) {
-            parsed.knownHiragana.push(v);
-          }
-        });
-      }
-      return parsed;
+      return JSON.parse(raw);
     }
-
-    // Hydrate from legacy keys if available
-    const initial = createInitialKnowledgeState();
-    const legacyVowels = localStorage.getItem('nihomi_completed_vowels');
-    if (legacyVowels) {
-      initial.knownHiragana = JSON.parse(legacyVowels);
-    }
-    const legacyXp = localStorage.getItem('nihomi_student_xp');
-    if (legacyXp) {
-      initial.totalXp = parseInt(legacyXp, 10) || 0;
-    }
-    return initial;
+    return createInitialKnowledgeState();
   } catch (err) {
     console.warn('[KnowledgeState] Hydration fallback:', err);
     return createInitialKnowledgeState();
   }
 }
 
-export function saveLearnerKnowledgeState(state: LearnerKnowledgeState): void {
+export function saveLearnerKnowledgeState(state: LearnerKnowledgeState, userId?: string): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    // Also sync legacy keys for older consumers
-    localStorage.setItem('nihomi_completed_vowels', JSON.stringify(state.knownHiragana));
-    localStorage.setItem('nihomi_student_xp', state.totalXp.toString());
-    
+    const key = getStorageKey(userId);
+    localStorage.setItem(key, JSON.stringify(state));
     window.dispatchEvent(new CustomEvent('nihomi:knowledge-state-updated', { detail: state }));
   } catch (err) {
     console.warn('[KnowledgeState] Storage failed:', err);

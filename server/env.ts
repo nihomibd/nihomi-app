@@ -25,3 +25,22 @@ export function validateEnvironment(): void {
   // Enforce JWT_SECRET fail-fast check
   getRequiredJwtSecret();
 }
+
+/**
+ * Retrieves trusted Founder emails configured in the environment.
+ */
+export function getFounderEmails(): string[] {
+  const raw = process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || 'mdtanvirkabirbiplob@gmail.com';
+  return raw
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/**
+ * Verifies if an email belongs to the trusted founder list.
+ */
+export function isFounderEmail(email?: string): boolean {
+  if (!email || typeof email !== 'string') return false;
+  return getFounderEmails().includes(email.trim().toLowerCase());
+}

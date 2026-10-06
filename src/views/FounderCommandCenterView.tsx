@@ -44,7 +44,7 @@ interface FounderCommandCenterViewProps {
 export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> = ({ onNavigate }) => {
   const { user, login, loginWithGoogle, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'ai-ceo' | 'approvals' | 'departments' | 'tasks' | 'budget' | 'emergency'
+    'overview' | 'students' | 'ai-ceo' | 'approvals' | 'departments' | 'tasks' | 'budget' | 'emergency'
   >('overview');
 
   // Executive Login & Gatekeeper State
@@ -74,6 +74,15 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
   const [budget, setBudget] = useState<any | null>(null);
   const [emergencyControls, setEmergencyControls] = useState<any | null>(null);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
+
+  // Students & Learner Cohort State
+  const [students, setStudents] = useState<any[]>([]);
+  const [studentsLoading, setStudentsLoading] = useState<boolean>(false);
+  const [studentSearch, setStudentSearch] = useState<string>('');
+  const [selectedStudentDetail, setSelectedStudentDetail] = useState<any | null>(null);
+  const [selectedStudentDashboard, setSelectedStudentDashboard] = useState<any | null>(null);
+  const [isStudentModalOpen, setIsStudentModalOpen] = useState<boolean>(false);
+  const [isDashboardSnapshotModalOpen, setIsDashboardSnapshotModalOpen] = useState<boolean>(false);
 
   // AI CEO Chat State
   const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string; timestamp: string }>>([
@@ -195,13 +204,59 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
     }
   }, [getAuthHeaders]);
 
+  const fetchStudents = useCallback(async (query: string = '') => {
+    setStudentsLoading(true);
+    try {
+      const headers = getAuthHeaders();
+      const url = query ? `/api/founder/students?search=${encodeURIComponent(query)}` : '/api/founder/students';
+      const res = await fetch(url, { headers });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.students)) {
+        setStudents(data.students);
+      }
+    } catch (err) {
+      console.error('Error fetching students:', err);
+    } finally {
+      setStudentsLoading(false);
+    }
+  }, [getAuthHeaders]);
+
+  const handleInspectStudent = async (studentId: string) => {
+    try {
+      const headers = getAuthHeaders();
+      const res = await fetch(`/api/founder/students/${studentId}`, { headers });
+      const data = await res.json();
+      if (data.success && data.student) {
+        setSelectedStudentDetail(data.student);
+        setIsStudentModalOpen(true);
+      }
+    } catch (err) {
+      console.error('Error inspecting student:', err);
+    }
+  };
+
+  const handleInspectStudentDashboard = async (studentId: string) => {
+    try {
+      const headers = getAuthHeaders();
+      const res = await fetch(`/api/founder/students/${studentId}/dashboard`, { headers });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setSelectedStudentDashboard(data.data);
+        setIsDashboardSnapshotModalOpen(true);
+      }
+    } catch (err) {
+      console.error('Error inspecting student dashboard:', err);
+    }
+  };
+
   useEffect(() => {
     if (isAuthorizedFounder) {
       fetchAllFounderData();
+      fetchStudents(studentSearch);
     } else {
       setIsLoading(false);
     }
-  }, [fetchAllFounderData, isAuthorizedFounder]);
+  }, [fetchAllFounderData, fetchStudents, isAuthorizedFounder, studentSearch]);
 
   // AI CEO Query Submission
   const handleSendChat = async (promptText?: string) => {
@@ -673,6 +728,13 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
               <span className="hidden sm:inline">Refresh</span>
             </button>
             <button
+              onClick={() => onNavigate('dashboard')}
+              className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-xs font-black text-white rounded-lg flex items-center space-x-1.5 transition-all shadow-md shadow-red-600/30 cursor-pointer"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>My Learner Dashboard</span>
+            </button>
+            <button
               onClick={() => onNavigate('portal')}
               className="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-200 rounded-lg transition-colors cursor-pointer"
             >
@@ -713,12 +775,13 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
           <div className="flex space-x-2 py-2.5 overflow-x-auto scrollbar-none">
             {[
               { id: 'overview', label: '1. Cockpit & Objectives', icon: Target },
-              { id: 'ai-ceo', label: '2. Ask AI CEO', icon: Sparkles },
-              { id: 'approvals', label: `3. Approvals (${approvals.filter(a => a.status === 'PENDING').length})`, icon: ShieldCheck },
-              { id: 'departments', label: '4. AI Workforce (13)', icon: Building2 },
-              { id: 'tasks', label: `5. Work Tasks (${tasks.length})`, icon: ListTodo },
-              { id: 'budget', label: '6. Budget Firewall', icon: DollarSign },
-              { id: 'emergency', label: '7. Emergency & Audit', icon: ShieldAlert },
+              { id: 'students', label: `2. Learners & Cohort (${summary?.students?.totalStudents ?? students.length})`, icon: Users },
+              { id: 'ai-ceo', label: '3. Ask AI CEO', icon: Sparkles },
+              { id: 'approvals', label: `4. Approvals (${approvals.filter(a => a.status === 'PENDING').length})`, icon: ShieldCheck },
+              { id: 'departments', label: '5. AI Workforce (13)', icon: Building2 },
+              { id: 'tasks', label: `6. Work Tasks (${tasks.length})`, icon: ListTodo },
+              { id: 'budget', label: '7. Budget Firewall', icon: DollarSign },
+              { id: 'emergency', label: '8. Emergency & Audit', icon: ShieldAlert },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -933,7 +996,222 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
         )}
 
         {/* ==================================================================== */}
-        {/* TAB 2: ASK AI CEO (READ-ONLY GROUNDED ASSISTANT) */}
+        {/* TAB: LEARNERS & STUDENTS COHORT */}
+        {/* ==================================================================== */}
+        {activeTab === 'students' && (
+          <div className="space-y-6">
+            {/* COHORT OVERVIEW CARDS */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-[#0e0e1a] p-5 rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-[10px] text-slate-400 font-mono uppercase block">TOTAL ENROLLED STUDENTS</span>
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-2xl font-black text-white font-mono">
+                    {summary?.students?.totalStudents ?? students.length}
+                  </span>
+                  <span className="text-xs text-slate-400 font-medium">Students</span>
+                </div>
+              </div>
+
+              <div className="bg-[#0e0e1a] p-5 rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-[10px] text-slate-400 font-mono uppercase block">NEW THIS MONTH</span>
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-2xl font-black text-emerald-400 font-mono">
+                    +{summary?.students?.newStudentsThisMonth ?? 0}
+                  </span>
+                  <span className="text-xs text-emerald-500/80 font-medium">Cohort</span>
+                </div>
+              </div>
+
+              <div className="bg-[#0e0e1a] p-5 rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-[10px] text-slate-400 font-mono uppercase block">ACTIVE LEARNERS (7D)</span>
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-2xl font-black text-amber-400 font-mono">
+                    {summary?.students?.activeStudents ?? 0}
+                  </span>
+                  <span className="text-xs text-amber-500/80 font-medium">Active</span>
+                </div>
+              </div>
+
+              <div className="bg-[#0e0e1a] p-5 rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-[10px] text-slate-400 font-mono uppercase block">JAPAN READY COHORT</span>
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-2xl font-black text-indigo-400 font-mono">
+                    {summary?.students?.readinessDistribution?.ready ?? 0}
+                  </span>
+                  <span className="text-xs text-indigo-400/80 font-medium">Score ≥ 75%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* READINESS DISTRIBUTION BAR */}
+            <div className="bg-[#0e0e1a] border border-slate-800 rounded-2xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <Target className="w-4 h-4 text-amber-400" />
+                  Cohort Japan Readiness Distribution
+                </span>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  Zero: {summary?.students?.readinessDistribution?.zero ?? 0} • Beginner: {summary?.students?.readinessDistribution?.beginner ?? 0} • Intermediate: {summary?.students?.readinessDistribution?.intermediate ?? 0} • Ready: {summary?.students?.readinessDistribution?.ready ?? 0}
+                </span>
+              </div>
+              <div className="w-full h-3 rounded-full bg-slate-900 overflow-hidden flex">
+                <div
+                  style={{ width: `${Math.max(5, ((summary?.students?.readinessDistribution?.zero ?? 0) / Math.max(1, summary?.students?.totalStudents ?? 1)) * 100)}%` }}
+                  className="bg-slate-700 h-full"
+                  title="Zero (<10%)"
+                />
+                <div
+                  style={{ width: `${Math.max(5, ((summary?.students?.readinessDistribution?.beginner ?? 0) / Math.max(1, summary?.students?.totalStudents ?? 1)) * 100)}%` }}
+                  className="bg-amber-600 h-full"
+                  title="Beginner (10-39%)"
+                />
+                <div
+                  style={{ width: `${Math.max(5, ((summary?.students?.readinessDistribution?.intermediate ?? 0) / Math.max(1, summary?.students?.totalStudents ?? 1)) * 100)}%` }}
+                  className="bg-blue-600 h-full"
+                  title="Intermediate (40-74%)"
+                />
+                <div
+                  style={{ width: `${Math.max(5, ((summary?.students?.readinessDistribution?.ready ?? 0) / Math.max(1, summary?.students?.totalStudents ?? 1)) * 100)}%` }}
+                  className="bg-emerald-500 h-full"
+                  title="Ready (≥75%)"
+                />
+              </div>
+            </div>
+
+            {/* SEARCH AND FILTER BAR */}
+            <div className="bg-[#0e0e1a] border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="w-full sm:w-96 relative">
+                <input
+                  type="text"
+                  value={studentSearch}
+                  onChange={(e) => {
+                    setStudentSearch(e.target.value);
+                    fetchStudents(e.target.value);
+                  }}
+                  placeholder="Search students by name, email, or Student ID..."
+                  className="w-full bg-[#12121f] border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => fetchStudents(studentSearch)}
+                disabled={studentsLoading}
+                className="btn-haptic px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${studentsLoading ? 'animate-spin text-amber-400' : ''}`} />
+                <span>Refresh Students</span>
+              </button>
+            </div>
+
+            {/* STUDENTS TABLE */}
+            <div className="bg-[#0e0e1a] border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#0b0b14] text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
+                    <tr>
+                      <th className="px-5 py-3.5">Student</th>
+                      <th className="px-4 py-3.5">Student ID & Role</th>
+                      <th className="px-4 py-3.5">Plan</th>
+                      <th className="px-4 py-3.5">Streak</th>
+                      <th className="px-4 py-3.5">Coins</th>
+                      <th className="px-4 py-3.5">Lessons</th>
+                      <th className="px-4 py-3.5">Readiness</th>
+                      <th className="px-5 py-3.5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/80">
+                    {studentsLoading && students.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="px-5 py-12 text-center text-slate-400 font-mono">
+                          <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-amber-400" />
+                          Loading students from database...
+                        </td>
+                      </tr>
+                    ) : students.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="px-5 py-12 text-center text-slate-500 font-mono">
+                          No students matching your search query.
+                        </td>
+                      </tr>
+                    ) : (
+                      students.map((st) => (
+                        <tr key={st.id} className="hover:bg-slate-900/40 transition-colors">
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/30 flex items-center justify-center font-bold text-amber-400">
+                                {st.name ? st.name[0].toUpperCase() : 'S'}
+                              </div>
+                              <div>
+                                <span className="font-bold text-white block">{st.name}</span>
+                                <span className="text-[11px] text-slate-400 font-mono">{st.email}</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <span className="font-mono text-amber-300 font-bold block">{st.studentId}</span>
+                            <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase ${
+                              st.role === 'founder' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-300'
+                            }`}>
+                              {st.role}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30 uppercase">
+                              {st.planId || 'free'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3.5 font-mono text-amber-400 font-bold">
+                            {st.currentStreak || 0}d
+                          </td>
+                          <td className="px-4 py-3.5 font-mono text-yellow-400 font-bold">
+                            {st.coinBalance || 0}
+                          </td>
+                          <td className="px-4 py-3.5 font-mono text-slate-300">
+                            {st.completedLessonsCount || 0}/25
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-white font-bold">{st.readinessScore || 0}%</span>
+                              <div className="w-12 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div
+                                  className="h-full bg-gradient-to-r from-amber-500 to-emerald-500"
+                                  style={{ width: `${Math.min(100, st.readinessScore || 0)}%` }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-5 py-3.5 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleInspectStudentDashboard(st.id)}
+                                className="px-2.5 py-1.5 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold transition-all cursor-pointer"
+                                title="View Learner Dashboard Snapshot"
+                              >
+                                View Dashboard
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleInspectStudent(st.id)}
+                                className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold transition-all cursor-pointer"
+                                title="Inspect Database Record"
+                              >
+                                Details
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* TAB 3: ASK AI CEO (READ-ONLY GROUNDED ASSISTANT) */}
         {/* ==================================================================== */}
         {activeTab === 'ai-ceo' && (
           <div className="bg-[#0e0e1a] border border-slate-800 rounded-3xl p-6 space-y-6 shadow-xl">
@@ -2058,6 +2336,180 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                 className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl cursor-pointer"
               >
                 Close Ledger
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================================== */}
+      {/* MODAL 8: STUDENT DATABASE RECORD DETAILS */}
+      {/* ==================================================================== */}
+      {isStudentModalOpen && selectedStudentDetail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-[#0e0e1a] border border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8 text-left">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-lg">
+                  {selectedStudentDetail.name ? selectedStudentDetail.name[0].toUpperCase() : 'S'}
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">{selectedStudentDetail.name}</h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    ID: {selectedStudentDetail.studentId} • {selectedStudentDetail.email}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setIsStudentModalOpen(false);
+                  setSelectedStudentDetail(null);
+                }}
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div className="bg-[#12121f] p-3 rounded-xl border border-slate-800">
+                <span className="text-[10px] text-slate-500 font-mono uppercase block">Role</span>
+                <span className="font-bold text-white uppercase font-mono">{selectedStudentDetail.role}</span>
+              </div>
+              <div className="bg-[#12121f] p-3 rounded-xl border border-slate-800">
+                <span className="text-[10px] text-slate-500 font-mono uppercase block">Plan</span>
+                <span className="font-bold text-emerald-400 uppercase font-mono">{selectedStudentDetail.planId || 'free'}</span>
+              </div>
+              <div className="bg-[#12121f] p-3 rounded-xl border border-slate-800">
+                <span className="text-[10px] text-slate-500 font-mono uppercase block">Coins</span>
+                <span className="font-bold text-yellow-400 font-mono">{selectedStudentDetail.wallet?.coinBalance || 0}</span>
+              </div>
+              <div className="bg-[#12121f] p-3 rounded-xl border border-slate-800">
+                <span className="text-[10px] text-slate-500 font-mono uppercase block">Streak</span>
+                <span className="font-bold text-amber-400 font-mono">{selectedStudentDetail.progress?.currentStreak || 0} days</span>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-amber-400 font-bold uppercase tracking-wider text-[11px] block">Curriculum Progress</span>
+                <div className="grid grid-cols-2 gap-2 text-slate-300">
+                  <div>Completed Lessons: <span className="text-white font-bold">{selectedStudentDetail.progress?.completedLessonIds?.length || 0} / 25</span></div>
+                  <div>Experience Points: <span className="text-white font-bold">{selectedStudentDetail.progress?.experiencePoints || 0} XP</span></div>
+                  <div>Total Minutes: <span className="text-white font-bold">{selectedStudentDetail.progress?.totalStudyMinutes || 0} mins</span></div>
+                  <div>Longest Streak: <span className="text-white font-bold">{selectedStudentDetail.progress?.longestStreak || 0} days</span></div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-[#12121f] rounded-2xl border border-slate-800 space-y-2">
+                <span className="text-indigo-400 font-bold uppercase tracking-wider text-[11px] block">Profile & Readiness</span>
+                <div className="grid grid-cols-2 gap-2 text-slate-300">
+                  <div>Target Level: <span className="text-white font-bold">{selectedStudentDetail.profile?.targetLevel || 'N5'}</span></div>
+                  <div>Target Exam: <span className="text-white font-bold">{selectedStudentDetail.profile?.targetExam || 'JLPT N5'}</span></div>
+                  <div>Readiness Score: <span className="text-emerald-400 font-bold">{selectedStudentDetail.profile?.japanReadinessScore || 0}%</span></div>
+                  <div>Preferred Sensei: <span className="text-white font-bold">{selectedStudentDetail.profile?.preferredSensei || 'Kenji Sensei'}</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => {
+                  const sId = selectedStudentDetail.id;
+                  setIsStudentModalOpen(false);
+                  handleInspectStudentDashboard(sId);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Inspect Learner Dashboard →
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsStudentModalOpen(false);
+                  setSelectedStudentDetail(null);
+                }}
+                className="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================================================================== */}
+      {/* MODAL 9: SERVER-AUTHORIZED LEARNER DASHBOARD SNAPSHOT */}
+      {/* ==================================================================== */}
+      {isDashboardSnapshotModalOpen && selectedStudentDashboard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto">
+          <div className="bg-[#080711] border border-amber-500/40 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8 text-left">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30 mb-1">
+                  👑 AUTHORIZED FOUNDER INSPECTION
+                </div>
+                <h3 className="text-lg font-black text-white">
+                  Learner Dashboard: {selectedStudentDashboard.user?.name}
+                </h3>
+                <p className="text-xs text-stone-400 font-mono">
+                  {selectedStudentDashboard.user?.email} • Student ID: {selectedStudentDashboard.user?.studentId}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setIsDashboardSnapshotModalOpen(false);
+                  setSelectedStudentDashboard(null);
+                }}
+                className="p-2 text-stone-400 hover:text-white rounded-xl hover:bg-white/[0.08] cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Dashboard Snapshot Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                <span className="text-[10px] font-mono uppercase block text-amber-300">Study Streak</span>
+                <span className="text-xl font-black font-mono">{selectedStudentDashboard.learningStats?.currentStreak || 0} দিন</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                <span className="text-[10px] font-mono uppercase block text-emerald-300">Experience (XP)</span>
+                <span className="text-xl font-black font-mono">{selectedStudentDashboard.learningStats?.xp || 0} XP</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">
+                <span className="text-[10px] font-mono uppercase block text-yellow-300">Coins Balance</span>
+                <span className="text-xl font-black font-mono">{selectedStudentDashboard.learningStats?.coins || 0}</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                <span className="text-[10px] font-mono uppercase block text-indigo-300">Lessons Finished</span>
+                <span className="text-xl font-black font-mono">{selectedStudentDashboard.learningStats?.completedLessonsCount || 0} / 25</span>
+              </div>
+            </div>
+
+            {/* Readiness Canvas Preview */}
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-[#16122d] to-[#0c0a18] border border-amber-500/30 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-300 uppercase tracking-wide">Japan Readiness Score™</span>
+                <span className="text-xl font-black text-white font-mono">{selectedStudentDashboard.learningStats?.readinessScore || 0}%</span>
+              </div>
+              <p className="text-xs text-stone-300 leading-relaxed">
+                This learner is on the {selectedStudentDashboard.profile?.targetLevel || 'N5'} track with daily study goal of {selectedStudentDashboard.profile?.dailyGoalMinutes || 20} minutes. Plan: <strong className="text-emerald-400 uppercase">{selectedStudentDashboard.user?.planId || 'free'}</strong>.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end pt-4 border-t border-white/[0.08]">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDashboardSnapshotModalOpen(false);
+                  setSelectedStudentDashboard(null);
+                }}
+                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Close Snapshot
               </button>
             </div>
           </div>

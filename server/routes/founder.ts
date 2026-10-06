@@ -3,6 +3,7 @@ import { db } from '../db.js';
 import { requireFounder } from '../middleware/rbac.js';
 import { AuthenticatedRequest } from '../authHelper.js';
 import { aiCoo } from '../services/aiCooRuntimeService.js';
+import { getUserActivePlanId } from '../services/entitlements.js';
 
 export const founderRouter = Router();
 
@@ -46,6 +47,18 @@ founderRouter.get('/summary', (req: AuthenticatedRequest, res: Response) => {
       ? `৳${Math.round(marketingWallet.current_spent / rev.newSubscribersThisMonth)}`
       : 'NOT CONFIGURED';
 
+    const allUsers = db.getAllUsers();
+    const studentUsers = allUsers.filter(u => u.role !== 'founder');
+    const totalStudents = studentUsers.length;
+    const now = new Date();
+    const thisMonthPrefix = now.toISOString().slice(0, 7);
+    const newStudentsThisMonth = studentUsers.filter(u => u.createdAt && u.createdAt.startsWith(thisMonthPrefix)).length;
+    const sevenDaysAgo = new Date(Date.now() - 7 * 86400 * 1000).toISOString().split('T')[0];
+    const activeStudents = studentUsers.filter(u => {
+      const prog = db.getProgressByUserId(u.id);
+      return prog && prog.lastActiveDate >= sevenDaysAgo;
+    }).length;
+
     return res.json({
       success: true,
       timestamp: new Date().toISOString(),
@@ -53,6 +66,23 @@ founderRouter.get('/summary', (req: AuthenticatedRequest, res: Response) => {
         founderEmail: req.user?.email || 'mdtanvirkabirbiplob@gmail.com',
         role: req.user?.role || 'founder',
         systemStatus: 'OPERATIONAL'
+      },
+      students: {
+        totalStudents,
+        newStudentsThisMonth,
+        activeStudents,
+        readinessDistribution: {
+          zero: studentUsers.filter(u => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) < 10).length,
+          beginner: studentUsers.filter(u => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 10 && score < 40;
+          }).length,
+          intermediate: studentUsers.filter(u => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 40 && score < 75;
+          }).length,
+          ready: studentUsers.filter(u => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) >= 75).length
+        }
       },
       business: {
         totalRevenue: rev.totalRevenue || 0,
@@ -656,6 +686,154 @@ founderRouter.post('/ai-coo/escalate-risk', (req: AuthenticatedRequest, res: Res
     return res.json({
       success: true,
       ...result
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/founder/students
+ * Searchable, filterable list of real persistent students for the Founder.
+ */
+founderRouter.get('/students', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const search = ((req.query.search as string) || '').trim().toLowerCase();
+    const allUsers = db.getAllUsers();
+    
+    const students = allUsers
+      .filter((u) => u.role !== 'founder')
+      .map((u) => {
+        const profile = db.getProfileByUserId(u.id);
+        const progress = db.getProgressByUserId(u.id);
+        const wallet = db.getUserWallet(u.id);
+        const completedCount = progress?.completedLessonIds?.length || 0;
+        
+        return {
+          id: u.id,
+          name: profile?.displayName || u.email.split('@')[0],
+          email: u.email,
+          role: u.role,
+          studentId: 'NHO-' + u.id.slice(0, 6).toUpperCase(),
+          joinDate: u.createdAt,
+          currentLevel: progress?.currentLevel || profile?.targetLevel || 'N5',
+          streak: progress?.currentStreak || 0,
+          currentStreak: progress?.currentStreak || 0,
+          coins: wallet?.coinBalance || 0,
+          coinBalance: wallet?.coinBalance || 0,
+          completedLessonsCount: completedCount,
+          lastActivity: progress?.lastActiveDate || u.createdAt.split('T')[0],
+          readiness: profile?.japanReadinessScore || 0,
+          readinessScore: profile?.japanReadinessScore || 0,
+          planId: getUserActivePlanId(u.id),
+          status: 'ACTIVE'
+        };
+      })
+      .filter((s) => {
+        if (!search) return true;
+        return (
+          s.name.toLowerCase().includes(search) ||
+          s.email.toLowerCase().includes(search) ||
+          s.studentId.toLowerCase().includes(search)
+        );
+      });
+
+    return res.json({
+      success: true,
+      count: students.length,
+      students
+    });
+  } catch (error: any) {
+    console.error('[FounderAPI] Error retrieving students:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Failed to retrieve students' });
+  }
+});
+
+/**
+ * GET /api/founder/students/:id
+ * Retrieve detailed student record.
+ */
+founderRouter.get('/students/:id', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = db.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Student not found', code: 'STUDENT_NOT_FOUND' });
+    }
+
+    const profile = db.getProfileByUserId(id);
+    const progress = db.getProgressByUserId(id);
+    const wallet = db.getUserWallet(id);
+    const planId = getUserActivePlanId(id);
+
+    return res.json({
+      success: true,
+      student: {
+        id: user.id,
+        email: user.email,
+        name: profile?.displayName || user.email.split('@')[0],
+        role: user.role,
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+        planId,
+        joinedAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        profile,
+        progress,
+        wallet
+      }
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/founder/students/:id/dashboard
+ * Server-authorized student dashboard snapshot for Founder inspection.
+ */
+founderRouter.get('/students/:id/dashboard', (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = db.findUserById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Student not found', code: 'STUDENT_NOT_FOUND' });
+    }
+
+    const profile = db.getProfileByUserId(id);
+    const progress = db.getProgressByUserId(id);
+    const wallet = db.getUserWallet(id);
+    const planId = getUserActivePlanId(id);
+
+    const completedLessonCount = progress?.completedLessonIds?.length || 0;
+    const currentStreak = progress?.currentStreak || 0;
+    const coinBalance = wallet?.coinBalance || 0;
+
+    return res.json({
+      success: true,
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: profile?.displayName || user.email.split('@')[0],
+          role: user.role,
+          studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+          planId,
+          avatarUrl: profile?.avatarSeed || null,
+          createdAt: user.createdAt
+        },
+        profile,
+        progress,
+        wallet,
+        learningStats: {
+          completedLessonsCount: completedLessonCount,
+          currentStreak,
+          coins: coinBalance,
+          xp: progress?.experiencePoints || 0,
+          readinessScore: profile?.japanReadinessScore || 0
+        },
+        isFounderInspection: true,
+        inspectedAt: new Date().toISOString()
+      }
     });
   } catch (error: any) {
     return res.status(500).json({ success: false, error: error.message });

@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import { db } from './db.js';
-import { User, UserRole } from './types.js';
-import { getRequiredJwtSecret } from './env.js';
+import { getRequiredJwtSecret, isFounderEmail } from './env.js';
+import { UserRole } from './types.js';
 
-export type { UserRole } from './types.js';
+export type { UserRole };
 
 /**
  * Authenticated user entity attached to Express requests upon cryptographic verification.
@@ -163,7 +163,7 @@ function getVerificationSecrets(): string[] {
  * Validates whether a given string is an allowed UserRole.
  */
 function isValidUserRole(role: unknown): role is UserRole {
-  return role === 'admin' || role === 'instructor' || role === 'user' || role === 'founder';
+  return role === 'admin' || role === 'instructor' || role === 'user' || role === 'student' || role === 'founder';
 }
 
 /**
@@ -390,16 +390,17 @@ export function getUserFromToken(token?: string): AuthenticatedUser | null {
     if (!verifiedPayload) return null;
 
     // Retrieve user by authoritative verified userId
+    const effectiveRole: UserRole = isFounderEmail(verifiedPayload.email) ? 'founder' : (verifiedPayload.role || 'student');
     let user = db.findUserById(verifiedPayload.userId);
 
     if (!user) {
       user = db.ensureUserExists({
         id: verifiedPayload.userId,
         email: verifiedPayload.email,
-        role: verifiedPayload.role
+        role: effectiveRole
       });
-    } else if (user.role !== verifiedPayload.role) {
-      user.role = verifiedPayload.role;
+    } else if (user.role !== effectiveRole) {
+      user.role = effectiveRole;
       try {
         db.save();
       } catch {}
@@ -408,7 +409,7 @@ export function getUserFromToken(token?: string): AuthenticatedUser | null {
     return {
       id: verifiedPayload.userId,
       email: verifiedPayload.email || user?.email || '',
-      role: verifiedPayload.role,
+      role: effectiveRole,
       passwordHash: user?.passwordHash,
       passwordSalt: user?.passwordSalt,
       createdAt: user?.createdAt,
@@ -462,13 +463,15 @@ export async function verifySupabaseTokenAsync(token?: string): Promise<Authenti
 
     const u = data.user;
     const email = (u.email || (u.user_metadata?.email as string) || '').toLowerCase().trim();
-    const isFounder = email === 'mdtanvirkabirbiplob@gmail.com';
+    const isFounder = isFounderEmail(email);
     const appMeta = u.app_metadata || {};
     const userMeta = u.user_metadata || {};
     const rawRole = ((appMeta.role as string) || (userMeta.role as string) || '').toLowerCase();
-    let role: UserRole = 'user';
-    if (isFounder || rawRole === 'admin' || rawRole === 'founder') role = 'admin';
+    let role: UserRole = 'student';
+    if (isFounder || rawRole === 'founder') role = 'founder';
+    else if (rawRole === 'admin') role = 'admin';
     else if (rawRole === 'instructor' || rawRole === 'teacher') role = 'instructor';
+    else role = 'student';
 
     let user = db.findUserById(u.id);
     if (!user && email) {
@@ -632,7 +635,7 @@ export async function requireFounder(req: Request | any, res: Response, next: Ne
   }
 
   const userEmail = (user.email || '').trim().toLowerCase();
-  const isFounder = (user.role as string) === 'founder' || userEmail === FOUNDER_EMAIL;
+  const isFounder = (user.role as string) === 'founder' || isFounderEmail(userEmail);
 
   if (!isFounder) {
     console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
@@ -643,10 +646,7 @@ export async function requireFounder(req: Request | any, res: Response, next: Ne
     });
   }
 
-  // Ensure role is admin or founder
-  if (user.role !== 'admin' && (user.role as string) !== 'founder') {
-    user.role = 'admin';
-  }
+  user.role = 'founder';
 
   // MFA-ready check: If FOUNDER_MFA_ENFORCED is enabled, require MFA header
   if (process.env.FOUNDER_MFA_ENFORCED === 'true') {

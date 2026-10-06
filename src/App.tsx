@@ -175,6 +175,7 @@ const KNOWN_VIEWS = new Set([
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
 import { useFocusMode } from './context/FocusModeContext';
+import { useAuth } from './context/AuthContext';
 import { QuickDictionaryOverlay } from './components/QuickDictionaryOverlay';
 import { CommandPaletteModal } from './components/CommandPaletteModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
@@ -352,6 +353,7 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
 };
 
 export const App: React.FC = () => {
+  const { user, loading, openAuthModal } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       const search = new URLSearchParams(window.location.search);
@@ -408,6 +410,27 @@ export const App: React.FC = () => {
       }
     } catch {}
   };
+
+  // Role & Authentication Route Guard
+  useEffect(() => {
+    if (loading) return;
+
+    const isFounderRoute = ['founder', 'admin', 'command-center'].includes(currentView);
+    const isStudentDashboardRoute = ['dashboard', 'student-dashboard', 'portal-dashboard'].includes(currentView);
+
+    // If an authenticated Student attempts to access /founder, block and redirect to /dashboard
+    if (isFounderRoute && user && user.role !== 'founder') {
+      handleNavigate('dashboard');
+      return;
+    }
+
+    // If an unauthenticated user tries to directly enter /dashboard, redirect to landing & prompt login
+    if (isStudentDashboardRoute && !user) {
+      handleNavigate('landing');
+      openAuthModal('login');
+      return;
+    }
+  }, [loading, user, currentView]);
 
   // URL Deep Link / Verification & Legal Route Listener
   useEffect(() => {
@@ -533,6 +556,24 @@ export const App: React.FC = () => {
   const isCanvasMode = currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya';
   const isDashboardRoute = currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard';
   const isJourneyMode = currentView === 'journey';
+  const isProtectedRoute = [
+    'founder', 'admin', 'command-center',
+    'dashboard', 'student-dashboard', 'portal-dashboard',
+    'portal', 'portal-settings', 'portal-subscription',
+    'credits', 'subscription'
+  ].includes(currentView);
+
+  if (loading && isProtectedRoute) {
+    return (
+      <div className="min-h-screen bg-[#07070d] flex flex-col items-center justify-center p-6 text-center text-white" id="control-plane-auth-loading">
+        <div className="w-10 h-10 border-3 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-4" />
+        <span className="text-xs font-mono font-bold tracking-wider uppercase text-amber-400">
+          শনাক্তকরণ নিশ্চিত করা হচ্ছে... (Verifying Identity)
+        </span>
+        <span className="text-[11px] text-stone-500 mt-1">Connecting to Nihomi Control Plane</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">

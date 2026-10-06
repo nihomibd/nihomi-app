@@ -205,6 +205,7 @@ async function startServer() {
   app.use('/api/voice', voiceRouter);
   app.use('/api/referral', referralRouter);
   app.use('/api/dashboard', dashboardRouter);
+  app.use('/api/me/dashboard', dashboardRouter);
   app.use('/api/cloud', cloudRouter);
   app.use('/api/founder', founderRouter);
 

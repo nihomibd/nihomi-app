@@ -144,6 +144,7 @@ import {
 } from './baitoSeedData.js';
 import { ContentDiffService } from './services/contentDiffService.js';
 import { prisma, isDatabaseConfigured } from './prisma.js';
+import { isFounderEmail } from './env.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -1751,9 +1752,16 @@ class Database {
   }): User {
     this.assertProductionStorageSafety('ensureUserExists');
     const cleanEmail = (params.email || '').trim().toLowerCase();
+    const isFounder = isFounderEmail(cleanEmail);
+    const resolvedRole: UserRole = isFounder ? 'founder' : (params.role || 'student');
+
     let existing = (params.id ? this.findUserById(params.id) : undefined) || (cleanEmail ? this.findUserByEmail(cleanEmail) : undefined);
     if (existing) {
-      if (params.role && existing.role !== params.role) {
+      if (isFounder && existing.role !== 'founder') {
+        existing.role = 'founder';
+        existing.updatedAt = new Date().toISOString();
+        this.save();
+      } else if (params.role && existing.role !== params.role && !isFounder) {
         existing.role = params.role;
         existing.updatedAt = new Date().toISOString();
         this.save();
@@ -1770,7 +1778,7 @@ class Database {
       email: cleanEmail || `user-${id.slice(0, 8)}@nihomi.com`,
       passwordHash: '',
       passwordSalt: '',
-      role: params.role || 'user',
+      role: resolvedRole,
       createdAt: now,
       updatedAt: now
     };
@@ -1793,8 +1801,8 @@ class Database {
       currentLessonId: 'les-n5-1-1',
       completedLessonIds: [],
       totalStudyMinutes: 0,
-      currentStreak: 1,
-      longestStreak: 1,
+      currentStreak: 0,
+      longestStreak: 0,
       lastActiveDate: now.split('T')[0],
       experiencePoints: 0,
       updatedAt: now
@@ -1822,13 +1830,16 @@ class Database {
     const id = `usr-${crypto.randomUUID().slice(0, 8)}`;
     const { hash, salt } = hashPassword(params.password);
     const now = new Date().toISOString();
+    const cleanEmail = params.email.trim().toLowerCase();
+    const isFounder = isFounderEmail(cleanEmail);
+    const resolvedRole: UserRole = isFounder ? 'founder' : (params.role || 'student');
 
     const user: User = {
       id,
-      email: params.email.trim().toLowerCase(),
+      email: cleanEmail,
       passwordHash: hash,
       passwordSalt: salt,
-      role: params.role || 'user',
+      role: resolvedRole,
       createdAt: now,
       updatedAt: now
     };
@@ -1854,8 +1865,8 @@ class Database {
       currentLessonId: firstLesson?.id,
       completedLessonIds: [],
       totalStudyMinutes: 0,
-      currentStreak: 1,
-      longestStreak: 1,
+      currentStreak: 0,
+      longestStreak: 0,
       lastActiveDate: now.split('T')[0],
       experiencePoints: 0,
       updatedAt: now
@@ -4245,9 +4256,9 @@ class Database {
     if (!wallet) {
       wallet = {
         userId,
-        coinBalance: 50 + Math.max(0, coins),
-        aiCredits: 100 + Math.max(0, aiCredits),
-        lifetimeEarned: 50 + Math.max(0, coins),
+        coinBalance: Math.max(0, coins),
+        aiCredits: Math.max(0, aiCredits),
+        lifetimeEarned: Math.max(0, coins),
         lifetimeSpent: 0,
         updatedAt: now
       };
@@ -4266,7 +4277,7 @@ class Database {
     };
   }
 
-  public getUserWallet(userId: string): { userId: string; coinBalance: number; aiCredits: number } {
+  public getUserWallet(userId: string): { userId: string; coinBalance: number; aiCredits: number; lifetimeEarned: number; lifetimeSpent: number } {
     if (!(this.data as any).coinWallets) {
       (this.data as any).coinWallets = [];
     }
@@ -4274,9 +4285,9 @@ class Database {
     if (!wallet) {
       wallet = {
         userId,
-        coinBalance: 50,
-        aiCredits: 100,
-        lifetimeEarned: 50,
+        coinBalance: 0,
+        aiCredits: 0,
+        lifetimeEarned: 0,
         lifetimeSpent: 0,
         updatedAt: new Date().toISOString()
       };
@@ -4285,8 +4296,10 @@ class Database {
     }
     return {
       userId,
-      coinBalance: wallet.coinBalance,
-      aiCredits: wallet.aiCredits
+      coinBalance: wallet.coinBalance || 0,
+      aiCredits: wallet.aiCredits || 0,
+      lifetimeEarned: wallet.lifetimeEarned || 0,
+      lifetimeSpent: wallet.lifetimeSpent || 0
     };
   }
 

@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const isFounder = user?.role === 'founder' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
-  const streak = progress?.streakDays || progress?.currentStreak || user?.streakDays || 1;
+  const streak = progress?.currentStreak ?? progress?.streakDays ?? user?.streakDays ?? 0;
 
   // Active Category Detection for the 4 core pillars
   const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'journey', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
