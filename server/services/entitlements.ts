@@ -238,8 +238,8 @@ export function getUserActivePlanId(userId: string): PlanId {
   const user = db.findUserById(userId);
   if (!user) return 'free';
 
-  // Admin gets all-access (Japan Ready)
-  if (user.role === 'admin') {
+  // Admin or Founder gets all-access (Japan Ready)
+  if (user.role === 'admin' || user.role === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') {
     return 'japan_ready';
   }
 

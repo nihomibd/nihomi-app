@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { db, verifyPassword, hashPassword } from '../db.js';
 import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, resolveUserFromTokenAsync, extractBearerToken, AuthenticatedRequest } from '../authHelper.js';
 import { verifyGoogleIdToken } from '../services/googleAuth.js';
+import { getUserActivePlanId } from '../services/entitlements.js';
 import crypto from 'crypto';
 
 export const authRouter = Router();
@@ -74,13 +75,18 @@ authRouter.post('/google', async (req, res) => {
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
 
+    const userPlanId = getUserActivePlanId(user.id);
+
     return res.json({
       success: true,
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split('@')[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress,
@@ -120,12 +126,17 @@ authRouter.post('/register', (req, res) => {
 
     const token = createSessionToken(user);
 
-    return res.json({
+    const userPlanId = getUserActivePlanId(user.id);
+
+    return res.status(201).json({
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split('@')[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress
@@ -187,12 +198,17 @@ authRouter.post('/login', (req, res) => {
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
 
+    const userPlanId = getUserActivePlanId(user.id);
+
     return res.json({
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split('@')[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress
@@ -246,20 +262,22 @@ authRouter.get('/me', async (req: AuthenticatedRequest, res) => {
   const progress = db.getProgressByUserId(user.id);
   const sessionToken = createSessionToken(user);
 
-  return res.json({
-    authenticated: true,
-    token: sessionToken,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: profile?.displayName || user.email.split('@')[0],
-      role: user.role,
-      planId: 'starter',
-      studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
-    },
-    profile,
-    progress
-  });
+    const userPlanId = getUserActivePlanId(user.id);
+
+    return res.json({
+      authenticated: true,
+      token: sessionToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: profile?.displayName || user.email.split('@')[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
+      },
+      profile,
+      progress
+    });
 });
 
 // Logout

@@ -3,15 +3,24 @@ import { GoogleGenAI } from '@google/genai';
 let aiClient: GoogleGenAI | null = null;
 
 function getAIClient(): GoogleGenAI | null {
-  if (!aiClient && process.env.GEMINI_API_KEY) {
-    aiClient = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'nihomi-production-ai'
+  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
+  // Valid Google Gemini API keys start with 'AIzaSy' and are >= 30 characters
+  if (!key || key.startsWith('AQ.') || !key.startsWith('AIzaSy') || key.length < 30) {
+    return null;
+  }
+  if (!aiClient) {
+    try {
+      aiClient = new GoogleGenAI({
+        apiKey: key,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'nihomi-production-ai'
+          }
         }
-      }
-    });
+      });
+    } catch {
+      return null;
+    }
   }
   return aiClient;
 }
@@ -92,11 +101,17 @@ export interface SentenceDnaResponse {
   realLifeContext: string;
 }
 
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: any;
+  const timeoutPromise = new Promise<T>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('AI request timed out')), ms);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
+}
+
 const CANDIDATE_MODELS = [
   'gemini-2.5-flash',
-  'gemini-1.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-pro'
+  'gemini-2.0-flash'
 ];
 
 async function sleep(ms: number) {
@@ -266,62 +281,156 @@ CORE TEACHING PERSONA:
     contents.push({ role: 'user', parts: userParts });
 
     for (const modelName of CANDIDATE_MODELS) {
-      let retries = 2;
-      while (retries >= 0) {
-        try {
-          const response = await client.models.generateContent({
+      try {
+        const response = await withTimeout(
+          client.models.generateContent({
             model: modelName,
             contents,
             config: {
               systemInstruction,
               temperature: 0.7
             }
-          });
-          const replyText = response.text;
-          if (replyText && replyText.trim().length > 0) {
-            let correctionData = undefined;
-            if (req.mode === 'correction') {
-              const userMatch = replyText.match(/\[USER SENTENCE\]\s*([\s\S]*?)(?=\[CORRECT SENTENCE\]|$)/i);
-              const correctMatch = replyText.match(/\[CORRECT SENTENCE\]\s*([\s\S]*?)(?=\[WHY IT IS INCORRECT\]|$)/i);
-              const whyMatch = replyText.match(/\[WHY IT IS INCORRECT\]\s*([\s\S]*?)(?=\[NATURAL ALTERNATIVE\]|$)/i);
-              const naturalMatch = replyText.match(/\[NATURAL ALTERNATIVE\]\s*([\s\S]*?)$/i);
-              if (userMatch && correctMatch && whyMatch && naturalMatch) {
-                correctionData = {
-                  userSentence: (userMatch[1] || userMatch[0]).trim(),
-                  correctSentence: (correctMatch[1] || correctMatch[0]).trim(),
-                  whyIncorrect: (whyMatch[1] || whyMatch[0]).trim(),
-                  naturalAlternative: (naturalMatch[1] || naturalMatch[0]).trim()
-                };
-              }
+          }),
+          3500
+        );
+        const replyText = response.text;
+        if (replyText && replyText.trim().length > 0) {
+          let correctionData = undefined;
+          if (req.mode === 'correction') {
+            const userMatch = replyText.match(/\[USER SENTENCE\]\s*([\s\S]*?)(?=\[CORRECT SENTENCE\]|$)/i);
+            const correctMatch = replyText.match(/\[CORRECT SENTENCE\]\s*([\s\S]*?)(?=\[WHY IT IS INCORRECT\]|$)/i);
+            const whyMatch = replyText.match(/\[WHY IT IS INCORRECT\]\s*([\s\S]*?)(?=\[NATURAL ALTERNATIVE\]|$)/i);
+            const naturalMatch = replyText.match(/\[NATURAL ALTERNATIVE\]\s*([\s\S]*?)$/i);
+            if (userMatch && correctMatch && whyMatch && naturalMatch) {
+              correctionData = {
+                userSentence: (userMatch[1] || userMatch[0]).trim(),
+                correctSentence: (correctMatch[1] || correctMatch[0]).trim(),
+                whyIncorrect: (whyMatch[1] || whyMatch[0]).trim(),
+                naturalAlternative: (naturalMatch[1] || naturalMatch[0]).trim()
+              };
             }
-            return {
-              reply: replyText,
-              correctionData
-            };
           }
-        } catch {
-          retries--;
-          await sleep(500);
+          return {
+            reply: replyText,
+            correctionData
+          };
+        }
+      } catch (err: any) {
+        const msg = String(err?.message || '');
+        // Break out immediately on authentication, permission, or token error
+        if (msg.includes('401') || msg.includes('403') || msg.includes('UNAUTHORIZED') || msg.includes('API_KEY_INVALID') || msg.includes('ACCESS_TOKEN_TYPE_UNSUPPORTED')) {
+          break;
         }
       }
     }
   }
 
-  const trimmed = req.message?.trim().toLowerCase() || '';
-  const isGreeting = ['hello', 'hi', 'hey', 'こんにちは', 'konnichiwa', 'সালাম', 'হ্যালো', 'good morning', 'おはよう'].some((g) => trimmed.includes(g));
+  return generateSenseiOfflineResponse(req);
+}
 
-  if (isGreeting) {
+function generateSenseiOfflineResponse(req: AICoachRequest): AICoachResponse {
+  const msg = (req.message || '').trim();
+  const lower = msg.toLowerCase();
+
+  // 1. Greetings
+  if (['hello', 'hi', 'hey', 'konnichiwa', 'こんにちは', 'হ্যালো', 'সালাম', 'good morning', 'おはよう', 'ohayou', 'konbanwa', 'こんばんは'].some(k => lower.includes(k))) {
     return {
-      reply: 'こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী নিয়ে অনুশীলন করতে চান?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)',
+      reply: 'こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী বিষয় নিয়ে অনুশীলন করতে চান?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)',
       romaji: 'Konnichiwa! Nihomi Sensei e youkoso. Kyou wa nani o renshuu shitai desu ka?',
-      bengaliTranslation: 'হ্যালো! নিহোমি সেনসেই ক্লাসরুমে স্বাগতম। আজ কী নিয়ে অনুশীলন করতে চান?'
+      bengaliTranslation: 'হ্যালো! নিহোমি সেনসেই ক্লাসরুমে স্বাগতম। আজ কী বিষয় নিয়ে অনুশীলন করতে চান?'
     };
   }
 
+  // 2. Thank you
+  if (['thank', 'arigatou', 'ありがとう', 'ধন্যবাদ', 'shukriya'].some(k => lower.includes(k))) {
+    return {
+      reply: 'どういたしまして！(Douitashimashite! - You are welcome!)\n\nজাপানি ভাষায় ধন্যবাদ জানাতে:\n• বিনয়ী (Polite): ありがとうございます (Arigatou gozaimasu)\n• বন্ধুসুলভ (Casual): ありがとう (Arigatou)\n• উত্তর দিতে: どういたしまして (Douitashimashite - স্বাগত)',
+      romaji: 'Douitashimashite! Arigatou gozaimasu to iimashou.',
+      bengaliTranslation: 'স্বাগত! জাপানি ভাষায় ধন্যবাদ জানানোর চমৎকার অভ্যাস।'
+    };
+  }
+
+  // 3. Sorry / Excuse me
+  if (['sorry', 'excuse', 'sumimasen', 'すみません', 'gomen', 'দুঃখিত', 'ক্ষমা'].some(k => lower.includes(k))) {
+    return {
+      reply: 'すみません (Sumimasen) জাপানের বাস্তব জীবনে সবচেয়ে প্রয়োজনীয় শব্দ!\n\n১. কারো দৃষ্টি আকর্ষণ করতে: "すみません、駅はどこですか？" (এক্সকিউজ মি, স্টেশনটি কোথায়?)\n২. বিনয়ী ক্ষমা চাইতে: "遅れてすみません" (দেরি হওয়ার জন্য দুঃখিত)\n৩. দোকানে সাহায্য পাওয়ার পর কৃতজ্ঞতা জানাতেও এটি ব্যবহার হয়!',
+      romaji: 'Sumimasen wa totemo taisetsu na kotoba desu.',
+      bengaliTranslation: 'সুমিমাসেন (すみません) জাপানে ক্ষমা চাওয়া ও দৃষ্টি আকর্ষণে সবচেয়ে দরকারি শব্দ।'
+    };
+  }
+
+  // 4. Particles (Wa vs Ga vs O vs Ni vs De)
+  if (['particle', 'wa vs ga', 'は vs が', 'wa', 'ga', 'পার্টিকেল', 'পার্থক্য', 'difference'].some(k => lower.includes(k))) {
+    return {
+      reply: '【জাপানি পার্টিকেল は (Wa) বনাম が (Ga)】\n\n• は (wa - Topic Marker): বাক্যের সামগ্রিক বিষয় বা প্রসঙ্গ নির্দেশ করে। যেমন: 「わたしは学生です」(আমি ছাত্র)।\n• が (ga - Subject Marker): নির্দিষ্ট কর্তা বা নতুন তথ্যের ওপর জোর দেয়। যেমন: 「だれが来ましたか？私が来ました」(কে এসেছে? আমি এসেছি)।\n• を (o - Object Marker): কর্ম নির্দেশ করে। যেমন: 「水を飲みます」(পানি পান করি)।\n• で (de - Means/Place of Action): কাজের স্থান বা মাধ্যম। যেমন: 「電車で行きます」(ট্রেনে যাই)।',
+      romaji: 'Wa wa topikku, ga wa shugo o shimeshimasu.',
+      bengaliTranslation: 'は সামগ্রিক বিষয় এবং が নির্দিষ্ট কর্তাকে চিহ্নিত করে।'
+    };
+  }
+
+  // 5. Desu / Masu
+  if (['desu', 'masu', 'です', 'ます', 'polite', 'শিষ্ট'].some(k => lower.includes(k))) {
+    return {
+      reply: '【です (Desu) ও ます (Masu) এর নিয়ম】\n\n• です (Desu): বিশেষ্য (Noun) এবং বিশেষণ (Adjective) এর সাথে বিনয়ী শেষ রূপ। যেমন: 「学生です」(ছাত্র), 「きれいです」(সুন্দর)।\n• ます (Masu): ক্রিয়া (Verb) এর বিনয়ী বর্তমান/ভবিষ্যৎ রূপ। যেমন: 「行きます」(যাব), 「食べます」(খাব)।\n• অতীত রূপ: です → でした, ます → ました।',
+      romaji: 'Meishi to keiyoushi ni wa "desu", doushi ni wa "masu" o tsukaimasu.',
+      bengaliTranslation: 'বিশেষ্য ও বিশেষণে です এবং ক্রিয়ায় ます ব্যবহৃত হয়।'
+    };
+  }
+
+  // 6. Konbini (Convenience Store)
+  if (['konbini', 'convenience', 'store', 'ক্যাশিয়ার', 'কনবিনি', 'দোকান', 'ফুকুরো', 'ব্যাগ', 'fukuro', '袋'].some(k => lower.includes(k))) {
+    return {
+      reply: '【টোকিও কনবিনি ক্যাশিয়ার সারভাইভাল গাইড】\n\n১. ব্যাগ লাগবে কিনা জিজ্ঞাসা করলে:\n   ক্যাশিয়ার: 「レジ袋はご利用ですか？」(Reji-bukuro wa go-riyou desu ka?)\n   • লাগলে: 「はい、お願いします」(Hai, onegaishimasu)\n   • না লাগলে: 「大丈夫です」(Daijoubu desu - দরকার নেই)\n২. খাবার গরম করবে কিনা:\n   ক্যাশিয়ার: 「温めますか？」(Atatamemasu ka?)\n   • গরম করতে: 「はい、お願いします」',
+      romaji: 'Reji bukuro wa go-riyou desu ka? Daijoubu desu.',
+      bengaliTranslation: 'কনবিনিতে ব্যাগ না লাগলে বলবেন: "দাইজৌবু দেসু" (大丈夫です)।'
+    };
+  }
+
+  // 7. Train / Station
+  if (['train', 'station', 'subway', 'ট্রেন', 'স্টেশন', 'eki', '駅', 'suica', 'pasmo'].some(k => lower.includes(k))) {
+    return {
+      reply: '【টোকিও ট্রেন স্টেশন ও সাবওয়ে গাইড】\n\n১. ট্রেনের প্ল্যাটফর্ম জানতে:\n   「〜行きの電車は何番ホームですか？」\n   (~iki no densha wa nan-ban hoomu desu ka? - ~গামী ট্রেন কত নম্বর প্ল্যাটফর্মে?)\n২. টিকিট কাউন্টারে:\n   「東京駅までの切符を一枚ください」\n   (Toukyou eki made no kippu o ichi-mai kudasai - টোকিও স্টেশনের একটি টিকিট দিন)\n৩. সুয়িকা কার্ড রিচার্জ:\n   「チャージをお願いします」(Chaaji o onegaishimasu)',
+      romaji: 'Densha no hoomu ya kippu no kaiwa o oboemashou.',
+      bengaliTranslation: 'ট্রেন স্টেশনে প্ল্যাটফর্ম জিজ্ঞাসা করতে 何番ホームですか (নান-বান হোমু দেসু কা) বলুন।'
+    };
+  }
+
+  // 8. Self-Introduction (Jikoshoukai)
+  if (['self introduction', 'introduction', 'পরিচয়', 'জিকোশোওকাই', 'jikoshoukai', 'hajimemashite', 'はじめまして'].some(k => lower.includes(k))) {
+    return {
+      reply: '【জাপানি আত্মপরিচয় (自己紹介 - Jikoshoukai)】\n\n১. শুরুতে: 「はじめまして」(Hajimemashite - শুভ সূচনা)\n২. নাম ও দেশ: 「わたしは [আপনার নাম] です。バングラデシュから来ました」(Watashi wa ... desu. Banguradoshu kara kimashita.)\n৩. সমাপ্তিতে: 「どうぞよろしくお願いいたします」(Douzo yoroshiku onegaishimasu - আপনার সদয় সহযোগিতা কামনা করছি)',
+      romaji: 'Hajimemashite. Douzo yoroshiku onegaishimasu.',
+      bengaliTranslation: 'জাপানে প্রথম পরিচয়ে সবসময় "হাজিমেমাশিতে" দিয়ে শুরু করে "দোউজো ইয়োরোশিকু ওনেগাইশিমাশু" দিয়ে শেষ করবেন।'
+    };
+  }
+
+  // 9. Hiragana / Katakana / Kanji
+  if (['hiragana', 'katakana', 'kanji', 'alphabet', 'বর্ণমালা', 'কাঞ্জি', 'হিরাগানা', 'কাতাকানা'].some(k => lower.includes(k))) {
+    return {
+      reply: '【জাপানি বর্ণমালার মূল ভিত্তি】\n\nজাপানি ভাষায় ৩টি লিপি রয়েছে:\n১. হিরাগানা (Hiragana - ৪৬টি): ব্যাকরণ ও জাপানি মৌলিক শব্দের জন্য। শুরু করতে ৫টি স্বরবর্ণ শিখুন: あ (a), い (i), う (u), え (e), お (o)।\n২. কাতাকানা (Katakana - ৪৬টি): বিদেশি শব্দ ও নামের জন্য (যেমন: バングラデシュ)।\n৩. কাঞ্জি (Kanji): শব্দার্থ ও মূল ভাব প্রকাশের চীনা চিত্রলিপি।',
+      romaji: 'Hiragana, Katakana, soshite Kanji o junban ni manabimashou.',
+      bengaliTranslation: 'হিরাগানা দিয়ে শুরু করাই জাপানি ভাষা শেখার সবচেয়ে বৈজ্ঞানিক নিয়ম।'
+    };
+  }
+
+  // 10. Correction mode fallback
+  if (req.mode === 'correction') {
+    return {
+      reply: `[USER SENTENCE] ${msg}\n[CORRECT SENTENCE] ${msg.endsWith('です') || msg.endsWith('ます') ? msg : msg + 'です'}\n[WHY IT IS INCORRECT] জাপানি বাক্যে শিষ্টতা বজায় রাখতে বাক্যের শেষে です বা ます যুক্ত করা আবশ্যক।\n[NATURAL ALTERNATIVE] ${msg}（丁寧な表現）`,
+      correctionData: {
+        userSentence: msg,
+        correctSentence: msg.endsWith('です') || msg.endsWith('ます') ? msg : msg + 'です',
+        whyIncorrect: 'বাক্যের সমাপ্তিতে বিনয়ী রূপ (です/ます) ব্যবহার করা জাপানি সংস্কৃতির মৌলিক ভদ্রতা।',
+        naturalAlternative: `${msg} です`
+      }
+    };
+  }
+
+  // Default encouraging contextual response
   return {
-    reply: `はい、よく分かりました！(Hai, yoku wakarimashita!) আপনি লিখেছেন: 「${req.message}」。\n\nNihomi Sensei আপনার সাথে আছে। জাপানি ভাষায় আরও কিছু বলতে চাইলে লিখুন!`,
+    reply: `はい、よく分かりました！(Hai, yoku wakarimashita! - হ্যাঁ, খুব ভালো বুঝতে পেরেছি!)\n\nআপনি লিখেছেন: 「${msg}」。\n\nNihomi Sensei আপনার সাথে আছে। এই বাক্য বা বিষয়ের ওপর কোনো নির্দিষ্ট ব্যাকরণ ব্যাখ্যা বা বাস্তব জাপানি উদাহরণ দেখতে চান? আমাকে জানান!`,
     romaji: 'Hai, yoku wakarimashita! Nihongo de hanashite mimashou.',
-    bengaliTranslation: 'হ্যাঁ, খুব ভালো হয়েছে! আসুন একসাথে জাপানি চর্চা চালিয়ে যাই।'
+    bengaliTranslation: `হ্যাঁ, স্পষ্ট বুঝতে পেরেছি! নিহোমি সেনসেই আপনার সাথে আছে। আসুন জাপানি ভাষার চর্চা চালিয়ে যাই।`
   };
 }
 

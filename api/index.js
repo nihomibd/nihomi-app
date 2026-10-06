@@ -60089,6 +60089,180 @@ async function verifyGoogleIdToken(token) {
   }
 }
 
+// server/services/entitlements.ts
+init_db();
+var PLAN_LIMITS = {
+  free: { aiMonthlyQuota: 10, maxLevel: "N5" },
+  starter: { aiMonthlyQuota: 100, maxLevel: "N4" },
+  pro: { aiMonthlyQuota: 1e3, maxLevel: "N3" },
+  japan_ready: { aiMonthlyQuota: 3e3, maxLevel: "N1" },
+  trip_7d: { aiMonthlyQuota: 200, maxLevel: "N5" },
+  trip_14d: { aiMonthlyQuota: 500, maxLevel: "N4" },
+  trip_30d: { aiMonthlyQuota: 1200, maxLevel: "N3" },
+  n5_pro: { aiMonthlyQuota: 5e3, maxLevel: "N5" },
+  n5_lifetime: { aiMonthlyQuota: 99999, maxLevel: "N5" },
+  lifetime: { aiMonthlyQuota: 99999, maxLevel: "N1" }
+};
+var PLAN_ENTITLEMENTS = {
+  free: ["n5_basic", "n5", "quizzes", "ai_coach"],
+  starter: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "n4",
+    "n4_full",
+    "grammar_bank",
+    "kanji_master",
+    "quizzes",
+    "ai_coach"
+  ],
+  pro: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "n4",
+    "n4_full",
+    "grammar_bank",
+    "kanji_master",
+    "n3",
+    "n3_full",
+    "jlpt_mock_exams",
+    "jlpt_pro",
+    "keigo_mastery",
+    "business_japanese",
+    "quizzes",
+    "ai_coach"
+  ],
+  japan_ready: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "n4",
+    "n4_full",
+    "grammar_bank",
+    "kanji_master",
+    "n3",
+    "n3_full",
+    "jlpt_mock_exams",
+    "jlpt_pro",
+    "keigo_mastery",
+    "business_japanese",
+    "japan_readiness",
+    "japan_ready",
+    "interview_prep",
+    "living_in_japan",
+    "certificates",
+    "priority_ai",
+    "quizzes",
+    "ai_coach"
+  ],
+  n5_pro: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "grammar_bank",
+    "kanji_master",
+    "jlpt_mock_exams",
+    "jlpt_pro",
+    "quizzes",
+    "ai_coach"
+  ],
+  n5_lifetime: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "grammar_bank",
+    "kanji_master",
+    "jlpt_mock_exams",
+    "jlpt_pro",
+    "certificates",
+    "quizzes",
+    "ai_coach"
+  ],
+  lifetime: [
+    "n5_basic",
+    "n5",
+    "n5_full",
+    "n4",
+    "n4_full",
+    "grammar_bank",
+    "kanji_master",
+    "n3",
+    "n3_full",
+    "jlpt_mock_exams",
+    "jlpt_pro",
+    "keigo_mastery",
+    "business_japanese",
+    "japan_readiness",
+    "japan_ready",
+    "interview_prep",
+    "living_in_japan",
+    "certificates",
+    "priority_ai",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_7d: [
+    "n5_basic",
+    "n5",
+    "living_in_japan",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_14d: [
+    "n5_basic",
+    "n5",
+    "n4",
+    "living_in_japan",
+    "keigo_mastery",
+    "quizzes",
+    "ai_coach"
+  ],
+  trip_30d: [
+    "n5_basic",
+    "n5",
+    "n4",
+    "n3",
+    "living_in_japan",
+    "keigo_mastery",
+    "japan_readiness",
+    "quizzes",
+    "ai_coach"
+  ]
+};
+function isSubscriptionActive(sub) {
+  if (!sub) return false;
+  const now = (/* @__PURE__ */ new Date()).getTime();
+  const periodEnd = new Date(sub.currentPeriodEnd).getTime();
+  if (sub.status === "active" || sub.status === "trialing") {
+    return true;
+  }
+  if (sub.status === "cancelled" && sub.cancelAtPeriodEnd) {
+    return now <= periodEnd;
+  }
+  if (sub.status === "past_due" && sub.gracePeriodEnd) {
+    return now <= new Date(sub.gracePeriodEnd).getTime();
+  }
+  return false;
+}
+function getUserActivePlanId(userId) {
+  db.processSubscriptionLifecycle();
+  const user = db.findUserById(userId);
+  if (!user) return "free";
+  if (user.role === "admin" || user.role === "founder" || user.email?.toLowerCase() === "mdtanvirkabirbiplob@gmail.com") {
+    return "japan_ready";
+  }
+  const sub = db.getUserActiveSubscription(userId);
+  if (sub && isSubscriptionActive(sub)) {
+    return sub.planId;
+  }
+  return "free";
+}
+function getUserEntitlements(userId) {
+  const planId = getUserActivePlanId(userId);
+  return PLAN_ENTITLEMENTS[planId] || PLAN_ENTITLEMENTS.free;
+}
+
 // server/routes/auth.ts
 import crypto4 from "crypto";
 var authRouter = Router();
@@ -60146,13 +60320,17 @@ authRouter.post("/google", async (req, res) => {
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
+    const userPlanId = getUserActivePlanId(user.id);
     return res.json({
       success: true,
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split("@")[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress,
@@ -60183,12 +60361,16 @@ authRouter.post("/register", (req, res) => {
       nativeLanguage: nativeLanguage || "English"
     });
     const token = createSessionToken(user);
-    return res.json({
+    const userPlanId = getUserActivePlanId(user.id);
+    return res.status(201).json({
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split("@")[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress
@@ -60238,12 +60420,16 @@ authRouter.post("/login", (req, res) => {
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
+    const userPlanId = getUserActivePlanId(user.id);
     return res.json({
       token,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        name: profile?.displayName || user.email.split("@")[0],
+        role: user.role,
+        planId: userPlanId,
+        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
       },
       profile,
       progress
@@ -60288,6 +60474,7 @@ authRouter.get("/me", async (req, res) => {
   const profile = db.getProfileByUserId(user.id);
   const progress = db.getProgressByUserId(user.id);
   const sessionToken = createSessionToken(user);
+  const userPlanId = getUserActivePlanId(user.id);
   return res.json({
     authenticated: true,
     token: sessionToken,
@@ -60296,7 +60483,7 @@ authRouter.get("/me", async (req, res) => {
       email: user.email,
       name: profile?.displayName || user.email.split("@")[0],
       role: user.role,
-      planId: "starter",
+      planId: userPlanId,
       studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
     },
     profile,
@@ -61076,23 +61263,36 @@ import { Router as Router5 } from "express";
 import { GoogleGenAI } from "@google/genai";
 var aiClient = null;
 function getAIClient() {
-  if (!aiClient && process.env.GEMINI_API_KEY) {
-    aiClient = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: {
-        headers: {
-          "User-Agent": "nihomi-production-ai"
+  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
+  if (!key || key.startsWith("AQ.") || !key.startsWith("AIzaSy") || key.length < 30) {
+    return null;
+  }
+  if (!aiClient) {
+    try {
+      aiClient = new GoogleGenAI({
+        apiKey: key,
+        httpOptions: {
+          headers: {
+            "User-Agent": "nihomi-production-ai"
+          }
         }
-      }
-    });
+      });
+    } catch {
+      return null;
+    }
   }
   return aiClient;
 }
+async function withTimeout(promise, ms) {
+  let timer;
+  const timeoutPromise = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error("AI request timed out")), ms);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
+}
 var CANDIDATE_MODELS = [
   "gemini-2.5-flash",
-  "gemini-1.5-flash",
-  "gemini-2.0-flash",
-  "gemini-1.5-pro"
+  "gemini-2.0-flash"
 ];
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -61244,61 +61444,138 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
     userParts.push({ text: req.message });
     contents.push({ role: "user", parts: userParts });
     for (const modelName of CANDIDATE_MODELS) {
-      let retries = 2;
-      while (retries >= 0) {
-        try {
-          const response = await client.models.generateContent({
+      try {
+        const response = await withTimeout(
+          client.models.generateContent({
             model: modelName,
             contents,
             config: {
               systemInstruction,
               temperature: 0.7
             }
-          });
-          const replyText = response.text;
-          if (replyText && replyText.trim().length > 0) {
-            let correctionData = void 0;
-            if (req.mode === "correction") {
-              const userMatch = replyText.match(/\[USER SENTENCE\]\s*([\s\S]*?)(?=\[CORRECT SENTENCE\]|$)/i);
-              const correctMatch = replyText.match(/\[CORRECT SENTENCE\]\s*([\s\S]*?)(?=\[WHY IT IS INCORRECT\]|$)/i);
-              const whyMatch = replyText.match(/\[WHY IT IS INCORRECT\]\s*([\s\S]*?)(?=\[NATURAL ALTERNATIVE\]|$)/i);
-              const naturalMatch = replyText.match(/\[NATURAL ALTERNATIVE\]\s*([\s\S]*?)$/i);
-              if (userMatch && correctMatch && whyMatch && naturalMatch) {
-                correctionData = {
-                  userSentence: (userMatch[1] || userMatch[0]).trim(),
-                  correctSentence: (correctMatch[1] || correctMatch[0]).trim(),
-                  whyIncorrect: (whyMatch[1] || whyMatch[0]).trim(),
-                  naturalAlternative: (naturalMatch[1] || naturalMatch[0]).trim()
-                };
-              }
+          }),
+          3500
+        );
+        const replyText = response.text;
+        if (replyText && replyText.trim().length > 0) {
+          let correctionData = void 0;
+          if (req.mode === "correction") {
+            const userMatch = replyText.match(/\[USER SENTENCE\]\s*([\s\S]*?)(?=\[CORRECT SENTENCE\]|$)/i);
+            const correctMatch = replyText.match(/\[CORRECT SENTENCE\]\s*([\s\S]*?)(?=\[WHY IT IS INCORRECT\]|$)/i);
+            const whyMatch = replyText.match(/\[WHY IT IS INCORRECT\]\s*([\s\S]*?)(?=\[NATURAL ALTERNATIVE\]|$)/i);
+            const naturalMatch = replyText.match(/\[NATURAL ALTERNATIVE\]\s*([\s\S]*?)$/i);
+            if (userMatch && correctMatch && whyMatch && naturalMatch) {
+              correctionData = {
+                userSentence: (userMatch[1] || userMatch[0]).trim(),
+                correctSentence: (correctMatch[1] || correctMatch[0]).trim(),
+                whyIncorrect: (whyMatch[1] || whyMatch[0]).trim(),
+                naturalAlternative: (naturalMatch[1] || naturalMatch[0]).trim()
+              };
             }
-            return {
-              reply: replyText,
-              correctionData
-            };
           }
-        } catch {
-          retries--;
-          await sleep(500);
+          return {
+            reply: replyText,
+            correctionData
+          };
+        }
+      } catch (err) {
+        const msg = String(err?.message || "");
+        if (msg.includes("401") || msg.includes("403") || msg.includes("UNAUTHORIZED") || msg.includes("API_KEY_INVALID") || msg.includes("ACCESS_TOKEN_TYPE_UNSUPPORTED")) {
+          break;
         }
       }
     }
   }
-  const trimmed = req.message?.trim().toLowerCase() || "";
-  const isGreeting = ["hello", "hi", "hey", "\u3053\u3093\u306B\u3061\u306F", "konnichiwa", "\u09B8\u09BE\u09B2\u09BE\u09AE", "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB", "good morning", "\u304A\u306F\u3088\u3046"].some((g) => trimmed.includes(g));
-  if (isGreeting) {
+  return generateSenseiOfflineResponse(req);
+}
+function generateSenseiOfflineResponse(req) {
+  const msg = (req.message || "").trim();
+  const lower = msg.toLowerCase();
+  if (["hello", "hi", "hey", "konnichiwa", "\u3053\u3093\u306B\u3061\u306F", "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB", "\u09B8\u09BE\u09B2\u09BE\u09AE", "good morning", "\u304A\u306F\u3088\u3046", "ohayou", "konbanwa", "\u3053\u3093\u3070\u3093\u306F"].some((k) => lower.includes(k))) {
     return {
-      reply: "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)",
+      reply: "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09AC\u09BF\u09B7\u09DF \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)",
       romaji: "Konnichiwa! Nihomi Sensei e youkoso. Kyou wa nani o renshuu shitai desu ka?",
-      bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u099C \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?"
+      bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u099C \u0995\u09C0 \u09AC\u09BF\u09B7\u09DF \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?"
+    };
+  }
+  if (["thank", "arigatou", "\u3042\u308A\u304C\u3068\u3046", "\u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6", "shukriya"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3069\u3046\u3044\u305F\u3057\u307E\u3057\u3066\uFF01(Douitashimashite! - You are welcome!)\n\n\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6 \u099C\u09BE\u09A8\u09BE\u09A4\u09C7:\n\u2022 \u09AC\u09BF\u09A8\u09DF\u09C0 (Polite): \u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059 (Arigatou gozaimasu)\n\u2022 \u09AC\u09A8\u09CD\u09A7\u09C1\u09B8\u09C1\u09B2\u09AD (Casual): \u3042\u308A\u304C\u3068\u3046 (Arigatou)\n\u2022 \u0989\u09A4\u09CD\u09A4\u09B0 \u09A6\u09BF\u09A4\u09C7: \u3069\u3046\u3044\u305F\u3057\u307E\u3057\u3066 (Douitashimashite - \u09B8\u09CD\u09AC\u09BE\u0997\u09A4)",
+      romaji: "Douitashimashite! Arigatou gozaimasu to iimashou.",
+      bengaliTranslation: "\u09B8\u09CD\u09AC\u09BE\u0997\u09A4! \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u09A7\u09A8\u09CD\u09AF\u09AC\u09BE\u09A6 \u099C\u09BE\u09A8\u09BE\u09A8\u09CB\u09B0 \u099A\u09AE\u09CE\u0995\u09BE\u09B0 \u0985\u09AD\u09CD\u09AF\u09BE\u09B8\u0964"
+    };
+  }
+  if (["sorry", "excuse", "sumimasen", "\u3059\u307F\u307E\u305B\u3093", "gomen", "\u09A6\u09C1\u0983\u0996\u09BF\u09A4", "\u0995\u09CD\u09B7\u09AE\u09BE"].some((k) => lower.includes(k))) {
+    return {
+      reply: '\u3059\u307F\u307E\u305B\u3093 (Sumimasen) \u099C\u09BE\u09AA\u09BE\u09A8\u09C7\u09B0 \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC \u099C\u09C0\u09AC\u09A8\u09C7 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u09C0\u09DF \u09B6\u09AC\u09CD\u09A6!\n\n\u09E7. \u0995\u09BE\u09B0\u09CB \u09A6\u09C3\u09B7\u09CD\u099F\u09BF \u0986\u0995\u09B0\u09CD\u09B7\u09A3 \u0995\u09B0\u09A4\u09C7: "\u3059\u307F\u307E\u305B\u3093\u3001\u99C5\u306F\u3069\u3053\u3067\u3059\u304B\uFF1F" (\u098F\u0995\u09CD\u09B8\u0995\u09BF\u0989\u099C \u09AE\u09BF, \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u099F\u09BF \u0995\u09CB\u09A5\u09BE\u09DF?)\n\u09E8. \u09AC\u09BF\u09A8\u09DF\u09C0 \u0995\u09CD\u09B7\u09AE\u09BE \u099A\u09BE\u0987\u09A4\u09C7: "\u9045\u308C\u3066\u3059\u307F\u307E\u305B\u3093" (\u09A6\u09C7\u09B0\u09BF \u09B9\u0993\u09DF\u09BE\u09B0 \u099C\u09A8\u09CD\u09AF \u09A6\u09C1\u0983\u0996\u09BF\u09A4)\n\u09E9. \u09A6\u09CB\u0995\u09BE\u09A8\u09C7 \u09B8\u09BE\u09B9\u09BE\u09AF\u09CD\u09AF \u09AA\u09BE\u0993\u09DF\u09BE\u09B0 \u09AA\u09B0 \u0995\u09C3\u09A4\u099C\u09CD\u099E\u09A4\u09BE \u099C\u09BE\u09A8\u09BE\u09A4\u09C7\u0993 \u098F\u099F\u09BF \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u09B9\u09DF!',
+      romaji: "Sumimasen wa totemo taisetsu na kotoba desu.",
+      bengaliTranslation: "\u09B8\u09C1\u09AE\u09BF\u09AE\u09BE\u09B8\u09C7\u09A8 (\u3059\u307F\u307E\u305B\u3093) \u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u0995\u09CD\u09B7\u09AE\u09BE \u099A\u09BE\u0993\u09DF\u09BE \u0993 \u09A6\u09C3\u09B7\u09CD\u099F\u09BF \u0986\u0995\u09B0\u09CD\u09B7\u09A3\u09C7 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09A6\u09B0\u0995\u09BE\u09B0\u09BF \u09B6\u09AC\u09CD\u09A6\u0964"
+    };
+  }
+  if (["particle", "wa vs ga", "\u306F vs \u304C", "wa", "ga", "\u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2", "\u09AA\u09BE\u09B0\u09CD\u09A5\u0995\u09CD\u09AF", "difference"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09B0\u09CD\u099F\u09BF\u0995\u09C7\u09B2 \u306F (Wa) \u09AC\u09A8\u09BE\u09AE \u304C (Ga)\u3011\n\n\u2022 \u306F (wa - Topic Marker): \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B8\u09BE\u09AE\u0997\u09CD\u09B0\u09BF\u0995 \u09AC\u09BF\u09B7\u09DF \u09AC\u09BE \u09AA\u09CD\u09B0\u09B8\u0999\u09CD\u0997 \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u308F\u305F\u3057\u306F\u5B66\u751F\u3067\u3059\u300D(\u0986\u09AE\u09BF \u099B\u09BE\u09A4\u09CD\u09B0)\u0964\n\u2022 \u304C (ga - Subject Marker): \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u0995\u09B0\u09CD\u09A4\u09BE \u09AC\u09BE \u09A8\u09A4\u09C1\u09A8 \u09A4\u09A5\u09CD\u09AF\u09C7\u09B0 \u0993\u09AA\u09B0 \u099C\u09CB\u09B0 \u09A6\u09C7\u09DF\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u3060\u308C\u304C\u6765\u307E\u3057\u305F\u304B\uFF1F\u79C1\u304C\u6765\u307E\u3057\u305F\u300D(\u0995\u09C7 \u098F\u09B8\u09C7\u099B\u09C7? \u0986\u09AE\u09BF \u098F\u09B8\u09C7\u099B\u09BF)\u0964\n\u2022 \u3092 (o - Object Marker): \u0995\u09B0\u09CD\u09AE \u09A8\u09BF\u09B0\u09CD\u09A6\u09C7\u09B6 \u0995\u09B0\u09C7\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u6C34\u3092\u98F2\u307F\u307E\u3059\u300D(\u09AA\u09BE\u09A8\u09BF \u09AA\u09BE\u09A8 \u0995\u09B0\u09BF)\u0964\n\u2022 \u3067 (de - Means/Place of Action): \u0995\u09BE\u099C\u09C7\u09B0 \u09B8\u09CD\u09A5\u09BE\u09A8 \u09AC\u09BE \u09AE\u09BE\u09A7\u09CD\u09AF\u09AE\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u96FB\u8ECA\u3067\u884C\u304D\u307E\u3059\u300D(\u099F\u09CD\u09B0\u09C7\u09A8\u09C7 \u09AF\u09BE\u0987)\u0964",
+      romaji: "Wa wa topikku, ga wa shugo o shimeshimasu.",
+      bengaliTranslation: "\u306F \u09B8\u09BE\u09AE\u0997\u09CD\u09B0\u09BF\u0995 \u09AC\u09BF\u09B7\u09DF \u098F\u09AC\u0982 \u304C \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u0995\u09B0\u09CD\u09A4\u09BE\u0995\u09C7 \u099A\u09BF\u09B9\u09CD\u09A8\u09BF\u09A4 \u0995\u09B0\u09C7\u0964"
+    };
+  }
+  if (["desu", "masu", "\u3067\u3059", "\u307E\u3059", "polite", "\u09B6\u09BF\u09B7\u09CD\u099F"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u3067\u3059 (Desu) \u0993 \u307E\u3059 (Masu) \u098F\u09B0 \u09A8\u09BF\u09DF\u09AE\u3011\n\n\u2022 \u3067\u3059 (Desu): \u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF (Noun) \u098F\u09AC\u0982 \u09AC\u09BF\u09B6\u09C7\u09B7\u09A3 (Adjective) \u098F\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09AC\u09BF\u09A8\u09DF\u09C0 \u09B6\u09C7\u09B7 \u09B0\u09C2\u09AA\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u5B66\u751F\u3067\u3059\u300D(\u099B\u09BE\u09A4\u09CD\u09B0), \u300C\u304D\u308C\u3044\u3067\u3059\u300D(\u09B8\u09C1\u09A8\u09CD\u09A6\u09B0)\u0964\n\u2022 \u307E\u3059 (Masu): \u0995\u09CD\u09B0\u09BF\u09DF\u09BE (Verb) \u098F\u09B0 \u09AC\u09BF\u09A8\u09DF\u09C0 \u09AC\u09B0\u09CD\u09A4\u09AE\u09BE\u09A8/\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09CE \u09B0\u09C2\u09AA\u0964 \u09AF\u09C7\u09AE\u09A8: \u300C\u884C\u304D\u307E\u3059\u300D(\u09AF\u09BE\u09AC), \u300C\u98DF\u3079\u307E\u3059\u300D(\u0996\u09BE\u09AC)\u0964\n\u2022 \u0985\u09A4\u09C0\u09A4 \u09B0\u09C2\u09AA: \u3067\u3059 \u2192 \u3067\u3057\u305F, \u307E\u3059 \u2192 \u307E\u3057\u305F\u0964",
+      romaji: 'Meishi to keiyoushi ni wa "desu", doushi ni wa "masu" o tsukaimasu.',
+      bengaliTranslation: "\u09AC\u09BF\u09B6\u09C7\u09B7\u09CD\u09AF \u0993 \u09AC\u09BF\u09B6\u09C7\u09B7\u09A3\u09C7 \u3067\u3059 \u098F\u09AC\u0982 \u0995\u09CD\u09B0\u09BF\u09DF\u09BE\u09DF \u307E\u3059 \u09AC\u09CD\u09AF\u09AC\u09B9\u09C3\u09A4 \u09B9\u09DF\u0964"
+    };
+  }
+  if (["konbini", "convenience", "store", "\u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0", "\u0995\u09A8\u09AC\u09BF\u09A8\u09BF", "\u09A6\u09CB\u0995\u09BE\u09A8", "\u09AB\u09C1\u0995\u09C1\u09B0\u09CB", "\u09AC\u09CD\u09AF\u09BE\u0997", "fukuro", "\u888B"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u099F\u09CB\u0995\u09BF\u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0 \u09B8\u09BE\u09B0\u09AD\u09BE\u0987\u09AD\u09BE\u09B2 \u0997\u09BE\u0987\u09A1\u3011\n\n\u09E7. \u09AC\u09CD\u09AF\u09BE\u0997 \u09B2\u09BE\u0997\u09AC\u09C7 \u0995\u09BF\u09A8\u09BE \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09B2\u09C7:\n   \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0: \u300C\u30EC\u30B8\u888B\u306F\u3054\u5229\u7528\u3067\u3059\u304B\uFF1F\u300D(Reji-bukuro wa go-riyou desu ka?)\n   \u2022 \u09B2\u09BE\u0997\u09B2\u09C7: \u300C\u306F\u3044\u3001\u304A\u9858\u3044\u3057\u307E\u3059\u300D(Hai, onegaishimasu)\n   \u2022 \u09A8\u09BE \u09B2\u09BE\u0997\u09B2\u09C7: \u300C\u5927\u4E08\u592B\u3067\u3059\u300D(Daijoubu desu - \u09A6\u09B0\u0995\u09BE\u09B0 \u09A8\u09C7\u0987)\n\u09E8. \u0996\u09BE\u09AC\u09BE\u09B0 \u0997\u09B0\u09AE \u0995\u09B0\u09AC\u09C7 \u0995\u09BF\u09A8\u09BE:\n   \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0: \u300C\u6E29\u3081\u307E\u3059\u304B\uFF1F\u300D(Atatamemasu ka?)\n   \u2022 \u0997\u09B0\u09AE \u0995\u09B0\u09A4\u09C7: \u300C\u306F\u3044\u3001\u304A\u9858\u3044\u3057\u307E\u3059\u300D",
+      romaji: "Reji bukuro wa go-riyou desu ka? Daijoubu desu.",
+      bengaliTranslation: '\u0995\u09A8\u09AC\u09BF\u09A8\u09BF\u09A4\u09C7 \u09AC\u09CD\u09AF\u09BE\u0997 \u09A8\u09BE \u09B2\u09BE\u0997\u09B2\u09C7 \u09AC\u09B2\u09AC\u09C7\u09A8: "\u09A6\u09BE\u0987\u099C\u09CC\u09AC\u09C1 \u09A6\u09C7\u09B8\u09C1" (\u5927\u4E08\u592B\u3067\u3059)\u0964'
+    };
+  }
+  if (["train", "station", "subway", "\u099F\u09CD\u09B0\u09C7\u09A8", "\u09B8\u09CD\u099F\u09C7\u09B6\u09A8", "eki", "\u99C5", "suica", "pasmo"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u099F\u09CB\u0995\u09BF\u0993 \u099F\u09CD\u09B0\u09C7\u09A8 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8 \u0993 \u09B8\u09BE\u09AC\u0993\u09DF\u09C7 \u0997\u09BE\u0987\u09A1\u3011\n\n\u09E7. \u099F\u09CD\u09B0\u09C7\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09AB\u09B0\u09CD\u09AE \u099C\u09BE\u09A8\u09A4\u09C7:\n   \u300C\u301C\u884C\u304D\u306E\u96FB\u8ECA\u306F\u4F55\u756A\u30DB\u30FC\u30E0\u3067\u3059\u304B\uFF1F\u300D\n   (~iki no densha wa nan-ban hoomu desu ka? - ~\u0997\u09BE\u09AE\u09C0 \u099F\u09CD\u09B0\u09C7\u09A8 \u0995\u09A4 \u09A8\u09AE\u09CD\u09AC\u09B0 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09AB\u09B0\u09CD\u09AE\u09C7?)\n\u09E8. \u099F\u09BF\u0995\u09BF\u099F \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0\u09C7:\n   \u300C\u6771\u4EAC\u99C5\u307E\u3067\u306E\u5207\u7B26\u3092\u4E00\u679A\u304F\u3060\u3055\u3044\u300D\n   (Toukyou eki made no kippu o ichi-mai kudasai - \u099F\u09CB\u0995\u09BF\u0993 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7\u09B0 \u098F\u0995\u099F\u09BF \u099F\u09BF\u0995\u09BF\u099F \u09A6\u09BF\u09A8)\n\u09E9. \u09B8\u09C1\u09AF\u09BC\u09BF\u0995\u09BE \u0995\u09BE\u09B0\u09CD\u09A1 \u09B0\u09BF\u099A\u09BE\u09B0\u09CD\u099C:\n   \u300C\u30C1\u30E3\u30FC\u30B8\u3092\u304A\u9858\u3044\u3057\u307E\u3059\u300D(Chaaji o onegaishimasu)",
+      romaji: "Densha no hoomu ya kippu no kaiwa o oboemashou.",
+      bengaliTranslation: "\u099F\u09CD\u09B0\u09C7\u09A8 \u09B8\u09CD\u099F\u09C7\u09B6\u09A8\u09C7 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09AB\u09B0\u09CD\u09AE \u099C\u09BF\u099C\u09CD\u099E\u09BE\u09B8\u09BE \u0995\u09B0\u09A4\u09C7 \u4F55\u756A\u30DB\u30FC\u30E0\u3067\u3059\u304B (\u09A8\u09BE\u09A8-\u09AC\u09BE\u09A8 \u09B9\u09CB\u09AE\u09C1 \u09A6\u09C7\u09B8\u09C1 \u0995\u09BE) \u09AC\u09B2\u09C1\u09A8\u0964"
+    };
+  }
+  if (["self introduction", "introduction", "\u09AA\u09B0\u09BF\u099A\u09DF", "\u099C\u09BF\u0995\u09CB\u09B6\u09CB\u0993\u0995\u09BE\u0987", "jikoshoukai", "hajimemashite", "\u306F\u3058\u3081\u307E\u3057\u3066"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0986\u09A4\u09CD\u09AE\u09AA\u09B0\u09BF\u099A\u09DF (\u81EA\u5DF1\u7D39\u4ECB - Jikoshoukai)\u3011\n\n\u09E7. \u09B6\u09C1\u09B0\u09C1\u09A4\u09C7: \u300C\u306F\u3058\u3081\u307E\u3057\u3066\u300D(Hajimemashite - \u09B6\u09C1\u09AD \u09B8\u09C2\u099A\u09A8\u09BE)\n\u09E8. \u09A8\u09BE\u09AE \u0993 \u09A6\u09C7\u09B6: \u300C\u308F\u305F\u3057\u306F [\u0986\u09AA\u09A8\u09BE\u09B0 \u09A8\u09BE\u09AE] \u3067\u3059\u3002\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5\u304B\u3089\u6765\u307E\u3057\u305F\u300D(Watashi wa ... desu. Banguradoshu kara kimashita.)\n\u09E9. \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF\u09A4\u09C7: \u300C\u3069\u3046\u305E\u3088\u308D\u3057\u304F\u304A\u9858\u3044\u3044\u305F\u3057\u307E\u3059\u300D(Douzo yoroshiku onegaishimasu - \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09A6\u09DF \u09B8\u09B9\u09AF\u09CB\u0997\u09BF\u09A4\u09BE \u0995\u09BE\u09AE\u09A8\u09BE \u0995\u09B0\u099B\u09BF)",
+      romaji: "Hajimemashite. Douzo yoroshiku onegaishimasu.",
+      bengaliTranslation: '\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u09AA\u09CD\u09B0\u09A5\u09AE \u09AA\u09B0\u09BF\u099A\u09DF\u09C7 \u09B8\u09AC\u09B8\u09AE\u09DF "\u09B9\u09BE\u099C\u09BF\u09AE\u09C7\u09AE\u09BE\u09B6\u09BF\u09A4\u09C7" \u09A6\u09BF\u09DF\u09C7 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09C7 "\u09A6\u09CB\u0989\u099C\u09CB \u0987\u09DF\u09CB\u09B0\u09CB\u09B6\u09BF\u0995\u09C1 \u0993\u09A8\u09C7\u0997\u09BE\u0987\u09B6\u09BF\u09AE\u09BE\u09B6\u09C1" \u09A6\u09BF\u09DF\u09C7 \u09B6\u09C7\u09B7 \u0995\u09B0\u09AC\u09C7\u09A8\u0964'
+    };
+  }
+  if (["hiragana", "katakana", "kanji", "alphabet", "\u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE", "\u0995\u09BE\u099E\u09CD\u099C\u09BF", "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE", "\u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE"].some((k) => lower.includes(k))) {
+    return {
+      reply: "\u3010\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09B0\u09CD\u09A3\u09AE\u09BE\u09B2\u09BE\u09B0 \u09AE\u09C2\u09B2 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF\u3011\n\n\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u09E9\u099F\u09BF \u09B2\u09BF\u09AA\u09BF \u09B0\u09DF\u09C7\u099B\u09C7:\n\u09E7. \u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE (Hiragana - \u09EA\u09EC\u099F\u09BF): \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF\u0964 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09A4\u09C7 \u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09B6\u09BF\u0996\u09C1\u09A8: \u3042 (a), \u3044 (i), \u3046 (u), \u3048 (e), \u304A (o)\u0964\n\u09E8. \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE (Katakana - \u09EA\u09EC\u099F\u09BF): \u09AC\u09BF\u09A6\u09C7\u09B6\u09BF \u09B6\u09AC\u09CD\u09A6 \u0993 \u09A8\u09BE\u09AE\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF (\u09AF\u09C7\u09AE\u09A8: \u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5)\u0964\n\u09E9. \u0995\u09BE\u099E\u09CD\u099C\u09BF (Kanji): \u09B6\u09AC\u09CD\u09A6\u09BE\u09B0\u09CD\u09A5 \u0993 \u09AE\u09C2\u09B2 \u09AD\u09BE\u09AC \u09AA\u09CD\u09B0\u0995\u09BE\u09B6\u09C7\u09B0 \u099A\u09C0\u09A8\u09BE \u099A\u09BF\u09A4\u09CD\u09B0\u09B2\u09BF\u09AA\u09BF\u0964",
+      romaji: "Hiragana, Katakana, soshite Kanji o junban ni manabimashou.",
+      bengaliTranslation: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09A6\u09BF\u09DF\u09C7 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09BE\u0987 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u09B6\u09C7\u0996\u09BE\u09B0 \u09B8\u09AC\u099A\u09C7\u09DF\u09C7 \u09AC\u09C8\u099C\u09CD\u099E\u09BE\u09A8\u09BF\u0995 \u09A8\u09BF\u09DF\u09AE\u0964"
+    };
+  }
+  if (req.mode === "correction") {
+    return {
+      reply: `[USER SENTENCE] ${msg}
+[CORRECT SENTENCE] ${msg.endsWith("\u3067\u3059") || msg.endsWith("\u307E\u3059") ? msg : msg + "\u3067\u3059"}
+[WHY IT IS INCORRECT] \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AC\u09BE\u0995\u09CD\u09AF\u09C7 \u09B6\u09BF\u09B7\u09CD\u099F\u09A4\u09BE \u09AC\u099C\u09BE\u09DF \u09B0\u09BE\u0996\u09A4\u09C7 \u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B6\u09C7\u09B7\u09C7 \u3067\u3059 \u09AC\u09BE \u307E\u3059 \u09AF\u09C1\u0995\u09CD\u09A4 \u0995\u09B0\u09BE \u0986\u09AC\u09B6\u09CD\u09AF\u0995\u0964
+[NATURAL ALTERNATIVE] ${msg}\uFF08\u4E01\u5BE7\u306A\u8868\u73FE\uFF09`,
+      correctionData: {
+        userSentence: msg,
+        correctSentence: msg.endsWith("\u3067\u3059") || msg.endsWith("\u307E\u3059") ? msg : msg + "\u3067\u3059",
+        whyIncorrect: "\u09AC\u09BE\u0995\u09CD\u09AF\u09C7\u09B0 \u09B8\u09AE\u09BE\u09AA\u09CD\u09A4\u09BF\u09A4\u09C7 \u09AC\u09BF\u09A8\u09DF\u09C0 \u09B0\u09C2\u09AA (\u3067\u3059/\u307E\u3059) \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09BE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF\u09B0 \u09AE\u09CC\u09B2\u09BF\u0995 \u09AD\u09A6\u09CD\u09B0\u09A4\u09BE\u0964",
+        naturalAlternative: `${msg} \u3067\u3059`
+      }
     };
   }
   return {
-    reply: `\u306F\u3044\u3001\u3088\u304F\u5206\u304B\u308A\u307E\u3057\u305F\uFF01(Hai, yoku wakarimashita!) \u0986\u09AA\u09A8\u09BF \u09B2\u09BF\u0996\u09C7\u099B\u09C7\u09A8: \u300C${req.message}\u300D\u3002
+    reply: `\u306F\u3044\u3001\u3088\u304F\u5206\u304B\u308A\u307E\u3057\u305F\uFF01(Hai, yoku wakarimashita! - \u09B9\u09CD\u09AF\u09BE\u0981, \u0996\u09C1\u09AC \u09AD\u09BE\u09B2\u09CB \u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09C7\u09B0\u09C7\u099B\u09BF!)
 
-Nihomi Sensei \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0986\u099B\u09C7\u0964 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09DF \u0986\u09B0\u0993 \u0995\u09BF\u099B\u09C1 \u09AC\u09B2\u09A4\u09C7 \u099A\u09BE\u0987\u09B2\u09C7 \u09B2\u09BF\u0996\u09C1\u09A8!`,
+\u0986\u09AA\u09A8\u09BF \u09B2\u09BF\u0996\u09C7\u099B\u09C7\u09A8: \u300C${msg}\u300D\u3002
+
+Nihomi Sensei \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0986\u099B\u09C7\u0964 \u098F\u0987 \u09AC\u09BE\u0995\u09CD\u09AF \u09AC\u09BE \u09AC\u09BF\u09B7\u09DF\u09C7\u09B0 \u0993\u09AA\u09B0 \u0995\u09CB\u09A8\u09CB \u09A8\u09BF\u09B0\u09CD\u09A6\u09BF\u09B7\u09CD\u099F \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u09AC\u09CD\u09AF\u09BE\u0996\u09CD\u09AF\u09BE \u09AC\u09BE \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0989\u09A6\u09BE\u09B9\u09B0\u09A3 \u09A6\u09C7\u0996\u09A4\u09C7 \u099A\u09BE\u09A8? \u0986\u09AE\u09BE\u0995\u09C7 \u099C\u09BE\u09A8\u09BE\u09A8!`,
     romaji: "Hai, yoku wakarimashita! Nihongo de hanashite mimashou.",
-    bengaliTranslation: "\u09B9\u09CD\u09AF\u09BE\u0981, \u0996\u09C1\u09AC \u09AD\u09BE\u09B2\u09CB \u09B9\u09DF\u09C7\u099B\u09C7! \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09B0\u09CD\u099A\u09BE \u099A\u09BE\u09B2\u09BF\u09DF\u09C7 \u09AF\u09BE\u0987\u0964"
+    bengaliTranslation: `\u09B9\u09CD\u09AF\u09BE\u0981, \u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09C7\u09B0\u09C7\u099B\u09BF! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0986\u09AA\u09A8\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u0986\u099B\u09C7\u0964 \u0986\u09B8\u09C1\u09A8 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u099A\u09B0\u09CD\u099A\u09BE \u099A\u09BE\u09B2\u09BF\u09DF\u09C7 \u09AF\u09BE\u0987\u0964`
   };
 }
 async function processVisionSenseiRequest(req) {
@@ -63916,180 +64193,6 @@ var requireStaff2 = requireRole3(["admin", "instructor"], {
 
 // server/middleware/auth.ts
 init_supabaseAuth();
-
-// server/services/entitlements.ts
-init_db();
-var PLAN_LIMITS = {
-  free: { aiMonthlyQuota: 10, maxLevel: "N5" },
-  starter: { aiMonthlyQuota: 100, maxLevel: "N4" },
-  pro: { aiMonthlyQuota: 1e3, maxLevel: "N3" },
-  japan_ready: { aiMonthlyQuota: 3e3, maxLevel: "N1" },
-  trip_7d: { aiMonthlyQuota: 200, maxLevel: "N5" },
-  trip_14d: { aiMonthlyQuota: 500, maxLevel: "N4" },
-  trip_30d: { aiMonthlyQuota: 1200, maxLevel: "N3" },
-  n5_pro: { aiMonthlyQuota: 5e3, maxLevel: "N5" },
-  n5_lifetime: { aiMonthlyQuota: 99999, maxLevel: "N5" },
-  lifetime: { aiMonthlyQuota: 99999, maxLevel: "N1" }
-};
-var PLAN_ENTITLEMENTS = {
-  free: ["n5_basic", "n5", "quizzes", "ai_coach"],
-  starter: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "n4",
-    "n4_full",
-    "grammar_bank",
-    "kanji_master",
-    "quizzes",
-    "ai_coach"
-  ],
-  pro: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "n4",
-    "n4_full",
-    "grammar_bank",
-    "kanji_master",
-    "n3",
-    "n3_full",
-    "jlpt_mock_exams",
-    "jlpt_pro",
-    "keigo_mastery",
-    "business_japanese",
-    "quizzes",
-    "ai_coach"
-  ],
-  japan_ready: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "n4",
-    "n4_full",
-    "grammar_bank",
-    "kanji_master",
-    "n3",
-    "n3_full",
-    "jlpt_mock_exams",
-    "jlpt_pro",
-    "keigo_mastery",
-    "business_japanese",
-    "japan_readiness",
-    "japan_ready",
-    "interview_prep",
-    "living_in_japan",
-    "certificates",
-    "priority_ai",
-    "quizzes",
-    "ai_coach"
-  ],
-  n5_pro: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "grammar_bank",
-    "kanji_master",
-    "jlpt_mock_exams",
-    "jlpt_pro",
-    "quizzes",
-    "ai_coach"
-  ],
-  n5_lifetime: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "grammar_bank",
-    "kanji_master",
-    "jlpt_mock_exams",
-    "jlpt_pro",
-    "certificates",
-    "quizzes",
-    "ai_coach"
-  ],
-  lifetime: [
-    "n5_basic",
-    "n5",
-    "n5_full",
-    "n4",
-    "n4_full",
-    "grammar_bank",
-    "kanji_master",
-    "n3",
-    "n3_full",
-    "jlpt_mock_exams",
-    "jlpt_pro",
-    "keigo_mastery",
-    "business_japanese",
-    "japan_readiness",
-    "japan_ready",
-    "interview_prep",
-    "living_in_japan",
-    "certificates",
-    "priority_ai",
-    "quizzes",
-    "ai_coach"
-  ],
-  trip_7d: [
-    "n5_basic",
-    "n5",
-    "living_in_japan",
-    "quizzes",
-    "ai_coach"
-  ],
-  trip_14d: [
-    "n5_basic",
-    "n5",
-    "n4",
-    "living_in_japan",
-    "keigo_mastery",
-    "quizzes",
-    "ai_coach"
-  ],
-  trip_30d: [
-    "n5_basic",
-    "n5",
-    "n4",
-    "n3",
-    "living_in_japan",
-    "keigo_mastery",
-    "japan_readiness",
-    "quizzes",
-    "ai_coach"
-  ]
-};
-function isSubscriptionActive(sub) {
-  if (!sub) return false;
-  const now = (/* @__PURE__ */ new Date()).getTime();
-  const periodEnd = new Date(sub.currentPeriodEnd).getTime();
-  if (sub.status === "active" || sub.status === "trialing") {
-    return true;
-  }
-  if (sub.status === "cancelled" && sub.cancelAtPeriodEnd) {
-    return now <= periodEnd;
-  }
-  if (sub.status === "past_due" && sub.gracePeriodEnd) {
-    return now <= new Date(sub.gracePeriodEnd).getTime();
-  }
-  return false;
-}
-function getUserActivePlanId(userId) {
-  db.processSubscriptionLifecycle();
-  const user = db.findUserById(userId);
-  if (!user) return "free";
-  if (user.role === "admin") {
-    return "japan_ready";
-  }
-  const sub = db.getUserActiveSubscription(userId);
-  if (sub && isSubscriptionActive(sub)) {
-    return sub.planId;
-  }
-  return "free";
-}
-function getUserEntitlements(userId) {
-  const planId = getUserActivePlanId(userId);
-  return PLAN_ENTITLEMENTS[planId] || PLAN_ENTITLEMENTS.free;
-}
 
 // server/services/paymentProviders.ts
 import crypto8 from "crypto";

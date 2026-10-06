@@ -101,6 +101,58 @@ export function setStoredToken(token: string | null): void {
   }
 }
 
+export function clearAllStoredAuthData(): void {
+  try {
+    if (typeof window !== 'undefined') {
+      if (window.localStorage) {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (
+            key &&
+            (key.startsWith('nihomi_') ||
+              key.startsWith('sb-') ||
+              key.includes('auth-token') ||
+              key.includes('supabase') ||
+              key.includes('token') ||
+              key === 'nihomi_user' ||
+              key === 'nihomi_profile' ||
+              key === 'nihomi_progress' ||
+              key === 'nihomi_subscription' ||
+              key === 'nihomi_student_coins' ||
+              key === 'nihomi_onboarding_answers')
+          ) {
+            if (key !== 'nihomi_guest_id') {
+              keysToRemove.push(key);
+            }
+          }
+        }
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
+      }
+      if (window.sessionStorage) {
+        const sessionKeys: string[] = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          if (
+            key &&
+            (key.startsWith('nihomi_') ||
+              key.startsWith('sb-') ||
+              key.includes('token') ||
+              key.includes('auth'))
+          ) {
+            sessionKeys.push(key);
+          }
+        }
+        sessionKeys.forEach((k) => sessionStorage.removeItem(k));
+      }
+      if (typeof document !== 'undefined') {
+        document.cookie = 'nihomi_auth_token=; Max-Age=0; path=/;';
+      }
+    }
+  } catch {}
+  memoryStorage.clear();
+}
+
 export async function apiRequest<T = any>(
   endpoint: string,
   options: RequestInit = {}

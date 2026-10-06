@@ -24,7 +24,7 @@ import { MemoryOsView } from './MemoryOsView';
 import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
 import { getNextBestMission, isGrammarEligible } from '../core/curriculum/journeyEngine';
 import { PlacementDiagnosticModal } from '../components/learning/PlacementDiagnosticModal';
-import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
+import { TokyoKonbiniFirstMissionModal, REAL_LIFE_MISSIONS } from '../components/missions/TokyoKonbiniFirstMissionModal';
 import { calculateJapanReadiness, getSavedOnboardingAnswers } from '../core/onboarding/onboardingStorage';
 import { trackNihomiEvent } from '../utils/analytics';
 
@@ -41,13 +41,32 @@ interface MilestoneLesson {
   estimatedMinutes: number;
 }
 
-const N5_CURRICULUM_PATHWAY: MilestoneLesson[] = [
-  { num: 1, id: 'n5-l1', titleJa: '自己紹介', titleBn: 'নিজের পরিচয় ও সম্ভাষণ', topic: '~は ~です / ~じゃありません', estimatedMinutes: 15 },
-  { num: 2, id: 'n5-l2', titleJa: '物の名前', titleBn: 'দৈনন্দিন বস্তু ও জিজ্ঞাসা', topic: 'これ・それ・あれ / この・その・あの', estimatedMinutes: 15 },
-  { num: 3, id: 'n5-l3', titleJa: '場所案内', titleBn: 'স্থান ও দিকনির্দেশনা', topic: 'ここ・そこ・あそこ / どこですか', estimatedMinutes: 18 },
-  { num: 4, id: 'n5-l4', titleJa: '時間と予定', titleBn: 'সময়, দিন ও দৈনন্দিন রুটিন', topic: '今何時ですか / 〜ます・〜ません', estimatedMinutes: 20 },
-  { num: 5, id: 'n5-l5', titleJa: '移動と乗り物', titleBn: 'যাত্রা, স্টেশন ও গন্তব্য', topic: 'へ行きます / で行きます', estimatedMinutes: 20 },
-  { num: 6, id: 'n5-l6', titleJa: '食事と行動', titleBn: 'খাবার গ্রহণ ও কর্মবাচক বাক্য', topic: 'を 食べます / を 飲みます', estimatedMinutes: 22 },
+export const N5_CURRICULUM_PATHWAY: MilestoneLesson[] = [
+  { num: 1, id: 'n5-l01', titleJa: '自己紹介', titleBn: 'নিজের পরিচয় ও সম্ভাষণ', topic: '~は ~です / ~じゃありません', estimatedMinutes: 15 },
+  { num: 2, id: 'n5-l02', titleJa: '物の名前', titleBn: 'দৈনন্দিন বস্তু ও জিজ্ঞাসা', topic: 'これ・それ・あれ / この・その・あの', estimatedMinutes: 15 },
+  { num: 3, id: 'n5-l03', titleJa: '場所案内', titleBn: 'স্থান ও দিকনির্দেশনা', topic: 'ここ・そこ・あそこ / どこですか', estimatedMinutes: 18 },
+  { num: 4, id: 'n5-l04', titleJa: '時間と予定', titleBn: 'সময়, দিন ও দৈনন্দিন রুটিন', topic: '今何時ですか / 〜ます・〜ません', estimatedMinutes: 20 },
+  { num: 5, id: 'n5-l05', titleJa: '移動と乗り物', titleBn: 'যাত্রা, স্টেশন ও গন্তব্য', topic: 'へ行きます / で行きます', estimatedMinutes: 20 },
+  { num: 6, id: 'n5-l06', titleJa: '食事と行動', titleBn: 'খাবার গ্রহণ ও কর্মবাচক বাক্য', topic: 'を 食べます / を 飲みます', estimatedMinutes: 22 },
+  { num: 7, id: 'n5-l07', titleJa: '道具と授受', titleBn: 'উপকরণ ও উপহার আদানপ্রদান', topic: 'で 書きます / に あげます', estimatedMinutes: 20 },
+  { num: 8, id: 'n5-l08', titleJa: '形容詞と特徴', titleBn: 'বিশেষণ ও গুণাবলি', topic: 'い形容詞 / な形容詞', estimatedMinutes: 22 },
+  { num: 9, id: 'n5-l09', titleJa: '好き嫌いと能力', titleBn: 'পছন্দ, অপছন্দ ও দক্ষতা', topic: 'が 好きです / が 分かります', estimatedMinutes: 20 },
+  { num: 10, id: 'n5-l10', titleJa: '存在と位置', titleBn: 'বস্তু ও প্রাণীর অবস্থান', topic: 'が あります / が います', estimatedMinutes: 20 },
+  { num: 11, id: 'n5-l11', titleJa: '数量と助数詞', titleBn: 'গণনা ও পরিমাণবাচক শব্দ', topic: '〜つ / 〜人 / 〜台 / いくつ', estimatedMinutes: 25 },
+  { num: 12, id: 'n5-l12', titleJa: '比較と過去', titleBn: 'তুলনা ও অতীতের রূপ', topic: 'より〜 / の方が〜 / でした', estimatedMinutes: 22 },
+  { num: 13, id: 'n5-l13', titleJa: '願望と目的', titleBn: 'ইচ্ছা ও উদ্দেশ্য', topic: 'が 欲しいです / 〜に行きます', estimatedMinutes: 20 },
+  { num: 14, id: 'n5-l14', titleJa: 'て形と依頼', titleBn: 'অনুরোধ ও তে-ফর্ম', topic: '〜てください / 〜ています', estimatedMinutes: 25 },
+  { num: 15, id: 'n5-l15', titleJa: '許可と禁止', titleBn: 'অনুমতি ও নিষেধ', topic: '〜てもいいです / 〜てはいけません', estimatedMinutes: 22 },
+  { num: 16, id: 'n5-l16', titleJa: '行動順序と方法', titleBn: 'কাজের ধারাবাহিকতা ও উপায়', topic: '〜てから / どうやって', estimatedMinutes: 22 },
+  { num: 17, id: 'n5-l17', titleJa: 'ない形と義務', titleBn: 'নাই-ফর্ম ও বাধ্যবাধকতা', topic: '〜なければなりません / 〜ないでください', estimatedMinutes: 25 },
+  { num: 18, id: 'n5-l18', titleJa: '辞書形と可能', titleBn: 'অভিধান রূপ ও সামর্থ্য', topic: '〜ことができます / 趣味は〜', estimatedMinutes: 25 },
+  { num: 19, id: 'n5-l19', titleJa: 'た形と経験', titleBn: 'অতীত অভিজ্ঞতা ও তা-ফর্ম', topic: '〜たことがあります / 〜たり〜たり', estimatedMinutes: 25 },
+  { num: 20, id: 'n5-l20', titleJa: '普通体と日常会話', titleBn: 'কথ্য রূপ ও বন্ধুসুলভ ভাষা', topic: '普通体 (Casual Plain Form)', estimatedMinutes: 25 },
+  { num: 21, id: 'n5-l21', titleJa: '意見と推測', titleBn: 'মতামত ও ধারণা', topic: '〜と思います / 〜と言いました', estimatedMinutes: 25 },
+  { num: 22, id: 'n5-l22', titleJa: '連体修飾', titleBn: 'বিশেষ্যকে বর্ণনা করা', topic: '名詞修飾節 (Noun Modification)', estimatedMinutes: 28 },
+  { num: 23, id: 'n5-l23', titleJa: 'ときと条件', titleBn: 'সময় ও স্বাভাবিক শর্ত', topic: '〜とき / 〜と、〜', estimatedMinutes: 25 },
+  { num: 24, id: 'n5-l24', titleJa: '授受表現', titleBn: 'উপকার আদান-প্রদান', topic: '〜てくれます / 〜てもらいます', estimatedMinutes: 28 },
+  { num: 25, id: 'n5-l25', titleJa: '条件と仮定', titleBn: 'শর্ত ও সমাপ্তি', topic: '〜たら / 〜ても (Conditionals)', estimatedMinutes: 30 }
 ];
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
@@ -55,6 +74,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [isPlacementOpen, setIsPlacementOpen] = useState<boolean>(false);
   const [isKonbiniModalOpen, setIsKonbiniModalOpen] = useState<boolean>(false);
+  const [activeMissionId, setActiveMissionId] = useState<string>('tokyo_konbini_01');
+  const [lessonFilter, setLessonFilter] = useState<'all' | 'stage1' | 'stage2'>('all');
   const [knowledgeVersion, setKnowledgeVersion] = useState<number>(0);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
@@ -121,7 +142,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const kState = loadLearnerKnowledgeState();
   const canonicalMission = getNextBestMission(kState);
   const grammarStatus = isGrammarEligible(kState);
-  const currentLessonNum = Math.min(6, completedLessons.length + 1);
+  const currentLessonNum = Math.min(25, completedLessons.length + 1);
   const activeMission = N5_CURRICULUM_PATHWAY.find((l) => l.num === currentLessonNum) || N5_CURRICULUM_PATHWAY[0];
   const isKonbiniDone = typeof window !== 'undefined' && localStorage.getItem('nihomi_mission_konbini_completed') === 'true';
   const savedAnswers = getSavedOnboardingAnswers();
@@ -372,31 +393,143 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         </section>
 
         {/* ========================================================================= */}
+        {/* 5 REAL-LIFE MISSIONS SCENARIO HUB                                         */}
+        {/* ========================================================================= */}
+        <section aria-label="5 Real-Life Missions" className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-black text-white flex items-center gap-2">
+                <Store className="w-4 h-4 text-amber-400" />
+                <span>বাস্তব জাপানের ৫টি মিশন (5 Real-Life Missions)</span>
+              </h2>
+              <p className="text-xs text-stone-400 mt-0.5">
+                কনবিনি, ট্রেন স্টেশন, রেস্তোরাঁ ও অফিস ইন্টারভিউ—বাস্তব পরিস্থিতিতে কথা বলার লাইভ সিমুলেশন।
+              </p>
+            </div>
+            <div className="text-xs font-mono text-amber-400 font-bold bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              সবগুলো ফ্রি ও আনলকড
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {REAL_LIFE_MISSIONS.map((m) => {
+              const isDone = typeof window !== 'undefined' && (
+                localStorage.getItem(`nihomi_mission_${m.id}_completed`) === 'true' ||
+                (m.id === 'tokyo_konbini_01' && isKonbiniDone)
+              );
+              return (
+                <div
+                  key={m.id}
+                  onClick={() => {
+                    setActiveMissionId(m.id);
+                    setIsKonbiniModalOpen(true);
+                  }}
+                  className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between gap-3 group ${
+                    isDone
+                      ? 'bg-white/[0.03] hover:bg-white/[0.06] border-emerald-500/30'
+                      : 'bg-gradient-to-b from-[#1c1737] to-[#120f26] hover:from-[#231d45] hover:to-[#171330] border-amber-500/30 shadow-lg'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-mono font-black text-xs border border-amber-500/30">
+                          {m.num}
+                        </span>
+                        <span className="text-[11px] font-mono font-bold text-stone-400">
+                          {m.tagBn}
+                        </span>
+                      </div>
+                      {isDone ? (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1 border border-emerald-500/30">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>সম্পন্ন</span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-600/20 text-red-300 font-bold border border-red-500/30 animate-pulse">
+                          +৫০ XP
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-xs text-stone-400 font-japanese">
+                        {m.titleJa}
+                      </div>
+                      <h3 className="text-sm font-bold text-white mt-0.5 leading-snug group-hover:text-amber-200 transition-colors">
+                        {m.titleBn}
+                      </h3>
+                      <p className="text-[11px] text-stone-400 mt-1 line-clamp-1">
+                        {m.location} • {m.speaker}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-amber-400/90 font-mono">
+                      ⏱️ ২ মিনিট
+                    </span>
+                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                      <span>{isDone ? 'পুনরায় খেলুন' : 'মিশন শুরু করুন'}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
         {/* LINEAR N5 LEVEL MAP: [Completed] -> [Current (Active)] -> [Upcoming]      */}
         {/* ========================================================================= */}
         <section aria-label="N5 Linear Level Map" className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-sm font-black text-white flex items-center gap-2">
                 <Layers className="w-4 h-4 text-rose-500" />
-                <span>N5 লেভেল ম্যাপ (Linear Progression Map)</span>
+                <span>N5 লেভেল ম্যাপ (Minna no Nihongo ১–২৫)</span>
               </h2>
               <p className="text-xs text-stone-400 mt-0.5">
-                ধাপে ধাপে শূন্য থেকে সম্পূর্ণ N5 জয় করার রোডম্যাপ
+                ধাপে ধাপে শূন্য থেকে সম্পূর্ণ N5 জয় করার রোডম্যাপ (২৫টি পূর্ণাঙ্গ পাঠ)
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => onNavigate?.('courses')}
-              className="text-xs text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1 cursor-pointer transition"
-            >
-              <span>সকল পাঠ ({N5_CURRICULUM_PATHWAY.length})</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setLessonFilter('all')}
+                className={`px-3 py-1 rounded-lg transition cursor-pointer ${
+                  lessonFilter === 'all' ? 'bg-rose-600 text-white shadow-sm' : 'text-stone-400 hover:text-white'
+                }`}
+              >
+                সব পাঠ (১–২৫)
+              </button>
+              <button
+                type="button"
+                onClick={() => setLessonFilter('stage1')}
+                className={`px-3 py-1 rounded-lg transition cursor-pointer ${
+                  lessonFilter === 'stage1' ? 'bg-rose-600 text-white shadow-sm' : 'text-stone-400 hover:text-white'
+                }`}
+              >
+                লেসন ১–১২
+              </button>
+              <button
+                type="button"
+                onClick={() => setLessonFilter('stage2')}
+                className={`px-3 py-1 rounded-lg transition cursor-pointer ${
+                  lessonFilter === 'stage2' ? 'bg-rose-600 text-white shadow-sm' : 'text-stone-400 hover:text-white'
+                }`}
+              >
+                লেসন ১৩–২৫
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {N5_CURRICULUM_PATHWAY.map((lesson) => {
+            {N5_CURRICULUM_PATHWAY.filter((lesson) => {
+              if (lessonFilter === 'stage1') return lesson.num <= 12;
+              if (lessonFilter === 'stage2') return lesson.num > 12;
+              return true;
+            }).map((lesson) => {
               const isCompleted = completedLessons.includes(lesson.id);
               const isGrammarBlocked = lesson.num > 1 && !grammarStatus.eligible;
               const isUpcoming = isGrammarBlocked || (!isCompleted && lesson.num > completedLessons.length + 1);
@@ -580,9 +713,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         }}
       />
 
-      {/* Interactive First Mission Modal */}
+      {/* Interactive Missions Modal */}
       <TokyoKonbiniFirstMissionModal
         isOpen={isKonbiniModalOpen}
+        initialMissionId={activeMissionId}
         onClose={() => setIsKonbiniModalOpen(false)}
         onComplete={() => {
           setIsKonbiniModalOpen(false);

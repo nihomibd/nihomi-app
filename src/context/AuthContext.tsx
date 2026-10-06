@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { setStoredToken, apiRequest, getStoredToken } from '../lib/api';
+import { setStoredToken, apiRequest, getStoredToken, clearAllStoredAuthData } from '../lib/api';
 import { getSavedOnboardingAnswers, syncOnboardingToProfile, checkAndConsumeOAuthPendingOnboarding } from '../core/onboarding/onboardingStorage';
 import { trackNihomiEvent } from '../utils/analytics';
 
@@ -279,15 +279,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<UserProfile | null>(() => {
     try {
       const saved = safeStorage.getItem('nihomi_profile');
-      return saved ? JSON.parse(saved) : {
-        userId: 'default_user',
-        targetLevel: 'N5',
-        targetExam: 'JLPT July 2026',
-        targetExamDate: '2026-07-05',
-        preferredSensei: 'Yuki (Adaptive)',
-        preferredLanguage: 'English',
-        dailyGoalMinutes: 30,
-      };
+      return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
     }
@@ -341,18 +333,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [coinWallet, setCoinWallet] = useState<CoinWalletData | null>(() => {
     try {
-      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '420', 10);
+      const storedCoins = parseInt(safeStorage.getItem('nihomi_student_coins') || '0', 10);
       return {
-        userId: user?.id || 'default_user',
+        userId: user?.id || 'guest',
         coinBalance: storedCoins,
         lifetimeEarned: storedCoins,
         lifetimeSpent: 0,
       };
     } catch {
       return {
-        userId: 'default_user',
-        coinBalance: 420,
-        lifetimeEarned: 420,
+        userId: 'guest',
+        coinBalance: 0,
+        lifetimeEarned: 0,
         lifetimeSpent: 0,
       };
     }
@@ -435,7 +427,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
           avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',
-          planId: isFounder ? 'japan_ready' : 'starter',
+          planId: isFounder ? 'japan_ready' : 'free',
           status: 'ACTIVE',
           studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
           nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
@@ -453,6 +445,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               setToken(res.token);
               safeStorage.setItem('nihomi_auth_token', res.token);
             }
+            if (res.user) setUserData(res.user);
             if (res.profile) setProfile(res.profile);
             if (res.progress) setProgress(res.progress);
           }
@@ -489,7 +482,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Nihomi Student',
           avatarUrl: avatar,
           role: isFounder ? 'founder' : 'student',
-          planId: isFounder ? 'japan_ready' : 'starter',
+          planId: isFounder ? 'japan_ready' : 'free',
           status: 'ACTIVE',
           studentId: 'NHO-' + Math.floor(100000 + Math.random() * 900000),
           nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
@@ -502,6 +495,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Sync with backend /api/auth/me
         apiRequest('/api/auth/me').then((res) => {
           if (res?.authenticated && res.user) {
+            if (res.user) setUserData(res.user);
             if (res.profile) setProfile(res.profile);
             if (res.progress) setProgress(res.progress);
           }
@@ -515,11 +509,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           trackNihomiEvent('auth_completed', { method: 'google', userId: u.id });
         }
       } else if (_event === 'SIGNED_OUT') {
+        clearAllStoredAuthData();
         setUser(null);
         setStoredToken(null);
         setToken(null);
-        safeStorage.removeItem('nihomi_user');
-        safeStorage.removeItem('nihomi_auth_token');
+        setProfile(null);
+        setProgress(null);
+        setSubscription(null);
       }
     });
 
@@ -588,21 +584,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await apiRequest('/api/auth/logout', { method: 'POST' }).catch(() => {});
     } catch {}
     await supabase.auth.signOut().catch(() => {});
+    clearAllStoredAuthData();
     setStoredToken(null);
     setToken(null);
     setUser(null);
     setProfile(null);
-    setProgress({
+    setProgress(null);
+    setSubscription(null);
+    setCoinWallet({
       userId: 'guest',
-      currentLevel: 'N5',
-      streakDays: 0,
-      totalHours: 0,
-      completedLessonsCount: 0,
+      coinBalance: 0,
+      lifetimeEarned: 0,
+      lifetimeSpent: 0,
     });
-    safeStorage.removeItem('nihomi_user');
-    safeStorage.removeItem('nihomi_profile');
-    safeStorage.removeItem('nihomi_progress');
-    safeStorage.removeItem('nihomi_subscription');
   };
 
   const updateProfileData = async (data: Partial<UserProfile & { name?: string; nameJa?: string; phone?: string }>) => {
@@ -818,7 +812,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         progress,
         subscription,
         subscriptionDetails: subscription,
-        activePlanId: user?.planId || 'starter',
+        activePlanId: user?.planId || 'free',
         learningDNA,
         coinWallet,
         loading: false,

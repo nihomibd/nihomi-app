@@ -23,7 +23,7 @@ import {
   getLabelForSituation,
   calculateJapanReadiness
 } from '../../core/onboarding/onboardingStorage';
-import { TokyoKonbiniFirstMissionModal } from '../missions/TokyoKonbiniFirstMissionModal';
+import { TokyoKonbiniFirstMissionModal, REAL_LIFE_MISSIONS } from '../missions/TokyoKonbiniFirstMissionModal';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { soundEffects } from '../../lib/soundEffects';
 
@@ -39,19 +39,17 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
   onStartFirstMission
 }) => {
   const [isMissionModalOpen, setIsMissionModalOpen] = useState(false);
+  const [activeMissionId, setActiveMissionId] = useState('tokyo_konbini_01');
   const readiness = calculateJapanReadiness(answers);
 
-  const handleStartMission = () => {
+  const handleStartMission = (missionId: string = 'tokyo_konbini_01') => {
+    setActiveMissionId(missionId);
     soundEffects.playButtonClick();
     trackNihomiEvent('mission_started', {
-      missionId: 'tokyo_konbini_01',
-      scenario: 'tokyo_konbini_bag_response'
+      missionId,
+      scenario: 'real_life_simulation'
     });
-    if (onStartFirstMission) {
-      onStartFirstMission();
-    } else {
-      setIsMissionModalOpen(true);
-    }
+    setIsMissionModalOpen(true);
   };
 
   return (
@@ -108,65 +106,59 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
             </div>
           </div>
 
-          {/* First Milestones Roadmap */}
+          {/* 5 Real-Life Missions List */}
           <div className="p-5 sm:p-6 rounded-3xl bg-[#111022] border border-white/10 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-stone-400 uppercase tracking-wider flex items-center gap-2">
-              <Layers className="w-4 h-4 text-amber-400" />
-              <span>প্রথম ৩টি মাস্টার মাইলস্টোন</span>
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-stone-300 uppercase tracking-wider flex items-center gap-2">
+                <Layers className="w-4 h-4 text-amber-400" />
+                <span>বাস্তব জাপানের ৫টি মিশন (Real-Life Missions)</span>
+              </h3>
+              <span className="text-[11px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                ৫টি আনলকড
+              </span>
+            </div>
 
-            <div className="space-y-3">
-              {[
-                {
-                  num: '০১',
-                  title: 'Tokyo Konbini & Daily Survival',
-                  desc: 'দোকান, ক্যাশিয়ারের প্রশ্ন ও জরুরি কেনাকাটায় সঠিক উত্তর',
-                  tag: 'বর্তমান আনলক',
-                  active: true
-                },
-                {
-                  num: '০২',
-                  title: 'Hiragana & Pure Japanese Phonetics',
-                  desc: '৪৬টি বর্ণ, সঠিক স্ট্রোক অর্ডার ও টোকিও পিচ অ্যাকসেন্ট',
-                  tag: 'পরবর্তী ধাপ',
-                  active: false
-                },
-                {
-                  num: '০৩',
-                  title: 'Minna no Nihongo & N5 Foundation',
-                  desc: 'লেসন ০১–২৫, ১০০টি কাঞ্জি ও ১৮০ মার্কসের অফিশিয়াল মক টেস্ট',
-                  tag: 'লক্ষ্যমাত্রা',
-                  active: false
-                }
-              ].map((m) => (
-                <div
-                  key={m.num}
-                  className={`p-3.5 rounded-2xl border flex items-center gap-3.5 transition-all ${
-                    m.active
-                      ? 'bg-red-500/10 border-red-500/30 text-white'
-                      : 'bg-white/[0.02] border-white/5 text-stone-400'
-                  }`}
-                >
+            <div className="space-y-2.5">
+              {REAL_LIFE_MISSIONS.map((m) => {
+                const isCompleted = typeof window !== 'undefined' && (
+                  localStorage.getItem(`nihomi_mission_${m.id}_completed`) === 'true' ||
+                  (m.id === 'tokyo_konbini_01' && localStorage.getItem('nihomi_mission_konbini_completed') === 'true')
+                );
+                return (
                   <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center font-mono font-black text-xs shrink-0 ${
-                      m.active ? 'bg-red-600 text-white shadow-md shadow-red-600/30' : 'bg-white/5 text-stone-400'
-                    }`}
+                    key={m.id}
+                    onClick={() => handleStartMission(m.id)}
+                    className="p-3.5 rounded-2xl border border-white/5 hover:border-red-500/30 bg-white/[0.02] hover:bg-white/[0.05] transition-all cursor-pointer flex items-center justify-between gap-3 group"
                   >
-                    {m.num}
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-red-600 text-stone-300 group-hover:text-white flex items-center justify-center font-mono font-black text-xs shrink-0 transition-colors">
+                        {m.num}
+                      </div>
+                      <div>
+                        <div className="font-bold text-xs sm:text-sm text-white group-hover:text-amber-200 transition-colors">
+                          {m.titleBn}
+                        </div>
+                        <div className="text-[11px] text-stone-400">
+                          {m.location} • {m.speaker}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {isCompleted ? (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>সম্পন্ন</span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] px-2.5 py-1 rounded-full bg-red-600/20 text-red-300 font-bold group-hover:bg-red-600 group-hover:text-white transition-all flex items-center gap-1">
+                          <Play className="w-2.5 h-2.5 fill-current" />
+                          <span>খেলুন</span>
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-grow">
-                    <div className="font-bold text-xs sm:text-sm text-white">{m.title}</div>
-                    <div className="text-[11px] text-stone-400">{m.desc}</div>
-                  </div>
-                  <span
-                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold shrink-0 ${
-                      m.active ? 'bg-red-500/20 text-red-300' : 'bg-white/5 text-stone-400'
-                    }`}
-                  >
-                    {m.tag}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -264,7 +256,7 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
 
             <button
               type="button"
-              onClick={handleStartMission}
+              onClick={() => handleStartMission('tokyo_konbini_01')}
               className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-500 hover:from-red-500 hover:to-rose-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
             >
               <Play className="w-4 h-4 fill-white" />
@@ -274,9 +266,10 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
         </div>
       </div>
 
-      {/* Modal for First Mission */}
+      {/* Modal for Missions */}
       <TokyoKonbiniFirstMissionModal
         isOpen={isMissionModalOpen}
+        initialMissionId={activeMissionId}
         onClose={() => setIsMissionModalOpen(false)}
         onComplete={() => {
           setIsMissionModalOpen(false);
