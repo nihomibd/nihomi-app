@@ -1627,7 +1627,7 @@ class Database {
   }
 
   public assertProductionStorageSafety(operation: string): void {
-    if (process.env.NODE_ENV === 'production' && !this.isSupabaseConnected) {
+    if (process.env.NODE_ENV === 'production' && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE !== 'true') {
       const error: any = new Error(
         `[PRODUCTION PERSISTENCE ERROR] Cannot execute '${operation}'. Production requires an active Supabase PostgreSQL datastore. Local filesystem fallback is disabled in production to prevent silent data loss.`
       );
@@ -1638,7 +1638,7 @@ class Database {
   }
 
   public safeWriteJsonFile(filePath: string, data: any): void {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' && process.env.ALLOW_LOCAL_STORAGE !== 'true') {
       // In production, writing to ephemeral filesystem JSON databases is strictly disabled
       return;
     }

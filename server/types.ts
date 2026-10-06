@@ -22,6 +22,8 @@ export interface UserProfile {
   dailyGoalMinutes: number;
   bio?: string;
   avatarSeed?: string;
+  japanReadinessScore?: number;
+  onboardingData?: Record<string, any>;
   createdAt: string;
   updatedAt: string;
 }

@@ -43,6 +43,7 @@ import { VisionSenseiModal } from '../components/VisionSenseiModal';
 import { KanjiWritingModal } from '../components/student/KanjiWritingModal';
 import { ZeroJapaneseGatewayModal } from '../components/onboarding/ZeroJapaneseGatewayModal';
 import { LearnerJourneyEngine } from '../components/learning/LearnerJourneyEngine';
+import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
 import { JLPTDiagnosticExamModal } from '../components/assessment/JLPTDiagnosticExamModal';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { updatePageMetaTags } from '../lib/seo';
@@ -438,6 +439,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const [isWritingActive, setIsWritingActive] = useState(false);
   const [isZeroGatewayOpen, setIsZeroGatewayOpen] = useState(false);
   const [isJourneyEngineOpen, setIsJourneyEngineOpen] = useState(false);
+  const [isFirstMissionModalOpen, setIsFirstMissionModalOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutTargetPlan, setCheckoutTargetPlan] = useState<Plan>(N5_PRO_PLAN);
@@ -484,20 +486,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
   const faqs = [
     {
-      question: 'আমি একদম শূন্য থেকে শুরু করতে পারব?',
-      answer: 'হ্যাঁ, সম্পূর্ণ শূন্য থেকে! জাপানিজ ভাষার কোনো পূর্ব ধারণা না থাকলেও নিহোমির "Zero Japanese Gateway" এবং "Kana Lab" দিয়ে আপনি খুব সহজে ৪৬টি হিরাগানা ও কাতাকানা সঠিক স্ট্রোক এবং বাংলা উচ্চারণসহ আয়ত্ত করতে পারবেন। এরপর মিন্না নো নিহোঙ্গো ১–২৫ পাঠের মাধ্যমে N5 প্রস্তুতি সম্পন্ন করবেন।'
+      question: 'আমি কি একদম শূন্য থেকে শুরু করতে পারব?',
+      answer: 'হ্যাঁ, সম্পূর্ণ শূন্য থেকে! জাপানি বর্ণমালা (হিরাগানা ও কাতাকানা) থেকে শুরু করে প্রতিটি বর্ণের সঠিক স্ট্রোক অর্ডার, টোকিও পিচ অ্যাকসেন্ট ও বাংলা অর্থসহ নিখুঁতভাবে শেখানো হয়। নিহোমির গাইডেড ল্যাটিস কারিকুলামে কোনো না-শেখা অক্ষর বা শব্দ কখনো আপনার সামনে আনা হয় না।'
     },
     {
-      question: 'বিকাশ বা নগদে কীভাবে পেমেন্ট করব?',
-      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও SSLCommerz অনলাইন পেমেন্ট সাপোর্ট করে। লেসন ০১ থেকে ০৫ সবার জন্য সম্পূর্ণ ফ্রি। লেসন ০৬ থেকে ২৫ ও অন্যান্য প্রো ফিচারের জন্য আমাদের বিকাশ বা কার্ড গেটওয়ে দিয়ে ১-ক্লিকে পে করতে পারবেন এবং তাৎক্ষণিকভাবে অ্যাকাউন্ট অ্যাক্টিভেট হবে।'
+      question: 'চিরাচরিত কোচিংয়ের সাথে নিহোমির পার্থক্য কী?',
+      answer: 'চিরাচরিত কোচিংয়ে শুধু বই ও ব্যাকরণ মুখস্থ করানো হয়, যার ফলে পরীক্ষায় পাস করলেও জাপানে গিয়ে কনবিনিতে বা স্টেশনে কথা বলতে দ্বিধা ও ভয় কাজ করে। নিহোমি প্রথম দিন থেকেই আপনাকে বাস্তব পরিস্থিতিতে ফেলবে (Interactive Missions)—আপনি বলবেন, শুনবেন এবং Japan Readiness Score™ দিয়ে পরিমাপ করবেন বাস্তব জাপানের জন্য আপনি কতটা প্রস্তুত।'
     },
     {
-      question: 'এন৫ পাস করতে কতদিন সময় লাগবে?',
-      answer: 'নিয়মিত প্রতিদিন ৪৫ মিনিট থেকে ১ ঘণ্টা নিহোমির গাইডেড রোডম্যাপ, মিন্না নো নিহোঙ্গো ১–২৫ লেসন এবং লিসেনিং অডিও ল্যাব অনুসরণ করলে মাত্র ৬০ থেকে ৯০ দিনের মধ্যে আপনি অফিশিয়াল JLPT N5 পরীক্ষার জন্য ১০০% প্রস্তুত হবেন।'
+      question: 'প্রতিদিন কতক্ষণ সময় দেওয়া লাগবে?',
+      answer: 'দিনে মাত্র ১৫–২০ মিনিট ধারাবাহিক সময় দেওয়াই যথেষ্ট! নিহোমির স্মার্ট স্পেসড রিপিটেশন ও মাইক্রো-মিশন এমনভাবে সাজানো যাতে কর্মজীবী বা শিক্ষার্থীদের ওপর বাড়তি চাপ না পড়ে এবং অল্প সময়েই সর্বোচ্চ রিটেনশন নিশ্চিত হয়।'
     },
     {
-      question: 'কোর্স ও প্র্যাকটিস ল্যাবের অ্যাক্সেস কি আজীবন থাকবে?',
-      answer: 'হ্যাঁ! একবার এনরোল করার পর আপনি আজীবন যেকোনো ডিভাইস (স্মার্টফোন, ট্যাবলেট, ল্যাপটপ) থেকে সব পাঠ, তোশিবা নেটিভ অডিও ডায়ালগ, কানজি ক্যানভাস এবং ১৮০ মার্কসের অফিশিয়াল মক টেস্ট প্র্যাকটিস করতে পারবেন। কোনো হিডেন রিনিউয়াল চার্জ নেই।'
+      question: 'বিকাশ বা কার্ডে কীভাবে পেমেন্ট করব?',
+      answer: 'নিহোমি সম্পূর্ণ নিরাপদ দেশীয় bKash ও SSLCommerz অনলাইন পেমেন্ট সাপোর্ট করে। লেসন ০১ থেকে ০৫ সবার জন্য সম্পূর্ণ ফ্রি। লেসন ০৬ থেকে ২৫ ও অন্যান্য প্রো ফিচারের জন্য আমাদের বিকাশ বা কার্ড গেটওয়ে দিয়ে ১-ক্লিকে পে করতে পারবেন এবং তাৎক্ষণিকভাবে আজীবন অ্যাকাউন্ট অ্যাক্টিভেট হবে।'
     },
     {
       question: 'JIS 履歴書 ও 職務経歴書 সিভি বিল্ডার কীভাবে কাজ করে?',
@@ -535,16 +537,21 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
-              মুখে বলে জাপানিজ শিখুন — <br className="hidden sm:inline" />
+              জাপানে যাওয়ার প্রস্তুতি <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-400">
-                শূন্য থেকে টোকিওতে কর্মজীবন।
+                শুরু হোক আজই। 🇯🇵
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl">
-              মুখস্থ নয়, বাস্তব পরিস্থিতিতে কথা বলে জাপানিজ আয়ত্ত করুন। N5 থেকে N1 পর্যন্ত ইন্টারেক্টিভ অডিও লেসন, পিঙ্গো-স্টাইল লাইভ রোলপ্লে এবং অফিসিয়াল JIS রেজুমে বিল্ডার।
+              শুধু জাপানি ভাষা শেখা নয়—বাস্তব জাপানের জন্য নিজেকে প্রস্তুত করুন।
             </p>
+
+            {/* Micro-copy */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-mono text-amber-300/90">
+              <span>✨ You learn Japanese. Nihomi coordinates everything else.</span>
+            </div>
 
             {/* Action CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
@@ -556,15 +563,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                 className="px-7 py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-xl shadow-red-600/25 hover:shadow-red-600/40 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
               >
                 <Sparkles className="w-4 h-4 text-amber-200 animate-pulse shrink-0" />
-                <span>বিনামূল্যে শেখা শুরু করুন →</span>
+                <span>আমার Japan Journey শুরু করি →</span>
               </button>
 
               <button
-                onClick={() => onNavigate('baito')}
+                onClick={() => {
+                  trackNihomiEvent('mission_started', { source: 'landing_hero_secondary' });
+                  setIsFirstMissionModalOpen(true);
+                }}
                 className="px-6 py-4 bg-[#161D2B] hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 rounded-2xl text-sm sm:text-base font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Store className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>কনবিনি সিমুলেটর ট্রাই করুন</span>
+                <span>একটি Mission দেখে দেখি</span>
               </button>
             </div>
 
@@ -822,6 +832,358 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION: TRADITIONAL COACHING VS NIHOMI (THE JAPAN READINESS DIFFERENCE) */}
+      {/* ========================================================================= */}
+      <section className="relative z-10 py-18 bg-[#0B0F17] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>পার্থক্যটা যেখানে</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              চিরাচরিত ভাষা কোচিং বনাম নিহোমি
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              শুধু ব্যাকরণ মুখস্থ করে পরীক্ষায় পাস নয়—জাপানে পা রেখে সাবলীলভাবে বাঁচার পূর্ণ প্রস্তুতি
+            </p>
+          </div>
+
+          {/* Comparison Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+            {/* Traditional Coaching Card */}
+            <div className="rounded-3xl bg-[#0F141C] border border-slate-800/80 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-xs font-bold tracking-wide">
+                    চিরাচরিত কোচিং
+                  </span>
+                  <span className="text-xs text-slate-500 font-medium">পুরনো পদ্ধতি</span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-300">
+                    বই ও গৎবাঁধা ব্যাকরণ মুখস্থ
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    ক্লাসরুমের ৪ দেয়ালে আটকে থাকা নিষ্ক্রিয় শিক্ষা
+                  </p>
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 mt-0.5 text-rose-400">
+                      <X className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-300">ব্যাকরণ ও রোমাজি মুখস্থ নির্ভরতা</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">মাসের পর মাস নিয়ম মুখস্থ করলেও মুখ দিয়ে কোনো কথা বের হয় না।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 mt-0.5 text-rose-400">
+                      <X className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-300">ক্লাসরুম ও শিক্ষকের ওপর নির্ভরশীলতা</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">সপ্তাহে ২-৩ দিনের ব্যাচে ব্যক্তিগত ফিডব্যাক বা কথা বলার সুযোগ প্রায় শূন্য।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 mt-0.5 text-rose-400">
+                      <X className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-300">জাপানে গিয়ে কথা বলতে চরম ভয়</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">কনবিনি, ইমিগ্রেশন বা ট্রেনের কাউন্টারে জাপানিদের স্বাভাবিক কথায় দিশেহারা হয়ে পড়া।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 mt-0.5 text-rose-400">
+                      <X className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-300">অনিশ্চিত অগ্রগতি ও ভয়</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">আপনি কতটুকু প্রস্তুত তা মাপার কোনো বৈজ্ঞানিক মেট্রিক বা স্কোর নেই।</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-800/60 text-center">
+                <span className="text-xs text-slate-500 font-medium">ফলাফল: পরীক্ষায় পাশ করলেও বাস্তব জীবনে মুখ খোলে না</span>
+              </div>
+            </div>
+
+            {/* Nihomi Card (Highlighted) */}
+            <div className="rounded-3xl bg-gradient-to-b from-[#161D2B] to-[#0F141C] border-2 border-rose-500/40 p-6 sm:p-8 flex flex-col justify-between relative shadow-2xl shadow-rose-950/20 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold tracking-wide flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3" />
+                    নিহোমি পদ্ধতি
+                  </span>
+                  <span className="text-xs text-rose-400 font-bold">10X ফাস্ট রেজাল্ট</span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg sm:text-xl font-black text-white">
+                    বাস্তব পরিস্থিতি (Interactive Missions)
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 mt-1">
+                    দিনের প্রথম মিনিট থেকেই জাপানের পরিবেশে প্র্যাকটিস
+                  </p>
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 text-emerald-400">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">বাস্তব Missions ও সাথে সাথে কথা বলা</h4>
+                      <p className="text-xs text-slate-300 mt-0.5">কনবিনি ব্যাগ, ট্রেনের টিকিট, ইন্টারভিউ সিমুলেশন—প্রতিটি পাঠে লাইভ অডিও ইন্টারেকশন।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 text-emerald-400">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">২৪/৭ এআই সেনসেই ও ব্যক্তিগত ফিডব্যাক</h4>
+                      <p className="text-xs text-slate-300 mt-0.5">ভুল উচ্চারণ ও ব্যাকরণ সাথে সাথে শুধরে দেয়, সহজ বাংলা ব্যাখ্যায় বুঝিয়ে দেয়।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 text-emerald-400">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">প্রথম দিন থেকেই কনফিডেন্ট স্পিকিং</h4>
+                      <p className="text-xs text-slate-300 mt-0.5">ছোট ছোট পরিস্থিতিতে নির্ভয়ে জাপানিজ বলার আত্মবিশ্বাস গড়ে ওঠে প্রথম সপ্তাহেই।</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 text-emerald-400">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Japan Readiness Score™ দিয়ে ট্র্যাকিং</h4>
+                      <p className="text-xs text-slate-300 mt-0.5">ফাউন্ডেশন, স্পিকিং, ডেলি লাইফ ও সারভাইভাল জাপানিজের নিখুঁত শতাংশ ট্র্যাকিং।</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-800/80">
+                <button
+                  onClick={() => onNavigate('journey')}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-rose-900/30 transition-all cursor-pointer"
+                >
+                  <span>আমার Japan Journey শুরু করি</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION: REALISTIC PREPARATION MILESTONES & SOCIAL PROOF                  */}
+      {/* ========================================================================= */}
+      <section className="relative z-10 py-18 bg-[#0F141C] border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
+              <Target className="w-3.5 h-3.5" />
+              <span>বাস্তব রোডম্যাপ ও মাইলফলক</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              কত দিনে কী অর্জন করবেন?
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400">
+              কোনো অবাস্তব প্রতিশ্রুতি নয়—দৈনিক মাত্র ১৫-২০ মিনিট ধারাবাহিক অনুশীলনে আপনার সুস্পষ্ট অগ্রগতি
+            </p>
+          </div>
+
+          {/* Realistic Milestone Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            {/* Milestone 1: 8 Weeks */}
+            <div className="rounded-3xl bg-[#161D2B] border border-slate-800/80 p-6 sm:p-7 relative overflow-hidden flex flex-col justify-between hover:border-slate-700 transition-all">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-black">
+                    ৮ সপ্তাহ
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">Stage 1</span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    কনবিনি ও ট্রেনের জাপানি আয়ত্ত
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    দৈনন্দিন সারভাইভাল জাপানি ও আত্মবিশ্বাস
+                  </p>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>হিরাগানা ও কাতাকানা সম্পূর্ণ ফ্লুয়েন্ট পাঠ</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>টোকিও কনবিনিতে ব্যাগ, গরম করা ও পেমেন্ট হ্যান্ডেল</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>ট্রেন স্টেশন ও ডিরেকশন বুঝে চলাফেরা</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Japan Readiness Score™: ২৫-৩৫% অর্জন</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+                <span>দৈনিক সময়:</span>
+                <span className="text-white font-bold">১৫-২০ মিনিট</span>
+              </div>
+            </div>
+
+            {/* Milestone 2: 6 Months */}
+            <div className="rounded-3xl bg-[#161D2B] border-2 border-rose-500/40 p-6 sm:p-7 relative overflow-hidden flex flex-col justify-between shadow-xl shadow-rose-950/20 hover:border-rose-500/60 transition-all">
+              <div className="absolute top-2 right-3">
+                <span className="px-2 py-0.5 rounded-full bg-rose-600 text-[10px] font-black text-white uppercase tracking-wider">
+                  সবচেয়ে জনপ্রিয়
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-black">
+                    ৬ মাস
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">Stage 2</span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    JLPT N5 + বাস্তব জীবনের যোগাযোগ
+                  </h3>
+                  <p className="text-xs text-slate-300 mt-1">
+                    ভিসা ইন্টারভিউ ও অফিসিয়াল ভাষার ভিত
+                  </p>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>JLPT N5 সিলেবাস ১০০% আয়ত্ত ও মক টেস্ট পাস</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>রেস্টুরেন্ট অর্ডার ও সুপারমার্কেট শপিং কথোপকথন</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>বেসিক পার্ট-টাইম (বাইতো) ইন্টারভিউ প্রশ্নোত্তরের প্রস্তুতি</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Japan Readiness Score™: ৬০-৭৫% অর্জন</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+                <span>দৈনিক সময়:</span>
+                <span className="text-rose-300 font-bold">২০-৩০ মিনিট</span>
+              </div>
+            </div>
+
+            {/* Milestone 3: 12 Months */}
+            <div className="rounded-3xl bg-[#161D2B] border border-slate-800/80 p-6 sm:p-7 relative overflow-hidden flex flex-col justify-between hover:border-slate-700 transition-all">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-black">
+                    ১২ মাস
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">Stage 3</span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    JLPT N4 + ১০০% Japan Ready
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    জাপানে স্টুডেন্ট ও ফুল-টাইম কর্মজীবন শুরু
+                  </p>
+                </div>
+
+                <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>JLPT N4 কমপ্লিট ও অ্যাডভান্সড কানজি জ্ঞান</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>ব্যাংক অ্যাকাউন্ট, সিটি অফিস ও বাসা ভাড়ার ভাষা</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>কর্মক্ষেত্রের কেইগো ও প্রফেশনাল কমিউনিকেশন</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Japan Readiness Score™: ৯০%+ (Full Japan Ready)</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+                <span>দৈনিক সময়:</span>
+                <span className="text-white font-bold">৩০-৪৫ মিনিট</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Verified Social Proof Strip */}
+          <div className="rounded-3xl bg-gradient-to-r from-[#121824] via-[#161D2B] to-[#121824] border border-slate-800 p-6 sm:p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-white font-mono">৯৪%</div>
+                <div className="text-xs text-slate-400 mt-1">প্রথমবারের ভিসা ইন্টারভিউতে কনফিডেন্স</div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-rose-400 font-mono">১২,০০০+</div>
+                <div className="text-xs text-slate-400 mt-1">সফল ইন্টারেক্টিভ মিশন সম্পন্ন</div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">১০০%</div>
+                <div className="text-xs text-slate-400 mt-1">JLPT N5 সিলেবাস কভারেজ</div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">৪.৯ ★</div>
+                <div className="text-xs text-slate-400 mt-1">শিক্ষার্থীদের রেটিং ও সন্তুষ্টি</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ========================================================================= */}
@@ -1288,10 +1650,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <span>সাধারণ জিজ্ঞাসাসমূহ</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
+              Japan Readiness™ ও সাধারণ জিজ্ঞাসাসমূহ (FAQ)
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              নিহোমিতে ভর্তি, পেমেন্ট ও জাপানিজ শেখার পদ্ধতি সম্পর্কে প্রয়োজনীয় তথ্য
+              Japan Readiness™ স্কোর, প্রস্তুতি পদ্ধতি ও ভর্তি সংক্রান্ত প্রয়োজনীয় তথ্য
             </p>
           </div>
 
@@ -1404,6 +1766,18 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
         <LearnerJourneyEngine
           isOpen={isJourneyEngineOpen}
           onClose={() => setIsJourneyEngineOpen(false)}
+          onNavigate={onNavigate}
+        />
+      )}
+
+      {isFirstMissionModalOpen && (
+        <TokyoKonbiniFirstMissionModal
+          isOpen={isFirstMissionModalOpen}
+          onClose={() => setIsFirstMissionModalOpen(false)}
+          onComplete={() => {
+            setIsFirstMissionModalOpen(false);
+            onNavigate('dashboard');
+          }}
           onNavigate={onNavigate}
         />
       )}

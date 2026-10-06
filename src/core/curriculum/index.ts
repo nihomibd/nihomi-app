@@ -7,3 +7,4 @@ export * from './curriculumGraph';
 export * from './journeyEngine';
 export * from './mistakeRecoveryEngine';
 export * from './placementEngine';
+export * from './missionResolver';

@@ -153,11 +153,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Auto-advance Carousel every 3 seconds
   useEffect(() => {
     if (!isOpen) return;
+    trackNihomiEvent('checkout_viewed', { planId: activePlan?.id || 'pro' });
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % NIHOMI_6_VALUES.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [isOpen]);
+  }, [isOpen, activePlan?.id]);
 
   // Handle ESC key
   useEffect(() => {

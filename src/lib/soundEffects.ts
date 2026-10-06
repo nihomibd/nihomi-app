@@ -134,6 +134,18 @@ class SoundEngine {
     this.playButtonTap();
   }
 
+  public playButtonClick(): void {
+    this.playButtonTap();
+  }
+
+  public playCorrect(): void {
+    this.playCorrectPing();
+  }
+
+  public playWrong(): void {
+    this.playIncorrectSoft();
+  }
+
   /**
    * Fanfare melody when a quiz or lesson is 100% completed
    */

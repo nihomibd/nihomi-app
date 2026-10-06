@@ -62,6 +62,13 @@ authRouter.post('/google', async (req, res) => {
       }
     }
 
+    if (req.body.onboardingData || req.body.japanReadinessScore) {
+      db.updateProfile(user.id, {
+        ...(req.body.onboardingData ? { onboardingData: req.body.onboardingData } : {}),
+        ...(req.body.japanReadinessScore !== undefined ? { japanReadinessScore: Number(req.body.japanReadinessScore) } : {})
+      });
+    }
+
     // Issue hardened stateless Nihomi JWT
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
@@ -311,14 +318,16 @@ authRouter.post('/reset-password-confirm', (req, res) => {
 // Update Profile
 authRouter.put('/profile', requireAuth, (req: AuthenticatedRequest, res) => {
   const user = req.user!;
-  const { displayName, targetLevel, dailyGoalMinutes, bio, nativeLanguage } = req.body;
+  const { displayName, targetLevel, dailyGoalMinutes, bio, nativeLanguage, japanReadinessScore, onboardingData } = req.body;
 
   const updatedProfile = db.updateProfile(user.id, {
     ...(displayName !== undefined ? { displayName } : {}),
     ...(targetLevel !== undefined ? { targetLevel } : {}),
     ...(dailyGoalMinutes !== undefined ? { dailyGoalMinutes: Number(dailyGoalMinutes) } : {}),
     ...(bio !== undefined ? { bio } : {}),
-    ...(nativeLanguage !== undefined ? { nativeLanguage } : {})
+    ...(nativeLanguage !== undefined ? { nativeLanguage } : {}),
+    ...(japanReadinessScore !== undefined ? { japanReadinessScore: Number(japanReadinessScore) } : {}),
+    ...(onboardingData !== undefined ? { onboardingData } : {})
   });
 
   // Also update progress level if targetLevel was updated
@@ -329,6 +338,18 @@ authRouter.put('/profile', requireAuth, (req: AuthenticatedRequest, res) => {
   }
 
   return res.json({ profile: updatedProfile });
+});
+
+// Save / Persist Onboarding Directly
+authRouter.post('/onboarding', requireAuth, (req: AuthenticatedRequest, res) => {
+  const user = req.user!;
+  const { onboardingData, japanReadinessScore, dailyMinutes } = req.body;
+  const updatedProfile = db.updateProfile(user.id, {
+    ...(onboardingData ? { onboardingData } : {}),
+    ...(japanReadinessScore !== undefined ? { japanReadinessScore: Number(japanReadinessScore) } : {}),
+    ...(dailyMinutes !== undefined ? { dailyGoalMinutes: Number(dailyMinutes) } : {})
+  });
+  return res.json({ success: true, profile: updatedProfile });
 });
 
 // Update Password

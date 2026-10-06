@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { setStoredToken, apiRequest, getStoredToken } from '../lib/api';
+import { getSavedOnboardingAnswers, syncOnboardingToProfile, checkAndConsumeOAuthPendingOnboarding } from '../core/onboarding/onboardingStorage';
+import { trackNihomiEvent } from '../utils/analytics';
 
 export interface User {
   id: string;
@@ -42,6 +44,8 @@ export interface UserProfile {
   bio?: string;
   dailyGoalMinutes: number;
   nihomiAccountId?: string;
+  japanReadinessScore?: number;
+  onboardingData?: Record<string, any>;
 }
 
 export interface UserProgress {
@@ -167,8 +171,8 @@ export interface AuthContextType {
   openLoginModal: (mode?: string) => void;
   closeAuthModal: () => void;
   setUserData: (user: User) => void;
-  loginWithGoogle: () => Promise<boolean>;
-  loginWithGoogleFirebase: () => Promise<boolean>;
+  loginWithGoogle: (customRedirect?: string) => Promise<boolean>;
+  loginWithGoogleFirebase: (customRedirect?: string) => Promise<boolean>;
   loginWithToken: (idToken: string) => Promise<boolean>;
   login: (email?: string, password?: string) => Promise<boolean>;
   register: (data?: any) => Promise<boolean>;
@@ -453,6 +457,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (res.progress) setProgress(res.progress);
           }
         }).catch(() => {});
+
+        const savedAnswers = getSavedOnboardingAnswers();
+        if (savedAnswers) {
+          syncOnboardingToProfile(savedAnswers).catch(() => {});
+        }
+        if (checkAndConsumeOAuthPendingOnboarding()) {
+          trackNihomiEvent('auth_completed', { method: 'google', userId: u.id });
+        }
       }
     });
 
@@ -494,6 +506,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (res.progress) setProgress(res.progress);
           }
         }).catch(() => {});
+
+        const savedAnswers = getSavedOnboardingAnswers();
+        if (savedAnswers) {
+          syncOnboardingToProfile(savedAnswers).catch(() => {});
+        }
+        if (checkAndConsumeOAuthPendingOnboarding()) {
+          trackNihomiEvent('auth_completed', { method: 'google', userId: u.id });
+        }
       } else if (_event === 'SIGNED_OUT') {
         setUser(null);
         setStoredToken(null);
@@ -508,13 +528,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const loginWithGoogle = async (): Promise<boolean> => {
+  const loginWithGoogle = async (customRedirect?: string): Promise<boolean> => {
     try {
+      const redirectUrl = customRedirect || (typeof window !== 'undefined' ? `${window.location.origin}/journey` : undefined);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           queryParams: { prompt: 'select_account' },
-          redirectTo: window.location.origin
+          redirectTo: redirectUrl || (typeof window !== 'undefined' ? window.location.origin : undefined)
         }
       });
       if (error) throw error;
@@ -525,8 +546,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginWithGoogleFirebase = async (): Promise<boolean> => {
-    return loginWithGoogle();
+  const loginWithGoogleFirebase = async (customRedirect?: string): Promise<boolean> => {
+    return loginWithGoogle(customRedirect);
   };
 
   const loginWithToken = async (idToken: string): Promise<boolean> => {

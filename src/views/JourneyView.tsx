@@ -1,24 +1,119 @@
-import React from 'react';
+// src/views/JourneyView.tsx
+import React, { useState, useEffect } from 'react';
+import { ConversationalOnboardingModal } from '../components/onboarding/ConversationalOnboardingModal';
+import { JourneyRevealView } from '../components/onboarding/JourneyRevealView';
+import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
 import { LearnerJourneyEngine } from '../components/learning/LearnerJourneyEngine';
-import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
-import { getNextBestMission } from '../core/curriculum/journeyEngine';
+import {
+  getSavedOnboardingAnswers,
+  isOnboardingCompleted,
+  DEFAULT_ONBOARDING_ANSWERS
+} from '../core/onboarding/onboardingStorage';
+import { OnboardingAnswers } from '../core/onboarding/onboardingTypes';
+import { HanabiBackground } from '../components/HanabiBackground';
 
 interface JourneyViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
 export const JourneyView: React.FC<JourneyViewProps> = ({ onNavigate }) => {
+  const [answers, setAnswers] = useState<OnboardingAnswers | null>(() => getSavedOnboardingAnswers());
+  const [activeScreen, setActiveScreen] = useState<'onboarding' | 'reveal' | 'lattice'>(() => {
+    return isOnboardingCompleted() ? 'reveal' : 'onboarding';
+  });
+  const [isFirstMissionOpen, setIsFirstMissionOpen] = useState(false);
+
+  useEffect(() => {
+    // Check if coming directly with hash or params to trigger first mission
+    if (typeof window !== 'undefined') {
+      const search = new URLSearchParams(window.location.search);
+      if (search.get('mission') === 'first' || search.get('mission') === 'konbini') {
+        setIsFirstMissionOpen(true);
+      }
+    }
+  }, []);
+
+  const handleOnboardingComplete = (newAnswers: OnboardingAnswers) => {
+    setAnswers(newAnswers);
+    setActiveScreen('reveal');
+  };
+
   return (
-    <LearnerJourneyEngine
-      isOpen={true}
-      onClose={() => {
-        const kState = loadLearnerKnowledgeState();
-        const next = getNextBestMission(kState);
-        onNavigate(next.viewRoute, next.viewParams);
-      }}
-      onNavigate={onNavigate}
-      isModal={false}
-    />
+    <div className="relative min-h-screen bg-[#080711] text-stone-100 flex flex-col justify-center items-center py-10 px-4 overflow-hidden">
+      {/* Neo-Tokyo Hanabi subtle canvas background */}
+      <HanabiBackground />
+
+      {activeScreen === 'onboarding' && (
+        <div className="w-full max-w-2xl z-10">
+          <ConversationalOnboardingModal
+            isOpen={true}
+            onClose={() => {
+              // Allow fallback to reveal with defaults
+              setAnswers(DEFAULT_ONBOARDING_ANSWERS);
+              setActiveScreen('reveal');
+            }}
+            onComplete={handleOnboardingComplete}
+            isStandalone={true}
+          />
+        </div>
+      )}
+
+      {activeScreen === 'reveal' && (
+        <div className="w-full z-10 animate-in fade-in duration-300">
+          <JourneyRevealView
+            answers={answers || DEFAULT_ONBOARDING_ANSWERS}
+            onNavigate={onNavigate}
+            onStartFirstMission={() => setIsFirstMissionOpen(true)}
+          />
+
+          <div className="max-w-4xl mx-auto px-4 mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-400 border-t border-white/5 pt-4">
+            <button
+              type="button"
+              onClick={() => setActiveScreen('onboarding')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              🔄 অনবোর্ডিং প্রশ্নগুলো আবার উত্তর দিন
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveScreen('lattice')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              🇯🇵 ক্লাসিক লার্নিং ল্যাটিস (হিরাগানা ড্রিল) দেখুন →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {activeScreen === 'lattice' && (
+        <div className="w-full z-10">
+          <button
+            type="button"
+            onClick={() => setActiveScreen('reveal')}
+            className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-white cursor-pointer"
+          >
+            ← পার্সোনালাইজড জার্নিতে ফিরে যান
+          </button>
+          <LearnerJourneyEngine
+            isOpen={true}
+            onClose={() => setActiveScreen('reveal')}
+            onNavigate={onNavigate}
+            isModal={false}
+          />
+        </div>
+      )}
+
+      {/* Interactive First Mission Modal */}
+      <TokyoKonbiniFirstMissionModal
+        isOpen={isFirstMissionOpen}
+        onClose={() => setIsFirstMissionOpen(false)}
+        onComplete={() => {
+          setIsFirstMissionOpen(false);
+          onNavigate('dashboard');
+        }}
+        onNavigate={onNavigate}
+      />
+    </div>
   );
 };
 

@@ -23,6 +23,8 @@ import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
+import { trackNihomiEvent } from '../utils/analytics';
+import { getSavedOnboardingAnswers } from '../core/onboarding/onboardingStorage';
 
 interface PricingViewProps {
   onSelectPlan?: (planId: PlanId) => void;
@@ -103,6 +105,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
         console.error('Failed to load plans:', err);
       }
     };
+    trackNihomiEvent('checkout_viewed', { source: 'pricing_view' });
     fetchPlans();
   }, []);
 
@@ -168,17 +171,51 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/80 text-red-700 dark:text-red-300 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/80 text-red-700 dark:text-red-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Investment in Your Japan Career & JLPT Mastery</span>
+            <span>জাপান রেডিনেস অ্যান্ড কেরিয়ার প্রিপারেশন • Nihomi Pro</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Simple, Transparent Pricing in Bangladeshi Taka (৳)
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-tight">
+            তোমার স্বপ্নটাকে বাস্তবে রূপ দেওয়ার পরবর্তী ধাপ।
           </h1>
-          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400">
-            Learn Japanese at your own pace with AI Sensei, pass JLPT N5–N3, and unlock visa & career opportunities in Japan. Cancel anytime.
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+            শুধু সাধারণ বই পড়া নয়—বাস্তব জাপানে পড়ার, থাকার ও কাজ করার জন্য সম্পূর্ণ নির্ভরযোগ্য প্রস্তুতি।
           </p>
+
+          {/* PERSONALIZED ROADMAP VISUALIZER */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121124] border border-zinc-200 dark:border-white/10 shadow-lg text-left max-w-3xl mx-auto my-5 space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-zinc-500 dark:text-zinc-400">
+              <span className="uppercase tracking-wider">তোমার পার্সোনালাইজড প্রিপারেশন পাথওয়ে:</span>
+              <span className="text-emerald-500 font-mono">100% Outcome Guaranteed</span>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300">
+                <div className="font-mono text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400">ধাপ ০১</div>
+                <div className="font-bold text-sm mt-0.5">Beginner</div>
+                <div className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1">শূন্য থেকে শুরু ও হিরাগানা</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300">
+                <div className="font-mono text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400">ধাপ ০২</div>
+                <div className="font-bold text-sm mt-0.5">N5 Foundation</div>
+                <div className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1">মিন্না নো নিহোঙ্গো ১–২৫ ও কাঞ্জি</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-800 dark:text-cyan-300">
+                <div className="font-mono text-[10px] uppercase font-bold text-cyan-600 dark:text-cyan-400">ধাপ ০৩</div>
+                <div className="font-bold text-sm mt-0.5">Konbini & Train</div>
+                <div className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1">বাস্তব জীবন, কেনাকাটা ও ভ্রমণ</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-800 dark:text-red-300">
+                <div className="font-mono text-[10px] uppercase font-bold text-red-600 dark:text-red-400">ধাপ ০৪</div>
+                <div className="font-bold text-sm mt-0.5">Japan Ready 🇯🇵</div>
+                <div className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1">ভিসা, ইন্টারভিউ ও পূর্ণ প্রস্তুতি</div>
+              </div>
+            </div>
+          </div>
 
           {/* ======================================================== */}
           {/* SPECIAL FEATURED PASS: N5 PRO LIFETIME (৳৪৯৯)             */}

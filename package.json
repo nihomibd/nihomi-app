@@ -11,7 +11,11 @@
     "verify-rc": "tsx scripts/verify-release-candidate.ts",
     "clean": "node -e \"try { fs.rmSync('dist', { recursive: true, force: true }); } catch (e) {}\"",
     "lint": "tsc --noEmit",
-    "validate:curriculum": "tsx scripts/validate-curriculum.ts"
+    "validate:curriculum": "tsx scripts/validate-curriculum.ts",
+    "verify:server": "tsx scripts/verify-server-lifecycle.ts",
+    "test:e2e": "tsx scripts/run-e2e-with-server.ts",
+    "verify:gate": "tsx scripts/verify-release-gate-matrix.ts",
+    "smoke:live": "tsx scripts/production-live-smoke-test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

@@ -15,7 +15,8 @@ import {
   Store,
   Layers,
   Award,
-  Play
+  Play,
+  Target
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
@@ -23,6 +24,9 @@ import { MemoryOsView } from './MemoryOsView';
 import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
 import { getNextBestMission, isGrammarEligible } from '../core/curriculum/journeyEngine';
 import { PlacementDiagnosticModal } from '../components/learning/PlacementDiagnosticModal';
+import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
+import { calculateJapanReadiness, getSavedOnboardingAnswers } from '../core/onboarding/onboardingStorage';
+import { trackNihomiEvent } from '../utils/analytics';
 
 interface DashboardViewProps {
   onNavigate?: (view: string, params?: Record<string, any>) => void;
@@ -50,6 +54,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const { user, progress } = useAuth();
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [isPlacementOpen, setIsPlacementOpen] = useState<boolean>(false);
+  const [isKonbiniModalOpen, setIsKonbiniModalOpen] = useState<boolean>(false);
   const [knowledgeVersion, setKnowledgeVersion] = useState<number>(0);
   const [showMemoryOs, setShowMemoryOs] = useState<boolean>(false);
 
@@ -118,6 +123,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
   const grammarStatus = isGrammarEligible(kState);
   const currentLessonNum = Math.min(6, completedLessons.length + 1);
   const activeMission = N5_CURRICULUM_PATHWAY.find((l) => l.num === currentLessonNum) || N5_CURRICULUM_PATHWAY[0];
+  const isKonbiniDone = typeof window !== 'undefined' && localStorage.getItem('nihomi_mission_konbini_completed') === 'true';
+  const savedAnswers = getSavedOnboardingAnswers();
+  const readiness = calculateJapanReadiness(savedAnswers);
 
   if (showMemoryOs) {
     return (
@@ -199,12 +207,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
                   <Zap className="w-3.5 h-3.5 fill-amber-300" />
-                  <span>আজকের পরবর্তী মিশন • NEXT BEST MISSION</span>
+                  <span>
+                    {!isKonbiniDone ? 'TODAY’S MISSION • বাস্তব জাপান সিমুলেশন' : 'আজকের পরবর্তী মিশন • NEXT BEST MISSION'}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-stone-300 font-mono">
                   <span className="flex items-center gap-1 text-amber-400 font-bold">
                     <Clock className="w-3.5 h-3.5" />
-                    ⏱️ {activeMission.estimatedMinutes} মিনিট
+                    ⏱️ {!isKonbiniDone ? '২ মিনিট' : `${activeMission.estimatedMinutes} মিনিট`}
                   </span>
                   <span>•</span>
                   <span className="text-emerald-400 font-bold">ফ্রি ও আনলকড</span>
@@ -213,39 +223,150 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
               <div className="space-y-2">
                 <div className="text-xs text-amber-400/90 font-japanese font-bold tracking-wider">
-                  JLPT N5 • {canonicalMission.titleBn}
+                  {!isKonbiniDone ? 'Tokyo Konbini • リアルコンビニ' : `JLPT N5 • ${canonicalMission.titleBn}`}
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-snug">
-                  {canonicalMission.titleBn}
+                  {!isKonbiniDone
+                    ? 'Mission 01: Tokyo Konbini (কনবিনি চ্যালেঞ্জ)'
+                    : canonicalMission.titleBn}
                 </h1>
                 <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-2xl font-medium">
-                  {canonicalMission.whyItMattersBn}
+                  {!isKonbiniDone
+                    ? 'টোকিওর সেভেন-ইলেভেন বা লসনে প্রথম কেনাকাটার অভিজ্ঞতা। প্লাস্টিক ব্যাগ ও ক্যাশিয়ারের প্রশ্নের দ্রুত সমাধান।'
+                    : canonicalMission.whyItMattersBn}
                 </p>
               </div>
 
               {/* ONE Prominent Hero CTA Button + Placement Fast-Track */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  id="btn-dashboard-start-next-mission"
-                  onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                </button>
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                {!isKonbiniDone ? (
+                  <button
+                    type="button"
+                    id="btn-dashboard-start-first-mission"
+                    onClick={() => {
+                      trackNihomiEvent('mission_started', { source: 'dashboard_hero' });
+                      setIsKonbiniModalOpen(true);
+                    }}
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>Mission শুরু করি →</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    id="btn-dashboard-start-next-mission"
+                    onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                  </button>
+                )}
 
                 <button
                   type="button"
                   id="btn-dashboard-placement-test"
                   onClick={() => setIsPlacementOpen(true)}
-                  className="px-5 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Compass className="w-4 h-4 text-amber-400" />
                   <span>আগে জাপানি জানা আছে? প্লেসমেন্ট টেস্ট দিন</span>
                 </button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* JAPAN READINESS™ SCORE BREAKDOWN                                          */}
+        {/* ========================================================================= */}
+        <section aria-label="Japan Readiness Breakdown" className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-black text-white flex items-center gap-2">
+                <Target className="w-4 h-4 text-emerald-400" />
+                <span>Japan Readiness Score™ (প্রস্তুতি সূচক)</span>
+              </h2>
+              <p className="text-xs text-stone-400 mt-0.5">
+                জাপানে উচ্চশিক্ষা, কাজ ও বসবাসের জন্য প্রয়োজনীয় ৪টি মূল দক্ষতার সমন্বিত স্কোর।
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono font-black text-sm shadow-lg shadow-emerald-500/10">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>{readiness.overallScore}% রেডি</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            {/* 1. Foundation */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-300">Foundation (বর্ণ ও ব্যাকরণ)</span>
+                <span className="font-mono font-bold text-red-400">{readiness.foundationScore}%</span>
+              </div>
+              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full transition-all duration-500"
+                  style={{ width: `${readiness.foundationScore}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 leading-snug">
+                হিরাগানা, কাতাকানা ও মিন্না নো নিহোঙ্গো N5 ব্যাকরণ ভিত্তি।
+              </p>
+            </div>
+
+            {/* 2. Speaking */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-300">Speaking (কথোপকথন)</span>
+                <span className="font-mono font-bold text-amber-400">{readiness.speakingScore}%</span>
+              </div>
+              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readiness.speakingScore}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 leading-snug">
+                টোকিও পিচ অ্যাকসেন্ট, স্বতঃস্ফূর্ত কথা বলা ও জড়তাহীন উচ্চারণ।
+              </p>
+            </div>
+
+            {/* 3. Daily Life */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-300">Daily Life (দৈনন্দিন জীবন)</span>
+                <span className="font-mono font-bold text-cyan-400">{readiness.dailyLifeScore}%</span>
+              </div>
+              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
+                  style={{ width: `${readiness.dailyLifeScore}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 leading-snug">
+                কনবিনি কেনাকাটা, ট্রেন সাবওয়ে, দিকনির্দেশনা ও রেস্তোরাঁ অর্ডার।
+              </p>
+            </div>
+
+            {/* 4. Survival */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-300">Survival (জরুরি পরিস্থিতি)</span>
+                <span className="font-mono font-bold text-emerald-400">{readiness.survivalScore}%</span>
+              </div>
+              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
+                  style={{ width: `${readiness.survivalScore}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 leading-snug">
+                জরুরি সাহায্য চাওয়া, ডাক্তারের কাছে সমস্যা বলা ও বিনয়ী কেইগো।
+              </p>
             </div>
           </div>
         </section>
@@ -457,6 +578,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           setIsPlacementOpen(false);
           onNavigate?.(viewRoute, viewParams);
         }}
+      />
+
+      {/* Interactive First Mission Modal */}
+      <TokyoKonbiniFirstMissionModal
+        isOpen={isKonbiniModalOpen}
+        onClose={() => setIsKonbiniModalOpen(false)}
+        onComplete={() => {
+          setIsKonbiniModalOpen(false);
+          setKnowledgeVersion((v) => v + 1);
+        }}
+        onNavigate={onNavigate}
       />
     </div>
   );

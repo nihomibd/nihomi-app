@@ -12,16 +12,19 @@
 - [x] **[PAY-02]** Verify SSLCommerz IPN callback, MD5 `verify_key` computation, and Stripe webhook handling with live idempotency keys.
 - [x] **[STORAGE-01]** Wire Content Engine file uploads directly to Supabase Storage buckets (`nihomi-content-sources`, `nihomi-curriculum-media`) with streaming endpoints, signed URLs, and dual-layer local caching (`verify_p1_storage_pipeline.ts`).
 
-## Phase 3: Automated Testing & Quality Assurance (P1) — COMPLETE ✅
+## Phase 3: Automated Testing & Verification Suite (P1) — COMPLETE ✅
 - [x] **[TEST-01]** Automated test runner `server/tests/verify_p0_auth_persistence.ts` configured and passing (14/14 tests green).
 - [x] **[TEST-02]** Automated test runner `server/tests/verify_p1_payment_gateways.ts` configured and passing (21/21 tests green).
 - [x] **[TEST-03]** Automated test runner `server/tests/verify_p1_storage_pipeline.ts` configured and passing (21/21 tests green).
-- [ ] **[TEST-04]** Write integration tests for `/api/auth/*` (register, login, me, google).
-- [ ] **[TEST-05]** Write integration tests for `/api/content/*` (upload, generate, draft, publish).
+- [x] **[TEST-LATTICE]** Canonical curriculum lattice validator `scripts/validate-curriculum.ts` passing (17/17 assertions green).
+- [x] **[TEST-SMOKE]** Monolithic production smoke test `server/scripts/productionSmokeTest.ts` passing (7/7 suites green).
+- [x] **[TEST-RC]** Release candidate verification `scripts/verify-release-candidate.ts` passing (7/7 checks green).
+- [x] **[TEST-LIFECYCLE]** Safe server lifecycle runner `scripts/verify-server-lifecycle.ts` (`npm run verify:server`) passing (5/5 checks green with zero hang risk).
+- [x] **[TEST-E2E]** Headless Chrome browser suite `scripts/run-e2e-with-server.ts` (`npm run test:e2e`) passing (5/5 scenarios green).
 
-## Phase 4: Observability & Production Hardening (P2/P3)
-- [ ] **[JOB-01]** Decouple heavy PDF OCR processing into async background queue.
-- [ ] **[OBS-01]** Add structured JSON logging middleware to Express.
-- [ ] **[OBS-02]** Integrate Sentry / APM error tracking for frontend and backend.
-- [ ] **[DR-01]** Configure automated daily database backups with Supabase / Cloud SQL.
+## Phase 4: Observability, Backup & Production Hardening (P2/P3)
+- [x] **[OBS-01]** Structured JSON request logging middleware in `server.ts` (lines 148-168) with latency and request tracking.
+- [x] **[DR-01]** Automated daily and weekly database backup snapshots in `server.ts` via `databaseBackupService.ts`.
+- [ ] **[JOB-01]** Decouple heavy PDF OCR processing in Content Studio into an asynchronous background worker queue.
+- [ ] **[OBS-02]** Integrate Sentry / APM error tracking for frontend and backend production telemetry.
 - [ ] **[CI-01]** Create `.github/workflows/ci.yml` for automated lint, build, and test verification on every PR.

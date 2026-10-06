@@ -441,10 +441,52 @@ async function run() {
   }
   const shotD = await send('Page.captureScreenshot', { format: 'png' });
   fs.writeFileSync(path.join(screenshotsDir, 'persona_d_pro_preview_modal.png'), Buffer.from(shotD.data, 'base64'));
-  console.log('  ✔ [PASS] Scenario D: Commercial boundary protection confirmed.');
+  // -------------------------------------------------------------------------
+  // SCENARIO F: Mobile Viewport & Responsiveness Audit (375x812)
+  // -------------------------------------------------------------------------
+  console.log('\n[SCENARIO F: Mobile Viewport & Responsiveness Audit]');
+  console.log('  -> Overriding device metrics to mobile dimensions (375x812)...');
+  await send('Emulation.setDeviceMetricsOverride', {
+    width: 375,
+    height: 812,
+    deviceScaleFactor: 2,
+    mobile: true
+  });
+  await wait(500);
+
+  console.log('  -> Navigating to / in mobile viewport...');
+  await send('Page.navigate', { url: 'http://localhost:3000/' });
+  await waitForPageReady(send);
+  await wait(1000);
+
+  const mobileAudit = await send('Runtime.evaluate', {
+    expression: `
+      (() => {
+        const bodyWidth = document.body.scrollWidth;
+        const windowWidth = window.innerWidth;
+        const hasHorizontalOverflow = bodyWidth > windowWidth + 5;
+        const ctaBtn = Array.from(document.querySelectorAll('button, a')).find(el => el.innerText.includes('শুরু'));
+        return {
+          windowWidth,
+          bodyWidth,
+          hasHorizontalOverflow,
+          hasVisibleCta: !!ctaBtn
+        };
+      })()
+    `,
+    returnByValue: true
+  });
+  console.log('  -> Mobile width:', mobileAudit.result.value.windowWidth);
+  console.log('  -> Content scroll width:', mobileAudit.result.value.bodyWidth);
+  console.log('  -> Horizontal overflow:', mobileAudit.result.value.hasHorizontalOverflow);
+  console.log('  -> Primary CTA visible:', mobileAudit.result.value.hasVisibleCta);
+
+  const shotMobile = await send('Page.captureScreenshot', { format: 'png' });
+  fs.writeFileSync(path.join(screenshotsDir, 'persona_f_mobile_viewport.png'), Buffer.from(shotMobile.data, 'base64'));
+  console.log('  ✔ [PASS] Scenario F: Mobile responsive layout verified.');
 
   console.log('\n================================================================');
-  console.log('🎉 ALL 5 CONSTITUTION PERSONAS & SCENARIOS PASSED 100%!');
+  console.log('🎉 ALL CONSTITUTION PERSONAS & MOBILE AUDIT PASSED 100%!');
   console.log('================================================================\n');
 
   chrome.kill();

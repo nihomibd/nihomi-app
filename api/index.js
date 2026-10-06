@@ -52957,7 +52957,7 @@ var init_db = __esm({
         return DATA_DIR;
       }
       assertProductionStorageSafety(operation) {
-        if (process.env.NODE_ENV === "production" && !this.isSupabaseConnected) {
+        if (process.env.NODE_ENV === "production" && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE !== "true") {
           const error = new Error(
             `[PRODUCTION PERSISTENCE ERROR] Cannot execute '${operation}'. Production requires an active Supabase PostgreSQL datastore. Local filesystem fallback is disabled in production to prevent silent data loss.`
           );
@@ -52967,7 +52967,7 @@ var init_db = __esm({
         }
       }
       safeWriteJsonFile(filePath, data) {
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV === "production" && process.env.ALLOW_LOCAL_STORAGE !== "true") {
           return;
         }
         try {
@@ -60137,6 +60137,12 @@ authRouter.post("/google", async (req, res) => {
         }
       }
     }
+    if (req.body.onboardingData || req.body.japanReadinessScore) {
+      db.updateProfile(user.id, {
+        ...req.body.onboardingData ? { onboardingData: req.body.onboardingData } : {},
+        ...req.body.japanReadinessScore !== void 0 ? { japanReadinessScore: Number(req.body.japanReadinessScore) } : {}
+      });
+    }
     const token = createSessionToken(user);
     const profile = db.getProfileByUserId(user.id);
     const progress = db.getProgressByUserId(user.id);
@@ -60340,13 +60346,15 @@ authRouter.post("/reset-password-confirm", (req, res) => {
 });
 authRouter.put("/profile", requireAuth2, (req, res) => {
   const user = req.user;
-  const { displayName, targetLevel, dailyGoalMinutes, bio, nativeLanguage } = req.body;
+  const { displayName, targetLevel, dailyGoalMinutes, bio, nativeLanguage, japanReadinessScore, onboardingData } = req.body;
   const updatedProfile = db.updateProfile(user.id, {
     ...displayName !== void 0 ? { displayName } : {},
     ...targetLevel !== void 0 ? { targetLevel } : {},
     ...dailyGoalMinutes !== void 0 ? { dailyGoalMinutes: Number(dailyGoalMinutes) } : {},
     ...bio !== void 0 ? { bio } : {},
-    ...nativeLanguage !== void 0 ? { nativeLanguage } : {}
+    ...nativeLanguage !== void 0 ? { nativeLanguage } : {},
+    ...japanReadinessScore !== void 0 ? { japanReadinessScore: Number(japanReadinessScore) } : {},
+    ...onboardingData !== void 0 ? { onboardingData } : {}
   });
   if (targetLevel) {
     const prog = db.getProgressByUserId(user.id);
@@ -60354,6 +60362,16 @@ authRouter.put("/profile", requireAuth2, (req, res) => {
     db.save();
   }
   return res.json({ profile: updatedProfile });
+});
+authRouter.post("/onboarding", requireAuth2, (req, res) => {
+  const user = req.user;
+  const { onboardingData, japanReadinessScore, dailyMinutes } = req.body;
+  const updatedProfile = db.updateProfile(user.id, {
+    ...onboardingData ? { onboardingData } : {},
+    ...japanReadinessScore !== void 0 ? { japanReadinessScore: Number(japanReadinessScore) } : {},
+    ...dailyMinutes !== void 0 ? { dailyGoalMinutes: Number(dailyMinutes) } : {}
+  });
+  return res.json({ success: true, profile: updatedProfile });
 });
 authRouter.put("/password", requireAuth2, (req, res) => {
   const user = req.user;

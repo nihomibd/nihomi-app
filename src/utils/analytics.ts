@@ -39,8 +39,13 @@ export type NihomiEventType =
   | 'nba_lesson_launched'
   | 'nba_mock_exam_launched'
   | 'journey_start_clicked'
+  | 'journey_started'
+  | 'onboarding_completed'
+  | 'auth_completed'
   | 'journey_calibrated'
   | 'mission_started'
+  | 'mission_completed'
+  | 'checkout_viewed'
   | 'next_best_mission_impression'
   | 'next_best_mission_clicked'
   | 'placement_test_started'
@@ -148,8 +153,13 @@ export type EventPayloadMap = {
   nba_lesson_launched: Record<string, any>;
   nba_mock_exam_launched: Record<string, any>;
   journey_start_clicked: Record<string, any>;
+  journey_started: Record<string, any>;
+  onboarding_completed: Record<string, any>;
+  auth_completed: Record<string, any>;
   journey_calibrated: Record<string, any>;
   mission_started: Record<string, any>;
+  mission_completed: Record<string, any>;
+  checkout_viewed: Record<string, any>;
   next_best_mission_impression: Record<string, any>;
   next_best_mission_clicked: Record<string, any>;
   placement_test_started: Record<string, any>;
@@ -344,6 +354,36 @@ export function trackNihomiEvent<T extends NihomiEventType>(
         content_name: cleanPayload.planName || cleanPayload.planId,
         num_items: 1
       });
+      break;
+    }
+
+    case 'journey_started': {
+      dispatchToGA4('journey_started', cleanPayload);
+      dispatchToMeta('trackCustom', 'JourneyStarted', cleanPayload);
+      break;
+    }
+
+    case 'onboarding_completed': {
+      dispatchToGA4('onboarding_completed', cleanPayload);
+      dispatchToMeta('trackCustom', 'OnboardingCompleted', cleanPayload);
+      break;
+    }
+
+    case 'auth_completed': {
+      dispatchToGA4('auth_completed', cleanPayload);
+      dispatchToMeta('trackCustom', 'AuthCompleted', cleanPayload);
+      break;
+    }
+
+    case 'mission_completed': {
+      dispatchToGA4('mission_completed', cleanPayload);
+      dispatchToMeta('trackCustom', 'MissionCompleted', cleanPayload);
+      break;
+    }
+
+    case 'checkout_viewed': {
+      dispatchToGA4('view_item_list', { item_list_name: 'Nihomi Plans', ...cleanPayload });
+      dispatchToMeta('track', 'ViewContent', { content_name: 'Checkout Plans', ...cleanPayload });
       break;
     }
 
