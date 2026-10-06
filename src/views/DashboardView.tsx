@@ -242,15 +242,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       {/* Main Learning Canvas */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
-        {/* Founder View Active Banner */}
-        {user?.role === 'founder' && (
+        {/* Admin / Founder View Active Banner */}
+        {(user?.role === 'admin' || user?.role === 'founder') && (
           <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-rose-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 text-lg">
                 👑
               </div>
               <div>
-                <div className="text-xs font-bold text-amber-300">Executive Founder View Active</div>
+                <div className="text-xs font-bold text-amber-300">Executive Admin View Active</div>
                 <p className="text-[11px] text-stone-300">Viewing your personal learner profile, progress, and readiness score.</p>
               </div>
             </div>

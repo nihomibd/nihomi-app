@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import { db } from './db.js';
-import { getRequiredJwtSecret, isFounderEmail } from './env.js';
-import { UserRole } from './types.js';
+import { getRequiredJwtSecret, isAdminEmail, isFounderEmail } from './env.js';
+import { UserRole, CanonicalRole } from './types.js';
 
-export type { UserRole };
+export type { UserRole, CanonicalRole };
+
 
 /**
  * Authenticated user entity attached to Express requests upon cryptographic verification.
@@ -163,37 +164,33 @@ function getVerificationSecrets(): string[] {
  * Validates whether a given string is an allowed UserRole.
  */
 function isValidUserRole(role: unknown): role is UserRole {
-  return role === 'admin' || role === 'instructor' || role === 'user' || role === 'student' || role === 'founder';
+  return role === 'admin' || role === 'student' || role === 'instructor' || role === 'user' || role === 'founder';
 }
 
 /**
- * Derives user role strictly from cryptographically verified claims.
- * Role resolution priority:
- * 1. app_metadata.role (Supabase server-managed authoritative claim)
- * 2. user_metadata.role (Supabase user metadata claim)
- * 3. role claim (Nihomi native token claim; explicitly filters out Postgres 'authenticated')
- *
- * Defaults safely to 'user'. Hardcoded email bypasses are strictly forbidden.
+ * Canonical Role Normalization (Strict 2-Role Production Model):
+ * EXACT ADMIN EMAIL: mdtanvirkabirbiplob@gmail.com => 'admin'
+ * EVERY OTHER GMAIL / EMAIL => 'student'
+ * Server-authoritative: client/browser can never elevate or tamper.
  */
-function resolveUserRole(rawPayload: Record<string, any>): UserRole {
-
-  // 1. Supabase app_metadata.role (server-controlled, cannot be spoofed by client)
-  if (isValidUserRole(rawPayload.app_metadata?.role)) {
-    return rawPayload.app_metadata.role;
+export function canonicalizeRole(email?: string): CanonicalRole {
+  if (email && isAdminEmail(email)) {
+    return 'admin';
   }
+  return 'student';
+}
 
-  // 2. Supabase user_metadata.role
-  if (isValidUserRole(rawPayload.user_metadata?.role)) {
-    return rawPayload.user_metadata.role;
-  }
-
-  // 3. Top-level role claim (standard in native tokens; ignore Postgres 'authenticated')
-  if (rawPayload.role !== 'authenticated' && isValidUserRole(rawPayload.role)) {
-    return rawPayload.role;
-  }
-
-  // Least-privilege safe default
-  return 'user';
+/**
+ * Derives user role strictly from cryptographically verified claims and canonicalizes.
+ */
+function resolveUserRole(rawPayload: Record<string, any>): CanonicalRole {
+  const email = (
+    rawPayload.email ||
+    rawPayload.user_metadata?.email ||
+    rawPayload.app_metadata?.email ||
+    ''
+  ).trim();
+  return canonicalizeRole(email);
 }
 
 /**
@@ -390,7 +387,7 @@ export function getUserFromToken(token?: string): AuthenticatedUser | null {
     if (!verifiedPayload) return null;
 
     // Retrieve user by authoritative verified userId
-    const effectiveRole: UserRole = isFounderEmail(verifiedPayload.email) ? 'founder' : (verifiedPayload.role || 'student');
+    const effectiveRole: CanonicalRole = canonicalizeRole(verifiedPayload.email);
     let user = db.findUserById(verifiedPayload.userId);
 
     if (!user) {
@@ -463,15 +460,7 @@ export async function verifySupabaseTokenAsync(token?: string): Promise<Authenti
 
     const u = data.user;
     const email = (u.email || (u.user_metadata?.email as string) || '').toLowerCase().trim();
-    const isFounder = isFounderEmail(email);
-    const appMeta = u.app_metadata || {};
-    const userMeta = u.user_metadata || {};
-    const rawRole = ((appMeta.role as string) || (userMeta.role as string) || '').toLowerCase();
-    let role: UserRole = 'student';
-    if (isFounder || rawRole === 'founder') role = 'founder';
-    else if (rawRole === 'admin') role = 'admin';
-    else if (rawRole === 'instructor' || rawRole === 'teacher') role = 'instructor';
-    else role = 'student';
+    const role: CanonicalRole = canonicalizeRole(email);
 
     let user = db.findUserById(u.id);
     if (!user && email) {
@@ -584,36 +573,35 @@ export async function requireAdmin(req: Request | any, res: Response, next: Next
     });
   }
 
-  if (user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' && user.role !== 'admin') {
-    user.role = 'admin';
-  }
+  const userEmail = (user.email || '').trim().toLowerCase();
+  const isAdmin = user.role === 'admin' || isAdminEmail(userEmail);
 
-  if (user.role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       error: 'Forbidden. Administrator privileges required.',
       code: 'FORBIDDEN_ROLE'
     });
   }
 
+  user.role = 'admin';
   req.user = user;
   req.authContext = { user, token };
   next();
 }
 
-export const FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || 'mdtanvirkabirbiplob@gmail.com').trim().toLowerCase();
+export const FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || process.env.ADMIN_EMAIL || 'mdtanvirkabirbiplob@gmail.com').trim().toLowerCase();
 
 /**
- * Express Middleware: Require strictly verified Founder access.
+ * Express Middleware: Require strictly verified Administrator / Founder access.
  * 
  * Strict Production Security Rules:
  * 1. Authenticated access via standard Authorization: Bearer <token>
  * 2. Cryptographic token verification (rejects fake/untrusted tokens)
- * 3. Server-side Founder authorization (email must strictly match FOUNDER_EMAIL or role must be 'founder')
- * 4. Explicit Founder permission (verified role must be 'admin' or 'founder')
- * 5. Rejects any normal student or unverified identity
- * 6. Completely ignores client-side role claims (body, query, headers)
- * 7. Audits every privileged action and unauthorized attempt
- * 8. MFA-ready: checks for x-founder-mfa-token or Supabase AAL2 claim if enforced
+ * 3. Server-side Administrator authorization (email must strictly match ADMIN_EMAILS or role must be 'admin')
+ * 4. Rejects any normal student or unverified identity
+ * 5. Completely ignores client-side role claims (body, query, headers)
+ * 6. Audits every privileged action and unauthorized attempt
+ * 7. MFA-ready: checks for x-founder-mfa-token or Supabase AAL2 claim if enforced
  */
 export async function requireFounder(req: Request | any, res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
@@ -635,18 +623,18 @@ export async function requireFounder(req: Request | any, res: Response, next: Ne
   }
 
   const userEmail = (user.email || '').trim().toLowerCase();
-  const isFounder = (user.role as string) === 'founder' || isFounderEmail(userEmail);
+  const isAdmin = user.role === 'admin' || isAdminEmail(userEmail);
 
-  if (!isFounder) {
-    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
+  if (!isAdmin) {
+    console.warn(`[Admin Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder/Admin API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
       success: false,
-      error: 'Forbidden. Access restricted strictly to NIHOMI Founder.',
+      error: 'Forbidden. Access restricted strictly to NIHOMI Administrator.',
       code: 'FORBIDDEN_FOUNDER_ONLY'
     });
   }
 
-  user.role = 'founder';
+  user.role = 'admin';
 
   // MFA-ready check: If FOUNDER_MFA_ENFORCED is enabled, require MFA header
   if (process.env.FOUNDER_MFA_ENFORCED === 'true') {

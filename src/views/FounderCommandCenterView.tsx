@@ -48,7 +48,7 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
   >('overview');
 
   // Executive Login & Gatekeeper State
-  const [founderEmailInput, setFounderEmailInput] = useState('mdtanvirkabirbiplob@gmail.com');
+  const [founderEmailInput, setFounderEmailInput] = useState('');
   const [founderPasscodeInput, setFounderPasscodeInput] = useState('');
   const [showPasscode, setShowPasscode] = useState(false);
   const [isAuthorizing, setIsAuthorizing] = useState(false);
@@ -56,7 +56,7 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
 
   const isAuthorizedFounder = Boolean(
     user &&
-    (user.role === 'founder' || user.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com')
+    (user.role === 'admin' || user.role === 'founder')
   );
 
   // Loading & Error States

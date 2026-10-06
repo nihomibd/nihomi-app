@@ -419,7 +419,7 @@ export const App: React.FC = () => {
     const isStudentDashboardRoute = ['dashboard', 'student-dashboard', 'portal-dashboard'].includes(currentView);
 
     // If an authenticated Student attempts to access /founder, block and redirect to /dashboard
-    if (isFounderRoute && user && user.role !== 'founder') {
+    if (isFounderRoute && user && user.role !== 'admin' && user.role !== 'founder') {
       handleNavigate('dashboard');
       return;
     }

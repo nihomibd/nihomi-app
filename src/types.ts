@@ -1,4 +1,5 @@
-export type UserRole = 'user' | 'admin' | 'instructor';
+export type CanonicalRole = 'admin' | 'student';
+export type UserRole = 'admin' | 'student' | 'user' | 'instructor' | 'founder';
 
 export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
 

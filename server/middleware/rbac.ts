@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest, getUserFromToken, extractBearerToken } from '../authHelper.js';
 import { UserRole } from '../types.js';
 
-import { isFounderEmail } from '../env.js';
+import { isAdminEmail, isFounderEmail } from '../env.js';
 
 export interface RbacOptions {
   errorMessage?: string;
@@ -35,10 +35,10 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
       });
     }
 
-    // Auto-recognize verified founder
-    if (isFounderEmail(user.email) || user.role === 'founder') {
-      user.role = 'founder';
-      // Founder has super-admin permissions across admin and instructor endpoints
+    // Auto-recognize verified administrator
+    if (isAdminEmail(user.email) || user.role === 'admin' || user.role === 'founder') {
+      user.role = 'admin';
+      // Admin has super-admin permissions across admin and instructor endpoints
       if (rolesArray.includes('admin') || rolesArray.includes('founder') || rolesArray.includes('instructor')) {
         req.user = user;
         return next();

@@ -144,7 +144,7 @@ import {
 } from './baitoSeedData.js';
 import { ContentDiffService } from './services/contentDiffService.js';
 import { prisma, isDatabaseConfigured } from './prisma.js';
-import { isFounderEmail } from './env.js';
+import { isAdminEmail, isFounderEmail } from './env.js';
 
 const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const DB_FILE = path.join(DATA_DIR, 'nihomi_db.json');
@@ -1736,11 +1736,28 @@ class Database {
 
   // --- USER & AUTH ---
   public findUserByEmail(email: string): User | undefined {
-    return this.data.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+    const clean = email.trim().toLowerCase();
+    const user = this.data.users.find((u) => u.email.toLowerCase() === clean);
+    if (user) {
+      const canonical: UserRole = isAdminEmail(user.email) ? 'admin' : 'student';
+      if (user.role !== canonical) {
+        user.role = canonical;
+        try { this.save(); } catch {}
+      }
+    }
+    return user;
   }
 
   public findUserById(id: string): User | undefined {
-    return this.data.users.find((u) => u.id === id);
+    const user = this.data.users.find((u) => u.id === id);
+    if (user) {
+      const canonical: UserRole = isAdminEmail(user.email) ? 'admin' : 'student';
+      if (user.role !== canonical) {
+        user.role = canonical;
+        try { this.save(); } catch {}
+      }
+    }
+    return user;
   }
 
   public ensureUserExists(params: {
@@ -1752,17 +1769,13 @@ class Database {
   }): User {
     this.assertProductionStorageSafety('ensureUserExists');
     const cleanEmail = (params.email || '').trim().toLowerCase();
-    const isFounder = isFounderEmail(cleanEmail);
-    const resolvedRole: UserRole = isFounder ? 'founder' : (params.role || 'student');
+    const isAdmin = isAdminEmail(cleanEmail);
+    const resolvedRole: UserRole = isAdmin ? 'admin' : 'student';
 
     let existing = (params.id ? this.findUserById(params.id) : undefined) || (cleanEmail ? this.findUserByEmail(cleanEmail) : undefined);
     if (existing) {
-      if (isFounder && existing.role !== 'founder') {
-        existing.role = 'founder';
-        existing.updatedAt = new Date().toISOString();
-        this.save();
-      } else if (params.role && existing.role !== params.role && !isFounder) {
-        existing.role = params.role;
+      if (existing.role !== resolvedRole) {
+        existing.role = resolvedRole;
         existing.updatedAt = new Date().toISOString();
         this.save();
       }
@@ -1831,8 +1844,8 @@ class Database {
     const { hash, salt } = hashPassword(params.password);
     const now = new Date().toISOString();
     const cleanEmail = params.email.trim().toLowerCase();
-    const isFounder = isFounderEmail(cleanEmail);
-    const resolvedRole: UserRole = isFounder ? 'founder' : (params.role || 'student');
+    const isAdmin = isAdminEmail(cleanEmail);
+    const resolvedRole: UserRole = isAdmin ? 'admin' : 'student';
 
     const user: User = {
       id,

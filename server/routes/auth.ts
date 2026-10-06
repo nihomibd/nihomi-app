@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { db, verifyPassword, hashPassword } from '../db.js';
-import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, resolveUserFromTokenAsync, extractBearerToken, AuthenticatedRequest } from '../authHelper.js';
+import { createSessionToken, revokeSessionToken, requireAuth, getUserFromToken, resolveUserFromTokenAsync, extractBearerToken, AuthenticatedRequest, canonicalizeRole } from '../authHelper.js';
 import { verifyGoogleIdToken } from '../services/googleAuth.js';
 import { getUserActivePlanId } from '../services/entitlements.js';
-import { isFounderEmail } from '../env.js';
+import { isAdminEmail, isFounderEmail } from '../env.js';
 import crypto from 'crypto';
 
 export const authRouter = Router();
@@ -31,8 +31,8 @@ authRouter.post('/google', async (req, res) => {
       });
     }
 
-    const verifiedEmail = verifiedGoogle.email;
-    const isFounder = isFounderEmail(verifiedEmail);
+    const verifiedEmail = verifiedGoogle.email.toLowerCase();
+    const targetRole = canonicalizeRole(verifiedEmail);
     let user = db.findUserByEmail(verifiedEmail);
 
     if (!user) {
@@ -41,7 +41,7 @@ authRouter.post('/google', async (req, res) => {
         email: verifiedEmail,
         password: crypto.randomBytes(24).toString('hex'), // Secure random internal hash
         displayName: verifiedGoogle.name,
-        role: isFounder ? 'founder' : 'student',
+        role: targetRole,
         targetLevel: (req.body.targetLevel === 'N1' || req.body.targetLevel === 'N2' || req.body.targetLevel === 'N3' || req.body.targetLevel === 'N4' || req.body.targetLevel === 'N5') ? req.body.targetLevel : 'N5',
         nativeLanguage: 'English'
       });
@@ -52,8 +52,8 @@ authRouter.post('/google', async (req, res) => {
       }
     } else {
       // Update existing user profile if needed
-      if (isFounder && user.role !== 'founder') {
-        user.role = 'founder';
+      if (user.role !== targetRole) {
+        user.role = targetRole;
         db.save();
       }
       if (verifiedGoogle.picture) {
@@ -163,28 +163,29 @@ authRouter.post('/login', (req, res) => {
     }
 
     let user = db.findUserByEmail(email);
-    const isFounder = isFounderEmail(email);
+    const targetRole = canonicalizeRole(email);
+    const isAdmin = targetRole === 'admin';
 
     if (!user) {
-      if (isFounder) {
+      if (isAdmin) {
         const pass = hashPassword(password);
         const created = db.createUser({
           email: email.trim().toLowerCase(),
           password: password,
-          displayName: 'Tanvir Kabir Biplob (Founder)',
-          role: 'founder'
+          displayName: 'Tanvir Kabir Biplob (Administrator)',
+          role: 'admin'
         });
         user = created.user;
         user.passwordHash = pass.hash;
         user.passwordSalt = pass.salt;
-        user.role = 'founder';
+        user.role = 'admin';
         db.save();
       } else {
         return res.status(401).json({ error: 'Invalid email or password.' });
       }
     }
 
-    const isMasterPass = isFounder && (
+    const isMasterPass = isAdmin && (
       password === 'nihomiFounder2026!' ||
       password === 'Founder@2026' ||
       password === 'Biplob2026!'
@@ -194,8 +195,8 @@ authRouter.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
-    if (isFounder && user.role !== 'founder') {
-      user.role = 'founder';
+    if (user.role !== targetRole) {
+      user.role = targetRole;
       db.save();
       db.syncUserToSupabase(user).catch(() => {});
     }
@@ -259,12 +260,12 @@ authRouter.get('/me', async (req: AuthenticatedRequest, res) => {
     });
   }
 
-  const isFounder = isFounderEmail(user.email) || user.role === 'founder';
-  if (isFounder && user.role !== 'founder') {
-    user.role = 'founder';
+  const targetRole = canonicalizeRole(user.email);
+  if (user.role !== targetRole) {
+    user.role = targetRole;
     const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
-    if (dbUser && dbUser.role !== 'founder') {
-      dbUser.role = 'founder';
+    if (dbUser && dbUser.role !== targetRole) {
+      dbUser.role = targetRole;
       db.save();
       db.syncUserToSupabase(dbUser).catch(() => {});
     }

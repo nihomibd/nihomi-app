@@ -4,6 +4,7 @@ import { requireFounder } from '../middleware/rbac.js';
 import { AuthenticatedRequest } from '../authHelper.js';
 import { aiCoo } from '../services/aiCooRuntimeService.js';
 import { getUserActivePlanId } from '../services/entitlements.js';
+import { isAdminEmail } from '../env.js';
 
 export const founderRouter = Router();
 
@@ -48,7 +49,7 @@ founderRouter.get('/summary', (req: AuthenticatedRequest, res: Response) => {
       : 'NOT CONFIGURED';
 
     const allUsers = db.getAllUsers();
-    const studentUsers = allUsers.filter(u => u.role !== 'founder');
+    const studentUsers = allUsers.filter(u => u.role !== 'admin' && !isAdminEmail(u.email));
     const totalStudents = studentUsers.length;
     const now = new Date();
     const thisMonthPrefix = now.toISOString().slice(0, 7);
@@ -702,7 +703,7 @@ founderRouter.get('/students', (req: AuthenticatedRequest, res: Response) => {
     const allUsers = db.getAllUsers();
     
     const students = allUsers
-      .filter((u) => u.role !== 'founder')
+      .filter((u) => u.role !== 'admin' && !isAdminEmail(u.email))
       .map((u) => {
         const profile = db.getProfileByUserId(u.id);
         const progress = db.getProgressByUserId(u.id);

@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
 import { requireAuth, AuthenticatedRequest } from '../authHelper.js';
-import { isFounderEmail } from '../env.js';
+import { isAdminEmail, isFounderEmail } from '../env.js';
 import { db } from '../db.js';
 import { getUserActivePlanId } from '../services/entitlements.js';
 
@@ -125,10 +125,9 @@ dashboardRouter.get('/', requireAuth, (req: AuthenticatedRequest, res: Response)
 dashboardRouter.get('/student/:userId', requireAuth, (req: AuthenticatedRequest, res: Response) => {
   const requestingUser = req.user!;
   const targetUserId = req.params.userId;
-  const isFounder = requestingUser.role === 'founder' || isFounderEmail(requestingUser.email);
-  const isAdmin = requestingUser.role === 'admin';
+  const isAuthorizedAdmin = requestingUser.role === 'admin' || isAdminEmail(requestingUser.email);
 
-  if (requestingUser.id !== targetUserId && !isFounder && !isAdmin) {
+  if (requestingUser.id !== targetUserId && !isAuthorizedAdmin) {
     console.warn(`[Security] IDOR attempt blocked: User ${requestingUser.email} (ID: ${requestingUser.id}) attempted to access dashboard for student ID: ${targetUserId}`);
     return res.status(403).json({
       success: false,

@@ -27,10 +27,18 @@ export function validateEnvironment(): void {
 }
 
 /**
- * Retrieves trusted Founder emails configured in the environment.
+ * Retrieves trusted Admin emails configured in the environment.
+ * Primary: ADMIN_EMAILS / ADMIN_EMAIL
+ * Fallback / alias: FOUNDER_EMAILS / FOUNDER_EMAIL
+ * Production Default: mdtanvirkabirbiplob@gmail.com
  */
-export function getFounderEmails(): string[] {
-  const raw = process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || 'mdtanvirkabirbiplob@gmail.com';
+export function getAdminEmails(): string[] {
+  const raw =
+    process.env.ADMIN_EMAILS ||
+    process.env.ADMIN_EMAIL ||
+    process.env.FOUNDER_EMAILS ||
+    process.env.FOUNDER_EMAIL ||
+    'mdtanvirkabirbiplob@gmail.com';
   return raw
     .split(',')
     .map(e => e.trim().toLowerCase())
@@ -38,9 +46,18 @@ export function getFounderEmails(): string[] {
 }
 
 /**
- * Verifies if an email belongs to the trusted founder list.
+ * Server-authoritative check: verifies if an email belongs to the trusted admin list.
+ * Exact admin email: mdtanvirkabirbiplob@gmail.com => ADMIN
+ * Every other email => STUDENT
  */
-export function isFounderEmail(email?: string): boolean {
+export function isAdminEmail(email?: string): boolean {
   if (!email || typeof email !== 'string') return false;
-  return getFounderEmails().includes(email.trim().toLowerCase());
+  return getAdminEmails().includes(email.trim().toLowerCase());
 }
+
+/**
+ * Backwards compatibility aliases for existing founder references
+ */
+export const getFounderEmails = getAdminEmails;
+export const isFounderEmail = isAdminEmail;
+

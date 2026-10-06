@@ -19,13 +19,13 @@ function getRequiredJwtSecret() {
   }
   return secret.trim();
 }
-function getFounderEmails() {
-  const raw = process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com";
+function getAdminEmails() {
+  const raw = process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com";
   return raw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 }
-function isFounderEmail(email) {
+function isAdminEmail(email) {
   if (!email || typeof email !== "string") return false;
-  return getFounderEmails().includes(email.trim().toLowerCase());
+  return getAdminEmails().includes(email.trim().toLowerCase());
 }
 var init_env = __esm({
   "server/env.ts"() {
@@ -53082,24 +53082,43 @@ var init_db = __esm({
       }
       // --- USER & AUTH ---
       findUserByEmail(email) {
-        return this.data.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+        const clean = email.trim().toLowerCase();
+        const user = this.data.users.find((u) => u.email.toLowerCase() === clean);
+        if (user) {
+          const canonical = isAdminEmail(user.email) ? "admin" : "student";
+          if (user.role !== canonical) {
+            user.role = canonical;
+            try {
+              this.save();
+            } catch {
+            }
+          }
+        }
+        return user;
       }
       findUserById(id) {
-        return this.data.users.find((u) => u.id === id);
+        const user = this.data.users.find((u) => u.id === id);
+        if (user) {
+          const canonical = isAdminEmail(user.email) ? "admin" : "student";
+          if (user.role !== canonical) {
+            user.role = canonical;
+            try {
+              this.save();
+            } catch {
+            }
+          }
+        }
+        return user;
       }
       ensureUserExists(params) {
         this.assertProductionStorageSafety("ensureUserExists");
         const cleanEmail = (params.email || "").trim().toLowerCase();
-        const isFounder = isFounderEmail(cleanEmail);
-        const resolvedRole = isFounder ? "founder" : params.role || "student";
+        const isAdmin = isAdminEmail(cleanEmail);
+        const resolvedRole = isAdmin ? "admin" : "student";
         let existing = (params.id ? this.findUserById(params.id) : void 0) || (cleanEmail ? this.findUserByEmail(cleanEmail) : void 0);
         if (existing) {
-          if (isFounder && existing.role !== "founder") {
-            existing.role = "founder";
-            existing.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
-            this.save();
-          } else if (params.role && existing.role !== params.role && !isFounder) {
-            existing.role = params.role;
+          if (existing.role !== resolvedRole) {
+            existing.role = resolvedRole;
             existing.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
             this.save();
           }
@@ -53154,8 +53173,8 @@ var init_db = __esm({
         const { hash, salt } = hashPassword(params.password);
         const now = (/* @__PURE__ */ new Date()).toISOString();
         const cleanEmail = params.email.trim().toLowerCase();
-        const isFounder = isFounderEmail(cleanEmail);
-        const resolvedRole = isFounder ? "founder" : params.role || "student";
+        const isAdmin = isAdminEmail(cleanEmail);
+        const resolvedRole = isAdmin ? "admin" : "student";
         const user = {
           id,
           email: cleanEmail,
@@ -59716,20 +59735,15 @@ function getVerificationSecrets() {
   }
   return secrets;
 }
-function isValidUserRole(role) {
-  return role === "admin" || role === "instructor" || role === "user" || role === "student" || role === "founder";
+function canonicalizeRole(email) {
+  if (email && isAdminEmail(email)) {
+    return "admin";
+  }
+  return "student";
 }
 function resolveUserRole(rawPayload) {
-  if (isValidUserRole(rawPayload.app_metadata?.role)) {
-    return rawPayload.app_metadata.role;
-  }
-  if (isValidUserRole(rawPayload.user_metadata?.role)) {
-    return rawPayload.user_metadata.role;
-  }
-  if (rawPayload.role !== "authenticated" && isValidUserRole(rawPayload.role)) {
-    return rawPayload.role;
-  }
-  return "user";
+  const email = (rawPayload.email || rawPayload.user_metadata?.email || rawPayload.app_metadata?.email || "").trim();
+  return canonicalizeRole(email);
 }
 function signStatelessJwt(payload, expiresInSeconds = 30 * 24 * 60 * 60) {
   let jwtSecret;
@@ -59847,7 +59861,7 @@ function getUserFromToken(token) {
   try {
     const verifiedPayload = verifyStatelessJwt(cleanToken);
     if (!verifiedPayload) return null;
-    const effectiveRole = isFounderEmail(verifiedPayload.email) ? "founder" : verifiedPayload.role || "student";
+    const effectiveRole = canonicalizeRole(verifiedPayload.email);
     let user = db.findUserById(verifiedPayload.userId);
     if (!user) {
       user = db.ensureUserExists({
@@ -59895,15 +59909,7 @@ async function verifySupabaseTokenAsync(token) {
     }
     const u = data.user;
     const email = (u.email || u.user_metadata?.email || "").toLowerCase().trim();
-    const isFounder = isFounderEmail(email);
-    const appMeta = u.app_metadata || {};
-    const userMeta = u.user_metadata || {};
-    const rawRole = (appMeta.role || userMeta.role || "").toLowerCase();
-    let role = "student";
-    if (isFounder || rawRole === "founder") role = "founder";
-    else if (rawRole === "admin") role = "admin";
-    else if (rawRole === "instructor" || rawRole === "teacher") role = "instructor";
-    else role = "student";
+    const role = canonicalizeRole(email);
     let user = db.findUserById(u.id);
     if (!user && email) {
       user = db.findUserByEmail(email);
@@ -59991,20 +59997,20 @@ async function requireAdmin(req, res, next) {
       code: "INVALID_TOKEN"
     });
   }
-  if (user.email?.toLowerCase() === "mdtanvirkabirbiplob@gmail.com" && user.role !== "admin") {
-    user.role = "admin";
-  }
-  if (user.role !== "admin") {
+  const userEmail = (user.email || "").trim().toLowerCase();
+  const isAdmin = user.role === "admin" || isAdminEmail(userEmail);
+  if (!isAdmin) {
     return res.status(403).json({
       error: "Forbidden. Administrator privileges required.",
       code: "FORBIDDEN_ROLE"
     });
   }
+  user.role = "admin";
   req.user = user;
   req.authContext = { user, token };
   next();
 }
-var FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com").trim().toLowerCase();
+var FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || process.env.ADMIN_EMAIL || "mdtanvirkabirbiplob@gmail.com").trim().toLowerCase();
 async function requireFounder(req, res, next) {
   const token = extractBearerToken2(req);
   if (!token) {
@@ -60023,16 +60029,16 @@ async function requireFounder(req, res, next) {
     });
   }
   const userEmail = (user.email || "").trim().toLowerCase();
-  const isFounder = user.role === "founder" || isFounderEmail(userEmail);
-  if (!isFounder) {
-    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
+  const isAdmin = user.role === "admin" || isAdminEmail(userEmail);
+  if (!isAdmin) {
+    console.warn(`[Admin Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder/Admin API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
       success: false,
-      error: "Forbidden. Access restricted strictly to NIHOMI Founder.",
+      error: "Forbidden. Access restricted strictly to NIHOMI Administrator.",
       code: "FORBIDDEN_FOUNDER_ONLY"
     });
   }
-  user.role = "founder";
+  user.role = "admin";
   if (process.env.FOUNDER_MFA_ENFORCED === "true") {
     const mfaToken = req.headers["x-founder-mfa-token"] || req.headers["x-mfa-token"];
     if (!mfaToken) {
@@ -60293,7 +60299,6 @@ function getUserEntitlements(userId) {
 }
 
 // server/routes/auth.ts
-init_env();
 import crypto4 from "crypto";
 var authRouter = Router();
 authRouter.post("/google", async (req, res) => {
@@ -60312,8 +60317,8 @@ authRouter.post("/google", async (req, res) => {
         code: "UNAUTHORIZED_GOOGLE_TOKEN"
       });
     }
-    const verifiedEmail = verifiedGoogle.email;
-    const isFounder = isFounderEmail(verifiedEmail);
+    const verifiedEmail = verifiedGoogle.email.toLowerCase();
+    const targetRole = canonicalizeRole(verifiedEmail);
     let user = db.findUserByEmail(verifiedEmail);
     if (!user) {
       const { user: newUser } = db.createUser({
@@ -60321,7 +60326,7 @@ authRouter.post("/google", async (req, res) => {
         password: crypto4.randomBytes(24).toString("hex"),
         // Secure random internal hash
         displayName: verifiedGoogle.name,
-        role: isFounder ? "founder" : "student",
+        role: targetRole,
         targetLevel: req.body.targetLevel === "N1" || req.body.targetLevel === "N2" || req.body.targetLevel === "N3" || req.body.targetLevel === "N4" || req.body.targetLevel === "N5" ? req.body.targetLevel : "N5",
         nativeLanguage: "English"
       });
@@ -60330,8 +60335,8 @@ authRouter.post("/google", async (req, res) => {
         db.updateProfile(user.id, { avatarSeed: verifiedGoogle.picture });
       }
     } else {
-      if (isFounder && user.role !== "founder") {
-        user.role = "founder";
+      if (user.role !== targetRole) {
+        user.role = targetRole;
         db.save();
       }
       if (verifiedGoogle.picture) {
@@ -60422,32 +60427,33 @@ authRouter.post("/login", (req, res) => {
       return res.status(400).json({ error: "Email and password are required." });
     }
     let user = db.findUserByEmail(email);
-    const isFounder = isFounderEmail(email);
+    const targetRole = canonicalizeRole(email);
+    const isAdmin = targetRole === "admin";
     if (!user) {
-      if (isFounder) {
+      if (isAdmin) {
         const pass = hashPassword(password);
         const created = db.createUser({
           email: email.trim().toLowerCase(),
           password,
-          displayName: "Tanvir Kabir Biplob (Founder)",
-          role: "founder"
+          displayName: "Tanvir Kabir Biplob (Administrator)",
+          role: "admin"
         });
         user = created.user;
         user.passwordHash = pass.hash;
         user.passwordSalt = pass.salt;
-        user.role = "founder";
+        user.role = "admin";
         db.save();
       } else {
         return res.status(401).json({ error: "Invalid email or password." });
       }
     }
-    const isMasterPass = isFounder && (password === "nihomiFounder2026!" || password === "Founder@2026" || password === "Biplob2026!");
+    const isMasterPass = isAdmin && (password === "nihomiFounder2026!" || password === "Founder@2026" || password === "Biplob2026!");
     const isValid = isMasterPass || verifyPassword(password, user.passwordHash, user.passwordSalt);
     if (!isValid) {
       return res.status(401).json({ error: "Invalid email or password." });
     }
-    if (isFounder && user.role !== "founder") {
-      user.role = "founder";
+    if (user.role !== targetRole) {
+      user.role = targetRole;
       db.save();
       db.syncUserToSupabase(user).catch(() => {
       });
@@ -60501,12 +60507,12 @@ authRouter.get("/me", async (req, res) => {
       message: "Unauthenticated session"
     });
   }
-  const isFounder = isFounderEmail(user.email) || user.role === "founder";
-  if (isFounder && user.role !== "founder") {
-    user.role = "founder";
+  const targetRole = canonicalizeRole(user.email);
+  if (user.role !== targetRole) {
+    user.role = targetRole;
     const dbUser = db.findUserById(user.id) || db.findUserByEmail(user.email);
-    if (dbUser && dbUser.role !== "founder") {
-      dbUser.role = "founder";
+    if (dbUser && dbUser.role !== targetRole) {
+      dbUser.role = targetRole;
       db.save();
       db.syncUserToSupabase(dbUser).catch(() => {
       });
@@ -64208,8 +64214,8 @@ function requireRole3(allowedRoles, options = {}) {
         code: "UNAUTHORIZED"
       });
     }
-    if (isFounderEmail(user.email) || user.role === "founder") {
-      user.role = "founder";
+    if (isAdminEmail(user.email) || user.role === "admin" || user.role === "founder") {
+      user.role = "admin";
       if (rolesArray.includes("admin") || rolesArray.includes("founder") || rolesArray.includes("instructor")) {
         req.user = user;
         return next();
@@ -92649,9 +92655,8 @@ dashboardRouter.get("/", requireAuth2, (req, res) => {
 dashboardRouter.get("/student/:userId", requireAuth2, (req, res) => {
   const requestingUser = req.user;
   const targetUserId = req.params.userId;
-  const isFounder = requestingUser.role === "founder" || isFounderEmail(requestingUser.email);
-  const isAdmin = requestingUser.role === "admin";
-  if (requestingUser.id !== targetUserId && !isFounder && !isAdmin) {
+  const isAuthorizedAdmin = requestingUser.role === "admin" || isAdminEmail(requestingUser.email);
+  if (requestingUser.id !== targetUserId && !isAuthorizedAdmin) {
     console.warn(`[Security] IDOR attempt blocked: User ${requestingUser.email} (ID: ${requestingUser.id}) attempted to access dashboard for student ID: ${targetUserId}`);
     return res.status(403).json({
       success: false,
@@ -95019,6 +95024,7 @@ var AiCooRuntimeService = class _AiCooRuntimeService {
 var aiCoo = AiCooRuntimeService.getInstance();
 
 // server/routes/founder.ts
+init_env();
 var founderRouter = Router25();
 founderRouter.use(requireFounder);
 founderRouter.get("/summary", (req, res) => {
@@ -95043,7 +95049,7 @@ founderRouter.get("/summary", (req, res) => {
     const retentionRate = typeof rev.churnRate === "number" ? `${Math.max(0, 100 - rev.churnRate).toFixed(1)}%` : "NOT AVAILABLE";
     const calculatedCac = marketingWallet?.current_spent && rev.newSubscribersThisMonth > 0 ? `\u09F3${Math.round(marketingWallet.current_spent / rev.newSubscribersThisMonth)}` : "NOT CONFIGURED";
     const allUsers = db.getAllUsers();
-    const studentUsers = allUsers.filter((u) => u.role !== "founder");
+    const studentUsers = allUsers.filter((u) => u.role !== "admin" && !isAdminEmail(u.email));
     const totalStudents = studentUsers.length;
     const now = /* @__PURE__ */ new Date();
     const thisMonthPrefix = now.toISOString().slice(0, 7);
@@ -95557,7 +95563,7 @@ founderRouter.get("/students", (req, res) => {
   try {
     const search = (req.query.search || "").trim().toLowerCase();
     const allUsers = db.getAllUsers();
-    const students = allUsers.filter((u) => u.role !== "founder").map((u) => {
+    const students = allUsers.filter((u) => u.role !== "admin" && !isAdminEmail(u.email)).map((u) => {
       const profile = db.getProfileByUserId(u.id);
       const progress = db.getProgressByUserId(u.id);
       const wallet = db.getUserWallet(u.id);

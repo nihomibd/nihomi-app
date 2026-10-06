@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const isFounder = user?.role === 'founder' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+  const isFounder = user?.role === 'admin' || user?.role === 'founder';
   const streak = progress?.currentStreak ?? progress?.streakDays ?? user?.streakDays ?? 0;
 
   // Active Category Detection for the 4 core pillars
