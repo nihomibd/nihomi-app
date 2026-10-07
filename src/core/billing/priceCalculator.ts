@@ -74,8 +74,10 @@ export function getPlanPriceForInterval(
   if (monthlyPrice === 0) return 0;
   if (interval === 'monthly') return monthlyPrice;
   if (interval === 'quarterly') {
-    // 3-Month upfront bundle (approx 15% discount on 3 months)
-    return Math.round(monthlyPrice * 3 * 0.85);
+    // 3-Month upfront bundle — canonical pricing: ৳1,490 for ৳599/mo Pro (approx 17% discount)
+    // For non-standard plans, compute ~17% 3-month discount
+    if (monthlyPrice === 599) return 1490;
+    return Math.round(monthlyPrice * 3 * 0.83);
   }
   return yearlyPrice;
 }

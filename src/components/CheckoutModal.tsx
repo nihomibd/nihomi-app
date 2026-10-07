@@ -143,8 +143,8 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     nameJa: 'スターター',
     badge: 'ফাউন্ডেশন',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-    monthlyPrice: 299,
-    yearlyPrice: 2490,
+    monthlyPrice: 599,
+    yearlyPrice: 4990,
     tagline: 'N5 ও N4 বেসিক ফাউন্ডেশন',
     features: [
       '২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন',

@@ -51650,8 +51650,8 @@ var init_db = __esm({
         tagline: "Master JLPT N5 & N4 foundations with structured drills",
         description: "Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and essential AI assistance.",
         order: 2,
-        monthlyPrice: 299,
-        yearlyPrice: 2490,
+        monthlyPrice: 599,
+        yearlyPrice: 4990,
         currency: "BDT",
         aiMonthlyLimit: 100,
         features: [
@@ -61316,7 +61316,7 @@ import { GoogleGenAI } from "@google/genai";
 var aiClient = null;
 function getAIClient() {
   const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
-  if (!key || key.startsWith("AQ.") || !key.startsWith("AIzaSy") || key.length < 30) {
+  if (!key || key.length < 20) {
     return null;
   }
   if (!aiClient) {
@@ -87470,26 +87470,17 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
     const allSubs = db.data?.subscriptions || [];
     const referralRecords = db.data?.referralRecords || [];
     const events = db.data?.marketingEvents || [];
-    const studentUsers = allUsers.filter((u) => u.role === "student" || u.role === "user");
-    const totalRegistered = Math.max(allUsers.length, 41);
-    const completedLesson1Users = allProgress.filter(
+    const totalRegistered = allUsers.length;
+    const lesson1Completed = allProgress.filter(
       (p) => p.completedLessonIds?.includes("n5-l1") || p.completedLessonIds?.includes("lesson-1") || (p.completedLessonIds?.length || 0) > 0
     ).length;
-    const lesson1Completed = Math.max(completedLesson1Users, 29);
-    const activationRate = Math.round(lesson1Completed / Math.max(1, totalRegistered) * 100);
+    const activationRate = totalRegistered > 0 ? Math.round(lesson1Completed / totalRegistered * 100) : 0;
     const landingViews = events.filter((e) => e.event === "landing_page_view").length;
-    const totalVisitors = Math.max(landingViews + 342, 342);
+    const totalVisitors = landingViews;
     const checkoutStarts = events.filter((e) => e.event === "subscription_checkout_started").length;
     const activePaidSubs = allSubs.filter((s) => s.status === "active" && s.planId !== "free").length;
-    const paymentStarts = Math.max(checkoutStarts + activePaidSubs + 18, 18);
+    const paymentStarts = checkoutStarts + activePaidSubs;
     const campaignMap = /* @__PURE__ */ new Map();
-    const defaultCampaigns = [
-      { campaign: "fb_reels_n5_intro", source: "facebook", medium: "reels", visitors: 142, signups: 19 },
-      { campaign: "fb_group_tokyo_cohort", source: "facebook_group", medium: "community", visitors: 98, signups: 14 },
-      { campaign: "ig_story_kanji_hacks", source: "instagram", medium: "story", visitors: 65, signups: 6 },
-      { campaign: "organic_direct", source: "direct", medium: "organic", visitors: 37, signups: 2 }
-    ];
-    defaultCampaigns.forEach((c) => campaignMap.set(c.campaign, { ...c }));
     events.forEach((e) => {
       const utm = e.properties?.utm || {};
       const campName = utm.utm_campaign || e.properties?.campaign;
@@ -87518,8 +87509,7 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
       const prog = allProgress.find((p) => p.userId === u.id);
       const sub = allSubs.find((s) => s.userId === u.id && s.status === "active");
       const hasReferral = referralRecords.some((r) => r.refereeUserId === u.id || r.referrerUserId === u.id);
-      const campaignTags = ["fb_reels_n5_intro", "fb_group_tokyo_cohort", "ig_story_kanji_hacks", "referral_invite"];
-      const campaignTag = campaignTags[index % campaignTags.length];
+      const utm = events.find((e) => e.userId === u.id && e.properties?.utm?.utm_campaign);
       return {
         id: u.id,
         name: prof?.displayName || u.email?.split("@")[0] || "Learner",
@@ -87527,10 +87517,10 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
         studentId: prof?.nihomiAccountId || `NHO-${100200 + index}`,
         level: prof?.targetLevel || "N5",
         plan: sub?.planId || "free",
-        streak: prog?.currentStreak || 1,
-        createdAt: u.createdAt || new Date(Date.now() - index * 36e5 * 4).toISOString(),
-        campaign: campaignTag,
-        isReferral: hasReferral || index % 3 === 0
+        streak: prog?.currentStreak || 0,
+        createdAt: u.createdAt || (/* @__PURE__ */ new Date()).toISOString(),
+        campaign: utm?.properties?.utm?.utm_campaign || null,
+        isReferral: hasReferral
       };
     });
     return res.json({
@@ -87540,9 +87530,9 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
         totalRegistered,
         lesson1Completed,
         activationRate,
-        referralsClaimed: Math.max(referralRecords.length, 12),
+        referralsClaimed: referralRecords.length,
         paymentStarts,
-        activePaidSubscribers: Math.max(activePaidSubs, 8)
+        activePaidSubscribers: activePaidSubs
       },
       milestone: {
         target: 100,

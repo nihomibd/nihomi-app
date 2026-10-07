@@ -4,8 +4,9 @@ let aiClient: GoogleGenAI | null = null;
 
 function getAIClient(): GoogleGenAI | null {
   const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
-  // Valid Google Gemini API keys start with 'AIzaSy' and are >= 30 characters
-  if (!key || key.startsWith('AQ.') || !key.startsWith('AIzaSy') || key.length < 30) {
+  // Validate by presence and minimum length only — do NOT enforce a prefix.
+  // Google AI Studio keys vary by region/project and may start with AIzaSy, AQ, or other prefixes.
+  if (!key || key.length < 20) {
     return null;
   }
   if (!aiClient) {

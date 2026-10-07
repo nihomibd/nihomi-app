@@ -57,52 +57,38 @@ interface LandingViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
-// Built-in resilient Gemini AI Sensei query resolver
+// Built-in resilient Gemini AI Sensei query resolver — all calls route through server proxy
 async function askSensei(query: string): Promise<string> {
-  const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (import.meta as any).env?.GEMINI_API_KEY || '';
+  const qLower = query.toLowerCase();
 
-  if (!apiKey) {
-    const qLower = query.toLowerCase();
-    if (qLower.includes('wa') || qLower.includes('ga') || query.includes('は') || query.includes('が')) {
-      return `【は (wa) vs が (ga) - Particle Distinction】\n• は (wa) marks the main Topic ("As for X...").\n• が (ga) marks the specific grammatical Subject or new focus.\n\nউদাহরণ: わたしは 田中 です。(As for me, I am Tanaka.)\nবাংলা অর্থ: "আমি তানাকা।"`;
-    }
-    if (qLower.includes('てください') || qLower.includes('kudasai')) {
-      return `【〜てください vs 〜てくださいませんか】\n• 〜てください: Polite request ("Please do X").\n• 〜てくださいませんか: Much more polite/honorific request ("Won't you please do X for me?").\n\nউদাহরণ: 教えてくださいませんか。(Could you please teach me?)\nবাংলা অর্থ: "আপনি কি দয়া করে আমাকে শিখিয়ে দেবেন?"`;
-    }
-    if (qLower.includes('baito') || qLower.includes('interview') || query.includes('バイト')) {
-      return `【Tokyo Baito Interview Key Phrases】\n1. はじめまして、よろしくお願いいたします。(Nice to meet you.)\n2. 週に３日入れます。(I can work 3 days a week.)\n3. 一生懸命頑張ります。(I will do my very best.)\nবাংলা অর্থ: "টোকিওতে পার্ট-টাইম জবের জন্য ৩টি গোল্ডেন বাক্য।"`;
-    }
-    return `【নিহোমি AI সেনসেই বিশ্লেষণ: "${query}"】\nজাপানিজ গ্রামার ও ব্যাকরণ নিয়ম আপনার লার্নিং ডিএনএ-তে যুক্ত করা হয়েছে।`;
-  }
-
+  // Route through server-side API proxy (API key is never exposed to the client)
   try {
-    const systemPrompt = `You are Nihomi AI Sensei (ニホミ先生) — an elite Japanese tutor for JLPT N5-N1 learners.
-Format responses cleanly with:
-1. Japanese text (Kanji & Kana)
-2. Romaji pronunciation
-3. Clear English explanation
-4. Natural Bengali meaning (বাংলা অর্থ)
-Keep answers concise, structured, and practical.`;
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nStudent Question: ${query}` }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 600 }
-        })
-      }
-    );
-
-    if (!response.ok) throw new Error(`Gemini status ${response.status}`);
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sensei is analyzing... Please ask again.';
-  } catch (err: any) {
-    return `【নিহোমি AI সেনসেই উত্তর】\n"${query}" এর বিশ্লেষণ সম্পন্ন হয়েছে। (AI কানেকশন সক্রিয়)`;
+    const res = await fetch('/api/ai/coach', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: query, mode: 'conversation', userLevel: 'N5' })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.reply) return data.reply;
+    }
+  } catch (_) {
+    // Fall through to static fallback
   }
+
+  // Static fallback when server is unreachable
+  if (qLower.includes('wa') || qLower.includes('ga') || query.includes('は') || query.includes('が')) {
+    return `【は (wa) vs が (ga) - Particle Distinction】\n• は (wa) marks the main Topic ("As for X...").\n• が (ga) marks the specific grammatical Subject or new focus.\n\nউদাহরণ: わたしは 田中 です。(As for me, I am Tanaka.)\nবাংলা অর্থ: "আমি তানাকা।"`;
+  }
+  if (qLower.includes('てください') || qLower.includes('kudasai')) {
+    return `【〜てください vs 〜てくださいませんか】\n• 〜てください: Polite request ("Please do X").\n• 〜てくださいませんか: Much more polite/honorific request ("Won't you please do X for me?").\n\nউদাহরণ: 教えてくださいませんか。(Could you please teach me?)\nবাংলা অর্থ: "আপনি কি দয়া করে আমাকে শিখিয়ে দেবেন?"`;
+  }
+  if (qLower.includes('baito') || qLower.includes('interview') || query.includes('バイト')) {
+    return `【Tokyo Baito Interview Key Phrases】\n1. はじめまして、よろしくお願いいたします。(Nice to meet you.)\n2. 週に３日入れます。(I can work 3 days a week.)\n3. 一生懸命頑張ります。(I will do my very best.)\nবাংলা অর্থ: "টোকিওতে পার্ট-টাইম জবের জন্য ৩টি গোল্ডেন বাক্য।"`;
+  }
+  return `【নিহোমি AI সেনসেই বিশ্লেষণ: "${query}"】\nজাপানিজ গ্রামার ও ব্যাকরণ নিয়ম আপনার লার্নিং ডিএনএ-তে যুক্ত করা হয়েছে।`;
 }
+
 
 // Hero Interactive Roleplay Dialogues (Pingo AI Style)
 interface HeroDialogue {

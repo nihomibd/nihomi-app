@@ -166,7 +166,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setErrorMessage(null);
     try {
       const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 499 : 4990 });
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 4990 : 4990 });
       
       const res = await billingApi.createBkashPayment({ tier });
       if (res.success && res.bkashURL) {
@@ -191,7 +191,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setErrorMessage(null);
     try {
       const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 499 : 4990 });
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 4990 : 4990 });
 
       const res = await billingApi.createSslCommerzPayment({
         tier,

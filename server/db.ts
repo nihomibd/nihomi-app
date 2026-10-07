@@ -193,8 +193,8 @@ export const SEED_PLANS: Plan[] = [
     tagline: 'Master JLPT N5 & N4 foundations with structured drills',
     description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and essential AI assistance.',
     order: 2,
-    monthlyPrice: 299,
-    yearlyPrice: 2490,
+    monthlyPrice: 599,
+    yearlyPrice: 4990,
     currency: 'BDT',
     aiMonthlyLimit: 100,
     features: [

@@ -174,6 +174,7 @@ const KNOWN_VIEWS = new Set([
 
 import { OfflineNotificationBanner } from './components/common/OfflineNotificationBanner';
 import { InstallPWA } from './components/common/InstallPWA';
+import { CookieConsentBanner } from './components/common/CookieConsentBanner';
 import { useFocusMode } from './context/FocusModeContext';
 import { useAuth } from './context/AuthContext';
 import { QuickDictionaryOverlay } from './components/QuickDictionaryOverlay';
@@ -856,6 +857,9 @@ export const App: React.FC = () => {
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && !isCanvasMode && !isJourneyMode && <InstallPWA />}
+
+      {/* Cookie Consent Banner — persisted in localStorage */}
+      <CookieConsentBanner />
     </div>
   );
 };

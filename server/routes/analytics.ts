@@ -275,28 +275,26 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
     const referralRecords = (db as any).data?.referralRecords || [];
     const events: any[] = (db as any).data?.marketingEvents || [];
 
-    const studentUsers = allUsers.filter((u: any) => u.role === 'student' || u.role === 'user');
-    const totalRegistered = Math.max(allUsers.length, 41);
+    const totalRegistered = allUsers.length;
 
     // Calculate lesson 1 completion
-    const completedLesson1Users = allProgress.filter((p: any) =>
+    const lesson1Completed = allProgress.filter((p: any) =>
       p.completedLessonIds?.includes('n5-l1') ||
       p.completedLessonIds?.includes('lesson-1') ||
       (p.completedLessonIds?.length || 0) > 0
     ).length;
-    const lesson1Completed = Math.max(completedLesson1Users, 29);
-    const activationRate = Math.round((lesson1Completed / Math.max(1, totalRegistered)) * 100);
+    const activationRate = totalRegistered > 0 ? Math.round((lesson1Completed / totalRegistered) * 100) : 0;
 
-    // Calculate visits from events
+    // Calculate visits from real telemetry only
     const landingViews = events.filter((e) => e.event === 'landing_page_view').length;
-    const totalVisitors = Math.max(landingViews + 342, 342);
+    const totalVisitors = landingViews;
 
-    // Calculate payment starts
+    // Calculate payment starts from real data only
     const checkoutStarts = events.filter((e) => e.event === 'subscription_checkout_started').length;
     const activePaidSubs = allSubs.filter((s: any) => s.status === 'active' && s.planId !== 'free').length;
-    const paymentStarts = Math.max(checkoutStarts + activePaidSubs + 18, 18);
+    const paymentStarts = checkoutStarts + activePaidSubs;
 
-    // Aggregate UTM campaigns
+    // Aggregate UTM campaigns from real telemetry only
     const campaignMap = new Map<string, {
       campaign: string;
       source: string;
@@ -304,16 +302,6 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
       visitors: number;
       signups: number;
     }>();
-
-    // Baseline ad campaigns
-    const defaultCampaigns = [
-      { campaign: 'fb_reels_n5_intro', source: 'facebook', medium: 'reels', visitors: 142, signups: 19 },
-      { campaign: 'fb_group_tokyo_cohort', source: 'facebook_group', medium: 'community', visitors: 98, signups: 14 },
-      { campaign: 'ig_story_kanji_hacks', source: 'instagram', medium: 'story', visitors: 65, signups: 6 },
-      { campaign: 'organic_direct', source: 'direct', medium: 'organic', visitors: 37, signups: 2 }
-    ];
-
-    defaultCampaigns.forEach((c) => campaignMap.set(c.campaign, { ...c }));
 
     // Merge live telemetry UTM parameters
     events.forEach((e) => {
@@ -341,7 +329,7 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
       conversionRate: c.visitors > 0 ? Math.round((c.signups / c.visitors) * 100) : 0
     })).sort((a, b) => b.signups - a.signups);
 
-    // Build recent registrations stream
+    // Build recent registrations stream from real users only
     const recentRegistrations = [...allUsers]
       .reverse()
       .slice(0, 15)
@@ -350,10 +338,7 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
         const prog = allProgress.find((p: any) => p.userId === u.id);
         const sub = allSubs.find((s: any) => s.userId === u.id && s.status === 'active');
         const hasReferral = referralRecords.some((r: any) => r.refereeUserId === u.id || r.referrerUserId === u.id);
-
-        // Assign a mock campaign tag to earlier seeded users if none
-        const campaignTags = ['fb_reels_n5_intro', 'fb_group_tokyo_cohort', 'ig_story_kanji_hacks', 'referral_invite'];
-        const campaignTag = campaignTags[index % campaignTags.length];
+        const utm = events.find((e) => e.userId === u.id && e.properties?.utm?.utm_campaign);
 
         return {
           id: u.id,
@@ -362,10 +347,10 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
           studentId: prof?.nihomiAccountId || `NHO-${100200 + index}`,
           level: prof?.targetLevel || 'N5',
           plan: sub?.planId || 'free',
-          streak: prog?.currentStreak || 1,
-          createdAt: u.createdAt || new Date(Date.now() - index * 3600000 * 4).toISOString(),
-          campaign: campaignTag,
-          isReferral: hasReferral || index % 3 === 0
+          streak: prog?.currentStreak || 0,
+          createdAt: u.createdAt || new Date().toISOString(),
+          campaign: utm?.properties?.utm?.utm_campaign || null,
+          isReferral: hasReferral
         };
       });
 
@@ -376,9 +361,9 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
         totalRegistered,
         lesson1Completed,
         activationRate,
-        referralsClaimed: Math.max(referralRecords.length, 12),
+        referralsClaimed: referralRecords.length,
         paymentStarts,
-        activePaidSubscribers: Math.max(activePaidSubs, 8)
+        activePaidSubscribers: activePaidSubs
       },
       milestone: {
         target: 100,
