@@ -472,10 +472,15 @@ contentStudioRouter.post('/lessons/batch-publish-defaults', optionalAuth, (req: 
   });
 });
 
-// Auto-seed default curriculum lessons on module initialization
-setTimeout(() => {
-  syncAllDefaultLessonsToLiveCatalog();
-}, 1000);
+// Auto-seed default curriculum lessons on module initialization in local development
+if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_LOCAL_STORAGE === 'true') {
+  const seedTimer = setTimeout(() => {
+    syncAllDefaultLessonsToLiveCatalog();
+  }, 1000);
+  if (seedTimer && typeof seedTimer.unref === 'function') {
+    seedTimer.unref();
+  }
+}
 
 // 11. Get Version History for Studio Lesson (Staff)
 contentStudioRouter.get('/lessons/:id/versions', requireStaff, (req: AuthenticatedRequest, res) => {

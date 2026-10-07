@@ -730,6 +730,7 @@ class ContentStudioDatabase {
   }
 
   private saveLessonsToDisk() {
+    if (process.env.NODE_ENV === 'production' && process.env.ALLOW_LOCAL_STORAGE !== 'true') return;
     try {
       ensureDataDir();
       const list = Array.from(this.lessons.values());
@@ -740,6 +741,7 @@ class ContentStudioDatabase {
   }
 
   private saveSourcesToDisk() {
+    if (process.env.NODE_ENV === 'production' && process.env.ALLOW_LOCAL_STORAGE !== 'true') return;
     try {
       ensureDataDir();
       const list = Array.from(this.sourceDocuments.values());
@@ -750,6 +752,7 @@ class ContentStudioDatabase {
   }
 
   private saveKnowledgeToDisk() {
+    if (process.env.NODE_ENV === 'production' && process.env.ALLOW_LOCAL_STORAGE !== 'true') return;
     try {
       ensureDataDir();
       const list = Array.from(this.knowledgeNodes.values());

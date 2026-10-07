@@ -80074,6 +80074,7 @@ var ContentStudioDatabase = class {
     }
   }
   saveLessonsToDisk() {
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_LOCAL_STORAGE !== "true") return;
     try {
       ensureDataDir();
       const list = Array.from(this.lessons.values());
@@ -80083,6 +80084,7 @@ var ContentStudioDatabase = class {
     }
   }
   saveSourcesToDisk() {
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_LOCAL_STORAGE !== "true") return;
     try {
       ensureDataDir();
       const list = Array.from(this.sourceDocuments.values());
@@ -80092,6 +80094,7 @@ var ContentStudioDatabase = class {
     }
   }
   saveKnowledgeToDisk() {
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_LOCAL_STORAGE !== "true") return;
     try {
       ensureDataDir();
       const list = Array.from(this.knowledgeNodes.values());
@@ -84920,9 +84923,14 @@ contentStudioRouter.post("/lessons/batch-publish-defaults", optionalAuth2, (req,
     totalAvailable: ALL_DEFAULT_LESSONS.length
   });
 });
-setTimeout(() => {
-  syncAllDefaultLessonsToLiveCatalog();
-}, 1e3);
+if (process.env.NODE_ENV !== "production" || process.env.ALLOW_LOCAL_STORAGE === "true") {
+  const seedTimer = setTimeout(() => {
+    syncAllDefaultLessonsToLiveCatalog();
+  }, 1e3);
+  if (seedTimer && typeof seedTimer.unref === "function") {
+    seedTimer.unref();
+  }
+}
 contentStudioRouter.get("/lessons/:id/versions", requireStaff2, (req, res) => {
   const versions = db.getContentVersionsByDraftId(req.params.id);
   res.json({ success: true, count: versions.length, versions });
