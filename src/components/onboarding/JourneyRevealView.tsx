@@ -229,13 +229,13 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-xs font-mono font-bold tracking-wider text-amber-300 uppercase">
-                Next Best Mission
+                তোমার প্রথম মিশন প্রস্তুত 🏪
               </span>
             </div>
 
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-white">
-                Mission 01: Tokyo Konbini (কনবিনি চ্যালেঞ্জ)
+                Mission 01: Tokyo Konbini (টোকিও কনবিনি চ্যালেঞ্জ)
               </h2>
               <p className="text-xs text-stone-300 mt-1 leading-relaxed">
                 টোকিওর ৭-ইলেভেন বা লসনে প্রথম কেনাকাটার অভিজ্ঞতা। প্লাস্টিক ব্যাগ ও ক্যাশিয়ারের প্রশ্নের দ্রুত সমাধান।
@@ -256,11 +256,17 @@ export const JourneyRevealView: React.FC<JourneyRevealViewProps> = ({
 
             <button
               type="button"
-              onClick={() => handleStartMission('tokyo_konbini_01')}
+              onClick={() => {
+                if (onStartFirstMission) {
+                  onStartFirstMission();
+                } else {
+                  handleStartMission('tokyo_konbini_01');
+                }
+              }}
               className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-500 hover:from-red-500 hover:to-rose-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
             >
-              <Play className="w-4 h-4 fill-white" />
-              <span>Mission শুরু করি →</span>
+              <span>চলো শুরু করি →</span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>

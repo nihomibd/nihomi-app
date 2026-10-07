@@ -51650,8 +51650,8 @@ var init_db = __esm({
         tagline: "Master JLPT N5 & N4 foundations with structured drills",
         description: "Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and essential AI assistance.",
         order: 2,
-        monthlyPrice: 599,
-        yearlyPrice: 4990,
+        monthlyPrice: 299,
+        yearlyPrice: 2490,
         currency: "BDT",
         aiMonthlyLimit: 100,
         features: [
@@ -51703,7 +51703,7 @@ var init_db = __esm({
         badge: "Best Value",
         order: 4,
         monthlyPrice: 999,
-        yearlyPrice: 8490,
+        yearlyPrice: 7990,
         currency: "BDT",
         aiMonthlyLimit: 3e3,
         features: [

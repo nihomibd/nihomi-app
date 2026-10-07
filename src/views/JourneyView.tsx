@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { ConversationalOnboardingModal } from '../components/onboarding/ConversationalOnboardingModal';
 import { JourneyRevealView } from '../components/onboarding/JourneyRevealView';
 import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
-import { LearnerJourneyEngine } from '../components/learning/LearnerJourneyEngine';
 import {
   getSavedOnboardingAnswers,
   isOnboardingCompleted,
@@ -18,7 +17,7 @@ interface JourneyViewProps {
 
 export const JourneyView: React.FC<JourneyViewProps> = ({ onNavigate }) => {
   const [answers, setAnswers] = useState<OnboardingAnswers | null>(() => getSavedOnboardingAnswers());
-  const [activeScreen, setActiveScreen] = useState<'onboarding' | 'reveal' | 'lattice'>(() => {
+  const [activeScreen, setActiveScreen] = useState<'onboarding' | 'reveal'>(() => {
     return isOnboardingCompleted() ? 'reveal' : 'onboarding';
   });
   const [isFirstMissionOpen, setIsFirstMissionOpen] = useState(false);
@@ -66,40 +65,15 @@ export const JourneyView: React.FC<JourneyViewProps> = ({ onNavigate }) => {
             onStartFirstMission={() => setIsFirstMissionOpen(true)}
           />
 
-          <div className="max-w-4xl mx-auto px-4 mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-400 border-t border-white/5 pt-4">
+          <div className="max-w-4xl mx-auto px-4 mt-6 flex items-center justify-center text-xs text-stone-400 border-t border-white/5 pt-4">
             <button
               type="button"
               onClick={() => setActiveScreen('onboarding')}
               className="hover:text-white underline cursor-pointer"
             >
-              🔄 অনবোর্ডিং প্রশ্নগুলো আবার উত্তর দিন
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveScreen('lattice')}
-              className="hover:text-white underline cursor-pointer"
-            >
-              🇯🇵 ক্লাসিক লার্নিং ল্যাটিস (হিরাগানা ড্রিল) দেখুন →
+              🔄 অনবোর্ডিং প্রশ্নগুলো আবার পরিবর্তন করুন
             </button>
           </div>
-        </div>
-      )}
-
-      {activeScreen === 'lattice' && (
-        <div className="w-full z-10">
-          <button
-            type="button"
-            onClick={() => setActiveScreen('reveal')}
-            className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-white cursor-pointer"
-          >
-            ← পার্সোনালাইজড জার্নিতে ফিরে যান
-          </button>
-          <LearnerJourneyEngine
-            isOpen={true}
-            onClose={() => setActiveScreen('reveal')}
-            onNavigate={onNavigate}
-            isModal={false}
-          />
         </div>
       )}
 

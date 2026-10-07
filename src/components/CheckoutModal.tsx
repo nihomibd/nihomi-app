@@ -136,6 +136,11 @@ export interface PlanDefinition {
   features: string[];
 }
 
+function toBengaliDigits(num: number | string): string {
+  const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return String(num).replace(/[0-9]/g, (d) => bnDigits[parseInt(d, 10)]);
+}
+
 export const CHECKOUT_PLANS: PlanDefinition[] = [
   {
     id: 'starter',
@@ -143,9 +148,9 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     nameJa: 'スターター',
     badge: 'ফাউন্ডেশন',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-    monthlyPrice: 599,
-    yearlyPrice: 4990,
-    tagline: 'N5 ও N4 বেসিক ফাউন্ডেশন',
+    monthlyPrice: 299,
+    yearlyPrice: 2490,
+    tagline: 'বেসিক ফাউন্ডেশন ও হিরাগানা/কাতাকানা',
     features: [
       '২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন',
       'ভোকাবুলারি ব্যাংক (৮০০+ শব্দ)',
@@ -160,7 +165,7 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
     monthlyPrice: 599,
     yearlyPrice: 4990,
-    tagline: 'N5 থেকে N3 ফুল কারিকুলাম',
+    tagline: 'N5 থেকে N3 ফুল কারিকুলাম + AI Sensei',
     features: [
       'N5, N4 ও N3 ফুল আনলক',
       '১,০০০ AI Coach চ্যাট / মাস',
@@ -174,8 +179,8 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     badge: 'সেরা মান',
     badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
     monthlyPrice: 999,
-    yearlyPrice: 8490,
-    tagline: 'চাকরি, ভিসা ও বাস্তব জাপান 🇯🇵',
+    yearlyPrice: 7990,
+    tagline: 'চাকরি, ভিসা ইন্টারভিউ ও কনবিনি সিমুলেটর',
     features: [
       'টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
       'ভিসা ও জব ইন্টারভিউ সিমুলেশন',
@@ -703,7 +708,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
                         </div>
                         <span className="text-left leading-tight text-xs sm:text-sm">
-                          bKash / নগদ / রকেট দিয়ে পেমেন্ট (৳{finalPrice.toLocaleString('en-US')})
+                          bKash / নগদ দিয়ে পেমেন্ট (৳{toBengaliDigits(finalPrice.toLocaleString('en-US'))})
                         </span>
                       </div>
                       {isProcessingBkash ? (
