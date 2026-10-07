@@ -351,8 +351,8 @@ const N5_PRO_PLAN: Plan = {
   displayNameJa: 'N5プロ・完全マスター (生涯アクセス)',
   tagline: 'Complete JLPT N5 mastery with lifetime access',
   description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, Nihomi WorkOS™, and 180-Mark Mock Exams',
-  monthlyPrice: 499,
-  yearlyPrice: 499,
+  monthlyPrice: 599,
+  yearlyPrice: 4990,
   currency: 'BDT',
   badge: 'সর্বোচ্চ জনপ্রিয়',
   isRecommended: true,
@@ -1544,14 +1544,13 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                   </div>
 
                   <h3 className="text-2xl sm:text-3xl font-black text-white">
-                    N5 Pro লাইফটাইম পাস — মাত্র ৳৪৯৯
+                    N5 Pro সম্পূর্ণ কারিকুলাম — মাত্র ৳৫৯৯/মাস
                   </h3>
 
                   <div className="flex items-baseline gap-3 pt-1">
-                    <span className="text-3xl sm:text-4xl font-black text-white">৳৪৯৯</span>
-                    <span className="text-base text-slate-400 line-through">৳১,৪৯৯</span>
+                    <span className="text-3xl sm:text-4xl font-black text-white">৳৫৯৯<span className="text-sm font-normal text-slate-400">/মাস</span></span>
                     <span className="text-xs text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded-md">
-                      ৬৭% ছাড় • এককালীন ফি
+                      প্রতিদিন মাত্র ৳২০ • এক কাপ চায়ের বাজেটের সমান
                     </span>
                   </div>
 
@@ -1568,7 +1567,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
                       'টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
                       '১৮০ মার্কসের অফিসিয়াল মক টেস্ট ও সনদ',
                       '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
-                      'আজীবন অ্যাক্সেস (কোনো মাসিক ফি নেই)'
+                      'বার্ষিক প্যাকেজে প্রতিদিন মাত্র ৳১৩'
                     ].map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -1589,14 +1588,14 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
 
                   <button
                     onClick={() => {
-                      trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 499 });
+                      trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 599 });
                       setCheckoutTargetPlan(N5_PRO_PLAN);
-                      setCheckoutTargetInterval('yearly');
+                      setCheckoutTargetInterval('monthly');
                       setIsCheckoutOpen(true);
                     }}
                     className="w-full py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm font-bold shadow-xl shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
                   >
-                    <span>১-ক্লিকে এনরোল করুন — ৳৪৯৯</span>
+                    <span>১-ক্লিকে এনরোল করুন — ৳৫৯৯</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 

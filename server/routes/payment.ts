@@ -197,7 +197,7 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     let resolvedUserId = execResult.payerReference || 'usr_student';
     let resolvedEmail = 'student@nihomi.com';
     let resolvedTier: 'n5_pro' | 'n5_lifetime' = 'n5_pro';
-    const amount = Number(execResult.amount) || 499;
+    const amount = Number(execResult.amount) || 599;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
 
     // Check Prisma Payment metadata if configured
@@ -285,7 +285,7 @@ paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, r
     let resolvedUserId = user?.id || execResult.payerReference || 'usr_student';
     let resolvedEmail = user?.email || 'student@nihomi.com';
     let resolvedTier: 'n5_pro' | 'n5_lifetime' = 'n5_pro';
-    const amount = Number(execResult.amount) || 499;
+    const amount = Number(execResult.amount) || 599;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
 
     if (amount >= 1400) {
@@ -391,14 +391,20 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
       {
         id: 'n5_pro',
         nameBn: 'N5 প্রো (মাসিক)',
-        amountBdt: 499,
+        amountBdt: 599,
         interval: 'monthly',
       },
       {
+        id: 'n5_milestone',
+        nameBn: 'N5 ৩ মাসের মাইলস্টোন পাস',
+        amountBdt: 1490,
+        interval: 'quarterly',
+      },
+      {
         id: 'n5_lifetime',
-        nameBn: 'N5 লাইফটাইম পাস (বিশেষ ছাড়)',
-        amountBdt: 499,
-        interval: 'lifetime',
+        nameBn: 'N5 লাইফটাইম / বার্ষিক অল-অ্যাক্সেস',
+        amountBdt: 4990,
+        interval: 'yearly',
       },
     ],
     stepsBn: [
@@ -630,7 +636,7 @@ paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRe
 
     const selectedTier = (planId || tier) as SubscriptionTier;
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
-    const amount = Number(requestedAmount) || planConfig.priceBdt || 499;
+    const amount = Number(requestedAmount) || planConfig.priceBdt || 599;
 
     const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
@@ -797,15 +803,15 @@ paymentRouter.post('/stripe/create-checkout-session', optionalAuth, async (req: 
     const selectedTier = (planId || tier) as SubscriptionTier;
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
     
-    // Default international pricing: N5 Pro = $9.99 (or 499 BDT equivalent), Lifetime = $29.99
+    // Default international pricing: N5 Pro = $9.99 (or 599 BDT equivalent), Lifetime = $49.99
     let amount = Number(requestedAmount);
     if (!amount) {
       if (currency.toLowerCase() === 'usd') {
-        amount = selectedTier === 'n5_lifetime' ? 29.99 : 9.99;
+        amount = selectedTier === 'n5_lifetime' ? 49.99 : 9.99;
       } else if (currency.toLowerCase() === 'jpy') {
-        amount = selectedTier === 'n5_lifetime' ? 4500 : 1500;
+        amount = selectedTier === 'n5_lifetime' ? 7500 : 1500;
       } else {
-        amount = planConfig.priceBdt || 499;
+        amount = planConfig.priceBdt || 599;
       }
     }
 

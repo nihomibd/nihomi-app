@@ -120,7 +120,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
 }) => {
   const { user } = useAuth();
   
-  // Selected Plan: 'lifetime' (৳499) vs 'all_access' (৳4,990)
+  // Selected Plan: 'lifetime' (3-Month N5 Milestone ৳1,490) vs 'all_access' (Annual Japan Ready ৳4,990)
   const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'all_access'>('lifetime');
 
   // Carousel Active Slide (0 to 5)
@@ -165,10 +165,10 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setIsProcessingBkash(true);
     setErrorMessage(null);
     try {
-      const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 4990 : 4990 });
+      const tier = selectedPlan === 'lifetime' ? 'n5_pro' : 'n5_lifetime';
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
       
-      const res = await billingApi.createBkashPayment({ tier });
+      const res = await billingApi.createBkashPayment({ tier, amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
       if (res.success && res.bkashURL) {
         window.location.href = res.bkashURL;
         return;
@@ -190,11 +190,12 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setIsProcessingSsl(true);
     setErrorMessage(null);
     try {
-      const tier = selectedPlan === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 4990 : 4990 });
+      const tier = selectedPlan === 'lifetime' ? 'n5_pro' : 'n5_lifetime';
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
 
       const res = await billingApi.createSslCommerzPayment({
         tier,
+        amount: selectedPlan === 'lifetime' ? 1490 : 4990,
         name: user?.name || user?.email?.split('@')[0] || 'Nihomi Learner'
       });
       if (res.success && res.gatewayUrl) {
@@ -360,7 +361,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 {/* Plan Selection Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   
-                  {/* Plan 1: ৳499 N5 Lifetime Pass */}
+                  {/* Plan 1: ৳1,490 N5 Milestone Pass */}
                   <div
                     onClick={() => setSelectedPlan('lifetime')}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
@@ -371,7 +372,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   >
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">
-                        মোস্ট পপুলার
+                        ৩ মাসের মাইলস্টোন
                       </span>
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                         selectedPlan === 'lifetime' ? 'border-amber-400 bg-amber-400' : 'border-stone-500'
@@ -381,13 +382,13 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-white">N5 Lifetime Pass</h4>
+                      <h4 className="text-sm font-black text-white">N5 Milestone Pass (৩ মাস)</h4>
                       <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5 ফুল মাস্টার কারিকুলাম</p>
                     </div>
 
                     <div className="pt-1">
-                      <div className="text-2xl font-black text-amber-300">৳৪৯৯</div>
-                      <span className="text-[10px] text-stone-400 font-mono">এককালীন / আজীবন মেয়াদী</span>
+                      <div className="text-2xl font-black text-amber-300">৳১,৪৯০</div>
+                      <span className="text-[10px] text-amber-400 font-mono">প্রতিদিন প্রায় ৳১৬ • ৯০ দিনের বান্ডিল</span>
                     </div>
 
                     <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
@@ -471,7 +472,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                         <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
                       </div>
                       <span className="text-left leading-tight">
-                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন ({selectedPlan === 'lifetime' ? '৳৪৯৯' : '৳৪,৯৯০'})
+                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন ({selectedPlan === 'lifetime' ? '৳১,৪৯০' : '৳৪,৯৯০'})
                       </span>
                     </div>
                     {isProcessingBkash ? (

@@ -361,6 +361,7 @@ export const billingApi = {
   // Real bKash Tokenized Checkout Create
   async createBkashPayment(params: {
     tier: 'n5_pro' | 'n5_lifetime';
+    amount?: number;
     couponCode?: string;
   }): Promise<{
     success: boolean;

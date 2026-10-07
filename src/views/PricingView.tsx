@@ -642,7 +642,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                   <tr>
                     <th className="py-3 px-4">Feature / Curriculum</th>
                     <th className="py-3 px-3 text-center">Free (৳0)</th>
-                    <th className="py-3 px-3 text-center">Starter (৳299/mo)</th>
+                    <th className="py-3 px-3 text-center">Starter (৳599/mo)</th>
                     <th className="py-3 px-3 text-center bg-red-500/5 text-red-600">Pro (৳599/mo)</th>
                     <th className="py-3 px-3 text-center">Japan Ready (৳999/mo)</th>
                   </tr>

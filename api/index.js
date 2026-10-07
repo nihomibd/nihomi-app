@@ -58702,7 +58702,7 @@ var init_subscriptionService = __esm({
         id: "n5_pro",
         name: "N5 Pro Monthly",
         nameBn: "N5 \u09AA\u09CD\u09B0\u09CB (\u09AE\u09BE\u09B8\u09BF\u0995)",
-        priceBdt: 499,
+        priceBdt: 599,
         interval: "monthly",
         descriptionBn: "\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8 \u0993 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 AI \u0997\u09BE\u0987\u09A1\u09C7\u09A8\u09CD\u09B8",
         featuresBn: [
@@ -58723,9 +58723,9 @@ var init_subscriptionService = __esm({
       },
       n5_lifetime: {
         id: "n5_lifetime",
-        name: "N5 Lifetime Pass",
-        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u09AA\u09BE\u09B8",
-        priceBdt: 499,
+        name: "N5 Lifetime / All-Access Pass",
+        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE / \u09AC\u09BE\u09B0\u09CD\u09B7\u09BF\u0995 \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+        priceBdt: 4990,
         interval: "lifetime",
         descriptionBn: "\u0986\u099C\u09C0\u09AC\u09A8 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8, \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F \u0993 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF",
         featuresBn: [
@@ -61343,8 +61343,8 @@ async function withTimeout(promise, ms) {
   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
 }
 var CANDIDATE_MODELS = [
-  "gemini-2.5-flash",
-  "gemini-2.0-flash"
+  "gemini-2.0-flash",
+  "gemini-1.5-flash"
 ];
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -61527,7 +61527,8 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
           }
           return {
             reply: replyText,
-            correctionData
+            correctionData,
+            fallbackUsed: false
           };
         }
       } catch (err) {
@@ -61538,7 +61539,11 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
       }
     }
   }
-  return generateSenseiOfflineResponse(req);
+  const offline = generateSenseiOfflineResponse(req);
+  return {
+    ...offline,
+    fallbackUsed: true
+  };
 }
 function generateSenseiOfflineResponse(req) {
   const msg = (req.message || "").trim();
@@ -62406,7 +62411,8 @@ aiRouter.post(
           reply: isGreeting ? "\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE! \u0986\u099C \u0986\u09AA\u09A8\u09BF \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)" : `\u3053\u3093\u306B\u3061\u306F\uFF01(Konnichiwa!) \u0986\u09AA\u09A8\u09BF \u09B2\u09BF\u0996\u09C7\u099B\u09C7\u09A8: "${message}". \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u09B8\u09B0\u09CD\u09AC\u09A6\u09BE \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09B6\u09C7 \u0986\u099B\u09C7\u0964 \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u099A\u09B0\u09CD\u099A\u09BE \u0995\u09B0\u09BF!`,
           romaji: isGreeting ? "Konnichiwa! Nihomi Sensei no kurasuruumu e youkoso." : "Konnichiwa! Issho ni nihongo o manabimashou.",
           bengaliTranslation: isGreeting ? "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09CD\u09B2\u09BE\u09B8\u09B0\u09C1\u09AE\u09C7 \u09B8\u09CD\u09AC\u09BE\u0997\u09A4\u09AE\u0964 \u0986\u099C \u0995\u09C0 \u09A8\u09BF\u09DF\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09A4\u09C7 \u099A\u09BE\u09A8?" : "\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB! \u0986\u09B8\u09C1\u09A8 \u098F\u0995\u09B8\u09BE\u09A5\u09C7 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE \u099A\u09B0\u09CD\u099A\u09BE \u0995\u09B0\u09BF\u0964",
-          correctionData: void 0
+          correctionData: void 0,
+          fallbackUsed: true
         };
       }
       if (isGuest) {
@@ -62416,6 +62422,7 @@ aiRouter.post(
           romaji: aiResult.romaji,
           bengaliTranslation: aiResult.bengaliTranslation,
           correctionData: aiResult.correctionData,
+          fallbackUsed: aiResult.fallbackUsed ?? false,
           sessionId: sessionId || `guest_session_${Date.now()}`,
           usage: {
             aiCoachInteractions: used,
@@ -62454,6 +62461,7 @@ aiRouter.post(
         romaji: aiResult.romaji,
         bengaliTranslation: aiResult.bengaliTranslation,
         correctionData: aiResult.correctionData,
+        fallbackUsed: aiResult.fallbackUsed ?? false,
         sessionId: session.id,
         messages: session.messages,
         usage: {
@@ -62467,7 +62475,8 @@ aiRouter.post(
       return res.status(200).json({
         reply: "\u3059\u307F\u307E\u305B\u3093 (Sumimasen), Nihomi Sensei AI\u2122 is reviewing your lesson. Practice repeating the key sentence patterns aloud!",
         romaji: "Kagi to naru bunkei o koe ni dashite renshuu shimashou.",
-        bengaliTranslation: "Nihomi Sensei AI\u2122 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09A0 \u09AA\u09B0\u09CD\u09AF\u09BE\u09B2\u09CB\u099A\u09A8\u09BE \u0995\u09B0\u099B\u09C7\u09A8\u0964 \u09AE\u09C2\u09B2 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u099C\u09CB\u09B0\u09C7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09C1\u09A8\u0964"
+        bengaliTranslation: "Nihomi Sensei AI\u2122 \u0986\u09AA\u09A8\u09BE\u09B0 \u09AA\u09BE\u09A0 \u09AA\u09B0\u09CD\u09AF\u09BE\u09B2\u09CB\u099A\u09A8\u09BE \u0995\u09B0\u099B\u09C7\u09A8\u0964 \u09AE\u09C2\u09B2 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u099C\u09CB\u09B0\u09C7 \u0989\u099A\u09CD\u099A\u09BE\u09B0\u09A3 \u0995\u09B0\u09C7 \u0985\u09A8\u09C1\u09B6\u09C0\u09B2\u09A8 \u0995\u09B0\u09C1\u09A8\u0964",
+        fallbackUsed: true
       });
     }
   }
@@ -66747,7 +66756,7 @@ var SSLCommerzService = class _SSLCommerzService {
       status: isMockValid ? "VALID" : "INVALID",
       tranId: tranId || `SSL_FALLBACK_${valId}`,
       valId,
-      amount: amount || 499,
+      amount: amount || 599,
       currency: "BDT",
       bankTranId: `BNK_${crypto9.randomBytes(4).toString("hex").toUpperCase()}`,
       cardType: "VISA / Mastercard / MFS"
@@ -66797,7 +66806,7 @@ var SSLCommerzService = class _SSLCommerzService {
   async processPaymentSuccess(payload) {
     const tranId = payload.tran_id || payload.paymentId || "";
     const valId = payload.val_id || "";
-    const amount = Number(payload.amount || payload.total_amount) || 499;
+    const amount = Number(payload.amount || payload.total_amount) || 599;
     let targetUserId = payload.value_a || payload.userId || "usr_student";
     let targetEmail = payload.value_c || payload.userEmail || payload.cus_email || "student@nihomi.com";
     let targetTier = amount >= 1400 || payload.planId === "n5_lifetime" || payload.value_b === "n5_lifetime" ? "n5_lifetime" : "n5_pro";
@@ -67423,7 +67432,7 @@ paymentRouter.get("/callback", async (req, res) => {
     let resolvedUserId = execResult.payerReference || "usr_student";
     let resolvedEmail = "student@nihomi.com";
     let resolvedTier = "n5_pro";
-    const amount = Number(execResult.amount) || 499;
+    const amount = Number(execResult.amount) || 599;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
     if (isDatabaseConfigured()) {
       try {
@@ -67491,7 +67500,7 @@ paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
     let resolvedUserId = user?.id || execResult.payerReference || "usr_student";
     let resolvedEmail = user?.email || "student@nihomi.com";
     let resolvedTier = "n5_pro";
-    const amount = Number(execResult.amount) || 499;
+    const amount = Number(execResult.amount) || 599;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
     if (amount >= 1400) {
       resolvedTier = "n5_lifetime";
@@ -67579,14 +67588,20 @@ paymentRouter.get("/manual/instructions", (_req, res) => {
       {
         id: "n5_pro",
         nameBn: "N5 \u09AA\u09CD\u09B0\u09CB (\u09AE\u09BE\u09B8\u09BF\u0995)",
-        amountBdt: 499,
+        amountBdt: 599,
         interval: "monthly"
       },
       {
+        id: "n5_milestone",
+        nameBn: "N5 \u09E9 \u09AE\u09BE\u09B8\u09C7\u09B0 \u09AE\u09BE\u0987\u09B2\u09B8\u09CD\u099F\u09CB\u09A8 \u09AA\u09BE\u09B8",
+        amountBdt: 1490,
+        interval: "quarterly"
+      },
+      {
         id: "n5_lifetime",
-        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u09AA\u09BE\u09B8 (\u09AC\u09BF\u09B6\u09C7\u09B7 \u099B\u09BE\u09DC)",
-        amountBdt: 499,
-        interval: "lifetime"
+        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE / \u09AC\u09BE\u09B0\u09CD\u09B7\u09BF\u0995 \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+        amountBdt: 4990,
+        interval: "yearly"
       }
     ],
     stepsBn: [
@@ -67772,7 +67787,7 @@ paymentRouter.post("/sslcommerz/init", optionalAuth2, async (req, res) => {
     } = req.body;
     const selectedTier = planId || tier;
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
-    const amount = Number(requestedAmount) || planConfig.priceBdt || 499;
+    const amount = Number(requestedAmount) || planConfig.priceBdt || 599;
     const resolvedUserId = user?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || "student@nihomi.com";
     const resolvedName = name || user?.name || resolvedEmail.split("@")[0];
@@ -67911,11 +67926,11 @@ paymentRouter.post("/stripe/create-checkout-session", optionalAuth2, async (req,
     let amount = Number(requestedAmount);
     if (!amount) {
       if (currency.toLowerCase() === "usd") {
-        amount = selectedTier === "n5_lifetime" ? 29.99 : 9.99;
+        amount = selectedTier === "n5_lifetime" ? 49.99 : 9.99;
       } else if (currency.toLowerCase() === "jpy") {
-        amount = selectedTier === "n5_lifetime" ? 4500 : 1500;
+        amount = selectedTier === "n5_lifetime" ? 7500 : 1500;
       } else {
-        amount = planConfig.priceBdt || 499;
+        amount = planConfig.priceBdt || 599;
       }
     }
     const resolvedUserId = user?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);

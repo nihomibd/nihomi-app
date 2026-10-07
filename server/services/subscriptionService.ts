@@ -48,7 +48,7 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, TierConfig> = {
     id: 'n5_pro',
     name: 'N5 Pro Monthly',
     nameBn: 'N5 প্রো (মাসিক)',
-    priceBdt: 499,
+    priceBdt: 599,
     interval: 'monthly',
     descriptionBn: 'সম্পূর্ণ N5 সিলেবাস ও আনলিমিটেড AI গাইডেন্স',
     featuresBn: [
@@ -69,9 +69,9 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, TierConfig> = {
   },
   n5_lifetime: {
     id: 'n5_lifetime',
-    name: 'N5 Lifetime Pass',
-    nameBn: 'N5 লাইফটাইম পাস',
-    priceBdt: 499,
+    name: 'N5 Lifetime / All-Access Pass',
+    nameBn: 'N5 লাইফটাইম / বার্ষিক অল-অ্যাক্সেস',
+    priceBdt: 4990,
     interval: 'lifetime',
     descriptionBn: 'আজীবন অ্যাক্সেস, সার্টিফিকেট ও সম্পূর্ণ প্রস্তুতি',
     featuresBn: [

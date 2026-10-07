@@ -218,7 +218,7 @@ export class SSLCommerzService {
       status: isMockValid ? 'VALID' : 'INVALID',
       tranId: tranId || `SSL_FALLBACK_${valId}`,
       valId,
-      amount: amount || 499,
+      amount: amount || 599,
       currency: 'BDT',
       bankTranId: `BNK_${crypto.randomBytes(4).toString('hex').toUpperCase()}`,
       cardType: 'VISA / Mastercard / MFS'
@@ -284,7 +284,7 @@ export class SSLCommerzService {
   }> {
     const tranId = payload.tran_id || payload.paymentId || '';
     const valId = payload.val_id || '';
-    const amount = Number(payload.amount || payload.total_amount) || 499;
+    const amount = Number(payload.amount || payload.total_amount) || 599;
 
     let targetUserId = payload.value_a || payload.userId || 'usr_student';
     let targetEmail = payload.value_c || payload.userEmail || payload.cus_email || 'student@nihomi.com';

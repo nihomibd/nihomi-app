@@ -118,7 +118,8 @@ aiRouter.post(
           bengaliTranslation: isGreeting
             ? 'হ্যালো! নিহোমি সেনসেই ক্লাসরুমে স্বাগতম। আজ কী নিয়ে অনুশীলন করতে চান?'
             : 'হ্যালো! আসুন একসাথে জাপানি ভাষা চর্চা করি।',
-          correctionData: undefined
+          correctionData: undefined,
+          fallbackUsed: true
         };
       }
 
@@ -129,6 +130,7 @@ aiRouter.post(
           romaji: aiResult.romaji,
           bengaliTranslation: aiResult.bengaliTranslation,
           correctionData: aiResult.correctionData,
+          fallbackUsed: aiResult.fallbackUsed ?? false,
           sessionId: sessionId || `guest_session_${Date.now()}`,
           usage: {
             aiCoachInteractions: used,
@@ -176,6 +178,7 @@ aiRouter.post(
         romaji: aiResult.romaji,
         bengaliTranslation: aiResult.bengaliTranslation,
         correctionData: aiResult.correctionData,
+        fallbackUsed: aiResult.fallbackUsed ?? false,
         sessionId: session.id,
         messages: session.messages,
         usage: {
@@ -189,7 +192,8 @@ aiRouter.post(
       return res.status(200).json({
         reply: 'すみません (Sumimasen), Nihomi Sensei AI™ is reviewing your lesson. Practice repeating the key sentence patterns aloud!',
         romaji: 'Kagi to naru bunkei o koe ni dashite renshuu shimashou.',
-        bengaliTranslation: 'Nihomi Sensei AI™ আপনার পাঠ পর্যালোচনা করছেন। মূল বাক্যগুলো জোরে উচ্চারণ করে অনুশীলন করুন।'
+        bengaliTranslation: 'Nihomi Sensei AI™ আপনার পাঠ পর্যালোচনা করছেন। মূল বাক্যগুলো জোরে উচ্চারণ করে অনুশীলন করুন।',
+        fallbackUsed: true
       });
     }
   }

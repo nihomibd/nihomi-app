@@ -43,6 +43,7 @@ export interface AICoachResponse {
   reply: string;
   romaji?: string;
   bengaliTranslation?: string;
+  fallbackUsed?: boolean;
   correctionData?: {
     userSentence: string;
     correctSentence: string;
@@ -111,8 +112,8 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 const CANDIDATE_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash'
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
 ];
 
 async function sleep(ms: number) {
@@ -313,7 +314,8 @@ CORE TEACHING PERSONA:
           }
           return {
             reply: replyText,
-            correctionData
+            correctionData,
+            fallbackUsed: false
           };
         }
       } catch (err: any) {
@@ -326,7 +328,11 @@ CORE TEACHING PERSONA:
     }
   }
 
-  return generateSenseiOfflineResponse(req);
+  const offline = generateSenseiOfflineResponse(req);
+  return {
+    ...offline,
+    fallbackUsed: true
+  };
 }
 
 function generateSenseiOfflineResponse(req: AICoachRequest): AICoachResponse {
