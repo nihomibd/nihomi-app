@@ -834,6 +834,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       </main>
 
+      {/* 1-Click Floating Nihomi Sensei AI Action Button */}
+      <button
+        type="button"
+        id="btn-floating-sensei-ai"
+        onClick={() => setIsAiSenseiOpen(true)}
+        className="fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs shadow-2xl shadow-red-600/40 hover:shadow-red-600/60 transition-all flex items-center gap-2 cursor-pointer active:scale-95 group border border-amber-400/30"
+        title="Floating Nihomi Sensei AI (২৪/৭ পার্সোনাল মেন্টর)"
+      >
+        <div className="relative">
+          <Bot className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" />
+          <span className="w-2 h-2 rounded-full bg-emerald-400 absolute -top-0.5 -right-0.5 ring-2 ring-stone-950 animate-pulse" />
+        </div>
+        <span className="tracking-wide">Nihomi Sensei AI 💬</span>
+      </button>
+
       {/* Tanaka AI Sensei Modal */}
       {isAiSenseiOpen && (
         <AiSenseiModal

@@ -26,23 +26,14 @@ export function validateEnvironment(): void {
   getRequiredJwtSecret();
 }
 
+export const AUTHORITATIVE_FOUNDER_EMAIL = 'mdtanvirkabirbiplob@gmail.com';
+
 /**
  * Retrieves trusted Admin emails configured in the environment.
- * Primary: ADMIN_EMAILS / ADMIN_EMAIL
- * Fallback / alias: FOUNDER_EMAILS / FOUNDER_EMAIL
- * Production Default: mdtanvirkabirbiplob@gmail.com
+ * Authoritative founder: mdtanvirkabirbiplob@gmail.com
  */
 export function getAdminEmails(): string[] {
-  const raw =
-    process.env.ADMIN_EMAILS ||
-    process.env.ADMIN_EMAIL ||
-    process.env.FOUNDER_EMAILS ||
-    process.env.FOUNDER_EMAIL ||
-    'mdtanvirkabirbiplob@gmail.com';
-  return raw
-    .split(',')
-    .map(e => e.trim().toLowerCase())
-    .filter(Boolean);
+  return [AUTHORITATIVE_FOUNDER_EMAIL];
 }
 
 /**
@@ -52,7 +43,7 @@ export function getAdminEmails(): string[] {
  */
 export function isAdminEmail(email?: string): boolean {
   if (!email || typeof email !== 'string') return false;
-  return getAdminEmails().includes(email.trim().toLowerCase());
+  return email.trim().toLowerCase() === AUTHORITATIVE_FOUNDER_EMAIL;
 }
 
 /**

@@ -19,17 +19,15 @@ function getRequiredJwtSecret() {
   }
   return secret.trim();
 }
-function getAdminEmails() {
-  const raw = process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || process.env.FOUNDER_EMAILS || process.env.FOUNDER_EMAIL || "mdtanvirkabirbiplob@gmail.com";
-  return raw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
-}
 function isAdminEmail(email) {
   if (!email || typeof email !== "string") return false;
-  return getAdminEmails().includes(email.trim().toLowerCase());
+  return email.trim().toLowerCase() === AUTHORITATIVE_FOUNDER_EMAIL;
 }
+var AUTHORITATIVE_FOUNDER_EMAIL;
 var init_env = __esm({
   "server/env.ts"() {
     dotenv.config();
+    AUTHORITATIVE_FOUNDER_EMAIL = "mdtanvirkabirbiplob@gmail.com";
   }
 });
 
@@ -60010,7 +60008,6 @@ async function requireAdmin(req, res, next) {
   req.authContext = { user, token };
   next();
 }
-var FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || process.env.ADMIN_EMAIL || "mdtanvirkabirbiplob@gmail.com").trim().toLowerCase();
 async function requireFounder(req, res, next) {
   const token = extractBearerToken2(req);
   if (!token) {

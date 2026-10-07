@@ -589,7 +589,7 @@ export async function requireAdmin(req: Request | any, res: Response, next: Next
   next();
 }
 
-export const FOUNDER_EMAIL = (process.env.FOUNDER_EMAIL || process.env.ADMIN_EMAIL || 'mdtanvirkabirbiplob@gmail.com').trim().toLowerCase();
+export const FOUNDER_EMAIL = 'mdtanvirkabirbiplob@gmail.com';
 
 /**
  * Express Middleware: Require strictly verified Administrator / Founder access.

@@ -150,8 +150,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#0B0F17]/90 border-b border-slate-800 text-white select-none transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full h-16 backdrop-blur-md bg-neutral-950/80 border-b border-neutral-800 text-white select-none transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div className="flex items-center justify-between h-16">
 
           {/* 1. BRAND LOGO: MINIMALIST RED SUN EMBLEM + HORIZONTAL NIHOMI (ニホミ) + OS BADGE */}
@@ -814,16 +814,28 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* FOUNDER COMMAND SHORTCUT */}
-            {isFounder && (
+            {/* FOUNDER PORTAL BADGE (Strict Founder Role Binding) */}
+            {(user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') && (
               <button
                 type="button"
-                onClick={() => onNavigate('founder')}
-                className="inline-flex items-center space-x-1 px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-bold transition-all cursor-pointer"
-                title="Founder Command Center"
+                id="header-founder-portal-btn"
+                onClick={() => onNavigate('portal')}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 hover:from-amber-500/35 hover:to-yellow-500/35 text-amber-300 border border-amber-400/50 rounded-full text-xs font-black shadow-sm shadow-amber-500/20 hover:shadow-amber-500/30 transition-all cursor-pointer whitespace-nowrap active:scale-95 ring-1 ring-amber-400/20"
+                title="Founder Portal"
               >
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
-                <span>Command</span>
+                <span>👑 Founder Portal</span>
+              </button>
+            )}
+
+            {/* MY DASHBOARD QUICK LINK FOR AUTHENTICATED USERS */}
+            {user && (
+              <button
+                type="button"
+                id="header-btn-my-dashboard"
+                onClick={() => onNavigate('dashboard')}
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.15] text-white text-xs font-bold transition-all cursor-pointer whitespace-nowrap"
+              >
+                <span>My Dashboard</span>
               </button>
             )}
 
@@ -931,14 +943,14 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         <span>নিহোমি কয়েন ও সাবস্ক্রিপশন</span>
                       </button>
 
-                      {isFounder && (
+                      {(user.role === 'admin' || user.email.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') && (
                         <button
                           type="button"
-                          onClick={() => handleDropdownSelect('founder')}
+                          onClick={() => handleDropdownSelect('portal')}
                           className="w-full px-3 py-2 rounded-xl hover:bg-amber-500/20 text-amber-300 text-left font-bold flex items-center space-x-2 cursor-pointer"
                         >
                           <Crown className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Founder Command Center</span>
+                          <span>👑 Founder Portal</span>
                         </button>
                       )}
 
@@ -960,13 +972,24 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 </div>
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={() => openAuthModal()}
-                className="px-4 py-1.5 bg-white text-stone-950 hover:bg-white/90 rounded-full text-xs font-bold shadow-sm transition-all cursor-pointer whitespace-nowrap active:scale-95"
-              >
-                লগইন / সাইন আপ
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  id="header-btn-login"
+                  onClick={() => openAuthModal('login')}
+                  className="px-3.5 py-1.5 text-stone-300 hover:text-white rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap hover:bg-white/[0.08]"
+                >
+                  লগইন
+                </button>
+                <button
+                  type="button"
+                  id="header-btn-start-journey"
+                  onClick={() => onNavigate('journey')}
+                  className="px-4 py-1.5 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-full text-xs font-bold shadow-md shadow-red-600/25 transition-all cursor-pointer whitespace-nowrap active:scale-95 flex items-center gap-1.5"
+                >
+                  <span>🔥 Start Journey</span>
+                </button>
+              </div>
             )}
           </div>
 

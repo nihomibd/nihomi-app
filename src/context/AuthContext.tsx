@@ -271,7 +271,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(() => {
     try {
       const saved = safeStorage.getItem('nihomi_user');
-      return saved ? JSON.parse(saved) : null;
+      if (!saved) return null;
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.email) {
+        const cleanEmail = (parsed.email || '').trim().toLowerCase();
+        parsed.role = cleanEmail === 'mdtanvirkabirbiplob@gmail.com' ? 'admin' : 'student';
+      }
+      return parsed;
     } catch {
       return null;
     }
@@ -354,6 +360,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!newUser.nihomiAccountId) {
       newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
     }
+    const cleanEmail = (newUser.email || '').trim().toLowerCase();
+    newUser.role = cleanEmail === 'mdtanvirkabirbiplob@gmail.com' ? 'admin' : 'student';
     setUser(newUser);
     safeStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };

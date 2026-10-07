@@ -9,6 +9,7 @@ import { NihomiMobileShowcase } from './components/showcase/NihomiMobileShowcase
 
 // Code-split / Lazy-loaded views to optimize bundle sizes
 const JourneyView = lazy(() => import('./views/JourneyView').then(m => ({ default: m.JourneyView })));
+const PortalView = lazy(() => import('./views/PortalView').then(m => ({ default: m.PortalView })));
 const StudentPortalView = lazy(() => import('./views/StudentPortalView').then(m => ({ default: m.StudentPortalView })));
 const DocumentsView = lazy(() => import('./views/DocumentsView').then(m => ({ default: m.DocumentsView })));
 const EmailSignatureView = lazy(() => import('./views/EmailSignatureView').then(m => ({ default: m.EmailSignatureView })));
@@ -648,7 +649,11 @@ export const App: React.FC = () => {
           <LessonPracticeView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
         )}
         {currentView === 'portal' && (
-          <StudentPortalView initialTab="dashboard" onNavigate={handleNavigate} />
+          (user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') ? (
+            <PortalView onNavigate={handleNavigate} />
+          ) : (
+            <StudentPortalView initialTab="dashboard" onNavigate={handleNavigate} />
+          )
         )}
         {currentView === 'portal-settings' && (
           <StudentPortalView initialTab="settings" onNavigate={handleNavigate} />
@@ -860,6 +865,27 @@ export const App: React.FC = () => {
 
       {/* Cookie Consent Banner — persisted in localStorage */}
       <CookieConsentBanner />
+
+      {/* Persistent Floating Pill when Founder is in Student Mode */}
+      {(user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') &&
+        (currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'courses' || currentView === 'lesson') && (
+          <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 animate-bounce duration-1000">
+            <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-stone-950 font-black text-xs shadow-2xl shadow-amber-500/40 border border-amber-300">
+              <span className="flex items-center gap-1.5">
+                👑 Founder Mode Active
+              </span>
+              <span>—</span>
+              <button
+                type="button"
+                id="btn-return-founder-portal"
+                onClick={() => handleNavigate('portal')}
+                className="underline hover:text-white font-extrabold cursor-pointer transition-colors"
+              >
+                [Return to Founder Portal]
+              </button>
+            </div>
+          </div>
+        )}
     </div>
   );
 };
