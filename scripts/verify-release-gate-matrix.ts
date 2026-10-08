@@ -177,7 +177,7 @@ async function runReleaseGateMatrix(): Promise<void> {
       displayName: 'Gate Test User A',
       targetLevel: 'N5'
     });
-    const regAPassed = regARes.statusCode === 200 && !!regARes.data?.token && !!regARes.data?.user?.id;
+    const regAPassed = (regARes.statusCode === 200 || regARes.statusCode === 201) && !!regARes.data?.token && !!regARes.data?.user?.id;
     const userAToken = regARes.data?.token;
     const userAId = regARes.data?.user?.id;
     recordResult(

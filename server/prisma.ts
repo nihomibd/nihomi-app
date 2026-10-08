@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 /**
  * NIHOMI.COM — High-Performance Singleton Prisma Database Client
@@ -9,13 +10,13 @@ import { PrismaClient } from '@prisma/client';
  */
 
 const globalForPrisma = globalThis as unknown as {
-  prisma?: PrismaClient;
+  prisma?: any;
   pgPool?: Pool;
 };
 
 let _initAttempted = false;
 
-function getPrismaClient(): PrismaClient | null {
+function getPrismaClient(): any {
   if (globalForPrisma.prisma) return globalForPrisma.prisma;
   const dbUrl = process.env.DATABASE_URL?.trim();
   if (!dbUrl) return null;
@@ -23,6 +24,8 @@ function getPrismaClient(): PrismaClient | null {
   if (!_initAttempted) {
     _initAttempted = true;
     try {
+      const { PrismaPg } = require('@prisma/adapter-pg');
+      const { PrismaClient } = require('@prisma/client');
       const pool =
         globalForPrisma.pgPool ??
         new Pool({

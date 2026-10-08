@@ -51529,8 +51529,7 @@ var init_contentDiffService = __esm({
 
 // server/prisma.ts
 import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
+import { createRequire } from "module";
 function getPrismaClient() {
   if (globalForPrisma.prisma) return globalForPrisma.prisma;
   const dbUrl = process.env.DATABASE_URL?.trim();
@@ -51538,6 +51537,8 @@ function getPrismaClient() {
   if (!_initAttempted) {
     _initAttempted = true;
     try {
+      const { PrismaPg } = require2("@prisma/adapter-pg");
+      const { PrismaClient } = require2("@prisma/client");
       const pool = globalForPrisma.pgPool ?? new Pool({
         connectionString: dbUrl,
         max: process.env.NODE_ENV === "production" ? 10 : 5,
@@ -51562,9 +51563,10 @@ function getPrismaClient() {
 function isDatabaseConfigured() {
   return Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "");
 }
-var globalForPrisma, _initAttempted, prisma;
+var require2, globalForPrisma, _initAttempted, prisma;
 var init_prisma = __esm({
   "server/prisma.ts"() {
+    require2 = createRequire(import.meta.url);
     globalForPrisma = globalThis;
     _initAttempted = false;
     prisma = new Proxy({}, {
@@ -95717,7 +95719,7 @@ app.use((req, _res, next) => {
   }
   next();
 });
-app.get(["/", "/health", "/api/health"], (_req, res) => {
+app.get(["/", "/health", "/api/health", "/api", "/api/index.js"], (_req, res) => {
   res.json({
     status: "ok",
     service: "nihomi-api-serverless",
@@ -95794,7 +95796,36 @@ app.use((err, _req, res, _next) => {
   });
 });
 var handler = (req, res) => {
-  return app(req, res);
+  return new Promise((resolve) => {
+    res.on("finish", () => resolve());
+    res.on("close", () => resolve());
+    try {
+      app(req, res, (err) => {
+        if (err) {
+          console.error("[API Serverless Express Callback Error]", err);
+          if (!res.headersSent) {
+            const status = typeof err.status === "number" ? err.status : typeof err.statusCode === "number" ? err.statusCode : 500;
+            res.status(status).json({
+              success: false,
+              error: err?.message || "Internal Server Error",
+              code: err?.code || "SERVER_ERROR"
+            });
+          }
+        }
+        resolve();
+      });
+    } catch (err) {
+      console.error("[API Serverless Synchronous Crash]", err);
+      if (!res.headersSent) {
+        res.status(500).json({
+          success: false,
+          error: err?.message || "Serverless Execution Crash",
+          code: "SERVERLESS_CRASH"
+        });
+      }
+      resolve();
+    }
+  });
 };
 var api_serverless_default = handler;
 export {

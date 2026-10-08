@@ -68,7 +68,7 @@ app.use((req: Request, _res: Response, next) => {
 });
 
 // 4. Root & Health Probes
-app.get(['/', '/health', '/api/health'], (_req: Request, res: Response) => {
+app.get(['/', '/health', '/api/health', '/api', '/api/index.js'], (_req: Request, res: Response) => {
   res.json({
     status: 'ok',
     service: 'nihomi-api-serverless',
@@ -157,8 +157,37 @@ app.use((err: any, _req: Request, res: Response, _next: any) => {
   });
 });
 
-const handler = (req: Request, res: Response) => {
-  return app(req, res);
+const handler = (req: Request, res: Response): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    res.on('finish', () => resolve());
+    res.on('close', () => resolve());
+    try {
+      app(req, res, (err: any) => {
+        if (err) {
+          console.error('[API Serverless Express Callback Error]', err);
+          if (!res.headersSent) {
+            const status = typeof err.status === 'number' ? err.status : (typeof err.statusCode === 'number' ? err.statusCode : 500);
+            res.status(status).json({
+              success: false,
+              error: err?.message || 'Internal Server Error',
+              code: err?.code || 'SERVER_ERROR'
+            });
+          }
+        }
+        resolve();
+      });
+    } catch (err: any) {
+      console.error('[API Serverless Synchronous Crash]', err);
+      if (!res.headersSent) {
+        res.status(500).json({
+          success: false,
+          error: err?.message || 'Serverless Execution Crash',
+          code: 'SERVERLESS_CRASH'
+        });
+      }
+      resolve();
+    }
+  });
 };
 
 export default handler;
