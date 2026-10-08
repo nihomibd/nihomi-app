@@ -341,7 +341,7 @@ ${cleanQuery}
 Respond clearly in professional Bengali (with technical terms in English or Japanese as appropriate). Answer directly. Maximum 3-4 structured bullet points.`;
 
         const response = await this.genAiClient.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: 'gemini-3.5-flash',
           contents: prompt
         });
 

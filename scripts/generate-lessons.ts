@@ -524,7 +524,7 @@ Strict Requirements:
 }
 `;
 
-  const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  const models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-flash-latest'];
   for (const modelName of models) {
     try {
       console.log(`🤖 Requesting Gemini API (${modelName})...`);

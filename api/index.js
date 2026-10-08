@@ -59355,7 +59355,7 @@ Return ONLY valid JSON matching this structure:
   }
 ]`;
           const response = await this.ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.5-flash",
             contents: prompt,
             config: {
               responseMimeType: "application/json"
@@ -61327,14 +61327,35 @@ import { GoogleGenAI } from "@google/genai";
 var aiClient = null;
 var lastUsedApiKey = "";
 function resolveGeminiApiKey() {
-  const candidates = [
-    { name: "GEMINI_API_KEY", val: (process.env.GEMINI_API_KEY || "").trim() },
-    { name: "GOOGLE_API_KEY", val: (process.env.GOOGLE_API_KEY || "").trim() },
-    { name: "VITE_GEMINI_API_KEY", val: (process.env.VITE_GEMINI_API_KEY || "").trim() },
-    { name: "VITE_GOOGLE_API_KEY", val: (process.env.VITE_GOOGLE_API_KEY || "").trim() }
-  ].filter((c) => c.val.length >= 15);
+  const candidateNames = [
+    "GEMINI_API_KEY",
+    "GOOGLE_API_KEY",
+    "GOOGLE_GENAI_API_KEY",
+    "VITE_GEMINI_API_KEY",
+    "VITE_GOOGLE_API_KEY",
+    "GEMINI_KEY",
+    "AI_STUDIO_KEY",
+    "NEXT_PUBLIC_GEMINI_API_KEY"
+  ];
+  const candidates = [];
+  for (const name of candidateNames) {
+    const val = (process.env[name] || "").trim();
+    if (val.length >= 15) {
+      candidates.push({ name, val });
+    }
+  }
+  for (const [k, v] of Object.entries(process.env)) {
+    if (/gemini|genai/i.test(k) && !candidateNames.includes(k) && typeof v === "string") {
+      const trimmed = v.trim();
+      if (trimmed.length >= 15) {
+        candidates.push({ name: k, val: trimmed });
+      }
+    }
+  }
   const validAiStudio = candidates.find((c) => c.val.startsWith("AIzaSy"));
   if (validAiStudio) return { key: validAiStudio.val, sourceVar: validAiStudio.name };
+  const validAq = candidates.find((c) => c.val.startsWith("AQ."));
+  if (validAq) return { key: validAq.val, sourceVar: validAq.name };
   const first = candidates[0];
   if (first) return { key: first.val, sourceVar: first.name };
   return { key: "", sourceVar: "none" };
@@ -61372,9 +61393,12 @@ async function withTimeout(promise, ms) {
   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
 }
 var CANDIDATE_MODELS = [
-  "gemini-2.5-flash",
-  "gemini-2.0-flash",
-  "gemini-1.5-flash"
+  "gemini-3.5-flash",
+  "gemini-3.1-flash-lite",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3-flash-preview",
+  "gemini-flash-latest"
 ];
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -80804,7 +80828,7 @@ MANDATORY LINGUISTIC RULES:
    ## \u7DF4\u7FD2\u554F\u984C (Practice Exercises)
    ## \u6587\u5316\u30FB\u30E1\u30E2 (Cultural Notes)
 `;
-  const ocrModels = ["gemini-2.5-flash", "gemini-3.7-flash", "gemini-flash-latest"];
+  const ocrModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.6-flash", "gemini-flash-latest"];
   let extractedOcrText = "";
   for (const modelName of ocrModels) {
     try {
@@ -80853,10 +80877,10 @@ function getAIClient2() {
   return aiClient2;
 }
 var CANDIDATE_MODELS2 = [
-  "gemini-2.5-flash",
-  "gemini-3.7-flash",
-  "gemini-flash-latest",
-  "gemini-2.5-pro"
+  "gemini-3.5-flash",
+  "gemini-3.1-flash-lite",
+  "gemini-3.6-flash",
+  "gemini-flash-latest"
 ];
 async function callGeminiJson(ai, prompt, stageName, timeoutMs = 25e3) {
   let lastError = null;
@@ -94073,7 +94097,7 @@ var CloudAiJobService = class _CloudAiJobService {
       );
     }
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.5-flash",
       contents: [
         {
           role: "user",

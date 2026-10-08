@@ -116,7 +116,7 @@ MANDATORY LINGUISTIC RULES:
    ## 文化・メモ (Cultural Notes)
 `;
 
-  const ocrModels = ['gemini-2.5-flash', 'gemini-3.7-flash', 'gemini-flash-latest'];
+  const ocrModels = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-flash-latest'];
   let extractedOcrText = '';
 
   for (const modelName of ocrModels) {
@@ -193,10 +193,10 @@ function getAIClient(): GoogleGenAI | null {
 }
 
 export const CANDIDATE_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-3.7-flash',
-  'gemini-flash-latest',
-  'gemini-2.5-pro'
+  'gemini-3.5-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-3.6-flash',
+  'gemini-flash-latest'
 ];
 
 /**

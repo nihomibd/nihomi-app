@@ -4,16 +4,42 @@ let aiClient: GoogleGenAI | null = null;
 let lastUsedApiKey = '';
 
 export function resolveGeminiApiKey(): { key: string; sourceVar: string } {
-  const candidates: { name: string; val: string }[] = [
-    { name: 'GEMINI_API_KEY', val: (process.env.GEMINI_API_KEY || '').trim() },
-    { name: 'GOOGLE_API_KEY', val: (process.env.GOOGLE_API_KEY || '').trim() },
-    { name: 'VITE_GEMINI_API_KEY', val: (process.env.VITE_GEMINI_API_KEY || '').trim() },
-    { name: 'VITE_GOOGLE_API_KEY', val: (process.env.VITE_GOOGLE_API_KEY || '').trim() },
-  ].filter(c => c.val.length >= 15);
+  const candidateNames = [
+    'GEMINI_API_KEY',
+    'GOOGLE_API_KEY',
+    'GOOGLE_GENAI_API_KEY',
+    'VITE_GEMINI_API_KEY',
+    'VITE_GOOGLE_API_KEY',
+    'GEMINI_KEY',
+    'AI_STUDIO_KEY',
+    'NEXT_PUBLIC_GEMINI_API_KEY'
+  ];
 
-  // If any candidate starts with AIzaSy, prioritize it over AQ. or others
+  const candidates: { name: string; val: string }[] = [];
+  for (const name of candidateNames) {
+    const val = (process.env[name] || '').trim();
+    if (val.length >= 15) {
+      candidates.push({ name, val });
+    }
+  }
+
+  // Scan any other runtime env vars matching /gemini/i or /genai/i
+  for (const [k, v] of Object.entries(process.env)) {
+    if (/gemini|genai/i.test(k) && !candidateNames.includes(k) && typeof v === 'string') {
+      const trimmed = v.trim();
+      if (trimmed.length >= 15) {
+        candidates.push({ name: k, val: trimmed });
+      }
+    }
+  }
+
+  // 1. If any candidate starts with standard Google AI Studio prefix AIzaSy, prioritize it
   const validAiStudio = candidates.find(c => c.val.startsWith('AIzaSy'));
   if (validAiStudio) return { key: validAiStudio.val, sourceVar: validAiStudio.name };
+
+  // 2. If any candidate starts with AQ. prefix, prioritize it
+  const validAq = candidates.find(c => c.val.startsWith('AQ.'));
+  if (validAq) return { key: validAq.val, sourceVar: validAq.name };
 
   const first = candidates[0];
   if (first) return { key: first.val, sourceVar: first.name };
@@ -140,10 +166,13 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
 }
 
-const CANDIDATE_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash'
+export const CANDIDATE_MODELS = [
+  'gemini-3.5-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-3.6-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3-flash-preview',
+  'gemini-flash-latest'
 ];
 
 async function sleep(ms: number) {
