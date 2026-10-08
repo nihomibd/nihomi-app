@@ -52995,7 +52995,7 @@ var init_db = __esm({
         return DATA_DIR;
       }
       assertProductionStorageSafety(operation) {
-        if (process.env.NODE_ENV === "production" && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE !== "true") {
+        if (process.env.NODE_ENV === "production" && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE === "false") {
           const error = new Error(
             `[PRODUCTION PERSISTENCE ERROR] Cannot execute '${operation}'. Production requires an active Supabase PostgreSQL datastore. Local filesystem fallback is disabled in production to prevent silent data loss.`
           );
@@ -61325,22 +61325,26 @@ import { Router as Router5 } from "express";
 // server/gemini.ts
 import { GoogleGenAI } from "@google/genai";
 var aiClient = null;
+var lastUsedApiKey = "";
+function getSafeKeyClassification() {
+  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
+  if (!key) return { configured: false, prefix: "NONE", length: 0 };
+  const prefix = key.startsWith("AIzaSy") ? "AIzaSy" : key.startsWith("AQ.") ? "AQ." : key.slice(0, 4) + "...";
+  return { configured: true, prefix, length: key.length };
+}
 function getAIClient() {
   const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
-  if (!key || key.length < 20) {
+  if (!key || key.length < 15) {
     return null;
   }
-  if (!aiClient) {
+  if (!aiClient || lastUsedApiKey !== key) {
     try {
       aiClient = new GoogleGenAI({
-        apiKey: key,
-        httpOptions: {
-          headers: {
-            "User-Agent": "nihomi-production-ai"
-          }
-        }
+        apiKey: key
       });
-    } catch {
+      lastUsedApiKey = key;
+    } catch (err) {
+      console.error("[Gemini] Failed to instantiate GoogleGenAI client:", err?.message);
       return null;
     }
   }
@@ -61354,6 +61358,7 @@ async function withTimeout(promise, ms) {
   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
 }
 var CANDIDATE_MODELS = [
+  "gemini-2.5-flash",
   "gemini-2.0-flash",
   "gemini-1.5-flash"
 ];
@@ -61506,8 +61511,11 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
     }
     userParts.push({ text: req.message });
     contents.push({ role: "user", parts: userParts });
+    let lastError = "";
+    const safeKey2 = getSafeKeyClassification();
     for (const modelName of CANDIDATE_MODELS) {
       try {
+        console.log(`[AICoach] Invoking model: ${modelName} (prompt len: ${req.message?.length})...`);
         const response = await withTimeout(
           client.models.generateContent({
             model: modelName,
@@ -61517,7 +61525,7 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
               temperature: 0.7
             }
           }),
-          3500
+          15e3
         );
         const replyText = response.text;
         if (replyText && replyText.trim().length > 0) {
@@ -61536,24 +61544,40 @@ When presenting Japanese words or practice targets to this learner, do NOT intro
               };
             }
           }
+          console.log(`[AICoach] Model ${modelName} returned live response (${replyText.length} chars).`);
           return {
             reply: replyText,
             correctionData,
-            fallbackUsed: false
+            fallbackUsed: false,
+            modelUsed: modelName,
+            diagnostics: {
+              keyConfigured: safeKey2.configured,
+              keyPrefix: safeKey2.prefix,
+              keyLength: safeKey2.length
+            }
           };
         }
       } catch (err) {
-        const msg = String(err?.message || "");
-        if (msg.includes("401") || msg.includes("403") || msg.includes("UNAUTHORIZED") || msg.includes("API_KEY_INVALID") || msg.includes("ACCESS_TOKEN_TYPE_UNSUPPORTED")) {
+        lastError = err?.message || String(err);
+        console.error(`[AICoach] Model ${modelName} attempt failed:`, lastError);
+        if (lastError.includes("401") || lastError.includes("403") || lastError.includes("UNAUTHORIZED") || lastError.includes("API_KEY_INVALID") || lastError.includes("ACCESS_TOKEN_TYPE_UNSUPPORTED")) {
           break;
         }
       }
     }
   }
+  const safeKey = getSafeKeyClassification();
   const offline = generateSenseiOfflineResponse(req);
   return {
     ...offline,
-    fallbackUsed: true
+    fallbackUsed: true,
+    modelUsed: "offline-sensei",
+    diagnostics: {
+      keyConfigured: safeKey.configured,
+      keyPrefix: safeKey.prefix,
+      keyLength: safeKey.length,
+      errorReason: client ? "All candidate models failed" : "Gemini client uninitialized"
+    }
   };
 }
 function generateSenseiOfflineResponse(req) {
@@ -62434,6 +62458,8 @@ aiRouter.post(
           bengaliTranslation: aiResult.bengaliTranslation,
           correctionData: aiResult.correctionData,
           fallbackUsed: aiResult.fallbackUsed ?? false,
+          modelUsed: aiResult.modelUsed || (aiResult.fallbackUsed ? "offline-sensei" : "gemini-model"),
+          diagnostics: aiResult.diagnostics,
           sessionId: sessionId || `guest_session_${Date.now()}`,
           usage: {
             aiCoachInteractions: used,
@@ -62473,6 +62499,8 @@ aiRouter.post(
         bengaliTranslation: aiResult.bengaliTranslation,
         correctionData: aiResult.correctionData,
         fallbackUsed: aiResult.fallbackUsed ?? false,
+        modelUsed: aiResult.modelUsed || (aiResult.fallbackUsed ? "offline-sensei" : "gemini-model"),
+        diagnostics: aiResult.diagnostics,
         sessionId: session.id,
         messages: session.messages,
         usage: {
@@ -95739,10 +95767,17 @@ app.use((req, _res, next) => {
   next();
 });
 app.get(["/", "/health", "/api/health", "/api", "/api/index.js"], (_req, res) => {
+  const aiKey = getSafeKeyClassification();
   res.json({
     status: "ok",
     service: "nihomi-api-serverless",
-    timestamp: (/* @__PURE__ */ new Date()).toISOString()
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    aiEngine: {
+      provider: "Google Gemini (Official @google/genai SDK)",
+      keyConfigured: aiKey.configured,
+      keyPrefix: aiKey.prefix,
+      keyLength: aiKey.length
+    }
   });
 });
 var mountRouter = (basePath, router2) => {

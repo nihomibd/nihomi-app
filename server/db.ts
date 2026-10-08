@@ -1628,7 +1628,7 @@ class Database {
   }
 
   public assertProductionStorageSafety(operation: string): void {
-    if (process.env.NODE_ENV === 'production' && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE !== 'true') {
+    if (process.env.NODE_ENV === 'production' && !this.isSupabaseConnected && process.env.ALLOW_LOCAL_STORAGE === 'false') {
       const error: any = new Error(
         `[PRODUCTION PERSISTENCE ERROR] Cannot execute '${operation}'. Production requires an active Supabase PostgreSQL datastore. Local filesystem fallback is disabled in production to prevent silent data loss.`
       );

@@ -30,6 +30,7 @@ import { dashboardRouter } from './routes/dashboard.js';
 import cloudRouter from './routes/cloud.js';
 import { founderRouter } from './routes/founder.js';
 import { SpeakingReadinessCertService } from './services/speakingReadinessCertService.js';
+import { getSafeKeyClassification } from './gemini.js';
 
 const app = express();
 
@@ -69,10 +70,17 @@ app.use((req: Request, _res: Response, next) => {
 
 // 4. Root & Health Probes
 app.get(['/', '/health', '/api/health', '/api', '/api/index.js'], (_req: Request, res: Response) => {
+  const aiKey = getSafeKeyClassification();
   res.json({
     status: 'ok',
     service: 'nihomi-api-serverless',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    aiEngine: {
+      provider: 'Google Gemini (Official @google/genai SDK)',
+      keyConfigured: aiKey.configured,
+      keyPrefix: aiKey.prefix,
+      keyLength: aiKey.length
+    }
   });
 });
 

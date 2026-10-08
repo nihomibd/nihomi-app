@@ -131,6 +131,8 @@ aiRouter.post(
           bengaliTranslation: aiResult.bengaliTranslation,
           correctionData: aiResult.correctionData,
           fallbackUsed: aiResult.fallbackUsed ?? false,
+          modelUsed: aiResult.modelUsed || (aiResult.fallbackUsed ? 'offline-sensei' : 'gemini-model'),
+          diagnostics: aiResult.diagnostics,
           sessionId: sessionId || `guest_session_${Date.now()}`,
           usage: {
             aiCoachInteractions: used,
@@ -179,6 +181,8 @@ aiRouter.post(
         bengaliTranslation: aiResult.bengaliTranslation,
         correctionData: aiResult.correctionData,
         fallbackUsed: aiResult.fallbackUsed ?? false,
+        modelUsed: aiResult.modelUsed || (aiResult.fallbackUsed ? 'offline-sensei' : 'gemini-model'),
+        diagnostics: aiResult.diagnostics,
         sessionId: session.id,
         messages: session.messages,
         usage: {

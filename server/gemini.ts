@@ -1,25 +1,28 @@
 import { GoogleGenAI } from '@google/genai';
 
 let aiClient: GoogleGenAI | null = null;
+let lastUsedApiKey = '';
+
+export function getSafeKeyClassification(): { configured: boolean; prefix: string; length: number } {
+  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
+  if (!key) return { configured: false, prefix: 'NONE', length: 0 };
+  const prefix = key.startsWith('AIzaSy') ? 'AIzaSy' : key.startsWith('AQ.') ? 'AQ.' : key.slice(0, 4) + '...';
+  return { configured: true, prefix, length: key.length };
+}
 
 function getAIClient(): GoogleGenAI | null {
   const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
-  // Validate by presence and minimum length only — do NOT enforce a prefix.
-  // Google AI Studio keys vary by region/project and may start with AIzaSy, AQ, or other prefixes.
-  if (!key || key.length < 20) {
+  if (!key || key.length < 15) {
     return null;
   }
-  if (!aiClient) {
+  if (!aiClient || lastUsedApiKey !== key) {
     try {
       aiClient = new GoogleGenAI({
-        apiKey: key,
-        httpOptions: {
-          headers: {
-            'User-Agent': 'nihomi-production-ai'
-          }
-        }
+        apiKey: key
       });
-    } catch {
+      lastUsedApiKey = key;
+    } catch (err: any) {
+      console.error('[Gemini] Failed to instantiate GoogleGenAI client:', err?.message);
       return null;
     }
   }
@@ -44,6 +47,13 @@ export interface AICoachResponse {
   romaji?: string;
   bengaliTranslation?: string;
   fallbackUsed?: boolean;
+  modelUsed?: string;
+  diagnostics?: {
+    keyConfigured: boolean;
+    keyPrefix: string;
+    keyLength: number;
+    errorReason?: string;
+  };
   correctionData?: {
     userSentence: string;
     correctSentence: string;
@@ -112,6 +122,7 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 const CANDIDATE_MODELS = [
+  'gemini-2.5-flash',
   'gemini-2.0-flash',
   'gemini-1.5-flash'
 ];
@@ -282,8 +293,12 @@ CORE TEACHING PERSONA:
     userParts.push({ text: req.message });
     contents.push({ role: 'user', parts: userParts });
 
+    let lastError = '';
+    const safeKey = getSafeKeyClassification();
+
     for (const modelName of CANDIDATE_MODELS) {
       try {
+        console.log(`[AICoach] Invoking model: ${modelName} (prompt len: ${req.message?.length})...`);
         const response = await withTimeout(
           client.models.generateContent({
             model: modelName,
@@ -293,7 +308,7 @@ CORE TEACHING PERSONA:
               temperature: 0.7
             }
           }),
-          3500
+          15000
         );
         const replyText = response.text;
         if (replyText && replyText.trim().length > 0) {
@@ -312,26 +327,42 @@ CORE TEACHING PERSONA:
               };
             }
           }
+          console.log(`[AICoach] Model ${modelName} returned live response (${replyText.length} chars).`);
           return {
             reply: replyText,
             correctionData,
-            fallbackUsed: false
+            fallbackUsed: false,
+            modelUsed: modelName,
+            diagnostics: {
+              keyConfigured: safeKey.configured,
+              keyPrefix: safeKey.prefix,
+              keyLength: safeKey.length
+            }
           };
         }
       } catch (err: any) {
-        const msg = String(err?.message || '');
+        lastError = err?.message || String(err);
+        console.error(`[AICoach] Model ${modelName} attempt failed:`, lastError);
         // Break out immediately on authentication, permission, or token error
-        if (msg.includes('401') || msg.includes('403') || msg.includes('UNAUTHORIZED') || msg.includes('API_KEY_INVALID') || msg.includes('ACCESS_TOKEN_TYPE_UNSUPPORTED')) {
+        if (lastError.includes('401') || lastError.includes('403') || lastError.includes('UNAUTHORIZED') || lastError.includes('API_KEY_INVALID') || lastError.includes('ACCESS_TOKEN_TYPE_UNSUPPORTED')) {
           break;
         }
       }
     }
   }
 
+  const safeKey = getSafeKeyClassification();
   const offline = generateSenseiOfflineResponse(req);
   return {
     ...offline,
-    fallbackUsed: true
+    fallbackUsed: true,
+    modelUsed: 'offline-sensei',
+    diagnostics: {
+      keyConfigured: safeKey.configured,
+      keyPrefix: safeKey.prefix,
+      keyLength: safeKey.length,
+      errorReason: client ? 'All candidate models failed' : 'Gemini client uninitialized'
+    }
   };
 }
 
