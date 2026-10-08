@@ -3,15 +3,34 @@ import { GoogleGenAI } from '@google/genai';
 let aiClient: GoogleGenAI | null = null;
 let lastUsedApiKey = '';
 
-export function getSafeKeyClassification(): { configured: boolean; prefix: string; length: number } {
-  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
-  if (!key) return { configured: false, prefix: 'NONE', length: 0 };
-  const prefix = key.startsWith('AIzaSy') ? 'AIzaSy' : key.startsWith('AQ.') ? 'AQ.' : key.slice(0, 4) + '...';
-  return { configured: true, prefix, length: key.length };
+export function resolveGeminiApiKey(): { key: string; sourceVar: string } {
+  const candidates: { name: string; val: string }[] = [
+    { name: 'GEMINI_API_KEY', val: (process.env.GEMINI_API_KEY || '').trim() },
+    { name: 'GOOGLE_API_KEY', val: (process.env.GOOGLE_API_KEY || '').trim() },
+    { name: 'VITE_GEMINI_API_KEY', val: (process.env.VITE_GEMINI_API_KEY || '').trim() },
+    { name: 'VITE_GOOGLE_API_KEY', val: (process.env.VITE_GOOGLE_API_KEY || '').trim() },
+  ].filter(c => c.val.length >= 15);
+
+  // If any candidate starts with AIzaSy, prioritize it over AQ. or others
+  const validAiStudio = candidates.find(c => c.val.startsWith('AIzaSy'));
+  if (validAiStudio) return { key: validAiStudio.val, sourceVar: validAiStudio.name };
+
+  const first = candidates[0];
+  if (first) return { key: first.val, sourceVar: first.name };
+
+  return { key: '', sourceVar: 'none' };
+}
+
+export function getSafeKeyClassification(): { configured: boolean; prefix: string; length: number; sourceVar: string } {
+  const resolved = resolveGeminiApiKey();
+  if (!resolved.key) return { configured: false, prefix: 'NONE', length: 0, sourceVar: 'none' };
+  const prefix = resolved.key.startsWith('AIzaSy') ? 'AIzaSy' : resolved.key.startsWith('AQ.') ? 'AQ.' : resolved.key.slice(0, 4) + '...';
+  return { configured: true, prefix, length: resolved.key.length, sourceVar: resolved.sourceVar };
 }
 
 function getAIClient(): GoogleGenAI | null {
-  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '').trim();
+  const resolved = resolveGeminiApiKey();
+  const key = resolved.key;
   if (!key || key.length < 15) {
     return null;
   }

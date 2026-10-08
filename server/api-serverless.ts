@@ -79,7 +79,8 @@ app.get(['/', '/health', '/api/health', '/api', '/api/index.js'], (_req: Request
       provider: 'Google Gemini (Official @google/genai SDK)',
       keyConfigured: aiKey.configured,
       keyPrefix: aiKey.prefix,
-      keyLength: aiKey.length
+      keyLength: aiKey.length,
+      sourceVar: aiKey.sourceVar
     }
   });
 });

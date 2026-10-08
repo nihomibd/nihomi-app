@@ -61326,14 +61326,28 @@ import { Router as Router5 } from "express";
 import { GoogleGenAI } from "@google/genai";
 var aiClient = null;
 var lastUsedApiKey = "";
+function resolveGeminiApiKey() {
+  const candidates = [
+    { name: "GEMINI_API_KEY", val: (process.env.GEMINI_API_KEY || "").trim() },
+    { name: "GOOGLE_API_KEY", val: (process.env.GOOGLE_API_KEY || "").trim() },
+    { name: "VITE_GEMINI_API_KEY", val: (process.env.VITE_GEMINI_API_KEY || "").trim() },
+    { name: "VITE_GOOGLE_API_KEY", val: (process.env.VITE_GOOGLE_API_KEY || "").trim() }
+  ].filter((c) => c.val.length >= 15);
+  const validAiStudio = candidates.find((c) => c.val.startsWith("AIzaSy"));
+  if (validAiStudio) return { key: validAiStudio.val, sourceVar: validAiStudio.name };
+  const first = candidates[0];
+  if (first) return { key: first.val, sourceVar: first.name };
+  return { key: "", sourceVar: "none" };
+}
 function getSafeKeyClassification() {
-  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
-  if (!key) return { configured: false, prefix: "NONE", length: 0 };
-  const prefix = key.startsWith("AIzaSy") ? "AIzaSy" : key.startsWith("AQ.") ? "AQ." : key.slice(0, 4) + "...";
-  return { configured: true, prefix, length: key.length };
+  const resolved = resolveGeminiApiKey();
+  if (!resolved.key) return { configured: false, prefix: "NONE", length: 0, sourceVar: "none" };
+  const prefix = resolved.key.startsWith("AIzaSy") ? "AIzaSy" : resolved.key.startsWith("AQ.") ? "AQ." : resolved.key.slice(0, 4) + "...";
+  return { configured: true, prefix, length: resolved.key.length, sourceVar: resolved.sourceVar };
 }
 function getAIClient() {
-  const key = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || "").trim();
+  const resolved = resolveGeminiApiKey();
+  const key = resolved.key;
   if (!key || key.length < 15) {
     return null;
   }
@@ -95776,7 +95790,8 @@ app.get(["/", "/health", "/api/health", "/api", "/api/index.js"], (_req, res) =>
       provider: "Google Gemini (Official @google/genai SDK)",
       keyConfigured: aiKey.configured,
       keyPrefix: aiKey.prefix,
-      keyLength: aiKey.length
+      keyLength: aiKey.length,
+      sourceVar: aiKey.sourceVar
     }
   });
 });
