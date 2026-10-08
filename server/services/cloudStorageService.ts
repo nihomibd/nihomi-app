@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import crypto from 'crypto';
 import { db } from '../db.js';
 
@@ -20,17 +21,26 @@ export class CloudStorageService {
   private mediaDir: string;
 
   constructor() {
-    this.sourcesDir = path.join(process.cwd(), 'server', 'data', 'content_sources');
-    this.mediaDir = path.join(process.cwd(), 'server', 'data', 'media');
+    const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const baseDir = isServerless
+      ? path.join(os.tmpdir(), 'nihomi_storage')
+      : path.join(process.cwd(), 'server', 'data');
+    this.sourcesDir = path.join(baseDir, 'content_sources');
+    this.mediaDir = path.join(baseDir, 'media');
     this.ensureDirs();
   }
 
   private ensureDirs() {
-    if (!fs.existsSync(this.sourcesDir)) {
-      fs.mkdirSync(this.sourcesDir, { recursive: true });
-    }
-    if (!fs.existsSync(this.mediaDir)) {
-      fs.mkdirSync(this.mediaDir, { recursive: true });
+    try {
+      if (!fs.existsSync(this.sourcesDir)) {
+        fs.mkdirSync(this.sourcesDir, { recursive: true });
+      }
+      if (!fs.existsSync(this.mediaDir)) {
+        fs.mkdirSync(this.mediaDir, { recursive: true });
+      }
+    } catch (err) {
+      // In serverless environments, gracefully continue without throwing on cold start
+      console.warn('[CloudStorageService] Local disk cache dirs unavailable, proceeding in cloud-first mode.');
     }
   }
 

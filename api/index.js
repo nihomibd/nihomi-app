@@ -69123,19 +69123,26 @@ import { GoogleGenAI as GoogleGenAI3 } from "@google/genai";
 init_db();
 import fs4 from "fs";
 import path4 from "path";
+import os from "os";
 import crypto12 from "crypto";
 var CloudStorageService = class {
   constructor() {
-    this.sourcesDir = path4.join(process.cwd(), "server", "data", "content_sources");
-    this.mediaDir = path4.join(process.cwd(), "server", "data", "media");
+    const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const baseDir = isServerless ? path4.join(os.tmpdir(), "nihomi_storage") : path4.join(process.cwd(), "server", "data");
+    this.sourcesDir = path4.join(baseDir, "content_sources");
+    this.mediaDir = path4.join(baseDir, "media");
     this.ensureDirs();
   }
   ensureDirs() {
-    if (!fs4.existsSync(this.sourcesDir)) {
-      fs4.mkdirSync(this.sourcesDir, { recursive: true });
-    }
-    if (!fs4.existsSync(this.mediaDir)) {
-      fs4.mkdirSync(this.mediaDir, { recursive: true });
+    try {
+      if (!fs4.existsSync(this.sourcesDir)) {
+        fs4.mkdirSync(this.sourcesDir, { recursive: true });
+      }
+      if (!fs4.existsSync(this.mediaDir)) {
+        fs4.mkdirSync(this.mediaDir, { recursive: true });
+      }
+    } catch (err) {
+      console.warn("[CloudStorageService] Local disk cache dirs unavailable, proceeding in cloud-first mode.");
     }
   }
   get sourcesBucket() {
