@@ -1,7 +1,8 @@
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
+import { coinWalletService, SUBSCRIPTION_COIN_ALLOWANCES } from './coinWalletService.js';
 
-export type SubscriptionTier = 'free' | 'n5_pro' | 'n5_lifetime';
+export type SubscriptionTier = 'free' | 'starter' | 'pro' | 'japan_ready' | 'n5_pro' | 'n5_lifetime';
 
 export interface TierConfig {
   id: SubscriptionTier;
@@ -24,43 +25,106 @@ export interface TierConfig {
 export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, TierConfig> = {
   free: {
     id: 'free',
-    name: 'Free Trial',
-    nameBn: 'ফ্রি ট্রায়াল',
+    name: 'Free',
+    nameBn: 'ফ্রি (১০ টার্ন/দিন)',
     priceBdt: 0,
     interval: 'free',
-    descriptionBn: 'শুরুর জন্য বেসিক জাপানিজ পরিচিতি',
+    descriptionBn: 'শুরুর জন্য বেসিক জাপানিজ পরিচিতি ও দৈনিক ১০টি AI সেনসেই চ্যাট টার্ন',
     featuresBn: [
-      'প্রতিদিন ৫টি N5 শব্দ (Vocabulary)',
-      'প্রতিদিন ৩টি AI সেনসেই চ্যাট টার্ন',
-      '১টি বেসিক প্র্যাকটিস কুইজ',
-      'হিরাগানা ও কাতাকানা চার্ট'
+      'প্রতিদিন ১০টি ফ্রি AI সেনসেই চ্যাট টার্ন (Google Login এর পর)',
+      'হিরাগানা ও কাতাকানা সম্পূর্ণ চার্ট',
+      'বেসিক N5 প্র্যাকটিস কুইজ'
     ],
     limits: {
       vocabPerDay: 5,
-      aiChatTurns: 3,
+      aiChatTurns: 10,
       mockExamsAllowed: false,
       fullGrammarBankAllowed: false,
       srsFlashcardsAllowed: false,
       certificateAllowed: false,
     },
   },
-  n5_pro: {
-    id: 'n5_pro',
-    name: 'N5 Pro Monthly',
-    nameBn: 'N5 প্রো (মাসিক)',
-    priceBdt: 599,
+  starter: {
+    id: 'starter',
+    name: 'Starter',
+    nameBn: 'স্টারটার (৳৯৯০/মাস - ৫০০ কয়েন)',
+    priceBdt: 990,
     interval: 'monthly',
-    descriptionBn: 'সম্পূর্ণ N5 সিলেবাস ও আনলিমিটেড AI গাইডেন্স',
+    descriptionBn: 'নিয়মিত শিক্ষার্থীদের জন্য ৫০০ নিহোমি কয়েন ও পূর্ণ সিলেবাস',
     featuresBn: [
-      'সম্পূর্ণ N5 ভোকাবুলারি ব্যাংক (৮০০+ শব্দ)',
-      'মিন্না নো নিহোঙ্গো পূর্ণাঙ্গ ব্যাকরণ ব্যাংক (২৫টি লেসন)',
-      'আনলিমিটেড AI সেনসেই ব্যক্তিগত টিউটর',
-      'JLPT N5 অফিসিয়াল ফুল মক এক্সাম ইঞ্জিন',
-      'দৈনিক প্রগ্রেস অ্যানালিটিক্স ও মিস্টেক ট্র্যাকার'
+      'প্রতি মাসে ৫০০ নিহোমি কয়েন (১ কয়েন = ১ সেনসেই টার্ন)',
+      'JLPT N5 ও N4 সম্পূর্ণ কারিকুলাম আনলক',
+      'ভোকাবুলারি, ব্যাকরণ ও কাঞ্জি ডেক',
+      'মাস্টারি কুইজ ও প্রগ্রেস ট্র্যাকিং'
     ],
     limits: {
       vocabPerDay: Infinity,
-      aiChatTurns: Infinity,
+      aiChatTurns: 500,
+      mockExamsAllowed: true,
+      fullGrammarBankAllowed: true,
+      srsFlashcardsAllowed: true,
+      certificateAllowed: false,
+    },
+  },
+  pro: {
+    id: 'pro',
+    name: 'Pro',
+    nameBn: 'প্রো (৳১,৯৯০/মাস - ১,৫০০ কয়েন)',
+    priceBdt: 1990,
+    interval: 'monthly',
+    descriptionBn: 'সিরিয়াস শিক্ষার্থীদের জন্য ১,৫০০ নিহোমি কয়েন ও ফুল JLPT প্রিপারেশন',
+    featuresBn: [
+      'প্রতি মাসে ১,৫০০ নিহোমি কয়েন (১ কয়েন = ১ সেনসেই টার্ন)',
+      'N5, N4 এবং ইন্টারমিডিয়েট N3 কোর্সসমূহ',
+      'বিজনেস কেইগো ও কাজের জাপানিজ মাস্টারক্লাস',
+      'সিমুলেটেড মক এক্সাম ও অ্যাডভান্সড রিটেনশন ট্র্যাকার'
+    ],
+    limits: {
+      vocabPerDay: Infinity,
+      aiChatTurns: 1500,
+      mockExamsAllowed: true,
+      fullGrammarBankAllowed: true,
+      srsFlashcardsAllowed: true,
+      certificateAllowed: false,
+    },
+  },
+  japan_ready: {
+    id: 'japan_ready',
+    name: 'Japan Ready',
+    nameBn: 'জাপান রেডি (৳৩,৯৯০/মাস - ৪,০০০ কয়েন)',
+    priceBdt: 3990,
+    interval: 'monthly',
+    descriptionBn: 'জাপানে চাকরি ও অভিবাসনের জন্য ইনটেন্সিভ ৪,০০০ কয়েন ও কর্মক্ষেত্র সিমুলেশন',
+    featuresBn: [
+      'প্রতি মাসে ৪,০০০ নিহোমি কয়েন (১ কয়েন = ১ সেনসেই টার্ন)',
+      'কর্মক্ষেত্র ও কনবিনি সিমুলেশন Hub',
+      'জাপানি চাকরির ইন্টারভিউ প্রস্তুতি ও সংস্কৃতি শিষ্টাচার',
+      'অফিসিয়াল সার্টিফিকেট ও প্রায়োরিটি সাপোর্ট'
+    ],
+    limits: {
+      vocabPerDay: Infinity,
+      aiChatTurns: 4000,
+      mockExamsAllowed: true,
+      fullGrammarBankAllowed: true,
+      srsFlashcardsAllowed: true,
+      certificateAllowed: true,
+    },
+  },
+  n5_pro: {
+    id: 'n5_pro',
+    name: 'Pro (Legacy N5 Pro)',
+    nameBn: 'N5 প্রো (মাসিক)',
+    priceBdt: 1990,
+    interval: 'monthly',
+    descriptionBn: 'সম্পূর্ণ N5 সিলেবাস ও ১,৫০০ কয়েন',
+    featuresBn: [
+      'প্রতি মাসে ১,৫০০ নিহোমি কয়েন',
+      'সম্পূর্ণ N5 ভোকাবুলারি ব্যাংক',
+      'JLPT N5 অফিসিয়াল ফুল মক এক্সাম ইঞ্জিন'
+    ],
+    limits: {
+      vocabPerDay: Infinity,
+      aiChatTurns: 1500,
       mockExamsAllowed: true,
       fullGrammarBankAllowed: true,
       srsFlashcardsAllowed: true,
@@ -69,23 +133,19 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, TierConfig> = {
   },
   n5_lifetime: {
     id: 'n5_lifetime',
-    name: 'N5 Lifetime / All-Access Pass',
-    nameBn: 'N5 লাইফটাইম / বার্ষিক অল-অ্যাক্সেস',
+    name: 'Japan Ready All-Access',
+    nameBn: 'জাপান রেডি অল-অ্যাক্সেস',
     priceBdt: 4990,
     interval: 'lifetime',
-    descriptionBn: 'আজীবন অ্যাক্সেস, সার্টিফিকেট ও সম্পূর্ণ প্রস্তুতি',
+    descriptionBn: 'আজীবন অ্যাক্সেস, সার্টিফিকেট ও ৪,০০০ কয়েন',
     featuresBn: [
-      'আজীবন সম্পূর্ণ N5 অ্যাক্সেস (কোনো মাসিক নবায়ন ফি নেই)',
-      'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও অডিও ল্যাব',
-      'JIS規格 履歴書 ও 職務経歴書 Pro PDF এক্সপোর্ট',
-      'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
-      'স্মার্ট SRS স্পেসড রিপিটিশন ফ্ল্যাশ কার্ড ইঞ্জিন',
-      'আনলিমিটেড ফুল JLPT N5 মক টেস্ট ও ভেরিফায়েড সার্টিফিকেট',
-      'ভবিষ্যতের সকল N5 আপডেট ও এক্সক্লুসিভ স্টাডি ম্যাটেরিয়াল'
+      'আজীবন সম্পূর্ণ অ্যাক্সেস',
+      '৪,০০০ নিহোমি কয়েন অন্তর্ভুক্ত',
+      'ফুল JLPT N5 মক টেস্ট ও ভেরিফায়েড সার্টিফিকেট'
     ],
     limits: {
       vocabPerDay: Infinity,
-      aiChatTurns: Infinity,
+      aiChatTurns: 4000,
       mockExamsAllowed: true,
       fullGrammarBankAllowed: true,
       srsFlashcardsAllowed: true,
@@ -97,7 +157,7 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, TierConfig> = {
 export interface ActivateSubscriptionParams {
   userId: string;
   userEmail?: string;
-  tier: 'n5_pro' | 'n5_lifetime';
+  tier: SubscriptionTier;
   trxID: string;
   amount: number;
   paymentID?: string;
@@ -393,10 +453,19 @@ export class SubscriptionService {
         },
       });
 
-      // Credit bonus coins & AI credits
-      const bonusCoins = tier === 'n5_lifetime' ? 3000 : 1000;
-      const bonusAi = tier === 'n5_lifetime' ? 5000 : 1500;
-      db.creditUserCoinsAndAI(targetUserId, bonusCoins, bonusAi, `bKash Unlock: ${SUBSCRIPTION_TIERS[tier].name}`);
+      // Credit monthly included coins & AI credits
+      const bonusCoins = SUBSCRIPTION_COIN_ALLOWANCES[tier] || (tier === 'n5_lifetime' ? 4000 : 1500);
+      const bonusAi = bonusCoins * 2;
+      db.creditUserCoinsAndAI(targetUserId, bonusCoins, bonusAi, `Subscription Unlock: ${SUBSCRIPTION_TIERS[tier]?.name || tier}`);
+
+      // Authoritative PostgreSQL grant & ledger entry
+      await coinWalletService.grantCoins({
+        userId: targetUserId,
+        amount: bonusCoins,
+        source: 'SUBSCRIPTION',
+        referenceId: trxID,
+        description: `Monthly subscription allowance: ${SUBSCRIPTION_TIERS[tier]?.name || tier}`
+      }).catch(err => console.warn('[SubscriptionService] grantCoins error:', err?.message));
 
       db.save();
       console.log(`[SubscriptionService] In-memory DB synced successfully for user ${targetUserId}`);
@@ -439,54 +508,118 @@ export class SubscriptionService {
   }
 
   /**
-   * Evaluates AI Sensei daily conversation quota:
-   * - Free Users: strictly capped at 3 conversational turns per calendar day
-   * - N5 Pro / Lifetime Users: unlimited 24/7 turns
+   * Evaluates AI Sensei daily conversation quota and coin availability:
+   * - Free Users: 10 daily free turns / day after Google Login.
+   * - If daily free turns exhausted: checks persistent Nihomi Coin wallet (1 Coin = 1 Turn).
+   * - Paid Users: uses included monthly coins + purchased/reward coins.
    */
   public async checkDailyAiChatQuota(userIdOrEmail: string): Promise<{
     allowed: boolean;
+    useCoin: boolean;
     remainingTurns: number;
     currentTurnsToday: number;
     maxDailyTurns: number;
     tier: SubscriptionTier;
+    remainingCoins?: number;
+    autoTopupTriggered?: boolean;
   }> {
     const sub = await this.getUserSubscription(userIdOrEmail);
+    const wallet = await coinWalletService.getWallet(userIdOrEmail);
 
-    if (sub.tier === 'n5_pro' || sub.tier === 'n5_lifetime') {
+    const isPaid = sub.tier !== 'free';
+
+    if (isPaid) {
+      if (wallet.coinBalance >= 1) {
+        return {
+          allowed: true,
+          useCoin: true,
+          remainingTurns: wallet.coinBalance,
+          currentTurnsToday: 0,
+          maxDailyTurns: Infinity,
+          tier: sub.tier,
+          remainingCoins: wallet.coinBalance,
+        };
+      }
+
+      if (wallet.autoTopupEnabled) {
+        return {
+          allowed: true,
+          useCoin: true,
+          autoTopupTriggered: true,
+          remainingTurns: 500,
+          currentTurnsToday: 0,
+          maxDailyTurns: Infinity,
+          tier: sub.tier,
+          remainingCoins: wallet.coinBalance,
+        };
+      }
+
       return {
-        allowed: true,
-        remainingTurns: 999999,
+        allowed: false,
+        useCoin: true,
+        remainingTurns: 0,
         currentTurnsToday: 0,
         maxDailyTurns: Infinity,
         tier: sub.tier,
+        remainingCoins: 0,
       };
     }
 
-    // Free tier - check daily turns
+    // Free tier - check 10 daily free turns
     const todayKey = new Date().toISOString().split('T')[0];
     if (!(db.data as any).dailyAiChatUsage) {
       (db.data as any).dailyAiChatUsage = {};
     }
     const userDailyKey = `${userIdOrEmail}_${todayKey}`;
     const currentTurns = (db.data as any).dailyAiChatUsage[userDailyKey] || 0;
-    const maxDailyTurns = 3;
+    const maxDailyTurns = 10;
 
-    if (currentTurns >= maxDailyTurns) {
+    if (currentTurns < maxDailyTurns) {
       return {
-        allowed: false,
-        remainingTurns: 0,
+        allowed: true,
+        useCoin: false,
+        remainingTurns: maxDailyTurns - currentTurns,
         currentTurnsToday: currentTurns,
         maxDailyTurns,
         tier: 'free',
+        remainingCoins: wallet.coinBalance,
+      };
+    }
+
+    // Free turns exhausted: fallback to Nihomi Coins (1 Coin = 1 Sensei Turn)!
+    if (wallet.coinBalance >= 1) {
+      return {
+        allowed: true,
+        useCoin: true,
+        remainingTurns: wallet.coinBalance,
+        currentTurnsToday: currentTurns,
+        maxDailyTurns,
+        tier: 'free',
+        remainingCoins: wallet.coinBalance,
+      };
+    }
+
+    if (wallet.autoTopupEnabled) {
+      return {
+        allowed: true,
+        useCoin: true,
+        autoTopupTriggered: true,
+        remainingTurns: 500,
+        currentTurnsToday: currentTurns,
+        maxDailyTurns,
+        tier: 'free',
+        remainingCoins: wallet.coinBalance,
       };
     }
 
     return {
-      allowed: true,
-      remainingTurns: maxDailyTurns - currentTurns,
+      allowed: false,
+      useCoin: false,
+      remainingTurns: 0,
       currentTurnsToday: currentTurns,
       maxDailyTurns,
       tier: 'free',
+      remainingCoins: 0,
     };
   }
 

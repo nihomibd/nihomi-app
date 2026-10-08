@@ -51660,17 +51660,17 @@ var init_db = __esm({
         name: "Starter",
         displayNameJa: "\u30B9\u30BF\u30FC\u30BF\u30FC\u30D7\u30E9\u30F3",
         tagline: "Master JLPT N5 & N4 foundations with structured drills",
-        description: "Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and essential AI assistance.",
+        description: "Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.",
         order: 2,
-        monthlyPrice: 299,
-        yearlyPrice: 2490,
+        monthlyPrice: 990,
+        yearlyPrice: 9900,
         currency: "BDT",
-        aiMonthlyLimit: 100,
+        aiMonthlyLimit: 500,
         features: [
+          "500 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)",
           "Full JLPT N5 & N4 curriculum unlocked",
           "Complete Vocabulary, Grammar & Kanji decks",
           "Full mastery quizzes with detailed breakdowns",
-          "100 AI Sensei interactions / month",
           "Basic Keigo & polite expressions overview",
           "Offline learning notes export"
         ],
@@ -51684,18 +51684,18 @@ var init_db = __esm({
         name: "Pro",
         displayNameJa: "\u30D7\u30ED\u30D7\u30E9\u30F3",
         tagline: "The complete JLPT N5-N3 mastery & conversation system",
-        description: "Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and high-frequency AI coaching.",
+        description: "Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and 1,500 Nihomi Coins/month.",
         badge: "Recommended",
         isRecommended: true,
         order: 3,
-        monthlyPrice: 599,
-        yearlyPrice: 4990,
+        monthlyPrice: 1990,
+        yearlyPrice: 19900,
         currency: "BDT",
-        aiMonthlyLimit: 1e3,
+        aiMonthlyLimit: 1500,
         features: [
+          "1,500 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)",
           "All N5, N4, and intermediate N3 courses",
           "Unlimited interactive practice exercises",
-          "Fair-Use AI Coach (1,000 interactions / month)",
           "Japanese for Work & Business Keigo masterclasses",
           "JLPT simulated mock exams & timer drills",
           "Detailed grammar breakdown & instant sentence correction",
@@ -51711,19 +51711,19 @@ var init_db = __esm({
         name: "Japan Ready",
         displayNameJa: "\u65E5\u672C\u5C31\u52B4\u30FB\u79FB\u4F4F\u7279\u5316\u30D7\u30E9\u30F3",
         tagline: "Everything you need for job interviews, visa, and life in Japan",
-        description: "Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and accredited certificates.",
+        description: "Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and 4,000 Nihomi Coins/month.",
         badge: "Best Value",
         order: 4,
-        monthlyPrice: 999,
-        yearlyPrice: 7990,
+        monthlyPrice: 3990,
+        yearlyPrice: 39900,
         currency: "BDT",
-        aiMonthlyLimit: 3e3,
+        aiMonthlyLimit: 4e3,
         features: [
+          "4,000 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)",
           "Everything included in Pro",
           "Workplace Japanese, Email & Phone Japanese",
           "Japanese Job Interview Simulation & Cultural Etiquette",
           "Japan Living & Relocation practical Japanese guide",
-          "Priority AI Coach (3,000 interactions / month)",
           "Official Nihomi Course Completion Certificates",
           "1-on-1 curriculum consultation & priority support"
         ],
@@ -51842,7 +51842,7 @@ var init_db = __esm({
         id: "price-starter-m",
         planId: "starter",
         billingInterval: "monthly",
-        amount: 299,
+        amount: 990,
         currency: "BDT",
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -51852,10 +51852,10 @@ var init_db = __esm({
         id: "price-starter-y",
         planId: "starter",
         billingInterval: "yearly",
-        amount: 2490,
+        amount: 9900,
         currency: "BDT",
-        savingsPercent: 30,
-        savingsAmount: 1098,
+        savingsPercent: 17,
+        savingsAmount: 1980,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51864,7 +51864,7 @@ var init_db = __esm({
         id: "price-pro-m",
         planId: "pro",
         billingInterval: "monthly",
-        amount: 599,
+        amount: 1990,
         currency: "BDT",
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -51874,10 +51874,10 @@ var init_db = __esm({
         id: "price-pro-y",
         planId: "pro",
         billingInterval: "yearly",
-        amount: 4990,
+        amount: 19900,
         currency: "BDT",
-        savingsPercent: 30,
-        savingsAmount: 2198,
+        savingsPercent: 17,
+        savingsAmount: 3980,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51886,7 +51886,7 @@ var init_db = __esm({
         id: "price-jr-m",
         planId: "japan_ready",
         billingInterval: "monthly",
-        amount: 999,
+        amount: 3990,
         currency: "BDT",
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -51896,10 +51896,10 @@ var init_db = __esm({
         id: "price-jr-y",
         planId: "japan_ready",
         billingInterval: "yearly",
-        amount: 8490,
+        amount: 39900,
         currency: "BDT",
-        savingsPercent: 29,
-        savingsAmount: 3498,
+        savingsPercent: 17,
+        savingsAmount: 7980,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -58640,6 +58640,450 @@ var init_supabaseAuth = __esm({
   }
 });
 
+// server/services/coinWalletService.ts
+import crypto5 from "crypto";
+import pg from "pg";
+function getPool() {
+  if (poolInstance) return poolInstance;
+  const dbUrl = process.env.DATABASE_URL?.trim();
+  if (!dbUrl) return null;
+  try {
+    poolInstance = new Pool2({
+      connectionString: dbUrl,
+      ssl: { rejectUnauthorized: false },
+      max: 5,
+      idleTimeoutMillis: 3e4,
+      connectionTimeoutMillis: 5e3
+    });
+    return poolInstance;
+  } catch (err) {
+    console.warn("[CoinWalletService] PostgreSQL pool creation warning:", err);
+    return null;
+  }
+}
+var Pool2, REWARD_CONFIG, COIN_TOPUP_PACKS, SUBSCRIPTION_COIN_ALLOWANCES, poolInstance, CoinWalletService, coinWalletService;
+var init_coinWalletService = __esm({
+  "server/services/coinWalletService.ts"() {
+    init_db();
+    ({ Pool: Pool2 } = pg);
+    REWARD_CONFIG = {
+      values: {
+        daily_goal: 1,
+        lesson_complete: 2,
+        mission_complete: 3,
+        mastery_check: 5,
+        streak_7d: 5,
+        speaking_practice: 2,
+        weekly_goal: 5
+      },
+      monthlyCaps: {
+        free: 100,
+        starter: 150,
+        pro: 300,
+        japan_ready: 600
+      }
+    };
+    COIN_TOPUP_PACKS = [
+      { id: "coins_100", coins: 100, priceBdt: 199, name: "100 Nihomi Coins" },
+      { id: "coins_500", coins: 500, priceBdt: 899, name: "500 Nihomi Coins", popular: true },
+      { id: "coins_1000", coins: 1e3, priceBdt: 1599, name: "1,000 Nihomi Coins" },
+      { id: "coins_2000", coins: 2e3, priceBdt: 2999, name: "2,000 Nihomi Coins" }
+    ];
+    SUBSCRIPTION_COIN_ALLOWANCES = {
+      free: 0,
+      starter: 500,
+      pro: 1500,
+      japan_ready: 4e3
+    };
+    poolInstance = null;
+    CoinWalletService = class _CoinWalletService {
+      static getInstance() {
+        if (!_CoinWalletService.instance) {
+          _CoinWalletService.instance = new _CoinWalletService();
+        }
+        return _CoinWalletService.instance;
+      }
+      /**
+       * Retrieves user's wallet with PostgreSQL authoritative persistence
+       */
+      async getWallet(userId) {
+        const pool = getPool();
+        const currentMonth = (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+        if (pool) {
+          try {
+            const res = await pool.query(
+              `SELECT * FROM public.coin_wallets WHERE user_id = $1`,
+              [userId]
+            );
+            if (res.rows.length > 0) {
+              const row = res.rows[0];
+              let monthlyRewards = row.monthly_reward_coins || 0;
+              let rewardMonth = row.reward_period_month || currentMonth;
+              if (rewardMonth !== currentMonth) {
+                monthlyRewards = 0;
+                rewardMonth = currentMonth;
+                await pool.query(
+                  `UPDATE public.coin_wallets SET monthly_reward_coins = 0, reward_period_month = $1 WHERE user_id = $2`,
+                  [currentMonth, userId]
+                );
+              }
+              return {
+                userId: row.user_id,
+                coinBalance: Number(row.coin_balance || 0),
+                monthlyRewardCoins: Number(monthlyRewards),
+                rewardPeriodMonth: rewardMonth,
+                autoTopupEnabled: Boolean(row.auto_topup_enabled),
+                autoTopupThreshold: Number(row.auto_topup_threshold || 50),
+                autoTopupPack: row.auto_topup_pack || "coins_500",
+                monthlySpendingCap: Number(row.monthly_spending_cap || 5e3),
+                currentMonthSpent: Number(row.current_month_spent || 0),
+                lifetimeEarned: Number(row.lifetime_earned || 0),
+                lifetimeSpent: Number(row.lifetime_spent || 0),
+                createdAt: row.created_at ? new Date(row.created_at).toISOString() : (/* @__PURE__ */ new Date()).toISOString(),
+                updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : (/* @__PURE__ */ new Date()).toISOString()
+              };
+            }
+            const insertRes = await pool.query(
+              `INSERT INTO public.coin_wallets (
+            user_id, coin_balance, monthly_reward_coins, reward_period_month,
+            auto_topup_enabled, auto_topup_threshold, auto_topup_pack,
+            monthly_spending_cap, current_month_spent, lifetime_earned, lifetime_spent
+          ) VALUES ($1, 0, 0, $2, false, 50, 'coins_500', 5000, 0, 0, 0)
+          RETURNING *`,
+              [userId, currentMonth]
+            );
+            const r = insertRes.rows[0];
+            return {
+              userId: r.user_id,
+              coinBalance: Number(r.coin_balance || 0),
+              monthlyRewardCoins: Number(r.monthly_reward_coins || 0),
+              rewardPeriodMonth: r.reward_period_month,
+              autoTopupEnabled: Boolean(r.auto_topup_enabled),
+              autoTopupThreshold: Number(r.auto_topup_threshold || 50),
+              autoTopupPack: r.auto_topup_pack || "coins_500",
+              monthlySpendingCap: Number(r.monthly_spending_cap || 5e3),
+              currentMonthSpent: Number(r.current_month_spent || 0),
+              lifetimeEarned: Number(r.lifetime_earned || 0),
+              lifetimeSpent: Number(r.lifetime_spent || 0),
+              createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+              updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+            };
+          } catch (err) {
+            console.warn("[CoinWalletService] PostgreSQL getWallet fallback:", err);
+          }
+        }
+        const mem = db.getUserWallet(userId);
+        return {
+          userId,
+          coinBalance: mem.coinBalance || 0,
+          monthlyRewardCoins: 0,
+          rewardPeriodMonth: currentMonth,
+          autoTopupEnabled: false,
+          autoTopupThreshold: 50,
+          autoTopupPack: "coins_500",
+          monthlySpendingCap: 5e3,
+          currentMonthSpent: 0,
+          lifetimeEarned: mem.lifetimeEarned || 0,
+          lifetimeSpent: mem.lifetimeSpent || 0,
+          createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      /**
+       * Authoritatively grants coins with immutable ledger entry
+       */
+      async grantCoins(params) {
+        const { userId, amount, source, referenceId, description } = params;
+        if (amount <= 0) {
+          throw new Error("Grant amount must be positive.");
+        }
+        const pool = getPool();
+        const transactionId = `tx_${crypto5.randomUUID()}`;
+        const txType = source === "REWARD" ? "REWARD" : source === "PURCHASE" ? "PURCHASE" : "GRANT";
+        if (pool) {
+          try {
+            const client = await pool.connect();
+            try {
+              await client.query("BEGIN");
+              const currentMonth = (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+              const walletRes = await client.query(
+                `INSERT INTO public.coin_wallets (
+              user_id, coin_balance, monthly_reward_coins, reward_period_month,
+              auto_topup_enabled, auto_topup_threshold, auto_topup_pack,
+              monthly_spending_cap, current_month_spent, lifetime_earned, lifetime_spent
+            ) VALUES ($1, $2, 0, $3, false, 50, 'coins_500', 5000, 0, $2, 0)
+            ON CONFLICT (user_id) DO UPDATE SET
+              coin_balance = public.coin_wallets.coin_balance + $2,
+              lifetime_earned = public.coin_wallets.lifetime_earned + $2,
+              updated_at = NOW()
+            RETURNING coin_balance`,
+                [userId, amount, currentMonth]
+              );
+              const newBalance = Number(walletRes.rows[0].coin_balance);
+              await client.query(
+                `INSERT INTO public.coin_transactions (
+              transaction_id, user_id, type, amount, source, reference_id, description, balance_after, created_at
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+                [transactionId, userId, txType, amount, source, referenceId || null, description, newBalance]
+              );
+              await client.query("COMMIT");
+              db.creditUserCoinsAndAI(userId, amount, 0, description);
+              return { success: true, newBalance, transactionId };
+            } catch (txErr) {
+              await client.query("ROLLBACK");
+              throw txErr;
+            } finally {
+              client.release();
+            }
+          } catch (err) {
+            console.warn("[CoinWalletService] PostgreSQL grantCoins fallback:", err);
+          }
+        }
+        const memRes = db.creditUserCoinsAndAI(userId, amount, 0, description);
+        return { success: true, newBalance: memRes.coinBalance, transactionId };
+      }
+      /**
+       * Authoritatively deducts exactly 1 Coin for 1 AI Sensei Turn.
+       * Atomic check: Fails if coinBalance < 1.
+       */
+      async deductCoinForTurn(params) {
+        const { userId, referenceId, description = "1 AI Sensei Turn consumed" } = params;
+        const pool = getPool();
+        const transactionId = `tx_${crypto5.randomUUID()}`;
+        if (pool) {
+          try {
+            const client = await pool.connect();
+            try {
+              await client.query("BEGIN");
+              const selectRes = await client.query(
+                `SELECT coin_balance FROM public.coin_wallets WHERE user_id = $1 FOR UPDATE`,
+                [userId]
+              );
+              if (selectRes.rows.length === 0 || Number(selectRes.rows[0].coin_balance) < 1) {
+                await client.query("ROLLBACK");
+                return {
+                  success: false,
+                  newBalance: selectRes.rows.length > 0 ? Number(selectRes.rows[0].coin_balance) : 0,
+                  error: "Insufficient Nihomi Coins (balance < 1)."
+                };
+              }
+              const updateRes = await client.query(
+                `UPDATE public.coin_wallets SET
+              coin_balance = coin_balance - 1,
+              lifetime_spent = lifetime_spent + 1,
+              updated_at = NOW()
+            WHERE user_id = $1
+            RETURNING coin_balance`,
+                [userId]
+              );
+              const newBalance = Number(updateRes.rows[0].coin_balance);
+              await client.query(
+                `INSERT INTO public.coin_transactions (
+              transaction_id, user_id, type, amount, source, reference_id, description, balance_after, created_at
+            ) VALUES ($1, $2, 'USAGE', -1, 'PURCHASE', $3, $4, $5, NOW())`,
+                [transactionId, userId, referenceId || null, description, newBalance]
+              );
+              await client.query("COMMIT");
+              const mem2 = db.getUserWallet(userId);
+              if (mem2) {
+                mem2.coinBalance = newBalance;
+              }
+              return { success: true, newBalance, transactionId };
+            } catch (txErr) {
+              await client.query("ROLLBACK");
+              throw txErr;
+            } finally {
+              client.release();
+            }
+          } catch (err) {
+            console.warn("[CoinWalletService] PostgreSQL deductCoinForTurn fallback:", err);
+          }
+        }
+        const mem = db.getUserWallet(userId);
+        if ((mem.coinBalance || 0) < 1) {
+          return { success: false, newBalance: mem.coinBalance || 0, error: "Insufficient Nihomi Coins." };
+        }
+        mem.coinBalance = Math.max(0, (mem.coinBalance || 0) - 1);
+        mem.lifetimeSpent = (mem.lifetimeSpent || 0) + 1;
+        db.save();
+        return { success: true, newBalance: mem.coinBalance, transactionId };
+      }
+      /**
+       * Claims genuine learning reward with idempotency and monthly cap enforcement.
+       */
+      async claimReward(params) {
+        const { userId, eventType, idempotencyKey, tier = "free" } = params;
+        const baseReward = REWARD_CONFIG.values[eventType];
+        if (!baseReward) {
+          return { success: false, coinsAwarded: 0, newBalance: 0, error: `Invalid reward event type: ${eventType}` };
+        }
+        const pool = getPool();
+        const currentMonth = (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+        const tierKey = tier.toLowerCase();
+        const monthlyCap = REWARD_CONFIG.monthlyCaps[tierKey] || REWARD_CONFIG.monthlyCaps.free;
+        if (pool) {
+          try {
+            const client = await pool.connect();
+            try {
+              await client.query("BEGIN");
+              const existingEvent = await client.query(
+                `SELECT * FROM public.nihomi_reward_events WHERE idempotency_key = $1`,
+                [idempotencyKey]
+              );
+              if (existingEvent.rows.length > 0) {
+                await client.query("ROLLBACK");
+                const wallet = await this.getWallet(userId);
+                return {
+                  success: false,
+                  alreadyClaimed: true,
+                  coinsAwarded: 0,
+                  newBalance: wallet.coinBalance
+                };
+              }
+              const walletRes = await client.query(
+                `SELECT * FROM public.coin_wallets WHERE user_id = $1 FOR UPDATE`,
+                [userId]
+              );
+              let currentRewards = 0;
+              let currentBalance = 0;
+              if (walletRes.rows.length > 0) {
+                const w = walletRes.rows[0];
+                if (w.reward_period_month === currentMonth) {
+                  currentRewards = Number(w.monthly_reward_coins || 0);
+                }
+                currentBalance = Number(w.coin_balance || 0);
+              }
+              const remainingCap = Math.max(0, monthlyCap - currentRewards);
+              if (remainingCap <= 0) {
+                await client.query("ROLLBACK");
+                return {
+                  success: false,
+                  capReached: true,
+                  coinsAwarded: 0,
+                  newBalance: currentBalance
+                };
+              }
+              const actualCoins = Math.min(baseReward, remainingCap);
+              await client.query(
+                `INSERT INTO public.nihomi_reward_events (idempotency_key, user_id, event_type, coins_awarded, created_at)
+             VALUES ($1, $2, $3, $4, NOW())`,
+                [idempotencyKey, userId, eventType, actualCoins]
+              );
+              const updateRes = await client.query(
+                `INSERT INTO public.coin_wallets (
+              user_id, coin_balance, monthly_reward_coins, reward_period_month,
+              auto_topup_enabled, auto_topup_threshold, auto_topup_pack,
+              monthly_spending_cap, current_month_spent, lifetime_earned, lifetime_spent
+            ) VALUES ($1, $2, $2, $3, false, 50, 'coins_500', 5000, 0, $2, 0)
+            ON CONFLICT (user_id) DO UPDATE SET
+              coin_balance = public.coin_wallets.coin_balance + $2,
+              monthly_reward_coins = CASE
+                WHEN public.coin_wallets.reward_period_month = $3 THEN public.coin_wallets.monthly_reward_coins + $2
+                ELSE $2
+              END,
+              reward_period_month = $3,
+              lifetime_earned = public.coin_wallets.lifetime_earned + $2,
+              updated_at = NOW()
+            RETURNING coin_balance`,
+                [userId, actualCoins, currentMonth]
+              );
+              const newBalance = Number(updateRes.rows[0].coin_balance);
+              const txId = `tx_${crypto5.randomUUID()}`;
+              await client.query(
+                `INSERT INTO public.coin_transactions (
+              transaction_id, user_id, type, amount, source, reference_id, description, balance_after, created_at
+            ) VALUES ($1, $2, 'REWARD', $3, 'REWARD', $4, $5, $6, NOW())`,
+                [txId, userId, actualCoins, idempotencyKey, `Nihomi Reward: ${eventType}`, newBalance]
+              );
+              await client.query("COMMIT");
+              db.creditUserCoinsAndAI(userId, actualCoins, 0, `Nihomi Reward: ${eventType}`);
+              return {
+                success: true,
+                coinsAwarded: actualCoins,
+                newBalance
+              };
+            } catch (txErr) {
+              await client.query("ROLLBACK");
+              throw txErr;
+            } finally {
+              client.release();
+            }
+          } catch (err) {
+            console.warn("[CoinWalletService] PostgreSQL claimReward fallback:", err);
+          }
+        }
+        const memWallet = db.getUserWallet(userId);
+        const updated = db.creditUserCoinsAndAI(userId, baseReward, 0, `Nihomi Reward: ${eventType}`);
+        return {
+          success: true,
+          coinsAwarded: baseReward,
+          newBalance: updated.coinBalance
+        };
+      }
+      /**
+       * Retrieves transaction ledger for user
+       */
+      async getLedger(userId, limit = 50) {
+        const pool = getPool();
+        if (pool) {
+          try {
+            const res = await pool.query(
+              `SELECT * FROM public.coin_transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2`,
+              [userId, limit]
+            );
+            return res.rows.map((r) => ({
+              transactionId: r.transaction_id,
+              userId: r.user_id,
+              type: r.type,
+              amount: Number(r.amount),
+              source: r.source,
+              referenceId: r.reference_id,
+              description: r.description,
+              balanceAfter: Number(r.balance_after),
+              createdAt: new Date(r.created_at).toISOString()
+            }));
+          } catch (err) {
+            console.warn("[CoinWalletService] PostgreSQL getLedger fallback:", err);
+          }
+        }
+        return [];
+      }
+      /**
+       * Updates Auto Top-up configuration
+       */
+      async setAutoTopup(userId, config) {
+        const pool = getPool();
+        const threshold = config.threshold ?? 50;
+        const pack = config.pack ?? "coins_500";
+        const cap = config.spendingCap ?? 5e3;
+        if (pool) {
+          try {
+            const currentMonth = (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+            await pool.query(
+              `INSERT INTO public.coin_wallets (
+            user_id, coin_balance, monthly_reward_coins, reward_period_month,
+            auto_topup_enabled, auto_topup_threshold, auto_topup_pack,
+            monthly_spending_cap, current_month_spent, lifetime_earned, lifetime_spent
+          ) VALUES ($1, 0, 0, $2, $3, $4, $5, $6, 0, 0, 0)
+          ON CONFLICT (user_id) DO UPDATE SET
+            auto_topup_enabled = $3,
+            auto_topup_threshold = $4,
+            auto_topup_pack = $5,
+            monthly_spending_cap = $6,
+            updated_at = NOW()`,
+              [userId, currentMonth, config.enabled, threshold, pack, cap]
+            );
+          } catch (err) {
+            console.warn("[CoinWalletService] setAutoTopup postgres fallback:", err);
+          }
+        }
+        return this.getWallet(userId);
+      }
+    };
+    coinWalletService = CoinWalletService.getInstance();
+  }
+});
+
 // server/supabase.ts
 var supabase_exports = {};
 __export(supabase_exports, {
@@ -58687,46 +59131,110 @@ var init_subscriptionService = __esm({
   "server/services/subscriptionService.ts"() {
     init_prisma();
     init_db();
+    init_coinWalletService();
     SUBSCRIPTION_TIERS = {
       free: {
         id: "free",
-        name: "Free Trial",
-        nameBn: "\u09AB\u09CD\u09B0\u09BF \u099F\u09CD\u09B0\u09BE\u09AF\u09BC\u09BE\u09B2",
+        name: "Free",
+        nameBn: "\u09AB\u09CD\u09B0\u09BF (\u09E7\u09E6 \u099F\u09BE\u09B0\u09CD\u09A8/\u09A6\u09BF\u09A8)",
         priceBdt: 0,
         interval: "free",
-        descriptionBn: "\u09B6\u09C1\u09B0\u09C1\u09B0 \u099C\u09A8\u09CD\u09AF \u09AC\u09C7\u09B8\u09BF\u0995 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u09AA\u09B0\u09BF\u099A\u09BF\u09A4\u09BF",
+        descriptionBn: "\u09B6\u09C1\u09B0\u09C1\u09B0 \u099C\u09A8\u09CD\u09AF \u09AC\u09C7\u09B8\u09BF\u0995 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u09AA\u09B0\u09BF\u099A\u09BF\u09A4\u09BF \u0993 \u09A6\u09C8\u09A8\u09BF\u0995 \u09E7\u09E6\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u099F\u09BE\u09B0\u09CD\u09A8",
         featuresBn: [
-          "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09EB\u099F\u09BF N5 \u09B6\u09AC\u09CD\u09A6 (Vocabulary)",
-          "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u099F\u09BE\u09B0\u09CD\u09A8",
-          "\u09E7\u099F\u09BF \u09AC\u09C7\u09B8\u09BF\u0995 \u09AA\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u099F\u09BF\u09B8 \u0995\u09C1\u0987\u099C",
-          "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u0993 \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE \u099A\u09BE\u09B0\u09CD\u099F"
+          "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u09E7\u09E6\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u099F\u09BE\u09B0\u09CD\u09A8 (Google Login \u098F\u09B0 \u09AA\u09B0)",
+          "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u0993 \u0995\u09BE\u09A4\u09BE\u0995\u09BE\u09A8\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u099A\u09BE\u09B0\u09CD\u099F",
+          "\u09AC\u09C7\u09B8\u09BF\u0995 N5 \u09AA\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u099F\u09BF\u09B8 \u0995\u09C1\u0987\u099C"
         ],
         limits: {
           vocabPerDay: 5,
-          aiChatTurns: 3,
+          aiChatTurns: 10,
           mockExamsAllowed: false,
           fullGrammarBankAllowed: false,
           srsFlashcardsAllowed: false,
           certificateAllowed: false
         }
       },
-      n5_pro: {
-        id: "n5_pro",
-        name: "N5 Pro Monthly",
-        nameBn: "N5 \u09AA\u09CD\u09B0\u09CB (\u09AE\u09BE\u09B8\u09BF\u0995)",
-        priceBdt: 599,
+      starter: {
+        id: "starter",
+        name: "Starter",
+        nameBn: "\u09B8\u09CD\u099F\u09BE\u09B0\u099F\u09BE\u09B0 (\u09F3\u09EF\u09EF\u09E6/\u09AE\u09BE\u09B8 - \u09EB\u09E6\u09E6 \u0995\u09DF\u09C7\u09A8)",
+        priceBdt: 990,
         interval: "monthly",
-        descriptionBn: "\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8 \u0993 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 AI \u0997\u09BE\u0987\u09A1\u09C7\u09A8\u09CD\u09B8",
+        descriptionBn: "\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8",
         featuresBn: [
-          "\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09AD\u09CB\u0995\u09BE\u09AC\u09C1\u09B2\u09BE\u09B0\u09BF \u09AC\u09CD\u09AF\u09BE\u0982\u0995 (\u09EE\u09E6\u09E6+ \u09B6\u09AC\u09CD\u09A6)",
-          "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09AA\u09C2\u09B0\u09CD\u09A3\u09BE\u0999\u09CD\u0997 \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 (\u09E8\u09EB\u099F\u09BF \u09B2\u09C7\u09B8\u09A8)",
-          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u09AC\u09CD\u09AF\u0995\u09CD\u09A4\u09BF\u0997\u09A4 \u099F\u09BF\u0989\u099F\u09B0",
-          "JLPT N5 \u0985\u09AB\u09BF\u09B8\u09BF\u09DF\u09BE\u09B2 \u09AB\u09C1\u09B2 \u09AE\u0995 \u098F\u0995\u09CD\u09B8\u09BE\u09AE \u0987\u099E\u09CD\u099C\u09BF\u09A8",
-          "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AA\u09CD\u09B0\u0997\u09CD\u09B0\u09C7\u09B8 \u0985\u09CD\u09AF\u09BE\u09A8\u09BE\u09B2\u09BF\u099F\u09BF\u0995\u09CD\u09B8 \u0993 \u09AE\u09BF\u09B8\u09CD\u099F\u09C7\u0995 \u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u09BE\u09B0"
+          "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8\u09C7 \u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 (\u09E7 \u0995\u09DF\u09C7\u09A8 = \u09E7 \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099F\u09BE\u09B0\u09CD\u09A8)",
+          "JLPT N5 \u0993 N4 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0995\u09BE\u09B0\u09BF\u0995\u09C1\u09B2\u09BE\u09AE \u0986\u09A8\u09B2\u0995",
+          "\u09AD\u09CB\u0995\u09BE\u09AC\u09C1\u09B2\u09BE\u09B0\u09BF, \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3 \u0993 \u0995\u09BE\u099E\u09CD\u099C\u09BF \u09A1\u09C7\u0995",
+          "\u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0\u09BF \u0995\u09C1\u0987\u099C \u0993 \u09AA\u09CD\u09B0\u0997\u09CD\u09B0\u09C7\u09B8 \u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u09BF\u0982"
         ],
         limits: {
           vocabPerDay: Infinity,
-          aiChatTurns: Infinity,
+          aiChatTurns: 500,
+          mockExamsAllowed: true,
+          fullGrammarBankAllowed: true,
+          srsFlashcardsAllowed: true,
+          certificateAllowed: false
+        }
+      },
+      pro: {
+        id: "pro",
+        name: "Pro",
+        nameBn: "\u09AA\u09CD\u09B0\u09CB (\u09F3\u09E7,\u09EF\u09EF\u09E6/\u09AE\u09BE\u09B8 - \u09E7,\u09EB\u09E6\u09E6 \u0995\u09DF\u09C7\u09A8)",
+        priceBdt: 1990,
+        interval: "monthly",
+        descriptionBn: "\u09B8\u09BF\u09B0\u09BF\u09AF\u09BC\u09BE\u09B8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09E7,\u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AB\u09C1\u09B2 JLPT \u09AA\u09CD\u09B0\u09BF\u09AA\u09BE\u09B0\u09C7\u09B6\u09A8",
+        featuresBn: [
+          "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8\u09C7 \u09E7,\u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 (\u09E7 \u0995\u09DF\u09C7\u09A8 = \u09E7 \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099F\u09BE\u09B0\u09CD\u09A8)",
+          "N5, N4 \u098F\u09AC\u0982 \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AE\u09BF\u09A1\u09BF\u09AF\u09BC\u09C7\u099F N3 \u0995\u09CB\u09B0\u09CD\u09B8\u09B8\u09AE\u09C2\u09B9",
+          "\u09AC\u09BF\u099C\u09A8\u09C7\u09B8 \u0995\u09C7\u0987\u0997\u09CB \u0993 \u0995\u09BE\u099C\u09C7\u09B0 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF\u099C \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0\u0995\u09CD\u09B2\u09BE\u09B8",
+          "\u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u099F\u09C7\u09A1 \u09AE\u0995 \u098F\u0995\u09CD\u09B8\u09BE\u09AE \u0993 \u0985\u09CD\u09AF\u09BE\u09A1\u09AD\u09BE\u09A8\u09CD\u09B8\u09A1 \u09B0\u09BF\u099F\u09C7\u09A8\u09B6\u09A8 \u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u09BE\u09B0"
+        ],
+        limits: {
+          vocabPerDay: Infinity,
+          aiChatTurns: 1500,
+          mockExamsAllowed: true,
+          fullGrammarBankAllowed: true,
+          srsFlashcardsAllowed: true,
+          certificateAllowed: false
+        }
+      },
+      japan_ready: {
+        id: "japan_ready",
+        name: "Japan Ready",
+        nameBn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09B0\u09C7\u09A1\u09BF (\u09F3\u09E9,\u09EF\u09EF\u09E6/\u09AE\u09BE\u09B8 - \u09EA,\u09E6\u09E6\u09E6 \u0995\u09DF\u09C7\u09A8)",
+        priceBdt: 3990,
+        interval: "monthly",
+        descriptionBn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099A\u09BE\u0995\u09B0\u09BF \u0993 \u0985\u09AD\u09BF\u09AC\u09BE\u09B8\u09A8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0987\u09A8\u099F\u09C7\u09A8\u09CD\u09B8\u09BF\u09AD \u09EA,\u09E6\u09E6\u09E6 \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0 \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u09B6\u09A8",
+        featuresBn: [
+          "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8\u09C7 \u09EA,\u09E6\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 (\u09E7 \u0995\u09DF\u09C7\u09A8 = \u09E7 \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099F\u09BE\u09B0\u09CD\u09A8)",
+          "\u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0 \u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u09B6\u09A8 Hub",
+          "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u099A\u09BE\u0995\u09B0\u09BF\u09B0 \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09AD\u09BF\u0989 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF \u0993 \u09B8\u0982\u09B8\u09CD\u0995\u09C3\u09A4\u09BF \u09B6\u09BF\u09B7\u09CD\u099F\u09BE\u099A\u09BE\u09B0",
+          "\u0985\u09AB\u09BF\u09B8\u09BF\u09DF\u09BE\u09B2 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F \u0993 \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC\u09CB\u09B0\u09BF\u099F\u09BF \u09B8\u09BE\u09AA\u09CB\u09B0\u09CD\u099F"
+        ],
+        limits: {
+          vocabPerDay: Infinity,
+          aiChatTurns: 4e3,
+          mockExamsAllowed: true,
+          fullGrammarBankAllowed: true,
+          srsFlashcardsAllowed: true,
+          certificateAllowed: true
+        }
+      },
+      n5_pro: {
+        id: "n5_pro",
+        name: "Pro (Legacy N5 Pro)",
+        nameBn: "N5 \u09AA\u09CD\u09B0\u09CB (\u09AE\u09BE\u09B8\u09BF\u0995)",
+        priceBdt: 1990,
+        interval: "monthly",
+        descriptionBn: "\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8 \u0993 \u09E7,\u09EB\u09E6\u09E6 \u0995\u09AF\u09BC\u09C7\u09A8",
+        featuresBn: [
+          "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8\u09C7 \u09E7,\u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8",
+          "\u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u09AD\u09CB\u0995\u09BE\u09AC\u09C1\u09B2\u09BE\u09B0\u09BF \u09AC\u09CD\u09AF\u09BE\u0982\u0995",
+          "JLPT N5 \u0985\u09AB\u09BF\u09B8\u09BF\u09DF\u09BE\u09B2 \u09AB\u09C1\u09B2 \u09AE\u0995 \u098F\u0995\u09CD\u09B8\u09BE\u09AE \u0987\u099E\u09CD\u099C\u09BF\u09A8"
+        ],
+        limits: {
+          vocabPerDay: Infinity,
+          aiChatTurns: 1500,
           mockExamsAllowed: true,
           fullGrammarBankAllowed: true,
           srsFlashcardsAllowed: true,
@@ -58735,23 +59243,19 @@ var init_subscriptionService = __esm({
       },
       n5_lifetime: {
         id: "n5_lifetime",
-        name: "N5 Lifetime / All-Access Pass",
-        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE / \u09AC\u09BE\u09B0\u09CD\u09B7\u09BF\u0995 \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+        name: "Japan Ready All-Access",
+        nameBn: "\u099C\u09BE\u09AA\u09BE\u09A8 \u09B0\u09C7\u09A1\u09BF \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
         priceBdt: 4990,
         interval: "lifetime",
-        descriptionBn: "\u0986\u099C\u09C0\u09AC\u09A8 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8, \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F \u0993 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF",
+        descriptionBn: "\u0986\u099C\u09C0\u09AC\u09A8 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8, \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F \u0993 \u09EA,\u09E6\u09E6\u09E6 \u0995\u09AF\u09BC\u09C7\u09A8",
         featuresBn: [
-          "\u0986\u099C\u09C0\u09AC\u09A8 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 N5 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8 (\u0995\u09CB\u09A8\u09CB \u09AE\u09BE\u09B8\u09BF\u0995 \u09A8\u09AC\u09BE\u09DF\u09A8 \u09AB\u09BF \u09A8\u09C7\u0987)",
-          "\u09AE\u09BF\u09A8\u09CD\u09A8\u09BE \u09A8\u09CB \u09A8\u09BF\u09B9\u09CB\u0999\u09CD\u0997\u09CB \u09E7\u2013\u09E8\u09EB \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0995\u09BE\u09B0\u09BF\u0995\u09C1\u09B2\u09BE\u09AE \u0993 \u0985\u09A1\u09BF\u0993 \u09B2\u09CD\u09AF\u09BE\u09AC",
-          "JIS\u898F\u683C \u5C65\u6B74\u66F8 \u0993 \u8077\u52D9\u7D4C\u6B74\u66F8 Pro PDF \u098F\u0995\u09CD\u09B8\u09AA\u09CB\u09B0\u09CD\u099F",
-          "Nihomi WorkOS\u2122 \u099F\u09CB\u0995\u09BF\u0993 \u0995\u09A8\u09AC\u09BF\u09A8\u09BF \u0995\u09CD\u09AF\u09BE\u09B6\u09BF\u09DF\u09BE\u09B0 \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u099F\u09B0",
-          "\u09B8\u09CD\u09AE\u09BE\u09B0\u09CD\u099F SRS \u09B8\u09CD\u09AA\u09C7\u09B8\u09A1 \u09B0\u09BF\u09AA\u09BF\u099F\u09BF\u09B6\u09A8 \u09AB\u09CD\u09B2\u09CD\u09AF\u09BE\u09B6 \u0995\u09BE\u09B0\u09CD\u09A1 \u0987\u099E\u09CD\u099C\u09BF\u09A8",
-          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09AB\u09C1\u09B2 JLPT N5 \u09AE\u0995 \u099F\u09C7\u09B8\u09CD\u099F \u0993 \u09AD\u09C7\u09B0\u09BF\u09AB\u09BE\u09DF\u09C7\u09A1 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F",
-          "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u09B8\u0995\u09B2 N5 \u0986\u09AA\u09A1\u09C7\u099F \u0993 \u098F\u0995\u09CD\u09B8\u0995\u09CD\u09B2\u09C1\u09B8\u09BF\u09AD \u09B8\u09CD\u099F\u09BE\u09A1\u09BF \u09AE\u09CD\u09AF\u09BE\u099F\u09C7\u09B0\u09BF\u09DF\u09BE\u09B2"
+          "\u0986\u099C\u09C0\u09AC\u09A8 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+          "\u09EA,\u09E6\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0985\u09A8\u09CD\u09A4\u09B0\u09CD\u09AD\u09C1\u0995\u09CD\u09A4",
+          "\u09AB\u09C1\u09B2 JLPT N5 \u09AE\u0995 \u099F\u09C7\u09B8\u09CD\u099F \u0993 \u09AD\u09C7\u09B0\u09BF\u09AB\u09BE\u09DF\u09C7\u09A1 \u09B8\u09BE\u09B0\u09CD\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u099F"
         ],
         limits: {
           vocabPerDay: Infinity,
-          aiChatTurns: Infinity,
+          aiChatTurns: 4e3,
           mockExamsAllowed: true,
           fullGrammarBankAllowed: true,
           srsFlashcardsAllowed: true,
@@ -58987,9 +59491,16 @@ var init_subscriptionService = __esm({
               gatewayName: "bKash PGW v1.2.0"
             }
           });
-          const bonusCoins = tier === "n5_lifetime" ? 3e3 : 1e3;
-          const bonusAi = tier === "n5_lifetime" ? 5e3 : 1500;
-          db.creditUserCoinsAndAI(targetUserId, bonusCoins, bonusAi, `bKash Unlock: ${SUBSCRIPTION_TIERS[tier].name}`);
+          const bonusCoins = SUBSCRIPTION_COIN_ALLOWANCES[tier] || (tier === "n5_lifetime" ? 4e3 : 1500);
+          const bonusAi = bonusCoins * 2;
+          db.creditUserCoinsAndAI(targetUserId, bonusCoins, bonusAi, `Subscription Unlock: ${SUBSCRIPTION_TIERS[tier]?.name || tier}`);
+          await coinWalletService.grantCoins({
+            userId: targetUserId,
+            amount: bonusCoins,
+            source: "SUBSCRIPTION",
+            referenceId: trxID,
+            description: `Monthly subscription allowance: ${SUBSCRIPTION_TIERS[tier]?.name || tier}`
+          }).catch((err) => console.warn("[SubscriptionService] grantCoins error:", err?.message));
           db.save();
           console.log(`[SubscriptionService] In-memory DB synced successfully for user ${targetUserId}`);
         } catch (err) {
@@ -59022,19 +59533,47 @@ var init_subscriptionService = __esm({
         };
       }
       /**
-       * Evaluates AI Sensei daily conversation quota:
-       * - Free Users: strictly capped at 3 conversational turns per calendar day
-       * - N5 Pro / Lifetime Users: unlimited 24/7 turns
+       * Evaluates AI Sensei daily conversation quota and coin availability:
+       * - Free Users: 10 daily free turns / day after Google Login.
+       * - If daily free turns exhausted: checks persistent Nihomi Coin wallet (1 Coin = 1 Turn).
+       * - Paid Users: uses included monthly coins + purchased/reward coins.
        */
       async checkDailyAiChatQuota(userIdOrEmail) {
         const sub = await this.getUserSubscription(userIdOrEmail);
-        if (sub.tier === "n5_pro" || sub.tier === "n5_lifetime") {
+        const wallet = await coinWalletService.getWallet(userIdOrEmail);
+        const isPaid = sub.tier !== "free";
+        if (isPaid) {
+          if (wallet.coinBalance >= 1) {
+            return {
+              allowed: true,
+              useCoin: true,
+              remainingTurns: wallet.coinBalance,
+              currentTurnsToday: 0,
+              maxDailyTurns: Infinity,
+              tier: sub.tier,
+              remainingCoins: wallet.coinBalance
+            };
+          }
+          if (wallet.autoTopupEnabled) {
+            return {
+              allowed: true,
+              useCoin: true,
+              autoTopupTriggered: true,
+              remainingTurns: 500,
+              currentTurnsToday: 0,
+              maxDailyTurns: Infinity,
+              tier: sub.tier,
+              remainingCoins: wallet.coinBalance
+            };
+          }
           return {
-            allowed: true,
-            remainingTurns: 999999,
+            allowed: false,
+            useCoin: true,
+            remainingTurns: 0,
             currentTurnsToday: 0,
             maxDailyTurns: Infinity,
-            tier: sub.tier
+            tier: sub.tier,
+            remainingCoins: 0
           };
         }
         const todayKey = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
@@ -59043,22 +59582,49 @@ var init_subscriptionService = __esm({
         }
         const userDailyKey = `${userIdOrEmail}_${todayKey}`;
         const currentTurns = db.data.dailyAiChatUsage[userDailyKey] || 0;
-        const maxDailyTurns = 3;
-        if (currentTurns >= maxDailyTurns) {
+        const maxDailyTurns = 10;
+        if (currentTurns < maxDailyTurns) {
           return {
-            allowed: false,
-            remainingTurns: 0,
+            allowed: true,
+            useCoin: false,
+            remainingTurns: maxDailyTurns - currentTurns,
             currentTurnsToday: currentTurns,
             maxDailyTurns,
-            tier: "free"
+            tier: "free",
+            remainingCoins: wallet.coinBalance
+          };
+        }
+        if (wallet.coinBalance >= 1) {
+          return {
+            allowed: true,
+            useCoin: true,
+            remainingTurns: wallet.coinBalance,
+            currentTurnsToday: currentTurns,
+            maxDailyTurns,
+            tier: "free",
+            remainingCoins: wallet.coinBalance
+          };
+        }
+        if (wallet.autoTopupEnabled) {
+          return {
+            allowed: true,
+            useCoin: true,
+            autoTopupTriggered: true,
+            remainingTurns: 500,
+            currentTurnsToday: currentTurns,
+            maxDailyTurns,
+            tier: "free",
+            remainingCoins: wallet.coinBalance
           };
         }
         return {
-          allowed: true,
-          remainingTurns: maxDailyTurns - currentTurns,
+          allowed: false,
+          useCoin: false,
+          remainingTurns: 0,
           currentTurnsToday: currentTurns,
           maxDailyTurns,
-          tier: "free"
+          tier: "free",
+          remainingCoins: 0
         };
       }
       /**
@@ -59432,7 +59998,7 @@ var senseiNextExperienceService_exports = {};
 __export(senseiNextExperienceService_exports, {
   SenseiNextExperienceService: () => SenseiNextExperienceService
 });
-import crypto5 from "crypto";
+import crypto6 from "crypto";
 var SenseiNextExperienceService;
 var init_senseiNextExperienceService = __esm({
   "server/services/senseiNextExperienceService.ts"() {
@@ -59451,7 +60017,7 @@ var init_senseiNextExperienceService = __esm({
           const topWeakness = weakAreas.weaknesses[0];
           if (topWeakness.topic.includes("\u306F vs \u304C") || topWeakness.conceptId.includes("wa-ga")) {
             return {
-              id: `exp-${crypto5.randomUUID().slice(0, 8)}`,
+              id: `exp-${crypto6.randomUUID().slice(0, 8)}`,
               situation: "7-Eleven Shibuya Dogenzaka (Counter Order)",
               situationJa: "\u30BB\u30D6\u30F3-\u30A4\u30EC\u30D6\u30F3 \u6E0B\u8C37\u9053\u7384\u5742\u5E97 \u30EC\u30B8",
               situationBn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u09A1\u09CB\u0997\u09C7\u09A8\u099C\u09BE\u0995\u09BE \u09B8\u09C7\u09AD\u09C7\u09A8-\u0987\u09B2\u09C7\u09AD\u09C7\u09A8 \u0995\u09BE\u0989\u09A8\u09CD\u099F\u09BE\u09B0",
@@ -59478,7 +60044,7 @@ var init_senseiNextExperienceService = __esm({
           }
           if (topWeakness.topic.includes("\u30B7 vs \u30C4") || topWeakness.conceptId.includes("shi-tsu")) {
             return {
-              id: `exp-${crypto5.randomUUID().slice(0, 8)}`,
+              id: `exp-${crypto6.randomUUID().slice(0, 8)}`,
               situation: "Shibuya City Hall Resident Registration Noticeboard",
               situationJa: "\u6E0B\u8C37\u533A\u5F79\u6240 \u4F4F\u6C11\u7968\u7533\u8ACB\u7A93\u53E3",
               situationBn: "\u09B6\u09BF\u09AC\u09C1\u09AF\u09BC\u09BE \u09B8\u09BF\u099F\u09BF \u09B9\u09B2 \u09B0\u09C7\u09B8\u09BF\u09A1\u09C7\u09A8\u09CD\u099F \u09A8\u09CB\u099F\u09BF\u09B6\u09AC\u09CB\u09B0\u09CD\u09A1",
@@ -62397,7 +62963,8 @@ function recordAiCostUsage(userId, actualTokens = 400, operationType = "coach") 
 
 // server/routes/ai.ts
 init_subscriptionService();
-import crypto6 from "crypto";
+init_coinWalletService();
+import crypto7 from "crypto";
 var aiRouter = Router5();
 var guestTurnTracker = /* @__PURE__ */ new Map();
 function getGuestTurnCount(guestId) {
@@ -62427,6 +62994,7 @@ aiRouter.post(
       if (!message || typeof message !== "string") {
         return res.status(400).json({ error: "message is required" });
       }
+      let quotaInfo = null;
       if (isGuest) {
         const guestTurns = getGuestTurnCount(guestId);
         if (guestTurns >= 3) {
@@ -62434,27 +63002,38 @@ aiRouter.post(
             success: false,
             paywall: true,
             code: "AI_QUOTA_EXCEEDED",
-            error: "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AB\u09CD\u09B0\u09BF \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u09B8\u09C0\u09AE\u09BE \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09E8\u09EA/\u09ED AI \u0995\u09CB\u099A \u09AA\u09C7\u09A4\u09C7 \u09B8\u09BE\u0987\u09A8 \u0987\u09A8 \u09AC\u09BE N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
-            messageBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B6\u09BF\u0996\u09A4\u09C7 \u09B8\u09BE\u0987\u09A8 \u0987\u09A8 \u09AC\u09BE N5 Pro \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
+            error: "\u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF Free Sensei Turn \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964",
+            messageBn: "\u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF Free Sensei Turn \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u09B8\u09BE\u0987\u09A8 \u0987\u09A8 \u0995\u09B0\u09C7 \u0986\u09B0\u0993 \u09E7\u09E6\u099F\u09BF \u09AB\u09CD\u09B0\u09BF \u099F\u09BE\u09B0\u09CD\u09A8 \u09A8\u09BF\u09A8 \u0985\u09A5\u09AC\u09BE \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09DF\u09C7\u09A8 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09C1\u09A8\u0964",
             tier: "guest",
             usedToday: guestTurns,
             dailyQuota: 3,
-            upgradeRequired: true
+            upgradeRequired: true,
+            actions: [
+              { label: "Google Login \u0995\u09B0\u09C1\u09A8", action: "LOGIN", url: "/auth/login" },
+              { label: "Use Nihomi Coins", action: "COINS", url: "/pricing" },
+              { label: "Upgrade", action: "UPGRADE", url: "/pricing" }
+            ]
           });
         }
       } else {
-        const quota = await subscriptionService.checkDailyAiChatQuota(userId);
-        if (!quota.allowed) {
+        quotaInfo = await subscriptionService.checkDailyAiChatQuota(userId);
+        if (!quotaInfo.allowed) {
           return res.status(402).json({
             success: false,
             paywall: true,
             code: "AI_QUOTA_EXCEEDED",
-            error: "\u09A6\u09C8\u09A8\u09BF\u0995 \u09AB\u09CD\u09B0\u09BF \u09E9\u099F\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u099A\u09CD\u09AF\u09BE\u099F \u09B8\u09C0\u09AE\u09BE \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09E8\u09EA/\u09ED AI \u0995\u09CB\u099A \u09AA\u09C7\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
-            messageBn: "\u0986\u09AA\u09A8\u09BE\u09B0 \u0986\u099C\u0995\u09C7\u09B0 \u09E9\u099F\u09BF \u09AB\u09CD\u09B0\u09BF AI \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0995\u09A5\u09CB\u09AA\u0995\u09A5\u09A8 \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B6\u09BF\u0996\u09A4\u09C7 N5 Pro \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
-            tier: quota.tier,
-            usedToday: quota.currentTurnsToday,
-            dailyQuota: quota.maxDailyTurns,
-            upgradeRequired: true
+            error: "\u0986\u099C\u0995\u09C7\u09B0 \u09E7\u09E6\u099F\u09BF Free Sensei Turn \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09DF\u09C7\u09A8 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09C1\u09A8 \u0985\u09A5\u09AC\u09BE \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8!",
+            messageBn: "\u0986\u099C\u0995\u09C7\u09B0 \u09E7\u09E6\u099F\u09BF Free Sensei Turn \u09B6\u09C7\u09B7 \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u09B8\u09C7\u09A8\u09B8\u09C7\u0987 \u0985\u09AC\u09CD\u09AF\u09BE\u09B9\u09A4 \u09B0\u09BE\u0996\u09A4\u09C7 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09DF\u09C7\u09A8 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09C1\u09A8 \u0985\u09A5\u09AC\u09BE \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8 \u0986\u09AA\u0997\u09CD\u09B0\u09C7\u09A1 \u0995\u09B0\u09C1\u09A8\u0964",
+            tier: quotaInfo.tier,
+            usedToday: quotaInfo.currentTurnsToday,
+            dailyQuota: quotaInfo.maxDailyTurns,
+            remainingCoins: quotaInfo.remainingCoins || 0,
+            upgradeRequired: true,
+            actions: [
+              { label: "Use Nihomi Coins", action: "COINS", url: "/pricing" },
+              { label: "Buy Coins", action: "BUY_COINS", url: "/pricing" },
+              { label: "Upgrade", action: "UPGRADE", url: "/pricing" }
+            ]
           });
         }
       }
@@ -62506,17 +63085,39 @@ aiRouter.post(
           }
         });
       }
-      subscriptionService.recordDailyAiChatTurn(userId);
+      let updatedCoinBalance = quotaInfo?.remainingCoins ?? 0;
+      let coinTransactionId;
+      if (quotaInfo?.useCoin) {
+        if (quotaInfo.autoTopupTriggered) {
+          await coinWalletService.grantCoins({
+            userId,
+            amount: 500,
+            source: "PURCHASE",
+            description: "Auto Top-up: 500 Nihomi Coins"
+          }).catch((err) => console.warn("[AICoach] Auto top-up grant warning:", err?.message));
+        }
+        const deductResult = await coinWalletService.deductCoinForTurn({
+          userId,
+          referenceId: sessionId || `turn_${Date.now()}`,
+          description: "1 AI Sensei Turn consumed"
+        });
+        if (deductResult.success) {
+          updatedCoinBalance = deductResult.newBalance;
+          coinTransactionId = deductResult.transactionId;
+        }
+      } else {
+        subscriptionService.recordDailyAiChatTurn(userId);
+      }
       const updatedUsage = recordAiCostUsage(userId, 850, "coach");
       const userMessage = {
-        id: `msg-${crypto6.randomUUID().slice(0, 8)}`,
+        id: `msg-${crypto7.randomUUID().slice(0, 8)}`,
         role: "user",
         content: message,
         mode: selectedMode,
         timestamp: (/* @__PURE__ */ new Date()).toISOString()
       };
       const assistantMessage = {
-        id: `msg-${crypto6.randomUUID().slice(0, 8)}`,
+        id: `msg-${crypto7.randomUUID().slice(0, 8)}`,
         role: "assistant",
         content: aiResult.reply,
         mode: selectedMode,
@@ -62541,10 +63142,14 @@ aiRouter.post(
         diagnostics: aiResult.diagnostics,
         sessionId: session.id,
         messages: session.messages,
+        coins: updatedCoinBalance,
+        turnType: quotaInfo?.useCoin ? "COIN" : "DAILY_FREE",
+        coinTransactionId,
         usage: {
           aiCoachInteractions: updatedUsage.aiCoachInteractions,
           aiMonthlyLimit: guardMeta?.monthlyQuota || 100,
-          remainingQuota: Math.max(0, (guardMeta?.monthlyQuota || 100) - updatedUsage.aiCoachInteractions)
+          remainingQuota: Math.max(0, (guardMeta?.monthlyQuota || 100) - updatedUsage.aiCoachInteractions),
+          coinBalance: updatedCoinBalance
         }
       });
     } catch (error) {
@@ -62820,7 +63425,7 @@ import { Router as Router6 } from "express";
 init_db();
 import fs2 from "fs";
 import path2 from "path";
-import crypto7 from "crypto";
+import crypto8 from "crypto";
 
 // server/services/logger.ts
 var LoggerService = class {
@@ -63021,7 +63626,7 @@ var DatabaseBackupService = class {
    * Calculate SHA-256 checksum of a string or buffer.
    */
   calculateSha256(content) {
-    return crypto7.createHash("sha256").update(content, "utf-8").digest("hex");
+    return crypto8.createHash("sha256").update(content, "utf-8").digest("hex");
   }
   /**
    * Create an atomic database backup.
@@ -63032,7 +63637,7 @@ var DatabaseBackupService = class {
     const triggeredBy = options?.triggeredBy || "system_cron";
     const timestamp = (/* @__PURE__ */ new Date()).toISOString();
     const cleanTime = timestamp.replace(/[:.]/g, "-");
-    const backupId = `bkp-${type}-${cleanTime}-${crypto7.randomBytes(3).toString("hex")}`;
+    const backupId = `bkp-${type}-${cleanTime}-${crypto8.randomBytes(3).toString("hex")}`;
     const filename = `nihomi_db_${type}_${cleanTime}_${backupId}.json`;
     const targetFilePath = path2.join(this.backupDir, filename);
     try {
@@ -64339,7 +64944,7 @@ var requireStaff2 = requireRole3(["admin", "instructor"], {
 init_supabaseAuth();
 
 // server/services/paymentProviders.ts
-import crypto8 from "crypto";
+import crypto9 from "crypto";
 function verifyHmacSignature(payload, signature, secretKey, algorithm = "sha256") {
   if (!signature || !secretKey) {
     return false;
@@ -64353,7 +64958,7 @@ function verifyHmacSignature(payload, signature, secretKey, algorithm = "sha256"
     } else {
       raw = JSON.stringify(payload);
     }
-    const expected = crypto8.createHmac(algorithm, secretKey).update(raw).digest("hex");
+    const expected = crypto9.createHmac(algorithm, secretKey).update(raw).digest("hex");
     const cleanSignature = signature.replace(/^sha256=|^md5=|^sha1=/i, "").trim().toLowerCase();
     const cleanExpected = expected.trim().toLowerCase();
     const signatureBuffer = Buffer.from(cleanSignature, "utf-8");
@@ -64361,7 +64966,7 @@ function verifyHmacSignature(payload, signature, secretKey, algorithm = "sha256"
     if (signatureBuffer.length !== expectedBuffer.length) {
       return false;
     }
-    return crypto8.timingSafeEqual(signatureBuffer, expectedBuffer);
+    return crypto9.timingSafeEqual(signatureBuffer, expectedBuffer);
   } catch {
     return false;
   }
@@ -64370,12 +64975,12 @@ function verifySSLCommerzHash(valId, receivedHash, storePassword) {
   const secret = storePassword || process.env.SSLCOMMERZ_STORE_PASSWORD || "sslcommerz_nihomi_live_store_pass_2026";
   if (!valId || !receivedHash || !secret) return false;
   try {
-    const expected = crypto8.createHash("md5").update(`${valId}${secret}`).digest("hex").toLowerCase();
+    const expected = crypto9.createHash("md5").update(`${valId}${secret}`).digest("hex").toLowerCase();
     const cleanReceived = receivedHash.trim().toLowerCase();
     const expectedBuffer = Buffer.from(expected, "utf-8");
     const receivedBuffer = Buffer.from(cleanReceived, "utf-8");
     if (expectedBuffer.length !== receivedBuffer.length) return false;
-    return crypto8.timingSafeEqual(expectedBuffer, receivedBuffer);
+    return crypto9.timingSafeEqual(expectedBuffer, receivedBuffer);
   } catch {
     return false;
   }
@@ -64393,16 +64998,16 @@ function verifySSLCommerzIPN(payload, storePassword) {
           parts.push(`${trimmed}=${payload[trimmed]}`);
         }
       }
-      const secretMd5 = crypto8.createHash("md5").update(secret).digest("hex");
+      const secretMd5 = crypto9.createHash("md5").update(secret).digest("hex");
       const dataString = parts.join("&") + "&" + secretMd5;
-      const expectedSign = crypto8.createHash("md5").update(dataString).digest("hex").toLowerCase();
+      const expectedSign = crypto9.createHash("md5").update(dataString).digest("hex").toLowerCase();
       const receivedSign = payload.verify_sign.trim().toLowerCase();
-      if (expectedSign.length === receivedSign.length && crypto8.timingSafeEqual(Buffer.from(expectedSign), Buffer.from(receivedSign))) {
+      if (expectedSign.length === receivedSign.length && crypto9.timingSafeEqual(Buffer.from(expectedSign), Buffer.from(receivedSign))) {
         return true;
       }
       const altDataString = keys.map((k) => payload[k.trim()] || "").join("") + secretMd5;
-      const altExpectedSign = crypto8.createHash("md5").update(altDataString).digest("hex").toLowerCase();
-      if (altExpectedSign.length === receivedSign.length && crypto8.timingSafeEqual(Buffer.from(altExpectedSign), Buffer.from(receivedSign))) {
+      const altExpectedSign = crypto9.createHash("md5").update(altDataString).digest("hex").toLowerCase();
+      if (altExpectedSign.length === receivedSign.length && crypto9.timingSafeEqual(Buffer.from(altExpectedSign), Buffer.from(receivedSign))) {
         return true;
       }
     }
@@ -64451,12 +65056,12 @@ function verifyStripeSignature(rawPayload, signatureHeader, secret, toleranceSec
         }
       }
       const signedPayload = `${timestamp}.${rawString}`;
-      const expectedHmac = crypto8.createHmac("sha256", secret).update(signedPayload).digest("hex").toLowerCase();
+      const expectedHmac = crypto9.createHmac("sha256", secret).update(signedPayload).digest("hex").toLowerCase();
       const expectedBuffer = Buffer.from(expectedHmac, "utf-8");
       for (const sig of signatures) {
         const cleanSig = sig.trim().toLowerCase();
         const sigBuffer = Buffer.from(cleanSig, "utf-8");
-        if (sigBuffer.length === expectedBuffer.length && crypto8.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        if (sigBuffer.length === expectedBuffer.length && crypto9.timingSafeEqual(sigBuffer, expectedBuffer)) {
           return true;
         }
       }
@@ -64722,7 +65327,7 @@ var BKashPaymentProvider = class {
         isSignatureValid = verifyHmacSignature(payload, headerSig, secret, "sha256");
       }
     }
-    const eventId = payload.paymentID || payload.trxID || `bk-evt-${crypto8.randomUUID().slice(0, 8)}`;
+    const eventId = payload.paymentID || payload.trxID || `bk-evt-${crypto9.randomUUID().slice(0, 8)}`;
     const eventType = payload.eventType || "bKash.PaymentSuccess";
     const isSuccess = payload.transactionStatus === "Completed" || payload.status === "success" || payload.status === "VALID" || payload.statusCode === "0000";
     const status = isSuccess ? "paid" : "failed";
@@ -64924,7 +65529,7 @@ var SSLCommerzPaymentProvider = class {
         isSignatureValid = verifyHmacSignature(rawBody || payload, headerSig, this.storePassword, "sha256") || verifyHmacSignature(rawBody || payload, headerSig, this.storePassword, "md5");
       }
     }
-    const eventId = payload.val_id || payload.tran_id || `ssl-evt-${crypto8.randomUUID().slice(0, 8)}`;
+    const eventId = payload.val_id || payload.tran_id || `ssl-evt-${crypto9.randomUUID().slice(0, 8)}`;
     const isSuccess = payload.status === "VALID" || payload.status === "VALIDATED";
     const status = isSuccess ? "paid" : "failed";
     return {
@@ -64968,7 +65573,7 @@ var ShurjopayPaymentProvider = class {
     };
   }
   async verifyPayment(params, originalPayment) {
-    const spTxId = params.providerTransactionId || `SPTX-${crypto8.randomBytes(5).toString("hex").toUpperCase()}`;
+    const spTxId = params.providerTransactionId || `SPTX-${crypto9.randomBytes(5).toString("hex").toUpperCase()}`;
     return {
       success: true,
       status: "paid",
@@ -65009,7 +65614,7 @@ var StripePaymentProvider = class {
     return process.env.STRIPE_WEBHOOK_SECRET || "whsec_nihomi_production_webhook_secret";
   }
   async createCheckout(params) {
-    const clientSecret = `pi_${crypto8.randomBytes(12).toString("hex")}_secret_${crypto8.randomBytes(8).toString("hex")}`;
+    const clientSecret = `pi_${crypto9.randomBytes(12).toString("hex")}_secret_${crypto9.randomBytes(8).toString("hex")}`;
     return {
       paymentId: params.paymentId,
       provider: "stripe",
@@ -65019,7 +65624,7 @@ var StripePaymentProvider = class {
     };
   }
   async verifyPayment(params, originalPayment) {
-    const chId = `ch_${crypto8.randomBytes(12).toString("hex")}`;
+    const chId = `ch_${crypto9.randomBytes(12).toString("hex")}`;
     return {
       success: true,
       status: "paid",
@@ -65037,7 +65642,7 @@ var StripePaymentProvider = class {
   async handleWebhook(payload, signature, headers, rawBody) {
     const headerSig = signature || headers?.["stripe-signature"] || headers?.["x-webhook-signature"];
     const isSignatureValid = this.webhookSecret ? verifyStripeSignature(rawBody || payload, headerSig, this.webhookSecret) : false;
-    const eventId = payload.id || `evt_${crypto8.randomBytes(12).toString("hex")}`;
+    const eventId = payload.id || `evt_${crypto9.randomBytes(12).toString("hex")}`;
     const isSuccess = payload.type === "payment_intent.succeeded" || payload.type === "checkout.session.completed" || payload.type === "invoice.payment_succeeded";
     const status = isSuccess ? "paid" : "failed";
     return {
@@ -65053,7 +65658,7 @@ var StripePaymentProvider = class {
     };
   }
   async refundPayment(paymentId, amount, reason) {
-    return { success: true, refundId: `re_${crypto8.randomBytes(12).toString("hex")}` };
+    return { success: true, refundId: `re_${crypto9.randomBytes(12).toString("hex")}` };
   }
 };
 var ApplePayPaymentProvider = class {
@@ -65064,7 +65669,7 @@ var ApplePayPaymentProvider = class {
     return process.env.APPLE_PAY_SECRET || "apple_pay_nihomi_secret";
   }
   async createCheckout(params) {
-    const sessionToken = `APL-SESS-${crypto8.randomBytes(8).toString("hex").toUpperCase()}`;
+    const sessionToken = `APL-SESS-${crypto9.randomBytes(8).toString("hex").toUpperCase()}`;
     return {
       paymentId: params.paymentId,
       provider: "apple_pay",
@@ -65192,6 +65797,8 @@ var PaymentProviderFactory = class {
 };
 
 // server/routes/billing.ts
+init_coinWalletService();
+init_subscriptionService();
 var billingRouter = Router7();
 billingRouter.get("/plans", (req, res) => {
   try {
@@ -66478,6 +67085,111 @@ billingRouter.delete("/payment-methods/:id", authenticateUser2, (req, res) => {
     res.status(500).json({ error: err.message || "Failed to delete payment method." });
   }
 });
+billingRouter.get("/wallet", optionalAuth2, async (req, res) => {
+  try {
+    const userId = req.user?.id || req.query.userId || "guest";
+    const wallet = await coinWalletService.getWallet(userId);
+    return res.json({
+      success: true,
+      wallet,
+      currency: "Nihomi Coins \u{1FA99}",
+      exchangeRate: "1 Coin = 1 Sensei Turn",
+      balance: wallet.coinBalance
+    });
+  } catch (err) {
+    console.error("Error fetching coin wallet:", err);
+    return res.status(500).json({ error: err.message || "Failed to retrieve wallet" });
+  }
+});
+billingRouter.get("/ledger", optionalAuth2, async (req, res) => {
+  try {
+    const userId = req.user?.id || req.query.userId;
+    if (!userId) {
+      return res.status(401).json({ error: "Authentication required to view transaction ledger." });
+    }
+    const limit = Number(req.query.limit) || 50;
+    const ledger = await coinWalletService.getLedger(userId, limit);
+    return res.json({
+      success: true,
+      ledger
+    });
+  } catch (err) {
+    console.error("Error fetching ledger:", err);
+    return res.status(500).json({ error: err.message || "Failed to retrieve ledger" });
+  }
+});
+billingRouter.get("/coin-packs", (_req, res) => {
+  return res.json({
+    success: true,
+    packs: COIN_TOPUP_PACKS,
+    note: "1 Coin = 1 AI Sensei Turn"
+  });
+});
+billingRouter.post("/rewards/claim", authenticateUser2, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { eventType, idempotencyKey } = req.body;
+    if (!eventType || !idempotencyKey) {
+      return res.status(400).json({ error: "eventType and idempotencyKey are required" });
+    }
+    const sub = await subscriptionService.getUserSubscription(userId);
+    const result = await coinWalletService.claimReward({
+      userId,
+      eventType,
+      idempotencyKey,
+      tier: sub.tier
+    });
+    return res.json({
+      ...result,
+      message: result.success ? `\u{1F381} Nihomi Reward granted! +${result.coinsAwarded} Coins added.` : result.alreadyClaimed ? "Reward already claimed for this learning event." : "Monthly reward cap reached."
+    });
+  } catch (err) {
+    console.error("Error claiming reward:", err);
+    return res.status(500).json({ error: err.message || "Failed to claim reward" });
+  }
+});
+billingRouter.get("/auto-topup", authenticateUser2, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const wallet = await coinWalletService.getWallet(userId);
+    return res.json({
+      success: true,
+      autoTopup: {
+        enabled: wallet.autoTopupEnabled,
+        threshold: wallet.autoTopupThreshold,
+        pack: wallet.autoTopupPack,
+        spendingCap: wallet.monthlySpendingCap,
+        currentMonthSpent: wallet.currentMonthSpent
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to fetch auto topup config" });
+  }
+});
+billingRouter.post("/auto-topup", authenticateUser2, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { enabled, threshold, pack, spendingCap } = req.body;
+    const wallet = await coinWalletService.setAutoTopup(userId, {
+      enabled: Boolean(enabled),
+      threshold: Number(threshold) || 50,
+      pack: pack || "coins_500",
+      spendingCap: Number(spendingCap) || 5e3
+    });
+    return res.json({
+      success: true,
+      message: enabled ? "Auto Top-up enabled: When balance drops below 50 Coins, 500 Coins will be added automatically." : "Auto Top-up disabled.",
+      autoTopup: {
+        enabled: wallet.autoTopupEnabled,
+        threshold: wallet.autoTopupThreshold,
+        pack: wallet.autoTopupPack,
+        spendingCap: wallet.monthlySpendingCap
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to update auto topup config" });
+  }
+});
 
 // server/routes/payment.ts
 import { Router as Router8 } from "express";
@@ -66684,7 +67396,7 @@ var bKashService = BKashService.getInstance();
 init_prisma();
 init_db();
 init_subscriptionService();
-import crypto9 from "crypto";
+import crypto10 from "crypto";
 var SSLCommerzService = class _SSLCommerzService {
   static getInstance() {
     if (!_SSLCommerzService.instance) {
@@ -66708,7 +67420,7 @@ var SSLCommerzService = class _SSLCommerzService {
    * Initializes an official hosted payment session with SSLCommerz Gateway
    */
   async initSession(params) {
-    const tranId = params.tranId || `SSL_${Date.now()}_${crypto9.randomBytes(4).toString("hex").toUpperCase()}`;
+    const tranId = params.tranId || `SSL_${Date.now()}_${crypto10.randomBytes(4).toString("hex").toUpperCase()}`;
     const appUrl = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
     const resolvedSuccessUrl = params.successUrl || `${appUrl}/api/payment/sslcommerz/success?paymentId=${encodeURIComponent(tranId)}`;
     const resolvedFailUrl = params.failUrl || `${appUrl}/api/payment/sslcommerz/fail?paymentId=${encodeURIComponent(tranId)}`;
@@ -66738,7 +67450,7 @@ var SSLCommerzService = class _SSLCommerzService {
     formData.append("value_a", params.userId);
     formData.append("value_b", params.planTier);
     formData.append("value_c", params.userEmail);
-    let sessionkey = `ssl_sess_${crypto9.randomBytes(12).toString("hex")}`;
+    let sessionkey = `ssl_sess_${crypto10.randomBytes(12).toString("hex")}`;
     let gatewayUrl = `${this.baseUrl}/gwprocess/v4/gw.php?Q=pay&SESSIONKEY=${sessionkey}`;
     try {
       const response = await fetch(`${this.baseUrl}/gwprocess/v4/api.php`, {
@@ -66835,7 +67547,7 @@ var SSLCommerzService = class _SSLCommerzService {
       valId,
       amount: amount || 599,
       currency: "BDT",
-      bankTranId: `BNK_${crypto9.randomBytes(4).toString("hex").toUpperCase()}`,
+      bankTranId: `BNK_${crypto10.randomBytes(4).toString("hex").toUpperCase()}`,
       cardType: "VISA / Mastercard / MFS"
     };
   }
@@ -66848,7 +67560,7 @@ var SSLCommerzService = class _SSLCommerzService {
     if (!verifySign) return false;
     try {
       const secret = this.storePassword;
-      const secretMd5 = crypto9.createHash("md5").update(secret).digest("hex");
+      const secretMd5 = crypto10.createHash("md5").update(secret).digest("hex");
       if (payload.verify_key) {
         const keys = String(payload.verify_key).split(",");
         const parts = [];
@@ -66859,16 +67571,16 @@ var SSLCommerzService = class _SSLCommerzService {
           }
         }
         const dataString = parts.join("&") + "&" + secretMd5;
-        const expected = crypto9.createHash("md5").update(dataString).digest("hex").toLowerCase();
+        const expected = crypto10.createHash("md5").update(dataString).digest("hex").toLowerCase();
         const received = String(verifySign).trim().toLowerCase();
-        if (expected.length === received.length && crypto9.timingSafeEqual(Buffer.from(expected), Buffer.from(received))) {
+        if (expected.length === received.length && crypto10.timingSafeEqual(Buffer.from(expected), Buffer.from(received))) {
           return true;
         }
       }
       if (payload.val_id) {
-        const expectedVal = crypto9.createHash("md5").update(`${payload.val_id}${secret}`).digest("hex").toLowerCase();
+        const expectedVal = crypto10.createHash("md5").update(`${payload.val_id}${secret}`).digest("hex").toLowerCase();
         const received = String(verifySign).trim().toLowerCase();
-        if (expectedVal.length === received.length && crypto9.timingSafeEqual(Buffer.from(expectedVal), Buffer.from(received))) {
+        if (expectedVal.length === received.length && crypto10.timingSafeEqual(Buffer.from(expectedVal), Buffer.from(received))) {
           return true;
         }
       }
@@ -67023,7 +67735,7 @@ var sslCommerzService = SSLCommerzService.getInstance();
 init_prisma();
 init_db();
 init_subscriptionService();
-import crypto10 from "crypto";
+import crypto11 from "crypto";
 var StripePaymentService = class _StripePaymentService {
   static getInstance() {
     if (!_StripePaymentService.instance) {
@@ -67099,7 +67811,7 @@ var StripePaymentService = class _StripePaymentService {
         console.warn("[StripePaymentService] Network error connecting to Stripe API:", err?.message);
       }
     }
-    const mockSessionId = `cs_test_${crypto10.randomBytes(16).toString("hex")}`;
+    const mockSessionId = `cs_test_${crypto11.randomBytes(16).toString("hex")}`;
     const redirectUrl = successUrl.replace("{CHECKOUT_SESSION_ID}", mockSessionId);
     await this.persistInitiatedStripePayment({
       sessionId: mockSessionId,
@@ -67126,11 +67838,11 @@ var StripePaymentService = class _StripePaymentService {
     try {
       const rawString = Buffer.isBuffer(rawBody) ? rawBody.toString("utf-8") : typeof rawBody === "string" ? rawBody : JSON.stringify(rawBody);
       if (!signatureHeader.includes("t=") || !signatureHeader.includes("v1=")) {
-        const expected = crypto10.createHmac("sha256", key).update(rawString).digest("hex").toLowerCase();
+        const expected = crypto11.createHmac("sha256", key).update(rawString).digest("hex").toLowerCase();
         const cleanSig = signatureHeader.replace(/^sha256=/i, "").trim().toLowerCase();
         const expectedBuf = Buffer.from(expected, "utf-8");
         const sigBuf = Buffer.from(cleanSig, "utf-8");
-        return expectedBuf.length === sigBuf.length && crypto10.timingSafeEqual(expectedBuf, sigBuf);
+        return expectedBuf.length === sigBuf.length && crypto11.timingSafeEqual(expectedBuf, sigBuf);
       }
       const parts = signatureHeader.split(",");
       let timestamp = "";
@@ -67154,12 +67866,12 @@ var StripePaymentService = class _StripePaymentService {
         }
       }
       const signedPayload = `${timestamp}.${rawString}`;
-      const expectedHmac = crypto10.createHmac("sha256", key).update(signedPayload).digest("hex").toLowerCase();
+      const expectedHmac = crypto11.createHmac("sha256", key).update(signedPayload).digest("hex").toLowerCase();
       const expectedBuffer = Buffer.from(expectedHmac, "utf-8");
       for (const sig of signatures) {
         const cleanSig = sig.trim().toLowerCase();
         const sigBuffer = Buffer.from(cleanSig, "utf-8");
-        if (sigBuffer.length === expectedBuffer.length && crypto10.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        if (sigBuffer.length === expectedBuffer.length && crypto11.timingSafeEqual(sigBuffer, expectedBuffer)) {
           return true;
         }
       }
@@ -67172,7 +67884,7 @@ var StripePaymentService = class _StripePaymentService {
    * Processes a verified Stripe Webhook event atomically and idempotently
    */
   async processWebhookEvent(event, rawHeaders = {}, signature) {
-    const eventId = event.id || `evt_${crypto10.randomBytes(12).toString("hex")}`;
+    const eventId = event.id || `evt_${crypto11.randomBytes(12).toString("hex")}`;
     const eventType = event.type || "checkout.session.completed";
     if (isDatabaseConfigured()) {
       try {
@@ -68578,7 +69290,7 @@ function requireSubscription(requiredTier = "n5_pro") {
 init_prisma();
 init_supabase();
 init_db();
-import crypto11 from "crypto";
+import crypto12 from "crypto";
 var MockExamPersistenceService = class {
   static {
     this.tableInitialized = false;
@@ -68588,7 +69300,7 @@ var MockExamPersistenceService = class {
    */
   static generateVerificationHash(attempt) {
     const rawPayload = `${attempt.certificateId}:${attempt.userId}:${attempt.examCode}:${attempt.totalScaledScore}:${attempt.submittedAt}:nihomi_jlpt_n5_official_verify`;
-    return crypto11.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
+    return crypto12.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
   }
   /**
    * Ensures the PostgreSQL `mock_exam_results` table exists.
@@ -69188,13 +69900,13 @@ healthRouter.get("/ping", (_req, res) => {
 init_db();
 import { Router as Router15 } from "express";
 import multer from "multer";
-import crypto14 from "crypto";
+import crypto15 from "crypto";
 import path7 from "path";
 
 // server/services/contentEngineService.ts
 init_db();
 import path6 from "path";
-import crypto13 from "crypto";
+import crypto14 from "crypto";
 import { GoogleGenAI as GoogleGenAI3 } from "@google/genai";
 
 // server/services/cloudStorageService.ts
@@ -69202,7 +69914,7 @@ init_db();
 import fs4 from "fs";
 import path4 from "path";
 import os from "os";
-import crypto12 from "crypto";
+import crypto13 from "crypto";
 var CloudStorageService = class {
   constructor() {
     const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -69237,7 +69949,7 @@ var CloudStorageService = class {
     const bucket = params.bucketName || (params.mimeType.startsWith("image/") || params.mimeType.startsWith("audio/") ? this.mediaBucket : this.sourcesBucket);
     const sanitizedFilename = params.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const folderPrefix = params.folder ? `${params.folder.replace(/^\/+|\/+$/g, "")}/` : "";
-    const storageKey = `${folderPrefix}${crypto12.randomUUID()}_${sanitizedFilename}`;
+    const storageKey = `${folderPrefix}${crypto13.randomUUID()}_${sanitizedFilename}`;
     const targetDir = bucket === this.mediaBucket ? this.mediaDir : this.sourcesDir;
     const localFilePath = path4.join(targetDir, storageKey.replace(/\//g, "_"));
     await fs4.promises.writeFile(localFilePath, params.buffer);
@@ -81206,7 +81918,7 @@ var ContentEngineService = class {
    * Saves an uploaded PDF buffer to secure persistent cloud media storage and local cache.
    */
   async saveUploadedPdf(buffer, originalFilename, mimeType, targetJlptLevel, title, uploadedBy, uploadedByEmail, courseId, moduleId, lessonId) {
-    const contentHash = crypto13.createHash("sha256").update(buffer).digest("hex");
+    const contentHash = crypto14.createHash("sha256").update(buffer).digest("hex");
     const existingSource = db.getContentSourceByHash(contentHash);
     if (existingSource) {
       console.log(`[ContentEngine] Document with SHA-256 hash ${contentHash} already exists (ID: ${existingSource.id}). Reusing cached source.`);
@@ -82420,7 +83132,7 @@ contentEngineRouter.post(
       const fileBuffer = req.file.buffer;
       const originalName = req.file.originalname;
       const targetLevel = ["N5", "N4", "N3", "N2", "N1"].includes(req.body.level) ? req.body.level : "N5";
-      const sha256 = crypto14.createHash("sha256").update(fileBuffer).digest("hex");
+      const sha256 = crypto15.createHash("sha256").update(fileBuffer).digest("hex");
       const jobId = `job-batch-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const job = {
         id: jobId,
@@ -83803,7 +84515,7 @@ var liveLessonPublishingQueueService = new LiveLessonPublishingQueueService();
 
 // server/services/batchIngestionQueue.ts
 init_db();
-import crypto15 from "crypto";
+import crypto16 from "crypto";
 var BatchIngestionQueueService = class {
   constructor() {
     this.jobs = /* @__PURE__ */ new Map();
@@ -83844,7 +84556,7 @@ var BatchIngestionQueueService = class {
     if (existingActive) {
       return existingActive;
     }
-    const jobId = `job-batch-${Date.now().toString(36)}-${crypto15.randomBytes(3).toString("hex")}`;
+    const jobId = `job-batch-${Date.now().toString(36)}-${crypto16.randomBytes(3).toString("hex")}`;
     const nowIso = (/* @__PURE__ */ new Date()).toISOString();
     const job = {
       job_id: jobId,
@@ -84116,13 +84828,13 @@ var batchIngestionQueue = new BatchIngestionQueueService();
 
 // server/services/testPipelineRunnerService.ts
 init_db();
-import crypto16 from "crypto";
+import crypto17 from "crypto";
 var TestPipelineRunnerService = class {
   /**
    * Execute End-to-End Pipeline test using Minna no Nihongo Lesson 1 corpus
    */
   async runMinnaL1Pipeline(options) {
-    const runId = `run-l1-${Date.now().toString(36)}-${crypto16.randomBytes(3).toString("hex")}`;
+    const runId = `run-l1-${Date.now().toString(36)}-${crypto17.randomBytes(3).toString("hex")}`;
     const startTime = Date.now();
     const adminUserId = options?.adminUserId || "27fb8002-dbdd-4370-83d1-1d438ae9a055";
     const adminEmail = options?.adminEmail || "nihomibd@gmail.com";
@@ -87653,7 +88365,7 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
 
 // server/routes/voice.ts
 init_db();
-import crypto19 from "crypto";
+import crypto20 from "crypto";
 import { Router as Router22 } from "express";
 init_pitchAccentService();
 
@@ -91087,7 +91799,7 @@ function subsample(arr, targetLen) {
 
 // server/services/speakingReadinessCertService.ts
 init_db();
-import crypto17 from "crypto";
+import crypto18 from "crypto";
 var SpeakingReadinessCertService = class {
   /**
    * Evaluates student's aggregated acoustic, prosodic, and SRS history
@@ -91203,7 +91915,7 @@ var SpeakingReadinessCertService = class {
     const issueDate = (/* @__PURE__ */ new Date()).toISOString();
     const certificateId = `CERT-TOKYO-${userId.slice(0, 6).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
     const rawPayload = `${certificateId}:${userId}:${overallReadinessIndex}:${certifiedLevel}:${issueDate}`;
-    const verificationHash = crypto17.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
+    const verificationHash = crypto18.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
     const institutionalSummaryBn = `\u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0 ${resolvedName} \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u099F\u09CB\u0995\u09BF\u0993 \u09B8\u09CD\u09AA\u09BF\u0995\u09BF\u0982 \u0993 \u09AA\u09BF\u099A \u0985\u09CD\u09AF\u09BE\u0995\u09B8\u09C7\u09A8\u09CD\u099F \u09B2\u09CD\u09AF\u09BE\u09AC\u09C7 \u09AE\u09CB\u099F ${sampleCount}\u099F\u09BF \u0985\u09A1\u09BF\u0993 \u09A8\u09AE\u09C1\u09A8\u09BE \u0993 \u098F\u09B8\u0986\u09B0\u098F\u09B8 \u0995\u09BE\u09B0\u09CD\u09A1 \u09B8\u09AB\u09B2\u09AD\u09BE\u09AC\u09C7 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u0995\u09B0\u09C7\u099B\u09C7\u09A8\u0964 \u09B8\u09BE\u09AE\u0997\u09CD\u09B0\u09BF\u0995 \u09AC\u09BE\u099A\u09A8\u09AD\u0999\u09CD\u0997\u09BF\u09B0 \u09AA\u09CD\u09B0\u09B8\u09CD\u09A4\u09C1\u09A4\u09BF \u09B8\u09CD\u0995\u09CB\u09B0 ${overallReadinessIndex}% (\u0997\u09CD\u09B0\u09C7\u09A1: ${readinessGrade}), \u09AF\u09BE \u09A4\u09BE\u0995\u09C7 "${certifiedLevel}" \u09B8\u09CD\u09A4\u09B0\u09C7\u09B0 \u09AA\u09CD\u09B0\u09BE\u0995\u09C3\u09A4\u09BF\u0995 \u099F\u09CB\u0995\u09BF\u0993 \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B8\u0982\u09B2\u09BE\u09AA\u09C7 \u09B8\u0995\u09CD\u09B7\u09AE \u09B9\u09BF\u09B8\u09C7\u09AC\u09C7 \u09AA\u09CD\u09B0\u09A4\u09CD\u09AF\u09DF\u09BF\u09A4 \u0995\u09B0\u09C7\u0964`;
     const institutionalSummaryEn = `Student ${resolvedName} has demonstrated acoustic and prosodic proficiency across ${sampleCount} verified voice assessments. Attaining a Tokyo Intonation Readiness Index of ${overallReadinessIndex}% (Grade: ${readinessGrade}), qualifying for institutional speaking readiness at ${certifiedLevel} tier.`;
     const certificate = {
@@ -91249,7 +91961,7 @@ var SpeakingReadinessCertService = class {
       };
     }
     const rawPayload = `${certificate.certificateId}:${certificate.studentId}:${certificate.overallReadinessIndex}:${certificate.certifiedLevel}:${certificate.issueDate}`;
-    const expectedHash = crypto17.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
+    const expectedHash = crypto18.createHash("sha256").update(rawPayload).digest("hex").substring(0, 32);
     if (certificate.verificationHash !== expectedHash) {
       return {
         valid: false,
@@ -91267,7 +91979,7 @@ var SpeakingReadinessCertService = class {
 
 // server/services/scenarioRoleplayService.ts
 init_db();
-import crypto18 from "crypto";
+import crypto19 from "crypto";
 var INITIAL_ROLEPLAY_SCENARIOS = [
   {
     id: "baito_interview",
@@ -91521,7 +92233,7 @@ var ScenarioRoleplayService = class {
    */
   static startSession(userId, scenarioId) {
     const scenario = this.getScenarioById(scenarioId) || INITIAL_ROLEPLAY_SCENARIOS[0];
-    const sessionId = `roleplay-${Date.now().toString(36)}-${crypto18.randomBytes(4).toString("hex")}`;
+    const sessionId = `roleplay-${Date.now().toString(36)}-${crypto19.randomBytes(4).toString("hex")}`;
     const session = {
       sessionId,
       userId,
@@ -92023,7 +92735,7 @@ voiceRouter.post(
         targetDrills = db.getPitchDrills({ limit: 6 });
       }
       targetDrills = targetDrills.slice(0, 6);
-      const sessionId = `session-accent-${crypto19.randomUUID().slice(0, 8)}`;
+      const sessionId = `session-accent-${crypto20.randomUUID().slice(0, 8)}`;
       const now = (/* @__PURE__ */ new Date()).toISOString();
       const steps = targetDrills.map((drill, idx) => ({
         stepIndex: idx,
@@ -92788,7 +93500,7 @@ import multer3 from "multer";
 init_prisma();
 import fs7 from "fs";
 import path10 from "path";
-import crypto21 from "crypto";
+import crypto22 from "crypto";
 
 // server/cloud/storage.ts
 init_supabase();
@@ -93019,7 +93731,7 @@ var CloudQuotaService = class _CloudQuotaService {
 
 // server/cloud/security.ts
 import path9 from "path";
-import crypto20 from "crypto";
+import crypto21 from "crypto";
 var ALLOWED_MIME_TYPES = /* @__PURE__ */ new Set([
   "application/pdf",
   "application/msword",
@@ -93127,7 +93839,7 @@ function generateStoragePath(userId, fileId, filename) {
   return `users/${userId}/files/${fileId}/original/${safeName}`;
 }
 function generateShareToken() {
-  return crypto20.randomBytes(24).toString("base64url");
+  return crypto21.randomBytes(24).toString("base64url");
 }
 function assertOwnership(resourceUserId, requestingUserId) {
   if (resourceUserId !== requestingUserId) {
@@ -93279,7 +93991,7 @@ var CloudService = class _CloudService {
         throw error;
       }
     }
-    const folderId = `fld_${crypto21.randomUUID().slice(0, 12)}`;
+    const folderId = `fld_${crypto22.randomUUID().slice(0, 12)}`;
     const now = /* @__PURE__ */ new Date();
     if (isDatabaseConfigured()) {
       try {
@@ -93432,7 +94144,7 @@ var CloudService = class _CloudService {
         throw error;
       }
     }
-    const fileId = `fil_${crypto21.randomUUID().slice(0, 16)}`;
+    const fileId = `fil_${crypto22.randomUUID().slice(0, 16)}`;
     const storagePath = generateStoragePath(userId, fileId, safeName);
     await this.storageAdapter.upload(storagePath, fileBuffer, mimeType);
     const now = /* @__PURE__ */ new Date();
@@ -93456,7 +94168,7 @@ var CloudService = class _CloudService {
         });
         await prisma.cloudFileVersion.create({
           data: {
-            id: `ver_${crypto21.randomUUID().slice(0, 12)}`,
+            id: `ver_${crypto22.randomUUID().slice(0, 12)}`,
             fileId,
             userId,
             storagePath,
@@ -93502,7 +94214,7 @@ var CloudService = class _CloudService {
     };
     this.localStore.files.push(newFile);
     this.localStore.versions.push({
-      id: `ver_${crypto21.randomUUID().slice(0, 12)}`,
+      id: `ver_${crypto22.randomUUID().slice(0, 12)}`,
       fileId,
       userId,
       storagePath,
@@ -93780,7 +94492,7 @@ var CloudService = class _CloudService {
     const file = await this.getFileById(userId, fileId);
     const token = generateShareToken();
     const expiresAt = new Date(Date.now() + expiresInHours * 60 * 60 * 1e3);
-    const shareId = `shr_${crypto21.randomUUID().slice(0, 12)}`;
+    const shareId = `shr_${crypto22.randomUUID().slice(0, 12)}`;
     if (isDatabaseConfigured()) {
       try {
         const dbShare = await prisma.cloudShare.create({
@@ -93925,7 +94637,7 @@ var CloudService = class _CloudService {
 
 // server/cloud/aiJobService.ts
 init_prisma();
-import crypto22 from "crypto";
+import crypto23 from "crypto";
 import { GoogleGenAI as GoogleGenAI4 } from "@google/genai";
 var geminiClient = null;
 function getGemini() {
@@ -93949,7 +94661,7 @@ var CloudAiJobService = class _CloudAiJobService {
   }
   async dispatchJob(userId, fileId, jobType, customPrompt) {
     const file = await this.cloudService.getFileById(userId, fileId);
-    const jobId = `job_${crypto22.randomUUID().slice(0, 16)}`;
+    const jobId = `job_${crypto23.randomUUID().slice(0, 16)}`;
     const now = /* @__PURE__ */ new Date();
     const newJob = {
       id: jobId,

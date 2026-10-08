@@ -5,6 +5,8 @@ import type { AuthenticatedRequest } from '../middleware/auth.js';
 import { canAccess, getUserActivePlanId, getUserEntitlements, PLAN_LIMITS } from '../services/entitlements.js';
 import { PaymentProviderFactory } from '../services/paymentProviders.js';
 import { BillingInterval, PaymentProviderType, PlanId } from '../types.js';
+import { coinWalletService, COIN_TOPUP_PACKS } from '../services/coinWalletService.js';
+import { subscriptionService } from '../services/subscriptionService.js';
 
 export const billingRouter = Router();
 
@@ -1586,6 +1588,127 @@ billingRouter.delete('/payment-methods/:id', authenticateUser, (req: Authenticat
   } catch (err: any) {
     console.error('Error deleting payment method:', err);
     res.status(500).json({ error: err.message || 'Failed to delete payment method.' });
+  }
+});
+
+// ==========================================
+// 10. REAL NIHOMI COIN WALLET & LEDGER API
+// ==========================================
+
+billingRouter.get('/wallet', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id || (req.query.userId as string) || 'guest';
+    const wallet = await coinWalletService.getWallet(userId);
+    return res.json({
+      success: true,
+      wallet,
+      currency: 'Nihomi Coins 🪙',
+      exchangeRate: '1 Coin = 1 Sensei Turn',
+      balance: wallet.coinBalance
+    });
+  } catch (err: any) {
+    console.error('Error fetching coin wallet:', err);
+    return res.status(500).json({ error: err.message || 'Failed to retrieve wallet' });
+  }
+});
+
+billingRouter.get('/ledger', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id || (req.query.userId as string);
+    if (!userId) {
+      return res.status(401).json({ error: 'Authentication required to view transaction ledger.' });
+    }
+    const limit = Number(req.query.limit) || 50;
+    const ledger = await coinWalletService.getLedger(userId, limit);
+    return res.json({
+      success: true,
+      ledger
+    });
+  } catch (err: any) {
+    console.error('Error fetching ledger:', err);
+    return res.status(500).json({ error: err.message || 'Failed to retrieve ledger' });
+  }
+});
+
+billingRouter.get('/coin-packs', (_req: Request, res: Response) => {
+  return res.json({
+    success: true,
+    packs: COIN_TOPUP_PACKS,
+    note: '1 Coin = 1 AI Sensei Turn'
+  });
+});
+
+billingRouter.post('/rewards/claim', authenticateUser, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const { eventType, idempotencyKey } = req.body;
+    if (!eventType || !idempotencyKey) {
+      return res.status(400).json({ error: 'eventType and idempotencyKey are required' });
+    }
+
+    const sub = await subscriptionService.getUserSubscription(userId);
+    const result = await coinWalletService.claimReward({
+      userId,
+      eventType,
+      idempotencyKey,
+      tier: sub.tier
+    });
+
+    return res.json({
+      ...result,
+      message: result.success
+        ? `🎁 Nihomi Reward granted! +${result.coinsAwarded} Coins added.`
+        : (result.alreadyClaimed ? 'Reward already claimed for this learning event.' : 'Monthly reward cap reached.')
+    });
+  } catch (err: any) {
+    console.error('Error claiming reward:', err);
+    return res.status(500).json({ error: err.message || 'Failed to claim reward' });
+  }
+});
+
+billingRouter.get('/auto-topup', authenticateUser, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const wallet = await coinWalletService.getWallet(userId);
+    return res.json({
+      success: true,
+      autoTopup: {
+        enabled: wallet.autoTopupEnabled,
+        threshold: wallet.autoTopupThreshold,
+        pack: wallet.autoTopupPack,
+        spendingCap: wallet.monthlySpendingCap,
+        currentMonthSpent: wallet.currentMonthSpent
+      }
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Failed to fetch auto topup config' });
+  }
+});
+
+billingRouter.post('/auto-topup', authenticateUser, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const { enabled, threshold, pack, spendingCap } = req.body;
+    const wallet = await coinWalletService.setAutoTopup(userId, {
+      enabled: Boolean(enabled),
+      threshold: Number(threshold) || 50,
+      pack: pack || 'coins_500',
+      spendingCap: Number(spendingCap) || 5000
+    });
+    return res.json({
+      success: true,
+      message: enabled
+        ? 'Auto Top-up enabled: When balance drops below 50 Coins, 500 Coins will be added automatically.'
+        : 'Auto Top-up disabled.',
+      autoTopup: {
+        enabled: wallet.autoTopupEnabled,
+        threshold: wallet.autoTopupThreshold,
+        pack: wallet.autoTopupPack,
+        spendingCap: wallet.monthlySpendingCap
+      }
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Failed to update auto topup config' });
   }
 });
 

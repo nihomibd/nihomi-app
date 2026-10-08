@@ -12,6 +12,7 @@ import {
 } from '../gemini.js';
 import { aiCostGuard, recordAiCostUsage } from '../middleware/aiCostGuard.js';
 import { subscriptionService } from '../services/subscriptionService.js';
+import { coinWalletService } from '../services/coinWalletService.js';
 import crypto from 'crypto';
 
 export const aiRouter = Router();
@@ -51,6 +52,7 @@ aiRouter.post(
         return res.status(400).json({ error: 'message is required' });
       }
 
+      let quotaInfo: any = null;
       if (isGuest) {
         const guestTurns = getGuestTurnCount(guestId);
         if (guestTurns >= 3) {
@@ -58,28 +60,39 @@ aiRouter.post(
             success: false,
             paywall: true,
             code: 'AI_QUOTA_EXCEEDED',
-            error: 'দৈনিক ফ্রি ৩টি AI সেনসেই চ্যাট সীমা পূর্ণ হয়েছে। আনলিমিটেড ২৪/৭ AI কোচ পেতে সাইন ইন বা N5 Pro প্ল্যানে আপগ্রেড করুন!',
-            messageBn: 'আপনার আজকের ৩টি ফ্রি AI সেনসেই কথোপকথন শেষ হয়েছে। আনলিমিটেড শিখতে সাইন ইন বা N5 Pro আপগ্রেড করুন।',
+            error: 'আজকের ৩টি Free Sensei Turn শেষ হয়েছে।',
+            messageBn: 'আজকের ৩টি Free Sensei Turn শেষ হয়েছে। সাইন ইন করে আরও ১০টি ফ্রি টার্ন নিন অথবা নিহোমি কয়েন ব্যবহার করুন।',
             tier: 'guest',
             usedToday: guestTurns,
             dailyQuota: 3,
             upgradeRequired: true,
+            actions: [
+              { label: 'Google Login করুন', action: 'LOGIN', url: '/auth/login' },
+              { label: 'Use Nihomi Coins', action: 'COINS', url: '/pricing' },
+              { label: 'Upgrade', action: 'UPGRADE', url: '/pricing' }
+            ]
           });
         }
       } else {
-        // Check daily conversation quota: Free capped at 3 turns, N5 Pro / Lifetime unlimited
-        const quota = await subscriptionService.checkDailyAiChatQuota(userId);
-        if (!quota.allowed) {
+        // Server-authoritative check: 10 daily free turns, then fallback to Nihomi Coins (1 Coin = 1 Turn)
+        quotaInfo = await subscriptionService.checkDailyAiChatQuota(userId);
+        if (!quotaInfo.allowed) {
           return res.status(402).json({
             success: false,
             paywall: true,
             code: 'AI_QUOTA_EXCEEDED',
-            error: 'দৈনিক ফ্রি ৩টি AI সেনসেই চ্যাট সীমা পূর্ণ হয়েছে। আনলিমিটেড ২৪/৭ AI কোচ পেতে N5 Pro প্ল্যানে আপগ্রেড করুন!',
-            messageBn: 'আপনার আজকের ৩টি ফ্রি AI সেনসেই কথোপকথন শেষ হয়েছে। আনলিমিটেড শিখতে N5 Pro প্ল্যানে আপগ্রেড করুন।',
-            tier: quota.tier,
-            usedToday: quota.currentTurnsToday,
-            dailyQuota: quota.maxDailyTurns,
+            error: 'আজকের ১০টি Free Sensei Turn শেষ হয়েছে। নিহোমি কয়েন ব্যবহার করুন অথবা আপগ্রেড করুন!',
+            messageBn: 'আজকের ১০টি Free Sensei Turn শেষ হয়েছে। সেনসেই অব্যাহত রাখতে নিহোমি কয়েন ব্যবহার করুন অথবা প্ল্যান আপগ্রেড করুন।',
+            tier: quotaInfo.tier,
+            usedToday: quotaInfo.currentTurnsToday,
+            dailyQuota: quotaInfo.maxDailyTurns,
+            remainingCoins: quotaInfo.remainingCoins || 0,
             upgradeRequired: true,
+            actions: [
+              { label: 'Use Nihomi Coins', action: 'COINS', url: '/pricing' },
+              { label: 'Buy Coins', action: 'BUY_COINS', url: '/pricing' },
+              { label: 'Upgrade', action: 'UPGRADE', url: '/pricing' }
+            ]
           });
         }
       }
@@ -142,8 +155,35 @@ aiRouter.post(
         });
       }
 
-      // Record daily turn consumed for logged-in user
-      subscriptionService.recordDailyAiChatTurn(userId);
+      // Server-authoritative turn accounting & coin deduction
+      let updatedCoinBalance = quotaInfo?.remainingCoins ?? 0;
+      let coinTransactionId: string | undefined;
+
+      if (quotaInfo?.useCoin) {
+        // If Auto Top-up was triggered, grant the pack first
+        if (quotaInfo.autoTopupTriggered) {
+          await coinWalletService.grantCoins({
+            userId,
+            amount: 500,
+            source: 'PURCHASE',
+            description: 'Auto Top-up: 500 Nihomi Coins'
+          }).catch(err => console.warn('[AICoach] Auto top-up grant warning:', err?.message));
+        }
+
+        // Deduct exactly 1 Coin for this successful Sensei turn
+        const deductResult = await coinWalletService.deductCoinForTurn({
+          userId,
+          referenceId: sessionId || `turn_${Date.now()}`,
+          description: '1 AI Sensei Turn consumed'
+        });
+        if (deductResult.success) {
+          updatedCoinBalance = deductResult.newBalance;
+          coinTransactionId = deductResult.transactionId;
+        }
+      } else {
+        // Daily free turn: record 1 free turn consumed
+        subscriptionService.recordDailyAiChatTurn(userId);
+      }
 
       // Atomic Token & Query Deduction via Cost Guard
       const updatedUsage = recordAiCostUsage(userId, 850, 'coach');
@@ -185,10 +225,14 @@ aiRouter.post(
         diagnostics: aiResult.diagnostics,
         sessionId: session.id,
         messages: session.messages,
+        coins: updatedCoinBalance,
+        turnType: quotaInfo?.useCoin ? 'COIN' : 'DAILY_FREE',
+        coinTransactionId,
         usage: {
           aiCoachInteractions: updatedUsage.aiCoachInteractions,
           aiMonthlyLimit: guardMeta?.monthlyQuota || 100,
-          remainingQuota: Math.max(0, (guardMeta?.monthlyQuota || 100) - updatedUsage.aiCoachInteractions)
+          remainingQuota: Math.max(0, (guardMeta?.monthlyQuota || 100) - updatedUsage.aiCoachInteractions),
+          coinBalance: updatedCoinBalance
         }
       });
     } catch (error: any) {
