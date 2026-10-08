@@ -223,55 +223,79 @@ const HERO_DIALOGUES: HeroDialogue[] = [
   }
 ];
 
-// 4 Real-Life Roleplay Scenarios
+// 6 Immersive Real-Life Japan Missions (Section 18)
 const ROLEPLAY_SCENARIOS = [
   {
     id: 'conbini',
-    title: 'টোকিও কনবিনি ক্যাশিয়ার',
+    title: 'Konbini (টোকিও কনবিনি)',
     sub: '7-Eleven & Lawson POS Dialogue',
-    desc: 'পয়েন্ট কার্ড, খাবার গরম করা, প্লাস্টিক ব্যাগ ও বিভিন্ন পেমেন্ট মেথড ডায়ালগ',
+    desc: 'পয়েন্ট কার্ড, খাবার গরম করা, প্লাস্টিক ব্যাগ ও ক্যাশিয়ার কাউন্টারে দ্রুত সমাধান।',
     phraseJa: '温めますか？袋はおつけしますか？',
     phraseBn: 'খাবার কি গরম করে দেব? সাথে ব্যাগ লাগবে?',
-    tags: ['অফিসিয়াল কেইগো', 'Baito POS'],
+    tags: ['Konbini POS', 'ক্যাশিয়ার কেইগো'],
     color: 'from-amber-500/20 to-orange-500/10 border-amber-500/30 text-amber-400',
     icon: Store,
     view: 'baito'
   },
   {
     id: 'station',
-    title: 'শিনজুকু স্টেশন নেভিগেশন',
+    title: 'Tokyo Station (টোকিও স্টেশন)',
     sub: 'JR Yamanote & Subway Transfer',
-    desc: 'ট্রেন মিস হলে রি-রুট, টিকিট কাউন্টারে অনুসন্ধান ও সঠিক প্ল্যাটফর্ম জিজ্ঞাসা',
+    desc: 'ট্রেন মিস হলে রি-রুট, টিকিট কাউন্টারে অনুসন্ধান ও সঠিক প্ল্যাটফর্ম জিজ্ঞাসা।',
     phraseJa: 'すみません、山手線は何番線ですか？',
     phraseBn: 'মাফ করবেন, ইয়ামানতে লাইন কত নম্বর প্ল্যাটফর্মে?',
-    tags: ['দিকনির্দেশনা', 'লিসেনিং ড্রিল'],
+    tags: ['স্টেশন নেভিগেশন', 'লিসেনিং ড্রিল'],
     color: 'from-sky-500/20 to-blue-500/10 border-sky-500/30 text-sky-400',
     icon: Compass,
     view: 'baito'
   },
   {
-    id: 'ramen',
-    title: 'রামেন শপ টিকেট মেশিন',
-    sub: 'Ticket Vending & Customization',
-    desc: 'টিকেট মেশিন রিডিং, নুডলসের কঠোরতা ও অতিরিক্ত টপিং অর্ডার করা',
-    phraseJa: '麺の硬さはどうなさいますか？カタメで！',
-    phraseBn: 'নুডলস কেমন চান? একটু শক্ত করে দিন!',
-    tags: ['ফুড ও মেনু', 'কাঞ্জি রিডিং'],
+    id: 'restaurant',
+    title: 'Restaurant (রেস্তোরাঁ ও ফুড অর্ডার)',
+    sub: 'Izakaya & Table Booking',
+    desc: 'টেবিল বুকিং, মেনু নির্বাচন, অ্যালার্জি জিজ্ঞাসা ও বিল পরিশোধ।',
+    phraseJa: '二人です。おすすめのメニューは何ですか？',
+    phraseBn: 'আমরা দুজন। স্পেশাল কী রিকমেন্ড করবেন?',
+    tags: ['ফুড ও মেনু', 'টেবিল রিজার্ভেশন'],
     color: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/30 text-emerald-400',
     icon: Zap,
     view: 'baito'
   },
   {
-    id: 'interview',
-    title: 'জাপান পার্ট-টাইম ও ভিসা ইন্টারভিউ',
-    sub: 'Baito & Visa Defense Coaching',
-    desc: 'স্ব-পরিচয় (Jikoshoukai), কাজের ইচ্ছা ও শিফট টাইম ব্যাখ্যা করার ফ্লুয়েন্সি',
+    id: 'airport',
+    title: 'Airport (নারিতা/হানেদা এয়ারপোর্ট)',
+    sub: 'Immigration & Customs Inspection',
+    desc: 'পাসপোর্ট কন্ট্রোল, ভিসার উদ্দেশ্য ও লাগেজ ক্লেইমে আত্মবিশ্বাসের সাথে কথা বলা।',
+    phraseJa: '滞在目的は留学です。日本語学校に通います。',
+    phraseBn: 'থাকার উদ্দেশ্য উচ্চশিক্ষা। জাপানিজ ল্যাঙ্গুয়েজ স্কুলে পড়ব।',
+    tags: ['ইমিগ্রেশন', 'ভিসা ডিফেন্স'],
+    color: 'from-purple-500/20 to-indigo-500/10 border-purple-500/30 text-purple-400',
+    icon: ShieldCheck,
+    view: 'interview'
+  },
+  {
+    id: 'workplace',
+    title: 'Workplace (কর্মক্ষেত্র ও বাইতো)',
+    sub: 'Baito Interview & Shift Manner',
+    desc: 'স্ব-পরিচয় (Jikoshoukai), কাজের শিফট ঠিক করা ও কর্মক্ষেত্রের অভিবাদন ম্যানারিজম।',
     phraseJa: 'はじめまして、一生懸命頑張ります！',
-    phraseBn: 'পরিচিত হয়ে খুশি হলাম, আমি মন দিয়ে পরিশ্রম করব!',
-    tags: ['জব ইন্টারভিউ', 'ভিসা প্রস্তুতি'],
+    phraseBn: 'পরিচিত হয়ে খুশি হলাম, আমি সর্বোচ্চ দিয়ে পরিশ্রম করব!',
+    tags: ['জব ইন্টারভিউ', 'অফিস শিফট'],
     color: 'from-rose-500/20 to-red-500/10 border-rose-500/30 text-rose-400',
     icon: Briefcase,
     view: 'interview'
+  },
+  {
+    id: 'everyday',
+    title: 'Everyday Japan (দৈনন্দিন জাপান)',
+    sub: 'Directions & City Life Navigation',
+    desc: 'রাস্তায় পথ জিজ্ঞাসা, ওষুধ ফার্মেসি, সিটি অফিস ও প্রতিবেশীদের সাথে সৌজন্য আলাপ।',
+    phraseJa: '駅までは歩いて何分くらいかかりますか？',
+    phraseBn: 'স্টেশনে হেঁটে পৌঁছাতে কত মিনিট লাগবে?',
+    tags: ['দৈনন্দিন জীবন', 'রাস্তা নির্দেশনা'],
+    color: 'from-blue-500/20 to-cyan-500/10 border-blue-500/30 text-blue-400',
+    icon: MapPin,
+    view: 'baito'
   }
 ];
 
@@ -344,59 +368,85 @@ const WANIKANI_LEVELS = [
   }
 ];
 
-// Pre-configured N5 Pro Lifetime Plan for instant checkout
-const N5_PRO_PLAN: Plan = {
-  id: 'pro',
-  name: 'N5 Pro Lifetime',
-  displayNameJa: 'N5プロ・完全マスター (生涯アクセス)',
-  tagline: 'Complete JLPT N5 mastery with lifetime access',
-  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, Nihomi WorkOS™, and 180-Mark Mock Exams',
-  monthlyPrice: 599,
-  yearlyPrice: 4990,
+// Official Nihomi Locked v1.9 Plans
+const STARTER_PLAN: Plan = {
+  id: 'starter',
+  name: 'Starter Learner',
+  displayNameJa: 'スターター会員',
+  tagline: 'Full JLPT N5 Foundation with Standard AI Support',
+  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, and 500 Nihomi Coins/month',
+  monthlyPrice: 990,
+  yearlyPrice: 8990,
   currency: 'BDT',
-  badge: 'সর্বোচ্চ জনপ্রিয়',
-  isRecommended: true,
+  badge: 'সহজ সূচনা',
+  isRecommended: false,
   order: 1,
   features: [
-    'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
+    'সম্পূর্ণ JLPT N5 কারিকুলাম (লেসন ১–২৫)',
+    '৫০০ মাসিক নিহোমি কয়েন (১ কয়েন = ১ AI সেনসেই টার্ন)',
     '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
-    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
-    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
-    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
-    '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
-    '২৪/৭ আনলিমিটেড Nihomi Sensei AI™ লাইভ টিউটর',
-    'আজীবন অ্যাক্সেস — মোবাইল, ট্যাবলেট ও ল্যাপটপ'
+    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (Choukai)',
+    'Nihomi WorkOS™ কনবিনি ক্যাশিয়ার সিমুলেটর',
+    'মিস্টেক রিকভারি ও রিভিশন মোড'
   ],
   aiMonthlyLimit: 500,
-  entitlements: ['n5', 'quizzes', 'ai_coach', 'jlpt_pro', 'certificates', 'japan_ready'],
+  entitlements: ['n5', 'quizzes', 'ai_coach', 'jlpt_pro'],
   isPublished: true
 };
 
-// Pre-configured All-Access Unlimited Annual Plan for instant checkout
-const ALL_ACCESS_ANNUAL_PLAN: Plan = {
+const PRO_PLAN: Plan = {
+  id: 'pro',
+  name: 'Pro Learning',
+  displayNameJa: 'プロ会員 (おすすめ)',
+  tagline: 'Complete N5 + N4 Mastery with Voice & Vision AI Sensei',
+  description: 'Full access to Minna no Nihongo 1-50, 1,500 Nihomi Coins/month, and JLPT Mock Exam Engine',
+  monthlyPrice: 1990,
+  yearlyPrice: 17990,
+  currency: 'BDT',
+  badge: 'সর্বোচ্চ জনপ্রিয়',
+  isRecommended: true,
+  order: 2,
+  features: [
+    'সম্পূর্ণ JLPT N5 + N4 কারিকুলাম (মিন্না নো নিহোঙ্গো ১–৫০)',
+    '১,৫০০ মাসিক নিহোমি কয়েন (AI সেনসেই ও ভয়েস ড্রিল)',
+    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
+    'হাই-স্পিড ভয়েস ও প্রোনাউন্সিয়েশন ল্যাব',
+    '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
+    'টোকিও কনবিনি, স্টেশন ও রেস্তোরাঁ রোলপ্লে'
+  ],
+  aiMonthlyLimit: 1500,
+  entitlements: ['n5', 'n4', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro', 'certificates', 'japan_ready'],
+  isPublished: true
+};
+
+const JAPAN_READY_PLAN: Plan = {
   id: 'japan_ready',
-  name: 'All-Access Unlimited Annual',
-  displayNameJa: '全レベル見放題・プロ年間プラン',
-  tagline: 'Complete JLPT N5-N1 mastery with continuous career companion',
-  description: 'Full access to all N5-N1 courses, Business Keigo, JIS Rirekisho & Shokumu Keirekisho, and 1,000 AI Coach turns/month',
-  monthlyPrice: 599,
-  yearlyPrice: 4990,
+  name: 'Japan Ready Track',
+  displayNameJa: '日本定住・就職完全トラック',
+  tagline: 'All Levels N5 to N1, Interview Simulators & 4,000 AI Coins',
+  description: 'Unrestricted access to all levels N5-N1, 4,000 Nihomi Coins/month, and Priority Career Support',
+  monthlyPrice: 3990,
+  yearlyPrice: 35990,
   currency: 'BDT',
   badge: 'সর্বোচ্চ ভ্যালু',
   isRecommended: false,
-  order: 2,
+  order: 3,
   features: [
-    'N5 থেকে N1 পর্যন্ত সকল ডিজিটাল কোর্স ও ২১০+ লেসন',
-    'JIS 履歴書 ও 職務経歴書 আনলিমিটেড Pro PDF এক্সপোর্ট',
-    'টোকিও কাস্টমার সার্ভিস ও বিজনেস কেইগো ড্রিল',
-    '১,০০০টি এআই সেনসেই কোচিং ইন্টারঅ্যাকশন প্রতি মাসে',
-    '১৮০ মার্কসের অফিসিয়াল ফুল সিমুলেটেড মক টেস্ট ইঞ্জিন',
-    'টোকিও ভিসা ও জব অ্যাপ্লিকেশন ক্যারিয়ার সাপোর্ট'
+    'N5 থেকে N1 সকল লেভেলের ডিজিটাল কোর্স ও ২১০+ লেসন',
+    '৪,০০০ মাসিক নিহোমি কয়েন (অ্যাডভান্সড AI সিমুলেশন)',
+    'জাপান দূতাবাস ও ভিসা ইন্টারভিউ ডিফেন্স ল্যাব',
+    'আইটি ইঞ্জিনিয়ার ও বাইতো স্পেশালাইজড ইন্টারভিউ সিমুলেটর',
+    'প্রায়োরিটি AI রাউটিং (সর্বনিম্ন লেটেন্সি)',
+    'জাপান ক্যারিয়ার গাইড ও সিভি প্রফেশনাল রিভিউ'
   ],
-  aiMonthlyLimit: 1000,
-  entitlements: ['n5', 'n4', 'n3', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro', 'certificates', 'japan_ready'],
+  aiMonthlyLimit: 4000,
+  entitlements: ['n5', 'n4', 'n3', 'n2', 'n1', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro', 'certificates', 'japan_ready'],
   isPublished: true
 };
+
+// Aliases for backwards compatibility with any existing modals
+const N5_PRO_PLAN = PRO_PLAN;
+const ALL_ACCESS_ANNUAL_PLAN = JAPAN_READY_PLAN;
 
 export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
   const { openAuthModal, user } = useAuth();
@@ -521,44 +571,47 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
               <span>🇯🇵 বাংলাদেশের প্রথম AI-Powered Japan Readiness প্ল্যাটফর্ম</span>
             </div>
 
-            {/* Main Headline */}
+            {/* Main Headline (Section 18: Clear Outcome) */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
-              জাপান যাওয়ার কমপ্লিট AI প্ল্যাটফর্ম, <br className="hidden sm:inline" />
+              Learn Japanese. <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-400">
-                যেখানে ভাষা শেখার সাথেই পাচ্ছো বাস্তব জীবনের লাইভ প্র্যাকটিস!
+                Get Japan Ready. 🇯🇵
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl">
-              চিরাচরিত কোচিংয়ের গৎবাঁধা ব্যাকরণ মুখস্থ তোমার জাপানের স্বপ্নপূরণে বাধা হতে পারে না। Nihomi AI-এর সাথে কথা বলে, কনবিনি ও ট্রেনের বাস্তব সিচুয়েশন প্র্যাকটিস করে নিজেকে ১০০% প্রস্তুত করো।
+              জাপানি ভাষা শিখুন বাস্তব কনভার্সেশন ও লাইভ সিনারিও দিয়ে। Nihomi Sensei AI-এর সাথে সরাসরি কথা বলে, কনবিনি, ট্রেন স্টেশন ও কর্মক্ষেত্রের বাস্তব পরিস্থিতিতে নিজেকে ১০০% প্রস্তুত করুন।
             </p>
 
             {/* Micro-copy Tagline */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-mono text-amber-300/90">
-              <span>✨ You learn Japanese. Nihomi coordinates everything else.</span>
+              <span>✨ 1 Coin = 1 Sensei Turn • Learn more. Do more. Earn more.</span>
             </div>
 
-            {/* Action CTA Buttons */}
+            {/* Action CTA Buttons (Section 18) */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <button
+                id="btn-hero-start-journey"
                 onClick={() => {
                   trackNihomiEvent('journey_start_clicked', { source: 'landing_hero' });
                   onNavigate('journey');
                 }}
                 className="px-7 py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm sm:text-base font-bold shadow-xl shadow-red-600/25 hover:shadow-red-600/40 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
               >
-                <span>🔥 আমার Japan Journey শুরু করি →</span>
+                <span>🔥 Start My Journey (আমার যাত্রা শুরু করি) →</span>
               </button>
 
               <button
+                id="btn-hero-meet-sensei"
                 onClick={() => {
-                  trackNihomiEvent('mission_started', { source: 'landing_hero_secondary' });
-                  setIsFirstMissionModalOpen(true);
+                  trackNihomiEvent('meet_sensei_clicked', { source: 'landing_hero_secondary' });
+                  onNavigate('ai-coach');
                 }}
                 className="px-6 py-4 bg-[#161D2B] hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 rounded-2xl text-sm sm:text-base font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
-                <span>▶ একটি Mission দেখে দেখি</span>
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Meet Nihomi Sensei (সেনসেইয়ের সাথে কথা বলি)</span>
               </button>
             </div>
 
@@ -1737,98 +1790,368 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
             onOpenWritingCanvas={() => setIsWritingActive(true)}
           />
 
-          {/* Dedicated High-Converting ৳৪৯৯ N5 Lifetime Pass Card */}
-          <div className="max-w-4xl mx-auto">
-            <div className="rounded-3xl bg-gradient-to-br from-[#161D2B] via-[#1A2333] to-[#161D2B] border-2 border-rose-500/80 p-6 sm:p-10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
-              
-              {/* Highlight Ribbon */}
-              <div className="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-bold px-5 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-md">
-                🔥 সর্বোচ্চ জনপ্রিয় • লাইফটাইম অ্যাক্সেস
+          {/* Locked v1.9 4-Tier Subscription Pricing Grid & Coin Economy */}
+          <div className="space-y-12">
+            
+            {/* Section Header */}
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold font-mono">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>1 NIHOMI COIN = 1 AI SENSEI TURN • LOCKED PRICING</span>
               </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                স্বচ্ছ ও সহজ মূল্যতালিকা — কোনো লুকানো শর্ত নেই
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                ফ্রি দিয়ে শুরু করুন, প্রতিদিন ১০টি ফ্রি সেনসেই টার্ন পান। প্রয়োজনমতো কয়েন টপ-আপ করুন অথবা সাবস্ক্রাইব করে সম্পূর্ণ জাপানিজ রোডম্যাপ আনলক করুন।
+              </p>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                
-                {/* Left Description (7 cols) */}
-                <div className="md:col-span-7 space-y-4 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-mono font-bold border border-rose-500/30">
-                    JLPT N5 Complete Mastery
+            {/* 4-Tier Pricing Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              
+              {/* Plan 1: FREE */}
+              <div className="rounded-3xl bg-[#161D2B] border border-slate-800 p-6 flex flex-col justify-between hover:border-slate-700 transition-all shadow-xl">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-300 font-mono">
+                      FREE TIER
+                    </span>
+                    <span className="text-[11px] text-emerald-400 font-bold">১০ টার্ন/দিন</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-black text-white">
-                    N5 Pro সম্পূর্ণ কারিকুলাম — মাত্র ৳৫৯৯/মাস
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Free Member</h3>
+                    <p className="text-xs text-slate-400 mt-1">Google Login-এর পর দৈনিক ফ্রি সেনসেই সুবিধা</p>
+                  </div>
 
-                  <div className="flex items-baseline gap-3 pt-1">
-                    <span className="text-3xl sm:text-4xl font-black text-white">৳৫৯৯<span className="text-sm font-normal text-slate-400">/মাস</span></span>
-                    <span className="text-xs text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded-md">
-                      প্রতিদিন মাত্র ৳২০ • এক কাপ চায়ের বাজেটের সমান
+                  <div className="pt-2">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-white">৳০</span>
+                      <span className="text-xs text-slate-400">/জীবনব্যাপী</span>
+                    </div>
+                    <span className="text-[11px] text-emerald-400 font-semibold block mt-1">
+                      গেস্ট ইউজার: ৩টি টার্ন/দিন
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম, তোশিবা নেটিভ লিসেনিং ল্যাব, ১০০ কাঞ্জি ড্রয়িং এবং অফিসিয়াল ১৮০ মার্কসের আনলিমিটেড মক টেস্ট।
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                    {[
-                      'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ পাঠ',
-                      '১০০টি N5 কাঞ্জি স্ট্রোক ক্যানভাস',
-                      'লিসেনিং অডিও ল্যাব (第1-25課 Choukai)',
-                      'JIS 履歴書 ও 職務経歴書 A4 PDF',
-                      'টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
-                      '১৮০ মার্কসের অফিসিয়াল মক টেস্ট ও সনদ',
-                      '২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর',
-                      'বার্ষিক প্যাকেজে প্রতিদিন মাত্র ৳১৩'
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
+                  <ul className="space-y-2.5 pt-3 border-t border-slate-800/80 text-xs text-slate-300">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>প্রতিদিন ১০টি Free Sensei AI Turn</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>হিরাগানা ও কাতাকানা বেসিক ড্রিল</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>টোকিও কনবিনি ফার্স্ট মিশন টেস্ট</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>Nihomi Reward কয়েন অর্জনের সুযোগ</span>
+                    </li>
+                  </ul>
                 </div>
 
-                {/* Right Action Box (5 cols) */}
-                <div className="md:col-span-5 bg-slate-900/90 rounded-2xl p-6 border border-slate-800 text-center space-y-4 shadow-xl">
-                  
-                  <div className="space-y-1">
-                    <div className="text-xs font-bold text-slate-300">ইনস্ট্যান্ট বিকাশ ও অনলাইন চেকআউট</div>
-                    <div className="text-[11px] text-slate-400">পেমেন্ট করার সাথে সাথেই পুরো N5 আনলক</div>
-                  </div>
-
+                <div className="pt-6 border-t border-slate-800/80 mt-6">
                   <button
                     onClick={() => {
-                      trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 599 });
-                      setCheckoutTargetPlan(N5_PRO_PLAN);
+                      if (!user) openAuthModal();
+                      else onNavigate('dashboard');
+                    }}
+                    className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    {user ? 'ড্যাশবোর্ডে যান →' : 'Google দিয়ে ফ্রি লগইন →'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Plan 2: STARTER (৳990) */}
+              <div className="rounded-3xl bg-[#161D2B] border border-slate-800 p-6 flex flex-col justify-between hover:border-slate-700 transition-all shadow-xl">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">
+                      STARTER
+                    </span>
+                    <span className="text-[11px] text-amber-400 font-bold font-mono">🪙 ৫০০ কয়েন/মাস</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Starter</h3>
+                    <p className="text-xs text-slate-400 mt-1">JLPT N5 বেসিক ও স্ট্যান্ডার্ড সেনসেই AI সাপোর্ট</p>
+                  </div>
+
+                  <div className="pt-2">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-white">৳৯৯০</span>
+                      <span className="text-xs text-slate-400">/মাস</span>
+                    </div>
+                    <span className="text-[11px] text-blue-400 font-semibold block mt-1">
+                      প্রতিদিন মাত্র ৳৩৩ • ৫০০ AI টার্ন
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 pt-3 border-t border-slate-800/80 text-xs text-slate-300">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>৫০০ নিহোমি কয়েন/মাস অন্তর্ভুক্ত</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>১০০টি N5 কাঞ্জি ও ইন্টারেক্টিভ ড্রয়িং</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>WorkOS কনবিনি ও শিফট সিমুলেটর</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-6 border-t border-slate-800/80 mt-6">
+                  <button
+                    onClick={() => {
+                      trackNihomiEvent('subscription_checkout_started', { planId: 'starter', amountBDT: 990 });
+                      setCheckoutTargetPlan(STARTER_PLAN);
                       setCheckoutTargetInterval('monthly');
                       setIsCheckoutOpen(true);
                     }}
-                    className="w-full py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-2xl text-sm font-bold shadow-xl shadow-red-600/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-colors cursor-pointer shadow-md shadow-blue-600/20"
                   >
-                    <span>১-ক্লিকে এনরোল করুন — ৳৫৯৯</span>
-                    <ArrowRight className="w-4 h-4" />
+                    Starter শুরু করুন — ৳৯৯০
                   </button>
+                </div>
+              </div>
 
-                  <div className="flex items-center justify-center gap-2 text-[11px] text-emerald-400 font-medium">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>bKash & SSLCommerz ভেরিফাইড মার্চেন্ট</span>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-800">
-                    <button
-                      onClick={() => onNavigate('pricing')}
-                      className="text-xs text-slate-400 hover:text-white font-medium transition-colors cursor-pointer"
-                    >
-                      বাৎসরিক অল-এক্সেস (৳৪,৯৯০) বা অন্যান্য প্ল্যান দেখুন →
-                    </button>
-                  </div>
-
+              {/* Plan 3: PRO (৳1,990) - HIGHLIGHTED */}
+              <div className="rounded-3xl bg-gradient-to-b from-[#1c1a35] via-[#161D2B] to-[#161D2B] border-2 border-rose-500 p-6 flex flex-col justify-between relative shadow-2xl shadow-rose-950/40">
+                <div className="absolute -top-3.5 right-6 bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                  🔥 সর্বাধিক জনপ্রিয়
                 </div>
 
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-mono">
+                      PRO LEARNING
+                    </span>
+                    <span className="text-[11px] text-amber-300 font-bold font-mono">🪙 ১,৫০০ কয়েন/মাস</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Nihomi Pro</h3>
+                    <p className="text-xs text-rose-200/80 mt-1">N5 + N4 সম্পূর্ণ কোর্স, ভয়েস ল্যাব ও সিভি টুলস</p>
+                  </div>
+
+                  <div className="pt-2">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-white">৳১,৯৯০</span>
+                      <span className="text-xs text-slate-400">/মাস</span>
+                    </div>
+                    <span className="text-[11px] text-rose-400 font-semibold block mt-1">
+                      ১,৫০০ AI টার্ন • সম্পূর্ণ ক্যারিয়ার সাপোর্ট
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 pt-3 border-t border-slate-800/80 text-xs text-slate-200">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>১,৫০০ নিহোমি কয়েন/মাস অন্তর্ভুক্ত</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>সম্পূর্ণ JLPT N5 + N4 কারিকুলাম (১–৫০)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>১৮০ মার্কসের অফিসিয়াল ফুল মক টেস্ট ও সনদ</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>হাই-স্পিড ভয়েস ও প্রোনাউন্সিয়েশন ল্যাব</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-6 border-t border-slate-800/80 mt-6">
+                  <button
+                    onClick={() => {
+                      trackNihomiEvent('subscription_checkout_started', { planId: 'pro', amountBDT: 1990 });
+                      setCheckoutTargetPlan(PRO_PLAN);
+                      setCheckoutTargetInterval('monthly');
+                      setIsCheckoutOpen(true);
+                    }}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white font-bold text-xs transition-all cursor-pointer shadow-lg shadow-red-600/30 active:scale-95"
+                  >
+                    Pro সদস্য হোন — ৳১,৯৯০
+                  </button>
+                </div>
+              </div>
+
+              {/* Plan 4: JAPAN READY (৳3,990) */}
+              <div className="rounded-3xl bg-[#161D2B] border border-amber-500/40 p-6 flex flex-col justify-between hover:border-amber-500/60 transition-all shadow-xl">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">
+                      JAPAN READY
+                    </span>
+                    <span className="text-[11px] text-amber-400 font-bold font-mono">🪙 ৪,০০০ কয়েন/মাস</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Japan Ready</h3>
+                    <p className="text-xs text-slate-400 mt-1">N5–N1 সকল লেভেল, ভিসা ডিফেন্স ও প্রায়োরিটি AI</p>
+                  </div>
+
+                  <div className="pt-2">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-white">৳৩,৯৯০</span>
+                      <span className="text-xs text-slate-400">/মাস</span>
+                    </div>
+                    <span className="text-[11px] text-amber-400 font-semibold block mt-1">
+                      ৪,০০০ AI টার্ন • VIP ক্যারিয়ার কম্প্যানিয়ন
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 pt-3 border-t border-slate-800/80 text-xs text-slate-300">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>৪,০০০ নিহোমি কয়েন/মাস অন্তর্ভুক্ত</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>N5 থেকে N1 সকল লেভেলের ডিজিটাল কোর্স</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>জাপান দূতাবাস ও ভিসা ইন্টারভিউ ডিফেন্স</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>আইটি ইঞ্জিনিয়ার ও বাইতো জব ইন্টারভিউ ল্যাব</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>প্রায়োরিটি AI রাউটিং (সর্বনিম্ন লেটেন্সি)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-6 border-t border-slate-800/80 mt-6">
+                  <button
+                    onClick={() => {
+                      trackNihomiEvent('subscription_checkout_started', { planId: 'japan_ready', amountBDT: 3990 });
+                      setCheckoutTargetPlan(JAPAN_READY_PLAN);
+                      setCheckoutTargetInterval('monthly');
+                      setIsCheckoutOpen(true);
+                    }}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition-colors cursor-pointer shadow-md shadow-amber-500/20"
+                  >
+                    Japan Ready ট্র্যাক — ৳৩,৯৯০
+                  </button>
+                </div>
               </div>
 
             </div>
+
+            {/* Coin Top-up Packs Preview (Section 6) */}
+            <div className="rounded-3xl bg-[#161D2B] border border-slate-800 p-6 sm:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold font-mono">
+                    <span>🪙 NIHOMI COIN TOP-UP PACKS</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white mt-1">
+                    যেকোনো সময় ইনস্ট্যান্ট কয়েন টপ-আপ করুন
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    সাবস্ক্রিপশন ছাড়াই কয়েন কিনুন। ১ কয়েন = ১ AI সেনসেই টার্ন। মেয়াদ আজীবন।
+                  </p>
+                </div>
+                <div className="text-xs text-slate-400 font-mono flex items-center gap-1.5 shrink-0">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>ইনস্ট্যান্ট bKash ভেরিফাইড ক্রেডিট</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { coins: 100, priceBDT: 199, label: 'স্টার্টার প্যাক' },
+                  { coins: 500, priceBDT: 899, label: '🔥 সর্বোচ্চ জনপ্রিয়', highlight: true },
+                  { coins: 1000, priceBDT: 1599, label: 'সেরা ভ্যালু' },
+                  { coins: 2000, priceBDT: 2999, label: 'প্রো পাওয়ার প্যাক' }
+                ].map((pack, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-4 rounded-2xl border flex flex-col justify-between transition-all ${
+                      pack.highlight
+                        ? 'bg-amber-500/10 border-amber-500/50 shadow-lg shadow-amber-950/20'
+                        : 'bg-slate-900/80 border-slate-800'
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-amber-400 font-mono">{pack.label}</span>
+                      <div className="text-2xl font-black text-white font-mono flex items-center gap-1">
+                        <span>🪙</span>
+                        <span>{pack.coins}</span>
+                      </div>
+                      <div className="text-xs text-slate-300 font-bold">৳{pack.priceBDT}</div>
+                      <div className="text-[10px] text-slate-400">({pack.coins} Sensei Turns)</div>
+                    </div>
+                    <button
+                      onClick={() => onNavigate('dashboard')}
+                      className={`mt-4 w-full py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        pack.highlight
+                          ? 'bg-amber-500 hover:bg-amber-400 text-stone-950'
+                          : 'bg-slate-800 hover:bg-slate-700 text-white'
+                      }`}
+                    >
+                      কয়েন কিনুন
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Nihomi Reward Banner (Section 8: Learn more. Do more. Earn more.) */}
+            <div className="rounded-3xl bg-gradient-to-r from-emerald-950/40 via-[#161D2B] to-emerald-950/30 border border-emerald-500/30 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 text-left">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
+                  <span>🎁 NIHOMI REWARD ENGINE</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  Learn more. Do more. Earn more.
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
+                  প্রতিদিন পড়াশোনা করলেই স্বয়ংক্রিয়ভাবে ফ্রি নিহোমি কয়েন জমা হবে আপনার ওয়ালেটে।
+                </p>
+                <div className="flex flex-wrap gap-2 pt-2 text-[11px] font-mono text-emerald-400">
+                  <span className="bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">Daily Goal: +১ কয়েন</span>
+                  <span className="bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">Lesson Complete: +২ কয়েন</span>
+                  <span className="bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">Mission Complete: +৩ কয়েন</span>
+                  <span className="bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">7-Day Streak: +৫ কয়েন</span>
+                </div>
+              </div>
+
+              <div className="shrink-0 w-full md:w-auto">
+                <button
+                  id="btn-final-start-journey"
+                  onClick={() => onNavigate('journey')}
+                  className="w-full md:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-500 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <span>🔥 Start My Journey (আমার যাত্রা শুরু করি) →</span>
+                </button>
+              </div>
+            </div>
+
           </div>
 
         </div>

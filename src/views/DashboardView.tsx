@@ -17,7 +17,11 @@ import {
   Award,
   Play,
   Target,
-  Coins
+  Coins,
+  Gift,
+  MessageSquare,
+  Plus,
+  Check
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
@@ -265,105 +269,345 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
         )}
 
         {/* ========================================================================= */}
-        {/* HERO CTA: ONE PROMINENT NEXT BEST MISSION CARD                            */}
+        {/* HERO COMMAND DECK: TODAY'S MISSION (7 COLS) + SENSEI & COIN HUB (5 COLS)   */}
         {/* ========================================================================= */}
-        <section aria-label="Hero Next Best Mission">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#16122d] via-[#141226] to-[#0c0a18] border border-amber-500/30 p-6 sm:p-8 shadow-2xl">
-            {/* Ambient Tokyo Neon Glow */}
-            <div className="pointer-events-none absolute -right-20 -top-20 w-72 h-72 bg-red-600/15 rounded-full blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 -bottom-20 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl" />
+        <section aria-label="Personal Learning Command Center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            {/* LEFT: TODAY'S MISSION (7 Cols) */}
+            <div className="lg:col-span-7 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#16122d] via-[#141226] to-[#0c0a18] border border-amber-500/30 p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
+              {/* Ambient Tokyo Neon Glow */}
+              <div className="pointer-events-none absolute -right-20 -top-20 w-72 h-72 bg-red-600/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -left-20 -bottom-20 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl" />
 
-            <div className="relative z-10 space-y-5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
-                  <Zap className="w-3.5 h-3.5 fill-amber-300" />
-                  <span>
-                    {!isKonbiniDone ? 'TODAY’S MISSION • বাস্তব জাপান সিমুলেশন' : 'আজকের পরবর্তী মিশন • NEXT BEST MISSION'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-stone-300 font-mono">
-                  <span className="flex items-center gap-1 text-amber-400 font-bold">
-                    <Clock className="w-3.5 h-3.5" />
-                    ⏱️ {!isKonbiniDone ? '২ মিনিট' : `${activeMission.estimatedMinutes} মিনিট`}
-                  </span>
-                  <span>•</span>
-                  <span className="text-emerald-400 font-bold">ফ্রি ও আনলকড</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="text-xs text-amber-400/90 font-japanese font-bold tracking-wider">
-                  {!isKonbiniDone ? 'Tokyo Konbini • リアルコンビニ' : `JLPT N5 • ${canonicalMission.titleBn}`}
-                </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-snug">
-                  {!isKonbiniDone
-                    ? 'Mission 01: Tokyo Konbini (কনবিনি চ্যালেঞ্জ)'
-                    : canonicalMission.titleBn}
-                </h1>
-                <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-2xl font-medium">
-                  {!isKonbiniDone
-                    ? 'টোকিওর সেভেন-ইলেভেন বা লসনে প্রথম কেনাকাটার অভিজ্ঞতা। প্লাস্টিক ব্যাগ ও ক্যাশিয়ারের প্রশ্নের দ্রুত সমাধান।'
-                    : canonicalMission.whyItMattersBn}
-                </p>
-
-                {/* Constitutional Explainable "Why this mission?" Box */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs text-stone-300 space-y-1 mt-2">
-                  <div className="text-[11px] font-mono text-amber-400 font-bold flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>কেন এই মিশন? (Why this mission?):</span>
+              <div className="relative z-10 space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
+                    <Zap className="w-3.5 h-3.5 fill-amber-300" />
+                    <span>
+                      {!isKonbiniDone ? 'TODAY’S MISSION • বাস্তব জাপান সিমুলেশন' : 'আজকের পরবর্তী মিশন • NEXT BEST MISSION'}
+                    </span>
                   </div>
-                  <p className="text-stone-300">
+                  <div className="flex items-center gap-2 text-xs text-stone-300 font-mono">
+                    <span className="flex items-center gap-1 text-amber-400 font-bold">
+                      <Clock className="w-3.5 h-3.5" />
+                      ⏱️ {!isKonbiniDone ? '২ মিনিট' : `${activeMission.estimatedMinutes} মিনিট`}
+                    </span>
+                    <span>•</span>
+                    <span className="text-emerald-400 font-bold">
+                      {isKonbiniDone ? '১০০% সম্পন্ন ✓' : 'আনলকড ও প্রস্তুত'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-xs text-amber-400/90 font-japanese font-bold tracking-wider">
+                    {!isKonbiniDone ? 'Tokyo Konbini • リアルコンビニ' : `JLPT N5 • ${canonicalMission.titleBn}`}
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
                     {!isKonbiniDone
-                      ? 'টোকিওতে পা রেখে প্রথম দিনই আপনার কনবিনি ক্যাশিয়ারের সাথে সাবলীল কথা বলা ও ব্যাগ চাওয়ার দক্ষতা প্রয়োজন হবে।'
+                      ? 'Mission 01: Tokyo Konbini (কনবিনি চ্যালেঞ্জ)'
+                      : canonicalMission.titleBn}
+                  </h1>
+                  <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-medium">
+                    {!isKonbiniDone
+                      ? 'টোকিওর সেভেন-ইলেভেন বা লসনে প্রথম কেনাকাটার অভিজ্ঞতা। প্লাস্টিক ব্যাগ ও ক্যাশিয়ারের প্রশ্নের দ্রুত সমাধান।'
                       : canonicalMission.whyItMattersBn}
                   </p>
-                  {canonicalMission.japanConnectionBn && (
-                    <div className="text-[11px] text-amber-200/80 pt-0.5 border-t border-white/5">
-                      🇯🇵 বাস্তব সংযোগ: {canonicalMission.japanConnectionBn}
+
+                  {/* Constitutional Explainable "Why this mission?" Box */}
+                  <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs text-stone-300 space-y-1 mt-2">
+                    <div className="text-[11px] font-mono text-amber-400 font-bold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>কেন এই মিশন? (Why this mission?):</span>
                     </div>
+                    <p className="text-stone-300">
+                      {!isKonbiniDone
+                        ? 'টোকিওতে পা রেখে প্রথম দিনই আপনার কনবিনি ক্যাশিয়ারের সাথে সাবলীল কথা বলা ও ব্যাগ চাওয়ার দক্ষতা প্রয়োজন হবে।'
+                        : canonicalMission.whyItMattersBn}
+                    </p>
+                    {canonicalMission.japanConnectionBn && (
+                      <div className="text-[11px] text-amber-200/80 pt-0.5 border-t border-white/5">
+                        🇯🇵 বাস্তব সংযোগ: {canonicalMission.japanConnectionBn}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Primary Mission Action Buttons */}
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  {!isKonbiniDone ? (
+                    <button
+                      type="button"
+                      id="btn-dashboard-start-first-mission"
+                      onClick={() => {
+                        trackNihomiEvent('mission_started', { source: 'dashboard_hero' });
+                        setIsKonbiniModalOpen(true);
+                      }}
+                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
+                    >
+                      <Play className="w-4 h-4 fill-white" />
+                      <span>Mission শুরু করি →</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      id="btn-dashboard-start-next-mission"
+                      onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
+                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
+                    >
+                      <Play className="w-4 h-4 fill-white" />
+                      <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
                   )}
+
+                  <button
+                    type="button"
+                    id="btn-dashboard-placement-test"
+                    onClick={() => setIsPlacementOpen(true)}
+                    className="px-4 py-3.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  >
+                    <Compass className="w-3.5 h-3.5 text-amber-400" />
+                    <span>প্লেসমেন্ট টেস্ট</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT: SENSEI AI & NIHOMI COINS WALLET (5 Cols) */}
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4">
+              
+              {/* Visual Coin Wallet Card (Section 10 & 19) */}
+              <div className="rounded-3xl bg-gradient-to-br from-[#181432] to-[#110f24] border border-amber-500/30 p-5 shadow-xl space-y-3 relative overflow-hidden">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                    <span className="text-xs font-mono font-bold text-amber-300 tracking-wider">
+                      NIHOMI COINS 🪙
+                    </span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-mono">
+                    1 Coin = 1 Sensei Turn
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between pt-1">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-white font-mono">
+                      🪙 {coinWallet?.coinBalance ?? 10}
+                    </span>
+                    <span className="text-xs text-stone-400 font-medium">কয়েন ব্যালেন্স</span>
+                  </div>
+                  <span className="text-[11px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                    সক্রিয় ও ব্যবহারোপযোগী
+                  </span>
+                </div>
+
+                {/* Wallet 3-Action Buttons: Earn, Use, Buy */}
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('section-nihomi-reward');
+                      el?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="py-2 px-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-stone-200 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <Gift className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Earn</span>
+                  </button>
+                  <button
+                    onClick={() => setIsAiSenseiOpen(true)}
+                    className="py-2 px-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-stone-200 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <Bot className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Use</span>
+                  </button>
+                  <button
+                    onClick={() => onNavigate?.('pricing')}
+                    className="py-2 px-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-xs transition-all flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-amber-500/20"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Buy</span>
+                  </button>
                 </div>
               </div>
 
-              {/* ONE Prominent Hero CTA Button + Placement Fast-Track */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                {!isKonbiniDone ? (
-                  <button
-                    type="button"
-                    id="btn-dashboard-start-first-mission"
-                    onClick={() => {
-                      trackNihomiEvent('mission_started', { source: 'dashboard_hero' });
-                      setIsKonbiniModalOpen(true);
-                    }}
-                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
-                  >
-                    <Play className="w-4 h-4 fill-white" />
-                    <span>Mission শুরু করি →</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    id="btn-dashboard-start-next-mission"
-                    onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
-                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-98"
-                  >
-                    <Play className="w-4 h-4 fill-white" />
-                    <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                  </button>
-                )}
+              {/* Nihomi Sensei AI Companion Card (Section 19 & 22) */}
+              <div className="rounded-3xl bg-[#141226] border border-white/10 p-5 shadow-xl space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-xl bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-400">
+                        <Bot className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white">Nihomi Sensei AI™</div>
+                        <div className="text-[10px] text-stone-400">ব্যক্তিগত লার্নিং মেন্টর • ২৪/৭ রেডি</div>
+                      </div>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  </div>
+
+                  {/* Contextual Suggestion Prompt Chips */}
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[10px] font-mono text-stone-400 font-bold block">
+                      সরাসরি সেনসেইকে জিজ্ঞাসা করুন:
+                    </span>
+                    <div className="flex flex-col gap-1.5">
+                      {[
+                        'টোকিও কনবিনিতে ব্যাগ কীভাবে চাইতে হয়?',
+                        'は (wa) বনাম が (ga) এর সহজ বাংলা পার্থক্য',
+                        'আজকের লেসনের ব্যাকরণ সহজে বুঝিয়ে দিন'
+                      ].map((prompt, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setIsAiSenseiOpen(true)}
+                          className="w-full text-left p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-amber-500/30 text-[11px] text-stone-300 hover:text-white transition-all flex items-center justify-between cursor-pointer group"
+                        >
+                          <span className="line-clamp-1">{prompt}</span>
+                          <ChevronRight className="w-3 h-3 text-stone-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
 
                 <button
                   type="button"
-                  id="btn-dashboard-placement-test"
-                  onClick={() => setIsPlacementOpen(true)}
-                  className="px-5 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  id="btn-talk-to-sensei-card"
+                  onClick={() => setIsAiSenseiOpen(true)}
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black text-xs shadow-md shadow-red-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
-                  <Compass className="w-4 h-4 text-amber-400" />
-                  <span>আগে জাপানি জানা আছে? প্লেসমেন্ট টেস্ট দিন</span>
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>Talk to Sensei (সেনসেইয়ের সাথে কথা বলি)</span>
                 </button>
               </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* YOUR JOURNEY: VISUAL PROGRESS PATH (SECTION 19 & 20)                     */}
+        {/* Always answers: "What should I do next? (এরপর আমার কী করা উচিত?)"          */}
+        {/* ========================================================================= */}
+        <section aria-label="Visual Learning Journey Path" className="space-y-4">
+          <div className="rounded-3xl bg-[#121024] border border-white/10 p-5 sm:p-6 shadow-xl space-y-4">
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.06] pb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-rose-500" />
+                  <h2 className="text-sm sm:text-base font-black text-white">
+                    Your Japan Journey (আপনার শেখার পথরেখা)
+                  </h2>
+                </div>
+                <p className="text-xs text-stone-400 mt-0.5">
+                  একটি ধাপ শেষ হলে স্বয়ংক্রিয়ভাবে পরবর্তী বাস্তব জাপান পরিস্থিতি আনলক হয়
+                </p>
+              </div>
+
+              {/* Immediate Answer to: "What should I do next?" */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 font-bold">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>
+                  পরবর্তী ধাপ: {!isKonbiniDone ? 'Tokyo Konbini চ্যালেঞ্জ সম্পন্ন করুন (+৩ কয়েন)' : 'JLPT N5 লেসন ০১ শুরু করুন'}
+                </span>
+              </div>
+            </div>
+
+            {/* Stepped Visual Journey Flow */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
+              {[
+                { step: '01', title: 'Calibration', labelBn: 'ক্যালিব্রেশন', state: 'completed' },
+                { step: '02', title: 'Kana & Pitch', labelBn: 'হিরাগানা ও কাঞ্জি', state: 'completed' },
+                { step: '03', title: 'Tokyo Konbini', labelBn: 'কনবিনি ক্যাশিয়ার', state: isKonbiniDone ? 'completed' : 'current' },
+                { step: '04', title: 'Minna N5 (1-5)', labelBn: 'লেসন ০১–০৫', state: isKonbiniDone ? 'current' : 'next' },
+                { step: '05', title: 'Tokyo Station', labelBn: 'স্টেশন ও ট্রেন', state: 'locked' },
+                { step: '06', title: 'Japan Ready™', labelBn: '১০০% রেডি', state: 'locked' }
+              ].map((stage, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3.5 rounded-2xl border flex flex-col justify-between gap-2 transition-all ${
+                    stage.state === 'completed'
+                      ? 'bg-emerald-500/[0.08] border-emerald-500/30'
+                      : stage.state === 'current'
+                      ? 'bg-amber-500/[0.12] border-amber-500/50 shadow-lg shadow-amber-950/20 ring-1 ring-amber-500/40'
+                      : 'bg-white/[0.02] border-white/[0.06] opacity-60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono font-bold text-stone-400">{stage.step}</span>
+                    {stage.state === 'completed' ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    ) : stage.state === 'current' ? (
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                    ) : (
+                      <Lock className="w-3.5 h-3.5 text-stone-500" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-stone-300 font-japanese">{stage.title}</div>
+                    <div className="text-xs font-black text-white">{stage.labelBn}</div>
+                  </div>
+                  <div className="text-[10px] font-mono pt-1 border-t border-white/5">
+                    {stage.state === 'completed' && <span className="text-emerald-400 font-bold">সম্পন্ন ✓</span>}
+                    {stage.state === 'current' && <span className="text-amber-400 font-bold animate-pulse">চলমান মিশন ▶</span>}
+                    {stage.state === 'next' && <span className="text-blue-400 font-medium">পরবর্তী ধাপ</span>}
+                    {stage.state === 'locked' && <span className="text-stone-500">লকড</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* NIHOMI REWARD TRACKER: LEARN MORE. DO MORE. EARN MORE. (SECTION 8 & 19)   */}
+        {/* ========================================================================= */}
+        <section id="section-nihomi-reward" aria-label="Nihomi Reward Tracker">
+          <div className="rounded-3xl bg-gradient-to-r from-emerald-950/40 via-[#131726] to-emerald-950/30 border border-emerald-500/30 p-5 sm:p-6 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-3">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
+                  <Gift className="w-3.5 h-3.5" />
+                  <span>NIHOMI REWARD • Learn more. Do more. Earn more.</span>
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-white mt-1">
+                  আজকের লার্নিং গোল ও রিওয়ার্ড স্ট্যাটাস
+                </h3>
+              </div>
+              <div className="text-xs font-mono text-emerald-400 font-bold">
+                কয়েন পাওয়ার যোগ্য: +১ কয়েন (ডেইলি গোল)
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: 'ডেইলি গোল', coins: '+১', desc: 'আজকের মিশন চর্চা', done: true },
+                { label: 'লেসন কমপ্লিট', coins: '+২', desc: 'একটি পূর্ণ পাঠ সম্পন্ন', done: isKonbiniDone },
+                { label: 'মিশন চ্যালেঞ্জ', coins: '+৩', desc: 'কনবিনি বা স্টেশন ড্রিল', done: isKonbiniDone },
+                { label: '৭-দিন স্ট্রিক', coins: '+৫', desc: 'ধারাবাহিক ৭ দিন', done: streakDays >= 7 }
+              ].map((rew, i) => (
+                <div key={i} className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-stone-300">{rew.label}</span>
+                    <span className="font-mono font-black text-amber-400 text-sm">🪙 {rew.coins}</span>
+                  </div>
+                  <p className="text-[11px] text-stone-400">{rew.desc}</p>
+                  <div className="pt-1 text-[10px] font-mono">
+                    {rew.done ? (
+                      <span className="text-emerald-400 font-bold">✓ অর্জিত / রেডি</span>
+                    ) : (
+                      <span className="text-stone-500">চর্চা করুন</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

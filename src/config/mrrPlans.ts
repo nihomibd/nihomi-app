@@ -90,18 +90,18 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     billingPeriod: 'monthly',
     tagline: 'Full JLPT N5 Foundation with Standard AI Support',
     taglineBn: 'সম্পূর্ণ JLPT N5 ফাউন্ডেশন ও স্ট্যান্ডার্ড AI সহায়তা',
-    coinsMonthly: 100,
+    coinsMonthly: 500,
     targetAudienceBn: 'প্রথমবার JLPT N5 পরীক্ষার্থী ও জাপানে স্টুডেন্ট ভিসার আবেদনকারী',
     features: [
       'Full JLPT N5 Curriculum (Lessons 1–25)',
-      'Nihomi Sensei AI™ Text & Voice Q&A (100 Monthly Coins)',
+      'Nihomi Sensei AI™ Text & Voice Q&A (500 Monthly Coins)',
       'Digital Student ID & Verifiable Attendance',
       'All Shibuya 3D Workplace Simulations',
       'Mistake Recovery Ghost Mode'
     ],
     featuresBn: [
       'সম্পূর্ণ JLPT N5 সিলেবাস (লেসন ১-২৫)',
-      'Nihomi Sensei AI™ টেক্সট ও ভয়েস চ্যাট (১০০ মাসিক কয়েন)',
+      'Nihomi Sensei AI™ টেক্সট ও ভয়েস চ্যাট (৫০০ মাসিক কয়েন)',
       'ডিজিটাল স্টুডেন্ট আইডি ও উপস্থিতি ট্র্যাকার',
       'শিবুয়া ৩ডি সকল কর্মক্ষেত্র সিমুলেশন অ্যাক্সেস',
       'মিস্টেক রিকভারি ঘোস্ট মোড'
@@ -119,11 +119,11 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     badgeText: 'MOST POPULAR',
     tagline: 'Complete N5 + N4 Mastery with Voice & Vision AI Sensei',
     taglineBn: 'সম্পূর্ণ N5 + N4 সিলেবাস ও আনলিমিটেড ভয়েস AI কোচিং',
-    coinsMonthly: 500,
+    coinsMonthly: 1500,
     targetAudienceBn: 'ভিসা ইন্টারভিউ ও স্পেশিফাইড স্কিল্ড ওয়ার্কার (SSW) চাকরিপ্রার্থী',
     features: [
       'Complete JLPT N5 + N4 Curriculum (Minna no Nihongo 1–50)',
-      '500 Monthly Nihomi Coins for AI Simulations',
+      '1,500 Monthly Nihomi Coins for AI Simulations',
       'High-Speed Nihomi Sensei AI™ Audio Pronunciation Lab',
       'Full Learning DNA Diagnostic & Weakness Fixer',
       'WorkOS™ POS Terminal & Izakaya Roleplay Included',
@@ -131,7 +131,7 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     ],
     featuresBn: [
       'সম্পূর্ণ JLPT N5 + N4 সিলেবাস (মিন্না নো নিহোঙ্গো ১-৫০)',
-      '৫০০ মাসিক নিহোমি কয়েন (AI সিমুলেশনের জন্য)',
+      '১,৫০০ মাসিক নিহোমি কয়েন (AI সিমুলেশনের জন্য)',
       'হাই-স্পিড Nihomi Sensei AI™ অডিও প্রোনাউন্সিয়েশন ল্যাব',
       'লার্নিং DNA ডায়াগনস্টিক ও দুর্বলতা সমাধান ইঞ্জিন',
       'WorkOS™ কনবিনি POS ও ইজাকায়া রোলপ্লে অন্তর্ভুক্ত',
@@ -149,11 +149,11 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     badgeText: 'ULTIMATE CAREER TRACK',
     tagline: 'All Levels N5 to N1, Interview Simulators & Priority AI',
     taglineBn: 'N5 থেকে N1 সকল লেভেল, জব ইন্টারভিউ সিমুলেটর ও অগ্রাধিকার AI',
-    coinsMonthly: 1500,
+    coinsMonthly: 4000,
     targetAudienceBn: 'জাপানে উচ্চশিক্ষা, আইটি ইঞ্জিনিয়ার ও স্থায়ী ক্যারিয়ার নিশ্চিতকারী',
     features: [
       'Unrestricted N5, N4, N3, N2, N1 Curriculum',
-      '1,500 Monthly Nihomi Coins for Advanced Roleplay',
+      '4,000 Monthly Nihomi Coins for Advanced Roleplay',
       'Baito & IT Engineering Interview Simulation Lab',
       'Embassy & Immigration Visa Defense Scenarios',
       'Priority AI Routing (Sub-500ms Voice Latency)',
@@ -161,7 +161,7 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     ],
     featuresBn: [
       'N5 থেকে N1 সকল লেভেলের উন্মুক্ত সিলেবাস',
-      '১,৫০০ মাসিক কয়েন (উন্নত রোলপ্লে ও কোচিংয়ের জন্য)',
+      '৪,০০০ মাসিক কয়েন (উন্নত রোলপ্লে ও কোচিংয়ের জন্য)',
       'আইটি ইঞ্জিনিয়ার ও বাইতো জব ইন্টারভিউ ল্যাব',
       'জাপান দূতাবাস ও ইমিগ্রেশন ভিসা ডিফেন্স সিমুলেশন',
       'প্রায়োরিটি AI রাউটিং (উচ্চগতির ভয়েস রেসপন্স)',
