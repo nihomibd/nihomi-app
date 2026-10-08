@@ -1,7 +1,13 @@
 import { Pool } from 'pg';
 import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url);
+function getDynamicModule(name: string): any {
+  if (typeof require === 'function') {
+    return require(name);
+  }
+  const req = createRequire(typeof import.meta !== 'undefined' && import.meta?.url ? import.meta.url : 'file://' + process.cwd() + '/');
+  return req(name);
+}
 
 /**
  * NIHOMI.COM — High-Performance Singleton Prisma Database Client
@@ -24,8 +30,8 @@ function getPrismaClient(): any {
   if (!_initAttempted) {
     _initAttempted = true;
     try {
-      const { PrismaPg } = require('@prisma/adapter-pg');
-      const { PrismaClient } = require('@prisma/client');
+      const { PrismaPg } = getDynamicModule('@prisma/adapter-pg');
+      const { PrismaClient } = getDynamicModule('@prisma/client');
       const pool =
         globalForPrisma.pgPool ??
         new Pool({

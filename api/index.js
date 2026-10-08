@@ -1,5 +1,11 @@
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined") return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
@@ -51530,6 +51536,13 @@ var init_contentDiffService = __esm({
 // server/prisma.ts
 import { Pool } from "pg";
 import { createRequire } from "module";
+function getDynamicModule(name) {
+  if (typeof __require === "function") {
+    return __require(name);
+  }
+  const req = createRequire(typeof import.meta !== "undefined" && import.meta?.url ? import.meta.url : "file://" + process.cwd() + "/");
+  return req(name);
+}
 function getPrismaClient() {
   if (globalForPrisma.prisma) return globalForPrisma.prisma;
   const dbUrl = process.env.DATABASE_URL?.trim();
@@ -51537,8 +51550,8 @@ function getPrismaClient() {
   if (!_initAttempted) {
     _initAttempted = true;
     try {
-      const { PrismaPg } = require2("@prisma/adapter-pg");
-      const { PrismaClient } = require2("@prisma/client");
+      const { PrismaPg } = getDynamicModule("@prisma/adapter-pg");
+      const { PrismaClient } = getDynamicModule("@prisma/client");
       const pool = globalForPrisma.pgPool ?? new Pool({
         connectionString: dbUrl,
         max: process.env.NODE_ENV === "production" ? 10 : 5,
@@ -51563,10 +51576,9 @@ function getPrismaClient() {
 function isDatabaseConfigured() {
   return Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "");
 }
-var require2, globalForPrisma, _initAttempted, prisma;
+var globalForPrisma, _initAttempted, prisma;
 var init_prisma = __esm({
   "server/prisma.ts"() {
-    require2 = createRequire(import.meta.url);
     globalForPrisma = globalThis;
     _initAttempted = false;
     prisma = new Proxy({}, {
