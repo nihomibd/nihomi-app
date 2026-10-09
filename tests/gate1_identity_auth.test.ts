@@ -178,6 +178,13 @@ async function runGate1Suite() {
   const isSwitchedActive = isFounderEmail(studentUser.email);
   assert(isFounderActive === true && isSwitchedActive === false, '10. Switching from Founder to student account cleanly revokes Founder privileges');
 
+  // --- 11. Strict Login Verification (Zero Auto-Creation / Zero Bypass) ---
+  const { verifyPassword } = await import('../server/db.js');
+  const bogusHash = 'invalid-salt-hash-combo';
+  const bogusSalt = 'salt-123';
+  const checkInvalid = verifyPassword('AnyPasswordAttempt', bogusHash, bogusSalt);
+  assert(checkInvalid === false, '11. Arbitrary password attempt strictly rejected by cryptographic verification');
+
   console.log('\n========================================================================');
   console.log(`📊 GATE 1 TEST SUMMARY: ${passed} PASSED | ${failed} FAILED`);
   console.log('========================================================================\n');

