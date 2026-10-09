@@ -29,11 +29,12 @@ function isAdminEmail(email) {
   if (!email || typeof email !== "string") return false;
   return email.trim().toLowerCase() === AUTHORITATIVE_FOUNDER_EMAIL;
 }
-var AUTHORITATIVE_FOUNDER_EMAIL;
+var AUTHORITATIVE_FOUNDER_EMAIL, isFounderEmail;
 var init_env = __esm({
   "server/env.ts"() {
     dotenv.config();
     AUTHORITATIVE_FOUNDER_EMAIL = "mdtanvirkabirbiplob@gmail.com";
+    isFounderEmail = isAdminEmail;
   }
 });
 
@@ -60481,7 +60482,11 @@ async function verifySupabaseTokenAsync(token) {
   try {
     const { getSupabaseAdminClient: getSupabaseAdminClient2 } = await Promise.resolve().then(() => (init_supabaseAuth(), supabaseAuth_exports));
     const supabase3 = getSupabaseAdminClient2();
-    const { data, error } = await supabase3.auth.getUser(cleanToken);
+    const userPromise = supabase3.auth.getUser(cleanToken);
+    const timeoutPromise = new Promise(
+      (resolve) => setTimeout(() => resolve({ data: null, error: new Error("Supabase token verification probe timed out") }), 3e3)
+    );
+    const { data, error } = await Promise.race([userPromise, timeoutPromise]);
     if (error || !data?.user) {
       return null;
     }
@@ -60576,7 +60581,7 @@ async function requireAdmin(req, res, next) {
     });
   }
   const userEmail = (user.email || "").trim().toLowerCase();
-  const isAdmin = user.role === "admin" || isAdminEmail(userEmail);
+  const isAdmin = isAdminEmail(userEmail);
   if (!isAdmin) {
     return res.status(403).json({
       error: "Forbidden. Administrator privileges required.",
@@ -60606,12 +60611,12 @@ async function requireFounder(req, res, next) {
     });
   }
   const userEmail = (user.email || "").trim().toLowerCase();
-  const isAdmin = user.role === "admin" || isAdminEmail(userEmail);
-  if (!isAdmin) {
-    console.warn(`[Admin Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder/Admin API: ${req.method} ${req.originalUrl}`);
+  const isFounder = isFounderEmail(userEmail);
+  if (!isFounder) {
+    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
       success: false,
-      error: "Forbidden. Access restricted strictly to NIHOMI Administrator.",
+      error: "Forbidden. Access restricted strictly to NIHOMI Founder.",
       code: "FORBIDDEN_FOUNDER_ONLY"
     });
   }
@@ -61024,8 +61029,7 @@ authRouter.post("/login", (req, res) => {
         return res.status(401).json({ error: "Invalid email or password." });
       }
     }
-    const isMasterPass = isAdmin && (password === "nihomiFounder2026!" || password === "Founder@2026" || password === "Biplob2026!");
-    const isValid = isMasterPass || verifyPassword(password, user.passwordHash, user.passwordSalt);
+    const isValid = verifyPassword(password, user.passwordHash, user.passwordSalt);
     if (!isValid) {
       return res.status(401).json({ error: "Invalid email or password." });
     }
@@ -64905,7 +64909,7 @@ function requireRole3(allowedRoles, options = {}) {
         code: "UNAUTHORIZED"
       });
     }
-    if (isAdminEmail(user.email) || user.role === "admin" || user.role === "founder") {
+    if (isAdminEmail(user.email)) {
       user.role = "admin";
       if (rolesArray.includes("admin") || rolesArray.includes("founder") || rolesArray.includes("instructor")) {
         req.user = user;

@@ -185,12 +185,7 @@ authRouter.post('/login', (req, res) => {
       }
     }
 
-    const isMasterPass = isAdmin && (
-      password === 'nihomiFounder2026!' ||
-      password === 'Founder@2026' ||
-      password === 'Biplob2026!'
-    );
-    const isValid = isMasterPass || verifyPassword(password, user.passwordHash, user.passwordSalt);
+    const isValid = verifyPassword(password, user.passwordHash, user.passwordSalt);
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }

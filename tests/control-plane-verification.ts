@@ -131,7 +131,7 @@ async function runTests() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: 'mdtanvirkabirbiplob@gmail.com',
-        password: 'nihomiFounder2026!'
+        password: process.env.TEST_ADMIN_PASSWORD || 'TestAdminSecret2026!'
       })
     });
     assert.strictEqual(res.status, 200, `Admin login returned status ${res.status}`);

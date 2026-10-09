@@ -74,6 +74,7 @@ export type NihomiEventType =
   | 'premium_preview_shown'
   | 'premium_upgrade_intent'
   | 'free_chapter_completed'
+  | 'meet_sensei_clicked'
   | 'lead_captured';
 
 export interface LandingPageViewPayload {

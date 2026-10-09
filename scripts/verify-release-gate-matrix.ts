@@ -73,7 +73,7 @@ function makeRequest(
     req.on('error', reject);
     req.on('timeout', () => {
       req.destroy();
-      reject(new Error(`HTTP ${method} ${urlPath} timed out after 6000ms`));
+      reject(new Error(`HTTP ${method} ${urlPath} timed out after 12000ms`));
     });
 
     if (postData) req.write(postData);

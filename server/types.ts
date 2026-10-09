@@ -317,6 +317,8 @@ export type EntitlementFeature =
   | 'n5'
   | 'n4'
   | 'n3'
+  | 'n2'
+  | 'n1'
   | 'ai_coach'
   | 'business_japanese'
   | 'jlpt_pro'

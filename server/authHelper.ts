@@ -452,7 +452,13 @@ export async function verifySupabaseTokenAsync(token?: string): Promise<Authenti
   try {
     const { getSupabaseAdminClient } = await import('./middleware/supabaseAuth.js');
     const supabase = getSupabaseAdminClient();
-    const { data, error } = await supabase.auth.getUser(cleanToken);
+    
+    // Safety guard: Race against a 3000ms timeout to prevent hanging Express requests on network lag
+    const userPromise = supabase.auth.getUser(cleanToken);
+    const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: new Error('Supabase token verification probe timed out') }), 3000)
+    );
+    const { data, error } = (await Promise.race([userPromise, timeoutPromise])) as any;
 
     if (error || !data?.user) {
       return null;
@@ -574,7 +580,7 @@ export async function requireAdmin(req: Request | any, res: Response, next: Next
   }
 
   const userEmail = (user.email || '').trim().toLowerCase();
-  const isAdmin = user.role === 'admin' || isAdminEmail(userEmail);
+  const isAdmin = isAdminEmail(userEmail);
 
   if (!isAdmin) {
     return res.status(403).json({
@@ -623,13 +629,13 @@ export async function requireFounder(req: Request | any, res: Response, next: Ne
   }
 
   const userEmail = (user.email || '').trim().toLowerCase();
-  const isAdmin = user.role === 'admin' || isAdminEmail(userEmail);
+  const isFounder = isFounderEmail(userEmail);
 
-  if (!isAdmin) {
-    console.warn(`[Admin Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder/Admin API: ${req.method} ${req.originalUrl}`);
+  if (!isFounder) {
+    console.warn(`[Founder Security] Access denied: User ${user.email} (Role: ${user.role}) attempted to access Founder API: ${req.method} ${req.originalUrl}`);
     return res.status(403).json({
       success: false,
-      error: 'Forbidden. Access restricted strictly to NIHOMI Administrator.',
+      error: 'Forbidden. Access restricted strictly to NIHOMI Founder.',
       code: 'FORBIDDEN_FOUNDER_ONLY'
     });
   }

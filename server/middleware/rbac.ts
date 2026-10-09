@@ -35,8 +35,8 @@ export function requireRole(allowedRoles: UserRole | UserRole[], options: RbacOp
       });
     }
 
-    // Auto-recognize verified administrator
-    if (isAdminEmail(user.email) || user.role === 'admin' || user.role === 'founder') {
+    // Auto-recognize verified administrator strictly by server-verified email
+    if (isAdminEmail(user.email)) {
       user.role = 'admin';
       // Admin has super-admin permissions across admin and instructor endpoints
       if (rolesArray.includes('admin') || rolesArray.includes('founder') || rolesArray.includes('instructor')) {
