@@ -608,8 +608,8 @@ export const App: React.FC = () => {
       {/* Global Export Download Path Toast Notification */}
       <ExportToastNotification />
 
-      {/* Main Header (Hidden in Real Japan Canvas, Student Dashboard, and Journey for unified minimal UX) */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && !isJourneyMode && (
+      {/* Main Header (Hidden in Real Japan Canvas, Student Dashboard, Journey, and Landing for dedicated UX) */}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && !isJourneyMode && currentView !== 'landing' && currentView !== 'home' && currentView !== 'classic' && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
