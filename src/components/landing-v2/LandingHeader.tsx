@@ -31,7 +31,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
     { label: 'জাপান রেডিনেস', href: '/baito', action: () => onNavigate('baito') },
     { label: 'শিক্ষার্থী অভিজ্ঞতা', href: '#testimonials', action: () => scrollToSection('testimonials') },
     { label: 'দাম', href: '#pricing', action: () => scrollToSection('pricing-section') },
-    { label: 'সহায়তা', href: '/contact', action: () => onNavigate('contact') },
+    { label: 'সহায়তা', href: '/contact', action: () => onNavigate('contact') },
   ];
 
   const scrollToSection = (id: string) => {
@@ -46,35 +46,35 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-2">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_1px_6px_rgba(0,0,0,0.03)] transition-all">
+      <div className="max-w-[1000px] xl:max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
         {/* Left: Brand Identity */}
         <div
           onClick={() => {
             onNavigate('landing');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="flex items-center gap-2.5 cursor-pointer select-none group shrink-0"
+          className="flex items-center gap-2 cursor-pointer select-none group shrink-0"
         >
-          <NihomiFlowerLogo size={36} className="transition-transform group-hover:scale-105 shrink-0" />
+          <NihomiFlowerLogo size={32} className="transition-transform group-hover:scale-105 shrink-0" />
           <div className="flex flex-col shrink-0">
-            <span className="font-extrabold text-xl sm:text-2xl text-[#101A59] tracking-tight leading-none group-hover:text-[#6D25EA] transition-colors whitespace-nowrap">
+            <span className="font-extrabold text-xl text-[#101A59] tracking-tight leading-none group-hover:text-[#6D25EA] transition-colors whitespace-nowrap">
               Nihomi
             </span>
-            <span className="text-[9px] sm:text-[10px] font-medium text-slate-400 tracking-wide mt-1 leading-none whitespace-nowrap">
+            <span className="text-[8.5px] font-medium text-slate-400 tracking-wide mt-0.5 leading-none whitespace-nowrap">
               Learn Japanese, Live Japan.
             </span>
           </div>
         </div>
 
         {/* Center: Bengali Navigation Links (Desktop) */}
-        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5">
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
           {navLinks.map((item) => (
             <button
               key={item.label}
               type="button"
               onClick={item.action}
-              className="px-2 py-1 text-xs xl:text-sm font-semibold text-slate-700 hover:text-[#6D25EA] rounded-lg transition-colors whitespace-nowrap cursor-pointer hover:bg-purple-50/50"
+              className="px-2 py-1 text-xs font-semibold text-slate-700 hover:text-[#6D25EA] rounded-lg transition-colors whitespace-nowrap cursor-pointer hover:bg-purple-50/50"
             >
               {item.label}
             </button>
@@ -82,13 +82,13 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
         </nav>
 
         {/* Right: Controls & CTAs */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Language Selector Dropdown */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setIsLangMenuOpen((prev) => !prev)}
-              className="flex items-center gap-1 px-1.5 sm:px-2 py-1 text-xs font-bold text-slate-700 hover:text-[#6D25EA] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-slate-200"
+              className="flex items-center gap-1 px-1.5 py-1 text-xs font-bold text-slate-700 hover:text-[#6D25EA] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-slate-200"
               aria-label="Language Selector"
             >
               <Globe className="w-3.5 h-3.5 text-slate-500" />
@@ -133,7 +133,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
             <button
               type="button"
               onClick={() => handleAuthClick('login')}
-              className="hidden sm:inline-block px-2.5 py-1 text-xs sm:text-sm font-semibold text-slate-700 hover:text-[#6D25EA] hover:bg-slate-50 rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+              className="hidden sm:inline-block px-3.5 py-1 text-xs font-semibold text-slate-700 hover:text-[#6D25EA] hover:border-[#6D25EA] border border-slate-300 rounded-full transition-colors cursor-pointer whitespace-nowrap bg-white/80"
             >
               লগইন
             </button>

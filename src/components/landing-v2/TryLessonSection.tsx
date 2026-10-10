@@ -136,48 +136,48 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
   ];
 
   return (
-    <section id="try-lesson" className="py-14 sm:py-20 bg-white border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section id="try-lesson" className="py-2 lg:py-2.5 bg-white border-t border-slate-100">
+      <div className="max-w-[1000px] xl:max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Section Top Header (Mobile & Desktop) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
           
           {/* ========================================================
               LEFT COLUMN: EDITORIAL KICKER & ACTION (4 cols)
               ======================================================== */}
-          <div className="lg:col-span-4 space-y-5">
+          <div className="lg:col-span-4 space-y-1.5 lg:space-y-2">
             <div className="inline-flex items-center gap-2">
-              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase text-slate-500 bg-slate-100/90 px-2.5 py-1 rounded-md">
+              <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200/50">
                 TRY A REAL LESSON
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-black text-[#101A59] tracking-tight leading-[1.2]">
+            <h2 className="text-xl lg:text-[23px] font-black text-[#101A59] tracking-tight leading-[1.15]">
               এখনই একটি ছোট লেসন <br />
               <span className="text-[#6D25EA]">চেষ্টা করে দেখুন</span>
             </h2>
 
-            <p className="text-slate-600 text-sm leading-relaxed">
+            <p className="text-slate-600 text-[10.5px] leading-snug max-w-xs font-normal">
               Nihomi Sensei-এর সাথে ইন্টারঅ্যাক্টিভ ভাবে শিখুন — জাপানিজ শেখা এতটাই সহজ ও মজার!
             </p>
 
             <button
               type="button"
               onClick={() => onNavigate('journey')}
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#5120B8] hover:bg-[#43149E] text-white font-bold text-sm shadow-lg shadow-purple-900/20 hover:shadow-purple-900/35 transition-all cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-extrabold text-[11px] shadow-md shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
             >
               <span>এখনই লেসন শুরু করুন</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
             </button>
           </div>
 
           {/* ========================================================
               CENTER & RIGHT: LESSON PLAYGROUND & SENSEI PREVIEW (8 cols)
               ======================================================== */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="lg:col-span-8 bg-slate-50/70 p-2 rounded-2xl border border-slate-200/80 shadow-2xs grid grid-cols-1 md:grid-cols-12 gap-2 items-stretch">
             
-            {/* 1. Vertical Mode Navigation Tabs (3.5 cols on md) */}
-            <div className="md:col-span-3 flex md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0">
+            {/* 1. Vertical Mode Navigation Tabs (3 cols on md) */}
+            <div className="md:col-span-3 flex md:flex-col gap-1 overflow-x-auto pb-1 md:pb-0">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -186,13 +186,13 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer text-left ${
+                    className={`flex items-center gap-1.5 px-2 py-1 rounded-xl text-[10px] font-bold transition-all whitespace-nowrap cursor-pointer text-left ${
                       isActive
-                        ? 'bg-[#6D25EA] text-white shadow-md shadow-purple-600/25'
-                        : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/60'
+                        ? 'bg-[#6D25EA] text-white shadow-xs'
+                        : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/60'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -200,12 +200,12 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             </div>
 
             {/* 2. Main Lesson Playground Interactive Card (5 cols on md) */}
-            <div className="md:col-span-5 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-lg shadow-indigo-950/5 flex flex-col justify-between space-y-4">
+            <div className="md:col-span-5 bg-white rounded-xl p-2.5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-1.5">
               
               {/* Top Character Focus */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="font-japanese text-5xl sm:text-6xl font-black text-[#101A59]">
+                <div className="flex items-center gap-2.5">
+                  <span className="font-japanese text-3xl sm:text-4xl font-black text-[#101A59]">
                     {currentContent.mainChar}
                   </span>
                   
@@ -213,42 +213,42 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                   <button
                     type="button"
                     onClick={() => handlePlaySound(currentContent.mainChar)}
-                    className={`p-2.5 rounded-full border transition-all cursor-pointer ${
+                    className={`p-1.5 rounded-full border transition-all cursor-pointer ${
                       isPlayingAudio
-                        ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-110'
+                        ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-105'
                         : 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-[#6D25EA]'
                     }`}
                     title="উচ্চারণ শুনুন"
                     aria-label="Play pronunciation"
                   >
-                    <Volume2 className="w-4 h-4" />
+                    <Volume2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
                 {/* Romaji & Bengali Hint */}
                 <div className="text-right">
-                  <span className="text-xs font-black text-slate-400 font-mono uppercase tracking-wider block">
+                  <span className="text-[10px] font-black text-slate-400 font-mono uppercase tracking-wider block">
                     ( {currentContent.romaji} )
                   </span>
-                  <span className="text-[10px] text-slate-500 max-w-[120px] block mt-0.5 leading-tight">
+                  <span className="text-[9px] text-slate-500 max-w-[110px] block mt-0.5 leading-tight">
                     {currentContent.bnHint}
                   </span>
                 </div>
               </div>
 
               {/* 3 Example thumbnails with Japanese & Bengali labels */}
-              <div className="pt-2 border-t border-slate-100">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              <div className="pt-1 border-t border-slate-100">
+                <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                   উদাহরণ শব্দ (Examples)
                 </span>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5">
                   {currentContent.examples.map((ex, i) => (
                     <div
                       key={i}
                       onClick={() => handlePlaySound(ex.ja)}
-                      className="bg-slate-50 hover:bg-purple-50/60 p-2 rounded-2xl border border-slate-200/60 text-center cursor-pointer transition-all hover:border-purple-200 flex flex-col items-center"
+                      className="bg-slate-50 hover:bg-purple-50/60 p-1 rounded-xl border border-slate-200/60 text-center cursor-pointer transition-all hover:border-purple-200 flex flex-col items-center"
                     >
-                      <div className="w-10 h-10 rounded-xl overflow-hidden mb-1.5 bg-white border border-slate-100 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-lg overflow-hidden mb-1 bg-white border border-slate-100 flex items-center justify-center">
                         <img
                           src={ex.image}
                           alt={ex.ja}
@@ -258,10 +258,10 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                           }}
                         />
                       </div>
-                      <span className="font-japanese font-black text-xs text-slate-800">
+                      <span className="font-japanese font-black text-[10px] text-slate-800 leading-tight">
                         {ex.ja}
                       </span>
-                      <span className="text-[10px] text-slate-500 leading-none mt-0.5">
+                      <span className="text-[8.5px] text-slate-500 leading-none mt-0.5">
                         ({ex.bn})
                       </span>
                     </div>
@@ -272,44 +272,44 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             </div>
 
             {/* 3. Nihomi Sensei Chat Preview Panel (4 cols on md) */}
-            <div className="md:col-span-4 bg-slate-50/80 rounded-3xl p-4 border border-slate-200/80 flex flex-col justify-between space-y-3">
+            <div className="md:col-span-4 bg-slate-50/80 rounded-2xl p-2 border border-slate-200/80 flex flex-col justify-between space-y-1.5">
               
               {/* Sensei Message Bubble */}
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5">
                   <img
                     src="/assets/landing-v2/sensei-avatar.png"
                     alt="Nihomi Sensei"
-                    className="w-7 h-7 rounded-full object-cover ring-2 ring-purple-200"
+                    className="w-5 h-5 rounded-full object-cover ring-1 ring-purple-200"
                     onError={(e) => {
                       (e.target as HTMLElement).style.display = 'none';
                     }}
                   />
-                  <span className="text-[11px] font-black text-[#5B21B6]">
+                  <span className="text-[10px] font-black text-[#5B21B6]">
                     Nihomi Sensei
                   </span>
                 </div>
-                <div className="bg-white p-2.5 rounded-2xl rounded-tl-xs border border-purple-100 shadow-2xs">
-                  <p className="text-xs font-semibold text-slate-800 leading-snug">
+                <div className="bg-white p-1.5 rounded-xl rounded-tl-xs border border-purple-100 shadow-2xs">
+                  <p className="text-[10px] font-semibold text-slate-800 leading-snug">
                     {currentContent.senseiMsg}
                   </p>
                 </div>
               </div>
 
               {/* Voice Wave Visualizer & Microphone Interaction */}
-              <div className="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-2xl border border-slate-200/60 shadow-2xs">
+              <div className="flex items-center justify-between gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200/60 shadow-2xs">
                 <div className="flex items-center gap-1">
-                  <span className={`w-1 h-3 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse h-4' : ''}`} />
-                  <span className={`w-1 h-5 rounded-full bg-purple-600 ${isMicActive ? 'animate-bounce h-6' : ''}`} />
-                  <span className={`w-1 h-2 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse h-5' : ''}`} />
-                  <span className={`w-1 h-4 rounded-full bg-purple-700 ${isMicActive ? 'animate-bounce h-7' : ''}`} />
-                  <span className={`w-1 h-2.5 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-2.5 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse h-3.5' : ''}`} />
+                  <span className={`w-0.5 h-4 rounded-full bg-purple-600 ${isMicActive ? 'animate-bounce h-5' : ''}`} />
+                  <span className={`w-0.5 h-2 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse h-4' : ''}`} />
+                  <span className={`w-0.5 h-3 rounded-full bg-purple-700 ${isMicActive ? 'animate-bounce h-4.5' : ''}`} />
+                  <span className={`w-0.5 h-2 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse' : ''}`} />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleMicClick}
-                  className={`p-2 rounded-full transition-all cursor-pointer ${
+                  className={`p-1.5 rounded-full transition-all cursor-pointer ${
                     isMicActive
                       ? 'bg-rose-500 text-white animate-ping'
                       : 'bg-[#6D25EA] hover:bg-[#5818D1] text-white shadow-xs'
@@ -317,22 +317,22 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                   aria-label="Microphone practice"
                   title="কথা বলুন"
                 >
-                  <Mic className="w-3.5 h-3.5" />
+                  <Mic className="w-3 h-3" />
                 </button>
               </div>
 
               {/* Learner Speech Bubble */}
-              <div className="bg-purple-100/70 p-2 rounded-2xl rounded-tr-xs text-right border border-purple-200/60">
-                <span className="text-[10px] text-slate-500 block">あなた (You):</span>
-                <span className="text-xs font-bold text-[#5B21B6]">
+              <div className="bg-purple-100/70 p-1.5 rounded-xl rounded-tr-xs text-right border border-purple-200/60">
+                <span className="text-[9px] text-slate-500 block">あなた (You):</span>
+                <span className="text-[10px] font-bold text-[#5B21B6]">
                   {currentContent.learnerMsg}
                 </span>
               </div>
 
               {/* Sensei Feedback Message */}
-              <div className="flex items-start gap-2 bg-emerald-50 p-2 rounded-2xl border border-emerald-200/60">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                <span className="text-[11px] font-bold text-emerald-800 leading-snug">
+              <div className="flex items-start gap-1.5 bg-emerald-50 p-1.5 rounded-xl border border-emerald-200/60">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-[9.5px] font-bold text-emerald-800 leading-tight">
                   {currentContent.feedbackMsg}
                 </span>
               </div>

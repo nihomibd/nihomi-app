@@ -85,88 +85,90 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
   ];
 
   return (
-    <section id="why-nihomi" className="py-14 sm:py-20 bg-[#F8FAFF] border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section id="why-nihomi" className="py-2.5 lg:py-3 bg-[#F8FAFF] border-t border-slate-100">
+      <div className="max-w-[1000px] xl:max-w-7xl mx-auto px-4 sm:px-6">
         
-        {/* Top Header Block */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-          <div className="space-y-3 max-w-2xl">
+        {/* 2-Column Macro Layout matching Reference Slice */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-center">
+          
+          {/* LEFT COLUMN: Editorial Intro & CTA (3 cols) */}
+          <div className="lg:col-span-3 space-y-2 lg:space-y-2.5">
             <div className="inline-flex items-center gap-2">
-              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase text-slate-500 bg-white px-2.5 py-1 rounded-md border border-slate-200/60 shadow-2xs">
+              <span className="text-[9.5px] font-extrabold tracking-widest uppercase text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200/60 shadow-2xs">
                 YOUR JAPANESE JOURNEY
               </span>
             </div>
             
-            <h2 className="text-3xl sm:text-4xl font-black text-[#101A59] tracking-tight leading-[1.2]">
-              আপনার ব্যক্তিগত শেখার পথ
+            <h2 className="text-2xl lg:text-[25px] font-black text-[#101A59] tracking-tight leading-[1.15]">
+              আপনার ব্যক্তিগত <br />
+              শেখার পথ
             </h2>
             
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-600 text-[11px] leading-snug font-normal">
               আপনার বর্তমান অবস্থান থেকে জাপানের লক্ষ্য পর্যন্ত — একটি কাঠামোগত, ধাপে ধাপে শেখার যাত্রা।
             </p>
-          </div>
 
-          <div className="shrink-0">
             <button
               type="button"
               onClick={() => onNavigate('journey')}
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#5120B8] hover:bg-[#43149E] text-white font-bold text-sm shadow-md shadow-purple-900/20 hover:shadow-purple-900/35 transition-all cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-extrabold text-xs shadow-md shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
             >
               <span>আপনার শেখার পথ দেখুন</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </button>
           </div>
-        </div>
 
-        {/* 6 Step Cards Connected in Progression */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 relative">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            const isLast = index === steps.length - 1;
+          {/* RIGHT COLUMN: 6 Step Cards in a single row (9 cols) */}
+          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-2 relative">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isLast = index === steps.length - 1;
 
-            return (
-              <div key={step.num} className="relative group">
-                <div
-                  onClick={() => onNavigate('journey')}
-                  className={`h-full bg-white rounded-3xl p-4 sm:p-5 border ${step.borderColor} shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4 cursor-pointer hover:-translate-y-1`}
-                >
-                  {/* Top Icon & Number */}
-                  <div className="flex items-center justify-between">
-                    <div className={`w-10 h-10 rounded-2xl ${step.bgColor} ${step.iconColor} flex items-center justify-center`}>
-                      <Icon className="w-5 h-5" />
+              return (
+                <div key={step.num} className="relative group">
+                  <div
+                    onClick={() => onNavigate('journey')}
+                    className={`h-full bg-white rounded-2xl p-2.5 border ${step.borderColor} shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col justify-between items-center text-center space-y-1.5 cursor-pointer hover:-translate-y-0.5`}
+                  >
+                    {/* Top Icon & Number */}
+                    <div className="flex flex-col items-center gap-1">
+                      <div className={`w-7 h-7 rounded-xl ${step.bgColor} ${step.iconColor} flex items-center justify-center shrink-0`}>
+                        <Icon className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="font-mono text-xs font-black text-slate-800 tracking-tight">
+                        {step.num}
+                      </span>
                     </div>
-                    <span className="font-mono text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                      {step.num}
-                    </span>
+
+                    {/* Step Title & Subtitle */}
+                    <div className="min-h-[38px] flex flex-col justify-center">
+                      <h3 className="text-[11px] font-black text-[#101A59] leading-tight group-hover:text-[#6D25EA] transition-colors">
+                        {step.title}
+                      </h3>
+                      <p className="text-[9px] text-slate-500 font-medium leading-tight mt-0.5">
+                        {step.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Bottom Tag / Badge */}
+                    <div className="pt-1 border-t border-slate-100 w-full flex justify-center">
+                      <span className={`text-[8.5px] font-bold px-1.5 py-0.5 rounded-full ${step.badgeColor} leading-none`}>
+                        {step.tag}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Step Title & Subtitle */}
-                  <div>
-                    <h3 className="text-sm font-black text-[#101A59] leading-snug group-hover:text-[#6D25EA] transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-[11px] text-slate-500 font-medium leading-tight mt-0.5">
-                      {step.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Bottom Tag / Badge */}
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${step.badgeColor}`}>
-                      {step.tag}
-                    </span>
-                  </div>
+                  {/* Arrow indicator between cards on desktop */}
+                  {!isLast && (
+                    <div className="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full bg-white border border-slate-200/90 shadow-2xs items-center justify-center text-slate-400 pointer-events-none">
+                      <ChevronRight className="w-2.5 h-2.5" />
+                    </div>
+                  )}
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Arrow indicator between cards on desktop */}
-                {!isLast && (
-                  <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white border border-slate-200/80 shadow-2xs items-center justify-center text-slate-400 pointer-events-none">
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
         </div>
 
       </div>

@@ -558,6 +558,7 @@ export const App: React.FC = () => {
   const isCanvasMode = currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya';
   const isDashboardRoute = currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard';
   const isJourneyMode = currentView === 'journey';
+  const isLandingMode = currentView === 'landing' || currentView === 'home';
   const isProtectedRoute = [
     'founder', 'admin', 'command-center',
     'dashboard', 'student-dashboard', 'portal-dashboard',
@@ -823,10 +824,10 @@ export const App: React.FC = () => {
         </GlobalErrorBoundary>
       </main>
 
-      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && <Footer onNavigate={handleNavigate} />}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && !isLandingMode && <Footer onNavigate={handleNavigate} />}
 
       {/* Mobile Bottom Bar for PWA Touch Experience */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && currentView !== 'dashboard' && currentView !== 'student-dashboard' && currentView !== 'portal-dashboard' && (
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && !isLandingMode && currentView !== 'dashboard' && currentView !== 'student-dashboard' && currentView !== 'portal-dashboard' && (
         <MobileBottomNav currentView={currentView} onNavigate={handleNavigate} />
       )}
 
@@ -855,13 +856,13 @@ export const App: React.FC = () => {
       <AuthModal />
 
       {/* Persistent AI Sensei Instant Grammar Floating Coach */}
-      {!isCanvasMode && !isJourneyMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
+      {!isCanvasMode && !isJourneyMode && !isLandingMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
 
       {/* Official WhatsApp & Student Admission Helpline Widget */}
-      {!isFocusMode && !isCanvasMode && !isJourneyMode && <WhatsAppHelpline />}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
-      {!isFocusMode && !isCanvasMode && !isJourneyMode && <InstallPWA />}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <InstallPWA />}
 
       {/* Cookie Consent Banner — persisted in localStorage */}
       <CookieConsentBanner />

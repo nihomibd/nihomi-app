@@ -7,7 +7,7 @@ interface FinalJapanCTAProps {
 
 export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
   return (
-    <section className="relative w-full overflow-hidden min-h-[300px] sm:min-h-[360px] flex items-center justify-center text-center">
+    <section className="relative w-full overflow-hidden h-[115px] sm:h-[120px] flex items-center justify-center text-center">
       {/* Full-width Japanese Dusk/Sunset Panorama Background */}
       <div className="absolute inset-0 z-0">
         <img
@@ -17,38 +17,35 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
           loading="lazy"
         />
         {/* Subtle Dark Vignette & Gradient for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-purple-950/50 to-slate-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-purple-950/40 to-slate-950/60" />
       </div>
 
       {/* Floating English Handwritten Accent Note */}
-      <div className="absolute top-6 left-6 sm:left-12 z-10 hidden sm:block pointer-events-none">
-        <span className="font-serif italic text-white/80 text-sm sm:text-base tracking-wide drop-shadow-md">
-          Your Future in Japan Starts Here.
+      <div className="absolute top-4 left-6 sm:left-10 z-10 hidden sm:block pointer-events-none text-left">
+        <span className="font-serif italic text-white/90 text-xs sm:text-sm tracking-wide drop-shadow-md leading-tight block">
+          Your Future in Japan <br />
+          Starts Here.
         </span>
       </div>
 
       {/* Main Centered Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-4">
-        <span className="sm:hidden font-serif italic text-white/80 text-xs block mb-1">
-          Your Future in Japan Starts Here.
-        </span>
-
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight drop-shadow-lg leading-tight">
+      <div className="relative z-10 max-w-2xl mx-auto px-4 space-y-1">
+        <h2 className="text-sm sm:text-base md:text-lg font-black text-white tracking-tight drop-shadow-md leading-tight">
           জাপানিজ শিখুন, নিজের সম্ভাবনাকে আরও বড় করুন
         </h2>
 
-        <p className="text-xs sm:text-base text-purple-100 max-w-xl mx-auto font-medium drop-shadow-sm leading-relaxed">
+        <p className="text-[10px] sm:text-xs text-purple-100 font-medium drop-shadow-xs leading-normal">
           Nihomi আপনার সাথে — আজ, আগামীকাল, জাপানের পথে।
         </p>
 
-        <div className="pt-3">
+        <div className="pt-1">
           <button
             type="button"
             onClick={() => onNavigate('journey')}
-            className="group inline-flex items-center gap-2 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-black text-sm sm:text-base shadow-2xl shadow-purple-950/60 hover:shadow-purple-900/80 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+            className="group inline-flex items-center gap-1.5 px-4.5 py-1 rounded-full bg-gradient-to-r from-purple-200 via-pink-100 to-sky-200 hover:opacity-95 text-[#101A59] font-black text-[11px] shadow-md transition-all cursor-pointer whitespace-nowrap"
           >
             <span>বিনামূল্যে শেখা শুরু করুন</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
       </div>
