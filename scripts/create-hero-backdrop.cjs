@@ -5,10 +5,11 @@ async function createHeroBackdrop() {
   const refHero = 'storage/evidence/reference-sections/02-hero.png';
   const outPath = 'public/assets/landing-v2/hero-full-backdrop.png';
 
-  // We want:
   // 1. Cherry blossoms on far left (x: 0 to 35) preserved.
-  // 2. Pure white (100% opaque) over the text area x: 40 to 380, smoothly fading to 0% at x: 440 so Mt. Fuji begins naturally.
-  // 3. Right side: inside the card area (x: 805 to 1005, y: 40 to 335), paint 100% opaque white with rounded corners (rx="16"), leaving the pagoda and cherry blossoms around the card completely untouched!
+  // 2. Pure white (100% opaque) over the text area x: 45 to 380, smoothly fading to 0% at x: 450 so Mt. Fuji begins naturally.
+  // 3. Right side: inside the floating card area ONLY (x: 810 to 984, y: 80 to 304, rx: 16),
+  //    paint 100% opaque white with rounded corners, leaving the Japanese pagoda above (y: 0 to 80)
+  //    and cherry blossoms below (y: 304 to 380) completely intact!
   const svgOverlay = Buffer.from(`
     <svg width="1024" height="380" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -32,9 +33,9 @@ async function createHeroBackdrop() {
       <!-- Smooth fade-out into Mt. Fuji & landscape (x: 380 to 455) -->
       <rect x="380" y="0" width="75" height="380" fill="url(#leftFadeOut)" />
 
-      <!-- Frosted card background on the right (x: 805 to 1008, y: 25 to 350, rx: 16) -->
-      <!-- Opaque white so text inside the card is completely wiped clean -->
-      <rect x="805" y="25" width="202" height="325" rx="16" fill="#FFFFFF" />
+      <!-- Clean card footprint on the right matching exact reference bounds (x: 810 to 984, y: 80 to 304) -->
+      <!-- Preserves the pagoda above (y: 0 to 80) and cherry blossoms below (y: 304 to 380) -->
+      <rect x="810" y="80" width="174" height="224" rx="16" fill="#FFFFFF" />
     </svg>
   `);
 
@@ -43,7 +44,7 @@ async function createHeroBackdrop() {
     .png()
     .toFile(outPath);
 
-  console.log('✔ Successfully generated refined hero-full-backdrop.png');
+  console.log('✔ Successfully generated refined hero-full-backdrop.png with intact pagoda and cherry blossoms');
 }
 
 createHeroBackdrop().catch(console.error);
