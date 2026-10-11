@@ -82,7 +82,7 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       id="why-nihomi"
       className="w-full h-auto lg:h-[215px] lg:max-h-[215px] flex items-center bg-[#F8FAFF] border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
     >
-      <div className="w-full max-w-[1024px] mx-auto px-4">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================
@@ -119,7 +119,7 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
           {/* ========================================================
               RIGHT COLUMN: 6 STEP CARDS IN A SINGLE ROW (9 cols)
               ======================================================== */}
-          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 items-stretch h-auto lg:h-[185px]">
+          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 items-stretch h-auto lg:h-[162px]">
             {steps.map((step, index) => {
               const Icon = step.icon;
               const isLast = index === steps.length - 1;

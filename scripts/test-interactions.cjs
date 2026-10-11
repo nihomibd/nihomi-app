@@ -48,6 +48,11 @@ async function testInteractions() {
     if (msg.type() === 'error') errors.push(msg.text());
   });
   page.on('pageerror', err => errors.push(err.toString()));
+  page.on('response', res => {
+    if (res.status() >= 400) {
+      console.log('Failed resource URL:', res.status(), res.url());
+    }
+  });
 
   await page.setViewport({ width: 1024, height: 1536 });
   await page.goto('http://localhost:4173', { waitUntil: 'networkidle0' });
@@ -93,6 +98,9 @@ async function testInteractions() {
   console.log('✔ Mobile 390px horizontal overflow check:', hasOverflow === false ? 'PASSED (no overflow)' : 'FAILED');
 
   console.log('Interaction test completed with total errors:', errors.length);
+  if (errors.length > 0) {
+    console.log('Errors caught:', errors);
+  }
   await browser.close();
 
   if (serverProc) {

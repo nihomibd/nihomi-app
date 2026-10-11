@@ -1,0 +1,251 @@
+{
+  "timestamp": "2026-10-11T18:37:06.468Z",
+  "viewport": {
+    "width": 1024,
+    "height": 1536
+  },
+  "domMetrics": {
+    "docScrollWidth": 1024,
+    "docScrollHeight": 1536,
+    "docClientWidth": 1024,
+    "docClientHeight": 1536,
+    "bodyScrollHeight": 1536,
+    "hasHorizontalOverflow": false
+  },
+  "sectionMetrics": [
+    {
+      "id": "01-header",
+      "name": "Header",
+      "exists": true,
+      "rect": {
+        "top": 0,
+        "bottom": 60,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 60
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "oklab(0.999994 0.0000455678 0.0000200868 / 0.95)"
+    },
+    {
+      "id": "02-hero",
+      "name": "Hero",
+      "exists": true,
+      "rect": {
+        "top": 60,
+        "bottom": 440,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 380
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(255, 255, 255)"
+    },
+    {
+      "id": "03-try-lesson",
+      "name": "Try Lesson",
+      "exists": true,
+      "rect": {
+        "top": 440,
+        "bottom": 675,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 235
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(255, 255, 255)"
+    },
+    {
+      "id": "04-journey",
+      "name": "Learning Journey",
+      "exists": true,
+      "rect": {
+        "top": 675,
+        "bottom": 890,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 215
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(248, 250, 255)"
+    },
+    {
+      "id": "05-outcomes",
+      "name": "Japan Outcomes",
+      "exists": true,
+      "rect": {
+        "top": 890,
+        "bottom": 1100,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 210
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(255, 255, 255)"
+    },
+    {
+      "id": "06-testimonials",
+      "name": "Student Stories",
+      "exists": true,
+      "rect": {
+        "top": 1100,
+        "bottom": 1260,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 160
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(248, 250, 255)"
+    },
+    {
+      "id": "07-pricing",
+      "name": "Pricing",
+      "exists": true,
+      "rect": {
+        "top": 1260,
+        "bottom": 1425,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 165
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(255, 255, 255)"
+    },
+    {
+      "id": "08-banner",
+      "name": "Final Banner",
+      "exists": true,
+      "rect": {
+        "top": 1425,
+        "bottom": 1536,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 111
+      },
+      "isVisible": true,
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgba(0, 0, 0, 0)"
+    }
+  ],
+  "sectionLedger": [
+    {
+      "id": "01-header",
+      "name": "Header",
+      "targetHeight": 60,
+      "renderedHeight": 60,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\01-header-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-01-header.png"
+    },
+    {
+      "id": "02-hero",
+      "name": "Hero",
+      "targetHeight": 380,
+      "renderedHeight": 380,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\02-hero-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-02-hero.png"
+    },
+    {
+      "id": "03-try-lesson",
+      "name": "Try Lesson",
+      "targetHeight": 235,
+      "renderedHeight": 235,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\03-try-lesson-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-03-try-lesson.png"
+    },
+    {
+      "id": "04-journey",
+      "name": "Learning Journey",
+      "targetHeight": 215,
+      "renderedHeight": 215,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\04-journey-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-04-journey.png"
+    },
+    {
+      "id": "05-outcomes",
+      "name": "Japan Outcomes",
+      "targetHeight": 210,
+      "renderedHeight": 210,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\05-outcomes-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-05-outcomes.png"
+    },
+    {
+      "id": "06-testimonials",
+      "name": "Student Stories",
+      "targetHeight": 160,
+      "renderedHeight": 160,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\06-testimonials-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-06-testimonials.png"
+    },
+    {
+      "id": "07-pricing",
+      "name": "Pricing",
+      "targetHeight": 165,
+      "renderedHeight": 165,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\07-pricing-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-07-pricing.png"
+    },
+    {
+      "id": "08-banner",
+      "name": "Final Banner",
+      "targetHeight": 111,
+      "renderedHeight": 111,
+      "renderedWidth": 1024,
+      "delta": 0,
+      "renderedFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\08-banner-rendered.png",
+      "comparisonFile": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\section-comparisons\\cmp-08-banner.png"
+    }
+  ],
+  "files": {
+    "fullpage": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\proof-landing-1024x1536-fullpage.png",
+    "viewport": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\proof-landing-1024x1536-viewport.png",
+    "topSegment": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\segment-top-0-768.png",
+    "bottomSegment": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\segment-bottom-768-1536.png",
+    "sideBySide": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\proof-side-by-side-1024x1536.png",
+    "overlayBlend": "C:\\Users\\bdtri\\Desktop\\www.Nihomi.com\\nihomi-app-1\\storage\\evidence\\proof-overlay-50-blend.png"
+  }
+}

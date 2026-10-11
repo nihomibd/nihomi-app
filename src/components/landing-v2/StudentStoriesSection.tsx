@@ -48,14 +48,11 @@ export const StudentStoriesSection: React.FC<StudentStoriesSectionProps> = ({ on
       id="testimonials"
       className="w-full h-auto lg:h-[160px] lg:max-h-[160px] flex items-center bg-[#F8FAFF] border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
     >
-      <div className="w-full max-w-[1024px] mx-auto px-4">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
         
         {/* Left-Aligned Header Matching Reference Poster */}
-        <div className="text-left mb-2.5">
-          <span className="text-[8.5px] font-extrabold tracking-widest uppercase text-[#5B21B6] block select-none">
-            REAL STUDENTS, REAL PROGRESS
-          </span>
-          <h2 className="text-base lg:text-[17px] font-black text-[#101A59] tracking-tight leading-tight mt-0.5">
+        <div className="text-left mb-2">
+          <h2 className="text-base lg:text-[17px] font-black text-[#101A59] tracking-tight leading-tight">
             আমাদের শিক্ষার্থীদের অভিজ্ঞতা
           </h2>
         </div>

@@ -138,7 +138,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
       id="try-lesson"
       className="w-full h-auto lg:h-[235px] lg:max-h-[235px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0"
     >
-      <div className="w-full max-w-[1024px] mx-auto px-4">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================
@@ -269,7 +269,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             </div>
 
             {/* Right: AI Sensei Chat Preview Panel (5 cols) */}
-            <div className="md:col-span-5 bg-white rounded-2xl p-2 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-1">
+            <div className="md:col-span-5 bg-white rounded-2xl p-2 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-0.5">
               {/* Sensei Message */}
               <div className="flex items-start gap-1.5">
                 <img
@@ -290,26 +290,28 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                 </div>
               </div>
 
-              {/* Sound Wave Visualizer & Microphone Interaction */}
-              <div className="flex items-center justify-between gap-1 bg-gradient-to-r from-[#4C1D95] to-[#6D25EA] px-2.5 py-1 rounded-full shadow-2xs text-white">
-                <div className="flex items-center gap-0.5 px-1">
+              {/* Sound Wave Visualizer Pill & Circular Microphone Button Matching Reference */}
+              <div className="flex items-center gap-1.5 justify-center">
+                <div className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-[#3B1774] to-[#581C87] px-3 py-1.5 rounded-full shadow-2xs text-white">
                   <span className={`w-0.5 h-2 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse h-3' : ''}`} />
-                  <span className={`w-0.5 h-3 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce h-3.5' : ''}`} />
+                  <span className={`w-0.5 h-3.5 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce h-4' : ''}`} />
                   <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                   <span className={`w-0.5 h-2.5 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce' : ''}`} />
                   <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-3 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce' : ''}`} />
+                  <span className={`w-0.5 h-2 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleMicClick}
-                  className={`p-1 rounded-full transition-all cursor-pointer ${
-                    isMicActive ? 'bg-rose-500 animate-ping' : 'bg-[#8B5CF6] hover:bg-[#A78BFA]'
+                  className={`w-7 h-7 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] flex items-center justify-center text-white shadow-xs transition-transform cursor-pointer shrink-0 ${
+                    isMicActive ? 'bg-rose-500 scale-105 animate-pulse' : 'hover:scale-105'
                   }`}
                   aria-label="Microphone practice"
                   title="কথা বলুন"
                 >
-                  <Mic className="w-2.5 h-2.5 text-white" />
+                  <Mic className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>
 

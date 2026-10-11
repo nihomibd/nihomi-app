@@ -42,7 +42,7 @@ export const JapanReadinessSection: React.FC<JapanReadinessSectionProps> = ({ on
       id="japan-readiness"
       className="w-full h-auto lg:h-[210px] lg:max-h-[210px] flex items-center bg-white border-t border-slate-100 py-4 lg:py-0"
     >
-      <div className="w-full max-w-[1024px] mx-auto px-4">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================

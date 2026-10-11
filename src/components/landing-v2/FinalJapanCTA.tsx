@@ -22,8 +22,8 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
       </div>
 
       {/* Floating English Handwritten Accent Note */}
-      <div className="absolute top-3 left-6 sm:left-10 z-10 hidden sm:block pointer-events-none text-left -rotate-3">
-        <span className="font-serif italic text-white text-xs sm:text-[13px] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight block">
+      <div className="absolute top-3.5 left-10 lg:left-14 z-10 hidden sm:block pointer-events-none text-left -rotate-3">
+        <span className="font-serif italic text-white text-xs sm:text-[12.5px] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight block">
           Your Future in Japan <br />
           Starts Here.
         </span>
@@ -31,7 +31,7 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
 
       {/* Main Centered Content */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 space-y-0.5">
-        <h2 className="text-xs sm:text-sm md:text-[15px] font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] leading-tight">
+        <h2 className="text-xs sm:text-sm md:text-[14.5px] font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] leading-tight">
           জাপানিজ শিখুন, নিজের সম্ভাবনাকে আরও বড় করুন
         </h2>
 

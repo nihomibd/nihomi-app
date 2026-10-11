@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
       {/* ========================================================
           SEMANTIC CONTENT CONTAINER
           ======================================================== */}
-      <div className="relative z-10 w-full max-w-[1024px] h-full mx-auto px-4 py-6 lg:py-0 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0">
+      <div className="relative z-10 w-full max-w-[1024px] h-full mx-auto px-6 lg:px-8 py-6 lg:py-0 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0">
         
         {/* ========================================================
             LEFT COLUMN: TYPOGRAPHY, VALUE PROPOSITIONS & CTAs

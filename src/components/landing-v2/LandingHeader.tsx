@@ -46,7 +46,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
 
   return (
     <header id="landing-header" className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_1px_6px_rgba(0,0,0,0.03)] h-[60px] flex items-center transition-all">
-      <div className="w-full max-w-[1024px] mx-auto px-4 h-full flex items-center justify-between gap-1">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8 h-full flex items-center justify-between gap-1">
         {/* Left: Brand Identity */}
         <div
           onClick={() => {

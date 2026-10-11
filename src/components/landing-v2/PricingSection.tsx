@@ -88,7 +88,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
       id="pricing-section"
       className="w-full h-auto lg:h-[165px] lg:max-h-[165px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
     >
-      <div className="w-full max-w-[1024px] mx-auto px-4">
+      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================
