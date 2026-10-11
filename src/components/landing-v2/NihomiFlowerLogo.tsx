@@ -17,45 +17,56 @@ export const NihomiFlowerLogo: React.FC<NihomiFlowerLogoProps> = ({ className = 
       aria-label="Nihomi Flower Logo"
     >
       <defs>
-        <radialGradient id="nihomiPetal1" cx="50%" cy="30%" r="70%">
-          <stop offset="0%" stopColor="#C084FC" />
-          <stop offset="100%" stopColor="#7C3AED" />
+        <radialGradient id="nihomiPetalGrad" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stopColor="#8B5CF6" />
+          <stop offset="60%" stopColor="#6D25EA" />
+          <stop offset="100%" stopColor="#581C87" />
         </radialGradient>
-        <radialGradient id="nihomiPetal2" cx="50%" cy="30%" r="70%">
-          <stop offset="0%" stopColor="#A855F7" />
-          <stop offset="100%" stopColor="#6D25EA" />
-        </radialGradient>
-        <radialGradient id="nihomiCenter" cx="50%" cy="50%" r="50%">
+        <radialGradient id="nihomiCenterCore" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="40%" stopColor="#E9D5FF" />
-          <stop offset="100%" stopColor="#A855F7" />
+          <stop offset="100%" stopColor="#EDE9FE" />
         </radialGradient>
       </defs>
 
-      {/* 8-Petal Japanese Sakura Flower Emblem */}
+      {/* 5 Plump Rounded Sakura / Plum Petals (Rotated at 72° increments) */}
       <g transform="translate(50, 50)">
-        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, idx) => (
+        {[0, 72, 144, 216, 288].map((angle) => (
           <path
             key={angle}
-            d="M 0,-4 C -8,-16 -13,-32 0,-44 C 13,-32 8,-16 0,-4 Z"
-            fill={idx % 2 === 0 ? 'url(#nihomiPetal1)' : 'url(#nihomiPetal2)'}
-            opacity="0.92"
+            d="M 0,-8 C -14,-14 -22,-30 -14,-42 C -5,-52 5,-52 14,-42 C 22,-30 14,-14 0,-8 Z"
+            fill="url(#nihomiPetalGrad)"
             transform={`rotate(${angle})`}
           />
         ))}
-        {/* Subtle inner petal layer */}
-        {[22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5].map((angle) => (
-          <path
-            key={`inner-${angle}`}
-            d="M 0,-2 C -4,-10 -7,-20 0,-28 C 7,-20 4,-10 0,-2 Z"
-            fill="#E9D5FF"
-            opacity="0.55"
-            transform={`rotate(${angle})`}
+
+        {/* Delicate Japanese central stamen star & pistil */}
+        {[0, 72, 144, 216, 288].map((angle) => (
+          <line
+            key={`stamen-${angle}`}
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="-16"
+            stroke="#EDE9FE"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            transform={`rotate(${angle + 36})`}
           />
         ))}
-        {/* Center core */}
-        <circle cx="0" cy="0" r="9" fill="url(#nihomiCenter)" />
-        <circle cx="0" cy="0" r="4.5" fill="#581C87" />
+        {[0, 72, 144, 216, 288].map((angle) => (
+          <circle
+            key={`tip-${angle}`}
+            cx="0"
+            cy="-18"
+            r="2"
+            fill="#FFFFFF"
+            transform={`rotate(${angle + 36})`}
+          />
+        ))}
+
+        {/* Center core hub */}
+        <circle cx="0" cy="0" r="7.5" fill="url(#nihomiCenterCore)" />
+        <circle cx="0" cy="0" r="3" fill="#6D25EA" />
       </g>
     </svg>
   );

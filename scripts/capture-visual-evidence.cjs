@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+const { spawn } = require('child_process');
 
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const OUTPUT_DIR = path.resolve('storage/evidence');
@@ -9,7 +11,40 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
+function checkServer() {
+  return new Promise((resolve) => {
+    http.get('http://localhost:4173', (res) => {
+      resolve(res.statusCode < 500);
+    }).on('error', () => resolve(false));
+  });
+}
+
+async function ensureServer() {
+  const isRunning = await checkServer();
+  if (isRunning) {
+    console.log('✔ Preview server is already running on port 4173');
+    return null;
+  }
+
+  console.log('Starting preview server on port 4173...');
+  const server = spawn('npx.cmd', ['vite', 'preview', '--port', '4173'], {
+    shell: true,
+    stdio: 'ignore'
+  });
+
+  for (let i = 0; i < 30; i++) {
+    await new Promise((r) => setTimeout(r, 1000));
+    if (await checkServer()) {
+      console.log('✔ Preview server started successfully');
+      return server;
+    }
+  }
+  throw new Error('Could not start preview server within 30 seconds');
+}
+
 async function capture() {
+  const serverProc = await ensureServer();
+
   console.log('Launching Chrome from:', CHROME_PATH);
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
@@ -86,6 +121,9 @@ async function capture() {
   console.log('Mobile horizontal overflow detected:', hasOverflow);
 
   await browser.close();
+  if (serverProc) {
+    serverProc.kill();
+  }
   console.log('All visual verification captures complete!');
 }
 

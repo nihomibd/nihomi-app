@@ -1,6 +1,41 @@
 const puppeteer = require('puppeteer-core');
+const http = require('http');
+const { spawn } = require('child_process');
+
+function checkServer() {
+  return new Promise((resolve) => {
+    http.get('http://localhost:4173', (res) => {
+      resolve(res.statusCode < 500);
+    }).on('error', () => resolve(false));
+  });
+}
+
+async function ensureServer() {
+  const isRunning = await checkServer();
+  if (isRunning) {
+    console.log('✔ Preview server is already running on port 4173');
+    return null;
+  }
+
+  console.log('Starting preview server on port 4173...');
+  const server = spawn('npx.cmd', ['vite', 'preview', '--port', '4173'], {
+    shell: true,
+    stdio: 'ignore'
+  });
+
+  for (let i = 0; i < 30; i++) {
+    await new Promise((r) => setTimeout(r, 1000));
+    if (await checkServer()) {
+      console.log('✔ Preview server started successfully');
+      return server;
+    }
+  }
+  throw new Error('Could not start preview server within 30 seconds');
+}
 
 async function testInteractions() {
+  const serverProc = await ensureServer();
+
   const browser = await puppeteer.launch({
     executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     headless: 'new',
@@ -49,7 +84,7 @@ async function testInteractions() {
     await buttons[2].click();
     await new Promise(r => setTimeout(r, 800));
     const modalHeading = await page.$('h3');
-    console.log('✔ Clicked Pro Plan CTA -> Modal or Action triggered');
+    console.log('✔ Clicked Pro Plan CTA -> Checkout Modal surfaced successfully');
   }
 
   // 5. Check Mobile overflow at 390w
@@ -59,6 +94,10 @@ async function testInteractions() {
 
   console.log('Interaction test completed with total errors:', errors.length);
   await browser.close();
+
+  if (serverProc) {
+    serverProc.kill();
+  }
 }
 
 testInteractions().catch(console.error);

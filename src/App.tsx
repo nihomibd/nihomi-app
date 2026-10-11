@@ -865,7 +865,7 @@ export const App: React.FC = () => {
       {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <InstallPWA />}
 
       {/* Cookie Consent Banner — persisted in localStorage */}
-      <CookieConsentBanner />
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <CookieConsentBanner />}
 
       {/* Persistent Floating Pill when Founder is in Student Mode */}
       {(user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') &&

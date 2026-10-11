@@ -3,15 +3,12 @@ import {
   Volume2,
   Mic,
   ArrowRight,
-  Sparkles,
-  BookOpen,
-  Headphones,
-  CheckCircle2,
   FileText,
   Layers,
-  VolumeX
+  BookOpen,
+  Sparkles,
+  Headphones
 } from 'lucide-react';
-import { speakJapanese } from '../../lib/tts';
 
 interface TryLessonSectionProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -19,85 +16,81 @@ interface TryLessonSectionProps {
 
 type LessonTab = 'hiragana' | 'katakana' | 'vocab' | 'sentences' | 'listening';
 
-interface TabContent {
+interface LessonContent {
   mainChar: string;
   romaji: string;
   bnHint: string;
-  examples: {
-    ja: string;
-    bn: string;
-    image: string;
-  }[];
+  examples: { ja: string; bn: string; image: string }[];
   senseiMsg: string;
   learnerMsg: string;
   feedbackMsg: string;
 }
 
-const TAB_DATA: Record<LessonTab, TabContent> = {
+const TAB_DATA: Record<LessonTab, LessonContent> = {
   hiragana: {
     mainChar: 'あ',
     romaji: 'a',
-    bnHint: "ইহা 'অ' উচ্চারণ, বাংলায় 'আ'-এর মতো।",
+    bnHint: 'উচ্চারণ "আ"। বাংলায় "আ"-এর মতো।',
     examples: [
       { ja: 'あお', bn: 'নীল', image: '/assets/landing-v2/lesson-blue-ao.png' },
       { ja: 'りんご', bn: 'আপেল', image: '/assets/landing-v2/lesson-apple-ringo.png' },
       { ja: 'いぬ', bn: 'কুকুর', image: '/assets/landing-v2/lesson-dog-inu.png' }
     ],
     senseiMsg: 'これは「あ」です。一緒に読んでみましょう！',
-    learnerMsg: 'a... (আ...)',
-    feedbackMsg: 'すごい！とても上手です！ (দারুণ! খুব ভালো!)'
+    learnerMsg: 'あ... (আ...)',
+    feedbackMsg: 'すごい！ とても上手です！ (দারুণ! খুব ভালো!)'
   },
   katakana: {
     mainChar: 'ア',
     romaji: 'a',
-    bnHint: "বিদেশি শব্দের জন্য ব্যবহৃত কাতাকানা 'আ'।",
+    bnHint: 'কাতাকানা "আ"। বিদেশি শব্দের জন্য ব্যবহৃত হয়।',
     examples: [
       { ja: 'アイス', bn: 'আইসক্রিম', image: '/assets/landing-v2/lesson-blue-ao.png' },
       { ja: 'アメリカ', bn: 'আমেরিকা', image: '/assets/landing-v2/lesson-apple-ringo.png' },
       { ja: 'アニメ', bn: 'অ্যানিমে', image: '/assets/landing-v2/lesson-dog-inu.png' }
     ],
-    senseiMsg: 'これはカタカナの「ア」です。読んでみましょう！',
-    learnerMsg: 'aisu... (আইসু...)',
-    feedbackMsg: '完璧です！カタカナも簡単ですね！ (চমৎকার! কাতাকানাও কত সহজ!)'
+    senseiMsg: 'カタカナの「ア」です。読んでみましょう！',
+    learnerMsg: 'ア... (আ...)',
+    feedbackMsg: 'バッチリ！素晴らしい発音です！'
   },
   vocab: {
     mainChar: 'あい',
     romaji: 'ai',
-    bnHint: "マスター বর্ণ 'あ' ও 'い' দিয়ে প্রথম শব্দ: ভালোবাসা।",
+    bnHint: 'অর্থ: ভালোবাসা। প্রথম আনলক হওয়া অর্থবোধক শব্দ।',
     examples: [
-      { ja: 'あい', bn: 'ভালোবাসা', image: '/assets/landing-v2/lesson-blue-ao.png' },
-      { ja: 'いえ', bn: 'বাড়ি / ঘর', image: '/assets/landing-v2/lesson-apple-ringo.png' },
-      { ja: 'あお', bn: 'নীল রঙ', image: '/assets/landing-v2/lesson-dog-inu.png' }
+      { ja: 'あさ', bn: 'সকাল', image: '/assets/landing-v2/lesson-blue-ao.png' },
+      { ja: 'いえ', bn: 'বাড়ি', image: '/assets/landing-v2/lesson-apple-ringo.png' },
+      { ja: 'うみ', bn: 'সমুদ্র', image: '/assets/landing-v2/lesson-dog-inu.png' }
     ],
-    senseiMsg: '「あい」の意味は何ですか？',
-    learnerMsg: 'bhalobasha... (ভালোবাসা)',
-    feedbackMsg: '正解！素晴らしい記憶力です！ (সঠিক উত্তর! দুর্দান্ত স্মৃতিশক্তি!)'
+    senseiMsg: '「あい」は「愛（Love）」という意味です！',
+    learnerMsg: 'あい... (আই...)',
+    feedbackMsg: 'パーフェクト！意味も完璧ですね。'
   },
   sentences: {
-    mainChar: 'これ',
-    romaji: 'kore',
-    bnHint: "ইঙ্গিতসূচক সর্বনাম: 'এটি' বা 'এই বস্তু'।",
+    mainChar: 'こんにちは',
+    romaji: 'konnichiwa',
+    bnHint: 'দিনের বেলায় সাধারণ শুভেচ্ছা: "হ্যালো / নমস্কার"',
     examples: [
-      { ja: 'これ は 本 です', bn: 'এটি বই', image: '/assets/landing-v2/lesson-blue-ao.png' },
-      { ja: 'それ は ペン です', bn: 'ওটি কলম', image: '/assets/landing-v2/lesson-apple-ringo.png' },
-      { ja: 'あれ は 車 です', bn: 'ওইটি গাড়ি', image: '/assets/landing-v2/lesson-dog-inu.png' }
+      { ja: 'ありがとう', bn: 'ধন্যবাদ', image: '/assets/landing-v2/lesson-apple-ringo.png' },
+      { ja: 'さようなら', bn: 'বিদায়', image: '/assets/landing-v2/lesson-blue-ao.png' },
+      { ja: 'はい', bn: 'হ্যাঁ', image: '/assets/landing-v2/lesson-dog-inu.png' }
     ],
-    senseiMsg: '「これは本です」を日本語で声に出してみましょう！',
-    learnerMsg: 'kore wa hon desu',
-    feedbackMsg: '発音のリズムがとても綺麗です！ (উচ্চারণের ছন্দ খুবই সুন্দর!)'
+    senseiMsg: '日本の基本的な挨拶「こんにちは」です。',
+    learnerMsg: 'こんにちは！',
+    feedbackMsg: '自然なトーンで言えました！すごい！'
   },
   listening: {
     mainChar: 'ありがとう',
     romaji: 'arigatou',
-    bnHint: 'জাপানের সবচেয়ে পরিচিত অভিবাদন: ধন্যবাদ।',
+    bnHint: 'শুনুন এবং সুর নকল করুন: "ধন্যবাদ"',
     examples: [
-      { ja: 'おはよう', bn: 'সুপ্রভাত', image: '/assets/landing-v2/lesson-blue-ao.png' },
-      { ja: 'こんにちは', bn: 'হ্যালো / শুভ দুপুর', image: '/assets/landing-v2/lesson-apple-ringo.png' },
-      { ja: 'こんばんは', bn: 'শুভ সন্ধ্যা', image: '/assets/landing-v2/lesson-dog-inu.png' }
+      { ja: 'どういたしまして', bn: 'ওয়েলকাম', image: '/assets/landing-v2/lesson-apple-ringo.png' },
+      { ja: 'すみません', bn: 'মাফ করবেন', image: '/assets/landing-v2/lesson-blue-ao.png' },
+      { ja: 'ごめんなさい', bn: 'দুঃখিত', image: '/assets/landing-v2/lesson-dog-inu.png' }
     ],
-    senseiMsg: 'ネイティブの発音をよく聞いてリピートしてください。',
-    learnerMsg: 'arigatou gozaimasu',
-    feedbackMsg: '素晴らしいリスニングです！ (চমৎকার লিসেনিং!)'
+    senseiMsg: '音をよく聴いて、真似してみましょう。',
+    learnerMsg: 'ありがとう...！',
+    feedbackMsg: 'イントネーションがとても綺麗です！'
   }
 };
 
@@ -108,13 +101,18 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
 
   const currentContent = TAB_DATA[activeTab];
 
-  const handlePlaySound = async (text: string) => {
-    try {
+  const handlePlaySound = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.85;
       setIsPlayingAudio(true);
-      await speakJapanese(text);
-    } catch {
-      // Graceful fallback
-    } finally {
+      utterance.onend = () => setIsPlayingAudio(false);
+      utterance.onerror = () => setIsPlayingAudio(false);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setIsPlayingAudio(true);
       setTimeout(() => setIsPlayingAudio(false), 800);
     }
   };
@@ -136,119 +134,116 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
   ];
 
   return (
-    <section id="try-lesson" className="py-2 lg:py-2.5 bg-white border-t border-slate-100">
-      <div className="max-w-[1000px] xl:max-w-7xl mx-auto px-4 sm:px-6">
-        
-        {/* Section Top Header (Mobile & Desktop) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+    <section
+      id="try-lesson"
+      className="w-full h-auto lg:h-[235px] lg:max-h-[235px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0"
+    >
+      <div className="w-full max-w-[1024px] mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================
               LEFT COLUMN: EDITORIAL KICKER & ACTION (4 cols)
               ======================================================== */}
-          <div className="lg:col-span-4 space-y-1.5 lg:space-y-2">
-            <div className="inline-flex items-center gap-2">
-              <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200/50">
+          <div className="lg:col-span-4 space-y-1.5 shrink-0">
+            <div>
+              <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 select-none">
                 TRY A REAL LESSON
               </span>
             </div>
 
-            <h2 className="text-xl lg:text-[23px] font-black text-[#101A59] tracking-tight leading-[1.15]">
+            <h2 className="text-xl lg:text-[21px] font-black text-[#101A59] tracking-tight leading-[1.14]">
               এখনই একটি ছোট লেসন <br />
               <span className="text-[#6D25EA]">চেষ্টা করে দেখুন</span>
             </h2>
 
-            <p className="text-slate-600 text-[10.5px] leading-snug max-w-xs font-normal">
+            <p className="text-slate-600 text-[10px] sm:text-[10.5px] leading-snug max-w-xs font-normal">
               Nihomi Sensei-এর সাথে ইন্টারঅ্যাক্টিভ ভাবে শিখুন — জাপানিজ শেখা এতটাই সহজ ও মজার!
             </p>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('journey')}
-              className="group inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-extrabold text-[11px] shadow-md shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
-            >
-              <span>এখনই লেসন শুরু করুন</span>
-              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-            </button>
+            <div className="pt-0.5">
+              <button
+                type="button"
+                onClick={() => onNavigate('journey')}
+                className="group inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-extrabold text-[11px] shadow-sm shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
+              >
+                <span>এখনই লেসন শুরু করুন</span>
+                <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </div>
           </div>
 
           {/* ========================================================
-              CENTER & RIGHT: LESSON PLAYGROUND & SENSEI PREVIEW (8 cols)
+              CENTER & RIGHT: LESSON CONSOLE & SENSEI PREVIEW (8 cols)
               ======================================================== */}
-          <div className="lg:col-span-8 bg-slate-50/70 p-2 rounded-2xl border border-slate-200/80 shadow-2xs grid grid-cols-1 md:grid-cols-12 gap-2 items-stretch">
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-12 gap-2 items-stretch h-auto lg:h-[212px]">
             
-            {/* 1. Vertical Mode Navigation Tabs (3 cols on md) */}
-            <div className="md:col-span-3 flex md:flex-col gap-1 overflow-x-auto pb-1 md:pb-0">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-2 py-1 rounded-xl text-[10px] font-bold transition-all whitespace-nowrap cursor-pointer text-left ${
-                      isActive
-                        ? 'bg-[#6D25EA] text-white shadow-xs'
-                        : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/60'
-                    }`}
-                  >
-                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 2. Main Lesson Playground Interactive Card (5 cols on md) */}
-            <div className="md:col-span-5 bg-white rounded-xl p-2.5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-1.5">
-              
-              {/* Top Character Focus */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <span className="font-japanese text-3xl sm:text-4xl font-black text-[#101A59]">
-                    {currentContent.mainChar}
-                  </span>
-                  
-                  {/* Speaker audio button */}
-                  <button
-                    type="button"
-                    onClick={() => handlePlaySound(currentContent.mainChar)}
-                    className={`p-1.5 rounded-full border transition-all cursor-pointer ${
-                      isPlayingAudio
-                        ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-105'
-                        : 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-[#6D25EA]'
-                    }`}
-                    title="উচ্চারণ শুনুন"
-                    aria-label="Play pronunciation"
-                  >
-                    <Volume2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Romaji & Bengali Hint */}
-                <div className="text-right">
-                  <span className="text-[10px] font-black text-slate-400 font-mono uppercase tracking-wider block">
-                    ( {currentContent.romaji} )
-                  </span>
-                  <span className="text-[9px] text-slate-500 max-w-[110px] block mt-0.5 leading-tight">
-                    {currentContent.bnHint}
-                  </span>
-                </div>
+            {/* Unified Console Panel: Side Menu + Center Card (7 cols) */}
+            <div className="md:col-span-7 bg-[#FBFBFF] rounded-2xl p-2 border border-slate-200/80 shadow-2xs flex gap-2 items-stretch">
+              {/* Vertical Mode Tabs */}
+              <div className="w-[124px] shrink-0 flex flex-col justify-between space-y-0.5">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-bold transition-all whitespace-nowrap cursor-pointer text-left w-full ${
+                        isActive
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-700 text-white shadow-xs'
+                          : 'bg-white text-slate-700 hover:bg-purple-50 border border-slate-200/50'
+                      }`}
+                    >
+                      <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">{tab.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* 3 Example thumbnails with Japanese & Bengali labels */}
-              <div className="pt-1 border-t border-slate-100">
-                <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                  উদাহরণ শব্দ (Examples)
-                </span>
-                <div className="grid grid-cols-3 gap-1.5">
+              {/* Main Playground Content Card */}
+              <div className="flex-1 bg-white rounded-xl p-1.5 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
+                {/* Character & Sound */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-japanese text-3xl font-black text-[#101A59]">
+                      {currentContent.mainChar}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handlePlaySound(currentContent.mainChar)}
+                      className={`p-1 rounded-full border transition-all cursor-pointer ${
+                        isPlayingAudio
+                          ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-105'
+                          : 'bg-sky-50 hover:bg-sky-100 border-sky-100 text-sky-600'
+                      }`}
+                      title="উচ্চারণ শুনুন"
+                      aria-label="Play pronunciation"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-[9.5px] font-black text-slate-400 font-mono uppercase tracking-wider block">
+                      ( {currentContent.romaji} )
+                    </span>
+                    <span className="text-[8px] text-slate-500 max-w-[95px] block leading-tight mt-0.5">
+                      {currentContent.bnHint}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 3 Example Thumbnails */}
+                <div className="grid grid-cols-3 gap-1 pt-0.5 border-t border-slate-100">
                   {currentContent.examples.map((ex, i) => (
                     <div
                       key={i}
                       onClick={() => handlePlaySound(ex.ja)}
-                      className="bg-slate-50 hover:bg-purple-50/60 p-1 rounded-xl border border-slate-200/60 text-center cursor-pointer transition-all hover:border-purple-200 flex flex-col items-center"
+                      className="bg-slate-50 hover:bg-purple-50 p-0.5 rounded-lg border border-slate-200/50 text-center cursor-pointer transition-all flex flex-col items-center"
                     >
-                      <div className="w-7 h-7 rounded-lg overflow-hidden mb-1 bg-white border border-slate-100 flex items-center justify-center">
+                      <div className="w-6 h-5 rounded overflow-hidden mb-0.5 bg-white border border-slate-100 flex items-center justify-center">
                         <img
                           src={ex.image}
                           alt={ex.ja}
@@ -258,91 +253,95 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                           }}
                         />
                       </div>
-                      <span className="font-japanese font-black text-[10px] text-slate-800 leading-tight">
+                      <span className="font-japanese font-black text-[9px] text-slate-800 leading-tight">
                         {ex.ja}
                       </span>
-                      <span className="text-[8.5px] text-slate-500 leading-none mt-0.5">
+                      <span className="text-[7.5px] text-slate-500 leading-none">
                         ({ex.bn})
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
-
             </div>
 
-            {/* 3. Nihomi Sensei Chat Preview Panel (4 cols on md) */}
-            <div className="md:col-span-4 bg-slate-50/80 rounded-2xl p-2 border border-slate-200/80 flex flex-col justify-between space-y-1.5">
-              
-              {/* Sensei Message Bubble */}
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5">
-                  <img
-                    src="/assets/landing-v2/sensei-avatar.png"
-                    alt="Nihomi Sensei"
-                    className="w-5 h-5 rounded-full object-cover ring-1 ring-purple-200"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                  <span className="text-[10px] font-black text-[#5B21B6]">
+            {/* Right: AI Sensei Chat Preview Panel (5 cols) */}
+            <div className="md:col-span-5 bg-white rounded-2xl p-1.5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-0.5">
+              {/* Sensei Message */}
+              <div className="flex items-start gap-1">
+                <img
+                  src="/assets/landing-v2/sensei-avatar.png"
+                  alt="Nihomi Sensei"
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-purple-200 shrink-0 mt-0.5"
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+                <div className="min-w-0">
+                  <span className="text-[9px] font-black text-[#5B21B6] block leading-none mb-0.5">
                     Nihomi Sensei
                   </span>
-                </div>
-                <div className="bg-white p-1.5 rounded-xl rounded-tl-xs border border-purple-100 shadow-2xs">
-                  <p className="text-[10px] font-semibold text-slate-800 leading-snug">
+                  <div className="bg-purple-50/70 p-1 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-purple-100/60">
                     {currentContent.senseiMsg}
-                  </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Voice Wave Visualizer & Microphone Interaction */}
-              <div className="flex items-center justify-between gap-1.5 bg-white px-2 py-1 rounded-xl border border-slate-200/60 shadow-2xs">
-                <div className="flex items-center gap-1">
-                  <span className={`w-0.5 h-2.5 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse h-3.5' : ''}`} />
-                  <span className={`w-0.5 h-4 rounded-full bg-purple-600 ${isMicActive ? 'animate-bounce h-5' : ''}`} />
-                  <span className={`w-0.5 h-2 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse h-4' : ''}`} />
-                  <span className={`w-0.5 h-3 rounded-full bg-purple-700 ${isMicActive ? 'animate-bounce h-4.5' : ''}`} />
-                  <span className={`w-0.5 h-2 rounded-full bg-purple-500 ${isMicActive ? 'animate-pulse' : ''}`} />
+              {/* Sound Wave Visualizer & Microphone Interaction */}
+              <div className="flex items-center justify-between gap-1 bg-[#1A0B2E] px-2 py-0.5 rounded-full shadow-2xs text-white">
+                <div className="flex items-center gap-0.5 px-1">
+                  <span className={`w-0.5 h-2 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse h-3' : ''}`} />
+                  <span className={`w-0.5 h-3 rounded-full bg-purple-300 ${isMicActive ? 'animate-bounce h-4' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-2.5 rounded-full bg-purple-200 ${isMicActive ? 'animate-bounce' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse' : ''}`} />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleMicClick}
-                  className={`p-1.5 rounded-full transition-all cursor-pointer ${
-                    isMicActive
-                      ? 'bg-rose-500 text-white animate-ping'
-                      : 'bg-[#6D25EA] hover:bg-[#5818D1] text-white shadow-xs'
+                  className={`p-1 rounded-full transition-all cursor-pointer ${
+                    isMicActive ? 'bg-rose-500 animate-ping' : 'bg-[#6D25EA] hover:bg-[#8B5CF6]'
                   }`}
                   aria-label="Microphone practice"
                   title="কথা বলুন"
                 >
-                  <Mic className="w-3 h-3" />
+                  <Mic className="w-2.5 h-2.5 text-white" />
                 </button>
               </div>
 
               {/* Learner Speech Bubble */}
-              <div className="bg-purple-100/70 p-1.5 rounded-xl rounded-tr-xs text-right border border-purple-200/60">
-                <span className="text-[9px] text-slate-500 block">あなた (You):</span>
-                <span className="text-[10px] font-bold text-[#5B21B6]">
-                  {currentContent.learnerMsg}
-                </span>
+              <div className="flex items-start gap-1 justify-end">
+                <div className="bg-slate-100 px-1.5 py-0.5 rounded-xl rounded-tr-none text-right max-w-[85%] border border-slate-200/50">
+                  <span className="text-[7.5px] text-slate-500 block leading-none">あなた</span>
+                  <span className="text-[8.5px] font-bold text-[#101A59] leading-tight block">
+                    {currentContent.learnerMsg}
+                  </span>
+                </div>
+                <div className="w-4 h-4 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[8px] font-bold shrink-0 mt-0.5">
+                  👤
+                </div>
               </div>
 
-              {/* Sensei Feedback Message */}
-              <div className="flex items-start gap-1.5 bg-emerald-50 p-1.5 rounded-xl border border-emerald-200/60">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0 mt-0.5" />
-                <span className="text-[9.5px] font-bold text-emerald-800 leading-tight">
+              {/* Sensei Feedback Card */}
+              <div className="flex items-center gap-1.5 bg-emerald-50/80 p-1 rounded-xl border border-emerald-200/60">
+                <img
+                  src="/assets/landing-v2/sensei-avatar.png"
+                  alt="Sensei Verified"
+                  className="w-4.5 h-4.5 rounded-full object-cover shrink-0"
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+                <span className="text-[8px] font-bold text-emerald-900 leading-tight">
                   {currentContent.feedbackMsg}
                 </span>
               </div>
-
             </div>
 
           </div>
 
         </div>
-
       </div>
     </section>
   );
