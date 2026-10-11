@@ -19,7 +19,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'free' as PlanId,
       name: 'Free',
-      price: '৳০',
+      price: '৳0',
       period: '',
       features: [
         'প্রতিদিন ৩টি AI টার্ন',
@@ -33,7 +33,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'starter' as PlanId,
       name: 'Starter',
-      price: '৳২৯৯',
+      price: '৳299',
       period: '/ মাস',
       features: [
         '500 AI টার্ন / মাস',
@@ -47,7 +47,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'pro' as PlanId,
       name: 'Pro',
-      price: '৳৫৯৯',
+      price: '৳599',
       period: '/ মাস',
       popularBadge: 'সবচেয়ে জনপ্রিয়',
       features: [
@@ -62,7 +62,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'japan_ready' as PlanId,
       name: 'Japan Ready',
-      price: '৳৯৯৯',
+      price: '৳999',
       period: '/ মাস',
       features: [
         '4,000 AI টার্ন / মাস',
@@ -86,38 +86,41 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
   return (
     <section
       id="pricing-section"
-      className="w-full h-auto lg:h-[165px] lg:max-h-[165px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0"
+      className="w-full h-auto lg:h-[165px] lg:max-h-[165px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
     >
       <div className="w-full max-w-[1024px] mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           
           {/* ========================================================
               LEFT COLUMN: EDITORIAL KICKER & BENEFITS LIST (4 cols)
+              Sub-split: Left text + Right checklist side-by-side
               ======================================================== */}
-          <div className="lg:col-span-4 space-y-1 shrink-0">
-            <div>
-              <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 select-none">
-                SIMPLE PRICING
-              </span>
+          <div className="lg:col-span-4 flex items-center justify-between gap-2 shrink-0">
+            <div className="space-y-1 max-w-[190px]">
+              <div>
+                <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 select-none">
+                  SIMPLE PRICING
+                </span>
+              </div>
+
+              <h2 className="text-lg lg:text-[19px] font-black text-[#101A59] tracking-tight leading-[1.12]">
+                আপনার গতিতে <br />
+                <span className="text-[#6D25EA]">শেখা শুরু করুন</span>
+              </h2>
+
+              <p className="text-slate-600 text-[9px] leading-snug font-normal">
+                ফ্রি প্ল্যান দিয়ে শুরু করুন। চাইলে পরবর্তীতে আপনার লক্ষ্য অনুযায়ী প্ল্যান আপগ্রেড করতে পারবেন।
+              </p>
             </div>
 
-            <h2 className="text-lg lg:text-[19px] font-black text-[#101A59] tracking-tight leading-[1.12]">
-              আপনার গতিতে <br />
-              <span className="text-[#6D25EA]">শেখা শুরু করুন</span>
-            </h2>
-
-            <p className="text-slate-600 text-[9.5px] leading-tight font-normal max-w-xs">
-              ফ্রি প্ল্যান দিয়ে শুরু করুন। চাইলে পরবর্তীতে আপনার লক্ষ্য অনুযায়ী প্ল্যান আপগ্রেড করতে পারবেন।
-            </p>
-
-            {/* Checklist items */}
-            <div className="space-y-0.5 pt-0.5">
+            {/* Checklist items in adjacent sub-column */}
+            <div className="space-y-1 shrink-0 pl-2">
               {checklist.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-1.5">
                   <div className="w-3.5 h-3.5 rounded-full bg-purple-100 text-[#6D25EA] flex items-center justify-center shrink-0">
                     <Check className="w-2 h-2 stroke-[3]" />
                   </div>
-                  <span className="text-[9.5px] font-semibold text-slate-700 leading-none">
+                  <span className="text-[9px] font-semibold text-slate-700 leading-none whitespace-nowrap">
                     {item.label}
                   </span>
                 </div>
@@ -135,13 +138,13 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
                   key={plan.id}
                   className={`relative rounded-xl p-2 flex flex-col justify-between transition-all ${
                     plan.isPopular
-                      ? 'bg-[#FBF9FF] border-2 border-[#6D25EA] shadow-xs'
+                      ? 'bg-gradient-to-b from-[#FAF5FF] via-[#F3E8FF]/20 to-white border-2 border-[#8B5CF6] shadow-xs'
                       : 'bg-white border border-slate-200/80 shadow-2xs'
                   }`}
                 >
                   {/* Top Popular Badge */}
                   {plan.isPopular && plan.popularBadge && (
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#6D25EA] text-white text-[7.5px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider shadow-2xs whitespace-nowrap">
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#6D25EA] text-white text-[7.5px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-2xs whitespace-nowrap">
                       {plan.popularBadge}
                     </div>
                   )}
@@ -189,7 +192,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
                       <button
                         type="button"
                         onClick={() => handleCtaClick(plan.id)}
-                        className="w-full py-1 rounded-lg bg-[#6D25EA] hover:bg-[#5818D1] text-white text-[9.5px] font-bold shadow-xs transition-colors cursor-pointer"
+                        className="w-full py-1 rounded-lg bg-gradient-to-r from-[#6D25EA] to-[#8B5CF6] hover:opacity-95 text-white text-[9.5px] font-bold shadow-xs transition-all cursor-pointer"
                       >
                         {plan.ctaText}
                       </button>

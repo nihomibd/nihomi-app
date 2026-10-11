@@ -79,17 +79,17 @@ export const JapanReadinessSection: React.FC<JapanReadinessSectionProps> = ({ on
           {/* ========================================================
               RIGHT COLUMN: 4 PHOTOGRAPHIC CARDS IN A SINGLE ROW (9 cols)
               ======================================================== */}
-          <div className="lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-2 items-stretch h-auto lg:h-[180px]">
+          <div className="lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-2 items-stretch h-auto lg:h-[182px]">
             {cards.map((card, idx) => {
               const Icon = card.icon;
               return (
                 <div
                   key={idx}
                   onClick={card.action}
-                  className="group bg-white rounded-xl overflow-hidden border border-slate-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer hover:border-purple-200"
+                  className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer hover:border-purple-200"
                 >
                   {/* Photo Thumbnail */}
-                  <div className="w-full h-[105px] overflow-hidden bg-slate-100">
+                  <div className="w-full h-[108px] overflow-hidden bg-slate-100">
                     <img
                       src={card.image}
                       alt={card.title}

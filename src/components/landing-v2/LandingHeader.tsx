@@ -121,7 +121,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
             <button
               type="button"
               onClick={() => onNavigate('dashboard')}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-purple-200 bg-purple-50 hover:bg-purple-100/70 text-[#6D25EA] text-[11px] font-bold shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100/70 text-[#6D25EA] text-[11px] font-bold shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
             >
               <User className="w-3 h-3" />
               <span>ড্যাশবোর্ড</span>
@@ -130,7 +130,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
             <button
               type="button"
               onClick={() => handleAuthClick('login')}
-              className="px-3.5 py-1 rounded-full border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-800 text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap shadow-2xs"
+              className="px-3.5 py-1 rounded-xl border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-800 text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap shadow-2xs"
             >
               লগইন
             </button>
@@ -140,7 +140,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
           <button
             type="button"
             onClick={() => handleAuthClick('signup')}
-            className="inline-flex items-center gap-1 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#6D25EA] to-[#8B5CF6] hover:opacity-95 text-white text-[11px] font-bold shadow-sm shadow-purple-600/30 transition-all cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-1 px-3.5 py-1 rounded-xl bg-gradient-to-r from-[#6D25EA] to-[#8B5CF6] hover:opacity-95 text-white text-[11px] font-bold shadow-sm shadow-purple-600/30 transition-all cursor-pointer whitespace-nowrap"
           >
             <span>বিনামূল্যে শুরু করুন</span>
             <ArrowRight className="w-3 h-3" />

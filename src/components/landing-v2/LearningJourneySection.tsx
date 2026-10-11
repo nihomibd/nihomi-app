@@ -21,8 +21,9 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(Quick Test)',
       meta: '৫ মিনিট',
       icon: BarChart2,
-      iconColor: 'text-sky-500',
-      bgColor: 'bg-sky-50'
+      iconColor: 'text-[#2563EB]',
+      cardBg: 'bg-[#F0F7FF]',
+      borderColor: 'border-[#E0F2FE]'
     },
     {
       num: '02',
@@ -30,8 +31,9 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(N5 - N1)',
       meta: 'AI নির্ভর',
       icon: Target,
-      iconColor: 'text-rose-500',
-      bgColor: 'bg-rose-50'
+      iconColor: 'text-[#E11D48]',
+      cardBg: 'bg-[#FFF1F2]',
+      borderColor: 'border-[#FFE4E6]'
     },
     {
       num: '03',
@@ -39,8 +41,9 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(আপনার জন্য ব্যক্তিগত)',
       meta: 'প্রতিদিন',
       icon: BookOpen,
-      iconColor: 'text-emerald-500',
-      bgColor: 'bg-emerald-50'
+      iconColor: 'text-[#059669]',
+      cardBg: 'bg-[#F0FDF4]',
+      borderColor: 'border-[#DCFCE7]'
     },
     {
       num: '04',
@@ -48,8 +51,9 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(ভিডিও + অনুশীলন)',
       meta: 'ধাপে ধাপে',
       icon: Headphones,
-      iconColor: 'text-purple-600',
-      bgColor: 'bg-purple-50'
+      iconColor: 'text-[#7C3AED]',
+      cardBg: 'bg-[#FAF5FF]',
+      borderColor: 'border-[#F3E8FF]'
     },
     {
       num: '05',
@@ -57,8 +61,9 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(বাস্তব জাপানিজ)',
       meta: 'কথা বলুন',
       icon: MessageSquare,
-      iconColor: 'text-indigo-500',
-      bgColor: 'bg-indigo-50'
+      iconColor: 'text-[#4F46E5]',
+      cardBg: 'bg-[#EEF2FF]',
+      borderColor: 'border-[#E0E7FF]'
     },
     {
       num: '06',
@@ -66,15 +71,16 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: '(পড়াশোনা, কাজ, জীবন)',
       meta: 'আপনার ভবিষ্যৎ',
       icon: Plane,
-      iconColor: 'text-fuchsia-500',
-      bgColor: 'bg-fuchsia-50'
+      iconColor: 'text-[#C026D3]',
+      cardBg: 'bg-[#FDF2F8]',
+      borderColor: 'border-[#FCE7F3]'
     }
   ];
 
   return (
     <section
       id="why-nihomi"
-      className="w-full h-auto lg:h-[215px] lg:max-h-[215px] flex items-center bg-[#F8FAFF] border-t border-slate-100 py-4 lg:py-0"
+      className="w-full h-auto lg:h-[215px] lg:max-h-[215px] flex items-center bg-[#F8FAFF] border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
     >
       <div className="w-full max-w-[1024px] mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
@@ -122,20 +128,18 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
                 <div key={step.num} className="relative flex items-center">
                   <div
                     onClick={() => onNavigate('journey')}
-                    className="w-full h-full bg-white rounded-xl p-2 border border-slate-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between items-center text-center cursor-pointer hover:border-purple-200"
+                    className={`w-full h-full ${step.cardBg} rounded-2xl p-2 border ${step.borderColor} shadow-2xs hover:shadow-xs transition-all flex flex-col justify-center gap-1.5 items-center text-center cursor-pointer hover:scale-[1.02]`}
                   >
                     {/* Top Icon & Number */}
-                    <div className="flex flex-col items-center gap-1 pt-0.5">
-                      <div className={`w-6 h-6 rounded-lg ${step.bgColor} ${step.iconColor} flex items-center justify-center shrink-0`}>
-                        <Icon className="w-3.5 h-3.5" />
-                      </div>
-                      <span className="font-mono text-[11px] font-black text-[#101A59] tracking-tight leading-none">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <Icon className={`w-5 h-5 ${step.iconColor}`} />
+                      <span className="font-mono text-xs font-black text-[#101A59] tracking-tight leading-none mt-0.5">
                         {step.num}
                       </span>
                     </div>
 
                     {/* Middle Titles */}
-                    <div className="space-y-0.5 my-1">
+                    <div className="space-y-0.5">
                       <h3 className="text-[10px] font-black text-slate-800 leading-tight">
                         {step.title}
                       </h3>
@@ -145,8 +149,8 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
                     </div>
 
                     {/* Bottom Meta Text */}
-                    <div className="pb-0.5">
-                      <span className="text-[8px] font-medium text-slate-400 leading-none">
+                    <div>
+                      <span className="text-[8px] font-bold text-slate-500 leading-none">
                         {step.meta}
                       </span>
                     </div>
@@ -154,7 +158,7 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
 
                   {/* Connecting Arrow between cards */}
                   {!isLast && (
-                    <div className="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-slate-300 pointer-events-none text-[9px] font-bold">
+                    <div className="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-slate-400 pointer-events-none text-[9px] font-bold">
                       →
                     </div>
                   )}

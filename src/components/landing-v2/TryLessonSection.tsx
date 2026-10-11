@@ -180,7 +180,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             {/* Unified Console Panel: Side Menu + Center Card (7 cols) */}
             <div className="md:col-span-7 bg-[#FBFBFF] rounded-2xl p-2 border border-slate-200/80 shadow-2xs flex gap-2 items-stretch">
               {/* Vertical Mode Tabs */}
-              <div className="w-[124px] shrink-0 flex flex-col justify-between space-y-0.5">
+              <div className="w-[122px] shrink-0 flex flex-col justify-between space-y-0.5">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.id;
@@ -189,13 +189,13 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-1 px-2 py-1 rounded-xl text-[9px] font-bold transition-all whitespace-nowrap cursor-pointer text-left w-full ${
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[9px] font-bold transition-all whitespace-nowrap cursor-pointer text-left w-full ${
                         isActive
-                          ? 'bg-gradient-to-r from-purple-600 to-indigo-700 text-white shadow-xs'
-                          : 'bg-white text-slate-700 hover:bg-purple-50 border border-slate-200/50'
+                          ? 'bg-gradient-to-r from-[#6D25EA] to-[#4F46E5] text-white shadow-xs'
+                          : 'bg-transparent text-slate-700 hover:bg-purple-50/70 hover:text-[#6D25EA]'
                       }`}
                     >
-                      <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
                       <span className="truncate">{tab.label}</span>
                     </button>
                   );
@@ -203,20 +203,20 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
               </div>
 
               {/* Main Playground Content Card */}
-              <div className="flex-1 bg-white rounded-xl p-1.5 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
+              <div className="flex-1 bg-white rounded-xl p-2 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
                 {/* Character & Sound */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-japanese text-3xl font-black text-[#101A59]">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-50">
+                  <div className="flex items-center gap-2">
+                    <span className="font-japanese text-3xl font-black text-[#101A59] leading-none">
                       {currentContent.mainChar}
                     </span>
                     <button
                       type="button"
                       onClick={() => handlePlaySound(currentContent.mainChar)}
-                      className={`p-1 rounded-full border transition-all cursor-pointer ${
+                      className={`p-1.5 rounded-full border transition-all cursor-pointer ${
                         isPlayingAudio
                           ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-105'
-                          : 'bg-sky-50 hover:bg-sky-100 border-sky-100 text-sky-600'
+                          : 'bg-sky-50 hover:bg-sky-100 border-sky-100 text-[#0284C7]'
                       }`}
                       title="উচ্চারণ শুনুন"
                       aria-label="Play pronunciation"
@@ -226,24 +226,27 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                   </div>
 
                   <div className="text-right">
-                    <span className="text-[9.5px] font-black text-slate-400 font-mono uppercase tracking-wider block">
+                    <span className="text-[10px] font-black text-[#101A59] font-mono leading-none block">
+                      {currentContent.mainChar}
+                    </span>
+                    <span className="text-[9px] font-bold text-slate-400 font-mono block mt-0.5 leading-none">
                       ( {currentContent.romaji} )
                     </span>
-                    <span className="text-[8px] text-slate-500 max-w-[95px] block leading-tight mt-0.5">
+                    <span className="text-[7.5px] text-slate-500 max-w-[105px] block leading-tight mt-0.5">
                       {currentContent.bnHint}
                     </span>
                   </div>
                 </div>
 
                 {/* 3 Example Thumbnails */}
-                <div className="grid grid-cols-3 gap-1 pt-0.5 border-t border-slate-100">
+                <div className="grid grid-cols-3 gap-1.5 pt-1">
                   {currentContent.examples.map((ex, i) => (
                     <div
                       key={i}
                       onClick={() => handlePlaySound(ex.ja)}
-                      className="bg-slate-50 hover:bg-purple-50 p-0.5 rounded-lg border border-slate-200/50 text-center cursor-pointer transition-all flex flex-col items-center"
+                      className="bg-slate-50/80 hover:bg-purple-50/60 p-1 rounded-xl border border-slate-100 text-center cursor-pointer transition-all flex flex-col items-center justify-center hover:scale-[1.02]"
                     >
-                      <div className="w-6 h-5 rounded overflow-hidden mb-0.5 bg-white border border-slate-100 flex items-center justify-center">
+                      <div className="w-8 h-6 rounded-md overflow-hidden mb-1 bg-white border border-slate-100 flex items-center justify-center shrink-0">
                         <img
                           src={ex.image}
                           alt={ex.ja}
@@ -253,10 +256,10 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                           }}
                         />
                       </div>
-                      <span className="font-japanese font-black text-[9px] text-slate-800 leading-tight">
+                      <span className="font-japanese font-black text-[9px] text-[#101A59] leading-tight">
                         {ex.ja}
                       </span>
-                      <span className="text-[7.5px] text-slate-500 leading-none">
+                      <span className="text-[8px] text-slate-500 font-medium leading-none mt-0.5">
                         ({ex.bn})
                       </span>
                     </div>
@@ -266,9 +269,9 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             </div>
 
             {/* Right: AI Sensei Chat Preview Panel (5 cols) */}
-            <div className="md:col-span-5 bg-white rounded-2xl p-1.5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-0.5">
+            <div className="md:col-span-5 bg-white rounded-2xl p-2 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-1">
               {/* Sensei Message */}
-              <div className="flex items-start gap-1">
+              <div className="flex items-start gap-1.5">
                 <img
                   src="/assets/landing-v2/sensei-avatar.png"
                   alt="Nihomi Sensei"
@@ -281,27 +284,27 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                   <span className="text-[9px] font-black text-[#5B21B6] block leading-none mb-0.5">
                     Nihomi Sensei
                   </span>
-                  <div className="bg-purple-50/70 p-1 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-purple-100/60">
+                  <div className="bg-[#FAF5FF] p-1.5 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-purple-100/70">
                     {currentContent.senseiMsg}
                   </div>
                 </div>
               </div>
 
               {/* Sound Wave Visualizer & Microphone Interaction */}
-              <div className="flex items-center justify-between gap-1 bg-[#1A0B2E] px-2 py-0.5 rounded-full shadow-2xs text-white">
+              <div className="flex items-center justify-between gap-1 bg-gradient-to-r from-[#4C1D95] to-[#6D25EA] px-2.5 py-1 rounded-full shadow-2xs text-white">
                 <div className="flex items-center gap-0.5 px-1">
-                  <span className={`w-0.5 h-2 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse h-3' : ''}`} />
-                  <span className={`w-0.5 h-3 rounded-full bg-purple-300 ${isMicActive ? 'animate-bounce h-4' : ''}`} />
-                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse' : ''}`} />
-                  <span className={`w-0.5 h-2.5 rounded-full bg-purple-200 ${isMicActive ? 'animate-bounce' : ''}`} />
-                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-400 ${isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-2 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse h-3' : ''}`} />
+                  <span className={`w-0.5 h-3 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce h-3.5' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-2.5 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleMicClick}
                   className={`p-1 rounded-full transition-all cursor-pointer ${
-                    isMicActive ? 'bg-rose-500 animate-ping' : 'bg-[#6D25EA] hover:bg-[#8B5CF6]'
+                    isMicActive ? 'bg-rose-500 animate-ping' : 'bg-[#8B5CF6] hover:bg-[#A78BFA]'
                   }`}
                   aria-label="Microphone practice"
                   title="কথা বলুন"
@@ -310,32 +313,33 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                 </button>
               </div>
 
-              {/* Learner Speech Bubble */}
-              <div className="flex items-start gap-1 justify-end">
-                <div className="bg-slate-100 px-1.5 py-0.5 rounded-xl rounded-tr-none text-right max-w-[85%] border border-slate-200/50">
-                  <span className="text-[7.5px] text-slate-500 block leading-none">あなた</span>
-                  <span className="text-[8.5px] font-bold text-[#101A59] leading-tight block">
+              {/* Learner Speech Bubble (Avatar on left matching reference) */}
+              <div className="flex items-start gap-1.5">
+                <div className="w-5 h-5 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[9px] shrink-0 mt-0.5">
+                  👤
+                </div>
+                <div className="bg-slate-50 px-2 py-1 rounded-xl text-left border border-slate-200/50">
+                  <span className="text-[7.5px] font-bold text-slate-400 block leading-none">あなた</span>
+                  <span className="text-[8.5px] font-bold text-[#101A59] leading-tight block mt-0.5">
                     {currentContent.learnerMsg}
                   </span>
-                </div>
-                <div className="w-4 h-4 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[8px] font-bold shrink-0 mt-0.5">
-                  👤
                 </div>
               </div>
 
               {/* Sensei Feedback Card */}
-              <div className="flex items-center gap-1.5 bg-emerald-50/80 p-1 rounded-xl border border-emerald-200/60">
+              <div className="flex items-start gap-1.5 bg-[#FDF2F8]/60 p-1.5 rounded-xl border border-pink-100">
                 <img
                   src="/assets/landing-v2/sensei-avatar.png"
                   alt="Sensei Verified"
-                  className="w-4.5 h-4.5 rounded-full object-cover shrink-0"
+                  className="w-5 h-5 rounded-full object-cover shrink-0 mt-0.5"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
                 />
-                <span className="text-[8px] font-bold text-emerald-900 leading-tight">
-                  {currentContent.feedbackMsg}
-                </span>
+                <div className="flex flex-col text-[8px] font-bold text-[#101A59] leading-tight">
+                  <span className="text-[#6D25EA]">すごい！ とても上手です！</span>
+                  <span className="text-slate-500 font-normal">(দারুণ! খুব ভালো!)</span>
+                </div>
               </div>
             </div>
 
