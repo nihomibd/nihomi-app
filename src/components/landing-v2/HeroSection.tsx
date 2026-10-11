@@ -83,8 +83,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-2xl sm:text-3xl lg:text-[27px] font-black tracking-tight text-[#101A59] leading-[1.14]">
-            জাপানিজ শেখা শুরু হোক <br />
+          <h1 className="text-2xl sm:text-3xl lg:text-[27px] font-black tracking-tight text-[#101A59] leading-[1.12]">
+            জাপানিজ শেখা <br />
+            শুরু হোক <br />
             <span className="text-[#6D25EA]">একদম শূন্য থেকে।</span>
           </h1>
 
