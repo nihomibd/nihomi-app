@@ -67,7 +67,7 @@ async function runGate2Verification() {
       return { json: () => {} };
     }
   };
-  requireFounder(mockUnauthReq, mockUnauthRes, () => {});
+  await requireFounder(mockUnauthReq, mockUnauthRes, () => {});
   assert(unauthCode === 401, '1.1. Unauthenticated request rejected with HTTP 401');
 
   // Test 1.2: Student role denied access to Founder HQ (403)
@@ -81,7 +81,7 @@ async function runGate2Verification() {
       return { json: (body: any) => body };
     }
   };
-  requireFounder(mockStudentReq, mockStudentRes, () => {});
+  await requireFounder(mockStudentReq, mockStudentRes, () => {});
   assert(forbiddenCode === 403, '1.2. Normal student user denied Founder HQ access with HTTP 403 Forbidden');
 
   // Test 1.3: Verified Founder granted access
@@ -92,7 +92,7 @@ async function runGate2Verification() {
   const mockFounderRes: any = {
     status: () => ({ json: () => {} })
   };
-  requireFounder(mockFounderReq, mockFounderRes, () => {
+  await requireFounder(mockFounderReq, mockFounderRes, () => {
     founderAllowed = true;
   });
   assert(founderAllowed, '1.3. Verified Founder identity granted access via requireFounder middleware');

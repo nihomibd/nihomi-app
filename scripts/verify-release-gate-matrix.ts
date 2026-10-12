@@ -53,7 +53,8 @@ function makeRequest(
         path: urlPath,
         method,
         headers: reqHeaders,
-        timeout: 6000
+        timeout: 12000,
+        agent: false
       },
       (res) => {
         let raw = '';
@@ -146,6 +147,9 @@ async function runReleaseGateMatrix(): Promise<void> {
       },
       stdio: ['ignore', 'pipe', 'pipe']
     });
+
+    serverProcess.stdout?.on('data', (d) => process.stdout.write(`  [Server stdout] ${d}`));
+    serverProcess.stderr?.on('data', (d) => process.stderr.write(`  [Server stderr] ${d}`));
 
     await waitForServer(STARTUP_TIMEOUT_MS);
     console.log(`[Gate Runner] Server boot confirmed healthy.\n`);

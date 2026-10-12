@@ -153,10 +153,11 @@ export const PlacementDiagnosticModal: React.FC<PlacementDiagnosticModalProps> =
             </div>
 
             {/* Options */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6" id="placement-diagnostic-options">
               {currentQ.options.map((opt, idx) => (
                 <button
                   key={idx}
+                  id={`btn-placement-option-${idx}`}
                   onClick={() => handleSelectOption(idx)}
                   className="w-full text-left p-4 rounded-xl border border-slate-800 bg-[#161D2B]/80 hover:bg-rose-500/10 hover:border-rose-500/40 text-slate-200 hover:text-white transition-all font-medium flex items-center justify-between group"
                 >
@@ -218,6 +219,7 @@ export const PlacementDiagnosticModal: React.FC<PlacementDiagnosticModalProps> =
                 আবার পরীক্ষা দিই
               </button>
               <button
+                id="btn-apply-placement"
                 onClick={handleApply}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white text-sm font-bold shadow-lg shadow-rose-900/40 transition flex items-center gap-2"
               >

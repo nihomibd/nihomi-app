@@ -81,14 +81,14 @@ async function runGate3Verification() {
       return { json: (b: any) => b };
     }
   };
-  requireFounder(mockStudentReq, mockStudentRes, () => {});
+  await requireFounder(mockStudentReq, mockStudentRes, () => {});
   assert(forbiddenCode === 403, '2.1. Student denied AI COO execution with HTTP 403 Forbidden');
 
   // Test 2.2: Founder allowed
   let founderAllowed = false;
   const mockFounderReq: any = { headers: { authorization: `Bearer ${founderToken}` } };
   const mockFounderRes: any = { status: () => ({ json: () => {} }) };
-  requireFounder(mockFounderReq, mockFounderRes, () => {
+  await requireFounder(mockFounderReq, mockFounderRes, () => {
     founderAllowed = true;
   });
   assert(founderAllowed, '2.2. Founder granted access to AI COO runtime');

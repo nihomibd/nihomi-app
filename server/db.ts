@@ -2010,7 +2010,11 @@ class Database {
     const today = new Date().toISOString().split('T')[0];
 
     // Check streak
-    if (p.lastActiveDate !== today) {
+    if (p.currentStreak === 0) {
+      p.currentStreak = 1;
+      if (p.longestStreak < 1) p.longestStreak = 1;
+      p.lastActiveDate = today;
+    } else if (p.lastActiveDate !== today) {
       const lastDate = new Date(p.lastActiveDate);
       const currentDate = new Date(today);
       const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());

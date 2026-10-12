@@ -327,7 +327,7 @@ async function runRealPaymentGatewayTests() {
     console.log('\n--- Test Suite 4: Database Price Integrity & Atomic Activation ---');
 
     const testPlan = db.getPlanById('japan_ready')!;
-    assert(testPlan.monthlyPrice === 999, '21. Server database plan monthly price is ৳999 BDT');
+    assert(testPlan.monthlyPrice === 3990, '21. Server database plan monthly price matches canonical catalog (৳3,990 BDT)');
 
     // Simulate coupon calculation with server signature: (code, planId, interval, baseAmount)
     const couponValidation = db.validateAndCalculateCoupon('LAUNCH50', 'japan_ready', 'monthly', testPlan.monthlyPrice);
@@ -354,19 +354,19 @@ async function runRealPaymentGatewayTests() {
       subscriptionId: newSub.id,
       planId: newSub.planId,
       planName: 'Japan Ready Pro',
-      amount: 999,
+      amount: testPlan.monthlyPrice,
       billingPeriod: '2026-09-02 to 2026-10-02',
       paymentId: 'pay-test-bkash-001',
       customerName: 'Test Student',
       customerEmail: testUser.email,
-      subtotal: 999,
+      subtotal: testPlan.monthlyPrice,
       discount: 0,
       tax: 0,
       paymentMethodName: 'bKash MFS (017•••••344)'
     });
 
     assert(createdInvoice.id.startsWith('inv-'), '26. Official Tax Invoice created with secure reference');
-    assert(createdInvoice.amount === 999, '27. Tax Invoice amount strictly matches payment amount');
+    assert(createdInvoice.amount === testPlan.monthlyPrice, '27. Tax Invoice amount strictly matches payment amount');
 
   } finally {
     globalThis.fetch = originalFetch;

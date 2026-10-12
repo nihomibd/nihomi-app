@@ -418,7 +418,7 @@ export const App: React.FC = () => {
     if (loading) return;
 
     const isFounderRoute = ['founder', 'admin', 'command-center'].includes(currentView);
-    const isStudentDashboardRoute = ['dashboard', 'student-dashboard', 'portal-dashboard'].includes(currentView);
+    const isStudentDashboardRoute = ['student-dashboard', 'portal-dashboard'].includes(currentView);
 
     // If an authenticated Student attempts to access /founder, block and redirect to /dashboard
     if (isFounderRoute && user && user.role !== 'admin' && user.role !== 'founder') {
@@ -426,7 +426,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    // If an unauthenticated user tries to directly enter /dashboard, redirect to landing & prompt login
+    // If an unauthenticated user tries to directly enter protected portal routes, redirect to landing & prompt login
     if (isStudentDashboardRoute && !user) {
       handleNavigate('landing');
       openAuthModal('login');
@@ -561,7 +561,7 @@ export const App: React.FC = () => {
   const isLandingMode = currentView === 'landing' || currentView === 'home';
   const isProtectedRoute = [
     'founder', 'admin', 'command-center',
-    'dashboard', 'student-dashboard', 'portal-dashboard',
+    'student-dashboard', 'portal-dashboard',
     'portal', 'portal-settings', 'portal-subscription',
     'credits', 'subscription'
   ].includes(currentView);

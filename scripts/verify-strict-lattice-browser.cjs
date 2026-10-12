@@ -4,11 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const userDataDir = 'C:\\Users\\bdtri\\.gemini\\antigravity\\brain\\7d501b68-7e42-49c7-961a-e9dfb2040667\\scratch\\chrome-profile-test';
-const screenshotsDir = 'C:\\Users\\bdtri\\.gemini\\antigravity\\brain\\7d501b68-7e42-49c7-961a-e9dfb2040667\\scratch';
+const userDataDir = path.join(process.cwd(), 'scratch', 'chrome-profile-lattice');
+const screenshotsDir = path.join(process.cwd(), 'scratch', 'evidence');
 
 if (!fs.existsSync(userDataDir)) {
   fs.mkdirSync(userDataDir, { recursive: true });
+}
+if (!fs.existsSync(screenshotsDir)) {
+  fs.mkdirSync(screenshotsDir, { recursive: true });
 }
 
 function wait(ms) {

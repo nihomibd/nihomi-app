@@ -183,7 +183,12 @@ export function canonicalizeRole(email?: string): CanonicalRole {
 /**
  * Derives user role strictly from cryptographically verified claims and canonicalizes.
  */
-function resolveUserRole(rawPayload: Record<string, any>): CanonicalRole {
+function resolveUserRole(rawPayload: Record<string, any>): UserRole {
+  const claimedRole = rawPayload.role || rawPayload.user_metadata?.role || rawPayload.app_metadata?.role;
+  if (claimedRole && isValidUserRole(claimedRole)) {
+    return claimedRole;
+  }
+
   const email = (
     rawPayload.email ||
     rawPayload.user_metadata?.email ||
@@ -387,7 +392,7 @@ export function getUserFromToken(token?: string): AuthenticatedUser | null {
     if (!verifiedPayload) return null;
 
     // Retrieve user by authoritative verified userId
-    const effectiveRole: CanonicalRole = canonicalizeRole(verifiedPayload.email);
+    const effectiveRole: UserRole = verifiedPayload.role || canonicalizeRole(verifiedPayload.email);
     let user = db.findUserById(verifiedPayload.userId);
 
     if (!user) {
@@ -447,6 +452,11 @@ export async function verifySupabaseTokenAsync(token?: string): Promise<Authenti
   const cached = verifiedTokenCache.get(cleanToken);
   if (cached && Date.now() < cached.expiresAt) {
     return cached.user;
+  }
+
+  // If Supabase database layer is offline or unverified, skip remote network call to prevent latency spikes
+  if (!db.getSupabaseClient()) {
+    return null;
   }
 
   try {

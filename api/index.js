@@ -53332,7 +53332,11 @@ var init_db = __esm({
         this.assertProductionStorageSafety("completeLesson");
         const p = this.getProgressByUserId(userId);
         const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-        if (p.lastActiveDate !== today) {
+        if (p.currentStreak === 0) {
+          p.currentStreak = 1;
+          if (p.longestStreak < 1) p.longestStreak = 1;
+          p.lastActiveDate = today;
+        } else if (p.lastActiveDate !== today) {
           const lastDate = new Date(p.lastActiveDate);
           const currentDate = new Date(today);
           const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
@@ -60314,6 +60318,9 @@ function getVerificationSecrets() {
   }
   return secrets;
 }
+function isValidUserRole(role) {
+  return role === "admin" || role === "student" || role === "instructor" || role === "user" || role === "founder";
+}
 function canonicalizeRole(email) {
   if (email && isAdminEmail(email)) {
     return "admin";
@@ -60321,6 +60328,10 @@ function canonicalizeRole(email) {
   return "student";
 }
 function resolveUserRole(rawPayload) {
+  const claimedRole = rawPayload.role || rawPayload.user_metadata?.role || rawPayload.app_metadata?.role;
+  if (claimedRole && isValidUserRole(claimedRole)) {
+    return claimedRole;
+  }
   const email = (rawPayload.email || rawPayload.user_metadata?.email || rawPayload.app_metadata?.email || "").trim();
   return canonicalizeRole(email);
 }
@@ -60440,7 +60451,7 @@ function getUserFromToken(token) {
   try {
     const verifiedPayload = verifyStatelessJwt(cleanToken);
     if (!verifiedPayload) return null;
-    const effectiveRole = canonicalizeRole(verifiedPayload.email);
+    const effectiveRole = verifiedPayload.role || canonicalizeRole(verifiedPayload.email);
     let user = db.findUserById(verifiedPayload.userId);
     if (!user) {
       user = db.ensureUserExists({

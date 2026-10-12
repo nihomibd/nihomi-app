@@ -268,52 +268,59 @@ async function run() {
 
   // Answer 5 placement diagnostic questions (Selecting 1st option for each)
   for (let q = 1; q <= 5; q++) {
-    console.log(`  -> Answering Placement Question ${q}/5...`);
-    await send('Runtime.evaluate', {
+    const qClick = await send('Runtime.evaluate', {
       expression: `
         (() => {
-          const optBtns = Array.from(document.querySelectorAll('button')).filter(b => 
-            b.innerText.includes('ভালোবাসা') ||
-            b.innerText.includes('さ') ||
-            b.innerText.includes('Arigatou') ||
-            b.innerText.includes('কফি') ||
-            b.innerText.includes('は (wa)')
-          );
-          if (optBtns.length > 0) {
-            optBtns[0].click();
-          } else {
-            // Fallback click first option card in modal
-            const btns = Array.from(document.querySelectorAll('button'));
-            const optionBtn = btns.find(b => b.className.includes('text-left') && b.className.includes('p-4'));
-            if (optionBtn) optionBtn.click();
+          const optBtn = document.querySelector('#btn-placement-option-0') ||
+                         document.querySelector('#placement-diagnostic-options button') ||
+                         Array.from(document.querySelectorAll('button')).find(b => 
+                           b.innerText.includes('ভালোবাসা') ||
+                           b.innerText.includes('Arigatou') ||
+                           b.innerText.includes('কফি') ||
+                           b.innerText === 'さ' ||
+                           b.innerText === 'は (wa)'
+                         );
+          if (optBtn) {
+            const txt = optBtn.innerText.trim();
+            optBtn.click();
+            return 'Option selected: ' + txt;
           }
+          return 'No option button found';
         })()
-      `
+      `,
+      returnByValue: true
     });
+    console.log(`  -> Answering Placement Question ${q}/5:`, qClick?.result?.value);
     await wait(1000);
   }
 
   // Verify diagnostic score summary
+  await wait(1000);
   const placementSummary = await send('Runtime.evaluate', {
     expression: `
       (() => {
         const text = document.body.innerText;
         return {
           hasSummary: text.includes('প্লেসমেন্ট মূল্যায়ন সম্পন্ন') || text.includes('অসাধারণ! আপনি হিরাগানা ও কাতাকানা'),
-          scoreText: text.includes('5 / 5') || text.includes('dual_kana_mastered')
+          scoreText: text.includes('5 / 5') || text.includes('dual_kana_mastered'),
+          snippet: text.substring(0, 300)
         };
       })()
     `,
     returnByValue: true
   });
   console.log('  -> Placement evaluation displayed:', placementSummary.result.value.hasSummary);
+  if (!placementSummary.result.value.hasSummary) {
+    console.log('  -> Diagnostic snippet:', placementSummary.result.value.snippet);
+  }
 
   // Click "এই লেভেলে যাত্রা শুরু করি"
   console.log('  -> Applying placement result...');
   await send('Runtime.evaluate', {
     expression: `
       (() => {
-        const applyBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('এই লেভেলে যাত্রা শুরু করি'));
+        const applyBtn = document.querySelector('#btn-apply-placement') ||
+                         Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('এই লেভেলে যাত্রা শুরু করি'));
         if (applyBtn) applyBtn.click();
       })()
     `
