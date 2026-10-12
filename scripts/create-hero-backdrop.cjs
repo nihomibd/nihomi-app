@@ -7,9 +7,11 @@ async function createHeroBackdrop() {
 
   // 1. Cherry blossoms on far left (x: 0 to 35) preserved.
   // 2. Pure white (100% opaque) over the text area x: 45 to 380, smoothly fading to 0% at x: 450 so Mt. Fuji begins naturally.
-  // 3. Right side: inside the floating card area ONLY (x: 810 to 984, y: 80 to 304, rx: 16),
-  //    paint 100% opaque white with rounded corners, leaving the Japanese pagoda above (y: 0 to 80)
-  //    and cherry blossoms below (y: 304 to 380) completely intact!
+  // 3. Right side: inside the floating card area (x: 810 to 984, y: 30 to 310, rx: 16),
+  //    paint clean white with rounded corners. This wipes the embedded Japanese heading
+  //    "日本語で もっと広がる あなたの未来" (y: 34 to 90) and all 4 shortcut items (y: 110 to 300)
+  //    completely clean with ZERO ghosting, while preserving the pagoda above (y: 0 to 30),
+  //    the pagoda roof to the right (x: 984 to 1024), and the cherry blossoms below (y: 310 to 380)!
   const svgOverlay = Buffer.from(`
     <svg width="1024" height="380" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -33,9 +35,9 @@ async function createHeroBackdrop() {
       <!-- Smooth fade-out into Mt. Fuji & landscape (x: 380 to 455) -->
       <rect x="380" y="0" width="75" height="380" fill="url(#leftFadeOut)" />
 
-      <!-- Clean card footprint on the right matching exact reference bounds (x: 810 to 984, y: 80 to 304) -->
-      <!-- Preserves the pagoda above (y: 0 to 80) and cherry blossoms below (y: 304 to 380) -->
-      <rect x="810" y="80" width="174" height="224" rx="16" fill="#FFFFFF" />
+      <!-- Full card footprint (x: 810 to 984, y: 30 to 310, rx: 16) wiping all text and pills -->
+      <!-- Preserves the pagoda above (y: 0 to 30) and cherry blossoms below (y: 310 to 380) -->
+      <rect x="810" y="30" width="174" height="280" rx="16" fill="#FFFFFF" />
     </svg>
   `);
 
@@ -44,7 +46,7 @@ async function createHeroBackdrop() {
     .png()
     .toFile(outPath);
 
-  console.log('✔ Successfully generated refined hero-full-backdrop.png with intact pagoda and cherry blossoms');
+  console.log('✔ Successfully generated refined hero-full-backdrop.png with 100% wiped card interior');
 }
 
 createHeroBackdrop().catch(console.error);

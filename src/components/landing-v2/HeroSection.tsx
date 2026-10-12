@@ -197,29 +197,29 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         {/* ========================================================
             RIGHT COLUMN: FLOATING JAPAN GOAL SHORTCUT CARD
             ======================================================== */}
-        <div className="w-full lg:w-[174px] z-10 flex flex-col justify-center shrink-0">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 border border-white/80 shadow-md flex flex-col justify-between w-full lg:w-[174px] lg:h-[224px]">
+        <div className="w-full lg:w-[174px] z-10 flex flex-col items-center lg:self-start lg:mt-[30px] shrink-0">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 border border-white/80 shadow-md flex flex-col justify-between w-full lg:w-[174px] lg:h-[280px]">
             {/* Japanese Promise Header */}
             <div>
-              <h3 className="text-[11px] font-black text-[#101A59] leading-tight tracking-tight">
+              <h3 className="text-xs font-black text-[#101A59] leading-tight tracking-tight">
                 日本語で <br />
                 もっと広がる <br />
                 あなたの未来
               </h3>
-              <div className="w-7 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full mt-1 mb-0.5" />
+              <div className="w-8 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full mt-1 mb-1" />
             </div>
 
             {/* 4 Shortcut Action Pills with Filled Colored Icon Badges */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <button
                 type="button"
                 onClick={() => onNavigate('courses')}
-                className="w-full flex items-center gap-1.5 p-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
+                className="w-full flex items-center gap-2 p-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
               >
-                <div className="w-5 h-5 rounded-md bg-[#38BDF8] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
-                  <Plane className="w-3 h-3" />
+                <div className="w-6 h-6 rounded-lg bg-[#38BDF8] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
+                  <Plane className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
+                <span className="text-[10px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
                   জাপানে পড়াশোনা
                 </span>
               </button>
@@ -227,12 +227,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => onNavigate('baito')}
-                className="w-full flex items-center gap-1.5 p-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
+                className="w-full flex items-center gap-2 p-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
               >
-                <div className="w-5 h-5 rounded-md bg-[#A855F7] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
-                  <Briefcase className="w-3 h-3" />
+                <div className="w-6 h-6 rounded-lg bg-[#A855F7] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
+                  <Briefcase className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
+                <span className="text-[10px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
                   জাপানে কাজের সুযোগ
                 </span>
               </button>
@@ -240,12 +240,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => onNavigate('baito')}
-                className="w-full flex items-center gap-1.5 p-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
+                className="w-full flex items-center gap-2 p-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
               >
-                <div className="w-5 h-5 rounded-md bg-[#6366F1] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
-                  <Users className="w-3 h-3" />
+                <div className="w-6 h-6 rounded-lg bg-[#6366F1] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
+                  <Users className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
+                <span className="text-[10px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
                   জাপান ভ্রমণ ও জীবন
                 </span>
               </button>
@@ -253,12 +253,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => onNavigate('community')}
-                className="w-full flex items-center gap-1.5 p-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
+                className="w-full flex items-center gap-2 p-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-100 shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer group"
               >
-                <div className="w-5 h-5 rounded-md bg-[#C026D3] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
-                  <Heart className="w-3 h-3" />
+                <div className="w-6 h-6 rounded-lg bg-[#C026D3] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform text-white">
+                  <Heart className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
+                <span className="text-[10px] font-bold text-slate-800 group-hover:text-[#6D25EA] transition-colors leading-tight truncate">
                   জাপানি সংস্কৃতি ও বন্ধুত্ব
                 </span>
               </button>
