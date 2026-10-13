@@ -40,6 +40,11 @@
    - Added accessible dialog role and close button selector (`#btn-close-badge-share`) in `src/components/BadgeShareModal.tsx`.
    - Hardened `scripts/generate-ui-consistency-evidence.cjs` to assert genuine modal removal (`modalDismissed === true`).
    - Created `docs/release/nihomi-founder-review-gate-2026-10-13.md` documenting founder review steps and preview gate verdict.
+10. **Phase J — Feature Branch Commit & GitHub Push:**
+   - Staged 114 release-candidate files and created commit `82a8332` (`feat: finalize Nihomi design system and release candidate QA`).
+   - Successfully pushed to `origin/feature/visual-landing-rebuild-v2`.
+   - Pull Request URL ready: `https://github.com/nihomibd/nihomi-app/pull/new/feature/visual-landing-rebuild-v2` to trigger Vercel Preview.
+   - Authored `docs/release/nihomi-feature-preview-verification-2026-10-13.md`.
 
 ---
 

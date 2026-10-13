@@ -1,10 +1,10 @@
 # NIHOMI.COM — OCTOBER 16 CONTROLLED LAUNCH LIVE STATUS
 **Document Path:** `docs/release/nihomi-oct16-live-status.md`  
-**Last Updated:** 2026-10-13T05:50:00+06:00  
+**Last Updated:** 2026-10-13T06:30:00+06:00  
 **Target Launch Date:** October 16, 2026  
 **Founder Persona:** Non-technical vibe coder  
 **Current Branch:** `feature/visual-landing-rebuild-v2`  
-**HEAD Commit:** `1d510fd150658f6bacab2fdf802259486284e745`  
+**HEAD Commit:** `82a8332e02212e147ab20edc861050589942a499`  
 **Operating Principle:** NO EVIDENCE = NO DONE. NO SAFE LEARNING VALUE = NO REAL LAUNCH.  
 
 ---
@@ -15,8 +15,8 @@
 | :--- | :--- | :--- |
 | **Repository Root** | `c:\Users\bdtri\Desktop\www.Nihomi.com\nihomi-app-1` | Git root verified |
 | **Active Branch** | `feature/visual-landing-rebuild-v2` | `git branch --show-current` |
-| **Baseline Commit** | `1d510fd` | `git rev-parse HEAD` |
-| **Working Tree** | Clean & Stable (Local Evidence Integrity Pass Completed) | `git status` |
+| **Baseline Commit** | `82a8332` | `git rev-parse HEAD` |
+| **Working Tree** | Clean & Pushed to `origin/feature/visual-landing-rebuild-v2` | `git status` |
 | **Package Manager** | npm (Node.js runtime v22+) | `package.json` |
 | **App Entry Points** | `server.ts` (dev), `dist/server.cjs` (prod), `src/App.tsx` (Vite SPA) | Project inspection |
 | **Database Mode** | Resilient local durable JSON (`nihomi_db.json`) + local Supabase | `server/db.ts` |
@@ -62,15 +62,16 @@
 | **Gate L** | International SEO audit | **PASS (AUDIT)**| Audit completed; documented in `docs/release/nihomi-international-seo-audit-2026-10-13.md` |
 | **Gate M** | P0/P1 defects remaining | **0 KNOWN** | Zero unresolved blockers |
 | **Gate N** | Ready for founder visual review | **READY** | Full hands-on guide in `docs/release/nihomi-founder-review-guide-2026-10-13.md` |
-| **Gate O** | Remote push / Vercel Preview | **AWAITING FOUNDER OK** | Ready to push to `feature/visual-landing-rebuild-v2` upon explicit authorization |
-| **Gate P** | Production deploy readiness | **GO FOR FOUNDER PREVIEW** | Local release candidate verified; awaiting founder review & authorization |
+| **Gate O** | Remote push / Vercel Preview | **PUSHED TO GITHUB (PR Ready)** | Pushed to `origin/feature/visual-landing-rebuild-v2`; PR ready to trigger Vercel Preview |
+| **Gate P** | Production deploy readiness | **GO FOR VERCEL PREVIEW REVIEW** | Feature branch pushed; awaiting founder PR review & preview verification |
 
 ---
 
 ## 4. RELEASE DOCUMENTATION & EVIDENCE INVENTORY
 
-1. `docs/release/nihomi-founder-review-gate-2026-10-13.md` — Authoritative Founder Review and Vercel Preview Gate report.
-2. `docs/release/nihomi-final-product-implementation-2026-10-16.md` — Authoritative final product implementation, route-by-route poster coverage matrix, and evidence ledger.
+1. `docs/release/nihomi-feature-preview-verification-2026-10-13.md` — Authoritative Feature Branch Push and Vercel Preview verification report.
+2. `docs/release/nihomi-founder-review-gate-2026-10-13.md` — Authoritative Founder Review and Vercel Preview Gate report.
+3. `docs/release/nihomi-final-product-implementation-2026-10-16.md` — Authoritative final product implementation, route-by-route poster coverage matrix, and evidence ledger.
 3. `docs/release/nihomi-design-constitution-implementation-2026-10-16.md` — Poster-driven design constitution implementation specification.
 4. `docs/release/nihomi-evidence-integrity-and-final-ui-acceptance-2026-10-13.md` — Authoritative evidence integrity and final UI acceptance audit report.
 5. `docs/release/nihomi-final-ui-and-release-readiness-2026-10-13.md` — Comprehensive UI and release readiness master report.
