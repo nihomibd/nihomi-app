@@ -110,11 +110,13 @@ export const BadgeShareModal: React.FC<BadgeShareModalProps> = ({
   const config = getRarityConfig(badge.rarity);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
       <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6 animate-in zoom-in-95 duration-200 relative text-stone-900 dark:text-stone-100">
         {/* Close Button */}
         <button
           onClick={onClose}
+          id="btn-close-badge-share"
+          aria-label="Close"
           className="absolute top-5 right-5 p-2 rounded-full text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition cursor-pointer"
         >
           <X className="w-5 h-5" />

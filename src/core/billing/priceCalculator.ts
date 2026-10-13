@@ -3,7 +3,7 @@
 // Section 26 & 27: Strict dynamic per-day price computation without hardcoding.
 // Truthful micro-copy: Only claim tea/coffee equivalence when mathematically valid (daily <= ৳35).
 
-export type JourneyInterval = 'monthly' | 'quarterly' | 'yearly';
+export type JourneyInterval = 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
 
 export interface DailyCostReport {
   totalPrice: number;
@@ -26,10 +26,13 @@ export function calculateDailyCost(
 
   if (interval === 'quarterly') {
     durationDays = 90;
-    savingPercent = 15;
+    savingPercent = 5;
+  } else if (interval === 'half_yearly') {
+    durationDays = 180;
+    savingPercent = 10;
   } else if (interval === 'yearly') {
     durationDays = 365;
-    savingPercent = 30;
+    savingPercent = 15;
   }
 
   if (totalPrice <= 0) {
@@ -73,11 +76,26 @@ export function getPlanPriceForInterval(
 ): number {
   if (monthlyPrice === 0) return 0;
   if (interval === 'monthly') return monthlyPrice;
-  if (interval === 'quarterly') {
-    // 3-Month upfront bundle — canonical pricing: ৳1,490 for ৳599/mo Pro (approx 17% discount)
-    // For non-standard plans, compute ~17% 3-month discount
-    if (monthlyPrice === 599) return 1490;
-    return Math.round(monthlyPrice * 3 * 0.83);
+
+  // Exact 12-combination pricing matrix matching approved rates
+  if (monthlyPrice === 990) {
+    if (interval === 'quarterly') return 2820;
+    if (interval === 'half_yearly') return 5350;
+    if (interval === 'yearly') return 10100;
   }
+  if (monthlyPrice === 1990) {
+    if (interval === 'quarterly') return 5670;
+    if (interval === 'half_yearly') return 10750;
+    if (interval === 'yearly') return 20300;
+  }
+  if (monthlyPrice === 3990) {
+    if (interval === 'quarterly') return 11370;
+    if (interval === 'half_yearly') return 21550;
+    if (interval === 'yearly') return 40700;
+  }
+
+  // Fallback calculations for non-standard plans
+  if (interval === 'quarterly') return Math.round(monthlyPrice * 3 * 0.95);
+  if (interval === 'half_yearly') return Math.round(monthlyPrice * 6 * 0.90);
   return yearlyPrice;
 }

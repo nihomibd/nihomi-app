@@ -166,9 +166,10 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setErrorMessage(null);
     try {
       const tier = selectedPlan === 'lifetime' ? 'n5_pro' : 'n5_lifetime';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
+      const amount = selectedPlan === 'lifetime' ? 5670 : 20300;
+      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount });
       
-      const res = await billingApi.createBkashPayment({ tier, amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
+      const res = await billingApi.createBkashPayment({ tier, amount });
       if (res.success && res.bkashURL) {
         window.location.href = res.bkashURL;
         return;
@@ -382,23 +383,23 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-white">N5 Milestone Pass (৩ মাস)</h4>
-                      <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5 ফুল মাস্টার কারিকুলাম</p>
+                      <h4 className="text-sm font-black text-white">Pro Pass (৩ মাস)</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5-N3 ফুল মাস্টার কারিকুলাম</p>
                     </div>
 
                     <div className="pt-1">
-                      <div className="text-2xl font-black text-amber-300">৳১,৪৯০</div>
-                      <span className="text-[10px] text-amber-400 font-mono">প্রতিদিন প্রায় ৳১৬ • ৯০ দিনের বান্ডিল</span>
+                      <div className="text-2xl font-black text-amber-300">৳৫,৬৭০</div>
+                      <span className="text-[10px] text-amber-400 font-mono">প্রতি মাসে ৳১,৮৯০ • সাশ্রয় ৳৩০০</span>
                     </div>
 
                     <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                        <span>২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন</span>
+                        <span>৫০+ N5-N3 ইন্টারঅ্যাক্টিভ লেসন</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                        <span>Nihomi Sensei AI™ আনলিমিটেড</span>
+                        <span>Nihomi Sensei AI™ ১,৫০০ কয়েন</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
@@ -407,7 +408,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     </ul>
                   </div>
 
-                  {/* Plan 2: ৳4,990 All-Access Career Pass */}
+                  {/* Plan 2: ৳20,300 Pro Annual Pass */}
                   <div
                     onClick={() => setSelectedPlan('all_access')}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
@@ -418,7 +419,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   >
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 text-[10px] font-bold">
-                        ক্যারিয়ার কমপ্লিট
+                        বাৎসরিক সেরা মান
                       </span>
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                         selectedPlan === 'all_access' ? 'border-red-400 bg-red-400' : 'border-stone-500'
@@ -428,13 +429,13 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-white">All-Access Pass</h4>
-                      <p className="text-[11px] text-stone-300 mt-0.5">N5 থেকে N1 + WorkOS ক্যারিয়ার</p>
+                      <h4 className="text-sm font-black text-white">Pro Annual Pass (১২ মাস)</h4>
+                      <p className="text-[11px] text-stone-300 mt-0.5">১ বছর সম্পূর্ণ নিশ্চিন্ত আনলিমিটেড</p>
                     </div>
 
                     <div className="pt-1">
-                      <div className="text-2xl font-black text-rose-300">৳৪,৯৯০</div>
-                      <span className="text-[10px] text-stone-400 font-mono">বাৎসরিক / পূর্ণাঙ্গ অ্যাক্সেস</span>
+                      <div className="text-2xl font-black text-rose-300">৳২০,৩০০</div>
+                      <span className="text-[10px] text-stone-400 font-mono">প্রতি মাসে ৳১,৬৯২ • সাশ্রয় ৳৩,৫৮০</span>
                     </div>
 
                     <ul className="text-[11px] text-stone-300 space-y-1 pt-1 border-t border-white/10">

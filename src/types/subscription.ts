@@ -11,7 +11,7 @@ export type SubscriptionStatus =
   | 'cancelled'
   | 'expired';
 
-export type BillingInterval = 'monthly' | 'yearly';
+export type BillingInterval = 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
 
 export type PaymentStatus =
   | 'initiated'

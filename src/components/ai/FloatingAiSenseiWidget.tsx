@@ -141,6 +141,14 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
   const [speechLanguage, setSpeechLanguage] = useState<'ja-JP' | 'bn-BD' | 'en-US'>('ja-JP');
   const [transcriptPreview, setTranscriptPreview] = useState('');
   const [learningContext, setLearningContext] = useState<LearningContextMode>('jlpt_n5');
+  const isPracticeView = currentContext?.viewName === 'practice';
+  const [isDismissed, setIsDismissed] = useState<boolean>(() => Boolean(isPracticeView));
+
+  useEffect(() => {
+    if (isPracticeView) {
+      setIsDismissed(true);
+    }
+  }, [isPracticeView]);
 
   const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -493,22 +501,47 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
   }
 
   return (
-    <div className={isOpen ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block bg-black/80 sm:bg-transparent" : "fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40"}>
+    <div className={isOpen ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block bg-black/80 sm:bg-transparent" : "fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-40"}>
       {/* Minimized Trigger Button */}
-      {!isOpen && (
+      {!isOpen && !isDismissed && (
+        <div className="flex items-center gap-1.5">
+          <button
+            id="btn-open-ai-sensei"
+            onClick={() => setIsOpen(true)}
+            className="group relative flex items-center space-x-1.5 p-2 sm:px-4 sm:py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
+            aria-label="Open Nihomi Sensei AI™ Grammar Coach"
+          >
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+            </div>
+            <div className="text-left hidden sm:block">
+              <span className="text-xs font-bold block leading-none">✨ Nihomi Sensei AI™</span>
+              <span className="text-[10px] opacity-70 font-mono">{activeContextConfig.shortLabel}</span>
+            </div>
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping hidden sm:block"></span>
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsDismissed(true);
+            }}
+            className="p-1.5 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-400 hover:text-white border border-stone-700/60 shadow-lg cursor-pointer transition-colors"
+            title="Minimize AI Sensei"
+            aria-label="Minimize AI Sensei"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {!isOpen && isDismissed && (
         <button
-          onClick={() => setIsOpen(true)}
-          className="group relative flex items-center space-x-2 px-3.5 py-2 sm:px-4 sm:py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
-          aria-label="Open Nihomi Sensei AI™ Grammar Coach"
+          onClick={() => setIsDismissed(false)}
+          className="w-10 h-10 rounded-full bg-stone-900/90 dark:bg-white/90 text-stone-100 dark:text-stone-900 hover:scale-110 flex items-center justify-center shadow-xl border border-stone-700/60 cursor-pointer transition-all"
+          title="Restore Nihomi Sensei AI™"
+          aria-label="Restore Nihomi Sensei AI™"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
-            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
-          </div>
-          <div className="text-left">
-            <span className="text-xs font-bold block leading-none">✨ Nihomi Sensei AI™</span>
-            <span className="text-[10px] opacity-70 font-mono hidden sm:inline">{activeContextConfig.shortLabel}</span>
-          </div>
-          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
+          <Sparkles className="w-4 h-4 text-amber-500" />
         </button>
       )}
 

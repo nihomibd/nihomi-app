@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIHOMI.COM — October 16 Release Visual Evidence & Interaction Gallery</title>
+  <style>
+    :root {
+      --bg: #09090f;
+      --card-bg: #12121c;
+      --border: #232338;
+      --accent: #ef4444;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --pass: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
+    header {
+      max-width: 1300px;
+      margin: 0 auto 32px auto;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--pass);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 8px;
+    }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    p.lead { color: var(--text-muted); font-size: 14px; }
+    
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-col;
+    }
+    .card-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .card-title { font-size: 15px; font-weight: 700; }
+    .card-meta { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(16,185,129,0.2);
+      color: var(--pass);
+      font-weight: 700;
+    }
+    .img-wrap {
+      max-height: 480px;
+      overflow-y: auto;
+      background: #000;
+      text-align: center;
+    }
+    .img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .card-footer {
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+    .interaction-table {
+      width: 100%;
+      max-width: 1300px;
+      margin: 32px auto 0 auto;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .interaction-table th, .interaction-table td {
+      padding: 12px 16px;
+      font-size: 13px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .interaction-table th {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="badge">✓ Local Release Gate Verified</span>
+    <h1>NIHOMI.COM — 16 October 2026 Visual Evidence & Interaction Gallery</h1>
+    <p class="lead">Independent Headless Chrome Browser Crawl across Desktop (1440×900), Tablet (768×1024), and Mobile (390×844) Viewports. 12/12 routes audited with ZERO horizontal overflow.</p>
+    <div class="nav-tabs">
+      <a href="#desktop-section" class="nav-btn active">Desktop (1440×900)</a>
+      <a href="#tablet-section" class="nav-btn">Tablet (768×1024)</a>
+      <a href="#mobile-section" class="nav-btn">Mobile (390×844)</a>
+      <a href="#interactions-section" class="nav-btn">Interaction Matrix (6/6 Pass)</a>
+    </div>
+  </header>
+
+  <section id="desktop-section" style="max-width: 1300px; margin: 0 auto 32px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--accent);">🖥️ Desktop Viewport (1440 × 900)</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Landing Page (/)</div><div class="card-meta">1440 × 1536 px fullpage</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./desktop-landing.png" alt="Desktop Landing"></div>
+        <div class="card-footer"><span>Headline: 3-line layout</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Pricing Page (/pricing)</div><div class="card-meta">1440 × 3915 px fullpage</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./desktop-pricing.png" alt="Desktop Pricing"></div>
+        <div class="card-footer"><span>Rates: ৳990 / ৳1,990 / ৳3,990</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Dashboard (/dashboard)</div><div class="card-meta">1440 × 4356 px viewport</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./desktop-dashboard.png" alt="Desktop Dashboard"></div>
+        <div class="card-footer"><span>Student Portal & XP Stats</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Journey Map (/journey)</div><div class="card-meta">1440 × 980 px viewport</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./desktop-journey.png" alt="Desktop Journey"></div>
+        <div class="card-footer"><span>Cumulative Pedagogical Lattice</span><span>Status: PASS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tablet-section" style="max-width: 1300px; margin: 0 auto 32px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: #a855f7;">📱 Tablet Viewport (768 × 1024)</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Tablet Landing (/)</div><div class="card-meta">768 × 3079 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./tablet-landing.png" alt="Tablet Landing"></div>
+        <div class="card-footer"><span>Responsive Hero & Cards</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Tablet Pricing (/pricing)</div><div class="card-meta">768 × 4805 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./tablet-pricing.png" alt="Tablet Pricing"></div>
+        <div class="card-footer"><span>4-Interval Switcher Active</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Tablet Dashboard (/dashboard)</div><div class="card-meta">768 × 6120 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./tablet-dashboard.png" alt="Tablet Dashboard"></div>
+        <div class="card-footer"><span>Adaptive Card Layout</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Tablet Journey (/journey)</div><div class="card-meta">768 × 1104 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./tablet-journey.png" alt="Tablet Journey"></div>
+        <div class="card-footer"><span>Roadmap Stepper Clean</span><span>Status: PASS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mobile-section" style="max-width: 1300px; margin: 0 auto 32px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: #3b82f6;">📲 Mobile Viewport (390 × 844 iPhone Profile)</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Mobile Landing (/)</div><div class="card-meta">390 × 3613 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./mobile-landing.png" alt="Mobile Landing"></div>
+        <div class="card-footer"><span>Zero Horizontal Spill</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Mobile Pricing (/pricing)</div><div class="card-meta">390 × 7457 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./mobile-pricing.png" alt="Mobile Pricing"></div>
+        <div class="card-footer"><span>Mobile Stacked Cards</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Mobile Dashboard (/dashboard)</div><div class="card-meta">390 × 10063 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./mobile-dashboard.png" alt="Mobile Dashboard"></div>
+        <div class="card-footer"><span>Touch-Friendly Targets</span><span>Status: PASS</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Mobile Journey (/journey)</div><div class="card-meta">390 × 924 px</div></div>
+          <span class="tag">0px Overflow</span>
+        </div>
+        <div class="img-wrap"><img src="./mobile-journey.png" alt="Mobile Journey"></div>
+        <div class="card-footer"><span>Mobile Roadmap Active</span><span>Status: PASS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="interactions-section" style="max-width: 1300px; margin: 0 auto 48px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: #10b981;">⚡ Interaction & State-Consistency Matrix</h2>
+    <table class="interaction-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Action</th>
+          <th>Target</th>
+          <th>Expected Outcome</th>
+          <th>Actual Observed Result</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td><strong>INT-01</strong></td>
+            <td>Click Hero CTA on Landing Page</td>
+            <td><code>বিনামূল্যে শুরু করুন</code></td>
+            <td>Auth Modal opens or routes to onboarding/courses</td>
+            <td>Modal appeared in DOM</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-PRICING-MONTHLY</strong></td>
+            <td>Click ১ মাস toggle on /pricing</td>
+            <td><code>pricing-toggle-monthly</code></td>
+            <td>Display exact term totals: Starter ৳990, Pro ৳1,990, Japan Ready ৳3,990</td>
+            <td>Starter match: true, Pro match: true, JR match: true</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-PRICING-QUARTERLY</strong></td>
+            <td>Click ৩ মাস toggle on /pricing</td>
+            <td><code>pricing-toggle-quarterly</code></td>
+            <td>Display exact term totals: Starter ৳2,820, Pro ৳5,670, Japan Ready ৳11,370</td>
+            <td>Starter match: true, Pro match: true, JR match: true</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-PRICING-HALF_YEARLY</strong></td>
+            <td>Click ৬ মাস toggle on /pricing</td>
+            <td><code>pricing-toggle-half-yearly</code></td>
+            <td>Display exact term totals: Starter ৳5,350, Pro ৳10,750, Japan Ready ৳21,550</td>
+            <td>Starter match: true, Pro match: true, JR match: true</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-PRICING-YEARLY</strong></td>
+            <td>Click ১২ মাস toggle on /pricing</td>
+            <td><code>pricing-toggle-yearly</code></td>
+            <td>Display exact term totals: Starter ৳10,100, Pro ৳20,300, Japan Ready ৳40,700</td>
+            <td>Starter match: true, Pro match: true, JR match: true</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-03</strong></td>
+            <td>Click Select Plan on Pricing Card</td>
+            <td><code>শুরু করুন (Free)</code></td>
+            <td>Open Checkout Modal or prompt authentication</td>
+            <td>Modal rendered in viewport</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-04</strong></td>
+            <td>Navigate to /practice (Lesson 1 Kana Drill)</td>
+            <td><code>/practice</code></td>
+            <td>Render pedagogical Kana drill with unlocked character (あ)</td>
+            <td>Kana detected: true, Interactive elements: true</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-05</strong></td>
+            <td>Navigate to /dashboard (Student Progress)</td>
+            <td><code>/dashboard</code></td>
+            <td>Render student stats, XP, and lesson pathway cards</td>
+            <td>Dashboard metrics detected: true, Cards rendered: 76</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+          <tr>
+            <td><strong>INT-06</strong></td>
+            <td>Audit Mobile Responsive Layout & Touch Targets</td>
+            <td><code>390x844 Viewport</code></td>
+            <td>Zero horizontal scroll overflow and accessible touch targets</td>
+            <td>Overflow: false (390px vs 390px). Touch-friendly targets: 27/27</td>
+            <td><span class="tag">✓ PASS</span></td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </section>
+</body>
+</html>

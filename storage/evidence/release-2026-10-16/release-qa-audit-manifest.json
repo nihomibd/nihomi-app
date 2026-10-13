@@ -1,0 +1,292 @@
+[
+  {
+    "viewport": "desktop",
+    "route": "/",
+    "label": "landing",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 1536,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": true,
+        "hasPro1990": true,
+        "hasJapanReady3990": true
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "desktop-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 3915,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Plans & Pricing (সাশ্রয়ী সাবস্ক্রিপশন) | Nihomi",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "desktop-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 4356,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Student Dashboard | Nihomi Japanese Learning OS",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "desktop-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop",
+    "route": "/journey",
+    "label": "journey",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 980,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "desktop-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet",
+    "route": "/",
+    "label": "landing",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 3079,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": true,
+        "hasPro1990": true,
+        "hasJapanReady3990": true
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "tablet-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 4805,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Plans & Pricing (সাশ্রয়ী সাবস্ক্রিপশন) | Nihomi",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "tablet-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 6120,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Student Dashboard | Nihomi Japanese Learning OS",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "tablet-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet",
+    "route": "/journey",
+    "label": "journey",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 1104,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "tablet-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile",
+    "route": "/",
+    "label": "landing",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 3613,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": true,
+        "hasPro1990": true,
+        "hasJapanReady3990": true
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "mobile-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 7457,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Plans & Pricing (সাশ্রয়ী সাবস্ক্রিপশন) | Nihomi",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "screenshot": "mobile-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 10063,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Student Dashboard | Nihomi Japanese Learning OS",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "mobile-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile",
+    "route": "/journey",
+    "label": "journey",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 924,
+      "hasOverflow": false,
+      "overflowing": [],
+      "title": "Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম",
+      "pricesFound": {
+        "hasStarter990": false,
+        "hasPro1990": false,
+        "hasJapanReady3990": false
+      }
+    },
+    "consoleErrors": [],
+    "screenshot": "mobile-journey.png",
+    "passed": true
+  }
+]

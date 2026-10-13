@@ -125,7 +125,7 @@ export const FounderCockpitTab: React.FC<FounderCockpitTabProps> = ({
             {mrrGap.formatted || '-$10,000 USD'}
           </div>
           <div className="text-[11px] text-stone-500 font-medium">
-            Requires ~{Math.ceil((mrrGap.gapBdt || 1200000) / 599)} Pro Subscribers
+            Requires ~{Math.ceil((mrrGap.gapBdt || 1200000) / 1990)} Pro Subscribers
           </div>
         </div>
 

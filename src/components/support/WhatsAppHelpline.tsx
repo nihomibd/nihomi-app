@@ -118,8 +118,8 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     <div
       id="nihomi-whatsapp-helpline-container"
       className={isOpen
-        ? `fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block p-4 sm:p-0 bg-black/75 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none select-none ${className}`
-        : `fixed bottom-[8.5rem] right-4 sm:bottom-[5.5rem] sm:right-6 z-40 select-none ${className}`}
+        ? `fixed inset-0 sm:inset-auto sm:bottom-6 sm:left-6 z-50 flex items-center justify-center sm:block p-4 sm:p-0 bg-black/75 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none select-none ${className}`
+        : `fixed bottom-20 left-3 sm:bottom-6 sm:left-6 z-40 select-none ${className}`}
     >
       {/* Floating Minimized Compact Pill Widget */}
       {!isOpen && (
@@ -129,15 +129,15 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label="Open Nihomi WhatsApp & Helpline Support"
-            className="flex items-center space-x-2 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-emerald-400/40 group"
+            className="flex items-center space-x-1.5 p-2 sm:px-3.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-emerald-400/40 group"
           >
             {/* Pulsing WhatsApp Icon */}
             <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-emerald-600 flex items-center justify-center font-bold shrink-0">
               <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
             </div>
 
-            {/* Compact Label: [💬 সাপোর্ট] */}
-            <span className="text-xs font-bold font-sans tracking-wide">
+            {/* Compact Label: [💬 সাপোর্ট] - visible on tablet and desktop */}
+            <span className="text-xs font-bold font-sans tracking-wide hidden sm:inline">
               সাপোর্ট
             </span>
           </button>

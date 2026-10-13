@@ -26,8 +26,10 @@ const STARTER_PLAN: Plan = {
   displayNameJa: 'スタータープラン',
   tagline: 'Master JLPT N5 & N4 foundations',
   description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.',
-  monthlyPrice: 299,
-  yearlyPrice: 2990,
+  monthlyPrice: 990,
+  quarterlyPrice: 2820,
+  halfYearlyPrice: 5350,
+  yearlyPrice: 10100,
   currency: 'BDT',
   badge: 'বেসিক প্ল্যান',
   order: 2,
@@ -47,8 +49,10 @@ const PRO_PLAN: Plan = {
   displayNameJa: 'プロプラン',
   tagline: 'The complete JLPT N5-N3 mastery & conversation system',
   description: 'Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and 1,500 Nihomi Coins/month.',
-  monthlyPrice: 599,
-  yearlyPrice: 5990,
+  monthlyPrice: 1990,
+  quarterlyPrice: 5670,
+  halfYearlyPrice: 10750,
+  yearlyPrice: 20300,
   currency: 'BDT',
   badge: 'সবচেয়ে জনপ্রিয়',
   isRecommended: true,
@@ -69,8 +73,10 @@ const JAPAN_READY_PLAN: Plan = {
   displayNameJa: '日本就労・移住特化プラン',
   tagline: 'Everything you need for job interviews, visa, and life in Japan',
   description: 'Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and 4,000 Nihomi Coins/month.',
-  monthlyPrice: 999,
-  yearlyPrice: 9990,
+  monthlyPrice: 3990,
+  quarterlyPrice: 11370,
+  halfYearlyPrice: 21550,
+  yearlyPrice: 40700,
   currency: 'BDT',
   badge: 'জাপান ক্যারিয়ার',
   order: 4,
@@ -134,7 +140,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onNavigate }) => {
       {/* SECTION F: STUDENT STORIES (3 authentic student testimonials with ratings) */}
       <StudentStoriesSection onNavigate={onNavigate} />
 
-      {/* SECTION G: SIMPLE PRICING (Free ৳0, Starter ৳299, Pro ৳599, Japan Ready ৳999) */}
+      {/* SECTION G: SIMPLE PRICING (Free ৳0, Starter ৳990, Pro ৳1,990, Japan Ready ৳3,990) */}
       <PricingSection
         onNavigate={onNavigate}
         onSelectPlan={handleSelectPlan}

@@ -10,6 +10,28 @@ import { subscriptionService } from '../services/subscriptionService.js';
 
 export const billingRouter = Router();
 
+export function getIntervalDurationMonths(interval: BillingInterval): number {
+  switch (interval) {
+    case 'yearly': return 12;
+    case 'half_yearly': return 6;
+    case 'quarterly': return 3;
+    case 'monthly':
+    default: return 1;
+  }
+}
+
+export function resolveBasePlanAmount(plan: any, interval: BillingInterval): number {
+  const planPrice = db.getPlanPrice(plan.id, interval);
+  if (planPrice) return planPrice.amount;
+  switch (interval) {
+    case 'yearly': return plan.yearlyPrice;
+    case 'half_yearly': return plan.halfYearlyPrice ?? (plan.monthlyPrice * 6);
+    case 'quarterly': return plan.quarterlyPrice ?? (plan.monthlyPrice * 3);
+    case 'monthly':
+    default: return plan.monthlyPrice;
+  }
+}
+
 // ==========================================
 // 1. PUBLIC / AUTHENTICATED PLAN CATALOG
 // ==========================================
@@ -21,12 +43,26 @@ billingRouter.get('/plans', (req: Request, res: Response) => {
     const enrichedPlans = plans.map((plan) => {
       const prices = planPrices.filter((p) => p.planId === plan.id);
       const monthly = prices.find((p) => p.billingInterval === 'monthly');
+      const quarterly = prices.find((p) => p.billingInterval === 'quarterly');
+      const halfYearly = prices.find((p) => p.billingInterval === 'half_yearly');
       const yearly = prices.find((p) => p.billingInterval === 'yearly');
 
       return {
         ...plan,
         prices: {
           monthly: monthly || { amount: plan.monthlyPrice, currency: 'BDT' },
+          quarterly: quarterly || {
+            amount: plan.quarterlyPrice ?? plan.monthlyPrice * 3,
+            currency: 'BDT',
+            savingsPercent: 5,
+            savingsAmount: Math.max(0, plan.monthlyPrice * 3 - (plan.quarterlyPrice ?? plan.monthlyPrice * 3))
+          },
+          half_yearly: halfYearly || {
+            amount: plan.halfYearlyPrice ?? plan.monthlyPrice * 6,
+            currency: 'BDT',
+            savingsPercent: 10,
+            savingsAmount: Math.max(0, plan.monthlyPrice * 6 - (plan.halfYearlyPrice ?? plan.monthlyPrice * 6))
+          },
           yearly: yearly || {
             amount: plan.yearlyPrice,
             currency: 'BDT',
@@ -119,7 +155,7 @@ billingRouter.post('/validate-coupon', authenticateUser, (req: Request, res: Res
       return res.status(404).json({ error: 'Selected plan not found.' });
     }
 
-    const baseAmount = billingInterval === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
+    const baseAmount = resolveBasePlanAmount(plan, billingInterval as BillingInterval);
     const result = db.validateAndCalculateCoupon(code, planId as PlanId, billingInterval as BillingInterval, baseAmount);
 
     if (!result.valid) {
@@ -171,7 +207,7 @@ billingRouter.post('/checkout', authenticateUser, async (req: AuthenticatedReque
       return res.status(404).json({ error: 'Plan not found.' });
     }
 
-    const baseAmount = billingInterval === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
+    const baseAmount = resolveBasePlanAmount(plan, billingInterval);
     let discountAmount = 0;
     let finalAmount = baseAmount;
     let validatedCouponCode: string | undefined = undefined;
@@ -185,11 +221,16 @@ billingRouter.post('/checkout', authenticateUser, async (req: AuthenticatedReque
       }
     }
 
+    const intervalLabel =
+      billingInterval === 'yearly' ? 'Annual (12M)' :
+      billingInterval === 'half_yearly' ? '6 Months' :
+      billingInterval === 'quarterly' ? '3 Months' : 'Monthly';
+
     // Create initiated payment record
     const payment = db.createPayment({
       userId,
       planId,
-      planName: `${plan.name} (${billingInterval === 'yearly' ? 'Annual' : 'Monthly'})`,
+      planName: `${plan.name} (${intervalLabel})`,
       billingInterval,
       amount: finalAmount,
       originalAmount: baseAmount,
@@ -314,7 +355,7 @@ billingRouter.post('/verify-payment', authenticateUser, async (req: Authenticate
 
     // 2. Check for active subscription or create a new one
     let activeSub = db.getUserActiveSubscription(userId);
-    const monthsToAdd = payment.billingInterval === 'yearly' ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
 
     if (activeSub && activeSub.planId === payment.planId) {
       // Renewal of existing subscription
@@ -461,7 +502,7 @@ async function handleBkashCallback(req: Request, res: Response) {
     const user = db.findUserById(payment.userId);
     const profile = db.getProfileByUserId(payment.userId);
     let activeSub = db.getUserActiveSubscription(payment.userId);
-    const monthsToAdd = payment.billingInterval === 'yearly' ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
 
     if (activeSub && activeSub.planId === payment.planId) {
       activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd)!;
@@ -661,7 +702,7 @@ billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Respo
         lastPaymentId: payment.id
       });
     } else {
-      const months = billingInterval === 'yearly' ? 12 : 1;
+      const months = getIntervalDurationMonths(billingInterval as BillingInterval);
       sub = db.extendSubscriptionPeriod(sub.id, months)!;
     }
 
@@ -973,7 +1014,7 @@ billingRouter.post('/sslcommerz/success', async (req: Request, res: Response) =>
     const user = db.findUserById(payment.userId);
     const profile = db.getProfileByUserId(payment.userId);
     let activeSub = db.getUserActiveSubscription(payment.userId);
-    const monthsToAdd = payment.billingInterval === 'yearly' ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
 
     if (activeSub && activeSub.planId === payment.planId) {
       activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd)!;

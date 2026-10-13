@@ -176,10 +176,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             </div>
             <div className="flex flex-col">
               <span className="text-[11px] font-extrabold text-[#101A59] leading-tight">
-                10,000+ শিক্ষার্থী
+                জাপানযাত্রী শিক্ষার্থীদের প্ল্যাটফর্ম
               </span>
               <span className="text-[9.5px] text-slate-500 font-medium leading-none mt-0.5">
-                Nihomi-এর সাথে জাপানিজ শিখছে
+                বাঙালি শিক্ষার্থীদের জন্য তৈরি আধুনিক জাপানিজ লার্নিং
               </span>
             </div>
           </div>

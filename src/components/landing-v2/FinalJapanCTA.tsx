@@ -17,7 +17,8 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
           src="/assets/landing-v2/sunset-panorama-cta.png"
           alt="Japan Sunset Panorama with Mt Fuji and Pagoda"
           className="w-full h-full object-cover object-center"
-          loading="lazy"
+          loading="eager"
+          decoding="async"
         />
       </div>
 

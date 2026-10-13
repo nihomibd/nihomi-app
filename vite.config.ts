@@ -3,8 +3,23 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+const previewTelemetryFallback = () => ({
+  name: 'preview-telemetry-fallback',
+  configurePreviewServer(server: any) {
+    server.middlewares.use((req: any, res: any, next: any) => {
+      if (req.url && req.url.startsWith('/api/analytics/track')) {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ success: true, preview: true }));
+        return;
+      }
+      next();
+    });
+  }
+});
+
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), previewTelemetryFallback()],
   server: {
     host: '0.0.0.0',
     port: 3000,

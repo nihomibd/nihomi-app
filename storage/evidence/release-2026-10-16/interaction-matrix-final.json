@@ -1,0 +1,58 @@
+[
+  {
+    "testId": "INT-SHARE-CARD",
+    "action": "Click Flame Streak button on Dashboard header & verify dismiss",
+    "target": "header button[title*=\"শেয়ার\"]",
+    "expectedOutcome": "Open BadgeShareModal with real student milestone and dismiss on close click",
+    "actualResult": "Triggered: true, Rendered: true, CloseClicked: true, Dismissed: false",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-MONTHLY",
+    "action": "Click monthly interval switcher on /pricing",
+    "target": "#pricing-toggle-monthly",
+    "expectedOutcome": "Show exact term prices in cards and table: 990 / 1,990 / 3,990",
+    "actualResult": "Clicked: true, Amounts matched: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-QUARTERLY",
+    "action": "Click quarterly interval switcher on /pricing",
+    "target": "#pricing-toggle-quarterly",
+    "expectedOutcome": "Show exact term prices in cards and table: 2,820 / 5,670 / 11,370",
+    "actualResult": "Clicked: true, Amounts matched: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-HALF_YEARLY",
+    "action": "Click half_yearly interval switcher on /pricing",
+    "target": "#pricing-toggle-half-yearly",
+    "expectedOutcome": "Show exact term prices in cards and table: 5,350 / 10,750 / 21,550",
+    "actualResult": "Clicked: true, Amounts matched: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-YEARLY",
+    "action": "Click yearly interval switcher on /pricing",
+    "target": "#pricing-toggle-yearly",
+    "expectedOutcome": "Show exact term prices in cards and table: 10,100 / 20,300 / 40,700",
+    "actualResult": "Clicked: true, Amounts matched: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRACTICE-KANA",
+    "action": "Navigate to /practice",
+    "target": "/practice",
+    "expectedOutcome": "Display authentic Hiragana Stage 1 (あ) drill",
+    "actualResult": "Kana character detected: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-SUPPORT-DOCK",
+    "action": "Audit Support & AI Coach floating coordinates on mobile Dashboard",
+    "target": "#btn-open-whatsapp-helpline & #btn-open-ai-sensei",
+    "expectedOutcome": "Support left-anchored (<80px), Sensei right-anchored (<80px), zero widget collision, zero Coins overlap",
+    "actualResult": "SupportFound: true (Left: 12px, W: 44px), SenseiFound: true (Right: 46px, W: 48px), NoCollision: true, CoinsClear: true",
+    "passed": true
+  }
+]

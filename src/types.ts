@@ -293,7 +293,7 @@ export interface AISession {
 
 export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready' | 'n5_pro' | 'n5_lifetime' | 'lifetime';
 
-export type BillingInterval = 'monthly' | 'yearly';
+export type BillingInterval = 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
 
 export type SubscriptionStatus =
   | 'trialing'
@@ -351,6 +351,8 @@ export interface Plan {
   isPopular?: boolean;
   order: number;
   monthlyPrice: number;
+  quarterlyPrice?: number;
+  halfYearlyPrice?: number;
   yearlyPrice: number;
   currency: 'BDT';
   aiMonthlyLimit: number;

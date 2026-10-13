@@ -1,0 +1,74 @@
+[
+  {
+    "testId": "INT-01",
+    "action": "Click Hero CTA on Landing Page",
+    "target": "বিনামূল্যে শুরু করুন",
+    "expected": "Auth Modal opens or routes to onboarding/courses",
+    "actual": "Modal appeared in DOM",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-MONTHLY",
+    "action": "Click ১ মাস toggle on /pricing",
+    "target": "pricing-toggle-monthly",
+    "expected": "Display exact term totals: Starter ৳990, Pro ৳1,990, Japan Ready ৳3,990",
+    "actual": "Starter match: true, Pro match: true, JR match: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-QUARTERLY",
+    "action": "Click ৩ মাস toggle on /pricing",
+    "target": "pricing-toggle-quarterly",
+    "expected": "Display exact term totals: Starter ৳2,820, Pro ৳5,670, Japan Ready ৳11,370",
+    "actual": "Starter match: true, Pro match: true, JR match: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-HALF_YEARLY",
+    "action": "Click ৬ মাস toggle on /pricing",
+    "target": "pricing-toggle-half-yearly",
+    "expected": "Display exact term totals: Starter ৳5,350, Pro ৳10,750, Japan Ready ৳21,550",
+    "actual": "Starter match: true, Pro match: true, JR match: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-PRICING-YEARLY",
+    "action": "Click ১২ মাস toggle on /pricing",
+    "target": "pricing-toggle-yearly",
+    "expected": "Display exact term totals: Starter ৳10,100, Pro ৳20,300, Japan Ready ৳40,700",
+    "actual": "Starter match: true, Pro match: true, JR match: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-03",
+    "action": "Click Select Plan on Pricing Card",
+    "target": "শুরু করুন (Free)",
+    "expected": "Open Checkout Modal or prompt authentication",
+    "actual": "Modal rendered in viewport",
+    "passed": true
+  },
+  {
+    "testId": "INT-04",
+    "action": "Navigate to /practice (Lesson 1 Kana Drill)",
+    "target": "/practice",
+    "expected": "Render pedagogical Kana drill with unlocked character (あ)",
+    "actual": "Kana detected: true, Interactive elements: true",
+    "passed": true
+  },
+  {
+    "testId": "INT-05",
+    "action": "Navigate to /dashboard (Student Progress)",
+    "target": "/dashboard",
+    "expected": "Render student stats, XP, and lesson pathway cards",
+    "actual": "Dashboard metrics detected: true, Cards rendered: 76",
+    "passed": true
+  },
+  {
+    "testId": "INT-06",
+    "action": "Audit Mobile Responsive Layout & Touch Targets",
+    "target": "390x844 Viewport",
+    "expected": "Zero horizontal scroll overflow and accessible touch targets",
+    "actual": "Overflow: false (390px vs 390px). Touch-friendly targets: 27/27",
+    "passed": true
+  }
+]

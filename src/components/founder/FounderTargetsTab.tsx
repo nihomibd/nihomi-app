@@ -31,7 +31,7 @@ export const FounderTargetsTab: React.FC = () => {
     geography: 'Dhaka, Chittagong, Sylhet, Tokyo',
     customerSegment: 'Japanese N5 Learners & SSW Candidates',
     language: 'Bangla, Japanese, English',
-    priceRange: '৳299 - ৳999/mo',
+    priceRange: '৳990 - ৳3,990/mo',
     acquisitionChannels: ['Facebook Groups', 'YouTube Organic'],
     priority: 'P0',
     timeframe: 'Q4 2026 (30-90 Days)'

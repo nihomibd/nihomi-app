@@ -131,6 +131,8 @@ export interface PlanDefinition {
   badge: string;
   badgeColor: string;
   monthlyPrice: number;
+  quarterlyPrice: number;
+  halfYearlyPrice: number;
   yearlyPrice: number;
   tagline: string;
   features: string[];
@@ -141,6 +143,16 @@ function toBengaliDigits(num: number | string): string {
   return String(num).replace(/[0-9]/g, (d) => bnDigits[parseInt(d, 10)]);
 }
 
+export function getCheckoutPlanPrice(p: PlanDefinition, interval: BillingInterval): number {
+  switch (interval) {
+    case 'yearly': return p.yearlyPrice;
+    case 'half_yearly': return p.halfYearlyPrice;
+    case 'quarterly': return p.quarterlyPrice;
+    case 'monthly':
+    default: return p.monthlyPrice;
+  }
+}
+
 export const CHECKOUT_PLANS: PlanDefinition[] = [
   {
     id: 'starter',
@@ -148,13 +160,15 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     nameJa: 'スターター',
     badge: 'ফাউন্ডেশন',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-    monthlyPrice: 299,
-    yearlyPrice: 2490,
+    monthlyPrice: 990,
+    quarterlyPrice: 2820,
+    halfYearlyPrice: 5350,
+    yearlyPrice: 10100,
     tagline: 'বেসিক ফাউন্ডেশন ও হিরাগানা/কাতাকানা',
     features: [
       '২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন',
       'ভোকাবুলারি ব্যাংক (৮০০+ শব্দ)',
-      '১০০ AI Sensei ইন্টারঅ্যাকশন / মাস'
+      '৫০০ AI Sensei কয়েন / মাস'
     ]
   },
   {
@@ -163,12 +177,14 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     nameJa: 'プロ',
     badge: 'সবচেয়ে জনপ্রিয়',
     badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    monthlyPrice: 599,
-    yearlyPrice: 4990,
+    monthlyPrice: 1990,
+    quarterlyPrice: 5670,
+    halfYearlyPrice: 10750,
+    yearlyPrice: 20300,
     tagline: 'N5 থেকে N3 ফুল কারিকুলাম + AI Sensei',
     features: [
       'N5, N4 ও N3 ফুল আনলক',
-      '১,০০০ AI Coach চ্যাট / মাস',
+      '১,৫০০ AI Coach কয়েন / মাস',
       'JLPT ফুল মক এক্সাম ও SRS ডেক'
     ]
   },
@@ -178,13 +194,15 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     nameJa: '日本就労・移住特化',
     badge: 'সেরা মান',
     badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-    monthlyPrice: 999,
-    yearlyPrice: 7990,
+    monthlyPrice: 3990,
+    quarterlyPrice: 11370,
+    halfYearlyPrice: 21550,
+    yearlyPrice: 40700,
     tagline: 'চাকরি, ভিসা ইন্টারভিউ ও কনবিনি সিমুলেটর',
     features: [
       'টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর',
       'ভিসা ও জব ইন্টারভিউ সিমুলেশন',
-      '৩,০০০ AI Coach ও সার্টিফিকেট'
+      '৪,০০০ AI Coach কয়েন ও সার্টিফিকেট'
     ]
   }
 ];
@@ -208,8 +226,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   const [tier, setTier] = useState<PlanTierKey>(getInitialTier());
-  const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>(
-    initialInterval === 'yearly' ? 'yearly' : 'monthly'
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>(
+    initialInterval || 'monthly'
   );
 
   // Carousel Active Slide (0 to 5)
@@ -264,9 +282,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   if (!isOpen) return null;
 
   const selectedPlanConfig = CHECKOUT_PLANS.find((p) => p.id === tier) || CHECKOUT_PLANS[1];
-  const basePrice = billingInterval === 'yearly'
-    ? selectedPlanConfig.yearlyPrice
-    : selectedPlanConfig.monthlyPrice;
+  const basePrice = getCheckoutPlanPrice(selectedPlanConfig, billingInterval);
   const finalPrice = appliedCoupon ? appliedCoupon.finalAmount : basePrice;
 
   const currentSlide = NIHOMI_6_VALUES[activeSlide];
@@ -537,30 +553,54 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                 )}
 
-                {/* Billing Interval Toggle */}
-                <div className="flex items-center justify-between p-1 rounded-xl bg-white/[0.04] border border-white/10 text-xs">
+                {/* Billing Interval Toggle (4 Terms: 1M, 3M, 6M, 12M) */}
+                <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/10 text-xs">
                   <button
                     type="button"
                     onClick={() => setBillingInterval('monthly')}
-                    className={`flex-1 py-1.5 rounded-lg font-bold text-center transition cursor-pointer ${
+                    className={`py-1.5 rounded-lg font-bold text-center transition cursor-pointer ${
                       billingInterval === 'monthly'
                         ? 'bg-amber-500 text-stone-950 shadow-md'
                         : 'text-stone-400 hover:text-white'
                     }`}
                   >
-                    মাসিক (Monthly)
+                    ১ মাস
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBillingInterval('quarterly')}
+                    className={`py-1.5 rounded-lg font-bold text-center transition cursor-pointer flex flex-col items-center justify-center ${
+                      billingInterval === 'quarterly'
+                        ? 'bg-amber-500 text-stone-950 shadow-md'
+                        : 'text-stone-400 hover:text-white'
+                    }`}
+                  >
+                    <span>৩ মাস</span>
+                    <span className={`text-[8px] font-black ${billingInterval === 'quarterly' ? 'text-amber-950' : 'text-amber-400'}`}>৫% ছাড়</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBillingInterval('half_yearly')}
+                    className={`py-1.5 rounded-lg font-bold text-center transition cursor-pointer flex flex-col items-center justify-center ${
+                      billingInterval === 'half_yearly'
+                        ? 'bg-amber-500 text-stone-950 shadow-md'
+                        : 'text-stone-400 hover:text-white'
+                    }`}
+                  >
+                    <span>৬ মাস</span>
+                    <span className={`text-[8px] font-black ${billingInterval === 'half_yearly' ? 'text-amber-950' : 'text-amber-400'}`}>১০% ছাড়</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setBillingInterval('yearly')}
-                    className={`flex-1 py-1.5 rounded-lg font-bold text-center transition cursor-pointer flex items-center justify-center gap-1.5 ${
+                    className={`py-1.5 rounded-lg font-bold text-center transition cursor-pointer flex flex-col items-center justify-center ${
                       billingInterval === 'yearly'
                         ? 'bg-amber-500 text-stone-950 shadow-md'
                         : 'text-stone-400 hover:text-white'
                     }`}
                   >
-                    <span>বাৎসরিক (Yearly)</span>
-                    <span className="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[9px] font-black">২০% ছাড়</span>
+                    <span>১২ মাস</span>
+                    <span className={`text-[8px] font-black ${billingInterval === 'yearly' ? 'text-rose-950' : 'text-rose-400'}`}>১৫% ছাড়</span>
                   </button>
                 </div>
 
@@ -568,8 +608,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {CHECKOUT_PLANS.map((p) => {
                     const isSelected = tier === p.id;
-                    const price = billingInterval === 'yearly' ? p.yearlyPrice : p.monthlyPrice;
-                    const dailyReport = calculateDailyCost(price, billingInterval === 'yearly' ? 'yearly' : 'monthly');
+                    const price = getCheckoutPlanPrice(p, billingInterval);
+                    const dailyReport = calculateDailyCost(price, billingInterval);
 
                     return (
                       <div
@@ -601,7 +641,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         <div className="pt-1.5 border-t border-white/10 space-y-0.5">
                           <div className="text-base font-black text-amber-300">৳{price.toLocaleString('en-US')}</div>
                           <div className="text-[9px] text-stone-400 font-mono">
-                            {billingInterval === 'yearly' ? '/ বছর' : '/ মাস'}
+                            {billingInterval === 'yearly' ? '/ ১২ মাস (বাৎসরিক)' :
+                             billingInterval === 'half_yearly' ? '/ ৬ মাস' :
+                             billingInterval === 'quarterly' ? '/ ৩ মাস' : '/ মাস'}
                           </div>
                           <div className="text-[10px] font-bold text-amber-400">
                             {dailyReport.dailyLabelBn}

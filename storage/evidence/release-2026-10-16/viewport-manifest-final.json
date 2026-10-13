@@ -1,0 +1,722 @@
+[
+  {
+    "viewport": "mobile-360x800",
+    "viewportLabel": "Mobile (Android Compact 360×800)",
+    "route": "/",
+    "label": "landing",
+    "width": 360,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "scrollHeight": 3609,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-360x800-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-360x800",
+    "viewportLabel": "Mobile (Android Compact 360×800)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 360,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "scrollHeight": 6758,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-360x800-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-360x800",
+    "viewportLabel": "Mobile (Android Compact 360×800)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 360,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "scrollHeight": 10649,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-360x800-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-360x800",
+    "viewportLabel": "Mobile (Android Compact 360×800)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 360,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "scrollHeight": 880,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-360x800-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-360x800",
+    "viewportLabel": "Mobile (Android Compact 360×800)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 360,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "scrollHeight": 1586,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-360x800-practice.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-390x844",
+    "viewportLabel": "Mobile (iPhone Standard 390×844)",
+    "route": "/",
+    "label": "landing",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 3549,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-390x844-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-390x844",
+    "viewportLabel": "Mobile (iPhone Standard 390×844)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 6595,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-390x844-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-390x844",
+    "viewportLabel": "Mobile (iPhone Standard 390×844)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 10460,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-390x844-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-390x844",
+    "viewportLabel": "Mobile (iPhone Standard 390×844)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 924,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-390x844-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "mobile-390x844",
+    "viewportLabel": "Mobile (iPhone Standard 390×844)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 390,
+    "height": 844,
+    "metrics": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 1529,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "mobile-390x844-practice.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-768x1024",
+    "viewportLabel": "Tablet Portrait (iPad 768×1024)",
+    "route": "/",
+    "label": "landing",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 3019,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-768x1024-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-768x1024",
+    "viewportLabel": "Tablet Portrait (iPad 768×1024)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 4194,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-768x1024-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-768x1024",
+    "viewportLabel": "Tablet Portrait (iPad 768×1024)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 6335,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-768x1024-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-768x1024",
+    "viewportLabel": "Tablet Portrait (iPad 768×1024)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 1104,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-768x1024-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-768x1024",
+    "viewportLabel": "Tablet Portrait (iPad 768×1024)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 768,
+    "height": 1024,
+    "metrics": {
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "scrollHeight": 1447,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-768x1024-practice.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-1024x768",
+    "viewportLabel": "Tablet Landscape (1024×768)",
+    "route": "/",
+    "label": "landing",
+    "width": 1024,
+    "height": 768,
+    "metrics": {
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1536,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-1024x768-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-1024x768",
+    "viewportLabel": "Tablet Landscape (1024×768)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 1024,
+    "height": 768,
+    "metrics": {
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 3512,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-1024x768-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-1024x768",
+    "viewportLabel": "Tablet Landscape (1024×768)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 1024,
+    "height": 768,
+    "metrics": {
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 4576,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-1024x768-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-1024x768",
+    "viewportLabel": "Tablet Landscape (1024×768)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 1024,
+    "height": 768,
+    "metrics": {
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 848,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-1024x768-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "tablet-1024x768",
+    "viewportLabel": "Tablet Landscape (1024×768)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 1024,
+    "height": 768,
+    "metrics": {
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1176,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "tablet-1024x768-practice.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1280x800",
+    "viewportLabel": "Desktop Laptop (1280×800)",
+    "route": "/",
+    "label": "landing",
+    "width": 1280,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "scrollHeight": 1536,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1280x800-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1280x800",
+    "viewportLabel": "Desktop Laptop (1280×800)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 1280,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "scrollHeight": 3324,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1280x800-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1280x800",
+    "viewportLabel": "Desktop Laptop (1280×800)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 1280,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "scrollHeight": 4576,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1280x800-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1280x800",
+    "viewportLabel": "Desktop Laptop (1280×800)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 1280,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "scrollHeight": 880,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1280x800-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1280x800",
+    "viewportLabel": "Desktop Laptop (1280×800)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 1280,
+    "height": 800,
+    "metrics": {
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "scrollHeight": 1208,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1280x800-practice.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "viewportLabel": "Desktop Standard (1440×900)",
+    "route": "/",
+    "label": "landing",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 1536,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "monthly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1440x900-landing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "viewportLabel": "Desktop Standard (1440×900)",
+    "route": "/pricing",
+    "label": "pricing",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 3296,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": true,
+        "detectedTerm": "quarterly"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1440x900-pricing.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "viewportLabel": "Desktop Standard (1440×900)",
+    "route": "/dashboard",
+    "label": "dashboard",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 4576,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1440x900-dashboard.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "viewportLabel": "Desktop Standard (1440×900)",
+    "route": "/journey",
+    "label": "journey",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 980,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1440x900-journey.png",
+    "passed": true
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "viewportLabel": "Desktop Standard (1440×900)",
+    "route": "/practice",
+    "label": "practice",
+    "width": 1440,
+    "height": 900,
+    "metrics": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 1308,
+      "hasOverflow": false,
+      "headerVerticalWrappingDetected": false,
+      "floatingCollisionDetected": false,
+      "pricesFound": {
+        "canonicalMatch": false,
+        "detectedTerm": "none"
+      }
+    },
+    "failedRequests": [],
+    "consoleErrors": [],
+    "screenshot": "desktop-1440x900-practice.png",
+    "passed": true
+  }
+]

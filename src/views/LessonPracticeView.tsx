@@ -281,7 +281,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
   const scorePercent = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 100;
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex flex-col font-sans selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex flex-col font-sans selection:bg-purple-600 selection:text-white">
       {/* ------------------------------------------------------------- */}
       {/* TOP NAVIGATION / CONTROL BAR */}
       {/* ------------------------------------------------------------- */}
@@ -300,7 +300,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-red-600/20 text-red-400 border border-red-500/30 flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-purple-600/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
                   {isHighLevel ? <Crown className="w-3 h-3 text-amber-400" /> : <GraduationCap className="w-3 h-3" />}
                   {meta.lesson_id}
                 </span>
@@ -321,7 +321,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeStep === 'quiz'
-                    ? 'bg-red-600 text-white font-bold shadow-xs'
+                    ? 'bg-[#684CFE] text-white font-bold shadow-xs'
                     : userQuizAnswers.length > 0
                     ? 'text-emerald-400'
                     : 'text-stone-500'
@@ -332,7 +332,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeStep === 'typing'
-                    ? 'bg-red-600 text-white font-bold shadow-xs'
+                    ? 'bg-[#684CFE] text-white font-bold shadow-xs'
                     : typingScore > 0
                     ? 'text-emerald-400'
                     : 'text-stone-500'
@@ -342,7 +342,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               </span>
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
-                  activeStep === 'summary' ? 'bg-red-600 text-white font-bold shadow-xs' : 'text-stone-500'
+                  activeStep === 'summary' ? 'bg-[#684CFE] text-white font-bold shadow-xs' : 'text-stone-500'
                 }`}
               >
                 ৩. স্কোর
@@ -369,7 +369,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
       {/* ------------------------------------------------------------- */}
       {/* MAIN INTERACTIVE ENGINE VIEWPORT */}
       {/* ------------------------------------------------------------- */}
-      <main className="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+      <main className="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-44 sm:pb-24 flex flex-col justify-center">
         {/* ========================================================= */}
         {/* PHASE 1: MCQ QUIZ ENGINE */}
         {/* ========================================================= */}
@@ -378,7 +378,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
             {/* Progress Bar & Header */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-mono text-stone-400">
-                <span className="flex items-center gap-1.5 font-bold text-red-400 uppercase tracking-wider">
+                <span className="flex items-center gap-1.5 font-bold text-purple-400 uppercase tracking-wider">
                   <HelpCircle className="w-3.5 h-3.5" />
                   প্রশ্ন {currentQuizIndex + 1} / {quizzes.length}
                 </span>
@@ -389,7 +389,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               </div>
               <div className="w-full h-1.5 rounded-full bg-stone-800 overflow-hidden">
                 <div
-                  className="h-full bg-linear-to-r from-red-600 via-rose-500 to-amber-500 rounded-full transition-all duration-300"
+                  className="h-full bg-linear-to-r from-purple-600 via-indigo-500 to-purple-400 rounded-full transition-all duration-300"
                   style={{ width: `${((currentQuizIndex + 1) / quizzes.length) * 100}%` }}
                 />
               </div>
@@ -397,7 +397,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
             {/* Question Card */}
             <div className="p-6 sm:p-8 rounded-3xl bg-[#13131e] border border-stone-800/90 shadow-2xl relative overflow-hidden space-y-4">
-              <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-red-600/10 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl" />
 
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2">
@@ -419,7 +419,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   title="উচ্চারণ শুনুন"
                   aria-label="জাপানি প্রশ্নের উচ্চারণ শুনুন"
                 >
-                  <Volume2 className="w-5 h-5 text-red-400" />
+                  <Volume2 className="w-5 h-5 text-purple-400" />
                 </button>
               </div>
 
@@ -443,7 +443,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                       cardStyle = 'bg-stone-900/40 border-stone-800/60 text-stone-500 opacity-60';
                     }
                   } else if (isSelected) {
-                    cardStyle = 'bg-red-950/30 border-red-500 text-white ring-2 ring-red-500/30';
+                    cardStyle = 'bg-purple-950/30 border-purple-500 text-white ring-2 ring-purple-500/30';
                   }
 
                   return (
@@ -508,7 +508,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     disabled={selectedOptionIndex === null}
                     onClick={handleSubmitQuizAnswer}
-                    className="px-6 py-3 rounded-2xl bg-red-600 hover:bg-red-500 disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 cursor-pointer flex items-center gap-2"
+                    className="px-6 py-3 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
                     aria-label="উত্তর নিশ্চিত করুন"
                   >
                     <span>উত্তর নিশ্চিত করুন (Submit)</span>
@@ -554,7 +554,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               </div>
               <div className="w-full h-1.5 rounded-full bg-stone-800 overflow-hidden">
                 <div
-                  className="h-full bg-linear-to-r from-amber-500 via-rose-500 to-red-600 rounded-full transition-all duration-300"
+                  className="h-full bg-linear-to-r from-purple-600 via-indigo-500 to-purple-400 rounded-full transition-all duration-300"
                   style={{ width: `${((currentTypingIndex + 1) / typingItems.length) * 100}%` }}
                 />
               </div>
@@ -562,18 +562,18 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
             {/* Prompt & Typing Box Card */}
             <div className="p-6 sm:p-8 rounded-3xl bg-[#13131e] border border-stone-800/90 shadow-2xl relative overflow-hidden space-y-6">
-              <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl" />
 
               {/* Japanese Prompt & Bengali Translation */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#181825] border border-stone-800">
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-mono uppercase font-bold text-amber-400">
+                  <span className="text-[10px] font-mono uppercase font-bold text-purple-400">
                     লক্ষ্য অভিব্যক্তি (Target Expression)
                   </span>
                   <div className="text-2xl sm:text-3xl font-bold text-white font-japanese tracking-wide">
                     <FuriganaText text={currentTyping.prompt_ja} />
                   </div>
-                  <div className="text-sm sm:text-base font-semibold text-rose-400">
+                  <div className="text-sm sm:text-base font-semibold text-purple-300">
                     অর্থ: {currentTyping.meaning_bn}
                   </div>
                 </div>
@@ -585,7 +585,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                     title="উচ্চারণ শুনুন"
                     aria-label="জাপানি অভিব্যক্তির উচ্চারণ শুনুন"
                   >
-                    <Volume2 className="w-5 h-5 text-amber-400" />
+                    <Volume2 className="w-5 h-5 text-purple-400" />
                   </button>
 
                   <button
@@ -593,7 +593,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                     className="px-3 py-2.5 rounded-2xl bg-stone-800 hover:bg-stone-700 text-xs font-bold text-stone-300 hover:text-white transition-all cursor-pointer border border-stone-700/60 flex items-center gap-1.5"
                     aria-label={isHintRevealed ? 'রোমাজি হিন্ট লুকান' : 'রোমাজি হিন্ট দেখুন'}
                   >
-                    <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+                    <Lightbulb className="w-3.5 h-3.5 text-purple-400" />
                     <span>{isHintRevealed ? 'হিন্ট লুকান' : 'রোমাজি হিন্ট'}</span>
                   </button>
                 </div>
@@ -601,7 +601,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
               {/* Hint Bar (If Toggled) */}
               {isHintRevealed && (
-                <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-xs text-amber-200 font-mono flex items-center justify-between animate-fadeIn">
+                <div className="p-3.5 rounded-2xl bg-purple-950/20 border border-purple-500/30 text-xs text-purple-200 font-mono flex items-center justify-between animate-fadeIn">
                   <span>
                     রোমাজি ইনপুট: <strong>{currentTyping.romaji_input}</strong>
                   </span>
@@ -639,7 +639,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                         ? isTypingCorrect
                           ? 'border-emerald-500 bg-emerald-950/20 ring-2 ring-emerald-500/30'
                           : 'border-red-500 bg-red-950/20 ring-2 ring-red-500/30'
-                        : 'border-stone-700 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20'
+                        : 'border-stone-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20'
                     }`}
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-stone-500 hidden sm:inline">
@@ -682,7 +682,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     disabled={!typingInput.trim()}
                     onClick={handleCheckTyping}
-                    className="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-stone-950 font-bold text-sm transition-all shadow-lg shadow-amber-500/20 cursor-pointer flex items-center gap-2"
+                    className="px-6 py-3 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
                     aria-label="টাইপিং উত্তর যাচাই করুন"
                   >
                     <span>যাচাই করুন (Verify)</span>
@@ -713,12 +713,12 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
         {activeStep === 'summary' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="p-8 sm:p-10 rounded-3xl bg-linear-to-b from-[#181828] via-[#12121c] to-[#0c0c14] border border-stone-800 shadow-2xl relative overflow-hidden text-center space-y-6">
-              <div className="pointer-events-none absolute -right-20 -top-20 w-64 h-64 bg-red-600/15 rounded-full blur-3xl" />
-              <div className="pointer-events-none absolute -left-20 -bottom-20 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-20 -top-20 w-64 h-64 bg-purple-600/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl" />
 
               {/* Badge Icon */}
               <div className="relative inline-flex items-center justify-center">
-                <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-red-600 via-rose-500 to-amber-500 p-0.5 shadow-xl shadow-red-600/20">
+                <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-purple-600 via-indigo-500 to-purple-400 p-0.5 shadow-xl shadow-purple-600/20">
                   <div className="w-full h-full bg-[#0e0e18] rounded-[22px] flex items-center justify-center">
                     {scorePercent >= 80 ? (
                       <Crown className="w-10 h-10 text-amber-400" />
@@ -833,7 +833,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
                 <button
                   onClick={() => onNavigate('courses')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-red-600/30 cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-purple-600/30 cursor-pointer flex items-center justify-center gap-2"
                   aria-label="পাঠ সম্পন্ন করুন ও পাঠ্যক্রমে ফিরুন"
                 >
                   <span>পাঠ সমাপ্ত করুন ও পাঠ্যক্রমে ফিরুন (Finish & Return)</span>

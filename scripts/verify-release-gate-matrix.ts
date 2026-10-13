@@ -29,57 +29,41 @@ function recordResult(category: string, name: string, passed: boolean, durationM
   console.log(`    └─ ${details}`);
 }
 
-function makeRequest(
+async function makeRequest(
   method: string,
   urlPath: string,
   body?: any,
   headers?: Record<string, string>
-): Promise<{ statusCode: number; headers: http.IncomingHttpHeaders; data: any; raw: string }> {
-  return new Promise((resolve, reject) => {
-    const postData = body ? JSON.stringify(body) : '';
-    const reqHeaders: Record<string, string> = {
-      Accept: 'application/json',
-      ...headers
-    };
-    if (body) {
-      reqHeaders['Content-Type'] = 'application/json';
-      reqHeaders['Content-Length'] = Buffer.byteLength(postData).toString();
-    }
+): Promise<{ statusCode: number; headers: Record<string, any>; data: any; raw: string }> {
+  const reqHeaders: Record<string, string> = {
+    Accept: 'application/json',
+    Connection: 'close',
+    ...headers
+  };
+  if (body) {
+    reqHeaders['Content-Type'] = 'application/json';
+  }
 
-    const req = http.request(
-      {
-        hostname: HOST,
-        port: TEST_PORT,
-        path: urlPath,
-        method,
-        headers: reqHeaders,
-        timeout: 12000,
-        agent: false
-      },
-      (res) => {
-        let raw = '';
-        res.on('data', (c) => (raw += c));
-        res.on('end', () => {
-          let parsed: any = null;
-          try {
-            parsed = raw ? JSON.parse(raw) : null;
-          } catch {
-            parsed = raw;
-          }
-          resolve({ statusCode: res.statusCode || 0, headers: res.headers, data: parsed, raw });
-        });
-      }
-    );
-
-    req.on('error', reject);
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error(`HTTP ${method} ${urlPath} timed out after 12000ms`));
-    });
-
-    if (postData) req.write(postData);
-    req.end();
+  const res = await fetch(`http://${HOST}:${TEST_PORT}${urlPath}`, {
+    method,
+    headers: reqHeaders,
+    body: body ? JSON.stringify(body) : undefined,
+    keepalive: false,
+    signal: AbortSignal.timeout(15000)
   });
+
+  const raw = await res.text();
+  let parsed: any = null;
+  try {
+    parsed = raw ? JSON.parse(raw) : null;
+  } catch {
+    parsed = raw;
+  }
+
+  const headerObj: Record<string, string> = {};
+  res.headers.forEach((val, key) => { headerObj[key] = val; });
+
+  return { statusCode: res.status, headers: headerObj, data: parsed, raw };
 }
 
 async function waitForServer(timeoutMs: number): Promise<void> {

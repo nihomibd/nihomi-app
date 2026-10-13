@@ -24,10 +24,10 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
   const [studentBin, setStudentBin] = useState('');
   const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
 
-  const planBaseRates: Record<string, { name: string; monthlyBDT: number; code: string }> = {
-    starter: { name: 'Starter JLPT N5 Access Plan', monthlyBDT: 1490, code: 'NIH-N5-ST' },
-    pro: { name: 'Pro JLPT N5-N3 Unlimited AI Plan', monthlyBDT: 2990, code: 'NIH-PRO-AI' },
-    japan_ready: { name: 'Japan Ready™ Career & Visa VIP Plan', monthlyBDT: 4990, code: 'NIH-JP-VIP' }
+  const planBaseRates: Record<string, { name: string; monthlyBDT: number; yearlyBDT: number; code: string }> = {
+    starter: { name: 'Starter JLPT N5 Access Plan', monthlyBDT: 990, yearlyBDT: 10100, code: 'NIH-N5-ST' },
+    pro: { name: 'Pro JLPT N5-N3 Unlimited AI Plan', monthlyBDT: 1990, yearlyBDT: 20300, code: 'NIH-PRO-AI' },
+    japan_ready: { name: 'Japan Ready™ Career & Visa VIP Plan', monthlyBDT: 3990, yearlyBDT: 40700, code: 'NIH-JP-VIP' }
   };
 
   const currentPlanMeta = planBaseRates[selectedPlan] || planBaseRates.pro;
@@ -51,7 +51,7 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
   };
 
   // Calculations
-  const rawBase = billingCycle === 'yearly' ? currentPlanMeta.monthlyBDT * 12 * 0.8 : currentPlanMeta.monthlyBDT;
+  const rawBase = billingCycle === 'yearly' ? currentPlanMeta.yearlyBDT : currentPlanMeta.monthlyBDT;
   const discountAmount = Math.round((rawBase * discountPercent) / 100);
   const netSubtotal = Math.max(0, rawBase - discountAmount);
   const vatRate = 0.15; // 15% Statutory Bangladesh VAT

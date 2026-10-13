@@ -33,7 +33,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'starter' as PlanId,
       name: 'Starter',
-      price: '৳299',
+      price: '৳990',
       period: '/ মাস',
       features: [
         '500 AI টার্ন / মাস',
@@ -47,7 +47,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'pro' as PlanId,
       name: 'Pro',
-      price: '৳599',
+      price: '৳1,990',
       period: '/ মাস',
       popularBadge: 'সবচেয়ে জনপ্রিয়',
       features: [
@@ -62,7 +62,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSe
     {
       id: 'japan_ready' as PlanId,
       name: 'Japan Ready',
-      price: '৳999',
+      price: '৳3,990',
       period: '/ মাস',
       features: [
         '4,000 AI টার্ন / মাস',

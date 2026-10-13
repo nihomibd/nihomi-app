@@ -499,7 +499,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
   const handleSimulatePreRenewalAlert = () => {
     const recipient = user?.email || 'mdtanvirkabirbiplob@gmail.com';
     const planName = plan?.name || 'Pro AI Plan';
-    const amount = (sub?.billingInterval === 'yearly' ? plan?.yearlyPrice : plan?.monthlyPrice) || 2990;
+    const amount = (sub?.billingInterval === 'yearly' ? plan?.yearlyPrice : plan?.monthlyPrice) || 1990;
     setActionMessage(
       `🔔 [Push & Email Pre-Renewal Alert Triggered]: Alert scheduled 3 days before renewal (on ${reminderDate.toLocaleDateString()}). Dispatched test payload to ${recipient}: "Your ${planName} subscription will renew on ${renewalDate.toLocaleDateString()} for ৳${amount.toLocaleString()} BDT."`
     );

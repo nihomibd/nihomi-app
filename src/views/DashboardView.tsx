@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
+import { BadgeShareModal } from '../components/BadgeShareModal';
 import { MemoryOsView } from './MemoryOsView';
 import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
 import { getNextBestMission, isGrammarEligible } from '../core/curriculum/journeyEngine';
@@ -198,46 +199,73 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
     );
   }
 
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+
+  const earnedMilestone = {
+    id: `milestone-${streakDays > 0 ? 'streak' : 'start'}`,
+    title: streakDays >= 7 ? '7-Day Samurai Streak' : (streakDays >= 1 ? `${streakDays}-Day Focus Streak` : 'Hiragana Pioneer'),
+    titleJa: streakDays >= 7 ? '7日間の継続達人' : (streakDays >= 1 ? `${streakDays}日連続学習` : '日本語の旅立ち'),
+    description: streakDays >= 1
+      ? `${streakDays} days of consistent Japanese practice on NIHOMI. Spaced repetition active.`
+      : 'Began authentic JLPT journey on NIHOMI platform.',
+    category: 'Milestone',
+    rarity: (streakDays >= 7 ? 'Epic' : streakDays >= 1 ? 'Rare' : 'Common') as 'Epic' | 'Rare' | 'Common',
+    xpReward: studentXp,
+    unlockedAt: new Date().toISOString()
+  };
+
   return (
-    <div className="min-h-screen bg-[#080711] text-stone-100 font-sans antialiased pb-24 selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-[#080711] text-stone-100 font-sans antialiased pb-24 selection:bg-purple-600 selection:text-white">
       {/* Sleek Minimal Header */}
-      <header className="border-b border-white/[0.06] bg-[#090814]/90 backdrop-blur-md sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center text-white font-black text-xs shadow-md shadow-red-600/30">
+      <header className="border-b border-white/[0.08] bg-[#090814]/95 backdrop-blur-md sticky top-0 z-20">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-rose-600 to-red-600 flex items-center justify-center text-white font-black text-xs shadow-md shadow-purple-600/30 shrink-0">
               日
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-black text-white tracking-wide">LEARNING CANVAS</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 font-mono font-bold border border-red-500/20">
-                  N5 FOUNDATION
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-xs sm:text-sm font-black text-white tracking-wide whitespace-nowrap">
+                  <span className="hidden xs:inline">LEARNING </span>CANVAS
+                </span>
+                <span className="text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold border border-purple-500/30 whitespace-nowrap shrink-0">
+                  N5
                 </span>
               </div>
-              <p className="text-[11px] text-stone-400 font-medium hidden sm:block">
+              <p className="text-[11px] text-stone-400 font-medium hidden md:block truncate">
                 Welcome back, Nihomian 🇯🇵 • {studentName} • Spaced Repetition Active
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400">
-              <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>{streakDays} দিন স্ট্রিক</span>
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsShareModalOpen(true)}
+              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-xs font-bold text-amber-400 cursor-pointer transition-colors whitespace-nowrap shrink-0"
+              title="শেয়ার করুন আপনার স্ট্রিক ও অর্জন"
+            >
+              <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
+              <span className="font-mono font-bold">{streakDays}</span>
+              <span className="hidden sm:inline text-[11px]"> দিন স্ট্রিক</span>
+            </button>
+            <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400 whitespace-nowrap shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="font-mono font-bold">{studentXp}</span>
+              <span className="text-[10px] sm:text-xs"> XP</span>
             </div>
-            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{studentXp} XP</span>
-            </div>
-            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400">
-              <Coins className="w-3.5 h-3.5 text-amber-400" />
-              <span>{coinWallet?.coinBalance ?? 0} কয়েন</span>
+            <div className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400 whitespace-nowrap shrink-0">
+              <Coins className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="font-mono font-bold">{coinWallet?.coinBalance ?? 0}</span>
+              <span className="hidden md:inline text-[11px]"> কয়েন</span>
             </div>
             <button
+              type="button"
               onClick={() => setIsAiSenseiOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white transition-all shadow-md shadow-red-600/20 cursor-pointer"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-500 hover:to-red-500 text-xs font-bold text-white transition-all shadow-md shadow-purple-600/20 cursor-pointer whitespace-nowrap shrink-0"
+              title="Open AI Sensei"
             >
-              <Bot className="w-3.5 h-3.5" />
+              <Bot className="w-3.5 h-3.5 shrink-0" />
               <span className="hidden sm:inline">Sensei AI</span>
             </button>
           </div>
@@ -245,7 +273,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
       </header>
 
       {/* Main Learning Canvas */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-44 sm:pb-24 space-y-8">
         {/* Admin / Founder View Active Banner */}
         {(user?.role === 'admin' || user?.role === 'founder') && (
           <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-rose-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
@@ -275,10 +303,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             
             {/* LEFT: TODAY'S MISSION (7 Cols) */}
-            <div className="lg:col-span-7 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#16122d] via-[#141226] to-[#0c0a18] border border-amber-500/30 p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
+            <div className="lg:col-span-7 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#16122d] via-[#141226] to-[#0c0a18] border border-purple-500/30 p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
               {/* Ambient Tokyo Neon Glow */}
-              <div className="pointer-events-none absolute -right-20 -top-20 w-72 h-72 bg-red-600/15 rounded-full blur-3xl" />
-              <div className="pointer-events-none absolute -left-20 -bottom-20 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -right-20 -top-20 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl" />
+              <div className="pointer-events-none absolute -left-20 -bottom-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl" />
 
               <div className="relative z-10 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -344,7 +372,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                         trackNihomiEvent('mission_started', { source: 'dashboard_hero' });
                         setIsKonbiniModalOpen(true);
                       }}
-                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
+                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-sm shadow-xl shadow-purple-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
                     >
                       <Play className="w-4 h-4 fill-white" />
                       <span>Mission শুরু করি →</span>
@@ -355,7 +383,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                       type="button"
                       id="btn-dashboard-start-next-mission"
                       onClick={() => onNavigate?.(canonicalMission.viewRoute, canonicalMission.viewParams)}
-                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
+                      className="flex-1 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-sm shadow-xl shadow-purple-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-98"
                     >
                       <Play className="w-4 h-4 fill-white" />
                       <span>{canonicalMission.actionLabelBn || 'আজকের মিশন শুরু করুন'}</span>
@@ -367,9 +395,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                     type="button"
                     id="btn-dashboard-placement-test"
                     onClick={() => setIsPlacementOpen(true)}
-                    className="px-4 py-3.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-amber-500/30 text-stone-300 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                    className="px-4 py-3.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-purple-500/30 text-stone-300 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                   >
-                    <Compass className="w-3.5 h-3.5 text-amber-400" />
+                    <Compass className="w-3.5 h-3.5 text-purple-400" />
                     <span>প্লেসমেন্ট টেস্ট</span>
                   </button>
                 </div>
@@ -406,7 +434,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                 </div>
 
                 {/* Wallet 3-Action Buttons: Earn, Use, Buy */}
-                <div className="grid grid-cols-3 gap-2 pt-1">
+                <div className="grid grid-cols-3 gap-2 pt-1 px-8 sm:px-0">
                   <button
                     onClick={() => {
                       const el = document.getElementById('section-nihomi-reward');
@@ -478,7 +506,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                   type="button"
                   id="btn-talk-to-sensei-card"
                   onClick={() => setIsAiSenseiOpen(true)}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black text-xs shadow-md shadow-red-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs shadow-md shadow-purple-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
                   <span>Talk to Sensei (সেনসেইয়ের সাথে কথা বলি)</span>
@@ -487,6 +515,69 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
             </div>
 
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* POSTER 04 — 4 PRIMARY LEARNER ACTION CARDS (QUICK SHORTCUTS)              */}
+        {/* ========================================================================= */}
+        <section aria-label="Quick Learner Shortcuts">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button
+              type="button"
+              onClick={() => onNavigate?.('journey')}
+              className="btn-haptic p-3.5 sm:p-4 rounded-2xl bg-[#141226] hover:bg-[#1b1735] border border-purple-500/20 hover:border-purple-500/40 text-left transition-all flex flex-col justify-between gap-3 group cursor-pointer shadow-lg"
+            >
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform">
+                <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300">My Journey</div>
+                <div className="text-[11px] text-stone-400">আমার লার্নিং ম্যাপ</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowMemoryOs(true)}
+              className="btn-haptic p-3.5 sm:p-4 rounded-2xl bg-[#141226] hover:bg-[#1b1735] border border-purple-500/20 hover:border-purple-500/40 text-left transition-all flex flex-col justify-between gap-3 group cursor-pointer shadow-lg"
+            >
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-white group-hover:text-amber-300">Review Queue</div>
+                <div className="text-[11px] text-stone-400">মেমরি ওএস স্পেসড রিভিউ</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAiSenseiOpen(true)}
+              className="btn-haptic p-3.5 sm:p-4 rounded-2xl bg-[#141226] hover:bg-[#1b1735] border border-purple-500/20 hover:border-purple-500/40 text-left transition-all flex flex-col justify-between gap-3 group cursor-pointer shadow-lg"
+            >
+              <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 group-hover:scale-105 transition-transform">
+                <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-white group-hover:text-rose-300">AI Sensei</div>
+                <div className="text-[11px] text-stone-400">ব্যক্তিগত মেন্টর</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onNavigate?.('practice', { lessonId: 'n5-l1' })}
+              className="btn-haptic p-3.5 sm:p-4 rounded-2xl bg-[#141226] hover:bg-[#1b1735] border border-purple-500/20 hover:border-purple-500/40 text-left transition-all flex flex-col justify-between gap-3 group cursor-pointer shadow-lg"
+            >
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-300">Practice</div>
+                <div className="text-[11px] text-stone-400">ইন্টারেক্টিভ ড্রিল</div>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -1078,20 +1169,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
 
       </main>
 
-      {/* 1-Click Floating Nihomi Sensei AI Action Button */}
-      <button
-        type="button"
-        id="btn-floating-sensei-ai"
-        onClick={() => setIsAiSenseiOpen(true)}
-        className="fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs shadow-2xl shadow-red-600/40 hover:shadow-red-600/60 transition-all flex items-center gap-2 cursor-pointer active:scale-95 group border border-amber-400/30"
-        title="Floating Nihomi Sensei AI (২৪/৭ পার্সোনাল মেন্টর)"
-      >
-        <div className="relative">
-          <Bot className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" />
-          <span className="w-2 h-2 rounded-full bg-emerald-400 absolute -top-0.5 -right-0.5 ring-2 ring-stone-950 animate-pulse" />
-        </div>
-        <span className="tracking-wide">Nihomi Sensei AI 💬</span>
-      </button>
+      {/* Real Milestone Share Card Modal */}
+      {isShareModalOpen && (
+        <BadgeShareModal
+          badge={earnedMilestone as any}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          userName={studentName}
+          studentId={user?.studentId || 'NHO-STUDENT'}
+        />
+      )}
 
       {/* Tanaka AI Sensei Modal */}
       {isAiSenseiOpen && (

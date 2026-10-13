@@ -77,6 +77,8 @@ enum SubscriptionStatus {
 
 enum BillingInterval {
   monthly
+  quarterly
+  half_yearly
   yearly
 }
 

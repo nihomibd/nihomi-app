@@ -51664,7 +51664,9 @@ var init_db = __esm({
         description: "Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.",
         order: 2,
         monthlyPrice: 990,
-        yearlyPrice: 9900,
+        quarterlyPrice: 2820,
+        halfYearlyPrice: 5350,
+        yearlyPrice: 10100,
         currency: "BDT",
         aiMonthlyLimit: 500,
         features: [
@@ -51690,7 +51692,9 @@ var init_db = __esm({
         isRecommended: true,
         order: 3,
         monthlyPrice: 1990,
-        yearlyPrice: 19900,
+        quarterlyPrice: 5670,
+        halfYearlyPrice: 10750,
+        yearlyPrice: 20300,
         currency: "BDT",
         aiMonthlyLimit: 1500,
         features: [
@@ -51716,7 +51720,9 @@ var init_db = __esm({
         badge: "Best Value",
         order: 4,
         monthlyPrice: 3990,
-        yearlyPrice: 39900,
+        quarterlyPrice: 11370,
+        halfYearlyPrice: 21550,
+        yearlyPrice: 40700,
         currency: "BDT",
         aiMonthlyLimit: 4e3,
         features: [
@@ -51819,10 +51825,31 @@ var init_db = __esm({
       }
     ];
     SEED_PLAN_PRICES = [
+      // Free Tier
       {
         id: "price-free-m",
         planId: "free",
         billingInterval: "monthly",
+        amount: 0,
+        currency: "BDT",
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-free-q",
+        planId: "free",
+        billingInterval: "quarterly",
+        amount: 0,
+        currency: "BDT",
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-free-h",
+        planId: "free",
+        billingInterval: "half_yearly",
         amount: 0,
         currency: "BDT",
         isActive: true,
@@ -51839,12 +51866,39 @@ var init_db = __esm({
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       },
+      // Starter Tier (1m ৳990, 3m ৳2,820, 6m ৳5,350, 12m ৳10,100)
       {
         id: "price-starter-m",
         planId: "starter",
         billingInterval: "monthly",
         amount: 990,
         currency: "BDT",
+        savingsPercent: 0,
+        savingsAmount: 0,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-starter-q",
+        planId: "starter",
+        billingInterval: "quarterly",
+        amount: 2820,
+        currency: "BDT",
+        savingsPercent: 5,
+        savingsAmount: 150,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-starter-h",
+        planId: "starter",
+        billingInterval: "half_yearly",
+        amount: 5350,
+        currency: "BDT",
+        savingsPercent: 10,
+        savingsAmount: 590,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51853,20 +51907,47 @@ var init_db = __esm({
         id: "price-starter-y",
         planId: "starter",
         billingInterval: "yearly",
-        amount: 9900,
+        amount: 10100,
         currency: "BDT",
-        savingsPercent: 17,
-        savingsAmount: 1980,
+        savingsPercent: 15,
+        savingsAmount: 1780,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       },
+      // Pro Tier (1m ৳1,990, 3m ৳5,670, 6m ৳10,750, 12m ৳20,300)
       {
         id: "price-pro-m",
         planId: "pro",
         billingInterval: "monthly",
         amount: 1990,
         currency: "BDT",
+        savingsPercent: 0,
+        savingsAmount: 0,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-pro-q",
+        planId: "pro",
+        billingInterval: "quarterly",
+        amount: 5670,
+        currency: "BDT",
+        savingsPercent: 5,
+        savingsAmount: 300,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-pro-h",
+        planId: "pro",
+        billingInterval: "half_yearly",
+        amount: 10750,
+        currency: "BDT",
+        savingsPercent: 10,
+        savingsAmount: 1190,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51875,20 +51956,47 @@ var init_db = __esm({
         id: "price-pro-y",
         planId: "pro",
         billingInterval: "yearly",
-        amount: 19900,
+        amount: 20300,
         currency: "BDT",
-        savingsPercent: 17,
-        savingsAmount: 3980,
+        savingsPercent: 15,
+        savingsAmount: 3580,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
       },
+      // Japan Ready Tier (1m ৳3,990, 3m ৳11,370, 6m ৳21,550, 12m ৳40,700)
       {
         id: "price-jr-m",
         planId: "japan_ready",
         billingInterval: "monthly",
         amount: 3990,
         currency: "BDT",
+        savingsPercent: 0,
+        savingsAmount: 0,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-jr-q",
+        planId: "japan_ready",
+        billingInterval: "quarterly",
+        amount: 11370,
+        currency: "BDT",
+        savingsPercent: 5,
+        savingsAmount: 600,
+        isActive: true,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      },
+      {
+        id: "price-jr-h",
+        planId: "japan_ready",
+        billingInterval: "half_yearly",
+        amount: 21550,
+        currency: "BDT",
+        savingsPercent: 10,
+        savingsAmount: 2390,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51897,10 +52005,10 @@ var init_db = __esm({
         id: "price-jr-y",
         planId: "japan_ready",
         billingInterval: "yearly",
-        amount: 39900,
+        amount: 40700,
         currency: "BDT",
-        savingsPercent: 17,
-        savingsAmount: 7980,
+        savingsPercent: 15,
+        savingsAmount: 7180,
         isActive: true,
         createdAt: (/* @__PURE__ */ new Date()).toISOString(),
         updatedAt: (/* @__PURE__ */ new Date()).toISOString()
@@ -51924,7 +52032,7 @@ var init_db = __esm({
         discountType: "percent",
         discountValue: 50,
         applicablePlans: ["starter", "pro", "japan_ready"],
-        applicableIntervals: ["monthly", "yearly"],
+        applicableIntervals: ["monthly", "quarterly", "half_yearly", "yearly"],
         maxRedemptions: 100,
         currentRedemptions: 18,
         isActive: true,
@@ -54035,7 +54143,7 @@ var init_db = __esm({
       createSubscription(params) {
         this.assertProductionStorageSafety("createSubscription");
         const now = /* @__PURE__ */ new Date();
-        const periodMonths = params.billingInterval === "yearly" ? 12 : 1;
+        const periodMonths = params.billingInterval === "yearly" ? 12 : params.billingInterval === "half_yearly" ? 6 : params.billingInterval === "quarterly" ? 3 : 1;
         const periodStart = now.toISOString();
         const periodEndDate = new Date(now);
         periodEndDate.setMonth(periodEndDate.getMonth() + periodMonths);
@@ -60490,6 +60598,9 @@ async function verifySupabaseTokenAsync(token) {
   if (cached && Date.now() < cached.expiresAt) {
     return cached.user;
   }
+  if (!db.getSupabaseClient()) {
+    return null;
+  }
   try {
     const { getSupabaseAdminClient: getSupabaseAdminClient2 } = await Promise.resolve().then(() => (init_supabaseAuth(), supabaseAuth_exports));
     const supabase3 = getSupabaseAdminClient2();
@@ -65799,6 +65910,34 @@ var PaymentProviderFactory = class {
 init_coinWalletService();
 init_subscriptionService();
 var billingRouter = Router7();
+function getIntervalDurationMonths(interval) {
+  switch (interval) {
+    case "yearly":
+      return 12;
+    case "half_yearly":
+      return 6;
+    case "quarterly":
+      return 3;
+    case "monthly":
+    default:
+      return 1;
+  }
+}
+function resolveBasePlanAmount(plan, interval) {
+  const planPrice = db.getPlanPrice(plan.id, interval);
+  if (planPrice) return planPrice.amount;
+  switch (interval) {
+    case "yearly":
+      return plan.yearlyPrice;
+    case "half_yearly":
+      return plan.halfYearlyPrice ?? plan.monthlyPrice * 6;
+    case "quarterly":
+      return plan.quarterlyPrice ?? plan.monthlyPrice * 3;
+    case "monthly":
+    default:
+      return plan.monthlyPrice;
+  }
+}
 billingRouter.get("/plans", (req, res) => {
   try {
     const plans = db.getPlans();
@@ -65806,11 +65945,25 @@ billingRouter.get("/plans", (req, res) => {
     const enrichedPlans = plans.map((plan) => {
       const prices = planPrices.filter((p) => p.planId === plan.id);
       const monthly = prices.find((p) => p.billingInterval === "monthly");
+      const quarterly = prices.find((p) => p.billingInterval === "quarterly");
+      const halfYearly = prices.find((p) => p.billingInterval === "half_yearly");
       const yearly = prices.find((p) => p.billingInterval === "yearly");
       return {
         ...plan,
         prices: {
           monthly: monthly || { amount: plan.monthlyPrice, currency: "BDT" },
+          quarterly: quarterly || {
+            amount: plan.quarterlyPrice ?? plan.monthlyPrice * 3,
+            currency: "BDT",
+            savingsPercent: 5,
+            savingsAmount: Math.max(0, plan.monthlyPrice * 3 - (plan.quarterlyPrice ?? plan.monthlyPrice * 3))
+          },
+          half_yearly: halfYearly || {
+            amount: plan.halfYearlyPrice ?? plan.monthlyPrice * 6,
+            currency: "BDT",
+            savingsPercent: 10,
+            savingsAmount: Math.max(0, plan.monthlyPrice * 6 - (plan.halfYearlyPrice ?? plan.monthlyPrice * 6))
+          },
           yearly: yearly || {
             amount: plan.yearlyPrice,
             currency: "BDT",
@@ -65889,7 +66042,7 @@ billingRouter.post("/validate-coupon", authenticateUser2, (req, res) => {
     if (!plan) {
       return res.status(404).json({ error: "Selected plan not found." });
     }
-    const baseAmount = billingInterval === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
+    const baseAmount = resolveBasePlanAmount(plan, billingInterval);
     const result = db.validateAndCalculateCoupon(code, planId, billingInterval, baseAmount);
     if (!result.valid) {
       return res.status(400).json({ error: result.error || "Invalid coupon code." });
@@ -65927,7 +66080,7 @@ billingRouter.post("/checkout", authenticateUser2, async (req, res) => {
     if (!plan) {
       return res.status(404).json({ error: "Plan not found." });
     }
-    const baseAmount = billingInterval === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
+    const baseAmount = resolveBasePlanAmount(plan, billingInterval);
     let discountAmount = 0;
     let finalAmount = baseAmount;
     let validatedCouponCode = void 0;
@@ -65939,10 +66092,11 @@ billingRouter.post("/checkout", authenticateUser2, async (req, res) => {
         validatedCouponCode = couponCheck.coupon?.code;
       }
     }
+    const intervalLabel = billingInterval === "yearly" ? "Annual (12M)" : billingInterval === "half_yearly" ? "6 Months" : billingInterval === "quarterly" ? "3 Months" : "Monthly";
     const payment = db.createPayment({
       userId,
       planId,
-      planName: `${plan.name} (${billingInterval === "yearly" ? "Annual" : "Monthly"})`,
+      planName: `${plan.name} (${intervalLabel})`,
       billingInterval,
       amount: finalAmount,
       originalAmount: baseAmount,
@@ -66046,7 +66200,7 @@ billingRouter.post("/verify-payment", authenticateUser2, async (req, res) => {
       paidAt
     });
     let activeSub = db.getUserActiveSubscription(userId);
-    const monthsToAdd = payment.billingInterval === "yearly" ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
     if (activeSub && activeSub.planId === payment.planId) {
       activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd);
       db.updateSubscription(activeSub.id, {
@@ -66160,7 +66314,7 @@ async function handleBkashCallback(req, res) {
     const user = db.findUserById(payment.userId);
     const profile = db.getProfileByUserId(payment.userId);
     let activeSub = db.getUserActiveSubscription(payment.userId);
-    const monthsToAdd = payment.billingInterval === "yearly" ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
     if (activeSub && activeSub.planId === payment.planId) {
       activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd);
       db.updateSubscription(activeSub.id, {
@@ -66326,7 +66480,7 @@ billingRouter.post("/bkash/submit-manual-trxid", async (req, res) => {
         lastPaymentId: payment.id
       });
     } else {
-      const months = billingInterval === "yearly" ? 12 : 1;
+      const months = getIntervalDurationMonths(billingInterval);
       sub = db.extendSubscriptionPeriod(sub.id, months);
     }
     const user = db.findUserById(targetUserId);
@@ -66593,7 +66747,7 @@ billingRouter.post("/sslcommerz/success", async (req, res) => {
     const user = db.findUserById(payment.userId);
     const profile = db.getProfileByUserId(payment.userId);
     let activeSub = db.getUserActiveSubscription(payment.userId);
-    const monthsToAdd = payment.billingInterval === "yearly" ? 12 : 1;
+    const monthsToAdd = getIntervalDurationMonths(payment.billingInterval);
     if (activeSub && activeSub.planId === payment.planId) {
       activeSub = db.extendSubscriptionPeriod(activeSub.id, monthsToAdd);
       db.updateSubscription(activeSub.id, {

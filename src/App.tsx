@@ -859,7 +859,7 @@ export const App: React.FC = () => {
       {!isCanvasMode && !isJourneyMode && !isLandingMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
 
       {/* Official WhatsApp & Student Admission Helpline Widget */}
-      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <WhatsAppHelpline />}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && currentView !== 'practice' && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <InstallPWA />}

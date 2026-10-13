@@ -194,7 +194,9 @@ export const SEED_PLANS: Plan[] = [
     description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.',
     order: 2,
     monthlyPrice: 990,
-    yearlyPrice: 9900,
+    quarterlyPrice: 2820,
+    halfYearlyPrice: 5350,
+    yearlyPrice: 10100,
     currency: 'BDT',
     aiMonthlyLimit: 500,
     features: [
@@ -220,7 +222,9 @@ export const SEED_PLANS: Plan[] = [
     isRecommended: true,
     order: 3,
     monthlyPrice: 1990,
-    yearlyPrice: 19900,
+    quarterlyPrice: 5670,
+    halfYearlyPrice: 10750,
+    yearlyPrice: 20300,
     currency: 'BDT',
     aiMonthlyLimit: 1500,
     features: [
@@ -246,7 +250,9 @@ export const SEED_PLANS: Plan[] = [
     badge: 'Best Value',
     order: 4,
     monthlyPrice: 3990,
-    yearlyPrice: 39900,
+    quarterlyPrice: 11370,
+    halfYearlyPrice: 21550,
+    yearlyPrice: 40700,
     currency: 'BDT',
     aiMonthlyLimit: 4000,
     features: [
@@ -350,10 +356,31 @@ export const SEED_PLANS: Plan[] = [
 ];
 
 export const SEED_PLAN_PRICES: PlanPrice[] = [
+  // Free Tier
   {
     id: 'price-free-m',
     planId: 'free',
     billingInterval: 'monthly',
+    amount: 0,
+    currency: 'BDT',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-free-q',
+    planId: 'free',
+    billingInterval: 'quarterly',
+    amount: 0,
+    currency: 'BDT',
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-free-h',
+    planId: 'free',
+    billingInterval: 'half_yearly',
     amount: 0,
     currency: 'BDT',
     isActive: true,
@@ -370,12 +397,40 @@ export const SEED_PLAN_PRICES: PlanPrice[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
+
+  // Starter Tier (1m ৳990, 3m ৳2,820, 6m ৳5,350, 12m ৳10,100)
   {
     id: 'price-starter-m',
     planId: 'starter',
     billingInterval: 'monthly',
     amount: 990,
     currency: 'BDT',
+    savingsPercent: 0,
+    savingsAmount: 0,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-starter-q',
+    planId: 'starter',
+    billingInterval: 'quarterly',
+    amount: 2820,
+    currency: 'BDT',
+    savingsPercent: 5,
+    savingsAmount: 150,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-starter-h',
+    planId: 'starter',
+    billingInterval: 'half_yearly',
+    amount: 5350,
+    currency: 'BDT',
+    savingsPercent: 10,
+    savingsAmount: 590,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -384,20 +439,48 @@ export const SEED_PLAN_PRICES: PlanPrice[] = [
     id: 'price-starter-y',
     planId: 'starter',
     billingInterval: 'yearly',
-    amount: 9900,
+    amount: 10100,
     currency: 'BDT',
-    savingsPercent: 17,
-    savingsAmount: 1980,
+    savingsPercent: 15,
+    savingsAmount: 1780,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
+
+  // Pro Tier (1m ৳1,990, 3m ৳5,670, 6m ৳10,750, 12m ৳20,300)
   {
     id: 'price-pro-m',
     planId: 'pro',
     billingInterval: 'monthly',
     amount: 1990,
     currency: 'BDT',
+    savingsPercent: 0,
+    savingsAmount: 0,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-pro-q',
+    planId: 'pro',
+    billingInterval: 'quarterly',
+    amount: 5670,
+    currency: 'BDT',
+    savingsPercent: 5,
+    savingsAmount: 300,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-pro-h',
+    planId: 'pro',
+    billingInterval: 'half_yearly',
+    amount: 10750,
+    currency: 'BDT',
+    savingsPercent: 10,
+    savingsAmount: 1190,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -406,20 +489,48 @@ export const SEED_PLAN_PRICES: PlanPrice[] = [
     id: 'price-pro-y',
     planId: 'pro',
     billingInterval: 'yearly',
-    amount: 19900,
+    amount: 20300,
     currency: 'BDT',
-    savingsPercent: 17,
-    savingsAmount: 3980,
+    savingsPercent: 15,
+    savingsAmount: 3580,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
+
+  // Japan Ready Tier (1m ৳3,990, 3m ৳11,370, 6m ৳21,550, 12m ৳40,700)
   {
     id: 'price-jr-m',
     planId: 'japan_ready',
     billingInterval: 'monthly',
     amount: 3990,
     currency: 'BDT',
+    savingsPercent: 0,
+    savingsAmount: 0,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-jr-q',
+    planId: 'japan_ready',
+    billingInterval: 'quarterly',
+    amount: 11370,
+    currency: 'BDT',
+    savingsPercent: 5,
+    savingsAmount: 600,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'price-jr-h',
+    planId: 'japan_ready',
+    billingInterval: 'half_yearly',
+    amount: 21550,
+    currency: 'BDT',
+    savingsPercent: 10,
+    savingsAmount: 2390,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -428,10 +539,10 @@ export const SEED_PLAN_PRICES: PlanPrice[] = [
     id: 'price-jr-y',
     planId: 'japan_ready',
     billingInterval: 'yearly',
-    amount: 39900,
+    amount: 40700,
     currency: 'BDT',
-    savingsPercent: 17,
-    savingsAmount: 7980,
+    savingsPercent: 15,
+    savingsAmount: 7180,
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -456,7 +567,7 @@ export const SEED_COUPONS: Coupon[] = [
     discountType: 'percent',
     discountValue: 50,
     applicablePlans: ['starter', 'pro', 'japan_ready'],
-    applicableIntervals: ['monthly', 'yearly'],
+    applicableIntervals: ['monthly', 'quarterly', 'half_yearly', 'yearly'],
     maxRedemptions: 100,
     currentRedemptions: 18,
     isActive: true,
@@ -2938,7 +3049,10 @@ class Database {
   }): Subscription {
     this.assertProductionStorageSafety('createSubscription');
     const now = new Date();
-    const periodMonths = params.billingInterval === 'yearly' ? 12 : 1;
+    const periodMonths =
+      params.billingInterval === 'yearly' ? 12 :
+      params.billingInterval === 'half_yearly' ? 6 :
+      params.billingInterval === 'quarterly' ? 3 : 1;
     const periodStart = now.toISOString();
     const periodEndDate = new Date(now);
     periodEndDate.setMonth(periodEndDate.getMonth() + periodMonths);

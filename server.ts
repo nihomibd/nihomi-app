@@ -175,7 +175,6 @@ async function startServer() {
   app.use('/api/payment', paymentRouter);
   app.use('/api/billing', billingRouter);
   app.use('/api/learning', learningRouter);
-  app.use('/api', learningRouter);
   app.use('/api/quizzes', quizzesRouter);
   app.use('/api/work-japanese', workRouter);
   app.use('/api/ai', aiRouter);
@@ -207,7 +206,7 @@ async function startServer() {
   app.use('/api/dashboard', dashboardRouter);
   app.use('/api/me/dashboard', dashboardRouter);
   app.use('/api/cloud', cloudRouter);
-  app.use('/api/founder', founderRouter);
+  app.use('/api', learningRouter);
 
   // Public Institutional Certificate Verification Endpoint
   app.get('/api/public/verify-certificate/:certId', (req, res) => {

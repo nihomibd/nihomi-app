@@ -291,7 +291,7 @@ export interface AISession {
 
 export type PlanId = 'free' | 'starter' | 'pro' | 'japan_ready' | 'trip_7d' | 'trip_14d' | 'trip_30d' | 'n5_pro' | 'n5_lifetime' | 'lifetime';
 
-export type BillingInterval = 'monthly' | 'yearly';
+export type BillingInterval = 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
 
 export type SubscriptionStatus =
   | 'trialing'
@@ -349,10 +349,12 @@ export interface Plan {
   badge?: string; // 'Recommended' | 'Best Value' | 'Most Popular'
   isRecommended?: boolean;
   order: number;
-  monthlyPrice: number; // 0, 299, 599, 999
-  yearlyPrice: number; // 0, 2490, 4990, 8490
+  monthlyPrice: number; // 0, 990, 1990, 3990
+  quarterlyPrice?: number; // 2820, 5670, 11370
+  halfYearlyPrice?: number; // 5350, 10750, 21550
+  yearlyPrice: number; // 0, 10100, 20300, 40700
   currency: 'BDT';
-  aiMonthlyLimit: number; // Free: 10, Starter: 100, Pro: 1000 (fair use), Japan Ready: 3000
+  aiMonthlyLimit: number; // Free: 10, Starter: 500, Pro: 1500, Japan Ready: 4000
   features: string[];
   entitlements: EntitlementFeature[];
   isPublished: boolean;

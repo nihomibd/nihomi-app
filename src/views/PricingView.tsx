@@ -39,7 +39,7 @@ const N5_LIFETIME_PLAN: Plan = {
   displayNameJa: 'N5プロ・生涯アクセスパス',
   tagline: 'Complete JLPT N5 mastery with lifetime access',
   description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, Nihomi WorkOS™, and 180-Mark Mock Exams',
-  monthlyPrice: 599,
+  monthlyPrice: 1990,
   yearlyPrice: 4990,
   currency: 'BDT',
   badge: 'সর্বোচ্চ জনপ্রিয়',
@@ -60,9 +60,113 @@ const N5_LIFETIME_PLAN: Plan = {
   isPublished: true
 };
 
+const DEFAULT_PLANS: Plan[] = [
+  {
+    id: 'free',
+    name: 'Free',
+    displayNameJa: '無料プラン',
+    tagline: 'Essential starter kit for Japanese beginners',
+    description: 'Perfect for getting started with introductory N5 Japanese grammar, hiragana, and katakana.',
+    order: 1,
+    monthlyPrice: 0,
+    quarterlyPrice: 0,
+    halfYearlyPrice: 0,
+    yearlyPrice: 0,
+    currency: 'BDT',
+    aiMonthlyLimit: 10,
+    features: [
+      'N5 introductory lessons (Lessons 01-05 completely free) & all 46 Kana',
+      'Essential vocabulary & grammar previews',
+      'Basic practice quizzes',
+      '10 AI Coach interactions / month',
+      'Community learning support'
+    ],
+    entitlements: ['n5', 'quizzes', 'ai_coach'],
+    isPublished: true
+  },
+  {
+    id: 'starter',
+    name: 'Starter',
+    displayNameJa: 'スタータープラン',
+    tagline: 'Master JLPT N5 & N4 foundations with structured drills',
+    description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.',
+    order: 2,
+    monthlyPrice: 990,
+    quarterlyPrice: 2820,
+    halfYearlyPrice: 5350,
+    yearlyPrice: 10100,
+    currency: 'BDT',
+    aiMonthlyLimit: 500,
+    features: [
+      '500 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)',
+      'Full JLPT N5 & N4 curriculum unlocked',
+      'Complete Vocabulary, Grammar & Kanji decks',
+      'Full mastery quizzes with detailed breakdowns',
+      'Basic Keigo & polite expressions overview',
+      'Offline learning notes export'
+    ],
+    entitlements: ['n5', 'n4', 'quizzes', 'ai_coach'],
+    isPublished: true
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    displayNameJa: 'プロプラン',
+    tagline: 'The complete JLPT N5-N3 mastery & conversation system',
+    description: 'Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and 1,500 Nihomi Coins/month.',
+    badge: 'Recommended',
+    isRecommended: true,
+    isPopular: true,
+    order: 3,
+    monthlyPrice: 1990,
+    quarterlyPrice: 5670,
+    halfYearlyPrice: 10750,
+    yearlyPrice: 20300,
+    currency: 'BDT',
+    aiMonthlyLimit: 1500,
+    features: [
+      '1,500 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)',
+      'All N5, N4, and intermediate N3 courses',
+      'Unlimited interactive practice exercises',
+      'Japanese for Work & Business Keigo masterclasses',
+      'JLPT simulated mock exams & timer drills',
+      'Detailed grammar breakdown & instant sentence correction',
+      'Advanced progress analytics & retention tracker'
+    ],
+    entitlements: ['n5', 'n4', 'n3', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro'],
+    isPublished: true
+  },
+  {
+    id: 'japan_ready',
+    name: 'Japan Ready',
+    displayNameJa: '日本就労・移住特化プラン',
+    tagline: 'Everything you need for job interviews, visa, and life in Japan',
+    description: 'Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and 4,000 Nihomi Coins/month.',
+    badge: 'Best Value',
+    order: 4,
+    monthlyPrice: 3990,
+    quarterlyPrice: 11370,
+    halfYearlyPrice: 21550,
+    yearlyPrice: 40700,
+    currency: 'BDT',
+    aiMonthlyLimit: 4000,
+    features: [
+      '4,000 Nihomi Coins included / month (1 Coin = 1 Sensei Turn)',
+      'Everything included in Pro',
+      'Workplace Japanese, Email & Phone Japanese',
+      'Japanese Job Interview Simulation & Cultural Etiquette',
+      'Japan Living & Relocation practical Japanese guide',
+      'Official Nihomi Course Completion Certificates',
+      '1-on-1 curriculum consultation & priority support'
+    ],
+    entitlements: ['n5', 'n4', 'n3', 'quizzes', 'ai_coach', 'business_japanese', 'jlpt_pro', 'japan_ready', 'certificates', 'priority_ai'],
+    isPublished: true
+  }
+];
+
 export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNavigate }) => {
   const { user, activePlanId, refreshSubscription } = useAuth();
-  const [plans, setPlans] = useState<Plan[]>([]);
+  const [plans, setPlans] = useState<Plan[]>(DEFAULT_PLANS);
   const [interval, setInterval] = useState<JourneyInterval>('quarterly');
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<Plan | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -188,7 +292,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#121124] border border-zinc-200 dark:border-white/10 shadow-lg text-left max-w-3xl mx-auto my-5 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold text-zinc-500 dark:text-zinc-400">
               <span className="uppercase tracking-wider">তোমার পার্সোনালাইজড প্রিপারেশন পাথওয়ে:</span>
-              <span className="text-emerald-500 font-mono">100% Outcome Guaranteed</span>
+              <span className="text-emerald-500 font-mono">Structured Pathway • লক্ষ্যভিত্তিক প্রস্তুতি</span>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
@@ -218,96 +322,8 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             </div>
           </div>
 
-          {/* ======================================================== */}
-          {/* SPECIAL FEATURED PASS: N5 PRO LIFETIME (৳৪৯৯)             */}
-          {/* ======================================================== */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-950/60 via-zinc-900 to-amber-950/40 border-2 border-red-500 shadow-2xl p-6 sm:p-8 backdrop-blur-xl text-left my-6">
-            {/* Ambient Red Glow */}
-            <div className="pointer-events-none absolute -top-20 -right-20 w-72 h-72 bg-red-600/20 rounded-full blur-[80px]" />
-            
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="space-y-3 max-w-2xl">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-red-600 text-white shadow-md flex items-center gap-1.5">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <span>সর্বাধিক জনপ্রিয় লাইফটাইম অফার • ৬৭% বিশেষ ছাড়</span>
-                  </span>
-                  <span className="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
-                    N5 PRO LIFETIME PASS
-                  </span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                  JLPT N5 Pro সম্পূর্ণ মাস্টারক্লাস — আজীবন অ্যাক্সেস মাত্র ৳৪৯৯
-                </h2>
-
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-medium">
-                  কোনো মাসিক বা বাৎসরিক নবায়ন ফি নেই। একবার পেমেন্টেই আজীবন মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কোর্স, তোশিবা নেটিভ অডিও ল্যাব, টোকিও কনবিনি ক্যাশিয়ার এবং জাপান-স্ট্যান্ডার্ড JIS 履歴書 ও 職務経歴書 Pro PDF এক্সপোর্ট আনলক করুন।
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-200 pt-1">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>মিন্না নো নিহোঙ্গো ১–২৫ ও ১০০ কাঞ্জি ড্রয়িং</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>JIS規格 履歴書 ও 職務経歴書 Pro PDF এক্সপোর্ট</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>টোকিও কনবিনি ক্যাশিয়ার ও বাইতো জব ড্রিল</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>১৮০ মার্কসের ফুল অফিশিয়াল মক টেস্ট ও সার্টিফিকেট</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price & Checkout CTAs */}
-              <div className="lg:text-right flex flex-col justify-center items-start lg:items-end shrink-0 space-y-3 bg-black/50 p-5 rounded-2xl border border-white/10 w-full lg:w-auto">
-                <div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl sm:text-4xl font-black text-white">৳৪৯৯</span>
-                    <span className="text-sm text-zinc-400 line-through">৳১,৪৯৯</span>
-                  </div>
-                  <p className="text-[11px] text-emerald-400 font-bold">এককালীন ফি • আজীবন অ্যাক্সেস</p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row lg:flex-col gap-2 w-full">
-                  <button
-                    type="button"
-                    onClick={() => handleDirectBkashCheckout('n5_lifetime')}
-                    disabled={bkashLoadingPlan === 'n5_lifetime'}
-                    className="px-5 py-3 rounded-xl bg-[#e2136e] hover:bg-[#c90f61] text-white text-xs font-bold shadow-md shadow-pink-900/30 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
-                    id="btn-bkash-hero-n5-lifetime"
-                  >
-                    <Smartphone className="w-4 h-4" />
-                    <span>{bkashLoadingPlan === 'n5_lifetime' ? 'bKash লোড হচ্ছে...' : 'bKash দিয়ে সরাসরি পে করুন (৳৪৯৯)'}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleStartCheckout(N5_LIFETIME_PLAN)}
-                    className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-zinc-200 hover:text-white border border-white/15 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <span>ম্যানুয়াল পেমেন্ট (Send Money TrxID)</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Subtitle dividing section */}
-          <div className="pt-2 text-center">
-            <p className="text-xs sm:text-sm font-semibold text-zinc-600 dark:text-zinc-400">
-              অথবা আপনি যদি সকল লেভেল (N5, N4, N3, N2, N1) এর আনলিমিটেড অ্যাক্সেস চান, তবে নিচের অল-এক্সেস সাবস্ক্রিপশন প্ল্যানগুলো বেছে নিন:
-            </p>
-          </div>
-
           {/* Monthly / 3-Month / Annual Toggle */}
-          <div className="pt-4 flex items-center justify-center">
+          <div className="pt-2 flex items-center justify-center">
             <div className="bg-zinc-200 dark:bg-zinc-800 p-1.5 rounded-2xl flex flex-wrap items-center justify-center gap-1 shadow-inner">
               <button
                 type="button"
@@ -334,6 +350,21 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 <span>৩ মাস (12-Week N5 Pass)</span>
                 <span className="text-[10px] bg-amber-700 text-white px-2 py-0.5 rounded-full font-extrabold">
                   জনপ্রিয়
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInterval('half_yearly')}
+                className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
+                  interval === 'half_yearly'
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+                }`}
+                id="pricing-toggle-half-yearly"
+              >
+                <span>৬ মাস (Semi-Annual)</span>
+                <span className="text-[10px] bg-purple-700 text-white px-2 py-0.5 rounded-full font-extrabold">
+                  Save 10%
                 </span>
               </button>
               <button
@@ -642,9 +673,30 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                   <tr>
                     <th className="py-3 px-4">Feature / Curriculum</th>
                     <th className="py-3 px-3 text-center">Free (৳0)</th>
-                    <th className="py-3 px-3 text-center">Starter (৳299/mo)</th>
-                    <th className="py-3 px-3 text-center bg-red-500/5 text-red-600">Pro (৳599/mo)</th>
-                    <th className="py-3 px-3 text-center">Japan Ready (৳999/mo)</th>
+                    <th className="py-3 px-3 text-center">
+                      Starter (
+                      {interval === 'monthly' && '৳990/মাস'}
+                      {interval === 'quarterly' && '৳2,820 / ৩ মাস'}
+                      {interval === 'half_yearly' && '৳5,350 / ৬ মাস'}
+                      {interval === 'yearly' && '৳10,100 / ১২ মাস'}
+                      )
+                    </th>
+                    <th className="py-3 px-3 text-center bg-red-500/5 text-red-600">
+                      Pro (
+                      {interval === 'monthly' && '৳1,990/মাস'}
+                      {interval === 'quarterly' && '৳5,670 / ৩ মাস'}
+                      {interval === 'half_yearly' && '৳10,750 / ৬ মাস'}
+                      {interval === 'yearly' && '৳20,300 / ১২ মাস'}
+                      )
+                    </th>
+                    <th className="py-3 px-3 text-center">
+                      Japan Ready (
+                      {interval === 'monthly' && '৳3,990/মাস'}
+                      {interval === 'quarterly' && '৳11,370 / ৩ মাস'}
+                      {interval === 'half_yearly' && '৳21,550 / ৬ মাস'}
+                      {interval === 'yearly' && '৳40,700 / ১২ মাস'}
+                      )
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">

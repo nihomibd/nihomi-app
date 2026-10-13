@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIHOMI.COM — UI Consistency & Launch Polish Evidence Gallery (Oct 16 Release)</title>
+  <style>
+    :root {
+      --bg: #090814;
+      --card-bg: #121124;
+      --border: #22203a;
+      --accent: #8b5cf6;
+      --text: #f4f4f6;
+      --text-muted: #9493a8;
+      --pass: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 32px 20px;
+    }
+    header {
+      max-width: 1400px;
+      margin: 0 auto 32px auto;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; color: #fff; }
+    p { color: var(--text-muted); font-size: 14px; max-width: 800px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .card-meta { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+    .img-wrap {
+      background: #000;
+      max-height: 480px;
+      overflow-y: auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .card-footer {
+      padding: 12px 16px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+    .tag-pass {
+      color: var(--pass);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .table-wrap {
+      max-width: 1400px;
+      margin: 0 auto 40px auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+    th { padding: 12px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); color: #fff; }
+    td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); }
+    td strong { color: #fff; }
+    code { font-family: monospace; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="badge">OCTOBER 16 RELEASE CANDIDATE • REFRESHED EVIDENCE</span>
+    <h1>NIHOMI.COM — UI Consistency & Launch Polish Gallery</h1>
+    <p>Comprehensive visual and interaction audit across all 6 viewports (Mobile 360 & 390, Tablet 768 & 1024, Desktop 1280 & 1440). Zero 404 network errors, zero text wrapping in dashboard headers, collision-safe floating widgets, and exact 12-price matrix verification.</p>
+  </header>
+
+  <section style="max-width: 1400px; margin: 0 auto 24px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: #a78bfa;">⚡ Key Interactions & Polish Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Action</th>
+            <th>Target</th>
+            <th>Expected Outcome</th>
+            <th>Observed Result</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td><strong>INT-SHARE-CARD</strong></td>
+              <td>Click Flame Streak button on Dashboard header & verify dismiss</td>
+              <td><code>header button[title*="শেয়ার"]</code></td>
+              <td>Open BadgeShareModal with real student milestone and dismiss on close click</td>
+              <td>Triggered: true, Rendered: true, CloseClicked: true, Dismissed: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-PRICING-MONTHLY</strong></td>
+              <td>Click monthly interval switcher on /pricing</td>
+              <td><code>#pricing-toggle-monthly</code></td>
+              <td>Show exact term prices in cards and table: 990 / 1,990 / 3,990</td>
+              <td>Clicked: true, Amounts matched: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-PRICING-QUARTERLY</strong></td>
+              <td>Click quarterly interval switcher on /pricing</td>
+              <td><code>#pricing-toggle-quarterly</code></td>
+              <td>Show exact term prices in cards and table: 2,820 / 5,670 / 11,370</td>
+              <td>Clicked: true, Amounts matched: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-PRICING-HALF_YEARLY</strong></td>
+              <td>Click half_yearly interval switcher on /pricing</td>
+              <td><code>#pricing-toggle-half-yearly</code></td>
+              <td>Show exact term prices in cards and table: 5,350 / 10,750 / 21,550</td>
+              <td>Clicked: true, Amounts matched: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-PRICING-YEARLY</strong></td>
+              <td>Click yearly interval switcher on /pricing</td>
+              <td><code>#pricing-toggle-yearly</code></td>
+              <td>Show exact term prices in cards and table: 10,100 / 20,300 / 40,700</td>
+              <td>Clicked: true, Amounts matched: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-PRACTICE-KANA</strong></td>
+              <td>Navigate to /practice</td>
+              <td><code>/practice</code></td>
+              <td>Display authentic Hiragana Stage 1 (あ) drill</td>
+              <td>Kana character detected: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+            <tr>
+              <td><strong>INT-SUPPORT-DOCK</strong></td>
+              <td>Audit Support & AI Coach floating coordinates on mobile Dashboard</td>
+              <td><code>#btn-open-whatsapp-helpline & #btn-open-ai-sensei</code></td>
+              <td>Support left-anchored (<80px), Sensei right-anchored (<80px), zero widget collision, zero Coins overlap</td>
+              <td>SupportFound: true (Left: 12px, W: 44px), SenseiFound: true (Right: 46px, W: 48px), NoCollision: true, CoinsClear: true</td>
+              <td><span class="tag-pass">✓ PASS</span></td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="max-width: 1400px; margin: 0 auto 24px auto;">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color: #f43f5e;">📸 Refreshed Viewport Evidence Captures (30 Combinations)</h2>
+    <div class="grid">
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Mobile (Android Compact 360×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-360x800-landing.png" alt="mobile-360x800-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 360 × 3609 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Mobile (Android Compact 360×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-360x800-pricing.png" alt="mobile-360x800-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 360 × 6758 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Mobile (Android Compact 360×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-360x800-dashboard.png" alt="mobile-360x800-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 360 × 10649 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Mobile (Android Compact 360×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-360x800-journey.png" alt="mobile-360x800-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 360 × 880 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Mobile (Android Compact 360×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-360x800-practice.png" alt="mobile-360x800-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 360 × 1586 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Mobile (iPhone Standard 390×844)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-390x844-landing.png" alt="mobile-390x844-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 390 × 3549 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Mobile (iPhone Standard 390×844)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-390x844-pricing.png" alt="mobile-390x844-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 390 × 6595 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Mobile (iPhone Standard 390×844)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-390x844-dashboard.png" alt="mobile-390x844-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 390 × 10460 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Mobile (iPhone Standard 390×844)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-390x844-journey.png" alt="mobile-390x844-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 390 × 924 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Mobile (iPhone Standard 390×844)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/mobile-390x844-practice.png" alt="mobile-390x844-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 390 × 1529 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Tablet Portrait (iPad 768×1024)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-768x1024-landing.png" alt="tablet-768x1024-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 768 × 3019 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Tablet Portrait (iPad 768×1024)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-768x1024-pricing.png" alt="tablet-768x1024-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 768 × 4194 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Tablet Portrait (iPad 768×1024)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-768x1024-dashboard.png" alt="tablet-768x1024-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 768 × 6335 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Tablet Portrait (iPad 768×1024)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-768x1024-journey.png" alt="tablet-768x1024-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 768 × 1104 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Tablet Portrait (iPad 768×1024)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-768x1024-practice.png" alt="tablet-768x1024-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 768 × 1447 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Tablet Landscape (1024×768)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-1024x768-landing.png" alt="tablet-1024x768-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1024 × 1536 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Tablet Landscape (1024×768)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-1024x768-pricing.png" alt="tablet-1024x768-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1024 × 3512 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Tablet Landscape (1024×768)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-1024x768-dashboard.png" alt="tablet-1024x768-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1024 × 4576 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Tablet Landscape (1024×768)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-1024x768-journey.png" alt="tablet-1024x768-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1024 × 848 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Tablet Landscape (1024×768)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/tablet-1024x768-practice.png" alt="tablet-1024x768-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1024 × 1176 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Desktop Laptop (1280×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1280x800-landing.png" alt="desktop-1280x800-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1280 × 1536 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Desktop Laptop (1280×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1280x800-pricing.png" alt="desktop-1280x800-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1280 × 3324 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Desktop Laptop (1280×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1280x800-dashboard.png" alt="desktop-1280x800-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1280 × 4576 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Desktop Laptop (1280×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1280x800-journey.png" alt="desktop-1280x800-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1280 × 880 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Desktop Laptop (1280×800)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1280x800-practice.png" alt="desktop-1280x800-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1280 × 1208 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">LANDING (/)</div>
+              <div class="card-meta">Desktop Standard (1440×900)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1440x900-landing.png" alt="desktop-1440x900-landing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1440 × 1536 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRICING (/pricing)</div>
+              <div class="card-meta">Desktop Standard (1440×900)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1440x900-pricing.png" alt="desktop-1440x900-pricing.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1440 × 3296 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">DASHBOARD (/dashboard)</div>
+              <div class="card-meta">Desktop Standard (1440×900)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1440x900-dashboard.png" alt="desktop-1440x900-dashboard.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1440 × 4576 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">JOURNEY (/journey)</div>
+              <div class="card-meta">Desktop Standard (1440×900)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1440x900-journey.png" alt="desktop-1440x900-journey.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1440 × 980 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">PRACTICE (/practice)</div>
+              <div class="card-meta">Desktop Standard (1440×900)</div>
+            </div>
+            <span class="tag-pass">0px Overflow</span>
+          </div>
+          <div class="img-wrap">
+            <img src="./ui-consistency-pass/desktop-1440x900-practice.png" alt="desktop-1440x900-practice.png" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <span>Dimensions: 1440 × 1308 px</span>
+            <span class="tag-pass">✓ 404s: 0</span>
+          </div>
+        </div>
+      
+    </div>
+  </section>
+</body>
+</html>

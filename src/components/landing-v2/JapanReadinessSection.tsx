@@ -94,7 +94,8 @@ export const JapanReadinessSection: React.FC<JapanReadinessSectionProps> = ({ on
                       src={card.image}
                       alt={card.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                     />
                   </div>
 
