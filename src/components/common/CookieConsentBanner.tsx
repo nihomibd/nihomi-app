@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Cookie } from 'lucide-react';
+import { Cookie, X } from 'lucide-react';
 
 const CONSENT_KEY = 'nihomi_cookie_consent';
 
@@ -64,15 +64,27 @@ export const CookieConsentBanner: React.FC = () => {
               </p>
             </div>
 
-            {/* Accept Button */}
-            <button
-              type="button"
-              id="cookie-consent-accept-btn"
-              onClick={handleAccept}
-              className="shrink-0 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-[#141726] text-sm font-bold transition-all duration-150 shadow-lg shadow-amber-500/20 cursor-pointer"
-            >
-              সম্মত আছি
-            </button>
+            {/* Actions */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                id="cookie-consent-accept-btn"
+                onClick={handleAccept}
+                className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-[#141726] text-xs font-bold transition-all duration-150 shadow-md shadow-amber-500/20 cursor-pointer"
+              >
+                সম্মত আছি
+              </button>
+              <button
+                type="button"
+                id="cookie-consent-dismiss-btn"
+                onClick={handleAccept}
+                className="p-1.5 rounded-xl text-stone-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                title="বন্ধ করুন"
+                aria-label="Dismiss cookie notice"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </motion.div>
       )}

@@ -446,6 +446,125 @@
       "status": "NORMAL"
     }
   ],
+  "aiDepartmentStatuses": {
+    "AI COO": {
+      "id": "NHO-AI-001",
+      "name": "AI COO",
+      "role": "Chief Operating Officer",
+      "status": "RUNNING",
+      "activeTasksCount": 2,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Orchestrating departmental sprints and synthesizing morning briefs"
+    },
+    "AI CTO": {
+      "id": "NHO-AI-002",
+      "name": "AI CTO",
+      "role": "Chief Technology Officer",
+      "status": "RUNNING",
+      "activeTasksCount": 1,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Maintaining 99.9% uptime, zero-defect verification, and stateless JWTs"
+    },
+    "AI Product": {
+      "id": "NHO-AI-003",
+      "name": "AI Product",
+      "role": "Head of Product",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Refining BaitoOS and JLPT mock exam roadmaps"
+    },
+    "AI Content": {
+      "id": "NHO-AI-004",
+      "name": "AI Content",
+      "role": "Head of Curriculum & Content",
+      "status": "RUNNING",
+      "activeTasksCount": 1,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Structuring Minna no Nihongo N5 grammar and Kanji Furigana"
+    },
+    "AI Marketing": {
+      "id": "NHO-AI-005",
+      "name": "AI Marketing",
+      "role": "Head of Growth & Marketing",
+      "status": "RUNNING",
+      "activeTasksCount": 1,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Drafting Facebook educational reels and student referral funnels"
+    },
+    "AI Ads": {
+      "id": "NHO-AI-006",
+      "name": "AI Ads",
+      "role": "Performance Marketing Lead",
+      "status": "PAUSED",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Awaiting Founder approval for Q4 Meta campaign budget"
+    },
+    "AI Sales": {
+      "id": "NHO-AI-007",
+      "name": "AI Sales",
+      "role": "Admissions & Conversion Lead",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Assisting free trial learners with bKash upgrade milestones"
+    },
+    "AI Finance": {
+      "id": "NHO-AI-008",
+      "name": "AI Finance",
+      "role": "Financial Controller",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Reconciling bKash and Stripe transaction ledgers against MRR target"
+    },
+    "AI Operations": {
+      "id": "NHO-AI-009",
+      "name": "AI Operations",
+      "role": "Head of Business Operations",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Auditing SOP compliance and subscription lifecycle crons"
+    },
+    "AI Support": {
+      "id": "NHO-AI-010",
+      "name": "AI Support",
+      "role": "Head of Customer Success",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Resolving student queries in Bengali and English (CSAT 4.95)"
+    },
+    "AI QA/Security": {
+      "id": "NHO-AI-011",
+      "name": "AI QA/Security",
+      "role": "Chief Information Security Officer",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Zero secrets leaked, HMAC token validation active"
+    },
+    "AI Analytics": {
+      "id": "NHO-AI-012",
+      "name": "AI Analytics",
+      "role": "Head of Analytics",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Aggregating learner retention cohorts and telemetry"
+    },
+    "AI Japan Intelligence": {
+      "id": "NHO-AI-013",
+      "name": "AI Japan Intelligence",
+      "role": "Japan Relocation Intelligence Lead",
+      "status": "RUNNING",
+      "activeTasksCount": 0,
+      "lastActive": "2026-10-18T12:25:48.515Z",
+      "details": "Tracking Ministry of Justice Tokutei Ginou SSW job quotas"
+    }
+  },
   "founderEmergencyControls": {
     "stopAllAi": {
       "active": false,

@@ -1,0 +1,53 @@
+route_id,primary_path,primary_view,aliases,target_role,primary_cta,data_dependencies,loading_state,empty_state,error_state,owner_component,test_status
+R01,/,landing,"home, world, canvas, shibuya, classic",public,"শুরু করুন (Quick Calibration)",LandingContent,ViewLoadingFallback,HeroFallback,GlobalErrorBoundary,LandingView,VERIFIED
+R02,/journey,journey,mission,student,"পরের পাঠ শুরু করুন",CurriculumGraph,ViewLoadingFallback,EmptyJourneyPlaceholder,RouteRecoveryView,JourneyView,VERIFIED
+R03,/start,start,"ad-campaign, campaign, ad",public,"ক্যালিব্রেশন শুরু",OnboardingConfig,ViewLoadingFallback,EmptyStateDefault,RouteRecoveryView,AdCampaignView,VERIFIED
+R04,/growth,growth,"admin-growth, founder/growth",founder,"গ্রোথ মেট্রিক্স রিফ্রেশ",TelemetryAnalytics,ViewLoadingFallback,EmptyStateDefault,FounderGuardFallback,AdminGrowthView,VERIFIED
+R05,/dashboard,dashboard,"student-dashboard, portal-dashboard",student,"দৈনিক স্ট্রিক ও মিশন",UserProfile+Progress,ViewLoadingFallback,EmptyProgressState,RouteRecoveryView,DashboardView,VERIFIED
+R06,/courses,courses,"curriculum, pathways",public,"পাঠ্যক্রম অন্বেষণ করুন",CourseCatalog,ViewLoadingFallback,EmptyCourseCatalog,RouteRecoveryView,CoursesView,VERIFIED
+R07,/lesson,lesson,"practice, lesson-practice",student,"অনুশীলন যাচাই করুন",LessonModel+Questions,ViewLoadingFallback,EmptyLessonPlaceholder,RouteRecoveryView,LessonView,VERIFIED
+R08,/portal,portal,"portal-settings, portal-subscription",student,"প্রোফাইল আপডেট করুন",UserProfile,ViewLoadingFallback,EmptyProfileState,RouteRecoveryView,PortalView,VERIFIED
+R09,/credits,credits,,student,"ক্রেডিট রিচার্জ করুন",UserCreditsBalance,ViewLoadingFallback,EmptyCreditsState,RouteRecoveryView,AICreditsView,VERIFIED
+R10,/coordination,coordination,,institution,"শিক্ষার্থী যোগ করুন",BatchRoster,ViewLoadingFallback,EmptyRosterState,RouteRecoveryView,CoordinationHubView,VERIFIED
+R11,/documents,documents,,public,"পিডিএফ ডাউনলোড করুন",PracticeSheetsManifest,ViewLoadingFallback,EmptyDocsState,RouteRecoveryView,DocumentsView,VERIFIED
+R12,/terms,terms,terms-of-service,public,"শর্তাবলী পড়ুন",StaticContent,ViewLoadingFallback,None,RouteRecoveryView,TermsPage,VERIFIED
+R13,/privacy,privacy,privacy-policy,public,"নীতিমালা দেখুন",StaticContent,ViewLoadingFallback,None,RouteRecoveryView,PrivacyPage,VERIFIED
+R14,/refund-policy,refund-policy,"refund, refunds",public,"রিফান্ড নীতি পড়ুন",StaticContent,ViewLoadingFallback,None,RouteRecoveryView,RefundPolicyPage,VERIFIED
+R15,/contact,contact,support,public,"হোয়াটসঅ্যাপ হেল্পলাইন",SupportConfig,ViewLoadingFallback,None,RouteRecoveryView,ContactPage,VERIFIED
+R16,/signature,signature,email-signature,founder,"স্বাক্ষর জেনারেট করুন",StaffProfile,ViewLoadingFallback,EmptyStateDefault,RouteRecoveryView,EmailSignatureView,VERIFIED
+R17,/quizzes,quizzes,quiz,student,"কুইজ নির্বাচন করুন",QuizCatalog,ViewLoadingFallback,EmptyQuizList,RouteRecoveryView,QuizzesView,VERIFIED
+R18,/quiz-runner,quiz-runner,,student,"উত্তর জমা দিন",ActiveQuizSession,ViewLoadingFallback,EmptyQuizSession,RouteRecoveryView,QuizRunnerView,VERIFIED
+R19,/pricing,pricing,plans,public,"প্ল্যান নির্বাচন করুন",Canonical12Pricing,ViewLoadingFallback,None,RouteRecoveryView,PricingView,VERIFIED
+R20,/payment-callback,payment-callback,billing/callback,student,"পেমেন্ট যাচাই করুন",TransactionState,ViewLoadingFallback,EmptyTransactionState,RouteRecoveryView,PaymentCallbackView,VERIFIED
+R21,/login,login,signin,public,"লগইন করুন",AuthSession,ViewLoadingFallback,None,RouteRecoveryView,LoginView,VERIFIED
+R22,/auth,auth,"signup, register",public,"অ্যাকাউন্ট তৈরি করুন",AuthSession,ViewLoadingFallback,None,RouteRecoveryView,AuthView,VERIFIED
+R23,/reset-password,reset-password,,public,"পাসওয়ার্ড রিসেট",AuthRecovery,ViewLoadingFallback,None,RouteRecoveryView,ResetPasswordView,VERIFIED
+R24,/subscription,subscription,,student,"সাবস্ক্রিপশন পরিচালনা করুন",UserSubscription,ViewLoadingFallback,EmptySubscriptionState,RouteRecoveryView,SubscriptionManagementView,VERIFIED
+R25,/passport,passport,,student,"পাসপোর্ট স্ক্যান আপলোড",KYCState,ViewLoadingFallback,EmptyKYCState,RouteRecoveryView,PassportVerificationView,VERIFIED
+R26,/institution,institution,"academy, dils",institution,"ইনস্টিটিউশন ড্যাশবোর্ড",PartnerRoster,ViewLoadingFallback,EmptyPartnerState,RouteRecoveryView,InstitutionPortalView,VERIFIED
+R27,/founder,founder,"admin, command-center",founder,"সিস্টেম হেলথ চেক",SystemMetrics,ViewLoadingFallback,FounderUnauthorized,FounderGuardFallback,FounderCommandCenterView,VERIFIED
+R28,/content-studio,content-studio,,admin,"নতুন লেসন ড্রাফট",CurriculumEditor,ViewLoadingFallback,EmptyStudioState,RouteRecoveryView,ContentStudioView,VERIFIED
+R29,/curriculum-explorer,curriculum-explorer,"n5-curriculum, minna",public,"সিলেবাস ম্যাপ দেখুন",MinnaLatticeMap,ViewLoadingFallback,EmptyLatticeState,RouteRecoveryView,CurriculumExplorerView,VERIFIED
+R30,/leaderboard,leaderboard,"community, community-leaderboard, rankings",student,"র‍্যাঙ্কিং দেখুন",LeaderboardScoreboard,ViewLoadingFallback,EmptyLeaderboard,RouteRecoveryView,CommunityLeaderboardView,VERIFIED
+R31,/ghost-mode,ghost-mode,ghost,student,"ঘোস্ট ট্রেইনিং শুরু",AcceleratedSRS,ViewLoadingFallback,EmptyGhostState,RouteRecoveryView,GhostModeView,VERIFIED
+R32,/mock-exams,mock-exams,"mock-exam-hub, mock-tests",student,"মক টেস্ট শুরু করুন",MockExamCatalog,ViewLoadingFallback,EmptyMockCatalog,RouteRecoveryView,MockExamsView,VERIFIED
+R33,/mock-exam-runner,mock-exam-runner,mock-exam,student,"পরীক্ষা সম্পন্ন করুন",ActiveExamState,ViewLoadingFallback,EmptyExamState,RouteRecoveryView,MockExamRunnerView,VERIFIED
+R34,/study-plan,study-plan,"roadmap, study-planner",student,"স্টাডি প্ল্যান তৈরি করুন",TargetExamDate,ViewLoadingFallback,EmptyRoadmapState,RouteRecoveryView,StudyPlanRoadmapView,VERIFIED
+R35,/baito,baito,"baito-os, simulation, relocation, workos, work-os",student,"কনবিনি সিমুলেশন শুরু",ScenarioDialogueTree,ViewLoadingFallback,EmptyScenarioState,RouteRecoveryView,BaitoOsView,VERIFIED
+R36,/interview,interview,"interview-lab, visa-defense",student,"মক ইন্টারভিউ শুরু",InterviewPromptTree,ViewLoadingFallback,EmptyInterviewState,RouteRecoveryView,BaitoOsView,VERIFIED
+R37,/rirekisho,rirekisho,"cv-builder, resume, jis-rirekisho",student,"JIS রেজুমে এক্সপোর্ট",ResumeDataStore,ViewLoadingFallback,EmptyResumeState,RouteRecoveryView,JisRirekishoStudio,VERIFIED
+R38,/keirekisho,keirekisho,"shokumu, shokumu-keirekisho",student,"ক্যারিয়ার হিস্ট্রি সেভ",CareerHistoryStore,ViewLoadingFallback,EmptyCareerState,RouteRecoveryView,ShokumuKeirekishoStudio,VERIFIED
+R39,/verify-cert,verify-cert,"verify, certificate-verification",public,"সনদ যাচাই করুন",CertificateRegistry,ViewLoadingFallback,EmptyCertLookup,RouteRecoveryView,CertificateVerificationPage,VERIFIED
+R40,/kana,kana,"hiragana, katakana, kana-lab",public,"অক্ষর আঁকা অনুশীলন",KanaStrokeData,ViewLoadingFallback,EmptyKanaGrid,RouteRecoveryView,KanaView,VERIFIED
+R41,/kanji,kanji,"kanji-lab, kanji-100, n5-kanji",student,"কাঞ্জি কার্ড খুলুন",KanjiMasterCatalog,ViewLoadingFallback,EmptyKanjiGrid,RouteRecoveryView,KanjiView,VERIFIED
+R42,/listening,listening,"listening-lab, kaiwa, choukai",student,"অডিও শ্যাডোয়িং শুনুন",AudioTracksManifest,ViewLoadingFallback,EmptyAudioList,RouteRecoveryView,ListeningLabView,VERIFIED
+R43,/cloud,cloud,"nihomi-cloud, drive, locker",student,"ফাইল আপলোড করুন",UserCloudStorage,ViewLoadingFallback,EmptyDriveState,RouteRecoveryView,NihomiCloudView,VERIFIED
+R44,/showcase,showcase,"mockups, mobile-showcase",public,"মোবাইল প্রিভিউ দেখুন",StaticShowcaseData,ViewLoadingFallback,None,RouteRecoveryView,NihomiMobileShowcase,VERIFIED
+R45,/memory-os,memory-os,"memoryos, srs, memory",student,"রিভিউ কিউ শুরু করুন",SrsReviewQueue,ViewLoadingFallback,EmptyReviewQueue,RouteRecoveryView,MemoryOsView,VERIFIED
+R46,/japan-twin,japan-twin,"japantwin, twin",student,"টোকিও ম্যাপ এক্সপ্লোর",TwinMapCoordinates,ViewLoadingFallback,EmptyTwinState,RouteRecoveryView,JapanTwinView,VERIFIED
+R47,/profile,profile,"account, me",student,"তথ্য সেভ করুন",UserProfile,ViewLoadingFallback,EmptyProfileState,RouteRecoveryView,ProfileView,VERIFIED
+R48,/badges,badges,achievements,student,"অর্জনসমূহ দেখুন",UserBadgesCatalog,ViewLoadingFallback,EmptyBadgesState,RouteRecoveryView,BadgesView,VERIFIED
+R49,/progress,progress,"stats, telemetry",student,"বিশ্লেষণ দেখুন",LearningTelemetry,ViewLoadingFallback,EmptyTelemetryState,RouteRecoveryView,ProgressView,VERIFIED
+R50,/vocabulary,vocabulary,"vocab, words",student,"শব্দভাণ্ডার অনুসন্ধান",VocabDictionary,ViewLoadingFallback,EmptyVocabState,RouteRecoveryView,VocabularyView,VERIFIED
+R51,/ai-coach,ai-coach,"coach, tutor",student,"নমি সেন্সেইকে প্রশ্ন করুন",SenseiDialogueHistory,ViewLoadingFallback,EmptyCoachHistory,RouteRecoveryView,AICoachView,VERIFIED
+R52,/quiz-insights,quiz-insights,insights,student,"দুর্বলতা বিশ্লেষণ",QuizTelemetryMetrics,ViewLoadingFallback,EmptyInsightsState,RouteRecoveryView,QuizPerformanceInsightsView,VERIFIED

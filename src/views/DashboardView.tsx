@@ -17,7 +17,9 @@ import {
   Gift,
   Plus,
   ChevronRight,
-  Award
+  Award,
+  LogOut,
+  Eye
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AiSenseiModal } from '../features/student-dashboard/components/AiSenseiModal';
@@ -74,7 +76,7 @@ export const N5_CURRICULUM_PATHWAY: MilestoneLesson[] = [
 ];
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
-  const { user, progress, coinWallet } = useAuth();
+  const { user, progress, coinWallet, logout } = useAuth();
   const [isAiSenseiOpen, setIsAiSenseiOpen] = useState<boolean>(false);
   const [isPlacementOpen, setIsPlacementOpen] = useState<boolean>(false);
   const [isKonbiniModalOpen, setIsKonbiniModalOpen] = useState<boolean>(false);
@@ -229,21 +231,34 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
             <Flame className="w-3 h-3 fill-amber-500 text-amber-500" />
             <span className="font-mono font-bold">{streakDays}d</span>
           </button>
+          <button
+            type="button"
+            onClick={() => logout()}
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200/80 dark:bg-white/10 hover:bg-rose-500/15 hover:text-[#E45147] text-xs font-semibold text-slate-600 dark:text-stone-300 border border-slate-300/60 dark:border-white/10 cursor-pointer transition-colors"
+            title="লগআউট"
+          >
+            <LogOut className="w-3 h-3" />
+            <span className="hidden sm:inline">লগআউট</span>
+          </button>
         </div>
       </div>
 
       {/* Main Content Area */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-6 sm:space-y-8">
-        {/* Admin / Founder Banner */}
+        {/* Founder Preview Banner */}
         {(user?.role === 'admin' || user?.role === 'founder') && (
           <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/10 to-indigo-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-500 text-lg">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-500 text-lg shrink-0">
                 👑
               </div>
               <div>
-                <div className="text-xs font-bold text-amber-700 dark:text-amber-300">Executive Admin View Active</div>
-                <p className="text-[11px] text-slate-600 dark:text-stone-300">Viewing student profile and curriculum engine telemetry.</p>
+                <div className="text-xs font-bold text-amber-700 dark:text-amber-300">
+                  Founder Preview Mode (ফাউন্ডার প্রিভিউ মোড)
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-stone-300">
+                  Viewing learner experience as Founder • শিক্ষার্থী ইন্টারফেস প্রিভিউ
+                </p>
               </div>
             </div>
             <button
@@ -251,7 +266,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
               onClick={() => onNavigate?.('founder')}
               className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-amber-500/20 cursor-pointer shrink-0"
             >
-              <span>Founder Control Center →</span>
+              <span>Return to Founder HQ (ফাউন্ডার কমান্ড সেন্টার) →</span>
             </button>
           </div>
         )}
@@ -388,6 +403,64 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate }) => {
                 <span>প্লেসমেন্ট টেস্ট</span>
               </button>
             </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 2.5 THE CANONICAL N.I.H.O.M.I. LEARNING LOOP (PEDAGOGICAL ENGINE)         */}
+        {/* ========================================================================= */}
+        <section aria-label="N.I.H.O.M.I. Learning Loop" className="rounded-3xl bg-white dark:bg-[#1B1E30] border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-white/5 pb-3.5 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="w-8 h-8 rounded-xl bg-[#E45147]/10 border border-[#E45147]/20 flex items-center justify-center text-[#E45147] font-black text-xs">
+                N
+              </span>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>N.I.H.O.M.I. লার্নিং লুপ (The Learning Method)</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#6D7C55]/15 border border-[#6D7C55]/30 text-[#6D7C55] dark:text-emerald-400 text-[10px] font-bold">
+                    পেডাগজি গ্যারান্টি
+                  </span>
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-stone-400">
+                  প্রতিটি লেসনে ৬টি ধাপে জাপানিজ আয়ত্ত করার বৈজ্ঞানিক মেথডোলজি
+                </p>
+              </div>
+            </div>
+            <div className="text-[11px] font-mono text-slate-400 dark:text-stone-500">
+              ৬-ধাপ লার্নিং ফ্রেমওয়ার্ক
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { letter: 'N', title: 'Notice the scene', bn: 'দৃশ্য দেখো।', icon: Eye, color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20' },
+              { letter: 'I', title: 'Identify the task', bn: 'কাজটি চেনো।', icon: Target, color: 'text-rose-500', bg: 'bg-rose-500/10 border-rose-500/20' },
+              { letter: 'H', title: 'Hunt for signals', bn: 'Clue খোঁজো।', icon: Compass, color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20' },
+              { letter: 'O', title: 'Own your answer', bn: 'নিজে উত্তর দাও।', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+              { letter: 'M', title: 'Make meaning', bn: 'কারণ বোঝো।', icon: Sparkles, color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20' },
+              { letter: 'I', title: 'Improve & retry', bn: 'আবার চেষ্টা করো।', icon: RotateCcw, color: 'text-[#E45147]', bg: 'bg-[#E45147]/10 border-[#E45147]/20' },
+            ].map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <div key={idx} className="p-3.5 rounded-2xl bg-[#F6F0E6]/40 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 flex flex-col justify-between space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className={`w-7 h-7 rounded-xl border flex items-center justify-center font-black text-xs ${step.bg} ${step.color}`}>
+                      {step.letter}
+                    </span>
+                    <Icon className={`w-3.5 h-3.5 ${step.color} opacity-80`} />
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-slate-800 dark:text-white leading-tight">
+                      {step.title}
+                    </div>
+                    <div className="text-[11px] font-medium text-[#E45147] dark:text-rose-300 mt-0.5">
+                      {step.bn}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 

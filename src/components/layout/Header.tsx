@@ -492,7 +492,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   </button>
 
                   {activeDropdown === 'user' && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-2xl p-2 z-50 text-xs text-white/80 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-2rem)] rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-2xl p-2 z-50 text-xs text-white/80 animate-in fade-in zoom-in-95 duration-150">
                       <div className="px-3 py-2.5 border-b border-white/[0.08] flex items-center space-x-3 mb-1">
                         {user.avatarUrl ? (
                           <img
@@ -678,7 +678,41 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
       {/* 4. MOBILE DRAWER: ROLE-SPECIFIC FROSTED GLASS ACCORDION */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-[#141726]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2 text-xs animate-in slide-in-from-top-2">
+        <div className="lg:hidden bg-[#141726]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-3 pb-6 space-y-2 text-xs animate-in slide-in-from-top-2">
+          {/* User Profile & Quick Logout Ribbon at the top of drawer */}
+          {user && (
+            <div className="p-3 rounded-2xl bg-white/[0.06] border border-white/[0.12] flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt={user.name} className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-red-500 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-1 ring-white/20">
+                    {user.name.charAt(0)}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="font-bold text-white truncate text-xs">{user.name}</p>
+                  <p className="text-[10px] text-white/50 font-mono truncate">{user.email}</p>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full inline-block mt-0.5 ${isFounder ? 'bg-amber-500/20 text-amber-300' : 'bg-red-500/20 text-red-300'}`}>
+                    {isFounder ? '👑 Founder' : user.planId === 'pro' ? 'Pro Member' : 'Student'}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  logout();
+                }}
+                className="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 font-bold text-xs flex items-center gap-1.5 shrink-0 cursor-pointer transition-colors shadow-sm"
+                title="লগআউট"
+              >
+                <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                <span>লগআউট</span>
+              </button>
+            </div>
+          )}
+
           {isFounder ? (
             /* FOUNDER MOBILE MENU */
             <div className="space-y-1">

@@ -442,14 +442,28 @@ export const App: React.FC = () => {
       return;
     }
 
-    // If an authenticated Student attempts to access auxiliary founder routes, redirect to dashboard
-    if (isAuxiliaryFounderRoute && user && user.role !== 'admin' && user.role !== 'founder') {
+    // If an authenticated Student attempts to access auxiliary founder routes or executive gatekeeper routes, redirect to dashboard
+    if ((isAuxiliaryFounderRoute || isExecutiveGatekeeperRoute) && user && user.role !== 'admin' && user.role !== 'founder') {
       handleNavigate('dashboard');
       return;
     }
 
-    // If user is on login view and authenticated, route founder to founder workspace and students to dashboard
-    if (currentView === 'login' && user) {
+    // Role-based post-OAuth redirection: if user just completed OAuth login, send founder to founder HQ and student to dashboard/journey
+    if (user && typeof window !== 'undefined' && window.sessionStorage?.getItem('nihomi_just_logged_in_oauth') === 'true') {
+      window.sessionStorage.removeItem('nihomi_just_logged_in_oauth');
+      if (user.role === 'admin' || user.role === 'founder') {
+        handleNavigate('founder');
+        return;
+      } else {
+        if (currentView !== 'journey') {
+          handleNavigate('dashboard');
+          return;
+        }
+      }
+    }
+
+    // If user is on login or auth view and authenticated, route founder to founder workspace and students to dashboard
+    if ((currentView === 'login' || currentView === 'auth') && user) {
       if (user.role === 'admin' || user.role === 'founder') {
         handleNavigate('founder');
       } else {

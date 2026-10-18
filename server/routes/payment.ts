@@ -3,13 +3,35 @@ import { bKashService } from '../services/bKashService.js';
 import { sslCommerzService } from '../services/sslCommerzService.js';
 import { stripePaymentService } from '../services/stripePaymentService.js';
 import { subscriptionService, SUBSCRIPTION_TIERS, SubscriptionTier } from '../services/subscriptionService.js';
-import { getCanonicalPrice, validatePurchaseAmount } from '../services/canonicalPricing.js';
+import { getCanonicalPrice, validatePurchaseAmount, CANONICAL_SUBSCRIPTION_MATRIX } from '../services/canonicalPricing.js';
 import { optionalAuth } from '../middleware/auth.js';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
 
 export const paymentRouter = Router();
+
+function resolveTierAndIntervalFromAmount(amount: number): { tier: SubscriptionTier; interval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' } {
+  // Check exact canonical matrix matches
+  for (const [planId, planDef] of Object.entries(CANONICAL_SUBSCRIPTION_MATRIX)) {
+    for (const [intervalKey, termPricing] of Object.entries(planDef.terms)) {
+      if (termPricing.amountBdt === amount) {
+        return {
+          tier: planId as SubscriptionTier,
+          interval: intervalKey as 'monthly' | 'quarterly' | 'half_yearly' | 'yearly',
+        };
+      }
+    }
+  }
+
+  // Legacy or approximate threshold matching
+  if (amount >= 20000) return { tier: 'japan_ready', interval: 'yearly' };
+  if (amount >= 10000) return { tier: 'pro', interval: 'yearly' };
+  if (amount >= 4000) return { tier: 'n5_lifetime', interval: 'yearly' };
+  if (amount >= 3000) return { tier: 'japan_ready', interval: 'monthly' };
+  if (amount >= 1500) return { tier: 'pro', interval: 'monthly' };
+  return { tier: 'starter', interval: 'monthly' };
+}
 
 // ========================================================
 // 1. PUBLIC PLAN CATALOG
@@ -206,9 +228,13 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     // 3. Resolve tier and user info from stored payment metadata
     let resolvedUserId = execResult.payerReference || 'usr_student';
     let resolvedEmail = 'student@nihomi.com';
-    let resolvedTier: 'n5_pro' | 'n5_lifetime' = 'n5_pro';
-    const amount = Number(execResult.amount) || 599;
+    const amount = Number(execResult.amount) || 1990;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
+
+    // Canonical & threshold fallback
+    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
+    let resolvedTier: SubscriptionTier = resolvedFallback.tier;
+    let resolvedInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = resolvedFallback.interval;
 
     // Check Prisma Payment metadata if configured
     if (isDatabaseConfigured()) {
@@ -219,7 +245,8 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
         if (storedPayment) {
           resolvedUserId = storedPayment.userId;
           const meta = (storedPayment.metadata as any) || {};
-          if (meta.tier === 'n5_lifetime') resolvedTier = 'n5_lifetime';
+          if (meta.tier) resolvedTier = meta.tier as SubscriptionTier;
+          if (meta.interval) resolvedInterval = meta.interval;
           if (meta.userEmail) resolvedEmail = meta.userEmail;
         }
       } catch (err: any) {
@@ -232,14 +259,10 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     const memPayment = allMemPayments.find((p: any) => (p.metadata as any)?.paymentID === paymentID);
     if (memPayment) {
       resolvedUserId = memPayment.userId;
-      if (memPayment.planId === 'n5_lifetime') resolvedTier = 'n5_lifetime';
+      if (memPayment.planId) resolvedTier = memPayment.planId as SubscriptionTier;
+      if ((memPayment as any).billingInterval) resolvedInterval = (memPayment as any).billingInterval;
       const user = db.findUserById(resolvedUserId);
       if (user?.email) resolvedEmail = user.email;
-    }
-
-    // Fallback tier detection based on amount paid
-    if (amount >= 1400) {
-      resolvedTier = 'n5_lifetime';
     }
 
     // 4. Atomically activate user subscription in Prisma & Memory DB
@@ -247,6 +270,7 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
       userId: resolvedUserId,
       userEmail: resolvedEmail,
       tier: resolvedTier,
+      billingInterval: resolvedInterval,
       trxID: execResult.trxID,
       amount,
       paymentID,
@@ -294,18 +318,46 @@ paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, r
 
     let resolvedUserId = user?.id || execResult.payerReference || 'usr_student';
     let resolvedEmail = user?.email || 'student@nihomi.com';
-    let resolvedTier: 'n5_pro' | 'n5_lifetime' = 'n5_pro';
-    const amount = Number(execResult.amount) || 599;
+    const amount = Number(execResult.amount) || 1990;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
 
-    if (amount >= 1400) {
-      resolvedTier = 'n5_lifetime';
+    // Canonical & threshold fallback
+    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
+    let resolvedTier: SubscriptionTier = resolvedFallback.tier;
+    let resolvedInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = resolvedFallback.interval;
+
+    // Check Prisma Payment metadata if configured
+    if (isDatabaseConfigured()) {
+      try {
+        const storedPayment = await prisma.payment.findFirst({
+          where: { paymentID },
+        });
+        if (storedPayment) {
+          resolvedUserId = storedPayment.userId;
+          const meta = (storedPayment.metadata as any) || {};
+          if (meta.tier) resolvedTier = meta.tier as SubscriptionTier;
+          if (meta.interval) resolvedInterval = meta.interval;
+          if (meta.userEmail) resolvedEmail = meta.userEmail;
+        }
+      } catch (err: any) {
+        console.warn('[PaymentRouter Execute] Prisma metadata lookup warning:', err?.message);
+      }
+    }
+
+    // Check memory db if still needed
+    const allMemPayments = db.getAllPayments();
+    const memPayment = allMemPayments.find((p: any) => (p.metadata as any)?.paymentID === paymentID);
+    if (memPayment) {
+      resolvedUserId = memPayment.userId;
+      if (memPayment.planId) resolvedTier = memPayment.planId as SubscriptionTier;
+      if ((memPayment as any).billingInterval) resolvedInterval = (memPayment as any).billingInterval;
     }
 
     const activation = await subscriptionService.activateSubscription({
       userId: resolvedUserId,
       userEmail: resolvedEmail,
       tier: resolvedTier,
+      billingInterval: resolvedInterval,
       trxID: execResult.trxID,
       amount,
       paymentID,
@@ -399,24 +451,37 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
     },
     plans: [
       {
-        id: 'n5_pro',
-        nameBn: 'N5 প্রো (মাসিক)',
-        amountBdt: 599,
+        id: 'starter',
+        nameBn: 'নিহোমি Starter (মাসিক)',
+        amountBdt: 990,
         interval: 'monthly',
       },
       {
-        id: 'n5_milestone',
-        nameBn: 'N5 ৩ মাসের মাইলস্টোন পাস',
-        amountBdt: 1490,
+        id: 'pro',
+        nameBn: 'নিহোমি Pro (মাসিক - রেকমেন্ডেড)',
+        amountBdt: 1990,
+        interval: 'monthly',
+      },
+      {
+        id: 'pro_quarterly',
+        nameBn: 'নিহোমি Pro (৩ মাসের মাইলস্টোন)',
+        amountBdt: 5670,
         interval: 'quarterly',
       },
       {
-        id: 'n5_lifetime',
-        nameBn: 'N5 লাইফটাইম / বার্ষিক অল-অ্যাক্সেস',
-        amountBdt: 4990,
+        id: 'japan_ready',
+        nameBn: 'নিহোমি Japan Ready (মাসিক)',
+        amountBdt: 3990,
+        interval: 'monthly',
+      },
+      {
+        id: 'japan_ready_yearly',
+        nameBn: 'নিহোমি Japan Ready (বার্ষিক অল-অ্যাক্সেস)',
+        amountBdt: 40700,
         interval: 'yearly',
       },
     ],
+    matrix: CANONICAL_SUBSCRIPTION_MATRIX,
     stepsBn: [
       'আপনার bKash বা Nagad অ্যাপে যান এবং "Send Money" নির্বাচন করুন।',
       'আমাদের অফিসিয়াল নম্বরে কাঙ্ক্ষিত প্ল্যানের সমপরিমাণ টাকা পাঠান (01834348966)।',
@@ -428,7 +493,16 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
 
 paymentRouter.post('/manual/submit', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { senderPhone, trxID, selectedPlan, paymentMethod = 'bkash', studentName, note } = req.body;
+    const {
+      senderPhone,
+      trxID,
+      selectedPlan,
+      paymentMethod = 'bkash',
+      studentName,
+      note,
+      billingInterval,
+      amount,
+    } = req.body;
     const user = req.user;
 
     const result = await subscriptionService.submitManualPayment({
@@ -436,6 +510,8 @@ paymentRouter.post('/manual/submit', optionalAuth, async (req: AuthenticatedRequ
       trxID,
       selectedPlan,
       paymentMethod,
+      billingInterval,
+      amount,
       userId: user?.id || (req.headers['x-user-id'] as string),
       userEmail: user?.email || req.body.email,
       studentName: studentName || user?.name || user?.displayName,
@@ -542,17 +618,29 @@ paymentRouter.post('/admin/verify', optionalAuth, async (req: AuthenticatedReque
     );
 
     if (action === 'approve') {
-      const planTier = (target?.planId === 'n5_lifetime' || req.body.planId === 'n5_lifetime') ? 'n5_lifetime' : 'n5_pro';
+      let planTier: SubscriptionTier = 'pro';
+      const rawPlan = (target?.planId || req.body.planId || '').toLowerCase();
+      if (rawPlan === 'starter') planTier = 'starter';
+      else if (rawPlan === 'japan_ready' || rawPlan === 'japanready' || rawPlan === 'japan_ready_yearly') planTier = 'japan_ready';
+      else if (rawPlan === 'n5_lifetime') planTier = 'n5_lifetime';
+      else if (rawPlan === 'n5_pro') planTier = 'n5_pro';
+      else planTier = 'pro';
+
+      let planInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = (target?.billingInterval || req.body.billingInterval || 'monthly');
+      if (rawPlan === 'pro_quarterly') planInterval = 'quarterly';
+      if (rawPlan === 'japan_ready_yearly' || rawPlan === 'n5_lifetime') planInterval = 'yearly';
+
       const targetUserId = target?.userId || req.body.userId || 'usr_student';
       const targetEmail = target?.studentEmail || req.body.email || `${target?.studentPhone || 'student'}@nihomi.com`;
       const finalTrxID = target?.trxId || lookupKey;
-      const amount = target?.amount || SUBSCRIPTION_TIERS[planTier].priceBdt;
+      const amount = target?.amount || (SUBSCRIPTION_TIERS[planTier]?.priceBdt || 1990);
 
       // 1. Activate subscription atomically
       const activation = await subscriptionService.activateSubscription({
         userId: targetUserId,
         userEmail: targetEmail,
         tier: planTier,
+        billingInterval: planInterval,
         trxID: finalTrxID,
         amount,
         paymentMethod: 'Manual bKash/Nagad (Admin Verified)',

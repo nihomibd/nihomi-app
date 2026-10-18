@@ -1340,7 +1340,7 @@ class Database {
 
     const adminUser: User = {
       id: 'usr-admin-01',
-      email: 'nihomibd@gmail.com',
+      email: 'mdtanvirkabirbiplob@gmail.com',
       passwordHash: adminPass.hash,
       passwordSalt: adminPass.salt,
       role: 'admin',
@@ -1350,11 +1350,11 @@ class Database {
 
     const adminProfile: UserProfile = {
       userId: 'usr-admin-01',
-      displayName: 'Sensei Admin',
-      nativeLanguage: 'English',
-      targetLevel: 'N3',
+      displayName: 'Tanvir Kabir (Founder)',
+      nativeLanguage: 'Bengali',
+      targetLevel: 'N1',
       dailyGoalMinutes: 30,
-      bio: 'Head of Curriculum and Platform Operations at Nihomi.',
+      bio: 'Founder, Lead System Architect & Head of Platform Operations at Nihomi.',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -1387,7 +1387,7 @@ class Database {
     const studentProfile: UserProfile = {
       userId: 'usr-student-01',
       displayName: 'Kenji Explorer',
-      nativeLanguage: 'English',
+      nativeLanguage: 'Bengali',
       targetLevel: 'N5',
       dailyGoalMinutes: 20,
       bio: 'Excited to learn Japanese for moving to Tokyo!',
@@ -1436,10 +1436,10 @@ class Database {
       subscriptionId: 'sub-std-pro-01',
       invoiceId: 'inv-seed-01',
       planId: 'pro',
-      planName: 'Pro Annual Plan',
+      planName: 'Nihomi Pro Annual Subscription',
       billingInterval: 'yearly',
-      amount: 4990,
-      originalAmount: 4990,
+      amount: 20300,
+      originalAmount: 20300,
       discountAmount: 0,
       currency: 'BDT',
       provider: 'bkash',
@@ -1460,16 +1460,16 @@ class Database {
       userId: 'usr-student-01',
       subscriptionId: 'sub-std-pro-01',
       planId: 'pro',
-      planName: 'Pro (Annual Membership)',
+      planName: 'Nihomi Pro (Annual Membership)',
       invoiceType: 'subscription',
-      amount: 4990,
+      amount: 20300,
       currency: 'BDT',
       billingPeriod: `${periodStart.split('T')[0]} to ${periodEnd.split('T')[0]}`,
       paymentId: 'pay-seed-01',
       status: 'paid',
       customerName: 'Kenji Explorer',
       customerEmail: 'nihomibd@gmail.com',
-      subtotal: 4990,
+      subtotal: 20300,
       discount: 0,
       tax: 0,
       items: [
@@ -1477,9 +1477,9 @@ class Database {
           id: 'item-01',
           invoiceId: 'inv-seed-01',
           description: 'Nihomi Pro Annual Subscription (JLPT N5-N3, Business Keigo, AI Sensei)',
-          amount: 4990,
+          amount: 20300,
           quantity: 1,
-          unitPrice: 4990
+          unitPrice: 20300
         }
       ],
       paymentMethodName: 'bKash MFS (018*****321)',
@@ -4662,7 +4662,7 @@ class Database {
 
     const trials = subs.filter((s) => s.trialStart);
     const convertedTrials = subs.filter((s) => s.trialStart && s.status === 'active' && s.lastPaymentId);
-    const trialConversionRate = trials.length > 0 ? Math.round((convertedTrials.length / trials.length) * 100) : 68;
+    const trialConversionRate = trials.length > 0 ? Math.round((convertedTrials.length / trials.length) * 100) : 0;
 
     const failedPaymentsCount = (this.data.payments || []).filter((p) => p.status === 'failed').length;
     const pastDueAccountsCount = subs.filter((s) => s.status === 'past_due').length;

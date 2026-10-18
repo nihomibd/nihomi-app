@@ -49,7 +49,14 @@ founderRouter.get('/summary', (req: AuthenticatedRequest, res: Response) => {
       : 'NOT CONFIGURED';
 
     const allUsers = db.getAllUsers();
-    const studentUsers = allUsers.filter(u => u.role !== 'admin' && !isAdminEmail(u.email));
+    const seenEmailsSummary = new Set<string>();
+    const studentUsers = allUsers.filter(u => {
+      const email = (u.email || '').trim().toLowerCase();
+      if (!email || u.role === 'admin' || isAdminEmail(email)) return false;
+      if (seenEmailsSummary.has(email)) return false;
+      seenEmailsSummary.add(email);
+      return true;
+    });
     const totalStudents = studentUsers.length;
     const now = new Date();
     const thisMonthPrefix = now.toISOString().slice(0, 7);
@@ -702,8 +709,16 @@ founderRouter.get('/students', (req: AuthenticatedRequest, res: Response) => {
     const search = ((req.query.search as string) || '').trim().toLowerCase();
     const allUsers = db.getAllUsers();
     
-    const students = allUsers
-      .filter((u) => u.role !== 'admin' && !isAdminEmail(u.email))
+    const seenEmailsList = new Set<string>();
+    const uniqueUserList = allUsers.filter((u) => {
+      const email = (u.email || '').trim().toLowerCase();
+      if (!email || u.role === 'admin' || isAdminEmail(email)) return false;
+      if (seenEmailsList.has(email)) return false;
+      seenEmailsList.add(email);
+      return true;
+    });
+
+    const students = uniqueUserList
       .map((u) => {
         const profile = db.getProfileByUserId(u.id);
         const progress = db.getProgressByUserId(u.id);

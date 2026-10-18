@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { requireAuth, optionalAuth, AuthenticatedRequest } from '../authHelper.js';
+import { isAdminEmail, isFounderEmail } from '../env.js';
 import { LearnerAnalyticsService } from '../services/learnerAnalyticsService.js';
 
 export const analyticsRouter = Router();
@@ -259,7 +260,11 @@ analyticsRouter.get('/cohort', requireAuth, (req: AuthenticatedRequest, res) => 
 analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) => {
   try {
     const user = req.user;
-    const isFounderAuth = (user?.role as string) === 'founder' || user?.role === 'admin' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+    const isFounderAuth =
+      (user?.role as string) === 'founder' ||
+      user?.role === 'admin' ||
+      (user?.email && isFounderEmail(user.email)) ||
+      (user?.email && isAdminEmail(user.email));
 
     if (!isFounderAuth) {
       return res.status(401).json({
@@ -275,7 +280,16 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
     const referralRecords = (db as any).data?.referralRecords || [];
     const events: any[] = (db as any).data?.marketingEvents || [];
 
-    const totalRegistered = allUsers.length;
+    const seenEmails = new Set<string>();
+    const studentUsers = allUsers.filter((u: any) => {
+      const email = (u.email || '').trim().toLowerCase();
+      if (!email || u.role === 'admin' || isAdminEmail(email)) return false;
+      if (seenEmails.has(email)) return false;
+      seenEmails.add(email);
+      return true;
+    });
+
+    const totalRegistered = studentUsers.length;
 
     // Calculate lesson 1 completion
     const lesson1Completed = allProgress.filter((p: any) =>
@@ -329,8 +343,8 @@ analyticsRouter.get('/growth', optionalAuth, (req: AuthenticatedRequest, res) =>
       conversionRate: c.visitors > 0 ? Math.round((c.signups / c.visitors) * 100) : 0
     })).sort((a, b) => b.signups - a.signups);
 
-    // Build recent registrations stream from real users only
-    const recentRegistrations = [...allUsers]
+    // Build recent registrations stream from real students only
+    const recentRegistrations = [...studentUsers]
       .reverse()
       .slice(0, 15)
       .map((u: any, index: number) => {

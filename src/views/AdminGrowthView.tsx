@@ -32,6 +32,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { generateCampaignUrl } from '../utils/utm';
 import { billingApi } from '../lib/billingApi';
+import { apiRequest } from '../lib/api';
 
 interface AdminGrowthViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -97,8 +98,8 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const [summary, setSummary] = useState<GrowthSummary | null>(null);
   const [milestone, setMilestone] = useState<{ target: number; current: number; percent: number }>({
     target: 100,
-    current: 41,
-    percent: 41
+    current: 0,
+    percent: 0
   });
   const [topCampaigns, setTopCampaigns] = useState<CampaignMetric[]>([]);
   const [recentRegistrations, setRecentRegistrations] = useState<RecentRegistration[]>([]);
@@ -149,10 +150,15 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const fetchGrowthMetrics = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/analytics/growth');
-      const data = await res.json();
+      const data = await apiRequest<{
+        success: boolean;
+        summary: GrowthSummary;
+        milestone: { target: number; current: number; percent: number };
+        topCampaigns: CampaignMetric[];
+        recentRegistrations: RecentRegistration[];
+      }>('/api/analytics/growth');
 
-      if (data.success) {
+      if (data && data.success) {
         setSummary(data.summary);
         if (data.milestone) setMilestone(data.milestone);
         if (data.topCampaigns) setTopCampaigns(data.topCampaigns);
@@ -160,8 +166,8 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
         setLastRefreshedAt(new Date().toLocaleTimeString());
         setIsUnlocked(true);
       }
-    } catch {
-      // quiet fallback
+    } catch (err) {
+      console.error('Failed to load growth metrics:', err);
     } finally {
       setIsLoading(false);
     }
@@ -540,11 +546,11 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
               <Eye className="w-4 h-4 text-sky-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white font-mono">
-              {summary?.totalVisitors || 342}
+              {summary?.totalVisitors ?? 0}
             </div>
             <div className="text-[10px] text-emerald-400 font-semibold flex items-center space-x-1">
               <ArrowUpRight className="w-3 h-3" />
-              <span>+২৮% আজ বৃদ্ধি</span>
+              <span>লাইভ অ্যাড ক্লিকস</span>
             </div>
           </div>
 
@@ -555,7 +561,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
               <Users className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white font-mono">
-              {summary?.totalRegistered || 41}
+              {summary?.totalRegistered ?? 0}
             </div>
             <div className="text-[10px] text-emerald-400 font-semibold">
               সক্রিয় শিক্ষার্থী প্রোফাইল
@@ -569,10 +575,10 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
               <CheckCircle2 className="w-4 h-4 text-amber-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white font-mono">
-              {summary?.lesson1Completed || 29}
+              {summary?.lesson1Completed ?? 0}
             </div>
             <div className="text-[10px] text-amber-400 font-semibold">
-              অ্যাক্টিভেশন রেট: {summary?.activationRate || 71}%
+              অ্যাক্টিভেশন রেট: {summary?.activationRate ?? 0}%
             </div>
           </div>
 
@@ -583,7 +589,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
               <Share2 className="w-4 h-4 text-purple-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white font-mono">
-              {summary?.referralsClaimed || 12}
+              {summary?.referralsClaimed ?? 0}
             </div>
             <div className="text-[10px] text-purple-400 font-semibold">
               +৫০ কয়েন ও প্রো রিওয়ার্ড
@@ -597,7 +603,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
               <CreditCard className="w-4 h-4 text-rose-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white font-mono">
-              {summary?.paymentStarts || 18}
+              {summary?.paymentStarts ?? 0}
             </div>
             <div className="text-[10px] text-rose-400 font-semibold">
               bKash / SSLCommerz ইন্টেন্ট

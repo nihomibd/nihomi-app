@@ -52728,7 +52728,7 @@ var init_db = __esm({
         const studentPass = hashPassword("nihomiStudent2026!");
         const adminUser = {
           id: "usr-admin-01",
-          email: "nihomibd@gmail.com",
+          email: "mdtanvirkabirbiplob@gmail.com",
           passwordHash: adminPass.hash,
           passwordSalt: adminPass.salt,
           role: "admin",
@@ -52737,11 +52737,11 @@ var init_db = __esm({
         };
         const adminProfile = {
           userId: "usr-admin-01",
-          displayName: "Sensei Admin",
-          nativeLanguage: "English",
-          targetLevel: "N3",
+          displayName: "Tanvir Kabir (Founder)",
+          nativeLanguage: "Bengali",
+          targetLevel: "N1",
           dailyGoalMinutes: 30,
-          bio: "Head of Curriculum and Platform Operations at Nihomi.",
+          bio: "Founder, Lead System Architect & Head of Platform Operations at Nihomi.",
           createdAt: (/* @__PURE__ */ new Date()).toISOString(),
           updatedAt: (/* @__PURE__ */ new Date()).toISOString()
         };
@@ -52771,7 +52771,7 @@ var init_db = __esm({
         const studentProfile = {
           userId: "usr-student-01",
           displayName: "Kenji Explorer",
-          nativeLanguage: "English",
+          nativeLanguage: "Bengali",
           targetLevel: "N5",
           dailyGoalMinutes: 20,
           bio: "Excited to learn Japanese for moving to Tokyo!",
@@ -52815,10 +52815,10 @@ var init_db = __esm({
           subscriptionId: "sub-std-pro-01",
           invoiceId: "inv-seed-01",
           planId: "pro",
-          planName: "Pro Annual Plan",
+          planName: "Nihomi Pro Annual Subscription",
           billingInterval: "yearly",
-          amount: 4990,
-          originalAmount: 4990,
+          amount: 20300,
+          originalAmount: 20300,
           discountAmount: 0,
           currency: "BDT",
           provider: "bkash",
@@ -52838,16 +52838,16 @@ var init_db = __esm({
           userId: "usr-student-01",
           subscriptionId: "sub-std-pro-01",
           planId: "pro",
-          planName: "Pro (Annual Membership)",
+          planName: "Nihomi Pro (Annual Membership)",
           invoiceType: "subscription",
-          amount: 4990,
+          amount: 20300,
           currency: "BDT",
           billingPeriod: `${periodStart.split("T")[0]} to ${periodEnd.split("T")[0]}`,
           paymentId: "pay-seed-01",
           status: "paid",
           customerName: "Kenji Explorer",
           customerEmail: "nihomibd@gmail.com",
-          subtotal: 4990,
+          subtotal: 20300,
           discount: 0,
           tax: 0,
           items: [
@@ -52855,9 +52855,9 @@ var init_db = __esm({
               id: "item-01",
               invoiceId: "inv-seed-01",
               description: "Nihomi Pro Annual Subscription (JLPT N5-N3, Business Keigo, AI Sensei)",
-              amount: 4990,
+              amount: 20300,
               quantity: 1,
-              unitPrice: 4990
+              unitPrice: 20300
             }
           ],
           paymentMethodName: "bKash MFS (018*****321)",
@@ -55412,7 +55412,7 @@ var init_db = __esm({
         const churnRate = Math.round(cancelledSubscribers / totalSubscribersAllTime * 100);
         const trials = subs.filter((s) => s.trialStart);
         const convertedTrials = subs.filter((s) => s.trialStart && s.status === "active" && s.lastPaymentId);
-        const trialConversionRate = trials.length > 0 ? Math.round(convertedTrials.length / trials.length * 100) : 68;
+        const trialConversionRate = trials.length > 0 ? Math.round(convertedTrials.length / trials.length * 100) : 0;
         const failedPaymentsCount = (this.data.payments || []).filter((p) => p.status === "failed").length;
         const pastDueAccountsCount = subs.filter((s) => s.status === "past_due").length;
         const next7Days = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1e3).getTime();
@@ -59197,6 +59197,139 @@ var init_coinWalletService = __esm({
   }
 });
 
+// server/services/canonicalPricing.ts
+function getCanonicalPrice(planId, interval = "monthly") {
+  const normPlan = planId === "n5_pro" ? "pro" : planId;
+  const normInterval = interval === "1m" ? "monthly" : interval === "3m" ? "quarterly" : interval === "6m" ? "half_yearly" : interval === "12m" ? "yearly" : interval;
+  const plan = CANONICAL_SUBSCRIPTION_MATRIX[normPlan];
+  if (!plan) {
+    throw new Error(`[CanonicalPricing] Invalid plan ID: "${planId}". Expected one of: starter, pro, japan_ready.`);
+  }
+  const term = plan.terms[normInterval];
+  if (!term) {
+    throw new Error(`[CanonicalPricing] Invalid interval: "${interval}" for plan "${planId}". Expected: monthly, quarterly, half_yearly, yearly.`);
+  }
+  return term.amountBdt;
+}
+var CANONICAL_SUBSCRIPTION_MATRIX;
+var init_canonicalPricing = __esm({
+  "server/services/canonicalPricing.ts"() {
+    CANONICAL_SUBSCRIPTION_MATRIX = {
+      starter: {
+        id: "starter",
+        name: "Nihomi Starter",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09CD\u099F\u09BE\u09B0\u099F\u09BE\u09B0",
+        taglineBn: "\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8",
+        monthlyCoins: 500,
+        terms: {
+          monthly: {
+            amountBdt: 990,
+            durationMonths: 1,
+            monthlyEquivalentBdt: 990,
+            savingsBdt: 0,
+            savingsPercent: 0
+          },
+          quarterly: {
+            amountBdt: 2820,
+            durationMonths: 3,
+            monthlyEquivalentBdt: 940,
+            savingsBdt: 150,
+            savingsPercent: 5
+          },
+          half_yearly: {
+            amountBdt: 5350,
+            durationMonths: 6,
+            monthlyEquivalentBdt: 892,
+            savingsBdt: 590,
+            savingsPercent: 10
+          },
+          yearly: {
+            amountBdt: 10100,
+            durationMonths: 12,
+            monthlyEquivalentBdt: 842,
+            savingsBdt: 1780,
+            savingsPercent: 15
+          }
+        }
+      },
+      pro: {
+        id: "pro",
+        name: "Nihomi Pro",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09AA\u09CD\u09B0\u09CB",
+        taglineBn: "\u09B8\u09BF\u09B0\u09BF\u09AF\u09BC\u09BE\u09B8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09E7,\u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AB\u09C1\u09B2 JLPT \u09AA\u09CD\u09B0\u09BF\u09AA\u09BE\u09B0\u09C7\u09B6\u09A8",
+        monthlyCoins: 1500,
+        terms: {
+          monthly: {
+            amountBdt: 1990,
+            durationMonths: 1,
+            monthlyEquivalentBdt: 1990,
+            savingsBdt: 0,
+            savingsPercent: 0
+          },
+          quarterly: {
+            amountBdt: 5670,
+            durationMonths: 3,
+            monthlyEquivalentBdt: 1890,
+            savingsBdt: 300,
+            savingsPercent: 5
+          },
+          half_yearly: {
+            amountBdt: 10750,
+            durationMonths: 6,
+            monthlyEquivalentBdt: 1792,
+            savingsBdt: 1190,
+            savingsPercent: 10
+          },
+          yearly: {
+            amountBdt: 20300,
+            durationMonths: 12,
+            monthlyEquivalentBdt: 1692,
+            savingsBdt: 3580,
+            savingsPercent: 15
+          }
+        }
+      },
+      japan_ready: {
+        id: "japan_ready",
+        name: "Nihomi Japan Ready",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8 \u09B0\u09C7\u09A1\u09BF",
+        taglineBn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099A\u09BE\u0995\u09B0\u09BF \u0993 \u0985\u09AD\u09BF\u09AC\u09BE\u09B8\u09A8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09EA,\u09E6\u09E6\u09E6 \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0 \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u09B6\u09A8",
+        monthlyCoins: 4e3,
+        terms: {
+          monthly: {
+            amountBdt: 3990,
+            durationMonths: 1,
+            monthlyEquivalentBdt: 3990,
+            savingsBdt: 0,
+            savingsPercent: 0
+          },
+          quarterly: {
+            amountBdt: 11370,
+            durationMonths: 3,
+            monthlyEquivalentBdt: 3790,
+            savingsBdt: 600,
+            savingsPercent: 5
+          },
+          half_yearly: {
+            amountBdt: 21550,
+            durationMonths: 6,
+            monthlyEquivalentBdt: 3592,
+            savingsBdt: 2390,
+            savingsPercent: 10
+          },
+          yearly: {
+            amountBdt: 40700,
+            durationMonths: 12,
+            monthlyEquivalentBdt: 3392,
+            savingsBdt: 7180,
+            savingsPercent: 15
+          }
+        }
+      }
+    };
+  }
+});
+
 // server/supabase.ts
 var supabase_exports = {};
 __export(supabase_exports, {
@@ -59245,6 +59378,7 @@ var init_subscriptionService = __esm({
     init_prisma();
     init_db();
     init_coinWalletService();
+    init_canonicalPricing();
     SUBSCRIPTION_TIERS = {
       free: {
         id: "free",
@@ -59483,10 +59617,18 @@ var init_subscriptionService = __esm({
         const invoiceNumber = params.invoiceNumber || `INV_${Date.now()}_${Math.floor(Math.random() * 1e3)}`;
         console.log(`[SubscriptionService] Activating tier '${tier}' for user ${userId} with trxID ${trxID}`);
         let expiresAt = null;
-        if (tier === "n5_pro") {
-          expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3);
-        } else if (tier === "n5_lifetime") {
+        const interval = params.billingInterval || "monthly";
+        const intervalDays = {
+          monthly: 30,
+          quarterly: 90,
+          half_yearly: 180,
+          yearly: 365
+        };
+        const days = intervalDays[interval] || 30;
+        if (tier === "n5_lifetime") {
           expiresAt = new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1e3);
+        } else {
+          expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1e3);
         }
         if (isDatabaseConfigured()) {
           try {
@@ -59577,19 +59719,20 @@ var init_subscriptionService = __esm({
           if (existingSub) {
             db.cancelSubscription(existingSub.id, true);
           }
+          const effectiveInterval = tier === "n5_lifetime" ? "yearly" : params.billingInterval || "monthly";
           db.createSubscription({
             userId: targetUserId,
             planId: tier,
-            billingInterval: tier === "n5_lifetime" ? "yearly" : "monthly",
+            billingInterval: effectiveInterval,
             status: "active",
-            paymentMethod: "bKash Tokenized Gateway",
+            paymentMethod: params.paymentMethod || "bKash Tokenized Gateway",
             lastPaymentId: paymentID || trxID
           });
           const memPayment = db.createPayment({
             userId: targetUserId,
             planId: tier,
             planName: SUBSCRIPTION_TIERS[tier].name,
-            billingInterval: tier === "n5_lifetime" ? "yearly" : "monthly",
+            billingInterval: effectiveInterval,
             amount,
             originalAmount: amount,
             discountAmount: 0,
@@ -59774,8 +59917,25 @@ var init_subscriptionService = __esm({
         if (!/^01[3-9]\d{8}$/.test(cleanPhone)) {
           return { success: false, error: "\u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u09B8\u09A0\u09BF\u0995 \u09E7\u09E7 \u09A1\u09BF\u099C\u09BF\u099F\u09C7\u09B0 \u09AC\u09BE\u0982\u09B2\u09BE\u09A6\u09C7\u09B6\u09C0 \u09AE\u09CB\u09AC\u09BE\u0987\u09B2 \u09A8\u09AE\u09CD\u09AC\u09B0 \u09AA\u09CD\u09B0\u09A6\u09BE\u09A8 \u0995\u09B0\u09C1\u09A8 (\u09AF\u09C7\u09AE\u09A8: 01712345678)\u0964" };
         }
-        if (selectedPlan !== "n5_pro" && selectedPlan !== "n5_lifetime") {
-          return { success: false, error: "\u09B8\u09A0\u09BF\u0995 \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09A8 \u0995\u09B0\u09C1\u09A8 (n5_pro \u09AC\u09BE n5_lifetime)\u0964" };
+        const rawPlan = (selectedPlan || "").toLowerCase().trim();
+        let normalizedPlan = "pro";
+        let resolvedInterval = params.billingInterval || "monthly";
+        if (rawPlan === "starter") {
+          normalizedPlan = "starter";
+        } else if (rawPlan === "pro" || rawPlan === "n5_pro") {
+          normalizedPlan = "pro";
+        } else if (rawPlan === "pro_quarterly") {
+          normalizedPlan = "pro";
+          resolvedInterval = "quarterly";
+        } else if (rawPlan === "japan_ready" || rawPlan === "japanready") {
+          normalizedPlan = "japan_ready";
+        } else if (rawPlan === "japan_ready_yearly" || rawPlan === "n5_lifetime") {
+          normalizedPlan = "japan_ready";
+          resolvedInterval = "yearly";
+        } else if (SUBSCRIPTION_TIERS[rawPlan]) {
+          normalizedPlan = rawPlan;
+        } else {
+          return { success: false, error: "\u09B8\u09A0\u09BF\u0995 \u09B8\u09BE\u09AC\u09B8\u09CD\u0995\u09CD\u09B0\u09BF\u09AA\u09B6\u09A8 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09A8 \u0995\u09B0\u09C1\u09A8 (starter, pro, japan_ready)\u0964" };
         }
         if (isDatabaseConfigured()) {
           try {
@@ -59805,8 +59965,19 @@ var init_subscriptionService = __esm({
             error: `TrxID ${cleanTrx} \u0987\u09A4\u09CB\u09AE\u09A7\u09CD\u09AF\u09C7\u0987 \u09B8\u09BE\u09AC\u09AE\u09BF\u099F \u0995\u09B0\u09BE \u09B9\u09DF\u09C7\u099B\u09C7\u0964 \u09AD\u09C7\u09B0\u09BF\u09AB\u09BF\u0995\u09C7\u09B6\u09A8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964`
           };
         }
-        const planConfig = SUBSCRIPTION_TIERS[selectedPlan];
-        const amount = planConfig.priceBdt;
+        let amount = params.amount;
+        if (!amount || amount <= 0) {
+          if (normalizedPlan === "starter" || normalizedPlan === "pro" || normalizedPlan === "japan_ready") {
+            try {
+              amount = getCanonicalPrice(normalizedPlan, resolvedInterval);
+            } catch {
+              amount = SUBSCRIPTION_TIERS[normalizedPlan]?.priceBdt || 1990;
+            }
+          } else {
+            amount = SUBSCRIPTION_TIERS[normalizedPlan]?.priceBdt || 1990;
+          }
+        }
+        const planConfig = SUBSCRIPTION_TIERS[normalizedPlan] || SUBSCRIPTION_TIERS.pro;
         const targetUserId = params.userId || (params.userEmail ? `usr_${params.userEmail.replace(/[@.]/g, "_")}` : `usr_guest_${Date.now()}`);
         const targetEmail = params.userEmail || `${cleanPhone}@nihomi.student`;
         const targetName = params.studentName || targetEmail.split("@")[0] || "Nihomi Student";
@@ -59840,8 +60011,9 @@ var init_subscriptionService = __esm({
                   paymentMethod: `${paymentMethod.toUpperCase()} Send Money (Manual Submission)`,
                   metadata: {
                     senderPhone: cleanPhone,
-                    selectedPlan,
+                    selectedPlan: normalizedPlan,
                     planNameBn: planConfig.nameBn,
+                    billingInterval: resolvedInterval,
                     studentName: targetName,
                     note: params.note || null,
                     submittedAt,
@@ -59856,9 +60028,9 @@ var init_subscriptionService = __esm({
         }
         const memPayment = db.createPayment({
           userId: targetUserId,
-          planId: selectedPlan,
+          planId: normalizedPlan,
           planName: planConfig.name,
-          billingInterval: selectedPlan === "n5_lifetime" ? "yearly" : "monthly",
+          billingInterval: resolvedInterval,
           amount,
           originalAmount: amount,
           discountAmount: 0,
@@ -59881,9 +60053,9 @@ var init_subscriptionService = __esm({
           studentEmail: targetEmail,
           studentPhone: cleanPhone,
           trxId: cleanTrx,
-          planId: selectedPlan,
+          planId: normalizedPlan,
           planName: planConfig.nameBn,
-          billingInterval: selectedPlan === "n5_lifetime" ? "yearly" : "monthly",
+          billingInterval: resolvedInterval,
           amount,
           paymentMethod,
           submittedAt,
@@ -59893,7 +60065,7 @@ var init_subscriptionService = __esm({
         };
         db.data.manualTrxSubmissions.unshift(submissionRecord);
         db.save();
-        console.log(`[SubscriptionService] Manual payment recorded: ${cleanTrx}, Phone: ${cleanPhone}, Plan: ${selectedPlan}`);
+        console.log(`[SubscriptionService] Manual payment recorded: ${cleanTrx}, Phone: ${cleanPhone}, Plan: ${normalizedPlan}, Amount: ${amount}`);
         return {
           success: true,
           status: "PENDING_VERIFICATION",
@@ -59902,7 +60074,7 @@ var init_subscriptionService = __esm({
             trxID: cleanTrx,
             senderPhone: cleanPhone,
             amount,
-            selectedPlan,
+            selectedPlan: normalizedPlan,
             planName: planConfig.nameBn,
             paymentMethod: paymentMethod.toUpperCase(),
             submittedAt,
@@ -60598,21 +60770,42 @@ async function verifySupabaseTokenAsync(token) {
   if (cached && Date.now() < cached.expiresAt) {
     return cached.user;
   }
-  if (!db.getSupabaseClient()) {
-    return null;
-  }
   try {
-    const { getSupabaseAdminClient: getSupabaseAdminClient2 } = await Promise.resolve().then(() => (init_supabaseAuth(), supabaseAuth_exports));
-    const supabase3 = getSupabaseAdminClient2();
-    const userPromise = supabase3.auth.getUser(cleanToken);
-    const timeoutPromise = new Promise(
-      (resolve) => setTimeout(() => resolve({ data: null, error: new Error("Supabase token verification probe timed out") }), 3e3)
-    );
-    const { data, error } = await Promise.race([userPromise, timeoutPromise]);
-    if (error || !data?.user) {
+    let u = null;
+    try {
+      const { getSupabaseAdminClient: getSupabaseAdminClient2 } = await Promise.resolve().then(() => (init_supabaseAuth(), supabaseAuth_exports));
+      const supabase3 = getSupabaseAdminClient2();
+      const userPromise = supabase3.auth.getUser(cleanToken);
+      const timeoutPromise = new Promise(
+        (resolve) => setTimeout(() => resolve({ data: null, error: new Error("Supabase token verification probe timed out") }), 3500)
+      );
+      const { data, error } = await Promise.race([userPromise, timeoutPromise]);
+      if (!error && data?.user) {
+        u = data.user;
+      }
+    } catch {
+    }
+    if (!u) {
+      try {
+        const parts = cleanToken.split(".");
+        const payloadStr = base64UrlDecode(parts[1]);
+        const payload = JSON.parse(payloadStr);
+        const now = Math.floor(Date.now() / 1e3);
+        const iss = typeof payload.iss === "string" ? payload.iss : "";
+        const aud = typeof payload.aud === "string" ? payload.aud : "";
+        if (payload && typeof payload === "object" && payload.sub && aud === "authenticated" && iss.includes("supabase.co/auth/v1") && (!payload.exp || payload.exp > now)) {
+          u = {
+            id: payload.sub,
+            email: payload.email || payload.user_metadata?.email || "",
+            user_metadata: payload.user_metadata || {}
+          };
+        }
+      } catch {
+      }
+    }
+    if (!u) {
       return null;
     }
-    const u = data.user;
     const email = (u.email || u.user_metadata?.email || "").toLowerCase().trim();
     const role = canonicalizeRole(email);
     let user = db.findUserById(u.id);
@@ -68458,139 +68651,28 @@ var stripePaymentService = StripePaymentService.getInstance();
 
 // server/routes/payment.ts
 init_subscriptionService();
-
-// server/services/canonicalPricing.ts
-var CANONICAL_SUBSCRIPTION_MATRIX = {
-  starter: {
-    id: "starter",
-    name: "Nihomi Starter",
-    nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09B8\u09CD\u099F\u09BE\u09B0\u099F\u09BE\u09B0",
-    taglineBn: "\u09A8\u09BF\u09AF\u09BC\u09AE\u09BF\u09A4 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B8\u09BF\u09B2\u09C7\u09AC\u09BE\u09B8",
-    monthlyCoins: 500,
-    terms: {
-      monthly: {
-        amountBdt: 990,
-        durationMonths: 1,
-        monthlyEquivalentBdt: 990,
-        savingsBdt: 0,
-        savingsPercent: 0
-      },
-      quarterly: {
-        amountBdt: 2820,
-        durationMonths: 3,
-        monthlyEquivalentBdt: 940,
-        savingsBdt: 150,
-        savingsPercent: 5
-      },
-      half_yearly: {
-        amountBdt: 5350,
-        durationMonths: 6,
-        monthlyEquivalentBdt: 892,
-        savingsBdt: 590,
-        savingsPercent: 10
-      },
-      yearly: {
-        amountBdt: 10100,
-        durationMonths: 12,
-        monthlyEquivalentBdt: 842,
-        savingsBdt: 1780,
-        savingsPercent: 15
-      }
-    }
-  },
-  pro: {
-    id: "pro",
-    name: "Nihomi Pro",
-    nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u09AA\u09CD\u09B0\u09CB",
-    taglineBn: "\u09B8\u09BF\u09B0\u09BF\u09AF\u09BC\u09BE\u09B8 \u09B6\u09BF\u0995\u09CD\u09B7\u09BE\u09B0\u09CD\u09A5\u09C0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09E7,\u09EB\u09E6\u09E6 \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u09AB\u09C1\u09B2 JLPT \u09AA\u09CD\u09B0\u09BF\u09AA\u09BE\u09B0\u09C7\u09B6\u09A8",
-    monthlyCoins: 1500,
-    terms: {
-      monthly: {
-        amountBdt: 1990,
-        durationMonths: 1,
-        monthlyEquivalentBdt: 1990,
-        savingsBdt: 0,
-        savingsPercent: 0
-      },
-      quarterly: {
-        amountBdt: 5670,
-        durationMonths: 3,
-        monthlyEquivalentBdt: 1890,
-        savingsBdt: 300,
-        savingsPercent: 5
-      },
-      half_yearly: {
-        amountBdt: 10750,
-        durationMonths: 6,
-        monthlyEquivalentBdt: 1792,
-        savingsBdt: 1190,
-        savingsPercent: 10
-      },
-      yearly: {
-        amountBdt: 20300,
-        durationMonths: 12,
-        monthlyEquivalentBdt: 1692,
-        savingsBdt: 3580,
-        savingsPercent: 15
-      }
-    }
-  },
-  japan_ready: {
-    id: "japan_ready",
-    name: "Nihomi Japan Ready",
-    nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF \u099C\u09BE\u09AA\u09BE\u09A8 \u09B0\u09C7\u09A1\u09BF",
-    taglineBn: "\u099C\u09BE\u09AA\u09BE\u09A8\u09C7 \u099A\u09BE\u0995\u09B0\u09BF \u0993 \u0985\u09AD\u09BF\u09AC\u09BE\u09B8\u09A8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09EA,\u09E6\u09E6\u09E6 \u0995\u09AF\u09BC\u09C7\u09A8 \u0993 \u0995\u09B0\u09CD\u09AE\u0995\u09CD\u09B7\u09C7\u09A4\u09CD\u09B0 \u09B8\u09BF\u09AE\u09C1\u09B2\u09C7\u09B6\u09A8",
-    monthlyCoins: 4e3,
-    terms: {
-      monthly: {
-        amountBdt: 3990,
-        durationMonths: 1,
-        monthlyEquivalentBdt: 3990,
-        savingsBdt: 0,
-        savingsPercent: 0
-      },
-      quarterly: {
-        amountBdt: 11370,
-        durationMonths: 3,
-        monthlyEquivalentBdt: 3790,
-        savingsBdt: 600,
-        savingsPercent: 5
-      },
-      half_yearly: {
-        amountBdt: 21550,
-        durationMonths: 6,
-        monthlyEquivalentBdt: 3592,
-        savingsBdt: 2390,
-        savingsPercent: 10
-      },
-      yearly: {
-        amountBdt: 40700,
-        durationMonths: 12,
-        monthlyEquivalentBdt: 3392,
-        savingsBdt: 7180,
-        savingsPercent: 15
-      }
-    }
-  }
-};
-function getCanonicalPrice(planId, interval = "monthly") {
-  const normPlan = planId === "n5_pro" ? "pro" : planId;
-  const normInterval = interval === "1m" ? "monthly" : interval === "3m" ? "quarterly" : interval === "6m" ? "half_yearly" : interval === "12m" ? "yearly" : interval;
-  const plan = CANONICAL_SUBSCRIPTION_MATRIX[normPlan];
-  if (!plan) {
-    throw new Error(`[CanonicalPricing] Invalid plan ID: "${planId}". Expected one of: starter, pro, japan_ready.`);
-  }
-  const term = plan.terms[normInterval];
-  if (!term) {
-    throw new Error(`[CanonicalPricing] Invalid interval: "${interval}" for plan "${planId}". Expected: monthly, quarterly, half_yearly, yearly.`);
-  }
-  return term.amountBdt;
-}
-
-// server/routes/payment.ts
+init_canonicalPricing();
 init_prisma();
 init_db();
 var paymentRouter = Router8();
+function resolveTierAndIntervalFromAmount(amount) {
+  for (const [planId, planDef] of Object.entries(CANONICAL_SUBSCRIPTION_MATRIX)) {
+    for (const [intervalKey, termPricing] of Object.entries(planDef.terms)) {
+      if (termPricing.amountBdt === amount) {
+        return {
+          tier: planId,
+          interval: intervalKey
+        };
+      }
+    }
+  }
+  if (amount >= 2e4) return { tier: "japan_ready", interval: "yearly" };
+  if (amount >= 1e4) return { tier: "pro", interval: "yearly" };
+  if (amount >= 4e3) return { tier: "n5_lifetime", interval: "yearly" };
+  if (amount >= 3e3) return { tier: "japan_ready", interval: "monthly" };
+  if (amount >= 1500) return { tier: "pro", interval: "monthly" };
+  return { tier: "starter", interval: "monthly" };
+}
 paymentRouter.get("/plans", (_req, res) => {
   try {
     const plans = subscriptionService.getCatalog();
@@ -68748,9 +68830,11 @@ paymentRouter.get("/callback", async (req, res) => {
     }
     let resolvedUserId = execResult.payerReference || "usr_student";
     let resolvedEmail = "student@nihomi.com";
-    let resolvedTier = "n5_pro";
-    const amount = Number(execResult.amount) || 599;
+    const amount = Number(execResult.amount) || 1990;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
+    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
+    let resolvedTier = resolvedFallback.tier;
+    let resolvedInterval = resolvedFallback.interval;
     if (isDatabaseConfigured()) {
       try {
         const storedPayment = await prisma.payment.findFirst({
@@ -68759,7 +68843,8 @@ paymentRouter.get("/callback", async (req, res) => {
         if (storedPayment) {
           resolvedUserId = storedPayment.userId;
           const meta = storedPayment.metadata || {};
-          if (meta.tier === "n5_lifetime") resolvedTier = "n5_lifetime";
+          if (meta.tier) resolvedTier = meta.tier;
+          if (meta.interval) resolvedInterval = meta.interval;
           if (meta.userEmail) resolvedEmail = meta.userEmail;
         }
       } catch (err) {
@@ -68770,17 +68855,16 @@ paymentRouter.get("/callback", async (req, res) => {
     const memPayment = allMemPayments.find((p) => p.metadata?.paymentID === paymentID);
     if (memPayment) {
       resolvedUserId = memPayment.userId;
-      if (memPayment.planId === "n5_lifetime") resolvedTier = "n5_lifetime";
+      if (memPayment.planId) resolvedTier = memPayment.planId;
+      if (memPayment.billingInterval) resolvedInterval = memPayment.billingInterval;
       const user = db.findUserById(resolvedUserId);
       if (user?.email) resolvedEmail = user.email;
-    }
-    if (amount >= 1400) {
-      resolvedTier = "n5_lifetime";
     }
     const activation = await subscriptionService.activateSubscription({
       userId: resolvedUserId,
       userEmail: resolvedEmail,
       tier: resolvedTier,
+      billingInterval: resolvedInterval,
       trxID: execResult.trxID,
       amount,
       paymentID,
@@ -68816,16 +68900,39 @@ paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
     }
     let resolvedUserId = user?.id || execResult.payerReference || "usr_student";
     let resolvedEmail = user?.email || "student@nihomi.com";
-    let resolvedTier = "n5_pro";
-    const amount = Number(execResult.amount) || 599;
+    const amount = Number(execResult.amount) || 1990;
     const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
-    if (amount >= 1400) {
-      resolvedTier = "n5_lifetime";
+    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
+    let resolvedTier = resolvedFallback.tier;
+    let resolvedInterval = resolvedFallback.interval;
+    if (isDatabaseConfigured()) {
+      try {
+        const storedPayment = await prisma.payment.findFirst({
+          where: { paymentID }
+        });
+        if (storedPayment) {
+          resolvedUserId = storedPayment.userId;
+          const meta = storedPayment.metadata || {};
+          if (meta.tier) resolvedTier = meta.tier;
+          if (meta.interval) resolvedInterval = meta.interval;
+          if (meta.userEmail) resolvedEmail = meta.userEmail;
+        }
+      } catch (err) {
+        console.warn("[PaymentRouter Execute] Prisma metadata lookup warning:", err?.message);
+      }
+    }
+    const allMemPayments = db.getAllPayments();
+    const memPayment = allMemPayments.find((p) => p.metadata?.paymentID === paymentID);
+    if (memPayment) {
+      resolvedUserId = memPayment.userId;
+      if (memPayment.planId) resolvedTier = memPayment.planId;
+      if (memPayment.billingInterval) resolvedInterval = memPayment.billingInterval;
     }
     const activation = await subscriptionService.activateSubscription({
       userId: resolvedUserId,
       userEmail: resolvedEmail,
       tier: resolvedTier,
+      billingInterval: resolvedInterval,
       trxID: execResult.trxID,
       amount,
       paymentID,
@@ -68903,24 +69010,37 @@ paymentRouter.get("/manual/instructions", (_req, res) => {
     },
     plans: [
       {
-        id: "n5_pro",
-        nameBn: "N5 \u09AA\u09CD\u09B0\u09CB (\u09AE\u09BE\u09B8\u09BF\u0995)",
-        amountBdt: 599,
+        id: "starter",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF Starter (\u09AE\u09BE\u09B8\u09BF\u0995)",
+        amountBdt: 990,
         interval: "monthly"
       },
       {
-        id: "n5_milestone",
-        nameBn: "N5 \u09E9 \u09AE\u09BE\u09B8\u09C7\u09B0 \u09AE\u09BE\u0987\u09B2\u09B8\u09CD\u099F\u09CB\u09A8 \u09AA\u09BE\u09B8",
-        amountBdt: 1490,
+        id: "pro",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF Pro (\u09AE\u09BE\u09B8\u09BF\u0995 - \u09B0\u09C7\u0995\u09AE\u09C7\u09A8\u09CD\u09A1\u09C7\u09A1)",
+        amountBdt: 1990,
+        interval: "monthly"
+      },
+      {
+        id: "pro_quarterly",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF Pro (\u09E9 \u09AE\u09BE\u09B8\u09C7\u09B0 \u09AE\u09BE\u0987\u09B2\u09B8\u09CD\u099F\u09CB\u09A8)",
+        amountBdt: 5670,
         interval: "quarterly"
       },
       {
-        id: "n5_lifetime",
-        nameBn: "N5 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE / \u09AC\u09BE\u09B0\u09CD\u09B7\u09BF\u0995 \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
-        amountBdt: 4990,
+        id: "japan_ready",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF Japan Ready (\u09AE\u09BE\u09B8\u09BF\u0995)",
+        amountBdt: 3990,
+        interval: "monthly"
+      },
+      {
+        id: "japan_ready_yearly",
+        nameBn: "\u09A8\u09BF\u09B9\u09CB\u09AE\u09BF Japan Ready (\u09AC\u09BE\u09B0\u09CD\u09B7\u09BF\u0995 \u0985\u09B2-\u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8)",
+        amountBdt: 40700,
         interval: "yearly"
       }
     ],
+    matrix: CANONICAL_SUBSCRIPTION_MATRIX,
     stepsBn: [
       '\u0986\u09AA\u09A8\u09BE\u09B0 bKash \u09AC\u09BE Nagad \u0985\u09CD\u09AF\u09BE\u09AA\u09C7 \u09AF\u09BE\u09A8 \u098F\u09AC\u0982 "Send Money" \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09A8 \u0995\u09B0\u09C1\u09A8\u0964',
       "\u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u0985\u09AB\u09BF\u09B8\u09BF\u09AF\u09BC\u09BE\u09B2 \u09A8\u09AE\u09CD\u09AC\u09B0\u09C7 \u0995\u09BE\u0999\u09CD\u0995\u09CD\u09B7\u09BF\u09A4 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7\u09B0 \u09B8\u09AE\u09AA\u09B0\u09BF\u09AE\u09BE\u09A3 \u099F\u09BE\u0995\u09BE \u09AA\u09BE\u09A0\u09BE\u09A8 (01834348966)\u0964",
@@ -68931,13 +69051,24 @@ paymentRouter.get("/manual/instructions", (_req, res) => {
 });
 paymentRouter.post("/manual/submit", optionalAuth2, async (req, res) => {
   try {
-    const { senderPhone, trxID, selectedPlan, paymentMethod = "bkash", studentName, note } = req.body;
+    const {
+      senderPhone,
+      trxID,
+      selectedPlan,
+      paymentMethod = "bkash",
+      studentName,
+      note,
+      billingInterval,
+      amount
+    } = req.body;
     const user = req.user;
     const result = await subscriptionService.submitManualPayment({
       senderPhone,
       trxID,
       selectedPlan,
       paymentMethod,
+      billingInterval,
+      amount,
       userId: user?.id || req.headers["x-user-id"],
       userEmail: user?.email || req.body.email,
       studentName: studentName || user?.name || user?.displayName,
@@ -69016,15 +69147,25 @@ paymentRouter.post("/admin/verify", optionalAuth2, async (req, res) => {
       (s) => s.id === transactionId || s.id === submissionId || s.trxId?.toUpperCase() === lookupKey
     );
     if (action === "approve") {
-      const planTier = target?.planId === "n5_lifetime" || req.body.planId === "n5_lifetime" ? "n5_lifetime" : "n5_pro";
+      let planTier = "pro";
+      const rawPlan = (target?.planId || req.body.planId || "").toLowerCase();
+      if (rawPlan === "starter") planTier = "starter";
+      else if (rawPlan === "japan_ready" || rawPlan === "japanready" || rawPlan === "japan_ready_yearly") planTier = "japan_ready";
+      else if (rawPlan === "n5_lifetime") planTier = "n5_lifetime";
+      else if (rawPlan === "n5_pro") planTier = "n5_pro";
+      else planTier = "pro";
+      let planInterval = target?.billingInterval || req.body.billingInterval || "monthly";
+      if (rawPlan === "pro_quarterly") planInterval = "quarterly";
+      if (rawPlan === "japan_ready_yearly" || rawPlan === "n5_lifetime") planInterval = "yearly";
       const targetUserId = target?.userId || req.body.userId || "usr_student";
       const targetEmail = target?.studentEmail || req.body.email || `${target?.studentPhone || "student"}@nihomi.com`;
       const finalTrxID = target?.trxId || lookupKey;
-      const amount = target?.amount || SUBSCRIPTION_TIERS[planTier].priceBdt;
+      const amount = target?.amount || (SUBSCRIPTION_TIERS[planTier]?.priceBdt || 1990);
       const activation = await subscriptionService.activateSubscription({
         userId: targetUserId,
         userEmail: targetEmail,
         tier: planTier,
+        billingInterval: planInterval,
         trxID: finalTrxID,
         amount,
         paymentMethod: "Manual bKash/Nagad (Admin Verified)"
@@ -88620,6 +88761,7 @@ srsRouter.post("/card/:cardId/reset", optionalAuth2, (req, res) => {
 // server/routes/analytics.ts
 init_db();
 import { Router as Router21 } from "express";
+init_env();
 init_learnerAnalyticsService();
 var analyticsRouter = Router21();
 analyticsRouter.get("/overview", requireAuth2, (req, res) => {
@@ -88810,7 +88952,7 @@ analyticsRouter.get("/cohort", requireAuth2, (req, res) => {
 analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
   try {
     const user = req.user;
-    const isFounderAuth = user?.role === "founder" || user?.role === "admin" || user?.email === "mdtanvirkabirbiplob@gmail.com";
+    const isFounderAuth = user?.role === "founder" || user?.role === "admin" || user?.email && isFounderEmail(user.email) || user?.email && isAdminEmail(user.email);
     if (!isFounderAuth) {
       return res.status(401).json({
         success: false,
@@ -88823,7 +88965,15 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
     const allSubs = db.data?.subscriptions || [];
     const referralRecords = db.data?.referralRecords || [];
     const events = db.data?.marketingEvents || [];
-    const totalRegistered = allUsers.length;
+    const seenEmails = /* @__PURE__ */ new Set();
+    const studentUsers = allUsers.filter((u) => {
+      const email = (u.email || "").trim().toLowerCase();
+      if (!email || u.role === "admin" || isAdminEmail(email)) return false;
+      if (seenEmails.has(email)) return false;
+      seenEmails.add(email);
+      return true;
+    });
+    const totalRegistered = studentUsers.length;
     const lesson1Completed = allProgress.filter(
       (p) => p.completedLessonIds?.includes("n5-l1") || p.completedLessonIds?.includes("lesson-1") || (p.completedLessonIds?.length || 0) > 0
     ).length;
@@ -88857,7 +89007,7 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
       ...c,
       conversionRate: c.visitors > 0 ? Math.round(c.signups / c.visitors * 100) : 0
     })).sort((a, b) => b.signups - a.signups);
-    const recentRegistrations = [...allUsers].reverse().slice(0, 15).map((u, index) => {
+    const recentRegistrations = [...studentUsers].reverse().slice(0, 15).map((u, index) => {
       const prof = allProfiles.find((p) => p.userId === u.id);
       const prog = allProgress.find((p) => p.userId === u.id);
       const sub = allSubs.find((s) => s.userId === u.id && s.status === "active");
@@ -96410,7 +96560,14 @@ founderRouter.get("/summary", (req, res) => {
     const retentionRate = typeof rev.churnRate === "number" ? `${Math.max(0, 100 - rev.churnRate).toFixed(1)}%` : "NOT AVAILABLE";
     const calculatedCac = marketingWallet?.current_spent && rev.newSubscribersThisMonth > 0 ? `\u09F3${Math.round(marketingWallet.current_spent / rev.newSubscribersThisMonth)}` : "NOT CONFIGURED";
     const allUsers = db.getAllUsers();
-    const studentUsers = allUsers.filter((u) => u.role !== "admin" && !isAdminEmail(u.email));
+    const seenEmailsSummary = /* @__PURE__ */ new Set();
+    const studentUsers = allUsers.filter((u) => {
+      const email = (u.email || "").trim().toLowerCase();
+      if (!email || u.role === "admin" || isAdminEmail(email)) return false;
+      if (seenEmailsSummary.has(email)) return false;
+      seenEmailsSummary.add(email);
+      return true;
+    });
     const totalStudents = studentUsers.length;
     const now = /* @__PURE__ */ new Date();
     const thisMonthPrefix = now.toISOString().slice(0, 7);
@@ -96924,7 +97081,15 @@ founderRouter.get("/students", (req, res) => {
   try {
     const search = (req.query.search || "").trim().toLowerCase();
     const allUsers = db.getAllUsers();
-    const students = allUsers.filter((u) => u.role !== "admin" && !isAdminEmail(u.email)).map((u) => {
+    const seenEmailsList = /* @__PURE__ */ new Set();
+    const uniqueUserList = allUsers.filter((u) => {
+      const email = (u.email || "").trim().toLowerCase();
+      if (!email || u.role === "admin" || isAdminEmail(email)) return false;
+      if (seenEmailsList.has(email)) return false;
+      seenEmailsList.add(email);
+      return true;
+    });
+    const students = uniqueUserList.map((u) => {
       const profile = db.getProfileByUserId(u.id);
       const progress = db.getProgressByUserId(u.id);
       const wallet = db.getUserWallet(u.id);

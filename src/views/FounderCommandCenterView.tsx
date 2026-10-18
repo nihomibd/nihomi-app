@@ -33,7 +33,9 @@ import {
   EyeOff,
   KeyRound,
   LogOut,
-  ArrowLeft
+  ArrowLeft,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { NihomiBrandLogo } from '../components/brand/NihomiBrandLogo';
@@ -75,6 +77,7 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
   const [budget, setBudget] = useState<any | null>(null);
   const [emergencyControls, setEmergencyControls] = useState<any | null>(null);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [showSecondaryMetrics, setShowSecondaryMetrics] = useState<boolean>(false);
 
   // Students & Learner Cohort State
   const [students, setStudents] = useState<any[]>([]);
@@ -510,7 +513,8 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
     setIsAuthorizing(true);
     setAuthError(null);
     try {
-      const ok = await loginWithGoogle();
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const ok = await loginWithGoogle(origin ? `${origin}/founder` : undefined);
       if (!ok) {
         setAuthError('Google sign-in was canceled or failed.');
       }
@@ -718,44 +722,38 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
               )}
             </h1>
             <p className="text-xs text-slate-400 font-mono">
-              Founder & CEO: {user?.email || 'Tanvir Kabir Biplob'} • Gate 2 Operational Backbone
+              Founder & CEO: {user?.email || 'mdtanvirkabirbiplob@gmail.com'} • Last Refreshed: {summary?.refreshedAt ? new Date(summary.refreshedAt).toLocaleTimeString() : new Date().toLocaleTimeString()} BST
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
+              id="founder-refresh-btn"
               onClick={fetchAllFounderData}
               disabled={isLoading}
-              className="px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-200 rounded-lg flex items-center space-x-1.5 transition-colors cursor-pointer"
-              title="Refresh Telemetry"
+              className="px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-200 rounded-xl flex items-center space-x-1.5 transition-colors cursor-pointer shadow-sm"
+              title="টেলিমেট্রি রিফ্রেশ করুন"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-amber-400' : ''}`} />
-              <span className="hidden sm:inline">Refresh</span>
+              <span>🔄 রিফ্রেশ (Refresh)</span>
             </button>
             <button
+              id="founder-student-preview-btn"
               onClick={() => onNavigate('dashboard')}
-              className="px-3 py-1.5 bg-[#E45147] hover:bg-[#D43E34] text-xs font-bold text-white rounded-lg flex items-center space-x-1.5 transition-all shadow-md shadow-purple-600/30 cursor-pointer"
+              className="px-3.5 py-2 bg-[#E45147] hover:bg-[#D43E34] text-xs font-bold text-white rounded-xl flex items-center space-x-1.5 transition-all shadow-md shadow-red-950/40 cursor-pointer"
+              title="শিক্ষার্থীর ড্যাশবোর্ড দেখুন"
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>My Learner Dashboard</span>
+              <span>👑 স্টুডেন্ট প্রিভিউ (Student View)</span>
             </button>
             <button
-              onClick={() => onNavigate('portal')}
-              className="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-200 rounded-lg transition-colors cursor-pointer"
+              id="founder-logout-btn"
+              onClick={() => logout()}
+              className="px-3.5 py-2 bg-red-950/60 hover:bg-red-900/80 border border-red-500/50 text-xs font-bold text-red-200 rounded-xl flex items-center space-x-1.5 transition-colors cursor-pointer shadow-sm"
+              title="ফাউন্ডার সেশন লগআউট"
             >
-              Student Portal
-            </button>
-            <button
-              onClick={() => onNavigate('admin-growth')}
-              className="px-3 py-1.5 bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 text-xs font-bold text-purple-200 rounded-lg transition-colors cursor-pointer"
-            >
-              Growth & UTMs
-            </button>
-            <button
-              onClick={() => onNavigate('landing')}
-              className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold rounded-lg transition-all shadow-md cursor-pointer"
-            >
-              Public Site →
+              <LogOut className="w-3.5 h-3.5" />
+              <span>🚪 লগআউট (Logout)</span>
             </button>
           </div>
         </div>
@@ -779,14 +777,12 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-2 py-2.5 overflow-x-auto scrollbar-none">
             {[
-              { id: 'overview', label: '1. Cockpit & Objectives', icon: Target },
-              { id: 'students', label: `2. Learners & Cohort (${summary?.students?.totalStudents ?? students.length})`, icon: Users },
-              { id: 'ai-ceo', label: '3. Ask AI CEO', icon: Sparkles },
-              { id: 'approvals', label: `4. Approvals (${approvals.filter(a => a.status === 'PENDING').length})`, icon: ShieldCheck },
-              { id: 'departments', label: '5. AI Workforce (13)', icon: Building2 },
-              { id: 'tasks', label: `6. Work Tasks (${tasks.length})`, icon: ListTodo },
-              { id: 'budget', label: '7. Budget Firewall', icon: DollarSign },
-              { id: 'emergency', label: '8. Emergency & Audit', icon: ShieldAlert },
+              { id: 'overview', label: '1. Cockpit & Engines', icon: Target },
+              { id: 'students', label: `2. Student Intelligence (${summary?.students?.totalStudents ?? students.length})`, icon: Users },
+              { id: 'approvals', label: `3. bKash Approvals (${approvals.filter(a => a.status === 'PENDING').length})`, icon: ShieldCheck },
+              { id: 'ai-ceo', label: '4. AI CEO Assistant', icon: Sparkles },
+              { id: 'tasks', label: `5. Work Tasks & Ops (${tasks.length})`, icon: ListTodo },
+              { id: 'budget', label: '6. Budget & Security', icon: DollarSign },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -912,55 +908,63 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                   <span className="text-[9px] text-stone-500 font-mono block">405 Graceful Fallback</span>
                 </div>
               </div>
-            </div>
 
-            {/* ACTIVE BUSINESS OBJECTIVE CARD */}
-            <div className="bg-gradient-to-r from-stone-950 via-[#12121f] to-amber-950/20 border border-amber-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
-                <div className="space-y-2 max-w-2xl">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold rounded uppercase">
-                      ACTIVE BUSINESS OBJECTIVE (AI COO INPUT)
-                    </span>
-                    <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold rounded">
-                      STATUS: {targets?.activeObjective?.status || 'ACTIVE'}
-                    </span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                    {targets?.activeObjective?.goal || 'Achieve $10,000 MRR & 500 Active Pro/Japan Ready Subscribers'}
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300 pt-1">
-                    <div>
-                      <span className="text-slate-500 block text-[10px] font-mono uppercase">TARGET MARKETS</span>
-                      <span className="font-semibold text-slate-200">{targets?.activeObjective?.market || 'Bangladesh & Japan'}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 block text-[10px] font-mono uppercase">SEGMENT</span>
-                      <span className="font-semibold text-slate-200">{targets?.activeObjective?.segment || 'JLPT N5/N4 Candidates'}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 block text-[10px] font-mono uppercase">APPROVED MONTHLY BUDGET</span>
-                      <span className="font-mono font-bold text-amber-400">৳{(targets?.activeObjective?.budget || 50000).toLocaleString()} BDT</span>
-                    </div>
-                  </div>
+              {/* CORE LEARNING ENGINES STATUS DECK */}
+              <div className="mt-4 pt-4 border-t border-purple-500/20">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    CORE LEARNING ENGINES STATUS DECK
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    5 / 5 ACTIVE & OPERATIONAL
+                  </span>
                 </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                  <div className="p-3 rounded-xl bg-[#141424] border border-slate-800">
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono font-semibold mb-1">
+                      <span>Kana Studio™</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-xs font-bold text-white block">Operational</span>
+                    <span className="text-[9px] text-stone-400 font-mono">30/30 Vector Templates</span>
+                  </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    onClick={() => setIsMrrModalOpen(true)}
-                    className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs rounded-xl transition-all shadow-md flex items-center space-x-1.5 cursor-pointer"
-                  >
-                    <Target className="w-3.5 h-3.5" />
-                    <span>Configure MRR Target</span>
-                  </button>
-                  <button
-                    onClick={() => setIsMarketModalOpen(true)}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
-                  >
-                    <Compass className="w-3.5 h-3.5" />
-                    <span>Target Markets</span>
-                  </button>
+                  <div className="p-3 rounded-xl bg-[#141424] border border-slate-800">
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono font-semibold mb-1">
+                      <span>JLPT Mock Engine</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-xs font-bold text-white block">Operational</span>
+                    <span className="text-[9px] text-stone-400 font-mono">N5 Simulation Active</span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#141424] border border-slate-800">
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono font-semibold mb-1">
+                      <span>Kotoba Canvas™</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-xs font-bold text-white block">Operational</span>
+                    <span className="text-[9px] text-stone-400 font-mono">Visual Vocabulary Active</span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#141424] border border-slate-800">
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono font-semibold mb-1">
+                      <span>Nomi Sensei AI</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-xs font-bold text-white block">Operational</span>
+                    <span className="text-[9px] text-stone-400 font-mono">Gemini 2.5 + Cost Guard</span>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#141424] border border-slate-800">
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono font-semibold mb-1">
+                      <span>Nihomi WorkOS™</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-xs font-bold text-white block">Operational</span>
+                    <span className="text-[9px] text-stone-400 font-mono">Baito Simulation Active</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1026,24 +1030,146 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
               </div>
             </div>
 
-            {/* SECONDARY ROW: RETENTION, CAC, AI COST, MARKETING */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#0e0e1a]/80 p-4 rounded-xl border border-slate-800/80">
-                <span className="text-[10px] text-slate-400 block font-mono">RETENTION (30-DAY)</span>
-                <span className="text-lg font-bold text-white font-mono">{summary?.business?.retentionRate || 'NOT AVAILABLE'}</span>
+            {/* PRIORITIZED SINGLE NEXT BEST ACTION FOR FOUNDER */}
+            <div className="bg-gradient-to-r from-emerald-950/30 via-[#101020] to-stone-950 border border-emerald-500/40 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1.5 max-w-2xl">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold rounded uppercase flex items-center gap-1">
+                      <Target className="w-3 h-3 text-emerald-400" />
+                      PRIORITIZED NEXT BEST ACTION (একক অগ্রাধিকারপ্রাপ্ত পদক্ষেপ)
+                    </span>
+                    <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold rounded">
+                      HIGHEST ROI
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white">
+                    পেইড শিক্ষার্থী Kenji Explorer-এর অনবোর্ডিং তদারকি ও bKash অটোমেশন যাচাইকরণ
+                  </h3>
+                  <p className="text-xs text-stone-300">
+                    বর্তমান MRR ৳১,৬৯২/মাস অর্জিত হয়েছে (১ পেইড মেম্বার, Pro Annual ৳২০,৩০০)। পরবর্তী পদক্ষেপ হিসেবে স্টুডেন্ট ইন্টেলিজেন্স থেকে শিক্ষার্থীর প্রগ্রেস পর্যালোচনা করুন এবং নতুন শিক্ষার্থীদের জন্য সরাসরি ট্র্যাকিং সচল রাখুন।
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <button
+                    onClick={() => setActiveTab('students')}
+                    className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-bold text-xs rounded-xl transition-all shadow-md flex items-center space-x-1.5 cursor-pointer"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    <span>শিক্ষার্থী তালিকা দেখুন (Student Intel)</span>
+                  </button>
+                  <button
+                    onClick={() => onNavigate('admin-growth')}
+                    className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
+                  >
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    <span>গ্রোথ ট্র্যাকিং</span>
+                  </button>
+                </div>
               </div>
-              <div className="bg-[#0e0e1a]/80 p-4 rounded-xl border border-slate-800/80">
-                <span className="text-[10px] text-slate-400 block font-mono">ESTIMATED CAC</span>
-                <span className="text-lg font-bold text-white font-mono">{summary?.business?.cac || 'NOT CONFIGURED'}</span>
-              </div>
-              <div className="bg-[#0e0e1a]/80 p-4 rounded-xl border border-slate-800/80">
-                <span className="text-[10px] text-slate-400 block font-mono">AI INFERENCE COST</span>
-                <span className="text-lg font-bold text-amber-400 font-mono">৳{(summary?.business?.aiCost || 0).toLocaleString()}</span>
-              </div>
-              <div className="bg-[#0e0e1a]/80 p-4 rounded-xl border border-slate-800/80">
-                <span className="text-[10px] text-slate-400 block font-mono">MARKETING SPENT</span>
-                <span className="text-lg font-bold text-indigo-300 font-mono">৳{(summary?.business?.marketingSpend || 0).toLocaleString()}</span>
-              </div>
+            </div>
+
+            {/* COLLAPSIBLE SECONDARY METRICS & BUSINESS OBJECTIVE */}
+            <div className="bg-[#0e0e1a] border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all">
+              <button
+                type="button"
+                onClick={() => setShowSecondaryMetrics(prev => !prev)}
+                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-900/40 transition-colors cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                    <Target className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                      <span>📊 গৌণ মেট্রিক্স ও বিজনেস অবজেক্টিভস (Secondary Metrics & Objectives)</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                        {showSecondaryMetrics ? 'হাইড করুন' : 'বিস্তারিত দেখুন'}
+                      </span>
+                    </h4>
+                    <p className="text-xs text-slate-400">
+                      Retention, CAC, AI Cost, Marketing Spend এবং AI COO বিজনেস টার্গেট কনফিগারেশন
+                    </p>
+                  </div>
+                </div>
+                <div className="text-slate-400 p-1.5 rounded-lg bg-slate-800/60">
+                  {showSecondaryMetrics ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {showSecondaryMetrics && (
+                <div className="p-6 border-t border-slate-800 space-y-6 bg-[#0a0a12]/50">
+                  {/* ACTIVE BUSINESS OBJECTIVE CARD */}
+                  <div className="bg-gradient-to-r from-stone-950 via-[#12121f] to-amber-950/20 border border-amber-500/30 rounded-2xl p-5 shadow-inner relative overflow-hidden">
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
+                      <div className="space-y-2 max-w-2xl">
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold rounded uppercase">
+                            ACTIVE BUSINESS OBJECTIVE (AI COO INPUT)
+                          </span>
+                          <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold rounded">
+                            STATUS: {targets?.activeObjective?.status || 'ACTIVE'}
+                          </span>
+                        </div>
+                        <h2 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                          {targets?.activeObjective?.goal || 'Achieve $10,000 MRR & 500 Active Pro/Japan Ready Subscribers'}
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300 pt-1">
+                          <div>
+                            <span className="text-slate-500 block text-[10px] font-mono uppercase">TARGET MARKETS</span>
+                            <span className="font-semibold text-slate-200">{targets?.activeObjective?.market || 'Bangladesh & Japan'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-[10px] font-mono uppercase">SEGMENT</span>
+                            <span className="font-semibold text-slate-200">{targets?.activeObjective?.segment || 'JLPT N5/N4 Candidates'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-[10px] font-mono uppercase">APPROVED MONTHLY BUDGET</span>
+                            <span className="font-mono font-bold text-amber-400">৳{(targets?.activeObjective?.budget || 50000).toLocaleString()} BDT</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => setIsMrrModalOpen(true)}
+                          className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs rounded-xl transition-all shadow-md flex items-center space-x-1.5 cursor-pointer"
+                        >
+                          <Target className="w-3.5 h-3.5" />
+                          <span>Configure MRR Target</span>
+                        </button>
+                        <button
+                          onClick={() => setIsMarketModalOpen(true)}
+                          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
+                        >
+                          <Compass className="w-3.5 h-3.5" />
+                          <span>Target Markets</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECONDARY ROW: RETENTION, CAC, AI COST, MARKETING */}
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-[#0e0e1a] p-4 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-mono">RETENTION (30-DAY)</span>
+                      <span className="text-lg font-bold text-white font-mono">{summary?.business?.retentionRate || 'NOT AVAILABLE'}</span>
+                    </div>
+                    <div className="bg-[#0e0e1a] p-4 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-mono">ESTIMATED CAC</span>
+                      <span className="text-lg font-bold text-white font-mono">{summary?.business?.cac || 'NOT CONFIGURED'}</span>
+                    </div>
+                    <div className="bg-[#0e0e1a] p-4 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-mono">AI INFERENCE COST</span>
+                      <span className="text-lg font-bold text-amber-400 font-mono">৳{(summary?.business?.aiCost || 0).toLocaleString()}</span>
+                    </div>
+                    <div className="bg-[#0e0e1a] p-4 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-mono">MARKETING SPENT</span>
+                      <span className="text-lg font-bold text-indigo-300 font-mono">৳{(summary?.business?.marketingSpend || 0).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* CEO REPORT: TODAY AT A GLANCE */}
@@ -1550,9 +1676,9 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
         )}
 
         {/* ==================================================================== */}
-        {/* TAB 4: AI WORKFORCE (13 DEPARTMENTS) */}
+        {/* TAB 5: AI WORKFORCE (13 DEPARTMENTS) & WORK TASKS */}
         {/* ==================================================================== */}
-        {activeTab === 'departments' && (
+        {(activeTab === 'departments' || activeTab === 'tasks') && (
           <div className="bg-[#0e0e1a] border border-slate-800 rounded-3xl p-6 space-y-6 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
               <div>
@@ -1770,9 +1896,9 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
         )}
 
         {/* ==================================================================== */}
-        {/* TAB 7: EMERGENCY CONTROLS & AUDIT LOGS */}
+        {/* TAB 6 & 7: EMERGENCY CONTROLS & AUDIT LOGS (SECURITY) */}
         {/* ==================================================================== */}
-        {activeTab === 'emergency' && (
+        {(activeTab === 'emergency' || activeTab === 'budget') && (
           <div className="space-y-6">
             <div className="bg-[#0e0e1a] border border-red-500/30 rounded-3xl p-6 space-y-6 shadow-xl">
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">

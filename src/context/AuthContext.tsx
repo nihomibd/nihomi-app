@@ -372,7 +372,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const verifyServerSession = async (tokenToUse?: string) => {
       try {
-        const res = await apiRequest('/api/auth/me');
+        if (tokenToUse) {
+          setStoredToken(tokenToUse);
+        }
+        const activeToken = tokenToUse || getStoredToken();
+        const res = await apiRequest('/api/auth/me', {
+          headers: activeToken ? { Authorization: `Bearer ${activeToken}` } : undefined
+        });
         if (!isMounted) return;
         if (res?.authenticated && res.user) {
           if (res.token) {
@@ -403,7 +409,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             safeStorage.setItem('nihomi_subscription', JSON.stringify(res.subscription));
           }
           bootstrapDefaultLearningPath(res.user.id);
-        } else {
+        } else if (res && res.authenticated === false) {
           clearAllStoredAuthData();
           setUser(null);
           setStoredToken(null);
@@ -425,24 +431,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
-    if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user && session.access_token) {
-          setStoredToken(session.access_token);
-          setToken(session.access_token);
-          safeStorage.setItem('nihomi_auth_token', session.access_token);
-          window.history.replaceState({}, document.title, window.location.pathname);
-          verifyServerSession(session.access_token);
-        } else {
-          if (isMounted) setLoading(false);
+    // Helper to strip sensitive token fragments from visible address bar without breaking navigation
+    const cleanAuthUrlHash = () => {
+      if (typeof window !== 'undefined' && window.location.hash) {
+        if (window.location.hash.includes('access_token') || window.location.hash.includes('error=')) {
+          try {
+            window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true');
+          } catch {}
+          const cleanUrl = window.location.pathname + (window.location.search || '');
+          window.history.replaceState({}, document.title, cleanUrl || '/');
         }
-      }).catch(() => {
-        if (isMounted) setLoading(false);
-      });
-      return;
+      }
+    };
+
+    // If redirected with OAuth hash params, extract access_token immediately and strip from URL
+    let hashToken: string | null = null;
+    if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
+      try {
+        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        hashToken = hashParams.get('access_token');
+        if (hashToken) {
+          setStoredToken(hashToken);
+          setToken(hashToken);
+          safeStorage.setItem('nihomi_auth_token', hashToken);
+          verifyServerSession(hashToken);
+        }
+      } catch (err) {
+        console.warn('[AuthContext] Error parsing URL hash token:', err);
+      }
+      cleanAuthUrlHash();
     }
 
-    const initialToken = getStoredToken();
+    const initialToken = hashToken || getStoredToken();
     if (initialToken) {
       verifyServerSession(initialToken);
     } else {
@@ -461,6 +481,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      cleanAuthUrlHash();
       if (session?.user) {
         if (session.access_token) {
           setStoredToken(session.access_token);
@@ -507,7 +528,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async (customRedirect?: string): Promise<boolean> => {
     try {
-      const redirectUrl = customRedirect || (typeof window !== 'undefined' ? `${window.location.origin}/journey` : undefined);
+      let redirectUrl = customRedirect;
+      if (!redirectUrl && typeof window !== 'undefined') {
+        const path = window.location.pathname;
+        if (path === '/founder' || path.startsWith('/admin') || path === '/command-center') {
+          redirectUrl = `${window.location.origin}/founder`;
+        } else if (path === '/login' || path === '/auth') {
+          redirectUrl = window.location.origin;
+        } else if (path && path !== '/') {
+          redirectUrl = `${window.location.origin}${path}`;
+        } else {
+          redirectUrl = window.location.origin;
+        }
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {

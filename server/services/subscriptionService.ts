@@ -1,6 +1,7 @@
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
 import { coinWalletService, SUBSCRIPTION_COIN_ALLOWANCES } from './coinWalletService.js';
+import { getCanonicalPrice } from './canonicalPricing.js';
 
 export type SubscriptionTier = 'free' | 'starter' | 'pro' | 'japan_ready' | 'n5_pro' | 'n5_lifetime';
 
@@ -163,6 +164,7 @@ export interface ActivateSubscriptionParams {
   paymentID?: string;
   invoiceNumber?: string;
   paymentMethod?: string;
+  billingInterval?: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
 }
 
 export class SubscriptionService {
@@ -310,10 +312,19 @@ export class SubscriptionService {
 
     // 1. Calculate subscription expiration
     let expiresAt: Date | null = null;
-    if (tier === 'n5_pro') {
-      expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-    } else if (tier === 'n5_lifetime') {
+    const interval = params.billingInterval || 'monthly';
+    const intervalDays: Record<string, number> = {
+      monthly: 30,
+      quarterly: 90,
+      half_yearly: 180,
+      yearly: 365,
+    };
+    const days = intervalDays[interval] || 30;
+
+    if (tier === 'n5_lifetime') {
       expiresAt = new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000); // 100 years perpetual
+    } else {
+      expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
     }
 
     // 2. Persist in PostgreSQL via Prisma if configured (with duplicate transaction idempotency protection)
@@ -422,12 +433,14 @@ export class SubscriptionService {
         db.cancelSubscription(existingSub.id, true);
       }
 
+      const effectiveInterval = tier === 'n5_lifetime' ? 'yearly' : (params.billingInterval || 'monthly');
+
       db.createSubscription({
         userId: targetUserId,
         planId: tier as any,
-        billingInterval: tier === 'n5_lifetime' ? ('yearly' as any) : ('monthly' as any),
+        billingInterval: effectiveInterval as any,
         status: 'active',
-        paymentMethod: 'bKash Tokenized Gateway',
+        paymentMethod: params.paymentMethod || 'bKash Tokenized Gateway',
         lastPaymentId: paymentID || trxID,
       });
 
@@ -436,7 +449,7 @@ export class SubscriptionService {
         userId: targetUserId,
         planId: tier as any,
         planName: SUBSCRIPTION_TIERS[tier].name,
-        billingInterval: tier === 'n5_lifetime' ? ('yearly' as any) : ('monthly' as any),
+        billingInterval: effectiveInterval as any,
         amount,
         originalAmount: amount,
         discountAmount: 0,
@@ -645,8 +658,10 @@ export class SubscriptionService {
   public async submitManualPayment(params: {
     senderPhone: string;
     trxID: string;
-    selectedPlan: 'n5_pro' | 'n5_lifetime';
+    selectedPlan: string;
     paymentMethod?: 'bkash' | 'nagad' | string;
+    billingInterval?: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
+    amount?: number;
     userId?: string;
     userEmail?: string;
     studentName?: string;
@@ -661,7 +676,7 @@ export class SubscriptionService {
       trxID: string;
       senderPhone: string;
       amount: number;
-      selectedPlan: 'n5_pro' | 'n5_lifetime';
+      selectedPlan: string;
       planName: string;
       paymentMethod: string;
       submittedAt: string;
@@ -687,8 +702,27 @@ export class SubscriptionService {
       return { success: false, error: 'অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশী মোবাইল নম্বর প্রদান করুন (যেমন: 01712345678)।' };
     }
 
-    if (selectedPlan !== 'n5_pro' && selectedPlan !== 'n5_lifetime') {
-      return { success: false, error: 'সঠিক সাবস্ক্রিপশন প্ল্যান নির্বাচন করুন (n5_pro বা n5_lifetime)।' };
+    // Normalize and validate selected plan
+    const rawPlan = (selectedPlan || '').toLowerCase().trim();
+    let normalizedPlan: SubscriptionTier = 'pro';
+    let resolvedInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = (params.billingInterval || 'monthly');
+
+    if (rawPlan === 'starter') {
+      normalizedPlan = 'starter';
+    } else if (rawPlan === 'pro' || rawPlan === 'n5_pro') {
+      normalizedPlan = 'pro';
+    } else if (rawPlan === 'pro_quarterly') {
+      normalizedPlan = 'pro';
+      resolvedInterval = 'quarterly';
+    } else if (rawPlan === 'japan_ready' || rawPlan === 'japanready') {
+      normalizedPlan = 'japan_ready';
+    } else if (rawPlan === 'japan_ready_yearly' || rawPlan === 'n5_lifetime') {
+      normalizedPlan = 'japan_ready';
+      resolvedInterval = 'yearly';
+    } else if (SUBSCRIPTION_TIERS[rawPlan as SubscriptionTier]) {
+      normalizedPlan = rawPlan as SubscriptionTier;
+    } else {
+      return { success: false, error: 'সঠিক সাবস্ক্রিপশন প্ল্যান নির্বাচন করুন (starter, pro, japan_ready)।' };
     }
 
     // 2. Anti-fraud: Duplicate TrxID check
@@ -723,8 +757,20 @@ export class SubscriptionService {
       };
     }
 
-    const planConfig = SUBSCRIPTION_TIERS[selectedPlan];
-    const amount = planConfig.priceBdt;
+    let amount = params.amount;
+    if (!amount || amount <= 0) {
+      if (normalizedPlan === 'starter' || normalizedPlan === 'pro' || normalizedPlan === 'japan_ready') {
+        try {
+          amount = getCanonicalPrice(normalizedPlan, resolvedInterval);
+        } catch {
+          amount = SUBSCRIPTION_TIERS[normalizedPlan]?.priceBdt || 1990;
+        }
+      } else {
+        amount = SUBSCRIPTION_TIERS[normalizedPlan]?.priceBdt || 1990;
+      }
+    }
+
+    const planConfig = SUBSCRIPTION_TIERS[normalizedPlan] || SUBSCRIPTION_TIERS.pro;
     const targetUserId = params.userId || (params.userEmail ? `usr_${params.userEmail.replace(/[@.]/g, '_')}` : `usr_guest_${Date.now()}`);
     const targetEmail = params.userEmail || `${cleanPhone}@nihomi.student`;
     const targetName = params.studentName || targetEmail.split('@')[0] || 'Nihomi Student';
@@ -761,8 +807,9 @@ export class SubscriptionService {
               paymentMethod: `${paymentMethod.toUpperCase()} Send Money (Manual Submission)`,
               metadata: {
                 senderPhone: cleanPhone,
-                selectedPlan,
+                selectedPlan: normalizedPlan,
                 planNameBn: planConfig.nameBn,
+                billingInterval: resolvedInterval,
                 studentName: targetName,
                 note: params.note || null,
                 submittedAt,
@@ -779,9 +826,9 @@ export class SubscriptionService {
     // 4. Record in in-memory DB
     const memPayment = db.createPayment({
       userId: targetUserId,
-      planId: selectedPlan as any,
+      planId: normalizedPlan as any,
       planName: planConfig.name,
-      billingInterval: selectedPlan === 'n5_lifetime' ? ('yearly' as any) : ('monthly' as any),
+      billingInterval: resolvedInterval as any,
       amount,
       originalAmount: amount,
       discountAmount: 0,
@@ -807,9 +854,9 @@ export class SubscriptionService {
       studentEmail: targetEmail,
       studentPhone: cleanPhone,
       trxId: cleanTrx,
-      planId: selectedPlan,
+      planId: normalizedPlan,
       planName: planConfig.nameBn,
-      billingInterval: selectedPlan === 'n5_lifetime' ? 'yearly' : 'monthly',
+      billingInterval: resolvedInterval,
       amount,
       paymentMethod,
       submittedAt,
@@ -820,7 +867,7 @@ export class SubscriptionService {
     (db.data as any).manualTrxSubmissions.unshift(submissionRecord);
     db.save();
 
-    console.log(`[SubscriptionService] Manual payment recorded: ${cleanTrx}, Phone: ${cleanPhone}, Plan: ${selectedPlan}`);
+    console.log(`[SubscriptionService] Manual payment recorded: ${cleanTrx}, Phone: ${cleanPhone}, Plan: ${normalizedPlan}, Amount: ${amount}`);
 
     return {
       success: true,
@@ -830,7 +877,7 @@ export class SubscriptionService {
         trxID: cleanTrx,
         senderPhone: cleanPhone,
         amount,
-        selectedPlan,
+        selectedPlan: normalizedPlan,
         planName: planConfig.nameBn,
         paymentMethod: paymentMethod.toUpperCase(),
         submittedAt,

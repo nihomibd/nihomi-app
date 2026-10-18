@@ -219,6 +219,15 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                   <span>PRO</span>
                 </span>
               )}
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="px-2.5 py-1 bg-stone-100 dark:bg-stone-800/80 hover:bg-rose-500/15 hover:text-[#E45147] border border-stone-200 dark:border-stone-700/60 rounded-full text-xs font-semibold text-stone-600 dark:text-stone-300 flex items-center gap-1 cursor-pointer transition-colors"
+                title="লগআউট"
+              >
+                <LogOut className="w-3 h-3" />
+                <span>লগআউট</span>
+              </button>
             </div>
 
           </div>
