@@ -441,6 +441,24 @@ const SMALL_KANA_BASE: Record<string, string> = {
 };
 
 /**
+ * Returns true if the character has a verified, canonical vector stroke template.
+ */
+export function hasKanaStrokeTemplate(char: string): boolean {
+  if (!char) return false;
+  if (KANA_STROKE_PATHS[char]) return true;
+  if (DAKUTEN_MAP[char]) {
+    return hasKanaStrokeTemplate(DAKUTEN_MAP[char].base);
+  }
+  if (char.length === 2) {
+    const c1 = char[0];
+    const c2 = char[1];
+    const c2Base = SMALL_KANA_BASE[c2] || c2;
+    return hasKanaStrokeTemplate(c1) && hasKanaStrokeTemplate(c2Base);
+  }
+  return false;
+}
+
+/**
  * Returns mathematically accurate, authentic stroke path definitions for any Japanese Kana character.
  * Supports:
  * - 46 Seion Hiragana & 46 Seion Katakana

@@ -227,6 +227,25 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleRetryFlawedSection = (sectionIndex: number) => {
+    if (!exam || !exam.sections[sectionIndex]) return;
+    soundEffects.playButtonClick();
+    setCurrentSectionIndex(sectionIndex);
+    setCurrentQuestionIndex(0);
+    setSectionTimeRemaining(exam.sections[sectionIndex].timeLimitMinutes * 60);
+
+    // Reset answers for this section's questions only
+    const sectionQuestionIds = new Set(exam.sections[sectionIndex].questions.map((q) => q.id));
+    setUserAnswers((prev) => {
+      const updated = { ...prev };
+      sectionQuestionIds.forEach((id) => delete updated[id]);
+      return updated;
+    });
+
+    setSubmissionResult(null);
+    setStage('running');
+  };
+
   if (loading || !exam) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center">
@@ -741,6 +760,17 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
                   <span>Accuracy: {secScore.rawScorePercent}%</span>
                   <span>{secScore.correctQuestions}/{secScore.totalQuestions} Qs</span>
                 </div>
+
+                <div className="mt-2.5 pt-2 border-t border-slate-800/60 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handleRetryFlawedSection(idx)}
+                    className="text-[11px] font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer transition active:scale-95"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>এই সেকশন রিটেক করুন</span>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -914,22 +944,49 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         )}
 
         {/* Bottom Actions */}
-        <div className="flex items-center justify-between pt-6 border-t border-slate-800">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800">
           <button
             type="button"
             onClick={() => onNavigate('quizzes')}
-            className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
           >
             Return to Exam Center
           </button>
 
-          <button
-            type="button"
-            onClick={handleStartSimulation}
-            className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-md"
-          >
-            <RotateCcw className="w-4 h-4" /> Retake Simulation
-          </button>
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
+            {(() => {
+              const secList = Object.values(attempt.sectionScores);
+              let lowestIdx = 0;
+              let minScore = 999;
+              secList.forEach((s, i) => {
+                if (s.scaledScore < minScore) {
+                  minScore = s.scaledScore;
+                  lowestIdx = i;
+                }
+              });
+              const lowestSec = secList[lowestIdx];
+              return lowestSec ? (
+                <button
+                  type="button"
+                  id="btn-retry-flawed-section"
+                  onClick={() => handleRetryFlawedSection(lowestIdx)}
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition-all shadow-md cursor-pointer active:scale-95"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>দুর্বল সেকশন রিটেক করুন ({lowestSec.sectionTitle})</span>
+                </button>
+              ) : null;
+            })()}
+
+            <button
+              type="button"
+              id="btn-retake-full-simulation"
+              onClick={handleStartSimulation}
+              className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer active:scale-95"
+            >
+              <RotateCcw className="w-4 h-4" /> পূর্ণাঙ্গ পরীক্ষা আবার দিন
+            </button>
+          </div>
         </div>
       </div>
     );

@@ -60,12 +60,12 @@ const translations: Record<string, Record<Language, string>> = {
     ja: '総合案内ハブ (ビザ・就職)'
   },
   ai_sensei: {
-    bn: 'AI সেনসেই (২৪/৭ টিউটর)',
-    en: 'AI Sensei (24/7 Tutor)',
-    ja: 'AI先生 (24時間指導)'
+    bn: 'Nomi Sensei (নমি সেন্সেই)',
+    en: 'Nomi Sensei (Personal Tutor)',
+    ja: 'Nomi Sensei (ノミ先生)'
   },
   vision_sensei: {
-    bn: 'ভিশন সেনসেই (📷 OCR স্ক্যানার)',
+    bn: 'ভিশন সেন্সেই (📷 OCR স্ক্যানার)',
     en: 'Vision Sensei (📷 OCR Scanner)',
     ja: 'ビジョン先生 (📷 OCR解析)'
   },
@@ -75,9 +75,9 @@ const translations: Record<string, Record<Language, string>> = {
     ja: 'メモリーOS™ (忘却曲線記憶)'
   },
   baito_os: {
-    bn: 'বাইতো ওএস™ (জাপান জব ল্যাব)',
-    en: 'BaitoOS™ (Part-time Job Lab)',
-    ja: 'バイトOS™ (アルバイト準備)'
+    bn: 'নিহোমি ওয়ার্কওএস™ (WorkOS সিমুলেশন)',
+    en: 'Nihomi WorkOS™ (Workplace Simulation Lab)',
+    ja: 'Nihomi WorkOS™ (職場シミュレーション)'
   },
   pricing: {
     bn: 'প্রাইসিং ও মেম্বারশিপ',

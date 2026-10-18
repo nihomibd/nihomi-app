@@ -63,7 +63,7 @@ export const PaymentCallbackView: React.FC<PaymentCallbackViewProps> = ({ onNavi
 
   return (
     <div
-      className="min-h-screen bg-[#0a0a12] text-slate-100 flex flex-col justify-center items-center px-4 py-16 sm:px-6 lg:px-8"
+      className="min-h-screen bg-[#141726] text-slate-100 flex flex-col justify-center items-center px-4 py-16 sm:px-6 lg:px-8"
       id="payment-callback-view"
     >
       <div className="w-full max-w-lg">
@@ -165,7 +165,7 @@ export const PaymentCallbackView: React.FC<PaymentCallbackViewProps> = ({ onNavi
                 </p>
                 <ul className="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
                   <li>মিন্না নো নিহোঙ্গো পূর্ণাঙ্গ ব্যাকরণ ব্যাংক (লেসন ১ - ২৫)</li>
-                  <li>আনলিমিটেড AI সেনসেই স্পিকিং ও কনভারসেশনাল গাইড</li>
+                  <li>আনলিমিটেড নমি সেন্সেই স্পিকিং ও কনভারসেশনাল গাইড</li>
                   <li>JLPT N5 ফুল অফিসিয়াল মক এক্সাম ও বিস্তারিত অ্যানালাইসিস</li>
                   <li>স্মার্ট স্পেসড রিপিটিশন (SRS) ফ্ল্যাশ কার্ড ইঞ্জিন</li>
                 </ul>

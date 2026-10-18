@@ -115,12 +115,12 @@ export const AiLessonFeedbackModal: React.FC<AiLessonFeedbackModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20">
-                  AI Sensei Evaluation
+                  Nomi Sensei Evaluation
                 </span>
                 <span className="text-xs font-semibold text-white/80">&bull; Lesson Completed</span>
               </div>
               <h2 className="text-xl font-bold font-serif mt-0.5">
-                AI Lesson Feedback & Analysis
+                Nomi Sensei Lesson Feedback & Analysis
               </h2>
             </div>
           </div>
@@ -137,7 +137,7 @@ export const AiLessonFeedbackModal: React.FC<AiLessonFeedbackModalProps> = ({
           {isLoading ? (
             <div className="py-12 flex flex-col items-center justify-center space-y-3 text-stone-400">
               <Loader2 className="w-8 h-8 animate-spin text-red-600" />
-              <p className="text-xs font-semibold">AI Sensei is analyzing your lesson performance...</p>
+              <p className="text-xs font-semibold">Nomi Sensei is analyzing your lesson performance...</p>
             </div>
           ) : feedback ? (
             <div className="space-y-6">
@@ -146,7 +146,7 @@ export const AiLessonFeedbackModal: React.FC<AiLessonFeedbackModalProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-amber-500" />
-                    <span>Sensei's Praise</span>
+                    <span>Nomi Sensei's Praise</span>
                   </span>
                   <div className="flex items-center gap-1 text-xs font-bold text-red-600 bg-white dark:bg-stone-800 px-2.5 py-1 rounded-xl shadow-xs border border-amber-200 dark:border-stone-700">
                     <Zap className="w-3.5 h-3.5 fill-red-600" />

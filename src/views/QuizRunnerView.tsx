@@ -539,7 +539,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                   Adaptive Focus Active: Prioritizing Particle & Memory Stability
                 </p>
                 <p className="text-purple-800/80 text-[11px] mt-0.5">
-                  AI Sensei will adaptively analyze subtle particle nuances (「へ」 vs 「に」, 「は」 vs 「が」) and provide Socratic breakdowns.
+                  Nomi Sensei will adaptively analyze subtle particle nuances (「へ」 vs 「に」, 「は」 vs 「が」) and provide Socratic breakdowns.
                 </p>
               </div>
             </div>
@@ -978,8 +978,8 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                         <Sparkles className={`w-3.5 h-3.5 ${aiMistakeExplanations[q.id]?.loading ? 'animate-spin' : ''}`} />
                         <span>
                           {aiMistakeExplanations[q.id]?.loading
-                            ? 'AI Sensei Analyzing Mistake...'
-                            : 'AI Explain Mistake (ভুলের কারণ ও ব্যাকরণ জানুন)'}
+                            ? 'Nomi Sensei ভুলের কারণ বিশ্লেষণ করছেন...'
+                            : 'Nomi Sensei Explains Mistake (ভুলের কারণ ও ব্যাকরণ জানুন)'}
                         </span>
                       </button>
                     )}
@@ -994,7 +994,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                             </span>
                             <div>
                               <h4 className="text-xs font-extrabold text-purple-950">
-                                AI Sensei Personalized Grammar Analysis
+                                Nomi Sensei Personalized Grammar Analysis
                               </h4>
                               <p className="text-[10px] text-purple-700 font-medium">
                                 JLPT {quiz?.level || 'N5'} Grammar Diagnostics &bull; ভুলের বিশ্লেষণ
@@ -1002,7 +1002,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                             </div>
                           </div>
                           <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 border border-purple-200">
-                            Smart Sensei™
+                            Nomi Sensei
                           </span>
                         </div>
 
@@ -1080,7 +1080,7 @@ export const QuizRunnerView: React.FC<QuizRunnerViewProps> = ({
                           <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] text-amber-900 flex items-start gap-2">
                             <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                             <div>
-                              <strong className="text-amber-800">Sensei Mnemonic Tip: </strong>
+                              <strong className="text-amber-800">Nomi Sensei Mnemonic Tip: </strong>
                               {aiMistakeExplanations[q.id].data!.senseiProTip}
                             </div>
                           </div>

@@ -196,9 +196,8 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
     }
   };
 
-  useEffect(() => {
-    handleRunDaySimulation(1);
-  }, []);
+  // Initial day 1 scenario is already preloaded in default state
+
 
   const daysList = [
     { day: 1, title: 'Day 1: Narita Airport & Immigration', icon: Plane },
@@ -211,20 +210,20 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-10 px-4 sm:px-6 lg:px-8" id="japan-twin-view">
+    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-slate-900 dark:text-slate-100 py-10 px-4 sm:px-6 lg:px-8" id="japan-twin-view">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Unauthenticated Preview Banner */}
         {!user && (
-          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-stone-300">
+              <span className="text-slate-300">
                 <strong>Interactive Tokyo Simulator (Preview Mode):</strong> Test your day-to-day survival skills in Tokyo. Sign in to save telemetry to your permanent student record.
               </span>
             </div>
             <button
               onClick={() => onNavigate('login')}
-              className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shrink-0 cursor-pointer"
+              className="px-4 py-1.5 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs shrink-0 cursor-pointer"
             >
               Sign In to Save
             </button>
@@ -232,15 +231,15 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
         )}
 
         {/* Header Hero */}
-        <div className="bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-stone-800 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-600/30 border border-red-500/50 text-red-300 text-xs font-bold">
+        <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-purple-900/40 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-600/30 border border-purple-500/50 text-purple-300 text-xs font-bold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Nihomi JapanTwin™ &bull; Flagship Purple Cow Engine</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight">
             “Your Japanese Self, Before You Meet Japan.”
           </h1>
-          <p className="text-stone-300 text-xs sm:text-sm max-w-3xl leading-relaxed">
+          <p className="text-slate-300 text-xs sm:text-sm max-w-3xl leading-relaxed">
             নিহোমি শুধু আপনাকে গ্রামার শেখায় না—বরং বিমানে ওঠার আগেই জাপানের প্রথম ৭ দিনের বাস্তব জীবনকে সিমুলেট করে আপনার ভবিষ্যৎ সম্ভাব্য ভুলগুলোকে আগে থেকেই প্রতিরোধ করে।
           </p>
         </div>
@@ -255,17 +254,17 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
         )}
 
         {/* 7-Day Future Tokyo Simulator Player */}
-        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+        <div className="bg-white dark:bg-[#1B1E30] border border-slate-200 dark:border-[#2A2E45] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div>
-              <span className="text-[11px] font-bold text-red-600 uppercase tracking-wider">
+              <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
                 Interactive Scenario Player
               </span>
-              <h3 className="text-xl font-bold font-serif text-stone-900 mt-0.5">
+              <h3 className="text-xl font-bold font-serif text-slate-900 dark:text-white mt-0.5">
                 Simulate Your First 7 Days in Tokyo
               </h3>
             </div>
-            <span className="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-xl">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-xl">
               Tokyo Takadanobaba Environment
             </span>
           </div>
@@ -282,11 +281,11 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
                   onClick={() => handleRunDaySimulation(d.day)}
                   className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[85px] ${
                     isActive
-                      ? 'bg-red-600 text-white border-red-600 shadow-md ring-2 ring-red-500/20'
-                      : 'bg-stone-50 border-stone-200 hover:border-stone-300 text-stone-700'
+                      ? 'bg-[#E45147] text-white border-[#E45147] shadow-md ring-2 ring-purple-500/20'
+                      : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-purple-300 text-slate-700 dark:text-slate-300'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-red-600'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-purple-600 dark:text-purple-400'}`} />
                   <div>
                     <span className="text-[10px] font-extrabold uppercase block opacity-80">Day 0{d.day}</span>
                     <span className="text-xs font-bold truncate block">{d.title.split(':')[1] || d.title}</span>
@@ -298,26 +297,26 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
 
           {/* Active Simulation Stage */}
           {isSimulating ? (
-            <div className="p-12 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col items-center justify-center space-y-3 animate-pulse">
-              <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
-              <p className="text-xs font-bold text-stone-600">Simulating Day {activeDay} in Tokyo...</p>
+            <div className="p-12 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center space-y-3 animate-pulse">
+              <Loader2 className="w-8 h-8 text-purple-600 animate-spin" />
+              <p className="text-xs font-bold text-slate-600 dark:text-slate-400">Simulating Day {activeDay} in Tokyo...</p>
             </div>
           ) : simulationResult ? (
-            <div className="p-6 rounded-2xl bg-stone-50 border border-stone-200 space-y-5 animate-in fade-in">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-[#121226]/50 border border-slate-200 dark:border-slate-800 space-y-5 animate-in fade-in">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-xs font-bold text-red-600 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
                     Day {simulationResult.day} &bull; {simulationResult.titleJa}
                   </span>
-                  <h4 className="text-xl font-bold font-serif text-stone-900 mt-1">
+                  <h4 className="text-xl font-bold font-serif text-slate-900 dark:text-white mt-1">
                     {simulationResult.title}
                   </h4>
-                  <p className="text-xs text-stone-600 mt-0.5">{simulationResult.situation}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{simulationResult.situation}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => speakJapanese(simulationResult.npcPrompt)}
-                  className="p-3 rounded-2xl bg-white border border-stone-200 text-stone-700 hover:text-red-600 shadow-sm transition-colors cursor-pointer"
+                  className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 shadow-sm transition-colors cursor-pointer"
                   title="Listen to Japanese prompt"
                 >
                   <Volume2 className="w-5 h-5" />
@@ -325,26 +324,26 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
               </div>
 
               {/* Japanese Dialogue Box */}
-              <div className="p-4 rounded-2xl bg-white border border-stone-200 space-y-2 text-xs">
-                <p className="text-base font-serif font-bold text-stone-900 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#141726] border border-slate-200 dark:border-[#2A2E45] space-y-2 text-xs">
+                <p className="text-base font-serif font-bold text-slate-900 dark:text-white leading-relaxed">
                   {simulationResult.npcPrompt}
                 </p>
-                <p className="text-stone-500 font-mono text-[11px]">{simulationResult.romaji}</p>
-                <p className="text-emerald-800 font-semibold text-xs pt-1 border-t border-stone-100">
+                <p className="text-slate-500 font-mono text-[11px]">{simulationResult.romaji}</p>
+                <p className="text-purple-700 dark:text-purple-300 font-semibold text-xs pt-1 border-t border-slate-100 dark:border-slate-800">
                   বাংলা: {simulationResult.bangla}
                 </p>
               </div>
 
               {/* Feedback Card */}
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold text-emerald-800">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-emerald-800 dark:text-emerald-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>You Survived Japan Day {simulationResult.day}!</span>
                 </div>
-                <p className="text-stone-700 text-[11px] leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                   <strong>Sensei Analysis:</strong> {simulationResult.evaluation}
                 </p>
-                <p className="text-red-700 text-[11px] font-semibold pt-1">
+                <p className="text-purple-700 dark:text-purple-400 text-[11px] font-semibold pt-1">
                   Weakness Flagged: {simulationResult.weakSkillDetected} (Added to Learning Memory™)
                 </p>
               </div>
@@ -354,13 +353,13 @@ export const JapanTwinView: React.FC<JapanTwinViewProps> = ({ onNavigate }) => {
                 <button
                   onClick={() => handleRunDaySimulation(Math.max(1, activeDay - 1))}
                   disabled={activeDay === 1}
-                  className="px-4 py-2 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 disabled:opacity-40 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-40 cursor-pointer"
                 >
                   Previous Day
                 </button>
                 <button
                   onClick={() => handleRunDaySimulation(Math.min(7, activeDay + 1))}
-                  className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs shadow-sm flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>{activeDay === 7 ? 'Complete Simulation' : `Proceed to Day ${activeDay + 1}`}</span>
                   <ArrowRight className="w-4 h-4" />

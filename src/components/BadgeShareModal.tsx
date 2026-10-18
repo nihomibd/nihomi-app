@@ -37,7 +37,7 @@ export const BadgeShareModal: React.FC<BadgeShareModalProps> = ({
         title: `${userName} earned "${badge.title}" on NIHOMI (ニホミ)`,
         description: `Verified Japanese milestone: ${badge.description} (${badge.titleJa}) • +${badge.xpReward} XP earned. Start learning Japanese with AI on NIHOMI.COM.`,
         ogTitle: `🏆 ${userName} unlocked "${badge.title}" (${badge.titleJa}) on NIHOMI!`,
-        ogDescription: `Learn Japanese with AI Sensei from Bangladesh. Sign up with Google to get 50 Free Coins + 100 AI Credits.`,
+        ogDescription: `Learn Japanese with Nomi Sensei from Bangladesh. Sign up with Google to get 50 Free Coins + 100 Credits.`,
         ogImage: 'https://nihomi.com/assets/og-nihomi-banner.png'
       });
     }

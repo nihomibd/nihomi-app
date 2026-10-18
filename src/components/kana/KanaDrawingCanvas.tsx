@@ -25,6 +25,7 @@ import { soundEffects } from '../../lib/soundEffects';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { logKanaMistake } from '../../lib/kanaMemorySync';
 import { haptic } from '../../lib/haptic';
+import { evaluateKanaStrokes } from '../../lib/kanaStrokeEvaluator';
 
 interface KanaDrawingCanvasProps {
   kana: KanaCharacter;
@@ -274,35 +275,20 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
     redrawAllStrokes(updated);
   };
 
-  // 6. Intelligent Writing Evaluation & MemoryOS Sync
+  // 6. Intelligent Geometric Vector Evaluation & MemoryOS Sync
   const evaluateWriting = () => {
-    if (strokesHistory.length === 0) {
-      setAccuracyFeedback('অনুগ্রহ করে ক্যানভাসে লিখে মূল্যায়ন বাটনে ট্যাপ করুন।');
-      return;
-    }
-
     soundEffects.playButtonTap();
 
-    const strokeCount = strokesHistory.length;
-    const targetCount = kana.strokes;
-    const strokeDiff = Math.abs(strokeCount - targetCount);
+    const canvasSize = containerRef.current?.getBoundingClientRect().width || 280;
+    const result = evaluateKanaStrokes(kana.char, kana.strokes, strokesHistory, canvasSize);
 
-    let calculated = 88;
-    if (strokeDiff === 0) {
-      calculated = Math.floor(88 + Math.random() * 11); // 88 - 98%
-    } else if (strokeDiff === 1) {
-      calculated = Math.floor(66 + Math.random() * 8); // 66 - 74%
-    } else {
-      calculated = Math.max(40, Math.floor(58 - strokeDiff * 8));
-    }
+    setAccuracyScore(result.score);
+    setAccuracyFeedback(result.feedbackBn);
 
-    setAccuracyScore(calculated);
-
-    if (calculated >= 75) {
+    if (result.isCorrect) {
       soundEffects.playLevelUp();
       haptic.correct();
       triggerCelebrationConfetti();
-      setAccuracyFeedback(`অসাধারণ! ${calculated}% নির্ভুল স্ট্রোক ও চমৎকার ব্যালান্স।`);
 
       if (!isMastered) {
         const res = toggleMasteredKana(kana.char);
@@ -316,18 +302,14 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
     } else {
       soundEffects.playIncorrectSoft();
       haptic.incorrect();
-      const failType = strokeDiff > 0 ? 'stroke_count' : 'accuracy';
-      logKanaMistake(kana, calculated, failType);
-
-      if (strokeDiff > 0) {
-        setAccuracyFeedback(
-          `স্ট্রোক সংখ্যা সঠিক নয়! ${kana.char}-এ মোট ${kana.strokes}টি স্ট্রোক রয়েছে (আপনি দিয়েছেন ${strokeCount}টি)। Spaced Repetition-এ যুক্ত করা হয়েছে।`
-        );
-      } else {
-        setAccuracyFeedback(
-          'স্ট্রোকের দিক ও গঠন নিখুঁত করতে গাইড দেখে আরেকবার লিখুন। এটি MemoryOS-এ যুক্ত হয়েছে।'
-        );
-      }
+      const reason = result.detailedMistake?.reason;
+      const failType: 'accuracy' | 'stroke_order' | 'stroke_count' =
+        reason === 'stroke_count_too_few' || reason === 'stroke_count_too_many'
+          ? 'stroke_count'
+          : reason === 'wrong_direction' || reason === 'wrong_start_position'
+          ? 'stroke_order'
+          : 'accuracy';
+      logKanaMistake(kana, result.score, failType);
     }
   };
 
@@ -522,6 +504,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
         {/* Check & Evaluate Button */}
         <button
           type="button"
+          id="kana-evaluate-btn"
           onClick={evaluateWriting}
           className="btn-haptic px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
         >
@@ -532,7 +515,7 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
 
       {/* 4. ACCURACY FEEDBACK & REELS COUNTDOWN */}
       {accuracyScore !== null && (
-        <div className="w-full mt-3 p-3 rounded-2xl bg-[#141524] border border-stone-700/80 space-y-2 animate-in fade-in">
+        <div className="w-full mt-3 p-3 rounded-2xl bg-[#141524] border border-stone-700/80 space-y-2 animate-in fade-in" id="kana-evaluation-feedback-card">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span
@@ -567,11 +550,37 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
           )}
 
           {accuracyScore < 75 && (
-            <div className="flex items-center gap-1.5 text-[10px] text-purple-300">
-              <Brain className="w-3.5 h-3.5 shrink-0" />
-              <span>ভুলটি স্বয়ংক্রিয়ভাবে MemoryOS Spaced Repetition-এ সংরক্ষিত হয়েছে।</span>
+            <div className="pt-2 border-t border-stone-800 space-y-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  id="kana-retry-btn"
+                  onClick={handleClearCanvas}
+                  className="flex-1 py-1.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer shadow-sm"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>পুনরায় চেষ্টা করুন</span>
+                </button>
+                {!showGhost && (
+                  <button
+                    type="button"
+                    onClick={() => setShowGhost(true)}
+                    className="py-1.5 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-rose-400" />
+                    <span>গাইড অন করুন</span>
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-purple-300">
+                <Brain className="w-3.5 h-3.5 shrink-0" />
+                <span>ভুলটি স্বয়ংক্রিয়ভাবে MemoryOS Spaced Repetition-এ সংরক্ষিত হয়েছে।</span>
+              </div>
             </div>
           )}
+          <div className="text-[9px] text-stone-500 text-center pt-1 font-mono">
+            ভেক্টর যাচাই: স্ট্রোক সংখ্যা, শুরুর অবস্থান ও দিক জ্যামিতিকভাবে পরিমাপিত
+          </div>
         </div>
       )}
     </div>

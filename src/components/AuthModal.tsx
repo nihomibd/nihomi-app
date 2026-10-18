@@ -1,7 +1,8 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw, UserPlus, LogIn } from 'lucide-react';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
+import { NihomiBrandLogo } from './brand/NihomiBrandLogo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -224,9 +225,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
         {/* Brand Badge */}
         <div className="text-center space-y-2 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center font-bold text-xl text-white mx-auto shadow-lg shadow-red-500/20">
-            日
-          </div>
+          <NihomiBrandLogo variant="full" theme="dark" size={32} showTagline={false} className="mx-auto mb-2 justify-center" />
           <h3 className="text-2xl font-bold text-white">Nihomi-তে স্বাগতম</h3>
           <p className="text-xs text-slate-400">
             {isSignUpMode ? 'নতুন অ্যাকাউন্ট খুলে জাপানি ভাষা শেখা শুরু করুন' : 'জাপানি ভাষা শেখার সেরা প্ল্যাটফর্মে লগইন করুন'}

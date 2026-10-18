@@ -5,12 +5,12 @@
   "id": "/",
   "start_url": "/",
   "scope": "/",
-  "background_color": "#FAF9F6",
-  "theme_color": "#0C0A09",
+  "background_color": "#141726",
+  "theme_color": "#141726",
   "display": "standalone",
   "orientation": "portrait",
   "categories": ["education", "productivity"],
-  "lang": "en",
+  "lang": "bn",
   "icons": [
     {
       "src": "/assets/icon-192.png",
@@ -48,14 +48,14 @@
       "sizes": "1200x630",
       "type": "image/jpeg",
       "form_factor": "wide",
-      "label": "NIHOMI — AI Japanese Learning Platform & JLPT N5 Master Deck"
+      "label": "NIHOMI — Japanese Learning Platform & JLPT N5 Master Deck"
     },
     {
       "src": "/assets/og-nihomi-banner.png",
       "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "NIHOMI — Minna no Nihongo Interactive Curriculum & 24/7 AI Sensei"
+      "label": "NIHOMI — Minna no Nihongo Interactive Curriculum & 24/7 Nomi Sensei"
     }
   ],
   "shortcuts": [

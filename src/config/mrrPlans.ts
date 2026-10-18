@@ -88,20 +88,20 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     priceBDT: 990,
     priceUSD: 9,
     billingPeriod: 'monthly',
-    tagline: 'Full JLPT N5 Foundation with Standard AI Support',
-    taglineBn: 'সম্পূর্ণ JLPT N5 ফাউন্ডেশন ও স্ট্যান্ডার্ড AI সহায়তা',
+    tagline: 'Full JLPT N5 Foundation with Nomi Sensei Support',
+    taglineBn: 'সম্পূর্ণ JLPT N5 ফাউন্ডেশন ও Nomi Sensei সহায়তা',
     coinsMonthly: 500,
     targetAudienceBn: 'প্রথমবার JLPT N5 পরীক্ষার্থী ও জাপানে স্টুডেন্ট ভিসার আবেদনকারী',
     features: [
       'Full JLPT N5 Curriculum (Lessons 1–25)',
-      'Nihomi Sensei AI™ Text & Voice Q&A (500 Monthly Coins)',
+      'Nomi Sensei Text & Voice Q&A (500 Monthly Coins)',
       'Digital Student ID & Verifiable Attendance',
       'All Shibuya 3D Workplace Simulations',
       'Mistake Recovery Ghost Mode'
     ],
     featuresBn: [
       'সম্পূর্ণ JLPT N5 সিলেবাস (লেসন ১-২৫)',
-      'Nihomi Sensei AI™ টেক্সট ও ভয়েস চ্যাট (৫০০ মাসিক কয়েন)',
+      'Nomi Sensei টেক্সট ও ভয়েস চ্যাট (৫০০ মাসিক কয়েন)',
       'ডিজিটাল স্টুডেন্ট আইডি ও উপস্থিতি ট্র্যাকার',
       'শিবুয়া ৩ডি সকল কর্মক্ষেত্র সিমুলেশন অ্যাক্সেস',
       'মিস্টেক রিকভারি ঘোস্ট মোড'
@@ -117,14 +117,14 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     billingPeriod: 'monthly',
     popular: true,
     badgeText: 'MOST POPULAR',
-    tagline: 'Complete N5 + N4 Mastery with Voice & Vision AI Sensei',
-    taglineBn: 'সম্পূর্ণ N5 + N4 সিলেবাস ও আনলিমিটেড ভয়েস AI কোচিং',
+    tagline: 'Complete N5 + N4 Mastery with Voice & Vision Nomi Sensei',
+    taglineBn: 'সম্পূর্ণ N5 + N4 সিলেবাস ও আনলিমিটেড ভয়েস Nomi Sensei কোচিং',
     coinsMonthly: 1500,
     targetAudienceBn: 'ভিসা ইন্টারভিউ ও স্পেশিফাইড স্কিল্ড ওয়ার্কার (SSW) চাকরিপ্রার্থী',
     features: [
       'Complete JLPT N5 + N4 Curriculum (Minna no Nihongo 1–50)',
       '1,500 Monthly Nihomi Coins for AI Simulations',
-      'High-Speed Nihomi Sensei AI™ Audio Pronunciation Lab',
+      'High-Speed Nomi Sensei Audio Pronunciation Lab',
       'Full Learning DNA Diagnostic & Weakness Fixer',
       'WorkOS™ POS Terminal & Izakaya Roleplay Included',
       'JLPT Official Mock Exam Scoring Engine'
@@ -132,7 +132,7 @@ export const CONTINUOUS_MEMBERSHIPS: Record<string, ContinuousMembershipPlan> = 
     featuresBn: [
       'সম্পূর্ণ JLPT N5 + N4 সিলেবাস (মিন্না নো নিহোঙ্গো ১-৫০)',
       '১,৫০০ মাসিক নিহোমি কয়েন (AI সিমুলেশনের জন্য)',
-      'হাই-স্পিড Nihomi Sensei AI™ অডিও প্রোনাউন্সিয়েশন ল্যাব',
+      'হাই-স্পিড Nomi Sensei অডিও প্রোনাউন্সিয়েশন ল্যাব',
       'লার্নিং DNA ডায়াগনস্টিক ও দুর্বলতা সমাধান ইঞ্জিন',
       'WorkOS™ কনবিনি POS ও ইজাকায়া রোলপ্লে অন্তর্ভুক্ত',
       'JLPT অফিসিয়াল ফুল মক এক্সাম ইঞ্জিন'
@@ -188,14 +188,14 @@ export const JAPAN_TRIP_PASSES: Record<string, JapanTripPassPlan> = {
     targetAudienceBn: 'স্বল্পমেয়াদী ট্যুরিস্ট ও প্রথমবার জাপান ভ্রমণকারী',
     features: [
       '7 Days Full Access to All 3D Shibuya Hotspots',
-      '200 Nihomi Coins for Instant Audio & AI Sensei Q&A',
+      '200 Nihomi Coins for Instant Audio & Nomi Sensei Q&A',
       'Narita/Haneda Airport & Tokyo Subway Navigation Phrasebook',
       'Conbini & Fast Food Ordering Audio Cheat Sheets',
       'Emergency Phrases (Lost Passport, Medical, Taxi Directions)'
     ],
     featuresBn: [
       '৭ দিন শিবুয়া ৩ডি সকল হটস্পট ও সিমুলেশন আনলক',
-      '২০০টি নিহোমি কয়েন (ইনস্ট্যান্ট ভয়েস ও AI উত্তরের জন্য)',
+      '২০০টি নিহোমি কয়েন (ইনস্ট্যান্ট ভয়েস ও Nomi Sensei উত্তরের জন্য)',
       'নারিতা/হানেদা বিমানবন্দর ও টোকিও সাবওয়ে নেভিগেশন',
       'কনবিনি ও ফাস্টফুড অর্ডারিং অডিও সহায়িকা',
       'জরুরি জাপানিজ বাক্য (মেডিকেল, ট্যাক্সি ও দিকনির্দেশনা)'
@@ -217,7 +217,7 @@ export const JAPAN_TRIP_PASSES: Record<string, JapanTripPassPlan> = {
     targetAudienceBn: 'দুই সপ্তাহের পূর্ণ জাপান ভ্রমণকারী ও ব্যবসায়িক প্রতিনিধি',
     features: [
       '14 Days Unlimited Access to All Spatial Hotspots',
-      '500 Nihomi Coins for Live Nihomi Sensei AI™ Voice Coaching',
+      '500 Nihomi Coins for Live Nomi Sensei Voice Coaching',
       'Traditional Izakaya & Ramen Dining Dialogue Simulators',
       'Shinkansen (Bullet Train) Booking & Hotel Check-in Guide',
       'Live Japanese Restaurant Menu OCR Kanji Decoder',
@@ -225,7 +225,7 @@ export const JAPAN_TRIP_PASSES: Record<string, JapanTripPassPlan> = {
     ],
     featuresBn: [
       '১৪ দিন আনলিমিটেড ৩ডি স্পাশিয়াল হটস্পট অ্যাক্সেস',
-      '৫০০টি নিহোমি কয়েন (Nihomi Sensei AI™-র লাইভ কোচিং)',
+      '৫০০টি নিহোমি কয়েন (Nomi Sensei-এর লাইভ কোচিং)',
       'ঐতিহ্যবাহী ইজাকায়া ও রামেন ডাইনিং ডায়ালগ সিমুলেটর',
       'শিনকানসেন বুলেট ট্রেন টিকিট ও হোটেল চেক-ইন গাইড',
       'রেস্তোরাঁর মেনু রিডার ও কাঞ্জি ডিকোডার',

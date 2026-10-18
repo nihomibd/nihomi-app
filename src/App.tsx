@@ -58,6 +58,8 @@ const VocabularyView = lazy(() => import('./views/VocabularyView').then(m => ({ 
 const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ default: m.AICoachView })));
 const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
 const LessonPracticeView = lazy(() => import('./views/LessonPracticeView').then(m => ({ default: m.LessonPracticeView })));
+const KotobaCanvasView = lazy(() => import('./components/kotoba/KotobaCanvasView').then(m => ({ default: m.KotobaCanvasView })));
+
 
 const ViewLoadingFallback: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center" id="view-loading-spinner">
@@ -169,6 +171,7 @@ const KNOWN_VIEWS = new Set([
   'badges', 'achievements',
   'progress', 'stats', 'telemetry',
   'vocabulary', 'vocab', 'words',
+  'kotoba', 'kotoba-canvas', 'word-canvas', 'dictionary-canvas',
   'ai-coach', 'coach', 'tutor',
   'quiz-insights', 'insights'
 ]);
@@ -187,6 +190,7 @@ import { captureUtmFromUrl } from './utils/utm';
 import { FocusSakuraBackground } from './components/focus/FocusSakuraBackground';
 import { ExportToastNotification } from './components/common/ExportToastNotification';
 import { FloatingAiSenseiWidget } from './components/ai/FloatingAiSenseiWidget';
+import { NomiProvider, NomiUniversalCompanion } from './components/nomi';
 import { WhatsAppHelpline } from './components/support/WhatsAppHelpline';
 import { GlobalErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -201,7 +205,13 @@ import { ZenSoundscapeType } from './lib/zenAudio';
 import { updatePageMetaTags } from './lib/seo';
 
 const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { view: string; params: Record<string, any> } => {
-  const path = pathname.toLowerCase();
+  let path = pathname.toLowerCase();
+  if (typeof window !== 'undefined' && (path === '/' || path === '') && window.location.hash) {
+    const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+    if (rawHash && KNOWN_VIEWS.has(rawHash)) {
+      path = '/' + rawHash;
+    }
+  }
   const queryCert = searchParams.get('certId') || searchParams.get('id');
 
   if (path === '/journey' || path === '/start-journey' || path === '/onboarding' || path === '/mission') {
@@ -276,6 +286,10 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   }
   if (path === '/vocabulary' || path === '/vocab') {
     return { view: 'vocabulary', params: {} };
+  }
+  if (path === '/kotoba' || path === '/kotoba-canvas' || path === '/word-canvas') {
+    const word = searchParams.get('word') || undefined;
+    return { view: 'kotoba', params: { word } };
   }
   if (path === '/ai-coach' || path === '/coach') {
     return { view: 'ai-coach', params: {} };
@@ -417,18 +431,36 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (loading) return;
 
-    const isFounderRoute = ['founder', 'admin', 'command-center'].includes(currentView);
-    const isStudentDashboardRoute = ['student-dashboard', 'portal-dashboard'].includes(currentView);
+    const isExecutiveGatekeeperRoute = ['founder', 'admin', 'command-center'].includes(currentView);
+    const isAuxiliaryFounderRoute = ['growth', 'admin-growth', 'founder/growth', 'content-studio'].includes(currentView);
+    const isProtectedStudentRoute = ['student-dashboard', 'portal-dashboard', 'dashboard', 'profile', 'subscription'].includes(currentView);
 
-    // If an authenticated Student attempts to access /founder, block and redirect to /dashboard
-    if (isFounderRoute && user && user.role !== 'admin' && user.role !== 'founder') {
+    // If an unauthenticated user attempts to access auxiliary administrative routes, block and prompt login
+    if (isAuxiliaryFounderRoute && !user) {
+      handleNavigate('login');
+      openAuthModal('login');
+      return;
+    }
+
+    // If an authenticated Student attempts to access auxiliary founder routes, redirect to dashboard
+    if (isAuxiliaryFounderRoute && user && user.role !== 'admin' && user.role !== 'founder') {
       handleNavigate('dashboard');
       return;
     }
 
-    // If an unauthenticated user tries to directly enter protected portal routes, redirect to landing & prompt login
-    if (isStudentDashboardRoute && !user) {
-      handleNavigate('landing');
+    // If user is on login view and authenticated, route founder to founder workspace and students to dashboard
+    if (currentView === 'login' && user) {
+      if (user.role === 'admin' || user.role === 'founder') {
+        handleNavigate('founder');
+      } else {
+        handleNavigate('dashboard');
+      }
+      return;
+    }
+
+    // If an unauthenticated user tries to directly enter protected student routes, redirect to login
+    if (isProtectedStudentRoute && !user) {
+      handleNavigate('login');
       openAuthModal('login');
       return;
     }
@@ -454,14 +486,18 @@ export const App: React.FC = () => {
       } catch (e) {}
     };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, []);
 
   // Dynamic SEO & Accessibility Language Engine
   useEffect(() => {
-    let title = 'Nihomi AI™ (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম';
+    let title = 'NIHOMI (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম';
     let description =
-      'বাংলায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল AI সেনসেই, অথেনটিক মিন্না নো নিহোঙ্গো ও JLPT N5, N4, N3, N2, N1 সম্পূর্ণ ২১০টি মাস্টার পাঠ্যক্রম ও টোকিও জব সিমুলেশন।';
+      'বাংলায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল নমি সেন্সেই, অথেনটিক মিন্না নো নিহোঙ্গো ও JLPT N5, N4, N3, N2, N1 সম্পূর্ণ ২১০টি মাস্টার পাঠ্যক্রম ও টোকিও জব সিমুলেশন।';
 
     if (currentView === 'courses' || currentView === 'curriculum' || currentView === 'pathways') {
       title = 'JLPT N5–N1 Curriculum & Masterclass Roadmap (২১০টি পাঠ) | Nihomi';
@@ -579,7 +615,8 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
+    <NomiProvider initialView={currentView}>
+      <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#141726] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
       {/* Offline Feedback & Service Worker Resilience Banner */}
       {!isFocusMode && !isAdLanding && !isCanvasMode && <OfflineNotificationBanner />}
 
@@ -609,8 +646,8 @@ export const App: React.FC = () => {
       {/* Global Export Download Path Toast Notification */}
       <ExportToastNotification />
 
-      {/* Main Header (Hidden in Real Japan Canvas, Student Dashboard, Journey, and Landing for dedicated UX) */}
-      {!isFocusMode && !isAdLanding && !isCanvasMode && !isDashboardRoute && !isJourneyMode && currentView !== 'landing' && currentView !== 'home' && currentView !== 'classic' && (
+      {/* Main Header (Hidden in Real Japan Canvas, Journey, and Landing for dedicated UX) */}
+      {!isFocusMode && !isAdLanding && !isCanvasMode && !isJourneyMode && currentView !== 'landing' && currentView !== 'home' && currentView !== 'classic' && (
         <Header
           currentView={currentView}
           onNavigate={handleNavigate}
@@ -650,7 +687,7 @@ export const App: React.FC = () => {
           <LessonPracticeView lessonId={viewParams.lessonId || 'n5-l1'} onNavigate={handleNavigate} />
         )}
         {currentView === 'portal' && (
-          (user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') ? (
+          (user?.role === 'admin' || user?.role === 'founder') ? (
             <PortalView onNavigate={handleNavigate} />
           ) : (
             <StudentPortalView initialTab="dashboard" onNavigate={handleNavigate} />
@@ -811,6 +848,9 @@ export const App: React.FC = () => {
         {(currentView === 'vocabulary' || currentView === 'vocab' || currentView === 'words') && (
           <VocabularyView onNavigate={handleNavigate} />
         )}
+        {(currentView === 'kotoba' || currentView === 'kotoba-canvas' || currentView === 'word-canvas') && (
+          <KotobaCanvasView initialWord={viewParams?.word} onNavigate={handleNavigate} />
+        )}
         {(currentView === 'ai-coach' || currentView === 'coach' || currentView === 'tutor') && (
           <AICoachView onNavigate={handleNavigate} />
         )}
@@ -843,6 +883,7 @@ export const App: React.FC = () => {
         isOpen={isDictionaryOpen}
         onClose={() => setIsDictionaryOpen(false)}
         onNavigateToFlashcards={() => handleNavigate('portal')}
+        onNavigate={handleNavigate}
       />
 
       {/* Global Keyboard Shortcut Helper Overlay (Triggered from Header or '?' key) */}
@@ -855,11 +896,11 @@ export const App: React.FC = () => {
       {/* Google Sign-in & Authentication Modal */}
       <AuthModal />
 
-      {/* Persistent AI Sensei Instant Grammar Floating Coach */}
-      {!isCanvasMode && !isJourneyMode && !isLandingMode && <FloatingAiSenseiWidget currentContext={{ viewName: currentView }} />}
+      {/* Canonical Nomi Universal Companion (Single identity across public, learner, workos & founder route families) */}
+      {!isCanvasMode && !isJourneyMode && <NomiUniversalCompanion currentView={currentView} />}
 
-      {/* Official WhatsApp & Student Admission Helpline Widget */}
-      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && currentView !== 'practice' && <WhatsAppHelpline />}
+      {/* Official WhatsApp & Student Admission Helpline Widget (Active on landing, pricing, account and support views; disabled during active drills) */}
+      {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && !['practice', 'dashboard', 'kana', 'kanji', 'quizzes', 'quiz-runner', 'vocabulary', 'kotoba', 'kotoba-canvas', 'memory-os', 'japan-twin', 'baito', 'mock-exams', 'mock-exam-runner', 'lesson'].includes(currentView) && <WhatsAppHelpline />}
 
       {/* PWA Home Screen Installation Prompt Banner */}
       {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <InstallPWA />}
@@ -868,26 +909,27 @@ export const App: React.FC = () => {
       {!isFocusMode && !isCanvasMode && !isJourneyMode && !isLandingMode && <CookieConsentBanner />}
 
       {/* Persistent Floating Pill when Founder is in Student Mode */}
-      {(user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') &&
+      {(user?.role === 'admin' || user?.role === 'founder') &&
         (currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'courses' || currentView === 'lesson') && (
-          <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 animate-bounce duration-1000">
+          <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-40">
             <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-stone-950 font-black text-xs shadow-2xl shadow-amber-500/40 border border-amber-300">
               <span className="flex items-center gap-1.5">
-                👑 Founder Mode Active
+                👑 Founder Preview Mode
               </span>
               <span>—</span>
               <button
                 type="button"
                 id="btn-return-founder-portal"
-                onClick={() => handleNavigate('portal')}
+                onClick={() => handleNavigate('founder')}
                 className="underline hover:text-white font-extrabold cursor-pointer transition-colors"
               >
-                [Return to Founder Portal]
+                [Return to Command Center]
               </button>
             </div>
           </div>
         )}
-    </div>
+      </div>
+    </NomiProvider>
   );
 };
 

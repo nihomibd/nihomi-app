@@ -526,7 +526,7 @@ export const CurriculumExplorerView: React.FC<CurriculumExplorerViewProps> = ({ 
   const completedPercentage = Math.round((completedLessons.length / totalLessonsCount) * 100);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 font-sans pb-24 text-left transition-colors">
+    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 font-sans pb-24 text-left transition-colors">
       
       {/* 1. HERO HEADER */}
       <div className="bg-stone-900 text-white pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-stone-800 relative overflow-hidden">

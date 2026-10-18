@@ -5,6 +5,7 @@ import { soundEffects } from '../../lib/soundEffects';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { speakJapanese } from '../../lib/tts';
 import { IconApple3D, IconBrush3D, IconLightbulb3D } from './Journey3DIcons';
+import { evaluateKanaStrokes } from '../../lib/kanaStrokeEvaluator';
 
 interface Point {
   x: number;
@@ -53,6 +54,8 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
   const currentStrokeRef = useRef<Point[]>([]);
   const [drawnCount, setDrawnCount] = useState(0);
   const [hasCelebrated, setHasCelebrated] = useState(false);
+  const [evalFeedback, setEvalFeedback] = useState<string>('');
+  const [evalScore, setEvalScore] = useState<number | null>(null);
 
   // Audio-reactive waveform ripple state
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -327,12 +330,22 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
       onStrokeDrawn?.(nextCount);
       soundEffects.playCorrectPing();
 
-      // Trigger celebration on completing all strokes
-      if (nextCount >= strokeCount && !hasCelebrated) {
-        setHasCelebrated(true);
-        soundEffects.playLessonCelebration();
-        triggerCelebrationConfetti();
-        onComplete?.();
+      // If completed all strokes, evaluate geometric accuracy
+      if (nextCount >= strokeCount) {
+        const canvasRect = canvasRef.current?.getBoundingClientRect();
+        const size = canvasRect?.width || 250;
+        const evalRes = evaluateKanaStrokes(char, strokeCount, newStrokes, size);
+        setEvalScore(evalRes.score);
+        setEvalFeedback(evalRes.feedbackBn);
+
+        if (evalRes.isCorrect && !hasCelebrated) {
+          setHasCelebrated(true);
+          soundEffects.playLessonCelebration();
+          triggerCelebrationConfetti();
+          onComplete?.();
+        } else if (!evalRes.isCorrect) {
+          soundEffects.playIncorrectSoft();
+        }
       }
     }
 
@@ -345,6 +358,8 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
     currentStrokeRef.current = [];
     setDrawnCount(0);
     setHasCelebrated(false);
+    setEvalFeedback('');
+    setEvalScore(null);
     redrawCanvas();
   };
 
@@ -565,6 +580,25 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
           <p className="text-[11px] text-stone-400 text-center">
             জলছাপের ওপর মাউস বা আঙুল ঘুরিয়ে সুন্দর করে লিখে ফেলো!
           </p>
+
+          {/* Genuine Geometric Stroke Feedback */}
+          {evalFeedback && !hasCelebrated && (
+            <div className="p-3 rounded-2xl bg-amber-950/70 border border-amber-500/50 text-amber-200 text-xs flex items-center justify-between gap-2 shadow-lg animate-in fade-in">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center shrink-0">
+                  {evalScore}%
+                </span>
+                <span className="leading-tight">{evalFeedback}</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleClearCanvas}
+                className="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] shrink-0 cursor-pointer"
+              >
+                আবার লিখুন
+              </button>
+            </div>
+          )}
 
           {/* Celebratory Victory Message & First Win CTA */}
           {hasCelebrated && (

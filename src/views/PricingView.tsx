@@ -32,34 +32,7 @@ interface PricingViewProps {
   onNavigate?: (view: string) => void;
 }
 
-// Pre-configured N5 Pro Lifetime Plan for direct checkout on Pricing page
-const N5_LIFETIME_PLAN: Plan = {
-  id: 'pro',
-  name: 'N5 Pro Lifetime Pass',
-  displayNameJa: 'N5プロ・生涯アクセスパス',
-  tagline: 'Complete JLPT N5 mastery with lifetime access',
-  description: 'Full access to Minna no Nihongo 1-25, 100 Kanji, Listening Lab, Nihomi WorkOS™, and 180-Mark Mock Exams',
-  monthlyPrice: 1990,
-  yearlyPrice: 4990,
-  currency: 'BDT',
-  badge: 'সর্বোচ্চ জনপ্রিয়',
-  isRecommended: true,
-  order: 1,
-  features: [
-    'মিন্না নো নিহোঙ্গো ১–২৫ সম্পূর্ণ কারিকুলাম ও ভিডিও নোটস',
-    '১০০টি N5 অপরিহার্য কাঞ্জি ও ইন্টারেক্টিভ স্ট্রোক ড্রয়িং',
-    'টোকিও নেটিভ অডিও লিসেনিং ল্যাব (第1-25課 Choukai)',
-    'JIS規格 履歴書 ও 職務経歴書 Pro A4 PDF এক্সপোর্ট',
-    'Nihomi WorkOS™ টোকিও কনবিনি ক্যাশিয়ার ও কাস্টমার সার্ভিস সিমুলেটর',
-    '১৮০ মার্কসের আনলিমিটেড মক টেস্ট ও ভেরিফাইড সনদ',
-    '২৪/৭ আনলিমিটেড Nihomi Sensei AI™ লাইভ টিউটর',
-    'আজীবন অ্যাক্সেস — কোনো মাসিক বা বাৎসরিক নবায়ন ফি নেই'
-  ],
-  aiMonthlyLimit: 500,
-  entitlements: ['n5', 'quizzes', 'ai_coach', 'jlpt_pro', 'certificates', 'japan_ready'],
-  isPublished: true
-};
-
+// Canonical Plan Definitions for PricingView (Single Source of Truth)
 const DEFAULT_PLANS: Plan[] = [
   {
     id: 'free',
@@ -86,7 +59,7 @@ const DEFAULT_PLANS: Plan[] = [
   },
   {
     id: 'starter',
-    name: 'Starter',
+    name: 'Nihomi Starter',
     displayNameJa: 'スタータープラン',
     tagline: 'Master JLPT N5 & N4 foundations with structured drills',
     description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.',
@@ -110,7 +83,7 @@ const DEFAULT_PLANS: Plan[] = [
   },
   {
     id: 'pro',
-    name: 'Pro',
+    name: 'Nihomi Pro',
     displayNameJa: 'プロプラン',
     tagline: 'The complete JLPT N5-N3 mastery & conversation system',
     description: 'Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and 1,500 Nihomi Coins/month.',
@@ -138,7 +111,7 @@ const DEFAULT_PLANS: Plan[] = [
   },
   {
     id: 'japan_ready',
-    name: 'Japan Ready',
+    name: 'Nihomi Japan Ready',
     displayNameJa: '日本就労・移住特化プラン',
     tagline: 'Everything you need for job interviews, visa, and life in Japan',
     description: 'Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and 4,000 Nihomi Coins/month.',
@@ -185,8 +158,10 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
     setBkashLoadingPlan(planId);
     setBkashError(null);
     try {
-      const tier = (planId === 'lifetime' || planId === 'n5_lifetime') ? 'n5_lifetime' : 'n5_pro';
-      const res = await billingApi.createBkashPayment({ tier });
+      const res = await billingApi.createBkashPayment({
+        planId,
+        interval
+      });
       if (res.success && res.bkashURL) {
         window.location.href = res.bkashURL;
       } else {
@@ -219,10 +194,6 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
       if (onNavigate) onNavigate('dashboard');
       return;
     }
-    if (!user) {
-      if (onNavigate) onNavigate('auth');
-      return;
-    }
     setSelectedPlanForCheckout(plan);
     setIsCheckoutOpen(true);
   };
@@ -247,7 +218,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 py-12 px-4 sm:px-6 lg:px-8" id="pricing-page">
+    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-zinc-900 dark:text-zinc-100 py-12 px-4 sm:px-6 lg:px-8" id="pricing-page">
       {/* Checkout Modal */}
       {selectedPlanForCheckout && (
         <CheckoutModal
@@ -324,13 +295,13 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
 
           {/* Monthly / 3-Month / Annual Toggle */}
           <div className="pt-2 flex items-center justify-center">
-            <div className="bg-zinc-200 dark:bg-zinc-800 p-1.5 rounded-2xl flex flex-wrap items-center justify-center gap-1 shadow-inner">
+            <div className="bg-stone-200 dark:bg-[#1B1E30] p-1.5 rounded-2xl flex flex-wrap items-center justify-center gap-1 shadow-inner border border-stone-300 dark:border-[#2A2E45]">
               <button
                 type="button"
                 onClick={() => setInterval('monthly')}
                 className={`px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
                   interval === 'monthly'
-                    ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-md'
+                    ? 'bg-white dark:bg-[#252A42] text-zinc-900 dark:text-zinc-100 shadow-md'
                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
                 }`}
                 id="pricing-toggle-monthly"
@@ -347,9 +318,9 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 }`}
                 id="pricing-toggle-quarterly"
               >
-                <span>৩ মাস (12-Week N5 Pass)</span>
+                <span>৩ মাস (Quarterly)</span>
                 <span className="text-[10px] bg-amber-700 text-white px-2 py-0.5 rounded-full font-extrabold">
-                  জনপ্রিয়
+                  Save ~5%
                 </span>
               </button>
               <button
@@ -364,7 +335,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
               >
                 <span>৬ মাস (Semi-Annual)</span>
                 <span className="text-[10px] bg-purple-700 text-white px-2 py-0.5 rounded-full font-extrabold">
-                  Save 10%
+                  Save ~10%
                 </span>
               </button>
               <button
@@ -377,9 +348,9 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 }`}
                 id="pricing-toggle-yearly"
               >
-                <span>১২ মাস (Full Japan Ready 🇯🇵)</span>
+                <span>১২ মাস (Yearly)</span>
                 <span className="text-[10px] bg-red-700 text-white px-2 py-0.5 rounded-full font-extrabold">
-                  Save 30%
+                  Save ~15%
                 </span>
               </button>
             </div>
@@ -417,8 +388,8 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 transition={{ duration: 0.2 }}
                 className={`relative flex flex-col justify-between rounded-2xl p-6 transition-all ${
                   isPopular
-                    ? 'bg-white dark:bg-zinc-900 border-2 border-red-500 dark:border-red-600 shadow-xl shadow-red-500/5 ring-4 ring-red-500/10'
-                    : 'bg-white dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800 shadow-md'
+                    ? 'bg-white dark:bg-[#1B1E30] border-2 border-[#E45147] dark:border-[#E45147] shadow-xl shadow-[#E45147]/10 ring-4 ring-[#E45147]/15'
+                    : 'bg-white dark:bg-[#1B1E30] border border-stone-200 dark:border-[#2A2E45] shadow-md'
                 }`}
                 id={`plan-card-${plan.id}`}
               >
@@ -459,6 +430,8 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                           ? '/আজীবন ফ্রি'
                           : interval === 'yearly'
                           ? '/১২ মাস'
+                          : interval === 'half_yearly'
+                          ? '/৬ মাস'
                           : interval === 'quarterly'
                           ? '/৩ মাস'
                           : '/মাস'}
@@ -495,7 +468,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 {/* Card CTA */}
                 <div className="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
                   {/* Official bKash Tokenized Checkout Button */}
-                  {(plan.id === 'pro' || (plan.id as string) === 'lifetime' || (plan.id as string) === 'n5_pro' || (plan.id as string) === 'n5_lifetime') && !isCurrent && (
+                  {plan.id !== 'free' && !isCurrent && (
                     <button
                       type="button"
                       onClick={() => handleDirectBkashCheckout(plan.id)}
@@ -568,12 +541,12 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white">
               {interval === 'quarterly'
-                ? '১২ সপ্তাহের সম্পূর্ণ N5 রোডম্যাপ (12-Week N5 Roadmap)'
+                ? '৩ মাসের কোয়ার্টারলি N5 রোডম্যাপ (Quarterly Roadmap)'
                 : '১২ মাসের সম্পূর্ণ জাপান ক্যারিয়ার ও লাইফ প্রিপারেশন রোডম্যাপ'}
             </h3>
             <p className="text-xs text-zinc-500 dark:text-stone-400">
               {interval === 'quarterly'
-                ? 'কোনো অতিরঞ্জিত প্রতিশ্রুতি নয়—মিন্না নো নিহোঙ্গো ১–২৫, ৫টি বাস্তব মিশন এবং ১০০ কাঞ্জির সুনির্দিষ্ট সপ্তাহভিত্তিক অগ্রগতি।'
+                ? 'কোনো অতিরঞ্জিত প্রতিশ্রুতি নয়—মিন্না নো নিহোঙ্গো ১–২৫, বাস্তব মিশন এবং ১০০ কাঞ্জির সুনির্দিষ্ট ত্রৈমাসিক অগ্রগতি।'
                 : 'হিরাগানা থেকে শুরু করে N5, N4, বাইতো কাস্টমার সার্ভিস, JIS রিজিউমে এবং ভিসা ইন্টারভিউ পর্যন্ত সামগ্রিক প্রস্তুতি।'}
             </p>
           </div>
@@ -581,22 +554,22 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           {interval === 'quarterly' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
               <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
-                <div className="text-[10px] font-mono font-bold text-red-500 uppercase">সপ্তাহ ১–৩ • ধাপ ০১</div>
+                <div className="text-[10px] font-mono font-bold text-red-500 uppercase">মাস ০১ • ধাপ ০১</div>
                 <div className="font-bold text-sm text-zinc-900 dark:text-white">বর্ণ ও মৌলিক উচ্চারণ</div>
                 <p className="text-xs text-zinc-600 dark:text-stone-400">৪৬ হিরাগানা, ৪৬ কাতাকানা ও প্রথম ৩০টি প্রাথমিক জাপানি শব্দ।</p>
               </div>
               <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
-                <div className="text-[10px] font-mono font-bold text-amber-500 uppercase">সপ্তাহ ৪–৬ • ধাপ ০২</div>
+                <div className="text-[10px] font-mono font-bold text-amber-500 uppercase">মাস ০২ • ধাপ ০২</div>
                 <div className="font-bold text-sm text-zinc-900 dark:text-white">N5 প্রাথমিক পাঠ ১–৮</div>
                 <p className="text-xs text-zinc-600 dark:text-stone-400">নিজের পরিচয়, বস্তু, স্থান, সময়, দৈনন্দিন কাজ ও বিশেষণের ব্যবহার।</p>
               </div>
               <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
-                <div className="text-[10px] font-mono font-bold text-blue-500 uppercase">সপ্তাহ ৭–৯ • ধাপ ০৩</div>
+                <div className="text-[10px] font-mono font-bold text-blue-500 uppercase">মাস ০৩ • ধাপ ০৩</div>
                 <div className="font-bold text-sm text-zinc-900 dark:text-white">টোকিও কনবিনি ও স্টেশন</div>
                 <p className="text-xs text-zinc-600 dark:text-stone-400">তে-ফর্ম (〜てください), বাস্তব কেনাকাটা, ট্রেনের টিকিট ও লিসেনিং।</p>
               </div>
               <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/5 space-y-1.5">
-                <div className="text-[10px] font-mono font-bold text-emerald-500 uppercase">সপ্তাহ ১০–১২ • ধাপ ০৪</div>
+                <div className="text-[10px] font-mono font-bold text-emerald-500 uppercase">কোয়ার্টার সমাপ্তি • ধাপ ০৪</div>
                 <div className="font-bold text-sm text-zinc-900 dark:text-white">N5 পূর্ণাঙ্গ জয় ও মক এক্সাম</div>
                 <p className="text-xs text-zinc-600 dark:text-stone-400">লেসন ৯–২৫ সমাপ্তি, ১০০ কাঞ্জি, ১৮০ নম্বরের মক টেস্ট ও ভেরিফাইড সনদ।</p>
               </div>
@@ -627,31 +600,28 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           )}
         </div>
 
-        {/* Trust Badges: Bangladesh Gateways */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Trust Badges: bKash Only Gateway */}
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1E30] border border-stone-200 dark:border-[#2A2E45] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center justify-center md:justify-start gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              100% Authorized Bangladesh Payment Methods
+              <ShieldCheck className="w-4 h-4 text-[#E2136E]" />
+              পেমেন্ট মাধ্যম: শুধুমাত্র বিকাশ (bKash Only)
             </h4>
             <p className="text-xs text-zinc-500">
-              Fast manual verification & swift activation via bKash & Nagad (Send Money / TrxID) and card payments.
+              কার্ডের প্রয়োজন নেই • bKash দিয়ে সহজে ও নিরাপদে সরাসরি ফি পরিশোধ করুন।
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => setIsBkashProModalOpen(true)}
-              className="px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300 font-bold text-xs hover:bg-pink-100 transition-colors flex items-center gap-1"
+              className="px-4 py-2 rounded-xl bg-[#E2136E] text-white font-bold text-xs hover:bg-[#c90f61] transition-colors flex items-center gap-1.5 shadow-md shadow-[#E2136E]/20 cursor-pointer"
             >
-              <Smartphone className="w-3 h-3" />
-              bKash MFS (সরাসরি পেমেন্ট)
+              <Smartphone className="w-3.5 h-3.5" />
+              bKash দিয়ে পেমেন্ট করুন
             </button>
-            <div className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold text-xs">
-              SSLCommerz (Cards & NetBanking)
-            </div>
-            <div className="px-3 py-1.5 rounded-lg bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 font-bold text-xs">
-              Nagad / Rocket
+            <div className="px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300 font-medium text-xs">
+              অনলাইন গেটওয়ে সংযোগ প্রক্রিয়াধীন (Sandbox Testing)
             </div>
             <div className="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold text-xs">
               256-Bit SSL Encrypted
@@ -666,10 +636,10 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             <p className="text-xs text-zinc-500">Compare every feature and entitlement side-by-side</p>
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-[#1B1E30] rounded-2xl border border-stone-200 dark:border-[#2A2E45] overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
-                <thead className="bg-zinc-50 dark:bg-zinc-800/60 border-b border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold uppercase tracking-wider text-[11px]">
+                <thead className="bg-stone-50 dark:bg-[#141726] border-b border-stone-200 dark:border-[#2A2E45] text-zinc-700 dark:text-zinc-300 font-bold uppercase tracking-wider text-[11px]">
                   <tr>
                     <th className="py-3 px-4">Feature / Curriculum</th>
                     <th className="py-3 px-3 text-center">Free (৳0)</th>
@@ -720,7 +690,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                   </tr>
                   <tr>
                     <td className="py-3 px-4 font-semibold text-zinc-900 dark:text-zinc-100">
-                      AI Sensei Coaching Monthly Quota
+                      Nomi Sensei Coaching Monthly Quota
                     </td>
                     <td className="py-3 px-3 text-center text-zinc-600">10 queries / mo</td>
                     <td className="py-3 px-3 text-center text-zinc-800 dark:text-zinc-200">100 queries / mo</td>
@@ -787,7 +757,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
             <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 space-y-1.5 text-xs">
               <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">How does the 7-day free trial work?</h4>
               <p className="text-zinc-600 dark:text-zinc-400">
-                New students can activate a 7-day free trial of the Pro Plan with one click. You get unrestricted access to N5–N3 lessons and AI Sensei.
+                New students can activate a 7-day free trial of the Pro Plan with one click. You get unrestricted access to N5–N3 lessons and Nomi Sensei.
               </p>
             </div>
 

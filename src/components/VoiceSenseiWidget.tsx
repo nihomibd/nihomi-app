@@ -211,12 +211,12 @@ export const VoiceSenseiWidget: React.FC<VoiceSenseiWidgetProps> = ({ onOpenFull
               VOICE ACTIVATED &bull; NATIVE TOKYO ACCENT
             </span>
             <span className="text-xs text-stone-400 font-mono">
-              WebSpeech AI Sensei
+              WebSpeech Nomi Sensei
             </span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold font-serif text-white flex items-center gap-2">
             <Bot className="w-5 h-5 text-red-500" />
-            <span>Voice Sensei Quick Query (ভয়েস সেনসেই সহকারী)</span>
+            <span>Voice Sensei Quick Query (ভয়েস সেন্সেই সহকারী)</span>
           </h3>
           <p className="text-xs text-stone-400 max-w-xl">
             Tap the microphone to speak your question in Japanese or English, or select a quick grammar query for audio-responsive guidance.

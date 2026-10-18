@@ -232,12 +232,14 @@ interface QuickDictionaryOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onNavigateToFlashcards?: () => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
 export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
   isOpen,
   onClose,
-  onNavigateToFlashcards
+  onNavigateToFlashcards,
+  onNavigate
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntry, setSelectedEntry] = useState<DictionaryEntry | null>(null);
@@ -652,8 +654,25 @@ export const QuickDictionaryOverlay: React.FC<QuickDictionaryOverlayProps> = ({
                         </div>
                       )}
 
-                      {/* AI GENERATE EXAMPLE SENTENCE SECTION */}
+                      {/* N-I-H-O-M-I Canvas™ Full Learning Journey CTA */}
                       <div className="pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onClose();
+                            if (onNavigate) {
+                              onNavigate('kotoba', { word: selectedEntry.kanji || selectedEntry.reading });
+                            }
+                          }}
+                          className="w-full py-2.5 px-4 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-2xl shadow-xs transition flex items-center justify-center space-x-2 cursor-pointer mb-2"
+                        >
+                          <BookOpen className="w-4 h-4 text-white" />
+                          <span>এভাবে শিখুন (N-I-H-O-M-I Canvas™)</span>
+                        </button>
+                      </div>
+
+                      {/* AI GENERATE EXAMPLE SENTENCE SECTION */}
+                      <div>
                         <button
                           type="button"
                           onClick={handleGenerateExampleSentence}

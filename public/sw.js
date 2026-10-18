@@ -1,6 +1,7 @@
-// NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V3
-// Designed for high reliability on 3G/4G mobile networks in Bangladesh
-const CACHE_VERSION = 'v3';
+// NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V4
+// Strict PWA security: Only cache static public app-shell assets.
+// Never precache or cache /api/*, student PII, or checkout flows.
+const CACHE_VERSION = 'v4';
 const CURRENT_CACHE_NAME = `nihomi-${CACHE_VERSION}`;
 
 // Core Shell & Offline Assets
@@ -17,17 +18,7 @@ const OFFLINE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap'
 ];
 
-// Key Offline Curriculum API Routes to Pre-Cache
-const OFFLINE_CURRICULUM_ROUTES = [
-  '/api/learning/modules',
-  '/api/learning/lessons/1',
-  '/api/learning/lessons/2',
-  '/api/learning/lessons/3',
-  '/api/quizzes',
-  '/api/work-japanese/modules'
-];
-
-// 1. Install Phase — Precache Static Shell & Core Curriculum Assets
+// 1. Install Phase — Precache Static Shell Assets only
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CURRENT_CACHE_NAME).then(async (cache) => {
@@ -38,20 +29,6 @@ self.addEventListener('install', (event) => {
             console.warn(`SW: Non-fatal precache skip for ${asset}:`, err);
           })
         )
-      );
-
-      // Precache core curriculum JSON endpoints for offline study
-      await Promise.allSettled(
-        OFFLINE_CURRICULUM_ROUTES.map(async (route) => {
-          try {
-            const resp = await fetch(route, { headers: { Accept: 'application/json' } });
-            if (resp && resp.ok) {
-              await cache.put(route, resp);
-            }
-          } catch (e) {
-            console.warn(`SW: Non-fatal precache skip for curriculum route ${route}:`, e);
-          }
-        })
       );
     })
   );

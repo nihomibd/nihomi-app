@@ -44,7 +44,7 @@ export const WhatsAppHelpline: React.FC<WhatsAppHelplineProps> = ({ className = 
     { label: 'ভর্তি ও কোর্স ফি', msg: 'হ্যালো নিহোমি! আমি JLPT N5 কোর্সে ভর্তির ফি ও ডিসকাউন্ট অফার সম্পর্কে জানতে চাই।' },
     { label: 'বিকাশ পেমেন্ট', msg: 'হ্যালো নিহোমি! আমি bKash / Nagad এর মাধ্যমে ফি পরিশোধ করেছি, ভেরিফিকেশন চাই।' },
     { label: 'অফিস ভিজিট', msg: `হ্যালো নিহোমি! আমি ${safeAddressBn} অফিসে সরাসরি এসে কথা বলতে চাই।` },
-    { label: 'AI সেনসেই ডেমো', msg: 'হ্যালো নিহোমি! ২৪/৭ AI সেনসেই এবং লিসেনিং অডিও ল্যাব কীভাবে কাজ করে?' }
+    { label: 'নমি সেন্সেই ডেমো', msg: 'হ্যালো নিহোমি! ২৪/৭ নমি সেন্সেই এবং লিসেনিং অডিও ল্যাব কীভাবে কাজ করে?' }
   ];
 
   // Broadcast support open/close state so other floating triggers can hide gracefully

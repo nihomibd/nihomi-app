@@ -119,10 +119,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   const [copiedUrl, setCopiedUrl] = useState(false);
 
   // Check initial founder authorization
-  const isFounderUser =
-    user?.role === 'founder' ||
-    user?.role === 'admin' ||
-    user?.email === 'mdtanvirkabirbiplob@gmail.com';
+  const isFounderUser = user?.role === 'founder' || user?.role === 'admin';
 
   useEffect(() => {
     if (isFounderUser) {
@@ -409,7 +406,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   // 1. Gate for Founder Protection
   if (!isUnlocked && !isFounderUser) {
     return (
-      <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex items-center justify-center p-4 font-sans text-left">
+      <div className="min-h-screen bg-[#141726] text-stone-100 flex items-center justify-center p-4 font-sans text-left">
         <div className="max-w-md w-full bg-stone-900 border border-stone-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
           <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30 shadow-md">
             <Lock className="w-7 h-7" />
@@ -437,7 +434,7 @@ export const AdminGrowthView: React.FC<AdminGrowthViewProps> = ({ onNavigate }) 
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-stone-100 font-sans antialiased text-left selection:bg-amber-500 selection:text-stone-950 pb-24">
+    <div className="min-h-screen bg-[#141726] text-stone-100 font-sans antialiased text-left selection:bg-amber-500 selection:text-stone-950 pb-24">
       
       {/* 1. TOP FOUNDER BAR */}
       <div className="bg-stone-950 border-b border-stone-800 py-6 px-4 sm:px-6 lg:px-8">

@@ -150,6 +150,10 @@ class SoundEngine {
     this.playIncorrectSoft();
   }
 
+  public playIncorrectBuzz(): void {
+    this.playIncorrectSoft();
+  }
+
   /**
    * Fanfare melody when a quiz or lesson is 100% completed
    */

@@ -435,7 +435,7 @@ export const VisionSenseiModal: React.FC<VisionSenseiModalProps> = ({ isOpen, on
                       ) : (
                         <>
                           <Sparkles className="w-4 h-4" />
-                          <span>Analyze Japanese Text with AI Sensei</span>
+                          <span>Analyze Japanese Text with Nomi Sensei</span>
                         </>
                       )}
                     </button>

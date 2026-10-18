@@ -244,7 +244,7 @@ export const NihomiCloudView: React.FC<NihomiCloudViewProps> = ({ onUpgradeClick
   return (
     <div
       id="nihomi-cloud-master-view"
-      className="min-h-screen bg-[#FAF9F6] dark:bg-[#0a0a12] text-stone-900 dark:text-stone-100 flex flex-col md:flex-row"
+      className="min-h-screen bg-[#FAF9F6] dark:bg-[#141726] text-stone-900 dark:text-stone-100 flex flex-col md:flex-row"
     >
       {/* Sidebar navigation */}
       <CloudSidebar

@@ -71,7 +71,7 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         }
       }).catch(() => {});
     }
-  } else if (window.location.protocol === 'https:' && import.meta.env.PROD) {
+  } else if ((window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && import.meta.env.PROD) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')

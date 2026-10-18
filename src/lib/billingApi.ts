@@ -360,7 +360,9 @@ export const billingApi = {
 
   // Real bKash Tokenized Checkout Create
   async createBkashPayment(params: {
-    tier: 'n5_pro' | 'n5_lifetime';
+    tier?: string;
+    planId?: string;
+    interval?: string;
     amount?: number;
     couponCode?: string;
   }): Promise<{

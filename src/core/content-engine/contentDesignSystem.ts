@@ -26,7 +26,7 @@ export const NIHOMI_CORE_DESIGN_SYSTEM: BrandingThemeTokens = {
   brandNameJa: '日本語学習オペレーティングシステム',
   primaryColor: '#0C0A09',
   accentColor: '#DC2626',
-  surfaceBg: '#FAF9F6',
+  surfaceBg: '#F6F0E6',
   cardBg: '#FFFFFF',
   fontSans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontJapanese: '"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif',

@@ -116,7 +116,7 @@ export const EmailSignatureView: React.FC = () => {
   return (
     <div
       id="email-signature-generator-root"
-      className="bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
+      className="bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
     >
       <div className="max-w-4xl mx-auto space-y-8">
         

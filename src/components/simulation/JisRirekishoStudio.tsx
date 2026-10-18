@@ -26,7 +26,8 @@ import {
   ArrowRight,
   Loader2,
   Lock,
-  Crown
+  Crown,
+  Info
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -88,8 +89,9 @@ interface JisRirekishoStudioProps {
 }
 
 export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved, onNavigate }) => {
-  const { activePlanId } = useAuth();
+  const { activePlanId, user, openAuthModal } = useAuth();
   const isPro = activePlanId !== 'free';
+  const [showAuthGateNotice, setShowAuthGateNotice] = useState(false);
 
   const [formData, setFormData] = useState<JisRirekishoData>(() => {
     try {
@@ -108,9 +110,11 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [showLeadMagnetModal, setShowLeadMagnetModal] = useState(false);
+  const [downloadSuccessNotice, setDownloadSuccessNotice] = useState(false);
   const [isPolishingMotivation, setIsPolishingMotivation] = useState(false);
   const [isPolishingSelfPr, setIsPolishingSelfPr] = useState(false);
   const [saveSuccessNotice, setSaveSuccessNotice] = useState(false);
+  const [isSavedToCloud, setIsSavedToCloud] = useState(false);
   const [viewMode, setViewMode] = useState<'editor' | 'preview'>('editor');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const paperRef = useRef<HTMLDivElement>(null);
@@ -129,6 +133,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
           const data = await res.json();
           if (data.rirekisho && isMounted) {
             setFormData((prev) => ({ ...prev, ...data.rirekisho }));
+            setIsSavedToCloud(true);
           }
         }
       } catch (err) {
@@ -142,8 +147,14 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
   }, []);
 
   const handleSave = async () => {
-    setIsSaving(true);
     soundEffects.playButtonTap();
+    if (!user) {
+      setShowAuthGateNotice(true);
+      openAuthModal?.('login');
+      return;
+    }
+    setIsSaving(true);
+    let cloudSynced = false;
 
     try {
       // Always persist to local cache first
@@ -160,16 +171,19 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.rirekisho && onSaved) onSaved(data.rirekisho);
+        if (data.rirekisho) {
+          cloudSynced = true;
+          if (onSaved) onSaved(data.rirekisho);
+        }
       }
     } catch (e) {
       console.warn('Remote save skipped, saved to local cache successfully:', e);
     } finally {
       setIsSaving(false);
+      setIsSavedToCloud(cloudSynced);
       soundEffects.playCorrectPing();
       setSaveSuccessNotice(true);
-      setTimeout(() => setSaveSuccessNotice(false), 3000);
-      setShowLeadMagnetModal(true);
+      setTimeout(() => setSaveSuccessNotice(false), 3500);
     }
   };
 
@@ -190,9 +204,9 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
   const handleDownloadPdf = async () => {
     soundEffects.playButtonTap();
-
-    if (!isPro) {
-      setShowLeadMagnetModal(true);
+    if (!user) {
+      setShowAuthGateNotice(true);
+      openAuthModal?.('login');
       return;
     }
 
@@ -248,7 +262,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       pdf.save(`Nihomi_JIS_Rirekisho_${safeName}.pdf`);
 
       soundEffects.playLessonCelebration();
-      setShowLeadMagnetModal(true);
+      setDownloadSuccessNotice(true);
+      setTimeout(() => setDownloadSuccessNotice(false), 4000);
     } catch (err) {
       console.warn('JIS PDF export failed:', err);
     } finally {
@@ -422,6 +437,9 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
             <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/30">
               JIS 規格準拠 (Official Standard)
             </span>
+            <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold border border-emerald-500/30">
+              বিনামূল্যে তৈরি ও ডাউনলোড (FREE)
+            </span>
             <span className="text-xs text-slate-400">アルバイト・正社員・特定技能・ビザ提出用</span>
           </div>
           <h2 className="text-xl font-black text-slate-100 mt-1 flex items-center gap-2">
@@ -443,9 +461,10 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
           </button>
 
           <button
+            id="jis-download-pdf-btn"
             onClick={handleDownloadPdf}
             disabled={isGeneratingPdf}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition flex items-center gap-2 disabled:opacity-50"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg transition flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             title="Download JIS Resume as Official A4 PDF"
           >
             {isGeneratingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
@@ -453,9 +472,10 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
           </button>
 
           <button
+            id="jis-save-draft-btn"
             onClick={handleSave}
             disabled={isSaving}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold rounded-xl transition flex items-center gap-2 text-xs"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold rounded-xl transition flex items-center gap-2 text-xs cursor-pointer"
           >
             <Save className="w-4 h-4 text-amber-400" />
             <span>{isSaving ? '保存中...' : 'データを保存'}</span>
@@ -463,14 +483,95 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         </div>
       </div>
 
+      {/* Legal & Pedagogical Disclaimer */}
+      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-200 text-xs flex items-start gap-2.5 print:hidden">
+        <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+        <span className="leading-relaxed">
+          <strong>ডিসক্লেইমার:</strong> নিহোমি রিজিউমে বিল্ডার একটি তথ্য ও ফরম্যাটিং সহায়ক ফ্রি টুল। এটি কোনো নিশ্চিত চাকরি, ভিসা অনুমোদন বা ভর্তির নিশ্চয়তা প্রদান করে না। ব্যবহারকারী প্রদত্ত তথ্যের সত্যতার দায়ভার ব্যবহারকারীর নিজের।
+        </span>
+      </div>
+
+      {/* Auth Prompt or Authenticated Status */}
+      {!user ? (
+        <div id="jis-auth-prompt-banner" className="p-4 bg-slate-900 border border-amber-500/30 rounded-2xl text-slate-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg print:hidden">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <div>
+              <span className="font-bold text-amber-300">গেস্ট প্রিভিউ মোড (Guest Preview):</span>
+              <span className="text-slate-300 ml-1">
+                আপনি ডেমো ফরম এডিট ও প্রিভিউ করতে পারবেন। তবে আপনার নিজস্ব JIS রিজিউমে স্থায়ীভাবে সংরক্ষণ এবং অফিশিয়াল A4 PDF এক্সপোর্ট করতে গুগল অ্যাকাউন্ট দিয়ে বিনামূল্যে সাইন-ইন আবশ্যক।
+              </span>
+            </div>
+          </div>
+          <button
+            id="jis-auth-signin-btn"
+            type="button"
+            onClick={() => openAuthModal?.('login')}
+            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs rounded-xl shadow transition shrink-0 cursor-pointer"
+          >
+            গুগল দিয়ে সাইন-ইন করুন (ফ্রি)
+          </button>
+        </div>
+      ) : (
+        <div id="jis-auth-logged-in-badge" className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-300 text-xs flex items-center justify-between gap-2 print:hidden">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>
+              সাইন-ইন সফল: <strong>{user.name || user.email}</strong> • অনুমোদিত ফ্রি বেনিফিট সক্রিয় (অফিসিয়াল A4 PDF এক্সপোর্ট আনলকড)
+            </span>
+          </div>
+          <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold">
+            STUDENT AUTHENTICATED
+          </span>
+        </div>
+      )}
+
+      {showAuthGateNotice && !user && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-3.5 bg-amber-500/20 border border-amber-500/40 rounded-xl text-amber-300 text-xs font-bold flex items-center justify-between gap-2 print:hidden"
+        >
+          <div className="flex items-center gap-2">
+            <Info className="w-4 h-4 shrink-0 text-amber-400" />
+            <span>অফিসিয়াল JIS A4 PDF এক্সপোর্ট ও ক্লাউড সেভের জন্য দয়া করে গুগল অ্যাকাউন্ট দিয়ে সাইন-ইন সম্পন্ন করুন।</span>
+          </div>
+          <button
+            onClick={() => openAuthModal?.('login')}
+            className="px-3 py-1 bg-amber-500 text-slate-950 rounded-lg text-xs font-extrabold cursor-pointer shrink-0"
+          >
+            লগইন করুন
+          </button>
+        </motion.div>
+      )}
+
+      {downloadSuccessNotice && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-3.5 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-300 text-xs font-bold flex items-center gap-2 print:hidden"
+        >
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+          <span>অফিসিয়াল JIS Z 8303 স্ট্যান্ডার্ড A4 PDF সফলভাবে আপনার ডিভাইসে ডাউনলোড হয়েছে!</span>
+        </motion.div>
+      )}
+
       {saveSuccessNotice && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-300 text-xs font-bold flex items-center gap-2 print:hidden"
+          className={`p-3 rounded-xl text-xs font-bold flex items-center gap-2 print:hidden ${
+            isSavedToCloud
+              ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+              : 'bg-amber-500/20 border border-amber-500/40 text-amber-300'
+          }`}
         >
-          <CheckCircle2 className="w-4 h-4" />
-          <span>履歴書データが正常に保存されました。(Saved to Nihomi Cloud & Local Storage)</span>
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>
+            {isSavedToCloud
+              ? '履歴書データがクラウドに保存されました。(ক্লাউড ডেটাবেসে সফলভাবে সংরক্ষিত)'
+              : 'ローカル下書きとして保存されました。(লোকাল ডিভাইস ক্যাশে ড্রাফট সংরক্ষিত — ক্লাউড সিঙ্ক বাকি)'}
+          </span>
         </motion.div>
       )}
 
@@ -1282,7 +1383,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
                 }}
                 className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm shadow-xl shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Unlock Pro PDF Export (৳৪৯৯)</span>
+                <span>Unlock Pro PDF Export (Upgrade to Pro)</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

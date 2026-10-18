@@ -21,12 +21,10 @@ export const FounderGuard: React.FC<FounderGuardProps> = ({ children, onNavigate
     );
   }
 
-  // Strict Founder Verification (Role === 'FOUNDER'/'admin' or Email === Founder Email)
+  // Strict Server-Resolved Founder Verification (Role === 'founder' || Role === 'admin')
   const isFounder =
-    (user?.role as string)?.toUpperCase() === 'FOUNDER' ||
-    user?.role === 'admin' ||
-    user?.email?.toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' ||
-    (user as any)?.isFounder === true;
+    (user?.role as string)?.toLowerCase() === 'founder' ||
+    user?.role === 'admin';
 
   if (!user || !isFounder) {
     return (

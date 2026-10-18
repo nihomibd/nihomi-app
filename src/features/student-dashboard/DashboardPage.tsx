@@ -237,7 +237,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   if (isMockExamOpen) {
     return (
-      <div className="min-h-screen bg-[#0a0a12] text-white">
+      <div className="min-h-screen bg-[#141726] text-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 pt-4">
           <button type="button" onClick={() => setIsMockExamOpen(false)} className="rounded-xl border border-slate-700 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
             ← Dashboard
@@ -643,8 +643,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <div className="pointer-events-auto flex items-center gap-2 bg-white/95 backdrop-blur-xl border border-stone-200/90 shadow-xl shadow-stone-900/10 rounded-2xl px-3 py-2.5">
             {/* Sensei Avatar Pulse */}
             <div className="relative shrink-0">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center shadow-sm">
-                <span className="text-white font-black text-sm leading-none">日</span>
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 overflow-hidden flex items-center justify-center shadow-sm">
+                <img
+                  src="/brand/nomi/nomi-avatar.png"
+                  alt="Nomi Sensei"
+                  className="w-full h-full object-cover"
+                />
               </div>
               {isSearchingSensei && (
                 <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white animate-pulse" />

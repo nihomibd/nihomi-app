@@ -113,10 +113,10 @@ export const DEFAULT_JLPT_N5_ROADMAP: JLPTStudyPlan = {
     {
       phaseNumber: 4,
       totalPhases: 4,
-      name: 'Official JLPT Mock Marathon & Ghost Weakness Eradication',
+      name: 'JLPT-Style Mock Marathon & Ghost Weakness Eradication',
       nameJa: '第4期：公式模試マラソンと弱点克服',
-      goalDescription: 'Take 3 full-length timed mock exams under official condition. Eliminate all remaining particle errors in MemoryOS™ Ghost Mode.',
-      goalDescriptionBn: 'পূর্ণাঙ্গ অফিসিয়াল টাইমারযুক্ত ৩টি মক পরীক্ষা এবং মেমরি ওএস-এ সমস্ত দুর্বল পার্টিকেল ও কাঞ্জির ১০০% রিকভারি।',
+      goalDescription: 'Take 3 full-length timed mock exams under real exam conditions. Eliminate all remaining particle errors in MemoryOS™ Ghost Mode.',
+      goalDescriptionBn: 'পূর্ণাঙ্গ টাইমারযুক্ত ৩টি JLPT-স্টাইল মক পরীক্ষা এবং মেমরি ওএস-এ সমস্ত দুর্বল পার্টিকেল ও কাঞ্জির ১০০% রিকভারি।',
       startDate: '2026-11-21',
       endDate: '2026-12-06',
       progressPercent: 0,

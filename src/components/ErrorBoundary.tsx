@@ -146,7 +146,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div
           id="nihomi-global-error-recovery"
-          className="min-h-screen bg-[#0a0a12] text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans select-none"
+          className="min-h-screen bg-[#141726] text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans select-none"
         >
           <div className="max-w-lg w-full bg-[#121222] border border-red-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center backdrop-blur-xl relative overflow-hidden">
             {/* Subtle Japanese Background Watermark */}

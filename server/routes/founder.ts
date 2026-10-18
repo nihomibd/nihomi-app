@@ -195,7 +195,7 @@ founderRouter.post('/market-target', (req: AuthenticatedRequest, res: Response) 
         geography: Array.isArray(geography) ? geography : ['Dhaka', 'Tokyo'],
         customerSegment: customerSegment || 'JLPT Candidates',
         language: language || 'Bengali / Japanese / English',
-        priceRange: priceRange || '৳499 - ৳14,999 BDT',
+        priceRange: priceRange || '৳990 - ৳40,700 BDT',
         acquisitionChannels: Array.isArray(acquisitionChannels) ? acquisitionChannels : ['Organic Social', 'Webinars'],
         priority: priority || 'P1_EXPANSION',
         timeframe: timeframe || '2026-2027'

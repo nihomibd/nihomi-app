@@ -1,5 +1,6 @@
-import React from 'react';
-import { Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { LandingPageContainer } from './LandingPageContainer';
+import { Check, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
 import { PlanId } from '../../types';
 
 interface PricingSectionProps {
@@ -7,212 +8,277 @@ interface PricingSectionProps {
   onSelectPlan: (planId: PlanId) => void;
 }
 
+type BillingInterval = 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';
+
 export const PricingSection: React.FC<PricingSectionProps> = ({ onNavigate, onSelectPlan }) => {
-  const checklist = [
-    { label: 'Nihomi Cloud' },
-    { label: 'AI Sensei' },
-    { label: 'ব্যক্তিগত শেখার পথ' },
-    { label: 'মোবাইল ও ওয়েবে অ্যাক্সেস' }
-  ];
+  const [interval, setInterval] = useState<BillingInterval>('monthly');
+
+  // Exact canonical prices per the 12-price matrix
+  const pricingData = {
+    starter: {
+      monthly: 990,
+      quarterly: 2820,
+      half_yearly: 5350,
+      yearly: 10100
+    },
+    pro: {
+      monthly: 1990,
+      quarterly: 5670,
+      half_yearly: 10750,
+      yearly: 20300
+    },
+    japan_ready: {
+      monthly: 3990,
+      quarterly: 11370,
+      half_yearly: 21550,
+      yearly: 40700
+    }
+  };
+
+  const formatPrice = (amount: number) => {
+    return '৳' + amount.toLocaleString('en-IN');
+  };
+
+  const getIntervalLabel = () => {
+    switch (interval) {
+      case 'monthly': return '/ মাস';
+      case 'quarterly': return '/ ৩ মাস';
+      case 'half_yearly': return '/ ৬ মাস';
+      case 'yearly': return '/ বছর';
+    }
+  };
 
   const plans = [
     {
       id: 'free' as PlanId,
-      name: 'Free',
-      price: '৳0',
-      period: '',
+      name: 'Nihomi Free',
+      titleBn: 'ফ্রি ট্রায়াল',
+      price: '৳০',
+      period: 'আজীবন',
+      desc: 'প্ল্যাটফর্মের কার্যকারিতা ও নমি সেন্সেইর শিক্ষাপদ্ধতি যাচাই করার জন্য।',
       features: [
-        'প্রতিদিন ৩টি AI টার্ন',
-        'বেসিক লেসন',
-        '1 GB Nihomi Cloud'
+        'হিরাগানা ৫টি মৌলিক স্বরবর্ণ লেসন',
+        'প্রতিদিন ৩টি নমি সেন্সেই কথোপকথন',
+        'বেসিক লার্নিং ক্যানভাস অ্যাক্সেস'
       ],
       isPopular: false,
-      ctaText: 'এখনই শুরু করুন',
-      ctaVariant: 'outline'
+      ctaText: 'বিনামূল্যে শুরু করুন',
+      variant: 'free'
     },
     {
       id: 'starter' as PlanId,
-      name: 'Starter',
-      price: '৳990',
-      period: '/ মাস',
+      name: 'Nihomi Starter',
+      titleBn: 'ফাউন্ডেশন প্ল্যান',
+      price: formatPrice(pricingData.starter[interval]),
+      period: getIntervalLabel(),
+      desc: 'JLPT N5 ও N4 পরীক্ষার সম্পূর্ণ প্রস্তুতি ও ধারাবাহিক রিভিশন।',
       features: [
-        '500 AI টার্ন / মাস',
-        'পূর্ণ লেসন অ্যাক্সেস',
-        '10 GB Nihomi Cloud'
+        'JLPT N5 ও N4 সম্পূর্ণ কারিকুলাম',
+        'নমি সেন্সেই পার্সোনাল কোচিং',
+        'দৈনিক মেমরিওএস ফ্ল্যাশকার্ড ও কুইজ',
+        'ফুল অডিও প্রোনাউন্সিয়েশন লাইব্রেরি'
       ],
       isPopular: false,
-      ctaText: 'এই প্ল্যান নিন',
-      ctaVariant: 'filled'
+      ctaText: 'Starter বেছে নিন',
+      variant: 'standard'
     },
     {
       id: 'pro' as PlanId,
-      name: 'Pro',
-      price: '৳1,990',
-      period: '/ মাস',
-      popularBadge: 'সবচেয়ে জনপ্রিয়',
+      name: 'Nihomi Pro',
+      titleBn: 'সবচেয়ে জনপ্রিয়',
+      price: formatPrice(pricingData.pro[interval]),
+      period: getIntervalLabel(),
+      desc: 'N5 থেকে N3 সম্পূর্ণ প্রস্তুতি, মক টেস্ট ও কনবিনি সিমুলেটর।',
       features: [
-        '1,500 AI টার্ন / মাস',
-        'অতিরিক্ত ফিচার',
-        '50 GB Nihomi Cloud'
+        'N5, N4 ও N3 সম্পূর্ণ কারিকুলাম',
+        '৫টি অফিসিয়াল JLPT মক-টেস্ট ইঞ্জিন',
+        'WorkOS™ কনবিনি বাইতো ক্যাশিয়ার সিমুলেশন',
+        'আনলিমিটেড নমি সেন্সেই ব্যাকরণ বিশ্লেষণ',
+        'প্রায়োরিটি সাপোর্ট ও উইক-স্পট ডিলিং'
       ],
       isPopular: true,
-      ctaText: 'এই প্ল্যান নিন',
-      ctaVariant: 'primary'
+      popularBadge: 'সবচেয়ে জনপ্রিয়',
+      ctaText: 'Pro প্ল্যান নিন',
+      variant: 'pro'
     },
     {
       id: 'japan_ready' as PlanId,
-      name: 'Japan Ready',
-      price: '৳3,990',
-      period: '/ মাস',
+      name: 'Nihomi Japan Ready',
+      titleBn: 'ক্যারিয়ার ও ইমিগ্রেশন',
+      price: formatPrice(pricingData.japan_ready[interval]),
+      period: getIntervalLabel(),
+      desc: 'জাপানে চাকরি, পড়াশোনা ও ভিসা ইন্টারভিউয়ের জন্য অল-ইন-ওয়ান প্যাকেজ।',
       features: [
-        '4,000 AI টার্ন / মাস',
-        'N3-N1 + জাপান প্রস্তুতি',
-        '200 GB Nihomi Cloud'
+        'N5 থেকে N1 সম্পূর্ণ অ্যাডভান্সড কারিকুলাম',
+        'JIS স্ট্যান্ডার্ড রিজিউমে বিল্ডার ও কভার লেটার',
+        'নারিতা এয়ারপোর্ট ও বিজনেস কেইগো সিমুলেশন',
+        'রিয়েল-টাইম ইন্টারভিউ মক সেশন',
+        'সব ফিচার ও সম্পূর্ণ প্ল্যাটফর্ম অ্যাক্সেস'
       ],
       isPopular: false,
-      ctaText: 'এই প্ল্যান নিন',
-      ctaVariant: 'filled'
+      ctaText: 'Japan Ready নিন',
+      variant: 'premium'
     }
   ];
 
-  const handleCtaClick = (planId: PlanId) => {
-    if (planId === 'free') {
-      onNavigate('journey');
-    } else {
-      onSelectPlan(planId);
-    }
-  };
-
   return (
-    <section
-      id="pricing-section"
-      className="w-full h-auto lg:h-[165px] lg:max-h-[165px] flex items-center bg-white border-t border-slate-100 py-3 lg:py-0 overflow-hidden"
-    >
-      <div className="w-full max-w-[1024px] mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
-          
-          {/* ========================================================
-              LEFT COLUMN: EDITORIAL KICKER & BENEFITS LIST (4 cols)
-              Sub-split: Left text + Right checklist side-by-side
-              ======================================================== */}
-          <div className="lg:col-span-4 flex items-center justify-between gap-2 shrink-0">
-            <div className="space-y-1 max-w-[190px]">
-              <div>
-                <span className="text-[9px] font-extrabold tracking-widest uppercase text-slate-500 select-none">
-                  SIMPLE PRICING
-                </span>
-              </div>
-
-              <h2 className="text-lg lg:text-[19px] font-black text-[#101A59] tracking-tight leading-[1.12]">
-                আপনার গতিতে <br />
-                <span className="text-[#6D25EA]">শেখা শুরু করুন</span>
-              </h2>
-
-              <p className="text-slate-600 text-[9px] leading-snug font-normal">
-                ফ্রি প্ল্যান দিয়ে শুরু করুন। চাইলে পরবর্তীতে আপনার লক্ষ্য অনুযায়ী প্ল্যান আপগ্রেড করতে পারবেন।
-              </p>
-            </div>
-
-            {/* Checklist items in adjacent sub-column */}
-            <div className="space-y-1 shrink-0 pl-2">
-              {checklist.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-1.5">
-                  <div className="w-3.5 h-3.5 rounded-full bg-purple-100 text-[#6D25EA] flex items-center justify-center shrink-0">
-                    <Check className="w-2 h-2 stroke-[3]" />
-                  </div>
-                  <span className="text-[9px] font-semibold text-slate-700 leading-none whitespace-nowrap">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+    <section id="pricing-section" className="py-20 md:py-28 bg-[#141726] text-[#F6F0E6] relative border-b border-[#F6F0E6]/10">
+      <LandingPageContainer>
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-[#E45147]" />
+            স্বচ্ছ ও অনুমোদিত ১২-মূল্য তালিকা • Approved Pricing Matrix
           </div>
-
-          {/* ========================================================
-              RIGHT COLUMN: 4 PRICING CARDS IN A SINGLE ROW (8 cols)
-              ======================================================== */}
-          <div className="lg:col-span-8 grid grid-cols-2 lg:grid-cols-4 gap-1.5 items-stretch h-auto lg:h-[148px]">
-            {plans.map((plan) => {
-              return (
-                <div
-                  key={plan.id}
-                  className={`relative rounded-xl p-2 flex flex-col justify-between transition-all ${
-                    plan.isPopular
-                      ? 'bg-gradient-to-b from-[#FAF5FF] via-[#F3E8FF]/20 to-white border-2 border-[#8B5CF6] shadow-xs'
-                      : 'bg-white border border-slate-200/80 shadow-2xs'
-                  }`}
-                >
-                  {/* Top Popular Badge */}
-                  {plan.isPopular && plan.popularBadge && (
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#6D25EA] text-white text-[7.5px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-2xs whitespace-nowrap">
-                      {plan.popularBadge}
-                    </div>
-                  )}
-
-                  <div className="space-y-0.5">
-                    {/* Plan Header */}
-                    <div>
-                      <h3 className="text-[10px] font-bold text-[#101A59] leading-tight">
-                        {plan.name}
-                      </h3>
-                      <div className="flex items-baseline gap-0.5 mt-0.5">
-                        <span className="text-base font-black text-[#101A59] tracking-tight leading-none">
-                          {plan.price}
-                        </span>
-                        {plan.period && (
-                          <span className="text-[8.5px] font-medium text-slate-500 leading-none">
-                            {plan.period}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Features list */}
-                    <ul className="space-y-0.5 my-1 pt-0.5 border-t border-slate-100">
-                      {plan.features.map((feat, i) => (
-                        <li key={i} className="flex items-start gap-1 text-[8.5px] text-slate-700 leading-tight">
-                          <Check className="w-2.5 h-2.5 text-[#6D25EA] shrink-0 mt-0.5" />
-                          <span className="font-medium truncate">{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* CTA Button */}
-                  <div>
-                    {plan.ctaVariant === 'outline' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleCtaClick(plan.id)}
-                        className="w-full py-1 rounded-lg border border-slate-300 hover:border-slate-400 bg-white text-slate-800 text-[9.5px] font-bold shadow-2xs transition-colors cursor-pointer"
-                      >
-                        {plan.ctaText}
-                      </button>
-                    ) : plan.ctaVariant === 'primary' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleCtaClick(plan.id)}
-                        className="w-full py-1 rounded-lg bg-gradient-to-r from-[#6D25EA] to-[#8B5CF6] hover:opacity-95 text-white text-[9.5px] font-bold shadow-xs transition-all cursor-pointer"
-                      >
-                        {plan.ctaText}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleCtaClick(plan.id)}
-                        className="w-full py-1 rounded-lg bg-[#2E1065] hover:bg-[#1E0B40] text-white text-[9.5px] font-bold shadow-xs transition-colors cursor-pointer"
-                      >
-                        {plan.ctaText}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+            কোনো গোপন চার্জ নেই — <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-amber-200">
+              আপনার প্রয়োজন অনুযায়ী প্ল্যান বেছে নিন
+            </span>
+          </h2>
+          <p className="text-slate-400 text-base sm:text-lg">
+            সরাসরি বিকাশ (bKash) ও লোকাল বাংলাদেশি পেমেন্টে মুহূর্তেই অ্যাক্টিভেশন।
+          </p>
         </div>
-      </div>
+
+        {/* Billing Interval Toggle Pill */}
+        <div className="flex justify-center mb-14">
+          <div className="inline-flex p-1.5 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
+            <button
+              onClick={() => setInterval('monthly')}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                interval === 'monthly'
+                  ? 'bg-[#E45147] text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              মাসিক
+            </button>
+            <button
+              onClick={() => setInterval('quarterly')}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                interval === 'quarterly'
+                  ? 'bg-[#E45147] text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ৩ মাস (ত্রৈমাসিক)
+            </button>
+            <button
+              onClick={() => setInterval('half_yearly')}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                interval === 'half_yearly'
+                  ? 'bg-[#E45147] text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ৬ মাস (অর্ধ-বার্ষিক)
+            </button>
+            <button
+              onClick={() => setInterval('yearly')}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                interval === 'yearly'
+                  ? 'bg-[#E45147] text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ১ বছর (বার্ষিক)
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-12">
+          {plans.map((plan) => {
+            const isPro = plan.isPopular;
+            return (
+              <div
+                key={plan.id}
+                className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all hover:-translate-y-1 ${
+                  isPro
+                    ? 'bg-gradient-to-b from-[#1B1E30] to-[#141726] border-2 border-[#E45147] shadow-2xl scale-[1.02]'
+                    : 'bg-[#1B1E30] border border-[#F6F0E6]/10 shadow-lg'
+                }`}
+              >
+                {/* Popular badge */}
+                {isPro && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#E45147] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md whitespace-nowrap">
+                    {plan.popularBadge}
+                  </div>
+                )}
+
+                <div>
+                  <div className="mb-4">
+                    <span className="text-xs font-semibold text-slate-400">
+                      {plan.titleBn}
+                    </span>
+                    <h3 className="text-xl font-bold text-white mt-0.5">
+                      {plan.name}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-baseline gap-1.5 mb-4">
+                    <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                      {plan.price}
+                    </span>
+                    <span className="text-xs text-slate-400 font-medium">
+                      {plan.period}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-300 leading-relaxed mb-6 pb-6 border-b border-white/10">
+                    {plan.desc}
+                  </p>
+
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2.5 text-xs text-slate-200">
+                        <Check className="w-3.5 h-3.5 text-[#6D7C55] shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <button
+                    onClick={() => {
+                      if (plan.id === 'free') {
+                        onNavigate('lesson', { id: 'n5-l1' });
+                      } else {
+                        onSelectPlan(plan.id);
+                      }
+                    }}
+                    className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md ${
+                      isPro
+                        ? 'bg-[#E45147] hover:bg-[#d44339] text-white'
+                        : plan.id === 'free'
+                        ? 'bg-white/10 hover:bg-white/15 text-white border border-white/15'
+                        : 'bg-white/15 hover:bg-[#E45147] text-white'
+                    }`}
+                  >
+                    {plan.ctaText}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Pricing Trust Guarantee */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-300 text-center sm:text-left">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="w-5 h-5 text-[#6D7C55] shrink-0" />
+            <span>বিকাশ ও ডিজিটাল পেমেন্ট গেটওয়ে • ৭ দিনের রিফান্ড পলিসি নীতিমালা সাপেক্ষে • স্বচ্ছ ভ্যাট ব্রেকডাউন</span>
+          </div>
+          <button
+            onClick={() => onNavigate('pricing')}
+            className="text-[#E45147] hover:underline font-semibold shrink-0"
+          >
+            ট্যাক্স ও চালান বিস্তারিত →
+          </button>
+        </div>
+      </LandingPageContainer>
     </section>
   );
 };

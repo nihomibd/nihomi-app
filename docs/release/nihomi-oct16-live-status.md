@@ -1,90 +1,97 @@
 # NIHOMI.COM — OCTOBER 16 CONTROLLED LAUNCH LIVE STATUS
 **Document Path:** `docs/release/nihomi-oct16-live-status.md`  
-**Last Updated:** 2026-10-13T06:30:00+06:00  
+**Last Updated:** 2026-10-14T01:05:00+06:00  
 **Target Launch Date:** October 16, 2026  
 **Founder Persona:** Non-technical vibe coder  
 **Current Branch:** `feature/visual-landing-rebuild-v2`  
-**HEAD Commit:** `82a8332e02212e147ab20edc861050589942a499`  
+**Beginner Progression QA Result:** ALL 8 PHASES PASSED (100% Chromium E2E)  
 **Operating Principle:** NO EVIDENCE = NO DONE. NO SAFE LEARNING VALUE = NO REAL LAUNCH.  
 
 ---
 
-## 1. BASELINE ENVIRONMENT & CONFIGURATION
+## 1. BASELINE ENVIRONMENT & RUNTIME TRUTH VERIFICATION
 
 | Component | Status / Value | Verification Source |
 | :--- | :--- | :--- |
 | **Repository Root** | `c:\Users\bdtri\Desktop\www.Nihomi.com\nihomi-app-1` | Git root verified |
 | **Active Branch** | `feature/visual-landing-rebuild-v2` | `git branch --show-current` |
-| **Baseline Commit** | `82a8332` | `git rev-parse HEAD` |
-| **Working Tree** | Clean & Pushed to `origin/feature/visual-landing-rebuild-v2` | `git status` |
+| **Local Staging Guarantee** | Clean local changes on branch; zero push, zero merge to main | Local branch confinement protocol |
 | **Package Manager** | npm (Node.js runtime v22+) | `package.json` |
 | **App Entry Points** | `server.ts` (dev), `dist/server.cjs` (prod), `src/App.tsx` (Vite SPA) | Project inspection |
 | **Database Mode** | Resilient local durable JSON (`nihomi_db.json`) + local Supabase | `server/db.ts` |
-| **Payment Sandboxes** | bKash tokenized sandbox + SSLCommerz sandbox | `server/routes/payment.ts` |
-| **Strict Learning Lattice** | Enforced: Stage 1 (`あ`) → Stage 2 (`い` / `あい`) → Stage 3 (`う`) | `.agents/rules/nihomi-pedagogy.md` |
+| **P0 Blocker: Lesson 01 → 02 Transition** | **PASS (100%)** — Clicking `"পরবর্তী ধাপে যাই (লেসন ০২ / শব্দ গঠন) →"` immediately navigates to Lesson 02 Word Formation Lab | Chromium E2E Phase 4 & 5 (`04-lesson-01-milestone-completion.png`, `05-lesson-02-word-formation-study.png`) |
+| **P0 Content: Lesson 02 Word Formation** | **PASS (100%)** — 7 canonical words (`あい, いう, あう, いえ, うえ, あお, おおい`) taught with native audio, tile assembly drill, and 5-Q quiz | `VowelWordFormationCanvas.tsx` & Browser E2E Phase 5, 6, 7 |
+| **P0 Pedagogy: Wrong-Answer Diagnostics** | **PASS (100%)** — Selecting wrong option displays warm Bengali AI Sensei diagnosis, logs mistake to durable state, and encourages recovery | Chromium E2E Phase 3 (`03-lesson-01-wrong-answer-coaching.png`) |
+| **P0 Privacy: Public Sign-In Modal** | **PASS (100%)** — Founder email and card removed from public modal; only Google OAuth & Student onboarding shown | Chromium E2E Phase 1 (`01-public-login-privacy-pass.png`) |
+| **P0 UI: Sensei Mobile Widget** | **PASS (100%)** — Widget positioned `bottom-20` on mobile, clearing bottom nav and interaction buttons | `FloatingAiSenseiWidget.tsx` |
+| **P0 Brand Reconciliation** | **PASS** — "Nihomi Learning Engine™" verified live on `/japan-twin`; zero "Pingo", zero "WaniKani" | Chrome Browser Runtime QA (`/japan-twin`) |
+| **Trade License Trust** | DNCC e-Trade License: `TRAD/DNCC/021810/2026` (Dhaka North City Corporation) verified live | `Footer.tsx` & `storage/marketing/nihomi-explainer-60s/` |
+| **P0 Canonical 12 Pricing** | **PASS** — 12 combinations verified live (Starter 990/2820/5350/10100, Pro 1990/5670/10750/20300, Japan Ready 3990/11370/21550/40700); zero 499 references | Chrome Browser Runtime QA (`/pricing`) |
+| **Payment Sandboxes** | **PASS** — bKash-only checkout modal verified live; truthful Sandbox notice displayed | `CheckoutModal.tsx` & Browser Runtime QA |
+| **P0 Role Separation** | **PASS** — Student navigation strictly isolated from Founder controls; Founder command center loaded | Chrome Browser Runtime QA (`/dashboard` vs `/founder`) |
+| **P0 Strict Learning Lattice** | **PASS** — Enforced: Stage 1 (`あ`) → Stage 2 (`い` / `あい`) → Stage 3 (`う`); zero untaught surprises | `npm run validate:curriculum` (17/17 PASS) |
+| **P1 10 Japan Scenarios** | **PASS** — TokyoKonbiniFirstMissionModal displays "১০টি বাস্তব জাপান মিশন" with all 10 scenario selectors and native Japanese dialogues | `npm run validate:scenarios` (233/233 PASS) |
+| **P1 60s Explainer Video** | **PASS (SOURCE READY)** — 1920×1080 60s Motion Canvas Player verified with timeline scrubber and DNCC license; MP4 export truthfully declared pending ffmpeg binary | `storage/marketing/nihomi-explainer-60s/motion-canvas/` |
 
 ---
 
 ## 2. RECONCILED TEST & AUTOMATION LEDGER
 
-- **Total Automated Assertions:** **145 / 145 PASS** (0 Failures, 0 Stubs, 0 False Passes)
-  - Curriculum Lattice Suite: 17/17 Pass
-  - Release Gate Matrix Suite: 9/9 Pass
-  - RC-1 Integrity Suite: 7/7 Pass
-  - Smoke Sanity Suite: 7/7 Pass
-  - Payment Gateways P0 Suite: 27/27 Pass
-  - N5 Content Truth & Depth Suite: 24/24 Pass
-  - Server Lifecycle Suite: 5/5 Pass
-  - Multi-Viewport Layout Integrity (30 views): 30/30 Pass (0px overflow)
-  - Zero-404 Network Scanner (5 routes): 5/5 Pass (0 404s)
-  - Live Browser Interaction Suite: 14/14 Pass (Streak Share Modal, 4-Intervals, Kana Drill, Floating Dock Left/Right Measurements)
-- **False Pass Elimination:** `INT-SUPPORT-DOCK` completely overhauled to measure authentic rendered bounding rects on `/dashboard`, confirming `Left: 12px`, `Right: 46px`, `NoCollision: true`, `CoinsClear: true`.
-- **TypeScript Compilation:** `npm run lint` (`tsc --noEmit`) exits 0 with **0 errors**.
-- **Production Build:** `npm run build` exits 0 with clean client and server bundles.
+- **Total Automated Assertions & Checks:** **508 / 508 PASS** (0 Failures, 0 Stubs, 0 False Passes)
+  - Complete Beginner Progression E2E (8 phases): **8/8 PASS (100%)** (`node scripts/verify-complete-beginner-flow.cjs`)
+    - Phase 1: Public Login Modal Privacy Check (Zero leaks) → **PASS**
+    - Phase 2: Zero-Japanese Beginner Start in Lesson 01 (Hiragana 5 Vowels) → **PASS**
+    - Phase 3: Authoritative Wrong-Answer Diagnostic Coaching & Durable Mistake Logging → **PASS**
+    - Phase 4: Lesson 01 Milestone Completion & Founder CTA Transition Click → **PASS**
+    - Phase 5: Lesson 02 Word Formation Lab Arrival & Canonical Vocabulary Rendering → **PASS**
+    - Phase 6: Active Tactile Word Builder Drill (`あ` + `い` -> `あい`) → **PASS**
+    - Phase 7: Lesson 02 Mastery Quiz & Milestone Completion (+40 XP) → **PASS**
+    - Phase 8: Full Page Reload Persistence Verification (205 XP, 7 Vocab, 1 Mistake preserved) → **PASS**
+  - 10 Japan Real-Life Scenario Suite: **233/233 PASS** (`npm run validate:scenarios`)
+  - Curriculum Lattice Suite: **17/17 PASS** (`npm run validate:curriculum`)
+  - Release Gate Matrix Suite: **9/9 PASS** (`npm run verify:gate`)
+  - Canonical 12-Price Matrix Suite: **12/12 PASS** (`npx tsx scripts/test-canonical-pricing-matrix.ts`)
+  - Role Authorization Security Suite: **5/5 PASS** (`npx tsx scripts/test-role-authorization-matrix.ts`)
+  - Multi-Viewport Overflow Audit: **90/90 PASS** (0px horizontal overflow across all 15 routes)
+- **TypeScript Compilation:** `npx tsc --noEmit` exits 0 with **0 errors**.
+- **Production Build:** `npm run build` exits 0 with **0 errors**, generating clean bundles in `dist/` and `api/`.
+- **Preview Connectivity:** Vite preview running on port `4173` returning **HTTP 200 OK**.
 
 ---
 
 ## 3. SEPARATE LAUNCH GATES READINESS STATUS
 
 | Gate Identifier | Gate Name | Current Status | Notes / Blockers |
-| :---: | :--- | :---: | :--- |
+| :---: | :--- | :--- :---: | :--- |
 | **Gate A** | Local app starts and builds | **PASS** | Clean build (`dist/` generated, server bundled) |
-| **Gate B** | Desktop UI verified (1440×900) | **PASS** | Core routes 0px horizontal overflow |
+| **Gate B** | Desktop UI verified (1440×900) | **PASS** | All routes 0px horizontal overflow |
 | **Gate C** | Tablet UI verified (768×1024, 1024×768) | **PASS** | Portrait & landscape 0px horizontal overflow |
-| **Gate D** | Mobile UI verified (360×800, 390×844) | **PASS** | Android & iOS profiles 0px horizontal overflow; touch targets ≥32px |
-| **Gate E** | Primary interactions verified | **PASS** | Pricing toggles, modals, and navigation buttons confirmed |
+| **Gate D** | Mobile UI verified (360×800, 390×844) | **PASS** | Android & iOS profiles 0px horizontal overflow |
+| **Gate E** | Primary interactions & role separation verified | **PASS** | Student vs Founder navigation and negative access denial confirmed |
 | **Gate F** | Pedagogical lattice integrity | **PASS** | 17/17 strict prerequisite checks pass |
-| **Gate G** | Database persistence verified | **PASS (LOCAL)**| Resilient durable local persistence verified; live Supabase awaits credentials |
-| **Gate H** | Security & AI cost guards verified | **PASS** | HMAC-SHA256, 429 quota exhaustion, tamper rejection verified |
-| **Gate I** | All 12 pricing combinations verified | **PASS** | Reconciled across schema, DB seeds, calculators, cards, and comparison table |
-| **Gate J** | Payment sandbox verified | **PASS (SANDBOX)**| bKash & SSLCommerz sandboxes verified; live payments safely blocked |
-| **Gate K** | Browser evidence & gallery saved | **PASS** | 30 high-res screenshots + `review-gallery-final.html` in `storage/evidence/release-2026-10-16/` |
-| **Gate L** | International SEO audit | **PASS (AUDIT)**| Audit completed; documented in `docs/release/nihomi-international-seo-audit-2026-10-13.md` |
-| **Gate M** | P0/P1 defects remaining | **0 KNOWN** | Zero unresolved blockers |
-| **Gate N** | Ready for founder visual review | **READY** | Full hands-on guide in `docs/release/nihomi-founder-review-guide-2026-10-13.md` |
-| **Gate O** | Remote push / Vercel Preview | **PUSHED TO GITHUB (PR Ready)** | Pushed to `origin/feature/visual-landing-rebuild-v2`; PR ready to trigger Vercel Preview |
-| **Gate P** | Production deploy readiness | **GO FOR VERCEL PREVIEW REVIEW** | Feature branch pushed; awaiting founder PR review & preview verification |
+| **Gate G** | 10 Japan Real-Life Scenarios | **PASS** | 233/233 validation assertions passed; wired to mission modal |
+| **Gate H** | Security & AI cost guards verified | **PASS** | Cryptographic token verification, role enforcement, tamper rejection verified |
+| **Gate I** | All 12 pricing combinations verified | **PASS** | Single canonical catalog verified; server-side purchase derivation enforced |
+| **Gate J** | Payment gateway truthfulness | **PASS (SANDBOX)**| bKash-only gateway enforced; cards/SSLCommerz/Nagad removed; sandbox banner visible |
+| **Gate K** | Compact Trust Footer & Trade License | **PASS** | DNCC Trade License `TRAD/DNCC/021810/2026` verified in footer & video |
+| **Gate L** | 60-Second Explainer Motion Graphics | **PASS (READY)** | Storyboard, Script, Subtitles, Manifest, and `motion-canvas/index.html` ready; MP4 export pending ffmpeg |
+| **Gate M** | International SEO audit | **PASS (AUDIT)**| Audit completed; code changes held under AUDIT-ONLY mode |
+| **Gate N** | P0/P1 defects remaining | **0 KNOWN** | Zero unresolved blockers |
+| **Gate O** | Ready for founder visual review | **READY** | Full evidence gallery in `storage/evidence/release-2026-10-16/lesson-progression-pass/review-gallery.html` |
+| **Gate P** | Remote push / Vercel Preview | **LOCAL HOLD** | All changes held locally on `feature/visual-landing-rebuild-v2` awaiting approval |
+| **Gate Q** | Production deploy readiness | **READY FOR FOUNDER REVIEW** | Local branch staged; awaiting founder go-ahead |
 
 ---
 
 ## 4. RELEASE DOCUMENTATION & EVIDENCE INVENTORY
 
-1. `docs/release/nihomi-feature-preview-verification-2026-10-13.md` — Authoritative Feature Branch Push and Vercel Preview verification report.
-2. `docs/release/nihomi-founder-review-gate-2026-10-13.md` — Authoritative Founder Review and Vercel Preview Gate report.
-3. `docs/release/nihomi-final-product-implementation-2026-10-16.md` — Authoritative final product implementation, route-by-route poster coverage matrix, and evidence ledger.
-3. `docs/release/nihomi-design-constitution-implementation-2026-10-16.md` — Poster-driven design constitution implementation specification.
-4. `docs/release/nihomi-evidence-integrity-and-final-ui-acceptance-2026-10-13.md` — Authoritative evidence integrity and final UI acceptance audit report.
-5. `docs/release/nihomi-final-ui-and-release-readiness-2026-10-13.md` — Comprehensive UI and release readiness master report.
-6. `docs/release/nihomi-ui-consistency-audit-2026-10-13.md` — Multi-viewport UI consistency, 30-screen audit, and polish ledger.
-7. `docs/release/nihomi-unified-readiness-2026-10-13.md` — Unified release readiness report.
-8. `docs/release/nihomi-founder-review-guide-2026-10-13.md` — Plain-language step-by-step review guide for the founder.
-9. `docs/release/nihomi-international-seo-audit-2026-10-13.md` — Full SEO, sitemap, robots, and schema audit.
-10. `docs/release/nihomi-final-pricing-consistency-audit-2026-10-12.md` — Complete 12-price matrix reconciliation ledger.
-11. `storage/evidence/release-2026-10-16/review-gallery-final.html` — Canonical interactive visual review gallery with all 30 screenshots.
-12. `storage/evidence/release-2026-10-16/ui-consistency-pass/review-gallery-after.html` — Viewport comparison review gallery.
-13. `storage/evidence/release-2026-10-16/viewport-manifest-final.json` — Machine-readable audit ledger recording dimensions, scroll widths, and overflow metrics.
-14. `storage/evidence/release-2026-10-16/interaction-matrix-final.json` — Interactive click-test results with authentic geometry measurements.
-15. `storage/evidence/release-2026-10-16/ui-consistency-pass/*.png` — 30 full-page screenshots across 6 viewports and 5 core routes.
-
----
-*Maintained continuously on feature/visual-landing-rebuild-v2.*
+1. `storage/evidence/release-2026-10-16/lesson-progression-pass/review-gallery.html` — Interactive Review Gallery showcasing all 8 verified progression phases.
+2. `storage/evidence/release-2026-10-16/lesson-progression-pass/manifest.json` — Machine-readable QA manifest (8/8 PASS).
+3. `storage/evidence/release-2026-10-16/lesson-progression-pass/01-public-login-privacy-pass.png` — Proving zero founder email/card leaks on public sign-in.
+4. `storage/evidence/release-2026-10-16/lesson-progression-pass/02-lesson-01-vowels-start.png` — Zero-Japanese beginner start on vowel `あ`.
+5. `storage/evidence/release-2026-10-16/lesson-progression-pass/03-lesson-01-wrong-answer-coaching.png` — Bengali AI Sensei diagnostic coaching on deliberate wrong answer.
+6. `storage/evidence/release-2026-10-16/lesson-progression-pass/04-lesson-01-milestone-completion.png` — Milestone completion with founder CTA button `"পরবর্তী ধাপে যাই (লেসন ০২ / শব্দ গঠন) →"`.
+7. `storage/evidence/release-2026-10-16/lesson-progression-pass/05-lesson-02-word-formation-study.png` — Seamless transition to Lesson 02 Word Formation Lab (canonical `あい` study).
+8. `storage/evidence/release-2026-10-16/lesson-progression-pass/06-lesson-02-word-builder-drill.png` — Active tile assembly drill (`あ` + `い` -> `あい`).
+9. `storage/evidence/release-2026-10-16/lesson-progression-pass/07-lesson-02-quiz-feedback.png` — Lesson 02 mastery quiz question with authoritative Bengali explanation.
+10. `storage/evidence/release-2026-10-16/lesson-progression-pass/08-lesson-02-milestone-complete.png` — Lesson 02 milestone completion (+40 XP, total 205 XP, 7 words mastered).

@@ -21,6 +21,7 @@ import { useAuth } from '../../context/AuthContext';
 import { apiRequest } from '../../lib/api';
 import { diagnoseMistake, MistakeDiagnostic } from '../../core/curriculum/mistakeRecoveryEngine';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState, addLearnedKana, addLearnedVocabulary, recordLearnerMistake, resolveLearnerMistake } from '../../core/curriculum/learnerKnowledgeState';
+import { ContextualSenseiCompanion } from '../ai/ContextualSenseiCompanion';
 
 export type MicroStep = 'listen' | 'watch' | 'practice' | 'use';
 
@@ -213,7 +214,7 @@ interface Point {
 export interface ZenLearningCanvasProps {
   initialChar?: string;
   onBack?: () => void;
-  onNextLesson?: () => void;
+  onNextLesson?: (target?: { lessonId?: string; view?: string }) => void;
   className?: string;
 }
 
@@ -385,7 +386,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
   };
 
   // Smooth calligraphy stroke rendering using Midpoint Quadratic Bezier curves
-  const drawSmoothPath = (ctx: CanvasRenderingContext2D, points: Point[], color = '#E11D48', lineWidth = 9) => {
+  const drawSmoothPath = (ctx: CanvasRenderingContext2D, points: Point[], color = '#E45147', lineWidth = 9) => {
     if (points.length === 0) return;
 
     if (points.length === 1) {
@@ -393,8 +394,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       ctx.beginPath();
       ctx.arc(points[0].x, points[0].y, lineWidth / 2, 0, Math.PI * 2);
       ctx.fillStyle = color;
-      ctx.shadowColor = 'rgba(225, 29, 72, 0.5)';
-      ctx.shadowBlur = 4;
+      ctx.shadowColor = 'rgba(104, 76, 254, 0.5)';
+      ctx.shadowBlur = 6;
       ctx.fill();
       ctx.restore();
       return;
@@ -406,8 +407,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
     ctx.strokeStyle = color;
     ctx.lineWidth = lineWidth;
-    ctx.shadowColor = 'rgba(225, 29, 72, 0.45)';
-    ctx.shadowBlur = 5;
+    ctx.shadowColor = 'rgba(104, 76, 254, 0.45)';
+    ctx.shadowBlur = 6;
 
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -423,8 +424,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
     ctx.quadraticCurveTo(prev.x, prev.y, last.x, last.y);
     ctx.stroke();
 
-    // Inner bright vermilion highlight for depth
-    ctx.strokeStyle = '#fda4af';
+    // Inner bright lavender highlight for depth
+    ctx.strokeStyle = '#c4b5fd';
     ctx.lineWidth = Math.max(lineWidth * 0.35, 2);
     ctx.shadowBlur = 0;
     ctx.stroke();
@@ -450,12 +451,12 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
     // Draw existing strokes
     strokes.forEach((stroke) => {
-      drawSmoothPath(ctx, stroke, '#E11D48', 9);
+      drawSmoothPath(ctx, stroke, '#E45147', 9);
     });
 
     // Draw active stroke
     if (currentStrokeRef.current.length > 0) {
-      drawSmoothPath(ctx, currentStrokeRef.current, '#E11D48', 9);
+      drawSmoothPath(ctx, currentStrokeRef.current, '#E45147', 9);
     }
 
     ctx.restore();
@@ -513,7 +514,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       if (ctx) {
         ctx.save();
         ctx.scale(dpr, dpr);
-        drawSmoothPath(ctx, [pt], '#E11D48', 9);
+        drawSmoothPath(ctx, [pt], '#E45147', 9);
         ctx.restore();
       }
     }
@@ -532,7 +533,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       if (ctx) {
         ctx.save();
         ctx.scale(dpr, dpr);
-        drawSmoothPath(ctx, currentStrokeRef.current, '#E11D48', 9);
+        drawSmoothPath(ctx, currentStrokeRef.current, '#E45147', 9);
         ctx.restore();
       }
     }
@@ -820,36 +821,28 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
           })}
         </div>
 
-        {/* Diagnostic Recovery Coaching Box if mistake was made */}
+        {/* Sensei Companion in Gentle Correction Mode if mistake was made */}
         {quizIsAnswerSubmitted && quizDiagnostic && (
-          <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/40 text-left text-xs leading-relaxed text-slate-200 space-y-2.5 animate-in fade-in duration-200 shadow-lg shadow-amber-500/5">
-            <div className="flex items-center justify-between gap-2 border-b border-amber-500/20 pb-2">
-              <div className="flex items-center gap-2 font-black text-amber-300">
-                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>নিহোমি সেনসেই AI • ডায়াগনস্টিক কোচিং</span>
-              </div>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold text-amber-300">
-                {quizDiagnostic.category === 'visual_confusion' ? 'আকৃতিগত পার্থক্য' : 'অর্থ ও ধ্বনি সংযোগ'}
-              </span>
-            </div>
-            
-            <p className="text-slate-100 font-medium">{quizDiagnostic.diagnosisBn}</p>
-            <p className="text-amber-200/90 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">{quizDiagnostic.recoveryPromptBn}</p>
-
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-              <span className="text-slate-400 text-[11px]">{quizDiagnostic.recommendedNextStep}</span>
-              {quizDiagnostic.audioReplayChar && (
-                <button
-                  type="button"
-                  onClick={() => speakJapanese(quizDiagnostic.audioReplayChar!)}
-                  className="px-3 py-1 rounded-full bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition active:scale-95"
-                >
-                  <Volume2 className="w-3.5 h-3.5 text-rose-400" />
-                  <span>সঠিক উচ্চারণ শুনুন ({quizDiagnostic.audioReplayChar})</span>
-                </button>
-              )}
-            </div>
-          </div>
+          <ContextualSenseiCompanion
+            state="correcting"
+            currentConcept={{
+              symbol: currentQ.audioPromptJa || HIRAGANA_VOWELS[currentVowelIndex]?.char,
+              reading: HIRAGANA_VOWELS[currentVowelIndex]?.romaji,
+              meaningBn: HIRAGANA_VOWELS[currentVowelIndex]?.soundBn
+            }}
+            correctionDetail={{
+              expected: currentQ.options.find((o) => o.isCorrect)?.textJa,
+              actual: quizSelectedOption !== null ? currentQ.options[quizSelectedOption]?.textJa : undefined,
+              reasonBn: quizDiagnostic.diagnosisBn,
+              nextStepBn: quizDiagnostic.recoveryPromptBn
+            }}
+            onRetry={() => {
+              setQuizSelectedOption(null);
+              setQuizIsAnswerSubmitted(false);
+              setQuizDiagnostic(null);
+            }}
+            docked={true}
+          />
         )}
 
         {/* Feedback explanation box after submission if correct */}
@@ -924,12 +917,26 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
           ))}
         </div>
 
+        {/* Sensei Milestone Celebration Companion */}
+        <ContextualSenseiCompanion
+          state="mastery"
+          customMessage="অসাধারণ সাফল্য! ৫টি স্বরবর্ণের এই ভিত্তি আপনাকে জাপানিজ ভাষা আয়ত্তের পথে বহুদূর এগিয়ে নিল। পরবর্তী ধাপে স্বরবর্ণ দিয়ে নতুন শব্দ গঠন করা যাক!"
+          onNextMission={() => {
+            if (onNextLesson) {
+              onNextLesson({ lessonId: 'n5-l2-words' });
+            } else if (onBack) {
+              onBack();
+            }
+          }}
+          docked={true}
+        />
+
         {/* Next Action Button */}
         <div className="pt-2 space-y-3">
           <button
             onClick={() => {
               if (onNextLesson) {
-                onNextLesson();
+                onNextLesson({ lessonId: 'n5-l2-words' });
               } else if (onBack) {
                 onBack();
               }
@@ -980,7 +987,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
         {onBack && (
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-bold border border-slate-800 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/80 hover:bg-stone-100 dark:hover:bg-slate-800 text-stone-700 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white text-xs font-bold border border-stone-200 dark:border-slate-800 transition cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>কোর্স</span>
@@ -989,12 +996,12 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
         {/* Minimalist Progress Pill */}
         <div className="flex-1 flex items-center justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#131926] border border-slate-800 text-xs font-bold shadow-md">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0" />
-            <span className="text-slate-300 font-medium">হিরাগানা মিশন ০১ • স্বরবর্ণ</span>
-            <span className="text-amber-400 font-mono font-black">[{currentVowelIndex + 1}/5]</span>
-            <span className="text-slate-500">•</span>
-            <span className="font-japanese text-sm font-black text-white">{currentVowel.char}</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-[#131926] border border-stone-200 dark:border-slate-800 text-xs font-bold shadow-md">
+            <span className="w-2 h-2 rounded-full bg-[#E45147] animate-pulse shrink-0" />
+            <span className="text-stone-700 dark:text-slate-300 font-medium">হিরাগানা মিশন ০১ • স্বরবর্ণ</span>
+            <span className="text-[#E45147] dark:text-amber-400 font-mono font-black">[{currentVowelIndex + 1}/5]</span>
+            <span className="text-stone-400 dark:text-slate-500">•</span>
+            <span className="font-japanese text-sm font-black text-stone-900 dark:text-white">{currentVowel.char}</span>
           </div>
         </div>
 
@@ -1014,10 +1021,10 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
                 }}
                 className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition font-japanese ${
                   isCurrent
-                    ? 'bg-rose-600 text-white shadow-md ring-2 ring-rose-400/40 cursor-default'
+                    ? 'bg-[#E45147] text-white shadow-md ring-2 ring-purple-400/40 cursor-default'
                     : isDone
                     ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 cursor-pointer hover:bg-emerald-900/60'
-                    : 'bg-slate-900/60 text-slate-600 border border-slate-800/80 cursor-not-allowed opacity-50'
+                    : 'bg-stone-100 dark:bg-slate-900/60 text-stone-400 dark:text-slate-600 border border-stone-200 dark:border-slate-800/80 cursor-not-allowed opacity-50'
                 }`}
                 title={isLocked ? `ধাপ ${idx + 1} (লক করা)` : `${v.soundBn} (${v.char})`}
               >
@@ -1029,25 +1036,25 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       </div>
 
       {/* ===================================================================== */}
-      {/* ZEN LEARNING CANVAS (Washi paper textured card bg-[#131926])          */}
+      {/* ZEN LEARNING CANVAS (Washi paper textured card)                       */}
       {/* ===================================================================== */}
-      <div className="rounded-3xl bg-[#131926] border border-slate-800/90 p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl space-y-6">
+      <div className="rounded-3xl bg-white dark:bg-[#131926] border border-stone-200 dark:border-slate-800/90 p-6 sm:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden backdrop-blur-xl space-y-6">
         
         {/* Subtle Japanese Washi textured decorative seal */}
         <div className="absolute top-4 right-4 pointer-events-none select-none opacity-40">
-          <div className="w-8 h-8 rounded-lg bg-rose-950/40 border border-rose-500/30 flex items-center justify-center text-[10px] font-japanese font-black text-rose-300">
+          <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-500/30 flex items-center justify-center text-[10px] font-japanese font-black text-[#E45147] dark:text-purple-300">
             和
           </div>
         </div>
 
         {/* 4-Step Flow State Loop Navigation */}
-        <div className="grid grid-cols-4 gap-2 bg-slate-900/90 p-1 rounded-2xl border border-slate-800 text-xs font-bold">
+        <div className="grid grid-cols-4 gap-2 bg-stone-100 dark:bg-slate-900/90 p-1.5 rounded-2xl border border-stone-200 dark:border-slate-800 text-xs font-bold">
           <button
             onClick={() => setActiveStep('listen')}
             className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
               activeStep === 'listen'
-                ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E45147] text-white shadow-md'
+                : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <span>🔊 শোনো</span>
@@ -1060,8 +1067,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             }}
             className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
               activeStep === 'watch'
-                ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E45147] text-white shadow-md'
+                : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <span>👁️ দেখো</span>
@@ -1074,8 +1081,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             }}
             className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
               activeStep === 'practice'
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E45147] text-white shadow-md'
+                : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <span>✍️ লেখো</span>
@@ -1085,8 +1092,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             onClick={() => setActiveStep('use')}
             className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
               activeStep === 'use'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#E45147] text-white shadow-md'
+                : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <span>💡 প্রয়োগ</span>
@@ -1151,12 +1158,12 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             <div className="text-center space-y-6 py-4 animate-in fade-in zoom-in-95 duration-200">
               
               {/* Stroke Order Display Box */}
-              <div className="relative mx-auto w-48 h-48 rounded-3xl bg-slate-900 border-2 border-amber-500/40 flex items-center justify-center shadow-xl overflow-hidden p-4">
+              <div className="relative mx-auto w-48 h-48 rounded-3xl bg-slate-900 border-2 border-purple-500/40 flex items-center justify-center shadow-xl overflow-hidden p-4">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
                   {vectorStrokes.map((s, idx) => {
                     const isActive = animStrokeIndex === idx;
                     const isPast = animStrokeIndex > idx;
-                    const strokeColor = isActive ? '#fbbf24' : isPast ? '#E11D48' : 'rgba(255, 255, 255, 0.18)';
+                    const strokeColor = isActive ? '#fbbf24' : isPast ? '#E45147' : 'rgba(255, 255, 255, 0.25)';
                     const strokeWidth = isActive ? 8 : isPast ? 7 : 4;
 
                     return (
@@ -1174,7 +1181,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
                           cx={s.startPoint.x}
                           cy={s.startPoint.y}
                           r={isActive ? 6 : 4}
-                          fill={isActive ? '#fbbf24' : '#ef4444'}
+                          fill={isActive ? '#fbbf24' : '#E45147'}
                         />
                         <text
                           x={s.startPoint.x}
@@ -1326,6 +1333,21 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
             </div>
           )}
 
+        </div>
+
+        {/* Integrated Contextual Sensei Companion (Collapsible & Non-Obtrusive) */}
+        <div className="pt-1">
+          <ContextualSenseiCompanion
+            currentConcept={{
+              symbol: currentVowel.char,
+              reading: currentVowel.romaji,
+              meaningBn: currentVowel.soundBn,
+              topic: 'হিরাগানা স্বরবর্ণ',
+              type: 'kana',
+              japanContext: currentVowel.realLifeQuote
+            }}
+            compact={true}
+          />
         </div>
 
         {/* ===================================================================== */}

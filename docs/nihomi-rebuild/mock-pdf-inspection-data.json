@@ -1,0 +1,2544 @@
+[
+  {
+    "filename": "JLPT_N1_Bangla_Japanese_Complete_Mock_Test.pdf",
+    "sizeBytes": 389822,
+    "sizeKb": "380.7 KB",
+    "numPages": [],
+    "info": {
+      "total": 13,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "WeasyPrint 68.0",
+        "Title": "JLPT N1 বাংলা-জাপানিজ Complete Mock Test"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "846f87165ad987c715d7cc361e8458ed",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 6,
+              "gen": 0
+            },
+            {
+              "name": "XYZ"
+            },
+            95.043307,
+            573.263542,
+            0
+          ],
+          "url": null,
+          "title": "JLPT N1 বাংলা-জাপানিজ Complete Mock Test",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 16,
+          "bold": false,
+          "italic": false,
+          "items": [
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 6,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                95.043307,
+                490.277043,
+                0
+              ],
+              "url": null,
+              "title": "অ্যাডভান্সড - Nuanced Grammar, Editorial Reading & High-Level Comprehension",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 8,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "কীভাবে ব্যবহার করবেন",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 1,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 8,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    42.519685,
+                    455.786959,
+                    0
+                  ],
+                  "url": null,
+                  "title": "Answer Sheet",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 10,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 1 - 文字・語彙 / Vocabulary & Kanji",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 14,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 2 - 文法 / Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 18,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 3 - 読解 / Reading",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 3,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    738.181485,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 1 - 指標と現実",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    319.198477,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 2 - リスク管理メモ",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 20,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    610.505215,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 3 - 専門性とAI",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 22,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 4 - 聴解シミュレーション / Listening Simulation",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 26,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Listening Script",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 4,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    687.485167,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 1 - Questions 33-34",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    562.48567,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 2 - Questions 35-36",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    437.486172,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 3 - Questions 37-38",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    329.206675,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 4 - Questions 39-40",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 28,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Answer Key + বাংলা ব্যাখ্যা",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            }
+          ]
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 8820,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N1 JLPT N1 বাংলা-জাপা7নিজ Complete Mock Test অ্যাডভান্সড - Nuanced Grammar, Editorial Reading & High-Level Comprehension 日本語能力試験 "
+  },
+  {
+    "filename": "JLPT_N2_Bangla_Japanese_Complete_Mock_Test.pdf",
+    "sizeBytes": 377365,
+    "sizeKb": "368.5 KB",
+    "numPages": [],
+    "info": {
+      "total": 13,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "WeasyPrint 68.0",
+        "Title": "JLPT N2 বাংলা-জাপানিজ Complete Mock Test"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "1fbc878a1cc4f00ee9807348f8f13e57",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 6,
+              "gen": 0
+            },
+            {
+              "name": "XYZ"
+            },
+            95.043307,
+            573.713615,
+            0
+          ],
+          "url": null,
+          "title": "JLPT N2 বাংলা-জাপানিজ Complete Mock Test",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 16,
+          "bold": false,
+          "italic": false,
+          "items": [
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 6,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                95.043307,
+                490.727116,
+                0
+              ],
+              "url": null,
+              "title": "উচ্চ-মধ্যম - Abstract Reading, Formal Japanese & Advanced Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 8,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "কীভাবে ব্যবহার করবেন",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 1,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 8,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    42.519685,
+                    455.786959,
+                    0
+                  ],
+                  "url": null,
+                  "title": "Answer Sheet",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 10,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 1 - 文字・語彙 / Vocabulary & Kanji",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 14,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 2 - 文法 / Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 18,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 3 - 読解 / Reading",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 3,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    738.181485,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 1 - 在宅勤務の方針",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    337.914693,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 2 - 市のリサイクル案内",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 20,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    610.505215,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 3 - 効率と余白",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 22,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 4 - 聴解シミュレーション / Listening Simulation",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 26,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Listening Script",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 4,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    687.485167,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 1 - Questions 33-34",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    562.48567,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 2 - Questions 35-36",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    437.486172,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 3 - Questions 37-38",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    312.486675,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 4 - Questions 39-40",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 28,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Answer Key + বাংলা ব্যাখ্যা",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            }
+          ]
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 8149,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N2 JLPT N2 বাংলা-জাপা7নিজ Complete Mock Test উচ্চ-মধ্যম - Abstract Reading, Formal Japanese & Advanced Grammar 日本語能力試験 N2 模擬試験 এই"
+  },
+  {
+    "filename": "JLPT_N3_Bangla_Japanese_Complete_Mock_Test.pdf",
+    "sizeBytes": 352460,
+    "sizeKb": "344.2 KB",
+    "numPages": [],
+    "info": {
+      "total": 13,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "WeasyPrint 68.0",
+        "Title": "JLPT N3 বাংলা-জাপানিজ Complete Mock Test"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "bce1e6a8f25b778884ae44310818119d",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 6,
+              "gen": 0
+            },
+            {
+              "name": "XYZ"
+            },
+            95.043307,
+            573.713615,
+            0
+          ],
+          "url": null,
+          "title": "JLPT N3 বাংলা-জাপানিজ Complete Mock Test",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 16,
+          "bold": false,
+          "italic": false,
+          "items": [
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 6,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                95.043307,
+                490.727116,
+                0
+              ],
+              "url": null,
+              "title": "মধ্যম - Practical Reading, Workplace Japanese & Intermediate Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 8,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "কীভাবে ব্যবহার করবেন",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 1,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 8,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    42.519685,
+                    455.786959,
+                    0
+                  ],
+                  "url": null,
+                  "title": "Answer Sheet",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 10,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 1 - 文字・語彙 / Vocabulary & Kanji",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 14,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 2 - 文法 / Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 18,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 3 - 読解 / Reading",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 3,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    738.181485,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 1 - 社内メール",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    337.914693,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 2 - 市民センター",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 20,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    696.687647,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 3 - 便利さについて",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 22,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 4 - 聴解シミュレーション / Listening Simulation",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 26,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Listening Script",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 4,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    687.485167,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 1 - Questions 33-34",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    562.48567,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 2 - Questions 35-36",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    437.486172,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 3 - Questions 37-38",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    345.926675,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 4 - Questions 39-40",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 28,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Answer Key + বাংলা ব্যাখ্যা",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            }
+          ]
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 7162,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N3 JLPT N3 বাংলা-জাপা7নিজ Complete Mock Test মধ্যম - Practical Reading, Workplace Japanese & Intermediate Grammar 日本語能力試験 N3 模擬試験"
+  },
+  {
+    "filename": "JLPT_N4_Bangla_Japanese_Complete_Mock_Test.pdf",
+    "sizeBytes": 351508,
+    "sizeKb": "343.3 KB",
+    "numPages": [],
+    "info": {
+      "total": 13,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "WeasyPrint 68.0",
+        "Title": "JLPT N4 বাংলা-জাপানিজ Complete Mock Test"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "9c1967c3f0c980bb57bd4679f7eeb9d0",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 6,
+              "gen": 0
+            },
+            {
+              "name": "XYZ"
+            },
+            95.043307,
+            573.713615,
+            0
+          ],
+          "url": null,
+          "title": "JLPT N4 বাংলা-জাপানিজ Complete Mock Test",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 16,
+          "bold": false,
+          "italic": false,
+          "items": [
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 6,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                95.043307,
+                490.727116,
+                0
+              ],
+              "url": null,
+              "title": "প্রাথমিক-মধ্যম - Everyday Communication, Basic Reading & Core Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 8,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "কীভাবে ব্যবহার করবেন",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 1,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 8,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    42.519685,
+                    455.786959,
+                    0
+                  ],
+                  "url": null,
+                  "title": "Answer Sheet",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 10,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 1 - 文字・語彙 / Vocabulary & Kanji",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 14,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 2 - 文法 / Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 18,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 3 - 読解 / Reading",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 3,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    738.181485,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 1 - ピクニックのメール",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    354.634693,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 2 - 図書館のお知らせ",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 20,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    696.687647,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 3 - 旅行の日記",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 22,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 4 - 聴解シミュレーション / Listening Simulation",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 26,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Listening Script",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 4,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    687.485167,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 1 - Questions 33-34",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    562.48567,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 2 - Questions 35-36",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    454.206172,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 3 - Questions 37-38",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    345.926675,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 4 - Questions 39-40",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 28,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Answer Key + বাংলা ব্যাখ্যা",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            }
+          ]
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 6500,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N4 JLPT N4 বাংলা-জাপা7নিজ Complete Mock Test প্র াথ7মিক-মিধ্যমি - Everyday Communication, Basic Reading & Core Grammar 日本語能力試験 N4"
+  },
+  {
+    "filename": "JLPT_N5_Bangla_Japanese_Complete_Mock_Test.pdf",
+    "sizeBytes": 319702,
+    "sizeKb": "312.2 KB",
+    "numPages": [],
+    "info": {
+      "total": 13,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "WeasyPrint 68.0",
+        "Title": "JLPT N5 বাংলা-জাপানিজ Complete Mock Test"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "c58fe2746f9463eb09469c8171d316b3",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 6,
+              "gen": 0
+            },
+            {
+              "name": "XYZ"
+            },
+            95.043307,
+            573.713615,
+            0
+          ],
+          "url": null,
+          "title": "JLPT N5 বাংলা-জাপানিজ Complete Mock Test",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 16,
+          "bold": false,
+          "italic": false,
+          "items": [
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 6,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                95.043307,
+                490.727116,
+                0
+              ],
+              "url": null,
+              "title": "শুরু পর্যায় - Hiragana, Katakana, Basic Kanji & Everyday Japanese",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 8,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "কীভাবে ব্যবহার করবেন",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 1,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 8,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    42.519685,
+                    455.786959,
+                    0
+                  ],
+                  "url": null,
+                  "title": "Answer Sheet",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 10,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 1 - 文字・語彙 / Vocabulary & Kanji",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 14,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 2 - 文法 / Grammar",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 18,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 3 - 読解 / Reading",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 3,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    738.181485,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 1 - 山田さんの朝",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 18,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    391.625474,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 2 - 店のお知らせ",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 20,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    54.519685,
+                    696.687647,
+                    0
+                  ],
+                  "url": null,
+                  "title": "読解 3 - メッセージ",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 22,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Section 4 - 聴解シミュレーション / Listening Simulation",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 26,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Listening Script",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 4,
+              "bold": false,
+              "italic": false,
+              "items": [
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    687.485167,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 1 - Questions 33-34",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    579.20567,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 2 - Questions 35-36",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    454.206172,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 3 - Questions 37-38",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                },
+                {
+                  "action": null,
+                  "dest": [
+                    {
+                      "num": 26,
+                      "gen": 0
+                    },
+                    {
+                      "name": "XYZ"
+                    },
+                    52.269685,
+                    345.926675,
+                    0
+                  ],
+                  "url": null,
+                  "title": "会話 4 - Questions 39-40",
+                  "color": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 0
+                  },
+                  "count": 0,
+                  "bold": false,
+                  "italic": false,
+                  "items": []
+                }
+              ]
+            },
+            {
+              "action": null,
+              "dest": [
+                {
+                  "num": 28,
+                  "gen": 0
+                },
+                {
+                  "name": "XYZ"
+                },
+                42.519685,
+                799.370079,
+                0
+              ],
+              "url": null,
+              "title": "Answer Key + বাংলা ব্যাখ্যা",
+              "color": {
+                "0": 0,
+                "1": 0,
+                "2": 0
+              },
+              "count": 0,
+              "bold": false,
+              "italic": false,
+              "items": []
+            }
+          ]
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 6174,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N5 JLPT N5 বাংলা-জাপা7নিজ Complete Mock Test শুরু প-র্যায় - Hiragana, Katakana, Basic Kanji & Everyday Japanese 日本語能力試験 N5 模擬試験 এ"
+  },
+  {
+    "filename": "JLPT_N5_to_N1_Bangla_Japanese_Mock_Test_Collection.pdf",
+    "sizeBytes": 1846883,
+    "sizeKb": "1803.6 KB",
+    "numPages": [],
+    "info": {
+      "total": 65,
+      "info": {
+        "PDFFormatVersion": "1.7",
+        "Language": null,
+        "EncryptFilterName": null,
+        "IsLinearized": false,
+        "IsAcroFormPresent": false,
+        "IsXFAPresent": false,
+        "IsCollectionPresent": false,
+        "IsSignaturesPresent": false,
+        "Producer": "pypdf"
+      },
+      "metadata": null,
+      "fingerprints": [
+        "41e8273df783a62b0c449d30375a719a",
+        null
+      ],
+      "permission": null,
+      "outline": [
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 4,
+              "gen": 0
+            },
+            {
+              "name": "Fit"
+            }
+          ],
+          "url": null,
+          "title": "JLPT N5",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 0,
+          "bold": false,
+          "italic": false,
+          "items": []
+        },
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 66,
+              "gen": 0
+            },
+            {
+              "name": "Fit"
+            }
+          ],
+          "url": null,
+          "title": "JLPT N4",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 0,
+          "bold": false,
+          "italic": false,
+          "items": []
+        },
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 127,
+              "gen": 0
+            },
+            {
+              "name": "Fit"
+            }
+          ],
+          "url": null,
+          "title": "JLPT N3",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 0,
+          "bold": false,
+          "italic": false,
+          "items": []
+        },
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 188,
+              "gen": 0
+            },
+            {
+              "name": "Fit"
+            }
+          ],
+          "url": null,
+          "title": "JLPT N2",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 0,
+          "bold": false,
+          "italic": false,
+          "items": []
+        },
+        {
+          "action": null,
+          "dest": [
+            {
+              "num": 249,
+              "gen": 0
+            },
+            {
+              "name": "Fit"
+            }
+          ],
+          "url": null,
+          "title": "JLPT N1",
+          "color": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          },
+          "count": 0,
+          "bold": false,
+          "italic": false,
+          "items": []
+        }
+      ],
+      "pages": []
+    },
+    "isExtractable": true,
+    "textLength": 36841,
+    "sampleText": "JLPT-STYLE ORIGINAL PRACTICE • N5 JLPT N5 বাংলা-জাপা7নিজ Complete Mock Test শুরু প-র্যায় - Hiragana, Katakana, Basic Kanji & Everyday Japanese 日本語能力試験 N5 模擬試験 এ"
+  }
+]

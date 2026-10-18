@@ -56,7 +56,7 @@ export const InCanvasAuthModal: React.FC<InCanvasAuthModalProps> = ({
           email: 'student.tokyo@nihomi.com',
           name: 'Tokyo Explorer',
           role: 'student',
-          planId: 'starter',
+          planId: 'free',
           status: 'ACTIVE',
           studentId,
           nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
@@ -158,7 +158,7 @@ export const InCanvasAuthModal: React.FC<InCanvasAuthModalProps> = ({
               </span>
             </div>
             <p className="text-[11px] text-zinc-300">
-              আপনার শিবুয়া প্রগ্রেস সেভ করুন এবং AI সেনসেই ক্রেডিট আনলক করুন
+              আপনার শিবুয়া প্রগ্রেস সেভ করুন এবং নমি সেন্সেই ক্রেডিট আনলক করুন
             </p>
           </div>
         </div>

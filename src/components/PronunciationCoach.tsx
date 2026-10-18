@@ -382,7 +382,7 @@ export const PronunciationCoach: React.FC<PronunciationCoachProps> = ({
       {isAnalyzing && (
         <div className="p-6 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 flex items-center justify-center space-x-3 text-amber-900 dark:text-amber-200 animate-pulse">
           <RefreshCw className="w-5 h-5 animate-spin text-amber-600" />
-          <p className="text-xs font-bold">Nihomi Sensei is analyzing pitch contour and phoneme clarity...</p>
+          <p className="text-xs font-bold">Nomi Sensei is analyzing pitch contour and phoneme clarity...</p>
         </div>
       )}
 

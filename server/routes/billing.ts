@@ -659,11 +659,12 @@ billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Respo
     let targetUserId = (req as any).user?.id || bodyUserId;
     if (!targetUserId) {
       const users = (db as any).getUsers ? (db as any).getUsers() : (db.data.users || []);
-      targetUserId = users[0]?.id || 'user-bdtrip24-student';
+      targetUserId = users[0]?.id || 'usr_anonymous_student';
     }
 
-    const amount = billingInterval === 'yearly' ? 4990 : 599;
-    const planName = billingInterval === 'yearly' ? 'Nihomi Pro Yearly' : 'Nihomi Pro Monthly';
+    const targetPlan = db.getPlanById(planId) || db.getPlanById('pro');
+    const amount = targetPlan ? resolveBasePlanAmount(targetPlan, billingInterval as BillingInterval) : 1990;
+    const planName = targetPlan ? `${targetPlan.name} (${billingInterval === 'yearly' ? 'Yearly' : billingInterval === 'half_yearly' ? '6-Months' : billingInterval === 'quarterly' ? 'Quarterly' : 'Monthly'})` : 'Nihomi Pro Monthly';
 
     // 1. Create Payment record
     const payment = db.createPayment({
@@ -746,7 +747,7 @@ billingRouter.post('/bkash/submit-manual-trxid', async (req: Request, res: Respo
       studentPhone: studentPhone || '018••••••66',
       trxId: cleanTrx,
       planId,
-      planName: billingInterval === 'yearly' ? '৳4,990 Pro Yearly' : '৳599 Pro Monthly',
+      planName,
       billingInterval,
       amount,
       submittedAt: new Date().toISOString(),
@@ -796,9 +797,9 @@ billingRouter.get('/pending-trxids', optionalAuth, async (req: AuthenticatedRequ
           studentPhone: '01712-884920',
           trxId: 'BL92A8X10K',
           planId: 'pro',
-          planName: '৳599 Pro Monthly',
+          planName: '৳1,990 Pro Monthly',
           billingInterval: 'monthly',
-          amount: 599,
+          amount: 1990,
           submittedAt: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
           status: 'pending'
         },
@@ -810,9 +811,9 @@ billingRouter.get('/pending-trxids', optionalAuth, async (req: AuthenticatedRequ
           studentPhone: '01923-456789',
           trxId: 'BK77M4P91Q',
           planId: 'pro',
-          planName: '৳4,990 Pro Yearly',
+          planName: '৳20,300 Pro Yearly',
           billingInterval: 'yearly',
-          amount: 4990,
+          amount: 20300,
           submittedAt: new Date(Date.now() - 1000 * 60 * 55).toISOString(),
           status: 'pending'
         },
@@ -823,10 +824,10 @@ billingRouter.get('/pending-trxids', optionalAuth, async (req: AuthenticatedRequ
           studentEmail: 'sakib.dhaka@gmail.com',
           studentPhone: '01844-332211',
           trxId: 'BL55R2D88W',
-          planId: 'pro',
-          planName: '৳599 Pro Monthly',
+          planId: 'starter',
+          planName: '৳990 Starter Monthly',
           billingInterval: 'monthly',
-          amount: 599,
+          amount: 990,
           submittedAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
           status: 'approved',
           approvedAt: new Date(Date.now() - 1000 * 60 * 150).toISOString(),
@@ -872,17 +873,19 @@ billingRouter.post('/approve-trxid', optionalAuth, async (req: AuthenticatedRequ
     const now = new Date().toISOString();
 
     if (!target) {
+      const targetPlan = db.getPlanById(planId) || db.getPlanById('pro');
+      const canonicalAmount = targetPlan ? resolveBasePlanAmount(targetPlan, billingInterval as BillingInterval) : 1990;
       target = {
         id: submissionId || `subm_${Date.now()}`,
-        userId: explicitUserId || 'user-bdtrip24-student',
+        userId: explicitUserId || 'usr_student_pending',
         studentName: 'Nihomi Student',
         studentEmail: 'student@nihomi.com',
         studentPhone: '018••••••66',
         trxId: trxId?.trim()?.toUpperCase() || 'TRX-MANUAL',
         planId,
-        planName: planId === 'japan_ready' || billingInterval === 'yearly' ? '৳4,990 Pro Yearly' : '৳599 Pro Monthly',
+        planName: targetPlan ? `${targetPlan.name} (${billingInterval})` : 'Nihomi Pro Monthly',
         billingInterval,
-        amount: billingInterval === 'yearly' ? 4990 : 599,
+        amount: canonicalAmount,
         submittedAt: now,
         status: 'pending'
       };

@@ -156,7 +156,7 @@ export function getCheckoutPlanPrice(p: PlanDefinition, interval: BillingInterva
 export const CHECKOUT_PLANS: PlanDefinition[] = [
   {
     id: 'starter',
-    name: 'Starter',
+    name: 'Nihomi Starter',
     nameJa: 'スターター',
     badge: 'ফাউন্ডেশন',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
@@ -168,12 +168,12 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     features: [
       '২৫টি N5 ইন্টারঅ্যাক্টিভ লেসন',
       'ভোকাবুলারি ব্যাংক (৮০০+ শব্দ)',
-      '৫০০ AI Sensei কয়েন / মাস'
+      '৫০০ Nomi Sensei কয়েন / মাস'
     ]
   },
   {
     id: 'pro',
-    name: 'Pro',
+    name: 'Nihomi Pro',
     nameJa: 'プロ',
     badge: 'সবচেয়ে জনপ্রিয়',
     badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
@@ -181,16 +181,16 @@ export const CHECKOUT_PLANS: PlanDefinition[] = [
     quarterlyPrice: 5670,
     halfYearlyPrice: 10750,
     yearlyPrice: 20300,
-    tagline: 'N5 থেকে N3 ফুল কারিকুলাম + AI Sensei',
+    tagline: 'N5 থেকে N3 ফুল কারিকুলাম + Nomi Sensei',
     features: [
       'N5, N4 ও N3 ফুল আনলক',
-      '১,৫০০ AI Coach কয়েন / মাস',
+      '১,৫০০ Nomi Sensei কয়েন / মাস',
       'JLPT ফুল মক এক্সাম ও SRS ডেক'
     ]
   },
   {
     id: 'japan_ready',
-    name: 'Japan Ready',
+    name: 'Nihomi Japan Ready',
     nameJa: '日本就労・移住特化',
     badge: 'সেরা মান',
     badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
@@ -221,7 +221,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const getInitialTier = (): PlanTierKey => {
     const pid = (activePlan?.id as string)?.toLowerCase();
     if (pid === 'starter') return 'starter';
-    if (pid === 'japan_ready' || pid === 'career' || pid === 'n5_lifetime') return 'japan_ready';
+    if (pid === 'japan_ready' || pid === 'career') return 'japan_ready';
     return 'pro';
   };
 
@@ -235,7 +235,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Processing state
   const [isProcessingBkash, setIsProcessingBkash] = useState<boolean>(false);
-  const [isProcessingSsl, setIsProcessingSsl] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Connecting / Stub State
@@ -340,7 +339,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         couponCode: appliedCoupon?.code
       });
       const res = await billingApi.createBkashPayment({
-        tier: (tier === 'japan_ready' ? 'n5_lifetime' : 'n5_pro') as any,
+        planId: tier,
+        tier: tier,
+        interval: billingInterval,
+        amount: finalPrice,
         couponCode: appliedCoupon?.code
       });
       if ((res as any)?.connecting) {
@@ -368,51 +370,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   };
 
-  // 1-Click Automated SSLCOMMERZ Hosted PGW Checkout
-  const handleSslCheckout = async () => {
-    setIsProcessingSsl(true);
-    setErrorMessage(null);
-    try {
-      trackNihomiEvent('subscription_checkout_started', {
-        planId: tier,
-        provider: 'sslcommerz',
-        amount: finalPrice,
-        couponCode: appliedCoupon?.code
-      });
-      const res = await billingApi.createSslCommerzPayment({
-        tier,
-        planId: tier,
-        amount: finalPrice,
-        name: user?.name || user?.email?.split('@')[0] || 'Nihomi Learner'
-      });
-      if ((res as any)?.connecting) {
-        setIsConnectingMode(true);
-        setConnectingMessage(
-          (res as any).message || 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)'
-        );
-        return;
-      }
-      if (res.success && res.gatewayUrl) {
-        window.location.href = res.gatewayUrl;
-        return;
-      }
-      setIsConnectingMode(true);
-      setConnectingMessage(
-        'কার্ড ও ইন্টারনেট ব্যাংকিং গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)। আজই নিশ্চিত আসন পেতে আমাদের সাথে যোগাযোগ করুন:'
-      );
-    } catch {
-      setIsConnectingMode(true);
-      setConnectingMessage(
-        'কার্ড ও ইন্টারনেট ব্যাংকিং গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)। আজই নিশ্চিত আসন পেতে আমাদের সাথে যোগাযোগ করুন:'
-      );
-    } finally {
-      setIsProcessingSsl(false);
-    }
-  };
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
+      <div id="nihomi-checkout-modal" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -517,8 +477,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {/* Trust Badges */}
               <div className="relative z-10 pt-4 mt-4 border-t border-white/10 space-y-2 text-[11px] text-stone-400 font-medium">
                 <div className="flex items-center gap-2 text-stone-300">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>SSLCOMMERZ ও bKash অনুমোদিত নিরাপদ গেটওয়ে</span>
+                  <ShieldCheck className="w-4 h-4 text-[#E2136E] shrink-0" />
+                  <span>bKash অনুমোদিত নিরাপদ পেমেন্ট চ্যানেল</span>
                 </div>
                 <div className="flex items-center gap-2 text-stone-300">
                   <Zap className="w-4 h-4 text-amber-400 shrink-0" />
@@ -542,7 +502,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     নিহোমি প্রিমিয়াম চেকআউট
                   </h2>
                   <p className="text-xs text-stone-300 mt-1">
-                    কোনো ম্যানুয়াল নম্বর বা স্ক্রিনশট নয় — ১-ক্লিকে bKash বা কার্ড দিয়ে নিরাপদ পেমেন্ট করুন।
+                    কোনো জটিলতা নয় — ১-ক্লিকে bKash দিয়ে নিরাপদ পেমেন্ট করুন (কার্ডের প্রয়োজন নেই)।
                   </p>
                 </div>
 
@@ -734,23 +694,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                 ) : (
                   <div className="space-y-2.5 pt-2">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono">
-                      নিরাপদ পেমেন্ট চ্যানেল নির্বাচন করুন:
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono flex items-center justify-between">
+                      <span>পেমেন্ট মাধ্যম: শুধুমাত্র বিকাশ (bKash Only)</span>
+                      <span className="text-[#E2136E] text-[10px]">কার্ডের প্রয়োজন নেই</span>
                     </div>
 
-                    {/* bKash / Nagad / Rocket MFS 1-Click Gateway Button */}
+                    {/* bKash 1-Click Gateway Button */}
                     <button
                       type="button"
                       onClick={handleBkashCheckout}
-                      disabled={isProcessingBkash || isProcessingSsl}
-                      className="w-full py-3 px-5 rounded-2xl bg-[#E2136E] hover:bg-[#c90f61] text-white font-black text-sm shadow-xl shadow-[#E2136E]/25 transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
+                      disabled={isProcessingBkash}
+                      className="w-full py-3.5 px-5 rounded-2xl bg-[#E2136E] hover:bg-[#c90f61] text-white font-black text-sm shadow-xl shadow-[#E2136E]/25 transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-lg bg-white p-1 flex items-center justify-center shrink-0">
                           <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
                         </div>
                         <span className="text-left leading-tight text-xs sm:text-sm">
-                          bKash / নগদ দিয়ে পেমেন্ট (৳{toBengaliDigits(finalPrice.toLocaleString('en-US'))})
+                          bKash দিয়ে পেমেন্ট করুন (৳{toBengaliDigits(finalPrice.toLocaleString('en-US'))})
                         </span>
                       </div>
                       {isProcessingBkash ? (
@@ -760,25 +721,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       )}
                     </button>
 
-                    {/* SSLCOMMERZ Cards & Multi-Channel Button */}
-                    <button
-                      type="button"
-                      onClick={handleSslCheckout}
-                      disabled={isProcessingBkash || isProcessingSsl}
-                      className="w-full py-3 px-5 rounded-2xl bg-gradient-to-r from-[#1e293b] via-[#0f172a] to-[#1e293b] hover:border-amber-400/50 border border-white/15 text-white font-bold text-sm shadow-lg transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
-                    >
-                      <div className="flex items-center gap-3">
-                        <CreditCard className="w-5 h-5 text-amber-400 shrink-0" />
-                        <span className="text-left text-xs sm:text-sm">
-                          কার্ড / ইন্টারনেট ব্যাংকিং (SSLCOMMERZ / Stripe)
-                        </span>
-                      </div>
-                      {isProcessingSsl ? (
-                        <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
-                      ) : (
-                        <ChevronRight className="w-5 h-5 text-stone-400" />
-                      )}
-                    </button>
+                    <div className="p-2.5 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-300 text-[11px] text-center font-medium">
+                      অনলাইন পেমেন্ট গেটওয়ে সংযোগ প্রক্রিয়াধীন (Sandbox Testing)
+                    </div>
                   </div>
                 )}
               </div>

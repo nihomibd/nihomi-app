@@ -60,26 +60,26 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-bold">
               <Award className="w-3.5 h-3.5" />
-              <span>OFFICIAL JLPT EXAM SIMULATOR</span>
+              <span>NIHOMI JLPT PRACTICE MOCK SIMULATOR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-              JLPT {selectedLevel} অফিসিয়াল মক টেস্ট ও স্কোরকার্ড
+              JLPT {selectedLevel} প্র্যাকটিস মক টেস্ট ও স্কোরকার্ড
             </h1>
             <p className="text-slate-300 text-sm md:text-base leading-relaxed">
-              জাপানের অফিশিয়াল JLPT স্কেলড মার্কিং সিস্টেম ও টাইম-লিমিট অনুযায়ী তৈরি রিয়েলিস্টিক সিমুলেশন।
-              প্রতিটি সেকশন পাস থ্রেশহোল্ড পূরণ করে অর্জন করুন ক্রিপ্টোগ্রাফিক ভেরিফাইড সার্টিফিকেট।
+              জাপানের অফিসিয়াল JLPT পরীক্ষার অনুরূপ ফরম্যাট, টাইম-লিমিট ও স্কেলড মার্কিং সিস্টেম অনুযায়ী তৈরি নিহোমি প্র্যাকটিস সিমুলেশন।
+              প্রতিটি সেকশন পাস থ্রেশহোল্ড (১৯/৬০) পূরণ করে অর্জন করুন ভেরিফায়েড সার্টিফিকেট।
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
             {/* Level Selector */}
-            <div className="flex bg-slate-900/90 border border-slate-800 rounded-2xl p-1.5 w-full sm:w-auto">
-              {(['N5', 'N4'] as const).map((lvl) => (
+            <div className="flex bg-slate-900/90 border border-slate-800 rounded-2xl p-1.5 w-full sm:w-auto flex-wrap">
+              {(['N5', 'N4', 'N3'] as const).map((lvl) => (
                 <button
                   key={lvl}
                   type="button"
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`flex-1 sm:flex-none px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                     selectedLevel === lvl
                       ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
                       : 'text-slate-400 hover:text-slate-200'
@@ -88,9 +88,39 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
                   JLPT {lvl}
                 </button>
               ))}
+              {(['N2', 'N1'] as const).map((lvl) => (
+                <button
+                  key={lvl}
+                  type="button"
+                  onClick={() => setSelectedLevel(lvl)}
+                  className={`flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                    selectedLevel === lvl
+                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                      : 'text-slate-500 hover:text-slate-300'
+                  }`}
+                  title={`${lvl} এডিটরিয়াল স্টেজিংয়ে রয়েছে`}
+                >
+                  {lvl} <span className="text-[10px] opacity-75 font-normal">(স্টেজিং)</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>
+
+        {/* N2 / N1 Staging Disclosure Banner */}
+        {(selectedLevel === 'N2' || selectedLevel === 'N1') && (
+          <div className="mt-6 p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-start gap-3 text-purple-200 text-xs leading-relaxed">
+            <AlertTriangle className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-sm text-purple-300 mb-1">
+                JLPT {selectedLevel} প্রশ্নব্যাংক বর্তমানে এডিটরিয়াল স্টেজিংয়ে রয়েছে
+              </p>
+              <p>
+                স্ক্যানকৃত প্রশ্নপত্রের OCR টাইপোগ্রাফিক ও উত্তরসূচি নিখুঁত করতে আমাদের টিম ম্যানুয়াল প্রুফরিডিং পরিচালনা করছে। কোনো কৃত্রিম বা যাচাইবিহীন প্রশ্ন শিক্ষার্থীদের সামনে উন্মুক্ত করা হচ্ছে না। ভেরিফিকেশন সম্পন্ন হওয়ামাত্রই পূর্ণাঙ্গ সিমুলেশন উন্মুক্ত হবে।
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Official Scoring Matrix & Exam Structure Card */}
@@ -311,10 +341,10 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
               <span>NIHOMI N5 PRO MEMBERSHIP</span>
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white">
-              আনলিমিটেড মক টেস্ট ও অফিশিয়াল ভেরিফাইড সার্টিফিকেট
+              JLPT-স্টাইল ফুল মক টেস্ট ও পারফরম্যান্স অ্যানালিটিক্স
             </h3>
             <p className="text-xs md:text-sm text-slate-300 max-w-xl">
-              N5 Pro সাবস্ক্রিপশনে রয়েছে সবকটি অফিসিয়াল টেস্টে অংশগ্রহণ, দুর্বলতা বিশ্লেষণের উপর বেস করে MemoryOS™ Ghost Mode রিভিশন এবং কিউআর ভেরিফাইড সার্টিফিকেট।
+              N5 Pro সাবস্ক্রিপশনে রয়েছে সবকটি JLPT-স্টাইল প্র্যাকটিস টেস্টে আনলিমিটেড অংশগ্রহণ, দুর্বলতা বিশ্লেষণের উপর বেস করে MemoryOS™ Ghost Mode রিভিশন এবং পারফরম্যান্স সার্টিফিকেট।
             </p>
           </div>
 

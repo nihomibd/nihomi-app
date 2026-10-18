@@ -919,7 +919,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
     if (planId === 'free') {
       return [
         'Full JLPT N5, N4 & N3 Complete Grammar & Kanji Bank',
-        '1,000 to Unlimited AI Sensei Coach Voice Queries (vs 10/mo)',
+        '1,000 to Unlimited Nomi Sensei Coach Voice Queries (vs 10/mo)',
         'Full-Length JLPT Timed Mock Exams with Scoring Analytics',
         'Business Japanese & Keigo (敬語) Workplace Mastery',
         'Japan Living, Visa Guidance & Tokyo Interview Prep',
@@ -929,7 +929,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
     if (planId === 'starter') {
       return [
         'Full JLPT N3 Advanced Modules & Specialized Reading Bank',
-        '1,000 AI Sensei Monthly Quotas (10x your current 100/mo cap)',
+        '1,000 Nomi Sensei Monthly Quotas (10x your current 100/mo cap)',
         'Keigo (敬語) & Japanese Business Email Masterclass',
         'Interactive JLPT Mock Exam Simulations with AI Feedback',
         'Japan Workplace Etiquette & Native Mock Interviews'
@@ -937,7 +937,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
     }
     if (planId === 'pro') {
       return [
-        'Unlimited AI Sensei Coach Interactions (Zero monthly caps)',
+        'Unlimited Nomi Sensei Coach Interactions (Zero monthly caps)',
         'Tokyo Workplace & Japanese Interview Simulation Lab',
         'Specialized Japan Job Placement & Visa Documentation Guides',
         'Official Verified Nihomi Japanese Academy Certificate'
@@ -1144,13 +1144,13 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
           <div>
             <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">My Subscription & Billing</h1>
             <p className="text-xs sm:text-sm text-zinc-500 mt-1">
-              Manage your plan, review invoices, check AI Sensei interaction quotas, and update payment settings.
+              Manage your plan, review invoices, check Nomi Sensei interaction quotas, and update payment settings.
             </p>
           </div>
 
           <button
             onClick={() => onNavigate && onNavigate('pricing')}
-            className="self-start sm:self-center px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors"
+            className="self-start sm:self-center px-4 py-2 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition-colors cursor-pointer"
             id="btn-explore-all-plans"
           >
             <span>Explore All Plans</span>
@@ -1337,7 +1337,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-red-600 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
                     {plan?.displayNameJa || '日本語プラン'}
                   </span>
                   {isTrialing ? (
@@ -1409,7 +1409,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
             <div className="p-4 rounded-2xl bg-zinc-50/70 dark:bg-zinc-800/30 border border-zinc-200/80 dark:border-zinc-700/50 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-800 dark:text-zinc-200">
-                  <TrendingUp className="w-3.5 h-3.5 text-red-600" />
+                  <TrendingUp className="w-3.5 h-3.5 text-[#E45147]" />
                   <span>6-Month Billing & Spending Velocity</span>
                 </div>
                 <span className="text-[10px] text-zinc-500 font-medium">Monthly Outlay Trend</span>
@@ -1419,8 +1419,8 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                   <AreaChart data={monthlySpendingTrend} margin={{ top: 5, right: 8, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="overviewSpendGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#dc2626" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#dc2626" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="#E45147" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="#E45147" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e4e4e7" strokeOpacity={0.4} />
@@ -1440,7 +1440,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                     <Area
                       type="monotone"
                       dataKey="amount"
-                      stroke="#dc2626"
+                      stroke="#E45147"
                       strokeWidth={2}
                       fillOpacity={1}
                       fill="url(#overviewSpendGradient)"
@@ -1454,7 +1454,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/60" id="card-due-date-push-notifications">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-md bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-md bg-purple-100 dark:bg-purple-950/60 text-[#E45147] dark:text-purple-400 flex items-center justify-center">
                     <BellRing className="w-3 h-3" />
                   </div>
                   <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
@@ -1480,7 +1480,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                     <button
                       type="button"
                       onClick={handleSimulatePreRenewalAlert}
-                      className="px-2.5 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/40 text-[10px] font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
+                      className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 text-[#E45147] dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-[10px] font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
                       id="btn-test-renewal-reminder"
                     >
                       <Bell className="w-3 h-3" />
@@ -1497,8 +1497,8 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                   disabled={isTogglingPush}
                   aria-checked={pushNotificationsEnabled}
                   role="switch"
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
-                    pushNotificationsEnabled ? 'bg-red-600' : 'bg-zinc-300 dark:bg-zinc-700'
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+                    pushNotificationsEnabled ? 'bg-[#E45147]' : 'bg-zinc-300 dark:bg-zinc-700'
                   } ${isTogglingPush ? 'opacity-60 cursor-not-allowed' : ''}`}
                   id="toggle-push-notifications-switch"
                 >
@@ -1512,7 +1512,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                     {isTogglingPush ? (
                       <Loader2 className="w-2.5 h-2.5 text-zinc-600 animate-spin" />
                     ) : pushNotificationsEnabled ? (
-                      <Check className="w-2.5 h-2.5 text-red-600 font-bold" />
+                      <Check className="w-2.5 h-2.5 text-[#E45147] font-bold" />
                     ) : null}
                   </span>
                 </button>
@@ -1542,7 +1542,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                   </div>
                   <p className="text-[11px] text-zinc-500 max-w-lg">
                     {autoRenewEnabled
-                      ? `Your subscription will automatically renew on ${sub?.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : 'period end'} to maintain uninterrupted AI Sensei and JLPT access.`
+                      ? `Your subscription will automatically renew on ${sub?.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : 'period end'} to maintain uninterrupted Nomi Sensei and JLPT access.`
                       : `Auto-renewal is paused. Your premium benefits remain accessible until ${sub?.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : 'the end of your period'} without recurring charges.`}
                   </p>
                 </div>
@@ -1628,7 +1628,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                 <div>
                   <span className="font-bold">Maximum Tier Active: </span>
-                  <span>You have unlocked all JLPT modules, unlimited AI Sensei interactions, live native interview prep, and career visa guidance.</span>
+                  <span>You have unlocked all JLPT modules, unlimited Nomi Sensei interactions, live native interview prep, and career visa guidance.</span>
                 </div>
               </div>
             )}
@@ -1705,12 +1705,12 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
             </div>
           </div>
 
-          {/* AI Sensei Quota Card */}
+          {/* Nomi Sensei Quota Card */}
           <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">AI Sensei Monthly Usage</span>
+                  <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Nomi Sensei Monthly Usage</span>
                   {usagePercent >= 90 && (
                     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30 text-[10px] font-bold animate-pulse" title="Monthly quota has reached 90% or higher!">
                       <span className="w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-500 inline-block animate-ping"></span>
@@ -1861,8 +1861,8 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                   </div>
                   <p className="text-xs text-rose-800 dark:text-rose-300 leading-relaxed max-w-2xl">
                     {expiredPaymentMethod
-                      ? `Your saved payment card (${expiredPaymentMethod.cardExpiry || 'Expired'}) needs immediate renewal. Update your card or bKash billing token to prevent subscription suspension and keep your unlimited AI Sensei access active.`
-                      : `An automatic renewal debit of ৳${failedInvoice?.amount || 1499} was unsuccessful. Please check your card balance or billing credentials to avoid service interruptions.`}
+                      ? `Your saved payment method needs renewal. Update your bKash billing authorization to prevent subscription suspension and keep your Nomi Sensei access active.`
+                      : `An automatic renewal payment of ৳${failedInvoice?.amount || 1990} was unsuccessful. Please check your bKash balance or account credentials to avoid service interruptions.`}
                   </p>
                 </div>
               </div>
@@ -2706,7 +2706,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                       {monthlySpendingTrend.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={index === monthlySpendingTrend.length - 1 ? '#dc2626' : '#f87171'}
+                          fill={index === monthlySpendingTrend.length - 1 ? '#E45147' : '#a78bfa'}
                         />
                       ))}
                     </Bar>
@@ -2736,7 +2736,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                               <div className="text-[11px] space-y-0.5">
                                 <p className="text-zinc-300 dark:text-zinc-700">Base Subtotal: ৳{data.subtotal.toLocaleString()} BDT</p>
                                 <p className="text-emerald-400 dark:text-emerald-600 font-bold">15% VAT Paid: ৳{data.vat.toLocaleString()} BDT</p>
-                                <p className="text-red-400 dark:text-red-600 font-extrabold">Total Settled: ৳{data.total.toLocaleString()} BDT</p>
+                                <p className="text-purple-400 dark:text-purple-600 font-extrabold">Total Settled: ৳{data.total.toLocaleString()} BDT</p>
                               </div>
                             </div>
                           );
@@ -2756,8 +2756,8 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                   <AreaChart data={monthlySpendingTrend12} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                     <defs>
                       <linearGradient id="spendingGradient12" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#dc2626" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#dc2626" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="#E45147" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="#E45147" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#71717a" opacity={0.15} />
@@ -2780,7 +2780,7 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                           return (
                             <div className="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-3 py-2 rounded-lg shadow-lg text-xs space-y-0.5 border border-zinc-700/50">
                               <p className="font-bold">{data.monthLabel}</p>
-                              <p className="text-red-400 dark:text-red-600 font-extrabold">
+                              <p className="text-purple-400 dark:text-purple-600 font-extrabold">
                                 Past Year Spending: ৳{data.amount.toLocaleString()}
                               </p>
                               <p className="text-[10px] text-zinc-400 dark:text-zinc-600">
@@ -2795,11 +2795,11 @@ export const SubscriptionManagementView: React.FC<SubscriptionManagementViewProp
                     <Area
                       type="monotone"
                       dataKey="amount"
-                      stroke="#dc2626"
+                      stroke="#E45147"
                       strokeWidth={2.5}
                       fillOpacity={1}
                       fill="url(#spendingGradient12)"
-                      activeDot={{ r: 5, fill: '#dc2626', stroke: '#ffffff', strokeWidth: 2 }}
+                      activeDot={{ r: 5, fill: '#E45147', stroke: '#ffffff', strokeWidth: 2 }}
                     />
                   </AreaChart>
                 )}

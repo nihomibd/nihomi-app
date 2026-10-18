@@ -17,17 +17,19 @@ export function useSubscription(): SubscriptionState {
     const planId = user?.planId || 'free';
     const role = user?.role || 'student';
 
-    const isFounderOrAdmin = role === 'admin' || role === 'founder' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+    const isFounderOrAdmin = role === 'admin' || role === 'founder';
     const isProTier = planId === 'pro' || planId === 'japan_ready' || planId === 'n5_pro' || planId === 'lifetime' || isFounderOrAdmin;
-    const isLifetime = planId === 'japan_ready' || planId === 'lifetime' || isFounderOrAdmin;
+    const isLifetime = planId === 'lifetime' || isFounderOrAdmin;
 
     let planName = 'ফ্রি প্ল্যান (Free Tier)';
-    if (isLifetime) {
-      planName = 'লাইফটাইম আনলিমিটেড (Lifetime Access)';
+    if (isFounderOrAdmin) {
+      planName = 'ফাউন্ডার ভিআইপি (Founder VIP)';
+    } else if (planId === 'japan_ready') {
+      planName = 'নিহোমি জাপান রেডি (Nihomi Japan Ready)';
     } else if (isProTier) {
-      planName = 'N5 Pro মেম্বারশিপ';
+      planName = 'নিহোমি প্রো (Nihomi Pro)';
     } else if (planId === 'starter') {
-      planName = 'স্টার্টার প্ল্যান (Starter)';
+      planName = 'নিহোমি স্টারটার (Nihomi Starter)';
     }
 
     return {

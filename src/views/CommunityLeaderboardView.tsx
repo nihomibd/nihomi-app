@@ -283,7 +283,7 @@ export const CommunityLeaderboardView: React.FC<CommunityLeaderboardViewProps> =
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 transition-colors pb-24 text-left">
+    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 transition-colors pb-24 text-left">
       {/* Top Header Banner */}
       <div className="bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 text-white pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-stone-800 relative overflow-hidden">
         {/* Subtle decorative glow */}

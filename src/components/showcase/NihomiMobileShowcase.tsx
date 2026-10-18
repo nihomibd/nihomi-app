@@ -400,7 +400,7 @@ export const NihomiMobileShowcase: React.FC = () => {
                   AFFORDABLE JAPAN READINESS
                 </span>
                 <h3 className="text-sm font-black text-white">
-                  Join N5 Pro Lifetime Batch
+                  Join Nihomi Pro Plan
                 </h3>
               </div>
 
@@ -410,30 +410,30 @@ export const NihomiMobileShowcase: React.FC = () => {
                   type="button"
                   className="flex-1 py-1 text-center text-stone-400 rounded-lg"
                 >
-                  Free Starter
+                  Nihomi Starter
                 </button>
                 <button
                   type="button"
                   className="flex-1 py-1 text-center bg-gradient-to-r from-red-600 to-amber-500 text-white rounded-lg shadow-xs"
                 >
-                  N5 Pro Lifetime ✨
+                  Nihomi Pro ✨
                 </button>
               </div>
 
-              {/* Prominent N5 Pro Lifetime Card with Gold-Leaf & Washi Texture Accents */}
+              {/* Prominent Nihomi Pro Plan Card with Gold-Leaf & Washi Texture Accents */}
               <div className="p-3.5 rounded-2xl bg-gradient-to-b from-[#1c1926] via-[#141525] to-[#10111e] border-2 border-amber-500/40 shadow-xl shadow-amber-950/20 mb-3 relative overflow-hidden">
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <span className="inline-block px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/30 text-amber-300 font-mono text-[9px] font-bold">
-                      PRO LIFETIME BATCH
+                      NIHOMI PRO PLAN
                     </span>
                     <h4 className="text-xs font-bold text-white mt-1">
                       Full JLPT N5 + Tokyo Baito
                     </h4>
                   </div>
                   <div className="text-right">
-                    <span className="text-base font-black text-amber-300 font-mono">৳৪৯৯</span>
-                    <span className="text-[9px] text-stone-400 line-through block">৳১২৫০</span>
+                    <span className="text-base font-black text-amber-300 font-mono">৳১,৯৯০</span>
+                    <span className="text-[9px] text-stone-400 block">প্রতি মাস</span>
                   </div>
                 </div>
 
@@ -445,7 +445,7 @@ export const NihomiMobileShowcase: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span>২৪/৭ আনলিমিটেড পার্সোনাল AI সেনসেই সাপোর্ট</span>
+                    <span>২৪/৭ আনলিমিটেড পার্সোনাল নমি সেন্সেই সাপোর্ট</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -462,18 +462,15 @@ export const NihomiMobileShowcase: React.FC = () => {
                   type="button"
                   className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 to-amber-500 hover:from-red-500 hover:to-amber-400 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-red-600/30 cursor-pointer"
                 >
-                  <span>Enroll Now - ৳৪৯৯ (bKash/Nagad)</span>
+                  <span>Enroll Now - ৳১,৯৯০ (bKash)</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
-                {/* bKash & Nagad Badges */}
+                {/* bKash Only Badge */}
                 <div className="mt-2.5 flex items-center justify-center gap-2 text-[9px] text-stone-400">
-                  <span>ইনস্ট্যান্ট পেমেন্ট:</span>
+                  <span>পেমেন্ট গেটওয়ে:</span>
                   <span className="px-1.5 py-0.5 rounded bg-pink-500/15 text-pink-400 font-bold border border-pink-500/20">
-                    bKash
-                  </span>
-                  <span className="px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-400 font-bold border border-orange-500/20">
-                    Nagad
+                    bKash (বিকাশ)
                   </span>
                 </div>
               </div>
@@ -486,8 +483,8 @@ export const NihomiMobileShowcase: React.FC = () => {
                     a: 'হ্যাঁ, হিরাগানা ও কাতাকানা থেকে শুরু করে JLPT N5 এর প্রতিটি ধাপ সহজ বাংলায় সাজানো।',
                   },
                   {
-                    q: 'একবার পেমেন্ট করলে কি আজীবন অ্যাক্সেস?',
-                    a: 'হ্যাঁ, একবার ৳৪৯৯ পেমেন্টে সম্পূর্ণ লাইফটাইম অ্যাক্সেস ও আপডেট পাবেন।',
+                    q: 'সাবস্ক্রিপশন প্ল্যানে কী কী সুবিধা রয়েছে?',
+                    a: 'সকল মিন্না নো নিহোঙ্গো লেসন, নমি সেন্সেই সাপোর্ট এবং বাস্তব জীবন মিশন অ্যাক্সেস পাবেন।',
                   },
                 ].map((item, idx) => {
                   const isOpen = activeFaq === idx;

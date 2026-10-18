@@ -115,7 +115,7 @@ export const PLAN_CONFIGS: Record<string, any> = {
     planName: 'Starter Learner',
     priceUSD: 9,
     priceBDT: 990,
-    features: ['Full JLPT N5 Curriculum', 'Standard AI Sensei Q&A', '100 Monthly Nihomi Coins', 'Digital Student ID'],
+    features: ['Full JLPT N5 Curriculum', 'Standard Nomi Sensei Q&A', '100 Monthly Nihomi Coins', 'Digital Student ID'],
   },
   pro: {
     planId: 'pro',
@@ -273,9 +273,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const saved = safeStorage.getItem('nihomi_user');
       if (!saved) return null;
       const parsed = JSON.parse(saved);
-      if (parsed && parsed.email) {
-        const cleanEmail = (parsed.email || '').trim().toLowerCase();
-        parsed.role = cleanEmail === 'mdtanvirkabirbiplob@gmail.com' ? 'admin' : 'student';
+      if (parsed && !parsed.role) {
+        parsed.role = 'student';
       }
       return parsed;
     } catch {
@@ -360,8 +359,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!newUser.nihomiAccountId) {
       newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
     }
-    const cleanEmail = (newUser.email || '').trim().toLowerCase();
-    newUser.role = cleanEmail === 'mdtanvirkabirbiplob@gmail.com' ? 'admin' : 'student';
+    if (!newUser.role) {
+      newUser.role = 'student';
+    }
     setUser(newUser);
     safeStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };

@@ -395,7 +395,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, inv
                     <tr>
                       <td className="px-4 py-3">
                         <p className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">{invoice.planName}</p>
-                        <p className="text-zinc-500 text-[11px]">Unlimited curriculum access, AI Sensei, mock exams</p>
+                        <p className="text-zinc-500 text-[11px]">Unlimited curriculum access, Nomi Sensei, mock exams</p>
                       </td>
                       <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">{invoice.billingPeriod}</td>
                       <td className="px-4 py-3 text-right font-semibold text-zinc-900 dark:text-zinc-100">

@@ -3,6 +3,7 @@ import { bKashService } from '../services/bKashService.js';
 import { sslCommerzService } from '../services/sslCommerzService.js';
 import { stripePaymentService } from '../services/stripePaymentService.js';
 import { subscriptionService, SUBSCRIPTION_TIERS, SubscriptionTier } from '../services/subscriptionService.js';
+import { getCanonicalPrice, validatePurchaseAmount } from '../services/canonicalPricing.js';
 import { optionalAuth } from '../middleware/auth.js';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
 import { prisma, isDatabaseConfigured } from '../prisma.js';
@@ -31,19 +32,28 @@ paymentRouter.get('/plans', (_req: Request, res: Response) => {
 // ========================================================
 paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { tier = 'n5_pro', callbackUrl } = req.body;
+    const { tier, planId, interval = 'monthly', callbackUrl } = req.body;
     const user = req.user;
 
-    const selectedTier = (tier as SubscriptionTier);
-    if (selectedTier !== 'n5_pro' && selectedTier !== 'n5_lifetime') {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid plan tier. Allowed options: "n5_pro", "n5_lifetime".',
-      });
+    const resolvedPlanKey = (planId || tier || 'pro').toLowerCase();
+    let amount: number;
+    let selectedTier: SubscriptionTier;
+
+    if (resolvedPlanKey === 'starter') {
+      selectedTier = 'starter';
+      amount = getCanonicalPrice('starter', interval);
+    } else if (resolvedPlanKey === 'japan_ready' || resolvedPlanKey === 'japanready') {
+      selectedTier = 'japan_ready';
+      amount = getCanonicalPrice('japan_ready', interval);
+    } else if (resolvedPlanKey === 'n5_lifetime') {
+      selectedTier = 'n5_lifetime';
+      amount = SUBSCRIPTION_TIERS.n5_lifetime?.priceBdt || 4990;
+    } else {
+      selectedTier = 'pro';
+      amount = getCanonicalPrice('pro', interval);
     }
 
-    const planConfig = SUBSCRIPTION_TIERS[selectedTier];
-    const amount = planConfig.priceBdt;
+    const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
     const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
 
@@ -624,7 +634,7 @@ paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRe
     const {
       tier = 'n5_pro',
       planId,
-      amount: requestedAmount,
+      interval = 'monthly',
       currency = 'BDT',
       callbackUrl,
       successUrl,
@@ -634,9 +644,25 @@ paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRe
       phone
     } = req.body;
 
-    const selectedTier = (planId || tier) as SubscriptionTier;
-    const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.n5_pro;
-    const amount = Number(requestedAmount) || planConfig.priceBdt || 599;
+    const resolvedPlanKey = (planId || tier || 'pro').toLowerCase();
+    let amount: number;
+    let selectedTier: SubscriptionTier;
+
+    if (resolvedPlanKey === 'starter') {
+      selectedTier = 'starter';
+      amount = getCanonicalPrice('starter', interval);
+    } else if (resolvedPlanKey === 'japan_ready' || resolvedPlanKey === 'japanready') {
+      selectedTier = 'japan_ready';
+      amount = getCanonicalPrice('japan_ready', interval);
+    } else if (resolvedPlanKey === 'n5_lifetime') {
+      selectedTier = 'n5_lifetime';
+      amount = SUBSCRIPTION_TIERS.n5_lifetime?.priceBdt || 4990;
+    } else {
+      selectedTier = 'pro';
+      amount = getCanonicalPrice('pro', interval);
+    }
+
+    const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
 
     const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';

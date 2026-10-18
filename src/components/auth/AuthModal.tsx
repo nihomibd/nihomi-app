@@ -3,6 +3,7 @@ import { X, Sparkles, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
+import { NihomiBrandLogo } from '../brand/NihomiBrandLogo';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
@@ -35,7 +36,7 @@ export const AuthModal: React.FC = () => {
           email: 'nihomibd@gmail.com',
           name: 'Nihomi Japanese Learner',
           role: 'student',
-          planId: 'starter',
+          planId: 'free',
           status: 'ACTIVE',
           studentId,
           nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
@@ -68,7 +69,7 @@ export const AuthModal: React.FC = () => {
       email: 'nihomibd@gmail.com',
       name: 'Nihomi Japanese Learner',
       role: 'student',
-      planId: 'starter',
+      planId: 'free',
       status: 'ACTIVE',
       studentId,
       nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
@@ -85,27 +86,6 @@ export const AuthModal: React.FC = () => {
     closeAuthModal();
   };
 
-  const handleFounderQuick = () => {
-    setUserData({
-      id: 'usr_founder_001',
-      email: 'mdtanvirkabirbiplob@gmail.com',
-      name: 'Tanvir Kabir (Founder)',
-      role: 'founder',
-      planId: 'japan_ready',
-      status: 'ACTIVE',
-      studentId: 'NHO-FND-001',
-      nihomiAccountId: 'ACC-8888',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    trackNihomiEvent('signup_completed', {
-      userId: 'usr_founder_001',
-      method: 'quick_founder',
-      studentId: 'NHO-FND-001'
-    });
-    closeAuthModal();
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/75 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
       <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 text-left my-auto">
@@ -117,9 +97,7 @@ export const AuthModal: React.FC = () => {
         </button>
 
         <div className="bg-stone-900 text-white p-6 text-center">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-white text-stone-900 font-extrabold text-xl flex items-center justify-center shadow-md mb-3">
-            日
-          </div>
+          <NihomiBrandLogo variant="full" theme="dark" size={32} showTagline={false} className="mx-auto mb-3 justify-center" />
           <h3 className="text-xl font-bold tracking-tight text-white">
             Sign In to NIHOMI
           </h3>
@@ -153,7 +131,7 @@ export const AuthModal: React.FC = () => {
           <div className="relative flex items-center justify-center my-2">
             <div className="border-t border-stone-200 w-full"></div>
             <span className="bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-              Instant Access Modes
+              Fast Student Access
             </span>
           </div>
 
@@ -172,22 +150,6 @@ export const AuthModal: React.FC = () => {
               </div>
             </div>
             <span className="text-[10px] text-emerald-700 font-bold group-hover:underline">Start Learning →</span>
-          </button>
-
-          <button
-            onClick={handleFounderQuick}
-            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
-          >
-            <div className="flex items-center space-x-2.5">
-              <div className="w-6 h-6 rounded-full bg-amber-600 text-white font-bold text-[10px] flex items-center justify-center">
-                T
-              </div>
-              <div>
-                <div className="font-bold text-stone-900 text-left">Tanvir Kabir Biplob</div>
-                <div className="text-[10px] text-stone-500">mdtanvirkabirbiplob@gmail.com</div>
-              </div>
-            </div>
-            <span className="text-[10px] text-amber-700 font-bold group-hover:underline">Founder Dashboard →</span>
           </button>
 
           <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1 pt-2">

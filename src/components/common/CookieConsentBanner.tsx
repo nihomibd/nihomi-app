@@ -69,7 +69,7 @@ export const CookieConsentBanner: React.FC = () => {
               type="button"
               id="cookie-consent-accept-btn"
               onClick={handleAccept}
-              className="shrink-0 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-[#0a0a12] text-sm font-bold transition-all duration-150 shadow-lg shadow-amber-500/20 cursor-pointer"
+              className="shrink-0 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-[#141726] text-sm font-bold transition-all duration-150 shadow-lg shadow-amber-500/20 cursor-pointer"
             >
               সম্মত আছি
             </button>

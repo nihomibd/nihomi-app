@@ -13,6 +13,7 @@ import {
 import { aiCostGuard, recordAiCostUsage } from '../middleware/aiCostGuard.js';
 import { subscriptionService } from '../services/subscriptionService.js';
 import { coinWalletService } from '../services/coinWalletService.js';
+import { evaluateAiScope } from '../services/aiScopeGuard.js';
 import crypto from 'crypto';
 
 export const aiRouter = Router();
@@ -51,6 +52,24 @@ aiRouter.post(
       if (!message || typeof message !== 'string') {
         return res.status(400).json({ error: 'message is required' });
       }
+
+      // Defense-in-depth: Strict Japanese-learning-only scope guard & prompt injection filter
+      const scopeCheck = evaluateAiScope(message, { mode, scenario });
+      if (!scopeCheck.isAllowed) {
+        return res.json({
+          reply: scopeCheck.refusalMessageBn,
+          romaji: 'Nihomi Sensei wa nihongo no kyouju ni senmon to shite imasu.',
+          bengaliTranslation: scopeCheck.refusalMessageBn,
+          scopeBlocked: true,
+          rejectionReason: scopeCheck.rejectionReason,
+          suggestedTopic: scopeCheck.suggestedJapaneseTopicBn,
+          fallbackUsed: true,
+          modelUsed: 'ai-scope-guard',
+          sessionId: sessionId || `session_${Date.now()}`
+        });
+      }
+
+      const activeMessage = scopeCheck.sanitizedMessage;
 
       let quotaInfo: any = null;
       if (isGuest) {
@@ -108,7 +127,7 @@ aiRouter.post(
       try {
         aiResult = await processAICoachRequest({
           mode: selectedMode as any,
-          message,
+          message: activeMessage,
           userLevel,
           scenario,
           history,
@@ -120,11 +139,11 @@ aiRouter.post(
         });
       } catch (err: any) {
         console.warn('[AICoach] Gemini fallback:', err?.message);
-        const isGreeting = /^(hello|hi|hey|konnichiwa|こんにちは|হ্যালো|সালাম|good morning|おはよう)/i.test((message || '').trim());
+        const isGreeting = /^(hello|hi|hey|konnichiwa|こんにちは|হ্যালো|সালাম|good morning|おはよう)/i.test(activeMessage.trim());
         aiResult = {
           reply: isGreeting
             ? 'こんにちは！(Konnichiwa!) নিহোমি ক্লাসরুমে স্বাগতম! আজ আপনি কী নিয়ে অনুশীলন করতে চান?\n\n(Hello! Welcome to Nihomi Sensei! What would you like to practice today?)'
-            : `こんにちは！(Konnichiwa!) আপনি লিখেছেন: "${message}". নিহোমি সেনসেই সর্বদা আপনার পাশে আছে। আসুন একসাথে জাপানি ভাষা চর্চা করি!`,
+            : `こんにちは！(Konnichiwa!) আপনি লিখেছেন: "${activeMessage}". নিহোমি সেনসেই সর্বদা আপনার পাশে আছে। আসুন একসাথে জাপানি ভাষা চর্চা করি!`,
           romaji: isGreeting
             ? 'Konnichiwa! Nihomi Sensei no kurasuruumu e youkoso.'
             : 'Konnichiwa! Issho ni nihongo o manabimashou.',
@@ -268,6 +287,18 @@ aiRouter.post(
       const progress = req.user ? db.getProgressByUserId(userId) : null;
       const userLevel = profile?.targetLevel || progress?.currentLevel || 'N5';
 
+      if (userPrompt && typeof userPrompt === 'string') {
+        const promptCheck = evaluateAiScope(userPrompt);
+        if (!promptCheck.isAllowed) {
+          return res.status(200).json({
+            success: false,
+            scopeBlocked: true,
+            rejectionReason: promptCheck.rejectionReason,
+            error: promptCheck.refusalMessageBn
+          });
+        }
+      }
+
       const analysis = await processVisionSenseiRequest({
         imageBase64: cleanBase64,
         mimeType: cleanMimeType,
@@ -301,6 +332,11 @@ aiRouter.post(
       const { sentence } = req.body;
       if (!sentence || typeof sentence !== 'string') {
         return res.status(400).json({ error: 'Japanese sentence string is required.' });
+      }
+
+      const scopeCheck = evaluateAiScope(sentence);
+      if (!scopeCheck.isAllowed && scopeCheck.rejectionReason === 'PROMPT_INJECTION') {
+        return res.status(400).json({ success: false, error: scopeCheck.refusalMessageBn, code: 'PROMPT_INJECTION' });
       }
 
       const userId = req.user?.id || 'guest-learner';
@@ -383,6 +419,11 @@ aiRouter.post('/example-sentence', optionalAuth, async (req: AuthenticatedReques
     const { word, reading, jlptLevel } = req.body;
     if (!word || typeof word !== 'string') {
       return res.status(400).json({ error: 'Word string is required.' });
+    }
+
+    const scopeCheck = evaluateAiScope(word);
+    if (!scopeCheck.isAllowed && scopeCheck.rejectionReason === 'PROMPT_INJECTION') {
+      return res.status(400).json({ success: false, error: scopeCheck.refusalMessageBn, code: 'PROMPT_INJECTION' });
     }
 
     const result = await processExampleSentenceRequest(

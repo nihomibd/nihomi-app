@@ -120,15 +120,14 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
 }) => {
   const { user } = useAuth();
   
-  // Selected Plan: 'lifetime' (3-Month N5 Milestone ৳1,490) vs 'all_access' (Annual Japan Ready ৳4,990)
-  const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'all_access'>('lifetime');
+  // Selected Plan: 'quarterly' (3-Month Nihomi Pro ৳5,670) vs 'yearly' (12-Month Nihomi Pro ৳20,300)
+  const [selectedPlan, setSelectedPlan] = useState<'quarterly' | 'yearly'>('quarterly');
 
   // Carousel Active Slide (0 to 5)
   const [activeSlide, setActiveSlide] = useState<number>(0);
 
   // Gateway Processing State
   const [isProcessingBkash, setIsProcessingBkash] = useState<boolean>(false);
-  const [isProcessingSsl, setIsProcessingSsl] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Auto-advance Carousel every 3 seconds
@@ -165,11 +164,12 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
     setIsProcessingBkash(true);
     setErrorMessage(null);
     try {
-      const tier = selectedPlan === 'lifetime' ? 'n5_pro' : 'n5_lifetime';
-      const amount = selectedPlan === 'lifetime' ? 5670 : 20300;
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'bkash', amount });
+      const planId = 'pro';
+      const interval = selectedPlan;
+      const amount = selectedPlan === 'quarterly' ? 5670 : 20300;
+      trackNihomiEvent('subscription_checkout_started', { planId, provider: 'bkash', amount });
       
-      const res = await billingApi.createBkashPayment({ tier, amount });
+      const res = await billingApi.createBkashPayment({ planId, interval, amount });
       if (res.success && res.bkashURL) {
         window.location.href = res.bkashURL;
         return;
@@ -180,38 +180,9 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
       throw new Error('bKash গেটওয়ে চালু করতে সমস্যা হয়েছে।');
     } catch (err: any) {
       console.error('bKash error:', err);
-      setErrorMessage(err.message || 'bKash গেটওয়ে চালু করতে ব্যর্থ হয়েছে। অনুগ্রহ করে SSLCOMMERZ চেষ্টা করুন।');
+      setErrorMessage(err.message || 'bKash গেটওয়ে চালু করতে ব্যর্থ হয়েছে।');
     } finally {
       setIsProcessingBkash(false);
-    }
-  };
-
-  // 1-Click Automated SSLCOMMERZ Hosted PGW Checkout
-  const handleSslCheckout = async () => {
-    setIsProcessingSsl(true);
-    setErrorMessage(null);
-    try {
-      const tier = selectedPlan === 'lifetime' ? 'n5_pro' : 'n5_lifetime';
-      trackNihomiEvent('subscription_checkout_started', { planId: tier, provider: 'sslcommerz', amount: selectedPlan === 'lifetime' ? 1490 : 4990 });
-
-      const res = await billingApi.createSslCommerzPayment({
-        tier,
-        amount: selectedPlan === 'lifetime' ? 1490 : 4990,
-        name: user?.name || user?.email?.split('@')[0] || 'Nihomi Learner'
-      });
-      if (res.success && res.gatewayUrl) {
-        window.location.href = res.gatewayUrl;
-        return;
-      }
-      if (res.error) {
-        throw new Error(res.error);
-      }
-      throw new Error('SSLCOMMERZ গেটওয়ে চালু করতে সমস্যা হয়েছে।');
-    } catch (err: any) {
-      console.error('SSLCommerz error:', err);
-      setErrorMessage(err.message || 'SSLCOMMERZ গেটওয়ে চালু করতে ব্যর্থ হয়েছে।');
-    } finally {
-      setIsProcessingSsl(false);
     }
   };
 
@@ -328,7 +299,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 </div>
                 <div className="flex items-center gap-2 text-stone-300">
                   <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>পেমেন্ট সফল হওয়ামাত্রই তাৎক্ষণিক লাইফটাইম এক্সেস</span>
+                  <span>পেমেন্ট সফল হওয়ামাত্রই তাৎক্ষণিক সাবস্ক্রিপশন অ্যাক্টিভেশন</span>
                 </div>
               </div>
             </div>
@@ -362,11 +333,11 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                 {/* Plan Selection Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   
-                  {/* Plan 1: ৳1,490 N5 Milestone Pass */}
+                  {/* Plan 1: ৳5,670 Nihomi Pro 3-Month Plan */}
                   <div
-                    onClick={() => setSelectedPlan('lifetime')}
+                    onClick={() => setSelectedPlan('quarterly')}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
-                      selectedPlan === 'lifetime'
+                      selectedPlan === 'quarterly'
                         ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-amber-500 shadow-xl ring-1 ring-amber-500/50'
                         : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
                     }`}
@@ -376,14 +347,14 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                         ৩ মাসের মাইলস্টোন
                       </span>
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                        selectedPlan === 'lifetime' ? 'border-amber-400 bg-amber-400' : 'border-stone-500'
+                        selectedPlan === 'quarterly' ? 'border-amber-400 bg-amber-400' : 'border-stone-500'
                       }`}>
-                        {selectedPlan === 'lifetime' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                        {selectedPlan === 'quarterly' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-white">Pro Pass (৩ মাস)</h4>
+                      <h4 className="text-sm font-black text-white">Nihomi Pro (৩ মাস)</h4>
                       <p className="text-[11px] text-stone-300 mt-0.5">JLPT N5-N3 ফুল মাস্টার কারিকুলাম</p>
                     </div>
 
@@ -399,7 +370,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                        <span>Nihomi Sensei AI™ ১,৫০০ কয়েন</span>
+                        <span>Nomi Sensei (নমি সেন্সেই) ১,৫০০ কয়েন</span>
                       </li>
                       <li className="flex items-center gap-1.5">
                         <Check className="w-3 h-3 text-emerald-400 shrink-0" />
@@ -408,11 +379,11 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     </ul>
                   </div>
 
-                  {/* Plan 2: ৳20,300 Pro Annual Pass */}
+                  {/* Plan 2: ৳20,300 Nihomi Pro 12-Month Plan */}
                   <div
-                    onClick={() => setSelectedPlan('all_access')}
+                    onClick={() => setSelectedPlan('yearly')}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer relative space-y-2.5 ${
-                      selectedPlan === 'all_access'
+                      selectedPlan === 'yearly'
                         ? 'bg-gradient-to-b from-[#22183b] to-[#161129] border-red-500 shadow-xl ring-1 ring-red-500/50'
                         : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
                     }`}
@@ -422,14 +393,14 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                         বাৎসরিক সেরা মান
                       </span>
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                        selectedPlan === 'all_access' ? 'border-red-400 bg-red-400' : 'border-stone-500'
+                        selectedPlan === 'yearly' ? 'border-red-400 bg-red-400' : 'border-stone-500'
                       }`}>
-                        {selectedPlan === 'all_access' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
+                        {selectedPlan === 'yearly' && <Check className="w-3 h-3 text-stone-950 stroke-[3]" />}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-white">Pro Annual Pass (১২ মাস)</h4>
+                      <h4 className="text-sm font-black text-white">Nihomi Pro (১২ মাস)</h4>
                       <p className="text-[11px] text-stone-300 mt-0.5">১ বছর সম্পূর্ণ নিশ্চিন্ত আনলিমিটেড</p>
                     </div>
 
@@ -455,17 +426,18 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                   </div>
                 </div>
 
-                {/* Automated Gateway Action Buttons */}
+                {/* Automated Gateway Action Buttons: bKash Only */}
                 <div className="space-y-2.5 pt-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono">
-                    ১-ক্লিক অনলাইন গেটওয়ে নির্বাচন করুন:
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-stone-400 font-mono flex items-center justify-between">
+                    <span>পেমেন্ট মাধ্যম: শুধুমাত্র বিকাশ (bKash Only)</span>
+                    <span className="text-[#E2136E] text-[10px]">কার্ডের প্রয়োজন নেই</span>
                   </div>
 
                   {/* bKash 1-Click Gateway Button */}
                   <button
                     type="button"
                     onClick={handleBkashCheckout}
-                    disabled={isProcessingBkash || isProcessingSsl}
+                    disabled={isProcessingBkash}
                     className="w-full py-3.5 px-5 rounded-2xl bg-[#E2136E] hover:bg-[#c90f61] text-white font-black text-sm shadow-xl shadow-[#E2136E]/25 transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
                   >
                     <div className="flex items-center gap-3">
@@ -473,7 +445,7 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                         <span className="text-[#E2136E] font-black text-xs font-mono">bK</span>
                       </div>
                       <span className="text-left leading-tight">
-                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন ({selectedPlan === 'lifetime' ? '৳১,৪৯০' : '৳৪,৯৯০'})
+                        bKash দিয়ে ১-ক্লিকে পেমেন্ট করুন ({selectedPlan === 'quarterly' ? '৳৫,৬৭০' : '৳২০,৩০০'})
                       </span>
                     </div>
                     {isProcessingBkash ? (
@@ -483,25 +455,9 @@ export const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({
                     )}
                   </button>
 
-                  {/* SSLCOMMERZ Cards & Multi-Channel Button */}
-                  <button
-                    type="button"
-                    onClick={handleSslCheckout}
-                    disabled={isProcessingBkash || isProcessingSsl}
-                    className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#1e293b] via-[#0f172a] to-[#1e293b] hover:border-amber-400/50 border border-white/15 text-white font-bold text-sm shadow-lg transition flex items-center justify-between cursor-pointer active:scale-98 disabled:opacity-50"
-                  >
-                    <div className="flex items-center gap-3">
-                      <CreditCard className="w-5 h-5 text-amber-400 shrink-0" />
-                      <span className="text-left text-xs sm:text-sm">
-                        কার্ড / নগদ / ইন্টারনেট ব্যাংকিং (SSLCOMMERZ)
-                      </span>
-                    </div>
-                    {isProcessingSsl ? (
-                      <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
-                    ) : (
-                      <ChevronRight className="w-5 h-5 text-stone-400" />
-                    )}
-                  </button>
+                  <div className="p-2.5 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-300 text-[11px] text-center font-medium">
+                    অনলাইন পেমেন্ট গেটওয়ে সংযোগ প্রক্রিয়াধীন (Sandbox Testing)
+                  </div>
                 </div>
               </div>
 

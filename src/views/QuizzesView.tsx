@@ -113,12 +113,12 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
   }, [quizzes, history]);
 
   return (
-    <div id="nihomi-quizzes-view" className="min-h-screen bg-[#F8F9FA] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-[#433422] py-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div id="nihomi-quizzes-view" className="min-h-screen bg-[#F8F9FA] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-[#433422] py-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Bento Hero Header */}
         <div className="bg-white dark:bg-[#12121e] sepia:bg-[#f4e5c3] border border-stone-200 dark:border-stone-800 sepia:border-[#d9c595] rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
               Verified Testing
             </span>
             <span className="text-xs font-semibold text-stone-500 dark:text-stone-400">
@@ -130,7 +130,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
             <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 dark:text-white sepia:text-[#382a17]">
               JLPT Quizzes & Mastery Assessments
             </h1>
-            <p className="text-sm font-serif text-red-600 dark:text-red-400">
+            <p className="text-sm font-serif text-purple-700 dark:text-purple-300">
               日本語能力試験 総合確認テスト
             </p>
           </div>
@@ -145,8 +145,8 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
               onClick={() => setActiveTab('mock_exams')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all cursor-pointer ${
                 activeTab === 'mock_exams'
-                  ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-lg shadow-rose-600/20 ring-2 ring-rose-500/30'
-                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-rose-400'
+                  ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white shadow-lg shadow-purple-600/20 ring-2 ring-purple-500/30'
+                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-purple-400'
               }`}
             >
               <Award className="w-4 h-4" />
@@ -160,8 +160,8 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
               onClick={() => setActiveTab('quizzes')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all cursor-pointer ${
                 activeTab === 'quizzes'
-                  ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
-                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-red-400'
+                  ? 'bg-[#E45147] text-white shadow-lg shadow-purple-600/20'
+                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-purple-400'
               }`}
             >
               <BookOpen className="w-4 h-4" />
@@ -198,8 +198,8 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold font-serif text-stone-900 dark:text-white sepia:text-[#382a17] flex items-center gap-2">
-                  <Award className="w-5 h-5 text-rose-500" />
-                  <span>Official JLPT Scaled Mock Exam Simulations</span>
+                  <Award className="w-5 h-5 text-purple-600" />
+                  <span>JLPT-Style Scaled Mock Exam Simulations</span>
                 </h2>
                 <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
                   Full exam simulations featuring Vocabulary, Grammar/Reading, and Tokyo Listening Drills with official 19/60 sectional passing thresholds.
@@ -217,7 +217,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
 
             {isLoading ? (
               <div className="p-12 text-center bg-white dark:bg-[#12121e] rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm">
-                <div className="w-8 h-8 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                 <p className="text-xs text-stone-500 font-bold">Loading official mock exam simulations...</p>
               </div>
             ) : mockExams.length === 0 ? (
@@ -271,7 +271,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
                         <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
                           {tag}
                         </span>
-                        <span className="text-[11px] font-bold text-red-600 dark:text-red-400">
+                        <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400">
                           JLPT {quiz.level}
                         </span>
                       </div>
@@ -297,7 +297,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
 
                     <button
                       onClick={() => onNavigate('quiz-runner', { quizId: quiz.id })}
-                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-bold text-xs shadow-md flex items-center justify-center space-x-2 transition cursor-pointer"
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md flex items-center justify-center space-x-2 transition cursor-pointer"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                       <span>{userAttempt ? 'Retake & Reinforce' : 'Start Targeted Quiz'}</span>
@@ -327,7 +327,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
 
           {isLoading ? (
             <div className="p-12 text-center bg-white dark:bg-[#12121e] rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm">
-              <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
               <p className="text-xs text-stone-500 font-bold">Loading quizzes...</p>
             </div>
           ) : (
@@ -337,11 +337,11 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
                 return (
                   <div
                     key={quiz.id}
-                    className="bg-white dark:bg-[#12121e] sepia:bg-[#f4e5c3] border border-stone-200 dark:border-stone-800 sepia:border-[#d9c595] hover:border-red-400 dark:hover:border-red-600 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                    className="bg-white dark:bg-[#12121e] sepia:bg-[#f4e5c3] border border-stone-200 dark:border-stone-800 sepia:border-[#d9c595] hover:border-purple-400 dark:hover:border-purple-600 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                           JLPT {quiz.level}
                         </span>
                         <span className="text-[11px] text-stone-400 font-semibold">
@@ -381,7 +381,7 @@ export const QuizzesView: React.FC<QuizzesViewProps> = ({ onNavigate }) => {
 
                     <button
                       onClick={() => onNavigate('quiz-runner', { quizId: quiz.id })}
-                      className="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-colors flex items-center justify-center space-x-2 shadow-xs cursor-pointer"
+                      className="w-full py-2.5 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs transition-colors flex items-center justify-center space-x-2 shadow-xs cursor-pointer"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                       <span>{userAttempt ? 'Retake Quiz' : 'Start Quiz'}</span>

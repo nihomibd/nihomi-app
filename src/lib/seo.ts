@@ -22,7 +22,7 @@ export function updatePageMetaTags(options: SeoMetaOptions): void {
 
   const defaultTitle = 'NIHOMI (ニホミ) — Japanese Learning Operating System | JLPT N5–N1 & Japan Readiness';
   const defaultDesc =
-    'From your first ひらがな to real Japanese fluency. Master JLPT N5–N1 with 24/7 Multimodal Gemini 2.5 AI Sensei, live Tokyo cohorts, and verified digital credentials.';
+    'From your first ひらがな to real Japanese fluency. Master JLPT N5–N1 with 24/7 Nomi Sensei, live Tokyo cohorts, and verified digital credentials.';
   const defaultImage = 'https://nihomi.com/assets/og-nihomi-banner.png';
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://nihomi.com';
 

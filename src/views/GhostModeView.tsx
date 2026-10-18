@@ -30,7 +30,7 @@ export const GhostModeView: React.FC<GhostModeViewProps> = ({ onNavigate }) => {
   const { user, profile } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-stone-100 py-10 px-4 sm:px-6 lg:px-8 font-sans" id="ghost-mode-view">
+    <div className="min-h-screen bg-[#141726] text-stone-100 py-10 px-4 sm:px-6 lg:px-8 font-sans" id="ghost-mode-view">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Navigation Bar */}
         <div className="flex items-center justify-between">

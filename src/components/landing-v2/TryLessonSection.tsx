@@ -157,7 +157,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
             </h2>
 
             <p className="text-slate-600 text-[10px] sm:text-[10.5px] leading-snug max-w-xs font-normal">
-              Nihomi Sensei-এর সাথে ইন্টারঅ্যাক্টিভ ভাবে শিখুন — জাপানিজ শেখা এতটাই সহজ ও মজার!
+              Nomi Sensei-এর সাথে ইন্টারঅ্যাক্টিভ ভাবে শিখুন — বাংলায় তোমার জাপানি শেখার সঙ্গী!
             </p>
 
             <div className="pt-0.5">
@@ -273,16 +273,13 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
               {/* Sensei Message */}
               <div className="flex items-start gap-1.5">
                 <img
-                  src="/assets/landing-v2/sensei-avatar.png"
-                  alt="Nihomi Sensei"
-                  className="w-5 h-5 rounded-full object-cover ring-1 ring-purple-200 shrink-0 mt-0.5"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
+                  src="/brand/nomi/nomi-welcome.png"
+                  alt="Nomi Sensei"
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-[#E45147] shrink-0 mt-0.5"
                 />
                 <div className="min-w-0">
-                  <span className="text-[9px] font-black text-[#5B21B6] block leading-none mb-0.5">
-                    Nihomi Sensei
+                  <span className="text-[9px] font-black text-[#141726] block leading-none mb-0.5">
+                    Nomi Sensei
                   </span>
                   <div className="bg-[#FAF5FF] p-1.5 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-purple-100/70">
                     {currentContent.senseiMsg}

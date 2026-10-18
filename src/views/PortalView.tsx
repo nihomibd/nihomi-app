@@ -67,7 +67,7 @@ export const PortalView: React.FC<PortalViewProps> = ({ onNavigate }) => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   // Authoritative Founder verification
-  const isFounder = (user?.email || '').trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' || user?.role === 'admin';
+  const isFounder = user?.role === 'admin' || user?.role === 'founder';
 
   // Load real student records and executive telemetry
   const loadPortalData = async () => {

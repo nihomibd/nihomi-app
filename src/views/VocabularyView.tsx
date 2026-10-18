@@ -550,21 +550,31 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
   const categories = ['All', 'Greetings', 'Daily Life', 'Food & Dining', 'Workplace Keigo', 'Transit & Travel', 'Verbs', 'Adjectives'];
 
   return (
-    <div id="nihomi-vocabulary-view" className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-8 px-4 sm:px-6 lg:px-8">
+    <div id="nihomi-vocabulary-view" className="min-h-screen bg-[#FAF9FC] dark:bg-[#07070d] text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Top Header & Breadcrumb */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <button
             onClick={() => onNavigate('courses')}
-            className="self-start inline-flex items-center gap-2 text-xs font-bold text-stone-600 hover:text-red-600 transition-colors bg-white px-3.5 py-2 rounded-xl border border-stone-200 shadow-xs cursor-pointer"
+            className="self-start inline-flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors bg-white dark:bg-[#0f0f1c] px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Courses</span>
           </button>
 
+          {/* Kotoba Canvas Quick Launcher */}
+          <button
+            type="button"
+            onClick={() => onNavigate('kotoba')}
+            className="inline-flex items-center gap-2 text-xs font-bold text-red-500 hover:text-white hover:bg-red-600 transition-all bg-red-950/20 px-4 py-2 rounded-xl border border-red-500/40 shadow-xs cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Nihomi Kotoba Canvas™ (৬-ধাপ লার্নিং ক্যানভাস)</span>
+          </button>
+
           {/* Hands-free Player Bar */}
-          <div className="flex items-center gap-2 bg-white p-2 rounded-2xl border border-stone-200 shadow-xs">
-            <div className="flex items-center bg-stone-100 rounded-xl p-0.5 text-[11px] font-bold">
+          <div className="flex items-center gap-2 bg-white dark:bg-[#0d0d1a] p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-900 rounded-xl p-0.5 text-[11px] font-bold">
               {[
                 { label: '0.8x', val: 0.8 },
                 { label: '1.0x', val: 0.95 },
@@ -575,8 +585,8 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                   onClick={() => setPlaybackSpeed(spd.val)}
                   className={`px-2 py-1 rounded-lg transition cursor-pointer ${
                     playbackSpeed === spd.val
-                      ? 'bg-red-600 text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900'
+                      ? 'bg-[#E45147] text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {spd.label}
@@ -597,8 +607,8 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
               }}
               className={`px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition cursor-pointer ${
                 isAutoPlaying
-                  ? 'bg-rose-600 text-white animate-pulse'
-                  : 'bg-stone-900 hover:bg-stone-800 text-white'
+                  ? 'bg-[#E45147] text-white animate-pulse'
+                  : 'bg-slate-900 dark:bg-slate-800 hover:bg-[#D43E34] text-white'
               }`}
             >
               {isAutoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Headphones className="w-3.5 h-3.5" />}
@@ -608,44 +618,44 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
         </div>
 
         {/* Hero Banner */}
-        <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-50 text-red-700 border border-red-200">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800">
               Interactive Audio Bank
             </span>
-            <span className="text-xs text-stone-500 font-semibold">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
               Native Tokyo Speech Synthesis & Bengali Mnemonics
             </span>
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900">
+            <h1 className="text-2xl sm:text-3xl font-bold font-serif text-slate-900 dark:text-white">
               Japanese Vocabulary & Terminology Bank (語彙)
             </h1>
-            <p className="text-sm font-serif text-red-600">
+            <p className="text-sm font-serif text-purple-700 dark:text-purple-400">
               JLPT N5, N4, N3 এবং প্র্যাকটিক্যাল অফিসিয়াল জাপানিজ শব্দভাণ্ডার
             </p>
           </div>
 
-          <p className="text-xs sm:text-sm text-stone-600 max-w-3xl leading-relaxed">
-            Click the <strong className="text-red-600 font-semibold">Listen</strong> icon on any vocabulary card to hear the authentic native Tokyo pronunciation via Browser Speech Synthesis. Filter by category, JLPT tier, or search in English, Bengali, Romaji, and Kanji.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+            Click the <strong className="text-purple-700 dark:text-purple-400 font-semibold">Listen</strong> icon on any vocabulary card to hear the authentic native Tokyo pronunciation via Browser Speech Synthesis. Filter by category, JLPT tier, or search in English, Bengali, Romaji, and Kanji.
           </p>
 
           {/* Search Bar & Filters */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2">
             <div className="md:col-span-6 relative">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="text"
                 placeholder="Search vocabulary (e.g. 'sumimasen', 'স্কুল', 'Water', '私')..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-xs text-stone-900 focus:outline-none focus:border-red-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-2.5 text-xs text-stone-400 hover:text-stone-600"
+                  className="absolute right-3 top-2.5 text-xs text-slate-400 hover:text-slate-600"
                 >
                   ✕
                 </button>
@@ -653,15 +663,15 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
             </div>
 
             {/* Level Selector */}
-            <div className="md:col-span-3 flex items-center bg-stone-100 p-1 rounded-2xl border border-stone-200 text-xs font-bold">
+            <div className="md:col-span-3 flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold">
               {['All', 'N5', 'N4', 'Workplace'].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
                   className={`flex-1 py-1.5 rounded-xl transition text-center cursor-pointer ${
                     selectedLevel === lvl
-                      ? 'bg-red-600 text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900'
+                      ? 'bg-[#E45147] text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {lvl}
@@ -674,7 +684,7 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full py-2.5 px-3 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-semibold text-stone-800 focus:outline-none focus:border-red-500 cursor-pointer"
+                className="w-full py-2.5 px-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-purple-500 cursor-pointer"
               >
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -687,30 +697,30 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
         </div>
 
         {/* Results Counter & Active Filter info */}
-        <div className="flex items-center justify-between text-xs text-stone-500 px-1">
+        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
           <span>
             Showing <strong>{filteredVocabulary.length}</strong> words
             {selectedLevel !== 'All' && ` for ${selectedLevel}`}
             {selectedCategory !== 'All' && ` in ${selectedCategory}`}
           </span>
-          <span className="text-[11px] text-stone-400">
+          <span className="text-[11px] text-slate-400">
             Click 'Listen' to hear pronunciation
           </span>
         </div>
 
         {/* Vocabulary Cards Grid */}
         {filteredVocabulary.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-3xl border border-stone-200 shadow-sm space-y-3">
-            <BookOpen className="w-8 h-8 text-stone-400 mx-auto" />
-            <p className="text-sm font-bold text-stone-800">No vocabulary found</p>
-            <p className="text-xs text-stone-500">Try adjusting your search query or level filters.</p>
+          <div className="p-12 text-center bg-white dark:bg-[#0d0d1a] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
+            <p className="text-sm font-bold text-slate-800 dark:text-white">No vocabulary found</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Try adjusting your search query or level filters.</p>
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedLevel('All');
                 setSelectedCategory('All');
               }}
-              className="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-xl hover:bg-red-700 transition cursor-pointer"
+              className="px-4 py-2 bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs rounded-xl transition cursor-pointer"
             >
               Reset Filters
             </button>
@@ -725,10 +735,10 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                 <div
                   key={word.id}
                   id={`vocab-card-${word.id}`}
-                  className={`bg-white border rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4 transition-all duration-300 ${
+                  className={`bg-white dark:bg-[#0d0d1a] border rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4 transition-all duration-300 ${
                     isPlaying
-                      ? 'border-red-500 ring-2 ring-red-400/50 bg-red-50/20'
-                      : 'border-stone-200 hover:border-stone-300 hover:shadow-md'
+                      ? 'border-purple-500 ring-2 ring-purple-400/50 bg-purple-50/20 dark:bg-purple-950/20'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-purple-300 dark:hover:border-slate-700 hover:shadow-md'
                   }`}
                 >
                   <div className="space-y-3">
@@ -738,13 +748,13 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border ${
                             word.level === 'Workplace'
-                              ? 'bg-purple-50 text-purple-700 border-purple-200'
-                              : 'bg-red-50 text-red-700 border-red-200'
+                              ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+                              : 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
                           }`}
                         >
                           {word.level}
                         </span>
-                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-lg bg-stone-100 text-stone-600">
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                           {word.category}
                         </span>
                       </div>
@@ -754,7 +764,7 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                         className={`p-1.5 rounded-lg transition cursor-pointer ${
                           isFav
                             ? 'text-amber-500 fill-amber-500'
-                            : 'text-stone-300 hover:text-amber-500'
+                            : 'text-slate-300 hover:text-amber-500'
                         }`}
                         title="Bookmark vocabulary"
                       >
@@ -764,31 +774,31 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
 
                     {/* Japanese Word with Ruby / Furigana */}
                     <div className="pt-1">
-                      <ruby className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 leading-tight">
+                      <ruby className="text-2xl sm:text-3xl font-bold font-serif text-slate-900 dark:text-white leading-tight">
                         {word.japanese}
                         {word.furigana !== word.japanese && (
-                          <rt className="text-xs font-sans text-red-600 font-normal">
+                          <rt className="text-xs font-sans text-purple-600 dark:text-purple-400 font-normal">
                             {word.furigana}
                           </rt>
                         )}
                       </ruby>
-                      <p className="text-xs text-stone-400 font-mono mt-0.5">{word.romaji}</p>
+                      <p className="text-xs text-slate-400 font-mono mt-0.5">{word.romaji}</p>
                     </div>
 
                     {/* Meanings */}
-                    <div className="space-y-1 pt-1 border-t border-stone-100">
-                      <p className="text-sm font-bold text-stone-900">{word.english}</p>
-                      <p className="text-xs font-medium text-red-700 bg-red-50/60 px-2.5 py-1 rounded-xl border border-red-100/80 inline-block">
+                    <div className="space-y-1 pt-1 border-t border-slate-100 dark:border-slate-800">
+                      <p className="text-sm font-bold text-slate-900 dark:text-white">{word.english}</p>
+                      <p className="text-xs font-medium text-purple-700 dark:text-purple-300 bg-purple-50/60 dark:bg-purple-950/40 px-2.5 py-1 rounded-xl border border-purple-100/80 dark:border-purple-900/60 inline-block">
                         বাংলা: {word.bengali}
                       </p>
                     </div>
 
                     {/* Example Sentence */}
-                    <div className="bg-stone-50 p-3 rounded-2xl border border-stone-200/80 text-xs space-y-1">
-                      <p className="font-serif font-bold text-stone-800">{word.exampleJa}</p>
-                      <p className="text-[11px] text-stone-500">{word.exampleEn}</p>
+                    <div className="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-xs space-y-1">
+                      <p className="font-serif font-bold text-slate-800 dark:text-slate-200">{word.exampleJa}</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">{word.exampleEn}</p>
                       {word.exampleBn && (
-                        <p className="text-[11px] text-stone-600 font-medium">
+                        <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
                           {word.exampleBn}
                         </p>
                       )}
@@ -796,15 +806,15 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                   </div>
 
                   {/* Card Bottom: Prominent Listen Button */}
-                  <div className="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       id={`btn-listen-vocab-${word.id}`}
                       onClick={() => handleSpeak(word)}
                       className={`flex-1 py-2.5 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs ${
                         isPlaying
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
-                          : 'bg-stone-900 hover:bg-red-600 text-white'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
+                          : 'bg-slate-900 dark:bg-slate-800 hover:bg-[#E45147] text-white'
                       }`}
                     >
                       <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-bounce' : ''}`} />
@@ -814,7 +824,7 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ onNavigate }) =>
                     <button
                       type="button"
                       onClick={() => speakJapanese(word.exampleJa, { rate: playbackSpeed })}
-                      className="p-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-2xl text-xs font-semibold transition cursor-pointer"
+                      className="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl text-xs font-semibold transition cursor-pointer"
                       title="Listen to full example sentence"
                     >
                       <Languages className="w-4 h-4" />

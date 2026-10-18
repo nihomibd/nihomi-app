@@ -77,7 +77,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
         {
           id: 'welcome-msg',
           role: 'assistant',
-          content: `こんにちは、${profile?.displayName || 'Learner'}さん！🇯🇵\nআমি নিহোমি এআই সেনসেই। আপনার সাথে জাপানি ভাষায় কথোপকথন, বাক্যের ব্যাকরণ সংশোধন (Sentence Correction) এবং বাস্তব জাপানি জীবনের প্রস্তুতিতে সাহায্য করতে প্রস্তুত। আপনি কিবোর্ডে লিখে কিংবা সরাসরি হ্যান্ডস-ফ্রি ভয়েস মোড (Hands-free Voice) অন করে কথা বলতে পারেন।`,
+          content: `こんにちは、${profile?.displayName || 'Learner'}さん！🇯🇵\nআমি নমি সেন্সেই — বাংলায় তোমার জাপানি শেখার সঙ্গী। আপনার সাথে জাপানি ভাষায় কথোপকথন, বাক্যের ব্যাকরণ সংশোধন (Sentence Correction) এবং বাস্তব জাপানি জীবনের প্রস্তুতিতে সাহায্য করতে প্রস্তুত। আপনি কিবোর্ডে লিখে কিংবা সরাসরি হ্যান্ডস-ফ্রি ভয়েস মোড (Hands-free Voice) অন করে কথা বলতে পারেন।`,
           mode: 'conversation',
           timestamp: new Date().toISOString()
         }
@@ -336,7 +336,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
                 <Bot className="w-5 h-5" />
               </div>
               <h1 className="text-xl font-bold font-serif text-stone-900">
-                Nihomi AI Sensei™ (AI জাপানি কোচ)
+                Nomi Sensei (নমি সেন্সেই)
               </h1>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200 uppercase">
                 Gemini 3.7 Multimodal
@@ -391,7 +391,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
             {/* Quota Badge */}
             <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 text-xs font-bold text-stone-700">
               <Sparkles className="w-3.5 h-3.5 text-red-600" />
-              <span>{activePlanId === 'japan_ready' ? 'Unlimited AI' : `${usage?.remainingQuota ?? 10} queries left`}</span>
+              <span>{activePlanId === 'japan_ready' ? 'Japan Ready Priority AI (Abuse-Guarded)' : `${usage?.remainingQuota ?? 10} queries left`}</span>
             </div>
           </div>
         </div>
@@ -427,7 +427,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
               </div>
               <div>
                 <p className="text-xs font-bold">
-                  {isRecording ? '🎙️ হ্যান্ডস-ফ্রি ভয়েস সক্রিয় — জাপানি বা বাংলায় কথা বলুন...' : 'AI Sensei প্রস্তুত হচ্ছে...'}
+                  {isRecording ? '🎙️ হ্যান্ডস-ফ্রি ভয়েস সক্রিয় — জাপানি বা বাংলায় কথা বলুন...' : 'Nomi Sensei প্রস্তুত হচ্ছেন...'}
                 </p>
                 <p className="text-[11px] text-red-100">
                   {liveTranscript ? `শুনছি: "${liveTranscript}"` : 'আপনার কথা শেষ হলে স্বয়ংক্রিয়ভাবে উত্তর দেয়া হবে ও অডিও বাজবে।'}
@@ -522,7 +522,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ onNavigate }) => {
                       <div className="flex items-center justify-between border-b border-stone-200/60 pb-1.5">
                         <span className="text-[10px] font-bold text-red-600 uppercase flex items-center gap-1">
                           <Bot className="w-3.5 h-3.5" />
-                          <span>AI Sensei (JLPT {profile?.targetLevel || 'N5'})</span>
+                          <span>Nomi Sensei (JLPT {profile?.targetLevel || 'N5'})</span>
                         </span>
                         <div className="flex items-center gap-1.5">
                           <button

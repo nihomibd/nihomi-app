@@ -122,7 +122,7 @@ export const RecentAiFeedbackTab: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Sparkles className="w-5 h-5 text-red-600 dark:text-red-400" />
             <h2 className="text-lg sm:text-xl font-bold font-serif text-stone-900 dark:text-white sepia:text-[#382a17]">
-              Recent AI Sensei Feedback & Corrections
+              Recent Nomi Sensei Feedback & Corrections
             </h2>
           </div>
           <p className="text-xs text-stone-500 dark:text-stone-400 sepia:text-[#7a6344]">

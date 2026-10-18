@@ -78,7 +78,7 @@ export const ChapterPremiumPreviewModal: React.FC<ChapterPremiumPreviewModalProp
           </div>
           {(status.previewDetails?.featuresBn || [
             'অধ্যায় ০৬–২৫ এর সম্পূর্ণ লেসন ও অডিও',
-            '২৪/৭ Nihomi Sensei AI™ স্পিকিং প্র্যাকটিস',
+            '২৪/৭ Nomi Sensei (নমি সেন্সেই) স্পিকিং প্র্যাকটিস',
             'JLPT N5 রিয়েল মক টেস্ট'
           ]).map((feat, idx) => (
             <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-200">

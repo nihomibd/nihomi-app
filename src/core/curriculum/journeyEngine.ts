@@ -14,7 +14,7 @@ export interface NextBestMission extends CurriculumNode {}
 
 export interface LessonGateStatus {
   isLocked: boolean;
-  gateType?: 'grammar_prerequisite_unmet' | 'kana_prerequisite_unmet';
+  gateType?: 'grammar_prerequisite_unmet' | 'kana_prerequisite_unmet' | 'foundation_prerequisite_unmet';
   reasonBn: string;
   requiredSkills: string[];
   nextBestMission: NextBestMission;
@@ -145,6 +145,14 @@ export function getNextBestMission(state: LearnerKnowledgeState): NextBestMissio
     return CURRICULUM_GRAPH['vowel-mastery-gate'];
   }
 
+  // 3b. Lesson 02: Word Formation Lab from 5 Vowels (あい, いう, あう, いえ, うえ, あお, おおい)
+  const hasPassedWordFormation = state.masteredSkills.includes('vowel_words_mastered') ||
+    (typeof window !== 'undefined' && localStorage.getItem('nihomi_lesson_02_completed') === 'true');
+
+  if (!hasPassedWordFormation) {
+    return CURRICULUM_GRAPH['n5-l2-words'];
+  }
+
   // 4. Tokyo Konbini Scenario & Real-Life Practice
   const hasDoneKonbini = state.masteredSkills.includes('konbini_mission_1');
   if (!hasDoneKonbini) {
@@ -221,6 +229,28 @@ export function getLessonGateStatus(lessonId: string, state: LearnerKnowledgeSta
       isLocked: false,
       reasonBn: 'মৌলিক স্বরবর্ণ পাঠ উন্মুক্ত।',
       requiredSkills: [],
+      nextBestMission: nextMission
+    };
+  }
+
+  // Lesson 2 Word Formation Lab (specifically n5-l2-words or lesson-02-words)
+  if (normId === 'n5-l2-words' || normId === 'lesson-02-words') {
+    const hasVowels = state.masteredSkills.includes('vowels_5_mastered') ||
+      state.masteredSkills.includes('5_vowels_gate') ||
+      (typeof window !== 'undefined' && localStorage.getItem('nihomi_foundation_completed') === 'true');
+    if (!hasVowels) {
+      return {
+        isLocked: true,
+        gateType: 'foundation_prerequisite_unmet',
+        reasonBn: 'লেসন ০২ (শব্দ গঠন)-এ প্রবেশের পূর্বে ৫টি মৌলিক স্বরবর্ণ (あ, い, う, え, お) শেখা সম্পন্ন করুন।',
+        requiredSkills: ['vowels_5_mastered'],
+        nextBestMission: nextMission
+      };
+    }
+    return {
+      isLocked: false,
+      reasonBn: 'স্বরবর্ণ দিয়ে শব্দ গঠন পাঠ উন্মুক্ত।',
+      requiredSkills: ['vowels_5_mastered'],
       nextBestMission: nextMission
     };
   }

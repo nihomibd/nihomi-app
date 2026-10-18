@@ -40,7 +40,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'こんにちは! আমি Nihomi Sensei AI™ (にほみ先生) — আপনার AI সেনসেই। বাংলা বা ইংরেজিতে জাপানিজ ব্যাকরণ, কাঞ্জি ও ভোকাবুলারি নিয়ে যেকোনো প্রশ্ন করুন।',
+      content: 'こんにちは! আমি Nomi Sensei (নমি সেন্সেই) — বাংলায় তোমার জাপানি শেখার সঙ্গী। বাংলা বা ইংরেজিতে জাপানিজ ব্যাকরণ, কাঞ্জি ও ভোকাবুলারি নিয়ে যেকোনো প্রশ্ন করুন।',
     },
   ]);
 
@@ -171,7 +171,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
         speakJapanese(reply);
       }
     } catch {
-      setError('Nihomi Sensei AI™-র সঙ্গে সংযোগ করা যায়নি। আপনার credit ব্যবহার হয়েছে, পরে আবার চেষ্টা করুন।');
+      setError('Nomi Sensei-এর সঙ্গে সংযোগ করা যায়নি। আপনার credit ব্যবহার হয়েছে, পরে আবার চেষ্টা করুন।');
     } finally {
       setIsLoading(false);
     }
@@ -179,7 +179,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col sm:items-center sm:justify-center bg-[#0a0a12] sm:bg-black/80 sm:backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-50 flex flex-col sm:items-center sm:justify-center bg-[#141726] sm:bg-black/80 sm:backdrop-blur-md animate-fade-in"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
@@ -188,23 +188,23 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
       <section
         aria-labelledby="ai-sensei-title"
         aria-modal="true"
-        className="flex h-full sm:h-auto sm:max-h-[90vh] w-full sm:max-w-lg flex-col overflow-hidden bg-[#0a0a12] text-slate-100 sm:rounded-3xl border-0 sm:border sm:border-slate-800 shadow-2xl pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]"
+        className="flex h-full sm:h-auto sm:max-h-[90vh] w-full sm:max-w-lg flex-col overflow-hidden bg-[#141726] text-slate-100 sm:rounded-3xl border-0 sm:border sm:border-slate-800 shadow-2xl pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]"
         role="dialog"
       >
         {/* Top Header */}
-        <header className="flex items-center justify-between border-b border-slate-800/80 bg-gradient-to-r from-[#141424] via-[#0f0f1c] to-[#0a0a12] px-4 sm:px-5 py-3.5 sm:py-4 shrink-0">
+        <header className="flex items-center justify-between border-b border-slate-800/80 bg-gradient-to-r from-[#141424] via-[#0f0f1c] to-[#141726] px-4 sm:px-5 py-3.5 sm:py-4 shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <div className="relative shrink-0">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 p-0.5 shadow-md shadow-rose-500/20">
-                <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                  <span className="font-japanese font-black text-rose-400 text-sm">にほみ</span>
-                </div>
-              </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a12]" />
+              <img
+                src="/brand/nomi/nomi-welcome.png"
+                alt="Nomi Sensei"
+                className="w-10 h-10 rounded-2xl border-2 border-[#E45147] object-cover bg-[#F6F0E6] shadow-md shadow-red-500/20"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#141726]" />
             </div>
             <div>
-              <h2 id="ai-sensei-title" className="text-sm sm:text-base font-bold text-white leading-tight">Nihomi Sensei AI™</h2>
-              <p className="text-[11px] font-medium text-slate-400">২৪/৭ জাপানি শিক্ষক • বাংলা / English</p>
+              <h2 id="ai-sensei-title" className="text-sm sm:text-base font-bold text-white leading-tight">Nomi Sensei</h2>
+              <p className="text-[11px] font-medium text-slate-400">বাংলায় তোমার জাপানি শেখার সঙ্গী</p>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
             {/* Close Button */}
             <button
               type="button"
-              aria-label="AI Sensei বন্ধ করুন"
+              aria-label="Nomi Sensei বন্ধ করুন"
               onClick={onClose}
               className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
             >
@@ -272,7 +272,7 @@ export const AiSenseiDrawer: React.FC<AiSenseiDrawerProps> = ({
           {isLoading && (
             <div className="flex items-center gap-2 p-3 rounded-2xl bg-[#131322] border border-slate-800 text-slate-400 text-xs w-fit animate-pulse">
               <div className="w-4 h-4 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
-              <span>Nihomi Sensei AI™ উত্তর লিখছেন...</span>
+              <span>Nomi Sensei (নমি সেন্সেই) উত্তর লিখছেন...</span>
             </div>
           )}
           {error && <p className="rounded-xl bg-rose-500/10 border border-rose-500/30 px-3 py-2 text-xs font-semibold text-rose-300" role="alert">{error}</p>}

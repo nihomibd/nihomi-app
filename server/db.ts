@@ -188,7 +188,7 @@ export const SEED_PLANS: Plan[] = [
   },
   {
     id: 'starter',
-    name: 'Starter',
+    name: 'Nihomi Starter',
     displayNameJa: 'スタータープラン',
     tagline: 'Master JLPT N5 & N4 foundations with structured drills',
     description: 'Full access to JLPT N5 and N4 curriculums, complete vocabulary sets, and 500 Nihomi Coins/month.',
@@ -214,7 +214,7 @@ export const SEED_PLANS: Plan[] = [
   },
   {
     id: 'pro',
-    name: 'Pro',
+    name: 'Nihomi Pro',
     displayNameJa: 'プロプラン',
     tagline: 'The complete JLPT N5-N3 mastery & conversation system',
     description: 'Comprehensive curriculum including JLPT N3 intermediate Japanese, Business Keigo, and 1,500 Nihomi Coins/month.',
@@ -243,7 +243,7 @@ export const SEED_PLANS: Plan[] = [
   },
   {
     id: 'japan_ready',
-    name: 'Japan Ready',
+    name: 'Nihomi Japan Ready',
     displayNameJa: '日本就労・移住特化プラン',
     tagline: 'Everything you need for job interviews, visa, and life in Japan',
     description: 'Career-focused Japanese training, workplace simulation, visa guidance, priority AI tutoring, and 4,000 Nihomi Coins/month.',
@@ -7901,7 +7901,7 @@ class Database {
           geography: ['Dhaka', 'Chittagong', 'Sylhet', 'Tokyo'],
           customerSegment: 'Japanese N5/N4 Aspirants & Relocation Candidates',
           language: 'Bengali / Japanese / English',
-          priceRange: '৳499 - ৳14,999 BDT',
+          priceRange: '৳990 - ৳40,700 BDT',
           acquisitionChannels: ['Facebook Reels', 'Direct Campus Partnerships', 'Organic SEO', 'Live Masterclasses'],
           priority: 'P1_PRIMARY_EXPANSION',
           timeframe: 'Q4 2026 - Q4 2027',

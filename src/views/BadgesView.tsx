@@ -123,7 +123,7 @@ export const BadgesView: React.FC<BadgesViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div id="nihomi-badges-view" className="min-h-screen bg-[#F8F9FA] dark:bg-[#0a0a12] text-[#1A1A1A] dark:text-stone-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div id="nihomi-badges-view" className="min-h-screen bg-[#F8F9FA] dark:bg-[#141726] text-[#1A1A1A] dark:text-stone-100 py-8 px-4 sm:px-6 lg:px-8">
       {/* Social Share Modal */}
       <BadgeShareModal
         badge={sharingBadge}

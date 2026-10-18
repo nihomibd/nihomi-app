@@ -359,13 +359,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
   });
 
   return (
-    <div className="bg-[#FAF9F6] dark:bg-[#0D0D11] text-stone-900 dark:text-stone-100 min-h-screen pb-24 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors">
+    <div className="bg-[#FAF9F6] dark:bg-[#0D0D11] text-stone-900 dark:text-stone-100 min-h-screen pb-24 font-sans antialiased text-left selection:bg-purple-600 selection:text-white transition-colors">
       
       {/* Top Hero Banner */}
-      <div className="bg-stone-900 dark:bg-[#09090D] text-white border-b border-stone-800 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white border-b border-purple-900/40 py-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-500/20 text-red-300 text-xs font-bold rounded-full border border-red-500/30">
-            <Sparkles className="w-3.5 h-3.5 text-red-400" />
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-purple-500/20 text-purple-200 text-xs font-bold rounded-full border border-purple-400/30">
+            <Sparkles className="w-3.5 h-3.5 text-purple-300" />
             <span>CONTINUOUS JAPANESE JOURNEY • জাপানি শিক্ষার রোডম্যাপ</span>
           </div>
 
@@ -385,7 +385,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 onClick={() => setActiveTab('pathways')}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 cursor-pointer ${
                   activeTab === 'pathways'
-                    ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                    ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                     : 'text-stone-300 hover:text-white hover:bg-stone-700/50'
                 }`}
               >
@@ -397,7 +397,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 onClick={() => setActiveTab('catalog')}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 cursor-pointer ${
                   activeTab === 'catalog'
-                    ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                    ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                     : 'text-stone-300 hover:text-white hover:bg-stone-700/50'
                 }`}
               >
@@ -421,13 +421,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
             {/* Student Current Target Status Bar */}
             <div className="bg-white dark:bg-[#15151E] p-5 rounded-3xl border border-stone-200 dark:border-stone-800/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center space-x-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-red-600/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-lg shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-purple-600/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-lg shrink-0">
                   {selectedLevel}
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs font-bold text-stone-500 dark:text-stone-400">বর্তমান লক্ষ্য:</span>
-                    <span className="text-xs font-mono font-bold text-red-600 dark:text-red-400 uppercase">JLPT {selectedLevel} Curriculum</span>
+                    <span className="text-xs font-mono font-bold text-purple-600 dark:text-purple-400 uppercase">JLPT {selectedLevel} Curriculum</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
                       অ্যাক্টিভ রোডম্যাপ
                     </span>
@@ -445,7 +445,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 </div>
                 <div className="w-24 bg-stone-100 dark:bg-stone-800 rounded-full h-2 overflow-hidden">
                   <div
-                    className="bg-red-600 h-2 rounded-full transition-all duration-500"
+                    className="bg-[#E45147] h-2 rounded-full transition-all duration-500"
                     style={{ width: `${Math.max(4, masteryPercentage)}%` }}
                   ></div>
                 </div>
@@ -462,7 +462,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 className={`relative bg-white dark:bg-[#15151E] rounded-3xl p-6 sm:p-7 border-2 transition-all ${
                   isFoundationDone
                     ? 'border-emerald-500/40 shadow-xs'
-                    : 'border-red-500/60 shadow-lg shadow-red-500/5'
+                    : 'border-purple-500/60 shadow-lg shadow-purple-500/5'
                 }`}
               >
                 {/* Status Pill Badge */}
@@ -482,7 +482,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       <span>ভিত্তি সম্পন্ন (COMPLETED)</span>
                     </span>
                   ) : (
-                    <span className="px-3 py-1 rounded-full bg-red-500/15 text-red-600 dark:text-red-400 text-xs font-bold flex items-center space-x-1.5 border border-red-500/30 animate-pulse">
+                    <span className="px-3 py-1 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-400 text-xs font-bold flex items-center space-x-1.5 border border-purple-500/30 animate-pulse">
                       <Zap className="w-3.5 h-3.5" />
                       <span>বর্তমান সক্রিয় পর্যায় (ACTIVE)</span>
                     </span>
@@ -517,7 +517,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       className={`w-full sm:w-auto px-6 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg transition-all cursor-pointer ${
                         isFoundationDone
                           ? 'bg-stone-900 hover:bg-stone-800 text-white dark:bg-stone-800 dark:hover:bg-stone-700'
-                          : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/30'
+                          : 'bg-[#E45147] hover:bg-[#D43E34] text-white shadow-purple-600/30'
                       }`}
                     >
                       <Sparkles className="w-4 h-4 text-amber-300" />
@@ -567,7 +567,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       aria-label="JLPT N5 স্তর নির্বাচন করুন (৪০টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N5'
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
@@ -579,7 +579,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       aria-label="JLPT N4 স্তর নির্বাচন করুন (৩৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N4'
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
@@ -591,7 +591,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       aria-label="JLPT N3 স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N3'
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
@@ -603,7 +603,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       aria-label="JLPT N2 স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N2'
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
@@ -615,7 +615,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       aria-label="JLPT N1 সর্বোচ্চ স্তর নির্বাচন করুন (৪৫টি পাঠ)"
                       className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                         selectedLevel === 'N1'
-                          ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                          ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                           : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
@@ -627,12 +627,12 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
 
                 <div className="space-y-6">
                   {/* TOP: Sleek Progress Overview */}
-                  <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-stone-950 via-stone-900 to-[#14141e] border border-stone-800 text-white shadow-xl relative overflow-hidden">
-                    <div className="pointer-events-none absolute -right-12 -top-12 w-48 h-48 bg-red-600/10 rounded-full blur-3xl" />
+                  <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 border border-purple-900/40 text-white shadow-xl relative overflow-hidden">
+                    <div className="pointer-events-none absolute -right-12 -top-12 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl" />
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-red-600/25 text-red-400 border border-red-500/30">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-600/25 text-purple-300 border border-purple-500/30">
                             STAGE-BASED CURRICULUM
                           </span>
                           <span className="text-xs text-stone-400">
@@ -662,7 +662,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                         </div>
                         <div className="px-3.5 py-2 rounded-2xl bg-white/[0.05] border border-white/[0.1] text-right">
                           <span className="text-[10px] text-stone-400 uppercase tracking-wider block font-bold">Current Focus</span>
-                          <span className="text-sm font-black text-rose-400">
+                          <span className="text-sm font-black text-purple-300">
                             {activeModule.code}
                           </span>
                         </div>
@@ -677,7 +677,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       </div>
                       <div className="w-full h-2.5 rounded-full bg-stone-800/90 overflow-hidden border border-stone-700/60">
                         <div
-                          className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 rounded-full transition-all duration-500 shadow-sm shadow-red-500/50"
+                          className="h-full bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-500 rounded-full transition-all duration-500 shadow-sm shadow-purple-500/50"
                           style={{ width: `${Math.max(4, masteryPercentage)}%` }}
                         />
                       </div>
@@ -713,15 +713,15 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                             }}
                             className={`p-2.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer relative overflow-hidden group ${
                               isActive
-                                ? 'bg-stone-900 dark:bg-[#1c1c28] border-red-500 shadow-md ring-1 ring-red-500/30'
+                                ? 'bg-stone-900 dark:bg-[#1c1c28] border-purple-500 shadow-md ring-1 ring-purple-500/30'
                                 : 'bg-white dark:bg-[#15151E] border-stone-200 dark:border-stone-800/80 hover:border-stone-300 dark:hover:border-stone-700'
                             }`}
                           >
                             {isActive && (
-                              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500 via-rose-500 to-amber-500" />
+                              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-400" />
                             )}
                             <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-0.5">
-                              <span className={isActive ? 'text-red-400 font-black' : 'text-stone-400'}>
+                              <span className={isActive ? 'text-purple-400 font-black' : 'text-stone-400'}>
                                 {mod.code}
                               </span>
                               <span className="text-stone-400 dark:text-stone-500 text-[9px]">
@@ -767,7 +767,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                         placeholder="পাঠ বা ব্যাকরণ খুঁজুন..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-8 pr-7 py-1.5 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-hidden focus:border-red-500 transition-colors"
+                        className="w-full pl-8 pr-7 py-1.5 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-xl text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-hidden focus:border-purple-500 transition-colors"
                       />
                       {searchQuery && (
                         <button
@@ -805,7 +805,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                           className={`group relative p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between bg-white dark:bg-[#15151E] ${
                             isCompleted
                               ? 'border-emerald-500/40 hover:border-emerald-500 shadow-xs'
-                              : 'border-stone-200 dark:border-stone-800/80 hover:border-red-500/50'
+                              : 'border-stone-200 dark:border-stone-800/80 hover:border-purple-500/50'
                           } hover:shadow-lg hover:-translate-y-0.5`}
                         >
                           <div>
@@ -829,7 +829,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                                     FREE
                                   </span>
                                 ) : isPro ? (
-                                  <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 bg-red-500/15 text-red-500 dark:text-red-400 border border-red-500/30 rounded font-mono font-bold">
+                                  <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 rounded font-mono font-bold">
                                     <Sparkles className="w-2.5 h-2.5" /> PRO
                                   </span>
                                 ) : (
@@ -846,7 +846,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                             </div>
 
                             {/* Bengali Meaning */}
-                            <div className="text-xs font-semibold text-red-600 dark:text-red-400 mt-1 line-clamp-1">
+                            <div className="text-xs font-semibold text-purple-700 dark:text-purple-300 mt-1 line-clamp-1">
                               {lesson.lesson_metadata.title_bn}
                             </div>
 
@@ -895,7 +895,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                               className={`py-1.5 px-2 rounded-xl active:scale-95 text-white text-[11px] font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer ${
                                 isCompleted
                                   ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20'
-                                  : 'bg-red-600 hover:bg-red-500 shadow-red-600/20'
+                                  : 'bg-[#E45147] hover:bg-[#D43E34] shadow-purple-600/20'
                               }`}
                             >
                               {isCompleted ? <Check className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white text-white" />}
@@ -928,7 +928,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
               </div>
 
               {/* ------------------------------------------------------------- */}
-              {/* MILESTONE 3: TOKYO LIFE, BAITOOS & VISA READINESS LAB */}
+              {/* MILESTONE 3: TOKYO LIFE & NIHOMI WORKOS™ LAB */}
               {/* ------------------------------------------------------------- */}
               <div className="relative bg-white dark:bg-[#15151E] rounded-3xl p-6 sm:p-7 border border-stone-200 dark:border-stone-800/80 shadow-xs">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -950,20 +950,20 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
                   <div className="lg:col-span-2 space-y-2">
                     <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white">
-                      Tokyo Life, BaitoOS & Visa Readiness Lab
+                      Tokyo Life &amp; Nihomi WorkOS™ Lab
                     </h2>
                     <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-                      শ্রেণিকক্ষের বাইরে জাপানের বাস্তব জীবনযাত্রার মুখোমুখি হোন। কনভিনিয়েন্স স্টোরের ক্যাশিয়ার সিমুলেশন (BaitoOS), জাপানি সমাজে শিষ্টাচার, ট্রেনের টিকিট কাটা, বাড়ি ভাড়া নেওয়া এবং ভিসার জন্য প্রয়োজনীয় কাগজপত্র প্রস্তুতির প্র্যাকটিক্যাল গাইড।
+                      শ্রেণিকক্ষের বাইরে জাপানের বাস্তব জীবনযাত্রার মুখোমুখি হোন। কনভিনিয়েন্স স্টোরের ক্যাশিয়ার সিমুলেশন (Nihomi WorkOS™), জাপানি সমাজে শিষ্টাচার, ট্রেনের টিকিট কাটা, বাড়ি ভাড়া নেওয়া এবং বাস্তব জীবনযাত্রার ভাষার প্র্যাকটিক্যাল গাইড। (নিহোমি কোনো ভিসা বা ইমিগ্রেশন এজেন্সি নয়; কোনো চাকরির নিশ্চয়তা দেয় না)
                     </p>
                     <div className="flex flex-wrap gap-2 pt-1 text-xs">
                       <span className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-medium">
-                        🏪 কনভিনিয়েন্স স্টোর POS সিমুলেশন
+                        🏪 কনভিনিয়েন্স স্টোর ক্যাশিয়ার সিমুলেশন
                       </span>
                       <span className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-medium">
-                        💼 বাইতো ইন্টারভিউ রোলপ্লে
+                        💼 কর্মক্ষেত্র ও ইন্টারভিউ রোলপ্লে
                       </span>
                       <span className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-medium">
-                        🛂 স্টুডেন্ট ও এসএসডব্লিউ ভিসা প্রস্তুতি
+                        🛂 জীবনযাত্রা ও বাস্তব শিষ্টাচার গাইড
                       </span>
                     </div>
                   </div>
@@ -974,7 +974,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white dark:bg-stone-800 dark:hover:bg-stone-700 text-xs font-bold flex items-center justify-center space-x-2 shadow-md transition-all cursor-pointer"
                     >
                       <Briefcase className="w-4 h-4 text-amber-400" />
-                      <span>BaitoOS সিমুলেশন শুরু করুন</span>
+                      <span>Nihomi WorkOS™ সিমুলেশন শুরু করুন</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                     <span className="text-[11px] text-stone-400">
@@ -1068,7 +1068,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                       </div>
                       <div className="w-full bg-stone-200 dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="bg-stone-900 dark:bg-red-500 h-1.5 rounded-full transition-all duration-300"
+                          className="bg-[#E45147] h-1.5 rounded-full transition-all duration-300"
                           style={{ width: `${course.progressPercent}%` }}
                         ></div>
                       </div>
@@ -1084,7 +1084,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onNavigate }) => {
                     onClick={() => setActiveCourseToPlay(course)}
                     className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer dark:bg-stone-800 dark:hover:bg-stone-700"
                   >
-                    <Play className="w-3.5 h-3.5 text-red-400 fill-red-400" />
+                    <Play className="w-3.5 h-3.5 text-purple-400 fill-purple-400" />
                     <span>{course.progressPercent > 0 ? 'Resume Lesson' : 'Start Curriculum'}</span>
                   </button>
 

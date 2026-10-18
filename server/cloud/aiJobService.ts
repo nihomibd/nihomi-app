@@ -6,6 +6,7 @@ import { GoogleGenAI } from '@google/genai';
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { CloudService } from './cloudService.js';
 import { AiJobType, CloudAiJob } from './types.js';
+import { evaluateAiScope, getImmutableAiSafetyPrompt } from '../services/aiScopeGuard.js';
 
 let geminiClient: GoogleGenAI | null = null;
 
@@ -38,6 +39,14 @@ export class CloudAiJobService {
   ): Promise<CloudAiJob> {
     // 1. Verify file exists and belongs to user
     const file = await this.cloudService.getFileById(userId, fileId);
+
+    // 2. Validate customPrompt scope if provided
+    if (customPrompt && typeof customPrompt === 'string') {
+      const scopeCheck = evaluateAiScope(customPrompt);
+      if (!scopeCheck.isAllowed) {
+        throw new Error(scopeCheck.refusalMessageBn || 'Request rejected by Japanese learning safety guard.');
+      }
+    }
 
     const jobId = `job_${crypto.randomUUID().slice(0, 16)}`;
     const now = new Date();
@@ -230,13 +239,14 @@ export class CloudAiJobService {
       );
     }
 
+    const safetyPrompt = getImmutableAiSafetyPrompt('N5');
     const response = await ai.models.generateContent({
       model: 'gemini-3.5-flash',
       contents: [
         {
           role: 'user',
           parts: [
-            { text: instruction },
+            { text: `${safetyPrompt}\n\nTask:\n${instruction}` },
             { text: `Document content:\n${sampleContent}` },
           ],
         },

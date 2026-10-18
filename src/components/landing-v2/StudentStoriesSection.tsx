@@ -20,7 +20,7 @@ export const StudentStoriesSection: React.FC<StudentStoriesSectionProps> = ({ on
       location: 'চট্টগ্রাম',
       target: 'N4 প্রস্তুতি',
       avatar: '/assets/landing-v2/student-riad.png',
-      quote: '“AI Sensei-এর সাথে অনুশীলন করতে করতে জাপানিজ শেখা এখন সহজ ও মজার।”',
+      quote: '“Nomi Sensei-এর সাথে অনুশীলন করতে করতে জাপানিজ শেখা এখন সহজ ও মজার।”',
       rating: 5
     },
     {

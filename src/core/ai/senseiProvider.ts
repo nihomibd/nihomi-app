@@ -119,7 +119,7 @@ export class HttpSenseiProvider implements ISenseiProvider {
       body: JSON.stringify({
         message,
         mode: context.mode || 'conversation',
-        scenario: context.scenario || 'N5 Japanese tutoring with Nihomi Sensei AI™',
+        scenario: context.scenario || 'N5 Japanese tutoring with Nomi Sensei',
         history: context.history,
         knownHiragana: state.knownHiragana,
         knownVocabulary: state.knownVocabulary,
@@ -130,12 +130,12 @@ export class HttpSenseiProvider implements ISenseiProvider {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      throw new Error(data.error || 'Nihomi Sensei AI™ এর সাথে সংযোগ স্থাপন করা সম্ভব হয়নি।');
+      throw new Error(data.error || 'Nomi Sensei (নমি সেন্সেই)-র সাথে সংযোগ স্থাপন করা সম্ভব হয়নি।');
     }
 
     const rawReply =
       data.reply ||
-      'こんにちは！(Konnichiwa!) নিহোমি সেনসেই আপনার সাথে আছেন। আসুন অনুশীলন করি!';
+      'こんにちは！(Konnichiwa!) Nomi Sensei (নমি সেন্সেই) আপনার সাথে আছেন। আসুন অনুশীলন করি!';
 
     const audit = assertSenseiOutputEligible(rawReply, state);
 

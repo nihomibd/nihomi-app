@@ -395,8 +395,8 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
         isOpen: true,
         speaker: 'sensei',
         step: 'sensei_coaching',
-        npcJapaneseText: '💡 Nihomi Sensei AI™ 敬語ワンポイントレッスン',
-        npcRomaji: 'Nihomi Sensei AI™ Keigo One-Point Lesson',
+        npcJapaneseText: '💡 Nomi Sensei 敬語ワンポイントレッスン',
+        npcRomaji: 'Nomi Sensei Keigo One-Point Lesson',
         npcEnglish: 'In Japanese workplace culture, asking 「バイトありますか？」 directly is too blunt and informal. Use the polite business structure:',
         senseiGuidance: {
           title: 'Workplace Etiquette: Part-Time Job Inquiry',
@@ -1105,7 +1105,7 @@ export const ShibuyaPlayableWorld: React.FC<ShibuyaPlayableWorldProps> = ({
                   <h3 className="text-sm font-bold text-white">
                     {dialogue.speaker === 'manager'
                       ? 'Store Manager Tanaka (店長 田中)'
-                      : 'Nihomi Sensei AI™ (Keigo Coach)'}
+                      : 'Nomi Sensei (Keigo Coach)'}
                   </h3>
                   <p className="text-[11px] text-slate-400">7-Eleven Shibuya Udagawacho Branch</p>
                 </div>

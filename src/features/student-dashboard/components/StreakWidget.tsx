@@ -72,7 +72,7 @@ export const StreakWidget: React.FC<StreakWidgetProps> = ({
     },
     {
       id: 'AI_CHAT' as RetentionActivityType,
-      title: 'সেনসেই এআই কনভারসেশন',
+      title: 'নমি সেন্সেই কনভারসেশন',
       xp: 15,
       completed: state.todayCompletedActivities.includes('AI_CHAT'),
     },

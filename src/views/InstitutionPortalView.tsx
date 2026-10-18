@@ -72,7 +72,7 @@ export const InstitutionPortalView: React.FC<InstitutionPortalViewProps> = ({ on
   return (
     <div
       id="institution-portal-root"
-      className="bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-stone-900 min-h-screen pb-20 text-left font-sans antialiased selection:bg-red-500 selection:text-white transition-colors"
+      className="bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-stone-900 min-h-screen pb-20 text-left font-sans antialiased selection:bg-red-500 selection:text-white transition-colors"
     >
       {/* Top Banner */}
       <div className="bg-stone-900 dark:bg-stone-950 sepia:bg-[#2b2118] text-white border-b border-stone-800 py-8 px-4 sm:px-6 lg:px-8">

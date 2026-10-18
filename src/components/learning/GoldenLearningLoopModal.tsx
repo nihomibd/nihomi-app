@@ -415,7 +415,7 @@ export const GoldenLearningLoopModal: React.FC<GoldenLearningLoopModalProps> = (
             <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-200 text-xs space-y-1.5">
               <div className="font-bold flex items-center gap-1.5 text-rose-300">
                 <RotateCcw className="w-4 h-4" />
-                <span>Nihomi Sensei AI™ Feedback:</span>
+                <span>Nomi Sensei Feedback:</span>
               </div>
               <p>{evaluation?.feedbackJa || 'もう一度正確なフレーズを確認して練習しましょう。'}</p>
               <p className="text-slate-300 font-sans">{evaluation?.feedbackBn}</p>

@@ -63,8 +63,8 @@ export const JourneyView: React.FC<JourneyViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#080711] text-stone-100 flex flex-col justify-center items-center py-10 px-4 overflow-hidden">
-      {/* Neo-Tokyo Hanabi subtle canvas background */}
+    <div className="relative min-h-screen bg-[#FAF9FC] dark:bg-[#080711] text-slate-900 dark:text-stone-100 flex flex-col justify-center items-center py-10 px-4 overflow-hidden">
+      {/* Subtle background */}
       <HanabiBackground />
 
       {activeScreen === 'lattice' && (

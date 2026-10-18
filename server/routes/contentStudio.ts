@@ -473,7 +473,7 @@ contentStudioRouter.post('/lessons/batch-publish-defaults', optionalAuth, (req: 
 });
 
 // Auto-seed default curriculum lessons on module initialization in local development
-if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_LOCAL_STORAGE === 'true') {
+if (process.env.NODE_ENV !== 'production') {
   const seedTimer = setTimeout(() => {
     syncAllDefaultLessonsToLiveCatalog();
   }, 1000);

@@ -62,7 +62,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
     },
     {
       key: 'K',
-      label: 'AI Coach & Sensei (AI সেনসেই)',
+      label: 'AI Coach & Sensei (নমি সেন্সেই)',
       description: 'Instant Japanese conversational practice and grammar feedback',
       view: 'ai-coach',
       icon: Bot,

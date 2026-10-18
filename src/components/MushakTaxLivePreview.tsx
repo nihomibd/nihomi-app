@@ -25,9 +25,9 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
   const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
 
   const planBaseRates: Record<string, { name: string; monthlyBDT: number; yearlyBDT: number; code: string }> = {
-    starter: { name: 'Starter JLPT N5 Access Plan', monthlyBDT: 990, yearlyBDT: 10100, code: 'NIH-N5-ST' },
-    pro: { name: 'Pro JLPT N5-N3 Unlimited AI Plan', monthlyBDT: 1990, yearlyBDT: 20300, code: 'NIH-PRO-AI' },
-    japan_ready: { name: 'Japan Ready™ Career & Visa VIP Plan', monthlyBDT: 3990, yearlyBDT: 40700, code: 'NIH-JP-VIP' }
+    starter: { name: 'Nihomi Starter JLPT N5 Plan', monthlyBDT: 990, yearlyBDT: 10100, code: 'NIH-N5-ST' },
+    pro: { name: 'Nihomi Pro JLPT N5-N3 Plan', monthlyBDT: 1990, yearlyBDT: 20300, code: 'NIH-PRO-AI' },
+    japan_ready: { name: 'Nihomi Japan Ready™ Career & Visa Plan', monthlyBDT: 3990, yearlyBDT: 40700, code: 'NIH-JP-VIP' }
   };
 
   const currentPlanMeta = planBaseRates[selectedPlan] || planBaseRates.pro;
@@ -109,9 +109,9 @@ export const MushakTaxLivePreview: React.FC<MushakTaxLivePreviewProps> = ({
             className="w-full p-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold cursor-pointer"
             id="select-mushak-plan"
           >
-            <option value="starter">Starter Plan (৳1,490/mo)</option>
-            <option value="pro">Pro AI Plan (৳2,990/mo)</option>
-            <option value="japan_ready">Japan Ready VIP (৳4,990/mo)</option>
+            <option value="starter">Nihomi Starter (৳990/mo)</option>
+            <option value="pro">Nihomi Pro (৳1,990/mo)</option>
+            <option value="japan_ready">Nihomi Japan Ready (৳3,990/mo)</option>
           </select>
         </div>
 

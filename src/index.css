@@ -37,27 +37,39 @@ html, body {
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
 
-  /* Nihomi Master Design Constitution v1.0 Semantic Tokens (Poster 02) */
-  --brand-primary: #684CFE;
-  --brand-hover: #5A3EE0;
-  --brand-accent: #F472B6;
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --surface: #FAF9FC;
-  --surface-card: #FFFFFF;
-  --border: #EDE9FE;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --info: #3B82F6;
-  --neutral-100: #F8FAFC;
-  --neutral-200: #F1F5F9;
-  --neutral-300: #E2E8F0;
+  /* Nihomi Brand Guidelines v1.0 Canonical Tokens (60% Ink / 22% Cream / 12% Red / 6% Moss) */
+  --nihomi-ink: #141726;       /* 60% Dominant Base - Deep Ink */
+  --nihomi-cream: #F6F0E6;     /* 22% Warm Human Ground - Washi Cream */
+  --nihomi-red: #E45147;       /* 12% Next Action & Urgency - Lacquer Red */
+  --nihomi-moss: #6D7C55;      /* 6% Completion & Confirmed Progress - Moss Green */
+  --nihomi-plum: #2F183A;      /* Supporting Accent Only (Deep Plum) */
+  --nihomi-gray: #737474;      /* Neutral Balance (Neutral Gray) */
 
-  /* Typography Fallbacks */
-  --font-bengali: 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Semantic Theme Mappings */
+  --brand-primary: #E45147;     /* Lacquer Red directs action */
+  --brand-hover: #D43E34;
+  --brand-accent: #6D7C55;     /* Moss Green for completion/mastery */
+  --brand-ink: #141726;
+  --brand-cream: #F6F0E6;
+  --text-primary: #141726;
+  --text-secondary: #57575E;
+  --surface: #F6F0E6;
+  --surface-card: #FFFFFF;
+  --border: rgba(20, 23, 38, 0.12);
+  --success: #6D7C55;
+  --warning: #F59E0B;
+  --danger: #E45147;
+  --info: #3B82F6;
+  --neutral-100: #F6F0E6;
+  --neutral-200: #EDE5D5;
+  --neutral-300: #D8CEBC;
+
+  /* Typography Stacks (Brand Guidelines 07/Typography) */
+  --font-latin-title: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-latin-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-bengali: 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-japanese: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-  --font-english: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-english: 'General Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Minimum interactive touch target for mobile thumb comfort (standard 40px, inline links excluded) */
@@ -97,26 +109,27 @@ p, h1, h2, h3, h4, h5, h6, li {
   word-wrap: break-word;
 }
 
-/* Dark Mode Overrides (Neo-Tokyo Dark Theme #0a0a12) */
+/* Dark Mode Overrides (Brand Guidelines v1.0 Deep Ink #141726) */
 html.dark {
   color-scheme: dark;
-  background-color: #0a0a12;
-  color: #f1f5f9;
+  background-color: #141726;
+  color: #F6F0E6;
 }
 
 html.dark body {
-  background-color: #0a0a12;
-  color: #f1f5f9;
+  background-color: #141726;
+  color: #F6F0E6;
 }
 
 html.dark .bg-\[\#F8F9FA\],
-html.dark .bg-\[\#FAFAFA\] {
-  background-color: #0a0a12 !important;
+html.dark .bg-\[\#FAFAFA\],
+html.dark .bg-\[\#141726\] {
+  background-color: #141726 !important;
 }
 
 html.dark .bg-white {
-  background-color: #12121e !important;
-  color: #f1f5f9;
+  background-color: #1B1E30 !important;
+  color: #F6F0E6;
 }
 
 html.dark .bg-white\/95 {

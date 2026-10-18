@@ -20,7 +20,7 @@ const THEME_OPTIONS: { id: AppTheme; label: string; sublabel: string; icon: type
     label: 'Neo-Tokyo',
     sublabel: 'Deep Indigo Dark',
     icon: Moon,
-    bgPreview: 'bg-[#0a0a12] border-rose-500/50',
+    bgPreview: 'bg-[#141726] border-rose-500/50',
   },
   {
     id: 'sepia',

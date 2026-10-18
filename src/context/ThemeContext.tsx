@@ -105,13 +105,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.setAttribute('data-theme-setting', theme);
 
       if (resolvedTheme === 'dark') {
-        document.body.style.backgroundColor = '#0a0a12';
+        document.body.style.backgroundColor = '#141726';
         document.body.style.color = '#f1f5f9';
       } else if (resolvedTheme === 'sepia') {
         document.body.style.backgroundColor = '#fbf0d9';
         document.body.style.color = '#433422';
       } else {
-        document.body.style.backgroundColor = resolvedBranding.branding.surfaceBg || '#FAF9F6';
+        document.body.style.backgroundColor = resolvedBranding.branding.surfaceBg || '#F6F0E6';
         document.body.style.color = '#1A1A1A';
       }
 

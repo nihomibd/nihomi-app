@@ -30,6 +30,7 @@ import { FuriganaText, stripFurigana } from '../utils/furigana';
 import { speakJapanese, stopJapaneseSpeech } from '../lib/tts';
 import { soundEffects } from '../lib/soundEffects';
 import { haptic } from '../lib/haptic';
+import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 
 interface LessonPracticeViewProps {
   lessonId?: string;
@@ -113,7 +114,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
   // Fallback if lesson not found
   if (!lesson) {
     return (
-      <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#141726] text-stone-100 flex items-center justify-center p-6">
         <div className="max-w-md w-full text-center space-y-4 p-8 rounded-3xl bg-[#14141e] border border-stone-800">
           <BookOpen className="w-12 h-12 mx-auto text-red-500 opacity-60" />
           <h2 className="text-xl font-bold">পাঠের তথ্য খুঁজে পাওয়া যায়নি</h2>
@@ -281,17 +282,17 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
   const scorePercent = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 100;
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-stone-100 flex flex-col font-sans selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-slate-900 dark:text-stone-100 flex flex-col font-sans selection:bg-[#E45147] selection:text-white">
       {/* ------------------------------------------------------------- */}
       {/* TOP NAVIGATION / CONTROL BAR */}
       {/* ------------------------------------------------------------- */}
-      <header className="sticky top-0 z-40 bg-[#0e0e18]/90 backdrop-blur-md border-b border-stone-800/80 px-4 sm:px-6 py-3.5">
+      <header className="sticky top-0 z-40 bg-white/90 dark:bg-[#141726]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 py-3.5">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
           {/* Back button & Lesson Identity */}
           <div className="flex items-center space-x-3">
             <button
               onClick={() => onNavigate('courses')}
-              className="p-2 rounded-xl bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-stone-800/80 dark:hover:bg-stone-700 text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer border border-slate-200 dark:border-stone-700/60"
               title="পাঠ্যক্রমে ফিরে যান"
               aria-label="পাঠ্যক্রমে ফিরে যান"
             >
@@ -321,7 +322,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeStep === 'quiz'
-                    ? 'bg-[#684CFE] text-white font-bold shadow-xs'
+                    ? 'bg-[#E45147] text-white font-bold shadow-xs'
                     : userQuizAnswers.length > 0
                     ? 'text-emerald-400'
                     : 'text-stone-500'
@@ -332,7 +333,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeStep === 'typing'
-                    ? 'bg-[#684CFE] text-white font-bold shadow-xs'
+                    ? 'bg-[#E45147] text-white font-bold shadow-xs'
                     : typingScore > 0
                     ? 'text-emerald-400'
                     : 'text-stone-500'
@@ -342,7 +343,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               </span>
               <span
                 className={`px-2.5 py-1 rounded-lg transition-all ${
-                  activeStep === 'summary' ? 'bg-[#684CFE] text-white font-bold shadow-xs' : 'text-stone-500'
+                  activeStep === 'summary' ? 'bg-[#E45147] text-white font-bold shadow-xs' : 'text-stone-500'
                 }`}
               >
                 ৩. স্কোর
@@ -396,18 +397,18 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
             </div>
 
             {/* Question Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#13131e] border border-stone-800/90 shadow-2xl relative overflow-hidden space-y-4">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1B1E30] border border-slate-200 dark:border-white/10 shadow-xl relative overflow-hidden space-y-4">
               <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl" />
 
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2">
-                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-stone-800 text-stone-300">
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-purple-50 dark:bg-stone-800 text-purple-700 dark:text-stone-300 border border-purple-200 dark:border-transparent">
                     JLPT {meta.difficulty} Drill
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-bold text-white font-japanese leading-relaxed">
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-japanese leading-relaxed">
                     <FuriganaText text={currentQuiz.question_ja} />
                   </h2>
-                  <p className="text-sm sm:text-base text-stone-300 leading-relaxed font-medium">
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-stone-300 leading-relaxed font-medium">
                     {currentQuiz.question_bn}
                   </p>
                 </div>
@@ -415,11 +416,11 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                 {/* Pronunciation Speaker Button */}
                 <button
                   onClick={() => handleSpeak(currentQuiz.question_ja)}
-                  className="p-3 rounded-2xl bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white transition-all cursor-pointer shrink-0 border border-stone-700/60 shadow-sm"
+                  className="p-3 rounded-2xl bg-slate-100 dark:bg-stone-800/80 hover:bg-slate-200 dark:hover:bg-stone-700 text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shrink-0 border border-slate-200 dark:border-stone-700/60 shadow-sm"
                   title="উচ্চারণ শুনুন"
                   aria-label="জাপানি প্রশ্নের উচ্চারণ শুনুন"
                 >
-                  <Volume2 className="w-5 h-5 text-purple-400" />
+                  <Volume2 className="w-5 h-5 text-[#E45147]" />
                 </button>
               </div>
 
@@ -430,20 +431,20 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   const isCorrectAnswer = optIdx === currentQuiz.correct_index;
 
                   let cardStyle =
-                    'bg-[#191926] border-stone-800 text-stone-200 hover:border-stone-600 hover:bg-[#202030]';
+                    'bg-slate-50 dark:bg-[#191926] border-slate-200 dark:border-stone-800 text-slate-800 dark:text-stone-200 hover:border-purple-400 hover:bg-purple-50/40 dark:hover:bg-[#202030]';
 
                   if (isAnswerSubmitted) {
                     if (isCorrectAnswer) {
                       cardStyle =
-                        'bg-emerald-950/40 border-emerald-500 text-emerald-200 ring-2 ring-emerald-500/30';
+                        'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500/30';
                     } else if (isSelected) {
                       cardStyle =
-                        'bg-red-950/40 border-red-500 text-red-200 ring-2 ring-red-500/30';
+                        'bg-red-50 dark:bg-red-950/40 border-red-500 text-red-900 dark:text-red-200 ring-2 ring-red-500/30';
                     } else {
-                      cardStyle = 'bg-stone-900/40 border-stone-800/60 text-stone-500 opacity-60';
+                      cardStyle = 'bg-slate-100/60 dark:bg-stone-900/40 border-slate-200 dark:border-stone-800/60 text-slate-400 dark:text-stone-500 opacity-60';
                     }
                   } else if (isSelected) {
-                    cardStyle = 'bg-purple-950/30 border-purple-500 text-white ring-2 ring-purple-500/30';
+                    cardStyle = 'bg-purple-50 dark:bg-purple-950/30 border-purple-500 text-purple-900 dark:text-white ring-2 ring-purple-500/30';
                   }
 
                   return (
@@ -455,7 +456,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                       aria-label={`বিকল্প ${optIdx + 1}: ${stripFurigana(option)}`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-lg bg-stone-800/80 text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
+                        <span className="w-6 h-6 rounded-lg bg-slate-200 dark:bg-stone-800/80 text-[11px] font-mono font-bold flex items-center justify-center shrink-0 text-slate-700 dark:text-stone-300">
                           {optIdx + 1}
                         </span>
                         <span className="font-semibold text-base">
@@ -464,41 +465,48 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                       </div>
 
                       {isAnswerSubmitted && isCorrectAnswer && (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       )}
                       {isAnswerSubmitted && isSelected && !isCorrectAnswer && (
-                        <XCircle className="w-5 h-5 text-red-400 shrink-0" />
+                        <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" />
                       )}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Instant Explanation Feedback Banner */}
+              {/* Instant Explanation Feedback Banner with Sensei Avatar */}
               {isAnswerSubmitted && (
                 <div
-                  className={`p-4 rounded-2xl border text-xs sm:text-sm leading-relaxed space-y-1.5 animate-fadeIn ${
+                  className={`p-4 rounded-2xl border text-xs sm:text-sm leading-relaxed space-y-2 animate-fadeIn flex items-start gap-3.5 ${
                     selectedOptionIndex === currentQuiz.correct_index
-                      ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
-                      : 'bg-red-950/30 border-red-500/40 text-red-200'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-500/40 text-emerald-900 dark:text-emerald-200'
+                      : 'bg-amber-50 dark:bg-amber-950/30 border-amber-500/40 text-amber-900 dark:text-amber-200'
                   }`}
                 >
-                  <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px]">
-                    {selectedOptionIndex === currentQuiz.correct_index ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>সঠিক উত্তর! (Correct Answer)</span>
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="w-4 h-4 text-red-400" />
-                        <span>ভুল উত্তর। সঠিক উত্তর: {currentQuiz.options[currentQuiz.correct_index]}</span>
-                      </>
-                    )}
+                  <img
+                    src={selectedOptionIndex === currentQuiz.correct_index ? "/brand/nomi/nomi-encourage.png" : "/brand/nomi/nomi-guide.png"}
+                    alt="Nomi"
+                    className="w-8 h-8 rounded-full border border-[#E45147] shrink-0 mt-0.5 object-cover bg-[#F6F0E6]"
+                  />
+                  <div className="space-y-1 flex-1">
+                    <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px]">
+                      {selectedOptionIndex === currentQuiz.correct_index ? (
+                        <>
+                          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          <span className="text-emerald-700 dark:text-emerald-300">正解です! 🎉 সঠিক উত্তর! (Correct Answer)</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                          <span className="text-amber-800 dark:text-amber-300">খুব ভালো চেষ্টা! এখানে সঠিক উত্তর: {stripFurigana(currentQuiz.options[currentQuiz.correct_index])}</span>
+                        </>
+                      )}
+                    </div>
+                    <p className="text-slate-700 dark:text-stone-300 font-sans text-xs sm:text-sm">
+                      {currentQuiz.explanation_bn}
+                    </p>
                   </div>
-                  <p className="text-stone-300 font-sans text-xs sm:text-sm">
-                    {currentQuiz.explanation_bn}
-                  </p>
                 </div>
               )}
 
@@ -508,7 +516,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     disabled={selectedOptionIndex === null}
                     onClick={handleSubmitQuizAnswer}
-                    className="px-6 py-3 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
+                    className="px-6 py-3 rounded-2xl bg-[#E45147] hover:bg-[#D43E34] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
                     aria-label="উত্তর নিশ্চিত করুন"
                   >
                     <span>উত্তর নিশ্চিত করুন (Submit)</span>
@@ -542,17 +550,17 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
           <div className="space-y-6 animate-fadeIn">
             {/* Progress Bar & Header */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono text-stone-400">
-                <span className="flex items-center gap-1.5 font-bold text-amber-400 uppercase tracking-wider">
+              <div className="flex items-center justify-between text-xs font-mono text-stone-500 dark:text-stone-400">
+                <span className="flex items-center gap-1.5 font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider">
                   <Keyboard className="w-3.5 h-3.5" />
                   টাইপিং ও রিডিং ড্রিল {currentTypingIndex + 1} / {typingItems.length}
                 </span>
-                <span className="flex items-center gap-1 font-bold text-emerald-400">
+                <span className="flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400">
                   <Sparkles className="w-3.5 h-3.5" />
                   সঠিক: {typingScore}
                 </span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-stone-800 overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden">
                 <div
                   className="h-full bg-linear-to-r from-purple-600 via-indigo-500 to-purple-400 rounded-full transition-all duration-300"
                   style={{ width: `${((currentTypingIndex + 1) / typingItems.length) * 100}%` }}
@@ -561,19 +569,19 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
             </div>
 
             {/* Prompt & Typing Box Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#13131e] border border-stone-800/90 shadow-2xl relative overflow-hidden space-y-6">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1B1E30] border border-stone-200 dark:border-white/10 shadow-xl dark:shadow-2xl relative overflow-hidden space-y-6">
               <div className="pointer-events-none absolute -right-16 -top-16 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl" />
 
               {/* Japanese Prompt & Bengali Translation */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#181825] border border-stone-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-stone-50 dark:bg-[#151522] border border-stone-200 dark:border-stone-800">
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-mono uppercase font-bold text-purple-400">
+                  <span className="text-[10px] font-mono uppercase font-bold text-[#E45147]">
                     লক্ষ্য অভিব্যক্তি (Target Expression)
                   </span>
-                  <div className="text-2xl sm:text-3xl font-bold text-white font-japanese tracking-wide">
+                  <div className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white font-japanese tracking-wide">
                     <FuriganaText text={currentTyping.prompt_ja} />
                   </div>
-                  <div className="text-sm sm:text-base font-semibold text-purple-300">
+                  <div className="text-sm sm:text-base font-semibold text-purple-700 dark:text-purple-300">
                     অর্থ: {currentTyping.meaning_bn}
                   </div>
                 </div>
@@ -581,19 +589,19 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                 <div className="flex items-center gap-2 self-start sm:self-center">
                   <button
                     onClick={() => handleSpeak(currentTyping.prompt_ja)}
-                    className="p-3 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-white transition-all cursor-pointer border border-stone-700/60 shadow-sm"
+                    className="p-3 rounded-2xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 hover:text-stone-900 dark:hover:text-white transition-all cursor-pointer border border-stone-200 dark:border-stone-700/60 shadow-sm"
                     title="উচ্চারণ শুনুন"
                     aria-label="জাপানি অভিব্যক্তির উচ্চারণ শুনুন"
                   >
-                    <Volume2 className="w-5 h-5 text-purple-400" />
+                    <Volume2 className="w-5 h-5 text-[#E45147]" />
                   </button>
 
                   <button
                     onClick={() => setIsHintRevealed((prev) => !prev)}
-                    className="px-3 py-2.5 rounded-2xl bg-stone-800 hover:bg-stone-700 text-xs font-bold text-stone-300 hover:text-white transition-all cursor-pointer border border-stone-700/60 flex items-center gap-1.5"
+                    className="px-3 py-2.5 rounded-2xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-all cursor-pointer border border-stone-200 dark:border-stone-700/60 flex items-center gap-1.5"
                     aria-label={isHintRevealed ? 'রোমাজি হিন্ট লুকান' : 'রোমাজি হিন্ট দেখুন'}
                   >
-                    <Lightbulb className="w-3.5 h-3.5 text-purple-400" />
+                    <Lightbulb className="w-3.5 h-3.5 text-[#E45147]" />
                     <span>{isHintRevealed ? 'হিন্ট লুকান' : 'রোমাজি হিন্ট'}</span>
                   </button>
                 </div>
@@ -601,7 +609,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
               {/* Hint Bar (If Toggled) */}
               {isHintRevealed && (
-                <div className="p-3.5 rounded-2xl bg-purple-950/20 border border-purple-500/30 text-xs text-purple-200 font-mono flex items-center justify-between animate-fadeIn">
+                <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-500/30 text-xs text-purple-900 dark:text-purple-200 font-mono flex items-center justify-between animate-fadeIn">
                   <span>
                     রোমাজি ইনপুট: <strong>{currentTyping.romaji_input}</strong>
                   </span>
@@ -613,7 +621,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
               {/* Input Field */}
               <div className="space-y-3">
-                <label className="text-xs font-semibold text-stone-400 block font-mono">
+                <label className="text-xs font-semibold text-stone-600 dark:text-stone-400 block font-mono">
                   নিচের ঘরে রোমাজি বা জাপানি হরফে লিখুন (Type Romaji or Japanese):
                 </label>
 
@@ -634,45 +642,54 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                       }
                     }}
                     placeholder={`টাইপ করুন: ${currentTyping.romaji_input}`}
-                    className={`w-full px-5 py-4 rounded-2xl bg-[#0a0a12] border text-lg font-mono text-white placeholder-stone-600 focus:outline-hidden transition-all ${
+                    className={`w-full px-5 py-4 rounded-2xl bg-stone-50 dark:bg-[#07070d] border text-lg font-mono text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-stone-600 focus:outline-hidden transition-all ${
                       isTypingSubmitted
                         ? isTypingCorrect
-                          ? 'border-emerald-500 bg-emerald-950/20 ring-2 ring-emerald-500/30'
-                          : 'border-red-500 bg-red-950/20 ring-2 ring-red-500/30'
-                        : 'border-stone-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20'
+                          ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/20 ring-2 ring-emerald-500/30'
+                          : 'border-red-500 bg-rose-50 dark:bg-red-950/20 ring-2 ring-red-500/30'
+                        : 'border-stone-200 dark:border-stone-700 focus:border-[#E45147] focus:ring-2 focus:ring-purple-500/20'
                     }`}
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-stone-500 hidden sm:inline">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-stone-400 dark:text-stone-500 hidden sm:inline">
                     Enter ↵ চাপুন
                   </span>
                 </div>
               </div>
 
-              {/* Result Feedback Banner */}
+              {/* Result Feedback Banner with Sensei Micro-Coach */}
               {isTypingSubmitted && (
                 <div
-                  className={`p-4 rounded-2xl border text-sm space-y-1 animate-fadeIn ${
+                  className={`p-4 rounded-2xl border text-sm space-y-2 animate-fadeIn ${
                     isTypingCorrect
-                      ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
-                      : 'bg-red-950/30 border-red-500/40 text-red-200'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-200'
+                      : 'bg-rose-50 dark:bg-red-950/30 border-rose-200 dark:border-red-500/40 text-rose-900 dark:text-red-200'
                   }`}
                 >
-                  <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
-                    {isTypingCorrect ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>চমৎকার! সঠিক টাইপিং। (Perfect Match!)</span>
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="w-4 h-4 text-red-400" />
-                        <span>সঠিক রোমাজি হলো: {currentTyping.romaji_input}</span>
-                      </>
-                    )}
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={isTypingCorrect ? "/brand/nomi/nomi-encourage.png" : "/brand/nomi/nomi-guide.png"}
+                      alt="Nomi"
+                      className="w-8 h-8 rounded-full border border-[#E45147] shrink-0 shadow-xs object-cover bg-[#F6F0E6]"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
+                        {isTypingCorrect ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                            <span>চমৎকার! সঠিক টাইপিং। (Perfect Match!)</span>
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                            <span>সঠিক রোমাজি হলো: {currentTyping.romaji_input}</span>
+                          </>
+                        )}
+                      </div>
+                      <p className="text-xs text-stone-600 dark:text-stone-300 font-mono mt-0.5">
+                        প্রদর্শিত রূপ: {currentTyping.target_display} ({currentTyping.meaning_bn})
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-xs text-stone-300 font-mono">
-                    প্রদর্শিত রূপ: {currentTyping.target_display} ({currentTyping.meaning_bn})
-                  </p>
                 </div>
               )}
 
@@ -682,7 +699,7 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                   <button
                     disabled={!typingInput.trim()}
                     onClick={handleCheckTyping}
-                    className="px-6 py-3 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
+                    className="px-6 py-3 rounded-2xl bg-[#E45147] hover:bg-[#D43E34] disabled:opacity-40 text-white font-bold text-sm transition-all shadow-lg shadow-purple-600/30 cursor-pointer flex items-center gap-2"
                     aria-label="টাইপিং উত্তর যাচাই করুন"
                   >
                     <span>যাচাই করুন (Verify)</span>
@@ -712,72 +729,85 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
         {/* ========================================================= */}
         {activeStep === 'summary' && (
           <div className="space-y-6 animate-fadeIn">
-            <div className="p-8 sm:p-10 rounded-3xl bg-linear-to-b from-[#181828] via-[#12121c] to-[#0c0c14] border border-stone-800 shadow-2xl relative overflow-hidden text-center space-y-6">
+            <div className="p-8 sm:p-10 rounded-3xl bg-linear-to-b from-white via-purple-50/20 to-white dark:from-[#181828] dark:via-[#12121c] dark:to-[#0c0c14] border border-stone-200 dark:border-stone-800 shadow-xl dark:shadow-2xl relative overflow-hidden text-center space-y-6">
               <div className="pointer-events-none absolute -right-20 -top-20 w-64 h-64 bg-purple-600/15 rounded-full blur-3xl" />
               <div className="pointer-events-none absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl" />
 
-              {/* Badge Icon */}
-              <div className="relative inline-flex items-center justify-center">
-                <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-purple-600 via-indigo-500 to-purple-400 p-0.5 shadow-xl shadow-purple-600/20">
-                  <div className="w-full h-full bg-[#0e0e18] rounded-[22px] flex items-center justify-center">
+              {/* Sensei Completion Hero */}
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <div className="relative">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E45147] shadow-xl shadow-purple-600/20 bg-[#F6F0E6]">
+                    <img
+                      src={scorePercent >= 80 ? "/brand/nomi/nomi-celebrate.png" : "/brand/nomi/nomi-encourage.png"}
+                      alt="Nomi"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-linear-to-tr from-purple-600 via-indigo-500 to-purple-400 p-0.5 shadow-md flex items-center justify-center text-white">
                     {scorePercent >= 80 ? (
-                      <Crown className="w-10 h-10 text-amber-400" />
+                      <Crown className="w-4 h-4 text-amber-300" />
                     ) : (
-                      <Award className="w-10 h-10 text-rose-400" />
+                      <Award className="w-4 h-4 text-purple-200" />
                     )}
                   </div>
+                </div>
+
+                <div className="max-w-md px-4 py-2.5 rounded-2xl bg-purple-50 dark:bg-[#1e1b38] border border-purple-200 dark:border-purple-800/60 text-xs sm:text-sm text-purple-900 dark:text-purple-200 font-medium">
+                  {scorePercent >= 80
+                    ? '「素晴らしい！ খুব ভালো অগ্রগতি হয়েছে! নিয়মিত অনুশীলনেই আপনার জাপানি ভাষা দ্রুত সাবলীল হবে。」'
+                    : '「よく頑張りました！ চেষ্টা দারুণ ছিল! ভুলগুলো একবার চোখ বুলিয়ে নিয়ে পরের মিশনে এগিয়ে চলুন。」'}
                 </div>
               </div>
 
               {/* Heading & Congratulations */}
               <div className="space-y-2">
-                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono">
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold font-mono">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>অনুশীলন সম্পন্ন • DRILL COMPLETED</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
                   {meta.lesson_id}: {scorePercent >= 80 ? 'অসাধারণ দক্ষতা!' : 'অনুশীলন সম্পন্ন হয়েছে!'}
                 </h2>
-                <p className="text-stone-400 text-sm max-w-lg mx-auto">
+                <p className="text-stone-600 dark:text-stone-400 text-sm max-w-lg mx-auto">
                   {meta.module_name_bn} মডিউলের এই পাঠে আপনি কুইজ এবং টাইপিং ড্রিল সম্পন্ন করেছেন।
                 </p>
               </div>
 
               {/* Metrics Score Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto pt-2">
-                <div className="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 text-center">
-                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider block">
+                <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/80 border border-stone-200 dark:border-stone-800 text-center">
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-bold uppercase tracking-wider block">
                     সার্বিক স্কোর
                   </span>
-                  <span className="text-2xl font-black text-amber-400 font-mono mt-1 block">
+                  <span className="text-2xl font-black text-amber-500 dark:text-amber-400 font-mono mt-1 block">
                     {scorePercent}%
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 text-center">
-                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider block">
+                <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/80 border border-stone-200 dark:border-stone-800 text-center">
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-bold uppercase tracking-wider block">
                     MCQ কুইজ
                   </span>
-                  <span className="text-2xl font-black text-emerald-400 font-mono mt-1 block">
+                  <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1 block">
                     {quizScore}/{quizzes.length}
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 text-center">
-                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider block">
+                <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/80 border border-stone-200 dark:border-stone-800 text-center">
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-bold uppercase tracking-wider block">
                     টাইপিং ড্রিল
                   </span>
-                  <span className="text-2xl font-black text-rose-400 font-mono mt-1 block">
+                  <span className="text-2xl font-black text-[#E45147] dark:text-purple-400 font-mono mt-1 block">
                     {typingScore}/{typingItems.length}
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 text-center">
-                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider block">
+                <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/80 border border-stone-200 dark:border-stone-800 text-center">
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-bold uppercase tracking-wider block">
                     অর্জিত XP
                   </span>
-                  <span className="text-2xl font-black text-amber-300 font-mono mt-1 block flex items-center justify-center gap-1">
-                    <Zap className="w-4 h-4 fill-amber-300" />
+                  <span className="text-2xl font-black text-amber-500 dark:text-amber-300 font-mono mt-1 block flex items-center justify-center gap-1">
+                    <Zap className="w-4 h-4 fill-amber-400" />
                     +50
                   </span>
                 </div>
@@ -785,8 +815,8 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
 
               {/* Review of Quiz Answers Accordion */}
               {userQuizAnswers.length > 0 && (
-                <div className="text-left space-y-3 pt-4 border-t border-stone-800/80 max-w-2xl mx-auto">
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-stone-400 font-bold">
+                <div className="text-left space-y-3 pt-4 border-t border-stone-200 dark:border-stone-800/80 max-w-2xl mx-auto">
+                  <h4 className="text-xs font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 font-bold">
                     প্রশ্নের সঠিক পর্যালোচনা (Answer Breakdown)
                   </h4>
                   <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
@@ -795,25 +825,25 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
                         key={idx}
                         className={`p-3.5 rounded-2xl border text-xs space-y-1.5 ${
                           item.isCorrect
-                            ? 'bg-emerald-950/20 border-emerald-500/30'
-                            : 'bg-red-950/20 border-red-500/30'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-500/30'
+                            : 'bg-rose-50 dark:bg-red-950/20 border-rose-200 dark:border-red-500/30'
                         }`}
                       >
-                        <div className="flex items-center justify-between font-japanese text-sm font-bold text-white">
+                        <div className="flex items-center justify-between font-japanese text-sm font-bold text-stone-900 dark:text-white">
                           <span>
                             {idx + 1}. <FuriganaText text={item.quiz.question_ja} />
                           </span>
                           {item.isCorrect ? (
-                            <span className="text-emerald-400 font-sans text-xs font-bold flex items-center gap-1 shrink-0">
+                            <span className="text-emerald-600 dark:text-emerald-400 font-sans text-xs font-bold flex items-center gap-1 shrink-0">
                               <CheckCircle2 className="w-3.5 h-3.5" /> সঠিক
                             </span>
                           ) : (
-                            <span className="text-red-400 font-sans text-xs font-bold flex items-center gap-1 shrink-0">
+                            <span className="text-rose-600 dark:text-red-400 font-sans text-xs font-bold flex items-center gap-1 shrink-0">
                               <XCircle className="w-3.5 h-3.5" /> ভুল
                             </span>
                           )}
                         </div>
-                        <p className="text-stone-400 text-[11px]">{item.quiz.explanation_bn}</p>
+                        <p className="text-stone-600 dark:text-stone-400 text-[11px]">{item.quiz.explanation_bn}</p>
                       </div>
                     ))}
                   </div>
@@ -824,16 +854,16 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button
                   onClick={handleRetry}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-white font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-2 border border-stone-700"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 hover:text-stone-900 dark:hover:text-white font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-2 border border-stone-200 dark:border-stone-700"
                   aria-label="পুনরায় অনুশীলন শুরু করুন"
                 >
-                  <RotateCcw className="w-4 h-4 text-stone-400" />
+                  <RotateCcw className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                   <span>পুনরায় অনুশীলন করুন (Retry)</span>
                 </button>
 
                 <button
                   onClick={() => onNavigate('courses')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#684CFE] hover:bg-[#5A3EE0] text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-purple-600/30 cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-purple-600/30 cursor-pointer flex items-center justify-center gap-2"
                   aria-label="পাঠ সম্পন্ন করুন ও পাঠ্যক্রমে ফিরুন"
                 >
                   <span>পাঠ সমাপ্ত করুন ও পাঠ্যক্রমে ফিরুন (Finish & Return)</span>
@@ -843,6 +873,19 @@ export const LessonPracticeView: React.FC<LessonPracticeViewProps> = ({
             </div>
           </div>
         )}
+
+        {/* Docked / Collapsible Sensei Companion in Practice View */}
+        <div className="pt-6 max-w-3xl mx-auto w-full">
+          <ContextualSenseiCompanion
+            currentConcept={{
+              topic: lesson?.lesson_metadata?.title_ja || 'অনুশীলন ড্রিল',
+              symbol: currentQuiz?.question_ja ? stripFurigana(currentQuiz.question_ja) : undefined,
+              meaningBn: currentQuiz?.explanation_bn,
+              type: 'grammar'
+            }}
+            compact={true}
+          />
+        </div>
       </main>
     </div>
   );

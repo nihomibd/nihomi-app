@@ -1,4 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
+import { getImmutableAiSafetyPrompt } from './services/aiScopeGuard.js';
 
 let aiClient: GoogleGenAI | null = null;
 let lastUsedApiKey = '';
@@ -316,6 +317,9 @@ CORE TEACHING PERSONA:
   } else if (req.mode === 'voice_chat') {
     systemInstruction += ` The user is speaking Japanese voice message. Analyze their pronunciation flow, provide an immediate warm, voice-tailored reply with furigana and romaji.`;
   }
+
+  // Enforce server-side immutable Japanese-learning boundary & prompt injection defense
+  systemInstruction += getImmutableAiSafetyPrompt(level);
 
   if (client) {
     const contents: any[] = [];

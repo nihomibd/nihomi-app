@@ -1,0 +1,154 @@
+[
+  {
+    "id": "nomi-welcome",
+    "name": "01 Welcome",
+    "state": "welcome",
+    "description": "Friendly and warm first impression with waving hand",
+    "file": "nomi-welcome.png",
+    "destPath": "/brand/nomi/nomi-welcome.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 845,
+      "y": 145,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-listen",
+    "name": "02 Listen",
+    "state": "listening",
+    "description": "Attentive and present to your needs, hands on chin",
+    "file": "nomi-listen.png",
+    "destPath": "/brand/nomi/nomi-listen.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 1105,
+      "y": 145,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-encourage",
+    "name": "03 Encourage",
+    "state": "encouraging",
+    "description": "Always supportive, even after mistakes, warm smile",
+    "file": "nomi-encourage.png",
+    "destPath": "/brand/nomi/nomi-encourage.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 1360,
+      "y": 145,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-think",
+    "name": "04 Think",
+    "state": "thinking",
+    "description": "Curious and thoughtful to find the best way",
+    "file": "nomi-think.png",
+    "destPath": "/brand/nomi/nomi-think.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 845,
+      "y": 435,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-guide",
+    "name": "05 Guide",
+    "state": "guiding",
+    "description": "Clear next step with simple guidance and subtle wink",
+    "file": "nomi-guide.png",
+    "destPath": "/brand/nomi/nomi-guide.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 1105,
+      "y": 435,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-celebrate",
+    "name": "06 Celebrate",
+    "state": "celebrating",
+    "description": "Genuine joy for your real verified learning progress",
+    "file": "nomi-celebrate.png",
+    "destPath": "/brand/nomi/nomi-celebrate.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 1360,
+      "y": 435,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-hero-main",
+    "name": "Main Hero Character",
+    "state": "hero",
+    "description": "Large waving canonical Nomi character for landing hero presence",
+    "file": "nomi-hero-main.png",
+    "destPath": "/brand/nomi/nomi-hero-main.png",
+    "dimensions": {
+      "width": 480,
+      "height": 560
+    },
+    "sourceCoords": {
+      "x": 335,
+      "y": 72,
+      "width": 480,
+      "height": 560
+    },
+    "visualQa": "PASSED (Zero label bleed, zero text clipping)"
+  },
+  {
+    "id": "nomi-avatar",
+    "name": "Canonical Nomi Avatar",
+    "state": "idle",
+    "description": "Default canonical Nomi avatar for floating companion dock and headers",
+    "file": "nomi-avatar.png",
+    "destPath": "/brand/nomi/nomi-avatar.png",
+    "dimensions": {
+      "width": 205,
+      "height": 195
+    },
+    "sourceCoords": {
+      "x": 845,
+      "y": 145,
+      "width": 205,
+      "height": 195
+    },
+    "visualQa": "PASSED"
+  }
+]

@@ -13,3 +13,6 @@ server/data/*.tmp*
 server/data/nihomi_db.json
 Book PDF/
 scratch/
+_founder_assets/
+_founder_drop/
+content-sources/processed/

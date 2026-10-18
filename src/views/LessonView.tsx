@@ -66,6 +66,7 @@ import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
 import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
 import { ZenLearningCanvas } from '../components/learning/ZenLearningCanvas.js';
+import { VowelWordFormationCanvas } from '../components/learning/VowelWordFormationCanvas.js';
 import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 import { PrerequisiteFoundationGate } from '../components/learning/PrerequisiteFoundationGate';
 import { loadLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
@@ -155,6 +156,21 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
   const isLockedForNonPro = monetizationStatus.isRestricted;
   const [isProModalOpen, setIsProModalOpen] = useState(false);
   const [isPremiumPreviewOpen, setIsPremiumPreviewOpen] = useState(false);
+
+  useEffect(() => {
+    if (propLessonId) {
+      const str = String(propLessonId).trim();
+      const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
+      if (lMatch) {
+        setSelectedLessonNum(parseInt(lMatch[1], 10));
+      } else {
+        const allMatches = str.match(/\d+/g);
+        if (allMatches && allMatches.length > 0) {
+          setSelectedLessonNum(parseInt(allMatches[allMatches.length - 1], 10));
+        }
+      }
+    }
+  }, [propLessonId]);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -455,21 +471,54 @@ if (lessonId) {
 
 
   const targetChar = propChar || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('char') || undefined : undefined);
+  const kState = loadLearnerKnowledgeState();
 
-  if (selectedLessonNum === 1) {
+  const isLesson02Words =
+    propLessonId === 'n5-l2-words' ||
+    propLessonId === 'lesson-02-words' ||
+    (selectedLessonNum === 2 && !kState.masteredSkills.includes('hiragana_core_mastered'));
+
+  if (selectedLessonNum === 1 && propLessonId !== 'n5-l2-words' && propLessonId !== 'lesson-02-words') {
     return (
-      <div className="min-h-screen bg-[#0B0F17] text-white py-6 px-3 sm:px-6">
+      <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-stone-900 dark:text-white py-6 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <ZenLearningCanvas
             initialChar={targetChar}
             onBack={() => onNavigate('courses')}
-            onNextLesson={() => {
-              const kState = loadLearnerKnowledgeState();
-              const nextMission = getNextBestMission(kState);
+            onNextLesson={(target) => {
+              if (target?.lessonId) {
+                onNavigate('lesson', { lessonId: target.lessonId });
+                return;
+              }
+              const currentKState = loadLearnerKnowledgeState();
+              const nextMission = getNextBestMission(currentKState);
               if (nextMission.viewRoute === 'lesson') {
-                onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l1' });
+                onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l2-words' });
               } else if (nextMission.viewRoute === 'journey') {
-                onNavigate('journey', nextMission.viewParams);
+                onNavigate('journey', nextMission.viewParams || { mission: 'first' });
+              } else {
+                onNavigate(nextMission.viewRoute, nextMission.viewParams);
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (isLesson02Words) {
+    return (
+      <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-stone-900 dark:text-white py-6 px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <VowelWordFormationCanvas
+            onBack={() => onNavigate('lesson', { lessonId: 'n5-l1' })}
+            onNextLesson={() => {
+              const currentKState = loadLearnerKnowledgeState();
+              const nextMission = getNextBestMission(currentKState);
+              if (nextMission.viewRoute === 'lesson') {
+                onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-kana-ka' });
+              } else if (nextMission.viewRoute === 'journey') {
+                onNavigate('journey', nextMission.viewParams || { mission: 'first' });
               } else {
                 onNavigate(nextMission.viewRoute, nextMission.viewParams);
               }
@@ -481,12 +530,11 @@ if (lessonId) {
   }
 
   // AUTHORITATIVE CURRICULUM GATE: Check if learner meets prerequisites for this lesson
-  const kState = loadLearnerKnowledgeState();
   const gateStatus = getLessonGateStatus(lessonId, kState);
 
   if (gateStatus.isLocked) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] text-white py-6 px-3 sm:px-6">
+      <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-stone-900 dark:text-white py-6 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <PrerequisiteFoundationGate
             gateStatus={gateStatus}
@@ -537,24 +585,24 @@ if (lessonId) {
   const { lesson, courseTitle, moduleTitle, quizSummary, isCompleted } = lessonData;
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-stone-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-stone-900 dark:text-stone-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-6">
         
         {/* Sleek Minimalist Top Bar */}
-        <div className="bg-[#131926] border border-slate-800 text-white p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-4 shadow-lg">
+        <div className="bg-white dark:bg-[#1B1E30] border border-stone-200 dark:border-[#2A2E45] text-stone-900 dark:text-white p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-4 shadow-sm dark:shadow-lg">
           <div className="flex items-center gap-3">
             <button
               onClick={() => onNavigate('courses')}
-              className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 cursor-pointer transition"
+              className="text-xs font-bold text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white flex items-center gap-1.5 cursor-pointer transition"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Courses</span>
             </button>
-            <span className="text-slate-700">|</span>
+            <span className="text-stone-300 dark:text-slate-700">|</span>
             <select
               value={selectedLessonNum}
               onChange={(e) => setSelectedLessonNum(parseInt(e.target.value, 10))}
-              className="bg-slate-900 text-white border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer focus:outline-none focus:border-red-500"
+              className="bg-stone-50 dark:bg-[#141726] text-stone-900 dark:text-white border border-stone-200 dark:border-[#2A2E45] px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer focus:outline-none focus:border-[#E45147]"
             >
               {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
                 <option key={num} value={num}>
@@ -568,9 +616,9 @@ if (lessonId) {
             {quizSummary && (
               <button
                 onClick={() => onNavigate('quiz-runner', { lessonId: lesson.id })}
-                className="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
-                <Award className="w-4 h-4 text-amber-400" />
+                <Award className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                 <span className="hidden sm:inline">Take Quiz</span>
               </button>
             )}
@@ -580,8 +628,8 @@ if (lessonId) {
                 disabled={isCompleting || isCompleted}
                 className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer ${
                   isCompleted
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                    : 'bg-red-600 hover:bg-red-500 text-white shadow-md shadow-red-600/30'
+                    ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30'
+                    : 'bg-[#E45147] hover:bg-[#D43E34] text-white shadow-md shadow-purple-600/30'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" />
@@ -592,18 +640,18 @@ if (lessonId) {
         </div>
 
         {/* Lesson Header Banner */}
-        <div className="bg-[#131926] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+        <div className="bg-white dark:bg-[#1B1E30] border border-stone-200 dark:border-[#2A2E45] rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-xl space-y-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-red-950/60 text-red-400 border border-red-800/40">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-[#E45147] dark:text-purple-300 border border-purple-200 dark:border-purple-800/40">
               JLPT N5
             </span>
-            <span className="text-xs text-slate-400 font-semibold">
+            <span className="text-xs text-stone-500 dark:text-slate-400 font-semibold">
               Lesson {selectedLessonNum} &bull; Minna no Nihongo
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-white">{lesson.title}</h1>
-          <p className="text-sm font-serif text-red-400">{lesson.titleJa}</p>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">{lesson.summary}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-stone-900 dark:text-white">{lesson.title}</h1>
+          <p className="text-sm font-serif text-[#E45147] dark:text-purple-400">{lesson.titleJa}</p>
+          <p className="text-xs sm:text-sm text-stone-600 dark:text-slate-300 leading-relaxed max-w-3xl">{lesson.summary}</p>
         </div>
 
         {/* If lesson >= 6 and student is not Pro, show Pro lock screen */}
@@ -615,7 +663,7 @@ if (lessonId) {
             <div className="space-y-2 max-w-lg mx-auto">
               <h3 className="text-xl sm:text-2xl font-bold font-serif">Lesson {selectedLessonNum} is a PRO Feature</h3>
               <p className="text-xs sm:text-sm text-stone-400 leading-relaxed">
-                Lessons 1 to 5 are completely free for all students. Upgrade to NIHOMI PRO to unlock full JLPT N5 Minna no Nihongo Lessons 6 through 25, interactive audio drills, unlimited AI Sensei feedback, and offline mode.
+                Lessons 1 to 5 are completely free for all students. Upgrade to NIHOMI PRO to unlock full JLPT N5 Minna no Nihongo Lessons 6 through 25, interactive audio drills, unlimited Nomi Sensei feedback, and offline mode.
               </p>
             </div>
             <button
@@ -630,11 +678,11 @@ if (lessonId) {
         ) : (
           <>
             {/* Tab Navigation (All 7 Study Tabs) */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 bg-stone-200/60 p-1.5 rounded-2xl border border-stone-200 text-xs font-bold">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 bg-stone-100 dark:bg-stone-900/80 p-1.5 rounded-2xl border border-stone-200 dark:border-stone-800 text-xs font-bold">
               <button
                 onClick={() => setActiveTab('grammar')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'grammar' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'grammar' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" />
@@ -644,7 +692,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('vocab')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'vocab' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'vocab' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -654,7 +702,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('kanji')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'kanji' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'kanji' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
@@ -664,7 +712,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('canvas-trace')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'canvas-trace' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'canvas-trace' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <PenTool className="w-3.5 h-3.5" />
@@ -674,7 +722,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('pronunciation')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'pronunciation' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'pronunciation' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <Mic className="w-3.5 h-3.5" />
@@ -684,7 +732,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('dialogue')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'dialogue' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'dialogue' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
@@ -694,7 +742,7 @@ if (lessonId) {
               <button
                 onClick={() => setActiveTab('practice')}
                 className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  activeTab === 'practice' ? 'bg-white text-red-700 shadow-xs' : 'text-stone-600 hover:text-stone-900'
+                  activeTab === 'practice' ? 'bg-[#E45147] text-white shadow-md' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 <HelpCircle className="w-3.5 h-3.5" />

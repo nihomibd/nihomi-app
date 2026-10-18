@@ -65,7 +65,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div id="contact-support-page" className="min-h-screen bg-[#0a0a12] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
+    <div id="contact-support-page" className="min-h-screen bg-[#141726] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
       {/* Top sticky navigation bar */}
       <header className="sticky top-0 z-40 bg-[#0e0e1a]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -155,7 +155,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – সন্ধ্যা ৭:০০ (BST)
                     </p>
                     <p className="text-[11px] text-slate-500">
-                      (শুক্রবার সাপ্তাহিক বন্ধ — তবে অনলাইন AI সেনসেই ২৪/৭ সচল)
+                      (শুক্রবার সাপ্তাহিক বন্ধ — তবে অনলাইন নমি সেন্সেই ২৪/৭ সচল)
                     </p>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         <option value="jlpt_n5_admission">JLPT N5 কোর্স ও অ্যাডমিশন</option>
                         <option value="tokyo_visa_prep">টোকিও স্টুডেন্ট ভিসা ও bdTrip24 স্টাডি ডেস্ক</option>
                         <option value="bKash_payment">bKash / কার্ড পেমেন্ট সমস্যা</option>
-                        <option value="ai_sensei_feedback">AI সেনসেই ও অ্যাপ ফিচার সংক্রান্ত</option>
+                        <option value="ai_sensei_feedback">নমি সেন্সেই ও অ্যাপ ফিচার সংক্রান্ত</option>
                         <option value="other">অন্যান্য সাধারণ প্রশ্ন</option>
                       </select>
                     </div>

@@ -30,7 +30,8 @@ import {
   Trash2,
   CreditCard,
   Check,
-  Play
+  Play,
+  Lock
 } from 'lucide-react';
 import { BaitoScenarioItem } from '../types';
 import { ConbiniPosCashierSimulator } from '../components/simulation/ConbiniPosCashierSimulator';
@@ -38,6 +39,8 @@ import { InterviewVoiceTwinLab } from '../components/simulation/InterviewVoiceTw
 import { JisRirekishoStudio } from '../components/simulation/JisRirekishoStudio';
 import { ShokumuKeirekishoStudio } from '../components/simulation/ShokumuKeirekishoStudio';
 import { VoiceTwinPitchLab } from '../components/simulation/VoiceTwinPitchLab';
+import { TokyoKonbiniFirstMissionModal } from '../components/missions/TokyoKonbiniFirstMissionModal';
+import { useSubscription } from '../hooks/useSubscription';
 import { speakJapanese } from '../lib/tts';
 import { soundEffects } from '../lib/soundEffects';
 
@@ -191,6 +194,8 @@ interface BaitoOsViewProps {
 }
 
 export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialStage, initialScenarioId, initialTab }) => {
+  const { isPro, tier } = useSubscription();
+
   // 3 Guided Journey Stages: Stage 1 Visa, Stage 2 Workplace, Stage 3 Living Survival
   const [currentStage, setCurrentStage] = useState<'stage1_visa' | 'stage2_workplace' | 'stage3_living'>(() => {
     if (initialStage) return initialStage;
@@ -200,13 +205,26 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
   });
   
   // Stage 1 sub-tools
-  const [stage1Tool, setStage1Tool] = useState<'interview' | 'rirekisho' | 'keirekisho'>('interview');
+  const [stage1Tool, setStage1Tool] = useState<'interview' | 'rirekisho' | 'keirekisho'>(() => {
+    if (initialTab === 'rirekisho' || initialTab === 'keirekisho') return initialTab;
+    return 'interview';
+  });
+
+  useEffect(() => {
+    if (initialTab === 'rirekisho' || initialTab === 'keirekisho') {
+      setStage1Tool(initialTab);
+      setCurrentStage('stage1_visa');
+    }
+  }, [initialTab]);
   
   // Stage 2 sub-tools
   const [stage2Tool, setStage2Tool] = useState<'pos_simulator' | 'pitch_lab'>('pos_simulator');
   
   // Stage 3 active module
   const [stage3ModuleId, setStage3ModuleId] = useState<string>('city_hall');
+
+  // Konbini Cashier Mission Modal
+  const [isKonbiniMissionModalOpen, setIsKonbiniMissionModalOpen] = useState(false);
 
   // Ambient sound state
   const [ambientMode, setAmbientMode] = useState<'off' | 'conbini' | 'cafe' | 'factory'>('off');
@@ -233,49 +251,52 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
   const activeStage3Module = STAGE3_LIVING_MODULES.find((m) => m.id === stage3ModuleId) || STAGE3_LIVING_MODULES[0];
 
   return (
-    <div id="baito-os-view" className="min-h-screen bg-[#080711] text-stone-100 pt-28 md:pt-36 pb-24 px-4 sm:px-6 lg:px-8 selection:bg-red-600 selection:text-white">
+    <div id="baito-os-view" className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-slate-900 dark:text-stone-100 pt-28 md:pt-36 pb-24 px-4 sm:px-6 lg:px-8 selection:bg-[#E45147] selection:text-white">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* ========================================================================= */}
         {/* HERO BANNER & JOURNEY ROADMAP INTRO                                       */}
         {/* ========================================================================= */}
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#15122b] via-[#120f26] to-[#0a0817] border border-amber-500/30 p-6 sm:p-8 shadow-2xl backdrop-blur-md">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-gradient-to-br dark:from-[#1B1E30] dark:via-[#181B2B] dark:to-[#141726] border border-purple-200 dark:border-purple-500/30 p-6 sm:p-8 shadow-sm dark:shadow-2xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 font-mono text-xs font-bold border border-amber-500/30">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 font-mono text-xs font-bold border border-purple-500/30">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>NIHOMI WORKOS™ • Experience Japan Before You Arrive</span>
               </div>
-              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                 জাপান কর্মজীবন ও বসবাস প্রস্তুতি <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-rose-400">
-                  ৩-ধাপের গাইডেড লার্নিং জার্নি (WorkOS™)
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-500 dark:from-purple-400 dark:via-purple-200 dark:to-indigo-300">
+                  ৩-ধাপের গাইডেড লার্নিং জার্নি (Nihomi WorkOS™)
                 </span>
               </h1>
-              <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-medium">
-                ভিসা ইন্টারভিউ থেকে শুরু করে টোকিও কনবিনি ক্যাশিয়ার এবং সিটি হল রেজিস্ট্রেশন — জাপানে সফলভাবে সেটেল হওয়ার প্রতিটি বাস্তব ধাপ এখানে হাতে-কলমে অনুশীলন করুন।
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-stone-300 leading-relaxed font-medium">
+                ইন্টারভিউ থেকে শুরু করে টোকিও কনবিনি ক্যাশিয়ার এবং সিটি হল রেজিস্ট্রেশন — জাপানে সফলভাবে সেটেল হওয়ার প্রতিটি বাস্তব ধাপ এখানে হাতে-কলমে অনুশীলন করুন।
+              </p>
+              <p className="text-[11px] text-slate-500 dark:text-stone-400 italic">
+                * নিহোমি কোনো ভিসা বা ইমিগ্রেশন এজেন্সি নয়; কোনো চাকরির নিশ্চয়তা দেয় না। এটি একটি শিক্ষামূলক বাস্তব ভাষা সিমুলেশন ল্যাব।
               </p>
             </div>
 
             {/* 3-Stage Progress Gauge Overview */}
-            <div className="grid grid-cols-3 gap-2.5 w-full sm:w-auto shrink-0 bg-[#0d0a1c] border border-white/10 p-3.5 rounded-2xl shadow-inner text-center font-mono">
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-amber-500/20">
-                <div className="text-[10px] text-stone-400">ধাপ ১: ভিসা</div>
-                <div className="text-base sm:text-lg font-black text-amber-300">{stats.stage1Complete}%</div>
-                <div className="text-[9px] text-emerald-400">Ready</div>
+            <div className="grid grid-cols-3 gap-2.5 w-full sm:w-auto shrink-0 bg-purple-50/50 dark:bg-[#141726] border border-purple-100 dark:border-white/10 p-3.5 rounded-2xl shadow-inner text-center font-mono">
+              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-purple-500/20">
+                <div className="text-[10px] text-slate-500 dark:text-stone-400">ধাপ ১: ভিসা</div>
+                <div className="text-base sm:text-lg font-black text-purple-700 dark:text-purple-300">{stats.stage1Complete}%</div>
+                <div className="text-[9px] text-emerald-500 dark:text-emerald-400">Ready</div>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-rose-500/20">
-                <div className="text-[10px] text-stone-400">ধাপ ২: কনবিনি</div>
-                <div className="text-base sm:text-lg font-black text-rose-300">{stats.stage2Complete}%</div>
-                <div className="text-[9px] text-emerald-400">Active</div>
+              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-purple-500/20">
+                <div className="text-[10px] text-slate-500 dark:text-stone-400">ধাপ ২: কনবিনি</div>
+                <div className="text-base sm:text-lg font-black text-purple-700 dark:text-purple-300">{stats.stage2Complete}%</div>
+                <div className="text-[9px] text-emerald-500 dark:text-emerald-400">Active</div>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-emerald-500/20">
-                <div className="text-[10px] text-stone-400">ধাপ ৩: লিভিং</div>
-                <div className="text-base sm:text-lg font-black text-emerald-300">{stats.stage3Complete}%</div>
-                <div className="text-[9px] text-emerald-400">Ready</div>
+              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-emerald-500/20">
+                <div className="text-[10px] text-slate-500 dark:text-stone-400">ধাপ ৩: লিভিং</div>
+                <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-300">{stats.stage3Complete}%</div>
+                <div className="text-[9px] text-emerald-500 dark:text-emerald-400">Ready</div>
               </div>
             </div>
           </div>
@@ -283,7 +304,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
           {/* ======================================================================= */}
           {/* 3 CLEAR JOURNEY STAGE SELECTOR TABS                                     */}
           {/* ======================================================================= */}
-          <div className="mt-8 pt-6 border-t border-white/10">
+          <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/10">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               
               {/* STAGE 1: Visa & Embassy Interview */}
@@ -295,26 +316,26 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden ${
                   currentStage === 'stage1_visa'
-                    ? 'bg-gradient-to-br from-amber-500/20 via-[#1f1938] to-[#120f26] border-amber-500 shadow-xl ring-1 ring-amber-500/50'
-                    : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    ? 'bg-purple-50/80 dark:bg-gradient-to-br dark:from-purple-500/20 dark:via-[#1f1938] dark:to-[#120f26] border-[#E45147] shadow-md ring-1 ring-purple-500/50'
+                    : 'bg-white dark:bg-white/[0.03] hover:bg-slate-50 dark:hover:bg-white/[0.06] border-slate-200 dark:border-white/10'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  currentStage === 'stage1_visa' ? 'bg-amber-500 text-stone-950 font-black' : 'bg-white/10 text-amber-300'
+                  currentStage === 'stage1_visa' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-purple-700 dark:text-purple-300'
                 }`}>
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">
                       STAGE 1
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-mono font-bold">{stats.stage1Complete}%</span>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{stats.stage1Complete}%</span>
                   </div>
-                  <h3 className="text-xs sm:text-sm font-black text-white mt-1">
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-1">
                     ভিসা ও এম্বাসি ইন্টারভিউ
                   </h3>
-                  <p className="text-[11px] text-stone-400 truncate mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-stone-400 truncate mt-0.5">
                     ビザ・面接 • অধ্যক্ষ ও ভিসা ইন্টারভিউ ডিফেন্স
                   </p>
                 </div>
@@ -329,26 +350,26 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden ${
                   currentStage === 'stage2_workplace'
-                    ? 'bg-gradient-to-br from-rose-500/20 via-[#26172e] to-[#120f26] border-rose-500 shadow-xl ring-1 ring-rose-500/50'
-                    : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    ? 'bg-purple-50/80 dark:bg-gradient-to-br dark:from-purple-500/20 dark:via-[#26172e] dark:to-[#120f26] border-[#E45147] shadow-md ring-1 ring-purple-500/50'
+                    : 'bg-white dark:bg-white/[0.03] hover:bg-slate-50 dark:hover:bg-white/[0.06] border-slate-200 dark:border-white/10'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  currentStage === 'stage2_workplace' ? 'bg-rose-500 text-white font-black' : 'bg-white/10 text-rose-300'
+                  currentStage === 'stage2_workplace' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-purple-700 dark:text-purple-300'
                 }`}>
                   <Store className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">
                       STAGE 2
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-mono font-bold">{stats.stage2Complete}%</span>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{stats.stage2Complete}%</span>
                   </div>
-                  <h3 className="text-xs sm:text-sm font-black text-white mt-1">
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-1">
                     কর্মক্ষেত্র ও কনবিনি ট্রেনিং
                   </h3>
-                  <p className="text-[11px] text-stone-400 truncate mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-stone-400 truncate mt-0.5">
                     職場・実務 • 7-Eleven ক্যাশিয়ার ও কেইগো
                   </p>
                 </div>
@@ -363,26 +384,26 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden ${
                   currentStage === 'stage3_living'
-                    ? 'bg-gradient-to-br from-emerald-500/20 via-[#132422] to-[#0e171b] border-emerald-500 shadow-xl ring-1 ring-emerald-500/50'
-                    : 'bg-white/[0.03] hover:bg-white/[0.06] border-white/10 opacity-75'
+                    ? 'bg-emerald-50/80 dark:bg-gradient-to-br dark:from-emerald-500/20 dark:via-[#132422] dark:to-[#0e171b] border-emerald-500 shadow-md ring-1 ring-emerald-500/40'
+                    : 'bg-white dark:bg-white/[0.03] hover:bg-slate-50 dark:hover:bg-white/[0.06] border-slate-200 dark:border-white/10'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  currentStage === 'stage3_living' ? 'bg-emerald-500 text-stone-950 font-black' : 'bg-white/10 text-emerald-300'
+                  currentStage === 'stage3_living' ? 'bg-emerald-500 text-stone-950 font-black' : 'bg-slate-100 dark:bg-white/10 text-emerald-600 dark:text-emerald-300'
                 }`}>
                   <Landmark className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
                       STAGE 3
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-mono font-bold">{stats.stage3Complete}%</span>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{stats.stage3Complete}%</span>
                   </div>
-                  <h3 className="text-xs sm:text-sm font-black text-white mt-1">
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-1">
                     জাপান লিভিং সারভাইভাল
                   </h3>
-                  <p className="text-[11px] text-stone-400 truncate mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-stone-400 truncate mt-0.5">
                     生活・役所 • সিটি হল, ব্যাংক ও আবর্জনা নিয়ম
                   </p>
                 </div>
@@ -397,15 +418,15 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
         {/* ========================================================================= */}
         {currentStage === 'stage1_visa' && (
           <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-[#110e24] p-4 rounded-2xl border border-white/10">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#110e24] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-amber-300 font-mono">STAGE 1 টুলস:</span>
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 font-mono">STAGE 1 টুলস:</span>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setStage1Tool('interview')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      stage1Tool === 'interview' ? 'bg-amber-500 text-stone-950' : 'bg-white/[0.06] text-stone-300 hover:text-white'
+                      stage1Tool === 'interview' ? 'bg-[#E45147] text-white shadow-sm' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     🎙️ ইন্টারভিউ ডিফেন্স ল্যাব
@@ -414,7 +435,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                     type="button"
                     onClick={() => setStage1Tool('rirekisho')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      stage1Tool === 'rirekisho' ? 'bg-amber-500 text-stone-950' : 'bg-white/[0.06] text-stone-300 hover:text-white'
+                      stage1Tool === 'rirekisho' ? 'bg-[#E45147] text-white shadow-sm' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     📝 JIS日本標準 履歴書
@@ -423,7 +444,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                     type="button"
                     onClick={() => setStage1Tool('keirekisho')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      stage1Tool === 'keirekisho' ? 'bg-amber-500 text-stone-950' : 'bg-white/[0.06] text-stone-300 hover:text-white'
+                      stage1Tool === 'keirekisho' ? 'bg-[#E45147] text-white shadow-sm' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     💼 職務経歴書 (Shokumu)
@@ -431,19 +452,89 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 </div>
               </div>
 
-              <span className="text-[11px] text-stone-400 font-mono">
+              <span className="text-[11px] text-slate-500 dark:text-stone-400 font-mono">
                 মডেল: Yamada Principal (Tokyo International Academy)
               </span>
             </div>
 
             {stage1Tool === 'interview' && (
-              <InterviewVoiceTwinLab scenario={DEFAULT_BAITO_SCENARIOS[0]} />
+              isPro ? (
+                <InterviewVoiceTwinLab scenario={DEFAULT_BAITO_SCENARIOS[0]} />
+              ) : (
+                <div id="interview-pro-lock" className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#1a1426] via-[#141726] to-[#0c0d18] p-8 text-center space-y-5 shadow-2xl">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Lock className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-2 max-w-lg mx-auto">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono">
+                      <span>NIHOMI PRO & JAPAN READY FEATURE</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white">
+                      টোকিও প্রিন্সিপাল ভিসা ও ল্যাঙ্গুয়েজ স্কুল ডিফেন্স
+                    </h3>
+                    <p className="text-sm text-stone-300">
+                      ভয়েস টুইন ইন্টারভিউ ল্যাব নিহোমি প্রো ও জাপান রেডি প্ল্যানে অন্তর্ভুক্ত। আপনি ফ্রি স্টুডেন্ট অ্যাকাউন্টে সম্পূর্ণ বিনামূল্যে JIS স্ট্যান্ডার্ড রিজিউমে (Rirekisho) তৈরি ও ডাউনলোড করতে পারেন।
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setStage1Tool('rirekisho')}
+                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-stone-200 text-xs font-bold transition cursor-pointer"
+                    >
+                      ফ্রি JIS জীবনবৃত্তান্ত খুলুন
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('pricing')}
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition cursor-pointer"
+                    >
+                      প্রো প্ল্যান দেখুন (৳১,৯৯০/মাস)
+                    </button>
+                  </div>
+                </div>
+              )
             )}
             {stage1Tool === 'rirekisho' && (
               <JisRirekishoStudio onNavigate={onNavigate} />
             )}
             {stage1Tool === 'keirekisho' && (
-              <ShokumuKeirekishoStudio onNavigate={onNavigate} />
+              isPro ? (
+                <ShokumuKeirekishoStudio onNavigate={onNavigate} />
+              ) : (
+                <div id="keirekisho-pro-lock" className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#1a1426] via-[#141726] to-[#0c0d18] p-8 text-center space-y-5 shadow-2xl">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Lock className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-2 max-w-lg mx-auto">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono">
+                      <span>NIHOMI PRO FEATURE</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white">
+                      জাপানিজ কর্মবৃত্তান্ত স্টুডিও (職務経歴書 - Shokumu Keirekisho)
+                    </h3>
+                    <p className="text-sm text-stone-300">
+                      ফুল-টাইম চাকরি ও স্পন্সর ভিসার জন্য বিস্তারিত কাজের অভিজ্ঞতা ও প্রজেক্ট হিস্ট্রি স্টুডিও নিহোমি প্রো ও জাপান রেডি প্ল্যানে অন্তর্ভুক্ত।
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setStage1Tool('rirekisho')}
+                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-stone-200 text-xs font-bold transition cursor-pointer"
+                    >
+                      ফ্রি JIS জীবনবৃত্তান্ত খুলুন
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('pricing')}
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition cursor-pointer"
+                    >
+                      প্রো প্ল্যান দেখুন
+                    </button>
+                  </div>
+                </div>
+              )
             )}
           </div>
         )}
@@ -453,15 +544,15 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
         {/* ========================================================================= */}
         {currentStage === 'stage2_workplace' && (
           <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-[#171026] p-4 rounded-2xl border border-white/10">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#171026] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-rose-300 font-mono">STAGE 2 টুলস:</span>
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 font-mono">STAGE 2 টুলস:</span>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setStage2Tool('pos_simulator')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      stage2Tool === 'pos_simulator' ? 'bg-rose-500 text-white' : 'bg-white/[0.06] text-stone-300 hover:text-white'
+                      stage2Tool === 'pos_simulator' ? 'bg-[#E45147] text-white shadow-sm' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     🏪 7-Eleven POS ক্যাশিয়ার সিমুলেটর
@@ -470,7 +561,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                     type="button"
                     onClick={() => setStage2Tool('pitch_lab')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      stage2Tool === 'pitch_lab' ? 'bg-rose-500 text-white' : 'bg-white/[0.06] text-stone-300 hover:text-white'
+                      stage2Tool === 'pitch_lab' ? 'bg-[#E45147] text-white shadow-sm' : 'bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-stone-300 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     🌊 কাস্টমার কেইগো পিচ ল্যাব
@@ -480,15 +571,15 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
 
               {/* Ambience audio controls */}
               <div className="flex items-center gap-2 text-xs">
-                <span className="text-stone-400 flex items-center gap-1">
-                  <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+                <span className="text-slate-500 dark:text-stone-400 flex items-center gap-1">
+                  <Volume2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                   <span>পরিবেশ সাউন্ড:</span>
                 </span>
                 <button
                   type="button"
                   onClick={() => setAmbientMode(ambientMode === 'conbini' ? 'off' : 'conbini')}
                   className={`px-2.5 py-1 rounded-lg font-bold text-xs transition cursor-pointer ${
-                    ambientMode === 'conbini' ? 'bg-rose-500 text-white' : 'bg-white/10 text-stone-300'
+                    ambientMode === 'conbini' ? 'bg-[#E45147] text-white' : 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-stone-300'
                   }`}
                 >
                   🏪 কনবিনি চাইম
@@ -497,10 +588,95 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
             </div>
 
             {stage2Tool === 'pos_simulator' && (
-              <ConbiniPosCashierSimulator />
+              isPro ? (
+                <div className="space-y-4">
+                  <div className="px-4 py-2 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-mono font-bold flex flex-wrap items-center justify-between gap-2">
+                    <span>🏪 কনবিনি ক্যাশিয়ার সিমুলেটর • প্রো ওয়ার্কপ্লেস মোড</span>
+                    <span className="text-emerald-400 text-[11px] font-sans">সক্রিয় প্রো সাবস্ক্রিপশন</span>
+                  </div>
+                  <ConbiniPosCashierSimulator />
+                </div>
+              ) : (
+                <div id="pos-simulator-pro-lock" className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#1a1426] via-[#141726] to-[#0c0d18] p-8 text-center space-y-5 shadow-2xl">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Lock className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-2 max-w-lg mx-auto">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono">
+                      <span>NIHOMI PRO FEATURE</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white">
+                      7-Eleven POS ক্যাশিয়ার সিমুলেটর (Workplace Cashier Simulator)
+                    </h3>
+                    <p className="text-sm text-stone-300">
+                      টোকিও বাইতো ও কর্মক্ষেত্রের বাস্তব পিওএস ক্যাশিয়ার টার্মিনাল সিমুলেশন নিহোমি প্রো ও জাপান রেডি সাবস্ক্রিপশনে অন্তর্ভুক্ত। প্রতিষ্ঠাতা-অনুমোদিত ফ্রি টিয়ারে অন্তর্ভুক্ত রয়েছে অফিসিয়াল JIS রিজিউমে বিল্ডার (A4 PDF), JLPT N5 লেসন ০১–০৫, এবং কানা ড্রয়িং ক্যানভাস।
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap justify-center gap-3">
+                    <button
+                      type="button"
+                      id="btn-open-konbini-cashier-mission"
+                      onClick={() => setIsKonbiniMissionModalOpen(true)}
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs font-black shadow-lg shadow-red-600/30 transition cursor-pointer flex items-center gap-1.5"
+                    >
+                      <Store className="w-3.5 h-3.5" />
+                      <span>৭-ধাপের কনবিনি ক্যাশিয়ার মিশন (ফ্রি)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStage1Tool('rirekisho')}
+                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-stone-200 text-xs font-bold transition cursor-pointer"
+                    >
+                      ফ্রি JIS রিজিউমে তৈরি করুন
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('pricing')}
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition cursor-pointer"
+                    >
+                      প্রো প্ল্যান দেখুন (৳১,৯৯০/মাস)
+                    </button>
+                  </div>
+                </div>
+              )
             )}
             {stage2Tool === 'pitch_lab' && (
-              <VoiceTwinPitchLab />
+              isPro ? (
+                <VoiceTwinPitchLab />
+              ) : (
+                <div id="pitch-lab-pro-lock" className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#1a1426] via-[#141726] to-[#0c0d18] p-8 text-center space-y-5 shadow-2xl">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Lock className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-2 max-w-lg mx-auto">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono">
+                      <span>NIHOMI PRO FEATURE</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white">
+                      কাস্টমার কেইগো পিচ ল্যাব (Customer Keigo Pitch Lab)
+                    </h3>
+                    <p className="text-sm text-stone-300">
+                      উন্নত জাপানিজ পিচ অ্যাকসেন্ট ও ভয়েস অ্যানালাইসিস নিহোমি প্রো সাবস্ক্রিপশনে অন্তর্ভুক্ত।
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setStage1Tool('rirekisho')}
+                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-stone-200 text-xs font-bold transition cursor-pointer"
+                    >
+                      ফ্রি JIS রিজিউমে তৈরি করুন
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('pricing')}
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition cursor-pointer"
+                    >
+                      প্রো প্ল্যান দেখুন (৳১,৯৯০/মাস)
+                    </button>
+                  </div>
+                </div>
+              )
             )}
           </div>
         )}
@@ -621,6 +797,27 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 </div>
               </div>
 
+              {!isPro && (
+                <div id="living-pro-lock" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="text-xs font-bold text-amber-400 font-mono flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>NIHOMI JAPAN READY EXCLUSIVE</span>
+                    </div>
+                    <p className="text-xs text-stone-300">
+                      জাপান লিভিং ও সিটি হল গাইডলাইন নিহোমি জাপান রেডি সাবস্ক্রিপশনে অন্তর্ভুক্ত।
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate?.('pricing')}
+                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer shrink-0"
+                  >
+                    প্ল্যান দেখুন (৳৩,৯৯০/মাস)
+                  </button>
+                </div>
+              )}
+
               {/* Bottom Action Button */}
               <div className="pt-2 flex items-center justify-between">
                 <span className="text-xs text-stone-400 font-mono">
@@ -643,6 +840,18 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
         )}
 
       </div>
+
+      {/* 7-Step Interactive Konbini Mission Modal */}
+      {isKonbiniMissionModalOpen && (
+        <TokyoKonbiniFirstMissionModal
+          isOpen={isKonbiniMissionModalOpen}
+          onClose={() => setIsKonbiniMissionModalOpen(false)}
+          onComplete={() => {
+            setIsKonbiniMissionModalOpen(false);
+          }}
+          onNavigate={onNavigate}
+        />
+      )}
     </div>
   );
 };

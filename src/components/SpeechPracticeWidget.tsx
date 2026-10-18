@@ -426,7 +426,7 @@ export const SpeechPracticeWidget: React.FC<SpeechPracticeWidgetProps> = ({
       {isEvaluatingAi && (
         <div className="p-3 rounded-2xl bg-red-50 text-red-700 text-xs flex items-center gap-2 border border-red-200">
           <Loader2 className="w-4 h-4 animate-spin text-red-600 shrink-0" />
-          <span>Gemini AI Sensei is analyzing your pitch contour, mora rhythm & pronunciation clarity...</span>
+          <span>Nomi Sensei is analyzing your pitch contour, mora rhythm & pronunciation clarity...</span>
         </div>
       )}
 

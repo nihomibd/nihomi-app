@@ -113,7 +113,7 @@ export const CloudSidebar: React.FC<CloudSidebarProps> = ({
   return (
     <aside
       id="nihomi-cloud-sidebar"
-      className={`flex flex-col h-full bg-[#FAF9F6]/80 dark:bg-[#0a0a12]/90 border-r border-stone-200 dark:border-stone-800/80 p-4 select-none ${className}`}
+      className={`flex flex-col h-full bg-[#FAF9F6]/80 dark:bg-[#141726]/90 border-r border-stone-200 dark:border-stone-800/80 p-4 select-none ${className}`}
     >
       {/* Brand Header */}
       <div className="flex items-center gap-2.5 px-2 mb-6">

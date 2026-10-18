@@ -119,7 +119,7 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
   return (
     <div
       id="coordination-hub-page"
-      className="bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-amber-950 min-h-screen pb-20 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
+      className="bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 sepia:text-amber-950 min-h-screen pb-20 font-sans antialiased text-left selection:bg-red-500 selection:text-white transition-colors"
     >
       {/* Top Banner */}
       <div className="bg-stone-900 dark:bg-stone-950 text-white border-b border-stone-800 py-12 px-4 sm:px-6 lg:px-8">
@@ -192,7 +192,7 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-red-600 dark:text-rose-400 uppercase tracking-wider block">Pathway 01</span>
-                    <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">NIHOMI AI Sensei</h3>
+                    <h3 className="text-lg font-bold text-stone-900 dark:text-white sepia:text-amber-950">Nomi Sensei</h3>
                     <p className="text-xs text-stone-400 dark:text-stone-500 font-japanese">自習AI・いつでも対話</p>
                   </div>
                   <p className="text-xs text-stone-600 dark:text-stone-300 sepia:text-stone-800 leading-relaxed">
@@ -215,7 +215,7 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                   onClick={() => onNavigate('portal')}
                   className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-rose-600 dark:hover:bg-rose-700 sepia:bg-amber-900 text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
                 >
-                  Open AI Sensei →
+                  Open Nomi Sensei →
                 </button>
               </div>
 

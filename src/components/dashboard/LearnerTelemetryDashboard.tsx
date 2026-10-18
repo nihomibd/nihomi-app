@@ -80,7 +80,7 @@ export const LearnerTelemetryDashboard: React.FC<LearnerTelemetryDashboardProps>
 
   if (isLoading && !analytics) {
     return (
-      <div className="rounded-3xl bg-[#0a0a12] border border-stone-800 p-8 text-center text-white shadow-2xl">
+      <div className="rounded-3xl bg-[#141726] border border-stone-800 p-8 text-center text-white shadow-2xl">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
           <p className="text-sm font-medium text-stone-400">Loading Real-Time Learner Telemetry Engine...</p>
@@ -94,7 +94,7 @@ export const LearnerTelemetryDashboard: React.FC<LearnerTelemetryDashboardProps>
   const { srsMetrics, streakMetrics, mockExamMetrics, leaderboardMetrics } = analytics;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-[#0a0a12] border border-stone-800 text-white p-6 sm:p-8 shadow-2xl space-y-8 text-left">
+    <div className="relative overflow-hidden rounded-3xl bg-[#141726] border border-stone-800 text-white p-6 sm:p-8 shadow-2xl space-y-8 text-left">
       {/* Decorative ambient glowing backdrops */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />

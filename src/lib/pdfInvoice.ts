@@ -124,7 +124,7 @@ export function generateInvoicePDF(invoice: Invoice): jsPDF {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(113, 113, 122);
-  doc.text('Full access to interactive JLPT drills, AI Sensei Coach, and verified progress tracking.', 20, y + 5);
+  doc.text('Full access to interactive JLPT drills, Nomi Sensei Coach, and verified progress tracking.', 20, y + 5);
 
   doc.setTextColor(24, 24, 27);
   doc.setFontSize(9.5);

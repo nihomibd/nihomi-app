@@ -64,7 +64,7 @@ export function generateWhatsAppShareUrl(studentIdOrCode: string, studentName?: 
   const link = generateReferralLink(studentIdOrCode);
   const nameStr = studentName ? `${studentName} invites you to ` : '';
   const text = `🎌 ${nameStr}Join NIHOMI — Bangladesh's premier Japanese Learning Platform!\n\n` +
-    `Master Minna no Nihongo JLPT N5–N1 with 24/7 AI Sensei & Tokyo Native Faculty.\n` +
+    `Master Minna no Nihongo JLPT N5–N1 with 24/7 Nomi Sensei & Tokyo Native Faculty.\n` +
     `🎁 Use my invite link to get 7 Days FREE Pro Access + 50 AI Practice Coins:\n${link}`;
 
   return `https://wa.me/?text=${encodeURIComponent(text)}`;

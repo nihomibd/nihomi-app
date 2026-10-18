@@ -338,7 +338,7 @@ export const TokyoSentenceShadowingStudio: React.FC<TokyoSentenceShadowingStudio
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0a12] text-stone-100 font-sans">
+    <div className="flex flex-col h-full bg-[#141726] text-stone-100 font-sans">
       {/* Studio Header Bar */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-stone-800 bg-[#0d0e1a]">
         <div className="flex items-center space-x-3">

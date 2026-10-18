@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Printer, ShieldCheck, CheckCircle2, Search, QrCode } from 'lucide-react';
+import { Printer, ShieldCheck, CheckCircle2, Search, QrCode, BookOpen, FileDown, FileText } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { KanaPracticeSheetDownloadCard } from '../components/kana/KanaPracticeSheetDownloadCard';
+import { JisRirekishoStudio } from '../components/simulation/JisRirekishoStudio';
 
 export const DocumentsView: React.FC = () => {
   const { user, profile } = useAuth();
+  const [activeTab, setActiveTab] = useState<'workbooks' | 'credentials' | 'resume'>('workbooks');
   const [docType, setDocType] = useState<'certificate' | 'letterhead' | 'invoice'>('certificate');
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationResult, setVerificationResult] = useState<any | null>(null);
@@ -26,10 +29,64 @@ export const DocumentsView: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FAF9F6] text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white">
+    <div className="bg-[#FAF9F6] text-stone-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-left selection:bg-red-500 selection:text-white pt-28 md:pt-36">
       <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* Top Controls */}
+        {/* Navigation Switcher Tab */}
+        <div className="flex items-center gap-2 sm:gap-3 bg-white p-2 rounded-2xl border border-stone-200 shadow-2xs w-fit flex-wrap">
+          <button
+            type="button"
+            id="documents-tab-workbooks"
+            onClick={() => setActiveTab('workbooks')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'workbooks'
+                ? 'bg-rose-600 text-white shadow-xs'
+                : 'text-stone-600 hover:text-stone-900'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>প্রিন্টযোগ্য ওয়ার্কবুক ও চার্ট (Worksheets)</span>
+          </button>
+          <button
+            type="button"
+            id="documents-tab-resume"
+            onClick={() => setActiveTab('resume')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'resume'
+                ? 'bg-amber-500 text-slate-950 shadow-xs'
+                : 'text-stone-600 hover:text-stone-900'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>JIS রিজিউমে বিল্ডার (Free Resume)</span>
+          </button>
+          <button
+            type="button"
+            id="documents-tab-credentials"
+            onClick={() => setActiveTab('credentials')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'credentials'
+                ? 'bg-stone-900 text-white shadow-xs'
+                : 'text-stone-600 hover:text-stone-900'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>একাডেমিক সনদ ও রসিদ (Credentials)</span>
+          </button>
+        </div>
+
+        {activeTab === 'workbooks' && (
+          <KanaPracticeSheetDownloadCard />
+        )}
+
+        {activeTab === 'resume' && (
+          <JisRirekishoStudio />
+        )}
+
+        {activeTab === 'credentials' && (
+          <>
+            {/* Top Controls */}
+
         <div className="bg-white p-5 rounded-3xl border border-stone-200 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
@@ -210,8 +267,10 @@ export const DocumentsView: React.FC = () => {
           </div>
 
         </div>
+        </>
+        )}
 
       </div>
     </div>
   );
-};
+};

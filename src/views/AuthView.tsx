@@ -4,6 +4,7 @@ import { JLPTLevel } from '../types.js';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
 import { trackCompleteRegistration, trackStartTrial } from '../lib/analytics.js';
+import { NihomiBrandLogo } from '../components/brand/NihomiBrandLogo';
 import {
   ArrowRight,
   CheckCircle2,
@@ -133,9 +134,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
       <div className="max-w-md w-full space-y-6 bg-white border border-stone-200 p-8 rounded-3xl shadow-sm">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-red-600 text-white font-bold font-serif text-2xl mx-auto shadow-sm">
-            日
-          </div>
+          <NihomiBrandLogo variant="full" theme="light" size={36} showTagline={false} className="mx-auto mb-2 justify-center" />
           <h2 className="text-2xl font-bold font-serif text-stone-900 tracking-tight">
             {mode === 'login' && 'Welcome Back to Nihomi'}
             {mode === 'register' && 'Create Your Nihomi Account'}

@@ -715,7 +715,7 @@ const verifyPaymentHandler = async (req: AuthenticatedRequest, res: any) => {
       const targetUserId = target?.userId || req.body.userId || 'usr_student';
       const targetEmail = target?.studentEmail || req.body.email || `${target?.studentPhone || 'student'}@nihomi.com`;
       const finalTrxID = target?.trxId || lookupKey;
-      const amount = target?.amount || (selectedTier === 'n5_lifetime' ? 1499 : 499);
+      const amount = target?.amount || (selectedTier === 'n5_lifetime' ? 1499 : 1990);
 
       // Lazy import or use subscriptionService
       const { subscriptionService, SUBSCRIPTION_TIERS } = await import('../services/subscriptionService.js');

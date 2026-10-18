@@ -125,7 +125,7 @@ export const INITIAL_ROOMS: StudyCircleRoom[] = [
       {
         id: 'm-3',
         senderId: 'sensei-ai',
-        senderName: 'Nihomi AI Sensei 🤖',
+        senderName: 'Nomi Sensei 🌸',
         senderAvatar: 'ai',
         text: '🌸 Study Tip: In Lesson 10, remember that あります is for inanimate objects (椅子があります) while います is for living beings (猫がいます).',
         timestamp: '10:20 AM',

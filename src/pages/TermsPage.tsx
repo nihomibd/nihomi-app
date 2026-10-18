@@ -15,7 +15,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div id="terms-of-service-page" className="min-h-screen bg-[#0a0a12] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
+    <div id="terms-of-service-page" className="min-h-screen bg-[#141726] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
       {/* Top sticky navigation bar */}
       <header className="sticky top-0 z-40 bg-[#0e0e1a]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -99,7 +99,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
             </h2>
           </div>
           <p className="text-slate-300 text-sm leading-relaxed">
-            NIHOMI.COM-এর সমস্ত শিক্ষণীয় কনটেন্ট, মিন্না নো নিহঙ্গো (Minna no Nihongo) পাঠ্যক্রমের বাংলা ব্যাখ্যা, ভোকাবুলারি অডিও ফাইল, কাঞ্জি স্ট্রোক অর্ডার অ্যানিমেশন, কৃত্রিম বুদ্ধিমত্তা চালিত সেনসেই (AI Sensei) এবং টোকিও কনবিনি সিমুলেশন ইঞ্জিন NIHOMI এবং bdTrip24 Ecosystem-এর নিজস্ব বুদ্ধিবৃত্তিক সম্পদ।
+            NIHOMI.COM-এর সমস্ত শিক্ষণীয় কনটেন্ট, মিন্না নো নিহঙ্গো (Minna no Nihongo) পাঠ্যক্রমের বাংলা ব্যাখ্যা, ভোকাবুলারি অডিও ফাইল, কাঞ্জি স্ট্রোক অর্ডার অ্যানিমেশন, Nomi Sensei লার্নিং কম্প্যানিয়ন এবং টোকিও কনবিনি সিমুলেশন ইঞ্জিন NIHOMI এবং bdTrip24 Ecosystem-এর নিজস্ব বুদ্ধিবৃত্তিক সম্পদ।
           </p>
           <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3 text-amber-300 text-xs leading-relaxed">
             <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-amber-400" />

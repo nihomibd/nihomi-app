@@ -18,9 +18,9 @@ interface NihomiStoreModalProps {
 }
 
 const PACKAGES: StorePackage[] = [
-  { id: 'starter', name: 'Starter Pack', price: 99, coins: 250, credits: 50, description: 'প্রতিদিনের practice শুরু করার জন্য' },
-  { id: 'intensive', name: 'JLPT N5 Intensive Pack', price: 249, coins: 800, credits: 200, description: 'N5 প্রস্তুতির জন্য সেরা মূল্য' },
-  { id: 'unlimited', name: 'Unlimited AI Sensei Monthly Pass', price: 499, coins: 0, credits: 1000, description: 'এক মাস AI Sensei access' },
+  { id: 'starter', name: 'Starter Coins Pack', price: 99, coins: 250, credits: 50, description: 'প্রতিদিনের AI Sensei অনুশীলনের জন্য' },
+  { id: 'intensive', name: 'JLPT N5 Intensive Coins', price: 249, coins: 800, credits: 200, description: 'N5 প্রস্তুতির জন্য অতিরিক্ত কয়েন' },
+  { id: 'unlimited', name: 'Mastery Coins Booster', price: 490, coins: 1800, credits: 500, description: 'দীর্ঘমেয়াদী প্র্যাকটিস কয়েন বান্ডেল' },
 ];
 
 export const NihomiStoreModal: React.FC<NihomiStoreModalProps> = ({ isOpen, onClose, onPurchase }) => {

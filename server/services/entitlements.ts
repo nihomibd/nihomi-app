@@ -307,9 +307,9 @@ export function evaluateAccess(
     }
   }
 
-  // 3. Free Tier Granular Lesson Restrictions (N5 Lessons 1 & 2 only)
+  // 3. Free Tier Granular Lesson Restrictions (N5 Lessons 1–5 Free, Lesson 6+ requires STARTER)
   if (planId === 'free') {
-    if ((feature === 'n5' || feature === 'n5_basic') && context?.lessonNumber && context.lessonNumber > 2) {
+    if ((feature === 'n5' || feature === 'n5_basic') && context?.lessonNumber && context.lessonNumber > 5) {
       return {
         allowed: false,
         reason: 'TIER_RESTRICTED',

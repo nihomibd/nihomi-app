@@ -25,6 +25,7 @@ import jsPDF from 'jspdf';
 import { useAuth } from '../context/AuthContext';
 import { speakJapanese } from '../lib/tts';
 import { getKanaMistakes, KanaMistakeRecord } from '../lib/kanaMemorySync';
+import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 
 interface MemoryOsViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -343,10 +344,10 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
   const activeCard = srsCards[currentIndex] || srsCards[0];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] py-10 px-4 sm:px-6 lg:px-8" id="memory-os-view">
+    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-slate-900 dark:text-slate-100 py-10 px-4 sm:px-6 lg:px-8" id="memory-os-view">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header Hero */}
-        <div className="bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-stone-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-purple-900/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-600/30 border border-purple-500/50 text-purple-300 text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5" />
@@ -355,7 +356,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
             <h1 className="text-3xl sm:text-4xl font-extrabold font-serif tracking-tight">
               Nihomi MemoryOS™ & SRS Trainer
             </h1>
-            <p className="text-stone-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
               “Nihomi remembers how you learn.” Smart spaced repetition algorithm schedules your reviews right before you forget, locking vocabulary into permanent long-term memory.
             </p>
           </div>
@@ -363,7 +364,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setActiveTab(activeTab === 'srs_trainer' ? 'booklet_preview' : 'srs_trainer')}
-              className="px-5 py-3 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold transition cursor-pointer border border-stone-700"
+              className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition cursor-pointer border border-white/20"
             >
               {activeTab === 'srs_trainer' ? 'View Mistake DNA Book' : 'Open SRS Flashcard Trainer'}
             </button>
@@ -371,7 +372,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
             <button
               onClick={handleDownloadPDF}
               disabled={isGenerating}
-              className="shrink-0 px-6 py-3.5 rounded-2xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs shadow-lg shadow-red-600/30 flex items-center gap-2 transition-all cursor-pointer"
+              className="shrink-0 px-6 py-3.5 rounded-2xl bg-[#E45147] hover:bg-[#D43E34] active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/30 flex items-center gap-2 transition-all cursor-pointer"
               id="btn-download-memoryos-pdf"
             >
               <Download className="w-4 h-4" />
@@ -385,40 +386,40 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
           <div className="space-y-6 animate-in fade-in">
             {/* SRS Status Bento Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">Due for Review</span>
-                <p className="text-3xl font-bold font-serif text-red-600">
+              <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Due for Review</span>
+                <p className="text-3xl font-bold font-serif text-purple-600 dark:text-purple-400">
                   {srsCards.filter((c) => c.status !== 'mastered').length}
                 </p>
-                <p className="text-[11px] text-stone-500">Scheduled by SM-2</p>
+                <p className="text-[11px] text-slate-500">Scheduled by SM-2</p>
               </div>
 
-              <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">In Learning</span>
-                <p className="text-3xl font-bold font-serif text-amber-600">
+              <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">In Learning</span>
+                <p className="text-3xl font-bold font-serif text-amber-600 dark:text-amber-400">
                   {srsCards.filter((c) => c.status === 'learning').length}
                 </p>
-                <p className="text-[11px] text-stone-500">Short intervals</p>
+                <p className="text-[11px] text-slate-500">Short intervals</p>
               </div>
 
-              <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">Mastered (Long-term)</span>
-                <p className="text-3xl font-bold font-serif text-emerald-600">
+              <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Mastered (Long-term)</span>
+                <p className="text-3xl font-bold font-serif text-emerald-600 dark:text-emerald-400">
                   {srsCards.filter((c) => c.status === 'mastered').length}
                 </p>
-                <p className="text-[11px] text-stone-500">5+ consecutive passes</p>
+                <p className="text-[11px] text-slate-500">5+ consecutive passes</p>
               </div>
 
-              <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">Reviews Done Today</span>
-                <p className="text-3xl font-bold font-serif text-stone-900">{completedToday}</p>
-                <p className="text-[11px] text-stone-500">Keep the momentum going!</p>
+              <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Reviews Done Today</span>
+                <p className="text-3xl font-bold font-serif text-slate-900 dark:text-white">{completedToday}</p>
+                <p className="text-[11px] text-slate-500">Keep the momentum going!</p>
               </div>
             </div>
 
             {/* 3D Card Stage with Anki Ease Rating Buttons */}
-            <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col items-center space-y-6">
-              <div className="w-full max-w-xl flex items-center justify-between text-xs font-bold text-stone-500">
+            <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col items-center space-y-6">
+              <div className="w-full max-w-xl flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <Brain className="w-4 h-4 text-purple-600" />
                   <span>Anki SM-2 Spaced Repetition</span>
@@ -434,14 +435,14 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                 onClick={() => setIsFlipped(!isFlipped)}
               >
                 <div
-                  className={`relative w-full h-full rounded-3xl shadow-xl transition-transform duration-500 preserve-3d border border-stone-200 ${
-                    isFlipped ? 'rotate-y-180 bg-stone-900 text-white' : 'bg-gradient-to-br from-white to-stone-50 text-stone-900'
+                  className={`relative w-full h-full rounded-3xl shadow-xl transition-transform duration-500 preserve-3d border border-slate-200 dark:border-slate-800 ${
+                    isFlipped ? 'rotate-y-180 bg-slate-900 text-white' : 'bg-gradient-to-br from-white to-slate-50 dark:from-[#0d0d1a] dark:to-[#121226] text-slate-900 dark:text-white'
                   }`}
                 >
                   {/* Front */}
                   <div className="absolute inset-0 backface-hidden p-8 flex flex-col justify-between">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                         {activeCard.status.toUpperCase()}
                       </span>
                       <button
@@ -449,27 +450,27 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                           e.stopPropagation();
                           speakJapanese(activeCard?.kanji);
                         }}
-                        className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition"
+                        className="p-2 rounded-xl bg-purple-50 dark:bg-slate-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-700 transition"
                       >
                         <Volume2 className="w-4 h-4" />
                       </button>
                     </div>
 
                     <div className="text-center space-y-2">
-                      <h2 className="text-5xl sm:text-6xl font-bold font-serif text-stone-900">
+                      <h2 className="text-5xl sm:text-6xl font-bold font-serif text-slate-900 dark:text-white">
                         {activeCard?.kanji}
                       </h2>
-                      <p className="text-sm text-stone-500 font-medium">{activeCard.reading}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{activeCard.reading}</p>
                     </div>
 
-                    <div className="text-center text-[11px] text-stone-400 font-semibold">
+                    <div className="text-center text-[11px] text-slate-400 font-semibold">
                       Click to reveal meaning & trigger Anki rating
                     </div>
                   </div>
 
                   {/* Back */}
                   <div className="absolute inset-0 backface-hidden rotate-y-180 p-8 flex flex-col justify-between text-white">
-                    <div className="flex items-center justify-between border-b border-stone-800 pb-2">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                         Recall Answer
                       </span>
@@ -478,7 +479,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                           e.stopPropagation();
                           speakJapanese(activeCard?.kanji);
                         }}
-                        className="p-1.5 text-stone-300 hover:text-white"
+                        className="p-1.5 text-slate-300 hover:text-white"
                       >
                         <Volume2 className="w-4 h-4" />
                       </button>
@@ -486,12 +487,12 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
                     <div className="text-center space-y-2">
                       <h3 className="text-2xl font-bold font-serif text-white">{activeCard.english}</h3>
-                      <p className="text-base font-bold text-red-400">{activeCard.bangla}</p>
-                      <p className="text-xs font-mono text-stone-400">{activeCard.romaji}</p>
-                      <p className="text-xs font-serif text-stone-300 italic pt-1">{activeCard.example}</p>
+                      <p className="text-base font-bold text-purple-300">{activeCard.bangla}</p>
+                      <p className="text-xs font-mono text-slate-400">{activeCard.romaji}</p>
+                      <p className="text-xs font-serif text-slate-300 italic pt-1">{activeCard.example}</p>
                     </div>
 
-                    <div className="text-center text-[10px] text-stone-500 font-mono">
+                    <div className="text-center text-[10px] text-slate-500 font-mono">
                       Current Interval: {activeCard.intervalDays}d | Ease: {activeCard.easeFactor.toFixed(2)}
                     </div>
                   </div>
@@ -503,7 +504,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                 <div className="w-full max-w-xl grid grid-cols-4 gap-2 animate-in fade-in">
                   <button
                     onClick={() => handleRateCard('again')}
-                    className="p-3 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
+                    className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
                   >
                     <span>Again</span>
                     <span className="text-[10px] font-normal text-rose-500">&lt; 10 min</span>
@@ -511,7 +512,7 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
                   <button
                     onClick={() => handleRateCard('hard')}
-                    className="p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
+                    className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-900 text-amber-800 dark:text-amber-300 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
                   >
                     <span>Hard</span>
                     <span className="text-[10px] font-normal text-amber-600">1 day</span>
@@ -519,22 +520,22 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
                   <button
                     onClick={() => handleRateCard('good')}
-                    className="p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
+                    className="p-3 rounded-2xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-300 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
                   >
                     <span>Good</span>
-                    <span className="text-[10px] font-normal text-emerald-600">3 days</span>
+                    <span className="text-[10px] font-normal text-purple-600 dark:text-purple-400">3 days</span>
                   </button>
 
                   <button
                     onClick={() => handleRateCard('easy')}
-                    className="p-3 rounded-2xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
+                    className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex flex-col items-center gap-0.5 transition cursor-pointer"
                   >
                     <span>Easy</span>
-                    <span className="text-[10px] font-normal text-blue-600">7 days</span>
+                    <span className="text-[10px] font-normal text-emerald-600 dark:text-emerald-400">7 days</span>
                   </button>
                 </div>
               ) : (
-                <div className="text-xs text-stone-400 font-semibold">
+                <div className="text-xs text-slate-400 font-semibold">
                   Tap or click the card to flip and submit your recall rating
                 </div>
               )}
@@ -546,28 +547,28 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
         {activeTab === 'booklet_preview' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in">
             {/* Left: Book Cover & Preview (7 cols) */}
-            <div className="lg:col-span-7 bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-              <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+            <div className="lg:col-span-7 bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
                 <div>
-                  <span className="text-[11px] font-bold text-red-600 uppercase tracking-wider">Booklet Snapshot</span>
-                  <h3 className="text-xl font-bold font-serif text-stone-900 mt-0.5">
+                  <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Booklet Snapshot</span>
+                  <h3 className="text-xl font-bold font-serif text-slate-900 dark:text-white mt-0.5">
                     {studentName}'s Personal JLPT {targetLevel} Mistake DNA
                   </h3>
                 </div>
-                <span className="font-mono text-xs font-bold text-stone-400">{memoryId}</span>
+                <span className="font-mono text-xs font-bold text-slate-400">{memoryId}</span>
               </div>
 
               {/* Weak Kanji & Kana Section */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-red-600" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-purple-600" />
                     <span>Your Weak Kanji & Kana DNA (AI Detected from Canvas & Drills)</span>
                   </h4>
                   {kanaMistakes.length > 0 && (
                     <button
                       onClick={() => onNavigate('kana')}
-                      className="text-[11px] text-red-600 hover:text-red-700 font-bold flex items-center gap-1 cursor-pointer transition"
+                      className="text-[11px] text-purple-600 dark:text-purple-400 hover:text-purple-700 font-bold flex items-center gap-1 cursor-pointer transition"
                     >
                       <span>Fix on Canvas</span>
                       <ArrowRight className="w-3 h-3" />
@@ -576,22 +577,22 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                 </div>
                 <div className="space-y-2.5">
                   {dynamicWeakItems.map((k) => (
-                    <div key={k.char} className="p-4 rounded-2xl bg-stone-50 border border-stone-200 flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-stone-900 text-white font-serif font-bold text-2xl flex items-center justify-center shrink-0 shadow-xs">
+                    <div key={k.char} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-slate-900 text-white font-serif font-bold text-2xl flex items-center justify-center shrink-0 shadow-xs">
                         {k.char}
                       </div>
                       <div className="space-y-0.5 text-xs flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-stone-900">{k.reading}</span>
-                          <span className="text-stone-500">&bull; {k.meaning}</span>
+                          <span className="font-bold text-slate-900 dark:text-white">{k.reading}</span>
+                          <span className="text-slate-500">&bull; {k.meaning}</span>
                           {k.isKana && (
-                            <span className="px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 text-[10px] font-bold">
+                            <span className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 text-[10px] font-bold">
                               Canvas Stroke
                             </span>
                           )}
-                          <span className="text-red-600 font-semibold text-[11px] ml-auto">{k.errorRate}</span>
+                          <span className="text-purple-600 dark:text-purple-400 font-semibold text-[11px] ml-auto">{k.errorRate}</span>
                         </div>
-                        <p className="text-stone-600 text-[11px]">
+                        <p className="text-slate-600 dark:text-slate-300 text-[11px]">
                           <strong>Correction Tip:</strong> {k.tip}
                         </p>
                       </div>
@@ -602,20 +603,20 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
               {/* Repeated Grammar Traps */}
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-purple-600" />
                   <span>Frequent Grammar & Particle Pitfalls</span>
                 </h4>
                 <div className="space-y-3">
                   {repeatedMistakes.map((m, idx) => (
-                    <div key={idx} className="p-4 rounded-2xl bg-purple-50/40 border border-purple-200/80 text-xs space-y-1.5">
-                      <span className="font-bold text-purple-900 block">{m.topic}</span>
+                    <div key={idx} className="p-4 rounded-2xl bg-purple-50/40 dark:bg-purple-950/20 border border-purple-200/80 dark:border-purple-900/60 text-xs space-y-1.5">
+                      <span className="font-bold text-purple-900 dark:text-purple-200 block">{m.topic}</span>
                       <div className="flex items-center gap-3">
-                        <span className="line-through text-rose-600 font-serif">{m.failedSentence}</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-stone-400" />
-                        <span className="font-bold text-emerald-700 font-serif">{m.correctedSentence}</span>
+                        <span className="line-through text-rose-500 font-serif">{m.failedSentence}</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400 font-serif">{m.correctedSentence}</span>
                       </div>
-                      <p className="text-stone-600 text-[11px]"><strong>Why:</strong> {m.rule}</p>
+                      <p className="text-slate-600 dark:text-slate-300 text-[11px]"><strong>Why:</strong> {m.rule}</p>
                     </div>
                   ))}
                 </div>
@@ -624,8 +625,8 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
 
             {/* Right: Progress DNA & Next Best Action (5 cols) */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm space-y-4">
-                <h3 className="text-base font-bold font-serif text-stone-900 flex items-center gap-2">
+              <div className="bg-white dark:bg-[#0d0d1a] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+                <h3 className="text-base font-bold font-serif text-slate-900 dark:text-white flex items-center gap-2">
                   <Zap className="w-4 h-4 text-amber-500" />
                   <span>Nihomi Progress DNA™ Matrix</span>
                 </h3>
@@ -633,9 +634,9 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                   <div>
                     <div className="flex justify-between font-semibold mb-1">
                       <span>Grammar Comprehension</span>
-                      <span className="font-bold text-stone-900">76%</span>
+                      <span className="font-bold text-slate-900 dark:text-white">76%</span>
                     </div>
-                    <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div className="bg-emerald-500 h-full rounded-full" style={{ width: '76%' }} />
                     </div>
                   </div>
@@ -643,20 +644,20 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
                   <div>
                     <div className="flex justify-between font-semibold mb-1">
                       <span>Listening & Audio Reflex</span>
-                      <span className="font-bold text-stone-900">68%</span>
+                      <span className="font-bold text-slate-900 dark:text-white">68%</span>
                     </div>
-                    <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
-                      <div className="bg-blue-500 h-full rounded-full" style={{ width: '68%' }} />
+                    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div className="bg-purple-500 h-full rounded-full" style={{ width: '68%' }} />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex justify-between font-semibold mb-1">
                       <span>Kanji Retention</span>
-                      <span className="font-bold text-red-600">54%</span>
+                      <span className="font-bold text-purple-600 dark:text-purple-400">54%</span>
                     </div>
-                    <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
-                      <div className="bg-red-500 h-full rounded-full" style={{ width: '54%' }} />
+                    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div className="bg-[#E45147] h-full rounded-full" style={{ width: '54%' }} />
                     </div>
                   </div>
                 </div>
@@ -664,7 +665,23 @@ export const MemoryOsView: React.FC<MemoryOsViewProps> = ({ onNavigate }) => {
             </div>
           </div>
         )}
+
+        {/* Docked / Collapsible Sensei Companion in MemoryOS */}
+        <div className="pt-6 max-w-4xl mx-auto w-full">
+          <ContextualSenseiCompanion
+            currentConcept={{
+              topic: 'MemoryOS™ Spaced Repetition',
+              symbol: srsCards[currentIndex]?.kanji,
+              reading: srsCards[currentIndex]?.romaji,
+              meaningBn: srsCards[currentIndex]?.bangla,
+              type: 'vocab'
+            }}
+            customMessage="MemoryOS™ ইন্টারভাল অ্যালগরিদম অনুযায়ী আজ আপনার রিভিশন শিডিউল প্রস্তুত। প্রতিটি ফ্ল্যাশকার্ড মনোযোগ দিয়ে অনুশীলন করুন!"
+            compact={true}
+          />
+        </div>
       </div>
     </div>
   );
 };
+

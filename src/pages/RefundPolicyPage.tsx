@@ -16,7 +16,7 @@ export const RefundPolicyPage: React.FC<RefundPolicyPageProps> = ({ onNavigate }
   };
 
   return (
-    <div id="refund-policy-page" className="min-h-screen bg-[#0a0a12] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
+    <div id="refund-policy-page" className="min-h-screen bg-[#141726] text-slate-100 font-sans selection:bg-red-500/30 selection:text-red-200">
       {/* Top sticky navigation bar */}
       <header className="sticky top-0 z-40 bg-[#0e0e1a]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">

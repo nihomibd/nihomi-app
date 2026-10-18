@@ -48,7 +48,7 @@ export const AICreditsView: React.FC<AICreditsViewProps> = ({ onNavigate }) => {
       priceJPY: 3600,
       priceBDT: 2880,
       badge: 'BEST VALUE',
-      description: 'High-volume Japanese job interview prep and unlimited Gemini AI Sensei coaching.',
+      description: 'High-volume Japanese job interview prep and unlimited Nomi Sensei coaching.',
     },
   ];
 

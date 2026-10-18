@@ -451,7 +451,7 @@ export const ContentStudioView: React.FC<ContentStudioViewProps> = ({ onNavigate
   });
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-slate-100 font-sans pb-24 pt-24 md:pt-28 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#141726] text-slate-100 font-sans pb-24 pt-24 md:pt-28 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Top Master Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-800">

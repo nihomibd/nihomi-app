@@ -159,9 +159,9 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
     {
       id: 'welcome',
       sender: 'sensei',
-      text: 'こんにちは！(Konnichiwa!) I am your Nihomi Sensei AI™. Ask me any grammar question, or tap the 🎙️ Mic to practice speaking Japanese and get instant pronunciation & pitch feedback!',
+      text: 'こんにちは！(Konnichiwa!) I am your Nomi Sensei. বাংলায় তোমার জাপানি শেখার সঙ্গী। Ask me any grammar question, or tap the 🎙️ Mic to practice speaking Japanese and get instant pronunciation & pitch feedback!',
       romaji: 'Konnichiwa! Nan demo kiite kudasai.',
-      bengaliTranslation: 'নমস্কার! যেকোনো ব্যাকরণ প্রশ্ন করুন অথবা মাইক্রোফোনে জাপানি উচ্চারণ প্র্যাকটিস করুন।',
+      bengaliTranslation: 'নমস্কার! বাংলায় তোমার জাপানি শেখার সঙ্গী। যেকোনো ব্যাকরণ প্রশ্ন করুন অথবা মাইক্রোফোনে জাপানি উচ্চারণ প্র্যাকটিস করুন।',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -501,7 +501,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
   }
 
   return (
-    <div className={isOpen ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block bg-black/80 sm:bg-transparent" : "fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-40"}>
+    <div className={isOpen ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 flex items-center justify-center sm:block bg-black/80 sm:bg-transparent" : "fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40"}>
       {/* Minimized Trigger Button */}
       {!isOpen && !isDismissed && (
         <div className="flex items-center gap-1.5">
@@ -509,16 +509,16 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             id="btn-open-ai-sensei"
             onClick={() => setIsOpen(true)}
             className="group relative flex items-center space-x-1.5 p-2 sm:px-4 sm:py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border border-stone-700/50 cursor-pointer"
-            aria-label="Open Nihomi Sensei AI™ Grammar Coach"
+            aria-label="Open Nomi Sensei Grammar Coach"
           >
-            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#E45147] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
             </div>
             <div className="text-left hidden sm:block">
-              <span className="text-xs font-bold block leading-none">✨ Nihomi Sensei AI™</span>
+              <span className="text-xs font-bold block leading-none">✨ Nomi Sensei</span>
               <span className="text-[10px] opacity-70 font-mono">{activeContextConfig.shortLabel}</span>
             </div>
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping hidden sm:block"></span>
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-purple-500 rounded-full animate-ping hidden sm:block"></span>
           </button>
           <button
             onClick={(e) => {
@@ -526,8 +526,8 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
               setIsDismissed(true);
             }}
             className="p-1.5 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-400 hover:text-white border border-stone-700/60 shadow-lg cursor-pointer transition-colors"
-            title="Minimize AI Sensei"
-            aria-label="Minimize AI Sensei"
+            title="Minimize Nomi Sensei"
+            aria-label="Minimize Nomi Sensei"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -538,8 +538,8 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
         <button
           onClick={() => setIsDismissed(false)}
           className="w-10 h-10 rounded-full bg-stone-900/90 dark:bg-white/90 text-stone-100 dark:text-stone-900 hover:scale-110 flex items-center justify-center shadow-xl border border-stone-700/60 cursor-pointer transition-all"
-          title="Restore Nihomi Sensei AI™"
-          aria-label="Restore Nihomi Sensei AI™"
+          title="Restore Nomi Sensei"
+          aria-label="Restore Nomi Sensei"
         >
           <Sparkles className="w-4 h-4 text-amber-500" />
         </button>
@@ -547,24 +547,24 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
 
       {/* Expanded Floating Chat Panel */}
       {isOpen && (
-        <div className="w-full sm:w-[460px] h-full sm:h-[560px] sm:max-h-[620px] bg-white dark:bg-[#0a0a12] border-0 sm:border border-stone-200 dark:border-stone-800 rounded-none sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-stone-900 dark:text-white animate-in zoom-in-95 duration-200 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] sm:pt-0 sm:pb-0">
+        <div className="w-full sm:w-[460px] h-full sm:h-[560px] sm:max-h-[620px] bg-white dark:bg-[#141726] border-0 sm:border border-stone-200 dark:border-stone-800 rounded-none sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-stone-900 dark:text-white animate-in zoom-in-95 duration-200 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] sm:pt-0 sm:pb-0">
           
           {/* Header */}
           <div className="p-3.5 bg-stone-50 dark:bg-stone-950/80 border-b border-stone-200 dark:border-stone-800 flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold shadow-xs">
+                <div className="w-8 h-8 rounded-xl bg-[#E45147] text-white flex items-center justify-center font-bold shadow-xs">
                   <Sparkles className="w-4 h-4 text-amber-200" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold flex items-center space-x-1.5">
-                    <span>Nihomi Sensei AI™</span>
-                    <span className="px-1.5 py-0.2 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 text-[9px] font-mono font-bold rounded">
-                      Gemini + WebSpeech
+                    <span>Nomi Sensei</span>
+                    <span className="px-1.5 py-0.2 bg-purple-100 dark:bg-purple-950 text-[#E45147] dark:text-purple-400 text-[9px] font-mono font-bold rounded">
+                      Sensei
                     </span>
                   </h4>
                   <p className="text-[10px] text-stone-400 font-mono truncate max-w-[210px]">
-                    Focus: {activeContextConfig.badge}
+                    বাংলায় তোমার জাপানি শেখার সঙ্গী
                   </p>
                 </div>
               </div>
@@ -602,7 +602,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
             {/* Learning Context Selector Dropdown Bar */}
             <div className="flex items-center justify-between bg-stone-100 dark:bg-stone-800/80 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
               <span className="text-[10px] font-bold text-stone-500 dark:text-stone-400 font-mono flex items-center gap-1 shrink-0">
-                <Sliders className="w-3 h-3 text-red-500" /> Context:
+                <Sliders className="w-3 h-3 text-[#E45147]" /> Context:
               </span>
               <select
                 id="select-ai-learning-context"
@@ -621,7 +621,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
 
           {/* Quick Context Prompt Chips & Voice Practice Prompts */}
           <div className="p-2 bg-stone-100/60 dark:bg-stone-950/40 border-b border-stone-200 dark:border-stone-800/80 flex items-center space-x-1.5 overflow-x-auto text-[11px] no-scrollbar">
-            <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 shrink-0 flex items-center gap-1">
+            <span className="text-[10px] font-mono font-bold text-[#E45147] dark:text-purple-400 shrink-0 flex items-center gap-1">
               <Mic className="w-3 h-3" /> Practice:
             </span>
             {activeContextConfig.quickChips.map((chip, idx) => (
@@ -648,7 +648,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
                     className={`max-w-[90%] p-3.5 rounded-2xl space-y-2 ${
                       isSensei
                         ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 rounded-tl-xs border border-stone-200 dark:border-stone-700'
-                        : 'bg-red-600 text-white rounded-tr-xs shadow-xs'
+                        : 'bg-[#E45147] text-white rounded-tr-xs shadow-xs'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -666,7 +666,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
                       {isSensei && (
                         <button
                           onClick={() => speakJapanese(m.text)}
-                          className="text-stone-400 hover:text-red-500 transition shrink-0 cursor-pointer p-1"
+                          className="text-stone-400 hover:text-[#E45147] transition shrink-0 cursor-pointer p-1"
                           title="Listen to Native Japanese Pronunciation"
                         >
                           <Volume2 className="w-3.5 h-3.5" />
@@ -697,7 +697,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
                         <button
                           type="button"
                           onClick={() => speakJapanese(m.pronunciationFeedback?.nativeCorrectionJa || m.text)}
-                          className="w-full mt-1 py-1 bg-stone-800 hover:bg-stone-700 rounded text-[10px] font-bold text-red-300 flex items-center justify-center space-x-1"
+                          className="w-full mt-1 py-1 bg-stone-800 hover:bg-stone-700 rounded text-[10px] font-bold text-purple-300 flex items-center justify-center space-x-1"
                         >
                           <Volume2 className="w-3 h-3" />
                           <span>Hear Standard Tokyo Model</span>
@@ -707,7 +707,7 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
 
                     {m.bengaliTranslation && (
                       <div className="pt-1.5 border-t border-stone-200 dark:border-stone-700/60 text-[11px] text-stone-600 dark:text-stone-300 font-medium">
-                        <span className="text-[9px] uppercase font-bold text-red-600 dark:text-red-400 block font-mono">
+                        <span className="text-[9px] uppercase font-bold text-[#E45147] dark:text-purple-400 block font-mono">
                           বাংলা অর্থ ও ব্যাকরণ বিশ্লেষণ:
                         </span>
                         {m.bengaliTranslation}
@@ -723,20 +723,20 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
 
             {/* Live Listening Waveform & Transcript Preview */}
             {isListening && (
-              <div className="p-3 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 rounded-2xl text-xs space-y-2 animate-in fade-in">
+              <div className="p-3 bg-purple-50 dark:bg-purple-950/50 border border-purple-200 dark:border-purple-800 rounded-2xl text-xs space-y-2 animate-in fade-in">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-red-600 dark:text-red-400 font-bold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+                  <div className="flex items-center space-x-2 text-[#E45147] dark:text-purple-400 font-bold">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#E45147] animate-ping"></span>
                     <span>Listening in {speechLanguage === 'ja-JP' ? '日本語' : speechLanguage}...</span>
                   </div>
                   <button
                     onClick={stopVoiceInput}
-                    className="px-2 py-0.5 bg-red-600 text-white rounded text-[10px] font-bold hover:bg-red-700"
+                    className="px-2 py-0.5 bg-[#E45147] text-white rounded text-[10px] font-bold hover:bg-[#D43E34]"
                   >
                     Finish
                   </button>
                 </div>
-                <div className="p-2 bg-white dark:bg-stone-900 rounded-xl text-stone-700 dark:text-stone-200 min-h-[32px] font-japanese border border-red-100 dark:border-red-900">
+                <div className="p-2 bg-white dark:bg-stone-900 rounded-xl text-stone-700 dark:text-stone-200 min-h-[32px] font-japanese border border-purple-100 dark:border-purple-900">
                   {transcriptPreview || 'Speak clearly into your microphone...'}
                 </div>
               </div>
@@ -744,17 +744,17 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
 
             {isLoading && (
               <div className="flex items-end gap-2 p-2 animate-in fade-in">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 p-0.5 shrink-0 shadow-xs">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 p-0.5 shrink-0 shadow-xs">
                   <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                    <span className="font-japanese font-black text-rose-400 text-[8px]">にほみ</span>
+                    <span className="font-japanese font-black text-purple-400 text-[8px]">にほみ</span>
                   </div>
                 </div>
                 <div className="bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl rounded-bl-xs px-3 py-2 shadow-xs flex items-center gap-2">
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">Nihomi Sensei AI™ is typing</span>
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">Nomi Sensei is typing</span>
                   <div className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '200ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-typing-dot" style={{ animationDelay: '400ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-typing-dot" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-typing-dot" style={{ animationDelay: '200ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-typing-dot" style={{ animationDelay: '400ms' }} />
                   </div>
                 </div>
               </div>
@@ -776,12 +776,12 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
               onClick={isListening ? stopVoiceInput : startVoiceInput}
               className={`p-2.5 rounded-xl transition-all cursor-pointer ${
                 isListening
-                  ? 'bg-red-600 text-white animate-pulse shadow-md ring-2 ring-red-400'
+                  ? 'bg-[#E45147] text-white animate-pulse shadow-md ring-2 ring-purple-400'
                   : 'bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300'
               }`}
               title={isListening ? 'Stop Speaking' : 'Click to Speak Japanese (Voice-to-Text)'}
             >
-              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-red-600 dark:text-red-400" />}
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-[#E45147] dark:text-purple-400" />}
             </button>
 
             <input
@@ -789,12 +789,12 @@ export const FloatingAiSenseiWidget: React.FC<FloatingAiSenseiWidgetProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder={isListening ? 'Listening to voice...' : 'Ask grammar or practice Japanese...'}
-              className="flex-1 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl text-xs outline-hidden focus:ring-1 focus:ring-red-500 text-stone-900 dark:text-white"
+              className="flex-1 px-3 py-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl text-xs outline-hidden focus:ring-1 focus:ring-[#E45147] text-stone-900 dark:text-white"
             />
             <button
               type="submit"
               disabled={isLoading || !inputText.trim()}
-              className="p-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-white dark:hover:bg-stone-200 text-white dark:text-stone-900 disabled:opacity-30 rounded-xl transition cursor-pointer"
+              className="p-2.5 bg-[#E45147] hover:bg-[#D43E34] text-white disabled:opacity-30 rounded-xl transition cursor-pointer shadow-md shadow-purple-600/20"
               title="Send Message"
             >
               <Send className="w-4 h-4" />

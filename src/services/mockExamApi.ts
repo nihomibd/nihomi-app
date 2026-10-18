@@ -51,7 +51,11 @@ export async function fetchMockExams(level?: string): Promise<MockExamSummaryIte
   }
 
   // Client-side fallback to initial mock exams
-  return INITIAL_MOCK_EXAMS.map((exam) => ({
+  const filtered = level
+    ? INITIAL_MOCK_EXAMS.filter((exam) => exam.level.toLowerCase() === level.toLowerCase())
+    : INITIAL_MOCK_EXAMS;
+
+  return filtered.map((exam) => ({
     id: exam.id,
     examCode: exam.examCode,
     title: exam.title,

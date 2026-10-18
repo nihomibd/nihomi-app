@@ -144,7 +144,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
   const [diagAnswers, setDiagAnswers] = useState<Record<number, number>>({});
   const [diagCompleted, setDiagCompleted] = useState(false);
 
-  // Nihomi Sensei AI™ Instant Voice Q&A state
+  // Nomi Sensei Instant Voice Q&A state
   const [senseiQuery, setSenseiQuery] = useState('');
   const [senseiResponse, setSenseiResponse] = useState<string | null>(null);
   const [isSenseiThinking, setIsSenseiThinking] = useState(false);
@@ -258,13 +258,13 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     }
   };
 
-  // Nihomi Sensei AI™ Instant Conversation (Redeem 10 Coins)
+  // Nomi Sensei Instant Conversation (Redeem 10 Coins)
   const handleAskSensei = async () => {
     if (!senseiQuery.trim()) return;
     if (coins < 10) {
       setPaywallConfig({
         mode: 'coin_topup',
-        hotspotTitle: 'Nihomi Sensei AI™ Voice Coaching',
+        hotspotTitle: 'Nomi Sensei Voice Coaching',
         hotspotTitleJa: 'にほみ先生 リアルタイム音声指導',
         onUnlockSuccess: () => {
           try {
@@ -287,7 +287,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
     // Pre-structured contextual responses for ultra-fast, offline-resilient immersion
     setTimeout(() => {
       let replyJa = 'はい、にほみ先生です。渋谷での生活とアルバイトで一番大切なのは、明るい挨拶と時間厳守です！';
-      let replyBn = 'হ্যাঁ, Nihomi Sensei AI™ শুনছি। শিবুয়াতে কাজ ও দৈনন্দিন জীবনে সবচেয়ে জরুরি হলো প্রাণবন্ত অভিবাদন এবং সময়ানুবর্তিতা!';
+      let replyBn = 'হ্যাঁ, Nomi Sensei শুনছি। শিবুয়াতে কাজ ও দৈনন্দিন জীবনে সবচেয়ে জরুরি হলো প্রাণবন্ত অভিবাদন এবং সময়ানুবর্তিতা!';
 
       const qLower = query.toLowerCase();
       if (qLower.includes('conbini') || qLower.includes('7-eleven') || query.includes('コンビニ')) {
@@ -404,7 +404,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
 
           {/* Description */}
           <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto font-normal leading-relaxed">
-            টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ Nihomi Sensei AI™ লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
+            টোকিও শহরের বাস্তব পরিবেশে মিন্না নো নিহোঙ্গো কারিকুলাম, ২৪/৭ Nomi Sensei লাইভ টিউটর এবং কনবিনি জব সিমুলেশন — সব কিছু এক প্ল্যাটফর্মে।
           </p>
 
           {/* Action: Clear high-converting CTA + Optional 3D exploration */}
@@ -450,8 +450,8 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
               <span className="text-lg block mb-1">🤖</span>
-              <p className="text-xs font-bold text-white">Nihomi Sensei AI™</p>
-              <p className="text-[11px] text-zinc-400">বাংলায় ২৪/৭ ব্যাকরণ টিউটর</p>
+              <p className="text-xs font-bold text-white">Nomi Sensei</p>
+              <p className="text-[11px] text-zinc-400">বাংলায় তোমার জাপানি শেখার সঙ্গী</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
               <span className="text-lg block mb-1">🏪</span>
@@ -637,13 +637,13 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
             <span className="hidden sm:inline">{!isAudioMuted ? 'Tokyo Live' : 'Sound'}</span>
           </button>
 
-          {/* Nihomi Sensei AI™ Instant Chat Launcher */}
+          {/* Nomi Sensei Instant Chat Launcher */}
           <button
             onClick={() => setIsSenseiChatOpen(true)}
             className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/40 text-xs font-bold text-zinc-200 transition-all flex items-center gap-1.5"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="hidden sm:inline">AI সেনসেই</span>
+            <span className="hidden sm:inline">Nomi Sensei</span>
             <span className="sm:hidden">Sensei</span>
           </button>
 
@@ -691,7 +691,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-white">Nihomi Sensei AI™ (にほみ先生)</h3>
+                    <h3 className="text-sm font-bold text-white">Nomi Sensei (নমি সেন্সেই)</h3>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Live in Tokyo 360°
@@ -945,7 +945,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                         <span className="text-xs font-bold text-white">Nihomi PRO Learning (N5+N4)</span>
                         <span className="text-[10px] text-amber-300 font-mono">500 Coins/mo</span>
                       </div>
-                      <p className="text-[11px] text-zinc-300 mt-0.5">ভয়েস AI সেনসেই ও ফুল মক এক্সাম ইঞ্জিন</p>
+                      <p className="text-[11px] text-zinc-300 mt-0.5">ভয়েস Nomi Sensei ও ফুল মক এক্সাম ইঞ্জিন</p>
                     </div>
                     <span className="text-sm font-extrabold text-amber-300 font-mono">৳1,990<span className="text-[10px] text-zinc-400 font-normal">/mo</span></span>
                   </div>
@@ -1204,7 +1204,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   সারভাইভাল রেটিং: Grade A (Tokyo Workplace Ready)
                 </p>
                 <p className="text-xs text-zinc-300 mt-3 leading-relaxed">
-                  আপনার অর্জিত ৫০টি নিহোমি কয়েন দিয়ে আপনি সরাসরি Nihomi Sensei AI™য়ের লাইভ এআই কোচিং ও কনবিনি সিমুলেশন আনলক করতে পারবেন।
+                  আপনার অর্জিত ৫০টি নিহোমি কয়েন দিয়ে আপনি সরাসরি Nomi Sensei-এর লাইভ কোচিং ও কনবিনি সিমুলেশন আনলক করতে পারবেন।
                 </p>
 
                 {/* If user not logged in, prompt seamless in-canvas login to save */}
@@ -1245,7 +1245,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                     className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-amber-300 font-semibold text-xs transition-all flex items-center justify-center gap-2"
                   >
                     <Coins className="w-4 h-4 text-amber-400" />
-                    <span>কয়েন দিয়ে AI সেনসেইয়ের সাথে কথা বলুন</span>
+                    <span>কয়েন দিয়ে Nomi Sensei-এর সাথে কথা বলুন</span>
                   </button>
                 </div>
               </div>
@@ -1254,7 +1254,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
         </div>
       )}
 
-      {/* 8. NIHOMI SENSEI AI™ IN-CANVAS VOICE & CHAT DRAWER (COIN REDEMPTION UTILITY) */}
+      {/* 8. NOMI SENSEI IN-CANVAS VOICE & CHAT DRAWER (COIN REDEMPTION UTILITY) */}
       {isSenseiChatOpen && (
         <div className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-zinc-950/95 border-l border-white/10 backdrop-blur-2xl z-40 p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-right duration-300">
           <div>
@@ -1265,7 +1265,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                   に
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Tanaka Sensei • Nihomi Sensei AI™ (田中先生)</h3>
+                  <h3 className="text-sm font-bold text-white">Nomi Sensei (নমি সেন্সেই)</h3>
                   <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Tokyo Real-Time Coach</span>
@@ -1298,7 +1298,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
               {senseiResponse && (
                 <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/15 to-zinc-900 border border-amber-400/40 text-xs space-y-2">
                   <div className="flex items-center justify-between text-[10px] font-bold text-amber-400 uppercase tracking-wide">
-                    <span>NIHOMI SENSEI AI™ ANALYSIS</span>
+                    <span>NOMI SENSEI ANALYSIS</span>
                     <button
                       onClick={() => handlePlayVoice(senseiResponse.split('\n')[0])}
                       className="p-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300"
@@ -1319,7 +1319,7 @@ export const RealJapanCanvasView: React.FC<RealJapanCanvasViewProps> = ({ onNavi
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-300 font-medium">Nihomi Sensei AI™ is typing</span>
+                    <span className="text-xs text-zinc-300 font-medium">Nomi Sensei is typing</span>
                     <div className="flex items-center gap-1 pt-0.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '0ms' }} />
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-typing-dot" style={{ animationDelay: '200ms' }} />

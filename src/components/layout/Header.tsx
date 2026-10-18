@@ -13,35 +13,33 @@ import {
   BookOpen,
   Trophy,
   Check,
-  Wifi,
-  Volume2,
   Compass,
   PenTool,
-  FileText,
-  Layers,
   Award,
-  Briefcase,
-  Flame,
   ChevronRight,
-  Clock,
+  Flame,
+  LayoutDashboard,
+  Coins,
+  Brain,
+  ShieldCheck,
   TrendingUp,
-  MapPin,
-  Phone,
-  MessageSquare,
-  Store,
-  HardDrive
+  SlidersHorizontal,
+  ExternalLink,
+  GraduationCap,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme, AppTheme } from '../../context/ThemeContext';
+import { NihomiBrandLogo } from '../brand/NihomiBrandLogo';
 
 interface HeaderProps {
   currentView: string;
-  onNavigate: (view: string) => void;
+  onNavigate: (view: string, params?: Record<string, any>) => void;
   onOpenDictionary?: () => void;
   onOpenShortcuts?: () => void;
 }
 
-type DropdownId = 'curriculum' | 'readiness' | 'career' | 'pricing' | 'theme' | 'user' | null;
+type DropdownId = 'curriculum' | 'readiness' | 'kana_kanji' | 'theme' | 'user' | null;
 
 export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   const { user, progress, openAuthModal, logout } = useAuth();
@@ -50,21 +48,15 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   // Dropdown States
   const [activeDropdown, setActiveDropdown] = useState<DropdownId>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<'curriculum' | 'readiness' | 'career' | 'pricing' | null>('curriculum');
 
   const navContainerRef = useRef<HTMLDivElement>(null);
   const themeDropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Server-authoritative role check
   const isFounder = user?.role === 'admin' || user?.role === 'founder';
   const streak = progress?.currentStreak ?? progress?.streakDays ?? user?.streakDays ?? 0;
-
-  // Active Category Detection for the 4 core pillars
-  const isCurriculumActive = ['curriculum', 'lesson', 'courses', 'journey', 'kana', 'hiragana', 'katakana', 'kanji', 'kanji-100', 'kanji-lab', 'listening-lab', 'listening', 'kaiwa', 'choukai'].includes(currentView);
-  const isReadinessActive = ['mock-exams', 'mock-exam-runner', 'mock-exam', 'mock-tests', 'baito', 'baito-os', 'study-plan', 'roadmap', 'quizzes', 'quiz-runner'].includes(currentView);
-  const isCareerActive = ['coordination', 'portal', 'dashboard', 'interview', 'interview-lab', 'visa-guide', 'leaderboard', 'community', 'cloud', 'nihomi-cloud', 'locker', 'rirekisho', 'cv-builder', 'resume', 'jis-rirekisho'].includes(currentView);
-  const isPricingActive = ['pricing', 'plans', 'contact', 'credits', 'subscription'].includes(currentView);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -82,7 +74,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Safe debounce for hover menus (Apple / Stripe standard)
   const handleMouseEnter = (id: DropdownId) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -100,39 +91,10 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     }, 180);
   };
 
-  // Service Worker Offline Readiness Detection
-  const [isOfflineReady, setIsOfflineReady] = useState(false);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const checkOfflineReadiness = async () => {
-      try {
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          const cacheKeys = await caches.keys();
-          const hasNihomiCache = cacheKeys.some((key) => key.startsWith('nihomi-pwa-cache-') || key.startsWith('nihomi-'));
-          if (hasNihomiCache) {
-            setIsOfflineReady(true);
-          }
-        }
-      } catch { }
-    };
-
-    checkOfflineReadiness();
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', checkOfflineReadiness);
-      navigator.serviceWorker.addEventListener('message', (e) => {
-        if (e.data && e.data.type === 'NIHOMI_CACHE_READY') {
-          setIsOfflineReady(true);
-        }
-      });
-    }
-  }, []);
-
-  const handleDropdownSelect = (viewId: string) => {
+  const handleDropdownSelect = (viewId: string, params?: Record<string, any>) => {
     setActiveDropdown(null);
     setIsMobileMenuOpen(false);
-    onNavigate(viewId);
+    onNavigate(viewId, params);
   };
 
   const renderThemeIcon = (themeMode: AppTheme) => {
@@ -150,624 +112,290 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full h-16 backdrop-blur-md bg-neutral-950/80 border-b border-neutral-800 text-white select-none transition-colors">
+    <header className="sticky top-0 z-50 w-full h-16 backdrop-blur-md bg-[#141726]/95 border-b border-[#F6F0E6]/10 text-[#F6F0E6] select-none transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-3">
 
-          {/* 1. BRAND LOGO: MINIMALIST RED SUN EMBLEM + HORIZONTAL NIHOMI (ニホミ) + OS BADGE */}
+          {/* 1. BRAND LOGO (Brand Guidelines v1.0) */}
           <button
             id="header-brand-logo"
             type="button"
-            onClick={() => onNavigate('landing')}
-            className="flex items-center space-x-3 group cursor-pointer focus:outline-hidden shrink-0"
+            onClick={() => onNavigate(isFounder ? 'founder' : user ? 'dashboard' : 'landing')}
+            className="flex items-center space-x-2.5 group cursor-pointer focus:outline-hidden shrink-0"
           >
-            {/* Minimalist Red Sun Emblem */}
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 via-red-500 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/25 ring-1 ring-white/20 group-hover:scale-105 group-hover:shadow-red-500/40 transition-all duration-200">
-              <div className="w-3.5 h-3.5 rounded-full bg-white shadow-xs" />
-            </div>
-
-            {/* Typography */}
-            <div className="flex items-center space-x-2 whitespace-nowrap">
-              <span className="font-extrabold text-lg tracking-tight text-white group-hover:text-red-400 transition-colors">
-                NIHOMI
+            <NihomiBrandLogo variant="full" theme="dark" size={28} showTagline={false} />
+            {isFounder ? (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-400/30 text-[10px] font-mono font-bold tracking-wider text-amber-300">
+                <Crown className="w-2.5 h-2.5 text-amber-400 shrink-0" />
+                FOUNDER
               </span>
-              <span className="font-japanese text-xs font-semibold text-white/50 tracking-normal">
-                (ニホミ)
-              </span>
+            ) : (
               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white/[0.06] border border-white/[0.12] text-[10px] font-mono font-bold tracking-wider text-red-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0 animate-pulse" />
                 OS
               </span>
-            </div>
+            )}
           </button>
 
-          {/* 2. DESKTOP NAVIGATION: STRICT 4-TAB APPLE MINIMALIST HEADER */}
+          {/* 2. ROLE-BASED DESKTOP NAVIGATION */}
           <nav
             ref={navContainerRef}
-            className="hidden md:flex items-center space-x-1 lg:space-x-2"
+            className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs"
           >
-            {/* NIHOMI WORLD™ (REAL JAPAN CANVAS) */}
-            <button
-              id="nav-tab-world"
-              type="button"
-              onClick={() => onNavigate('world')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya'
-                ? 'bg-gradient-to-r from-rose-500/25 to-amber-500/25 text-amber-300 border border-amber-400/40 shadow-sm ring-1 ring-amber-400/20'
-                : 'text-amber-300/90 hover:text-amber-200 hover:bg-amber-400/10 border border-amber-400/20'
-                }`}
-            >
-              <Compass className="w-3.5 h-3.5 text-amber-400" />
-              <span>নিহোমি ওয়ার্ল্ড™ (3D)</span>
-            </button>
-
-            {/* TAB 1: লেসন (Lessons) */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('curriculum')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                id="nav-tab-curriculum"
-                type="button"
-                onClick={() => {
-                  if (activeDropdown === 'curriculum') {
-                    setActiveDropdown(null);
-                  } else {
-                    onNavigate('courses');
-                  }
-                }}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCurriculumActive || activeDropdown === 'curriculum'
-                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+            {/* ============================================================ */}
+            {/* ROLE A: FOUNDER / EXECUTIVE NAVIGATION                       */}
+            {/* ============================================================ */}
+            {isFounder ? (
+              <>
+                <button
+                  id="nav-founder-command-center"
+                  type="button"
+                  onClick={() => onNavigate('founder')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'founder' || currentView === 'admin'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 shadow-sm'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
-              >
-                <span>লেসন (Lessons)</span>
-                <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'curriculum' ? 'rotate-180 text-white' : ''
-                    }`}
-                />
-              </button>
-
-              {activeDropdown === 'curriculum' && (
-                <div
-                  className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('curriculum')}
-                  onMouseLeave={handleMouseLeave}
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    কারিকুলাম ও ফাউন্ডেশন
-                  </div>
+                  <Crown className="w-3.5 h-3.5 text-amber-400" />
+                  <span>👑 Command Center</span>
+                </button>
 
-                  {/* 0. লার্নার জার্নি (Journey Engine) */}
-                  <button
-                    id="nav-item-learner-journey"
-                    type="button"
-                    onClick={() => handleDropdownSelect('journey')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          লার্নার জার্নি (Journey Engine)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-semibold">
-                          ৫ মিনিট মিশন
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টোকিও এন্ট্রি জার্নি, বর্ণমালা ও প্রথম বাক্য
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 1. বর্ণমালা (Kana) */}
-                  <button
-                    id="nav-item-kana-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('kana')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 border border-rose-500/20 group-hover/item:scale-105 transition-transform">
-                      <PenTool className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          বর্ণমালা (Kana Lab)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-rose-500/10 text-rose-400 font-mono font-semibold">
-                          ৪৬+৪৬ বর্ণ
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        হিরাগানা ও কাতাকানা স্ট্রোক অর্ডার ক্যানভাস
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 2. পাঠ্যক্রম (Minna no Nihongo 1-25) */}
-                  <button
-                    id="nav-item-minna-lessons"
-                    type="button"
-                    onClick={() => handleDropdownSelect('curriculum')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 mt-0.5 border border-red-500/20 group-hover/item:scale-105 transition-transform">
-                      <BookOpen className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          পাঠ্যক্রম (Minna no Nihongo ১–২৫)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
-                          ২৫ লেসন
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        প্রতিটি অধ্যায়ের ব্যাকরণ ও শব্দভাণ্ডার
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 3. কাঞ্জি ল্যাব (Kanji Lab) */}
-                  <button
-                    id="nav-item-kanji-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('kanji')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <FileText className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          কাঞ্জি ল্যাব (Kanji Lab)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          ১০০ কাঞ্জি
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ওন-কুনিওমি ও স্টক ডিরেকশন ক্যানভাস
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 4. লিসেনিং ও উচ্চারণ (Listening Lab) */}
-                  <button
-                    id="nav-item-listening-lab"
-                    type="button"
-                    onClick={() => handleDropdownSelect('listening-lab')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0 mt-0.5 border border-blue-500/20 group-hover/item:scale-105 transition-transform">
-                      <Volume2 className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          লিসেনিং ও উচ্চারণ (Listening Lab)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-blue-500/10 text-blue-400 font-mono font-semibold">
-                          Choukai
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        টোকিও নেটিভ ভয়েস ও কাইওয়া ডায়ালগ
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* TAB 2: পরিস্থিতি (Scenarios) */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('readiness')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                id="nav-tab-readiness"
-                type="button"
-                onClick={() => {
-                  if (activeDropdown === 'readiness') {
-                    setActiveDropdown(null);
-                  } else {
-                    onNavigate('baito');
-                  }
-                }}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isReadinessActive || activeDropdown === 'readiness'
-                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                <button
+                  id="nav-founder-growth"
+                  type="button"
+                  onClick={() => onNavigate('growth')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'growth' || currentView === 'admin-growth'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 shadow-sm'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
-              >
-                <span>পরিস্থিতি (Scenarios)</span>
-                <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'readiness' ? 'rotate-180 text-white' : ''
-                    }`}
-                />
-              </button>
-
-              {activeDropdown === 'readiness' && (
-                <div
-                  className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('readiness')}
-                  onMouseLeave={handleMouseLeave}
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    মক পরীক্ষা ও সিমুলেটর
-                  </div>
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Growth & Telemetry</span>
+                </button>
 
-                  {/* 1. মক টেস্ট ও কুইজ */}
-                  <button
-                    id="nav-item-mock-exams"
-                    type="button"
-                    onClick={() => handleDropdownSelect('mock-exams')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 mt-0.5 border border-red-500/20 group-hover/item:scale-105 transition-transform">
-                      <Award className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          মক টেস্ট ও কুইজ (Mock Tests)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
-                          ১৮০ মার্কস
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        অফিশিয়াল জেএলপিটি ফরম্যাট ও রিয়েল টাইমার
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 2. NIHOMI WORKOS™ / টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর */}
-                  <button
-                    id="nav-item-baito-sim"
-                    type="button"
-                    onClick={() => handleDropdownSelect('baito')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <Store className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-bold">
-                          Baito POS
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        Experience Japan Before You Arrive (Tokyo Workplace Simulation)
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 3. রিটেনশন ও মেমোরি */}
-                  <button
-                    id="nav-item-memory-srs"
-                    type="button"
-                    onClick={() => handleDropdownSelect('study-plan')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0 mt-0.5 border border-purple-500/20 group-hover/item:scale-105 transition-transform">
-                      <Layers className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          রিটেনশন ও মেমোরি (Memory SRS)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-purple-500/10 text-purple-400 font-mono font-semibold">
-                          Spaced Rep
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        দৈনিক মিশন ও স্মার্ট স্পেসড রিভিশন সিস্টেম
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* TAB 3: জাপান সিভি (CV Studio) */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('career')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                id="nav-tab-career"
-                type="button"
-                onClick={() => {
-                  if (activeDropdown === 'career') {
-                    setActiveDropdown(null);
-                  } else {
-                    onNavigate('shokumu');
-                  }
-                }}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isCareerActive || activeDropdown === 'career'
-                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                <button
+                  id="nav-founder-content-studio"
+                  type="button"
+                  onClick={() => onNavigate('content-studio')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'content-studio'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 shadow-sm'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
-              >
-                <span>জাপান সিভি (CV Studio)</span>
-                <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'career' ? 'rotate-180 text-white' : ''
-                    }`}
-                />
-              </button>
-
-              {activeDropdown === 'career' && (
-                <div
-                  className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('career')}
-                  onMouseLeave={handleMouseLeave}
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    রিলোকেশন ও ক্যারিয়ার
-                  </div>
+                  <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Content Studio</span>
+                </button>
 
-                  {/* 1. ভিসা ও প্রস্তুতি গাইড */}
-                  <button
-                    id="nav-item-visa-guide"
-                    type="button"
-                    onClick={() => handleDropdownSelect('coordination')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
-                      <Compass className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ভিসা ও প্রস্তুতি গাইড (Visa & Life)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
-                          Relocation
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        জাপান স্টুডেন্ট ভিসা ও স্পন্সর গাইডলাইন
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 2. জবসাইট ও ক্যারিয়ার */}
-                  <button
-                    id="nav-item-job-roadmap"
-                    type="button"
-                    onClick={() => handleDropdownSelect('portal')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 mt-0.5 border border-sky-500/20 group-hover/item:scale-105 transition-transform">
-                      <Briefcase className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          জবসাইট ও ক্যারিয়ার (Job Roadmap)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-sky-500/10 text-sky-400 font-mono font-semibold">
-                          Jobs
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        পার্ট-টাইম ও ফুল-টাইম জবের প্রস্তুতি ও ড্যাশবোর্ড
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 3. ইন্টারভিউ প্রস্তুতি */}
-                  <button
-                    id="nav-item-interview-prep"
-                    type="button"
-                    onClick={() => handleDropdownSelect('interview')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <MessageSquare className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          ইন্টারভিউ প্রস্তুতি (Interview Prep)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          AI Drill
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        ভিসা ও জব ইন্টারভিউ প্রশ্নোত্তর মহড়া
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 4. নিহোমি ক্লাউড ও জাপান লকার */}
-                  <button
-                    id="nav-item-cloud-vault"
-                    type="button"
-                    onClick={() => handleDropdownSelect('cloud')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 mt-0.5 border border-red-500/20 group-hover/item:scale-105 transition-transform">
-                      <HardDrive className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          নিহোমি ক্লাউড (Nihomi Cloud)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-red-500/10 text-red-400 font-mono font-semibold">
-                          Vault
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        জাপান লকার, পাসপোর্ট ও শিক্ষা নোটসের ব্যক্তিগত ক্লাউড
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* 5. জাপানিজ সিভি বিল্ডার (JIS Rirekisho) */}
-                  <button
-                    id="nav-item-rirekisho-builder"
-                    type="button"
-                    onClick={() => handleDropdownSelect('rirekisho')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20 group-hover/item:scale-105 transition-transform">
-                      <FileText className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          জাপানিজ সিভি বিল্ডার (JIS Rirekisho)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/10 text-amber-400 font-mono font-semibold">
-                          Free A4 PDF
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        অফিশিয়াল জাপানিজ ফরম্যাটে সিভি তৈরি ও ডাউনলোড
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* TAB 4: প্রাইসিং (Pricing) */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('pricing')}
-              onMouseLeave={handleMouseLeave}
-            >
-              <button
-                id="nav-tab-pricing"
-                type="button"
-                onClick={() => {
-                  if (activeDropdown === 'pricing') {
-                    setActiveDropdown(null);
-                  } else {
-                    onNavigate('pricing');
-                  }
-                }}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${isPricingActive || activeDropdown === 'pricing'
-                  ? 'bg-white/[0.12] text-white border border-white/[0.18] shadow-sm'
-                  : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                {/* Safe & Distinct Preview Student Experience Toggle */}
+                <button
+                  id="nav-founder-preview-student"
+                  type="button"
+                  onClick={() => onNavigate('dashboard')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-xs bg-white/[0.06] hover:bg-white/[0.12] text-white/80 hover:text-white border border-white/[0.15] transition-all cursor-pointer"
+                  title="Switch to Student Dashboard to inspect learner experience"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Preview Student</span>
+                </button>
+              </>
+            ) : user ? (
+              /* ============================================================ */
+              /* ROLE B: AUTHENTICATED STUDENT NAVIGATION (9 CANONICAL)       */
+              /* ============================================================ */
+              <>
+                {/* 1. শেখা (Home / Next Mission) */}
+                <button
+                  id="nav-student-dashboard"
+                  type="button"
+                  onClick={() => onNavigate('dashboard')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'dashboard'
+                      ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-sm'
+                      : 'text-white/80 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
-              >
-                <span>প্রাইসিং (Pricing)</span>
-                <ChevronDown
-                  className={`w-3 h-3 text-white/50 transition-transform duration-200 ${activeDropdown === 'pricing' ? 'rotate-180 text-white' : ''
-                    }`}
-                />
-              </button>
-
-              {activeDropdown === 'pricing' && (
-                <div
-                  className="absolute left-0 mt-2.5 w-80 sm:w-88 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-white/5"
-                  onMouseEnter={() => handleMouseEnter('pricing')}
-                  onMouseLeave={handleMouseLeave}
+                  title="শেখা (Home / Next Mission)"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    সাবস্ক্রিপশন ও যোগাযোগ
-                  </div>
+                  <LayoutDashboard className="w-3.5 h-3.5 text-red-400" />
+                  <span>শেখা</span>
+                </button>
 
-                  {/* 1. প্রিমিয়াম সাবস্ক্রিপশন */}
-                  <button
-                    id="nav-item-premium-pricing"
-                    type="button"
-                    onClick={() => handleDropdownSelect('pricing')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 border border-rose-500/20 group-hover/item:scale-105 transition-transform">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          প্রিমিয়াম সাবস্ক্রিপশন (Pricing)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 font-mono font-bold">
-                          ৳৪৯৯
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        সম্পূর্ণ N5 কোর্স ও আনলিমিটেড লাইফটাইম অ্যাক্সেস
-                      </p>
-                    </div>
-                  </button>
+                {/* 2. পাঠ্যক্রম */}
+                <button
+                  id="nav-student-courses"
+                  type="button"
+                  onClick={() => onNavigate('courses')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'courses' || currentView === 'lesson'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="পাঠ্যক্রম (Minna no Nihongo ১–২৫)"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-rose-400" />
+                  <span>পাঠ্যক্রম</span>
+                </button>
 
-                  {/* 2. হেল্পলাইন ও অফিস */}
-                  <button
-                    id="nav-item-support-contact"
-                    type="button"
-                    onClick={() => handleDropdownSelect('contact')}
-                    className="w-full p-2.5 rounded-xl hover:bg-white/[0.06] text-left flex items-start gap-3 transition-all duration-150 group/item border border-transparent hover:border-white/[0.08] cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20 group-hover/item:scale-105 transition-transform">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white/90 group-hover/item:text-white transition-colors">
-                          হেল্পলাইন ও অফিস (Support/Contact)
-                        </span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-semibold">
-                          01834348966
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/50 group-hover/item:text-white/70 line-clamp-1 transition-colors mt-0.5">
-                        হোয়াটসঅ্যাপ হেল্পলাইন ও ফার্মগেট ঢাকা অফিস
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-            </div>
+                {/* 3. Kana / Writing Canvas */}
+                <button
+                  id="nav-student-kana"
+                  type="button"
+                  onClick={() => onNavigate('kana')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'kana' || currentView === 'hiragana' || currentView === 'katakana'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="Kana ক্যানভাস (Writing Lab)"
+                >
+                  <PenTool className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Kana ক্যানভাস</span>
+                </button>
+
+                {/* 4. Kotoba Canvas™ (Visual Vocabulary) */}
+                <button
+                  id="nav-student-kotoba"
+                  type="button"
+                  onClick={() => onNavigate('kotoba')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'kotoba' || currentView === 'vocabulary'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="Kotoba Canvas™ (ভিজ্যুয়াল শব্দভাণ্ডার)"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Kotoba Canvas™</span>
+                </button>
+
+                {/* 5. Nihomi WorkOS™ (Real-Life Simulations) */}
+                <button
+                  id="nav-student-baito"
+                  type="button"
+                  onClick={() => onNavigate('baito')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'baito' || currentView === 'japan-twin'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="Nihomi WorkOS™ (বাস্তব জীবন সিমুলেশন)"
+                >
+                  <Award className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Nihomi WorkOS™</span>
+                </button>
+
+                {/* 6. JLPT Mock */}
+                <button
+                  id="nav-student-mock-exams"
+                  type="button"
+                  onClick={() => onNavigate('mock-exams')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'mock-exams' || currentView === 'mock-exam-runner'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="JLPT মক টেস্ট (N5–N1)"
+                >
+                  <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>JLPT মক</span>
+                </button>
+
+                {/* 7. প্র্যাকটিস শিট ও নোটস */}
+                <button
+                  id="nav-student-documents"
+                  type="button"
+                  onClick={() => onNavigate('documents')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'documents'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="প্র্যাকটিস শিট PDF (Workbook Packs)"
+                >
+                  <FileText className="w-3.5 h-3.5 text-blue-400" />
+                  <span>প্র্যাকটিস শিট</span>
+                </button>
+
+                {/* 8. আমার অগ্রগতি */}
+                <button
+                  id="nav-student-journey"
+                  type="button"
+                  onClick={() => onNavigate('journey')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    currentView === 'journey'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                  title="আমার অগ্রগতি (Learner Journey)"
+                >
+                  <Compass className="w-3.5 h-3.5 text-amber-400" />
+                  <span>আমার অগ্রগতি</span>
+                </button>
+              </>
+            ) : (
+              /* ============================================================ */
+              /* ROLE C: ANONYMOUS PUBLIC VISITOR                             */
+              /* ============================================================ */
+              <>
+                <button
+                  id="nav-public-world"
+                  type="button"
+                  onClick={() => onNavigate('world')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold text-amber-300 bg-amber-500/10 border border-amber-400/30 hover:bg-amber-500/20 transition-all cursor-pointer"
+                >
+                  <Compass className="w-3.5 h-3.5 text-amber-400" />
+                  <span>নিহোমি ওয়ার্ল্ড™ (3D)</span>
+                </button>
+
+                <button
+                  id="nav-public-courses"
+                  type="button"
+                  onClick={() => onNavigate('courses')}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-semibold transition-all cursor-pointer ${
+                    currentView === 'courses'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-rose-400" />
+                  <span>লেসন ও পাঠ্যক্রম</span>
+                </button>
+
+                <button
+                  id="nav-public-japan-twin"
+                  type="button"
+                  onClick={() => onNavigate('japan-twin')}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-semibold transition-all cursor-pointer ${
+                    currentView === 'japan-twin'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                >
+                  <Award className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>জাপান প্রস্তুতি</span>
+                </button>
+
+                <button
+                  id="nav-public-pricing"
+                  type="button"
+                  onClick={() => onNavigate('pricing')}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-semibold transition-all cursor-pointer ${
+                    currentView === 'pricing'
+                      ? 'bg-white/[0.12] text-white border border-white/[0.18]'
+                      : 'text-white/70 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>সাবস্ক্রিপশন ও ফি</span>
+                </button>
+              </>
+            )}
           </nav>
 
-          {/* 3. RIGHT UTILITY: GEMINI STYLE N5 PRO CTA + THEME + PROFILE */}
-          <div className="hidden md:flex items-center space-x-2.5 shrink-0">
-
-            {/* Offline Ready Badge (Service worker indicator) */}
-            {isOfflineReady && (
-              <div
-                id="header-offline-ready-badge"
-                className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold"
-                title="Service Worker Cached: Complete Offline Access"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <Wifi className="w-3 h-3 text-emerald-400 shrink-0" />
-                <span className="whitespace-nowrap">অফলাইন</span>
-              </div>
-            )}
-
-            {/* RIGHT CTA: MINIMALIST PINGO / WANIKANI STYLE "শুরু করুন (Free)" */}
-            <button
-              id="header-btn-start-free"
-              type="button"
-              onClick={() => onNavigate('journey')}
-              className="relative group overflow-hidden px-4 py-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white text-xs font-bold shadow-md shadow-red-600/25 hover:shadow-red-600/40 transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-200 animate-pulse group-hover:rotate-12 transition-transform" />
-              <span className="whitespace-nowrap font-bold">শুরু করুন (Free)</span>
-              <ChevronRight className="w-3.5 h-3.5 text-white/80 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-
+          {/* 3. RIGHT HEADER CONTROLS */}
+          <div className="flex items-center space-x-2 shrink-0">
             {/* THEME TOGGLE */}
             <div className="relative" ref={themeDropdownRef}>
               <button
@@ -778,15 +406,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 title={`Theme: ${theme.toUpperCase()}`}
               >
                 {renderThemeIcon(theme)}
-                <span className="capitalize text-[11px] font-semibold text-white/90">{theme}</span>
                 <ChevronDown className="w-3 h-3 text-white/40" />
               </button>
 
               {activeDropdown === 'theme' && (
-                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-xl p-1.5 z-50 text-xs text-white/80 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1 text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                    থিম নির্বাচন করুন
-                  </div>
+                <div className="absolute right-0 mt-2 w-36 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-2xl border border-white/[0.12] shadow-xl p-1.5 z-50 text-xs text-white/80 animate-in fade-in zoom-in-95 duration-150">
                   {(['system', 'light', 'dark', 'sepia'] as AppTheme[]).map((optId) => {
                     const isSelected = theme === optId;
                     return (
@@ -797,16 +421,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                           setTheme(optId);
                           setActiveDropdown(null);
                         }}
-                        className={`w-full px-3 py-2 rounded-xl text-left font-medium flex items-center justify-between transition-colors cursor-pointer ${isSelected
-                          ? 'bg-white/[0.12] text-white font-bold'
-                          : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
-                          }`}
+                        className={`w-full px-2.5 py-1.5 rounded-xl text-left font-medium flex items-center justify-between transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-white/[0.12] text-white font-bold'
+                            : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
+                        }`}
                       >
                         <div className="flex items-center space-x-2">
                           {renderThemeIcon(optId)}
-                          <span className="capitalize">{optId}</span>
+                          <span className="capitalize text-[11px]">{optId}</span>
                         </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                        {isSelected && <Check className="w-3 h-3 text-amber-400" />}
                       </button>
                     );
                   })}
@@ -814,44 +439,34 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               )}
             </div>
 
-            {/* FOUNDER PORTAL BADGE (Strict Founder Role Binding) */}
-            {(user?.role === 'admin' || user?.email?.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') && (
-              <button
-                type="button"
-                id="header-founder-portal-btn"
-                onClick={() => onNavigate('portal')}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 hover:from-amber-500/35 hover:to-yellow-500/35 text-amber-300 border border-amber-400/50 rounded-full text-xs font-black shadow-sm shadow-amber-500/20 hover:shadow-amber-500/30 transition-all cursor-pointer whitespace-nowrap active:scale-95 ring-1 ring-amber-400/20"
-                title="Founder Portal"
-              >
-                <span>👑 Founder Portal</span>
-              </button>
-            )}
-
-            {/* MY DASHBOARD QUICK LINK FOR AUTHENTICATED USERS */}
-            {user && (
-              <button
-                type="button"
-                id="header-btn-my-dashboard"
-                onClick={() => onNavigate('dashboard')}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.15] text-white text-xs font-bold transition-all cursor-pointer whitespace-nowrap"
-              >
-                <span>My Dashboard</span>
-              </button>
-            )}
-
-            {/* DYNAMIC STUDENT PROFILE WITH ACTIVE STREAK FLAME COUNTER */}
+            {/* IF AUTHENTICATED */}
             {user ? (
               <div className="flex items-center space-x-2">
-                {/* Active Streak Flame Counter */}
-                <div
-                  className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs font-mono font-bold"
-                  title={`স্টাডি স্ট্রিক: ${streak} দিন`}
-                >
-                  <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/70 animate-pulse" />
-                  <span>{streak}d</span>
-                </div>
+                {/* Coins / Subscription Pill for Students */}
+                {!isFounder && (
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('subscription')}
+                    className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer"
+                    title="Subscription & Coins"
+                  >
+                    <Coins className="w-3.5 h-3.5 text-amber-400" />
+                    <span>সাবস্ক্রিপশন</span>
+                  </button>
+                )}
 
-                {/* Profile Dropdown Trigger */}
+                {/* Streak Counter for Students */}
+                {!isFounder && streak > 0 && (
+                  <div
+                    className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs font-mono font-bold"
+                    title={`স্টাডি স্ট্রিক: ${streak} দিন`}
+                  >
+                    <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/70 animate-pulse" />
+                    <span>{streak}d</span>
+                  </div>
+                )}
+
+                {/* Profile Dropdown */}
                 <div className="relative" ref={userDropdownRef}>
                   <button
                     id="header-user-avatar-btn"
@@ -862,7 +477,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     <span className="text-xs font-bold text-white max-w-[80px] truncate">
                       {user.name.split(' ')[0]}
                     </span>
-
                     {user.avatarUrl ? (
                       <img
                         src={user.avatarUrl}
@@ -874,7 +488,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         {user.name.charAt(0)}
                       </div>
                     )}
-
                     <ChevronDown className="w-3 h-3 text-white/50" />
                   </button>
 
@@ -896,62 +509,117 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                           <p className="font-bold text-white truncate">{user.name}</p>
                           <p className="text-[10px] text-white/50 font-mono truncate">{user.email}</p>
                           <div className="flex items-center gap-1 mt-1">
-                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-red-500/20 text-red-300 font-bold">
-                              {user.planId === 'pro' ? 'N5 Pro Plan' : 'Student Member'}
-                            </span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-orange-500/20 text-orange-300 font-mono font-bold flex items-center gap-0.5">
-                              <Flame className="w-2.5 h-2.5" />
-                              {streak}d
-                            </span>
+                            {isFounder ? (
+                              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 font-bold">
+                                👑 Founder / Admin
+                              </span>
+                            ) : (
+                              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-red-500/20 text-red-300 font-bold">
+                                {user.planId === 'pro' ? 'Pro Member' : user.planId === 'japan_ready' ? 'Japan Ready' : 'Student'}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleDropdownSelect('portal')}
-                        className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
-                      >
-                        <User className="w-3.5 h-3.5 text-white/60" />
-                        <span>স্টুডেন্ট ড্যাশবোর্ড</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDropdownSelect('cloud')}
-                        className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
-                      >
-                        <HardDrive className="w-3.5 h-3.5 text-amber-400" />
-                        <span>নিহোমি ক্লাউড (Nihomi Cloud)</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDropdownSelect('leaderboard')}
-                        className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
-                      >
-                        <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                        <span>কমিউনিটি লিডারবোর্ড</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDropdownSelect('credits')}
-                        className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-red-400" />
-                        <span>নিহোমি কয়েন ও সাবস্ক্রিপশন</span>
-                      </button>
-
-                      {(user.role === 'admin' || user.email.toLowerCase().trim() === 'mdtanvirkabirbiplob@gmail.com') && (
-                        <button
-                          type="button"
-                          onClick={() => handleDropdownSelect('portal')}
-                          className="w-full px-3 py-2 rounded-xl hover:bg-amber-500/20 text-amber-300 text-left font-bold flex items-center space-x-2 cursor-pointer"
-                        >
-                          <Crown className="w-3.5 h-3.5 text-amber-400" />
-                          <span>👑 Founder Portal</span>
-                        </button>
+                      {/* Role-Specific Dropdown Items */}
+                      {isFounder ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('founder')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-amber-500/15 text-left font-bold flex items-center space-x-2 text-amber-300 cursor-pointer"
+                          >
+                            <Crown className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Executive Command Center</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('growth')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Growth & Telemetry</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('content-studio')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                            <span>Curriculum Studio</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('dashboard')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>Preview Student Dashboard</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('dashboard')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <LayoutDashboard className="w-3.5 h-3.5 text-red-400" />
+                            <span>লার্নার ড্যাশবোর্ড</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('profile')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <User className="w-3.5 h-3.5 text-white/60" />
+                            <span>আমার প্রোফাইল ও সেটিংস</span>
+                          </button>
+                          <button
+                            type="button"
+                            id="nav-dropdown-student-mock-exams"
+                            onClick={() => handleDropdownSelect('mock-exams')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <Award className="w-3.5 h-3.5 text-rose-400" />
+                            <span>JLPT মক টেস্ট (Mock Exams)</span>
+                          </button>
+                          <button
+                            type="button"
+                            id="nav-dropdown-student-documents"
+                            onClick={() => handleDropdownSelect('documents')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+                            <span>প্র্যাকটিস শিট PDF (Workbooks)</span>
+                          </button>
+                          <button
+                            type="button"
+                            id="nav-dropdown-student-cv-builder"
+                            onClick={() => handleDropdownSelect('cv-builder')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <PenTool className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>JIS সিভি বিল্ডার (CV Studio)</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('subscription')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <Coins className="w-3.5 h-3.5 text-amber-400" />
+                            <span>সাবস্ক্রিপশন ও বিলিং</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDropdownSelect('leaderboard')}
+                            className="w-full px-3 py-2 rounded-xl hover:bg-white/[0.06] text-left font-semibold flex items-center space-x-2 text-white/90 hover:text-white cursor-pointer"
+                          >
+                            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                            <span>কমিউনিটি লিডারবোর্ড</span>
+                          </button>
+                        </>
                       )}
 
                       <div className="border-t border-white/[0.08] my-1" />
@@ -972,6 +640,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                 </div>
               </div>
             ) : (
+              /* ANONYMOUS RIGHT CTA */
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -987,52 +656,17 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                   onClick={() => onNavigate('journey')}
                   className="px-4 py-1.5 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white rounded-full text-xs font-bold shadow-md shadow-red-600/25 transition-all cursor-pointer whitespace-nowrap active:scale-95 flex items-center gap-1.5"
                 >
-                  <span>🔥 Start Journey</span>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
+                  <span>শুরু করুন</span>
                 </button>
               </div>
             )}
-          </div>
 
-          {/* 4. MOBILE CONTROLS (HAMBURGER & COMPACT CTA) */}
-          <div className="md:hidden flex items-center space-x-2">
-            {/* Mobile N5 Pro CTA button */}
-            <button
-              type="button"
-              onClick={() => onNavigate('courses')}
-              className="px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-rose-500/20 border border-amber-400/40 text-amber-200 text-[11px] font-bold shadow-xs flex items-center gap-1"
-            >
-              <Sparkles className="w-3 h-3 text-amber-300" />
-              <span>৳৪৯৯</span>
-            </button>
-
-            {user ? (
-              <button
-                type="button"
-                onClick={() => onNavigate('portal')}
-                className="w-8 h-8 rounded-full overflow-hidden border border-white/20 flex items-center justify-center cursor-pointer"
-              >
-                {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-tr from-rose-600 to-red-500 text-white text-xs font-bold flex items-center justify-center">
-                    {user.name.charAt(0)}
-                  </div>
-                )}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => openAuthModal()}
-                className="px-3 py-1 bg-white text-stone-950 rounded-full text-xs font-bold"
-              >
-                লগইন
-              </button>
-            )}
-
+            {/* MOBILE MENU TOGGLE */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-white/80 hover:text-white rounded-xl hover:bg-white/[0.08] cursor-pointer"
+              className="lg:hidden p-2 text-white/80 hover:text-white rounded-xl hover:bg-white/[0.08] cursor-pointer"
               aria-label="Toggle Mobile Navigation"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -1042,279 +676,271 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
         </div>
       </div>
 
-      {/* 5. MOBILE DRAWER: FLUID ACCORDIONS WITH MINIMALIST FROSTED GLASS */}
+      {/* 4. MOBILE DRAWER: ROLE-SPECIFIC FROSTED GLASS ACCORDION */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#0a0a12]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2.5 text-xs animate-in slide-in-from-top-2">
-
-          {/* Mobile Direct Entry: NIHOMI WORLD™ */}
-          <button
-            type="button"
-            onClick={() => handleDropdownSelect('world')}
-            className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500/20 via-amber-500/20 to-rose-500/10 border border-amber-400/40 text-amber-300 font-extrabold flex items-center justify-between shadow-lg"
-          >
-            <div className="flex items-center gap-2">
-              <Compass className="w-4 h-4 text-amber-400 animate-spin" />
-              <span>নিহোমি ওয়ার্ল্ড™ (Real Japan Canvas)</span>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-400 text-zinc-950 font-black">
-              3D BETA
-            </span>
-          </button>
-
-          {/* Mobile Group 1: লেসন (Lessons) */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'curriculum' ? null : 'curriculum')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-red-400" />
-                <span>লেসন (Lessons)</span>
+        <div className="lg:hidden bg-[#141726]/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-2 pb-6 space-y-2 text-xs animate-in slide-in-from-top-2">
+          {isFounder ? (
+            /* FOUNDER MOBILE MENU */
+            <div className="space-y-1">
+              <div className="px-3 py-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                👑 Founder / Executive Controls
               </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'curriculum' ? 'rotate-180' : ''}`} />
-            </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('founder')}
+                className="w-full py-2.5 px-3 rounded-xl bg-amber-500/10 text-amber-300 font-bold text-left flex items-center justify-between"
+              >
+                <span>Executive Command Center</span>
+                <ChevronRight className="w-4 h-4 text-amber-400" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('growth')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <span>Growth & Telemetry</span>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('content-studio')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <span>Curriculum Content Studio</span>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('dashboard')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-cyan-300 font-medium text-left flex items-center justify-between"
+              >
+                <span>Preview Student Dashboard</span>
+                <ExternalLink className="w-4 h-4 text-cyan-400" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  logout();
+                }}
+                className="w-full py-2.5 px-3 rounded-xl bg-rose-500/10 text-rose-300 font-bold text-left flex items-center justify-between mt-2"
+              >
+                <span>লগআউট (Sign Out)</span>
+                <LogOut className="w-4 h-4 text-rose-400" />
+              </button>
+            </div>
+          ) : user ? (
+            /* STUDENT MOBILE MENU (9 CANONICAL SURFACES) */
+            <div className="space-y-1">
+              <div className="px-3 py-1.5 text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                লার্নার নেভিগেশন (Canonical Navigation)
+              </div>
+              <button
+                type="button"
+                id="drawer-student-dashboard"
+                onClick={() => handleDropdownSelect('dashboard')}
+                className="w-full py-2.5 px-3 rounded-xl bg-red-500/10 text-red-300 font-bold text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <LayoutDashboard className="w-4 h-4 text-red-400" />
+                  <span>১. শেখা (Home / Next Mission)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-red-400" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-courses"
+                onClick={() => handleDropdownSelect('courses')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-rose-400" />
+                  <span>২. পাঠ্যক্রম (Minna no Nihongo ১–২৫)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-kana"
+                onClick={() => handleDropdownSelect('kana')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <PenTool className="w-4 h-4 text-purple-400" />
+                  <span>৩. Kana / Writing Canvas (বর্ণমালা)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-kotoba"
+                onClick={() => handleDropdownSelect('kotoba')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-red-400 font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>৪. Kotoba Canvas™ (ভিজ্যুয়াল শব্দভাণ্ডার)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-red-400" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-baito"
+                onClick={() => handleDropdownSelect('baito')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-emerald-400 font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-emerald-400" />
+                  <span>৫. Nihomi WorkOS™ (বাস্তব সিমুলেশন)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-emerald-400" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-mock-exams"
+                onClick={() => handleDropdownSelect('mock-exams')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-cyan-300 font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-cyan-400" />
+                  <span>৬. JLPT Mock (মক টেস্ট ইঞ্জিন)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-documents"
+                onClick={() => handleDropdownSelect('documents')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-blue-300 font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-blue-400" />
+                  <span>৭. প্র্যাকটিস শিট ও নোটস (PDF Workbooks)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-journey"
+                onClick={() => handleDropdownSelect('journey')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-amber-400" />
+                  <span>৮. আমার অগ্রগতি (Learner Journey)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-profile"
+                onClick={() => handleDropdownSelect('profile')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-stone-300" />
+                  <span>৯. Account / Settings (প্রোফাইল)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
 
-            {mobileExpandedGroup === 'curriculum' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
+              <div className="border-t border-white/[0.08] my-2 pt-1" />
+
+              {/* Secondary Utility Links */}
+              <button
+                type="button"
+                id="drawer-student-cv-builder"
+                onClick={() => handleDropdownSelect('cv-builder')}
+                className="w-full py-2 px-3 rounded-xl hover:bg-white/[0.06] text-stone-300 text-left flex items-center justify-between"
+              >
+                <span>JIS সিভি বিল্ডার (CV Studio)</span>
+                <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+              </button>
+              <button
+                type="button"
+                id="drawer-student-subscription"
+                onClick={() => handleDropdownSelect('subscription')}
+                className="w-full py-2 px-3 rounded-xl hover:bg-white/[0.06] text-amber-300 font-medium text-left flex items-center justify-between"
+              >
+                <span>সাবস্ক্রিপশন ও বিলিং</span>
+                <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  logout();
+                }}
+                className="w-full py-2.5 px-3 rounded-xl bg-rose-500/10 text-rose-300 font-bold text-left flex items-center justify-between mt-2"
+              >
+                <span>লগআউট (Sign Out)</span>
+                <LogOut className="w-4 h-4 text-rose-400" />
+              </button>
+            </div>
+          ) : (
+            /* ANONYMOUS MOBILE MENU */
+            <div className="space-y-1">
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('world')}
+                className="w-full py-2.5 px-3 rounded-xl bg-amber-500/15 text-amber-300 font-bold text-left flex items-center justify-between"
+              >
+                <span>নিহোমি ওয়ার্ল্ড™ (3D Canvas)</span>
+                <ChevronRight className="w-4 h-4 text-amber-400" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('courses')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <span>লেসন ও পাঠ্যক্রম</span>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('kotoba')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-red-400 font-medium text-left flex items-center justify-between"
+              >
+                <span>কতোবা ক্যানভাস (Kotoba Canvas™)</span>
+                <ChevronRight className="w-4 h-4 text-red-400" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('japan-twin')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <span>জাপান প্রস্তুতি</span>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropdownSelect('pricing')}
+                className="w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.06] text-white font-medium text-left flex items-center justify-between"
+              >
+                <span>সাবস্ক্রিপশন ও ফি</span>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </button>
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openAuthModal('login');
+                  }}
+                  className="flex-1 py-2.5 rounded-xl bg-white/[0.08] text-white font-bold text-center"
+                >
+                  লগইন
+                </button>
                 <button
                   type="button"
                   onClick={() => handleDropdownSelect('journey')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-amber-300 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
+                  className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-bold text-center shadow-md shadow-red-600/30"
                 >
-                  <div>
-                    <div className="text-xs font-bold text-amber-300">লার্নার জার্নি (Journey Engine)</div>
-                    <div className="text-[10px] text-white/50">টোকিও এন্ট্রি জার্নি ও ফার্স্ট ওয়ার্ড</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('kana')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">বর্ণমালা (Kana Lab)</div>
-                    <div className="text-[10px] text-white/50">হিরাগানা ও কাতাকানা স্ট্রোক অর্ডার</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('curriculum')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">পাঠ্যক্রম (Minna no Nihongo ১–২৫)</div>
-                    <div className="text-[10px] text-white/50">প্রতিটি অধ্যায়ের ব্যাকরণ ও শব্দভাণ্ডার</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('kanji')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">কাঞ্জি ল্যাব (Kanji Lab)</div>
-                    <div className="text-[10px] text-white/50">১০০ মৌলিক কাঞ্জি ও ওন-কুনিওমি</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('listening-lab')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">লিসেনিং ও উচ্চারণ (Listening Lab)</div>
-                    <div className="text-[10px] text-white/50">টোকিও নেটিভ অডিও ও কাইওয়া ডায়ালগ</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                  শুরু করুন
                 </button>
               </div>
-            )}
-          </div>
-
-          {/* Mobile Group 2: পরিস্থিতি (Scenarios) */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'readiness' ? null : 'readiness')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-amber-400" />
-                <span>পরিস্থিতি (Scenarios)</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'readiness' ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileExpandedGroup === 'readiness' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('mock-exams')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">মক টেস্ট ও কুইজ (Mock Tests)</div>
-                    <div className="text-[10px] text-white/50">১৮০ মার্কস অফিশিয়াল ফরম্যাট ও সনদ</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('baito')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-amber-300">টোকিও কনবিনি ক্যাশিয়ার সিমুলেটর (Baito POS)</div>
-                    <div className="text-[10px] text-white/50">Experience Japan Before You Arrive</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('study-plan')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">রিটেনশন ও মেমোরি (Memory SRS)</div>
-                    <div className="text-[10px] text-white/50">দৈনিক মিশন ও স্পেসড রিভিশন</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Group 3: জাপান সিভি (CV Studio) */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'career' ? null : 'career')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-indigo-400" />
-                <span>জাপান সিভি (CV Studio)</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'career' ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileExpandedGroup === 'career' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('coordination')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">ভিসা ও প্রস্তুতি গাইড (Visa & Life)</div>
-                    <div className="text-[10px] text-white/50">জাপান স্টুডেন্ট ভিসা ও স্পন্সর গাইড</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('portal')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">জবসাইট ও ক্যারিয়ার (Job Roadmap)</div>
-                    <div className="text-[10px] text-white/50">পার্ট-টাইম ও ফুল-টাইম জবের প্রস্তুতি</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('interview')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">ইন্টারভিউ প্রস্তুতি (Interview Prep)</div>
-                    <div className="text-[10px] text-white/50">ভিসা ও জব ইন্টারভিউ প্রশ্নোত্তর মহড়া</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('cloud')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">নিহোমি ক্লাউড ও জাপান লকার (Cloud Vault)</div>
-                    <div className="text-[10px] text-white/50">পাসপোর্ট, ভিসা ও শিক্ষা নোটসের পার্সোনাল ভল্ট</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('shokumu')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-amber-300">জাপানিজ সিভি বিল্ডার (JIS Rirekisho & Shokumu)</div>
-                    <div className="text-[10px] text-white/50">১০০% ফ্রি অফিশিয়াল A4 PDF ফরম্যাট</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Group 4: প্রাইসিং (Pricing) */}
-          <div className="border border-white/[0.08] rounded-2xl overflow-hidden bg-white/[0.03]">
-            <button
-              type="button"
-              onClick={() => setMobileExpandedGroup(mobileExpandedGroup === 'pricing' ? null : 'pricing')}
-              className="w-full px-4 py-3 font-bold text-white flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-rose-400" />
-                <span>প্রাইসিং (Pricing)</span>
-              </div>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpandedGroup === 'pricing' ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileExpandedGroup === 'pricing' && (
-              <div className="px-3 pb-3 pt-1 space-y-1 border-t border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('pricing')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">প্রিমিয়াম সাবস্ক্রিপশন (Pricing)</div>
-                    <div className="text-[10px] text-white/50">লাইফটাইম অ্যাক্সেস মাত্র ৳৪৯৯</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDropdownSelect('contact')}
-                  className="w-full py-2 px-3 rounded-xl text-left font-medium text-white/80 hover:text-white hover:bg-white/[0.06] flex items-center justify-between"
-                >
-                  <div>
-                    <div className="text-xs font-bold text-white">হেল্পলাইন ও অফিস (Support/Contact)</div>
-                    <div className="text-[10px] text-white/50">01834348966 • BTI Central Plaza, Farmgate</div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Start Free CTA Button */}
-          <button
-            type="button"
-            onClick={() => handleDropdownSelect('journey')}
-            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-red-500 border border-red-500/40 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-red-500/20 active:scale-98 cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
-            <span>শুরু করুন (Free) →</span>
-          </button>
+            </div>
+          )}
         </div>
       )}
     </header>

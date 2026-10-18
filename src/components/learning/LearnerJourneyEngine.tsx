@@ -479,20 +479,20 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
       className={`${isModal ? 'fixed inset-0 z-50' : 'relative'} min-h-screen w-full flex flex-col justify-between overflow-x-hidden overflow-y-auto bg-[#080711] text-stone-100 selection:bg-red-500/30`}
       style={{
         backgroundImage: `
-          radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.15) 0%, transparent 60%),
-          radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 50% 0%, rgba(104, 76, 254, 0.18) 0%, transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(167, 139, 250, 0.08) 0%, transparent 50%),
           linear-gradient(to bottom, #090814 0%, #120f26 50%, #080711 100%)
         `
       }}
     >
       {/* Decorative Hanging Japanese Paper Lanterns (提灯) in corners with gentle floating animation */}
       <div className="hidden lg:block absolute top-0 left-8 pointer-events-none z-40 opacity-85 animate-bounce" style={{ animationDuration: '3.6s' }}>
-        <div className="w-10 h-16 rounded-xl bg-gradient-to-b from-red-600 to-rose-700 border border-amber-400/50 shadow-lg shadow-red-600/40 flex items-center justify-center font-japanese text-[11px] font-black text-amber-200">
+        <div className="w-10 h-16 rounded-xl bg-gradient-to-b from-purple-700 to-indigo-900 border border-purple-400/40 shadow-lg shadow-purple-900/40 flex items-center justify-center font-japanese text-[11px] font-black text-purple-200">
           にほ
         </div>
       </div>
       <div className="hidden lg:block absolute top-0 right-8 pointer-events-none z-40 opacity-85 animate-bounce" style={{ animationDuration: '4.2s' }}>
-        <div className="w-10 h-16 rounded-xl bg-gradient-to-b from-red-600 to-rose-700 border border-amber-400/50 shadow-lg shadow-red-600/40 flex items-center justify-center font-japanese text-[11px] font-black text-amber-200">
+        <div className="w-10 h-16 rounded-xl bg-gradient-to-b from-purple-700 to-indigo-900 border border-purple-400/40 shadow-lg shadow-purple-900/40 flex items-center justify-center font-japanese text-[11px] font-black text-purple-200">
           東京
         </div>
       </div>
@@ -504,11 +504,11 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
         <div className="max-w-5xl xl:max-w-6xl mx-auto space-y-1.5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-600 via-rose-600 to-amber-500 flex items-center justify-center font-black text-white text-xs shadow-md">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-700 flex items-center justify-center font-black text-white text-xs shadow-md shadow-purple-600/30">
                 日
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-3.5 py-1 rounded-full bg-gradient-to-r from-red-600/30 to-amber-600/30 border border-red-500/40 text-amber-300 text-xs font-black flex items-center gap-1.5 shadow-sm">
+                <span className="px-3.5 py-1 rounded-full bg-gradient-to-r from-purple-600/30 to-indigo-600/30 border border-purple-500/40 text-purple-200 text-xs font-black flex items-center gap-1.5 shadow-sm">
                   <IconTokyoMap3D className="w-3.5 h-3.5" />
                   <span>টোকিও জার্নি • মিশন ০১</span>
                 </span>
@@ -542,14 +542,14 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                         isPast
                           ? 'bg-emerald-500'
                           : isCurrent
-                          ? 'bg-gradient-to-r from-red-500 via-rose-500 to-amber-400 shadow-md shadow-amber-500/50'
+                          ? 'bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-400 shadow-md shadow-purple-500/50'
                           : 'bg-white/10'
                       }`}
                     />
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <IconComp className="w-3.5 h-3.5 shrink-0" />
-                    <span className={isCurrent ? 'text-amber-300 font-black' : isPast ? 'text-emerald-400' : 'text-stone-500 hidden sm:inline'}>
+                    <span className={isCurrent ? 'text-purple-300 font-black' : isPast ? 'text-emerald-400' : 'text-stone-500 hidden sm:inline'}>
                       {isCurrent || isPast ? s.label : `ধাপ ০${idx + 1}`}
                     </span>
                   </div>
@@ -598,7 +598,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                   soundEffects.playButtonTap();
                   setCurrentStage('kana_a');
                 }}
-                className="w-full sm:w-auto px-8 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
+                className="w-full sm:w-auto px-8 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-sm sm:text-base shadow-xl shadow-purple-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
               >
                 <span>চলো শুরু করি →</span>
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
@@ -742,7 +742,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                     addLearnedVocabulary(kState, 'あい');
                     setCurrentStage('konbini');
                   }}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-red-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-purple-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 group"
                 >
                   <span>টোকিও কনবিনিতে ব্যবহার করি (Use in Tokyo)</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -867,7 +867,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                         soundEffects.playButtonTap();
                         setCurrentStage('mission_complete');
                       }}
-                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-red-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-purple-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                     >
                       <span>মিশন ০১ সম্পন্ন করো</span>
                       <IconRocket3D className="w-4 h-4" />
@@ -1042,7 +1042,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
                       type="button"
                       id="btn-journey-start-next-mission"
                       onClick={handleStartNextMission}
-                      className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer transition transform active:scale-98"
+                      className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-purple-900/30 flex items-center justify-center gap-2 cursor-pointer transition transform active:scale-98"
                     >
                       <BookOpen className="w-4 h-4" />
                       <span>{nextM.actionLabelBn || 'পরের মিশন শুরু করুন →'}</span>

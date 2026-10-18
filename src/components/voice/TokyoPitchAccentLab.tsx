@@ -463,7 +463,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto">
       <div
         id="tokyo-pitch-accent-lab"
-        className="w-full max-w-5xl bg-[#0a0a12] border border-stone-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col my-auto max-h-[94vh]"
+        className="w-full max-w-5xl bg-[#141726] border border-stone-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col my-auto max-h-[94vh]"
       >
         {/* Header Bar */}
         <div className="px-6 py-4 border-b border-stone-800/80 flex items-center justify-between bg-[#0f101c]">
@@ -1296,7 +1296,7 @@ export const TokyoPitchAccentLab: React.FC<TokyoPitchAccentLabProps> = ({
               ) : diagnosticReport ? (
                 <div className="space-y-6">
                   {/* Readiness Grade Card */}
-                  <div className="p-6 bg-gradient-to-r from-[#17182e] via-[#0f101c] to-[#0a0a12] border border-amber-500/30 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+                  <div className="p-6 bg-gradient-to-r from-[#17182e] via-[#0f101c] to-[#141726] border border-amber-500/30 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
                     <div className="space-y-2 text-center sm:text-left">
                       <div className="flex items-center justify-center sm:justify-start space-x-2">
                         <span className="text-xs uppercase font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">

@@ -370,7 +370,7 @@ export function trackStartTrial(params?: StartTrialParams): void {
 
 /**
  * Track Purchase conversion event (Meta Pixel, Google Ads / GA4, TikTok Pixel)
- * Optimized for BDT currency (৳99, ৳249, ৳499 pricing packs)
+ * Optimized for BDT currency (Canonical Starter ৳990, Pro ৳1,990, Japan Ready ৳3,990 plans)
  */
 export function trackPurchase(amount: number, pack: string, params?: PurchaseEventParams): void {
   const currency = params?.currency || 'BDT';

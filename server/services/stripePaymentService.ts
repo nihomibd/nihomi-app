@@ -262,7 +262,7 @@ export class StripePaymentService {
       const rawTier = metadata.planTier || metadata.tier || 'n5_pro';
       const tier: SubscriptionTier = rawTier === 'n5_lifetime' || rawTier === 'lifetime' ? 'n5_lifetime' : 'n5_pro';
       
-      const amountPaid = sessionObj.amount_total ? sessionObj.amount_total / 100 : (sessionObj.amount ? sessionObj.amount / 100 : 499);
+      const amountPaid = sessionObj.amount_total ? sessionObj.amount_total / 100 : (sessionObj.amount ? sessionObj.amount / 100 : 1990);
       const trxId = sessionObj.payment_intent || sessionObj.id || eventId;
       const invoiceNumber = `INV_STRIPE_${Date.now()}`;
 

@@ -556,7 +556,7 @@ export const ContextualPaywallModal: React.FC<ContextualPaywallModalProps> = ({
               নিহোমি কয়েন টপ-আপ করুন
             </h2>
             <p className="text-xs text-zinc-400 mt-0.5 mb-5">
-              Nihomi Sensei AI™-র রিয়েল-টাইম ভয়েস কোচিং, রেস্তোরাঁ ও কনবিনি সিমুলেশন সরাসরি আনলক করতে কয়েন প্যাক রিচার্জ করুন।
+              Nomi Sensei (নমি সেন্সেই)-র রিয়েল-টাইম ভয়েস কোচিং, রেস্তোরাঁ ও কনবিনি সিমুলেশন সরাসরি আনলক করতে কয়েন প্যাক রিচার্জ করুন।
             </p>
 
             {/* 3 Coin Packages Grid */}

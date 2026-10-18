@@ -155,7 +155,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#0a0a12] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 font-sans pb-24 text-left transition-colors selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#141726] sepia:bg-[#fbf0d9] text-stone-900 dark:text-stone-100 font-sans pb-24 text-left transition-colors selection:bg-[#E45147] selection:text-white">
       
       {/* 1. TOP STUDENT STATUS BAR */}
       <div className="bg-white dark:bg-stone-900 sepia:bg-[#f6ebd4] border-b border-stone-200/80 dark:border-stone-800 sepia:border-[#d9cbb2] sticky top-16 z-30 shadow-2xs">
@@ -181,7 +181,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
                       isActive
-                        ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-2xs'
+                        ? 'bg-[#E45147] text-white shadow-md shadow-purple-600/30'
                         : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800'
                     }`}
                   >
@@ -198,8 +198,8 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                 <span>{studentProfile.streakDays} Day Streak</span>
               </div>
-              <div className="flex items-center space-x-1 px-2.5 py-1 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 rounded-full text-xs font-bold text-blue-900 dark:text-blue-300">
-                <Clock className="w-3.5 h-3.5 text-blue-500" />
+              <div className="flex items-center space-x-1 px-2.5 py-1 bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/40 rounded-full text-xs font-bold text-purple-900 dark:text-purple-300">
+                <Clock className="w-3.5 h-3.5 text-purple-500" />
                 <span>{studentProfile.totalStudyHours}h Focus</span>
               </div>
               {!isPro ? (
@@ -207,14 +207,14 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                   id="btn-portal-header-upgrade-pro"
                   type="button"
                   onClick={() => setIsProModalOpen(true)}
-                  className="px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-stone-950 text-xs font-black rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
+                  className="px-3 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-black rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
                   title="Nihomi Pro — Unlock All Lessons"
                 >
-                  <Crown className="w-3.5 h-3.5 fill-stone-950" />
+                  <Crown className="w-3.5 h-3.5 fill-current" />
                   <span>Upgrade to PRO</span>
                 </button>
               ) : (
-                <span className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 text-xs font-mono font-bold rounded-full flex items-center gap-1">
+                <span className="px-2.5 py-1 bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300 border border-purple-300 dark:border-purple-700/50 text-xs font-mono font-bold rounded-full flex items-center gap-1">
                   <Crown className="w-3 h-3 fill-current" />
                   <span>PRO</span>
                 </span>
@@ -233,27 +233,27 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
           {!isPro && (
             <div
               id="portal-pro-banner"
-              className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border-2 border-amber-500/40 p-6 shadow-xl text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+              className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 border-2 border-purple-500/40 p-6 shadow-xl text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
             >
               <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold uppercase tracking-wide">
-                  <Crown className="w-3.5 h-3.5 text-amber-400" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-extrabold uppercase tracking-wide">
+                  <Crown className="w-3.5 h-3.5 text-purple-400" />
                   <span>Nihomi Pro™ Exclusive</span>
                 </div>
                 <h3 className="text-xl font-black text-white">
                   সম্পূর্ণ JLPT N5 এর ২৫টি লেসন ও AI ভয়েস টিউটর আনলক করুন
                 </h3>
                 <p className="text-xs text-stone-300 leading-relaxed">
-                  লেসন ০১–০৫ সম্পূর্ণ ফ্রি। লেসন ০৬–২৫ এর অ্যাডভান্সড ব্যাকরণ, কানজি ড্রয়িং এবং টোকিও অ্যাকসেন্ট ফিডব্যাক পেতে Pro নিন মাত্র ৳৫৯৯/মাসে।
+                  লেসন ০১–০৫ সম্পূর্ণ ফ্রি। লেসন ০৬–২৫ এর অ্যাডভান্সড ব্যাকরণ, কানজি ড্রয়িং এবং টোকিও অ্যাকসেন্ট ফিডব্যাক পেতে Pro নিন মাত্র ৳১,৯৯০/মাসে।
                 </p>
               </div>
               <button
                 id="btn-portal-upgrade-cta"
                 type="button"
                 onClick={() => setIsProModalOpen(true)}
-                className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-stone-950 font-black text-xs rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
+                className="px-6 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
               >
-                <Crown className="w-4 h-4 fill-stone-950" />
+                <Crown className="w-4 h-4 fill-current" />
                 <span>Upgrade to PRO — আনলক করুন</span>
               </button>
             </div>

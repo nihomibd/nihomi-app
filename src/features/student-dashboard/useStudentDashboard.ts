@@ -141,7 +141,7 @@ export const useStudentDashboard = () => {
     if (!data) return;
     const result = await studentService.completeBaitoTransaction();
     setData({ ...data, accountUsage: { ...data.accountUsage, nihomiCoins: result.updatedCoins } });
-    showToast('BaitoOS transaction সম্পন্ন! +40 XP এবং +10 Coins যোগ হয়েছে।');
+    showToast('Nihomi WorkOS™ সিমুলেশন সম্পন্ন! +40 XP এবং +10 Coins যোগ হয়েছে।');
   };
 
   const handleWritingPracticeComplete = async (character: string) => {
