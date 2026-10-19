@@ -22,6 +22,25 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({ onNavigate }) => {
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>লোকাল প্রিভিউ মোড • ভেরশন ২.০</span>
             </div>
+            <div className="pt-2">
+              <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">ট্রাভেল ও ফ্লাইট পার্টনার:</span>
+              <a
+                id="link-bdtrip24-logo-landing-footer"
+                href="https://bdtrip24.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-1 focus:ring-offset-[#0E101B]"
+                aria-label="bdTrip24.com Official Website"
+                title="bdTrip24.com — Travel & Logistics Partner"
+              >
+                <img
+                  src="/brand/bdtrip24.com%20Official%20Logo.png"
+                  alt="bdTrip24.com"
+                  className="h-6 w-auto object-contain"
+                  loading="lazy"
+                />
+              </a>
+            </div>
           </div>
 
           {/* Col 2: Learning & WorkOS */}

@@ -478,8 +478,15 @@ export const CoordinationHubView: React.FC<CoordinationHubViewProps> = ({ onNavi
                     href="https://bdtrip24.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-1.5 text-xs text-stone-900 dark:text-white font-bold hover:underline"
+                    className="inline-flex items-center space-x-2 text-xs text-stone-900 dark:text-white font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-rose-500 rounded p-1"
+                    title="bdTrip24.com — Official Student Flight Desk"
                   >
+                    <img
+                      src="/brand/bdtrip24.com%20Official%20Logo.png"
+                      alt="bdTrip24.com"
+                      className="h-5 w-auto object-contain inline-block"
+                      loading="lazy"
+                    />
                     <span>Visit bdTrip24.com Official Portal</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>

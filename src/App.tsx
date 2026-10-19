@@ -448,17 +448,21 @@ export const App: React.FC = () => {
       return;
     }
 
-    // Role-based post-OAuth redirection: if user just completed OAuth login, send founder to founder HQ and student to dashboard/journey
+    // If an authenticated Founder is on the generic journey view, immediately route to Founder Command HQ
+    if (user && (user.role === 'admin' || user.role === 'founder') && currentView === 'journey') {
+      handleNavigate('founder');
+      return;
+    }
+
+    // Role-based post-OAuth redirection: if user just completed OAuth login, send founder to founder HQ and student to dashboard
     if (user && typeof window !== 'undefined' && window.sessionStorage?.getItem('nihomi_just_logged_in_oauth') === 'true') {
       window.sessionStorage.removeItem('nihomi_just_logged_in_oauth');
       if (user.role === 'admin' || user.role === 'founder') {
         handleNavigate('founder');
         return;
       } else {
-        if (currentView !== 'journey') {
-          handleNavigate('dashboard');
-          return;
-        }
+        handleNavigate('dashboard');
+        return;
       }
     }
 
