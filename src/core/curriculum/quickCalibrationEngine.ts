@@ -269,6 +269,7 @@ export function evaluateCalibration(
 
   // Track B: Some Hiragana
   if (trackId === 'track_some_hiragana') {
+    const knowsVowels = answers['sh-1-vowels'] !== undefined && TRACK_QUESTIONS.track_some_hiragana[0].options[answers['sh-1-vowels']]?.isCorrect;
     if (score === 2) {
       const startingNode = CURRICULUM_GRAPH['kana-ka-family'] || CURRICULUM_GRAPH['kana-a'];
       return {
@@ -287,6 +288,24 @@ export function evaluateCalibration(
         unverifiedCapabilities: [
           'か, さ, た বর্গসহ বাকি হিরাগানা যাচাই বাকি',
           'কাতাকানা লিপি ও বাক্য গঠন এখনও লক করা'
+        ]
+      };
+    } else if (score === 1 && knowsVowels) {
+      const startingNode = CURRICULUM_GRAPH['kana-ka-family'] || CURRICULUM_GRAPH['kana-a'];
+      return {
+        trackId,
+        startingNodeId: 'kana-ka-family',
+        recommendedMission: startingNode,
+        score,
+        totalQuestions: questions.length,
+        titleBn: 'আপনার শুরু করার জায়গা: ব্যঞ্জনবর্ণ পরিবার (か-বর্গ)',
+        trackTitleBn: track.titleBn,
+        rationaleBn: 'আপনি মৌলিক স্বরবর্ণ ও শব্দ "あい" সঠিকভাবে চিনেছেন (১/২)। স্বরবর্ণের জ্ঞান থাকায় আপনাকে কা-বর্গে অগ্রসর করা হলো।',
+        verifiedCapabilities: [
+          'মৌলিক স্বরবর্ণ ও শব্দ "あい" পরিচিতি'
+        ],
+        unverifiedCapabilities: [
+          'ব্যঞ্জনবর্ণ বর্গসমূহ (か, さ, た) অনুশীলন বাকি'
         ]
       };
     } else {
@@ -439,19 +458,42 @@ export function applyCalibrationToState(result: CalibrationResult): LearnerKnowl
   if (result.startingNodeId === 'kana-ka-family') {
     addUnique(updated.knownHiragana, ['あ', 'い', 'う', 'え', 'お']);
     addUnique(updated.knownVocabulary, ['あい', 'あお', 'いえ', 'うえ', 'いい']);
-    addUnique(updated.masteredSkills, ['vowels_5_mastered', '5_vowels_gate']);
-    updated.totalXp = Math.max(updated.totalXp, 150);
-  } else if (result.startingNodeId === 'katakana-foundation') {
-    addUnique(updated.knownHiragana, ALL_HIRAGANA_46);
-    addUnique(updated.knownVocabulary, ['あい', 'あお', 'いえ', 'うえ', 'いい', 'ありがとう', 'さくら', 'ねこ']);
     addUnique(updated.masteredSkills, [
       'vowels_5_mastered',
       '5_vowels_gate',
+      'vowel_words_mastered',
+      'konbini_mission_1'
+    ]);
+    updated.totalXp = Math.max(updated.totalXp, 150);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('nihomi_foundation_completed', 'true');
+        localStorage.setItem('nihomi_lesson_02_completed', 'true');
+        localStorage.setItem('nihomi_mission_konbini_completed', 'true');
+      } catch {}
+    }
+  } else if (result.startingNodeId === 'katakana-foundation') {
+    addUnique(updated.knownHiragana, ALL_HIRAGANA_46);
+    addUnique(updated.knownVocabulary, [
+      'あい', 'あお', 'いえ', 'うえ', 'いい', 'ありがとう', 'さくら', 'ねこ', 'これ', 'それ', 'あれ'
+    ]);
+    addUnique(updated.masteredSkills, [
+      'vowels_5_mastered',
+      '5_vowels_gate',
+      'vowel_words_mastered',
+      'konbini_mission_1',
       'hiragana_core_mastered',
       'hiragana_mechanics_mastered',
       'hiragana_reading_mastered'
     ]);
     updated.totalXp = Math.max(updated.totalXp, 350);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('nihomi_foundation_completed', 'true');
+        localStorage.setItem('nihomi_lesson_02_completed', 'true');
+        localStorage.setItem('nihomi_mission_konbini_completed', 'true');
+      } catch {}
+    }
   } else if (result.startingNodeId === 'grammar-n5-lesson-01') {
     addUnique(updated.knownHiragana, ALL_HIRAGANA_46);
     addUnique(updated.knownKatakana, ALL_KATAKANA_46);
@@ -462,18 +504,29 @@ export function applyCalibrationToState(result: CalibrationResult): LearnerKnowl
     addUnique(updated.masteredSkills, [
       'vowels_5_mastered',
       '5_vowels_gate',
+      'vowel_words_mastered',
+      'konbini_mission_1',
       'hiragana_core_mastered',
       'hiragana_mechanics_mastered',
       'hiragana_reading_mastered',
+      'katakana_foundation_mastered',
       'katakana_mastered',
-      'kana_dual_mastered'
+      'kana_dual_mastered',
+      'reading_foundation_verified'
     ]);
     updated.totalXp = Math.max(updated.totalXp, 600);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('nihomi_foundation_completed', 'true');
+        localStorage.setItem('nihomi_lesson_02_completed', 'true');
+        localStorage.setItem('nihomi_mission_konbini_completed', 'true');
+      } catch {}
+    }
   }
 
-  // Set authoritatively calculated next mission
+  // Set authoritatively calculated next mission matching the placed starting node
   const nextMission = getNextBestMission(updated);
-  updated.currentMissionId = result.startingNodeId;
+  updated.currentMissionId = nextMission.id;
 
   saveLearnerKnowledgeState(updated);
   return updated;

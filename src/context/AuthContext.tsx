@@ -222,7 +222,7 @@ const AuthContext = createContext<AuthContextType>({
   refreshAuth: async () => {},
 });
 
-const safeStorage = {
+export const safeStorage = {
   getItem: (key: string): string | null => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -263,6 +263,17 @@ const bootstrapDefaultLearningPath = (userId: string) => {
     completed: false,
   })));
   safeStorage.setItem(pathKey, JSON.stringify({ userId, level: 'N5', learningPath, bootstrappedAt: new Date().toISOString() }));
+};
+
+export const getCanonicalOAuthRedirectUrl = (customPath?: string): string => {
+  if (typeof window === 'undefined') return 'https://www.nihomi.com';
+  const hostname = window.location.hostname;
+  const isProduction = hostname === 'nihomi.com' || hostname === 'www.nihomi.com';
+  const base = isProduction ? 'https://www.nihomi.com' : window.location.origin;
+  if (!customPath || customPath === '/' || customPath === '/login' || customPath === '/auth') {
+    return base;
+  }
+  return `${base}${customPath.startsWith('/') ? '' : '/'}${customPath}`;
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -431,54 +442,121 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
-    // Helper to strip sensitive token fragments from visible address bar without breaking navigation
+    // Helper to strip sensitive token fragments or OAuth errors from visible address bar without breaking navigation
     const cleanAuthUrlHash = () => {
-      if (typeof window !== 'undefined' && window.location.hash) {
-        if (window.location.hash.includes('access_token') || window.location.hash.includes('error=')) {
-          try {
-            window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true');
-          } catch {}
-          const cleanUrl = window.location.pathname + (window.location.search || '');
+      if (typeof window !== 'undefined') {
+        const hasHash = Boolean(window.location.hash && (window.location.hash.includes('access_token') || window.location.hash.includes('error=')));
+        const searchParams = new URLSearchParams(window.location.search);
+        const hasSearch = searchParams.has('code') || searchParams.has('error') || searchParams.has('error_description');
+
+        if (hasHash || hasSearch) {
+          const hashParams = window.location.hash ? new URLSearchParams(window.location.hash.replace(/^#/, '')) : null;
+          const error = hashParams?.get('error') || searchParams.get('error');
+          const errorDesc = hashParams?.get('error_description') || searchParams.get('error_description');
+
+          if (error) {
+            console.warn('[AuthContext] Google OAuth Error returned from provider:', error, errorDesc);
+            safeStorage.setItem('nihomi_oauth_error', errorDesc || error);
+          } else {
+            try {
+              window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true');
+              safeStorage.setItem('nihomi_just_logged_in_oauth', 'true');
+            } catch {}
+          }
+
+          // Strip tokens and OAuth params cleanly from visible URL bar
+          searchParams.delete('code');
+          searchParams.delete('error');
+          searchParams.delete('error_description');
+          searchParams.delete('error_code');
+          const cleanQuery = searchParams.toString() ? `?${searchParams.toString()}` : '';
+          const cleanUrl = (window.location.pathname || '/') + cleanQuery;
           window.history.replaceState({}, document.title, cleanUrl || '/');
         }
       }
     };
 
-    // If redirected with OAuth hash params, extract access_token immediately and strip from URL
-    let hashToken: string | null = null;
-    if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
-      try {
-        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-        hashToken = hashParams.get('access_token');
-        if (hashToken) {
-          setStoredToken(hashToken);
-          setToken(hashToken);
-          safeStorage.setItem('nihomi_auth_token', hashToken);
-          verifyServerSession(hashToken);
-        }
-      } catch (err) {
-        console.warn('[AuthContext] Error parsing URL hash token:', err);
+    // 1. If an OAuth error is present in URL (e.g. ?error=access_denied or #error=access_denied), capture it and clean immediately
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = window.location.hash ? new URLSearchParams(window.location.hash.replace(/^#/, '')) : null;
+      const error = searchParams.get('error') || hashParams?.get('error');
+      const errorDesc = searchParams.get('error_description') || hashParams?.get('error_description');
+      if (error) {
+        console.warn('[AuthContext] Google OAuth Error returned from provider:', error, errorDesc);
+        safeStorage.setItem('nihomi_oauth_error', errorDesc || error);
+        cleanAuthUrlHash();
       }
-      cleanAuthUrlHash();
     }
 
-    const initialToken = hashToken || getStoredToken();
-    if (initialToken) {
-      verifyServerSession(initialToken);
-    } else {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user && session.access_token) {
-          setStoredToken(session.access_token);
-          setToken(session.access_token);
-          safeStorage.setItem('nihomi_auth_token', session.access_token);
-          verifyServerSession(session.access_token);
-        } else {
+    // 2. PKCE Authorization Code Exchange (Google OAuth returns ?code=... in query under flowType: 'pkce')
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const urlCode = searchParams?.get('code');
+
+    const handleInitialSessionResolution = async () => {
+      // 2a. If PKCE authorization code is present in URL, exchange deterministically
+      if (urlCode) {
+        try {
+          console.log('[AuthContext] Exchanging detected OAuth PKCE code for authenticated session...');
+          const { data, error } = await supabase.auth.exchangeCodeForSession(urlCode);
+          cleanAuthUrlHash();
+          if (!error && data?.session?.access_token) {
+            setStoredToken(data.session.access_token);
+            setToken(data.session.access_token);
+            safeStorage.setItem('nihomi_auth_token', data.session.access_token);
+            safeStorage.setItem('nihomi_just_logged_in_oauth', 'true');
+            try { window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true'); } catch {}
+            await verifyServerSession(data.session.access_token);
+            return;
+          }
+        } catch (exchangeErr) {
+          console.warn('[AuthContext] Direct exchangeCodeForSession note:', exchangeErr);
+          cleanAuthUrlHash();
+        }
+      }
+
+      // 2b. If redirected with OAuth hash params (legacy implicit flow), extract access_token
+      let hashToken: string | null = null;
+      if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('access_token')) {
+        try {
+          const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+          hashToken = hashParams.get('access_token');
+          if (hashToken) {
+            setStoredToken(hashToken);
+            setToken(hashToken);
+            safeStorage.setItem('nihomi_auth_token', hashToken);
+            safeStorage.setItem('nihomi_just_logged_in_oauth', 'true');
+            try { window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true'); } catch {}
+            cleanAuthUrlHash();
+            await verifyServerSession(hashToken);
+            return;
+          }
+        } catch (err) {
+          console.warn('[AuthContext] Error parsing URL hash token:', err);
+        }
+      }
+
+      const initialToken = getStoredToken();
+      if (initialToken) {
+        await verifyServerSession(initialToken);
+      } else {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && session.access_token) {
+            setStoredToken(session.access_token);
+            setToken(session.access_token);
+            safeStorage.setItem('nihomi_auth_token', session.access_token);
+            await verifyServerSession(session.access_token);
+          } else {
+            if (isMounted) setLoading(false);
+          }
+        } catch {
           if (isMounted) setLoading(false);
         }
-      }).catch(() => {
-        if (isMounted) setLoading(false);
-      });
-    }
+      }
+    };
+
+    handleInitialSessionResolution();
 
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(async (event, session) => {
       cleanAuthUrlHash();
@@ -487,6 +565,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setStoredToken(session.access_token);
           setToken(session.access_token);
           safeStorage.setItem('nihomi_auth_token', session.access_token);
+        }
+        if (event === 'SIGNED_IN') {
+          safeStorage.setItem('nihomi_just_logged_in_oauth', 'true');
+          try { window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true'); } catch {}
         }
         await verifyServerSession(session.access_token);
         const savedAnswers = getSavedOnboardingAnswers();
@@ -528,24 +610,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async (customRedirect?: string): Promise<boolean> => {
     try {
-      let redirectUrl = customRedirect;
-      if (!redirectUrl && typeof window !== 'undefined') {
+      let targetPath = customRedirect;
+      if (!targetPath && typeof window !== 'undefined') {
         const path = window.location.pathname;
         if (path === '/founder' || path.startsWith('/admin') || path === '/command-center') {
-          redirectUrl = `${window.location.origin}/founder`;
+          targetPath = '/founder';
         } else if (path === '/login' || path === '/auth') {
-          redirectUrl = window.location.origin;
+          targetPath = '/';
         } else if (path && path !== '/') {
-          redirectUrl = `${window.location.origin}${path}`;
-        } else {
-          redirectUrl = window.location.origin;
+          targetPath = path;
         }
       }
+      const redirectUrl = getCanonicalOAuthRedirectUrl(targetPath);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           queryParams: { prompt: 'select_account' },
-          redirectTo: redirectUrl || (typeof window !== 'undefined' ? window.location.origin : undefined)
+          redirectTo: redirectUrl
         }
       });
       if (error) throw error;

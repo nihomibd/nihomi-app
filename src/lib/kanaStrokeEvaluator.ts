@@ -1,6 +1,6 @@
 // src/lib/kanaStrokeEvaluator.ts
 // NIHOMI KANA STUDIO™ — GEOMETRIC VECTOR STROKE EVALUATION ENGINE
-// Evaluates stroke count, start point proximity, vector direction, and path coverage.
+// Evaluates stroke count, start point proximity, endpoint proximity, vector direction, and path coverage.
 // Truthful, evidence-based handwriting verification without fake random percentages.
 
 import { KanaVectorStroke, getKanaStrokeSequence, hasKanaStrokeTemplate } from '../data/kanaStrokePaths';
@@ -31,12 +31,33 @@ export interface KanaStrokeEvaluationResult {
       | 'stroke_count_too_few'
       | 'stroke_count_too_many'
       | 'wrong_start_position'
+      | 'wrong_end_position'
       | 'wrong_direction'
       | 'stroke_too_short'
+      | 'missing_loop'
       | 'unsupported_template';
     instructionBn?: string;
   } | null;
   items: StrokeEvaluationItem[];
+}
+
+/**
+ * Extracts the final (x, y) target point from an SVG path string.
+ */
+export function extractPathEndPoint(pathStr: string): { x: number; y: number } | null {
+  if (!pathStr) return null;
+  const matches = pathStr.trim().match(/[-+]?\d*\.?\d+\s+[-+]?\d*\.?\d+$/);
+  if (matches) {
+    const parts = matches[0].trim().split(/\s+/);
+    if (parts.length === 2) {
+      const x = parseFloat(parts[0]);
+      const y = parseFloat(parts[1]);
+      if (!isNaN(x) && !isNaN(y)) {
+        return { x, y };
+      }
+    }
+  }
+  return null;
 }
 
 /**
@@ -170,10 +191,10 @@ export function evaluateKanaStrokes(
       continue;
     }
 
-    // Start position proximity check (allow 38% tolerance for touchscreens)
+    // A. Start position proximity check (strictly 24% tolerance)
     if (ref && ref.startPoint) {
       const startDist = Math.hypot(u0 - ref.startPoint.x, v0 - ref.startPoint.y);
-      if (startDist > 38) {
+      if (startDist > 24) {
         const reason = `স্ট্রোক ${i + 1} ভুল স্থান থেকে শুরু হয়েছে।`;
         evaluatedItems.push({ strokeNumber: i + 1, passed: false, reason });
         if (!firstFailingMistake) {
@@ -189,22 +210,84 @@ export function evaluateKanaStrokes(
       }
     }
 
-    // Direction check
+    // B. Endpoint proximity check (28% tolerance against canonical path endpoint)
+    if (ref && ref.path) {
+      const expectedEnd = extractPathEndPoint(ref.path);
+      if (expectedEnd) {
+        const endDist = Math.hypot(uEnd - expectedEnd.x, vEnd - expectedEnd.y);
+        if (endDist > 28) {
+          const reason = `স্ট্রোক ${i + 1} ভুল স্থানে শেষ হয়েছে।`;
+          evaluatedItems.push({ strokeNumber: i + 1, passed: false, reason });
+          if (!firstFailingMistake) {
+            firstFailingMistake = {
+              reason: 'wrong_end_position',
+              strokeIndex: i,
+              instructionBn: ref.instructionBn
+            };
+            failingFeedback = `স্ট্রোক ${i + 1} ভুল স্থানে শেষ হয়েছে। সঠিক দিক ও দৈর্ঘ্য বজায় রেখে স্ট্রোক টানুন।`;
+          }
+          totalScore -= 25;
+          continue;
+        }
+      }
+    }
+
+    // C. Strict Vector Direction & Curvature Verification
     if (ref && ref.direction) {
       let directionMismatch = false;
 
-      if (ref.direction === 'right' && dx < -12) {
-        directionMismatch = true;
-        failingFeedback = `স্ট্রোক ${i + 1} উল্টো দিকে টানা হয়েছে! নিয়ম: বাম থেকে ডানে সোজা টান দিন।`;
-      } else if (ref.direction === 'down' && dy < -12) {
-        directionMismatch = true;
-        failingFeedback = `স্ট্রোক ${i + 1} নিচ থেকে ওপরে টানা হয়েছে! নিয়ম: ওপর থেকে নিচে নামান।`;
-      } else if (ref.direction === 'down-left' && (dx > 20 || dy < -10)) {
-        directionMismatch = true;
-        failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে বাম দিকে টানুন।`;
-      } else if (ref.direction === 'down-right' && (dx < -15 || dy < -10)) {
-        directionMismatch = true;
-        failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে ডান দিকে টানুন।`;
+      if (ref.direction === 'right') {
+        // Must move predominantly to the right (dx positive and dominating dy)
+        if (dx < 8 || Math.abs(dx) < Math.abs(dy) * 0.75) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1} ভুল বা উল্টো দিকে টানা হয়েছে! নিয়ম: বাম থেকে ডানে সোজা টান দিন।`;
+        }
+      } else if (ref.direction === 'down') {
+        // Must move predominantly downwards (dy positive and dominating dx)
+        if (dy < 8 || Math.abs(dy) < Math.abs(dx) * 0.75) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1} ভুল বা উল্টো দিকে টানা হয়েছে! নিয়ম: ওপর থেকে নিচে সোজা নামান।`;
+        }
+      } else if (ref.direction === 'down-left') {
+        if (dy < 4 || dx > 4) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে বাম দিকে তীর্যক টানুন।`;
+        }
+      } else if (ref.direction === 'down-right') {
+        if (dy < 4 || dx < -4) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে ডান দিকে তীর্যক টানুন।`;
+        }
+      } else if (ref.direction === 'hook') {
+        if (dy < 8) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে নামিয়ে শেষে ছোট হুক দিন।`;
+        }
+      } else if (ref.direction === 'loop') {
+        // True loop verification: bounding box width and height must be >= 14% and trajectory >= 35
+        const xs = points.map((p) => (p.x / safeCanvasSize) * 100);
+        const ys = points.map((p) => (p.y / safeCanvasSize) * 100);
+        const boxWidth = Math.max(...xs) - Math.min(...xs);
+        const boxHeight = Math.max(...ys) - Math.min(...ys);
+
+        let totalTrajLength = 0;
+        for (let k = 1; k < points.length; k++) {
+          const stepDx = ((points[k].x - points[k - 1].x) / safeCanvasSize) * 100;
+          const stepDy = ((points[k].y - points[k - 1].y) / safeCanvasSize) * 100;
+          totalTrajLength += Math.hypot(stepDx, stepDy);
+        }
+
+        if (boxWidth < 14 || boxHeight < 14 || totalTrajLength < 35) {
+          directionMismatch = true;
+          failingFeedback = `স্ট্রোক ${i + 1}-এ লুপ বা বৃত্ত তৈরি হয়নি! হাত না তুলে গোল করে ঘুরিয়ে লুপ সম্পন্ন করুন।`;
+          if (!firstFailingMistake) {
+            firstFailingMistake = {
+              reason: 'missing_loop',
+              strokeIndex: i,
+              instructionBn: ref.instructionBn
+            };
+          }
+        }
       }
 
       if (directionMismatch) {

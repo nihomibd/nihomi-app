@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, Mail, ArrowRight, CheckCircle2, AlertCircle, X, RefreshCw, UserPlus, LogIn } from 'lucide-react';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
+import { getCanonicalOAuthRedirectUrl } from '../context/AuthContext';
 import { NihomiBrandLogo } from './brand/NihomiBrandLogo';
 
 interface AuthModalProps {
@@ -199,7 +200,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         provider: 'google',
         options: {
           queryParams: { prompt: 'select_account' },
-          redirectTo: window.location.origin
+          redirectTo: getCanonicalOAuthRedirectUrl()
         }
       });
 

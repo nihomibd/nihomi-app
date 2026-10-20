@@ -393,8 +393,8 @@ export const CURRICULUM_GRAPH: Record<string, CurriculumNode> = {
     prerequisites: ['vowel-mastery-gate'],
     requiredSkills: ['vowels_5_mastered'],
     unlocks: ['kana-sa-family'],
-    viewRoute: 'lesson',
-    viewParams: { lessonId: 'n5-kana-ka' },
+    viewRoute: 'kana',
+    viewParams: { char: 'か', row: 'ka', type: 'hiragana' },
     xpReward: 40,
   },
 
@@ -411,8 +411,8 @@ export const CURRICULUM_GRAPH: Record<string, CurriculumNode> = {
     prerequisites: ['kana-ka-family'],
     requiredKana: ['か', 'き', 'く', 'け', 'こ'],
     unlocks: ['kana-core-complete'],
-    viewRoute: 'lesson',
-    viewParams: { lessonId: 'n5-kana-sa' },
+    viewRoute: 'kana',
+    viewParams: { char: 'さ', row: 'sa', type: 'hiragana' },
     xpReward: 40,
   },
 
@@ -481,8 +481,8 @@ export const CURRICULUM_GRAPH: Record<string, CurriculumNode> = {
     prerequisites: ['hiragana-reading-mastery'],
     requiredSkills: ['hiragana_reading_mastered'],
     unlocks: ['katakana-mastery'],
-    viewRoute: 'lesson',
-    viewParams: { lessonId: 'n5-katakana-vowels' },
+    viewRoute: 'kana',
+    viewParams: { char: 'ア', row: 'a', type: 'katakana' },
     xpReward: 50,
   },
 
@@ -498,8 +498,8 @@ export const CURRICULUM_GRAPH: Record<string, CurriculumNode> = {
     prerequisites: ['katakana-foundation'],
     requiredSkills: ['katakana_foundation_mastered'],
     unlocks: ['reading-foundation-complete'],
-    viewRoute: 'lesson',
-    viewParams: { lessonId: 'n5-katakana-core' },
+    viewRoute: 'kana',
+    viewParams: { char: 'カ', row: 'ka', type: 'katakana' },
     xpReward: 70,
   },
 

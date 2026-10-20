@@ -5,7 +5,11 @@ import { trackNihomiEvent } from '../../utils/analytics';
 import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
 import { NihomiBrandLogo } from '../brand/NihomiBrandLogo';
 
-export const AuthModal: React.FC = () => {
+interface AuthModalProps {
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
+}
+
+export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -51,6 +55,7 @@ export const AuthModal: React.FC = () => {
         const ref = getStoredReferralCode();
         if (ref) claimReferralReward(ref, userId).catch(() => {});
         closeAuthModal();
+        onNavigate?.('dashboard');
       } else {
         trackNihomiEvent('signup_completed', { method: 'google' });
         const ref = getStoredReferralCode();
@@ -84,6 +89,7 @@ export const AuthModal: React.FC = () => {
     const ref = getStoredReferralCode();
     if (ref) claimReferralReward(ref, userId).catch(() => {});
     closeAuthModal();
+    onNavigate?.('dashboard');
   };
 
   return (

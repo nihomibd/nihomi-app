@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
+  Bot,
+  Brain,
+  Store,
+  FileText,
+  Target,
+  Compass,
+  ChevronLeft,
+  ChevronRight,
   Check,
   X,
   Sparkles,
@@ -23,14 +31,85 @@ import { calculateDailyCost, getPlanPriceForInterval, JourneyInterval } from '..
 import { billingApi } from '../lib/billingApi';
 import { useAuth } from '../context/AuthContext';
 import { CheckoutModal } from '../components/CheckoutModal';
-import { ProUpgradeModal } from '../components/billing/ProUpgradeModal';
 import { trackNihomiEvent } from '../utils/analytics';
 import { getSavedOnboardingAnswers } from '../core/onboarding/onboardingStorage';
 
 interface PricingViewProps {
   onSelectPlan?: (planId: PlanId) => void;
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
+  initialPlan?: PlanId | string;
+  initialInterval?: BillingInterval | string;
 }
+
+// Canonical 6-Core Value Pillars (Embedded Educational Slideshow)
+const NIHOMI_6_VALUES = [
+  {
+    id: 'sensei',
+    badge: 'PERSONAL SENSEI',
+    title: '২৪/৭ সার্বক্ষণিক পার্সোনাল শিক্ষক',
+    titleJa: 'AI 専属講師',
+    description: 'বাংলা ভাষায় জটিল জাপানি ব্যাকরণ বিশ্লেষণ ও যেকোনো সময় নির্ভুল কেইগো ও উচ্চারণ সহায়তা।',
+    icon: Bot,
+    accentGradient: 'from-red-600/20 via-[#1a1228] to-[#0d0918]',
+    badgeColor: 'bg-red-500/20 text-red-300 border-red-500/30',
+    highlightText: '১০০% বাংলায় প্রাঞ্জল ব্যাকরণ ব্যাখ্যা'
+  },
+  {
+    id: 'memoryos',
+    badge: 'MEMORYOS™ SRS',
+    title: 'স্পেসড রিপিটেশন স্মৃতি ইঞ্জিন',
+    titleJa: '記憶定着エンジン',
+    description: 'বৈজ্ঞানিক ইন্টারভালে আপনার ভুল হওয়া শব্দ ও ব্যাকরণ রিভিশন করিয়ে আজীবন মনে রাখা নিশ্চিত করে।',
+    icon: Brain,
+    accentGradient: 'from-amber-600/20 via-[#1a1528] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: '৯৫%+ দীর্ঘমেয়াদী মনে রাখার হার'
+  },
+  {
+    id: 'conbini',
+    badge: 'CONBINI SHIFT POS',
+    title: 'জাপানে যাওয়ার আগেই কাজের মহড়া',
+    titleJa: '現場レジ訓練',
+    description: 'টোকিও সেভেন-ইলেভেন ক্যাশিয়ার, বারকোড স্ক্যানার, সেমি-সেলফ রেজিস্টার ও কাস্টমার কেইগো সিমুলেশন।',
+    icon: Store,
+    accentGradient: 'from-emerald-600/20 via-[#121c22] to-[#0d0918]',
+    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    highlightText: 'বাস্তব টোকিও স্টোর অডিও ও রিয়েল শিফট'
+  },
+  {
+    id: 'jis_cv',
+    badge: 'JIS CV STUDIO',
+    title: 'জাপান স্ট্যান্ডার্ড JIS সিভি এক্সপোর্ট',
+    titleJa: '履歴書・職務経歴書',
+    description: 'জাপানি কোম্পানি ও ভিসা অনুমোদিত স্ট্যান্ডার্ড JIS 履歴書 এবং 職務経歴書 সরাসরি A4 PDF এক্সপোর্ট।',
+    icon: FileText,
+    accentGradient: 'from-blue-600/20 via-[#12162a] to-[#0d0918]',
+    badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    highlightText: 'A4 প্রিন্ট পারফেক্ট জাপানি ফরম্যাট'
+  },
+  {
+    id: 'zero_n1',
+    badge: 'ZERO TO N1 ROADMAP',
+    title: 'সম্পূর্ণ ভাষা ও ক্যারিয়ার রোডম্যাপ',
+    titleJa: 'N5からN1完全制覇',
+    description: 'শূন্য থেকে শুরু করে JLPT N1 পর্যন্ত বাস্তব সিলেবাস, ৫০+ মক টেস্ট ও মিনিমাম টাইমে সর্বোচ্চ প্রোগ্রেস।',
+    icon: Target,
+    accentGradient: 'from-purple-600/20 via-[#1a122e] to-[#0d0918]',
+    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    highlightText: '১,০০০+ বাস্তব অডিও ডায়ালগ ও কুইজ'
+  },
+  {
+    id: 'japan_readiness',
+    badge: 'JAPAN LIFE READINESS',
+    title: 'জাপান লিভিং সারভাইভাল গাইড',
+    titleJa: '日本生活完全ガイド',
+    description: 'সিটি হল রেজিস্ট্রেশন, ব্যাংক অ্যাকাউন্ট খোলা, ময়লা ফেলার নিয়ম ও জাপানে বসবাসের সব বাস্তব কলাকৌশল।',
+    icon: Compass,
+    accentGradient: 'from-amber-600/20 via-[#1d1520] to-[#0d0918]',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    highlightText: 'বাস্তব জীবনযাপনে শতভাগ প্রস্তুতি'
+  }
+];
 
 // Canonical Plan Definitions for PricingView (Single Source of Truth)
 const DEFAULT_PLANS: Plan[] = [
@@ -137,13 +216,17 @@ const DEFAULT_PLANS: Plan[] = [
   }
 ];
 
-export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNavigate }) => {
+export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNavigate, initialPlan, initialInterval }) => {
   const { user, activePlanId, refreshSubscription } = useAuth();
   const [plans, setPlans] = useState<Plan[]>(DEFAULT_PLANS);
-  const [interval, setInterval] = useState<JourneyInterval>('quarterly');
+  const [interval, setInterval] = useState<JourneyInterval>(
+    (initialInterval === 'monthly' || initialInterval === 'quarterly' || initialInterval === 'half-yearly' || initialInterval === 'yearly')
+      ? (initialInterval as JourneyInterval)
+      : 'quarterly'
+  );
+  const [activeSlide, setActiveSlide] = useState(0);
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<Plan | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [isBkashProModalOpen, setIsBkashProModalOpen] = useState(false);
   const [trialLoading, setTrialLoading] = useState(false);
   const [trialMessage, setTrialMessage] = useState<string | null>(null);
   const [trialError, setTrialError] = useState<string | null>(null);
@@ -189,6 +272,23 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
     fetchPlans();
   }, []);
 
+  useEffect(() => {
+    if (initialInterval && ['monthly', 'quarterly', 'half-yearly', 'yearly'].includes(initialInterval)) {
+      setInterval(initialInterval as JourneyInterval);
+    }
+  }, [initialInterval]);
+
+  useEffect(() => {
+    if (initialPlan && initialPlan !== 'free') {
+      const target = plans.find(p => p.id === initialPlan);
+      if (target) {
+        setSelectedPlanForCheckout(target);
+        setIsCheckoutOpen(true);
+      }
+    }
+  }, [initialPlan, plans]);
+
+
   const handleStartCheckout = (plan: Plan) => {
     if (plan.id === 'free') {
       if (onNavigate) onNavigate('dashboard');
@@ -232,17 +332,6 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           }}
         />
       )}
-
-      {/* Direct bKash Pro Upgrade Modal with WhatsApp Verification */}
-      <ProUpgradeModal
-        isOpen={isBkashProModalOpen}
-        onClose={() => setIsBkashProModalOpen(false)}
-        defaultPlanInterval={interval === 'yearly' ? 'yearly' : 'monthly'}
-        onSuccess={() => {
-          setIsBkashProModalOpen(false);
-          if (onNavigate) onNavigate('dashboard');
-        }}
-      />
 
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Hero Section */}
@@ -291,6 +380,103 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                 <div className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-1">ভিসা, ইন্টারভিউ ও পূর্ণ প্রস্তুতি</div>
               </div>
             </div>
+          </div>
+
+          {/* =================================================================== */}
+          {/* CANONICAL 6-VALUE PILLARS SLIDESHOW CAROUSEL (EMBEDDED)            */}
+          {/* =================================================================== */}
+          <div className="max-w-3xl mx-auto my-6 p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#14102c] via-[#100d24] to-[#0a0817] border border-white/10 shadow-2xl relative overflow-hidden text-left" id="pricing-value-slideshow">
+            <div className="pointer-events-none absolute -left-16 -top-16 w-52 h-52 bg-red-600/15 rounded-full blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -bottom-16 w-52 h-52 bg-amber-500/15 rounded-full blur-3xl" />
+
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center text-white font-black text-xs shadow-md">
+                  日
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-white leading-tight">
+                    কেন নিহোমি প্রিমিয়াম? (NIHOMI 6-Core Values)
+                  </h3>
+                  <p className="text-[11px] text-stone-300">
+                    জাপানে পদার্পণ ও ক্যারিয়ার গড়ার পূর্ণাঙ্গ ডিজিটাল ইকোসিস্টেম
+                  </p>
+                </div>
+              </div>
+
+              {/* Navigation Arrows */}
+              <div className="flex items-center gap-1.5 self-end sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev - 1 + NIHOMI_6_VALUES.length) % NIHOMI_6_VALUES.length)}
+                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+                  title="পূর্ববর্তী ভ্যালু"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev + 1) % NIHOMI_6_VALUES.length)}
+                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+                  title="পরবর্তী ভ্যালু"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Current Slide Display */}
+            {(() => {
+              const currentSlide = NIHOMI_6_VALUES[activeSlide];
+              const SlideIcon = currentSlide.icon;
+              return (
+                <div className="relative z-10 pt-4 space-y-3">
+                  <div className={`p-5 rounded-2xl bg-gradient-to-br ${currentSlide.accentGradient} border border-white/15 shadow-xl space-y-3`}>
+                    <div className="flex items-center justify-between">
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono border ${currentSlide.badgeColor}`}>
+                        {currentSlide.badge}
+                      </span>
+                      <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                        <SlideIcon className="w-4 h-4 text-amber-300" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="text-[11px] font-japanese text-amber-400 font-bold">
+                        {currentSlide.titleJa}
+                      </div>
+                      <h4 className="text-base font-black text-white leading-snug">
+                        {currentSlide.title}
+                      </h4>
+                      <p className="text-xs text-stone-200 leading-relaxed font-medium">
+                        {currentSlide.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-bold text-amber-300 font-mono">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>{currentSlide.highlightText}</span>
+                    </div>
+                  </div>
+
+                  {/* Dots Indicator */}
+                  <div className="flex items-center justify-center gap-1.5 pt-1">
+                    {NIHOMI_6_VALUES.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setActiveSlide(idx)}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          activeSlide === idx
+                            ? 'w-6 bg-gradient-to-r from-red-500 to-amber-500'
+                            : 'w-2 bg-white/20 hover:bg-white/40'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Monthly / 3-Month / Annual Toggle */}
@@ -483,7 +669,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
 
                   <button
                     type="button"
-                    onClick={() => handleStartCheckout(plan)}
+                    onClick={() => { const p = plans.find(x => x.id === 'pro') || plans[0]; handleStartCheckout(p); }}
                     disabled={isCurrent && plan.id !== 'free'}
                     className={`w-full py-3 px-4 rounded-xl font-bold text-xs transition-all shadow-xs flex items-center justify-center gap-2 ${
                       isCurrent
@@ -502,7 +688,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
                   {plan.id === 'pro' && !isCurrent && (
                     <button
                       type="button"
-                      onClick={() => setIsBkashProModalOpen(true)}
+                      onClick={() => { const p = plans.find(x => x.id === 'pro') || plans[0]; handleStartCheckout(p); }}
                       className="w-full py-2 px-3 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
                       id="btn-bkash-direct-pro"
                     >
@@ -614,7 +800,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
-              onClick={() => setIsBkashProModalOpen(true)}
+              onClick={() => { const p = plans.find(x => x.id === 'pro') || plans[0]; handleStartCheckout(p); }}
               className="px-4 py-2 rounded-xl bg-[#E2136E] text-white font-bold text-xs hover:bg-[#c90f61] transition-colors flex items-center gap-1.5 shadow-md shadow-[#E2136E]/20 cursor-pointer"
             >
               <Smartphone className="w-3.5 h-3.5" />

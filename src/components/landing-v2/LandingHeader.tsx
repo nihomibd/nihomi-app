@@ -114,11 +114,11 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
           {user ? (
             <button
               type="button"
-              onClick={() => onNavigate('dashboard')}
+              onClick={() => onNavigate(user.role === 'founder' || user.role === 'admin' ? 'founder' : 'dashboard')}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-colors cursor-pointer whitespace-nowrap"
             >
               <User className="w-3.5 h-3.5 text-[#a3e635]" />
-              <span>ড্যাশবোর্ড</span>
+              <span>{user.role === 'founder' || user.role === 'admin' ? 'কমান্ড সেন্টার' : 'ড্যাশবোর্ড'}</span>
             </button>
           ) : (
             <button
@@ -133,10 +133,10 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
           {/* Primary CTA Button */}
           <button
             type="button"
-            onClick={() => handleAuthClick('signup')}
+            onClick={() => user ? onNavigate(user.role === 'founder' || user.role === 'admin' ? 'founder' : 'dashboard') : handleAuthClick('signup')}
             className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#E45147] hover:bg-[#c93b32] text-white text-xs font-bold shadow-md shadow-red-600/30 transition-all cursor-pointer whitespace-nowrap"
           >
-            <span>বিনামূল্যে শুরু করুন</span>
+            <span>{user ? (user.role === 'founder' || user.role === 'admin' ? 'কমান্ড সেন্টার' : 'ড্যাশবোর্ডে প্রবেশ') : 'বিনামূল্যে শুরু করুন'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
@@ -166,20 +166,35 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
             </button>
           ))}
           <div className="pt-3 border-t border-white/10 flex flex-col gap-2.5">
-            <button
-              type="button"
-              onClick={() => handleAuthClick('login')}
-              className="w-full py-2.5 rounded-xl border border-white/15 text-slate-200 text-xs font-bold hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              লগইন
-            </button>
-            <button
-              type="button"
-              onClick={() => handleAuthClick('signup')}
-              className="w-full py-2.5 rounded-xl bg-[#E45147] text-white text-xs font-bold shadow-md shadow-red-600/30 hover:bg-[#c93b32] transition-all cursor-pointer"
-            >
-              বিনামূল্যে শুরু করুন
-            </button>
+            {user ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigate(user.role === 'founder' || user.role === 'admin' ? 'founder' : 'dashboard');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full py-2.5 rounded-xl bg-[#E45147] text-white text-xs font-bold shadow-md shadow-red-600/30 hover:bg-[#c93b32] transition-all cursor-pointer"
+              >
+                {user.role === 'founder' || user.role === 'admin' ? 'কমান্ড সেন্টারে প্রবেশ করুন' : 'ড্যাশবোর্ডে প্রবেশ করুন'}
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleAuthClick('login')}
+                  className="w-full py-2.5 rounded-xl border border-white/15 text-slate-200 text-xs font-bold hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  লগইন
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleAuthClick('signup')}
+                  className="w-full py-2.5 rounded-xl bg-[#E45147] text-white text-xs font-bold shadow-md shadow-red-600/30 hover:bg-[#c93b32] transition-all cursor-pointer"
+                >
+                  বিনামূল্যে শুরু করুন
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

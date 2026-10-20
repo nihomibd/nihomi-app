@@ -83,10 +83,11 @@ export const LessonView: React.FC<LessonViewProps> = ({ lessonId: propLessonId, 
   const [selectedLessonNum, setSelectedLessonNum] = useState<number>(() => {
     if (propLessonId) {
       const str = String(propLessonId).trim();
+      if (str.includes('kana')) return 1;
       const lMatch = str.match(/l(?:esson)?[-_]?(\d+)/i) || str.match(/[-_](\d+)$/);
       if (lMatch) return parseInt(lMatch[1], 10);
       const allMatches = str.match(/\d+/g);
-      if (allMatches && allMatches.length > 0) return parseInt(allMatches[allMatches.length - 1], 10);
+      if (allMatches && allMatches.length > 0 && !str.startsWith('n')) return parseInt(allMatches[allMatches.length - 1], 10);
     }
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -1226,7 +1227,11 @@ if (lessonId) {
           onClose={() => setIsPremiumPreviewOpen(false)}
           onUpgrade={() => {
             setIsPremiumPreviewOpen(false);
-            setIsProModalOpen(true);
+            if (onNavigate) {
+              onNavigate('pricing', { plan: 'pro' });
+            } else {
+              setIsProModalOpen(true);
+            }
           }}
         />
 

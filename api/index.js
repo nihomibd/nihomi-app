@@ -68711,17 +68711,17 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1e3 + Math.random() * 9e3)}`;
     const appUrl = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
-    const isBkashStub = !process.env.BKASH_APP_KEY || process.env.BKASH_APP_KEY.includes("placeholder") || process.env.BKASH_APP_KEY === "bkash_nihomi_live_app_key";
-    if (isBkashStub) {
-      console.log("[PaymentRouter] bKash gateway in connecting/stub mode. Returning connecting status.");
+    const isBkashConfigured = Boolean(
+      process.env.BKASH_APP_KEY && !process.env.BKASH_APP_KEY.includes("placeholder") && process.env.BKASH_APP_KEY !== "bkash_nihomi_live_app_key"
+    );
+    if (!isBkashConfigured) {
+      console.log("[PaymentRouter] bKash gateway NOT_CONFIGURED. Returning honest state.");
       return res.json({
         success: false,
-        connecting: true,
-        message: "\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0997\u09C7\u099F\u0993\u09AF\u09BC\u09C7 \u09B8\u0982\u09AF\u09CB\u0997 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u099A\u09CD\u099B\u09C7 (Live Gateway Connecting Tomorrow)",
-        contact: {
-          phone: "+880 1834-348966",
-          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF! \u0986\u09AE\u09BF ${planConfig.nameBn} \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF \u09B9\u09A4\u09C7 \u099A\u09BE\u0987\u0964`)}`
-        }
+        gatewayStatus: "NOT_CONFIGURED",
+        state: "NOT_CONFIGURED",
+        messageBn: "\u09AC\u09BF\u0995\u09BE\u09B6 \u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964",
+        message: "\u09AC\u09BF\u0995\u09BE\u09B6 \u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964"
       });
     }
     const bkashRes = await bKashService.createPayment({
@@ -69264,17 +69264,17 @@ paymentRouter.post("/sslcommerz/init", optionalAuth2, async (req, res) => {
     const resolvedEmail = user?.email || req.body.email || "student@nihomi.com";
     const resolvedName = name || user?.name || resolvedEmail.split("@")[0];
     const resolvedPhone = phone || user?.phone || "+8801834-348966";
-    const isSslStub = !process.env.SSLCOMMERZ_STORE_ID || process.env.SSLCOMMERZ_STORE_ID.includes("placeholder") || process.env.SSLCOMMERZ_STORE_ID === "nihomi_live_store";
-    if (isSslStub) {
-      console.log("[PaymentRouter] SSLCommerz in connecting/stub mode. Returning connecting status.");
+    const isSslConfigured = Boolean(
+      process.env.SSLCOMMERZ_STORE_ID && !process.env.SSLCOMMERZ_STORE_ID.includes("placeholder") && process.env.SSLCOMMERZ_STORE_ID !== "nihomi_live_store"
+    );
+    if (!isSslConfigured) {
+      console.log("[PaymentRouter] SSLCommerz gateway NOT_CONFIGURED. Returning honest state.");
       return res.json({
         success: false,
-        connecting: true,
-        message: "\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0997\u09C7\u099F\u0993\u09AF\u09BC\u09C7 \u09B8\u0982\u09AF\u09CB\u0997 \u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8 \u09B9\u099A\u09CD\u099B\u09C7 (Live Gateway Connecting Tomorrow)",
-        contact: {
-          phone: "+880 1834-348966",
-          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`\u09B9\u09CD\u09AF\u09BE\u09B2\u09CB \u09A8\u09BF\u09B9\u09CB\u09AE\u09BF! \u0986\u09AE\u09BF \u0995\u09BE\u09B0\u09CD\u09A1/\u098F\u09B8\u098F\u09B8\u098F\u09B2\u0995\u09AE\u09BE\u09B0\u09CD\u09B8 \u09A6\u09BF\u09DF\u09C7 \u09AD\u09B0\u09CD\u09A4\u09BF \u09B9\u09A4\u09C7 \u099A\u09BE\u0987\u0964`)}`
-        }
+        gatewayStatus: "NOT_CONFIGURED",
+        state: "NOT_CONFIGURED",
+        message: "\u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0997\u09C7\u099F\u0993\u09AF\u09BC\u09C7 \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964",
+        messageBn: "\u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u0997\u09C7\u099F\u0993\u09AF\u09BC\u09C7 \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964"
       });
     }
     const result = await sslCommerzService.initSession({
@@ -87979,7 +87979,7 @@ var supabase2 = createClient4(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: "implicit",
+    flowType: "pkce",
     storage: typeof window !== "undefined" ? window.localStorage : void 0
   }
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext.js';
+import { useAuth, getCanonicalOAuthRedirectUrl } from '../context/AuthContext.js';
 import { JLPTLevel } from '../types.js';
 import { apiRequest, setStoredToken } from '../lib/api.js';
 import { supabase } from '../lib/supabase.js';
@@ -53,7 +53,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
         provider: 'google',
         options: {
           queryParams: { prompt: 'select_account' },
-          redirectTo: window.location.origin
+          redirectTo: getCanonicalOAuthRedirectUrl()
         }
       });
 

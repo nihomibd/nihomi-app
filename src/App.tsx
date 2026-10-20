@@ -4,6 +4,7 @@ import { Footer } from './components/layout/Footer';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { LandingView } from './views/LandingView';
 import { AuthModal } from './components/auth/AuthModal';
+import { safeStorage } from './context/AuthContext';
 import { LearnerJourneyEngine } from './components/learning/LearnerJourneyEngine';
 import { NihomiMobileShowcase } from './components/showcase/NihomiMobileShowcase';
 
@@ -255,7 +256,9 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     return { view: 'practice', params: { lessonId: targetLesson } };
   }
   if (path === '/kana' || path === '/hiragana' || path === '/katakana' || path === '/kana-lab') {
-    return { view: 'kana', params: {} };
+    const char = searchParams.get('char') || undefined;
+    const type = searchParams.get('type') || (path === '/katakana' ? 'katakana' : undefined);
+    return { view: 'kana', params: { char, type } };
   }
   if (path === '/kanji' || path === '/kanji-lab' || path === '/kanji-100' || path === '/n5-kanji') {
     return { view: 'kanji', params: {} };
@@ -273,7 +276,9 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     return { view: 'japan-twin', params: {} };
   }
   if (path === '/pricing' || path === '/plans') {
-    return { view: 'pricing', params: {} };
+    const plan = searchParams.get('plan') || undefined;
+    const interval = searchParams.get('interval') || undefined;
+    return { view: 'pricing', params: { plan, interval } };
   }
   if (path === '/profile' || path === '/account' || path === '/me') {
     return { view: 'profile', params: {} };
@@ -455,8 +460,17 @@ export const App: React.FC = () => {
     }
 
     // Role-based post-OAuth redirection: if user just completed OAuth login, send founder to founder HQ and student to dashboard
-    if (user && typeof window !== 'undefined' && window.sessionStorage?.getItem('nihomi_just_logged_in_oauth') === 'true') {
-      window.sessionStorage.removeItem('nihomi_just_logged_in_oauth');
+    const hasOAuthJustLoggedIn = typeof window !== 'undefined' && (
+      window.sessionStorage?.getItem('nihomi_just_logged_in_oauth') === 'true' ||
+      safeStorage.getItem('nihomi_just_logged_in_oauth') === 'true' ||
+      window.location.search.includes('code=') ||
+      window.location.hash.includes('access_token')
+    );
+    if (user && hasOAuthJustLoggedIn) {
+      try {
+        window.sessionStorage?.removeItem('nihomi_just_logged_in_oauth');
+        safeStorage.removeItem('nihomi_just_logged_in_oauth');
+      } catch {}
       if (user.role === 'admin' || user.role === 'founder') {
         handleNavigate('founder');
         return;
@@ -748,7 +762,11 @@ export const App: React.FC = () => {
           <QuizRunnerView quizId={viewParams.quizId || 'quiz-n5-01'} onNavigate={handleNavigate} />
         )}
         {currentView === 'pricing' && (
-          <PricingView onNavigate={handleNavigate} />
+          <PricingView
+            onNavigate={handleNavigate}
+            initialPlan={viewParams.plan}
+            initialInterval={viewParams.interval}
+          />
         )}
         {currentView === 'payment-callback' && (
           <PaymentCallbackView onNavigate={handleNavigate} />
@@ -834,7 +852,7 @@ export const App: React.FC = () => {
           />
         )}
         {(currentView === 'kana' || currentView === 'hiragana' || currentView === 'katakana' || currentView === 'kana-lab') && (
-          <KanaView onNavigate={handleNavigate} />
+          <KanaView onNavigate={handleNavigate} initialChar={viewParams.char} initialType={viewParams.type} />
         )}
         {(currentView === 'kanji' || currentView === 'kanji-lab' || currentView === 'kanji-100' || currentView === 'n5-kanji') && (
           <KanjiView />
@@ -912,7 +930,7 @@ export const App: React.FC = () => {
       />
 
       {/* Google Sign-in & Authentication Modal */}
-      <AuthModal />
+      <AuthModal onNavigate={handleNavigate} />
 
       {/* Canonical Nomi Universal Companion (Single identity across public, learner, workos & founder route families) */}
       {!isCanvasMode && !isJourneyMode && <NomiUniversalCompanion currentView={currentView} />}

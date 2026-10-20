@@ -206,7 +206,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
                 <button
                   id="btn-portal-header-upgrade-pro"
                   type="button"
-                  onClick={() => setIsProModalOpen(true)}
+                  onClick={() => onNavigate ? onNavigate("pricing", { plan: "pro" }) : setIsProModalOpen(true)}
                   className="px-3 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-black rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
                   title="Nihomi Pro — Unlock All Lessons"
                 >
@@ -259,7 +259,7 @@ export const StudentPortalView: React.FC<StudentPortalViewProps> = ({
               <button
                 id="btn-portal-upgrade-cta"
                 type="button"
-                onClick={() => setIsProModalOpen(true)}
+                onClick={() => onNavigate ? onNavigate("pricing", { plan: "pro" }) : setIsProModalOpen(true)}
                 className="px-6 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
               >
                 <Crown className="w-4 h-4 fill-current" />

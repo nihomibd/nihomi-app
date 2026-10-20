@@ -84,17 +84,19 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
 
-    const isBkashStub = !process.env.BKASH_APP_KEY || process.env.BKASH_APP_KEY.includes('placeholder') || process.env.BKASH_APP_KEY === 'bkash_nihomi_live_app_key';
-    if (isBkashStub) {
-      console.log('[PaymentRouter] bKash gateway in connecting/stub mode. Returning connecting status.');
+    const isBkashConfigured = Boolean(
+      process.env.BKASH_APP_KEY &&
+      !process.env.BKASH_APP_KEY.includes('placeholder') &&
+      process.env.BKASH_APP_KEY !== 'bkash_nihomi_live_app_key'
+    );
+    if (!isBkashConfigured) {
+      console.log('[PaymentRouter] bKash gateway NOT_CONFIGURED. Returning honest state.');
       return res.json({
         success: false,
-        connecting: true,
-        message: 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)',
-        contact: {
-          phone: '+880 1834-348966',
-          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`হ্যালো নিহোমি! আমি ${planConfig.nameBn} প্ল্যানে ভর্তি হতে চাই।`)}`
-        }
+        gatewayStatus: 'NOT_CONFIGURED',
+        state: 'NOT_CONFIGURED',
+        messageBn: 'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।',
+        message: 'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।'
       });
     }
 
@@ -757,17 +759,19 @@ paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRe
     const resolvedName = name || user?.name || resolvedEmail.split('@')[0];
     const resolvedPhone = phone || (user as any)?.phone || '+8801834-348966';
 
-    const isSslStub = !process.env.SSLCOMMERZ_STORE_ID || process.env.SSLCOMMERZ_STORE_ID.includes('placeholder') || process.env.SSLCOMMERZ_STORE_ID === 'nihomi_live_store';
-    if (isSslStub) {
-      console.log('[PaymentRouter] SSLCommerz in connecting/stub mode. Returning connecting status.');
+    const isSslConfigured = Boolean(
+      process.env.SSLCOMMERZ_STORE_ID &&
+      !process.env.SSLCOMMERZ_STORE_ID.includes('placeholder') &&
+      process.env.SSLCOMMERZ_STORE_ID !== 'nihomi_live_store'
+    );
+    if (!isSslConfigured) {
+      console.log('[PaymentRouter] SSLCommerz gateway NOT_CONFIGURED. Returning honest state.');
       return res.json({
         success: false,
-        connecting: true,
-        message: 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)',
-        contact: {
-          phone: '+880 1834-348966',
-          whatsapp: `https://wa.me/8801834348966?text=${encodeURIComponent(`হ্যালো নিহোমি! আমি কার্ড/এসএসএলকমার্স দিয়ে ভর্তি হতে চাই।`)}`
-        }
+        gatewayStatus: 'NOT_CONFIGURED',
+        state: 'NOT_CONFIGURED',
+        message: 'অনলাইন পেমেন্ট গেটওয়ে এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।',
+        messageBn: 'অনলাইন পেমেন্ট গেটওয়ে এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।'
       });
     }
 

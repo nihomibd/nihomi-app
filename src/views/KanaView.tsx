@@ -49,18 +49,61 @@ import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiComp
 import { KanaPracticeSheetDownloadCard } from '../components/kana/KanaPracticeSheetDownloadCard';
 
 interface KanaViewProps {
+  initialChar?: string;
+  initialRow?: string;
+  initialType?: KanaType;
   onNavigate?: (view: string, params?: Record<string, any>) => void;
 }
 
-export const KanaView: React.FC<KanaViewProps> = ({ onNavigate }) => {
-  const [activeType, setActiveType] = useState<KanaType>('hiragana');
-  const [activeSubType, setActiveSubType] = useState<KanaSubType>('seion');
+export const KanaView: React.FC<KanaViewProps> = ({ initialChar: propChar, initialType: propType, onNavigate }) => {
+  // Query param fallback support
+  const queryChar = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('char') : null;
+  const queryType = typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('type') as KanaType) : null;
+
+  const targetChar = propChar || queryChar;
+  const targetType = propType || queryType;
+
+  // Resolve matching Kana character across all available syllabaries
+  const resolveTargetKana = (charOrRomaji?: string | null): KanaCharacter => {
+    if (!charOrRomaji) return HIRAGANA_SEION[0];
+    const q = charOrRomaji.trim();
+    const foundHiragana = HIRAGANA_SEION.find((k) => k.char === q || k.romaji.toLowerCase() === q.toLowerCase());
+    if (foundHiragana) return foundHiragana;
+    const foundKatakana = KATAKANA_SEION.find((k) => k.char === q || k.romaji.toLowerCase() === q.toLowerCase());
+    if (foundKatakana) return foundKatakana;
+    const foundDakuon = DAKUON_HANDAKUON_KANA.find((k) => k.char === q || k.romaji.toLowerCase() === q.toLowerCase());
+    if (foundDakuon) return foundDakuon;
+    const foundYoon = YOON_KANA.find((k) => k.char === q || k.romaji.toLowerCase() === q.toLowerCase());
+    if (foundYoon) return foundYoon;
+    return HIRAGANA_SEION[0];
+  };
+
+  const initialKana = resolveTargetKana(targetChar);
+
+  const [activeType, setActiveType] = useState<KanaType>(
+    targetType || initialKana.type || 'hiragana'
+  );
+  const [activeSubType, setActiveSubType] = useState<KanaSubType>(
+    initialKana.subType || 'seion'
+  );
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedKana, setSelectedKana] = useState<KanaCharacter>(HIRAGANA_SEION[0]);
+  const [selectedKana, setSelectedKana] = useState<KanaCharacter>(initialKana);
   const [viewLayout, setViewLayout] = useState<'studio' | 'grid'>('studio');
   const [masteredList, setMasteredList] = useState<string[]>([]);
   const [recentMistakes, setRecentMistakes] = useState<KanaMistakeRecord[]>([]);
   const [isKanaLabOpen, setIsKanaLabOpen] = useState<boolean>(false);
+
+  // Synchronize when propChar or targetChar changes dynamically
+  useEffect(() => {
+    if (targetChar) {
+      const resolved = resolveTargetKana(targetChar);
+      setSelectedKana(resolved);
+      setActiveType(resolved.type);
+      if (resolved.subType) {
+        setActiveSubType(resolved.subType);
+      }
+    }
+  }, [targetChar]);
 
   // Refresh mastery and memory-os logs
   const refreshMasteryAndLogs = () => {

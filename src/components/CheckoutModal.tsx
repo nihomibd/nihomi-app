@@ -240,7 +240,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Connecting / Stub State
   const [isConnectingMode, setIsConnectingMode] = useState<boolean>(false);
   const [connectingMessage, setConnectingMessage] = useState<string>(
-    'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)'
+    'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি。'
   );
 
   // Coupon state
@@ -348,7 +348,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       if ((res as any)?.connecting) {
         setIsConnectingMode(true);
         setConnectingMessage(
-          (res as any).message || 'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)'
+          (res as any).message || 'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি。'
         );
         return;
       }
@@ -358,12 +358,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       }
       setIsConnectingMode(true);
       setConnectingMessage(
-        'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)। আজই ভর্তি হতে বা আসন সংরক্ষণ করতে সরাসরি আমাদের সাথে যোগাযোগ করুন:'
+        'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি。'
       );
     } catch {
       setIsConnectingMode(true);
       setConnectingMessage(
-        'পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)। আজই নিশ্চিত আসন ও আর্লি-বার্ড সুবিধায় ভর্তি হতে সরাসরি আমাদের হেল্পলাইনে যোগাযোগ করুন:'
+        'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি。'
       );
     } finally {
       setIsProcessingBkash(false);
@@ -652,7 +652,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                       <div>
                         <h4 className="text-xs sm:text-sm font-black text-amber-300">
-                          পেমেন্ট গেটওয়ে সংযোগ সম্পন্ন হচ্ছে (Live Gateway Connecting Tomorrow)
+                          বিকাশ অনলাইন পেমেন্ট স্ট্যাটাস (bKash Payment Status)
                         </h4>
                         <p className="text-[11px] text-stone-300 mt-1 leading-relaxed">
                           {connectingMessage}
