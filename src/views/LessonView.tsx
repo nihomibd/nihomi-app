@@ -66,6 +66,7 @@ import { SessionReportOverlay } from '../components/SessionReportOverlay.js';
 import { PronunciationCoach } from '../components/PronunciationCoach.js';
 import { trackNihomiEvent } from '../utils/analytics.js';
 import { ZenLearningCanvas } from '../components/learning/ZenLearningCanvas.js';
+import { InteractiveGrammarLoop } from '../components/learning/InteractiveGrammarLoop.js';
 import { VowelWordFormationCanvas } from '../components/learning/VowelWordFormationCanvas.js';
 import { ContextualSenseiCompanion } from '../components/ai/ContextualSenseiCompanion';
 import { PrerequisiteFoundationGate } from '../components/learning/PrerequisiteFoundationGate';
@@ -763,7 +764,19 @@ if (lessonId) {
 
             {/* TAB 1: Grammar Patterns */}
             {activeTab === 'grammar' && (
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Canonical N.I.H.O.M.I. Interactive Learning Cycle */}
+                <InteractiveGrammarLoop
+                  lessonId={lessonId}
+                  lessonTitle={lesson.title || `JLPT N5 Lesson ${selectedLessonNum}`}
+                  onComplete={handleCompleteLesson}
+                />
+
+                <div className="pt-2">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-3">
+                    📚 ব্যাকরণ সূত্র ও প্র্যাকটিস রেফারেন্স (Grammar Blueprint)
+                  </h3>
+                </div>
                 {lesson.grammar?.map((g: any, idx: number) => (
                   <div key={idx} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between border-b border-stone-100 pb-3">

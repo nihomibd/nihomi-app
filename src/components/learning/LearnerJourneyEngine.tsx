@@ -330,8 +330,8 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
       localStorage.setItem('nihomi_mission_001_done', 'true');
       const raw = localStorage.getItem('nihomi_completed_lessons');
       const currentCompleted: string[] = raw ? JSON.parse(raw) : [];
-      if (!currentCompleted.includes('n5-l1')) {
-        currentCompleted.push('n5-l1');
+      if (!currentCompleted.includes('kana-a-i')) {
+        currentCompleted.push('kana-a-i');
         localStorage.setItem('nihomi_completed_lessons', JSON.stringify(currentCompleted));
       }
 
@@ -340,7 +340,7 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
       localStorage.setItem('nihomi_student_xp', nextXp.toString());
 
       window.dispatchEvent(new CustomEvent('nihomi:progress-updated', {
-        detail: { type: 'journey', lessonId: 'n5-l1', xp: 100, totalXp: nextXp, email: savedEmail }
+        detail: { type: 'journey', lessonId: 'kana-a-i', xp: 100, totalXp: nextXp, email: savedEmail }
       }));
       window.dispatchEvent(new CustomEvent('nihomi-foundation-unlocked'));
     } catch (syncErr) {
@@ -428,14 +428,15 @@ export const LearnerJourneyEngine: React.FC<LearnerJourneyEngineProps> = ({
     soundEffects.playButtonTap();
     syncProgressToStorage();
     const kState = loadLearnerKnowledgeState();
-    if (!kState.masteredSkills.includes('konbini_mission_1')) {
-      kState.masteredSkills.push('konbini_mission_1');
-      saveLearnerKnowledgeState(kState);
-    }
+    addLearnedKana(kState, 'あ');
+    addLearnedKana(kState, 'い');
+    addLearnedVocabulary(kState, 'あい');
+    saveLearnerKnowledgeState(kState);
+
     const nextMission = getNextBestMission(kState);
     if (onNavigate) {
       if (nextMission.viewRoute === 'lesson') {
-        onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l1' });
+        onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l1', char: 'う' });
       } else if (nextMission.viewRoute === 'journey') {
         onNavigate('journey', nextMission.viewParams);
       } else {
