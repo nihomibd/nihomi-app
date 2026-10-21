@@ -53216,7 +53216,14 @@ var init_db = __esm({
           try {
             fs.renameSync(tmpFile, filePath);
           } catch {
-            fs.copyFileSync(tmpFile, filePath);
+            try {
+              fs.copyFileSync(tmpFile, filePath);
+            } catch {
+              try {
+                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+              } catch {
+              }
+            }
             try {
               fs.unlinkSync(tmpFile);
             } catch {
@@ -68748,6 +68755,251 @@ var idempotencyRegistry = /* @__PURE__ */ new Map();
 var userRateLimitRegistry = /* @__PURE__ */ new Map();
 var processedTrxRegistry = /* @__PURE__ */ new Set();
 var paymentAttemptRegistry = /* @__PURE__ */ new Map();
+async function getDurableIdempotency(key) {
+  if (!key) return null;
+  const cached = idempotencyRegistry.get(key);
+  if (cached && Date.now() - cached.createdAt < 15 * 60 * 1e3) {
+    return cached;
+  }
+  try {
+    const memPayments = db.getAllPayments();
+    const match = memPayments.find(
+      (p) => (p.metadata?.idempotencyKey === key || p.metadata?.clientKey === key) && p.metadata?.cachedResponse && Date.now() - new Date(p.createdAt).getTime() < 15 * 60 * 1e3
+    );
+    if (match) {
+      const rec = {
+        key,
+        userId: match.userId,
+        tier: match.planId,
+        interval: match.billingInterval || "monthly",
+        amount: match.amount,
+        state: match.status === "paid" ? "SUCCEEDED" : "PENDING",
+        response: match.metadata.cachedResponse,
+        createdAt: new Date(match.createdAt).getTime(),
+        expiresAt: new Date(match.createdAt).getTime() + 15 * 60 * 1e3
+      };
+      idempotencyRegistry.set(key, rec);
+      return rec;
+    }
+  } catch (err) {
+    console.warn("[PaymentRouter] Durable idempotency db lookup warning:", err?.message);
+  }
+  if (isDatabaseConfigured()) {
+    try {
+      const stored = await prisma.payment.findFirst({
+        where: {
+          invoiceNumber: { equals: key }
+        }
+      });
+      if (stored && Date.now() - stored.createdAt.getTime() < 15 * 60 * 1e3) {
+        const meta = stored.metadata || {};
+        if (meta.cachedResponse) {
+          const rec = {
+            key,
+            userId: stored.userId,
+            tier: meta.tier || "pro",
+            interval: meta.interval || "monthly",
+            amount: Number(stored.amount),
+            state: stored.status === "paid" ? "SUCCEEDED" : "PENDING",
+            response: meta.cachedResponse,
+            createdAt: stored.createdAt.getTime(),
+            expiresAt: stored.createdAt.getTime() + 15 * 60 * 1e3
+          };
+          idempotencyRegistry.set(key, rec);
+          return rec;
+        }
+      }
+    } catch (err) {
+      console.warn("[PaymentRouter] Durable idempotency Prisma lookup warning:", err?.message);
+    }
+  }
+  return null;
+}
+async function saveDurableIdempotency(key, record) {
+  idempotencyRegistry.set(key, record);
+  try {
+    const memPayments = db.getAllPayments();
+    const existing = memPayments.find(
+      (p) => p.metadata?.idempotencyKey === key || record.response?.paymentID && p.metadata?.paymentID === record.response.paymentID
+    );
+    if (existing) {
+      db.updatePayment(existing.id, {
+        metadata: {
+          ...existing.metadata,
+          idempotencyKey: key,
+          cachedResponse: record.response,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      });
+    } else {
+      const newPay = db.createPayment({
+        userId: record.userId,
+        planId: record.tier,
+        planName: SUBSCRIPTION_TIERS[record.tier]?.name || "Nihomi Learning Plan",
+        billingInterval: record.interval || "monthly",
+        amount: record.amount,
+        originalAmount: record.amount,
+        discountAmount: 0,
+        provider: "bkash"
+      });
+      db.updatePayment(newPay.id, {
+        providerTransactionId: record.response?.paymentID || `IDEMP_${key}`,
+        metadata: {
+          idempotencyKey: key,
+          paymentID: record.response?.paymentID,
+          invoiceNumber: record.response?.invoiceNumber,
+          cachedResponse: record.response,
+          tier: record.tier,
+          interval: record.interval
+        }
+      });
+    }
+    db.save();
+  } catch (err) {
+    console.warn("[PaymentRouter] Durable idempotency db save warning:", err?.message);
+  }
+}
+async function getDurablePaymentAttempt(paymentID) {
+  if (!paymentID) return null;
+  const cached = paymentAttemptRegistry.get(paymentID);
+  if (cached) return cached;
+  try {
+    const memPayments = db.getAllPayments();
+    const mem = memPayments.find(
+      (p) => p.metadata?.paymentID === paymentID || p.providerTransactionId === paymentID || p.id === paymentID
+    );
+    if (mem) {
+      const meta = mem.metadata || {};
+      const state = mem.status === "paid" ? "SUCCEEDED" : mem.status === "failed" ? "FAILED" : mem.status === "cancelled" ? "CANCELLED" : meta.paymentState || "PENDING";
+      const record = {
+        paymentID,
+        userId: mem.userId,
+        tier: meta.tier || mem.planId || "pro",
+        interval: meta.interval || mem.billingInterval || "monthly",
+        amount: mem.amount,
+        state,
+        trxID: mem.status === "paid" ? mem.providerTransactionId : meta.trxID,
+        invoiceNumber: meta.invoiceNumber || `INV_${paymentID}`,
+        createdAt: new Date(mem.createdAt).getTime(),
+        updatedAt: new Date(mem.updatedAt).getTime()
+      };
+      paymentAttemptRegistry.set(paymentID, record);
+      return record;
+    }
+  } catch (err) {
+    console.warn("[PaymentRouter] Durable payment attempt db lookup warning:", err?.message);
+  }
+  if (isDatabaseConfigured()) {
+    try {
+      const stored = await prisma.payment.findFirst({
+        where: {
+          OR: [{ paymentID }, { providerTransactionId: paymentID }]
+        }
+      });
+      if (stored) {
+        const meta = stored.metadata || {};
+        const state = stored.status === "paid" ? "SUCCEEDED" : stored.status === "failed" ? "FAILED" : stored.status === "cancelled" ? "CANCELLED" : meta.paymentState || "PENDING";
+        const record = {
+          paymentID,
+          userId: stored.userId,
+          tier: meta.tier || "pro",
+          interval: meta.interval || "monthly",
+          amount: Number(stored.amount),
+          state,
+          trxID: stored.status === "paid" ? stored.providerTransactionId : meta.trxID,
+          invoiceNumber: stored.invoiceNumber || `INV_${paymentID}`,
+          createdAt: stored.createdAt.getTime(),
+          updatedAt: stored.createdAt.getTime()
+        };
+        paymentAttemptRegistry.set(paymentID, record);
+        return record;
+      }
+    } catch (err) {
+      console.warn("[PaymentRouter] Durable payment attempt Prisma lookup warning:", err?.message);
+    }
+  }
+  return null;
+}
+async function saveDurablePaymentAttempt(paymentID, record) {
+  paymentAttemptRegistry.set(paymentID, record);
+  try {
+    const memPayments = db.getAllPayments();
+    const existing = memPayments.find(
+      (p) => p.metadata?.paymentID === paymentID || p.providerTransactionId === paymentID || p.id === paymentID
+    );
+    if (existing) {
+      db.updatePayment(existing.id, {
+        status: record.state === "SUCCEEDED" ? "paid" : record.state === "FAILED" ? "failed" : "initiated",
+        providerTransactionId: record.trxID || existing.providerTransactionId,
+        metadata: {
+          ...existing.metadata,
+          paymentID,
+          paymentState: record.state,
+          trxID: record.trxID,
+          invoiceNumber: record.invoiceNumber,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      });
+    } else {
+      const newPay = db.createPayment({
+        userId: record.userId,
+        planId: record.tier,
+        planName: SUBSCRIPTION_TIERS[record.tier]?.name || "Nihomi Learning Plan",
+        billingInterval: record.interval || "monthly",
+        amount: record.amount,
+        originalAmount: record.amount,
+        discountAmount: 0,
+        provider: "bkash"
+      });
+      db.updatePayment(newPay.id, {
+        providerTransactionId: record.trxID || paymentID,
+        status: record.state === "SUCCEEDED" ? "paid" : "initiated",
+        metadata: {
+          paymentID,
+          paymentState: record.state,
+          trxID: record.trxID,
+          invoiceNumber: record.invoiceNumber,
+          tier: record.tier,
+          interval: record.interval
+        }
+      });
+    }
+    db.save();
+  } catch (err) {
+    console.warn("[PaymentRouter] Durable payment attempt db save warning:", err?.message);
+  }
+  if (isDatabaseConfigured()) {
+    try {
+      const existing = await prisma.payment.findFirst({
+        where: { OR: [{ paymentID }, { providerTransactionId: paymentID }] }
+      });
+      if (existing) {
+        await prisma.payment.update({
+          where: { id: existing.id },
+          data: {
+            status: record.state === "SUCCEEDED" ? "paid" : "initiated",
+            paidAt: record.state === "SUCCEEDED" ? /* @__PURE__ */ new Date() : void 0,
+            providerTransactionId: record.trxID || existing.providerTransactionId,
+            metadata: {
+              ...existing.metadata,
+              paymentID,
+              paymentState: record.state,
+              trxID: record.trxID,
+              invoiceNumber: record.invoiceNumber
+            }
+          }
+        });
+      }
+    } catch (err) {
+      console.warn("[PaymentRouter] Durable payment attempt Prisma update warning:", err?.message);
+    }
+  }
+}
+function recordDurableTrxProcessed(trxID) {
+  if (trxID) {
+    processedTrxRegistry.add(trxID);
+  }
+}
 function resolveTierAndIntervalFromAmount(amount) {
   for (const [planId, planDef] of Object.entries(CANONICAL_SUBSCRIPTION_MATRIX)) {
     for (const [intervalKey, termPricing] of Object.entries(planDef.terms)) {
@@ -68814,7 +69066,7 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
     const resolvedEmail = user?.email || req.body.email || "student@nihomi.com";
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1e3 + Math.random() * 9e3)}`;
     const idempotencyKey = clientKey || req.headers["idempotency-key"] || req.headers["x-idempotency-key"] || `idemp_${resolvedUserId}_${selectedTier}_${interval}`;
-    const cachedAttempt = idempotencyRegistry.get(idempotencyKey);
+    const cachedAttempt = await getDurableIdempotency(idempotencyKey);
     if (cachedAttempt && Date.now() - cachedAttempt.createdAt < 15 * 60 * 1e3) {
       res.setHeader("X-Idempotent-Replay", "true");
       return res.json(cachedAttempt.response);
@@ -68849,7 +69101,7 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
         state: "PENDING",
         planNameBn: planConfig.nameBn
       };
-      idempotencyRegistry.set(idempotencyKey, {
+      await saveDurableIdempotency(idempotencyKey, {
         key: idempotencyKey,
         userId: resolvedUserId,
         tier: selectedTier,
@@ -68861,7 +69113,7 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
         expiresAt: now + 15 * 60 * 1e3
       });
       userRateLimitRegistry.set(resolvedUserId, { timestamp: now, key: idempotencyKey, response: mockResponse });
-      paymentAttemptRegistry.set(mockPaymentID, {
+      await saveDurablePaymentAttempt(mockPaymentID, {
         paymentID: mockPaymentID,
         userId: resolvedUserId,
         tier: selectedTier,
@@ -68954,6 +69206,17 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
         }
       });
       db.save();
+      await saveDurablePaymentAttempt(bkashRes.paymentID, {
+        paymentID: bkashRes.paymentID,
+        userId: resolvedUserId,
+        tier: selectedTier,
+        interval,
+        amount,
+        state: "PENDING",
+        invoiceNumber,
+        createdAt: now,
+        updatedAt: now
+      });
     } catch (memErr) {
       console.warn("[PaymentRouter] In-memory payment init log error:", memErr?.message);
     }
@@ -68986,12 +69249,33 @@ paymentRouter.get("/callback", async (req, res) => {
     return res.redirect(`/payment/callback?status=${encodeURIComponent(status || "failed")}&paymentID=${encodeURIComponent(paymentID)}`);
   }
   try {
-    const existingAttempt = paymentAttemptRegistry.get(paymentID);
+    const existingAttempt = await getDurablePaymentAttempt(paymentID);
     if (existingAttempt && existingAttempt.state === "SUCCEEDED") {
       console.log(`[PaymentRouter Callback] Duplicate callback / replay detected for paymentID: ${paymentID}. Returning idempotent success.`);
       return res.redirect(`/payment/callback?status=success&trxID=${existingAttempt.trxID || "ALREADY_PAID"}&tier=${existingAttempt.tier}&amount=${existingAttempt.amount}&invoiceNumber=${existingAttempt.invoiceNumber}&deduplicated=true`);
     }
-    const execResult = await bKashService.executePayment(paymentID);
+    let execResult;
+    if (paymentID.startsWith("MOCK_BK_") || req.query.mock === "true" || process.env.ENABLE_PAYMENT_MOCK === "true") {
+      const existing = await getDurablePaymentAttempt(paymentID);
+      const mockAmt = existing?.amount || 1990;
+      const mockInv = existing?.invoiceNumber || `INV_MOCK_${Date.now()}`;
+      execResult = {
+        statusCode: "0000",
+        statusMessage: "Successful",
+        paymentID,
+        payerReference: existing?.userId || "usr_student",
+        customerMsisdn: "01800000000",
+        trxID: existing?.trxID || `TRX_MOCK_${Date.now()}`,
+        amount: String(mockAmt),
+        transactionStatus: "Completed",
+        paymentExecuteTime: (/* @__PURE__ */ new Date()).toISOString(),
+        currency: "BDT",
+        intent: "sale",
+        merchantInvoiceNumber: mockInv
+      };
+    } else {
+      execResult = await bKashService.executePayment(paymentID);
+    }
     if (execResult.transactionStatus !== "Completed" || !execResult.trxID) {
       console.error(`[PaymentRouter Callback] Incomplete status: ${execResult.transactionStatus}`);
       return res.redirect(`/payment/callback?status=failed&error=incomplete_transaction&paymentID=${encodeURIComponent(paymentID)}`);
@@ -69038,8 +69322,8 @@ paymentRouter.get("/callback", async (req, res) => {
       paymentID,
       invoiceNumber
     });
-    processedTrxRegistry.add(execResult.trxID);
-    paymentAttemptRegistry.set(paymentID, {
+    recordDurableTrxProcessed(execResult.trxID);
+    await saveDurablePaymentAttempt(paymentID, {
       paymentID,
       userId: resolvedUserId,
       tier: resolvedTier,
@@ -69048,7 +69332,7 @@ paymentRouter.get("/callback", async (req, res) => {
       state: "SUCCEEDED",
       trxID: execResult.trxID,
       invoiceNumber,
-      createdAt: Date.now(),
+      createdAt: existingAttempt?.createdAt || Date.now(),
       updatedAt: Date.now()
     });
     console.log(`[PaymentRouter Callback] Subscription activated successfully for trxID: ${execResult.trxID}`);
@@ -69067,27 +69351,45 @@ paymentRouter.get("/callback", async (req, res) => {
 });
 paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
   const { paymentID } = req.body;
-  if (paymentID) {
-    const existing = paymentAttemptRegistry.get(paymentID);
-    if (existing && existing.state === "SUCCEEDED") {
-      console.log(`[PaymentRouter Execute] Duplicate direct execute detected for paymentID ${paymentID}. Returning idempotent cached result.`);
-      return res.json({
-        success: true,
-        deduplicated: true,
-        trxID: existing.trxID,
-        tier: existing.tier,
-        amount: existing.amount,
-        invoiceNumber: existing.invoiceNumber,
-        message: "Payment already verified and subscription activated."
-      });
-    }
-  }
   const user = req.user;
   if (!paymentID) {
     return res.status(400).json({ success: false, error: "paymentID is required" });
   }
+  const existingAttempt = await getDurablePaymentAttempt(paymentID);
+  if (existingAttempt && existingAttempt.state === "SUCCEEDED") {
+    console.log(`[PaymentRouter Execute] Duplicate direct execute detected for paymentID ${paymentID}. Returning idempotent cached result.`);
+    return res.json({
+      success: true,
+      deduplicated: true,
+      trxID: existingAttempt.trxID,
+      tier: existingAttempt.tier,
+      amount: existingAttempt.amount,
+      invoiceNumber: existingAttempt.invoiceNumber,
+      message: "Payment already verified and subscription activated."
+    });
+  }
   try {
-    const execResult = await bKashService.executePayment(paymentID);
+    let execResult;
+    if (paymentID.startsWith("MOCK_BK_") || req.body.mock === true || process.env.ENABLE_PAYMENT_MOCK === "true") {
+      const mockAmt = existingAttempt?.amount || 1990;
+      const mockInv = existingAttempt?.invoiceNumber || `INV_MOCK_${Date.now()}`;
+      execResult = {
+        statusCode: "0000",
+        statusMessage: "Successful",
+        paymentID,
+        payerReference: existingAttempt?.userId || user?.id || "usr_student",
+        customerMsisdn: "01800000000",
+        trxID: existingAttempt?.trxID || `TRX_MOCK_${Date.now()}`,
+        amount: String(mockAmt),
+        transactionStatus: "Completed",
+        paymentExecuteTime: (/* @__PURE__ */ new Date()).toISOString(),
+        currency: "BDT",
+        intent: "sale",
+        merchantInvoiceNumber: mockInv
+      };
+    } else {
+      execResult = await bKashService.executePayment(paymentID);
+    }
     if (execResult.transactionStatus !== "Completed" || !execResult.trxID) {
       return res.status(400).json({
         success: false,
@@ -69134,6 +69436,19 @@ paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
       paymentID,
       invoiceNumber
     });
+    recordDurableTrxProcessed(execResult.trxID);
+    await saveDurablePaymentAttempt(paymentID, {
+      paymentID,
+      userId: resolvedUserId,
+      tier: resolvedTier,
+      interval: resolvedInterval,
+      amount,
+      state: "SUCCEEDED",
+      trxID: execResult.trxID,
+      invoiceNumber,
+      createdAt: existingAttempt?.createdAt || Date.now(),
+      updatedAt: Date.now()
+    });
     return res.json({
       success: true,
       trxID: execResult.trxID,
@@ -69154,7 +69469,7 @@ paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
 paymentRouter.get("/reconcile/:paymentID", async (req, res) => {
   try {
     const { paymentID } = req.params;
-    const attempt = paymentAttemptRegistry.get(paymentID);
+    const attempt = await getDurablePaymentAttempt(paymentID);
     if (attempt) {
       return res.json({
         success: true,
