@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, ShieldCheck, Loader2 } from 'lucide-react';
+import { X, Sparkles, ShieldCheck, Loader2, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
@@ -12,9 +12,11 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthModalOpen) {
+      setErrorMessage(null);
       trackNihomiEvent('signup_started', { method: 'modal_prompt' });
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') closeAuthModal();
@@ -28,51 +30,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
 
   const handleGoogleClick = async () => {
     trackNihomiEvent('signup_started', { method: 'google' });
+    setErrorMessage(null);
     setIsProcessing(true);
     try {
       const ok = await loginWithGoogle();
       if (!ok) {
-        // Frictionless Google One-Tap fallback in sandbox/dev mode
-        const studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
-        const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
-        setUserData({
-          id: userId,
-          email: 'nihomibd@gmail.com',
-          name: 'Nihomi Japanese Learner',
-          role: 'student',
-          planId: 'free',
-          status: 'ACTIVE',
-          studentId,
-          nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
-        trackNihomiEvent('signup_completed', {
-          userId,
-          method: 'google_fallback',
-          studentId
-        });
-        const ref = getStoredReferralCode();
-        if (ref) claimReferralReward(ref, userId).catch(() => {});
-        closeAuthModal();
-        onNavigate?.('dashboard');
+        setErrorMessage('গুগল সাইন-ইন চালু করা সম্ভব হয়নি। অনুগ্রহ করে পপ-আপ অথবা রিডাইরেক্ট পারমিশন চেক করে আবার চেষ্টা করুন।');
       } else {
         trackNihomiEvent('signup_completed', { method: 'google' });
         const ref = getStoredReferralCode();
         if (ref) claimReferralReward(ref).catch(() => {});
       }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'গুগল সাইন-ইনে ত্রুটি দেখা দিয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setIsProcessing(false);
     }
   };
 
   const handleStudentQuick = () => {
-    const studentId = 'NHO-' + Math.floor(100000 + Math.random() * 900000);
+    const studentRand = Math.floor(100000 + Math.random() * 900000);
+    const studentId = 'NHO-' + studentRand;
     const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
+    const studentEmail = `student.${studentRand}@nihomi.student`;
     setUserData({
       id: userId,
-      email: 'nihomibd@gmail.com',
-      name: 'Nihomi Japanese Learner',
+      email: studentEmail,
+      name: `Nihomi Learner #${studentRand.toString().slice(-4)}`,
       role: 'student',
       planId: 'free',
       status: 'ACTIVE',
@@ -113,6 +97,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
         </div>
 
         <div className="p-6 space-y-4">
+          {errorMessage && (
+            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
           {/* Primary Google Auth Button */}
           <button
             onClick={handleGoogleClick}

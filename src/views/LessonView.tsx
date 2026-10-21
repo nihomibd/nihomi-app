@@ -476,15 +476,25 @@ if (lessonId) {
 
   const isLesson02Words =
     propLessonId === 'n5-l2-words' ||
-    propLessonId === 'lesson-02-words' ||
-    (selectedLessonNum === 2 && !kState.masteredSkills.includes('hiragana_core_mastered'));
+    propLessonId === 'lesson-02-words';
 
-  if (selectedLessonNum === 1 && propLessonId !== 'n5-l2-words' && propLessonId !== 'lesson-02-words') {
+  // Only render tactile ZenLearningCanvas when character is explicitly specified or specifically a Kana foundational mission
+  const isExplicitKanaMission =
+    Boolean(targetChar) ||
+    rawId === 'kana-a' ||
+    rawId === 'kana-i' ||
+    rawId === 'kana-u' ||
+    rawId === 'kana-e' ||
+    rawId === 'kana-o' ||
+    rawId === 'vowel-mastery-gate' ||
+    (rawId.includes('kana') && !rawId.includes('grammar') && !rawId.includes('n5-l'));
+
+  if (isExplicitKanaMission && propLessonId !== 'n5-l2-words' && propLessonId !== 'lesson-02-words') {
     return (
       <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#141726] text-stone-900 dark:text-white py-6 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <ZenLearningCanvas
-            initialChar={targetChar}
+            initialChar={targetChar || 'あ'}
             onBack={() => onNavigate('courses')}
             onNextLesson={(target) => {
               if (target?.lessonId) {
@@ -607,7 +617,7 @@ if (lessonId) {
             >
               {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
                 <option key={num} value={num}>
-                  Lesson {num} {num === 1 ? '(Zen Canvas)' : num <= 5 ? '(Free)' : '(Pro)'}
+                  Lesson {num} {num <= 5 ? '(Free)' : '(Pro)'}
                 </option>
               ))}
             </select>

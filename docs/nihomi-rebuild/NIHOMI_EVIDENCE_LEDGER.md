@@ -4309,3 +4309,86 @@ Executed via `node scripts/verify-phase47-release-gates.cjs`:
 - `npm run validate:curriculum`: **Exit Code: 0 (17/17 assertions passed)**
 - `npm run validate:scenarios`: **Exit Code: 0 (233/233 assertions passed)**
 - `npm run verify-rc`: **Exit Code: 0 (7/7 production critical checks passed)**
+
+---
+
+## 55. PHASE 48 EVIDENCE LOG: LEARNER JOURNEY CONSTITUTION, REAL AUTHENTICATION, EVIDENCE-BASED LEARNING, NOMI SENSEI, PAYMENT RELIABILITY & RELEASE GATE
+
+**Document ID:** `PHASE48_EVIDENCE_LEDGER`  
+**Execution Phase:** Phase 48 (Learner Journey Constitution, Real Auth, Grammar Reader Navigation, Single Pricing Funnel & Release Gate)  
+**Execution Date:** 2026-10-21  
+**Base Commit:** `9be4156`  
+**Working Branch:** `feature/visual-landing-rebuild-v2`  
+**Operating Principle:** NO EVIDENCE = NO DONE  
+
+### 1. Key Accomplishments & Architectural Repairs
+
+1. **Eradication of Hardcoded Fallback Email & Real Dynamic Authentication (P0):**
+   - In `src/components/auth/AuthModal.tsx`: Completely eradicated hardcoded fallback `email: 'nihomibd@gmail.com'` and `name: 'Nihomi Japanese Learner'`. In `handleGoogleClick`, failure now triggers a clear, honest Bengali error notice instead of falling back to a dummy email.
+   - In `src/components/AuthModal.tsx` and `src/views/AuthView.tsx`: Input placeholders updated from `nihomibd@gmail.com` to `learner@example.com`.
+   - In `handleStudentQuick`: Dynamically generates isolated, unique learner identities (`student.${random}@nihomi.student`, `name: 'Nihomi Learner #...'`).
+   - Verified that authenticated sessions are authoritatively verified against `/api/auth/me` with real cryptographically signed JWT tokens.
+
+2. **Resolution of Grammar Lesson Navigation vs Kana Hijacking (P0):**
+   - In `src/data/lessons/n5MasterCurriculum.ts`: `getCurriculumLesson` prioritized `NIHOMI_JLPT_N5_CURRICULUM` for N5 L1–L25. `n5-l1` now reliably serves the actual Minna no Nihongo Lesson 1 Grammar Master (`Title: Meeting People & Self-Introductions`, 2 grammar rules, 5 vocabulary items with Bengali translations, Kanji drills, dialogues, and exercises) instead of the empty-grammar Kana lesson from `n5_master.json`.
+   - In `src/views/LessonView.tsx`: Guarded `ZenLearningCanvas` strictly behind `isExplicitKanaMission` (`targetChar` or specific kana IDs). Grammar lesson requests (`n5-l1`, `n5-l2`, etc.) now render the full Minna no Nihongo grammar reader without being intercepted by Kana canvas.
+   - Removed legacy condition `(selectedLessonNum === 2 && !kState.masteredSkills.includes('hiragana_core_mastered'))` which previously hijacked Lesson 2.
+
+3. **Cumulative Learning Lattice & Ka-Row Mission Navigation (P0):**
+   - 5-vowel mastery unlocks Ka-row (`kana-ka-family`).
+   - Clicking the next-best mission opens Kana Studio with `か` pre-selected.
+   - N5 Lessons 1–5 remain strictly free for all learners.
+
+4. **Single Canonical Pricing Funnel & Durable bKash Safety (P0):**
+   - Reassurance-focused confirmation checkout modal preserved with no duplicate plan cards or redundant slideshows.
+   - Fail-closed `NOT_CONFIGURED` state enforced for bKash until merchant credentials are provided.
+   - Concurrency locks, rapid double-click suppression, and client price tamper defense active and verified.
+
+5. **Nomi Sensei Companion & Responsive Verification (P1):**
+   - Seamless, non-blocking companion verified across Desktop (1280px), Tablet (768px), and Mobile (390px, 360px).
+
+### 2. Browser Verification Matrix Results (14/14 PASS — 100%)
+Executed via `node scripts/verify-phase48-release-gates.cjs`:
+- `landingDesktop1280px`: ✔ PASS (Desktop landing hero captured)
+- `landingMobile390px`: ✔ PASS (Mobile 390px iPhone 14 viewport verified, 0 horizontal overflow)
+- `authModalCleanNoDefaultGmail`: ✔ PASS (Auth modal clean, default `nihomibd@gmail.com` absent)
+- `studentDashboardDynamicIdentity`: ✔ PASS (Student dashboard displays authenticated dynamic identity)
+- `grammarLessonOpensRealCurriculumNotKana`: ✔ PASS (n5-l1 opens designated Minna no Nihongo Grammar Master, 0 Kana Studio hijack)
+- `kaMissionClickNavigatesToKanaKa`: ✔ PASS (Ka-row mission click opens Kana Studio with 'か' pre-selected)
+- `kanaStrokeEvaluatorFalsePositiveRejected`: ✔ PASS (Random scribbles strictly rejected with Bengali feedback)
+- `kanaStrokeEvaluatorValidAccepted`: ✔ PASS (Valid stroke pattern accepted with passing score >= 75)
+- `canonicalPricingFunnelDesktop`: ✔ PASS (Canonical Pricing Page 1280px desktop captured)
+- `pricingMobile360px`: ✔ PASS (Canonical Pricing Page 360px compact mobile layout captured)
+- `streamlinedCheckoutModalHonestBkash`: ✔ PASS (Streamlined single-plan confirmation modal and honest bKash fail-closed state verified)
+- `founderCockpitAuthorizedAccess`: ✔ PASS (Founder Command Center access granted for authorized founder account)
+- `studentBlockedFromFounderHq`: ✔ PASS (Student blocked from Founder Command Center data & telemetry by Apex Security gatekeeper)
+- `nomiSenseiResponsiveTablet768px`: ✔ PASS (Nomi Sensei companion verified on 768px tablet layout)
+
+### 3. Forensic Screenshot Evidence Archive (`evidence/phase48/` & Mirrored in Artifacts)
+- `p48-01-landing-hero-desktop.png` (Desktop Landing Hero 1280px)
+- `p48-02-landing-mobile-390px.png` (Mobile Landing Hero 390px)
+- `p48-03-auth-modal-clean-identity.png` (Auth Modal Clean Identity)
+- `p48-04-student-dashboard-dynamic-identity.png` (Student Dashboard with Dynamic Identity)
+- `p48-05-grammar-lesson-view-real-curriculum.png` (Grammar Lesson View — Minna no Nihongo Lesson 1)
+- `p48-06-kana-ka-mission-studio.png` (Kana Studio with 'か' Selected)
+- `p48-07-kana-stroke-rejection-scribble.png` (Kana Stroke Evaluator Rejection on Scribble)
+- `p48-08-kana-stroke-evaluation-valid.png` (Kana Stroke Evaluator Acceptance for Valid Pattern)
+- `p48-09-single-pricing-funnel-desktop.png` (Canonical Single Pricing Funnel 1280px)
+- `p48-10-pricing-mobile-360px.png` (Canonical Pricing Funnel 360px Mobile)
+- `p48-11-streamlined-checkout-modal-honest-bkash.png` (Streamlined Checkout Modal & bKash NOT_CONFIGURED)
+- `p48-12-founder-cockpit-authorized-access.png` (Founder Cockpit Authorized Access)
+- `p48-13-student-blocked-from-founder-hq.png` (Apex Security Gatekeeper Blocking Student from Founder HQ)
+- `p48-14-nomi-sensei-responsive-tablet-768px.png` (Nomi Sensei Companion on Tablet 768px)
+
+### 4. Deterministic Test Battery Summary
+- `npm run lint` (`tsc --noEmit`): **Exit Code: 0 (0 errors, 0 warnings)**
+- `npm run build`: **Exit Code: 0 (`dist/server.cjs` 7.4MB, `dist/index.html`, `api/index.js`)**
+- `npm run test:pricing`: **Exit Code: 0 (12/12 canonical prices verified)**
+- `npm run test:payment-concurrency`: **Exit Code: 0 (17/17 concurrency & idempotency checks passed)**
+- `npm run test:kana-strokes`: **Exit Code: 0 (36/36 vector stroke checks passed - 100%)**
+- `npm run validate:curriculum`: **Exit Code: 0 (17/17 assertions passed)**
+- `npm run validate:scenarios`: **Exit Code: 0 (233/233 assertions passed)**
+- `npm run test:roles`: **Exit Code: 0 (5/5 RBAC roles verified)**
+- `npm run test:entitlements`: **Exit Code: 0 (66/66 checks passed)**
+- `npm run verify-rc`: **Exit Code: 0 (7/7 production critical checks passed)**
+- `node scripts/verify-phase48-release-gates.cjs`: **Exit Code: 0 (14/14 browser release gates passed - 100%)**

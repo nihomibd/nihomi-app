@@ -42457,6 +42457,95 @@ function getCurriculumLesson(lessonIdOrNum) {
   const maxLessons = targetLevel === "N1" ? 45 : targetLevel === "N2" ? 45 : targetLevel === "N3" ? 45 : targetLevel === "N4" ? 35 : 40;
   if (num < 1) num = 1;
   if (num > maxLessons) num = maxLessons;
+  if (targetLevel === "N5" && num >= 1 && num <= 25) {
+    const item2 = NIHOMI_JLPT_N5_CURRICULUM.find((l) => l.lessonNumber === num);
+    if (item2) {
+      return {
+        id: `les-n5-${item2.lessonNumber}`,
+        moduleId: `mod-n5-${Math.ceil(item2.lessonNumber / 5)}`,
+        courseId: "course-n5",
+        level: "N5",
+        lessonNumber: item2.lessonNumber,
+        title: item2.titleEnglish,
+        titleJa: item2.titleJapanese,
+        summary: `${item2.topic} \u2014 Complete Minna no Nihongo Lesson ${item2.lessonNumber} with core vocabulary, Bengali grammar notes, Kanji drills, and quizzes.`,
+        explanation: `Lesson ${item2.lessonNumber} focuses on ${item2.topic}. Study the vocabulary, listen to native pronunciation, review the Bengali grammar notes, and test your knowledge.`,
+        isPublished: true,
+        estimatedMinutes: 25,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        vocabulary: item2.vocabularies.map((v, i) => ({
+          id: `voc-${item2.lessonNumber}-${i + 1}`,
+          japanese: v?.kanji || v.hiragana,
+          furigana: v.hiragana,
+          romaji: v.romaji,
+          english: v.meaningEnglish,
+          banglaMeaning: v.meaningBengali,
+          partOfSpeech: v.partOfSpeech || "noun",
+          level: "N5",
+          exampleSentenceJa: v.example?.japanese || v?.kanji,
+          exampleSentenceEn: v.example?.english || v.meaningEnglish,
+          exampleSentenceBn: v.example?.bengali || v.meaningBengali,
+          exampleFurigana: v.example?.romaji || v.romaji
+        })),
+        grammar: item2.grammarPatterns.map((g, i) => ({
+          id: g.id || `gram-${item2.lessonNumber}-${i + 1}`,
+          title: g.pattern,
+          titleJa: g.topic,
+          structure: g.pattern,
+          meaning: g.explanationEnglish,
+          explanation: g.explanationBengali,
+          level: "N5",
+          examples: [
+            {
+              japanese: g.dialogue?.speakerA || "",
+              english: g.dialogue?.english || "",
+              breakdown: g.dialogue?.bengali || ""
+            },
+            {
+              japanese: g.dialogue?.speakerB || "",
+              english: g.dialogue?.english || "",
+              breakdown: g.dialogue?.bengali || ""
+            }
+          ]
+        })),
+        kanji: item2.kanjiList.map((k, i) => ({
+          id: `kanji-${item2.lessonNumber}-${i + 1}`,
+          character: k?.kanji,
+          meaning: `${k.meaningEnglish} (${k.meaningBengali})`,
+          onyomi: k.onyomi,
+          kunyomi: k.kunyomi,
+          strokes: k.strokeCount,
+          radicals: k?.kanji,
+          level: "N5",
+          examples: k.compounds.map((c) => ({
+            word: c.word,
+            reading: c.reading,
+            meaning: `${c.meaningEnglish} / ${c.meaningBengali}`
+          }))
+        })),
+        dialogue: item2.grammarPatterns.map((g) => ({
+          speaker: "\u7530\u4E2D (Tanaka)",
+          speakerRole: "Student",
+          japanese: g.dialogue?.speakerA || "",
+          english: `${g.dialogue?.english} (${g.dialogue?.bengali})`
+        })),
+        practiceExercises: [
+          {
+            id: `prac-${item2.lessonNumber}-1`,
+            instruction: "Choose the grammatically correct Japanese sentence structure:",
+            questionJa: item2.practiceQuiz?.question || item2.grammarPatterns[0]?.dialogue?.speakerA || "",
+            hint: item2.practiceQuiz?.explanationBengali || item2.grammarPatterns[0]?.explanationBengali || "",
+            type: "multiple_choice",
+            options: item2.practiceQuiz?.options || ["\u3067\u3059", "\u3058\u3083\u3042\u308A\u307E\u305B\u3093", "\u3067\u3057\u305F", "\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3067\u3057\u305F"],
+            correctAnswer: item2.practiceQuiz?.correctAnswer || "\u3067\u3059",
+            explanation: item2.practiceQuiz?.explanationBengali || item2.grammarPatterns[0]?.explanationBengali || ""
+          }
+        ],
+        quizId: `quiz-n5-${item2.lessonNumber}`
+      };
+    }
+  }
   const dataset = targetLevel === "N1" ? n1_master_default : targetLevel === "N2" ? n2_master_default : targetLevel === "N3" ? n3_master_default : targetLevel === "N4" ? n4_master_default : n5_master_default;
   const masterItem = dataset.find((l) => l.lesson_metadata?.lesson_number === num);
   if (masterItem) {

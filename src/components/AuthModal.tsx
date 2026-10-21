@@ -310,7 +310,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">ইমেইল অ্যাড্রেস</label>
               <input
                 type="email"
-                placeholder="nihomibd@gmail.com"
+                placeholder="learner@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
