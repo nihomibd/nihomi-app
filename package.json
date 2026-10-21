@@ -15,6 +15,7 @@
     "validate:curriculum": "tsx scripts/validate-curriculum.ts",
     "validate:scenarios": "tsx scripts/validate-japan-scenarios.ts",
     "test:kana-strokes": "tsx scripts/test-kana-stroke-evaluator.ts",
+    "test:jis-pdf": "tsx scripts/test-jis-rirekisho-pdf.ts",
     "test:pricing": "tsx scripts/test-canonical-pricing-matrix.ts",
     "test:payment-concurrency": "tsx scripts/test-phase47-payment-concurrency.ts",
     "test:roles": "tsx scripts/test-role-authorization-matrix.ts",

@@ -35,6 +35,8 @@ import { JisRirekishoData } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
 import { useAuth } from '../../context/AuthContext';
 
+export const DEFAULT_AVATAR_DATA_URI = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' width='120' height='160'><rect width='120' height='160' fill='%23f1f5f9'/><circle cx='60' cy='55' r='32' fill='%2394a3b8'/><path d='M 20 150 C 20 105, 100 105, 100 150 Z' fill='%2394a3b8'/><text x='60' y='155' font-family='sans-serif' font-size='9' fill='%2364748b' text-anchor='middle'>写真 (3cm x 4cm)</text></svg>";
+
 const DEFAULT_JIS_RIREKISHO: JisRirekishoData = {
   id: 'rirekisho-default',
   userId: 'usr-current',
@@ -50,7 +52,7 @@ const DEFAULT_JIS_RIREKISHO: JisRirekishoData = {
   postalCode: '169-0075',
   currentAddress: '東京都新宿区高田馬場2-14-8 メゾン高田302号室',
   currentAddressKana: 'トウキョウトシンジュククタカダノババ',
-  photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+  photoUrl: DEFAULT_AVATAR_DATA_URI,
   visaStatus: '留学 (Student Visa / 資格外活動許可済)',
   visaExpiry: '2026-04-30',
   allowedHoursPerWeek: 28,
@@ -78,9 +80,18 @@ const DEFAULT_JIS_RIREKISHO: JisRirekishoData = {
 };
 
 const PHOTO_PRESETS = [
-  { label: 'Formal Headshot 1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Formal Headshot 2', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80' },
-  { label: 'Formal Headshot 3', url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80' }
+  {
+    label: 'Formal Male Avatar',
+    url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' width='120' height='160'><rect width='120' height='160' fill='%23e2e8f0'/><circle cx='60' cy='50' r='28' fill='%23475569'/><path d='M 20 145 C 20 100, 100 100, 100 145 Z' fill='%231e293b'/><polygon points='60,95 50,140 70,140' fill='%23ef4444'/><text x='60' y='155' font-family='sans-serif' font-size='8' fill='%2364748b' text-anchor='middle'>JIS Standard Male</text></svg>"
+  },
+  {
+    label: 'Formal Female Avatar',
+    url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' width='120' height='160'><rect width='120' height='160' fill='%23fdf2f8'/><circle cx='60' cy='50' r='28' fill='%23f472b6'/><path d='M 20 145 C 20 100, 100 100, 100 145 Z' fill='%23334155'/><text x='60' y='155' font-family='sans-serif' font-size='8' fill='%2364748b' text-anchor='middle'>JIS Standard Female</text></svg>"
+  },
+  {
+    label: 'Minimalist Silhouette',
+    url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' width='120' height='160'><rect width='120' height='160' fill='%23f8fafc'/><circle cx='60' cy='52' r='30' fill='%2364748b'/><path d='M 22 148 C 22 102, 98 102, 98 148 Z' fill='%23334155'/><text x='60' y='155' font-family='sans-serif' font-size='8' fill='%2364748b' text-anchor='middle'>証明写真</text></svg>"
+  }
 ];
 
 interface JisRirekishoStudioProps {
@@ -204,20 +215,9 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
   const handleDownloadPdf = async () => {
     soundEffects.playButtonTap();
-    if (!user) {
-      setShowAuthGateNotice(true);
-      openAuthModal?.('login');
-      return;
-    }
-
     setIsGeneratingPdf(true);
 
     try {
-      if (viewMode !== 'preview') {
-        setViewMode('preview');
-        await new Promise((resolve) => setTimeout(resolve, 300));
-      }
-
       const paperElement = paperRef.current || document.getElementById('jis-resume-paper');
       if (!paperElement) {
         console.warn('Resume paper element not found for export');
@@ -228,7 +228,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       const canvas = await html2canvas(paperElement, {
         scale: 2,
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         logging: false,
         backgroundColor: '#ffffff',
         scrollX: 0,
@@ -236,7 +236,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       });
 
       const imgData = canvas.toDataURL('image/jpeg', 0.98);
-      const pdf = new jsPDF({
+      const PDFDoc = (jsPDF as any).jsPDF || jsPDF;
+      const pdf = new PDFDoc({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4'
@@ -256,6 +257,17 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         pdf.addPage();
         pdf.addImage(imgData, 'JPEG', 0, position, pdfPageWidth, imgHeight);
         heightLeft -= pdfPageHeight;
+      }
+
+      // Watermark for free tier
+      if (!isPro) {
+        const totalPages = pdf.getNumberOfPages();
+        for (let p = 1; p <= totalPages; p++) {
+          pdf.setPage(p);
+          pdf.setFontSize(8);
+          pdf.setTextColor(140, 140, 140);
+          pdf.text('Generated via NIHOMI.COM — Bengali-First Japanese Learning Platform', 15, pdfPageHeight - 4);
+        }
       }
 
       const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
@@ -1115,9 +1127,9 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         </div>
       )}
 
-      {/* Official Japanese JIS Printable View */}
-      {viewMode === 'preview' && (
-        <div className="space-y-4">
+      {/* Official Japanese JIS Printable View (Always mounted in DOM for zero-delay PDF export) */}
+      <div className={viewMode === 'preview' ? 'space-y-4 block' : 'fixed -left-[9999px] -top-[9999px] pointer-events-none opacity-0'}>
+        {viewMode === 'preview' && (
           <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-2xl p-3 print:hidden">
             <span className="text-xs text-slate-300 font-medium">
               📄 JIS規格 A4印刷対応プレビュー（下のボタンでPDF保存または印刷できます）
@@ -1139,9 +1151,10 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
               </button>
             </div>
           </div>
+        )}
 
-          <div
-            id="jis-resume-paper"
+        <div
+          id="jis-resume-paper"
             ref={paperRef}
             data-resume-paper="true"
             className="bg-white text-slate-950 p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border-2 sm:border-4 border-slate-400 font-serif max-w-4xl mx-auto space-y-6 overflow-x-auto"
@@ -1347,9 +1360,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
               <span>日本産業規格 JIS Z 8303 準拠様式（全国アルバイト・留学・特定技能・正社員共通）</span>
               <span className="font-semibold text-slate-700">Created via Nihomi.com — Learn JLPT N5 for Free • ID: NHM-CV-2026</span>
             </div>
-          </div>
         </div>
-      )}
+      </div>
 
       {/* Viral PLG Lead Magnet Conversion Modal */}
       {showLeadMagnetModal && (
