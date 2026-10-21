@@ -25,6 +25,7 @@ import { soundEffects } from '../../lib/soundEffects';
 import { triggerCelebrationConfetti } from '../../lib/gamificationService';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { JAPAN_REAL_LIFE_SCENARIOS } from '../../data/japanRealLifeScenarios';
+import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 export interface MissionScenario {
   id: string;
@@ -377,7 +378,7 @@ export const TOKYO_KONBINI_7_STEPS: KonbiniCashierStep[] = [
 export interface TokyoKonbiniFirstMissionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: () => void;
+  onComplete?: () => void;
   onNavigate?: (view: string, params?: Record<string, any>) => void;
   initialMissionId?: string;
 }
@@ -459,6 +460,11 @@ export const TokyoKonbiniFirstMissionModal: React.FC<TokyoKonbiniFirstMissionMod
                 localStorage.setItem('nihomi_mission_tokyo_konbini_01_completed', 'true');
                 const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
                 localStorage.setItem('nihomi_student_xp', (prevXp + 50).toString());
+                const kState = loadLearnerKnowledgeState();
+                if (!kState.masteredSkills.includes('konbini_mission_1')) {
+                  kState.masteredSkills.push('konbini_mission_1');
+                  saveLearnerKnowledgeState(kState);
+                }
                 window.dispatchEvent(new CustomEvent('nihomi:progress-updated'));
               }
             } catch {}
@@ -488,6 +494,11 @@ export const TokyoKonbiniFirstMissionModal: React.FC<TokyoKonbiniFirstMissionMod
             if (currentMission.id === 'scenario_03_tokyo_konbini' || currentMission.id === 'tokyo_konbini_01') {
               localStorage.setItem('nihomi_mission_konbini_completed', 'true');
               localStorage.setItem('nihomi_mission_tokyo_konbini_01_completed', 'true');
+              const kState = loadLearnerKnowledgeState();
+              if (!kState.masteredSkills.includes('konbini_mission_1')) {
+                kState.masteredSkills.push('konbini_mission_1');
+                saveLearnerKnowledgeState(kState);
+              }
             }
             const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
             localStorage.setItem('nihomi_student_xp', (prevXp + 50).toString());
@@ -524,7 +535,8 @@ export const TokyoKonbiniFirstMissionModal: React.FC<TokyoKonbiniFirstMissionMod
   };
 
   const handleFinish = () => {
-    onComplete();
+    onComplete?.();
+    onClose();
     if (onNavigate) {
       onNavigate('dashboard');
     }
@@ -554,7 +566,7 @@ export const TokyoKonbiniFirstMissionModal: React.FC<TokyoKonbiniFirstMissionMod
 
   return (
     <div id="tokyo-konbini-mission-modal" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#0d0d1a] border border-white/10 rounded-3xl shadow-2xl p-5 sm:p-8 text-white my-auto overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[#0d0d1a] border border-white/10 rounded-3xl shadow-2xl p-4 sm:p-8 text-white my-auto max-h-[92vh] overflow-y-auto">
         {/* Subtle decorative glow */}
         <div className="absolute -top-24 -right-24 w-60 h-60 bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
 

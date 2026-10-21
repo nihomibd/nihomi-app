@@ -222,6 +222,15 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
   
   // Stage 3 active module
   const [stage3ModuleId, setStage3ModuleId] = useState<string>('city_hall');
+  const [completedStage3Modules, setCompletedStage3Modules] = useState<string[]>(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? localStorage.getItem('nihomi_workos_stage3_completed') : null;
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [completionNotice, setCompletionNotice] = useState<string | null>(null);
 
   // Konbini Cashier Mission Modal
   const [isKonbiniMissionModalOpen, setIsKonbiniMissionModalOpen] = useState(false);
@@ -818,21 +827,48 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 </div>
               )}
 
-              {/* Bottom Action Button */}
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-xs text-stone-400 font-mono">
-                  সারভাইভাল স্ট্যাটাস: <span className="text-emerald-400 font-bold">৮৮% সম্পন্ন</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    soundEffects.playLessonCelebration();
-                    alert('অভিনন্দন! আপনি এই মডিউলটির মূল বিষয়গুলো সম্পন্ন করেছেন।');
-                  }}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs transition cursor-pointer shadow-md"
-                >
-                  মডিউল সম্পন্ন মার্ক করুন ✓
-                </button>
+              {/* Bottom Action Button & Feedback */}
+              <div className="pt-2 space-y-3">
+                {completionNotice && (
+                  <div className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold animate-in fade-in flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{completionNotice}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-stone-400 font-mono">
+                    সারভাইভাল স্ট্যাটাস: <span className="text-emerald-400 font-bold">{stats.stage3Complete}% সম্পন্ন</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundEffects.playLessonCelebration();
+                      const updated = Array.from(new Set([...completedStage3Modules, activeStage3Module.id]));
+                      setCompletedStage3Modules(updated);
+                      try {
+                        if (typeof window !== 'undefined') {
+                          localStorage.setItem('nihomi_workos_stage3_completed', JSON.stringify(updated));
+                        }
+                      } catch {}
+                      setCompletionNotice(`অভিনন্দন! "${activeStage3Module.titleBn}" সফলভাবে সম্পন্ন হিসেবে চিহ্নিত হয়েছে।`);
+                      setTimeout(() => setCompletionNotice(null), 4000);
+                    }}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-md flex items-center gap-1.5 ${
+                      completedStage3Modules.includes(activeStage3Module.id)
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+                        : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white'
+                    }`}
+                  >
+                    {completedStage3Modules.includes(activeStage3Module.id) ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>✓ মডিউল সম্পন্ন হয়েছে</span>
+                      </>
+                    ) : (
+                      <span>মডিউল সম্পন্ন মার্ক করুন ✓</span>
+                    )}
+                  </button>
+                </div>
               </div>
 
             </div>
