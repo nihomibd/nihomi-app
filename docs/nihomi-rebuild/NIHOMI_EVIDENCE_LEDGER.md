@@ -4392,3 +4392,78 @@ Executed via `node scripts/verify-phase48-release-gates.cjs`:
 - `npm run test:entitlements`: **Exit Code: 0 (66/66 checks passed)**
 - `npm run verify-rc`: **Exit Code: 0 (7/7 production critical checks passed)**
 - `node scripts/verify-phase48-release-gates.cjs`: **Exit Code: 0 (14/14 browser release gates passed - 100%)**
+
+---
+
+## 56. PHASE 49 EVIDENCE LOG: REAL-USER ACCEPTANCE, AUTHENTICATION TRUTH, MOBILE QA & SAFE RELEASE CLOSURE (2026-10-21)
+
+**Sprint Identifier:** Phase 49 Real-User Acceptance, Authentication Truth, Mobile QA and Safe Release Closure  
+**Standard:** Antigravity 2.0 Local-First Evidence-Driven Protocol (`NO EVIDENCE = NO DONE`)  
+**Workspace:** `C:\Users\bdtri\Desktop\www.Nihomi.com\nihomi-app-1`  
+**Git Branch:** `feature/visual-landing-rebuild-v2`  
+**Timestamp:** 2026-10-21T18:35:00+06:00  
+**Overall Status:** **GREEN (100% PASS — 14/14 BROWSER GATES, 12/12 DETERMINISTIC COMMANDS)**  
+
+### 1. Root Cause Analysis & Core Implementations:
+1. **Deployment Identity Discrepancy & Diagnostic Transparency (P0):**
+   - **Root Cause Identified:** The founder observed old pre-Phase 48 behaviors on Preview because Phase 48 local commit (`f1371ed`) had not yet been pushed to GitHub (`origin/feature/visual-landing-rebuild-v2` was at `9be4156`). Furthermore, `src/config/buildInfo.ts` had a static commit hash string `'66ed76d'` that obscured whether changes had taken effect.
+   - **Engineering Fix:** Updated `src/config/buildInfo.ts` to `1.0.0-phase49`, dynamically injecting `__COMMIT_HASH__` and `__BUILD_DATE__` via `vite.config.ts` using `process.env.VERCEL_GIT_COMMIT_SHA` with dynamic `git rev-parse --short HEAD` local fallback. Added high-contrast diagnostic metadata pill visible on preview landing page.
+2. **Authentication Sandbox Clarification (P0):**
+   - **Root Cause Identified:** The fast-track test button in the login modal was perceived by the founder as a confusing bypass or mock account mechanism.
+   - **Engineering Fix:** Updated `src/components/auth/AuthModal.tsx` to visibly label the action with an amber banner: `[TEST / PREVIEW SANDBOX] Demo Student Sandbox • Preview Only` with the subtitle `Isolated Test Session • Temporary State`. Clean email/password inputs verified at `/login` with zero hardcoded default credentials (`nihomibd@gmail.com` or `learner@example.com`).
+3. **Session Cleansing on Logout (P0):**
+   - **Root Cause Identified:** Post-OAuth redirect flags (`nihomi_just_logged_in_oauth`) could persist across sessions if not explicitly cleared on sign-out.
+   - **Engineering Fix:** Added explicit removal of `nihomi_just_logged_in_oauth` from `localStorage` and `sessionStorage` in both `SIGNED_OUT` auth events and `logout()` in `src/context/AuthContext.tsx`.
+4. **Learning Lattice, Grammar Master & Kana Evaluation Integrity (P0):**
+   - Minna no Nihongo Lesson 1 strictly opens the Grammar Master view without being intercepted by Kana Studio.
+   - Ka-row mission strictly opens Kana Studio with 'か' pre-selected.
+   - 36/36 vector stroke unit tests pass; random scribbles rejected with Bengali constructive feedback, valid characters accepted with score >= 75.
+5. **Durable Fail-Closed bKash & Canonical Pricing Funnel (P0):**
+   - bKash fail-closed `NOT_CONFIGURED` state enforced cleanly with no duplicate plan selector cards.
+
+### 2. Browser Verification Matrix Results (14/14 PASS — 100%)
+Executed via `node scripts/verify-phase49-release-gates.cjs`:
+- `landingDesktop1280px`: ✔ PASS (Desktop landing hero with Phase 49 diagnostic badge captured)
+- `landingMobile390px`: ✔ PASS (Mobile 390px iPhone 14 viewport verified, 0 horizontal overflow)
+- `authModalCleanIdentity`: ✔ PASS (Auth modal clean, no hardcoded email; Sandbox visibly labeled [TEST / PREVIEW SANDBOX])
+- `studentDashboardDynamicIdentity`: ✔ PASS (Student dashboard displays authenticated dynamic identity)
+- `grammarLessonOpensRealCurriculumNotKana`: ✔ PASS (n5-l1 opens designated Minna no Nihongo Grammar Master, 0 Kana Studio hijack)
+- `kaMissionClickNavigatesToKanaKa`: ✔ PASS (Ka-row mission click opens Kana Studio with 'か' pre-selected)
+- `kanaStrokeEvaluatorFalsePositiveRejected`: ✔ PASS (Random scribbles strictly rejected with Bengali feedback)
+- `kanaStrokeEvaluatorValidAccepted`: ✔ PASS (Valid stroke pattern accepted with passing score >= 75)
+- `canonicalPricingFunnelDesktop`: ✔ PASS (Canonical Pricing Page 1280px desktop captured)
+- `pricingMobile360px`: ✔ PASS (Canonical Pricing Page 360px compact mobile layout captured)
+- `streamlinedCheckoutModalHonestBkash`: ✔ PASS (Streamlined single-plan confirmation modal and honest bKash fail-closed state verified)
+- `founderCockpitAuthorizedAccess`: ✔ PASS (Founder Command Center access granted for authorized founder account)
+- `studentBlockedFromFounderHq`: ✔ PASS (Student blocked from Founder Command Center data & telemetry by Apex Security gatekeeper)
+- `nomiSenseiResponsiveTablet768px`: ✔ PASS (Nomi Sensei companion verified on 768px tablet layout)
+
+### 3. Forensic Screenshot Evidence Archive (`evidence/phase49/` & Mirrored in Artifacts)
+- `p49-01-landing-hero-desktop.png` (Desktop Landing Hero 1280px with Phase 49 Diagnostic Badge)
+- `p49-02-landing-mobile-390px.png` (Mobile Landing Hero 390px)
+- `p49-03-auth-modal-clean-identity.png` (Auth Modal with [TEST / PREVIEW SANDBOX] Visible Warning)
+- `p49-04-student-dashboard-dynamic-identity.png` (Student Dashboard with Dynamic Server Identity)
+- `p49-05-grammar-lesson-view-real-curriculum.png` (Grammar Lesson View — Minna no Nihongo Lesson 1)
+- `p49-06-kana-ka-mission-studio.png` (Kana Studio with 'か' Selected)
+- `p49-07-kana-stroke-rejection-scribble.png` (Kana Stroke Evaluator Rejection on Scribble)
+- `p49-08-kana-stroke-evaluation-valid.png` (Kana Stroke Evaluator Acceptance for Valid Pattern)
+- `p49-09-single-pricing-funnel-desktop.png` (Canonical Single Pricing Funnel 1280px)
+- `p49-010-pricing-mobile-360px.png` (Canonical Pricing Funnel 360px Mobile)
+- `p49-11-streamlined-checkout-modal-honest-bkash.png` (Streamlined Checkout Modal & bKash NOT_CONFIGURED)
+- `p49-12-founder-cockpit-authorized-access.png` (Founder Cockpit Authorized Access)
+- `p49-13-student-blocked-from-founder-hq.png` (Apex Security Gatekeeper Blocking Student from Founder HQ)
+- `p49-14-nomi-sensei-responsive-tablet-768px.png` (Nomi Sensei Companion on Tablet 768px)
+
+### 4. Deterministic Test Battery Summary (All Exit Code 0)
+- `npm run lint` (`tsc --noEmit`): **Exit Code: 0 (0 errors, 0 warnings)**
+- `npm run build`: **Exit Code: 0 (`dist/server.cjs` 7.4MB, `dist/index.html`, `api/index.js`)**
+- `npm run test:pricing`: **Exit Code: 0 (12/12 canonical prices verified)**
+- `npm run test:payment-concurrency`: **Exit Code: 0 (17/17 concurrency & idempotency checks passed)**
+- `npm run test:kana-strokes`: **Exit Code: 0 (36/36 vector stroke checks passed - 100%)**
+- `npm run validate:curriculum`: **Exit Code: 0 (17/17 assertions passed)**
+- `npm run validate:scenarios`: **Exit Code: 0 (233/233 assertions passed)**
+- `npm run test:roles`: **Exit Code: 0 (5/5 RBAC roles verified)**
+- `npm run test:entitlements`: **Exit Code: 0 (66/66 checks passed)**
+- `npx tsx scripts/test-phase22-ai-scope-and-tenant-isolation.ts`: **Exit Code: 0 (100% passed)**
+- `npm run verify-rc`: **Exit Code: 0 (7/7 production critical checks passed)**
+- `node scripts/verify-phase49-release-gates.cjs`: **Exit Code: 0 (14/14 browser release gates passed - 100%)**

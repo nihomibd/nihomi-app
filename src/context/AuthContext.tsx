@@ -586,6 +586,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         safeStorage.removeItem('nihomi_subscription');
         safeStorage.removeItem('nihomi_student_coins');
         safeStorage.removeItem('nihomi_ai_credits');
+    safeStorage.removeItem('nihomi_just_logged_in_oauth');
+    try { window.sessionStorage?.removeItem('nihomi_just_logged_in_oauth'); } catch {}
         setUser(null);
         setStoredToken(null);
         setToken(null);
@@ -696,6 +698,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     safeStorage.removeItem('nihomi_subscription');
     safeStorage.removeItem('nihomi_student_coins');
     safeStorage.removeItem('nihomi_ai_credits');
+    safeStorage.removeItem('nihomi_just_logged_in_oauth');
+    try { window.sessionStorage?.removeItem('nihomi_just_logged_in_oauth'); } catch {}
     setStoredToken(null);
     setToken(null);
     setUser(null);

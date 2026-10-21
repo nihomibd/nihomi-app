@@ -127,26 +127,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
 
           <div className="relative flex items-center justify-center my-2">
             <div className="border-t border-stone-200 w-full"></div>
-            <span className="bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-              Fast Student Access
+            <span className="bg-white px-3 text-[10px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">
+              TEST / PREVIEW SANDBOX
             </span>
           </div>
 
-          {/* Frictionless Student Onboarding */}
+          {/* Frictionless Demo Student Sandbox Action */}
           <button
+            type="button"
+            id="btn-quick-student-preview"
             onClick={handleStudentQuick}
-            className="btn-haptic w-full py-2.5 px-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-50/80 hover:bg-amber-100 border border-amber-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
           >
             <div className="flex items-center space-x-2.5">
-              <div className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold text-[10px] flex items-center justify-center">
-                学
+              <div className="w-6 h-6 rounded-full bg-amber-600 text-white font-bold text-[10px] flex items-center justify-center">
+                試
               </div>
               <div className="text-left">
-                <div className="font-bold text-stone-900">New Student Onboarding</div>
-                <div className="text-[10px] text-emerald-700 font-medium">Digital ID + 50 Coins + 100 AI Credits</div>
+                <div className="font-bold text-stone-900 flex items-center gap-1.5">
+                  <span>Demo Student Sandbox</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-900 font-extrabold uppercase">Preview Only</span>
+                </div>
+                <div className="text-[10px] text-stone-500 font-medium">Isolated Test Session • Temporary State</div>
               </div>
             </div>
-            <span className="text-[10px] text-emerald-700 font-bold group-hover:underline">Start Learning →</span>
+            <span className="text-[10px] text-amber-800 font-bold group-hover:underline">Try Demo →</span>
           </button>
 
           <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1 pt-2">

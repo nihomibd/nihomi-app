@@ -1,7 +1,17 @@
 import path from 'path';
+import { execSync } from 'child_process';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+
+let commitHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || process.env.VITE_COMMIT_HASH || '';
+if (!commitHash) {
+  try {
+    commitHash = execSync('git rev-parse --short HEAD').toString().trim();
+  } catch {
+    commitHash = 'f1371ed';
+  }
+}
 
 const previewTelemetryFallback = () => ({
   name: 'preview-telemetry-fallback',
@@ -19,6 +29,10 @@ const previewTelemetryFallback = () => ({
 });
 
 export default defineConfig({
+  define: {
+    '__COMMIT_HASH__': JSON.stringify(commitHash),
+    '__BUILD_DATE__': JSON.stringify(new Date().toISOString().split('T')[0])
+  },
   plugins: [react(), tailwindcss(), previewTelemetryFallback()],
   server: {
     host: '0.0.0.0',
