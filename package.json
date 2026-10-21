@@ -16,6 +16,7 @@
     "validate:scenarios": "tsx scripts/validate-japan-scenarios.ts",
     "test:kana-strokes": "tsx scripts/test-kana-stroke-evaluator.ts",
     "test:pricing": "tsx scripts/test-canonical-pricing-matrix.ts",
+    "test:payment-concurrency": "tsx scripts/test-phase47-payment-concurrency.ts",
     "test:roles": "tsx scripts/test-role-authorization-matrix.ts",
     "test:entitlements": "tsx scripts/test-entitlement-constitution.ts",
     "verify:server": "tsx scripts/verify-server-lifecycle.ts",

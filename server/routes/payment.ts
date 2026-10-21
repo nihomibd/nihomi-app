@@ -11,6 +11,50 @@ import { db } from '../db.js';
 
 export const paymentRouter = Router();
 
+// ========================================================
+// PHASE 47: MONOTONIC PAYMENT STATE MACHINE & CONCURRENCY
+// ========================================================
+export type CanonicalPaymentState =
+  | 'CREATED'
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'SUCCEEDED'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'EXPIRED'
+  | 'REQUIRES_RECONCILIATION';
+
+export interface IdempotencyRecord {
+  key: string;
+  userId: string;
+  tier: SubscriptionTier;
+  interval: string;
+  amount: number;
+  state: CanonicalPaymentState;
+  response: any;
+  createdAt: number;
+  expiresAt: number;
+}
+
+export interface PaymentAttemptRecord {
+  paymentID: string;
+  userId: string;
+  tier: SubscriptionTier;
+  interval: string;
+  amount: number;
+  state: CanonicalPaymentState;
+  trxID?: string;
+  invoiceNumber: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+// In-memory concurrency & idempotency registries (persists across requests in server lifecycle)
+export const idempotencyRegistry = new Map<string, IdempotencyRecord>();
+export const userRateLimitRegistry = new Map<string, { timestamp: number; key: string; response: any }>();
+export const processedTrxRegistry = new Set<string>();
+export const paymentAttemptRegistry = new Map<string, PaymentAttemptRecord>();
+
 function resolveTierAndIntervalFromAmount(amount: number): { tier: SubscriptionTier; interval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' } {
   // Check exact canonical matrix matches
   for (const [planId, planDef] of Object.entries(CANONICAL_SUBSCRIPTION_MATRIX)) {
@@ -50,11 +94,11 @@ paymentRouter.get('/plans', (_req: Request, res: Response) => {
 });
 
 // ========================================================
-// 2. CREATE BKASH CHECKOUT SESSION
+// 2. CREATE BKASH CHECKOUT SESSION (IDEMPOTENT & RATE-LIMITED)
 // ========================================================
 paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { tier, planId, interval = 'monthly', callbackUrl } = req.body;
+    const { tier, planId, interval = 'monthly', callbackUrl, mock, idempotencyKey: clientKey } = req.body;
     const user = req.user;
 
     const resolvedPlanKey = (planId || tier || 'pro').toLowerCase();
@@ -75,14 +119,103 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
       amount = getCanonicalPrice('pro', interval);
     }
 
+    // Strict Client Tamper Defense: Reject fraudulent pricing payloads
+    if (req.body.amount && typeof req.body.amount === 'number' && req.body.amount > 0) {
+      if (Math.abs(req.body.amount - amount) > 1 && !req.body.couponCode) {
+        console.warn(`[PaymentRouter] Client price tamper attempt detected: sent ৳${req.body.amount}, expected ৳${amount}`);
+        return res.status(400).json({
+          success: false,
+          error: 'Price mismatch. Server canonical pricing is strictly enforced.',
+          expectedAmount: amount,
+          currency: 'BDT'
+        });
+      }
+    }
+
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
     const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
 
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
+    // High-Entropy Idempotency Key Resolution
+    const idempotencyKey = (
+      clientKey ||
+      (req.headers['idempotency-key'] as string) ||
+      (req.headers['x-idempotency-key'] as string) ||
+      `idemp_${resolvedUserId}_${selectedTier}_${interval}`
+    );
+
+    // 1. Idempotency Check: Return existing attempt if within 15-minute validity window
+    const cachedAttempt = idempotencyRegistry.get(idempotencyKey);
+    if (cachedAttempt && (Date.now() - cachedAttempt.createdAt) < 15 * 60 * 1000) {
+      res.setHeader('X-Idempotent-Replay', 'true');
+      return res.json(cachedAttempt.response);
+    }
+
+    // 2. Rapid Double-Click Suppression: 2-second rate limiter per user
+    const lastUserReq = userRateLimitRegistry.get(resolvedUserId);
+    const now = Date.now();
+    if (lastUserReq && (now - lastUserReq.timestamp) < 2000) {
+      if (lastUserReq.response) {
+        res.setHeader('X-Duplicate-Suppression', 'true');
+        return res.json(lastUserReq.response);
+      }
+      return res.status(429).json({
+        success: false,
+        error: 'Please wait a moment before retrying payment initiation.',
+        code: 'RATE_LIMITED'
+      });
+    }
+
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
+
+    // 3. Deterministic Mock / Sandbox Provider for Automated Chaos Tests
+    if (mock === true || process.env.ENABLE_PAYMENT_MOCK === 'true') {
+      const mockPaymentID = `MOCK_BK_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      const mockResponse = {
+        success: true,
+        mock: true,
+        paymentID: mockPaymentID,
+        bkashURL: `${appUrl}/api/payment/callback?paymentID=${mockPaymentID}&status=success`,
+        invoiceNumber,
+        amount,
+        currency: 'BDT',
+        tier: selectedTier,
+        interval,
+        state: 'PENDING' as CanonicalPaymentState,
+        planNameBn: planConfig.nameBn,
+      };
+
+      idempotencyRegistry.set(idempotencyKey, {
+        key: idempotencyKey,
+        userId: resolvedUserId,
+        tier: selectedTier,
+        interval,
+        amount,
+        state: 'PENDING',
+        response: mockResponse,
+        createdAt: now,
+        expiresAt: now + 15 * 60 * 1000,
+      });
+
+      userRateLimitRegistry.set(resolvedUserId, { timestamp: now, key: idempotencyKey, response: mockResponse });
+
+      paymentAttemptRegistry.set(mockPaymentID, {
+        paymentID: mockPaymentID,
+        userId: resolvedUserId,
+        tier: selectedTier,
+        interval,
+        amount,
+        state: 'PENDING',
+        invoiceNumber,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      return res.json(mockResponse);
+    }
 
     const isBkashConfigured = Boolean(
       process.env.BKASH_APP_KEY &&
@@ -218,6 +351,13 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
   }
 
   try {
+    // 0. Deduplication check: Has this payment already completed?
+    const existingAttempt = paymentAttemptRegistry.get(paymentID);
+    if (existingAttempt && existingAttempt.state === 'SUCCEEDED') {
+      console.log(`[PaymentRouter Callback] Duplicate callback / replay detected for paymentID: ${paymentID}. Returning idempotent success.`);
+      return res.redirect(`/payment/callback?status=success&trxID=${existingAttempt.trxID || 'ALREADY_PAID'}&tier=${existingAttempt.tier}&amount=${existingAttempt.amount}&invoiceNumber=${existingAttempt.invoiceNumber}&deduplicated=true`);
+    }
+
     // 1. Execute payment with bKash API
     const execResult = await bKashService.executePayment(paymentID);
 
@@ -279,6 +419,21 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
       invoiceNumber,
     });
 
+    // Mark payment attempt as SUCCEEDED and record trxID in registry
+    processedTrxRegistry.add(execResult.trxID);
+    paymentAttemptRegistry.set(paymentID, {
+      paymentID,
+      userId: resolvedUserId,
+      tier: resolvedTier,
+      interval: resolvedInterval,
+      amount,
+      state: 'SUCCEEDED',
+      trxID: execResult.trxID,
+      invoiceNumber,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
     console.log(`[PaymentRouter Callback] Subscription activated successfully for trxID: ${execResult.trxID}`);
 
     // 5. Redirect to frontend success page
@@ -302,6 +457,21 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
 // ========================================================
 paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   const { paymentID } = req.body;
+  if (paymentID) {
+    const existing = paymentAttemptRegistry.get(paymentID);
+    if (existing && existing.state === 'SUCCEEDED') {
+      console.log(`[PaymentRouter Execute] Duplicate direct execute detected for paymentID ${paymentID}. Returning idempotent cached result.`);
+      return res.json({
+        success: true,
+        deduplicated: true,
+        trxID: existing.trxID,
+        tier: existing.tier,
+        amount: existing.amount,
+        invoiceNumber: existing.invoiceNumber,
+        message: 'Payment already verified and subscription activated.'
+      });
+    }
+  }
   const user = req.user;
 
   if (!paymentID) {
@@ -387,6 +557,44 @@ paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, r
 // ========================================================
 // 5. QUERY PAYMENT STATUS DIRECTLY FROM BKASH
 // ========================================================
+// ========================================================
+// 5. STATUS RECONCILIATION ENDPOINT (P0 PAYMENT RELIABILITY)
+// ========================================================
+paymentRouter.get('/reconcile/:paymentID', async (req: Request, res: Response) => {
+  try {
+    const { paymentID } = req.params;
+    const attempt = paymentAttemptRegistry.get(paymentID);
+    if (attempt) {
+      return res.json({
+        success: true,
+        paymentID,
+        state: attempt.state,
+        tier: attempt.tier,
+        amount: attempt.amount,
+        trxID: attempt.trxID,
+        invoiceNumber: attempt.invoiceNumber,
+        isTerminal: attempt.state === 'SUCCEEDED' || attempt.state === 'FAILED' || attempt.state === 'CANCELLED',
+        messageBn: attempt.state === 'SUCCEEDED' ? 'পেমেন্ট সফল ও যাচাইকৃত।' : 'পেমেন্টের অবস্থা যাচাই হচ্ছে...'
+      });
+    }
+    // Fallback: check query API
+    const statusData = await bKashService.queryPayment(paymentID);
+    return res.json({
+      success: true,
+      paymentID,
+      data: statusData,
+      state: statusData.transactionStatus === 'Completed' ? 'SUCCEEDED' : 'PENDING'
+    });
+  } catch (err: any) {
+    return res.json({
+      success: false,
+      state: 'UNKNOWN',
+      messageBn: 'পেমেন্টের অবস্থা এখনো নিশ্চিত করা সম্ভব হয়নি। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।',
+      error: err?.message
+    });
+  }
+});
+
 paymentRouter.get('/query/:paymentID', async (req: Request, res: Response) => {
   try {
     const { paymentID } = req.params;

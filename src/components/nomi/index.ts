@@ -9,4 +9,5 @@ export * from './NomiMessageList';
 export * from './NomiComposer';
 export * from './NomiTypingIndicator';
 export * from './NomiUniversalCompanion';
+export * from './NomiSenseiCompanion';
 export { default } from './NomiUniversalCompanion';

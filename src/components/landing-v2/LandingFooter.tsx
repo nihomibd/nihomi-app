@@ -2,6 +2,7 @@ import React from 'react';
 import { Building, Lock } from 'lucide-react';
 import { LandingPageContainer } from './LandingPageContainer';
 import { NihomiBrandLogo } from '../brand/NihomiBrandLogo';
+import { NIHOMI_BUILD_INFO } from '../../config/buildInfo';
 
 interface LandingFooterProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
@@ -18,9 +19,9 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({ onNavigate }) => {
             <p className="text-slate-400 leading-relaxed">
               শূন্য থেকে জাপান-রেডি। বাংলাভাষী শিক্ষার্থীদের জন্য আধুনিক ও বাস্তবমুখী জাপানি ভাষা ও কর্মক্ষেত্র সিমুলেশন প্ল্যাটফর্ম।
             </p>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300 font-mono">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>লোকাল প্রিভিউ মোড • ভেরশন ২.০</span>
+              <span>{NIHOMI_BUILD_INFO.getDisplayBadge()}</span>
             </div>
             <div className="pt-2">
               <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">ট্রাভেল ও ফ্লাইট পার্টনার:</span>

@@ -325,7 +325,15 @@ export const PricingView: React.FC<PricingViewProps> = ({ onSelectPlan, onNaviga
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
           selectedPlan={selectedPlanForCheckout}
-          initialInterval={interval === 'yearly' ? 'yearly' : 'monthly'}
+          initialInterval={
+            interval === 'yearly'
+              ? 'yearly'
+              : interval === 'half_yearly'
+              ? 'half_yearly'
+              : interval === 'quarterly'
+              ? 'quarterly'
+              : 'monthly'
+          }
           onSuccess={() => {
             setIsCheckoutOpen(false);
             if (onNavigate) onNavigate('dashboard');

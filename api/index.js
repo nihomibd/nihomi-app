@@ -68655,6 +68655,10 @@ init_canonicalPricing();
 init_prisma();
 init_db();
 var paymentRouter = Router8();
+var idempotencyRegistry = /* @__PURE__ */ new Map();
+var userRateLimitRegistry = /* @__PURE__ */ new Map();
+var processedTrxRegistry = /* @__PURE__ */ new Set();
+var paymentAttemptRegistry = /* @__PURE__ */ new Map();
 function resolveTierAndIntervalFromAmount(amount) {
   for (const [planId, planDef] of Object.entries(CANONICAL_SUBSCRIPTION_MATRIX)) {
     for (const [intervalKey, termPricing] of Object.entries(planDef.terms)) {
@@ -68687,7 +68691,7 @@ paymentRouter.get("/plans", (_req, res) => {
 });
 paymentRouter.post("/create", optionalAuth2, async (req, res) => {
   try {
-    const { tier, planId, interval = "monthly", callbackUrl } = req.body;
+    const { tier, planId, interval = "monthly", callbackUrl, mock, idempotencyKey: clientKey } = req.body;
     const user = req.user;
     const resolvedPlanKey = (planId || tier || "pro").toLowerCase();
     let amount;
@@ -68705,12 +68709,82 @@ paymentRouter.post("/create", optionalAuth2, async (req, res) => {
       selectedTier = "pro";
       amount = getCanonicalPrice("pro", interval);
     }
+    if (req.body.amount && typeof req.body.amount === "number" && req.body.amount > 0) {
+      if (Math.abs(req.body.amount - amount) > 1 && !req.body.couponCode) {
+        console.warn(`[PaymentRouter] Client price tamper attempt detected: sent \u09F3${req.body.amount}, expected \u09F3${amount}`);
+        return res.status(400).json({
+          success: false,
+          error: "Price mismatch. Server canonical pricing is strictly enforced.",
+          expectedAmount: amount,
+          currency: "BDT"
+        });
+      }
+    }
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
     const resolvedUserId = user?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user?.email || req.body.email || "student@nihomi.com";
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1e3 + Math.random() * 9e3)}`;
+    const idempotencyKey = clientKey || req.headers["idempotency-key"] || req.headers["x-idempotency-key"] || `idemp_${resolvedUserId}_${selectedTier}_${interval}`;
+    const cachedAttempt = idempotencyRegistry.get(idempotencyKey);
+    if (cachedAttempt && Date.now() - cachedAttempt.createdAt < 15 * 60 * 1e3) {
+      res.setHeader("X-Idempotent-Replay", "true");
+      return res.json(cachedAttempt.response);
+    }
+    const lastUserReq = userRateLimitRegistry.get(resolvedUserId);
+    const now = Date.now();
+    if (lastUserReq && now - lastUserReq.timestamp < 2e3) {
+      if (lastUserReq.response) {
+        res.setHeader("X-Duplicate-Suppression", "true");
+        return res.json(lastUserReq.response);
+      }
+      return res.status(429).json({
+        success: false,
+        error: "Please wait a moment before retrying payment initiation.",
+        code: "RATE_LIMITED"
+      });
+    }
     const appUrl = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
+    if (mock === true || process.env.ENABLE_PAYMENT_MOCK === "true") {
+      const mockPaymentID = `MOCK_BK_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      const mockResponse = {
+        success: true,
+        mock: true,
+        paymentID: mockPaymentID,
+        bkashURL: `${appUrl}/api/payment/callback?paymentID=${mockPaymentID}&status=success`,
+        invoiceNumber,
+        amount,
+        currency: "BDT",
+        tier: selectedTier,
+        interval,
+        state: "PENDING",
+        planNameBn: planConfig.nameBn
+      };
+      idempotencyRegistry.set(idempotencyKey, {
+        key: idempotencyKey,
+        userId: resolvedUserId,
+        tier: selectedTier,
+        interval,
+        amount,
+        state: "PENDING",
+        response: mockResponse,
+        createdAt: now,
+        expiresAt: now + 15 * 60 * 1e3
+      });
+      userRateLimitRegistry.set(resolvedUserId, { timestamp: now, key: idempotencyKey, response: mockResponse });
+      paymentAttemptRegistry.set(mockPaymentID, {
+        paymentID: mockPaymentID,
+        userId: resolvedUserId,
+        tier: selectedTier,
+        interval,
+        amount,
+        state: "PENDING",
+        invoiceNumber,
+        createdAt: now,
+        updatedAt: now
+      });
+      return res.json(mockResponse);
+    }
     const isBkashConfigured = Boolean(
       process.env.BKASH_APP_KEY && !process.env.BKASH_APP_KEY.includes("placeholder") && process.env.BKASH_APP_KEY !== "bkash_nihomi_live_app_key"
     );
@@ -68823,6 +68897,11 @@ paymentRouter.get("/callback", async (req, res) => {
     return res.redirect(`/payment/callback?status=${encodeURIComponent(status || "failed")}&paymentID=${encodeURIComponent(paymentID)}`);
   }
   try {
+    const existingAttempt = paymentAttemptRegistry.get(paymentID);
+    if (existingAttempt && existingAttempt.state === "SUCCEEDED") {
+      console.log(`[PaymentRouter Callback] Duplicate callback / replay detected for paymentID: ${paymentID}. Returning idempotent success.`);
+      return res.redirect(`/payment/callback?status=success&trxID=${existingAttempt.trxID || "ALREADY_PAID"}&tier=${existingAttempt.tier}&amount=${existingAttempt.amount}&invoiceNumber=${existingAttempt.invoiceNumber}&deduplicated=true`);
+    }
     const execResult = await bKashService.executePayment(paymentID);
     if (execResult.transactionStatus !== "Completed" || !execResult.trxID) {
       console.error(`[PaymentRouter Callback] Incomplete status: ${execResult.transactionStatus}`);
@@ -68870,6 +68949,19 @@ paymentRouter.get("/callback", async (req, res) => {
       paymentID,
       invoiceNumber
     });
+    processedTrxRegistry.add(execResult.trxID);
+    paymentAttemptRegistry.set(paymentID, {
+      paymentID,
+      userId: resolvedUserId,
+      tier: resolvedTier,
+      interval: resolvedInterval,
+      amount,
+      state: "SUCCEEDED",
+      trxID: execResult.trxID,
+      invoiceNumber,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
     console.log(`[PaymentRouter Callback] Subscription activated successfully for trxID: ${execResult.trxID}`);
     const redirectParams = new URLSearchParams({
       status: "success",
@@ -68886,6 +68978,21 @@ paymentRouter.get("/callback", async (req, res) => {
 });
 paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
   const { paymentID } = req.body;
+  if (paymentID) {
+    const existing = paymentAttemptRegistry.get(paymentID);
+    if (existing && existing.state === "SUCCEEDED") {
+      console.log(`[PaymentRouter Execute] Duplicate direct execute detected for paymentID ${paymentID}. Returning idempotent cached result.`);
+      return res.json({
+        success: true,
+        deduplicated: true,
+        trxID: existing.trxID,
+        tier: existing.tier,
+        amount: existing.amount,
+        invoiceNumber: existing.invoiceNumber,
+        message: "Payment already verified and subscription activated."
+      });
+    }
+  }
   const user = req.user;
   if (!paymentID) {
     return res.status(400).json({ success: false, error: "paymentID is required" });
@@ -68952,6 +69059,39 @@ paymentRouter.post("/execute", optionalAuth2, async (req, res) => {
     return res.status(500).json({
       success: false,
       error: err?.message || "Failed to execute payment with bKash API"
+    });
+  }
+});
+paymentRouter.get("/reconcile/:paymentID", async (req, res) => {
+  try {
+    const { paymentID } = req.params;
+    const attempt = paymentAttemptRegistry.get(paymentID);
+    if (attempt) {
+      return res.json({
+        success: true,
+        paymentID,
+        state: attempt.state,
+        tier: attempt.tier,
+        amount: attempt.amount,
+        trxID: attempt.trxID,
+        invoiceNumber: attempt.invoiceNumber,
+        isTerminal: attempt.state === "SUCCEEDED" || attempt.state === "FAILED" || attempt.state === "CANCELLED",
+        messageBn: attempt.state === "SUCCEEDED" ? "\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u09B8\u09AB\u09B2 \u0993 \u09AF\u09BE\u099A\u09BE\u0987\u0995\u09C3\u09A4\u0964" : "\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE \u09AF\u09BE\u099A\u09BE\u0987 \u09B9\u099A\u09CD\u099B\u09C7..."
+      });
+    }
+    const statusData = await bKashService.queryPayment(paymentID);
+    return res.json({
+      success: true,
+      paymentID,
+      data: statusData,
+      state: statusData.transactionStatus === "Completed" ? "SUCCEEDED" : "PENDING"
+    });
+  } catch (err) {
+    return res.json({
+      success: false,
+      state: "UNKNOWN",
+      messageBn: "\u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F\u09C7\u09B0 \u0985\u09AC\u09B8\u09CD\u09A5\u09BE \u098F\u0996\u09A8\u09CB \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09BE \u09B8\u09AE\u09CD\u09AD\u09AC \u09B9\u09DF\u09A8\u09BF\u0964 \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u0995\u09BF\u099B\u09C1\u0995\u09CD\u09B7\u09A3 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964",
+      error: err?.message
     });
   }
 });

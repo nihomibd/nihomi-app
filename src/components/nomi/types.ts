@@ -65,9 +65,9 @@ export interface NomiContextState {
 }
 
 export const NOMI_STATE_ASSETS: Record<NomiState, string> = {
-  idle: '/brand/nomi/nomi-welcome.png',
+  idle: '/brand/nomi-sensei/nomi-sensei-primary.png',
   attentive: '/brand/nomi/nomi-listen.png',
-  opening: '/brand/nomi/nomi-welcome.png',
+  opening: '/brand/nomi-sensei/nomi-sensei-primary.png',
   listening: '/brand/nomi/nomi-listen.png',
   thinking: '/brand/nomi/nomi-think.png',
   responding: '/brand/nomi/nomi-think.png',
@@ -76,8 +76,8 @@ export const NOMI_STATE_ASSETS: Record<NomiState, string> = {
   celebrating: '/brand/nomi/nomi-celebrate.png',
   supportive: '/brand/nomi/nomi-encourage.png',
   hint: '/brand/nomi/nomi-guide.png',
-  waiting: '/brand/nomi/nomi-welcome.png',
+  waiting: '/brand/nomi-sensei/nomi-sensei-primary.png',
   error: '/brand/nomi/nomi-guide.png',
   offline: '/brand/nomi/nomi-think.png',
-  reduced_motion: '/brand/nomi/nomi-welcome.png'
+  reduced_motion: '/brand/nomi-sensei/nomi-sensei-primary.png'
 };

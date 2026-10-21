@@ -4228,3 +4228,84 @@ All 20/20 criteria verified with 100% success rate:
 - `npm run validate:scenarios`: **Exit Code: 0 (233/233 assertions passed)**
 - `npm run verify:gate`: **Exit Code: 0 (9/9 release gate matrix checks passed)**
 - `npx tsx scripts/test-phase22-ai-scope-and-tenant-isolation.ts`: **Exit Code: 0 (36/36 assertions passed)**
+
+
+---
+
+## 54. PHASE 47 AUTONOMOUS PRODUCT HARDENING, SINGLE PRICING FUNNEL, NOMI SENSEI & CONCURRENCY EVIDENCE
+
+**Document ID:** `PHASE47_EVIDENCE_LEDGER`  
+**Execution Phase:** Phase 47 (Autonomous Product Hardening & Release Candidate Verification)  
+**Execution Date:** 2026-10-21  
+**Base Commit:** `66ed76d`  
+**Working Branch:** `feature/visual-landing-rebuild-v2`  
+**Operating Principle:** NO EVIDENCE = NO DONE  
+
+### 1. Key Accomplishments & Architectural Repairs
+1. **Single Canonical Pricing & Streamlined Checkout UX (P0):**
+   - Removed the duplicate 3-plan card grid (`CHECKOUT_PLANS`) from `src/components/CheckoutModal.tsx`.
+   - Removed the duplicate 6-value slideshow from `CheckoutModal.tsx` (preserving the canonical slideshow on `/pricing`).
+   - Replaced with a focused, reassurance-driven confirmation modal showing the student's chosen plan name, chosen billing term, canonical price, dynamic daily cost comparison, promo code input, and honest bKash trigger.
+   - Updated `src/views/PricingView.tsx` to pass the exact selected term (`monthly`, `quarterly`, `half_yearly`, `yearly`).
+
+2. **Payment Concurrency, Idempotency & Tamper Defense (P0):**
+   - Implemented `idempotencyRegistry` with 15-minute validity window in `server/routes/payment.ts`.
+   - Implemented 2-second rapid double-click suppression per user to prevent duplicate checkout creations.
+   - Added strict client price tamper defense: rejects client-altered prices (e.g. ৳10 instead of ৳1,990) with HTTP 400.
+   - Added duplicate callback / replay deduplication: subsequent webhook/redirect returns are acknowledged without double-granting entitlements.
+   - Added status reconciliation endpoint `GET /api/payment/reconcile/:paymentID`.
+   - Verified with 17/17 tests in `scripts/test-phase47-payment-concurrency.ts`.
+
+3. **Real Google Login & Build Diagnostic Identifier (P0):**
+   - Added non-sensitive build and environment identification pill (`NIHOMI_BUILD_INFO`) in `src/config/buildInfo.ts`.
+   - Displayed in `LandingFooter.tsx` and `Footer.tsx` (`NIHOMI v1.0.0-phase47 • LOCAL/PREVIEW • 66ed76d`) so the founder can detect stale deployment caches.
+
+4. **Nomi Sensei Companion Constitution (P1):**
+   - Established canonical artwork path: `public/brand/nomi-sensei/nomi-sensei-primary.png` (verified in repo).
+   - Created `docs/nihomi-rebuild/NIHOMI_NOMI_SENSEI_CONSTITUTION.md`.
+   - Created reusable component `src/components/nomi/NomiSenseiCompanion.tsx` adhering to the cumulative learning lattice.
+
+### 2. Browser Verification Matrix Results (14/14 PASS)
+Executed via `node scripts/verify-phase47-release-gates.cjs`:
+- `landingDesktop1280px`: ✔ PASS (Desktop landing hero with build diagnostic pill captured)
+- `landingMobile390px`: ✔ PASS (Mobile 390px viewport captured)
+- `canonicalPricingFunnelSlideshow`: ✔ PASS (Canonical Pricing Page with embedded 6-Value Slideshow)
+- `pricingMobile360px`: ✔ PASS (Mobile 360px compact Android layout verified)
+- `streamlinedCheckoutModalNoDuplicates`: ✔ PASS (Focused single plan confirmation; duplicate cards & slideshow eliminated)
+- `bkashHonestStatusNotConfigured`: ✔ PASS (Honest fail-closed NOT_CONFIGURED banner with manual support links)
+- `studentDashboardKaMissionVisible`: ✔ PASS (5-vowel mastery unlocks Ka-row mission on dashboard)
+- `kaMissionClickNavigatesToKanaKa`: ✔ PASS (Next mission click opens Kana Studio with 'か' selected)
+- `kanaStrokeEvaluatorFalsePositiveRejected`: ✔ PASS (Random scribble strictly rejected with constructive Bengali feedback)
+- `kanaStrokeEvaluatorValidAccepted`: ✔ PASS (Valid stroke sequence accepted with passing score >= 75)
+- `portalUpgradeCtaRedirectsToPricing`: ✔ PASS (Single upgrade funnel redirects to /pricing)
+- `studentBlockedFromFounderHq`: ✔ PASS (Access denied to non-founder accounts)
+- `founderCockpitRealData`: ✔ PASS (Founder authenticated access to real data telemetry)
+- `tablet768pxDashboard`: ✔ PASS (Tablet 768px responsive layout verified)
+
+### 3. Forensic Screenshot Evidence Archive (`evidence/phase47/` & Mirrored in Brain Artifacts)
+- `p47-01-landing-hero-desktop.png` (1280px Desktop Landing Hero)
+- `p47-02-landing-mobile-390px.png` (390px Mobile Landing Hero)
+- `p47-03-pricing-slideshow-desktop.png` (Canonical Pricing Page with 6-Value Slideshow)
+- `p47-04-pricing-mobile-360px.png` (360px Mobile Pricing)
+- `p47-05-streamlined-checkout-modal.png` (Streamlined Checkout Confirmation Modal)
+- `p47-06-bkash-checkout-not-configured.png` (bKash Checkout Honest NOT_CONFIGURED State)
+- `p47-07-student-dashboard-ka-mission.png` (Student Dashboard with Ka-Row Mission)
+- `p47-08-ka-mission-click-kana-studio.png` (Kana Studio Pre-Selected on 'か')
+- `p47-09-kana-stroke-rejection-scribble.png` (Kana Stroke Evaluator Rejecting Scribble)
+- `p47-10-kana-stroke-evaluation-valid.png` (Kana Stroke Evaluator Accepting Valid Stroke)
+- `p47-11-student-upgrade-cta-to-pricing.png` (Single Upgrade Funnel from Student Portal to Pricing)
+- `p47-12-student-blocked-from-founder.png` (Apex Security Blocking Student from Founder HQ)
+- `p47-13-founder-cockpit-real-data.png` (Founder Command Center with Real Telemetry)
+- `p47-14-tablet-768px-dashboard.png` (768px Tablet Responsive Dashboard)
+
+### 4. Deterministic Test Battery Summary
+- `npm run lint` (`tsc --noEmit`): **Exit Code: 0 (0 errors, 0 warnings)**
+- `npm run build`: **Exit Code: 0 (`dist/server.cjs` 7.4MB, `dist/index.html`, `api/index.js`)**
+- `npm run test:pricing`: **Exit Code: 0 (12/12 canonical prices verified)**
+- `npm run test:payment-concurrency`: **Exit Code: 0 (17/17 concurrency & idempotency checks passed)**
+- `npm run test:roles`: **Exit Code: 0 (5/5 RBAC roles verified)**
+- `npm run test:entitlements`: **Exit Code: 0 (66/66 checks passed)**
+- `npm run test:kana-strokes`: **Exit Code: 0 (36/36 vector stroke checks passed - 100%)**
+- `npm run validate:curriculum`: **Exit Code: 0 (17/17 assertions passed)**
+- `npm run validate:scenarios`: **Exit Code: 0 (233/233 assertions passed)**
+- `npm run verify-rc`: **Exit Code: 0 (7/7 production critical checks passed)**

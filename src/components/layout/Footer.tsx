@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { NihomiBrandLogo } from '../brand/NihomiBrandLogo';
+import { NIHOMI_BUILD_INFO } from '../../config/buildInfo';
 
 interface FooterProps {
   onNavigate?: (view: string) => void;
@@ -35,6 +36,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 loading="lazy"
               />
             </a>
+            <span className="text-[#F6F0E6]/30 hidden sm:inline">•</span>
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>{NIHOMI_BUILD_INFO.getDisplayBadge()}</span>
+            </div>
           </div>
 
           {/* Clean Navigation Links */}
