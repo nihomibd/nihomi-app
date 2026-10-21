@@ -229,6 +229,7 @@ async function runConcurrencyTests() {
   if (failed > 0) {
     process.exit(1);
   }
+  process.exit(0);
 }
 
 runConcurrencyTests().catch((err) => {
