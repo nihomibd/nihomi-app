@@ -166,6 +166,10 @@ export const KanaDrawingCanvas: React.FC<KanaDrawingCanvasProps> = ({
       // Prevent scrolling while drawing on touchscreen
       e.stopPropagation();
     }
+    if (isAnimatingStroke) {
+      setIsAnimatingStroke(false);
+      if (animTimerRef.current) clearInterval(animTimerRef.current);
+    }
     haptic.trigger('kanji_stroke');
     const point = getCanvasCoords(e);
     setIsDrawing(true);

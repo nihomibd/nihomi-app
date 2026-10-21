@@ -191,10 +191,10 @@ export function evaluateKanaStrokes(
       continue;
     }
 
-    // A. Start position proximity check (strictly 24% tolerance)
+    // A. Start position proximity check (strictly 18% tolerance)
     if (ref && ref.startPoint) {
       const startDist = Math.hypot(u0 - ref.startPoint.x, v0 - ref.startPoint.y);
-      if (startDist > 24) {
+      if (startDist > 18) {
         const reason = `স্ট্রোক ${i + 1} ভুল স্থান থেকে শুরু হয়েছে।`;
         evaluatedItems.push({ strokeNumber: i + 1, passed: false, reason });
         if (!firstFailingMistake) {
@@ -210,12 +210,12 @@ export function evaluateKanaStrokes(
       }
     }
 
-    // B. Endpoint proximity check (28% tolerance against canonical path endpoint)
+    // B. Endpoint proximity check (20% tolerance against canonical path endpoint)
     if (ref && ref.path) {
       const expectedEnd = extractPathEndPoint(ref.path);
       if (expectedEnd) {
         const endDist = Math.hypot(uEnd - expectedEnd.x, vEnd - expectedEnd.y);
-        if (endDist > 28) {
+        if (endDist > 20) {
           const reason = `স্ট্রোক ${i + 1} ভুল স্থানে শেষ হয়েছে।`;
           evaluatedItems.push({ strokeNumber: i + 1, passed: false, reason });
           if (!firstFailingMistake) {
@@ -238,23 +238,23 @@ export function evaluateKanaStrokes(
 
       if (ref.direction === 'right') {
         // Must move predominantly to the right (dx positive and dominating dy)
-        if (dx < 8 || Math.abs(dx) < Math.abs(dy) * 0.75) {
+        if (dx < 10 || Math.abs(dx) < Math.abs(dy) * 0.8) {
           directionMismatch = true;
           failingFeedback = `স্ট্রোক ${i + 1} ভুল বা উল্টো দিকে টানা হয়েছে! নিয়ম: বাম থেকে ডানে সোজা টান দিন।`;
         }
       } else if (ref.direction === 'down') {
         // Must move predominantly downwards (dy positive and dominating dx)
-        if (dy < 8 || Math.abs(dy) < Math.abs(dx) * 0.75) {
+        if (dy < 10 || Math.abs(dy) < Math.abs(dx) * 0.8) {
           directionMismatch = true;
           failingFeedback = `স্ট্রোক ${i + 1} ভুল বা উল্টো দিকে টানা হয়েছে! নিয়ম: ওপর থেকে নিচে সোজা নামান।`;
         }
       } else if (ref.direction === 'down-left') {
-        if (dy < 4 || dx > 4) {
+        if (dy < 6 || dx > 2) {
           directionMismatch = true;
           failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে বাম দিকে তীর্যক টানুন।`;
         }
       } else if (ref.direction === 'down-right') {
-        if (dy < 4 || dx < -4) {
+        if (dy < 6 || dx < -2) {
           directionMismatch = true;
           failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে ডান দিকে তীর্যক টানুন।`;
         }
@@ -264,20 +264,32 @@ export function evaluateKanaStrokes(
           failingFeedback = `স্ট্রোক ${i + 1}-এর দিক ভুল। ওপর থেকে নিচে নামিয়ে শেষে ছোট হুক দিন।`;
         }
       } else if (ref.direction === 'loop') {
-        // True loop verification: bounding box width and height must be >= 14% and trajectory >= 35
+        // True loop verification: bounding box width and height must be >= 14%, trajectory >= 35,
+        // and winding angle must demonstrate a circular enclosure (cumulative angle >= 1.5 * PI)
         const xs = points.map((p) => (p.x / safeCanvasSize) * 100);
         const ys = points.map((p) => (p.y / safeCanvasSize) * 100);
         const boxWidth = Math.max(...xs) - Math.min(...xs);
         const boxHeight = Math.max(...ys) - Math.min(...ys);
 
         let totalTrajLength = 0;
+        let cumulativeAngle = 0;
         for (let k = 1; k < points.length; k++) {
           const stepDx = ((points[k].x - points[k - 1].x) / safeCanvasSize) * 100;
           const stepDy = ((points[k].y - points[k - 1].y) / safeCanvasSize) * 100;
           totalTrajLength += Math.hypot(stepDx, stepDy);
+
+          if (k < points.length - 1) {
+            const nextDx = ((points[k + 1].x - points[k].x) / safeCanvasSize) * 100;
+            const nextDy = ((points[k + 1].y - points[k].y) / safeCanvasSize) * 100;
+            const cross = stepDx * nextDy - stepDy * nextDx;
+            const dot = stepDx * nextDx + stepDy * nextDy;
+            cumulativeAngle += Math.atan2(cross, dot);
+          }
         }
 
-        if (boxWidth < 14 || boxHeight < 14 || totalTrajLength < 35) {
+        const hasValidEnclosure = Math.abs(cumulativeAngle) >= Math.PI * 1.35 || (boxWidth >= 16 && boxHeight >= 16 && totalTrajLength >= 40);
+
+        if (boxWidth < 14 || boxHeight < 14 || totalTrajLength < 35 || !hasValidEnclosure) {
           directionMismatch = true;
           failingFeedback = `স্ট্রোক ${i + 1}-এ লুপ বা বৃত্ত তৈরি হয়নি! হাত না তুলে গোল করে ঘুরিয়ে লুপ সম্পন্ন করুন।`;
           if (!firstFailingMistake) {

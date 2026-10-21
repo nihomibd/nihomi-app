@@ -273,6 +273,7 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.preventDefault();
+    stopAnimation(); // Guarantee that stroke preview animation stops immediately when user touches canvas
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
@@ -323,28 +324,35 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
     } catch {}
 
     if (currentStrokeRef.current.length > 1) {
-      const newStrokes = [...strokes, currentStrokeRef.current];
-      setStrokes(newStrokes);
-      const nextCount = newStrokes.length;
-      setDrawnCount(nextCount);
-      onStrokeDrawn?.(nextCount);
-      soundEffects.playCorrectPing();
+      const pt0 = currentStrokeRef.current[0];
+      const ptEnd = currentStrokeRef.current[currentStrokeRef.current.length - 1];
+      const strokeDist = Math.hypot(ptEnd.x - pt0.x, ptEnd.y - pt0.y);
 
-      // If completed all strokes, evaluate geometric accuracy
-      if (nextCount >= strokeCount) {
-        const canvasRect = canvasRef.current?.getBoundingClientRect();
-        const size = canvasRect?.width || 250;
-        const evalRes = evaluateKanaStrokes(char, strokeCount, newStrokes, size);
-        setEvalScore(evalRes.score);
-        setEvalFeedback(evalRes.feedbackBn);
+      // Check minimum stroke distance to prevent tiny accidental taps being counted as a full stroke
+      if (strokeDist >= 8 || currentStrokeRef.current.length >= 3) {
+        const newStrokes = [...strokes, currentStrokeRef.current];
+        setStrokes(newStrokes);
+        const nextCount = newStrokes.length;
+        setDrawnCount(nextCount);
+        onStrokeDrawn?.(nextCount);
+        soundEffects.playCorrectPing();
 
-        if (evalRes.isCorrect && !hasCelebrated) {
-          setHasCelebrated(true);
-          soundEffects.playLessonCelebration();
-          triggerCelebrationConfetti();
-          onComplete?.();
-        } else if (!evalRes.isCorrect) {
-          soundEffects.playIncorrectSoft();
+        // If completed all strokes, evaluate geometric accuracy
+        if (nextCount >= strokeCount) {
+          const canvasRect = canvasRef.current?.getBoundingClientRect();
+          const size = canvasRect?.width || 250;
+          const evalRes = evaluateKanaStrokes(char, strokeCount, newStrokes, size);
+          setEvalScore(evalRes.score);
+          setEvalFeedback(evalRes.feedbackBn);
+
+          if (evalRes.isCorrect && !hasCelebrated) {
+            setHasCelebrated(true);
+            soundEffects.playLessonCelebration();
+            triggerCelebrationConfetti();
+            onComplete?.();
+          } else if (!evalRes.isCorrect) {
+            soundEffects.playIncorrectSoft();
+          }
         }
       }
     }
@@ -354,6 +362,7 @@ export const InteractiveKanaTraceCanvas: React.FC<InteractiveKanaTraceCanvasProp
   };
 
   const handleClearCanvas = () => {
+    stopAnimation();
     setStrokes([]);
     currentStrokeRef.current = [];
     setDrawnCount(0);

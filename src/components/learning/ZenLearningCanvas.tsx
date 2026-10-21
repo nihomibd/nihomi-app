@@ -22,6 +22,7 @@ import { apiRequest } from '../../lib/api';
 import { diagnoseMistake, MistakeDiagnostic } from '../../core/curriculum/mistakeRecoveryEngine';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState, addLearnedKana, addLearnedVocabulary, recordLearnerMistake, resolveLearnerMistake } from '../../core/curriculum/learnerKnowledgeState';
 import { ContextualSenseiCompanion } from '../ai/ContextualSenseiCompanion';
+import { evaluateKanaStrokes, KanaStrokeEvaluationResult } from '../../lib/kanaStrokeEvaluator';
 
 export type MicroStep = 'listen' | 'watch' | 'practice' | 'use';
 
@@ -274,6 +275,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
   const currentStrokeRef = useRef<Point[]>([]);
   const [drawnCount, setDrawnCount] = useState(0);
   const [hasCelebratedTrace, setHasCelebratedTrace] = useState(false);
+  const [evalResult, setEvalResult] = useState<KanaStrokeEvaluationResult | null>(null);
 
   // Stroke animation state (WATCH mode)
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
@@ -298,6 +300,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
     currentStrokeRef.current = [];
     setDrawnCount(0);
     setHasCelebratedTrace(false);
+    setEvalResult(null);
     setActiveStep('listen');
     stopAnimation();
 
@@ -499,6 +502,7 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.preventDefault();
+    stopAnimation(); // Isolate drawing completely: never display or run preview animations while learner writes
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
@@ -555,10 +559,20 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
       setDrawnCount(nextCount);
       soundEffects.playCorrectPing();
 
-      if (nextCount >= currentVowel.strokeCount && !hasCelebratedTrace) {
-        setHasCelebratedTrace(true);
-        soundEffects.playLessonCelebration();
-        triggerCelebrationConfetti();
+      if (nextCount >= currentVowel.strokeCount) {
+        const canvas = canvasRef.current;
+        const rect = canvas?.getBoundingClientRect();
+        const canvasSize = rect?.width || 260;
+        const result = evaluateKanaStrokes(currentVowel.char, currentVowel.strokeCount, newStrokes, canvasSize);
+        setEvalResult(result);
+
+        if (result.isCorrect && !hasCelebratedTrace) {
+          setHasCelebratedTrace(true);
+          soundEffects.playLessonCelebration();
+          triggerCelebrationConfetti();
+        } else if (!result.isCorrect) {
+          soundEffects.playIncorrectSoft();
+        }
       }
     }
 
@@ -567,10 +581,12 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
   };
 
   const handleClearCanvas = () => {
+    stopAnimation();
     setStrokes([]);
     currentStrokeRef.current = [];
     setDrawnCount(0);
     setHasCelebratedTrace(false);
+    setEvalResult(null);
     redrawCanvas();
   };
 
@@ -590,8 +606,8 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
       const raw = localStorage.getItem('nihomi_completed_lessons');
       const currentCompleted: string[] = raw ? JSON.parse(raw) : [];
-      if (!currentCompleted.includes('n5-l1')) {
-        currentCompleted.push('n5-l1');
+      if (!currentCompleted.includes('n5-kana-vowels')) {
+        currentCompleted.push('n5-kana-vowels');
         localStorage.setItem('nihomi_completed_lessons', JSON.stringify(currentCompleted));
       }
 
@@ -601,19 +617,19 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
 
       window.dispatchEvent(
         new CustomEvent('nihomi:progress-updated', {
-          detail: { type: 'lesson', lessonId: 'n5-l1', xp: 50, totalXp: nextXp }
+          detail: { type: 'lesson', lessonId: 'n5-kana-vowels', xp: 50, totalXp: nextXp }
         })
       );
       window.dispatchEvent(
         new CustomEvent('nihomi:lesson-completed', {
-          detail: { lessonId: 'n5-l1', xp: 50, totalXp: nextXp }
+          detail: { lessonId: 'n5-kana-vowels', xp: 50, totalXp: nextXp }
         })
       );
 
       if (user?.id) {
         await apiRequest('/api/progress/complete-lesson', {
           method: 'POST',
-          body: JSON.stringify({ lessonId: 'n5-l1', studyMinutes: 10 })
+          body: JSON.stringify({ lessonId: 'n5-kana-vowels', studyMinutes: 10 })
         }).catch(() => {});
         refreshProgress?.();
       }
@@ -1275,7 +1291,16 @@ export const ZenLearningCanvas: React.FC<ZenLearningCanvasProps> = ({
                 {hasCelebratedTrace ? (
                   <div className="p-3 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 shadow-lg animate-in fade-in">
                     <Sparkles className="w-4 h-4 text-amber-300 animate-bounce" />
-                    <span>{currentVowel.feedbackPraise}</span>
+                    <span>{currentVowel.feedbackPraise} {evalResult ? `(${evalResult.score}%)` : ''}</span>
+                  </div>
+                ) : evalResult && !evalResult.isCorrect ? (
+                  <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-medium space-y-1 shadow-lg animate-in fade-in">
+                    <div className="font-bold flex items-center justify-center gap-1.5 text-amber-200">
+                      <span>⚠️ {evalResult.feedbackBn}</span>
+                    </div>
+                    {evalResult.detailedMistake?.instructionBn && (
+                      <p className="text-[11px] text-amber-300/80">পরামর্শ: {evalResult.detailedMistake.instructionBn}</p>
+                    )}
                   </div>
                 ) : (
                   <p className="text-xs text-slate-300 leading-relaxed font-medium">

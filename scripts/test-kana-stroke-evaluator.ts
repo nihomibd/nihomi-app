@@ -173,6 +173,46 @@ assert(
   'Identifies wrong endpoint or direction'
 );
 
+// 13. FALSE POSITIVE PREVENTION: Random 3 Scribbles across Canvas for 'あ' MUST FAIL!
+const randomScribbles: DrawnStroke[] = [
+  [{ x: 10, y: 10 }, { x: 90, y: 15 }, { x: 50, y: 20 }],
+  [{ x: 15, y: 50 }, { x: 85, y: 55 }],
+  [{ x: 20, y: 80 }, { x: 80, y: 85 }]
+];
+const scribbleResult = evaluateKanaStrokes('あ', 3, randomScribbles, 100);
+assert(!scribbleResult.isCorrect, 'Random 3 horizontal scribble lines for あ are strictly rejected');
+assert(scribbleResult.detailedMistake !== null, 'Mistake diagnostic is reported for scribbles');
+
+// 14. Hiragana 'い' Correct Strokes (canvas size 100)
+// Stroke 1: M 30 26 -> down to (36, 78) with hook
+// Stroke 2: M 68 36 -> down to (66, 68)
+const validIStrokes: DrawnStroke[] = [
+  [{ x: 30, y: 26 }, { x: 28, y: 55 }, { x: 36, y: 78 }],
+  [{ x: 68, y: 36 }, { x: 70, y: 52 }, { x: 66, y: 68 }]
+];
+const validIResult = evaluateKanaStrokes('い', 2, validIStrokes, 100);
+assert(validIResult.isCorrect, 'Valid Hiragana い strokes pass evaluation');
+
+// 15. FALSE POSITIVE PREVENTION: Hiragana 'い' with reversed / horizontal lines MUST FAIL!
+const reversedIStrokes: DrawnStroke[] = [
+  // Horizontal line instead of down
+  [{ x: 30, y: 26 }, { x: 80, y: 26 }],
+  // Horizontal line instead of down
+  [{ x: 30, y: 68 }, { x: 80, y: 68 }]
+];
+const reversedIResult = evaluateKanaStrokes('い', 2, reversedIStrokes, 100);
+assert(!reversedIResult.isCorrect, 'Horizontal lines for い are strictly rejected');
+
+// 16. Hiragana 'う' Correct Strokes
+// Stroke 1: M 44 20 -> (58, 26)
+// Stroke 2: M 36 42 -> curve -> (40, 82)
+const validUStrokes: DrawnStroke[] = [
+  [{ x: 44, y: 20 }, { x: 52, y: 24 }, { x: 58, y: 26 }],
+  [{ x: 36, y: 42 }, { x: 65, y: 38 }, { x: 66, y: 60 }, { x: 40, y: 82 }]
+];
+const validUResult = evaluateKanaStrokes('う', 2, validUStrokes, 100);
+assert(validUResult.isCorrect, 'Valid Hiragana う strokes pass evaluation');
+
 console.log('\n================================================================');
 console.log(`✅ KANA STROKE EVALUATOR SUITE: ${passedChecks}/${totalChecks} PASSED (${Math.round((passedChecks / totalChecks) * 100)}%)`);
 console.log('================================================================\n');
