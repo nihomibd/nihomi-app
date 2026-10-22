@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP15-FOUNDER-EMAIL-UPDATE-AND-GLOBAL-SEO-AI-INDEXING",
-  "scope_fingerprint": "22918a924accfad963a32d9b5c89b6ff5bbcdb81da5943c3573be2dc0e6c8606",
-  "approved_at": "2026-10-23T02:33:05.000Z",
+  "task_id": "NIHOMI-WP16-LIVE-SEARCH-CONSOLE-AND-INDEXING-AUDIT",
+  "scope_fingerprint": "9b79c2757e390edfbe1fbb03c4cf6a6c242968b8b475ca5f54e2887e27a9c822",
+  "approved_at": "2026-10-23T02:43:59.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Authoritative Founder Email Lock, Search Engine Indexing (GSC, Bing, Sitemap, Robots), AI Crawler Metadata (llms.txt) & High-Resolution Open Graph Protocol",
+    "title": "Live Search Engine & AI Crawler Production Verification (nihomi.com/sitemap.xml & llms.txt Live Audit)",
     "domain": "Platform Infrastructure / SEO & Growth Engineering",
-    "base_commit": "94aa742"
+    "base_commit": "9293ddc"
   }
 }
