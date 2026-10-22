@@ -1,3 +1,8 @@
+---
+trigger: always_on
+description: "Always apply NIHOMI constitution laws when working in this repository."
+---
+
 # NIHOMI CONSTITUTION — AGENT OPERATIONAL RULES
 # Canonical Version 1.0.0
 

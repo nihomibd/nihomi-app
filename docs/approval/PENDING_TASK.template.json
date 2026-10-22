@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "status": "pending",
+  "task_id": "NIHOMI-EXAMPLE-001",
+  "title": "Short task title",
+  "objective": "User-visible outcome and why it matters.",
+  "domain": "japanese-learning | pos-simulation | exam-os | cv-rirekisho | platform",
+  "in_scope": [
+    "One bounded change"
+  ],
+  "out_of_scope": [
+    "Unrelated refactors",
+    "Production deployment"
+  ],
+  "acceptance_criteria": [
+    "Observable criterion with expected result"
+  ],
+  "verification": [
+    "Specific automated/browser checks"
+  ],
+  "risks": [
+    "Known risks and mitigations"
+  ],
+  "dependencies": [
+    "Existing component/service or none"
+  ],
+  "base_commit": "<actual commit SHA or branch ref>",
+  "created_at": "<ISO 8601 timestamp>",
+  "proposed_by": "Antigravity 2.0"
+}
