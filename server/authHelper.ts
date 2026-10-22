@@ -184,18 +184,18 @@ export function canonicalizeRole(email?: string): CanonicalRole {
  * Derives user role strictly from cryptographically verified claims and canonicalizes.
  */
 function resolveUserRole(rawPayload: Record<string, any>): UserRole {
-  const claimedRole = rawPayload.role || rawPayload.user_metadata?.role || rawPayload.app_metadata?.role;
-  if (claimedRole && isValidUserRole(claimedRole)) {
-    return claimedRole;
-  }
-
   const email = (
     rawPayload.email ||
     rawPayload.user_metadata?.email ||
     rawPayload.app_metadata?.email ||
     ''
   ).trim();
-  return canonicalizeRole(email);
+
+  // INVIOLABLE SECURITY LAW: ONLY mdtanvirkabirbiplob@gmail.com can EVER be 'admin' or 'founder'.
+  if (isAdminEmail(email)) {
+    return 'admin';
+  }
+  return 'student';
 }
 
 /**

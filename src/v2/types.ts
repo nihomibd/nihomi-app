@@ -8,6 +8,7 @@ export type V2Route =
   | 'kana'
   | 'curriculum'
   | 'lesson'
+  | 'exam'
   | 'workos'
   | 'rirekisho'
   | 'pricing'
@@ -20,6 +21,7 @@ export type V2Route =
 export interface V2NavigationParams {
   lessonId?: string;
   char?: string;
+  examId?: string;
   scenarioId?: string;
   planId?: string;
   interval?: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly';

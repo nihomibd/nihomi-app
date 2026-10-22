@@ -285,8 +285,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const saved = safeStorage.getItem('nihomi_user');
       if (!saved) return null;
       const parsed = JSON.parse(saved);
-      if (parsed && !parsed.role) {
-        parsed.role = 'student';
+      if (parsed) {
+        const isFounder = parsed.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+        parsed.role = isFounder ? 'founder' : 'student';
       }
       return parsed;
     } catch {
@@ -371,9 +372,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!newUser.nihomiAccountId) {
       newUser.nihomiAccountId = 'ACC-' + Math.floor(1000 + Math.random() * 9000);
     }
-    if (!newUser.role) {
-      newUser.role = 'student';
-    }
+    const isFounder = newUser.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+    newUser.role = isFounder ? 'founder' : 'student';
     setUser(newUser);
     safeStorage.setItem('nihomi_user', JSON.stringify(newUser));
   };

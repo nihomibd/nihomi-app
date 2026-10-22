@@ -12,10 +12,13 @@ import {
   LogOut,
   Sparkles,
   ShieldAlert,
-  GraduationCap
+  GraduationCap,
+  Award,
+  Crown
 } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../../types';
 import { useAuth } from '../../../context/AuthContext';
+import { NihomiBrandLogo } from '../../../components/brand/NihomiBrandLogo';
 
 interface V2HeaderProps {
   currentRoute: V2Route;
@@ -27,11 +30,15 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
+  // Strict Founder Invariant: ONLY mdtanvirkabirbiplob@gmail.com
+  const isFounder = user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+
   const navLinks: { route: V2Route; label: string; icon: React.FC<{ className?: string }> }[] = [
     { route: 'landing', label: 'হোম', icon: Sparkles },
     { route: 'journey', label: 'টোকিও জার্নি', icon: Compass },
-    { route: 'dashboard', label: 'ড্যাশবোর্ড', icon: GraduationCap },
+    { route: 'dashboard', label: 'শিক্ষার্থী ড্যাশবোর্ড', icon: GraduationCap },
     { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', icon: BookOpen },
+    { route: 'exam', label: 'JLPT মক এক্সাম ওএস', icon: Award },
     { route: 'workos', label: 'কনবিনি WorkOS™', icon: Store },
     { route: 'rirekisho', label: 'রিলোকেশন CV', icon: FileText },
     { route: 'pricing', label: 'সাবস্ক্রিপশন', icon: CreditCard }
@@ -43,38 +50,24 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
     onNavigate(route);
   };
 
-  const isFounder = user?.role === 'admin' || user?.role === 'founder';
-
   return (
     <header id="v2-header" className="sticky top-0 z-40 w-full bg-[#141726]/95 backdrop-blur-md border-b border-[#F6F0E6]/10 text-[#F6F0E6]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
         
-        {/* Brand Logo & Tagline */}
+        {/* Authentic Founder Brand Logo */}
         <div
           onClick={() => handleNavClick('landing')}
           className="flex items-center gap-3 cursor-pointer select-none group"
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#E45147] to-[#F59E0B] p-0.5 shadow-lg shadow-red-600/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-[#141726] rounded-[14px] flex items-center justify-center">
-              <span className="font-serif font-black text-xl text-white">に</span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                NIHOMI
-              </span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-[#E45147]/20 text-[#E45147] font-bold border border-[#E45147]/30">
-                V2
-              </span>
-            </div>
-            <span className="text-[10px] text-stone-400 font-medium hidden sm:inline">
-              জাপানিজ লার্নিং ও রিলোকেশন ওএস
-            </span>
-          </div>
+          <NihomiBrandLogo
+            variant="full"
+            theme="dark"
+            size={36}
+            showTagline={true}
+          />
         </div>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links (Segmented for Learning Excellence) */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
           {navLinks.map(({ route, label }) => {
             const isActive = currentRoute === route;
@@ -82,7 +75,7 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
               <button
                 key={route}
                 onClick={() => handleNavClick(route)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#E45147] text-white shadow-md shadow-red-600/30'
                     : 'text-stone-300 hover:text-white hover:bg-white/5'
@@ -96,13 +89,14 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
 
         {/* Right CTA / Auth Status */}
         <div className="flex items-center gap-2.5">
+          {/* Dedicated Founder Cockpit Gateway — STRICTLY visible only for mdtanvirkabirbiplob@gmail.com */}
           {isFounder && (
             <button
               onClick={() => handleNavClick('founder')}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition cursor-pointer shadow-lg shadow-amber-500/10"
             >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>Founder HQ</span>
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span>Founder Cockpit</span>
             </button>
           )}
 
@@ -123,10 +117,12 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
               {profileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-[#1B1E30] border border-[#F6F0E6]/15 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
                   <div className="px-3 py-2 border-b border-white/10 mb-1">
-                    <p className="text-xs font-bold text-white truncate">{user.name || 'শিক্ষার্থী'}</p>
+                    <p className="text-xs font-bold text-white truncate">{user.name || (isFounder ? 'ফাউন্ডার' : 'শিক্ষার্থী')}</p>
                     <p className="text-[11px] text-stone-400 truncate">{user.email}</p>
-                    <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#6D7C55]/20 text-[#6D7C55]">
-                      প্ল্যান: {user.planId ? user.planId.toUpperCase() : 'FREE'}
+                    <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold ${
+                      isFounder ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-[#6D7C55]/20 text-[#6D7C55]'
+                    }`}>
+                      {isFounder ? 'রোল: FOUNDER' : `রোল: STUDENT (${(user.planId || 'free').toUpperCase()})`}
                     </span>
                   </div>
                   <button
@@ -137,10 +133,17 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
                     <span>আমার ড্যাশবোর্ড</span>
                   </button>
                   <button
+                    onClick={() => handleNavClick('exam')}
+                    className="w-full text-left px-3 py-2 text-xs font-bold text-stone-200 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
+                  >
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>JLPT মক এক্সাম ওএস</span>
+                  </button>
+                  <button
                     onClick={() => handleNavClick('pricing')}
                     className="w-full text-left px-3 py-2 text-xs font-bold text-stone-200 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
                   >
-                    <CreditCard className="w-4 h-4 text-amber-400" />
+                    <CreditCard className="w-4 h-4 text-emerald-400" />
                     <span>সাবস্ক্রিপশন ও বিলিং</span>
                   </button>
                   {isFounder && (
@@ -196,7 +199,7 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
 
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Navigation (Cleanly Segmented) */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#1B1E30] border-b border-[#F6F0E6]/10 px-4 py-4 space-y-2 animate-in slide-in-from-top duration-200">
           {navLinks.map(({ route, label, icon: IconComp }) => (
@@ -218,7 +221,7 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
               onClick={() => handleNavClick('founder')}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20"
             >
-              <ShieldAlert className="w-4 h-4" />
+              <Crown className="w-4 h-4 text-amber-400" />
               <span>Founder Command Center</span>
             </button>
           )}
@@ -234,3 +237,4 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
     </header>
   );
 };
+export default V2Header;

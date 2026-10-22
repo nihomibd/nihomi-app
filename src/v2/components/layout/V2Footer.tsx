@@ -7,9 +7,11 @@ import {
   Heart,
   FileText,
   Mail,
-  Phone
+  Phone,
+  Award
 } from 'lucide-react';
 import { V2Route } from '../../types';
+import { NihomiBrandLogo } from '../../../components/brand/NihomiBrandLogo';
 
 interface V2FooterProps {
   onNavigate: (route: V2Route) => void;
@@ -44,11 +46,13 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
         
         {/* Col 1: Brand & Compliance */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-white font-black text-lg">
-            <span className="w-7 h-7 rounded-lg bg-[#E45147] text-white flex items-center justify-center text-xs font-serif">
-              に
-            </span>
-            <span>NIHOMI.COM</span>
+          <div className="cursor-pointer" onClick={() => onNavigate('landing')}>
+            <NihomiBrandLogo
+              variant="full"
+              theme="dark"
+              size={32}
+              showTagline={false}
+            />
           </div>
           <p className="text-[11px] leading-relaxed text-stone-400">
             বাঙালি শিক্ষার্থীদের জন্য প্রামাণ্য জাপানিজ ভাষা শিক্ষা এবং জাপান ক্যারিয়ার প্রস্তুতি ওএস।
@@ -59,9 +63,9 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Col 2: Learning Modules */}
+        {/* Col 2: Learning & Exam Modules */}
         <div className="space-y-2.5">
-          <h4 className="text-white font-bold text-xs uppercase tracking-wider">শিক্ষা মডিউল</h4>
+          <h4 className="text-white font-bold text-xs uppercase tracking-wider">শিক্ষা ও এক্সাম ওএস</h4>
           <ul className="space-y-1.5 text-[11px]">
             <li>
               <button onClick={() => onNavigate('journey')} className="hover:text-white transition cursor-pointer">
@@ -76,6 +80,12 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
             <li>
               <button onClick={() => onNavigate('curriculum')} className="hover:text-white transition cursor-pointer">
                 JLPT N5–N1 পাঠ্যক্রম
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate('exam')} className="hover:text-amber-400 transition cursor-pointer flex items-center gap-1.5 font-semibold">
+                <Award className="w-3 h-3" />
+                <span>JLPT মক এক্সাম ওএস</span>
               </button>
             </li>
             <li>
@@ -140,13 +150,22 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
 
       </div>
 
+      {/* Bottom Copyright & Version V2 Footprint */}
       <div className="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
         <p>© 2026 NIHOMI (にほみ) — All Rights Reserved. Built with care for Bangladesh scholars.</p>
-        <div className="flex items-center gap-1 text-stone-500">
-          <span>Crafted in Tokyo & Dhaka</span>
-          <Heart className="w-3 h-3 text-red-500 fill-red-500" />
+        
+        {/* Version V2 indicator at the very bottom as explicitly directed by founder */}
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-stone-400 font-mono text-[10px] font-bold">
+            Version V2
+          </span>
+          <div className="flex items-center gap-1 text-stone-500 text-[10px]">
+            <span>Crafted in Tokyo & Dhaka</span>
+            <Heart className="w-3 h-3 text-red-500 fill-red-500" />
+          </div>
         </div>
       </div>
     </footer>
   );
 };
+export default V2Footer;

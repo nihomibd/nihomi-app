@@ -72,7 +72,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-red-600/20 text-red-400 border border-red-500/30">
-              {user?.role === 'founder' || user?.role === 'admin' ? 'প্রতিষ্ঠাতা ভিউ' : 'লার্নার ড্যাশবোর্ড'}
+              {user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' ? 'প্রতিষ্ঠাতা ভিউ' : 'শিক্ষার্থী ড্যাশবোর্ড'}
             </span>
             <span className="text-xs text-stone-400 font-mono">
               こんにちは (Konnichiwa)
@@ -209,7 +209,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
           <span>প্রোডাক্ট মডিউল ও স্টুডিও</span>
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {/* Card 1: Kana Studio */}
           <div
             onClick={() => onNavigate('kana')}
@@ -286,6 +286,25 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             </div>
             <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 mt-4 group-hover:translate-x-1 transition-transform">
               <span>CV প্রস্তুত করুন</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          {/* Card 5: JLPT Exam OS */}
+          <div
+            onClick={() => onNavigate('exam')}
+            className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-purple-500/40 transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <Award className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-white text-base">JLPT মক এক্সাম ওএস</h4>
+              <p className="text-xs text-stone-400 mt-1 leading-relaxed">
+                অফিসিয়াল সময়সীমা ও স্কোরকার্ড সহ N5, N4 ও N3 ফুল-লেংথ প্র্যাকটিস সিমুলেশন ও সার্টিফিকেট।
+              </p>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-purple-400 mt-4 group-hover:translate-x-1 transition-transform">
+              <span>পরীক্ষা দিন</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>

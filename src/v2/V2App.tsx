@@ -9,6 +9,7 @@ import { V2DashboardPage } from './pages/V2DashboardPage';
 import { V2KanaPage } from './pages/V2KanaPage';
 import { V2CurriculumPage } from './pages/V2CurriculumPage';
 import { V2LessonPage } from './pages/V2LessonPage';
+import { V2ExamPage } from './pages/V2ExamPage';
 import { V2WorkOsPage } from './pages/V2WorkOsPage';
 import { V2RirekishoPage } from './pages/V2RirekishoPage';
 import { V2PricingPage } from './pages/V2PricingPage';
@@ -54,6 +55,12 @@ const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
     case 'lesson':
       if (parts[1]) params.lessonId = parts[1];
       return { route: 'lesson', params };
+    case 'exam':
+    case 'exams':
+    case 'mock':
+    case 'mock-exam':
+      if (parts[1]) params.examId = parts[1];
+      return { route: 'exam', params };
     case 'workos':
     case 'baito':
       return { route: 'workos', params };
@@ -133,6 +140,7 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
     let hash = `#${route}`;
     if (params?.char) hash += `/${params.char}`;
     else if (params?.lessonId) hash += `/${params.lessonId}`;
+    else if (params?.examId) hash += `/${params.examId}`;
 
     if (window.location.hash !== hash) {
       window.location.hash = hash;
@@ -163,6 +171,13 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
         return (
           <V2LessonPage
             lessonId={navParams.lessonId || 'n5-l01'}
+            onNavigate={handleNavigate}
+          />
+        );
+      case 'exam':
+        return (
+          <V2ExamPage
+            examId={navParams.examId}
             onNavigate={handleNavigate}
           />
         );

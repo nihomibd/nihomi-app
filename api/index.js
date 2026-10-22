@@ -60717,9 +60717,6 @@ function getVerificationSecrets() {
   }
   return secrets;
 }
-function isValidUserRole(role) {
-  return role === "admin" || role === "student" || role === "instructor" || role === "user" || role === "founder";
-}
 function canonicalizeRole(email) {
   if (email && isAdminEmail(email)) {
     return "admin";
@@ -60727,12 +60724,11 @@ function canonicalizeRole(email) {
   return "student";
 }
 function resolveUserRole(rawPayload) {
-  const claimedRole = rawPayload.role || rawPayload.user_metadata?.role || rawPayload.app_metadata?.role;
-  if (claimedRole && isValidUserRole(claimedRole)) {
-    return claimedRole;
-  }
   const email = (rawPayload.email || rawPayload.user_metadata?.email || rawPayload.app_metadata?.email || "").trim();
-  return canonicalizeRole(email);
+  if (isAdminEmail(email)) {
+    return "admin";
+  }
+  return "student";
 }
 function signStatelessJwt(payload, expiresInSeconds = 30 * 24 * 60 * 60) {
   let jwtSecret;

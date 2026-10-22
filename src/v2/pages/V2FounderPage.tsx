@@ -63,7 +63,7 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const isAuthorized = Boolean(user && (user.role === 'founder' || user.role === 'admin'));
+  const isAuthorized = Boolean(user && user.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com');
 
   const fetchTelemetry = async () => {
     try {
