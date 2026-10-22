@@ -927,7 +927,7 @@ class Database {
           userId: s.user_id,
           planId: s.plan_id,
           status: s.status,
-          billingInterval: 'yearly',
+          billingInterval: s.billing_interval || 'monthly',
           currentPeriodStart: s.current_period_start,
           currentPeriodEnd: s.current_period_end,
           cancelAtPeriodEnd: s.cancel_at_period_end,
@@ -1627,11 +1627,11 @@ class Database {
 
       plans: SEED_PLANS,
       planPrices: SEED_PLAN_PRICES,
-      subscriptions: [studentSub],
+      subscriptions: [],
       subscriptionItems: [],
-      payments: [seedPayment],
+      payments: [],
       paymentAttempts: [],
-      invoices: [seedInvoice, seedTopUpInvoice1, seedTopUpInvoice2, seedStarterInvoice],
+      invoices: [],
       invoiceItems: [],
       entitlements: [],
       usageRecords: [seedUsage],
@@ -4673,6 +4673,14 @@ class Database {
             const monthlyEquivalent = Math.round(plan.yearlyPrice / 12);
             mrr += monthlyEquivalent;
             arr += plan.yearlyPrice;
+          } else if (sub.billingInterval === 'half_yearly') {
+            const monthlyEquivalent = Math.round((plan.halfYearlyPrice || plan.monthlyPrice * 6) / 6);
+            mrr += monthlyEquivalent;
+            arr += monthlyEquivalent * 12;
+          } else if (sub.billingInterval === 'quarterly') {
+            const monthlyEquivalent = Math.round((plan.quarterlyPrice || plan.monthlyPrice * 3) / 3);
+            mrr += monthlyEquivalent;
+            arr += monthlyEquivalent * 12;
           } else {
             mrr += plan.monthlyPrice;
             arr += plan.monthlyPrice * 12;

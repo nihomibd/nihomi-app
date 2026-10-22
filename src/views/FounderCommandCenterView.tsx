@@ -1044,10 +1044,14 @@ export const FounderCommandCenterView: React.FC<FounderCommandCenterViewProps> =
                     </span>
                   </div>
                   <h3 className="text-lg font-bold text-white">
-                    পেইড শিক্ষার্থী Kenji Explorer-এর অনবোর্ডিং তদারকি ও bKash অটোমেশন যাচাইকরণ
+                    {(summary?.business?.activePaidMembers || 0) > 0
+                      ? `পেইড শিক্ষার্থী অনবোর্ডিং তদারকি ও পেমেন্ট অটোমেশন যাচাইকরণ (${summary?.business?.activePaidMembers} পেইড মেম্বার)`
+                      : 'শিক্ষার্থী অ্যাক্টিভেশন ও লাইভ সাবস্ক্রিপশন ট্র্যাকিং'}
                   </h3>
                   <p className="text-xs text-stone-300">
-                    বর্তমান MRR ৳১,৬৯২/মাস অর্জিত হয়েছে (১ পেইড মেম্বার, Pro Annual ৳২০,৩০০)। পরবর্তী পদক্ষেপ হিসেবে স্টুডেন্ট ইন্টেলিজেন্স থেকে শিক্ষার্থীর প্রগ্রেস পর্যালোচনা করুন এবং নতুন শিক্ষার্থীদের জন্য সরাসরি ট্র্যাকিং সচল রাখুন।
+                    {(summary?.business?.activePaidMembers || 0) > 0
+                      ? `বর্তমান বাস্তব MRR ৳${(summary?.business?.currentMrr || 0).toLocaleString()}/মাস অর্জিত হয়েছে (${summary?.business?.activePaidMembers} জন পেইড মেম্বার)। স্টুডেন্ট ইন্টেলিজেন্স থেকে শিক্ষার্থীর প্রগ্রেস পর্যালোচনা করুন এবং সরাসরি ট্র্যাকিং সচল রাখুন।`
+                      : `বর্তমান বাস্তব MRR ৳${(summary?.business?.currentMrr || 0).toLocaleString()}/মাস (০ জন পেইড মেম্বার)। লাইভ প্রোডাকশন ডেটাবেস সিঙ্কড—কোনো কৃত্রিম বা ফেক ডেটা অন্তর্ভুক্ত নয়।`}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2.5">

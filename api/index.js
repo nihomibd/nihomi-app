@@ -52443,7 +52443,7 @@ var init_db = __esm({
               userId: s.user_id,
               planId: s.plan_id,
               status: s.status,
-              billingInterval: "yearly",
+              billingInterval: s.billing_interval || "monthly",
               currentPeriodStart: s.current_period_start,
               currentPeriodEnd: s.current_period_end,
               cancelAtPeriodEnd: s.cancel_at_period_end,
@@ -53088,11 +53088,11 @@ var init_db = __esm({
           aiSessions: [],
           plans: SEED_PLANS,
           planPrices: SEED_PLAN_PRICES,
-          subscriptions: [studentSub],
+          subscriptions: [],
           subscriptionItems: [],
-          payments: [seedPayment],
+          payments: [],
           paymentAttempts: [],
-          invoices: [seedInvoice, seedTopUpInvoice1, seedTopUpInvoice2, seedStarterInvoice],
+          invoices: [],
           invoiceItems: [],
           entitlements: [],
           usageRecords: [seedUsage],
@@ -55520,6 +55520,14 @@ var init_db = __esm({
                 const monthlyEquivalent = Math.round(plan.yearlyPrice / 12);
                 mrr += monthlyEquivalent;
                 arr += plan.yearlyPrice;
+              } else if (sub.billingInterval === "half_yearly") {
+                const monthlyEquivalent = Math.round((plan.halfYearlyPrice || plan.monthlyPrice * 6) / 6);
+                mrr += monthlyEquivalent;
+                arr += monthlyEquivalent * 12;
+              } else if (sub.billingInterval === "quarterly") {
+                const monthlyEquivalent = Math.round((plan.quarterlyPrice || plan.monthlyPrice * 3) / 3);
+                mrr += monthlyEquivalent;
+                arr += monthlyEquivalent * 12;
               } else {
                 mrr += plan.monthlyPrice;
                 arr += plan.monthlyPrice * 12;
@@ -60718,15 +60726,15 @@ function getVerificationSecrets() {
   return secrets;
 }
 function canonicalizeRole(email) {
-  if (email && isAdminEmail(email)) {
-    return "admin";
+  if (email && (isAdminEmail(email) || isFounderEmail(email))) {
+    return "founder";
   }
   return "student";
 }
 function resolveUserRole(rawPayload) {
   const email = (rawPayload.email || rawPayload.user_metadata?.email || rawPayload.app_metadata?.email || "").trim();
-  if (isAdminEmail(email)) {
-    return "admin";
+  if (isAdminEmail(email) || isFounderEmail(email)) {
+    return "founder";
   }
   return "student";
 }
@@ -61378,7 +61386,8 @@ authRouter.post("/google", async (req, res) => {
         name: profile?.displayName || user.email.split("@")[0],
         role: user.role,
         planId: userPlanId,
-        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase()
+        studentId: user.role === "founder" ? "NHO-FOUNDER-01" : "NHO-" + user.id.slice(0, 6).toUpperCase(),
+        avatarUrl: profile?.avatarSeed || verifiedGoogle.picture || null
       },
       profile,
       progress,
@@ -61464,9 +61473,9 @@ authRouter.post("/login", (req, res) => {
         id: user.id,
         email: user.email,
         name: profile?.displayName || user.email.split("@")[0],
-        role: user.role,
+        role: user.role === "admin" ? "founder" : user.role,
         planId: userPlanId,
-        studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+        studentId: user.role === "founder" || user.role === "admin" ? "NHO-FOUNDER-01" : "NHO-" + user.id.slice(0, 6).toUpperCase(),
         avatarUrl: profile?.avatarSeed || null,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
@@ -97306,6 +97315,10 @@ founderRouter.get("/summary", (req, res) => {
       business: {
         totalRevenue: rev.totalRevenue || 0,
         currentMrr,
+        arr: rev.arr || currentMrr * 12,
+        revenueByPlan: rev.revenueByPlan || { free: 0, starter: 0, pro: 0, japan_ready: 0 },
+        subscribersByPlan: rev.subscribersByPlan || { free: 0, starter: 0, pro: 0, japan_ready: 0 },
+        monthlyVsAnnualRevenue: rev.monthlyVsAnnualRevenue || { monthly: 0, yearly: 0 },
         mrrTarget,
         mrrTargetCurrency: settings.mrrTarget.currency || "USD",
         mrrGap: Math.round(mrrGap),
@@ -97330,6 +97343,208 @@ founderRouter.get("/summary", (req, res) => {
   } catch (error) {
     console.error("[FounderAPI] Error generating summary:", error);
     return res.status(500).json({ success: false, error: error.message || "Failed to retrieve Founder summary" });
+  }
+});
+founderRouter.get("/financials", (req, res) => {
+  try {
+    const rev = db.getRevenueMetrics();
+    const plans = db.getPlans();
+    const allSubs = db.data?.subscriptions || [];
+    const now = Date.now();
+    const activeSubs = allSubs.filter(
+      (s) => (s.status === "active" || s.status === "trialing") && new Date(s.currentPeriodEnd).getTime() >= now
+    );
+    let starterMrr = 0;
+    let proMrr = 0;
+    let japanReadyMrr = 0;
+    for (const sub of activeSubs) {
+      const plan = plans.find((p) => p.id === sub.planId);
+      if (!plan) continue;
+      let monthlyContribution = 0;
+      if (sub.billingInterval === "yearly") {
+        monthlyContribution = Math.round(plan.yearlyPrice / 12);
+      } else if (sub.billingInterval === "half_yearly") {
+        monthlyContribution = Math.round((plan.halfYearlyPrice || plan.monthlyPrice * 6) / 6);
+      } else if (sub.billingInterval === "quarterly") {
+        monthlyContribution = Math.round((plan.quarterlyPrice || plan.monthlyPrice * 3) / 3);
+      } else {
+        monthlyContribution = plan.monthlyPrice || 0;
+      }
+      if (sub.planId === "starter") starterMrr += monthlyContribution;
+      else if (sub.planId === "pro") proMrr += monthlyContribution;
+      else if (sub.planId === "japan_ready") japanReadyMrr += monthlyContribution;
+    }
+    const totalLiveMrr = starterMrr + proMrr + japanReadyMrr;
+    const totalLiveArr = totalLiveMrr * 12;
+    return res.json({
+      success: true,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      financials: {
+        currency: "BDT",
+        currentMrr: totalLiveMrr,
+        arr: totalLiveArr,
+        totalRevenue: rev.totalRevenue || 0,
+        activeSubscribers: activeSubs.length,
+        subscribersByPlan: {
+          starter: activeSubs.filter((s) => s.planId === "starter").length,
+          pro: activeSubs.filter((s) => s.planId === "pro").length,
+          japan_ready: activeSubs.filter((s) => s.planId === "japan_ready").length,
+          free: Math.max(0, (db.data?.users || []).length - activeSubs.length)
+        },
+        mrrByPlan: {
+          starter: starterMrr,
+          pro: proMrr,
+          japan_ready: japanReadyMrr
+        },
+        monthlyVsAnnualRevenue: rev.monthlyVsAnnualRevenue || { monthly: 0, yearly: 0 },
+        paidPaymentsCount: (db.data?.payments || []).filter((p) => p.status === "paid").length
+      }
+    });
+  } catch (err) {
+    console.error("[FounderAPI] Error in /financials:", err);
+    return res.status(500).json({ success: false, error: err.message || "Failed to compute financials" });
+  }
+});
+founderRouter.get("/growth", (req, res) => {
+  try {
+    const allUsers = db.getAllUsers();
+    const seenEmails = /* @__PURE__ */ new Set();
+    const studentUsers = allUsers.filter((u) => {
+      const email = (u.email || "").trim().toLowerCase();
+      if (!email || u.role === "admin" || isAdminEmail(email)) return false;
+      if (seenEmails.has(email)) return false;
+      seenEmails.add(email);
+      return true;
+    });
+    const now = /* @__PURE__ */ new Date();
+    const thisMonthPrefix = now.toISOString().slice(0, 7);
+    const newStudentsThisMonth = studentUsers.filter((u) => u.createdAt && u.createdAt.startsWith(thisMonthPrefix)).length;
+    const sevenDaysAgo = new Date(Date.now() - 7 * 86400 * 1e3).toISOString().split("T")[0];
+    const activeStudents7d = studentUsers.filter((u) => {
+      const prog = db.getProgressByUserId(u.id);
+      return prog && prog.lastActiveDate >= sevenDaysAgo;
+    }).length;
+    return res.json({
+      success: true,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      growth: {
+        totalStudents: studentUsers.length,
+        newStudentsThisMonth,
+        activeStudents7d,
+        readinessDistribution: {
+          zero: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) < 10).length,
+          beginner: studentUsers.filter((u) => {
+            const s = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return s >= 10 && s < 40;
+          }).length,
+          intermediate: studentUsers.filter((u) => {
+            const s = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return s >= 40 && s < 75;
+          }).length,
+          ready: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) >= 75).length
+        }
+      }
+    });
+  } catch (err) {
+    console.error("[FounderAPI] Error in /growth:", err);
+    return res.status(500).json({ success: false, error: err.message || "Failed to compute growth" });
+  }
+});
+founderRouter.get("/telemetry", (req, res) => {
+  try {
+    const rev = db.getRevenueMetrics();
+    const settings = db.getFounderSettings();
+    const wallets = db.getFounderBudgetWallets();
+    const approvals = db.getFounderApprovals();
+    const tasks = db.getFounderTasks();
+    const emergencyControls = db.getFounderEmergencyControls();
+    const totalSpent = wallets.reduce((sum, w) => sum + (w.current_spent || 0), 0);
+    const monthlyBudget = settings.mrrTarget.monthlyBudget || 5e4;
+    const remainingBudget = Math.max(0, monthlyBudget - totalSpent);
+    const mrrTarget = settings.mrrTarget.targetAmount || 1e4;
+    const currentMrr = rev.mrr || 0;
+    const mrrGap = Math.max(0, mrrTarget - (settings.mrrTarget.currency === "USD" ? currentMrr / 122 : currentMrr));
+    const pendingApprovalsCount = approvals.filter((a) => a.status === "PENDING").length;
+    const activeTasksCount = tasks.filter((t) => t.status === "ACTIVE").length;
+    const blockedTasksCount = tasks.filter((t) => t.status === "BLOCKED").length;
+    const marketingWallet = wallets.find((w) => w.wallet_id === "w-marketing");
+    const aiWallet = wallets.find((w) => w.wallet_id === "w-ai");
+    const retentionRate = typeof rev.churnRate === "number" ? `${Math.max(0, 100 - rev.churnRate).toFixed(1)}%` : "NOT AVAILABLE";
+    const calculatedCac = marketingWallet?.current_spent && rev.newSubscribersThisMonth > 0 ? `\u09F3${Math.round(marketingWallet.current_spent / rev.newSubscribersThisMonth)}` : "NOT CONFIGURED";
+    const allUsers = db.getAllUsers();
+    const seenEmailsSummary = /* @__PURE__ */ new Set();
+    const studentUsers = allUsers.filter((u) => {
+      const email = (u.email || "").trim().toLowerCase();
+      if (!email || u.role === "admin" || isAdminEmail(email)) return false;
+      if (seenEmailsSummary.has(email)) return false;
+      seenEmailsSummary.add(email);
+      return true;
+    });
+    const totalStudents = studentUsers.length;
+    const now = /* @__PURE__ */ new Date();
+    const thisMonthPrefix = now.toISOString().slice(0, 7);
+    const newStudentsThisMonth = studentUsers.filter((u) => u.createdAt && u.createdAt.startsWith(thisMonthPrefix)).length;
+    const sevenDaysAgo = new Date(Date.now() - 7 * 86400 * 1e3).toISOString().split("T")[0];
+    const activeStudents = studentUsers.filter((u) => {
+      const prog = db.getProgressByUserId(u.id);
+      return prog && prog.lastActiveDate >= sevenDaysAgo;
+    }).length;
+    return res.json({
+      success: true,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      executive: {
+        founderEmail: req.user?.email || "mdtanvirkabirbiplob@gmail.com",
+        role: req.user?.role || "founder",
+        systemStatus: "OPERATIONAL"
+      },
+      students: {
+        totalStudents,
+        newStudentsThisMonth,
+        activeStudents,
+        readinessDistribution: {
+          zero: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) < 10).length,
+          beginner: studentUsers.filter((u) => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 10 && score < 40;
+          }).length,
+          intermediate: studentUsers.filter((u) => {
+            const score = db.getProfileByUserId(u.id)?.japanReadinessScore || 0;
+            return score >= 40 && score < 75;
+          }).length,
+          ready: studentUsers.filter((u) => (db.getProfileByUserId(u.id)?.japanReadinessScore || 0) >= 75).length
+        }
+      },
+      business: {
+        totalRevenue: rev.totalRevenue || 0,
+        currentMrr,
+        arr: rev.arr || currentMrr * 12,
+        revenueByPlan: rev.revenueByPlan || { free: 0, starter: 0, pro: 0, japan_ready: 0 },
+        subscribersByPlan: rev.subscribersByPlan || { free: 0, starter: 0, pro: 0, japan_ready: 0 },
+        monthlyVsAnnualRevenue: rev.monthlyVsAnnualRevenue || { monthly: 0, yearly: 0 },
+        mrrTarget,
+        mrrTargetCurrency: settings.mrrTarget.currency || "USD",
+        mrrGap: Math.round(mrrGap),
+        activePaidMembers: rev.activeSubscribers || 0,
+        newMembersThisMonth: rev.newSubscribersThisMonth || 0,
+        retentionRate,
+        cac: calculatedCac,
+        marketingSpend: marketingWallet?.current_spent || 0,
+        aiCost: aiWallet?.current_spent || 0,
+        operatingCost: totalSpent,
+        approvedMonthlyBudget: monthlyBudget,
+        remainingApprovedBudget: remainingBudget
+      },
+      activeObjective: settings.activeObjective,
+      workforce: {
+        pendingApprovalsCount,
+        activeTasksCount,
+        blockedTasksCount,
+        emergencyState: Object.values(emergencyControls).some((s) => s.active) ? "ACTIVE_LOCKDOWN" : "NORMAL"
+      }
+    });
+  } catch (error) {
+    console.error("[FounderAPI] Error generating telemetry:", error);
+    return res.status(500).json({ success: false, error: error.message || "Failed to retrieve Founder telemetry" });
   }
 });
 founderRouter.get("/targets", (req, res) => {

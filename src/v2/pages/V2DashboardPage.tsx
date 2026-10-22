@@ -15,11 +15,12 @@ import {
   RotateCcw,
   Zap,
   Target,
-  Sliders
+  Sliders,
+  Coins
 } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../types';
 import { useAuth } from '../../context/AuthContext';
-import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
+import { loadLearnerKnowledgeState, hydrateKnowledgeStateFromServer } from '../../core/curriculum/learnerKnowledgeState';
 import { getNextBestMission, isGrammarEligible } from '../../core/curriculum/journeyEngine';
 import { BengaliQuickCalibrationModal } from '../../components/learning/BengaliQuickCalibrationModal';
 import { loopOrchestrator } from '../../core/loop';
@@ -29,7 +30,7 @@ interface V2DashboardPageProps {
 }
 
 export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) => {
-  const { user, progress, openAuthModal } = useAuth();
+  const { user, progress, openAuthModal, coinWallet, refreshProgress } = useAuth();
   const [knowledgeState, setKnowledgeState] = useState(loadLearnerKnowledgeState());
   const [isCalibrationOpen, setIsCalibrationOpen] = useState(false);
 
@@ -37,11 +38,15 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
     const handleUpdate = () => setKnowledgeState(loadLearnerKnowledgeState());
     window.addEventListener('nihomi:knowledge-state-updated', handleUpdate);
     window.addEventListener('nihomi:memory-updated', handleUpdate);
+    if (user) {
+      refreshProgress();
+      hydrateKnowledgeStateFromServer(user.id);
+    }
     return () => {
       window.removeEventListener('nihomi:knowledge-state-updated', handleUpdate);
       window.removeEventListener('nihomi:memory-updated', handleUpdate);
     };
-  }, []);
+  }, [user, refreshProgress]);
 
     const nextMission = getNextBestMission(knowledgeState);
   const grammarStatus = isGrammarEligible(knowledgeState);
@@ -92,7 +97,10 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
   }, [knowledgeState]);
 
   const knownKanaCount = knowledgeState.knownHiragana.length + knowledgeState.knownKatakana.length;
-  // Authentic learner progress telemetry — 0 fallback if new/unauthenticated, zero fake 5-day / 1240-XP mocks
+  const reviewDueCount = knowledgeState.reviewQueue?.length ?? 0;
+  const coinBalance = coinWallet?.coinBalance ?? ((user as any)?.coinBalance ?? 10);
+  const totalStudyMinutes = progress?.totalStudyMinutes ?? ((progress?.totalHours ?? 0) * 60);
+  // Authentic learner progress telemetry — zero fake 5-day / 1240-XP mocks
   const streakDays = progress?.currentStreak ?? progress?.streakDays ?? (user?.streakDays ?? 0);
   const xpPoints = progress?.experiencePoints ?? ((user as any)?.xpPoints ?? 0);
 
@@ -133,44 +141,79 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
         </div>
 
         {/* Gamification Badges */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Streak */}
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#141726] border border-amber-500/30 shadow-lg shadow-amber-500/5">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-amber-500/30 shadow-lg shadow-amber-500/5">
             <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-              <Flame className="w-5 h-5 fill-amber-400" />
+              <Flame className="w-4 h-4 fill-amber-400" />
             </div>
             <div>
-              <div className="text-[10px] text-stone-400 uppercase font-bold tracking-wider">দৈনিক স্ট্রিক</div>
-              <div className="text-lg font-black text-amber-400 leading-none">{streakDays} দিন</div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">দৈনিক স্ট্রিক</div>
+              <div className="text-base font-black text-amber-400 leading-none">{streakDays} দিন</div>
             </div>
           </div>
 
           {/* XP */}
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#141726] border border-emerald-500/30 shadow-lg shadow-emerald-500/5">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-emerald-500/30 shadow-lg shadow-emerald-500/5">
             <div className="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <Zap className="w-5 h-5 fill-emerald-400" />
+              <Zap className="w-4 h-4 fill-emerald-400" />
             </div>
             <div>
-              <div className="text-[10px] text-stone-400 uppercase font-bold tracking-wider">অর্জিত পয়েন্ট</div>
-              <div className="text-lg font-black text-emerald-400 leading-none">{xpPoints} XP</div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">অর্জিত পয়েন্ট</div>
+              <div className="text-base font-black text-emerald-400 leading-none">{xpPoints} XP</div>
             </div>
           </div>
 
           {/* Kana Mastered */}
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#141726] border border-red-500/30 shadow-lg shadow-red-500/5">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-red-500/30 shadow-lg shadow-red-500/5">
             <div className="w-8 h-8 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-              <Award className="w-5 h-5" />
+              <Award className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-[10px] text-stone-400 uppercase font-bold tracking-wider">জানা বর্ণমালা</div>
-              <div className="text-lg font-black text-red-400 leading-none">{knownKanaCount} টি</div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">জানা বর্ণমালা</div>
+              <div className="text-base font-black text-red-400 leading-none">{knownKanaCount} টি</div>
+            </div>
+          </div>
+
+          {/* SRS Review Queue */}
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-purple-500/30 shadow-lg shadow-purple-500/5">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+              <RotateCcw className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">রিভিশন বাকি</div>
+              <div className="text-base font-black text-purple-400 leading-none">{reviewDueCount} টি</div>
+            </div>
+          </div>
+
+          {/* Coins Wallet */}
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-yellow-500/30 shadow-lg shadow-yellow-500/5">
+            <div className="w-8 h-8 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400">
+              <Coins className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">নিহোমি কয়েন</div>
+              <div className="text-base font-black text-yellow-400 leading-none">{coinBalance} কয়েন</div>
+            </div>
+          </div>
+
+          {/* Total Study Time */}
+          <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-cyan-500/30 shadow-lg shadow-cyan-500/5">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <Clock className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">স্টাডি সময়</div>
+              <div className="text-base font-black text-cyan-400 leading-none">
+                {totalStudyMinutes >= 60 ? `${(totalStudyMinutes / 60).toFixed(1)} ঘণ্টা` : `${totalStudyMinutes} মিনিট`}
+              </div>
             </div>
           </div>
 
           {/* Recalibrate Button */}
           <button
             onClick={() => setIsCalibrationOpen(true)}
-            className="p-2.5 rounded-2xl bg-[#141726] hover:bg-[#1a1f33] border border-white/10 text-stone-300 hover:text-white transition-all cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[#141726] hover:bg-[#1a1f33] border border-white/10 text-stone-300 hover:text-white transition-all cursor-pointer shadow-md"
             title="লার্নিং লেভেল রিক্যালিব্রেট করুন"
           >
             <Sliders className="w-5 h-5" />
