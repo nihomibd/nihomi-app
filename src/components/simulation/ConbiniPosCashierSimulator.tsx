@@ -1,4 +1,5 @@
 // src/components/simulation/ConbiniPosCashierSimulator.tsx
+// NIHOMI V2 — TOKYO WORKOS™ 7-ELEVEN / CONBINI CASHIER WORKSTATION
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -19,36 +20,26 @@ import {
   HelpCircle,
   Clock,
   UserCheck,
-  Mic,
   Store,
-  ThumbsUp,
-  Star,
   Check,
   ArrowRight,
-  TrendingUp,
   Receipt,
-  Radio,
   ShoppingBag,
   Utensils,
-  CreditCard as CardIcon,
   Play,
-  Pause,
-  AlertTriangle,
-  Lightbulb,
-  X
+  RotateCw
 } from 'lucide-react';
 import { ConbiniPosProduct, ConbiniCustomerOrder } from '../../types';
 import { CONBINI_SCENARIOS, ConbiniScenarioItem } from '../../data/conbiniScenarios';
-import { CONBINI_BRANDS, ConbiniBrandId, ConbiniBrandConfig, HotSnackMenuItem } from '../../data/conbiniBrands';
+import { CONBINI_BRANDS, ConbiniBrandId, HotSnackMenuItem } from '../../data/conbiniBrands';
 import { ConbiniCustomerFigure } from './conbini/ConbiniCustomerFigure';
 import { ConbiniHotSnackCase } from './conbini/ConbiniHotSnackCase';
 import { ConbiniMicrowaveOven } from './conbini/ConbiniMicrowaveOven';
 import { ConbiniCartoneTray } from './conbini/ConbiniCartoneTray';
 import { ConbiniCustomerTablet } from './conbini/ConbiniCustomerTablet';
-import { ConbiniStoreStageBackground } from './conbini/ConbiniStoreStageBackground';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
-import { haptic } from '../../lib/haptic';
+import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 interface ConbiniPosCashierSimulatorProps {
   onCompleteOrder?: (score: number, yenTotal: number) => void;
@@ -72,7 +63,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
   const currentScenario = scenarios[currentScenarioIndex] || scenarios[0];
 
-  // 4. Stage Progression
+  // 4. Stage Progression (1. Greeting -> 2. Scanning -> 3. Service -> 4. Payment -> 5. Closing)
   const [stage, setStage] = useState<CashierStage>('greeting');
 
   // 5. Customer Interaction & Hot Food States
@@ -112,7 +103,6 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   // 8. Payment Tender
   const [activePaymentMethod, setActivePaymentMethod] = useState<'cash' | 'suica' | 'paypay' | 'credit' | null>(null);
   const [cashTendered, setCashTendered] = useState<number | null>(null);
-  const [cashInputValue, setCashInputValue] = useState<string>('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isPaymentApproved, setIsPaymentApproved] = useState(false);
 
@@ -138,15 +128,9 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     readinessPoints: 0
   });
 
-  const [currentTransactionScore, setCurrentTransactionScore] = useState<number | null>(null);
   const [showShiftScorecardModal, setShowShiftScorecardModal] = useState(false);
 
-  // 12. Voice Recognition for Tap-to-Speak
-  const [isListening, setIsListening] = useState(false);
-  const [speechEvaluation, setSpeechEvaluation] = useState<{ score: number; text: string } | null>(null);
-  const recognitionRef = useRef<any>(null);
-
-  // 13. Audio & Notification
+  // 12. Audio & Notification Feedback
   const [feedbackNotice, setFeedbackNotice] = useState<{
     text: string;
     type: 'success' | 'warn' | 'info';
@@ -155,11 +139,6 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   // Clean speech recognition on unmount
   useEffect(() => {
     return () => {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (e) {}
-      }
       stopJapaneseSpeech();
     };
   }, []);
@@ -184,12 +163,10 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     setIsAgeVerified(false);
     setActivePaymentMethod(null);
     setCashTendered(null);
-    setCashInputValue('');
     setIsDrawerOpen(false);
     setIsPaymentApproved(false);
     setIsReceiptPrinting(false);
     setIsPartingCompleted(false);
-    setCurrentTransactionScore(null);
     setPatienceSeconds(currentScenario.patienceTimeSeconds);
     setCustomerPatienceExpired(false);
     setIsHotSnackRequested(true);
@@ -219,7 +196,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     const brand = CONBINI_BRANDS[brandId];
     brand.playEntranceChime();
     setFeedbackNotice({
-      text: `コンビニチェーン切替: ${brand.nameJa} (${brand.nameBn}) に移動しました`,
+      text: `কনভেনিয়েন্স ব্র্যান্ড পরিবর্তন: ${brand.nameJa} (${brand.nameBn})`,
       type: 'info'
     });
   };
@@ -235,7 +212,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
           setCustomerPatienceExpired(true);
           soundEffects.playIncorrectSoft();
           setFeedbackNotice({
-            text: 'お客様の待ち時間が限界を超えました！接客スピードと手際を上げてください。',
+            text: 'গ্রাহকের অপেক্ষার সময় শেষ হয়েছে! দ্রুত সেবা প্রদান করুন।',
             type: 'warn'
           });
           return 0;
@@ -295,8 +272,8 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
     setFeedbackNotice({
       text: mode === 'training'
-        ? `店員: 「いらっしゃいませ！」 → お客様: 「${greetingResp.customerResponseJa}」`
-        : `店員: 「いらっしゃいませ！」 (挨拶完了・商品スキャンへ)`,
+        ? `ক্যাশিয়ার: 「いらっしゃいませ！」 → কাস্টমার: 「${greetingResp.customerResponseJa}」`
+        : `অভিবাদন সম্পন্ন। পরবর্তী ধাপ: পণ্য স্ক্যান করুন।`,
       type: 'success'
     });
 
@@ -321,7 +298,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       if (scannedItems.length + 1 >= currentScenario.items.length) {
         setStage('service');
         setFeedbackNotice({
-          text: '全商品のスキャンが完了しました！接客確認（カード・温め・袋）へ進みます。',
+          text: 'সকল পণ্য স্ক্যান সম্পন্ন হয়েছে! পরবর্তী ধাপ: সেবা নিশ্চিতকরণ (খাবার গরম, ব্যাগ, কার্ড)।',
           type: 'info'
         });
       }
@@ -333,12 +310,11 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     setScannedItems([...currentScenario.items]);
     setStage('service');
     setFeedbackNotice({
-      text: '全商品を一括スキャンしました。(All items scanned successfully)',
+      text: 'সকল পণ্য এক ক্লিকে সফলভাবে স্ক্যান করা হয়েছে।',
       type: 'info'
     });
   };
 
-  // Grab hot snack from warmer case
   const handleSelectHotSnack = (snack: HotSnackMenuItem) => {
     if (packagedSnacks.includes(snack.id)) return;
     setPackagedSnacks((prev) => [...prev, snack.id]);
@@ -365,7 +341,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     });
 
     setFeedbackNotice({
-      text: `ホットスナック「${snack.nameJa}」をトングで取り出し包装しました (+¥${snack.priceYen})`,
+      text: `হট স্ন্যাক্স 「${snack.nameJa}」টংস দিয়ে প্যাকেজিং করে কার্টে যোগ করা হয়েছে (+¥${snack.priceYen})`,
       type: 'success'
     });
   };
@@ -395,8 +371,8 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
     setFeedbackNotice({
       text: pc.hasCard
-        ? `お客様: 「${responseJa}」 (+10点 規定ポイント確認完了)`
-        : `お客様: 「${responseJa}」 (確認完了)`,
+        ? `কাস্টমার: 「${responseJa}」 (পয়েন্ট কার্ড চেক সম্পন্ন)`
+        : `কাস্টমার: 「${responseJa}」 (পয়েন্ট কার্ড নেই)`,
       type: 'success'
     });
   };
@@ -421,12 +397,12 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       setIsMicrowaveRunning(true);
       setMicrowaveSecondsLeft(4);
       setFeedbackNotice({
-        text: 'お弁当を1500W業務用電子レンジに入れ、温めを開始しました (4秒)',
+        text: 'বেন্তোটি ১৫০০ ওয়াটের ওভেনে গরম করা শুরু হয়েছে (৪ সেকেন্ড)...',
         type: 'info'
       });
     } else {
       setFeedbackNotice({
-        text: `お客様: 「${bw.customerResponseJa}」 (温め不要)`,
+        text: `কাস্টমার: 「${bw.customerResponseJa}」 (গরম করার প্রয়োজন নেই)`,
         type: 'info'
       });
     }
@@ -442,7 +418,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       soundEffects.playPlasticBagSound();
       speakJapanese('レジ袋、大サイズを1枚お付けいたします。(+5円)', { rate: 0.9 });
       setFeedbackNotice({
-        text: 'レジ袋（有料5円）を追加し、袋詰めを行いました。',
+        text: 'পরিবেশবান্ধব পলিথিন ব্যাগ (+৫ ইয়েন) কার্টে যোগ করা হয়েছে।',
         type: 'success'
       });
     } else {
@@ -450,7 +426,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       setBagFee(0);
       speakJapanese('かしこまりました。袋なしでテープをお貼りいたします。', { rate: 0.9 });
       setFeedbackNotice({
-        text: 'レジ袋なし（マイバッグまたは手持ちテープ貼付）',
+        text: 'ব্যাগ ছাড়া হাতে নেওয়া নিশ্চিত করা হয়েছে (ফ্রি টেপ)।',
         type: 'info'
       });
     }
@@ -464,13 +440,13 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     if (add) {
       speakJapanese('お箸とスプーンをお付けいたしました。', { rate: 0.9 });
       setFeedbackNotice({
-        text: 'お箸・スプーンを商品にお付けしました。',
+        text: 'চপস্টিক ও চামচ ব্যাগে দেওয়া হয়েছে।',
         type: 'success'
       });
     } else {
       speakJapanese('かしこまりました。お箸はお付けいたしません。', { rate: 0.9 });
       setFeedbackNotice({
-        text: 'カトラリー不要確認完了',
+        text: 'কাটলারি ছাড়াই পণ্য প্রদান নিশ্চিত হয়েছে।',
         type: 'info'
       });
     }
@@ -482,7 +458,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     soundEffects.playRegisterSettlement();
     speakJapanese('年齢確認ボタンのタッチ、ありがとうございます。', { rate: 0.9 });
     setFeedbackNotice({
-      text: '酒・たばこの年齢確認（20歳以上タッチ）が正常に完了しました。',
+      text: 'মদ ও তামাকের জন্য ২০ বছর বা তদূর্ধ্ব বয়স নিশ্চিতকরণ সম্পন্ন হয়েছে।',
       type: 'success'
     });
   };
@@ -502,7 +478,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     }, 500);
 
     setFeedbackNotice({
-      text: `お客様の支払い希望: 「${pay.customerAnnounceJa}」`,
+      text: `কাস্টমারের পেমেন্ট মাধ্যম: 「${pay.customerAnnounceJa}」`,
       type: 'info'
     });
   };
@@ -516,7 +492,6 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
     if (method === 'cash') {
       const defaultTender = currentScenario.tenderedCashAmount || Math.ceil(totalAmount / 1000) * 1000;
-      setCashInputValue(defaultTender.toString());
       setCashTendered(defaultTender);
     } else if (method === 'suica') {
       setTimeout(() => {
@@ -539,12 +514,12 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     }
   };
 
-  // Cash Cartone Actions
   const handleOpenDrawerAndTender = () => {
     setIsDrawerOpen(true);
+    soundEffects.playCashDrawerPop();
     const entered = cashTendered || totalAmount;
     setFeedbackNotice({
-      text: `現金 ¥${entered.toLocaleString()} をお預かりしました。レジが開きました。`,
+      text: `নগদ ¥${entered.toLocaleString()} গ্রহণ করা হয়েছে। ক্যাশ ড্রয়ার উন্মুক্ত।`,
       type: 'info'
     });
   };
@@ -552,8 +527,9 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   const handleCompleteChangeHandover = () => {
     setIsPaymentApproved(true);
     setStage('closing');
+    soundEffects.playCoinDrop();
     setFeedbackNotice({
-      text: `お釣り ¥${changeDue.toLocaleString()} とレシートをお渡ししました。会計完了。`,
+      text: `ভাংতি ¥${changeDue.toLocaleString()} এবং রসিদ প্রদান করা হয়েছে। পেমেন্ট সম্পন্ন।`,
       type: 'success'
     });
   };
@@ -581,8 +557,6 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       // Calculate shift scoring metrics
       let penalty = 0;
       let keigoScore = 100;
-      let scanningScore = 100;
-      let paymentScore = 100;
 
       if (!isGreetingCompleted) {
         penalty += 15;
@@ -598,112 +572,61 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       }
       if (currentScenario.needsBag && !isBagAdded) {
         penalty += 15;
-        scanningScore -= 15;
-      }
-      if (hasAgeVerificationItem && !isAgeVerified) {
-        penalty += 30;
-        paymentScore -= 30;
+        keigoScore -= 15;
       }
       if (customerPatienceExpired) {
         penalty += 20;
       }
 
-      const satisfaction = Math.max(40, 100 - penalty);
-      setCurrentTransactionScore(satisfaction);
+      const finalScore = Math.max(50, 100 - penalty);
+      const earnedXp = Math.max(30, Math.round(finalScore * 0.8));
 
-      setShiftStats((prev) => {
-        const nextCustomers = prev.customersServed + 1;
-        return {
-          customersServed: nextCustomers,
-          totalSalesYen: prev.totalSalesYen + totalAmount,
-          perfectTransactions: satisfaction >= 95 ? prev.perfectTransactions + 1 : prev.perfectTransactions,
-          scanningAccuracySum: prev.scanningAccuracySum + scanningScore,
-          keigoServiceScoreSum: prev.keigoServiceScoreSum + keigoScore,
-          paymentAccuracySum: prev.paymentAccuracySum + paymentScore,
-          satisfactionScoreSum: prev.satisfactionScoreSum + satisfaction,
-          earnedXp: prev.earnedXp + 40 + (satisfaction >= 90 ? 20 : 0),
-          readinessPoints: prev.readinessPoints + 5
-        };
+      // Synchronize with durable learner knowledge state directly
+      try {
+        const state = loadLearnerKnowledgeState();
+        const skills = Array.from(new Set([...(state.masteredSkills || []), 'baito_conbini_cashier']));
+        saveLearnerKnowledgeState({
+          ...state,
+          totalXp: (state.totalXp || 0) + earnedXp,
+          masteredSkills: skills
+        });
+      } catch (e) {
+        console.warn('[WorkOS] Could not sync knowledge state:', e);
+      }
+
+      setShiftStats((prev) => ({
+        ...prev,
+        customersServed: prev.customersServed + 1,
+        totalSalesYen: prev.totalSalesYen + totalAmount,
+        perfectTransactions: penalty === 0 ? prev.perfectTransactions + 1 : prev.perfectTransactions,
+        earnedXp: prev.earnedXp + earnedXp,
+        readinessPoints: prev.readinessPoints + Math.round(finalScore / 10)
+      }));
+
+      setStage('completed');
+      soundEffects.playLessonCelebration();
+
+      setFeedbackNotice({
+        text: `শিফট সম্পন্ন! স্কোর: ${finalScore}% | + ${earnedXp} XP অর্জিত হয়েছে।`,
+        type: 'success'
       });
 
-      soundEffects.playLessonCelebration();
-      setStage('completed');
-
-      if (onCompleteOrder) {
-        onCompleteOrder(satisfaction, totalAmount);
-      }
+      onCompleteOrder?.(finalScore, totalAmount);
     }, 900);
   };
 
-  // Next Customer or Loop
   const handleAdvanceToNextCustomer = () => {
     soundEffects.playButtonTap();
     if (currentScenarioIndex < scenarios.length - 1) {
       setCurrentScenarioIndex((prev) => prev + 1);
     } else {
-      // Full shift completed! Persist rewards (+150 XP, +25 Readiness points)
-      try {
-        const prevXp = parseInt(localStorage.getItem('nihomi_student_xp') || '0', 10);
-        const nextXp = prevXp + 150;
-        localStorage.setItem('nihomi_student_xp', nextXp.toString());
-
-        const prevShifts = parseInt(localStorage.getItem('nihomi_baito_shifts_completed') || '0', 10);
-        const nextShifts = prevShifts + 1;
-        localStorage.setItem('nihomi_baito_shifts_completed', nextShifts.toString());
-
-        const prevReadiness = parseInt(localStorage.getItem('nihomi_baito_readiness_score') || '75', 10);
-        const nextReadiness = Math.min(100, Math.max(75, prevReadiness + 25));
-        localStorage.setItem('nihomi_baito_readiness_score', nextReadiness.toString());
-
-        localStorage.setItem('nihomi_conbini_passed', 'true');
-
-        // Dispatch global sync events for Dashboard and Course roadmaps
-        window.dispatchEvent(new CustomEvent('nihomi:baito-shift-completed', {
-          detail: {
-            xp: 150,
-            totalXp: nextXp,
-            readinessPoints: 25,
-            readinessScore: nextReadiness,
-            shiftsCompleted: nextShifts,
-            timestamp: Date.now()
-          }
-        }));
-
-        window.dispatchEvent(new CustomEvent('nihomi:progress-updated', {
-          detail: {
-            type: 'baito',
-            xp: 150,
-            readinessPoints: 25,
-            shiftsCompleted: nextShifts
-          }
-        }));
-
-        // Graceful API persist attempt
-        if (typeof window !== 'undefined' && window.fetch) {
-          fetch('/api/baito/shift/complete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              shiftsCompleted: nextShifts,
-              earnedXp: 150,
-              readinessScore: nextReadiness,
-              totalSalesYen: shiftStats.totalSalesYen
-            })
-          }).catch(() => {
-            // Silently handled on static/offline edge deployments
-          });
-        }
-      } catch (err) {
-        console.warn('[ConbiniSync] Failed to persist shift rewards:', err);
-      }
-
       setShowShiftScorecardModal(true);
     }
   };
 
-  const handleSelectScenarioDirect = (index: number) => {
+  const handleSelectScenarioDirect = (idx: number) => {
     soundEffects.playButtonTap();
-    setCurrentScenarioIndex(index);
+    setCurrentScenarioIndex(idx);
   };
 
   const handleRestartShift = () => {
@@ -723,101 +646,37 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     });
   };
 
-  // Voice recognition for interactive practice
-  const handleVoiceRecognition = (targetPhraseJa: string, onMatchAction: () => void) => {
-    soundEffects.playButtonTap();
-
-    if (isListening && recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (e) {}
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    const evaluateTranscript = (transcript: string) => {
-      let score = 95;
-      const cleanTarget = targetPhraseJa.replace(/[！!？?、。\s]/g, '');
-      const cleanTrans = transcript.replace(/\s+/g, '');
-
-      if (cleanTrans.length > 0 && cleanTarget.length > 0) {
-        if (cleanTrans === cleanTarget) {
-          score = 99;
-        } else if (cleanTrans.includes(cleanTarget.substring(0, 3))) {
-          score = 96;
-        } else {
-          score = Math.floor(88 + Math.random() * 8);
-        }
-      }
-
-      setSpeechEvaluation({ score, text: transcript || targetPhraseJa });
-      soundEffects.playCorrectPing();
-      haptic.correct();
-      onMatchAction();
-    };
-
-    if (SpeechRecognition) {
-      try {
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ja-JP';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
-        recognition.onstart = () => {
-          setIsListening(true);
-        };
-
-        recognition.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          evaluateTranscript(transcript);
-        };
-
-        recognition.onerror = () => {
-          setIsListening(false);
-          evaluateTranscript(targetPhraseJa);
-        };
-
-        recognition.onend = () => {
-          setIsListening(false);
-        };
-
-        recognitionRef.current = recognition;
-        recognition.start();
-      } catch (e) {
-        setIsListening(false);
-        evaluateTranscript(targetPhraseJa);
-      }
-    } else {
-      evaluateTranscript(targetPhraseJa);
-    }
-  };
+  const stagesList = [
+    { key: 'greeting', num: 1, ja: '1. 挨拶 (শুভেচ্ছা)', icon: '🗣️' },
+    { key: 'scanning', num: 2, ja: '2. スキャン (স্ক্যান)', icon: '🛒' },
+    { key: 'service', num: 3, ja: '3. 接客確認 (সেবা)', icon: '🍱' },
+    { key: 'payment', num: 4, ja: '4. お会計 (পেমেন্ট)', icon: '💳' },
+    { key: 'closing', num: 5, ja: '5. お見送り (রসিদ)', icon: '🧾' }
+  ];
 
   return (
-    <div id="conbini-first-person-pos" className="w-full space-y-4">
+    <div className="w-full space-y-5 animate-fadeIn">
       {/* =========================================================================
-          TOP STAGE HEADER: 3-Brand Switcher & Mode Toggles
+          1. TOP CONTROLS: Brand Selector (7-Eleven / Lawson / FamilyMart) & Mode
          ========================================================================= */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 shadow-xl backdrop-blur-md">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          {/* Brand Switcher Bar (7-Eleven, Lawson, FamilyMart) */}
+      <div className="bg-[#141726] border border-white/10 rounded-2xl sm:rounded-3xl p-4 shadow-xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* Brand Switcher Bar */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1.5">
+            <span className="text-xs font-bold text-stone-400 uppercase tracking-wider shrink-0 flex items-center gap-1.5 mr-1">
               <Store className="w-4 h-4 text-amber-400" />
-              <span>コンビニブランド (Select Store):</span>
+              <span>স্টোর নির্বাচন:</span>
             </span>
 
-            <div className="inline-flex rounded-2xl bg-slate-950 p-1 border border-slate-800 shadow-inner">
+            <div className="inline-flex rounded-xl bg-black/40 p-1 border border-white/10">
               {/* 7-Eleven */}
               <button
                 type="button"
                 onClick={() => handleSwitchBrand('seven_eleven')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   selectedBrandId === 'seven_eleven'
-                    ? 'bg-gradient-to-r from-orange-600 via-emerald-600 to-red-600 text-white shadow-md ring-2 ring-orange-400/50 scale-[1.02]'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-gradient-to-r from-orange-600 via-emerald-600 to-red-600 text-white shadow-md ring-2 ring-orange-400/50'
+                    : 'text-stone-400 hover:text-white'
                 }`}
               >
                 <span>🟢🟠🔴</span>
@@ -828,10 +687,10 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               <button
                 type="button"
                 onClick={() => handleSwitchBrand('lawson')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   selectedBrandId === 'lawson'
-                    ? 'bg-gradient-to-r from-blue-700 to-sky-600 text-white shadow-md ring-2 ring-blue-400/50 scale-[1.02]'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-gradient-to-r from-blue-700 to-sky-600 text-white shadow-md ring-2 ring-blue-400/50'
+                    : 'text-stone-400 hover:text-white'
                 }`}
               >
                 <span>🔵⚪</span>
@@ -842,10 +701,10 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               <button
                 type="button"
                 onClick={() => handleSwitchBrand('family_mart')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   selectedBrandId === 'family_mart'
-                    ? 'bg-gradient-to-r from-emerald-600 to-cyan-600 text-white shadow-md ring-2 ring-emerald-400/50 scale-[1.02]'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-gradient-to-r from-emerald-600 to-cyan-600 text-white shadow-md ring-2 ring-emerald-400/50'
+                    : 'text-stone-400 hover:text-white'
                 }`}
               >
                 <span>🟢⚪🔵</span>
@@ -856,21 +715,21 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
           {/* Mode Switcher: Training vs Real Shift */}
           <div className="flex items-center gap-2 shrink-0">
-            <div className="inline-flex rounded-2xl bg-slate-950 p-1 border border-slate-800 shadow-inner">
+            <div className="inline-flex rounded-xl bg-black/40 p-1 border border-white/10">
               <button
                 type="button"
                 onClick={() => {
                   soundEffects.playButtonTap();
                   setMode('training');
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   mode === 'training'
-                    ? 'bg-amber-500 text-slate-950 shadow-md font-black'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-500 text-black font-black'
+                    : 'text-stone-400 hover:text-white'
                 }`}
               >
                 <HelpCircle className="w-3.5 h-3.5" />
-                <span>研修モード (Training)</span>
+                <span>ট্রেনিং মোড (সহজ গাইড)</span>
               </button>
 
               <button
@@ -879,24 +738,24 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                   soundEffects.playButtonTap();
                   setMode('shift');
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   mode === 'shift'
-                    ? 'bg-rose-600 text-white shadow-md font-black ring-1 ring-rose-400'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-red-600 text-white font-black'
+                    : 'text-stone-400 hover:text-white'
                 }`}
               >
                 <Zap className="w-3.5 h-3.5" />
-                <span>本番シフト (Real Shift)</span>
+                <span>লাইভ শিফট (টাইমার)</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Customer Carousel / Quick Switcher */}
-        <div className="mt-3.5 pt-3 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1">
+        <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <span className="text-xs font-bold text-stone-400 shrink-0 mr-1 flex items-center gap-1">
             <UserCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>お客様選択 (Customers):</span>
+            <span>গ্রাহক নির্বাচন:</span>
           </span>
 
           {scenarios.map((sc, idx) => {
@@ -905,13 +764,13 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               <button
                 key={sc.id}
                 onClick={() => handleSelectScenarioDirect(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center gap-2 border ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center gap-2 border cursor-pointer ${
                   isSelected
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500 shadow'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500 shadow-md'
+                    : 'bg-black/40 border-white/10 text-stone-400 hover:text-stone-200'
                 }`}
               >
-                <span className="text-base">{sc.avatarEmoji}</span>
+                <span className="text-sm">{sc.avatarEmoji}</span>
                 <span className="truncate max-w-[130px]">{sc.customerName}</span>
                 {idx === 4 && <span className="text-[9px] bg-rose-500/30 text-rose-300 px-1 rounded font-mono">RUSH</span>}
               </button>
@@ -921,440 +780,723 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
       </div>
 
       {/* =========================================================================
-          STAGE WORKSPACE: First-Person 2.5D Japanese Store Environment
+          2. STEP-BY-STEP PROGRESSIVE STEPPER (1 to 5)
          ========================================================================= */}
-      <ConbiniStoreStageBackground brand={activeBrand}>
-        {/* Interactive Cashier Workflow Stepper Navigation */}
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 text-center text-xs font-bold mb-5 select-none">
-          {[
-            { key: 'greeting', num: 1, ja: '挨拶 (Greeting)', icon: '🗣️' },
-            { key: 'scanning', num: 2, ja: 'スキャン (Scan)', icon: '🛒' },
-            { key: 'service', num: 3, ja: '接客確認 (Service)', icon: '🍱' },
-            { key: 'payment', num: 4, ja: 'お会計 (Payment)', icon: '💳' },
-            { key: 'closing', num: 5, ja: 'お見送り (Close)', icon: '🧾' }
-          ].map((s) => {
-            const isActive = stage === s.key;
-            const isDone =
-              (s.key === 'greeting' && isGreetingCompleted) ||
-              (s.key === 'scanning' && allItemsScanned) ||
-              (s.key === 'service' && isBagAsked) ||
-              (s.key === 'payment' && isPaymentApproved) ||
-              (s.key === 'closing' && isPartingCompleted);
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-2 text-center text-xs font-bold select-none">
+        {stagesList.map((s) => {
+          const isActive = stage === s.key;
+          const isDone =
+            (s.key === 'greeting' && isGreetingCompleted) ||
+            (s.key === 'scanning' && allItemsScanned) ||
+            (s.key === 'service' && isBagAsked) ||
+            (s.key === 'payment' && isPaymentApproved) ||
+            (s.key === 'closing' && isPartingCompleted);
 
-            return (
-              <div
-                key={s.key}
-                className={`p-2 rounded-xl border transition flex flex-col items-center justify-center gap-0.5 ${
-                  isActive
-                    ? 'bg-amber-500/20 border-amber-500 text-amber-300 ring-1 ring-amber-500/40'
-                    : isDone
-                    ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
-                }`}
-              >
-                <div className="text-base">{s.icon}</div>
-                <div className="text-[11px] truncate max-w-full">{s.ja}</div>
-              </div>
-            );
-          })}
-        </div>
+          return (
+            <div
+              key={s.key}
+              className={`p-2.5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-1 ${
+                isActive
+                  ? 'bg-gradient-to-b from-[#E45147]/20 to-[#141726] border-[#E45147] text-white ring-1 ring-[#E45147]/50 shadow-lg'
+                  : isDone
+                  ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                  : 'bg-[#141726]/60 border-white/5 text-stone-500'
+              }`}
+            >
+              <div className="text-base sm:text-lg">{s.icon}</div>
+              <div className="text-[10px] sm:text-xs truncate max-w-full font-serif">{s.ja}</div>
+            </div>
+          );
+        })}
+      </div>
 
-        {/* 3-Column / Stacked Cinematic Store Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          {/* =====================================================================
-              LEFT COLUMN (3 Cols): Hot Snack Showcase & 1500W Microwave
-             ===================================================================== */}
-          <div className="lg:col-span-3 space-y-4">
-            {/* Hot Snack Warmer Case */}
-            <ConbiniHotSnackCase
-              brandNameJa={activeBrand.nameJa}
-              brandCaseTitleJa={activeBrand.hotSnackCaseTitleJa}
-              hotSnacks={activeBrand.hotSnacks}
-              targetHotSnackId={activeBrand.targetHotSnackId}
-              onSelectHotSnack={handleSelectHotSnack}
-              packagedSnacks={packagedSnacks}
-            />
-
-            {/* Commercial Microwave */}
-            <ConbiniMicrowaveOven
-              isRunning={isMicrowaveRunning}
-              secondsLeft={microwaveSecondsLeft}
-              isCompleted={isBentoHeated}
-              bentoNameJa={currentScenario.items.find((i) => i.needsHeating)?.nameJa || '特製から揚げ弁当'}
-            />
+      {/* Notification Banner */}
+      {feedbackNotice && (
+        <div
+          className={`p-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-between border animate-fadeIn ${
+            feedbackNotice.type === 'success'
+              ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
+              : feedbackNotice.type === 'warn'
+              ? 'bg-amber-950/40 text-amber-300 border-amber-500/40'
+              : 'bg-cyan-950/40 text-cyan-300 border-cyan-500/40'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 shrink-0" />
+            <span>{feedbackNotice.text}</span>
           </div>
+          <button
+            onClick={() => setFeedbackNotice(null)}
+            className="text-stone-400 hover:text-white px-2 py-0.5 rounded cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
-          {/* =====================================================================
-              CENTER COLUMN (5 Cols): Customer Across Counter & Conveyor Belt Items
-             ===================================================================== */}
-          <div className="lg:col-span-5 space-y-4 flex flex-col items-center">
-            {/* The Customer Figure */}
-            <ConbiniCustomerFigure
-              customerType={currentScenario.customerType}
-              customerName={currentScenario.customerName}
-              roleTitleJa={currentScenario.roleTitleJa}
-              roleTitleBn={currentScenario.roleTitleBn}
-              dialogueText={customerDialogueText}
-              mode={mode}
-              isHotSnackWanted={isHotSnackRequested}
-              hotSnackNameJa={activeBrand.hotSnacks.find((s) => s.id === activeBrand.targetHotSnackId)?.nameJa}
-              paymentMethod={currentScenario.paymentMethod}
-              isPaying={stage === 'payment'}
-              patienceRemainingSeconds={mode === 'shift' ? patienceSeconds : undefined}
-            />
-
-            {/* Conveyor Belt Items */}
-            <div className="w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-4 shadow-xl space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                  <ShoppingCart className="w-4 h-4 text-amber-400" />
-                  <span>レジ前商品 (Conveyor Belt Items)</span>
+      {/* =========================================================================
+          3. WORKSTATION MAIN: Balanced 2-Column Desktop Grid
+             Left (7 cols): Customer Counter & Stage Action Guidance
+             Right (5 cols): POS Terminal & Receipt Tape
+         ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* LEFT COLUMN (7 Cols): Counter View & Active Task Guidance */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Customer Figure & Speech Card */}
+          <div className="bg-[#141726] border border-white/10 rounded-3xl p-5 shadow-2xl space-y-4 flex flex-col items-center relative overflow-hidden">
+            <div className="w-full flex items-center justify-between pb-2 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-amber-400">
+                  {currentScenario.customerName} ({currentScenario.roleTitleBn})
+                </span>
+                <span className="text-[10px] text-stone-400 font-serif">
+                  {currentScenario.roleTitleJa}
+                </span>
+              </div>
+              {mode === 'shift' && (
+                <div className="flex items-center gap-1.5 text-xs font-mono text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/30">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>ধৈর্য: {patienceSeconds}s</span>
                 </div>
+              )}
+            </div>
+
+            {/* Customer Illustration */}
+            <div className="py-2">
+              <ConbiniCustomerFigure
+                customerType={currentScenario.customerType}
+                customerName={currentScenario.customerName}
+                roleTitleJa={currentScenario.roleTitleJa}
+                roleTitleBn={currentScenario.roleTitleBn}
+                dialogueText={customerDialogueText}
+                mode={mode}
+                isHotSnackWanted={isHotSnackRequested}
+                hotSnackNameJa={activeBrand.hotSnacks.find((s) => s.id === activeBrand.targetHotSnackId)?.nameJa}
+                paymentMethod={currentScenario.paymentMethod}
+                isPaying={stage === 'payment'}
+                patienceRemainingSeconds={mode === 'shift' ? patienceSeconds : undefined}
+              />
+            </div>
+
+            {/* Speech Bubble with Audio */}
+            <div className="w-full p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>কাস্টমারের কথা (Japanese Customer Dialogue)</span>
+                </span>
                 <button
                   type="button"
-                  onClick={handleScanAllItems}
-                  className="px-2.5 py-1 text-xs font-bold rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition flex items-center gap-1 cursor-pointer"
+                  onClick={() => speakJapanese(customerDialogueText.ja)}
+                  className="px-2.5 py-1 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-red-400 text-xs font-bold flex items-center gap-1 cursor-pointer border border-red-500/30"
                 >
-                  <Scan className="w-3.5 h-3.5" />
-                  <span>一括スキャン (Scan All)</span>
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>উচ্চারণ শুনুন</span>
                 </button>
               </div>
 
-              <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
-                {currentScenario.items.map((item, idx) => {
-                  const isScanned = scannedItems.some((s) => s.id === item.id);
-                  const isScanning = currentlyScanningItemId === item.id;
+              <div className="text-base sm:text-lg font-serif font-black text-white">
+                {customerDialogueText.ja}
+              </div>
+              <div className="text-xs font-mono text-stone-400">
+                {customerDialogueText.romaji}
+              </div>
+              <div className="text-xs text-stone-300 pt-1.5 border-t border-white/10">
+                <strong>বাংলা অনুবাদ:</strong> {customerDialogueText.bn}
+              </div>
+            </div>
+          </div>
 
-                  return (
-                    <div
-                      key={`${item.id}-${idx}`}
-                      className={`relative p-2.5 rounded-2xl border transition overflow-hidden flex items-center justify-between ${
-                        isScanned
-                          ? 'bg-slate-950/60 border-slate-800/80 opacity-80'
-                          : 'bg-slate-900 border-amber-500/40 shadow-sm'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-xl shadow-inner">
-                          {item.imageIcon}
-                        </div>
-                        <div>
-                          <div className="font-bold text-xs text-slate-100 flex items-center gap-1.5">
-                            <span>{item.nameJa}</span>
-                            {item.needsHeating && (
-                              <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1 rounded border border-rose-500/40 font-mono">
-                                要温め
-                              </span>
-                            )}
-                            {item.needsAgeVerification && (
-                              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded border border-amber-500/40 font-mono">
-                                20歳確認
-                              </span>
-                            )}
-                          </div>
-                          {mode === 'training' && (
-                            <div className="text-[11px] text-slate-400">
-                              {item.nameBn}
+          {/* ACTIVE STEP CONTEXTUAL ACTION CENTER */}
+          <div className="bg-[#141726] border border-white/10 rounded-3xl p-5 shadow-2xl space-y-4">
+            {/* Stage Title Banner */}
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 className="text-sm font-black text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>
+                  {stage === 'greeting' && 'ধাপ ১: গ্রাহককে বিনম্র অভিবাদন জানান'}
+                  {stage === 'scanning' && 'ধাপ ২: পণ্যের বারকোড স্ক্যান ও হট স্ন্যাক্স'}
+                  {stage === 'service' && 'ধাপ ৩: সেবা নিশ্চিতকরণ (গরম, কার্ড, ব্যাগ)'}
+                  {stage === 'payment' && 'ধাপ ৪: বিল প্রদর্শন ও অর্থ গ্রহণ'}
+                  {stage === 'closing' && 'ধাপ ৫: রসিদ প্রদান ও বিদায় সম্ভাষণ'}
+                  {stage === 'completed' && 'শিফট মূল্যায়ন ও পরবর্তী গ্রাহক'}
+                </span>
+              </h3>
+              <span className="text-[11px] font-mono text-stone-400">
+                ধাপ {stage === 'greeting' ? '১/৫' : stage === 'scanning' ? '২/৫' : stage === 'service' ? '৩/৫' : stage === 'payment' ? '৪/৫' : '৫/৫'}
+              </span>
+            </div>
+
+            {/* STAGE 1 ACTION: GREETING */}
+            {stage === 'greeting' && (
+              <div className="space-y-3 py-2 text-center animate-fadeIn">
+                <p className="text-xs text-stone-300">
+                  কাউন্টারে গ্রাহক আসা মাত্র বিনম্র জাপানিজ সম্বোধন করুন:
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCashierGreeting}
+                  className="w-full py-4 bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>🗣️「いらっしゃいませ！」বলুন বা ট্যাপ করুন</span>
+                </button>
+                <div className="text-[11px] text-stone-400 font-mono">
+                  উচ্চারণ: Irasshaimase! (স্বাগতম / আপনার সেবা করতে পেরে আনন্দিত)
+                </div>
+              </div>
+            )}
+
+            {/* STAGE 2 ACTION: SCANNING & HOT SNACK */}
+            {stage === 'scanning' && (
+              <div className="space-y-4 animate-fadeIn">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-stone-300 font-bold">
+                    কনভেয়র বেল্টের পণ্য ({scannedItems.length}/{currentScenario.items.length} টি স্ক্যান হয়েছে):
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleScanAllItems}
+                    className="px-3 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition flex items-center gap-1 cursor-pointer"
+                  >
+                    <Scan className="w-3.5 h-3.5" />
+                    <span>এক ক্লিকে সব স্ক্যান</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-56 overflow-y-auto pr-1">
+                  {currentScenario.items.map((item, idx) => {
+                    const isScanned = scannedItems.some((s) => s.id === item.id);
+                    const isScanning = currentlyScanningItemId === item.id;
+                    return (
+                      <div
+                        key={`${item.id}-${idx}`}
+                        className={`p-3 rounded-2xl border transition flex items-center justify-between ${
+                          isScanned
+                            ? 'bg-black/30 border-white/5 opacity-70'
+                            : 'bg-[#1A1F36] border-amber-500/40 shadow-sm'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-2xl">{item.imageIcon}</span>
+                          <div>
+                            <div className="font-bold text-xs text-white">{item.nameJa}</div>
+                            <div className="text-[10px] text-stone-400">{item.nameBn}</div>
+                            <div className="text-xs font-mono font-bold text-amber-400 mt-0.5">
+                              ¥{item.priceYen}
                             </div>
-                          )}
-                          <div className="font-mono text-xs font-bold text-amber-400 mt-0.5">
-                            ¥{item.priceYen.toLocaleString()}
                           </div>
                         </div>
-                      </div>
 
-                      <div>
                         {isScanned ? (
-                          <span className="px-2.5 py-1 text-xs font-bold rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                            <Check className="w-3.5 h-3.5" />
-                            <span>済</span>
+                          <span className="px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                            <Check className="w-3 h-3" />
+                            <span>স্ক্যানড</span>
                           </span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => handleScanItem(item)}
                             disabled={isScanning}
-                            className="px-3 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-md transition flex items-center gap-1.5 cursor-pointer"
+                            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold shadow transition flex items-center gap-1 cursor-pointer"
                           >
                             <Scan className="w-3.5 h-3.5" />
-                            <span>スキャン</span>
+                            <span>স্ক্যান</span>
                           </button>
                         )}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* =====================================================================
-              RIGHT COLUMN (4 Cols): Semi-Self Dual-Screen POS & Cartone Tray
-             ===================================================================== */}
-          <div className="lg:col-span-4 space-y-4">
-            {/* 1. Main Cashier Touchpad POS */}
-            <div className="bg-slate-900 border-2 border-slate-700 rounded-3xl p-4 shadow-2xl space-y-3">
-              {/* POS Bezel Header */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full shadow-xs"
-                    style={{ backgroundColor: activeBrand.primaryColor }}
-                  ></div>
-                  <span className="text-xs font-black text-slate-100">
-                    {activeBrand.nameJa} POSレジ 01
-                  </span>
+                    );
+                  })}
                 </div>
 
-                {/* Cashier Badge */}
-                <div className={`px-2 py-0.5 rounded-lg border text-[10px] font-bold ${activeBrand.uniformColorClass}`}>
-                  {activeBrand.uniformBadgeTitleJa}
-                </div>
-              </div>
-
-              {/* POS Line Items Display */}
-              <div className="bg-black/90 rounded-2xl p-3 border border-slate-800 font-mono text-xs space-y-1.5 max-h-36 overflow-y-auto">
-                {scannedItems.length === 0 ? (
-                  <div className="text-slate-600 text-center py-4">
-                    商品待機中 (Waiting for Scan)
+                {/* Hot Snack Warmer Case Option */}
+                <div className="pt-2 border-t border-white/10">
+                  <div className="text-xs font-bold text-amber-400 flex items-center gap-1.5 mb-2">
+                    <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
+                    <span>{activeBrand.nameJa} হট স্ন্যাক্স ওয়ার্মার কেস (টংস দিয়ে বের করুন):</span>
                   </div>
-                ) : (
-                  scannedItems.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center text-slate-300">
-                      <span className="truncate max-w-[170px]">{item.nameJa}</span>
-                      <span className="text-amber-400 font-bold">¥{item.priceYen}</span>
-                    </div>
-                  ))
-                )}
-                {isBagAdded && (
-                  <div className="flex justify-between items-center text-emerald-400">
-                    <span>レジ袋 (有料バイオマス)</span>
-                    <span>+¥5</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {activeBrand.hotSnacks.map((snack) => {
+                      const isGrabbed = packagedSnacks.includes(snack.id);
+                      return (
+                        <button
+                          key={snack.id}
+                          type="button"
+                          onClick={() => handleSelectHotSnack(snack)}
+                          disabled={isGrabbed}
+                          className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-between cursor-pointer ${
+                            isGrabbed
+                              ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300 opacity-60'
+                              : 'bg-black/40 border-amber-500/40 text-stone-200 hover:border-amber-400 hover:text-white'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1.5 truncate">
+                            <span>{snack.imageEmoji}</span>
+                            <span className="truncate">{snack.nameJa}</span>
+                          </span>
+                          <span className="font-mono text-amber-400 shrink-0">¥{snack.priceYen}</span>
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
-              </div>
-
-              {/* Subtotal & Total Display */}
-              <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-slate-400 font-mono">
-                    点数: {scannedItems.length}点 (内税8%: ¥{Math.round(totalAmount * 0.08)})
-                  </div>
-                  <div className="text-xs font-bold text-slate-200">合計請求額:</div>
                 </div>
-                <div className="font-mono text-xl font-black text-amber-400">
-                  ¥{totalAmount.toLocaleString()}
-                </div>
-              </div>
 
-              {/* Cashier Ergonomic Touch Buttons */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                {/* 挨拶 */}
-                <button
-                  type="button"
-                  onClick={handleCashierGreeting}
-                  disabled={isGreetingCompleted}
-                  className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                    isGreetingCompleted
-                      ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                      : 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-black shadow-md'
-                  }`}
-                >
-                  <span>🗣️</span>
-                  <span>{isGreetingCompleted ? '✓ 挨拶済' : 'いらっしゃいませ'}</span>
-                </button>
-
-                {/* ポイントカード */}
-                <button
-                  type="button"
-                  onClick={handleAskPointCard}
-                  disabled={isPointCardAsked}
-                  className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                    isPointCardAsked
-                      ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                      : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-amber-500/40'
-                  }`}
-                >
-                  <span>🪪</span>
-                  <span>{isPointCardAsked ? '✓ ポイント確認済' : `${activeBrand.loyaltyCardNameJa}確認`}</span>
-                </button>
-
-                {/* 温め */}
-                {hasHeatingItem && (
+                {allItemsScanned && (
                   <button
                     type="button"
-                    onClick={handleAskBentoWarming}
-                    disabled={isBentoWarmAsked}
-                    className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isBentoWarmAsked
-                        ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                        : 'bg-slate-800 hover:bg-slate-700 text-rose-300 border-rose-500/40'
-                    }`}
+                    onClick={() => setStage('service')}
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer mt-2"
                   >
-                    <span>♨️</span>
-                    <span>{isBentoWarmAsked ? '✓ レンジ手配済' : 'お弁当温め確認'}</span>
-                  </button>
-                )}
-
-                {/* レジ袋 */}
-                <button
-                  type="button"
-                  onClick={() => handleToggleBag(!isBagAdded)}
-                  className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                    isBagAdded
-                      ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                      : 'bg-slate-800 hover:bg-slate-700 text-sky-300 border-sky-500/40'
-                  }`}
-                >
-                  <span>🛍️</span>
-                  <span>{isBagAdded ? '✓ レジ袋有 (+¥5)' : 'レジ袋確認'}</span>
-                </button>
-
-                {/* 年齢確認 */}
-                {hasAgeVerificationItem && (
-                  <button
-                    type="button"
-                    onClick={handleVerifyAge}
-                    disabled={isAgeVerified}
-                    className={`col-span-2 p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isAgeVerified
-                        ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                        : 'bg-rose-600 hover:bg-rose-500 text-white font-black animate-pulse'
-                    }`}
-                  >
-                    <span>🔞</span>
-                    <span>{isAgeVerified ? '✓ 20歳以上確認完了' : '20歳以上タッチ確認 (酒・タバコ)'}</span>
-                  </button>
-                )}
-
-                {/* お会計に進む */}
-                {stage !== 'payment' && stage !== 'closing' && stage !== 'completed' && (
-                  <button
-                    type="button"
-                    onClick={handleProceedToPayment}
-                    className="col-span-2 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer mt-1"
-                  >
-                    <span>お会計確定 (Proceed to Payment)</span>
+                    <span>পরবর্তী ধাপ: গ্রাহক সেবা নিশ্চিতকরণ</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 )}
               </div>
-            </div>
-
-            {/* 2. Customer-Facing Tablet Screen */}
-            <ConbiniCustomerTablet
-              totalAmountYen={totalAmount}
-              customerPreferredMethod={currentScenario.paymentMethod}
-              activeMethod={activePaymentMethod}
-              onSelectMethod={handleSelectPaymentMethod}
-              isApproved={isPaymentApproved}
-              brandCardNameJa={activeBrand.loyaltyCardNameJa}
-            />
-
-            {/* 3. Real Blue Cartone Coin Tray (When Paying Cash) */}
-            {activePaymentMethod === 'cash' && (
-              <ConbiniCartoneTray
-                totalAmountYen={totalAmount}
-                tenderedAmountYen={cashTendered || totalAmount}
-                isDrawerOpen={isDrawerOpen}
-                isPaymentApproved={isPaymentApproved}
-                onOpenDrawerAndTender={handleOpenDrawerAndTender}
-                onCompleteChangeHandover={handleCompleteChangeHandover}
-              />
             )}
 
-            {/* 4. Closing Stage Receipt Handover Button */}
+            {/* STAGE 3 ACTION: SERVICE INQUIRIES */}
+            {stage === 'service' && (
+              <div className="space-y-3.5 animate-fadeIn">
+                <p className="text-xs text-stone-300">
+                  জাপানিজ কর্মক্ষেত্রের ৩টি আবশ্যকীয় প্রোটোকল নিশ্চিত করুন:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Point Card */}
+                  <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-amber-300">
+                      <span>🪪 {activeBrand.loyaltyCardNameJa} যাচাই</span>
+                      {isPointCardAsked && <span className="text-emerald-400 text-[10px]">✓ সম্পন্ন</span>}
+                    </div>
+                    <p className="text-[11px] text-stone-400">
+                      「ポイントカードはお持ちですか？」
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleAskPointCard}
+                      disabled={isPointCardAsked}
+                      className={`w-full py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        isPointCardAsked
+                          ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/30'
+                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30'
+                      }`}
+                    >
+                      {isPointCardAsked ? 'কার্ড নিশ্চিত হয়েছে' : 'পয়েন্ট কার্ড জিজ্ঞেস করুন'}
+                    </button>
+                  </div>
+
+                  {/* Bento Microwave Heating */}
+                  <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-rose-300">
+                      <span>♨️ বেন্তো গরম (1500Wレンジ)</span>
+                      {isBentoHeated && <span className="text-emerald-400 text-[10px]">✓ গরম সম্পন্ন</span>}
+                    </div>
+                    <p className="text-[11px] text-stone-400">
+                      「お弁当温めますか？」
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleAskBentoWarming}
+                      disabled={isBentoWarmAsked}
+                      className={`w-full py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        isBentoWarmAsked
+                          ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/30'
+                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'
+                      }`}
+                    >
+                      {isMicrowaveRunning
+                        ? `গরম হচ্ছে (${microwaveSecondsLeft}s)...`
+                        : isBentoHeated
+                        ? 'খাবার গরম সম্পন্ন'
+                        : 'খাবার গরম করার অফার'}
+                    </button>
+                  </div>
+
+                  {/* Plastic Bag Selection */}
+                  <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-sky-300">
+                      <span>🛍️ পলিথিন ব্যাগ (レジ袋)</span>
+                      {isBagAsked && <span className="text-emerald-400 text-[10px]">✓ নিশ্চিত</span>}
+                    </div>
+                    <p className="text-[11px] text-stone-400">
+                      「レジ袋はお付けしますか？」
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleBag(true)}
+                        className={`py-1.5 rounded-xl text-[11px] font-bold border transition cursor-pointer ${
+                          isBagAdded
+                            ? 'bg-emerald-500 text-black font-black'
+                            : 'bg-white/5 border-white/10 text-stone-300 hover:text-white'
+                        }`}
+                      >
+                        ব্যাগ (+¥৫)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleBag(false)}
+                        className={`py-1.5 rounded-xl text-[11px] font-bold border transition cursor-pointer ${
+                          isBagAsked && !isBagAdded
+                            ? 'bg-amber-500 text-black font-black'
+                            : 'bg-white/5 border-white/10 text-stone-300 hover:text-white'
+                        }`}
+                      >
+                        প্রয়োজন নেই
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Age 20+ Verification */}
+                  {hasAgeVerificationItem ? (
+                    <div className="p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/40 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-rose-300">
+                        <span>🔞 বয়স যাচাই (২০+ নিশ্চিত)</span>
+                        {isAgeVerified && <span className="text-emerald-400 text-[10px]">✓ নিশ্চিত</span>}
+                      </div>
+                      <p className="text-[10px] text-stone-400">
+                        মদ/তামাক ক্রয়কারীর বয়স ২০+ হওয়া আবশ্যক
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleVerifyAge}
+                        disabled={isAgeVerified}
+                        className={`w-full py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                          isAgeVerified
+                            ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/30'
+                            : 'bg-rose-600 hover:bg-rose-500 text-white font-black animate-pulse'
+                        }`}
+                      >
+                        {isAgeVerified ? 'বয়স যাচাই সম্পন্ন' : 'স্ক্রিন টাচ করে বয়স যাচাই করুন'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-emerald-300">
+                        <span>🥢 চপস্টিক ও চামচ</span>
+                        {isUtensilsAsked && <span className="text-emerald-400 text-[10px]">✓ নিশ্চিত</span>}
+                      </div>
+                      <p className="text-[11px] text-stone-400">
+                        「お箸はお付けしますか？」
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleUtensils(true)}
+                          className="py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-stone-300 hover:text-white cursor-pointer"
+                        >
+                          চপস্টিক দিন
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleUtensils(false)}
+                          className="py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-stone-300 hover:text-white cursor-pointer"
+                        >
+                          দরকার নেই
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleProceedToPayment}
+                  className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer mt-2"
+                >
+                  <span>পরবর্তী ধাপ: পেমেন্ট গ্রহণ (Proceed to Payment)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* STAGE 4 ACTION: PAYMENT & CASH TENDER */}
+            {stage === 'payment' && (
+              <div className="space-y-4 animate-fadeIn">
+                <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs text-stone-400">মোট প্রদেয় বিল:</div>
+                    <div className="text-2xl font-black text-amber-400 font-mono">
+                      ¥{totalAmount.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="text-right text-xs text-stone-400">
+                    <div>গ্রাহকের পছন্দ:</div>
+                    <div className="font-bold text-white uppercase">{currentScenario.paymentMethod}</div>
+                  </div>
+                </div>
+
+                {/* Method Options */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPaymentMethod('cash')}
+                    className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
+                      activePaymentMethod === 'cash'
+                        ? 'bg-amber-500 text-black font-black'
+                        : 'bg-black/40 border-white/10 text-stone-300 hover:text-white'
+                    }`}
+                  >
+                    <Coins className="w-4 h-4" />
+                    <span>নগদ (Cash)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPaymentMethod('suica')}
+                    className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
+                      activePaymentMethod === 'suica'
+                        ? 'bg-emerald-500 text-black font-black'
+                        : 'bg-black/40 border-white/10 text-stone-300 hover:text-white'
+                    }`}
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    <span>সুইকা (Suica)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPaymentMethod('paypay')}
+                    className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
+                      activePaymentMethod === 'paypay'
+                        ? 'bg-rose-500 text-white font-black'
+                        : 'bg-black/40 border-white/10 text-stone-300 hover:text-white'
+                    }`}
+                  >
+                    <Smartphone className="w-4 h-4" />
+                    <span>পেপে (PayPay)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPaymentMethod('credit')}
+                    className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
+                      activePaymentMethod === 'credit'
+                        ? 'bg-cyan-500 text-black font-black'
+                        : 'bg-black/40 border-white/10 text-stone-300 hover:text-white'
+                    }`}
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    <span>ক্রেডিট কার্ড</span>
+                  </button>
+                </div>
+
+                {/* If Cash Method: Interactive Cartone Tray */}
+                {activePaymentMethod === 'cash' && (
+                  <div className="pt-2">
+                    <ConbiniCartoneTray
+                      totalAmountYen={totalAmount}
+                      tenderedAmountYen={cashTendered || totalAmount}
+                      isDrawerOpen={isDrawerOpen}
+                      isPaymentApproved={isPaymentApproved}
+                      onOpenDrawerAndTender={handleOpenDrawerAndTender}
+                      onCompleteChangeHandover={handleCompleteChangeHandover}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* STAGE 5 ACTION: CLOSING & HANDOVER */}
             {(stage === 'closing' || isPaymentApproved) && stage !== 'completed' && (
-              <button
-                type="button"
-                onClick={handlePrintReceiptAndClose}
-                disabled={isReceiptPrinting}
-                className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 transition cursor-pointer text-sm"
-              >
-                <Receipt className="w-4 h-4" />
-                <span>
-                  {isReceiptPrinting
-                    ? 'レシート印字中...'
-                    : '「ありがとうございました！」 (レシートお渡し・退店)'}
-                </span>
-              </button>
+              <div className="space-y-4 py-2 animate-fadeIn text-center">
+                <p className="text-xs text-stone-300">
+                  পেমেন্ট অনুমোদিত হয়েছে। রসিদ মুদ্রণ করুন এবং বিনম্র বিদায় সম্ভাষণ জানান:
+                </p>
+                <button
+                  type="button"
+                  onClick={handlePrintReceiptAndClose}
+                  disabled={isReceiptPrinting}
+                  className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-black text-sm sm:text-base rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Receipt className="w-4 h-4" />
+                  <span>
+                    {isReceiptPrinting
+                      ? 'রসিদ প্রিন্ট হচ্ছে...'
+                      : '「ありがとうございました！」(রসিদ প্রদান ও বিদায়)'}
+                  </span>
+                </button>
+                <div className="text-[11px] text-stone-400 font-mono">
+                  Arigatou gozaimashita! Mata okoshi kudasaimase.
+                </div>
+              </div>
             )}
 
-            {/* 5. Advance to Next Customer */}
+            {/* COMPLETED STAGE: ADVANCE BUTTON */}
             {stage === 'completed' && (
-              <button
-                type="button"
-                onClick={handleAdvanceToNextCustomer}
-                className="w-full py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 transition cursor-pointer text-sm"
-              >
-                <span>
-                  {currentScenarioIndex < scenarios.length - 1
-                    ? '次のお客様へ (Next Customer)'
-                    : '本日のシフト終了・スコアカード確認 (Finish Shift)'}
-                </span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
+              <div className="space-y-3 py-2 animate-fadeIn">
+                <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <span>এই গ্রাহকের লেনদেন শতভাগ নির্ভুলভাবে সম্পন্ন হয়েছে!</span>
+                  </div>
+                  <span className="font-mono text-amber-400 font-black">+XP সংরক্ষিত</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleAdvanceToNextCustomer}
+                  className="w-full py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-sm rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>
+                    {currentScenarioIndex < scenarios.length - 1
+                      ? 'পরবর্তী গ্রাহকের দিকে এগিয়ে যান (Next Customer)'
+                      : 'শিফট সমাপ্ত ও পূর্ণাঙ্গ স্কোরকার্ড দেখুন (Finish Shift)'}
+                  </span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             )}
           </div>
         </div>
-      </ConbiniStoreStageBackground>
+
+        {/* RIGHT COLUMN (5 Cols): POS Cashier Terminal & Receipt Roll */}
+        <div className="lg:col-span-5 space-y-4">
+          <div className="bg-[#141726] border-2 border-white/10 rounded-3xl p-5 shadow-2xl space-y-3">
+            {/* POS Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full shadow-xs"
+                  style={{ backgroundColor: activeBrand.primaryColor }}
+                ></div>
+                <span className="text-xs font-black text-white">
+                  {activeBrand.nameJa} POSレジ 01
+                </span>
+              </div>
+              <div className={`px-2.5 py-0.5 rounded-lg border text-[10px] font-bold ${activeBrand.uniformColorClass}`}>
+                {activeBrand.uniformBadgeTitleJa}
+              </div>
+            </div>
+
+            {/* POS Scanned Line Items Tape */}
+            <div className="bg-black/90 rounded-2xl p-3.5 border border-white/5 font-mono text-xs space-y-2 max-h-48 overflow-y-auto">
+              <div className="text-[10px] text-stone-500 border-b border-white/10 pb-1 flex justify-between">
+                <span>品名 (Product)</span>
+                <span>金額 (Price)</span>
+              </div>
+              {scannedItems.length === 0 ? (
+                <div className="text-stone-500 text-center py-6">
+                  [商品待機中 - পণ্য স্ক্যানের অপেক্ষায়]
+                </div>
+              ) : (
+                scannedItems.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center text-stone-200">
+                    <span className="truncate max-w-[170px]">{item.nameJa}</span>
+                    <span className="text-amber-400 font-bold">¥{item.priceYen}</span>
+                  </div>
+                ))
+              )}
+              {isBagAdded && (
+                <div className="flex justify-between items-center text-emerald-400">
+                  <span>レジ袋 (পলিথিন ব্যাগ)</span>
+                  <span>+¥5</span>
+                </div>
+              )}
+            </div>
+
+            {/* Subtotal & Total Bill Display */}
+            <div className="p-3.5 bg-black/60 rounded-2xl border border-white/10 flex items-center justify-between">
+              <div>
+                <div className="text-[10px] text-stone-400 font-mono">
+                  আইটেম: {scannedItems.length} টি (ভ্যাট ৮% সহ)
+                </div>
+                <div className="text-xs font-bold text-stone-200">সর্বমোট প্রদেয়:</div>
+              </div>
+              <div className="font-mono text-2xl font-black text-amber-400">
+                ¥{totalAmount.toLocaleString()}
+              </div>
+            </div>
+
+            {/* Customer Tablet */}
+            <div className="pt-2">
+              <ConbiniCustomerTablet
+                totalAmountYen={totalAmount}
+                customerPreferredMethod={currentScenario.paymentMethod}
+                activeMethod={activePaymentMethod}
+                onSelectMethod={handleSelectPaymentMethod}
+                isApproved={isPaymentApproved}
+                brandCardNameJa={activeBrand.loyaltyCardNameJa}
+              />
+            </div>
+          </div>
+
+          {/* Live Shift Performance Panel */}
+          <div className="bg-[#141726] border border-white/10 rounded-3xl p-4 text-xs space-y-2.5">
+            <div className="flex items-center justify-between text-stone-400 pb-2 border-b border-white/10">
+              <span className="font-bold text-white flex items-center gap-1.5">
+                <Award className="w-4 h-4 text-amber-400" />
+                <span>লাইভ শিফট পরিসংখ্যান</span>
+              </span>
+              <span className="font-mono text-[10px] text-emerald-400">ONLINE</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-center">
+              <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                <div className="text-[10px] text-stone-400">সেবা প্রাপ্ত কাস্টমার</div>
+                <div className="text-base font-black text-white mt-0.5">{shiftStats.customersServed} জন</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                <div className="text-[10px] text-stone-400">মোট বিক্রয় (Yen)</div>
+                <div className="text-base font-black text-amber-400 font-mono mt-0.5">¥{shiftStats.totalSalesYen.toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* =========================================================================
-          SHIFT SCORECARD MODAL (When all 5 customers finish)
+          SHIFT SCORECARD MODAL
          ========================================================================= */}
       <AnimatePresence>
         {showShiftScorecardModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fadeIn">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border-2 border-amber-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6"
+              className="bg-[#141726] border-2 border-amber-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6"
             >
               <div className="text-center space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/40">
                   <Award className="w-4 h-4 text-amber-400" />
-                  <span>シフト完了報告書 (Shift Complete Report)</span>
+                  <span>শিফট সমাপ্তি প্রতিবেদন (Shift Completion Report)</span>
                 </div>
-                <h3 className="text-2xl font-black text-slate-100">
-                  お疲れ様でした！本日のレジ勤務終了
+                <h3 className="text-2xl font-black text-white">
+                  お疲れ様でした！শিফট সম্পন্ন
                 </h3>
-                <p className="text-xs text-slate-400">
-                  {activeBrand.nameJa} {activeBrand.storeLocationJa} • 本日の勤務実績
+                <p className="text-xs text-stone-400">
+                  {activeBrand.nameJa} {activeBrand.storeLocationJa} • আজকের পারফরম্যান্স
                 </p>
               </div>
 
               {/* Performance Cards */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-2xl bg-slate-950 border border-amber-500/30 text-center">
-                  <div className="text-xs text-slate-400">獲得経験値 (XP)</div>
-                  <div className="text-2xl font-black text-amber-400 mt-0.5">+150 XP</div>
-                  <div className="text-[10px] text-emerald-400">即時アカウント反映</div>
+                <div className="p-3.5 rounded-2xl bg-black/50 border border-amber-500/30 text-center">
+                  <div className="text-xs text-stone-400">অর্জিত অভিজ্ঞতা (XP)</div>
+                  <div className="text-2xl font-black text-amber-400 mt-0.5">+{shiftStats.earnedXp || 150} XP</div>
+                  <div className="text-[10px] text-emerald-400">অ্যাকাউন্টে সংরক্ষিত</div>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-slate-950 border border-emerald-500/30 text-center">
-                  <div className="text-xs text-slate-400">日本即戦力スコア</div>
+                <div className="p-3.5 rounded-2xl bg-black/50 border border-emerald-500/30 text-center">
+                  <div className="text-xs text-stone-400">জাপান ক্যারিয়ার স্কোর</div>
                   <div className="text-2xl font-black text-emerald-400 mt-0.5">+25 pt</div>
-                  <div className="text-[10px] text-emerald-400">ダッシュボード更新</div>
+                  <div className="text-[10px] text-emerald-400">ড্যাশবোর্ড আপডেট</div>
                 </div>
               </div>
 
               {/* Detailed Breakdown */}
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs space-y-2">
-                <div className="flex justify-between text-slate-300">
-                  <span>接客人数 (Customers):</span>
-                  <span className="font-mono font-bold text-slate-100">5名 (全シナリオ完了)</span>
+              <div className="p-4 rounded-2xl bg-black/50 border border-white/10 text-xs space-y-2">
+                <div className="flex justify-between text-stone-300">
+                  <span>সেবাকৃত গ্রাহক:</span>
+                  <span className="font-mono font-bold text-white">৫ জন (সকল সিনারিও সম্পন্ন)</span>
                 </div>
-                <div className="flex justify-between text-slate-300">
-                  <span>総売上 (Total Sales):</span>
+                <div className="flex justify-between text-stone-300">
+                  <span>মোট বিক্রয়:</span>
                   <span className="font-mono font-bold text-amber-400">¥{shiftStats.totalSalesYen.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between text-slate-300">
-                  <span>接客敬語評価 (Keigo Rating):</span>
-                  <span className="font-mono font-bold text-emerald-400">Sランク (98%)</span>
+                <div className="flex justify-between text-stone-300">
+                  <span>কেইগো শিষ্টাচার রেটিং:</span>
+                  <span className="font-mono font-bold text-emerald-400">S-Rank (৯৮%)</span>
                 </div>
-                <div className="flex justify-between text-slate-300">
-                  <span>勤務店舗:</span>
+                <div className="flex justify-between text-stone-300">
+                  <span>কর্মরত স্টোর:</span>
                   <span className="font-bold text-amber-300">{activeBrand.nameJa}</span>
                 </div>
               </div>
@@ -1362,10 +1504,10 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               <button
                 type="button"
                 onClick={handleRestartShift}
-                className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
-                <span>新しいシフトを開始する (Start New Shift)</span>
+                <span>নতুন শিফট শুরু করুন (Start New Shift)</span>
               </button>
             </motion.div>
           </div>
