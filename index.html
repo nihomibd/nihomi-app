@@ -166,15 +166,28 @@
           }
         }
       ],
-      "offers": {
-        "@type": "Offer",
-        "category": "Subscription & Freemium",
-        "price": "990",
-        "priceCurrency": "BDT",
-        "availability": "https://schema.org/InStock",
-        "url": "https://nihomi.com",
-        "validFrom": "2026-01-01"
-      }
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Nihomi Free Tier",
+          "category": "Freemium",
+          "price": "0",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing",
+          "description": "হিরাগানা, কাতাকানা ও N5 প্রথম ৫টি বেসিক লেসনে আজীবন ফ্রি অ্যাক্সেস।"
+        },
+        {
+          "@type": "Offer",
+          "name": "Nihomi Starter Plan",
+          "category": "Subscription",
+          "price": "990",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing",
+          "description": "JLPT N5 ও N4 এর সম্পূর্ণ ৫০টি লেসন ও Nomi Sensei সার্বক্ষণিক AI লার্নিং টিউটর।"
+        }
+      ]
     },
     {
       "@type": "Course",
@@ -195,12 +208,13 @@
       "courseCode": "NHO-JPN-N4",
       "offers": {
         "@type": "Offer",
+        "name": "Nihomi Starter Plan",
         "category": "Subscription",
         "price": "990",
         "priceCurrency": "BDT",
         "availability": "https://schema.org/InStock",
-        "url": "https://nihomi.com",
-        "validFrom": "2026-01-01"
+        "url": "https://nihomi.com/#pricing",
+        "description": "JLPT N5 ও N4 এর সম্পূর্ণ কারিকুলাম ও প্র্যাকটিস টেস্ট।"
       }
     },
     {
@@ -222,12 +236,13 @@
       "courseCode": "NHO-JPN-N3",
       "offers": {
         "@type": "Offer",
+        "name": "Nihomi Pro Plan",
         "category": "Subscription",
         "price": "1990",
         "priceCurrency": "BDT",
         "availability": "https://schema.org/InStock",
-        "url": "https://nihomi.com",
-        "validFrom": "2026-01-01"
+        "url": "https://nihomi.com/#pricing",
+        "description": "JLPT N5-N3 পূর্ণাঙ্গ প্রস্তুতি, WorkOS কনবিনি বাইতো ড্রিল ও ফুল মক-টেস্ট।"
       }
     },
     {
@@ -249,12 +264,13 @@
       "courseCode": "NHO-JPN-N2",
       "offers": {
         "@type": "Offer",
+        "name": "Nihomi Japan Ready Plan",
         "category": "Subscription",
         "price": "3990",
         "priceCurrency": "BDT",
         "availability": "https://schema.org/InStock",
-        "url": "https://nihomi.com",
-        "validFrom": "2026-01-01"
+        "url": "https://nihomi.com/#pricing",
+        "description": "N5-N1 সম্পূর্ণ কারিকুলাম, JIS A4 রিলোকেশন CV ও ১০টি লাইফ সিনারিও।"
       }
     },
     {
@@ -276,12 +292,13 @@
       "courseCode": "NHO-JPN-N1",
       "offers": {
         "@type": "Offer",
+        "name": "Nihomi Japan Ready Plan",
         "category": "Subscription",
         "price": "3990",
         "priceCurrency": "BDT",
         "availability": "https://schema.org/InStock",
-        "url": "https://nihomi.com",
-        "validFrom": "2026-01-01"
+        "url": "https://nihomi.com/#pricing",
+        "description": "N5-N1 সম্পূর্ণ কারিকুলাম, JIS A4 রিলোকেশন CV ও ১০টি লাইফ সিনারিও।"
       }
     },
     {
@@ -300,6 +317,111 @@
       "creator": {
         "@id": "https://nihomi.com/#organization"
       }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://nihomi.com/#plan-starter",
+      "name": "NIHOMI Starter Subscription (নিহোমি স্টারটার)",
+      "description": "JLPT N5 এবং N4 এর পূর্ণাঙ্গ ৫০টি লেসন ও Nomi Sensei লার্নিং মেন্টর।",
+      "brand": {
+        "@id": "https://nihomi.com/#organization"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Starter Monthly",
+          "price": "990",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Starter Quarterly (3 Months)",
+          "price": "2820",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Starter Yearly (12 Months)",
+          "price": "10100",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        }
+      ]
+    },
+    {
+      "@type": "Product",
+      "@id": "https://nihomi.com/#plan-pro",
+      "name": "NIHOMI Pro Subscription (নিহোমি প্রো)",
+      "description": "N5 থেকে N3 ফুল প্রস্তুতি, WorkOS™ কনবিনি বাইতো ড্রিল ও ফুল মক-টেস্ট।",
+      "brand": {
+        "@id": "https://nihomi.com/#organization"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Pro Monthly",
+          "price": "1990",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Pro Quarterly (3 Months)",
+          "price": "5670",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Pro Yearly (12 Months)",
+          "price": "20300",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        }
+      ]
+    },
+    {
+      "@type": "Product",
+      "@id": "https://nihomi.com/#plan-japan-ready",
+      "name": "NIHOMI Japan Ready Subscription (নিহোমি জাপান রেডি)",
+      "description": "জাপান ক্যারিয়ার ও রিলোকেশন প্যাক: JIS CV স্টুডিও ও ১০টি লাইফ সিনারিও।",
+      "brand": {
+        "@id": "https://nihomi.com/#organization"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Japan Ready Monthly",
+          "price": "3990",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Japan Ready Quarterly (3 Months)",
+          "price": "11370",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Japan Ready Yearly (12 Months)",
+          "price": "40700",
+          "priceCurrency": "BDT",
+          "availability": "https://schema.org/InStock",
+          "url": "https://nihomi.com/#pricing"
+        }
+      ]
     }
   ]
 }
