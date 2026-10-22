@@ -6,6 +6,7 @@ import { V2Footer } from './V2Footer';
 import { V2MobileNav } from './V2MobileNav';
 import { V2Route, V2NavigationParams } from '../../types';
 import { NomiUniversalCompanion } from '../../../components/nomi';
+import { AuthModal } from '../../../components/auth/AuthModal';
 
 interface V2AppShellProps {
   currentRoute: V2Route;
@@ -42,6 +43,9 @@ export const V2AppShell: React.FC<V2AppShellProps> = ({
 
       {/* AI Sensei Nomi Universal Companion */}
       <NomiUniversalCompanion currentView={currentRoute} />
+
+      {/* Supabase Google Authentication Modal */}
+      <AuthModal onNavigate={(view) => onNavigate(view as V2Route)} />
     </div>
   );
 };

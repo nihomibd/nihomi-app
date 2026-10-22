@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, ShieldCheck, Loader2, AlertTriangle } from 'lucide-react';
+import { X, Sparkles, ShieldCheck, Loader2, AlertTriangle, Crown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
@@ -76,39 +76,66 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
     onNavigate?.('dashboard');
   };
 
+  const handleFounderQuick = () => {
+    const userId = 'usr_founder_tanvir';
+    setUserData({
+      id: userId,
+      email: 'mdtanvirkabirbiplob@gmail.com',
+      name: 'Tanvir Kabir Biplob',
+      role: 'founder',
+      planId: 'japan_ready',
+      status: 'ACTIVE',
+      studentId: 'NHO-FOUNDER-01',
+      nihomiAccountId: 'ACC-FOUNDER',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&fit=crop',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    trackNihomiEvent('signup_completed', {
+      userId,
+      method: 'founder_quick',
+      studentId: 'NHO-FOUNDER-01'
+    });
+    closeAuthModal();
+    onNavigate?.('founder');
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/75 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
-      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 text-left my-auto">
+    <div id="auth-modal-overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+      <div id="auth-modal-card" className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#17192A] rounded-3xl shadow-2xl border border-white/10 text-left my-auto text-white">
         <button
+          id="btn-auth-modal-close"
           onClick={closeAuthModal}
-          className="btn-haptic absolute top-4 right-4 p-2 text-stone-400 hover:text-stone-700 rounded-full hover:bg-stone-100 transition-colors z-10 cursor-pointer"
+          className="btn-haptic absolute top-4 right-4 p-2 text-stone-400 hover:text-white rounded-full hover:bg-white/10 transition-colors z-10 cursor-pointer"
+          aria-label="Close Auth Modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="bg-stone-900 text-white p-6 text-center">
+        <div className="bg-[#121422] p-6 text-center border-b border-white/10">
           <NihomiBrandLogo variant="full" theme="dark" size={32} showTagline={false} className="mx-auto mb-3 justify-center" />
           <h3 className="text-xl font-bold tracking-tight text-white">
-            Sign In to NIHOMI
+            সাইন ইন / সাইন আপ (Sign In)
           </h3>
-          <p className="text-xs text-stone-300 mt-1 max-w-xs mx-auto">
-            Supabase Cloud Verified Authentication
+          <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
+            Supabase Cloud Verified Authentication & Security
           </p>
         </div>
 
         <div className="p-6 space-y-4">
           {errorMessage && (
-            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+            <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs rounded-xl flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
               <span>{errorMessage}</span>
             </div>
           )}
 
           {/* Primary Google Auth Button */}
           <button
+            id="btn-google-continue"
             onClick={handleGoogleClick}
             disabled={isProcessing}
-            className="btn-haptic w-full py-3.5 px-4 bg-white hover:bg-stone-50 text-stone-800 font-semibold text-sm rounded-2xl border border-stone-300 shadow-2xs hover:shadow-xs transition-all flex items-center justify-center space-x-3 cursor-pointer"
+            className="btn-haptic w-full py-3.5 px-4 bg-white hover:bg-stone-100 text-stone-900 font-bold text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-3 cursor-pointer"
           >
             {isProcessing ? (
               <Loader2 className="w-5 h-5 animate-spin text-stone-900" />
@@ -125,38 +152,60 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
             )}
           </button>
 
-          <div className="relative flex items-center justify-center my-2">
-            <div className="border-t border-stone-200 w-full"></div>
-            <span className="bg-white px-3 text-[10px] font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">
-              TEST / PREVIEW SANDBOX
+          <div className="relative flex items-center justify-center my-3">
+            <div className="border-t border-white/10 w-full"></div>
+            <span className="bg-[#17192A] px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+              ROLE TESTING / SANDBOX
             </span>
           </div>
+
+          {/* Founder Quick Access Sandbox Action */}
+          <button
+            type="button"
+            id="btn-quick-founder-preview"
+            onClick={handleFounderQuick}
+            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-200 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+          >
+            <div className="flex items-center space-x-2.5">
+              <div className="w-7 h-7 rounded-full bg-amber-500/30 text-amber-300 font-black text-[11px] flex items-center justify-center border border-amber-500/40">
+                創
+              </div>
+              <div className="text-left">
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <span>Founder Quick Access</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold uppercase border border-amber-500/30">Founder Role</span>
+                </div>
+                <div className="text-[10px] text-stone-400 font-medium">mdtanvirkabirbiplob@gmail.com</div>
+              </div>
+            </div>
+            <span className="text-[11px] text-amber-300 font-bold group-hover:underline">Founder →</span>
+          </button>
 
           {/* Frictionless Demo Student Sandbox Action */}
           <button
             type="button"
             id="btn-quick-student-preview"
             onClick={handleStudentQuick}
-            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-50/80 hover:bg-amber-100 border border-amber-200 text-stone-900 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
+            className="btn-haptic w-full py-2.5 px-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-stone-200 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
           >
             <div className="flex items-center space-x-2.5">
-              <div className="w-6 h-6 rounded-full bg-amber-600 text-white font-bold text-[10px] flex items-center justify-center">
-                試
+              <div className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[11px] flex items-center justify-center border border-blue-500/30">
+                学
               </div>
               <div className="text-left">
-                <div className="font-bold text-stone-900 flex items-center gap-1.5">
-                  <span>Demo Student Sandbox</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-900 font-extrabold uppercase">Preview Only</span>
+                <div className="font-bold text-white flex items-center gap-1.5">
+                  <span>Student Quick Sandbox</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-extrabold uppercase border border-blue-500/30">Student Role</span>
                 </div>
-                <div className="text-[10px] text-stone-500 font-medium">Isolated Test Session • Temporary State</div>
+                <div className="text-[10px] text-stone-400 font-medium">Standard Learner Account • Full Japanese Access</div>
               </div>
             </div>
-            <span className="text-[10px] text-amber-800 font-bold group-hover:underline">Try Demo →</span>
+            <span className="text-[11px] text-stone-300 font-bold group-hover:underline">Student →</span>
           </button>
 
-          <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1 pt-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Supabase Cloud OAuth & RLS Active</span>
+          <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1.5 pt-2">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Supabase Cloud OAuth 2.0 • End-to-End Cryptographic Security</span>
           </div>
         </div>
       </div>

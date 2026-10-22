@@ -188,6 +188,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             </p>
           </div>
           <button
+            id="dashboard-guest-login-btn"
             onClick={() => openAuthModal('login')}
             className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:opacity-90 text-white font-bold text-xs shrink-0 cursor-pointer shadow-md shadow-red-600/20"
           >

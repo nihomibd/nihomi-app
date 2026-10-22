@@ -1,43 +1,47 @@
 {
   "schema_version": "1.0",
   "status": "pending",
-  "task_id": "NIHOMI-WP06-PRODUCTION-MERGE-AND-DEPLOYMENT",
-  "title": "Merge Feature Branch to Main, Build Verification, and Production Deployment Preparation",
-  "objective": "Merge feature/founder-approved-product-system into main, verify clean git tree, execute production build verification, and prepare deployment checklist for live Cloudflare Pages / Vercel release.",
+  "task_id": "NIHOMI-WP07-V2-ROLE-AUTH-AND-AVATAR-FIX",
+  "title": "Fix V2 Auth Modal Mounting, 2-Role Sign-In (Founder vs Student), and Google Avatar Hydration",
+  "objective": "Mount AuthModal in V2AppShell to resolve unresponsive login/signup buttons on mobile/desktop, enforce strict 2-role system (Founder for mdtanvirkabirbiplob@gmail.com, Student for all others), and fix Google profile image hydration across client and server.",
   "domain": "platform",
   "in_scope": [
-    "Safely checkout main and merge feature/founder-approved-product-system with zero merge conflicts",
-    "Run full production build (npm run build) generating dist/server.cjs and dist/index.html",
-    "Run automated pre-flight release gate (npm run verify:preflight) on main branch",
-    "Generate production deployment checklist and release notes for Founder live rollout"
+    "Mount AuthModal in V2AppShell and wire openAuthModal triggers across V2Header (desktop & mobile drawer) and V2DashboardPage",
+    "Add mobile-friendly Login/Sign-up button inside V2Header mobile drawer when unauthenticated",
+    "Enforce strict 2-role assignment: mdtanvirkabirbiplob@gmail.com strictly gets role 'founder'; all other emails strictly get role 'student'",
+    "Fix Google avatar photo hydration in server (server/routes/auth.ts, server/authHelper.ts), AuthContext, and render <img src={avatarUrl} /> in V2Header and V2DashboardPage",
+    "Create and run automated test suite (scripts/test-v2-auth-and-roles.ts) and headless browser verification ensuring modal opens and sign-in succeeds"
   ],
   "out_of_scope": [
-    "Directly pushing to remote GitHub repository without Founder explicit release consent",
-    "Triggering live cloud CI/CD webhook deployments without Founder confirmation",
-    "Modifying live production database credentials or third-party secret tokens"
+    "Modifying payment gateway billing keys or third-party OAuth provider secrets",
+    "Altering production database schema or deleting live learner records",
+    "Redesigning exam engine marksheets or CV PDF export (scheduled for subsequent work packages)"
   ],
   "acceptance_criteria": [
-    "main branch contains all 5 approved work packages with unbroken commit lineage",
-    "npm run build completes with zero errors and zero TypeScript warnings",
-    "npm run verify:preflight passes 6/6 release gates with 100% green status on main",
-    "Complete release manifest and smoke testing protocol delivered to Founder"
+    "Clicking Login / Sign-up button on desktop or mobile in Version 2 immediately opens the Supabase/Google authentication modal",
+    "Mobile hamburger drawer displays clean Login / Sign-up action for unauthenticated users",
+    "mdtanvirkabirbiplob@gmail.com automatically acquires role 'founder' with immediate access to Founder Cockpit; all other users acquire role 'student'",
+    "Google account profile picture renders cleanly in V2Header and dashboard dropdown upon login",
+    "npm run build passes with 0 errors and automated test suite passes 100%"
   ],
   "verification": [
-    "git branch --show-current",
-    "git log -n 6 --oneline",
+    "npx tsx scripts/test-v2-auth-and-roles.ts",
     "npm run build",
-    "npm run verify:preflight",
+    "node scripts/verify-v2-browser-suite.cjs",
     "node scripts/nihomi-approval-gate.mjs validate"
   ],
   "risks": [
-    "Git merge conflicts if uncommitted local files conflict. Mitigation: Stash or preserve untracked scratch notes before merging."
+    "Google image URLs from googleusercontent.com might need referrer-policy='no-referrer' to avoid cross-origin image block. Mitigation: Set referrerPolicy='no-referrer' on avatar images."
   ],
   "dependencies": [
-    "dist/server.cjs",
-    "scripts/verify-preflight-release-gate.ts",
-    "docs/NIHOMI_PRODUCT_DOMAIN_MATRIX.md"
+    "src/v2/components/layout/V2AppShell.tsx",
+    "src/v2/components/layout/V2Header.tsx",
+    "src/components/auth/AuthModal.tsx",
+    "src/context/AuthContext.tsx",
+    "server/routes/auth.ts",
+    "server/authHelper.ts"
   ],
-  "base_commit": "dc790d0",
-  "created_at": "2026-10-22T17:18:00.000Z",
+  "base_commit": "a785f8d",
+  "created_at": "2026-10-22T17:55:00.000Z",
   "proposed_by": "Antigravity Lead System Architect"
 }

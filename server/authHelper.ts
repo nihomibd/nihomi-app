@@ -174,8 +174,8 @@ function isValidUserRole(role: unknown): role is UserRole {
  * Server-authoritative: client/browser can never elevate or tamper.
  */
 export function canonicalizeRole(email?: string): CanonicalRole {
-  if (email && isAdminEmail(email)) {
-    return 'admin';
+  if (email && (isAdminEmail(email) || isFounderEmail(email))) {
+    return 'founder';
   }
   return 'student';
 }
@@ -191,9 +191,9 @@ function resolveUserRole(rawPayload: Record<string, any>): UserRole {
     ''
   ).trim();
 
-  // INVIOLABLE SECURITY LAW: ONLY mdtanvirkabirbiplob@gmail.com can EVER be 'admin' or 'founder'.
-  if (isAdminEmail(email)) {
-    return 'admin';
+  // INVIOLABLE SECURITY LAW: ONLY mdtanvirkabirbiplob@gmail.com can EVER be 'founder'.
+  if (isAdminEmail(email) || isFounderEmail(email)) {
+    return 'founder';
   }
   return 'student';
 }

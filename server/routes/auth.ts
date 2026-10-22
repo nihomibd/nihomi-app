@@ -89,7 +89,8 @@ authRouter.post('/google', async (req, res) => {
         name: profile?.displayName || user.email.split('@')[0],
         role: user.role,
         planId: userPlanId,
-        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase()
+        studentId: user.role === 'founder' ? 'NHO-FOUNDER-01' : ('NHO-' + user.id.slice(0, 6).toUpperCase()),
+        avatarUrl: profile?.avatarSeed || verifiedGoogle.picture || null,
       },
       profile,
       progress,
@@ -193,9 +194,9 @@ authRouter.post('/login', (req, res) => {
         id: user.id,
         email: user.email,
         name: profile?.displayName || user.email.split('@')[0],
-        role: user.role,
-        planId: userPlanId,
-        studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+        role: user.role === 'admin' ? 'founder' : user.role,
+      planId: userPlanId,
+      studentId: user.role === 'founder' || user.role === 'admin' ? 'NHO-FOUNDER-01' : ('NHO-' + user.id.slice(0, 6).toUpperCase()),
         avatarUrl: profile?.avatarSeed || null,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
