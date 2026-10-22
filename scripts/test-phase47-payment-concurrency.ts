@@ -2,9 +2,20 @@
 // NIHOMI.COM — PHASE 47 PAYMENT CONCURRENCY, IDEMPOTENCY & CHAOS TEST SUITE
 // Tests 10 real-world concurrency, race-condition, replay, and tamper scenarios.
 
+process.env.NODE_ENV = 'test';
+process.env.ENABLE_PAYMENT_MOCK = 'true';
+
 import express from 'express';
 import http from 'http';
-import { paymentRouter, idempotencyRegistry, userRateLimitRegistry, processedTrxRegistry, paymentAttemptRegistry } from '../server/routes/payment.ts';
+import {
+  paymentRouter,
+  idempotencyRegistry,
+  userRateLimitRegistry,
+  processedTrxRegistry,
+  paymentAttemptRegistry,
+  saveDurablePaymentAttempt
+} from '../server/routes/payment.ts';
+import { signStatelessJwt } from '../server/authHelper.ts';
 
 const app = express();
 app.use(express.json());
@@ -39,15 +50,22 @@ async function runConcurrencyTests() {
     // -------------------------------------------------------------
     console.log('🧪 Test 1: Rapid Double-Click Suppression (Same user, < 2000ms)');
     const t1User = 'usr_double_click_' + Date.now();
+    const token1 = signStatelessJwt({ userId: t1User, email: `${t1User}@nihomi.com`, role: 'student' });
     const req1 = fetch(`${baseUrl}/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token1}`
+      },
       body: JSON.stringify({ userId: t1User, tier: 'pro', interval: 'monthly', mock: true })
     });
     // Immediately fire second request within 10ms
     const req2 = fetch(`${baseUrl}/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token1}`
+      },
       body: JSON.stringify({ userId: t1User, tier: 'pro', interval: 'monthly', mock: true })
     });
 
@@ -68,12 +86,14 @@ async function runConcurrencyTests() {
     console.log('\n🧪 Test 2: Concurrency Lock — 10 Parallel Workers with Same Idempotency Key');
     const sharedKey = `idemp_parallel_${Date.now()}`;
     const t2User = 'usr_parallel_' + Date.now();
+    const token2 = signStatelessJwt({ userId: t2User, email: `${t2User}@nihomi.com`, role: 'student' });
 
     const parallelRequests = Array.from({ length: 10 }).map((_, idx) =>
       fetch(`${baseUrl}/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token2}`,
           'idempotency-key': sharedKey
         },
         body: JSON.stringify({
@@ -98,11 +118,16 @@ async function runConcurrencyTests() {
     // Test 3: Client Price Tamper Rejection (Fraud Defense)
     // -------------------------------------------------------------
     console.log('\n🧪 Test 3: Price Tamper Defense (Client alters ৳1,990 to ৳10)');
+    const t3User = 'usr_fraud_' + Date.now();
+    const token3 = signStatelessJwt({ userId: t3User, email: `${t3User}@nihomi.com`, role: 'student' });
     const tamperRes = await fetch(`${baseUrl}/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token3}`
+      },
       body: JSON.stringify({
-        userId: 'usr_fraud_' + Date.now(),
+        userId: t3User,
         tier: 'pro',
         interval: 'monthly',
         amount: 10, // Tampered client price!
@@ -118,7 +143,7 @@ async function runConcurrencyTests() {
     // -------------------------------------------------------------
     console.log('\n🧪 Test 4: Callback Deduplication (5 repeated callbacks for same paymentID)');
     const t4PaymentID = `MOCK_BK_CALLBACK_${Date.now()}`;
-    paymentAttemptRegistry.set(t4PaymentID, {
+    await saveDurablePaymentAttempt(t4PaymentID, {
       paymentID: t4PaymentID,
       userId: 'usr_cb_student',
       tier: 'pro',
@@ -156,21 +181,29 @@ async function runConcurrencyTests() {
     assert(recBody.isTerminal === true, 'isTerminal is true (prevents duplicate checkout loop)');
 
     // -------------------------------------------------------------
-    // Test 6: Multi-Tenant Isolation (User A & User B concurrent checkout)
+    // Test 6: Multi-Tenant Isolation (User A & User B pay concurrently)
     // -------------------------------------------------------------
     console.log('\n🧪 Test 6: Tenant Isolation (User A & User B pay concurrently)');
     const userA = 'usr_tenant_A_' + Date.now();
     const userB = 'usr_tenant_B_' + Date.now();
+    const tokenA = signStatelessJwt({ userId: userA, email: `${userA}@nihomi.com`, role: 'student' });
+    const tokenB = signStatelessJwt({ userId: userB, email: `${userB}@nihomi.com`, role: 'student' });
 
     const [resA, resB] = await Promise.all([
       fetch(`${baseUrl}/create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokenA}`
+        },
         body: JSON.stringify({ userId: userA, tier: 'starter', interval: 'monthly', mock: true })
       }),
       fetch(`${baseUrl}/create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokenB}`
+        },
         body: JSON.stringify({ userId: userB, tier: 'japan_ready', interval: 'yearly', mock: true })
       })
     ]);
@@ -186,9 +219,13 @@ async function runConcurrencyTests() {
     // Test 7: Direct Execute Deduplication
     // -------------------------------------------------------------
     console.log('\n🧪 Test 7: Direct Execute Deduplication');
+    const tokenCb = signStatelessJwt({ userId: 'usr_cb_student', email: 'usr_cb_student@nihomi.com', role: 'student' });
     const execRes1 = await fetch(`${baseUrl}/execute`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenCb}`
+      },
       body: JSON.stringify({ paymentID: t4PaymentID })
     });
     const execBody1 = await execRes1.json();
@@ -198,11 +235,16 @@ async function runConcurrencyTests() {
     // Test 8: Fail-Closed Honest NOT_CONFIGURED State
     // -------------------------------------------------------------
     console.log('\n🧪 Test 8: Honest Fail-Closed State when Gateway Keys Missing');
+    const liveUser = 'usr_live_attempt_' + Date.now();
+    const tokenLive = signStatelessJwt({ userId: liveUser, email: `${liveUser}@nihomi.com`, role: 'student' });
     const realCreateRes = await fetch(`${baseUrl}/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenLive}`
+      },
       body: JSON.stringify({
-        userId: 'usr_live_attempt_' + Date.now(),
+        userId: liveUser,
         tier: 'pro',
         interval: 'monthly'
         // mock NOT provided -> exercises fail-closed check

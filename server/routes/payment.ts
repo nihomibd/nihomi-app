@@ -4,10 +4,20 @@ import { sslCommerzService } from '../services/sslCommerzService.js';
 import { stripePaymentService } from '../services/stripePaymentService.js';
 import { subscriptionService, SUBSCRIPTION_TIERS, SubscriptionTier } from '../services/subscriptionService.js';
 import { getCanonicalPrice, validatePurchaseAmount, CANONICAL_SUBSCRIPTION_MATRIX } from '../services/canonicalPricing.js';
-import { optionalAuth } from '../middleware/auth.js';
+import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { db } from '../db.js';
+
+
+// ========================================================
+// SECURITY GUARD: RESTRICT MOCK PAYMENTS TO NON-PRODUCTION
+// ========================================================
+export const isMockPaymentAllowed = (): boolean => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isTest = process.env.NODE_ENV === 'test' || process.env.ENABLE_PAYMENT_MOCK === 'true';
+  return isTest && !isProduction;
+};
 
 export const paymentRouter = Router();
 
@@ -415,10 +425,40 @@ paymentRouter.get('/plans', (_req: Request, res: Response) => {
 // ========================================================
 // 2. CREATE BKASH CHECKOUT SESSION (IDEMPOTENT & RATE-LIMITED)
 // ========================================================
-paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { tier, planId, interval = 'monthly', callbackUrl, mock, idempotencyKey: clientKey } = req.body;
     const user = req.user;
+
+    if (!user || !user.id) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized: Authentication is required for checkout.',
+        code: 'AUTH_REQUIRED'
+      });
+    }
+
+    const resolvedUserId = user.id;
+    const resolvedEmail = user.email || 'student@nihomi.com';
+
+    // Strict Identity Protection: Reject client spoofing
+    if (req.body.userId && req.body.userId !== resolvedUserId && user.role !== 'admin') {
+      return res.status(400).json({
+        success: false,
+        error: 'Forbidden: User ID in request body does not match authenticated session.',
+        code: 'IDENTITY_MISMATCH'
+      });
+    }
+
+    // Mock bypass protection: Strictly forbidden in production
+    const isMockRequested = Boolean(mock === true || req.body.mock === true);
+    if (isMockRequested && !isMockPaymentAllowed()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Mock payment is strictly forbidden in production mode.',
+        code: 'MOCK_PAYMENT_FORBIDDEN'
+      });
+    }
 
     const resolvedPlanKey = (planId || tier || 'pro').toLowerCase();
     let amount: number;
@@ -452,9 +492,6 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     }
 
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
-    const resolvedUserId = user?.id || req.body.userId || 'usr_guest_' + Math.random().toString(36).substring(2, 8);
-    const resolvedEmail = user?.email || req.body.email || 'student@nihomi.com';
-
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
     // High-Entropy Idempotency Key Resolution
@@ -468,6 +505,13 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     // 1. Idempotency Check: Return existing attempt if within 15-minute validity window
     const cachedAttempt = await getDurableIdempotency(idempotencyKey);
     if (cachedAttempt && (Date.now() - cachedAttempt.createdAt) < 15 * 60 * 1000) {
+      if (cachedAttempt.userId !== resolvedUserId && user.role !== 'admin') {
+        return res.status(403).json({
+          success: false,
+          error: 'Idempotency key collision across accounts.',
+          code: 'IDEMPOTENCY_KEY_COLLISION'
+        });
+      }
       res.setHeader('X-Idempotent-Replay', 'true');
       return res.json(cachedAttempt.response);
     }
@@ -490,8 +534,8 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
 
-    // 3. Deterministic Mock / Sandbox Provider for Automated Chaos Tests
-    if (mock === true || process.env.ENABLE_PAYMENT_MOCK === 'true') {
+    // 3. Deterministic Mock / Sandbox Provider for Automated Chaos Tests (Explicitly requested and allowed only)
+    if (isMockRequested && isMockPaymentAllowed()) {
       const mockPaymentID = `MOCK_BK_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
       const mockResponse = {
         success: true,
@@ -563,7 +607,6 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
     // Record pending transaction in Prisma PostgreSQL if configured (non-blocking fallback)
     if (isDatabaseConfigured()) {
       try {
-        // Find or create user in prisma if missing
         let dbUser = await prisma.user.findFirst({
           where: { OR: [{ id: resolvedUserId }, { email: resolvedEmail }] },
         });
@@ -593,6 +636,7 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
               paymentMethod: 'bKash MFS',
               metadata: {
                 tier: selectedTier,
+                interval,
                 invoiceNumber,
                 userEmail: resolvedEmail,
                 initiatedAt: new Date().toISOString(),
@@ -611,7 +655,7 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
         userId: resolvedUserId,
         planId: selectedTier as any,
         planName: planConfig.name,
-        billingInterval: selectedTier === 'n5_lifetime' ? ('yearly' as any) : ('monthly' as any),
+        billingInterval: selectedTier === 'n5_lifetime' ? ('yearly' as any) : ((interval as any) || 'monthly'),
         amount,
         originalAmount: amount,
         discountAmount: 0,
@@ -624,6 +668,7 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
           paymentID: bkashRes.paymentID,
           invoiceNumber,
           tier: selectedTier,
+          interval,
           userEmail: resolvedEmail,
         },
       });
@@ -663,7 +708,6 @@ paymentRouter.post('/create', optionalAuth, async (req: AuthenticatedRequest, re
   }
 });
 
-// ========================================================
 // 3. BKASH REDIRECT CALLBACK (BROWSER RETURN)
 // ========================================================
 paymentRouter.get('/callback', async (req: Request, res: Response) => {
@@ -681,33 +725,47 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     return res.redirect(`/payment/callback?status=${encodeURIComponent(status || 'failed')}&paymentID=${encodeURIComponent(paymentID)}`);
   }
 
+  // Mock security check: Strictly forbidden in production
+  const isMock = Boolean(
+    paymentID.startsWith('MOCK_BK_') ||
+    req.query.mock === 'true'
+  );
+
+  if (isMock && !isMockPaymentAllowed()) {
+    console.warn(`[PaymentRouter Callback] Mock payment rejected in production mode: ${paymentID}`);
+    return res.redirect(`/payment/callback?status=failed&error=mock_payment_forbidden&paymentID=${encodeURIComponent(paymentID)}`);
+  }
+
   try {
-    // 0. Deduplication check: Has this payment already completed?
+    // 0. Durable database lookup: Payment attempt MUST exist from prior initiation
     const existingAttempt = await getDurablePaymentAttempt(paymentID);
-    if (existingAttempt && existingAttempt.state === 'SUCCEEDED') {
+    if (!existingAttempt) {
+      console.error(`[PaymentRouter Callback] Unregistered or fabricated paymentID: ${paymentID}`);
+      return res.redirect(`/payment/callback?status=failed&error=payment_attempt_not_found&paymentID=${encodeURIComponent(paymentID)}`);
+    }
+
+    // Deduplication check: Has this payment already completed?
+    if (existingAttempt.state === 'SUCCEEDED') {
       console.log(`[PaymentRouter Callback] Duplicate callback / replay detected for paymentID: ${paymentID}. Returning idempotent success.`);
       return res.redirect(`/payment/callback?status=success&trxID=${existingAttempt.trxID || 'ALREADY_PAID'}&tier=${existingAttempt.tier}&amount=${existingAttempt.amount}&invoiceNumber=${existingAttempt.invoiceNumber}&deduplicated=true`);
     }
 
-    // 1. Execute payment with bKash API (with mock/sandbox fallback for automated tests)
+    // 1. Execute payment with bKash API (with mock/sandbox fallback ONLY if allowed)
     let execResult: any;
-    if (paymentID.startsWith('MOCK_BK_') || req.query.mock === 'true' || process.env.ENABLE_PAYMENT_MOCK === 'true') {
-      const existing = await getDurablePaymentAttempt(paymentID);
-      const mockAmt = existing?.amount || 1990;
-      const mockInv = existing?.invoiceNumber || `INV_MOCK_${Date.now()}`;
+    if (isMock && isMockPaymentAllowed()) {
       execResult = {
         statusCode: '0000',
         statusMessage: 'Successful',
         paymentID,
-        payerReference: existing?.userId || 'usr_student',
+        payerReference: existingAttempt.userId,
         customerMsisdn: '01800000000',
-        trxID: existing?.trxID || `TRX_MOCK_${Date.now()}`,
-        amount: String(mockAmt),
+        trxID: existingAttempt.trxID || `TRX_MOCK_${Date.now()}`,
+        amount: String(existingAttempt.amount),
         transactionStatus: 'Completed',
         paymentExecuteTime: new Date().toISOString(),
         currency: 'BDT',
         intent: 'sale',
-        merchantInvoiceNumber: mockInv,
+        merchantInvoiceNumber: existingAttempt.invoiceNumber,
       };
     } else {
       execResult = await bKashService.executePayment(paymentID);
@@ -716,51 +774,40 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
     // 2. Strict validation: transactionStatus must be 'Completed'
     if (execResult.transactionStatus !== 'Completed' || !execResult.trxID) {
       console.error(`[PaymentRouter Callback] Incomplete status: ${execResult.transactionStatus}`);
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
       return res.redirect(`/payment/callback?status=failed&error=incomplete_transaction&paymentID=${encodeURIComponent(paymentID)}`);
     }
 
-    // 3. Resolve tier and user info from stored payment metadata
-    let resolvedUserId = execResult.payerReference || 'usr_student';
+    // 3. Amount and currency validation: must match existingAttempt!
+    const paidAmount = Number(execResult.amount);
+    if (isNaN(paidAmount) || Math.abs(paidAmount - existingAttempt.amount) > 0.01) {
+      console.error(`[PaymentRouter Callback] Amount mismatch: expected ${existingAttempt.amount}, got ${paidAmount}`);
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
+      return res.redirect(`/payment/callback?status=failed&error=amount_mismatch&paymentID=${encodeURIComponent(paymentID)}`);
+    }
+
+    if (execResult.currency && execResult.currency.toUpperCase() !== 'BDT') {
+      console.error(`[PaymentRouter Callback] Currency mismatch: ${execResult.currency}`);
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
+      return res.redirect(`/payment/callback?status=failed&error=currency_mismatch&paymentID=${encodeURIComponent(paymentID)}`);
+    }
+
+    // 4. Derive identity and plan strictly from the durable pre-saved attempt (Client cannot spoof!)
+    const resolvedUserId = existingAttempt.userId;
+    const resolvedTier = existingAttempt.tier;
+    const resolvedInterval = existingAttempt.interval as any;
+    const amount = existingAttempt.amount;
+    const invoiceNumber = existingAttempt.invoiceNumber;
+
     let resolvedEmail = 'student@nihomi.com';
-    const amount = Number(execResult.amount) || 1990;
-    const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
+    const user = db.findUserById(resolvedUserId);
+    if (user?.email) resolvedEmail = user.email;
 
-    // Canonical & threshold fallback
-    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
-    let resolvedTier: SubscriptionTier = resolvedFallback.tier;
-    let resolvedInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = resolvedFallback.interval;
-
-    // Check Prisma Payment metadata if configured
-    if (isDatabaseConfigured()) {
-      try {
-        const storedPayment = await prisma.payment.findFirst({
-          where: { paymentID },
-        });
-        if (storedPayment) {
-          resolvedUserId = storedPayment.userId;
-          const meta = (storedPayment.metadata as any) || {};
-          if (meta.tier) resolvedTier = meta.tier as SubscriptionTier;
-          if (meta.interval) resolvedInterval = meta.interval;
-          if (meta.userEmail) resolvedEmail = meta.userEmail;
-        }
-      } catch (err: any) {
-        console.warn('[PaymentRouter Callback] Prisma metadata lookup warning:', err?.message);
-      }
-    }
-
-    // Check memory db if still needed
-    const allMemPayments = db.getAllPayments();
-    const memPayment = allMemPayments.find((p: any) => (p.metadata as any)?.paymentID === paymentID);
-    if (memPayment) {
-      resolvedUserId = memPayment.userId;
-      if (memPayment.planId) resolvedTier = memPayment.planId as SubscriptionTier;
-      if ((memPayment as any).billingInterval) resolvedInterval = (memPayment as any).billingInterval;
-      const user = db.findUserById(resolvedUserId);
-      if (user?.email) resolvedEmail = user.email;
-    }
-
-    // 4. Atomically activate user subscription in Prisma & Memory DB
-    const activation = await subscriptionService.activateSubscription({
+    // 5. Atomically activate user subscription in Prisma & Memory DB
+    await subscriptionService.activateSubscription({
       userId: resolvedUserId,
       userEmail: resolvedEmail,
       tier: resolvedTier,
@@ -773,22 +820,14 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
 
     // Mark payment attempt as SUCCEEDED and record trxID in registry
     recordDurableTrxProcessed(execResult.trxID);
-    await saveDurablePaymentAttempt(paymentID, {
-      paymentID,
-      userId: resolvedUserId,
-      tier: resolvedTier,
-      interval: resolvedInterval,
-      amount,
-      state: 'SUCCEEDED',
-      trxID: execResult.trxID,
-      invoiceNumber,
-      createdAt: existingAttempt?.createdAt || Date.now(),
-      updatedAt: Date.now(),
-    });
+    existingAttempt.state = 'SUCCEEDED';
+    existingAttempt.trxID = execResult.trxID;
+    existingAttempt.updatedAt = Date.now();
+    await saveDurablePaymentAttempt(paymentID, existingAttempt);
 
     console.log(`[PaymentRouter Callback] Subscription activated successfully for trxID: ${execResult.trxID}`);
 
-    // 5. Redirect to frontend success page
+    // 6. Redirect to frontend success page
     const redirectParams = new URLSearchParams({
       status: 'success',
       trxID: execResult.trxID,
@@ -804,19 +843,63 @@ paymentRouter.get('/callback', async (req: Request, res: Response) => {
   }
 });
 
-// ========================================================
 // 4. DIRECT EXECUTE ENDPOINT (API / SPA / MOBILE)
 // ========================================================
-paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/execute', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   const { paymentID } = req.body;
   const user = req.user;
 
-  if (!paymentID) {
-    return res.status(400).json({ success: false, error: 'paymentID is required' });
+  if (!user || !user.id) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized: Authentication required.',
+      code: 'AUTH_REQUIRED'
+    });
   }
 
+  if (!paymentID) {
+    return res.status(400).json({
+      success: false,
+      error: 'paymentID is required',
+      code: 'PAYMENT_ID_REQUIRED'
+    });
+  }
+
+  // 1. Mock protection: strictly forbidden in production mode
+  const isMock = Boolean(
+    paymentID.startsWith('MOCK_BK_') ||
+    req.body.mock === true
+  );
+
+  if (isMock && !isMockPaymentAllowed()) {
+    return res.status(403).json({
+      success: false,
+      error: 'Mock payment execution is strictly forbidden in production mode.',
+      code: 'MOCK_PAYMENT_FORBIDDEN'
+    });
+  }
+
+  // 2. Lookup existing attempt
   const existingAttempt = await getDurablePaymentAttempt(paymentID);
-  if (existingAttempt && existingAttempt.state === 'SUCCEEDED') {
+  if (!existingAttempt) {
+    return res.status(404).json({
+      success: false,
+      error: 'Payment attempt not found.',
+      code: 'PAYMENT_ATTEMPT_NOT_FOUND'
+    });
+  }
+
+  // 3. Strict ownership check! User cannot execute someone else's payment attempt
+  if (existingAttempt.userId !== user.id && user.role !== 'admin') {
+    return res.status(403).json({
+      success: false,
+      error: 'Forbidden: You do not own this payment attempt.',
+      code: 'FORBIDDEN_PAYMENT_OWNERSHIP_MISMATCH'
+    });
+  }
+
+  // 4. Deduplication
+  if (existingAttempt.state === 'SUCCEEDED') {
     console.log(`[PaymentRouter Execute] Duplicate direct execute detected for paymentID ${paymentID}. Returning idempotent cached result.`);
     return res.json({
       success: true,
@@ -831,103 +914,82 @@ paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, r
 
   try {
     let execResult: any;
-    if (paymentID.startsWith('MOCK_BK_') || req.body.mock === true || process.env.ENABLE_PAYMENT_MOCK === 'true') {
-      const mockAmt = existingAttempt?.amount || 1990;
-      const mockInv = existingAttempt?.invoiceNumber || `INV_MOCK_${Date.now()}`;
+    if (isMock && isMockPaymentAllowed()) {
       execResult = {
         statusCode: '0000',
         statusMessage: 'Successful',
         paymentID,
-        payerReference: existingAttempt?.userId || user?.id || 'usr_student',
+        payerReference: existingAttempt.userId,
         customerMsisdn: '01800000000',
-        trxID: existingAttempt?.trxID || `TRX_MOCK_${Date.now()}`,
-        amount: String(mockAmt),
+        trxID: existingAttempt.trxID || `TRX_MOCK_${Date.now()}`,
+        amount: String(existingAttempt.amount),
         transactionStatus: 'Completed',
         paymentExecuteTime: new Date().toISOString(),
         currency: 'BDT',
         intent: 'sale',
-        merchantInvoiceNumber: mockInv,
+        merchantInvoiceNumber: existingAttempt.invoiceNumber,
       };
     } else {
       execResult = await bKashService.executePayment(paymentID);
     }
 
     if (execResult.transactionStatus !== 'Completed' || !execResult.trxID) {
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
       return res.status(400).json({
         success: false,
         error: `Transaction status is '${execResult.transactionStatus || 'unknown'}'. Not completed.`,
+        code: 'TRANSACTION_INCOMPLETE'
       });
     }
 
-    let resolvedUserId = user?.id || execResult.payerReference || 'usr_student';
-    let resolvedEmail = user?.email || 'student@nihomi.com';
-    const amount = Number(execResult.amount) || 1990;
-    const invoiceNumber = execResult.merchantInvoiceNumber || `INV_${Date.now()}`;
-
-    // Canonical & threshold fallback
-    const resolvedFallback = resolveTierAndIntervalFromAmount(amount);
-    let resolvedTier: SubscriptionTier = resolvedFallback.tier;
-    let resolvedInterval: 'monthly' | 'quarterly' | 'half_yearly' | 'yearly' = resolvedFallback.interval;
-
-    // Check Prisma Payment metadata if configured
-    if (isDatabaseConfigured()) {
-      try {
-        const storedPayment = await prisma.payment.findFirst({
-          where: { paymentID },
-        });
-        if (storedPayment) {
-          resolvedUserId = storedPayment.userId;
-          const meta = (storedPayment.metadata as any) || {};
-          if (meta.tier) resolvedTier = meta.tier as SubscriptionTier;
-          if (meta.interval) resolvedInterval = meta.interval;
-          if (meta.userEmail) resolvedEmail = meta.userEmail;
-        }
-      } catch (err: any) {
-        console.warn('[PaymentRouter Execute] Prisma metadata lookup warning:', err?.message);
-      }
+    // Amount and currency validation
+    const paidAmount = Number(execResult.amount);
+    if (isNaN(paidAmount) || Math.abs(paidAmount - existingAttempt.amount) > 0.01) {
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
+      return res.status(400).json({
+        success: false,
+        error: 'Payment amount does not match expected attempt amount.',
+        code: 'AMOUNT_MISMATCH'
+      });
     }
 
-    // Check memory db if still needed
-    const allMemPayments = db.getAllPayments();
-    const memPayment = allMemPayments.find((p: any) => (p.metadata as any)?.paymentID === paymentID);
-    if (memPayment) {
-      resolvedUserId = memPayment.userId;
-      if (memPayment.planId) resolvedTier = memPayment.planId as SubscriptionTier;
-      if ((memPayment as any).billingInterval) resolvedInterval = (memPayment as any).billingInterval;
+    if (execResult.currency && execResult.currency.toUpperCase() !== 'BDT') {
+      existingAttempt.state = 'FAILED';
+      await saveDurablePaymentAttempt(paymentID, existingAttempt);
+      return res.status(400).json({
+        success: false,
+        error: 'Payment currency must be BDT.',
+        code: 'CURRENCY_MISMATCH'
+      });
     }
 
+    // Activate subscription strictly for existingAttempt
     const activation = await subscriptionService.activateSubscription({
-      userId: resolvedUserId,
-      userEmail: resolvedEmail,
-      tier: resolvedTier,
-      billingInterval: resolvedInterval,
+      userId: existingAttempt.userId,
+      userEmail: user.email || 'student@nihomi.com',
+      tier: existingAttempt.tier,
+      billingInterval: existingAttempt.interval as any,
       trxID: execResult.trxID,
-      amount,
+      amount: existingAttempt.amount,
       paymentID,
-      invoiceNumber,
+      invoiceNumber: existingAttempt.invoiceNumber,
     });
 
     recordDurableTrxProcessed(execResult.trxID);
-    await saveDurablePaymentAttempt(paymentID, {
-      paymentID,
-      userId: resolvedUserId,
-      tier: resolvedTier,
-      interval: resolvedInterval,
-      amount,
-      state: 'SUCCEEDED',
-      trxID: execResult.trxID,
-      invoiceNumber,
-      createdAt: existingAttempt?.createdAt || Date.now(),
-      updatedAt: Date.now(),
-    });
+    existingAttempt.state = 'SUCCEEDED';
+    existingAttempt.trxID = execResult.trxID;
+    existingAttempt.updatedAt = Date.now();
+    await saveDurablePaymentAttempt(paymentID, existingAttempt);
 
     return res.json({
       success: true,
       trxID: execResult.trxID,
-      tier: resolvedTier,
+      tier: existingAttempt.tier,
       expiresAt: activation.expiresAt,
-      amount,
-      invoiceNumber,
+      amount: existingAttempt.amount,
+      invoiceNumber: existingAttempt.invoiceNumber,
       message: activation.message,
     });
   } catch (err: any) {
@@ -939,10 +1001,6 @@ paymentRouter.post('/execute', optionalAuth, async (req: AuthenticatedRequest, r
   }
 });
 
-// ========================================================
-// 5. QUERY PAYMENT STATUS DIRECTLY FROM BKASH
-// ========================================================
-// ========================================================
 // 5. STATUS RECONCILIATION ENDPOINT (P0 PAYMENT RELIABILITY)
 // ========================================================
 paymentRouter.get('/reconcile/:paymentID', async (req: Request, res: Response) => {
@@ -1086,7 +1144,14 @@ paymentRouter.get('/manual/instructions', (_req: Request, res: Response) => {
   });
 });
 
-paymentRouter.post('/manual/submit', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/manual/submit', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  const user = req.user;
+  if (!user || !user.id) {
+    return res.status(401).json({ success: false, error: 'Authentication required.', code: 'AUTH_REQUIRED' });
+  }
+  if (req.body.userId && req.body.userId !== user.id && user.role !== 'admin') {
+    return res.status(400).json({ success: false, error: 'User ID in request does not match authenticated session.', code: 'IDENTITY_MISMATCH' });
+  }
   try {
     const {
       senderPhone,
@@ -1164,7 +1229,7 @@ const isFounderOrAdmin = (user: any) => {
   );
 };
 
-paymentRouter.get('/admin/pending', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.get('/admin/pending', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = req.user;
     if (!isFounderOrAdmin(user)) {
@@ -1182,7 +1247,7 @@ paymentRouter.get('/admin/pending', optionalAuth, async (req: AuthenticatedReque
   }
 });
 
-paymentRouter.post('/admin/verify', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/admin/verify', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = req.user;
     if (!isFounderOrAdmin(user)) {
@@ -1311,7 +1376,14 @@ paymentRouter.post('/admin/verify', optionalAuth, async (req: AuthenticatedReque
 // ========================================================
 // 9. SSLCOMMERZ GATEWAY INTEGRATION (MFS & CARDS)
 // ========================================================
-paymentRouter.post('/sslcommerz/init', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/sslcommerz/init', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  const user = req.user;
+  if (!user || !user.id) {
+    return res.status(401).json({ success: false, error: 'Authentication required.', code: 'AUTH_REQUIRED' });
+  }
+  if (req.body.userId && req.body.userId !== user.id && user.role !== 'admin') {
+    return res.status(400).json({ success: false, error: 'User ID mismatch.', code: 'IDENTITY_MISMATCH' });
+  }
   try {
     const user = req.user;
     const {
@@ -1499,7 +1571,14 @@ paymentRouter.post('/sslcommerz/ipn', async (req: Request, res: Response) => {
 // ========================================================
 // 10. STRIPE GATEWAY INTEGRATION (GLOBAL CARDS / USD / JPY)
 // ========================================================
-paymentRouter.post('/stripe/create-checkout-session', optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+paymentRouter.post('/stripe/create-checkout-session', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  const user = req.user;
+  if (!user || !user.id) {
+    return res.status(401).json({ success: false, error: 'Authentication required.', code: 'AUTH_REQUIRED' });
+  }
+  if (req.body.userId && req.body.userId !== user.id && user.role !== 'admin') {
+    return res.status(400).json({ success: false, error: 'User ID mismatch.', code: 'IDENTITY_MISMATCH' });
+  }
   try {
     const user = req.user;
     const {

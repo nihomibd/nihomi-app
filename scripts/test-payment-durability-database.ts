@@ -3,6 +3,9 @@
 // Proves that idempotency, transaction deduplication, and payment state survive
 // complete process-local memory resets (wiped Maps/Sets simulating server restart or multi-instance load balancing).
 
+process.env.NODE_ENV = 'test';
+process.env.ENABLE_PAYMENT_MOCK = 'true';
+
 import express from 'express';
 import http from 'http';
 import {
@@ -14,6 +17,7 @@ import {
   getDurablePaymentAttempt,
   isDurableTrxProcessed
 } from '../server/routes/payment.ts';
+import { signStatelessJwt } from '../server/authHelper.ts';
 import { db } from '../server/db.ts';
 
 const app = express();
@@ -50,11 +54,17 @@ async function runDurabilityTests() {
     console.log('[Test 1] Idempotency creation and durable persistence...');
     const testIdempKey = `idemp_durable_${Date.now()}`;
     const testUser = `usr_dur_${Date.now()}`;
+    const tokenUser = signStatelessJwt({
+      userId: testUser,
+      email: `${testUser}@nihomi.com`,
+      role: 'student'
+    });
 
     const createRes = await fetch(`${baseUrl}/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenUser}`,
         'idempotency-key': testIdempKey
       },
       body: JSON.stringify({
@@ -95,6 +105,7 @@ async function runDurabilityTests() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenUser}`,
         'idempotency-key': testIdempKey
       },
       body: JSON.stringify({
@@ -113,11 +124,9 @@ async function runDurabilityTests() {
     // Test 4: Complete Payment and Wipe Memory Again
     // -------------------------------------------------------------
     console.log('\n[Test 4] Completing payment and wiping memory to test replay defense...');
-    const mockTrxID = `TRX_DUR_${Date.now()}`;
     const cbRes = await fetch(`${baseUrl}/callback?paymentID=${paymentID}&status=success&mock=true`, {
       redirect: 'manual'
     });
-    // In mock mode callback activates subscription or redirects
     console.log('  Payment callback completed with status: ' + cbRes.status);
 
     // Wipe memory again
@@ -145,7 +154,10 @@ async function runDurabilityTests() {
 
     const execRes = await fetch(`${baseUrl}/execute`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenUser}`
+      },
       body: JSON.stringify({ paymentID })
     });
     const execBody = await execRes.json();
