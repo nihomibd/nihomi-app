@@ -14,7 +14,8 @@ export type V2Route =
   | 'founder'
   | 'terms'
   | 'privacy'
-  | 'refund';
+  | 'refund'
+  | 'legacy';
 
 export interface V2NavigationParams {
   lessonId?: string;

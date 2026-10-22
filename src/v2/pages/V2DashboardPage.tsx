@@ -28,7 +28,7 @@ interface V2DashboardPageProps {
 }
 
 export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) => {
-  const { user } = useAuth();
+  const { user, progress, openAuthModal } = useAuth();
   const [knowledgeState, setKnowledgeState] = useState(loadLearnerKnowledgeState());
   const [isCalibrationOpen, setIsCalibrationOpen] = useState(false);
 
@@ -40,8 +40,9 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
   const grammarStatus = isGrammarEligible(knowledgeState);
 
   const knownKanaCount = knowledgeState.knownHiragana.length + knowledgeState.knownKatakana.length;
-  const streakDays = (user as any)?.streakDays || 5;
-  const xpPoints = (user as any)?.xpPoints || 1240;
+  // Authentic learner progress telemetry — 0 fallback if new/unauthenticated, zero fake 5-day / 1240-XP mocks
+  const streakDays = progress?.currentStreak ?? progress?.streakDays ?? (user?.streakDays ?? 0);
+  const xpPoints = progress?.experiencePoints ?? ((user as any)?.xpPoints ?? 0);
 
   const handleStartMission = () => {
     if (nextMission.type === 'kana' || nextMission.type === 'word_unlock') {
@@ -124,6 +125,24 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
           </button>
         </div>
       </div>
+
+      {/* Unauthenticated / Guest Learner Notice */}
+      {!user && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+            <p className="text-xs sm:text-sm">
+              <strong className="text-white">গেস্ট মোড (Unauthenticated):</strong> স্ট্রিক এবং জাপানিজ লার্নিং ডিএনএ ক্লাউডে চিরস্থায়ীভাবে সংরক্ষণ করতে ফ্রি সাইন-আপ করুন।
+            </p>
+          </div>
+          <button
+            onClick={() => openAuthModal('login')}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:opacity-90 text-white font-bold text-xs shrink-0 cursor-pointer shadow-md shadow-red-600/20"
+          >
+            লগইন / সাইন-আপ
+          </button>
+        </div>
+      )}
 
       {/* 2. Primary Next Best Mission Hero */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E2338] via-[#141726] to-[#0A0A12] border-2 border-[#E45147]/40 p-6 sm:p-8 shadow-2xl shadow-red-600/10">

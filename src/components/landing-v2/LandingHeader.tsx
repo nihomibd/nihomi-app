@@ -76,6 +76,17 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({ onNavigate, onOpen
 
         {/* Right: Controls & CTAs */}
         <div className="flex items-center gap-2.5 shrink-0">
+          {/* V2 Greenfield Switcher Badge */}
+          <button
+            id="nav-v2-greenfield-switch"
+            type="button"
+            onClick={() => onNavigate('v2')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-xs bg-gradient-to-r from-red-600 to-amber-500 text-white shadow-md shadow-red-600/30 hover:opacity-95 transition-all cursor-pointer whitespace-nowrap"
+            title="Return to V2 Experience"
+          >
+            <span>V2 REBUILD</span>
+          </button>
+
           {/* Language Selector Dropdown */}
           <div className="relative">
             <button

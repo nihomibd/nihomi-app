@@ -23,7 +23,8 @@
     "verify:server": "tsx scripts/verify-server-lifecycle.ts",
     "test:e2e": "tsx scripts/run-e2e-with-server.ts",
     "verify:gate": "tsx scripts/verify-release-gate-matrix.ts",
-    "smoke:live": "tsx scripts/production-live-smoke-test.ts"
+    "smoke:live": "tsx scripts/production-live-smoke-test.ts",
+    "test:v2-browser": "tsx scripts/run-v2-browser-e2e.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

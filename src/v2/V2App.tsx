@@ -71,12 +71,19 @@ const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
       return { route: 'privacy', params };
     case 'refund':
       return { route: 'refund', params };
+    case 'legacy':
+    case 'classic':
+      return { route: 'legacy', params };
     default:
       return { route: 'landing', params };
   }
 };
 
-export const V2App: React.FC = () => {
+export interface V2AppProps {
+  onNavigateLegacy?: () => void;
+}
+
+export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
   const [currentRoute, setCurrentRoute] = useState<V2Route>('landing');
   const [navParams, setNavParams] = useState<V2NavigationParams>({});
 
@@ -84,6 +91,14 @@ export const V2App: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const { route, params } = parseHashRoute();
+      if (route === 'legacy') {
+        if (onNavigateLegacy) {
+          onNavigateLegacy();
+        } else {
+          window.location.href = '/legacy';
+        }
+        return;
+      }
       setCurrentRoute(route);
       setNavParams(params);
     };
@@ -91,9 +106,18 @@ export const V2App: React.FC = () => {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [onNavigateLegacy]);
 
   const handleNavigate = (route: V2Route, params?: V2NavigationParams) => {
+    if (route === 'legacy') {
+      if (onNavigateLegacy) {
+        onNavigateLegacy();
+      } else {
+        window.location.href = '/legacy';
+      }
+      return;
+    }
+
     setCurrentRoute(route);
     setNavParams(params || {});
 

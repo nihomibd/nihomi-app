@@ -123,6 +123,7 @@ const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: stri
 
 const KNOWN_VIEWS = new Set([
   'v2',
+  'legacy',
   'journey', 'mission',
   'start', 'ad-campaign', 'campaign', 'ad',
   'growth', 'admin-growth', 'founder/growth',
@@ -217,6 +218,12 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   }
   const queryCert = searchParams.get('certId') || searchParams.get('id');
 
+    if (path === '/legacy' || path.startsWith('/legacy') || searchParams.get('mode') === 'legacy' || (typeof window !== 'undefined' && window.location.hash === '#legacy')) {
+    return { view: 'landing', params: { legacy: true } };
+  }
+  if (path === '/' || path === '') {
+    return { view: 'v2', params: {} };
+  }
   if (path === '/v2' || path.startsWith('/v2/')) {
     return { view: 'v2', params: {} };
   }
@@ -371,7 +378,7 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     return { view: 'verify-cert', params: { certId: targetCert ? decodeURIComponent(targetCert) : '' } };
   }
   if (path === '/' || path === '') {
-    return { view: 'landing', params: {} };
+    return { view: 'v2', params: {} };
   }
 
   const cleanPath = path.replace(/^\//, '');
@@ -648,6 +655,15 @@ export const App: React.FC = () => {
         </span>
         <span className="text-[11px] text-stone-500 mt-1">Connecting to Nihomi Control Plane</span>
       </div>
+    );
+  }
+  if (currentView === 'v2') {
+    return (
+      <NomiProvider initialView="v2">
+        <Suspense fallback={<ViewLoadingFallback />}>
+          <V2App onNavigateLegacy={() => handleNavigate('landing', { legacy: true })} />
+        </Suspense>
+      </NomiProvider>
     );
   }
 

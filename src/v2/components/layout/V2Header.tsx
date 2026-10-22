@@ -152,6 +152,13 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
                       <span>ফাউন্ডার ককপিট</span>
                     </button>
                   )}
+                  <button
+                    onClick={() => handleNavClick('legacy')}
+                    className="w-full text-left px-3 py-2 text-xs font-bold text-stone-400 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
+                  >
+                    <Compass className="w-4 h-4 text-stone-400" />
+                    <span>লেগ্যাসি ভিউ (Classic)</span>
+                  </button>
                   <div className="border-t border-white/10 mt-1 pt-1">
                     <button
                       onClick={() => {
@@ -215,6 +222,13 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
               <span>Founder Command Center</span>
             </button>
           )}
+          <button
+            onClick={() => handleNavClick('legacy')}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-medium text-stone-400 hover:text-white hover:bg-white/5 border border-dashed border-white/10"
+          >
+            <Compass className="w-4 h-4 text-stone-400" />
+            <span>লেগ্যাসি ভিউ (Classic Platform)</span>
+          </button>
         </div>
       )}
     </header>
