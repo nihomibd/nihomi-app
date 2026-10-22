@@ -1,3 +1,4 @@
+import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../core/curriculum/learnerKnowledgeState';
 // NIHOMI.COM — COMPLETE JAPANESE KANA SYLLABARY DATABASE
 // 46 Seion Hiragana + 46 Seion Katakana + Dakuon + Handakuon + Yoon
 
@@ -1747,7 +1748,14 @@ export function getMasteredKanaList(): string[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem('nihomi_mastered_kana');
-    return raw ? JSON.parse(raw) : [];
+    const legacyList: string[] = raw ? JSON.parse(raw) : [];
+    const kState = loadLearnerKnowledgeState();
+    const unified = new Set<string>([
+      ...legacyList,
+      ...(kState.knownHiragana || []),
+      ...(kState.knownKatakana || [])
+    ]);
+    return Array.from(unified);
   } catch {
     return [];
   }
@@ -1765,6 +1773,38 @@ export function toggleMasteredKana(char: string): { isMastered: boolean; totalMa
       updated = [...current, char];
     }
     localStorage.setItem('nihomi_mastered_kana', JSON.stringify(updated));
+
+    // Bi-directional synchronization with Canonical LearnerKnowledgeState
+    try {
+      const kState = loadLearnerKnowledgeState();
+      const kanaObj = ALL_KANA.find((k) => k.char === char);
+      const isKatakana = kanaObj ? kanaObj.type === 'katakana' : false;
+      const targetField = isKatakana ? 'knownKatakana' : 'knownHiragana';
+      const currentList = kState[targetField] || [];
+
+      let nextList: string[];
+      if (exists) {
+        nextList = currentList.filter((c) => c !== char);
+      } else {
+        nextList = currentList.includes(char) ? currentList : [...currentList, char];
+      }
+
+      const updatedState = {
+        ...kState,
+        [targetField]: nextList,
+        totalXp: exists ? Math.max(0, kState.totalXp - 15) : kState.totalXp + 15
+      };
+      saveLearnerKnowledgeState(updatedState);
+    } catch (err) {
+      console.warn('[KanaData] Failed to sync with LearnerKnowledgeState:', err);
+    }
+
+    window.dispatchEvent(
+      new CustomEvent('nihomi:memory-updated', {
+        detail: { char, isMastered: !exists, totalMastered: updated.length }
+      })
+    );
+
     return { isMastered: !exists, totalMastered: updated.length };
   } catch {
     return { isMastered: false, totalMastered: 0 };

@@ -28,7 +28,13 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
   const [knowledgeState, setKnowledgeState] = useState(loadLearnerKnowledgeState());
 
   useEffect(() => {
-    setKnowledgeState(loadLearnerKnowledgeState());
+    const handleUpdate = () => setKnowledgeState(loadLearnerKnowledgeState());
+    window.addEventListener('nihomi:knowledge-state-updated', handleUpdate);
+    window.addEventListener('nihomi:memory-updated', handleUpdate);
+    return () => {
+      window.removeEventListener('nihomi:knowledge-state-updated', handleUpdate);
+      window.removeEventListener('nihomi:memory-updated', handleUpdate);
+    };
   }, []);
 
   const grammarEligibility = isGrammarEligible(knowledgeState);

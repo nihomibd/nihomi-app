@@ -61,7 +61,11 @@ export const V2KanaPage: React.FC<V2KanaPageProps> = ({
     setMasteredList(getMasteredKanaList());
     const handler = () => setMasteredList(getMasteredKanaList());
     window.addEventListener('nihomi:memory-updated', handler);
-    return () => window.removeEventListener('nihomi:memory-updated', handler);
+    window.addEventListener('nihomi:knowledge-state-updated', handler);
+    return () => {
+      window.removeEventListener('nihomi:memory-updated', handler);
+      window.removeEventListener('nihomi:knowledge-state-updated', handler);
+    };
   }, []);
 
   useEffect(() => {

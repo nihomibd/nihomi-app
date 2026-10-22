@@ -33,7 +33,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
   const [isCalibrationOpen, setIsCalibrationOpen] = useState(false);
 
   useEffect(() => {
-    setKnowledgeState(loadLearnerKnowledgeState());
+    const handleUpdate = () => setKnowledgeState(loadLearnerKnowledgeState());
+    window.addEventListener('nihomi:knowledge-state-updated', handleUpdate);
+    window.addEventListener('nihomi:memory-updated', handleUpdate);
+    return () => {
+      window.removeEventListener('nihomi:knowledge-state-updated', handleUpdate);
+      window.removeEventListener('nihomi:memory-updated', handleUpdate);
+    };
   }, []);
 
   const nextMission = getNextBestMission(knowledgeState);
