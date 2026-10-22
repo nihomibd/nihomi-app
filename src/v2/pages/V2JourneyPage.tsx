@@ -17,6 +17,9 @@ export const V2JourneyPage: React.FC<V2JourneyPageProps> = ({ onNavigate }) => {
     else if (view === 'kana') targetRoute = 'kana';
     else if (view === 'baito' || view === 'workos') targetRoute = 'workos';
     else if (view === 'pricing') targetRoute = 'pricing';
+    else if (view === 'exam' || view === 'mock-exams' || view === 'mock-exam-runner') targetRoute = 'exam';
+    else if (view === 'rirekisho' || view === 'cv' || view === 'resume') targetRoute = 'rirekisho';
+    else if (view === 'founder' || view === 'admin') targetRoute = 'founder';
     onNavigate(targetRoute, params);
   };
 
