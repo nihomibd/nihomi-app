@@ -41,7 +41,7 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <footer className="w-full bg-[#0E101A] border-t border-[#F6F0E6]/10 text-stone-400 text-xs py-12 px-4 sm:px-6 lg:px-8 mt-auto">
+    <footer className="w-full bg-[#0E101A] border-t border-[#F6F0E6]/10 text-stone-400 text-xs py-12 pb-24 lg:pb-12 px-4 sm:px-6 lg:px-8 mt-auto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/10">
         
         {/* Col 1: Brand & Compliance */}
@@ -155,7 +155,7 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
         <p>© 2026 NIHOMI (にほみ) — All Rights Reserved. Built with care for Bangladesh scholars.</p>
         
         {/* Version V2 indicator at the very bottom as explicitly directed by founder */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" id="v2-footer-version-badge">
           <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-stone-400 font-mono text-[10px] font-bold">
             Version V2
           </span>

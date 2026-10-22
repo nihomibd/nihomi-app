@@ -11,12 +11,25 @@ import {
 } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../types';
 import { JisRirekishoStudio } from '../../components/simulation/JisRirekishoStudio';
+import { loopOrchestrator } from '../../core/loop';
+import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 interface V2RirekishoPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
 }
 
 export const V2RirekishoPage: React.FC<V2RirekishoPageProps> = ({ onNavigate }) => {
+  const cvLoopBriefing = React.useMemo(() => {
+    try {
+      const state = loadLearnerKnowledgeState();
+      return loopOrchestrator.startLoopActivity({
+        domain: 'cv-rirekisho',
+        learnerState: state
+      });
+    } catch {
+      return null;
+    }
+  }, []);
   const handleAdapterNavigate = (view: string, params?: Record<string, any>) => {
     let target: V2Route = 'dashboard';
     if (view === 'pricing') target = 'pricing';
@@ -48,7 +61,7 @@ export const V2RirekishoPage: React.FC<V2RirekishoPageProps> = ({ onNavigate }) 
 
         <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-3 py-1.5 rounded-xl">
           <ShieldCheck className="w-4 h-4" />
-          <span>JIS Z 8303 STANDARD FORMAT</span>
+          <span>{cvLoopBriefing?.briefingTitleBn || 'JIS Z 8303 STANDARD FORMAT'}</span>
         </div>
       </div>
 

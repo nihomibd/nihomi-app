@@ -31,7 +31,21 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   // Strict Founder Invariant: ONLY mdtanvirkabirbiplob@gmail.com
-  const isFounder = user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+  const isFounder = Boolean(
+    (user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') ||
+    (() => {
+      try {
+        if (typeof window !== 'undefined') {
+          const raw = localStorage.getItem('nihomi_user');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            return parsed?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+          }
+        }
+      } catch {}
+      return false;
+    })()
+  );
 
   const navLinks: { route: V2Route; label: string; icon: React.FC<{ className?: string }> }[] = [
     { route: 'landing', label: 'হোম', icon: Sparkles },
