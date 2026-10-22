@@ -59121,7 +59121,7 @@ var init_coinWalletService = __esm({
        * Claims genuine learning reward with idempotency and monthly cap enforcement.
        */
       async claimReward(params) {
-        const { userId, eventType, idempotencyKey, tier = "free" } = params;
+        const { userId, eventType, idempotencyKey: idempotencyKey2, tier = "free" } = params;
         const baseReward = REWARD_CONFIG.values[eventType];
         if (!baseReward) {
           return { success: false, coinsAwarded: 0, newBalance: 0, error: `Invalid reward event type: ${eventType}` };
@@ -59137,7 +59137,7 @@ var init_coinWalletService = __esm({
               await client.query("BEGIN");
               const existingEvent = await client.query(
                 `SELECT * FROM public.nihomi_reward_events WHERE idempotency_key = $1`,
-                [idempotencyKey]
+                [idempotencyKey2]
               );
               if (existingEvent.rows.length > 0) {
                 await client.query("ROLLBACK");
@@ -59176,7 +59176,7 @@ var init_coinWalletService = __esm({
               await client.query(
                 `INSERT INTO public.nihomi_reward_events (idempotency_key, user_id, event_type, coins_awarded, created_at)
              VALUES ($1, $2, $3, $4, NOW())`,
-                [idempotencyKey, userId, eventType, actualCoins]
+                [idempotencyKey2, userId, eventType, actualCoins]
               );
               const updateRes = await client.query(
                 `INSERT INTO public.coin_wallets (
@@ -59202,7 +59202,7 @@ var init_coinWalletService = __esm({
                 `INSERT INTO public.coin_transactions (
               transaction_id, user_id, type, amount, source, reference_id, description, balance_after, created_at
             ) VALUES ($1, $2, 'REWARD', $3, 'REWARD', $4, $5, $6, NOW())`,
-                [txId, userId, actualCoins, idempotencyKey, `Nihomi Reward: ${eventType}`, newBalance]
+                [txId, userId, actualCoins, idempotencyKey2, `Nihomi Reward: ${eventType}`, newBalance]
               );
               await client.query("COMMIT");
               db.creditUserCoinsAndAI(userId, actualCoins, 0, `Nihomi Reward: ${eventType}`);
@@ -67807,15 +67807,15 @@ billingRouter.get("/coin-packs", (_req, res) => {
 billingRouter.post("/rewards/claim", authenticateUser2, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { eventType, idempotencyKey } = req.body;
-    if (!eventType || !idempotencyKey) {
+    const { eventType, idempotencyKey: idempotencyKey2 } = req.body;
+    if (!eventType || !idempotencyKey2) {
       return res.status(400).json({ error: "eventType and idempotencyKey are required" });
     }
     const sub = await subscriptionService.getUserSubscription(userId);
     const result = await coinWalletService.claimReward({
       userId,
       eventType,
-      idempotencyKey,
+      idempotencyKey: idempotencyKey2,
       tier: sub.tier
     });
     return res.json({
@@ -68760,6 +68760,8 @@ var idempotencyRegistry = /* @__PURE__ */ new Map();
 var userRateLimitRegistry = /* @__PURE__ */ new Map();
 var processedTrxRegistry = /* @__PURE__ */ new Set();
 var paymentAttemptRegistry = /* @__PURE__ */ new Map();
+var inFlightUserCreations = /* @__PURE__ */ new Map();
+var inFlightIdempotencyCreations = /* @__PURE__ */ new Map();
 async function getDurableIdempotency(key) {
   if (!key) return null;
   const cached = idempotencyRegistry.get(key);
@@ -69028,9 +69030,9 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
         code: "AUTH_REQUIRED"
       });
     }
-    const resolvedUserId = user.id;
+    const resolvedUserId2 = user.id;
     const resolvedEmail = user.email || "student@nihomi.com";
-    if (req.body.userId && req.body.userId !== resolvedUserId && user.role !== "admin") {
+    if (req.body.userId && req.body.userId !== resolvedUserId2 && user.role !== "admin") {
       return res.status(400).json({
         success: false,
         error: "Forbidden: User ID in request body does not match authenticated session.",
@@ -69074,10 +69076,26 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
     }
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1e3 + Math.random() * 9e3)}`;
-    const idempotencyKey = clientKey || req.headers["idempotency-key"] || req.headers["x-idempotency-key"] || `idemp_${resolvedUserId}_${selectedTier}_${interval}`;
-    const cachedAttempt = await getDurableIdempotency(idempotencyKey);
+    const idempotencyKey2 = clientKey || req.headers["idempotency-key"] || req.headers["x-idempotency-key"] || `idemp_${resolvedUserId2}_${selectedTier}_${interval}`;
+    if (inFlightIdempotencyCreations.has(idempotencyKey2)) {
+      try {
+        const inFlightRes = await inFlightIdempotencyCreations.get(idempotencyKey2);
+        res.setHeader("X-Idempotent-Replay", "true");
+        return res.json(inFlightRes);
+      } catch (err) {
+      }
+    }
+    if (inFlightUserCreations.has(resolvedUserId2)) {
+      try {
+        const inFlightRes = await inFlightUserCreations.get(resolvedUserId2);
+        res.setHeader("X-Duplicate-Suppression", "true");
+        return res.json(inFlightRes);
+      } catch (err) {
+      }
+    }
+    const cachedAttempt = await getDurableIdempotency(idempotencyKey2);
     if (cachedAttempt && Date.now() - cachedAttempt.createdAt < 15 * 60 * 1e3) {
-      if (cachedAttempt.userId !== resolvedUserId && user.role !== "admin") {
+      if (cachedAttempt.userId !== resolvedUserId2 && user.role !== "admin") {
         return res.status(403).json({
           success: false,
           error: "Idempotency key collision across accounts.",
@@ -69087,7 +69105,7 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
       res.setHeader("X-Idempotent-Replay", "true");
       return res.json(cachedAttempt.response);
     }
-    const lastUserReq = userRateLimitRegistry.get(resolvedUserId);
+    const lastUserReq = userRateLimitRegistry.get(resolvedUserId2);
     const now = Date.now();
     if (lastUserReq && now - lastUserReq.timestamp < 2e3) {
       if (lastUserReq.response) {
@@ -69100,6 +69118,14 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
         code: "RATE_LIMITED"
       });
     }
+    let resolveInFlight;
+    let rejectInFlight2;
+    const inFlightPromise = new Promise((resolve, reject) => {
+      resolveInFlight = resolve;
+      rejectInFlight2 = reject;
+    });
+    inFlightIdempotencyCreations.set(idempotencyKey2, inFlightPromise);
+    inFlightUserCreations.set(resolvedUserId2, inFlightPromise);
     const appUrl = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
     if (isMockRequested && isMockPaymentAllowed()) {
@@ -69117,9 +69143,9 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
         state: "PENDING",
         planNameBn: planConfig.nameBn
       };
-      await saveDurableIdempotency(idempotencyKey, {
-        key: idempotencyKey,
-        userId: resolvedUserId,
+      await saveDurableIdempotency(idempotencyKey2, {
+        key: idempotencyKey2,
+        userId: resolvedUserId2,
         tier: selectedTier,
         interval,
         amount,
@@ -69128,10 +69154,10 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
         createdAt: now,
         expiresAt: now + 15 * 60 * 1e3
       });
-      userRateLimitRegistry.set(resolvedUserId, { timestamp: now, key: idempotencyKey, response: mockResponse });
+      userRateLimitRegistry.set(resolvedUserId2, { timestamp: now, key: idempotencyKey2, response: mockResponse });
       await saveDurablePaymentAttempt(mockPaymentID, {
         paymentID: mockPaymentID,
-        userId: resolvedUserId,
+        userId: resolvedUserId2,
         tier: selectedTier,
         interval,
         amount,
@@ -69140,6 +69166,9 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
         createdAt: now,
         updatedAt: now
       });
+      resolveInFlight(mockResponse);
+      inFlightIdempotencyCreations.delete(idempotencyKey2);
+      inFlightUserCreations.delete(resolvedUserId2);
       return res.json(mockResponse);
     }
     const isBkashConfigured = Boolean(
@@ -69147,29 +69176,33 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
     );
     if (!isBkashConfigured) {
       console.log("[PaymentRouter] bKash gateway NOT_CONFIGURED. Returning honest state.");
-      return res.json({
+      const notConfiguredPayload = {
         success: false,
         gatewayStatus: "NOT_CONFIGURED",
         state: "NOT_CONFIGURED",
         messageBn: "\u09AC\u09BF\u0995\u09BE\u09B6 \u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964",
         message: "\u09AC\u09BF\u0995\u09BE\u09B6 \u0985\u09A8\u09B2\u09BE\u0987\u09A8 \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u098F\u0996\u09A8\u09CB \u0995\u09A8\u09AB\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09B9\u09DF\u09A8\u09BF\u0964 \u0986\u09AA\u09A8\u09BE\u09B0 \u0995\u09BE\u099B \u09A5\u09C7\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09BE\u0995\u09BE \u09A8\u09C7\u0993\u09DF\u09BE \u09B9\u09DF\u09A8\u09BF\u0964"
-      });
+      };
+      resolveInFlight(notConfiguredPayload);
+      inFlightIdempotencyCreations.delete(idempotencyKey2);
+      inFlightUserCreations.delete(resolvedUserId2);
+      return res.json(notConfiguredPayload);
     }
     const bkashRes = await bKashService.createPayment({
       amount,
       invoiceNumber,
-      payerReference: resolvedUserId,
+      payerReference: resolvedUserId2,
       callbackUrl: finalCallbackUrl
     });
     if (isDatabaseConfigured()) {
       try {
         let dbUser = await prisma.user.findFirst({
-          where: { OR: [{ id: resolvedUserId }, { email: resolvedEmail }] }
+          where: { OR: [{ id: resolvedUserId2 }, { email: resolvedEmail }] }
         });
         if (!dbUser && resolvedEmail) {
           dbUser = await prisma.user.create({
             data: {
-              id: resolvedUserId.startsWith("usr_") ? resolvedUserId : void 0,
+              id: resolvedUserId2.startsWith("usr_") ? resolvedUserId2 : void 0,
               email: resolvedEmail,
               name: resolvedEmail.split("@")[0],
               subscriptionTier: "free"
@@ -69204,7 +69237,7 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
     }
     try {
       const memPayment = db.createPayment({
-        userId: resolvedUserId,
+        userId: resolvedUserId2,
         planId: selectedTier,
         planName: planConfig.name,
         billingInterval: selectedTier === "n5_lifetime" ? "yearly" : interval || "monthly",
@@ -69226,7 +69259,7 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
       db.save();
       await saveDurablePaymentAttempt(bkashRes.paymentID, {
         paymentID: bkashRes.paymentID,
-        userId: resolvedUserId,
+        userId: resolvedUserId2,
         tier: selectedTier,
         interval,
         amount,
@@ -69238,7 +69271,7 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
     } catch (memErr) {
       console.warn("[PaymentRouter] In-memory payment init log error:", memErr?.message);
     }
-    return res.json({
+    const finalLiveResponse = {
       success: true,
       paymentID: bkashRes.paymentID,
       bkashURL: bkashRes.bkashURL,
@@ -69247,8 +69280,15 @@ paymentRouter.post("/create", requireAuth2, async (req, res) => {
       currency: "BDT",
       tier: selectedTier,
       planNameBn: planConfig.nameBn
-    });
+    };
+    resolveInFlight(finalLiveResponse);
+    inFlightIdempotencyCreations.delete(idempotencyKey2);
+    inFlightUserCreations.delete(resolvedUserId2);
+    return res.json(finalLiveResponse);
   } catch (err) {
+    rejectInFlight?.(err);
+    inFlightIdempotencyCreations.delete(idempotencyKey);
+    inFlightUserCreations.delete(resolvedUserId);
     console.error("[PaymentRouter] Checkout initiation failed:", err);
     return res.status(500).json({
       success: false,
@@ -69321,16 +69361,16 @@ paymentRouter.get("/callback", async (req, res) => {
       await saveDurablePaymentAttempt(paymentID, existingAttempt);
       return res.redirect(`/payment/callback?status=failed&error=currency_mismatch&paymentID=${encodeURIComponent(paymentID)}`);
     }
-    const resolvedUserId = existingAttempt.userId;
+    const resolvedUserId2 = existingAttempt.userId;
     const resolvedTier = existingAttempt.tier;
     const resolvedInterval = existingAttempt.interval;
     const amount = existingAttempt.amount;
     const invoiceNumber = existingAttempt.invoiceNumber;
     let resolvedEmail = "student@nihomi.com";
-    const user = db.findUserById(resolvedUserId);
+    const user = db.findUserById(resolvedUserId2);
     if (user?.email) resolvedEmail = user.email;
     await subscriptionService.activateSubscription({
-      userId: resolvedUserId,
+      userId: resolvedUserId2,
       userEmail: resolvedEmail,
       tier: resolvedTier,
       billingInterval: resolvedInterval,
@@ -69844,7 +69884,7 @@ paymentRouter.post("/sslcommerz/init", requireAuth2, async (req, res) => {
       amount = getCanonicalPrice("pro", interval);
     }
     const planConfig = SUBSCRIPTION_TIERS[selectedTier] || SUBSCRIPTION_TIERS.pro;
-    const resolvedUserId = user2?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
+    const resolvedUserId2 = user2?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user2?.email || req.body.email || "student@nihomi.com";
     const resolvedName = name || user2?.name || resolvedEmail.split("@")[0];
     const resolvedPhone = phone || user2?.phone || "+8801834-348966";
@@ -69865,7 +69905,7 @@ paymentRouter.post("/sslcommerz/init", requireAuth2, async (req, res) => {
       amount,
       currency,
       planTier: selectedTier,
-      userId: resolvedUserId,
+      userId: resolvedUserId2,
       userEmail: resolvedEmail,
       userName: resolvedName,
       userPhone: resolvedPhone,
@@ -69996,10 +70036,10 @@ paymentRouter.post("/stripe/create-checkout-session", requireAuth2, async (req, 
         amount = planConfig.priceBdt || 599;
       }
     }
-    const resolvedUserId = user2?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
+    const resolvedUserId2 = user2?.id || req.body.userId || "usr_guest_" + Math.random().toString(36).substring(2, 8);
     const resolvedEmail = user2?.email || req.body.email || "student@nihomi.com";
     const sessionResult = await stripePaymentService.createCheckoutSession({
-      userId: resolvedUserId,
+      userId: resolvedUserId2,
       userEmail: resolvedEmail,
       planTier: selectedTier,
       amount,

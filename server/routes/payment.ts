@@ -64,6 +64,8 @@ export const idempotencyRegistry = new Map<string, IdempotencyRecord>();
 export const userRateLimitRegistry = new Map<string, { timestamp: number; key: string; response: any }>();
 export const processedTrxRegistry = new Set<string>();
 export const paymentAttemptRegistry = new Map<string, PaymentAttemptRecord>();
+export const inFlightUserCreations = new Map<string, Promise<any>>();
+export const inFlightIdempotencyCreations = new Map<string, Promise<any>>();
 
 // ========================================================
 // DATABASE-BACKED DURABLE PAYMENT STATE & IDEMPOTENCY
@@ -502,6 +504,24 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
       `idemp_${resolvedUserId}_${selectedTier}_${interval}`
     );
 
+    // 0. Concurrency in-flight lock: If another request for the same idempotency key is actively running
+    if (inFlightIdempotencyCreations.has(idempotencyKey)) {
+      try {
+        const inFlightRes = await inFlightIdempotencyCreations.get(idempotencyKey);
+        res.setHeader('X-Idempotent-Replay', 'true');
+        return res.json(inFlightRes);
+      } catch (err) {}
+    }
+
+    // 0b. Concurrency in-flight lock for user: Rapid double-click suppression
+    if (inFlightUserCreations.has(resolvedUserId)) {
+      try {
+        const inFlightRes = await inFlightUserCreations.get(resolvedUserId);
+        res.setHeader('X-Duplicate-Suppression', 'true');
+        return res.json(inFlightRes);
+      } catch (err) {}
+    }
+
     // 1. Idempotency Check: Return existing attempt if within 15-minute validity window
     const cachedAttempt = await getDurableIdempotency(idempotencyKey);
     if (cachedAttempt && (Date.now() - cachedAttempt.createdAt) < 15 * 60 * 1000) {
@@ -530,6 +550,15 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
         code: 'RATE_LIMITED'
       });
     }
+
+    let resolveInFlight!: (val: any) => void;
+    let rejectInFlight!: (err: any) => void;
+    const inFlightPromise = new Promise<any>((resolve, reject) => {
+      resolveInFlight = resolve;
+      rejectInFlight = reject;
+    });
+    inFlightIdempotencyCreations.set(idempotencyKey, inFlightPromise);
+    inFlightUserCreations.set(resolvedUserId, inFlightPromise);
 
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
@@ -577,6 +606,9 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
         updatedAt: now,
       });
 
+      resolveInFlight(mockResponse);
+      inFlightIdempotencyCreations.delete(idempotencyKey);
+      inFlightUserCreations.delete(resolvedUserId);
       return res.json(mockResponse);
     }
 
@@ -587,13 +619,17 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
     );
     if (!isBkashConfigured) {
       console.log('[PaymentRouter] bKash gateway NOT_CONFIGURED. Returning honest state.');
-      return res.json({
+      const notConfiguredPayload = {
         success: false,
         gatewayStatus: 'NOT_CONFIGURED',
         state: 'NOT_CONFIGURED',
         messageBn: 'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।',
         message: 'বিকাশ অনলাইন পেমেন্ট এখনো কনফিগার করা হয়নি। আপনার কাছ থেকে কোনো টাকা নেওয়া হয়নি।'
-      });
+      };
+      resolveInFlight(notConfiguredPayload);
+      inFlightIdempotencyCreations.delete(idempotencyKey);
+      inFlightUserCreations.delete(resolvedUserId);
+      return res.json(notConfiguredPayload);
     }
 
     // Call bKash Tokenized Checkout Create API
@@ -689,7 +725,7 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
       console.warn('[PaymentRouter] In-memory payment init log error:', memErr?.message);
     }
 
-    return res.json({
+    const finalLiveResponse = {
       success: true,
       paymentID: bkashRes.paymentID,
       bkashURL: bkashRes.bkashURL,
@@ -698,8 +734,15 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
       currency: 'BDT',
       tier: selectedTier,
       planNameBn: planConfig.nameBn,
-    });
+    };
+    resolveInFlight(finalLiveResponse);
+    inFlightIdempotencyCreations.delete(idempotencyKey);
+    inFlightUserCreations.delete(resolvedUserId);
+    return res.json(finalLiveResponse);
   } catch (err: any) {
+    rejectInFlight?.(err);
+    inFlightIdempotencyCreations.delete(idempotencyKey);
+    inFlightUserCreations.delete(resolvedUserId);
     console.error('[PaymentRouter] Checkout initiation failed:', err);
     return res.status(500).json({
       success: false,
