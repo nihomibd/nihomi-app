@@ -27,7 +27,8 @@
     "test:v2-browser": "tsx scripts/run-v2-browser-e2e.ts",
     "test:knowledge-state": "tsx scripts/test-knowledge-state-persistence.ts",
     "test:adapters": "tsx scripts/test-domain-adapters.ts",
-    "test:orchestrator": "tsx scripts/test-loop-orchestrator.ts"
+    "test:orchestrator": "tsx scripts/test-loop-orchestrator.ts",
+    "verify:preflight": "tsx scripts/verify-preflight-release-gate.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

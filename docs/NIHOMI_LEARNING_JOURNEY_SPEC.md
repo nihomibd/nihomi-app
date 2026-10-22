@@ -129,6 +129,32 @@ If a learner attempts to access a URL directly (e.g. `?lessonId=n5-l2` or `/less
 - The curriculum engine strictly refuses to render premature lessons.
 
 ---
+
+## 7. N.I.H.O.M.I SHARED LEARNING LOOP ORCHESTRATION
+
+The entire learner journey is orchestrated through the unified 11-step loop implemented in `src/core/loop/orchestrator.ts`:
+
+```mermaid
+flowchart LR
+    S1[1. Understand State] --> S2[2. Diagnose]
+    S2 --> S3[3. Select Objective]
+    S3 --> S4[4. Teach / Brief]
+    S4 --> S5[5. Practice / Simulate]
+    S5 --> S6[6. Evaluate Attempt]
+    S6 --> S7[7. Correct & Retry]
+    S7 --> S8[8. Save Evidence]
+    S8 --> S9[9. Update State]
+    S9 --> S10[10. Schedule Review]
+    S10 --> S11[11. Recommend Next Action]
+```
+
+Across all four domains:
+1. **Japanese Learning (`japanese-learning`):** Evaluates vector stroke accuracy and cumulative lattice prerequisites.
+2. **7-Eleven Workplace POS (`pos-simulation`):** Evaluates 5-beat register shifts and awards `baito_conbini_cashier`.
+3. **JLPT Exam OS (`exam-os`):** Evaluates 180-point mock scoring and enqueues missed questions into `reviewQueue`.
+4. **JIS Relocation CV (`cv-rirekisho`):** Verifies 10 mandatory JIS fields with strict Zero Hallucination Law user truth confirmation.
+
+---
 *Maintained by the Nihomi Lead Product & Curriculum Engineering Team.*
 
 <!-- NIHOMI_FOUNDER_APPROVAL_RECORD:START -->

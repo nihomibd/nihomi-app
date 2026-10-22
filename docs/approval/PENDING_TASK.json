@@ -1,6 +1,47 @@
 {
   "schema_version": "1.0",
-  "status": "idle",
-  "task_id": null,
-  "message": "No task is currently awaiting approval."
+  "status": "pending",
+  "task_id": "NIHOMI-WP05-BROWSER-E2E-AND-RELEASE-GATE",
+  "title": "Execute Cross-Domain E2E Test Suite and Pre-Flight Commercial Release Gate Verification",
+  "objective": "Execute headless browser test suite across all 4 learning domains (Japanese Kana, 7-Eleven POS Cashier Simulation, Exam OS, JIS Rirekisho Studio), verify cross-domain state telemetry synchronization, update canonical system documentation, and establish automated pre-flight release gate verification.",
+  "domain": "platform",
+  "in_scope": [
+    "Execute full headless browser E2E test runs verifying interactive multi-domain flows (Kana vector tracing, 5-beat Conbini shift, JLPT scoring, and JIS CV truth verification)",
+    "Verify cross-domain telemetry synchronization (state updates, reviewQueue scheduling, and server persistence)",
+    "Update canonical architecture and domain documentation (docs/NIHOMI_PRODUCT_DOMAIN_MATRIX.md, docs/NIHOMI_LEARNING_JOURNEY_SPEC.md)",
+    "Run complete pre-flight release gate validation across all test suites (lint, build, adapters, orchestrator, roles, knowledge-state, curriculum, browser)"
+  ],
+  "out_of_scope": [
+    "Directly pushing to live production environment or performing public DNS cutover without Founder release authorization",
+    "Modifying live production database schema or executing unreviewed database migrations",
+    "Altering live payment billing keys or live production secrets"
+  ],
+  "acceptance_criteria": [
+    "100% of headless browser test journeys across all 4 domains pass without DOM defects or console errors",
+    "Multi-domain state updates synchronize to local and server knowledge state durably",
+    "Documentation reflects the canonical N.I.H.O.M.I Shared Loop Orchestrator architecture",
+    "Release gate automated check verifies all safety invariants before any release candidate seal"
+  ],
+  "verification": [
+    "npm run lint (0 errors)",
+    "npm run test:adapters (77/77 passed)",
+    "npm run test:orchestrator (38/38 passed)",
+    "npm run test:roles (5/5 passed)",
+    "npm run test:knowledge-state (12/12 passed)",
+    "npm run validate:curriculum (17/17 passed)",
+    "npm run test:v2-browser (14/14 passed)",
+    "npm run build (clean production build)"
+  ],
+  "risks": [
+    "Automated browser tests timing out on resource-constrained environments. Mitigation: Maintain generous retry windows and clean headless process termination."
+  ],
+  "dependencies": [
+    "src/core/loop/orchestrator.ts",
+    "src/core/adapters/index.ts",
+    "src/v2/pages/V2DashboardPage.tsx",
+    "scripts/run-v2-browser-e2e.ts"
+  ],
+  "base_commit": "2d74884",
+  "created_at": "2026-10-22T17:00:00.000Z",
+  "proposed_by": "Antigravity Lead System Architect"
 }
