@@ -7,6 +7,7 @@ import { createServer as createViteServer } from 'vite';
 
 import { authRouter } from './server/routes/auth.js';
 import { learningRouter } from './server/routes/learning.js';
+import { progressRouter } from './server/routes/progress.js';
 import { quizzesRouter } from './server/routes/quizzes.js';
 import { workRouter } from './server/routes/work.js';
 import { aiRouter } from './server/routes/ai.js';
@@ -175,6 +176,8 @@ async function startServer() {
   app.use('/api/payment', paymentRouter);
   app.use('/api/billing', billingRouter);
   app.use('/api/learning', learningRouter);
+  app.use('/api/progress', progressRouter);
+  app.use('/progress', progressRouter);
   app.use('/api/quizzes', quizzesRouter);
   app.use('/api/work-japanese', workRouter);
   app.use('/api/ai', aiRouter);

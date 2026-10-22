@@ -20,6 +20,7 @@ import { V2Route, V2NavigationParams } from '../types';
 import { ConbiniPosCashierSimulator } from '../../components/simulation/ConbiniPosCashierSimulator';
 import { DEFAULT_BAITO_SCENARIOS } from '../../views/BaitoOsView';
 import { speakJapanese } from '../../lib/tts';
+import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 interface V2WorkOsPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
@@ -30,6 +31,24 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
 
   const activeScenario = DEFAULT_BAITO_SCENARIOS[selectedScenarioIndex] || DEFAULT_BAITO_SCENARIOS[0];
+  const [completionNotice, setCompletionNotice] = useState<{ score: number; xp: number } | null>(null);
+
+  const handleCompleteOrder = (score: number, totalYen: number) => {
+    const earnedXp = Math.max(30, Math.round(score * 5));
+    try {
+      const current = loadLearnerKnowledgeState();
+      const updatedSkills = Array.from(new Set([...(current.masteredSkills || []), 'baito_conbini_cashier']));
+      const updated = {
+        ...current,
+        totalXp: (current.totalXp || 0) + earnedXp,
+        masteredSkills: updatedSkills
+      };
+      saveLearnerKnowledgeState(updated);
+      setCompletionNotice({ score, xp: earnedXp });
+    } catch (e) {
+      console.warn('[WorkOS] Could not save order completion:', e);
+    }
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
@@ -92,10 +111,24 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
 
           {/* Embedded Cashier Simulator Engine */}
           <div className="bg-[#141726] border border-white/10 rounded-3xl p-4 sm:p-6 shadow-2xl">
+            {completionNotice && (
+              <div id="workos-shift-completion-banner" className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 flex items-center justify-between animate-fadeIn mb-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <span className="text-xs sm:text-sm font-bold">
+                    অভিনন্দন! আপনি সফলভাবে কনবিনি ক্যাশিয়ার শিফট সম্পন্ন করেছেন (স্কোর: {completionNotice.score}%)। +{completionNotice.xp} XP অর্জিত হয়েছে!
+                  </span>
+                </div>
+                <button
+                  onClick={() => setCompletionNotice(null)}
+                  className="text-xs px-3 py-1 rounded-lg bg-emerald-800/40 hover:bg-emerald-700/50 text-white cursor-pointer"
+                >
+                  ঠিক আছে
+                </button>
+              </div>
+            )}
             <ConbiniPosCashierSimulator
-              onCompleteOrder={(score, totalYen) => {
-                console.log(`Order completed with score ${score}, total ¥${totalYen}`);
-              }}
+              onCompleteOrder={handleCompleteOrder}
             />
           </div>
         </div>

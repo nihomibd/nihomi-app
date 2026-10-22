@@ -53532,6 +53532,29 @@ var init_db = __esm({
       getProgress(userId) {
         return this.getProgressByUserId(userId);
       }
+      getKnowledgeState(userId) {
+        const p = this.getProgressByUserId(userId);
+        return p.knowledgeState || null;
+      }
+      saveKnowledgeState(userId, knowledgeState) {
+        this.assertProductionStorageSafety("saveKnowledgeState");
+        const p = this.getProgressByUserId(userId);
+        p.knowledgeState = knowledgeState;
+        if (typeof knowledgeState?.totalXp === "number" && knowledgeState.totalXp > (p.experiencePoints || 0)) {
+          p.experiencePoints = knowledgeState.totalXp;
+        }
+        if (typeof knowledgeState?.streakDays === "number" && knowledgeState.streakDays > (p.currentStreak || 0)) {
+          p.currentStreak = knowledgeState.streakDays;
+        }
+        p.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.save();
+        const user = this.findUserById(userId);
+        if (user) {
+          this.syncUserToSupabase(user, this.getProfile(userId), p).catch(() => {
+          });
+        }
+        return p.knowledgeState;
+      }
       completeLesson(userId, lessonId, studyMinutes = 15) {
         this.assertProductionStorageSafety("completeLesson");
         const p = this.getProgressByUserId(userId);
@@ -62144,10 +62167,50 @@ learningRouter.get("/progress/streak", optionalAuth2, (req, res) => {
   }
 });
 
-// server/routes/quizzes.ts
+// server/routes/progress.ts
 init_db();
 import { Router as Router3 } from "express";
-var quizzesRouter = Router3();
+var progressRouter = Router3();
+progressRouter.get("/knowledge-state", requireAuth2, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const state = db.getKnowledgeState(userId);
+    return res.json({
+      success: true,
+      knowledgeState: state
+    });
+  } catch (err) {
+    console.error("[ProgressRouter] Error getting knowledge state:", err?.message);
+    return res.status(500).json({ success: false, error: "Failed to retrieve knowledge state" });
+  }
+});
+progressRouter.post("/knowledge-state", requireAuth2, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { knowledgeState } = req.body;
+    if (!knowledgeState || typeof knowledgeState !== "object") {
+      return res.status(400).json({
+        success: false,
+        error: "knowledgeState object is required",
+        code: "INVALID_KNOWLEDGE_STATE"
+      });
+    }
+    const saved = db.saveKnowledgeState(userId, knowledgeState);
+    return res.json({
+      success: true,
+      knowledgeState: saved,
+      message: "Learner knowledge state saved successfully"
+    });
+  } catch (err) {
+    console.error("[ProgressRouter] Error saving knowledge state:", err?.message);
+    return res.status(500).json({ success: false, error: "Failed to save knowledge state" });
+  }
+});
+
+// server/routes/quizzes.ts
+init_db();
+import { Router as Router4 } from "express";
+var quizzesRouter = Router4();
 quizzesRouter.get("/", optionalAuth2, (req, res) => {
   const level = req.query.level;
   const quizzes = db.getQuizzes(false, level);
@@ -62242,8 +62305,8 @@ quizzesRouter.get("/attempts/history", requireAuth2, (req, res) => {
 
 // server/routes/work.ts
 init_db();
-import { Router as Router4 } from "express";
-var workRouter = Router4();
+import { Router as Router5 } from "express";
+var workRouter = Router5();
 workRouter.get("/", optionalAuth2, (req, res) => {
   const category = req.query.category;
   const items = db.getWorkJapanese(category, false);
@@ -62285,7 +62348,7 @@ workRouter.get("/:id", optionalAuth2, (req, res) => {
 
 // server/routes/ai.ts
 init_db();
-import { Router as Router5 } from "express";
+import { Router as Router6 } from "express";
 
 // server/gemini.ts
 import { GoogleGenAI } from "@google/genai";
@@ -63564,7 +63627,7 @@ function recordAiCostUsage(userId, actualTokens = 400, operationType = "coach") 
 init_subscriptionService();
 init_coinWalletService();
 import crypto7 from "crypto";
-var aiRouter = Router5();
+var aiRouter = Router6();
 var guestTurnTracker = /* @__PURE__ */ new Map();
 function getGuestTurnCount(guestId) {
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
@@ -64052,7 +64115,7 @@ aiRouter.post(
 
 // server/routes/admin.ts
 init_db();
-import { Router as Router6 } from "express";
+import { Router as Router7 } from "express";
 
 // server/services/databaseBackupService.ts
 init_db();
@@ -64867,7 +64930,7 @@ var StateIntegrityService = class {
 var stateIntegrityService = new StateIntegrityService();
 
 // server/routes/admin.ts
-var adminRouter = Router6();
+var adminRouter = Router7();
 adminRouter.post("/bootstrap", async (req, res) => {
   try {
     const targetEmail = (req.body?.email || "mdtanvirkabirbiplob@gmail.com").trim().toLowerCase();
@@ -65522,7 +65585,7 @@ adminRouter.post("/payments/verify-bkash", verifyPaymentHandler);
 
 // server/routes/billing.ts
 init_db();
-import { Router as Router7 } from "express";
+import { Router as Router8 } from "express";
 
 // server/middleware/rbac.ts
 init_env();
@@ -66432,7 +66495,7 @@ var PaymentProviderFactory = class {
 // server/routes/billing.ts
 init_coinWalletService();
 init_subscriptionService();
-var billingRouter = Router7();
+var billingRouter = Router8();
 function getIntervalDurationMonths(interval) {
   switch (interval) {
     case "yearly":
@@ -67871,7 +67934,7 @@ billingRouter.post("/auto-topup", authenticateUser2, async (req, res) => {
 });
 
 // server/routes/payment.ts
-import { Router as Router8 } from "express";
+import { Router as Router9 } from "express";
 
 // server/services/bKashService.ts
 var BKashService = class _BKashService {
@@ -68755,7 +68818,7 @@ var isMockPaymentAllowed = () => {
   const isTest = process.env.NODE_ENV === "test" || process.env.ENABLE_PAYMENT_MOCK === "true";
   return isTest && !isProduction;
 };
-var paymentRouter = Router8();
+var paymentRouter = Router9();
 var idempotencyRegistry = /* @__PURE__ */ new Map();
 var userRateLimitRegistry = /* @__PURE__ */ new Map();
 var processedTrxRegistry = /* @__PURE__ */ new Set();
@@ -70090,8 +70153,8 @@ paymentRouter.post("/stripe/webhook", async (req, res) => {
 });
 
 // server/routes/coordination.ts
-import { Router as Router9 } from "express";
-var coordinationRouter = Router9();
+import { Router as Router10 } from "express";
+var coordinationRouter = Router10();
 coordinationRouter.get("/live-cohorts", optionalAuth2, (req, res) => {
   const cohorts = [
     {
@@ -70272,8 +70335,8 @@ coordinationRouter.post("/bdtrip24/verify-ticket", requireAuth2, (req, res) => {
 
 // server/routes/japanTwin.ts
 init_db();
-import { Router as Router10 } from "express";
-var japanTwinRouter = Router10();
+import { Router as Router11 } from "express";
+var japanTwinRouter = Router11();
 japanTwinRouter.get("/profile", requireAuth2, (req, res) => {
   const userId = req.user.id;
   const profile = db.getProfileByUserId(userId);
@@ -70415,8 +70478,8 @@ japanTwinRouter.post("/simulate-day", requireAuth2, async (req, res) => {
 
 // server/routes/ghostMode.ts
 init_db();
-import { Router as Router11 } from "express";
-var ghostModeRouter = Router11();
+import { Router as Router12 } from "express";
+var ghostModeRouter = Router12();
 ghostModeRouter.get("/active-ghosts", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
@@ -70566,7 +70629,7 @@ ghostModeRouter.post("/create-ghost", requireAuth2, (req, res) => {
 
 // server/routes/mockExams.ts
 init_db();
-import { Router as Router12 } from "express";
+import { Router as Router13 } from "express";
 
 // server/middleware/subscriptionGate.ts
 init_subscriptionService();
@@ -70812,7 +70875,7 @@ var MockExamPersistenceService = class {
 
 // server/routes/mockExams.ts
 init_subscriptionService();
-var mockExamsRouter = Router12();
+var mockExamsRouter = Router13();
 mockExamsRouter.get("/verify-certificate/:certificateId", async (req, res) => {
   try {
     const cert = await MockExamPersistenceService.verifyCertificate(req.params.certificateId);
@@ -71049,8 +71112,8 @@ mockExamsRouter.get("/user/history", requireAuth2, (req, res) => {
 
 // server/routes/systemHealth.ts
 init_db();
-import { Router as Router13 } from "express";
-var systemHealthRouter = Router13();
+import { Router as Router14 } from "express";
+var systemHealthRouter = Router14();
 systemHealthRouter.get("/status", (req, res) => {
   const isGeminiReady = !!process.env.GEMINI_API_KEY;
   const isEpsReady = !!(process.env.EPS_MERCHANT_ID && process.env.EPS_API_KEY);
@@ -71117,8 +71180,8 @@ systemHealthRouter.post("/repair", requireAdmin, async (req, res) => {
 
 // server/routes/health.ts
 init_db();
-import { Router as Router14 } from "express";
-var healthRouter = Router14();
+import { Router as Router15 } from "express";
+var healthRouter = Router15();
 healthRouter.get("/", async (_req, res) => {
   const startTime = Date.now();
   const isGeminiConfigured = !!process.env.GEMINI_API_KEY;
@@ -71223,7 +71286,7 @@ healthRouter.get("/ping", (_req, res) => {
 
 // server/routes/contentEngine.ts
 init_db();
-import { Router as Router15 } from "express";
+import { Router as Router16 } from "express";
 import multer from "multer";
 import crypto15 from "crypto";
 import path7 from "path";
@@ -83933,7 +83996,7 @@ var BackgroundJobQueueService = class {
 var backgroundJobQueue = new BackgroundJobQueueService();
 
 // server/routes/contentEngine.ts
-var contentEngineRouter = Router15();
+var contentEngineRouter = Router16();
 var upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -84506,7 +84569,7 @@ contentEngineRouter.post(
 );
 
 // server/routes/contentStudio.ts
-import { Router as Router16 } from "express";
+import { Router as Router17 } from "express";
 import multer2 from "multer";
 
 // server/services/content-studio/sourceExtractionService.ts
@@ -86671,7 +86734,7 @@ var TestPipelineRunnerService = class {
 var testPipelineRunnerService = new TestPipelineRunnerService();
 
 // server/routes/contentStudio.ts
-var contentStudioRouter = Router16();
+var contentStudioRouter = Router17();
 var upload2 = multer2({
   storage: multer2.memoryStorage(),
   limits: {
@@ -87366,7 +87429,7 @@ contentStudioRouter.delete("/batch/jobs/completed", requireStaff2, (req, res) =>
 });
 
 // server/routes/whiteLabelRoutes.ts
-import { Router as Router17 } from "express";
+import { Router as Router18 } from "express";
 
 // src/core/content-engine/contentDesignSystem.ts
 var NIHOMI_CORE_DESIGN_SYSTEM = {
@@ -88936,7 +88999,7 @@ var ContentAnalyticsService = class {
 };
 
 // server/routes/whiteLabelRoutes.ts
-var whiteLabelRouter = Router17();
+var whiteLabelRouter = Router18();
 whiteLabelRouter.get("/design-tokens", (_req, res) => {
   const tokens = ContentDesignSystem.getDesignTokens();
   res.json({ success: true, tokens });
@@ -88969,8 +89032,8 @@ whiteLabelRouter.post("/certificate/generate", (req, res) => {
 
 // server/routes/studyPlan.ts
 init_db();
-import { Router as Router18 } from "express";
-var studyPlanRouter = Router18();
+import { Router as Router19 } from "express";
+var studyPlanRouter = Router19();
 studyPlanRouter.get("/", optionalAuth2, (req, res) => {
   try {
     const userId = req.user?.id || "usr-student-01";
@@ -89095,8 +89158,8 @@ studyPlanRouter.post("/recalculate", requireAuth2, (req, res) => {
 
 // server/routes/baitoSimulation.ts
 init_db();
-import { Router as Router19 } from "express";
-var baitoSimulationRouter = Router19();
+import { Router as Router20 } from "express";
+var baitoSimulationRouter = Router20();
 baitoSimulationRouter.get("/scenarios", optionalAuth2, (req, res) => {
   const scenarios = db.getBaitoScenarios();
   return res.json({
@@ -89194,8 +89257,8 @@ baitoSimulationRouter.post("/keirekisho/save", optionalAuth2, (req, res) => {
 
 // server/routes/srsRouter.ts
 init_db();
-import { Router as Router20 } from "express";
-var srsRouter = Router20();
+import { Router as Router21 } from "express";
+var srsRouter = Router21();
 function resolveUserId(req) {
   return req.user?.id || "usr-student-01";
 }
@@ -89402,10 +89465,10 @@ srsRouter.post("/card/:cardId/reset", optionalAuth2, (req, res) => {
 
 // server/routes/analytics.ts
 init_db();
-import { Router as Router21 } from "express";
+import { Router as Router22 } from "express";
 init_env();
 init_learnerAnalyticsService();
-var analyticsRouter = Router21();
+var analyticsRouter = Router22();
 analyticsRouter.get("/overview", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
@@ -89700,7 +89763,7 @@ analyticsRouter.get("/growth", optionalAuth2, (req, res) => {
 // server/routes/voice.ts
 init_db();
 import crypto20 from "crypto";
-import { Router as Router22 } from "express";
+import { Router as Router23 } from "express";
 init_pitchAccentService();
 
 // server/services/drillSeedGeneratorService.ts
@@ -93806,7 +93869,7 @@ var ScenarioRoleplayService = class {
 };
 
 // server/routes/voice.ts
-var voiceRouter = Router22();
+var voiceRouter = Router23();
 async function handlePitchAccentEvaluation(req, res) {
   try {
     const userId = req.user.id;
@@ -94562,8 +94625,8 @@ voiceRouter.get("/public/verify-certificate/:certId", (req, res) => {
 
 // server/routes/referral.ts
 init_db();
-import { Router as Router23 } from "express";
-var referralRouter = Router23();
+import { Router as Router24 } from "express";
+var referralRouter = Router24();
 function getReferralRecords() {
   if (!db.data.referralRecords) {
     db.data.referralRecords = [];
@@ -94696,10 +94759,10 @@ referralRouter.get("/stats", optionalAuth2, (req, res) => {
 });
 
 // server/routes/dashboard.ts
-import { Router as Router24 } from "express";
+import { Router as Router25 } from "express";
 init_env();
 init_db();
-var dashboardRouter = Router24();
+var dashboardRouter = Router25();
 function buildStudentDashboardData(userId) {
   const user = db.findUserById(userId);
   const profile = db.getProfileByUserId(userId);
@@ -96484,7 +96547,7 @@ var cloud_default = router;
 
 // server/routes/founder.ts
 init_db();
-import { Router as Router25 } from "express";
+import { Router as Router26 } from "express";
 
 // server/services/aiCooRuntimeService.ts
 init_db();
@@ -97178,7 +97241,7 @@ var aiCoo = AiCooRuntimeService.getInstance();
 
 // server/routes/founder.ts
 init_env();
-var founderRouter = Router25();
+var founderRouter = Router26();
 founderRouter.use(requireFounder);
 founderRouter.get("/summary", (req, res) => {
   try {
@@ -97899,6 +97962,7 @@ mountRouter("/auth", authRouter);
 mountRouter("/payment", paymentRouter);
 mountRouter("/billing", billingRouter);
 mountRouter("/learning", learningRouter);
+mountRouter("/progress", progressRouter);
 mountRouter("/quizzes", quizzesRouter);
 mountRouter("/work-japanese", workRouter);
 mountRouter("/ai", aiRouter);

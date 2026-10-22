@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import { authRouter } from './routes/auth.js';
 import { learningRouter } from './routes/learning.js';
+import { progressRouter } from './routes/progress.js';
 import { quizzesRouter } from './routes/quizzes.js';
 import { workRouter } from './routes/work.js';
 import { aiRouter } from './routes/ai.js';
@@ -97,6 +98,7 @@ mountRouter('/auth', authRouter);
 mountRouter('/payment', paymentRouter);
 mountRouter('/billing', billingRouter);
 mountRouter('/learning', learningRouter);
+mountRouter('/progress', progressRouter);
 mountRouter('/quizzes', quizzesRouter);
 mountRouter('/work-japanese', workRouter);
 mountRouter('/ai', aiRouter);

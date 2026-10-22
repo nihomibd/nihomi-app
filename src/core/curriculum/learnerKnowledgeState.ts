@@ -1,3 +1,67 @@
+let _syncTimeout: any = null;
+
+export function syncKnowledgeStateToServer(state: LearnerKnowledgeState): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const token = localStorage.getItem('nihomi_auth_token');
+    if (!token) return;
+    if (_syncTimeout) clearTimeout(_syncTimeout);
+    _syncTimeout = setTimeout(async () => {
+      try {
+        await fetch('/api/progress/knowledge-state', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ knowledgeState: state })
+        });
+      } catch (e) {}
+    }, 400);
+  } catch {}
+}
+
+export async function hydrateKnowledgeStateFromServer(userId?: string): Promise<LearnerKnowledgeState | null> {
+  if (typeof window === 'undefined') return null;
+  try {
+    const token = localStorage.getItem('nihomi_auth_token');
+    if (!token) return null;
+    const res = await fetch('/api/progress/knowledge-state', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data?.success && data.knowledgeState) {
+      const serverState = data.knowledgeState;
+      const localState = loadLearnerKnowledgeState(userId);
+      const merged: LearnerKnowledgeState = {
+        ...localState,
+        ...serverState,
+        knownHiragana: Array.from(new Set([...(localState.knownHiragana || []), ...(serverState.knownHiragana || [])])),
+        knownKatakana: Array.from(new Set([...(localState.knownKatakana || []), ...(serverState.knownKatakana || [])])),
+        knownDakuten: Array.from(new Set([...(localState.knownDakuten || []), ...(serverState.knownDakuten || [])])),
+        knownHandakuten: Array.from(new Set([...(localState.knownHandakuten || []), ...(serverState.knownHandakuten || [])])),
+        knownCombinationKana: Array.from(new Set([...(localState.knownCombinationKana || []), ...(serverState.knownCombinationKana || [])])),
+        knownReadingRules: Array.from(new Set([...(localState.knownReadingRules || []), ...(serverState.knownReadingRules || [])])),
+        knownVocabulary: Array.from(new Set([...(localState.knownVocabulary || []), ...(serverState.knownVocabulary || [])])),
+        knownKanji: Array.from(new Set([...(localState.knownKanji || []), ...(serverState.knownKanji || [])])),
+        knownGrammar: Array.from(new Set([...(localState.knownGrammar || []), ...(serverState.knownGrammar || [])])),
+        masteredSkills: Array.from(new Set([...(localState.masteredSkills || []), ...(serverState.masteredSkills || [])])),
+        totalXp: Math.max(localState.totalXp || 0, serverState.totalXp || 0),
+        streakDays: Math.max(localState.streakDays || 0, serverState.streakDays || 0)
+      };
+      const key = getStorageKey(userId);
+      localStorage.setItem(key, JSON.stringify(merged));
+      localStorage.setItem(PRIMARY_KNOWLEDGE_STATE_KEY, JSON.stringify(merged));
+      window.dispatchEvent(new CustomEvent('nihomi:knowledge-state-updated', { detail: merged }));
+      return merged;
+    }
+  } catch (err) {
+    console.warn('[KnowledgeState] Server hydration fallback to local:', err);
+  }
+  return null;
+}
+
 // src/core/curriculum/learnerKnowledgeState.ts
 // Canonical Learner Knowledge State — NIHOMI Core Curriculum Engine
 
@@ -125,6 +189,7 @@ export function saveLearnerKnowledgeState(state: LearnerKnowledgeState, userId?:
       localStorage.setItem(PRIMARY_KNOWLEDGE_STATE_KEY, serialized);
     }
     window.dispatchEvent(new CustomEvent('nihomi:knowledge-state-updated', { detail: state }));
+    syncKnowledgeStateToServer(state);
   } catch (err) {
     console.warn('[KnowledgeState] Storage failed:', err);
   }

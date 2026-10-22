@@ -2115,6 +2115,30 @@ class Database {
     return this.getProgressByUserId(userId);
   }
 
+  public getKnowledgeState(userId: string): any | null {
+    const p = this.getProgressByUserId(userId);
+    return (p as any).knowledgeState || null;
+  }
+
+  public saveKnowledgeState(userId: string, knowledgeState: any): any {
+    this.assertProductionStorageSafety('saveKnowledgeState');
+    const p = this.getProgressByUserId(userId);
+    (p as any).knowledgeState = knowledgeState;
+    if (typeof knowledgeState?.totalXp === 'number' && knowledgeState.totalXp > (p.experiencePoints || 0)) {
+      p.experiencePoints = knowledgeState.totalXp;
+    }
+    if (typeof knowledgeState?.streakDays === 'number' && knowledgeState.streakDays > (p.currentStreak || 0)) {
+      p.currentStreak = knowledgeState.streakDays;
+    }
+    p.updatedAt = new Date().toISOString();
+    this.save();
+    const user = this.findUserById(userId);
+    if (user) {
+      this.syncUserToSupabase(user, this.getProfile(userId), p).catch(() => {});
+    }
+    return (p as any).knowledgeState;
+  }
+
   public completeLesson(userId: string, lessonId: string, studyMinutes = 15): UserProgress {
     this.assertProductionStorageSafety('completeLesson');
     const p = this.getProgressByUserId(userId);

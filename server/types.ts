@@ -41,6 +41,7 @@ export interface UserProgress {
   longestStreak: number;
   lastActiveDate: string; // YYYY-MM-DD
   experiencePoints: number;
+  knowledgeState?: any;
   updatedAt: string;
 }
 

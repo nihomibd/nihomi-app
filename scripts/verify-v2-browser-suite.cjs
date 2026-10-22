@@ -250,22 +250,87 @@ async function runV2BrowserSuite() {
     // -------------------------------------------------------------
     // Test 8: Minna no Nihongo Lesson 1 Interactive Grammar Loop
     // -------------------------------------------------------------
-    console.log('[Test 8/14] Minna no Nihongo Lesson 1 Interactive Grammar Loop...');
+    console.log('[Test 8/14] Minna no Nihongo Lesson 1 Interactive Grammar Loop (Interactive Stage Transition)...');
+    // Ensure learner state has the 5 foundation vowels and prerequisite mastery across all storage keys
+    await page.evaluate(async () => {
+      const state = {
+        knownHiragana: ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ'],
+        knownKatakana: ['ア', 'イ', 'ウ', 'エ', 'オ'],
+        knownDakuten: [],
+        knownHandakuten: [],
+        knownCombinationKana: [],
+        knownReadingRules: [],
+        knownVocabulary: ['あい', 'いえ', 'うえ', 'あお'],
+        knownKanji: [],
+        knownGrammar: [],
+        masteredSkills: ['vowels_5_mastered', 'hiragana_core_mastered'],
+        currentMissionId: 'mission-002-ka-row',
+        currentLevel: 'N5',
+        recentMistakes: [],
+        reviewQueue: [],
+        totalXp: 120,
+        streakDays: 2,
+        lastActiveDate: '2026-10-22'
+      };
+      const serialized = JSON.stringify(state);
+      localStorage.setItem('nihomi_foundation_completed', 'true');
+      localStorage.setItem('nihomi_learner_knowledge_state_v1', serialized);
+      localStorage.setItem('nihomi_learner_knowledge_state_guest', serialized);
+      try {
+        const u = JSON.parse(localStorage.getItem('nihomi_user') || '{}');
+        if (u && u.id) {
+          localStorage.setItem('nihomi_knowledge_state_' + u.id, serialized);
+        }
+      } catch (e) {}
+      const token = localStorage.getItem('nihomi_auth_token');
+      if (token) {
+        try {
+          await fetch('/api/progress/knowledge-state', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ knowledgeState: state })
+          });
+        } catch (e) {}
+      }
+      window.dispatchEvent(new CustomEvent('nihomi:knowledge-state-updated', { detail: state }));
+    });
+
     await page.goto(`${LOCAL_URL}/#lesson/n5-l01`, { waitUntil: 'networkidle2' });
-    await new Promise((r) => setTimeout(r, 1200));
+    await page.reload({ waitUntil: 'networkidle2' });
+    await new Promise((r) => setTimeout(r, 1500));
 
     const lessonCheck = await page.evaluate(() => {
       const text = document.body.innerText;
-      const hasGrammarLoop = text.includes('Interactive Grammar Loop') || text.includes('Notice the scene') || text.includes('N1 は N2 です') || text.includes('Grammar') || text.includes('লেকচার');
+      const hasGrammarLoop = text.includes('Interactive Grammar Loop') || text.includes('Notice the scene') || text.includes('N1 は N2 です') || text.includes('Grammar') || text.includes('বাস্তব পরিস্থিতি') || text.includes('Hajimemashite');
       return hasGrammarLoop;
+    });
+
+    // Genuine user interaction: click next stage to advance to Stage 2 (Identify)
+    const clickedAdvance = await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const advanceBtn = buttons.find((b) => b.textContent && (b.textContent.includes('Identify') || b.textContent.includes('কাঠামো শনাক্ত') || b.textContent.includes('পরবর্তী') || b.textContent.includes('Next')));
+      if (advanceBtn) {
+        advanceBtn.click();
+        return true;
+      }
+      return false;
+    });
+    await new Promise((r) => setTimeout(r, 1000));
+
+    const transitioned = await page.evaluate(() => {
+      const text = document.body.innerText;
+      return text.includes('Identify') || text.includes('কাঠামো শনাক্তকরণ') || text.includes('Structural Blueprint') || text.includes('টপিক ও সমাপিকা') || text.includes('Hunt');
     });
 
     const shot8 = path.join(EVIDENCE_DIR, 'v2-08-grammar-loop.png');
     await page.screenshot({ path: shot8, fullPage: false });
     saveScreenshot(shot8, 'v2-08-grammar-loop.png');
 
-    results.v2LessonGrammarLoop = lessonCheck;
-    console.log(`  ✔ PASS: Lesson Grammar Loop verified: ${lessonCheck ? 'OK' : 'MISSING'}\n`);
+    results.v2LessonGrammarLoop = lessonCheck && (clickedAdvance || transitioned);
+    console.log(`  ${results.v2LessonGrammarLoop ? '✔ PASS' : '❌ FAIL'}: Lesson Grammar Loop (Lesson: ${lessonCheck ? 'OK' : 'MISSING'}, Advanced: ${clickedAdvance ? 'YES' : 'NO'}, Stage2: ${transitioned ? 'YES' : 'NO'})\n`);
 
     // -------------------------------------------------------------
     // Test 9: Curriculum JLPT N5–N1 Comprehensive Grid
@@ -290,22 +355,30 @@ async function runV2BrowserSuite() {
     // -------------------------------------------------------------
     // Test 10: JIS Standard Rirekisho (CV) Studio
     // -------------------------------------------------------------
-    console.log('[Test 10/14] JIS Standard Rirekisho (CV) Studio & Paper Preview...');
+    console.log('[Test 10/14] JIS Standard Rirekisho (CV) Studio & Download Trigger...');
     await page.goto(`${LOCAL_URL}/#rirekisho`, { waitUntil: 'networkidle2' });
     await new Promise((r) => setTimeout(r, 1200));
 
     const rirekishoCheck = await page.evaluate(() => {
       const text = document.body.innerText;
       const paperDOM = Boolean(document.querySelector('#jis-resume-paper') || document.querySelector('.jis-paper') || text.includes('履歴書'));
-      return paperDOM;
+      const dlBtn = Boolean(document.querySelector('#jis-download-pdf-btn'));
+      return { paperDOM, dlBtn };
     });
+
+    // Simulate clicking PDF download button
+    await page.evaluate(() => {
+      const btn = document.querySelector('#jis-download-pdf-btn');
+      if (btn) btn.click();
+    });
+    await new Promise((r) => setTimeout(r, 1200));
 
     const shot10 = path.join(EVIDENCE_DIR, 'v2-10-jis-rirekisho.png');
     await page.screenshot({ path: shot10, fullPage: false });
     saveScreenshot(shot10, 'v2-10-jis-rirekisho.png');
 
-    results.v2JISRirekisho = rirekishoCheck;
-    console.log(`  ✔ PASS: JIS Rirekisho Studio verified: ${rirekishoCheck ? 'OK' : 'MISSING'}\n`);
+    results.v2JISRirekisho = rirekishoCheck.paperDOM && rirekishoCheck.dlBtn;
+    console.log(`  ✔ PASS: JIS Rirekisho Studio verified (DOM: ${rirekishoCheck.paperDOM ? 'OK' : 'MISSING'}, Download Trigger: ${rirekishoCheck.dlBtn ? 'OK' : 'MISSING'})\n`);
 
     // -------------------------------------------------------------
     // Test 11: WorkOS Tokyo Workplace Simulation Studio

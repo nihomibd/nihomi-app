@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { setStoredToken, apiRequest, getStoredToken, clearAllStoredAuthData } from '../lib/api';
 import { getSavedOnboardingAnswers, syncOnboardingToProfile, checkAndConsumeOAuthPendingOnboarding } from '../core/onboarding/onboardingStorage';
 import { trackNihomiEvent } from '../utils/analytics';
+import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowledgeState';
 
 export interface User {
   id: string;
@@ -398,6 +399,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             safeStorage.setItem('nihomi_auth_token', res.token);
           }
           setUserData(res.user);
+          hydrateKnowledgeStateFromServer(res.user.id).catch(() => {});
           if (res.profile) {
             setProfile(res.profile);
             safeStorage.setItem('nihomi_profile', JSON.stringify(res.profile));

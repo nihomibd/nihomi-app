@@ -16,6 +16,7 @@ import { V2FounderPage } from './pages/V2FounderPage';
 import { TermsPage } from '../pages/TermsPage';
 import { PrivacyPage } from '../pages/PrivacyPage';
 import { RefundPolicyPage } from '../pages/RefundPolicyPage';
+import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowledgeState';
 
 const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   if (typeof window === 'undefined') return { route: 'landing', params: {} };
@@ -91,6 +92,10 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
   const [navParams, setNavParams] = useState<V2NavigationParams>(() => parseHashRoute().params);
 
   // Synchronize route from window.location.hash on initial mount & hashchange
+  useEffect(() => {
+    hydrateKnowledgeStateFromServer().catch(() => {});
+  }, []);
+
   useEffect(() => {
     const handleHashChange = () => {
       const { route, params } = parseHashRoute();
