@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP13-PUBLIC-PRODUCTION-DEPLOYMENT-AND-LIVE-SANITY-CHECK",
-  "scope_fingerprint": "b24a4ce3907cc7078b673f82f7e081ee92f781500c32bf4806453cde1e0d7787",
-  "approved_at": "2026-10-23T02:16:33.000Z",
+  "task_id": "NIHOMI-WP14-PRODUCTION-RELEASE-FINAL-SIGN-OFF-AND-MAINTENANCE",
+  "scope_fingerprint": "d7a3ce6b65f4fbff8a6f858e81439e7a2b0c145c8e077614e0ccd2d77111226f",
+  "approved_at": "2026-10-23T02:22:58.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Live Production Cloudflare/VPS Deployment Verification, Domain Health & Founder Final Acceptance",
-    "domain": "Japanese Learning / Platform Infrastructure",
-    "base_commit": "cc51862"
+    "title": "Commercial Production Release Final Sign-Off, Telemetry Monitoring & Student Onboarding Protocol",
+    "domain": "Release Governance / Commercial Operations",
+    "base_commit": "1c97c25"
   }
 }
