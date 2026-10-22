@@ -136,18 +136,18 @@ check('Free users have access to basic JIS CV Builder & 100 Kana Studio', () => 
 });
 
 check('WorkOS Konbini simulation and JLPT Exam OS require Pro tier', () => {
-  const freeWorkOs = evaluateEntitlement(freeSubject, 'workos_simulation');
+  const freeWorkOs = evaluateEntitlement(freeSubject, 'voice_twin_interview_lab');
   assert.equal(freeWorkOs.granted, false, 'WorkOS simulation must be gated for free users');
   assert.equal(freeWorkOs.requiredTier, 'PRO');
 
-  const proWorkOs = evaluateEntitlement(proSubject, 'workos_simulation');
+  const proWorkOs = evaluateEntitlement(proSubject, 'voice_twin_interview_lab');
   assert.equal(proWorkOs.granted, true, 'WorkOS simulation must be granted for Pro users');
 
-  const freeExam = evaluateEntitlement(freeSubject, 'jlpt_mock_full');
+  const freeExam = evaluateEntitlement(freeSubject, 'jlpt_full_mocks');
   assert.equal(freeExam.granted, false, 'Full JLPT Mock exam must be gated for free users');
   assert.equal(freeExam.requiredTier, 'PRO');
 
-  const proExam = evaluateEntitlement(proSubject, 'jlpt_mock_full');
+  const proExam = evaluateEntitlement(proSubject, 'jlpt_full_mocks');
   assert.equal(proExam.granted, true, 'Full JLPT Mock exam must be granted for Pro users');
 });
 

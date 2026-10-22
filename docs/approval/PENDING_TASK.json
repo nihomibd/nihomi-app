@@ -1,47 +1,46 @@
 {
   "schema_version": "1.0",
   "status": "pending",
-  "task_id": "NIHOMI-WP11-PRODUCTION-PAYMENT-GATEWAYS-AND-COMMERCIAL-RELEASE",
-  "title": "Production Payment Gateways Hardening, Branded Checkout Flow & Automated Tax Invoicing",
-  "objective": "Harden bKash, SSLCommerz/Nagad, and Stripe payment services for production release with robust error handling, honest credential disclosures, brand-aligned checkout UI, automated durable subscription state hydration, and official downloadable payment tax receipts/invoices.",
-  "domain": "monetization",
+  "task_id": "NIHOMI-WP12-PRODUCTION-CANDIDATE-MOBILE-POLISH-AND-FINAL-RELEASE-GATE",
+  "title": "Production Candidate Mobile Touchpoint Polish, End-to-End Route Auditing & Final Release Gate Dossier",
+  "objective": "Perform a comprehensive mobile and desktop usability audit across all V2 learning touchpoints (Zero Japanese -> Hiragana Studio -> Tokyo Journey -> N5 Minna Lessons -> JLPT CBT Simulator -> CV Builder -> Billing), verifying zero mobile layout clipping, responsive touch targets, flawless performance, and compilation of the Master Production Candidate Release Dossier.",
+  "domain": "release-engineering",
   "in_scope": [
-    "Harden backend payment services (server/services/bKashService.ts, server/services/sslCommerzService.ts, server/services/stripePaymentService.ts) with strict idempotency, resilient error boundaries, and zero fake timeouts",
-    "Harmonize CheckoutModal and PaymentMethodModal to adhere strictly to the Nihomi brand palette (Obsidian #0A0A12, Crimson #E45147, Amber #F59E0B) with transparent staging vs production credential indicators",
-    "Implement automated post-payment invoice and tax receipt generation in downloadable A4 PDF format (including transaction ID, VAT/Tax registration, Nihomi official logo, and student billing details)",
-    "Ensure database subscription hydration persists immediately upon payment verification with instant tier elevation across Student and Founder views",
-    "Create automated test suite (scripts/test-production-payments-and-invoicing.ts) verifying checkout initialization, callback validation, receipt generation, and subscription tier persistence",
-    "Integrate GATE-09-PRODUCTION-PAYMENTS into the pre-flight release gate and verify via real browser flow"
+    "Audit and optimize mobile touch targets, header spacing, and responsive padding across 360px-390px viewports",
+    "Verify seamless mobile navigation across all 15 production routes with zero layout clipping or horizontal overflow",
+    "Audit V2 App Lazy Loading and code splitting for lightning-fast sub-second Time-to-Interactive (TTI)",
+    "Execute full 9-gate pre-flight verification (Domain Adapters, Orchestrator, Role Security, Knowledge State, Cumulative Lattice, Browser E2E, CV PDF, CBT Exams, Payments)",
+    "Capture mobile and desktop browser evidence across the complete learner journey",
+    "Compile the Master Production Release Dossier for Founder final sign-off"
   ],
   "out_of_scope": [
-    "Physical point-of-sale card terminals in brick-and-mortar Japanese schools",
-    "Direct cryptocurrency payment processing",
-    "Manual paper ledger book tax audits"
+    "Native iOS/Android Swift/Kotlin app store packaging (web mobile PWA only)",
+    "Marketing video ads production",
+    "Third-party physical textbook supply chain"
   ],
   "acceptance_criteria": [
-    "Payment gateways operate in strict production candidate mode with zero mock functions or fake timeouts",
-    "Checkout modal renders seamlessly in Obsidian, Crimson, and Amber brand palette across mobile and desktop",
-    "Successful checkout updates user subscription tier in database without requiring server restart",
-    "Learners can download an official Nihomi-branded Payment Invoice & Tax Receipt in A4 PDF format",
-    "Automated test suite (scripts/test-production-payments-and-invoicing.ts) passes 100%",
-    "All 9 pre-flight release gates pass 100%"
+    "Mobile viewports (360px, 390px, 412px) render with zero horizontal scrollbar or clipped headers",
+    "All interactive elements (buttons, inputs, tabs) maintain minimum 44px touch targets on touch devices",
+    "All 9 pre-flight release gates pass 100% with zero warnings or test failures",
+    "Production build output is clean in dist/ with zero TypeScript errors",
+    "Master Production Candidate Dossier is documented with full verifiable evidence"
   ],
   "verification": [
-    "npx tsx scripts/test-production-payments-and-invoicing.ts",
     "npm run verify:preflight",
+    "node scripts/verify-v2-browser-suite.cjs",
     "node scripts/nihomi-approval-gate.mjs validate"
   ],
   "risks": [
-    "Payment provider API downtime or missing production environment secrets. Mitigation: Graceful fallback with transparent guidance to learner, preserving state."
+    "Mobile browser viewport differences across iOS Safari and Android Chrome. Mitigation: Test on standardized responsive viewports with CSS safe-area-inset."
   ],
   "dependencies": [
-    "server/routes/payment.ts",
-    "server/services/paymentProviders.ts",
-    "server/services/subscriptionService.ts",
-    "src/components/CheckoutModal.tsx",
-    "src/lib/services/invoicePdfGenerator.ts"
+    "src/v2/V2App.tsx",
+    "src/v2/components/layout/V2Header.tsx",
+    "src/v2/components/layout/V2Footer.tsx",
+    "scripts/verify-preflight-release-gate.ts",
+    "scripts/verify-v2-browser-suite.cjs"
   ],
-  "base_commit": "41007ea",
-  "created_at": "2026-10-23T01:46:00.000Z",
+  "base_commit": "4c2a547",
+  "created_at": "2026-10-23T02:07:00.000Z",
   "proposed_by": "Antigravity Lead Autonomous Production Engineer"
 }

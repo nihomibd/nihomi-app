@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP11-PRODUCTION-PAYMENT-GATEWAYS-AND-COMMERCIAL-RELEASE",
-  "scope_fingerprint": "c4bca2b4618e3930b1a6c9d96a80824b5019bcfe31de48ac7501c44e336ab6dc",
-  "approved_at": "2026-10-23T01:48:22.000Z",
+  "task_id": "NIHOMI-WP12-PRODUCTION-CANDIDATE-MOBILE-POLISH-AND-FINAL-RELEASE-GATE",
+  "scope_fingerprint": "77e360a127904e9c88f989ea7c6f52de2acd0402849effa2e12e02196527a1f2",
+  "approved_at": "2026-10-23T02:08:10.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Production Payment Gateways Hardening, Branded Checkout Flow & Automated Tax Invoicing",
-    "domain": "monetization",
-    "base_commit": "41007ea"
+    "title": "Production Candidate Mobile Touchpoint Polish, End-to-End Route Auditing & Final Release Gate Dossier",
+    "domain": "release-engineering",
+    "base_commit": "4c2a547"
   }
 }
