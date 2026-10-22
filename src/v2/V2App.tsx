@@ -21,7 +21,16 @@ import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowl
 
 const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   if (typeof window === 'undefined') return { route: 'landing', params: {} };
-  const rawHash = window.location.hash.replace(/^#\/?/, '').trim();
+  let rawHash = window.location.hash.replace(/^#\/?/, '').trim();
+
+  // If hash is empty, check pathname so direct URLs (/workos, /dashboard, /curriculum, /pricing, /exam) resolve seamlessly to V2
+  if (!rawHash) {
+    const pathname = window.location.pathname.replace(/^\//, '').toLowerCase().trim();
+    if (pathname && pathname !== 'v2' && pathname !== 'legacy' && pathname !== 'classic') {
+      rawHash = pathname;
+    }
+  }
+
   if (!rawHash) return { route: 'landing', params: {} };
 
   const [pathPart, queryPart] = rawHash.split('?');
@@ -40,44 +49,78 @@ const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   switch (mainSegment) {
     case 'journey':
     case 'mission':
+    case 'tokyo':
+    case 'roadmap':
+    case 'pathway':
       return { route: 'journey', params };
     case 'dashboard':
     case 'student-dashboard':
+    case 'portal':
+    case 'portal-dashboard':
+    case 'student':
       return { route: 'dashboard', params };
     case 'kana':
     case 'hiragana':
     case 'katakana':
+    case 'alphabet':
       if (parts[1]) params.char = parts[1];
       return { route: 'kana', params };
     case 'curriculum':
     case 'courses':
+    case 'course':
+    case 'syllabus':
+    case 'n5':
+    case 'n4':
+    case 'n3':
+    case 'n2':
+    case 'n1':
       return { route: 'curriculum', params };
     case 'lesson':
+    case 'lessons':
+    case 'grammar':
       if (parts[1]) params.lessonId = parts[1];
       return { route: 'lesson', params };
     case 'exam':
     case 'exams':
     case 'mock':
     case 'mock-exam':
+    case 'mock-exams':
+    case 'jlpt':
       if (parts[1]) params.examId = parts[1];
       return { route: 'exam', params };
     case 'workos':
     case 'baito':
+    case 'conbini':
+    case '7eleven':
+    case '7-eleven':
+    case 'shift':
       return { route: 'workos', params };
     case 'rirekisho':
     case 'cv':
+    case 'resume':
+    case 'documents':
+    case 'relocation-cv':
       return { route: 'rirekisho', params };
     case 'pricing':
     case 'plans':
+    case 'subscription':
+    case 'subscribe':
+    case 'checkout':
       return { route: 'pricing', params };
     case 'founder':
     case 'admin':
+    case 'cockpit':
+    case 'command-center':
       return { route: 'founder', params };
     case 'terms':
+    case 'tos':
       return { route: 'terms', params };
     case 'privacy':
+    case 'privacy-policy':
       return { route: 'privacy', params };
     case 'refund':
+    case 'refund-policy':
+    case 'refunds':
       return { route: 'refund', params };
     case 'legacy':
     case 'classic':

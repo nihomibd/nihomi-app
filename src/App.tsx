@@ -371,12 +371,6 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   if (path === '/payment/callback' || path === '/billing/callback') {
     return { view: 'payment-callback', params: {} };
   }
-  if (path === '/login' || path === '/signin') {
-    return { view: 'login', params: {} };
-  }
-  if (path === '/auth' || path === '/signup' || path === '/register') {
-    return { view: 'auth', params: {} };
-  }
   if (path === '/reset-password' || path === '/auth/reset-password') {
     return { view: 'reset-password', params: {} };
   }
@@ -385,12 +379,12 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     const targetCert = certFromPath || queryCert;
     return { view: 'verify-cert', params: { certId: targetCert ? decodeURIComponent(targetCert) : '' } };
   }
-  if (path === '/' || path === '') {
-    return { view: 'v2', params: {} };
+  if (path === '/legacy' || path === '/classic') {
+    return { view: 'classic', params: {} };
   }
 
-  const cleanPath = path.replace(/^\//, '');
-  return { view: cleanPath || 'landing', params: {} };
+  // ALL OTHER ROUTES ARE UNIFIED UNDER V2 AS CANONICAL RUNTIME
+  return { view: 'v2', params: {} };
 };
 
 export const App: React.FC = () => {
