@@ -3,3 +3,6 @@
 export * from './types';
 export * from './japaneseLearningAdapter';
 export * from './conbiniSimulatorAdapter';
+export * from './examOsAdapter';
+export * from './cvRirekishoAdapter';
+

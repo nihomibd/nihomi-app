@@ -1,10 +1,16 @@
 // scripts/test-domain-adapters.ts
 // NIHOMI.COM — DOMAIN ADAPTERS AUTOMATED TEST SUITE
-// Tests JapaneseKanaGrammarAdapter and ConbiniSimulatorAdapter according to N.I.H.O.M.I Shared Loop contracts
+// Tests all 4 Domain Adapters according to N.I.H.O.M.I Shared Loop contracts:
+// 1. Japanese Kana & Grammar Adapter
+// 2. 7-Eleven POS Conbini Simulation Adapter
+// 3. JLPT Exam OS Adapter
+// 4. JIS Rirekisho CV Builder Adapter
 
 import {
   japaneseLearningAdapter,
   conbiniSimulatorAdapter,
+  examOsAdapter,
+  cvRirekishoAdapter,
   JapaneseActivity,
   ConbiniActivity
 } from '../src/core/adapters';
@@ -228,6 +234,187 @@ async function runDomainAdapterTests() {
   const nextConbiniAction = conbiniSimulatorAdapter.recommendNextAction(conbiniUpdate.updatedState);
   assert(nextConbiniAction.actionType === 'advance', "Action type is 'advance' after mastering cashier");
   assert(nextConbiniAction.targetId === 'tokyo_career_izakaya', 'Next target is tokyo_career_izakaya');
+
+  // ============================================================================
+  // DOMAIN 3: JLPT EXAM OS ADAPTER
+  // ============================================================================
+  console.log('\n--- [DOMAIN 3: JLPT EXAM OS ADAPTER] ---');
+
+  // Test 19: Select Exam Activity (Standard JLPT N5 Blueprint)
+  console.log('[Test 3.1] Select standard JLPT N5 mock exam...');
+  const examActivity = examOsAdapter.selectActivity(freshState, { level: 'N5' });
+  assert(examActivity.level === 'N5', 'Mock exam level is N5');
+  assert(examActivity.totalPossibleScore === 180, 'Total possible score is 180');
+  assert(examActivity.overallPassingScore === 90, 'Passing score is 90');
+  assert(examActivity.sections.length === 3, 'Contains strictly 3 sections (Vocab, Grammar/Reading, Listening)');
+
+  // Test 20: Validate Prerequisites - Rejected for beginner with zero kana
+  console.log('[Test 3.2] Prerequisite check rejects brand new learner with 0 kana...');
+  const examPrereqFail = examOsAdapter.validatePrerequisites(examActivity, freshState);
+  assert(examPrereqFail.eligible === false, 'Mock exam rejected for learner with 0 kana');
+  assert(examPrereqFail.unmetPrerequisites.length > 0, 'Unmet prerequisites lists foundational kana');
+
+  // Test 21: Validate Prerequisites - Allowed when 5 foundational vowels mastered
+  console.log('[Test 3.3] Prerequisite check passes when 5 vowels mastered...');
+  const stateWithVowels: LearnerKnowledgeState = {
+    ...freshState,
+    knownHiragana: ['あ', 'い', 'う', 'え', 'お'],
+    masteredSkills: ['vowels_5_mastered']
+  };
+  const examPrereqPass = examOsAdapter.validatePrerequisites(examActivity, stateWithVowels);
+  assert(examPrereqPass.eligible === true, 'Mock exam eligible when foundational vowels mastered');
+
+  // Test 22: Evaluate passing attempt
+  console.log('[Test 3.4] Evaluate passing attempt (Score >= 90 & all sections >= 19)...');
+  const passingAttempt = {
+    examId: examActivity.id,
+    examCode: examActivity.examCode,
+    level: examActivity.level,
+    timeSpentSeconds: 4800,
+    sectionScores: {
+      vocabulary: { rawScore: 25, maxRawScore: 30, scaledScore: 42, maxScaledScore: 60, passed: true },
+      grammar_reading: { rawScore: 22, maxRawScore: 30, scaledScore: 38, maxScaledScore: 60, passed: true },
+      listening: { rawScore: 18, maxRawScore: 25, scaledScore: 32, maxScaledScore: 60, passed: true }
+    },
+    totalScaledScore: 112,
+    answers: [
+      {
+        questionId: 'q-vocab-01',
+        sectionType: 'vocabulary' as const,
+        conceptCode: 'kana_reading_noun',
+        isCorrect: true,
+        chosenIndex: 1,
+        correctIndex: 1,
+        explanationBn: 'সঠিক উত্তর।'
+      },
+      {
+        questionId: 'q-grammar-02',
+        sectionType: 'grammar_reading' as const,
+        conceptCode: 'particle_wa_ga',
+        isCorrect: false,
+        questionTextBn: 'পার্টিকেল は বনাম が ব্যবহার',
+        chosenIndex: 0,
+        correctIndex: 2,
+        explanationBn: 'টপিক মার্কার হিসেবে は সঠিক।'
+      }
+    ]
+  };
+  const evalExamPass = examOsAdapter.evaluateAttempt(examActivity, passingAttempt);
+  assert(evalExamPass.passed === true, 'Attempt is passed (112/180 and all sections >= 19)');
+  assert(evalExamPass.xpEarned === 100, 'Awarded 100 XP for passing mock exam');
+  assert(evalExamPass.evaluation.weakSections.length === 0, 'No weak sections in passing attempt');
+
+  // Test 23: Evaluate failing attempt due to section threshold failure
+  console.log('[Test 3.5] Evaluate failing attempt (Listening < 19 threshold)...');
+  const failingSectionAttempt = {
+    ...passingAttempt,
+    sectionScores: {
+      ...passingAttempt.sectionScores,
+      listening: { rawScore: 5, maxRawScore: 25, scaledScore: 12, maxScaledScore: 60, passed: false }
+    },
+    totalScaledScore: 92 // Above 90 overall, but listening is below 19
+  };
+  const evalExamFail = examOsAdapter.evaluateAttempt(examActivity, failingSectionAttempt);
+  assert(evalExamFail.passed === false, 'Exam failed because listening scaled score (12) < threshold (19)');
+  assert(evalExamFail.evaluation.weakSections.length > 0, 'Weak sections identifies listening failure');
+
+  // Test 24: State update derivation enqueues review items and awards pass skill
+  console.log('[Test 3.6] State derivation awards jlpt_n5_mock_passed and enqueues review...');
+  const examUpdate = examOsAdapter.deriveStateUpdate(stateWithVowels, evalExamPass.evidence);
+  assert(examUpdate.updatedState.masteredSkills.includes('jlpt_n5_mock_passed'), "State contains 'jlpt_n5_mock_passed'");
+  assert(examUpdate.updatedState.reviewQueue.length > 0, 'Weak question added to reviewQueue');
+  assert(examUpdate.updatedState.totalXp === 100, 'Total XP incremented by 100');
+
+  // Test 25: Recommend Next Action focuses on weak review if items present
+  console.log('[Test 3.7] Recommend Next Action points to review remediation...');
+  const nextExamAction = examOsAdapter.recommendNextAction(examUpdate.updatedState);
+  assert(nextExamAction.actionType === 'review', "Action type is 'review'");
+  assert(nextExamAction.targetId === 'exam_weak_remediation', 'Target is exam_weak_remediation');
+
+  // ============================================================================
+  // DOMAIN 4: JIS RIREKISHO CV BUILDER ADAPTER
+  // ============================================================================
+  console.log('\n--- [DOMAIN 4: JIS RIREKISHO CV BUILDER ADAPTER] ---');
+
+  // Test 26: Select CV Activity
+  console.log('[Test 4.1] Select JIS Standard Rirekisho template...');
+  const cvActivity = cvRirekishoAdapter.selectActivity(freshState);
+  assert(cvActivity.templateType === 'jis_standard_rirekisho', 'Template is JIS standard rirekisho');
+  assert(cvActivity.requiredFields.length === 10, 'Requires 10 mandatory JIS fields');
+
+  // Test 27: Prerequisite check
+  console.log('[Test 4.2] CV Builder prerequisite check is accessible...');
+  const cvPrereq = cvRirekishoAdapter.validatePrerequisites(cvActivity, freshState);
+  assert(cvPrereq.eligible === true, 'CV Builder is accessible to learners');
+
+  // Test 28: Incomplete draft evaluation (< 80% completeness)
+  console.log('[Test 4.3] Evaluate incomplete draft...');
+  const incompleteDraftAttempt = {
+    documentId: 'doc_cv_test_01',
+    templateType: 'jis_standard_rirekisho' as const,
+    data: {
+      fullName: 'MD TANVIR HOSSAIN',
+      phone: '080-1234-5678'
+    },
+    userConfirmedTruthful: true,
+    timeSpentSeconds: 120
+  };
+  const evalCvIncomplete = cvRirekishoAdapter.evaluateAttempt(cvActivity, incompleteDraftAttempt);
+  assert(evalCvIncomplete.passed === false, 'Incomplete draft (2/10 fields) failed');
+  assert(evalCvIncomplete.evaluation.completenessScore === 20, 'Completeness score is 20%');
+  assert(evalCvIncomplete.evaluation.missingRequiredFields.length === 8, '8 fields missing');
+
+  // Test 29: Zero Hallucination Law — complete data but unconfirmed truth
+  console.log('[Test 4.4] Zero Hallucination check: complete data but userConfirmedTruthful is false...');
+  const completeSampleData = {
+    fullName: 'MD TANVIR HOSSAIN',
+    fullNameKana: 'エムディ タンヴィル ホセイン',
+    birthDate: '2001-05-15',
+    phone: '080-1234-5678',
+    email: 'tanvir@example.com',
+    currentAddress: '東京都新宿区高田馬場2-14-8',
+    currentAddressKana: 'トウキョウトシンジュククタカダノババ',
+    visaStatus: '留学 (Student Visa)',
+    educationHistory: [
+      { year: 2023, month: 10, schoolName: '東京国際日本語学院', faculty: '進学コース', status: 'enrolled' as const }
+    ],
+    motivationStatement: '日本の接客文化を学び、店舗運営に貢献したいと考え志望いたしました。'
+  };
+  const unverifiedDraftAttempt = {
+    documentId: 'doc_cv_test_02',
+    templateType: 'jis_standard_rirekisho' as const,
+    data: completeSampleData,
+    userConfirmedTruthful: false, // NOT confirmed by human
+    timeSpentSeconds: 300
+  };
+  const evalCvUnverified = cvRirekishoAdapter.evaluateAttempt(cvActivity, unverifiedDraftAttempt);
+  assert(evalCvUnverified.passed === false, 'Complete draft rejected without explicit user truth confirmation');
+  assert(evalCvUnverified.evaluation.truthConfirmed === false, 'truthConfirmed is false');
+
+  // Test 30: Validated, complete, human-verified CV draft
+  console.log('[Test 4.5] Fully verified, 100% complete JIS resume passes...');
+  const verifiedDraftAttempt = {
+    ...unverifiedDraftAttempt,
+    userConfirmedTruthful: true
+  };
+  const evalCvPassed = cvRirekishoAdapter.evaluateAttempt(cvActivity, verifiedDraftAttempt);
+  assert(evalCvPassed.passed === true, 'Verified and complete draft passed');
+  assert(evalCvPassed.evaluation.completenessScore === 100, 'Completeness is 100%');
+  assert(evalCvPassed.xpEarned === 60, 'Awarded 60 XP for verified JIS resume');
+
+  // Test 31: State update derivation awards 'jis_rirekisho_ready'
+  console.log('[Test 4.6] State derivation awards jis_rirekisho_ready skill...');
+  const cvUpdate = cvRirekishoAdapter.deriveStateUpdate(freshState, evalCvPassed.evidence);
+  assert(cvUpdate.updatedState.masteredSkills.includes('jis_rirekisho_ready'), "Mastered skills contains 'jis_rirekisho_ready'");
+  assert(cvUpdate.unlockedSkills.includes('jis_rirekisho_ready'), "Unlocked skills contains 'jis_rirekisho_ready'");
+  assert(cvUpdate.updatedState.totalXp === 60, 'Total XP incremented by 60');
+
+  // Test 32: Recommend Next Action after CV readiness advances to PDF export
+  console.log('[Test 4.7] Recommend Next Action advances to PDF export and interview drill...');
+  const nextCvAction = cvRirekishoAdapter.recommendNextAction(cvUpdate.updatedState);
+  assert(nextCvAction.actionType === 'advance', "Action type is 'advance'");
+  assert(nextCvAction.targetId === 'tokyo_baito_interview_drill', 'Target is tokyo_baito_interview_drill');
+
 
   // Summary
   console.log('\n================================================================');
