@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP12-PRODUCTION-CANDIDATE-MOBILE-POLISH-AND-FINAL-RELEASE-GATE",
-  "scope_fingerprint": "77e360a127904e9c88f989ea7c6f52de2acd0402849effa2e12e02196527a1f2",
-  "approved_at": "2026-10-23T02:08:10.000Z",
+  "task_id": "NIHOMI-WP13-PUBLIC-PRODUCTION-DEPLOYMENT-AND-LIVE-SANITY-CHECK",
+  "scope_fingerprint": "b24a4ce3907cc7078b673f82f7e081ee92f781500c32bf4806453cde1e0d7787",
+  "approved_at": "2026-10-23T02:16:33.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Production Candidate Mobile Touchpoint Polish, End-to-End Route Auditing & Final Release Gate Dossier",
-    "domain": "release-engineering",
-    "base_commit": "4c2a547"
+    "title": "Live Production Cloudflare/VPS Deployment Verification, Domain Health & Founder Final Acceptance",
+    "domain": "Japanese Learning / Platform Infrastructure",
+    "base_commit": "cc51862"
   }
 }

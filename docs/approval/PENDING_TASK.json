@@ -1,46 +1,44 @@
 {
-  "schema_version": "1.0",
-  "status": "pending",
-  "task_id": "NIHOMI-WP12-PRODUCTION-CANDIDATE-MOBILE-POLISH-AND-FINAL-RELEASE-GATE",
-  "title": "Production Candidate Mobile Touchpoint Polish, End-to-End Route Auditing & Final Release Gate Dossier",
-  "objective": "Perform a comprehensive mobile and desktop usability audit across all V2 learning touchpoints (Zero Japanese -> Hiragana Studio -> Tokyo Journey -> N5 Minna Lessons -> JLPT CBT Simulator -> CV Builder -> Billing), verifying zero mobile layout clipping, responsive touch targets, flawless performance, and compilation of the Master Production Candidate Release Dossier.",
-  "domain": "release-engineering",
+  "schema_version": "1.0.0",
+  "task_id": "NIHOMI-WP13-PUBLIC-PRODUCTION-DEPLOYMENT-AND-LIVE-SANITY-CHECK",
+  "title": "Live Production Cloudflare/VPS Deployment Verification, Domain Health & Founder Final Acceptance",
+  "objective": "Verify the live production build and deploy pipeline, execute live sanity check against https://www.nihomi.com, verify live SSL, headers, and OAuth routing, and deliver the final commercial release dossier for Founder acceptance.",
+  "domain": "Japanese Learning / Platform Infrastructure",
   "in_scope": [
-    "Audit and optimize mobile touch targets, header spacing, and responsive padding across 360px-390px viewports",
-    "Verify seamless mobile navigation across all 15 production routes with zero layout clipping or horizontal overflow",
-    "Audit V2 App Lazy Loading and code splitting for lightning-fast sub-second Time-to-Interactive (TTI)",
-    "Execute full 9-gate pre-flight verification (Domain Adapters, Orchestrator, Role Security, Knowledge State, Cumulative Lattice, Browser E2E, CV PDF, CBT Exams, Payments)",
-    "Capture mobile and desktop browser evidence across the complete learner journey",
-    "Compile the Master Production Release Dossier for Founder final sign-off"
+    "Verify production build and deploy artifacts in dist/ (dist/server.cjs, dist/index.html)",
+    "Execute live health and sanity check probe against live production URL https://www.nihomi.com",
+    "Audit live domain response codes, V2 landing asset loading, SSL certificates, and Google OAuth callback redirect alignment",
+    "Verify zero client-side routing crashes or HTTP 405/500 errors on production environment",
+    "Publish final Founder Acceptance Dossier and release notes"
   ],
   "out_of_scope": [
-    "Native iOS/Android Swift/Kotlin app store packaging (web mobile PWA only)",
-    "Marketing video ads production",
-    "Third-party physical textbook supply chain"
+    "Modifying core curriculum lattice or introducing untaught vocabulary",
+    "Modifying production payment gateway secrets or database schemas without authorization",
+    "Unsolicited architectural rewrites or breaking API changes"
   ],
   "acceptance_criteria": [
-    "Mobile viewports (360px, 390px, 412px) render with zero horizontal scrollbar or clipped headers",
-    "All interactive elements (buttons, inputs, tabs) maintain minimum 44px touch targets on touch devices",
-    "All 9 pre-flight release gates pass 100% with zero warnings or test failures",
-    "Production build output is clean in dist/ with zero TypeScript errors",
-    "Master Production Candidate Dossier is documented with full verifiable evidence"
+    "Production build produces clean dist/ artifacts with zero errors",
+    "Live production sanity check script confirms 200 OK on https://www.nihomi.com root and API health endpoints",
+    "SSL certificates and security headers valid on live domain",
+    "V2 routes resolve cleanly on live production environment",
+    "Comprehensive Founder Acceptance Dossier delivered with complete visual evidence and test credentials"
   ],
   "verification": [
-    "npm run verify:preflight",
-    "node scripts/verify-v2-browser-suite.cjs",
-    "node scripts/nihomi-approval-gate.mjs validate"
+    "npm run build",
+    "node scripts/verify-live-deployment-and-cloudflare.cjs",
+    "node scripts/probe-production-site.cjs",
+    "Manual mobile browser walkthrough by Founder"
   ],
   "risks": [
-    "Mobile browser viewport differences across iOS Safari and Android Chrome. Mitigation: Test on standardized responsive viewports with CSS safe-area-inset."
+    "Cloudflare Pages edge caching might serve stale HTML if cache-invalidation is delayed",
+    "Production DNS or third-party OAuth redirect URI mismatch if production env variables differ from local"
   ],
   "dependencies": [
-    "src/v2/V2App.tsx",
-    "src/v2/components/layout/V2Header.tsx",
-    "src/v2/components/layout/V2Footer.tsx",
-    "scripts/verify-preflight-release-gate.ts",
-    "scripts/verify-v2-browser-suite.cjs"
+    "NIHOMI-WP12-PRODUCTION-CANDIDATE-MOBILE-POLISH-AND-FINAL-RELEASE-GATE (commit cc51862)",
+    "GitHub origin/main branch up-to-date",
+    "Live DNS pointing to nihomi.com"
   ],
-  "base_commit": "4c2a547",
-  "created_at": "2026-10-23T02:07:00.000Z",
-  "proposed_by": "Antigravity Lead Autonomous Production Engineer"
+  "base_commit": "cc51862",
+  "created_at": "2026-10-22T20:15:00.000Z",
+  "status": "pending"
 }
