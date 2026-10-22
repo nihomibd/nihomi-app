@@ -60,6 +60,7 @@ const AICoachView = lazy(() => import('./views/AICoachView').then(m => ({ defaul
 const QuizPerformanceInsightsView = lazy(() => import('./views/QuizPerformanceInsightsView').then(m => ({ default: m.QuizPerformanceInsightsView })));
 const LessonPracticeView = lazy(() => import('./views/LessonPracticeView').then(m => ({ default: m.LessonPracticeView })));
 const KotobaCanvasView = lazy(() => import('./components/kotoba/KotobaCanvasView').then(m => ({ default: m.KotobaCanvasView })));
+const V2App = lazy(() => import('./v2/V2App').then(m => ({ default: m.V2App })));
 
 
 const ViewLoadingFallback: React.FC = () => (
@@ -121,6 +122,7 @@ const RouteRecoveryView: React.FC<{ currentView: string; onNavigate: (view: stri
 );
 
 const KNOWN_VIEWS = new Set([
+  'v2',
   'journey', 'mission',
   'start', 'ad-campaign', 'campaign', 'ad',
   'growth', 'admin-growth', 'founder/growth',
@@ -215,6 +217,9 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   }
   const queryCert = searchParams.get('certId') || searchParams.get('id');
 
+  if (path === '/v2' || path.startsWith('/v2/')) {
+    return { view: 'v2', params: {} };
+  }
   if (path === '/journey' || path === '/start-journey' || path === '/onboarding' || path === '/mission') {
     return { view: 'journey', params: {} };
   }
@@ -702,6 +707,9 @@ export const App: React.FC = () => {
         )}
         {(currentView === 'world' || currentView === 'canvas' || currentView === 'shibuya') && (
           <RealJapanCanvasView onNavigate={handleNavigate} />
+        )}
+        {currentView === 'v2' && (
+          <V2App />
         )}
         {(currentView === 'dashboard' || currentView === 'student-dashboard' || currentView === 'portal-dashboard') && (
           <DashboardView onNavigate={handleNavigate} />

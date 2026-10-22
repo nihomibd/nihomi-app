@@ -428,6 +428,9 @@ paymentRouter.get('/plans', (_req: Request, res: Response) => {
 // 2. CREATE BKASH CHECKOUT SESSION (IDEMPOTENT & RATE-LIMITED)
 // ========================================================
 paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  let rejectInFlight: ((err: any) => void) | undefined;
+  let idempotencyKey: string | undefined;
+  let resolvedUserId: string | undefined;
   try {
     const { tier, planId, interval = 'monthly', callbackUrl, mock, idempotencyKey: clientKey } = req.body;
     const user = req.user;
@@ -440,7 +443,7 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
       });
     }
 
-    const resolvedUserId = user.id;
+    resolvedUserId = user.id;
     const resolvedEmail = user.email || 'student@nihomi.com';
 
     // Strict Identity Protection: Reject client spoofing
@@ -497,7 +500,7 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
     const invoiceNumber = `INV_NHO_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
     // High-Entropy Idempotency Key Resolution
-    const idempotencyKey = (
+    idempotencyKey = (
       clientKey ||
       (req.headers['idempotency-key'] as string) ||
       (req.headers['x-idempotency-key'] as string) ||
@@ -522,9 +525,21 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
       } catch (err) {}
     }
 
+    // Immediately register synchronous in-flight promise before any async I/O
+    let resolveInFlight!: (val: any) => void;
+    const inFlightPromise = new Promise<any>((resolve, reject) => {
+      resolveInFlight = resolve;
+      rejectInFlight = reject;
+    });
+    inFlightIdempotencyCreations.set(idempotencyKey, inFlightPromise);
+    inFlightUserCreations.set(resolvedUserId, inFlightPromise);
+
     // 1. Idempotency Check: Return existing attempt if within 15-minute validity window
     const cachedAttempt = await getDurableIdempotency(idempotencyKey);
     if (cachedAttempt && (Date.now() - cachedAttempt.createdAt) < 15 * 60 * 1000) {
+      resolveInFlight(cachedAttempt.response);
+      inFlightIdempotencyCreations.delete(idempotencyKey);
+      inFlightUserCreations.delete(resolvedUserId);
       if (cachedAttempt.userId !== resolvedUserId && user.role !== 'admin') {
         return res.status(403).json({
           success: false,
@@ -541,24 +556,21 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
     const now = Date.now();
     if (lastUserReq && (now - lastUserReq.timestamp) < 2000) {
       if (lastUserReq.response) {
+        resolveInFlight(lastUserReq.response);
+        inFlightIdempotencyCreations.delete(idempotencyKey);
+        inFlightUserCreations.delete(resolvedUserId);
         res.setHeader('X-Duplicate-Suppression', 'true');
         return res.json(lastUserReq.response);
       }
+      resolveInFlight({ success: false, error: 'Rate limited', code: 'RATE_LIMITED' });
+      inFlightIdempotencyCreations.delete(idempotencyKey);
+      inFlightUserCreations.delete(resolvedUserId);
       return res.status(429).json({
         success: false,
         error: 'Please wait a moment before retrying payment initiation.',
         code: 'RATE_LIMITED'
       });
     }
-
-    let resolveInFlight!: (val: any) => void;
-    let rejectInFlight!: (err: any) => void;
-    const inFlightPromise = new Promise<any>((resolve, reject) => {
-      resolveInFlight = resolve;
-      rejectInFlight = reject;
-    });
-    inFlightIdempotencyCreations.set(idempotencyKey, inFlightPromise);
-    inFlightUserCreations.set(resolvedUserId, inFlightPromise);
 
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const finalCallbackUrl = callbackUrl || `${appUrl}/api/payment/callback`;
@@ -741,8 +753,8 @@ paymentRouter.post('/create', requireAuth, async (req: AuthenticatedRequest, res
     return res.json(finalLiveResponse);
   } catch (err: any) {
     rejectInFlight?.(err);
-    inFlightIdempotencyCreations.delete(idempotencyKey);
-    inFlightUserCreations.delete(resolvedUserId);
+    if (idempotencyKey) inFlightIdempotencyCreations.delete(idempotencyKey);
+    if (resolvedUserId) inFlightUserCreations.delete(resolvedUserId);
     console.error('[PaymentRouter] Checkout initiation failed:', err);
     return res.status(500).json({
       success: false,

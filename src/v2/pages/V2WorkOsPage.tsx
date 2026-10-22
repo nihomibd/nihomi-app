@@ -1,0 +1,242 @@
+// src/v2/pages/V2WorkOsPage.tsx
+// NIHOMI V2 — TOKYO WORKOS™ & LIFE SIMULATION STUDIO
+import React, { useState } from 'react';
+import {
+  Store,
+  Sparkles,
+  Play,
+  Volume2,
+  CheckCircle2,
+  ShieldCheck,
+  Compass,
+  Building,
+  GraduationCap,
+  ArrowRight,
+  Clock,
+  Layers,
+  Award
+} from 'lucide-react';
+import { V2Route, V2NavigationParams } from '../types';
+import { ConbiniPosCashierSimulator } from '../../components/simulation/ConbiniPosCashierSimulator';
+import { DEFAULT_BAITO_SCENARIOS } from '../../views/BaitoOsView';
+import { speakJapanese } from '../../lib/tts';
+
+interface V2WorkOsPageProps {
+  onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
+}
+
+export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
+  const [activeTab, setActiveTab] = useState<'cashier' | 'scenarios'>('cashier');
+  const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
+
+  const activeScenario = DEFAULT_BAITO_SCENARIOS[selectedScenarioIndex] || DEFAULT_BAITO_SCENARIOS[0];
+
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
+      {/* 1. Header & Tab Switcher */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              টোকিও ক্যারিয়ার ও প্রাত্যহিক জীবন
+            </span>
+            <span className="text-xs text-stone-400 font-mono">
+              Tokyo WorkOS™ Simulator
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-white">
+            রিয়েল জাপান কর্মক্ষেত্র ও কনবিনি সিমুলেশন
+          </h1>
+          <p className="text-xs sm:text-sm text-stone-400 mt-1">
+            টোকিওতে পৌঁছানোর আগেই ৭-ইলেভেন ক্যাশিয়ার শিফট এবং ভিসা-ইন্টারভিউয়ের সরাসরি অভিজ্ঞতা নিন।
+          </p>
+        </div>
+
+        {/* Tab Controls */}
+        <div className="flex items-center gap-2 p-1.5 bg-[#141726] rounded-2xl border border-white/10">
+          <button
+            onClick={() => setActiveTab('cashier')}
+            className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+              activeTab === 'cashier'
+                ? 'bg-[#E45147] text-white shadow-lg shadow-red-600/30'
+                : 'text-stone-400 hover:text-white'
+            }`}
+          >
+            🏪 কনবিনি POS ক্যাশিয়ার ড্রিল
+          </button>
+          <button
+            onClick={() => setActiveTab('scenarios')}
+            className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+              activeTab === 'scenarios'
+                ? 'bg-[#E45147] text-white shadow-lg shadow-red-600/30'
+                : 'text-stone-400 hover:text-white'
+            }`}
+          >
+            🇯🇵 জাপান লাইফ সিনারিও প্যাক
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Tab Content */}
+      {activeTab === 'cashier' ? (
+        <div className="space-y-6">
+          <div className="p-4 rounded-2xl bg-[#141726] border border-white/10 text-xs text-stone-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Store className="w-4 h-4 text-emerald-400" />
+              <span>
+                <strong>৭-ইলেভেন / লসন ক্যাশিয়ার সিমুলেটর:</strong> বারকোড স্ক্যান, খাবার গরম, পয়েন্ট কার্ড ও বিনম্র জাপানিজ ডায়ালগ অনুশীলন করুন।
+              </span>
+            </div>
+            <span className="text-emerald-400 font-mono font-bold">READY TO SERVE</span>
+          </div>
+
+          {/* Embedded Cashier Simulator Engine */}
+          <div className="bg-[#141726] border border-white/10 rounded-3xl p-4 sm:p-6 shadow-2xl">
+            <ConbiniPosCashierSimulator
+              onCompleteOrder={(score, totalYen) => {
+                console.log(`Order completed with score ${score}, total ¥${totalYen}`);
+              }}
+            />
+          </div>
+        </div>
+      ) : (
+        /* Scenarios Catalog */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Scenario Rail */}
+          <div className="lg:col-span-4 bg-[#141726] border border-white/10 rounded-3xl p-5 space-y-3">
+            <h3 className="text-xs font-bold text-stone-300 pb-2 border-b border-white/10">
+              জাপান রিলোকেশন সিনারিও তালিকা
+            </h3>
+
+            <div className="space-y-2">
+              {DEFAULT_BAITO_SCENARIOS.map((sc, index) => {
+                const isSelected = selectedScenarioIndex === index;
+                return (
+                  <div
+                    key={sc.id}
+                    onClick={() => setSelectedScenarioIndex(index)}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-red-600/20 to-amber-500/20 border-red-500/50 text-white'
+                        : 'bg-black/30 border-white/5 text-stone-400 hover:bg-white/5 hover:text-stone-200'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-bold text-white">{sc.titleBn}</span>
+                      <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/10">
+                        {sc.difficulty}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-stone-400 font-serif">
+                      {sc.titleJa}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Scenario Details & Audio Player */}
+          <div className="lg:col-span-8 bg-[#141726] border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  {activeScenario.location}
+                </span>
+                <h2 className="text-xl font-black text-white mt-2">
+                  {activeScenario.titleBn}
+                </h2>
+                <div className="text-xs text-stone-400 font-serif mt-0.5">
+                  {activeScenario.titleJa}
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-xs text-stone-400 font-mono block">কথোপকথনকারী</span>
+                <span className="text-sm font-bold text-white">{activeScenario.interlocutorName}</span>
+              </div>
+            </div>
+
+            {/* Context Description */}
+            <div className="p-4 rounded-2xl bg-black/40 border border-white/5 text-xs text-stone-300 leading-relaxed">
+              <strong>পরিস্থিতি:</strong> {activeScenario.contextDescription}
+            </div>
+
+            {/* Initial Dialogue Card with Audio Button */}
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-[#1E2338] to-[#141726] border border-white/10 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                  <Volume2 className="w-4 h-4" />
+                  প্রথম জাপানিজ সংলাপ
+                </span>
+                <button
+                  onClick={() => speakJapanese(activeScenario.initialDialogue.ja)}
+                  className="px-3 py-1.5 rounded-xl bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-red-400 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>শুনুন</span>
+                </button>
+              </div>
+
+              <div className="text-base sm:text-lg font-serif font-black text-white">
+                {activeScenario.initialDialogue.ja}
+              </div>
+
+              <div className="text-xs font-mono text-stone-400">
+                {activeScenario.initialDialogue.romaji}
+              </div>
+
+              <div className="text-xs text-stone-300 pt-2 border-t border-white/10">
+                <strong>বাংলা অর্থ:</strong> {activeScenario.initialDialogue.bn}
+              </div>
+            </div>
+
+            {/* Objectives */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                মিশনের প্রধান উদ্দেশ্যসমূহ:
+              </h4>
+              <div className="space-y-1.5">
+                {activeScenario.objectives.map((obj, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-stone-300">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{obj}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Key Vocabulary */}
+            {activeScenario.keyVocabulary && (
+              <div className="space-y-3 pt-4 border-t border-white/10">
+                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                  প্রয়োজনীয় শব্দকোষ:
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {activeScenario.keyVocabulary.map((v, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-xl bg-black/30 border border-white/5 flex items-center justify-between"
+                    >
+                      <div>
+                        <span className="font-serif font-bold text-white text-sm">{v.ja}</span>
+                        <span className="text-xs text-stone-400 font-mono ml-2">({v.kana})</span>
+                        <div className="text-[11px] text-stone-300 mt-0.5">{v.meaningBn}</div>
+                      </div>
+                      <button
+                        onClick={() => speakJapanese(v.ja)}
+                        className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white cursor-pointer"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

@@ -1,0 +1,222 @@
+// src/v2/components/layout/V2Header.tsx
+import React, { useState } from 'react';
+import {
+  Menu,
+  X,
+  Compass,
+  BookOpen,
+  Store,
+  FileText,
+  CreditCard,
+  User,
+  LogOut,
+  Sparkles,
+  ShieldAlert,
+  GraduationCap
+} from 'lucide-react';
+import { V2Route, V2NavigationParams } from '../../types';
+import { useAuth } from '../../../context/AuthContext';
+
+interface V2HeaderProps {
+  currentRoute: V2Route;
+  onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
+}
+
+export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) => {
+  const { user, logout, openAuthModal } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  const navLinks: { route: V2Route; label: string; icon: React.FC<{ className?: string }> }[] = [
+    { route: 'landing', label: 'হোম', icon: Sparkles },
+    { route: 'journey', label: 'টোকিও জার্নি', icon: Compass },
+    { route: 'dashboard', label: 'ড্যাশবোর্ড', icon: GraduationCap },
+    { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', icon: BookOpen },
+    { route: 'workos', label: 'কনবিনি WorkOS™', icon: Store },
+    { route: 'rirekisho', label: 'রিলোকেশন CV', icon: FileText },
+    { route: 'pricing', label: 'সাবস্ক্রিপশন', icon: CreditCard }
+  ];
+
+  const handleNavClick = (route: V2Route) => {
+    setMobileMenuOpen(false);
+    setProfileDropdownOpen(false);
+    onNavigate(route);
+  };
+
+  const isFounder = user?.role === 'admin' || user?.role === 'founder';
+
+  return (
+    <header className="sticky top-0 z-40 w-full bg-[#141726]/95 backdrop-blur-md border-b border-[#F6F0E6]/10 text-[#F6F0E6]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+        
+        {/* Brand Logo & Tagline */}
+        <div
+          onClick={() => handleNavClick('landing')}
+          className="flex items-center gap-3 cursor-pointer select-none group"
+        >
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#E45147] to-[#F59E0B] p-0.5 shadow-lg shadow-red-600/20 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-[#141726] rounded-[14px] flex items-center justify-center">
+              <span className="font-serif font-black text-xl text-white">に</span>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                NIHOMI
+              </span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#E45147]/20 text-[#E45147] font-bold border border-[#E45147]/30">
+                V2
+              </span>
+            </div>
+            <span className="text-[10px] text-stone-400 font-medium hidden sm:inline">
+              জাপানিজ লার্নিং ও রিলোকেশন ওএস
+            </span>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {navLinks.map(({ route, label }) => {
+            const isActive = currentRoute === route;
+            return (
+              <button
+                key={route}
+                onClick={() => handleNavClick(route)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-[#E45147] text-white shadow-md shadow-red-600/30'
+                    : 'text-stone-300 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Right CTA / Auth Status */}
+        <div className="flex items-center gap-2.5">
+          {isFounder && (
+            <button
+              onClick={() => handleNavClick('founder')}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition cursor-pointer"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Founder HQ</span>
+            </button>
+          )}
+
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold transition cursor-pointer"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#6D7C55] text-white flex items-center justify-center text-[11px] font-black">
+                  {user.name ? user.name[0].toUpperCase() : 'U'}
+                </div>
+                <span className="max-w-[100px] truncate text-stone-200">
+                  {user.name || user.email.split('@')[0]}
+                </span>
+              </button>
+
+              {profileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-[#1B1E30] border border-[#F6F0E6]/15 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
+                  <div className="px-3 py-2 border-b border-white/10 mb-1">
+                    <p className="text-xs font-bold text-white truncate">{user.name || 'শিক্ষার্থী'}</p>
+                    <p className="text-[11px] text-stone-400 truncate">{user.email}</p>
+                    <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#6D7C55]/20 text-[#6D7C55]">
+                      প্ল্যান: {user.planId ? user.planId.toUpperCase() : 'FREE'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleNavClick('dashboard')}
+                    className="w-full text-left px-3 py-2 text-xs font-bold text-stone-200 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
+                  >
+                    <GraduationCap className="w-4 h-4 text-purple-400" />
+                    <span>আমার ড্যাশবোর্ড</span>
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('pricing')}
+                    className="w-full text-left px-3 py-2 text-xs font-bold text-stone-200 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
+                  >
+                    <CreditCard className="w-4 h-4 text-amber-400" />
+                    <span>সাবস্ক্রিপশন ও বিলিং</span>
+                  </button>
+                  {isFounder && (
+                    <button
+                      onClick={() => handleNavClick('founder')}
+                      className="w-full text-left px-3 py-2 text-xs font-bold text-amber-300 hover:bg-amber-500/10 rounded-xl flex items-center gap-2 cursor-pointer"
+                    >
+                      <ShieldAlert className="w-4 h-4 text-amber-400" />
+                      <span>ফাউন্ডার ককপিট</span>
+                    </button>
+                  )}
+                  <div className="border-t border-white/10 mt-1 pt-1">
+                    <button
+                      onClick={() => {
+                        logout();
+                        setProfileDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs font-bold text-rose-400 hover:bg-rose-500/10 rounded-xl flex items-center gap-2 cursor-pointer"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>লগআউট (Sign Out)</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => openAuthModal('login')}
+              className="btn-haptic px-4 py-2 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-xs font-extrabold shadow-md shadow-red-600/30 transition cursor-pointer flex items-center gap-1.5"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>লগইন / সাইন-আপ</span>
+            </button>
+          )}
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer"
+            aria-label="Toggle Navigation"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+      </div>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-[#1B1E30] border-b border-[#F6F0E6]/10 px-4 py-4 space-y-2 animate-in slide-in-from-top duration-200">
+          {navLinks.map(({ route, label, icon: IconComp }) => (
+            <button
+              key={route}
+              onClick={() => handleNavClick(route)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition cursor-pointer ${
+                currentRoute === route
+                  ? 'bg-[#E45147] text-white'
+                  : 'text-stone-300 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              <IconComp className="w-4 h-4" />
+              <span>{label}</span>
+            </button>
+          ))}
+          {isFounder && (
+            <button
+              onClick={() => handleNavClick('founder')}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20"
+            >
+              <ShieldAlert className="w-4 h-4" />
+              <span>Founder Command Center</span>
+            </button>
+          )}
+        </div>
+      )}
+    </header>
+  );
+};
