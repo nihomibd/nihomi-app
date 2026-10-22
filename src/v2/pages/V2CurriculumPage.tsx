@@ -107,7 +107,7 @@ export const V2CurriculumPage: React.FC<V2CurriculumPageProps> = ({ onNavigate }
             {isProUser ? (
               <strong className="text-emerald-400">Pro অ্যাক্টিভ: সমস্ত ৫০টি লেসন আনলক করা আছে</strong>
             ) : (
-              <span>লেসন ১ থেকে ৫ <strong>ফ্রি ট্রায়াল</strong>; লেসন ৬–৫০ আনলক করতে Pro সাবস্ক্রিপশন প্রয়োজন।</span>
+              <span>লেসন ১ থেকে ৫ <strong className="text-emerald-400 font-bold">সম্পূর্ণ ফ্রি (ফ্রি টিয়ারভুক্ত)</strong>; লেসন ৬–৫০ আনলক করতে Pro সাবস্ক্রিপশন প্রয়োজন।</span>
             )}
           </span>
         </div>
@@ -155,14 +155,14 @@ export const V2CurriculumPage: React.FC<V2CurriculumPageProps> = ({ onNavigate }
                       </div>
 
                       {isLocked ? (
-                        <span className="flex items-center gap-1 text-[10px] font-black uppercase text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded-full">
+                        <span className="flex items-center gap-1 text-[10px] font-black uppercase text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2.5 py-0.5 rounded-full">
                           <Lock className="w-3 h-3" />
-                          PRO
+                          PRO লক
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-[10px] font-black uppercase text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-full">
-                          <Unlock className="w-3 h-3" />
-                          UNLOCKED
+                        <span className="flex items-center gap-1 text-[10px] font-black uppercase text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2.5 py-0.5 rounded-full">
+                          <Sparkles className="w-3 h-3" />
+                          ১০০% ফ্রি
                         </span>
                       )}
                     </div>

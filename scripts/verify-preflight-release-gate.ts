@@ -64,6 +64,14 @@ const GATE_CHECKS: GateCheck[] = [
     args: ['scripts/verify-v2-browser-suite.cjs'],
     expectedPassPhrase: 'TOTAL: 14/14 PASSED (100%)',
     timeoutMs: 90000
+  },
+  {
+    id: 'GATE-07-CV-PDF-AND-FREE-TIER',
+    name: 'JIS CV PDF Generation & Free Tier Gating (13 Tests)',
+    command: 'npx',
+    args: ['tsx', 'scripts/test-cv-pdf-and-free-tier.ts'],
+    expectedPassPhrase: 'ALL 13/13 TESTS PASSED PERFECTLY',
+    timeoutMs: 30000
   }
 ];
 

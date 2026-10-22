@@ -28,7 +28,8 @@
     "test:knowledge-state": "tsx scripts/test-knowledge-state-persistence.ts",
     "test:adapters": "tsx scripts/test-domain-adapters.ts",
     "test:orchestrator": "tsx scripts/test-loop-orchestrator.ts",
-    "verify:preflight": "tsx scripts/verify-preflight-release-gate.ts"
+    "verify:preflight": "tsx scripts/verify-preflight-release-gate.ts",
+    "test:cv-pdf": "tsx scripts/test-cv-pdf-and-free-tier.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

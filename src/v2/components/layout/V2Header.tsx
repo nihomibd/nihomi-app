@@ -48,14 +48,20 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
     })()
   );
 
-  const navLinks: { route: V2Route; label: string; icon: React.FC<{ className?: string }> }[] = [
+  const navLinks: {
+    route: V2Route;
+    label: string;
+    badge?: string;
+    badgeColor?: string;
+    icon: React.FC<{ className?: string }>;
+  }[] = [
     { route: 'landing', label: 'হোম', icon: Sparkles },
-    { route: 'journey', label: 'টোকিও জার্নি', icon: Compass },
+    { route: 'journey', label: 'টোকিও জার্নি', badge: '১০০% ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: Compass },
     { route: 'dashboard', label: 'শিক্ষার্থী ড্যাশবোর্ড', icon: GraduationCap },
-    { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', icon: BookOpen },
-    { route: 'exam', label: 'JLPT মক এক্সাম ওএস', icon: Award },
-    { route: 'workos', label: 'কনবিনি WorkOS™', icon: Store },
-    { route: 'rirekisho', label: 'রিলোকেশন CV', icon: FileText },
+    { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', badge: 'N5 ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: BookOpen },
+    { route: 'exam', label: 'JLPT মক এক্সাম ওএস', badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Award },
+    { route: 'workos', label: 'কনবিনি WorkOS™', badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Store },
+    { route: 'rirekisho', label: 'রিলোকেশন CV', badge: 'ফ্রি টুল', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: FileText },
     { route: 'pricing', label: 'সাবস্ক্রিপশন', icon: CreditCard }
   ];
 
@@ -84,19 +90,26 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
 
         {/* Desktop Navigation Links (Segmented for Learning Excellence) */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-          {navLinks.map(({ route, label }) => {
+          {navLinks.map(({ route, label, badge, badgeColor }) => {
             const isActive = currentRoute === route;
             return (
               <button
                 key={route}
                 onClick={() => handleNavClick(route)}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                   isActive
                     ? 'bg-[#E45147] text-white shadow-md shadow-red-600/30'
                     : 'text-stone-300 hover:text-white hover:bg-white/5'
                 }`}
               >
-                {label}
+                <span>{label}</span>
+                {badge && (
+                  <span className={`px-1.5 py-0.2 rounded text-[9px] font-black uppercase tracking-wider border ${
+                    isActive ? 'bg-white/20 text-white border-white/30' : badgeColor
+                  }`}>
+                    {badge}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -293,18 +306,25 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
             </button>
           )}
 
-          {navLinks.map(({ route, label, icon: IconComp }) => (
+          {navLinks.map(({ route, label, icon: IconComp, badge, badgeColor }) => (
             <button
               key={route}
               onClick={() => handleNavClick(route)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition cursor-pointer ${
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 currentRoute === route
                   ? 'bg-[#E45147] text-white'
                   : 'text-stone-300 hover:bg-white/5 hover:text-white'
               }`}
             >
-              <IconComp className="w-4 h-4" />
-              <span>{label}</span>
+              <div className="flex items-center gap-3">
+                <IconComp className="w-4 h-4" />
+                <span>{label}</span>
+              </div>
+              {badge && (
+                <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border ${badgeColor}`}>
+                  {badge}
+                </span>
+              )}
             </button>
           ))}
           {isFounder && (

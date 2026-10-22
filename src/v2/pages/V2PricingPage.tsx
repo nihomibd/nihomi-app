@@ -31,19 +31,20 @@ const ALL_PLANS: Plan[] = [
     name: 'Nihomi Free',
     displayNameJa: '無料プラン',
     tagline: 'Start learning Japanese foundations',
-    description: 'হিরাগানা, কাতাকানা এবং N5 প্রথম ৫টি বেসিক লেসনে আজীবন ফ্রি অ্যাক্সেস।',
+    description: 'হিরাগানা, কাতাকানা, N5 লেসন ০১-০৫ এবং JIS রিলোকেশন CV তৈরিতে আজীবন ফ্রি অ্যাক্সেস।',
     monthlyPrice: 0,
     quarterlyPrice: 0,
     halfYearlyPrice: 0,
     yearlyPrice: 0,
     currency: 'BDT',
-    badge: 'ফ্রি স্টার্টার',
+    badge: '১০০% ফ্রি',
     order: 1,
     features: [
-      'হিরাগানা ও কাতাকানা ক্যালিগ্রাফি স্টুডিও',
-      'JLPT N5 প্রথম ৫টি প্রামাণ্য লেসন',
-      'মৌলিক কুইজ ও ফ্ল্যাশকার্ড প্র্যাকটিস',
-      'কমিউনিটি ডিসকর্ড ও সাপোর্ট'
+      'সকল ৪৬টি হিরাগানা ও ৪৬টি কাতাকানা বর্ণমালা মাস্টারি',
+      'JLPT N5 এর প্রথম ৫টি প্রামাণ্য লেসন (১০০% ফ্রি)',
+      'মৌলিক ১০০ কাঞ্জি প্র্যাকটিস ওয়ার্কবুক ও কুইজ',
+      'জাপানিজ JIS Z 8303 স্ট্যান্ডার্ড CV মেকার টুল',
+      '১০টি Nomi Sensei ইন্টারেক্টিভ এআই ট্রায়াল কয়েন'
     ],
     aiMonthlyLimit: 50,
     entitlements: ['n5'],
@@ -315,6 +316,253 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
 
         <div className="flex items-center gap-2 font-mono text-stone-400">
           <span>bKash</span> • <span>Nagad</span> • <span>Visa</span> • <span>Mastercard</span>
+        </div>
+      </div>
+
+
+      {/* 5. Free vs Pro In-depth Comparison Matrix */}
+      <div id="v2-pricing-comparison-matrix" className="mt-16 space-y-6">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span>স্বচ্ছ ফিচার তুলনা</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-white">
+            কোন প্ল্যানে কি থাকছে? বিস্তারিত তুলনা
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-300">
+            ফ্রি টিয়ার এবং প্রিমিয়াম প্যাকেজের প্রতিটি ফিচার একদম স্বচ্ছভাবে জেনে আপনার উপযোগী প্ল্যান বেছে নিন।
+          </p>
+        </div>
+
+        <div className="overflow-x-auto rounded-3xl border border-white/10 bg-[#141726]/90 shadow-2xl backdrop-blur-sm">
+          <table className="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr className="border-b border-white/10 bg-white/5">
+                <th className="p-4 sm:p-5 font-black text-white min-w-[200px]">ফিচার ও সুবিধাসমূহ</th>
+                <th className="p-4 sm:p-5 font-bold text-emerald-400 text-center min-w-[140px] bg-emerald-500/5">
+                  <div className="font-black text-sm sm:text-base text-white">Free</div>
+                  <div className="text-xs text-emerald-400">৳০ / আজীবন</div>
+                </th>
+                <th className="p-4 sm:p-5 font-bold text-stone-200 text-center min-w-[140px]">
+                  <div className="font-black text-sm sm:text-base text-white">Starter</div>
+                  <div className="text-xs text-stone-400">৳৯৯০ / মাস</div>
+                </th>
+                <th className="p-4 sm:p-5 font-bold text-amber-300 text-center min-w-[150px] bg-amber-500/10 border-x border-amber-500/20">
+                  <div className="flex items-center justify-center gap-1 font-black text-sm sm:text-base text-white">
+                    <Crown className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Pro</span>
+                  </div>
+                  <div className="text-xs text-amber-300 font-semibold">৳১,৯৯০ / মাস (জনপ্রিয়)</div>
+                </th>
+                <th className="p-4 sm:p-5 font-bold text-cyan-300 text-center min-w-[150px]">
+                  <div className="font-black text-sm sm:text-base text-white">Japan Ready</div>
+                  <div className="text-xs text-cyan-300">৳৩,৯৯০ / মাস</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {/* Category: কারিকুলাম */}
+              <tr className="bg-white/5">
+                <td colSpan={5} className="py-2.5 px-4 sm:px-5 text-[11px] font-black uppercase tracking-wider text-stone-400">
+                  জাপানিজ লার্নিং ও কারিকুলাম
+                </td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  হিরাগানা ও কাতাকানা ক্যালিগ্রাফি স্টুডিও (Kana Studio)
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-emerald-400 font-bold">
+                  ✓ সম্পূর্ণ ৯২টি বর্ণ
+                </td>
+                <td className="p-4 sm:p-5 text-center text-emerald-400 font-bold">✓ আনলিমিটেড</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-emerald-400 font-bold">
+                  ✓ আনলিমিটেড
+                </td>
+                <td className="p-4 sm:p-5 text-center text-emerald-400 font-bold">✓ আনলিমিটেড</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  JLPT N5 কারিকুলাম অ্যাক্সেস
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-emerald-400 font-bold">
+                  লেসন ০১ - ০৫ (১০০% ফ্রি)
+                </td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ সম্পূর্ণ ২৫টি লেসন</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-stone-200 font-semibold">
+                  ✓ সম্পূর্ণ ২৫টি লেসন
+                </td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ সম্পূর্ণ ২৫টি লেসন</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  JLPT N4 কারিকুলাম অ্যাক্সেস
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">— (Pro লক)</td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ সম্পূর্ণ ২৫টি লেসন</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-stone-200 font-semibold">
+                  ✓ সম্পূর্ণ ২৫টি লেসন
+                </td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ সম্পূর্ণ ২৫টি লেসন</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  JLPT N3 ইন্টারমিডিয়েট কারিকুলাম
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">— (Pro লক)</td>
+                <td className="p-4 sm:p-5 text-center text-stone-500 font-mono">— (Pro লক)</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-emerald-400 font-bold">
+                  ✓ সম্পূর্ণ N3 প্রস্তুতি
+                </td>
+                <td className="p-4 sm:p-5 text-center text-emerald-400 font-bold">✓ সম্পূর্ণ N3 প্রস্তুতি</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  JLPT N2 ও N1 অ্যাডভান্সড কারিকুলাম
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">—</td>
+                <td className="p-4 sm:p-5 text-center text-stone-500 font-mono">—</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-stone-500 font-mono">—</td>
+                <td className="p-4 sm:p-5 text-center text-cyan-400 font-bold">✓ N2 & N1 সম্পূর্ণ</td>
+              </tr>
+
+              {/* Category: কাঞ্জি ও ওয়ার্কবুক */}
+              <tr className="bg-white/5">
+                <td colSpan={5} className="py-2.5 px-4 sm:px-5 text-[11px] font-black uppercase tracking-wider text-stone-400">
+                  কাঞ্জি ও প্র্যাকটিস টুলস
+                </td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  ১০০ কাঞ্জি প্র্যাকটিস ওয়ার্কবুক
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-300">বেসিক ৫০ কাঞ্জি</td>
+                <td className="p-4 sm:p-5 text-center text-stone-300">১০০ কাঞ্জি</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-semibold">
+                  ২৫০ কাঞ্জি
+                </td>
+                <td className="p-4 sm:p-5 text-center text-cyan-300 font-semibold">১,০০০+ কাঞ্জি (N5-N1)</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  স্পেসড রিপিটেশন ফ্ল্যাশকার্ড ও রিভিশন
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-300">বেসিক ফ্ল্যাশকার্ড</td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ পূর্ণাঙ্গ মেমরিওএস</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-stone-200 font-semibold">
+                  ✓ দুর্বলতা বিশ্লেষণ সহ
+                </td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ আনলিমিটেড</td>
+              </tr>
+
+              {/* Category: ক্যারিয়ার ও পরীক্ষা */}
+              <tr className="bg-white/5">
+                <td colSpan={5} className="py-2.5 px-4 sm:px-5 text-[11px] font-black uppercase tracking-wider text-stone-400">
+                  জাপান ক্যারিয়ার ও এক্সাম ওএস
+                </td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  JIS Z 8303 স্ট্যান্ডার্ড জাপানিজ CV / জীবনবৃত্তান্ত মেকার
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-emerald-400 font-bold">
+                  ✓ ফ্রি এডিটর ও প্রিভিউ
+                </td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">✓ এডিটর ও ক্লাউড সেভ</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
+                  ✓ ফুল JIS এক্সপোর্ট ও PDF
+                </td>
+                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">✓ AI কাভার লেটার + PDF</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  টোকিও কনবিনি WorkOS™ ক্যাশিয়ার সিমুলেটর
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">— (Pro লক)</td>
+                <td className="p-4 sm:p-5 text-center text-stone-500 font-mono">— (Pro লক)</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-emerald-400 font-bold">
+                  ✓ ফুল শিফট ও POS অডিও
+                </td>
+                <td className="p-4 sm:p-5 text-center text-emerald-400 font-bold">✓ ফুল শিফট ও সিনিয়র মোড</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  কম্পিউটার-বেসড JLPT মক এক্সাম ও অফিসিয়াল মার্কশিট
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">— (লক)</td>
+                <td className="p-4 sm:p-5 text-center text-stone-300">১টি কুইক মক</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
+                  ✓ ৫টি ফুল মক + স্কোরিং
+                </td>
+                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">✓ আনলিমিটেড + সার্টিফিকেট</td>
+              </tr>
+
+              {/* Category: এআই ও সাপোর্ট */}
+              <tr className="bg-white/5">
+                <td colSpan={5} className="py-2.5 px-4 sm:px-5 text-[11px] font-black uppercase tracking-wider text-stone-400">
+                  Nomi Sensei AI ও সাপোর্ট
+                </td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  Nomi Sensei AI ইন্টারেক্টিভ টিউটর
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-300">১০টি ট্রায়াল কয়েন</td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">৫০০ কয়েন / মাস</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
+                  ১,৫০০ কয়েন / মাস
+                </td>
+                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">৪,০০০ কয়েন + প্রায়োরিটি</td>
+              </tr>
+              <tr className="hover:bg-white/[0.02] transition">
+                <td className="p-4 sm:p-5 font-medium text-stone-200">
+                  সাপোর্ট ও কনসালটেশন
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-400">কমিউনিটি</td>
+                <td className="p-4 sm:p-5 text-center text-stone-300">ইমেল সাপোর্ট</td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-semibold">
+                  হোয়াটসঅ্যাপ প্রায়োরিটি
+                </td>
+                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">১-অন-১ ভিসা ও ইন্টারভিউ</td>
+              </tr>
+
+              {/* Action Buttons Row */}
+              <tr className="bg-white/5 border-t border-white/10">
+                <td className="p-4 sm:p-5 font-black text-white">এখনই শুরু করুন</td>
+                <td className="p-4 sm:p-5 text-center bg-emerald-500/5">
+                  <button
+                    onClick={() => onNavigate('journey')}
+                    className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow"
+                  >
+                    ফ্রি শুরু করুন
+                  </button>
+                </td>
+                <td className="p-4 sm:p-5 text-center">
+                  <button
+                    onClick={() => handleOpenCheckout(ALL_PLANS[1])}
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#1E2338] hover:bg-[#252c48] border border-white/20 text-white font-bold text-xs transition cursor-pointer"
+                  >
+                    Starter নিন
+                  </button>
+                </td>
+                <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20">
+                  <button
+                    onClick={() => handleOpenCheckout(ALL_PLANS[2])}
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white font-black text-xs transition cursor-pointer shadow-lg shadow-red-600/30"
+                  >
+                    Pro সাবস্ক্রাইব
+                  </button>
+                </td>
+                <td className="p-4 sm:p-5 text-center">
+                  <button
+                    onClick={() => handleOpenCheckout(ALL_PLANS[3])}
+                    className="w-full py-2.5 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition cursor-pointer shadow"
+                  >
+                    Japan Ready
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 

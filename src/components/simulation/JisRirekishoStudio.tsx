@@ -220,20 +220,74 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
     try {
       const paperElement = paperRef.current || document.getElementById('jis-resume-paper');
       if (!paperElement) {
-        console.warn('Resume paper element not found for export');
-        setIsGeneratingPdf(false);
-        return;
+        throw new Error('Resume paper element not found');
       }
 
-      const canvas = await html2canvas(paperElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        scrollX: 0,
-        scrollY: 0
-      });
+      // Safe Candidate File Name
+      const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
+      const fileName = `Nihomi_JIS_Rirekisho_${safeName}.pdf`;
+
+      // 1. Setup isolated sandbox with standard A4 width (794px at 96 DPI)
+      const sandbox = document.createElement('div');
+      sandbox.style.position = 'fixed';
+      sandbox.style.left = '0';
+      sandbox.style.top = '0';
+      sandbox.style.width = '794px';
+      sandbox.style.minHeight = '1123px';
+      sandbox.style.zIndex = '-9999';
+      sandbox.style.opacity = '1';
+      sandbox.style.pointerEvents = 'none';
+      sandbox.style.backgroundColor = '#ffffff';
+
+      const clone = paperElement.cloneNode(true) as HTMLElement;
+      clone.style.width = '794px';
+      clone.style.maxWidth = '794px';
+      clone.style.minWidth = '794px';
+      clone.style.margin = '0';
+      clone.style.transform = 'none';
+      clone.style.overflow = 'visible';
+      clone.style.opacity = '1';
+      clone.style.visibility = 'visible';
+      clone.style.display = 'block';
+      sandbox.appendChild(clone);
+      document.body.appendChild(sandbox);
+
+      let canvas: HTMLCanvasElement | null = null;
+
+      try {
+        // Render A4 canvas at 2x scale for crisp Japanese text
+        canvas = await html2canvas(clone, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          width: 794,
+          windowWidth: 794
+        });
+      } catch (captureErr) {
+        console.warn('Sandbox html2canvas capture failed, attempting sanitized retry:', captureErr);
+        // If image tainted canvas, remove external images from clone and retry
+        const images = clone.querySelectorAll('img');
+        images.forEach((img) => img.remove());
+        canvas = await html2canvas(clone, {
+          scale: 2,
+          useCORS: false,
+          allowTaint: false,
+          logging: false,
+          backgroundColor: '#ffffff',
+          width: 794,
+          windowWidth: 794
+        });
+      } finally {
+        if (sandbox.parentNode) {
+          sandbox.parentNode.removeChild(sandbox);
+        }
+      }
+
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        throw new Error('Canvas render produced empty dimensions');
+      }
 
       const imgData = canvas.toDataURL('image/jpeg', 0.98);
       const PDFDoc = (jsPDF as any).jsPDF || jsPDF;
@@ -270,14 +324,71 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
         }
       }
 
-      const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
-      pdf.save(`Nihomi_JIS_Rirekisho_${safeName}.pdf`);
+      // Multi-platform binary download triggering (Desktop + iOS/Android mobile webviews)
+      try {
+        const blob = pdf.output('blob');
+        const blobUrl = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = blobUrl;
+        downloadLink.download = fileName;
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        setTimeout(() => {
+          if (downloadLink.parentNode) {
+            downloadLink.parentNode.removeChild(downloadLink);
+          }
+          URL.revokeObjectURL(blobUrl);
+        }, 3000);
+      } catch (blobErr) {
+        pdf.save(fileName);
+      }
 
       soundEffects.playLessonCelebration();
       setDownloadSuccessNotice(true);
       setTimeout(() => setDownloadSuccessNotice(false), 4000);
-    } catch (err) {
-      console.warn('JIS PDF export failed:', err);
+    } catch (err: any) {
+      console.warn('JIS PDF export failed, falling back to structured vector generator:', err);
+      try {
+        const PDFDoc = (jsPDF as any).jsPDF || jsPDF;
+        const fallbackPdf = new PDFDoc({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        fallbackPdf.setFontSize(18);
+        fallbackPdf.text('JIS Standard Japanese Resume (履歴書)', 15, 20);
+        fallbackPdf.setFontSize(10);
+        fallbackPdf.text(`Candidate: ${formData.fullNameRomaji} (${formData.fullNameKana})`, 15, 30);
+        fallbackPdf.text(`Date of Birth: ${formData.birthDate} (${formData.japaneseEraBirth})`, 15, 36);
+        fallbackPdf.text(`Email: ${formData.email} | Phone: ${formData.phone}`, 15, 42);
+        fallbackPdf.text(`Visa Status: ${formData.visaStatus}`, 15, 48);
+        fallbackPdf.text(`Address: ${formData.currentAddress}`, 15, 54);
+        fallbackPdf.text('--- Education & Work History ---', 15, 64);
+        let y = 70;
+        formData.educationHistory.forEach((edu) => {
+          if (y < 260) {
+            fallbackPdf.text(`${edu.year}/${edu.month}: ${edu.schoolName} (${edu.status})`, 15, y);
+            y += 6;
+          }
+        });
+        formData.workHistory.forEach((work) => {
+          if (y < 260) {
+            fallbackPdf.text(`${work.year}/${work.month}: ${work.companyName} (${work.role})`, 15, y);
+            y += 6;
+          }
+        });
+        fallbackPdf.text('--- Motivation & Self PR ---', 15, y + 4);
+        y += 10;
+        const motivationLines = fallbackPdf.splitTextToSize(formData.motivationStatementPolished || formData.motivationStatement || 'None', 180);
+        fallbackPdf.text(motivationLines, 15, y);
+        y += motivationLines.length * 5 + 6;
+        const prLines = fallbackPdf.splitTextToSize(formData.selfPrPolished || formData.selfPr || 'None', 180);
+        fallbackPdf.text(prLines, 15, y);
+
+        const safeName = formData.fullNameRomaji.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'nihomi_user';
+        fallbackPdf.save(`Nihomi_JIS_Rirekisho_${safeName}.pdf`);
+        setDownloadSuccessNotice(true);
+      } catch (innerErr) {
+        console.error('All JIS PDF generation methods failed:', innerErr);
+        alert('PDF ডাউনলোড ব্যর্থ হয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+      }
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -1128,7 +1239,7 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       )}
 
       {/* Official Japanese JIS Printable View (Always mounted in DOM for zero-delay PDF export) */}
-      <div className={viewMode === 'preview' ? 'space-y-4 block' : 'fixed -left-[9999px] -top-[9999px] pointer-events-none opacity-0'}>
+      <div className={viewMode === 'preview' ? 'space-y-4 block' : 'fixed -left-[9999px] top-0 pointer-events-none z-[-9999]'}>
         {viewMode === 'preview' && (
           <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-2xl p-3 print:hidden">
             <span className="text-xs text-slate-300 font-medium">
