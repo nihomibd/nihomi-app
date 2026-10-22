@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP10-CBT-MOCK-EXAMS-CERTIFICATES-AND-BRAND-ALIGNMENT",
-  "scope_fingerprint": "f18e3c8245d680e1d0d24e37d81b4fb04e2f65c6d949b0733535460e64af404b",
-  "approved_at": "2026-10-22T19:17:30.000Z",
+  "task_id": "NIHOMI-WP11-PRODUCTION-PAYMENT-GATEWAYS-AND-COMMERCIAL-RELEASE",
+  "scope_fingerprint": "c4bca2b4618e3930b1a6c9d96a80824b5019bcfe31de48ac7501c44e336ab6dc",
+  "approved_at": "2026-10-23T01:48:22.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Computer-Based JLPT/NAT Mock Exams, Automated Marksheets & Branded Certificates, and Site-Wide Brand Color Palette Alignment",
-    "domain": "exam-os",
-    "base_commit": "4fa5018"
+    "title": "Production Payment Gateways Hardening, Branded Checkout Flow & Automated Tax Invoicing",
+    "domain": "monetization",
+    "base_commit": "41007ea"
   }
 }

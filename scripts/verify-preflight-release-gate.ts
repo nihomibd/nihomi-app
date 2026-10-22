@@ -80,6 +80,14 @@ const GATE_CHECKS: GateCheck[] = [
     args: ['tsx', 'scripts/test-cbt-mock-exam-and-certificates.ts'],
     expectedPassPhrase: 'ALL 8/8 TESTS PASSED PERFECTLY',
     timeoutMs: 30000
+  },
+  {
+    id: 'GATE-09-PRODUCTION-PAYMENTS',
+    name: 'Production Payment Gateways, Security & Tax Invoicing (11 Tests)',
+    command: 'npx',
+    args: ['tsx', 'scripts/test-production-payments-and-invoicing.ts'],
+    expectedPassPhrase: 'ALL 11/11 TESTS PASSED PERFECTLY',
+    timeoutMs: 30000
   }
 ];
 

@@ -1,47 +1,47 @@
 {
   "schema_version": "1.0",
   "status": "pending",
-  "task_id": "NIHOMI-WP10-CBT-MOCK-EXAMS-CERTIFICATES-AND-BRAND-ALIGNMENT",
-  "title": "Computer-Based JLPT/NAT Mock Exams, Automated Marksheets & Branded Certificates, and Site-Wide Brand Color Palette Alignment",
-  "objective": "Build a production-grade Computer-Based Testing (CBT) engine mirroring official JLPT/NAT-TEST conditions with strict sectional timers, candidate registration, automated marksheet scoring, and authentic Nihomi-branded PDF certificates, alongside complete UI alignment to the official Nihomi brand color palette.",
-  "domain": "exam-os",
+  "task_id": "NIHOMI-WP11-PRODUCTION-PAYMENT-GATEWAYS-AND-COMMERCIAL-RELEASE",
+  "title": "Production Payment Gateways Hardening, Branded Checkout Flow & Automated Tax Invoicing",
+  "objective": "Harden bKash, SSLCommerz/Nagad, and Stripe payment services for production release with robust error handling, honest credential disclosures, brand-aligned checkout UI, automated durable subscription state hydration, and official downloadable payment tax receipts/invoices.",
+  "domain": "monetization",
   "in_scope": [
-    "Build full CBT JLPT & NAT-TEST simulation engine with strict sectional time constraints (Language Knowledge, Reading, Listening audio player with one-play constraint)",
-    "Implement candidate exam registration flow with auto-generated candidate registration number and hall ticket slip",
-    "Develop automated marksheet scoring engine calculating sectional scores (Vocab/Reading/Listening) against official JLPT pass criteria (e.g. 19/60 sectional, 90/180 overall)",
-    "Generate authentic Nihomi-branded Achievement Certificates (合格証明書) and Official Marksheets (成績証明書) in downloadable A4 PDF format featuring the official Nihomi logo, QR verification code, and Founder signature",
-    "Harmonize colors and typography across nihomi.com (Obsidian #0A0A12, Crimson #E45147, Amber #F59E0B, Cream #F6F0E6, Slate #141726) strictly adhering to official Nihomi brand guidelines",
-    "Create automated test suite (scripts/test-cbt-mock-exam-and-certificates.ts) and verify real browser E2E flow for exam completion and certificate export"
+    "Harden backend payment services (server/services/bKashService.ts, server/services/sslCommerzService.ts, server/services/stripePaymentService.ts) with strict idempotency, resilient error boundaries, and zero fake timeouts",
+    "Harmonize CheckoutModal and PaymentMethodModal to adhere strictly to the Nihomi brand palette (Obsidian #0A0A12, Crimson #E45147, Amber #F59E0B) with transparent staging vs production credential indicators",
+    "Implement automated post-payment invoice and tax receipt generation in downloadable A4 PDF format (including transaction ID, VAT/Tax registration, Nihomi official logo, and student billing details)",
+    "Ensure database subscription hydration persists immediately upon payment verification with instant tier elevation across Student and Founder views",
+    "Create automated test suite (scripts/test-production-payments-and-invoicing.ts) verifying checkout initialization, callback validation, receipt generation, and subscription tier persistence",
+    "Integrate GATE-09-PRODUCTION-PAYMENTS into the pre-flight release gate and verify via real browser flow"
   ],
   "out_of_scope": [
-    "External third-party webcam biometric proctoring service",
-    "Physical paper test booklet printing and test venue seating logistics",
-    "Payment gateway payouts to third-party proctors"
+    "Physical point-of-sale card terminals in brick-and-mortar Japanese schools",
+    "Direct cryptocurrency payment processing",
+    "Manual paper ledger book tax audits"
   ],
   "acceptance_criteria": [
-    "Learners can register for a computer-based JLPT mock test and receive an automated candidate ID",
-    "Exam runner enforces real-exam time constraints and automatically submits answers upon time expiration",
-    "Upon exam submission, an official marksheet is calculated immediately with sectional breakdown and Pass/Fail status",
-    "Learners who pass can download an official Nihomi-branded Japanese Achievement Certificate in high-resolution A4 PDF with the Nihomi logo and QR code",
-    "All text, buttons, and backgrounds across nihomi.com conform to the official Nihomi brand color palette",
-    "All automated test suites and pre-flight release gates pass 100%"
+    "Payment gateways operate in strict production candidate mode with zero mock functions or fake timeouts",
+    "Checkout modal renders seamlessly in Obsidian, Crimson, and Amber brand palette across mobile and desktop",
+    "Successful checkout updates user subscription tier in database without requiring server restart",
+    "Learners can download an official Nihomi-branded Payment Invoice & Tax Receipt in A4 PDF format",
+    "Automated test suite (scripts/test-production-payments-and-invoicing.ts) passes 100%",
+    "All 9 pre-flight release gates pass 100%"
   ],
   "verification": [
-    "npx tsx scripts/test-cbt-mock-exam-and-certificates.ts",
+    "npx tsx scripts/test-production-payments-and-invoicing.ts",
     "npm run verify:preflight",
     "node scripts/nihomi-approval-gate.mjs validate"
   ],
   "risks": [
-    "Audio player for JLPT Listening section must be resilient against autoplay blocking on mobile browsers. Mitigation: Use explicit user start gesture with audio preload."
+    "Payment provider API downtime or missing production environment secrets. Mitigation: Graceful fallback with transparent guidance to learner, preserving state."
   ],
   "dependencies": [
-    "src/v2/pages/V2ExamPage.tsx",
-    "src/components/simulation/MockExamRunnerView.tsx",
-    "src/components/brand/NihomiBrandLogo.tsx",
-    "src/lib/services/certificatePdfGenerator.ts",
-    "src/core/entitlements/entitlementConstitution.ts"
+    "server/routes/payment.ts",
+    "server/services/paymentProviders.ts",
+    "server/services/subscriptionService.ts",
+    "src/components/CheckoutModal.tsx",
+    "src/lib/services/invoicePdfGenerator.ts"
   ],
-  "base_commit": "4fa5018",
-  "created_at": "2026-10-23T01:15:00.000Z",
+  "base_commit": "41007ea",
+  "created_at": "2026-10-23T01:46:00.000Z",
   "proposed_by": "Antigravity Lead Autonomous Production Engineer"
 }

@@ -9,16 +9,59 @@ import {
   Receipt,
   RotateCcw,
   BookOpen,
-  Award
+  Award,
+  FileText,
+  Download,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { generateOfficialInvoicePdf, triggerPdfDownload } from '../lib/services/invoicePdfGenerator';
+import { soundEffects } from '../lib/soundEffects';
 
 interface PaymentCallbackViewProps {
   onNavigate: (view: string, params?: Record<string, any>) => void;
 }
 
 export const PaymentCallbackView: React.FC<PaymentCallbackViewProps> = ({ onNavigate }) => {
-  const { refreshSubscription } = useAuth();
+  const { user, refreshSubscription } = useAuth();
+  const [isDownloadingInvoice, setIsDownloadingInvoice] = useState(false);
+
+  const handleDownloadInvoice = () => {
+    setIsDownloadingInvoice(true);
+    soundEffects.playButtonTap();
+    try {
+      const invNumber = params.invoiceNumber || `NHM-INV-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      const trx = params.trxID || `TRX_${Date.now().toString().slice(-6)}`;
+      const amt = parseFloat(params.amount || '1990') || 1990;
+      const doc = generateOfficialInvoicePdf(
+        {
+          invoiceNumber: invNumber,
+          trxID: trx,
+          paymentMethod: 'bKash Tokenized Gateway (PGW)',
+          planId: params.tier || 'pro',
+          planTitle: tierNameBn + ' (Minna no Nihongo & Nomi Sensei Pass)',
+          billingInterval: 'Monthly Subscription',
+          amount: amt,
+          currency: 'BDT',
+          discountAmount: 0,
+          taxAmount: 0,
+          paymentStatus: 'PAID'
+        },
+        {
+          studentName: user?.name || user?.email?.split('@')[0] || 'Nihomi Student',
+          studentEmail: user?.email || 'student@nihomi.com',
+          studentId: user?.id || 'NHM-STD-2026-REG',
+          studentCountry: 'Bangladesh (BD)'
+        }
+      );
+      triggerPdfDownload(doc, `Nihomi_Payment_Invoice_${invNumber}.pdf`);
+      soundEffects.playLessonCelebration();
+    } catch (err) {
+      console.error('Failed to download invoice:', err);
+    } finally {
+      setIsDownloadingInvoice(false);
+    }
+  };
   const [params, setParams] = useState<{
     status: string;
     trxID?: string;
@@ -173,6 +216,26 @@ export const PaymentCallbackView: React.FC<PaymentCallbackViewProps> = ({ onNavi
 
               {/* Actions */}
               <div className="space-y-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleDownloadInvoice}
+                  disabled={isDownloadingInvoice}
+                  className="w-full py-3 px-4 bg-slate-900/90 hover:bg-slate-800 text-amber-400 text-sm font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors border border-amber-500/30 cursor-pointer shadow-lg active:scale-[0.99]"
+                  id="download-official-invoice-btn"
+                >
+                  {isDownloadingInvoice ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+                      <span>ইনভয়েস জেনারেট হচ্ছে...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-4 h-4 text-amber-400" />
+                      <span>অফিসিয়াল ট্যাক্স ইনভয়েস ডাউনলোড করুন (A4 PDF)</span>
+                    </>
+                  )}
+                </button>
+
                 <button
                   type="button"
                   onClick={() => onNavigate('portal')}

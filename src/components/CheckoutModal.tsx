@@ -300,7 +300,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.22, ease: 'easeOut' }}
-          className="relative w-full max-w-xl bg-[#0d0b1a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden my-auto p-5 sm:p-7 space-y-5"
+          className="relative w-full max-w-xl bg-[#0A0A12] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden my-auto p-5 sm:p-7 space-y-5"
         >
           {/* Close Button */}
           <button
@@ -333,7 +333,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           )}
 
           {/* Chosen Plan Summary Box (Single Plan Confirmation) */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1a1433] via-[#140f28] to-[#0d091b] border border-white/15 space-y-3 shadow-lg">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#141726] via-[#101320] to-[#0A0A12] border border-white/15 space-y-3 shadow-lg">
             <div className="flex items-start justify-between">
               <div>
                 <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border mb-1 ${planConfig.badgeColor}`}>
@@ -452,7 +452,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
           {/* Honest Connecting / Not Configured State or bKash 1-Click Gateway */}
           {isConnectingMode ? (
-            <div className="p-4 rounded-2xl bg-gradient-to-b from-[#1e172e] to-[#140f21] border border-amber-500/40 space-y-3">
+            <div className="p-4 rounded-2xl bg-gradient-to-b from-[#141726] to-[#0A0A12] border border-amber-500/40 space-y-3">
               <div className="flex items-start gap-2.5">
                 <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                 <div>

@@ -30,7 +30,8 @@
     "test:orchestrator": "tsx scripts/test-loop-orchestrator.ts",
     "verify:preflight": "tsx scripts/verify-preflight-release-gate.ts",
     "test:cv-pdf": "tsx scripts/test-cv-pdf-and-free-tier.ts",
-    "test:cbt-exam": "tsx scripts/test-cbt-mock-exam-and-certificates.ts"
+    "test:cbt-exam": "tsx scripts/test-cbt-mock-exam-and-certificates.ts",
+    "test:payments": "tsx scripts/test-production-payments-and-invoicing.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
