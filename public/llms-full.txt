@@ -1,0 +1,153 @@
+# NIHOMI.COM (にほみ) — COMPLETE EXTENDED LLM SPECIFICATION & PEDAGOGICAL BLUEPRINT
+
+## 1. Executive Summary & Vision
+NIHOMI (にほみ) is the commercial Japanese learning and Tokyo relocation operating system developed for native Bengali speakers and South Asian students aiming for higher education, specialized skilled worker (SSW) visas, and corporate placement in Japan.
+
+URL: https://nihomi.com
+Founder & System Architect: MD Tanvir Kabir Biplob (mdtanvirkabirbiplob@gmail.com)
+Academic Ecosystem: bdTrip24 Group & Nihomi Academic Council
+
+---
+
+## 2. Strict Cumulative Learning Lattice & Invariants
+
+```
+Known Character ≠ Valid Syllable ≠ Valid Japanese Word ≠ Pedagogically Useful Word
+```
+
+Every sentence, word, flashcard, exercise, and AI Sensei response must be validated against the learner's unlocked knowledge state:
+
+1. **Stage 1 (Character: あ / a):**
+   - Introduced: ONLY the isolated glyph 'あ' (Sound: /a/, 3 strokes).
+   - Invariant: Zero vocabulary unlocked. The word 'あい' is strictly illegal at Stage 1 because 'い' has not been introduced.
+
+2. **Stage 2 (Character: い / i):**
+   - Active Character Inventory: { あ, い }
+   - Meaningful Vocabulary Unlocked:
+     * あい (Ai — Love / ভালোবাসা)
+     * いい (Ii — Good / ভালো)
+   - Invariant: Multi-vowel words requiring 'う' (e.g. 'いう'), 'え' (e.g. 'いえ'), or 'お' (e.g. 'あお') remain strictly locked.
+
+3. **Stage 3 (Character: う / u):**
+   - Active Character Inventory: { あ, い, う }
+   - Vocabulary Unlocked:
+     * いう (Iu — To say / বলা)
+     * あう (Au — To meet / দেখা করা)
+
+4. **Stage 4 (Character: え / e):**
+   - Active Character Inventory: { あ, い, う, え }
+   - Vocabulary Unlocked:
+     * いえ (Ie — House / বাড়ি)
+     * うえ (Ue — Above, Top / উপরে)
+     * え (E — Picture, Painting / ছবি)
+
+5. **Stage 5 (Character: お / o):**
+   - Active Character Inventory: { あ, い, う, え, お }
+   - Vocabulary Unlocked:
+     * あお (Ao — Blue / নীল)
+     * おおい (Ooi — Many, Numerous / অনেক)
+     * おおう (Oou — To cover / ঢেকে রাখা)
+   - Milestone: 5-Vowel Milestone Gate (Mastery test over the 5 vowels before unlocking the 'Ka' column).
+
+---
+
+## 3. Minna no Nihongo & JLPT N5 Master Curriculum (25 Lessons)
+
+| Lesson | Module | Core Concept | Unlocked Grammar & Real-Life Scenario | Free/Pro |
+| :--- | :--- | :--- | :--- | :--- |
+| **L01** | Foundation | 自己紹介 (Self Introduction) | 〜は〜です / 〜じゃありません / 〜ですか (Introducing yourself at Tokyo Language School) | **FREE** |
+| **L02** | Foundation | 指示代名詞 (Demonstratives) | これ・それ・あれ・この・その・あの (Shopping and asking for stationery items) | **FREE** |
+| **L03** | Foundation | 場所 (Locations & Places) | ここ・そこ・あそこ・どこ・〜階 (Navigating Shinjuku station and department stores) | **FREE** |
+| **L04** | Time & Action | 時間と動词 (Time & Verb Basics) | 今〜時〜分 / 〜から〜まで / 動詞ます・ました (Asking store opening hours and train schedules) | **FREE** |
+| **L05** | Movement | 移動動詞 (Direction & Travel) | へ行きます・来ます・帰ります / で (Vehicle particles, commuting by Yamanote line) | **FREE** |
+| **L06** | Daily Routine | 行為・飲食 (Food, Drink & Objects) | を食べます・飲みます / で (Ordering at a ramen shop or café in Shibuya) | PRO |
+| **L07** | Tools & Gifts | 授受・道具 (Giving, Receiving & Tools) | で (with tool) / にあげます・にもらいます / もう〜ました (Gifting and chopsticks etiquette) | PRO |
+| **L08** | Describing | 形容詞 (Adjectives i/na) | い形容詞 / な形容詞 / とても・あまり (Describing Tokyo weather, food, and neighborhood safety) | PRO |
+| **L09** | Preferences | 嗜好・能力 (Likes, Dislikes & Ability) | が好きです・嫌いです / が分かります / があります (Conversations with Japanese coworkers) | PRO |
+| **L10** | Existence | 存在動詞 (Existence of People & Items) | に〜があります・います / 箱の中に (Finding lost items at station Lost & Found) | PRO |
+| **L11** | Counting | 助数詞 (Japanese Counters) | 一つ・二つ・枚・本・台 / どのくらい (Ordering portions at Izakaya and ticket counters) | PRO |
+| **L12** | Comparison | 比較・過去 (Comparison & Past Adjectives) | 〜より〜のほうが / 一番 / 〜でした (Comparing Tokyo vs Osaka cost of living) | PRO |
+| **L13** | Desires | 願望・目的 (Desires & Purpose of Movement) | 〜が欲しいです / 〜たいです / 〜に行きます (Expressing career dreams and apartment search goals) | PRO |
+| **L14** | Te-Form 1 | て形 (The Crucial Te-form Foundation) | 〜てください / 〜ています (polite requests at municipal city hall) | PRO |
+| **L15** | Te-Form 2 | 許可・禁止 (Permission & Prohibition) | 〜てもいいです / 〜てはいけません (Rules on trains, smoking zones, and work safety) | PRO |
+| **L16** | Sequences | 連続動作 (Sequence of Actions) | 〜てから / 〜て、〜て (Explaining morning commute sequence) | PRO |
+| **L17** | Nai-Form | ない形 (Negative Polite & Obligation) | 〜ないでください / 〜なければなりません (Visa documentation submission deadlines) | PRO |
+| **L18** | Dictionary | 辞書形 (Dictionary Form & Hobbies) | 辞書形 / ことができます / 趣味は〜ことです (Opening a Japan Post Yucho bank account) | PRO |
+| **L19** | Ta-Form | た形 (Past Experience & Alternation) | 〜たことがあります / 〜たり〜たりします (Discussing previous travel experiences) | PRO |
+| **L20** | Plain Style | 普通体 (Conversational Plain Style) | だ・じゃない・だった (Talking casually with dorm roommates and friends) | PRO |
+| **L21** | Opinions | 意見・推量 (Expressing Opinions) | 〜と思います / 〜と言いました (Discussing news and expressing thoughts at work meetings) | PRO |
+| **L22** | Modifiers | 連体修飾 (Noun Modification Clauses) | ［修飾節］＋名詞 (Describing people and items: 'The person wearing glasses') | PRO |
+| **L23** | Conditions | とき・条件 (When & Conditions) | 〜とき / 〜と、〜ます (Asking directions: 'When you turn right at the corner...') | PRO |
+| **L24** | Favors | 授受表現 (Giving & Receiving Favors) | 〜てくれます / 〜てもらいます / 〜てあげます (Thanking a mentor for helping with tax forms) | PRO |
+| **L25** | Hypotheticals | 条件・仮定 (Hypothetical Conditionals) | 〜たら、〜 / 〜ても、〜 (Planning future career steps after passing JLPT N5) | PRO |
+
+---
+
+## 4. Computer-Based Examination Engine (JLPT & NAT Architecture)
+
+- **Exam Formats Supported**: JLPT (N5, N4, N3, N2, N1) & NAT-TEST (5Q, 4Q, 3Q, 2Q, 1Q).
+- **Time Limits**:
+  * N5: Language Knowledge & Reading (80 mins) + Listening (30 mins). Total: 110 mins.
+  * N4: Language Knowledge & Reading (95 mins) + Listening (35 mins). Total: 130 mins.
+- **Scoring Breakdown**: Total 180 Marks.
+  * Section 1 (Language Knowledge: Vocabulary/Grammar): 60 Marks (Sectional Pass cutoff: 19)
+  * Section 2 (Reading Comprehension): 60 Marks (Sectional Pass cutoff: 19)
+  * Section 3 (Listening Comprehension): 60 Marks (Sectional Pass cutoff: 19)
+  * Overall Passing Cutoff: 90 / 180 (N5) or 95 / 180 (N4).
+- **Certificates Generated**: Official A4 Landscape PDF featuring:
+  * Full Student Legal Name & Hall Ticket Registration Number
+  * Nihomi Official Brand Logo & Red Hanko Seal (にほみ公式印)
+  * QR Code for Instant Web Verification on https://nihomi.com/verify
+  * Formal Bengali, Japanese, and English certification text.
+
+---
+
+## 5. Japanese JIS Standard Resume (履歴書) Studio
+
+- **Standard**: Japanese Industrial Standards (JIS) Form Z 8303.
+- **Imperial Calendar Engine**: Converts Western Gregorian calendar dates into authentic Japanese Gengo (令和 / 平成 / 昭和).
+  * 2026 => 令和 8 年 (Reiwa 8)
+  * 2019 => 令和元年 (Reiwa 1)
+  * 2000 => 平成 12 年 (Heisei 12)
+- **Sections Handled**:
+  * 基本情報 (Basic Personal Information, Furigana, Gender, Seal space)
+  * 学歴・職歴 (Academic & Work History with chronological layout)
+  * 免許・資格 (Licenses & Qualifications, JLPT level, Driver's License)
+  * 志望動機・自己PR (Motivation & Self-Promotion, Keigo validation)
+  * 本人希望記入欄 (Commute preferences, working hours)
+- **Export**: One-click high-resolution A4 vector PDF.
+
+---
+
+## 6. Tokyo Konbini (7-Eleven POS) Job Simulator (WorkOS)
+
+- **Context**: Real Tokyo convenience store counter operation.
+- **Key Register Phrases Taught**:
+  * いらっしゃいませ (Welcome)
+  * ポイントカードはお持ちですか (Do you have a point card?)
+  * お弁当温めますか (Shall I heat up your bento?)
+  * 少々お待ちください (Please wait a moment)
+  * 1,000円からお預かりいたします (Accepting 1,000 yen)
+  * 350円のお返しでございます (Returning 350 yen change)
+  * ありがとうございました、またお越しくださいませ (Thank you, please come again)
+- **Interactive Scenarios**: Barcode scanning, cash calculation, tobacco number confirmation (タバコの番号), hot snack dispensing (ホットスナック), and customer dispute de-escalation.
+
+---
+
+## 7. Role-Based Access Control (RBAC) Specification
+
+- **Authoritative Founder Email**: `mdtanvirkabirbiplob@gmail.com`
+- **Role Assignment Law**:
+  * Email `=== 'mdtanvirkabirbiplob@gmail.com'` => Role: `founder` / `admin` (Unrestricted access to Executive Cockpit, Telemetry, MRR, User Management, Content Engine).
+  * All other authenticated emails => Role: `student` (Granted access to learner dashboard, study progress, personal SRS deck, and billing).
+- **Security Guard**: Unauthenticated requests to `/api/founder/*` return HTTP `401 AUTH_REQUIRED`. Non-founder bearer tokens return HTTP `403 FORBIDDEN_FOUNDER_ONLY`.
+
+---
+
+## 8. IndexNow Protocol & Search Engine Integration
+
+- **IndexNow Endpoint**: `https://api.indexnow.org/indexnow`
+- **Key Location**: `https://nihomi.com/indexnow-key.txt`
+- **Search Engines Notified**: Bing, Yandex, Seznam, Naver.
+- **Sitemap Location**: `https://nihomi.com/sitemap.xml`
+- **Robots Directives**: `https://nihomi.com/robots.txt`

@@ -1,23 +1,45 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V2-COMMERCIAL-PRODUCTION-RELEASE-LOCKED",
-  "title": "Platform Operating in Stable Commercial Production Mode",
-  "objective": "All work packages WP01 through WP14 successfully executed, verified, pushed, tagged as v2.0.0-production, and live on https://www.nihomi.com.",
-  "domain": "Production Operations",
+  "task_id": "NIHOMI-WP15-FOUNDER-EMAIL-UPDATE-AND-GLOBAL-SEO-AI-INDEXING",
+  "title": "Authoritative Founder Email Lock, Search Engine Indexing (GSC, Bing, Sitemap, Robots), AI Crawler Metadata (llms.txt) & High-Resolution Open Graph Protocol",
+  "objective": "Lock authoritative Founder email mdtanvirkabirbiplob@gmail.com with student default for all others, add Google Search Console and Bing Webmaster verification, build comprehensive V2 sitemap.xml and robots.txt, establish llms.txt standard for AI crawlers, and harden Open Graph social preview cards.",
+  "domain": "Platform Infrastructure / SEO & Growth Engineering",
   "in_scope": [
-    "Continuous uptime and telemetry monitoring",
-    "Learner onboarding and study session tracking"
+    "Lock and verify authoritative Founder email mdtanvirkabirbiplob@gmail.com across server env, auth middleware, and client context (all other users strictly student role)",
+    "Implement Google Search Console verification meta tag and Bing Webmaster Tools msvalidate tag in index.html with runtime env fallback support",
+    "Generate comprehensive canonical public/sitemap.xml with all V2 routes (Home, Journey, Kana, Curriculum, Mock Exams, JIS CV Builder, WorkOS, Pricing, Legal, Contact) and lastmod timestamps",
+    "Update public/robots.txt with sitemap directive and explicit crawler permissions for Bingbot and AI agents (GPTBot, ClaudeBot, Google-Extended, PerplexityBot)",
+    "Create public/llms.txt and public/llms-full.txt according to standard llmstxt.org specification describing Nihomi platform, Nomi Sensei, Minna no Nihongo curriculum, and API endpoints",
+    "Harden Open Graph and Twitter Card tags in index.html for high-contrast rich media previews on WhatsApp, LinkedIn, Facebook, and Twitter",
+    "Build and execute automated test suite scripts/test-seo-sitemap-and-ai-indexing.ts verifying XML schema, status codes, and meta tag attributes"
   ],
-  "out_of_scope": [],
+  "out_of_scope": [
+    "Modifying core Japanese pedagogical lattice or introducing untaught vocabulary",
+    "Modifying production payment credentials or external database schema",
+    "Unsolicited aesthetic changes unrelated to SEO or meta tags"
+  ],
   "acceptance_criteria": [
-    "Platform live and healthy on https://www.nihomi.com"
+    "Server and client role matrix strictly restricts Founder privileges to mdtanvirkabirbiplob@gmail.com",
+    "public/sitemap.xml exists, is valid XML, and contains all canonical V2 routes",
+    "public/robots.txt correctly links to https://nihomi.com/sitemap.xml and allows search & AI bots",
+    "public/llms.txt and public/llms-full.txt serve 200 OK with accurate platform documentation",
+    "index.html contains valid Google Search Console and Bing Webmaster verification tags",
+    "index.html contains full Open Graph and Twitter Card metadata rendering rich previews",
+    "Automated verification test suite scripts/test-seo-sitemap-and-ai-indexing.ts passes 100% of checks"
   ],
   "verification": [
-    "Continuous health monitoring"
+    "npx tsx scripts/test-seo-sitemap-and-ai-indexing.ts",
+    "node scripts/verify-live-production-browser.cjs",
+    "npm run lint"
   ],
-  "risks": [],
-  "dependencies": [],
-  "base_commit": "1c97c25",
-  "created_at": "2026-10-22T20:23:00.000Z",
-  "status": "idle"
+  "risks": [
+    "Search engine indexing latency depends on Google and Bing crawl queues"
+  ],
+  "dependencies": [
+    "NIHOMI-WP14-PRODUCTION-RELEASE-FINAL-SIGN-OFF-AND-MAINTENANCE (commit 94aa742)",
+    "Live production domain https://www.nihomi.com operational"
+  ],
+  "base_commit": "94aa742",
+  "created_at": "2026-10-23T02:32:00.000Z",
+  "status": "pending"
 }

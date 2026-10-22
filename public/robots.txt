@@ -1,26 +1,93 @@
-# NIHOMI™ (nihomi.com) — Robots Configuration & Search Engine Directives
+# NIHOMI™ (nihomi.com) — Modern Production Robots & AI Agent Directives
+# Official Platform: NIHOMI (にほみ) — Japanese Learning & Career OS
+# Canonical Sitemap: https://nihomi.com/sitemap.xml
+# AI Knowledge Architecture: https://nihomi.com/llms.txt
+
+# 1. General Web Crawlers
 User-agent: *
 Allow: /
-Allow: /courses
+Allow: /journey
+Allow: /curriculum
 Allow: /kana
+Allow: /mock-exams
+Allow: /rirekisho
+Allow: /workos
 Allow: /pricing
 Allow: /portal
-Allow: /baito
-Allow: /coordination
 Allow: /documents
-Allow: /credits
+Allow: /about
+Allow: /contact
 Allow: /terms
 Allow: /privacy
-Allow: /contact
+Allow: /refund-policy
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
 
-# Disallow Private Executive & Internal Admin Endpoints
-Disallow: /admin/*
-Disallow: /admin
-Disallow: /founder/*
+# 2. Leading Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# 3. Modern AI Agents & LLM Information Gatherers
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+# 4. Strictly Protect Sensitive Internal APIs and Founder Executive Portals
 Disallow: /founder
+Disallow: /founder/*
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/founder/*
 Disallow: /api/admin/*
 Disallow: /api/content-engine/*
 Disallow: /api/billing/webhook
 
-# Sitemap Index
+# 5. Search Engine Index & AI Architecture Pointers
 Sitemap: https://nihomi.com/sitemap.xml

@@ -2,110 +2,160 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- 1. Home / Central Landing -->
+  <!-- 1. Central Landing / Home -->
   <url>
     <loc>https://nihomi.com/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/?lang=ja" />
     <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/?lang=en" />
   </url>
 
-  <!-- 2. JLPT N5, N4, N3 Master Curriculum -->
+  <!-- 2. Tokyo Metro Journey & Interactive Map -->
   <url>
-    <loc>https://nihomi.com/courses</loc>
-    <lastmod>2026-09-30</lastmod>
+    <loc>https://nihomi.com/journey</loc>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/courses" />
-    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/courses?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/journey" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/journey?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/journey?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/journey?lang=en" />
   </url>
 
-  <!-- 3. Authentic Kana Studio & Stroke Lab -->
+  <!-- 3. Authentic Minna no Nihongo & JLPT N5-N1 Master Curriculum (Lessons 1-5 Free) -->
+  <url>
+    <loc>https://nihomi.com/curriculum</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/curriculum" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/curriculum?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/curriculum?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/curriculum?lang=en" />
+  </url>
+
+  <!-- 4. Authentic Kana Studio & Stroke Lab (100% Free) -->
   <url>
     <loc>https://nihomi.com/kana</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/kana" />
     <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/kana?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/kana?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/kana?lang=en" />
   </url>
 
-  <!-- 4. Pricing & Subscription Plans -->
+  <!-- 5. Computer-Based JLPT & NAT-TEST Online Examination Hub (Timed Mocks & Branded Certificates) -->
+  <url>
+    <loc>https://nihomi.com/mock-exams</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/mock-exams" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/mock-exams?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/mock-exams?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/mock-exams?lang=en" />
+  </url>
+
+  <!-- 6. Japanese Standard JIS Resume (履歴書) Studio & PDF Exporter (100% Free) -->
+  <url>
+    <loc>https://nihomi.com/rirekisho</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/rirekisho" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/rirekisho?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/rirekisho?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/rirekisho?lang=en" />
+  </url>
+
+  <!-- 7. Tokyo Konbini (7-Eleven POS) Job & Relocation Simulation Lab (WorkOS) -->
+  <url>
+    <loc>https://nihomi.com/workos</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/workos" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/workos?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/workos?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/workos?lang=en" />
+  </url>
+
+  <!-- 8. Commercial Pricing, Transparent Free Tier & Pro Subscription Plans -->
   <url>
     <loc>https://nihomi.com/pricing</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/pricing" />
     <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/pricing?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://nihomi.com/pricing?lang=ja" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nihomi.com/pricing?lang=en" />
   </url>
 
-  <!-- 5. Student Portal & SRS Memory Arena -->
+  <!-- 9. Student Portal & SRS Memory Arena -->
   <url>
     <loc>https://nihomi.com/portal</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/portal" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/portal?lang=bn" />
   </url>
 
-  <!-- 6. Tokyo Baito-OS™ Job & Visa Simulator -->
-  <url>
-    <loc>https://nihomi.com/baito</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- 7. Academic, Visa & Coordination Hub -->
-  <url>
-    <loc>https://nihomi.com/coordination</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- 8. Official Documents & 150-Hour Certification -->
+  <!-- 10. Official Documents & 150-Hour Japanese Study Certificate Verification -->
   <url>
     <loc>https://nihomi.com/documents</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/documents" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/documents?lang=bn" />
   </url>
 
-  <!-- 9. AI Sensei Credits Store -->
-  <url>
-    <loc>https://nihomi.com/credits</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- 10. Terms of Service -->
-  <url>
-    <loc>https://nihomi.com/terms</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- 11. Privacy Policy -->
-  <url>
-    <loc>https://nihomi.com/privacy</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- 12. Contact & Student Support -->
+  <!-- 11. Contact & Support Desk -->
   <url>
     <loc>https://nihomi.com/contact</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.70</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/contact" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/contact?lang=bn" />
+  </url>
+
+  <!-- 12. Terms of Service -->
+  <url>
+    <loc>https://nihomi.com/terms</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/terms" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/terms?lang=bn" />
+  </url>
+
+  <!-- 13. Privacy Policy -->
+  <url>
+    <loc>https://nihomi.com/privacy</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/privacy" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/privacy?lang=bn" />
+  </url>
+
+  <!-- 14. Commercial Refund & Cancellation Policy -->
+  <url>
+    <loc>https://nihomi.com/refund-policy</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nihomi.com/refund-policy" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://nihomi.com/refund-policy?lang=bn" />
   </url>
 
 </urlset>

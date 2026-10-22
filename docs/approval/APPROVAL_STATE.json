@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP14-PRODUCTION-RELEASE-FINAL-SIGN-OFF-AND-MAINTENANCE",
-  "scope_fingerprint": "d7a3ce6b65f4fbff8a6f858e81439e7a2b0c145c8e077614e0ccd2d77111226f",
-  "approved_at": "2026-10-23T02:22:58.000Z",
+  "task_id": "NIHOMI-WP15-FOUNDER-EMAIL-UPDATE-AND-GLOBAL-SEO-AI-INDEXING",
+  "scope_fingerprint": "22918a924accfad963a32d9b5c89b6ff5bbcdb81da5943c3573be2dc0e6c8606",
+  "approved_at": "2026-10-23T02:33:05.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Commercial Production Release Final Sign-Off, Telemetry Monitoring & Student Onboarding Protocol",
-    "domain": "Release Governance / Commercial Operations",
-    "base_commit": "1c97c25"
+    "title": "Authoritative Founder Email Lock, Search Engine Indexing (GSC, Bing, Sitemap, Robots), AI Crawler Metadata (llms.txt) & High-Resolution Open Graph Protocol",
+    "domain": "Platform Infrastructure / SEO & Growth Engineering",
+    "base_commit": "94aa742"
   }
 }
