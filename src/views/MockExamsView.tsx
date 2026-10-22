@@ -21,6 +21,7 @@ import {
 import { fetchMockExams, MockExamSummaryItem } from '../services/mockExamApi';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../hooks/useSubscription';
+import { CbtExamRegistrationModal } from '../components/mockExam/CbtExamRegistrationModal';
 
 interface MockExamsViewProps {
   onNavigate: (view: string, params?: any) => void;
@@ -32,6 +33,13 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
   const [exams, setExams] = useState<MockExamSummaryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedLevel, setSelectedLevel] = useState<string>('N5');
+  const [selectedExamForRegistration, setSelectedExamForRegistration] = useState<MockExamSummaryItem | null>(null);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+
+  const handleOpenRegistration = (exam: MockExamSummaryItem) => {
+    setSelectedExamForRegistration(exam);
+    setIsRegistrationModalOpen(true);
+  };
 
   useEffect(() => {
     async function loadExams() {
@@ -299,11 +307,11 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
                   <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
                     <button
                       type="button"
-                      onClick={() => onNavigate('mock-exam-runner', { examId: exam.id })}
-                      className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-sm shadow-xl shadow-rose-600/30 transition-all active:scale-[0.98]"
+                      onClick={() => handleOpenRegistration(exam)}
+                      className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white font-black text-sm shadow-xl shadow-red-600/30 transition-all active:scale-[0.98] cursor-pointer"
                     >
                       <Play className="w-4 h-4 fill-white" />
-                      <span>{exam.userBestAttempt ? 'আবার পরীক্ষা দিন' : 'সিমুলেশন শুরু করুন'}</span>
+                      <span>{exam.userBestAttempt ? 'CBT পুনরায় পরীক্ষা দিন' : 'রেজিস্ট্রেশন ও পরীক্ষা শুরু'}</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
 
@@ -357,6 +365,22 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
           </button>
         </div>
       )}
+
+      {/* CBT Candidate Registration & Hall Ticket Modal */}
+      <CbtExamRegistrationModal
+        isOpen={isRegistrationModalOpen}
+        exam={selectedExamForRegistration}
+        onClose={() => setIsRegistrationModalOpen(false)}
+        onProceedToExam={(regData) => {
+          setIsRegistrationModalOpen(false);
+          if (selectedExamForRegistration) {
+            onNavigate('mock-exam-runner', {
+              examId: selectedExamForRegistration.id,
+              registrationData: regData
+            });
+          }
+        }}
+      />
     </div>
   );
 };

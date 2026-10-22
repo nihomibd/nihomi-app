@@ -15,6 +15,7 @@ interface V2ExamPageProps {
 
 export const V2ExamPage: React.FC<V2ExamPageProps> = ({ examId, onNavigate }) => {
   const [activeExamId, setActiveExamId] = useState<string | null>(examId || null);
+  const [activeRegistrationParams, setActiveRegistrationParams] = useState<Record<string, any>>({});
 
   const examLoopBriefing = React.useMemo(() => {
     try {

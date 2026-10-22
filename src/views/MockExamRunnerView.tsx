@@ -31,12 +31,13 @@ import { haptic } from '../lib/haptic';
 import { soundEffects } from '../lib/soundEffects';
 
 interface MockExamRunnerViewProps {
+  registrationData?: Record<string, any>;
   examId: string;
   onNavigate: (view: string, params?: any) => void;
   onAttemptCompleted?: (attempt: MockExamAttempt, reviewSections: any[]) => void | Promise<void>;
 }
 
-export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, onNavigate, onAttemptCompleted }) => {
+export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, registrationData, onNavigate, onAttemptCompleted }) => {
   const { user } = useAuth();
   const [exam, setExam] = useState<MockExam | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -845,7 +846,9 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         {reviewActiveTab === 'certificate' && (
           <MockExamOfficialCertificate
             attempt={attempt}
-            studentName={user?.name || user?.email?.split('@')[0] || 'Tanvir Hossain'}
+            studentName={registrationData?.candidateName || user?.name || user?.email?.split('@')[0] || 'Tanvir Hossain'}
+            studentNameKana={registrationData?.candidateNameKana || 'タンヴィル ホセイン'}
+            registrationNumber={registrationData?.registrationNumber}
           />
         )}
 

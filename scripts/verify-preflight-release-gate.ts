@@ -72,6 +72,14 @@ const GATE_CHECKS: GateCheck[] = [
     args: ['tsx', 'scripts/test-cv-pdf-and-free-tier.ts'],
     expectedPassPhrase: 'ALL 13/13 TESTS PASSED PERFECTLY',
     timeoutMs: 30000
+  },
+  {
+    id: 'GATE-08-CBT-EXAM-AND-CERTIFICATES',
+    name: 'CBT JLPT Mock Exams, Marksheets & Branded Certificates (8 Tests)',
+    command: 'npx',
+    args: ['tsx', 'scripts/test-cbt-mock-exam-and-certificates.ts'],
+    expectedPassPhrase: 'ALL 8/8 TESTS PASSED PERFECTLY',
+    timeoutMs: 30000
   }
 ];
 

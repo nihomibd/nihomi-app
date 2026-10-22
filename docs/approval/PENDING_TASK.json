@@ -1,47 +1,47 @@
 {
   "schema_version": "1.0",
   "status": "pending",
-  "task_id": "NIHOMI-WP07-V2-ROLE-AUTH-AND-AVATAR-FIX",
-  "title": "Fix V2 Auth Modal Mounting, 2-Role Sign-In (Founder vs Student), and Google Avatar Hydration",
-  "objective": "Mount AuthModal in V2AppShell to resolve unresponsive login/signup buttons on mobile/desktop, enforce strict 2-role system (Founder for mdtanvirkabirbiplob@gmail.com, Student for all others), and fix Google profile image hydration across client and server.",
-  "domain": "platform",
+  "task_id": "NIHOMI-WP10-CBT-MOCK-EXAMS-CERTIFICATES-AND-BRAND-ALIGNMENT",
+  "title": "Computer-Based JLPT/NAT Mock Exams, Automated Marksheets & Branded Certificates, and Site-Wide Brand Color Palette Alignment",
+  "objective": "Build a production-grade Computer-Based Testing (CBT) engine mirroring official JLPT/NAT-TEST conditions with strict sectional timers, candidate registration, automated marksheet scoring, and authentic Nihomi-branded PDF certificates, alongside complete UI alignment to the official Nihomi brand color palette.",
+  "domain": "exam-os",
   "in_scope": [
-    "Mount AuthModal in V2AppShell and wire openAuthModal triggers across V2Header (desktop & mobile drawer) and V2DashboardPage",
-    "Add mobile-friendly Login/Sign-up button inside V2Header mobile drawer when unauthenticated",
-    "Enforce strict 2-role assignment: mdtanvirkabirbiplob@gmail.com strictly gets role 'founder'; all other emails strictly get role 'student'",
-    "Fix Google avatar photo hydration in server (server/routes/auth.ts, server/authHelper.ts), AuthContext, and render <img src={avatarUrl} /> in V2Header and V2DashboardPage",
-    "Create and run automated test suite (scripts/test-v2-auth-and-roles.ts) and headless browser verification ensuring modal opens and sign-in succeeds"
+    "Build full CBT JLPT & NAT-TEST simulation engine with strict sectional time constraints (Language Knowledge, Reading, Listening audio player with one-play constraint)",
+    "Implement candidate exam registration flow with auto-generated candidate registration number and hall ticket slip",
+    "Develop automated marksheet scoring engine calculating sectional scores (Vocab/Reading/Listening) against official JLPT pass criteria (e.g. 19/60 sectional, 90/180 overall)",
+    "Generate authentic Nihomi-branded Achievement Certificates (合格証明書) and Official Marksheets (成績証明書) in downloadable A4 PDF format featuring the official Nihomi logo, QR verification code, and Founder signature",
+    "Harmonize colors and typography across nihomi.com (Obsidian #0A0A12, Crimson #E45147, Amber #F59E0B, Cream #F6F0E6, Slate #141726) strictly adhering to official Nihomi brand guidelines",
+    "Create automated test suite (scripts/test-cbt-mock-exam-and-certificates.ts) and verify real browser E2E flow for exam completion and certificate export"
   ],
   "out_of_scope": [
-    "Modifying payment gateway billing keys or third-party OAuth provider secrets",
-    "Altering production database schema or deleting live learner records",
-    "Redesigning exam engine marksheets or CV PDF export (scheduled for subsequent work packages)"
+    "External third-party webcam biometric proctoring service",
+    "Physical paper test booklet printing and test venue seating logistics",
+    "Payment gateway payouts to third-party proctors"
   ],
   "acceptance_criteria": [
-    "Clicking Login / Sign-up button on desktop or mobile in Version 2 immediately opens the Supabase/Google authentication modal",
-    "Mobile hamburger drawer displays clean Login / Sign-up action for unauthenticated users",
-    "mdtanvirkabirbiplob@gmail.com automatically acquires role 'founder' with immediate access to Founder Cockpit; all other users acquire role 'student'",
-    "Google account profile picture renders cleanly in V2Header and dashboard dropdown upon login",
-    "npm run build passes with 0 errors and automated test suite passes 100%"
+    "Learners can register for a computer-based JLPT mock test and receive an automated candidate ID",
+    "Exam runner enforces real-exam time constraints and automatically submits answers upon time expiration",
+    "Upon exam submission, an official marksheet is calculated immediately with sectional breakdown and Pass/Fail status",
+    "Learners who pass can download an official Nihomi-branded Japanese Achievement Certificate in high-resolution A4 PDF with the Nihomi logo and QR code",
+    "All text, buttons, and backgrounds across nihomi.com conform to the official Nihomi brand color palette",
+    "All automated test suites and pre-flight release gates pass 100%"
   ],
   "verification": [
-    "npx tsx scripts/test-v2-auth-and-roles.ts",
-    "npm run build",
-    "node scripts/verify-v2-browser-suite.cjs",
+    "npx tsx scripts/test-cbt-mock-exam-and-certificates.ts",
+    "npm run verify:preflight",
     "node scripts/nihomi-approval-gate.mjs validate"
   ],
   "risks": [
-    "Google image URLs from googleusercontent.com might need referrer-policy='no-referrer' to avoid cross-origin image block. Mitigation: Set referrerPolicy='no-referrer' on avatar images."
+    "Audio player for JLPT Listening section must be resilient against autoplay blocking on mobile browsers. Mitigation: Use explicit user start gesture with audio preload."
   ],
   "dependencies": [
-    "src/v2/components/layout/V2AppShell.tsx",
-    "src/v2/components/layout/V2Header.tsx",
-    "src/components/auth/AuthModal.tsx",
-    "src/context/AuthContext.tsx",
-    "server/routes/auth.ts",
-    "server/authHelper.ts"
+    "src/v2/pages/V2ExamPage.tsx",
+    "src/components/simulation/MockExamRunnerView.tsx",
+    "src/components/brand/NihomiBrandLogo.tsx",
+    "src/lib/services/certificatePdfGenerator.ts",
+    "src/core/entitlements/entitlementConstitution.ts"
   ],
-  "base_commit": "a785f8d",
-  "created_at": "2026-10-22T17:55:00.000Z",
-  "proposed_by": "Antigravity Lead System Architect"
+  "base_commit": "4fa5018",
+  "created_at": "2026-10-23T01:15:00.000Z",
+  "proposed_by": "Antigravity Lead Autonomous Production Engineer"
 }
