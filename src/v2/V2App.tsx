@@ -84,8 +84,11 @@ export interface V2AppProps {
 }
 
 export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
-  const [currentRoute, setCurrentRoute] = useState<V2Route>('landing');
-  const [navParams, setNavParams] = useState<V2NavigationParams>({});
+  const [currentRoute, setCurrentRoute] = useState<V2Route>(() => {
+    const initial = parseHashRoute();
+    return initial.route === 'legacy' ? 'landing' : initial.route;
+  });
+  const [navParams, setNavParams] = useState<V2NavigationParams>(() => parseHashRoute().params);
 
   // Synchronize route from window.location.hash on initial mount & hashchange
   useEffect(() => {

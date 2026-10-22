@@ -210,22 +210,30 @@ import { updatePageMetaTags } from './lib/seo';
 
 const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { view: string; params: Record<string, any> } => {
   let path = pathname.toLowerCase();
-  if (typeof window !== 'undefined' && (path === '/' || path === '') && window.location.hash) {
+  const queryCert = searchParams.get('certId') || searchParams.get('id');
+
+  // 1. Explicit legacy mode requested via path, query param, or #legacy
+  if (
+    path === '/legacy' ||
+    path.startsWith('/legacy') ||
+    searchParams.get('mode') === 'legacy' ||
+    (typeof window !== 'undefined' && (window.location.hash === '#legacy' || window.location.hash === '#/legacy'))
+  ) {
+    return { view: 'landing', params: { legacy: true } };
+  }
+
+  // 2. Default root path & V2 deep routes strictly resolve to V2
+  // (V2 router internally handles all sub-route hashes like #dashboard, #pricing, #kana, etc.)
+  if (path === '/' || path === '' || path === '/v2' || path.startsWith('/v2/')) {
+    return { view: 'v2', params: {} };
+  }
+
+  // 3. Hash rewriting for legacy views only when on non-root legacy paths
+  if (typeof window !== 'undefined' && window.location.hash) {
     const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
     if (rawHash && KNOWN_VIEWS.has(rawHash)) {
       path = '/' + rawHash;
     }
-  }
-  const queryCert = searchParams.get('certId') || searchParams.get('id');
-
-    if (path === '/legacy' || path.startsWith('/legacy') || searchParams.get('mode') === 'legacy' || (typeof window !== 'undefined' && window.location.hash === '#legacy')) {
-    return { view: 'landing', params: { legacy: true } };
-  }
-  if (path === '/' || path === '') {
-    return { view: 'v2', params: {} };
-  }
-  if (path === '/v2' || path.startsWith('/v2/')) {
-    return { view: 'v2', params: {} };
   }
   if (path === '/journey' || path === '/start-journey' || path === '/onboarding' || path === '/mission') {
     return { view: 'journey', params: {} };

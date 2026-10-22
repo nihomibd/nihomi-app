@@ -46,7 +46,7 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
   const isFounder = user?.role === 'admin' || user?.role === 'founder';
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#141726]/95 backdrop-blur-md border-b border-[#F6F0E6]/10 text-[#F6F0E6]">
+    <header id="v2-header" className="sticky top-0 z-40 w-full bg-[#141726]/95 backdrop-blur-md border-b border-[#F6F0E6]/10 text-[#F6F0E6]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
         
         {/* Brand Logo & Tagline */}
