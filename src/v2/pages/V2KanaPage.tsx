@@ -30,6 +30,8 @@ import {
 } from '../../data/kanaData';
 import { KanaDrawingCanvas } from '../../components/kana/KanaDrawingCanvas';
 import { speakJapanese } from '../../lib/tts';
+import { loopOrchestrator } from '../../core/loop';
+import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 import { V2Route, V2NavigationParams } from '../types';
 
 interface V2KanaPageProps {
@@ -115,6 +117,19 @@ export const V2KanaPage: React.FC<V2KanaPageProps> = ({
 
   const isCurrentMastered = masteredList.includes(selectedKana.char);
 
+  const kanaLoopBriefing = React.useMemo(() => {
+    try {
+      const state = loadLearnerKnowledgeState();
+      return loopOrchestrator.startLoopActivity({
+        domain: 'japanese-learning',
+        learnerState: state,
+        context: { char: selectedKana.char }
+      });
+    } catch {
+      return null;
+    }
+  }, [selectedKana.char]);
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
       {/* 1. Page Header & Syllabary Switcher */}
@@ -125,7 +140,7 @@ export const V2KanaPage: React.FC<V2KanaPageProps> = ({
               ভেক্টর ক্যালিগ্রাফি স্টুডিও
             </span>
             <span className="text-xs text-stone-400 font-mono">
-              Kana Writing Studio
+              Kana Writing Studio • {kanaLoopBriefing?.briefingTitleBn || 'ভেক্টর ক্যালিগ্রাফি স্টুডিও'}
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white">

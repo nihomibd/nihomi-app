@@ -21,6 +21,7 @@ import { ConbiniPosCashierSimulator } from '../../components/simulation/ConbiniP
 import { DEFAULT_BAITO_SCENARIOS } from '../../views/BaitoOsView';
 import { speakJapanese } from '../../lib/tts';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
+import { loopOrchestrator } from '../../core/loop';
 
 interface V2WorkOsPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
@@ -33,20 +34,61 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
   const activeScenario = DEFAULT_BAITO_SCENARIOS[selectedScenarioIndex] || DEFAULT_BAITO_SCENARIOS[0];
   const [completionNotice, setCompletionNotice] = useState<{ score: number; xp: number } | null>(null);
 
+  const conbiniLoopBriefing = React.useMemo(() => {
+    try {
+      const state = loadLearnerKnowledgeState();
+      return loopOrchestrator.startLoopActivity({
+        domain: 'pos-simulation',
+        learnerState: state,
+        context: { scenarioId: activeScenario.id }
+      });
+    } catch {
+      return null;
+    }
+  }, [activeScenario.id]);
+
   const handleCompleteOrder = (score: number, totalYen: number) => {
     const earnedXp = Math.max(30, Math.round(score * 5));
     try {
       const current = loadLearnerKnowledgeState();
-      const updatedSkills = Array.from(new Set([...(current.masteredSkills || []), 'baito_conbini_cashier']));
+      const briefing = loopOrchestrator.startLoopActivity({
+        domain: 'pos-simulation',
+        learnerState: current,
+        context: { scenarioId: activeScenario.id }
+      });
+
+      const loopEval = loopOrchestrator.processAttempt({
+        domain: 'pos-simulation',
+        learnerState: current,
+        activity: briefing.activity,
+        attempt: {
+          scenarioId: activeScenario.id,
+          stepsCompleted: score >= 60 ? 5 : 3,
+          step1GreetingCorrect: true,
+          step2ItemsScanned: true,
+          step3ServiceHandled: score >= 60,
+          step4PaymentCalculated: true,
+          step5ClosingPolite: score >= 80,
+          timeSpentSeconds: 45
+        }
+      });
+
       const updated = {
-        ...current,
-        totalXp: (current.totalXp || 0) + earnedXp,
-        masteredSkills: updatedSkills
+        ...loopEval.stateDerivation.updatedState,
+        totalXp: (loopEval.stateDerivation.updatedState.totalXp || 0) + earnedXp
       };
       saveLearnerKnowledgeState(updated);
       setCompletionNotice({ score, xp: earnedXp });
     } catch (e) {
-      console.warn('[WorkOS] Could not save order completion:', e);
+      console.warn('[WorkOS] Could not process attempt via loopOrchestrator:', e);
+      const current = loadLearnerKnowledgeState();
+      const updatedSkills = Array.from(new Set([...(current.masteredSkills || []), 'baito_conbini_cashier']));
+      saveLearnerKnowledgeState({
+        ...current,
+        totalXp: (current.totalXp || 0) + earnedXp,
+        masteredSkills: updatedSkills
+      });
+      setCompletionNotice({ score, xp: earnedXp });
     }
   };
 

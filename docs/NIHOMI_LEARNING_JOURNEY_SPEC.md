@@ -129,4 +129,57 @@ If a learner attempts to access a URL directly (e.g. `?lessonId=n5-l2` or `/less
 - The curriculum engine strictly refuses to render premature lessons.
 
 ---
+
+## 7. N.I.H.O.M.I SHARED LEARNING LOOP ORCHESTRATION
+
+The entire learner journey is orchestrated through the unified 11-step loop implemented in `src/core/loop/orchestrator.ts`:
+
+```mermaid
+flowchart LR
+    S1[1. Understand State] --> S2[2. Diagnose]
+    S2 --> S3[3. Select Objective]
+    S3 --> S4[4. Teach / Brief]
+    S4 --> S5[5. Practice / Simulate]
+    S5 --> S6[6. Evaluate Attempt]
+    S6 --> S7[7. Correct & Retry]
+    S7 --> S8[8. Save Evidence]
+    S8 --> S9[9. Update State]
+    S9 --> S10[10. Schedule Review]
+    S10 --> S11[11. Recommend Next Action]
+```
+
+Across all four domains:
+1. **Japanese Learning (`japanese-learning`):** Evaluates vector stroke accuracy and cumulative lattice prerequisites.
+2. **7-Eleven Workplace POS (`pos-simulation`):** Evaluates 5-beat register shifts and awards `baito_conbini_cashier`.
+3. **JLPT Exam OS (`exam-os`):** Evaluates 180-point mock scoring and enqueues missed questions into `reviewQueue`.
+4. **JIS Relocation CV (`cv-rirekisho`):** Verifies 10 mandatory JIS fields with strict Zero Hallucination Law user truth confirmation.
+
+---
 *Maintained by the Nihomi Lead Product & Curriculum Engineering Team.*
+
+<!-- NIHOMI_FOUNDER_APPROVAL_RECORD:START -->
+
+## Founder approval record — 2026-10-22
+
+**Status:** APPROVED FOR IMPLEMENTATION WITHIN SCOPE. The actual code implementation has not been accepted by the Founder, and public launch is not approved by this record.
+
+The Founder approves the NIHOMI learning-journey concept and the shared product-refinement process described in `docs/NIHOMI_PRODUCT_REFINEMENT_PROTOCOL.md`.
+
+The shared N.I.H.O.M.I Learning Loop is to be applied consistently across the following product domains:
+
+1. Japanese language learning with Nomi Sensei.
+2. 7-Eleven-style POS/workplace simulation (educational simulation; do not imply affiliation or access to proprietary live systems).
+3. NIHOMI Exam OS: practice, mock exams, assessment, error analysis, and review.
+4. CV / Japanese 履歴書 and job-readiness tools.
+
+The shared loop is: understand learner intent and current state → diagnose → select a learning objective → teach/brief → practice/simulate → evaluate → correct and retry → persist evidence → update learner memory/mastery → schedule review → choose the next best action.
+
+These domains share orchestration, learner/session state, evidence, review, accessibility, analytics, and QA standards, but each retains domain-specific content, validation, scoring rubrics, safety rules, and completion criteria. Do not force every domain into an identical question format or scoring system.
+
+**Task gate:** after one explicitly authorized work package is complete, the agent must stop, produce evidence and a proposal for exactly one next task, and wait for explicit approval. Use Antigravity's native approval control if available. Otherwise require the explicit phrase `APPROVE <TASK-ID>` or an explicit request for changes. Approval applies only to the exact proposed task and scope.
+
+**Release authority:** Founder acceptance of an implementation and authorization for production release remain separate and pending until explicitly granted.
+
+This addendum records product intent and decision status; it is not evidence that implementation, tests, browser flows, or release readiness have been completed.
+
+<!-- NIHOMI_FOUNDER_APPROVAL_RECORD:END -->

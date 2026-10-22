@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "status": "approved",
+  "task_id": "NIHOMI-WP06-PRODUCTION-MERGE-AND-DEPLOYMENT",
+  "scope_fingerprint": "4de28a94e0ef5e625d9595bcbe83e7475f5a7ff78471c06b84936558663c1cc9",
+  "approved_at": "2026-10-22T17:19:30.000Z",
+  "approved_via": "chat-founder-explicit-approval",
+  "approved_scope_summary": {
+    "title": "Merge Feature Branch to Main, Build Verification, and Production Deployment Preparation",
+    "domain": "platform",
+    "base_commit": "dc790d0"
+  }
+}

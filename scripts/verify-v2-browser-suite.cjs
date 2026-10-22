@@ -21,12 +21,29 @@ if (!fs.existsSync(ARTIFACT_DIR)) {
   fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
 }
 
-function saveScreenshot(sourcePath, filename) {
+async function captureAndSaveScreenshot(page, filename) {
+  const localPath = path.join(EVIDENCE_DIR, filename);
   const destPath = path.join(ARTIFACT_DIR, filename);
   try {
-    fs.copyFileSync(sourcePath, destPath);
+    const buffer = await page.screenshot({ fullPage: false });
+    for (let i = 0; i < 3; i++) {
+      try {
+        fs.writeFileSync(localPath, buffer);
+        break;
+      } catch (e) {
+        await new Promise((r) => setTimeout(r, 150));
+      }
+    }
+    for (let i = 0; i < 3; i++) {
+      try {
+        fs.writeFileSync(destPath, buffer);
+        break;
+      } catch (e) {
+        await new Promise((r) => setTimeout(r, 150));
+      }
+    }
   } catch (err) {
-    console.warn(`[Artifact Sync Warning] Failed to copy to artifact dir:`, err.message);
+    console.warn(`[Screenshot Warning] Could not capture ${filename}:`, err.message);
   }
 }
 
@@ -75,9 +92,7 @@ async function runV2BrowserSuite() {
       };
     });
 
-    const shot1 = path.join(EVIDENCE_DIR, 'v2-01-root-landing-desktop-1280.png');
-    await page.screenshot({ path: shot1, fullPage: false });
-    saveScreenshot(shot1, 'v2-01-root-landing-desktop-1280.png');
+    await captureAndSaveScreenshot(page, 'v2-01-root-landing-desktop-1280.png');
 
     results.v2RootDesktop = checkRoot.hasV2Hero && checkRoot.noDuplicateShell;
     console.log(`  ✔ PASS: V2 Root Desktop. Headers: ${checkRoot.headersCount}, Footers: ${checkRoot.footersCount}, Hero: ${checkRoot.hasV2Hero ? 'OK' : 'MISSING'}\n`);
@@ -96,9 +111,7 @@ async function runV2BrowserSuite() {
       return { overflow, mobileNav };
     });
 
-    const shot2 = path.join(EVIDENCE_DIR, 'v2-02-root-landing-mobile-390.png');
-    await page.screenshot({ path: shot2, fullPage: false });
-    saveScreenshot(shot2, 'v2-02-root-landing-mobile-390.png');
+    await captureAndSaveScreenshot(page, 'v2-02-root-landing-mobile-390.png');
 
     results.v2Mobile390NoOverflow = !mobileCheck.overflow && mobileCheck.mobileNav;
     console.log(`  ✔ PASS: Mobile 390px captured. Overflow: ${mobileCheck.overflow ? 'DETECTED' : 'NONE (PASS)'}, MobileNav: ${mobileCheck.mobileNav ? 'OK' : 'MISSING'}\n`);
@@ -118,9 +131,7 @@ async function runV2BrowserSuite() {
       return { overflow, hasPlans };
     });
 
-    const shot3 = path.join(EVIDENCE_DIR, 'v2-03-pricing-mobile-360.png');
-    await page.screenshot({ path: shot3, fullPage: false });
-    saveScreenshot(shot3, 'v2-03-pricing-mobile-360.png');
+    await captureAndSaveScreenshot(page, 'v2-03-pricing-mobile-360.png');
 
     results.v2Compact360Pricing = !compactCheck.overflow && compactCheck.hasPlans;
     console.log(`  ✔ PASS: Compact 360px Pricing. Overflow: ${compactCheck.overflow ? 'DETECTED' : 'NONE (PASS)'}, Plans: ${compactCheck.hasPlans ? 'OK' : 'MISSING'}\n`);
@@ -133,9 +144,7 @@ async function runV2BrowserSuite() {
     await page.goto(`${LOCAL_URL}/#dashboard`, { waitUntil: 'networkidle2' });
     await new Promise((r) => setTimeout(r, 1000));
 
-    const shot4 = path.join(EVIDENCE_DIR, 'v2-04-tablet-768.png');
-    await page.screenshot({ path: shot4, fullPage: false });
-    saveScreenshot(shot4, 'v2-04-tablet-768.png');
+    await captureAndSaveScreenshot(page, 'v2-04-tablet-768.png');
 
     results.v2Tablet768Layout = true;
     console.log('  ✔ PASS: Tablet 768px Dashboard captured.\n');
@@ -200,9 +209,7 @@ async function runV2BrowserSuite() {
       };
     });
 
-    const shot5 = path.join(EVIDENCE_DIR, 'v2-05-dashboard-authenticated.png');
-    await page.screenshot({ path: shot5, fullPage: false });
-    saveScreenshot(shot5, 'v2-05-dashboard-authenticated.png');
+    await captureAndSaveScreenshot(page, 'v2-05-dashboard-authenticated.png');
 
     results.v2DashboardAuthenticated = dashboardCheck.hasGreeting && dashboardCheck.hasNextMission;
     console.log(`  ✔ PASS: Authenticated Dashboard. Greeting: ${dashboardCheck.hasGreeting ? 'OK' : 'MISSING'}, Mission: ${dashboardCheck.hasNextMission ? 'OK' : 'MISSING'}, Zero Fake Mock: ${dashboardCheck.hasZeroFakeMock ? 'PASS' : 'FAIL'}\n`);
@@ -219,9 +226,7 @@ async function runV2BrowserSuite() {
       return text.includes('টোকিও গোল্ডেন জার্নি') || text.includes('Tokyo Golden Journey') || text.includes('সহজ শুরু') || text.includes('চলো শুরু করি') || text.includes('প্রথম ধাপ');
     });
 
-    const shot6 = path.join(EVIDENCE_DIR, 'v2-06-tokyo-journey.png');
-    await page.screenshot({ path: shot6, fullPage: false });
-    saveScreenshot(shot6, 'v2-06-tokyo-journey.png');
+    await captureAndSaveScreenshot(page, 'v2-06-tokyo-journey.png');
 
     results.v2TokyoJourney = journeyCheck;
     console.log(`  ✔ PASS: Tokyo Journey Map verified: ${journeyCheck ? 'OK' : 'MISSING'}\n`);
@@ -240,9 +245,7 @@ async function runV2BrowserSuite() {
       return Boolean(canvas || hasChar);
     });
 
-    const shot7 = path.join(EVIDENCE_DIR, 'v2-07-kana-studio.png');
-    await page.screenshot({ path: shot7, fullPage: false });
-    saveScreenshot(shot7, 'v2-07-kana-studio.png');
+    await captureAndSaveScreenshot(page, 'v2-07-kana-studio.png');
 
     results.v2KanaStudio = kanaCheck;
     console.log(`  ✔ PASS: Kana Studio Canvas verified: ${kanaCheck ? 'OK' : 'MISSING'}\n`);
@@ -325,9 +328,7 @@ async function runV2BrowserSuite() {
       return text.includes('Identify') || text.includes('কাঠামো শনাক্তকরণ') || text.includes('Structural Blueprint') || text.includes('টপিক ও সমাপিকা') || text.includes('Hunt');
     });
 
-    const shot8 = path.join(EVIDENCE_DIR, 'v2-08-grammar-loop.png');
-    await page.screenshot({ path: shot8, fullPage: false });
-    saveScreenshot(shot8, 'v2-08-grammar-loop.png');
+    await captureAndSaveScreenshot(page, 'v2-08-grammar-loop.png');
 
     results.v2LessonGrammarLoop = lessonCheck && (clickedAdvance || transitioned);
     console.log(`  ${results.v2LessonGrammarLoop ? '✔ PASS' : '❌ FAIL'}: Lesson Grammar Loop (Lesson: ${lessonCheck ? 'OK' : 'MISSING'}, Advanced: ${clickedAdvance ? 'YES' : 'NO'}, Stage2: ${transitioned ? 'YES' : 'NO'})\n`);
@@ -345,9 +346,7 @@ async function runV2BrowserSuite() {
       return hasLevels;
     });
 
-    const shot9 = path.join(EVIDENCE_DIR, 'v2-09-curriculum-n5-n1.png');
-    await page.screenshot({ path: shot9, fullPage: false });
-    saveScreenshot(shot9, 'v2-09-curriculum-n5-n1.png');
+    await captureAndSaveScreenshot(page, 'v2-09-curriculum-n5-n1.png');
 
     results.v2CurriculumGrid = curriculumCheck;
     console.log(`  ✔ PASS: Curriculum JLPT N5–N1 Grid verified: ${curriculumCheck ? 'OK' : 'MISSING'}\n`);
@@ -373,9 +372,7 @@ async function runV2BrowserSuite() {
     });
     await new Promise((r) => setTimeout(r, 1200));
 
-    const shot10 = path.join(EVIDENCE_DIR, 'v2-10-jis-rirekisho.png');
-    await page.screenshot({ path: shot10, fullPage: false });
-    saveScreenshot(shot10, 'v2-10-jis-rirekisho.png');
+    await captureAndSaveScreenshot(page, 'v2-10-jis-rirekisho.png');
 
     results.v2JISRirekisho = rirekishoCheck.paperDOM && rirekishoCheck.dlBtn;
     console.log(`  ✔ PASS: JIS Rirekisho Studio verified (DOM: ${rirekishoCheck.paperDOM ? 'OK' : 'MISSING'}, Download Trigger: ${rirekishoCheck.dlBtn ? 'OK' : 'MISSING'})\n`);
@@ -392,9 +389,7 @@ async function runV2BrowserSuite() {
       return text.includes('কনবিনি') || text.includes('WorkOS') || text.includes('সিমুলেশন') || text.includes('Cashier');
     });
 
-    const shot11 = path.join(EVIDENCE_DIR, 'v2-11-workos-simulation.png');
-    await page.screenshot({ path: shot11, fullPage: false });
-    saveScreenshot(shot11, 'v2-11-workos-simulation.png');
+    await captureAndSaveScreenshot(page, 'v2-11-workos-simulation.png');
 
     results.v2WorkOsSimulation = workosCheck;
     console.log(`  ✔ PASS: WorkOS Simulation verified: ${workosCheck ? 'OK' : 'MISSING'}\n`);
@@ -414,9 +409,7 @@ async function runV2BrowserSuite() {
     });
     await new Promise((r) => setTimeout(r, 800));
 
-    const shot12 = path.join(EVIDENCE_DIR, 'v2-12-pricing-checkout.png');
-    await page.screenshot({ path: shot12, fullPage: false });
-    saveScreenshot(shot12, 'v2-12-pricing-checkout.png');
+    await captureAndSaveScreenshot(page, 'v2-12-pricing-checkout.png');
 
     results.v2PricingCheckout = true;
     console.log('  ✔ PASS: Pricing & Checkout Modal captured.\n');
@@ -461,9 +454,7 @@ async function runV2BrowserSuite() {
       return Boolean(document.querySelector('#founder-cockpit') || text.includes('কমান্ড সেন্টার') || text.includes('টেলিমেট্রি'));
     });
 
-    const shot13 = path.join(EVIDENCE_DIR, 'v2-13-founder-cockpit.png');
-    await page.screenshot({ path: shot13, fullPage: false });
-    saveScreenshot(shot13, 'v2-13-founder-cockpit.png');
+    await captureAndSaveScreenshot(page, 'v2-13-founder-cockpit.png');
 
     results.v2FounderSecurityAndCockpit = studentBlocked && founderLoaded;
     console.log(`  ✔ PASS: Founder Gate verified (Blocked: ${studentBlocked ? 'OK' : 'FAIL'}, Cockpit: ${founderLoaded ? 'OK' : 'FAIL'})\n`);
@@ -482,9 +473,7 @@ async function runV2BrowserSuite() {
       return v2Badge;
     });
 
-    const shot14 = path.join(EVIDENCE_DIR, 'v2-14-legacy-route-recovery.png');
-    await page.screenshot({ path: shot14, fullPage: false });
-    saveScreenshot(shot14, 'v2-14-legacy-route-recovery.png');
+    await captureAndSaveScreenshot(page, 'v2-14-legacy-route-recovery.png');
 
     results.v2LegacyRecovery = legacyCheck;
     console.log(`  ✔ PASS: Legacy Route Recovery verified (V2 Switcher present: ${legacyCheck ? 'OK' : 'MISSING'})\n`);

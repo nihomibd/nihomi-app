@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "status": "pending",
+  "task_id": "NIHOMI-WP06-PRODUCTION-MERGE-AND-DEPLOYMENT",
+  "title": "Merge Feature Branch to Main, Build Verification, and Production Deployment Preparation",
+  "objective": "Merge feature/founder-approved-product-system into main, verify clean git tree, execute production build verification, and prepare deployment checklist for live Cloudflare Pages / Vercel release.",
+  "domain": "platform",
+  "in_scope": [
+    "Safely checkout main and merge feature/founder-approved-product-system with zero merge conflicts",
+    "Run full production build (npm run build) generating dist/server.cjs and dist/index.html",
+    "Run automated pre-flight release gate (npm run verify:preflight) on main branch",
+    "Generate production deployment checklist and release notes for Founder live rollout"
+  ],
+  "out_of_scope": [
+    "Directly pushing to remote GitHub repository without Founder explicit release consent",
+    "Triggering live cloud CI/CD webhook deployments without Founder confirmation",
+    "Modifying live production database credentials or third-party secret tokens"
+  ],
+  "acceptance_criteria": [
+    "main branch contains all 5 approved work packages with unbroken commit lineage",
+    "npm run build completes with zero errors and zero TypeScript warnings",
+    "npm run verify:preflight passes 6/6 release gates with 100% green status on main",
+    "Complete release manifest and smoke testing protocol delivered to Founder"
+  ],
+  "verification": [
+    "git branch --show-current",
+    "git log -n 6 --oneline",
+    "npm run build",
+    "npm run verify:preflight",
+    "node scripts/nihomi-approval-gate.mjs validate"
+  ],
+  "risks": [
+    "Git merge conflicts if uncommitted local files conflict. Mitigation: Stash or preserve untracked scratch notes before merging."
+  ],
+  "dependencies": [
+    "dist/server.cjs",
+    "scripts/verify-preflight-release-gate.ts",
+    "docs/NIHOMI_PRODUCT_DOMAIN_MATRIX.md"
+  ],
+  "base_commit": "dc790d0",
+  "created_at": "2026-10-22T17:18:00.000Z",
+  "proposed_by": "Antigravity Lead System Architect"
+}

@@ -22,6 +22,7 @@ import { useAuth } from '../../context/AuthContext';
 import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 import { getNextBestMission, isGrammarEligible } from '../../core/curriculum/journeyEngine';
 import { BengaliQuickCalibrationModal } from '../../components/learning/BengaliQuickCalibrationModal';
+import { loopOrchestrator } from '../../core/loop';
 
 interface V2DashboardPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
@@ -42,8 +43,53 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
     };
   }, []);
 
-  const nextMission = getNextBestMission(knowledgeState);
+    const nextMission = getNextBestMission(knowledgeState);
   const grammarStatus = isGrammarEligible(knowledgeState);
+
+  // N.I.H.O.M.I Shared Loop Orchestrator Multi-domain Telemetry
+  const japaneseBriefing = React.useMemo(() => {
+    try {
+      return loopOrchestrator.startLoopActivity({
+        domain: 'japanese-learning',
+        learnerState: knowledgeState
+      });
+    } catch {
+      return null;
+    }
+  }, [knowledgeState]);
+
+  const conbiniBriefing = React.useMemo(() => {
+    try {
+      return loopOrchestrator.startLoopActivity({
+        domain: 'pos-simulation',
+        learnerState: knowledgeState
+      });
+    } catch {
+      return null;
+    }
+  }, [knowledgeState]);
+
+  const examBriefing = React.useMemo(() => {
+    try {
+      return loopOrchestrator.startLoopActivity({
+        domain: 'exam-os',
+        learnerState: knowledgeState
+      });
+    } catch {
+      return null;
+    }
+  }, [knowledgeState]);
+
+  const cvBriefing = React.useMemo(() => {
+    try {
+      return loopOrchestrator.startLoopActivity({
+        domain: 'cv-rirekisho',
+        learnerState: knowledgeState
+      });
+    } catch {
+      return null;
+    }
+  }, [knowledgeState]);
 
   const knownKanaCount = knowledgeState.knownHiragana.length + knowledgeState.knownKatakana.length;
   // Authentic learner progress telemetry — 0 fallback if new/unauthenticated, zero fake 5-day / 1240-XP mocks
@@ -216,8 +262,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-red-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center font-serif text-xl font-black mb-3 group-hover:scale-110 transition-transform">
-                あ
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center font-serif text-xl font-black group-hover:scale-110 transition-transform">
+                  あ
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                  {japaneseBriefing?.activity?.targetChar ? `বর্ণ: ${japaneseBriefing.activity.targetChar}` : 'সক্রিয় লুপ'}
+                </span>
               </div>
               <h4 className="font-bold text-white text-base">কানা স্টুডিও (Kana Studio)</h4>
               <p className="text-xs text-stone-400 mt-1 leading-relaxed">
@@ -236,8 +287,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-sans text-lg font-black mb-3 group-hover:scale-110 transition-transform">
-                N5
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-sans text-lg font-black group-hover:scale-110 transition-transform">
+                  N5
+                </div>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${grammarStatus.eligible ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
+                  {grammarStatus.eligible ? 'লেসন ১ আনলকড' : 'ফাউন্ডেশন বাকি'}
+                </span>
               </div>
               <h4 className="font-bold text-white text-base">মাস্টার কারিকুলাম (N5–N1)</h4>
               <p className="text-xs text-stone-400 mt-1 leading-relaxed">
@@ -256,8 +312,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-emerald-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <Store className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Store className="w-5 h-5" />
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  {conbiniBriefing?.isEligible ? 'শিফট রেডি' : 'লুপ পেন্ডিং'}
+                </span>
               </div>
               <h4 className="font-bold text-white text-base">কনবিনি WorkOS™</h4>
               <p className="text-xs text-stone-400 mt-1 leading-relaxed">
@@ -276,8 +337,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-cyan-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <FileText className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                  {cvBriefing?.isEligible ? 'JIS রেডি' : 'ড্রাফট মোড'}
+                </span>
               </div>
               <h4 className="font-bold text-white text-base">JIS রিলোকেশন CV স্টুডিও</h4>
               <p className="text-xs text-stone-400 mt-1 leading-relaxed">
@@ -295,8 +361,13 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-purple-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <Award className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Award className="w-5 h-5" />
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  {examBriefing?.isEligible ? 'মক টেস্ট রেডি' : 'স্বরবর্ণ বাকি'}
+                </span>
               </div>
               <h4 className="font-bold text-white text-base">JLPT মক এক্সাম ওএস</h4>
               <p className="text-xs text-stone-400 mt-1 leading-relaxed">
@@ -315,7 +386,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
       <div className="p-6 rounded-3xl bg-[#141726] border border-white/10 space-y-4">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-          <span>পেডাগোজিক্যাল ল্যাটিস গেট স্ট্যাটাস</span>
+          <span>N.I.H.O.M.I শেয়ার্ড লুপ ও পেডাগোজিক্যাল ল্যাটিস গেট স্ট্যাটাস</span>
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">

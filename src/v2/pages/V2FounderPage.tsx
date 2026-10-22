@@ -63,7 +63,21 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const isAuthorized = Boolean(user && user.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com');
+  const isAuthorized = Boolean(
+    (user && user.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') ||
+    (() => {
+      try {
+        if (typeof window !== 'undefined') {
+          const raw = localStorage.getItem('nihomi_user');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            return parsed?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+          }
+        }
+      } catch {}
+      return false;
+    })()
+  );
 
   const fetchTelemetry = async () => {
     try {

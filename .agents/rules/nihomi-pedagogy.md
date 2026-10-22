@@ -1,3 +1,8 @@
+---
+trigger: always_on
+description: "Always enforce NIHOMI cumulative curriculum prerequisites and learner-facing content eligibility."
+---
+
 # NIHOMI PEDAGOGICAL LAW & CUMULATIVE LATTICE SPECIFICATION
 # Version 1.0.0 — Canonical System Rule
 

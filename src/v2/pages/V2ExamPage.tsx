@@ -5,6 +5,8 @@ import { Award, ArrowLeft, ShieldCheck, Sparkles } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../types';
 import { MockExamsView } from '../../views/MockExamsView';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
+import { loopOrchestrator } from '../../core/loop';
+import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 
 interface V2ExamPageProps {
   examId?: string;
@@ -13,6 +15,19 @@ interface V2ExamPageProps {
 
 export const V2ExamPage: React.FC<V2ExamPageProps> = ({ examId, onNavigate }) => {
   const [activeExamId, setActiveExamId] = useState<string | null>(examId || null);
+
+  const examLoopBriefing = React.useMemo(() => {
+    try {
+      const state = loadLearnerKnowledgeState();
+      return loopOrchestrator.startLoopActivity({
+        domain: 'exam-os',
+        learnerState: state,
+        context: { examId: activeExamId || undefined }
+      });
+    } catch {
+      return null;
+    }
+  }, [activeExamId]);
 
   useEffect(() => {
     if (examId) {
@@ -58,7 +73,7 @@ export const V2ExamPage: React.FC<V2ExamPageProps> = ({ examId, onNavigate }) =>
 
         <div className="flex items-center gap-2 text-xs font-mono text-amber-400 font-bold bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
           <Award className="w-3.5 h-3.5" />
-          <span>NIHOMI EXAM OS™</span>
+          <span>NIHOMI EXAM OS™ • {examLoopBriefing?.briefingTitleBn || 'JLPT N5–N1 Blueprint'}</span>
         </div>
       </div>
 
