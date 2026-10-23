@@ -37,6 +37,7 @@ import { ConbiniHotSnackCase } from './conbini/ConbiniHotSnackCase';
 import { ConbiniMicrowaveOven } from './conbini/ConbiniMicrowaveOven';
 import { ConbiniCartoneTray } from './conbini/ConbiniCartoneTray';
 import { ConbiniCustomerTablet } from './conbini/ConbiniCustomerTablet';
+import { ConbiniThermalReceiptModal } from './conbini/ConbiniThermalReceiptModal';
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
@@ -108,6 +109,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
   // 9. Closing & Handover
   const [isReceiptPrinting, setIsReceiptPrinting] = useState(false);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [isPartingCompleted, setIsPartingCompleted] = useState(false);
 
   // 10. Real Shift Rush Hour & Patience Timer
@@ -544,6 +546,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
     setTimeout(() => {
       setIsReceiptPrinting(false);
       setIsPartingCompleted(true);
+      setShowReceiptModal(true);
 
       const closing = currentScenario.dialogueState.closing;
       speakJapanese(closing.cashierPartingJa, { rate: 0.95 });
@@ -655,7 +658,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   ];
 
   return (
-    <div className="w-full space-y-5 animate-fadeIn">
+    <div id="conbini-pos-cashier-simulator" className="w-full space-y-5 animate-fadeIn">
       {/* =========================================================================
           1. TOP CONTROLS: Brand Selector (7-Eleven / Lawson / FamilyMart) & Mode
          ========================================================================= */}
@@ -887,6 +890,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                 </span>
                 <button
                   type="button"
+                  id="btn-conbini-customer-audio-replay"
                   onClick={() => speakJapanese(customerDialogueText.ja)}
                   className="px-2.5 py-1 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-red-400 text-xs font-bold flex items-center gap-1 cursor-pointer border border-red-500/30"
                 >
@@ -935,6 +939,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                 </p>
                 <button
                   type="button"
+                  id="btn-conbini-greeting-action"
                   onClick={handleCashierGreeting}
                   className="w-full py-4 bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
@@ -955,6 +960,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                   </span>
                   <button
                     type="button"
+                    id="btn-scan-all-conbini-items"
                     onClick={handleScanAllItems}
                     className="px-3 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition flex items-center gap-1 cursor-pointer"
                   >
@@ -1200,6 +1206,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
                 <button
                   type="button"
+                  id="btn-conbini-proceed-to-payment"
                   onClick={handleProceedToPayment}
                   className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
@@ -1229,6 +1236,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
                     type="button"
+                    id="btn-conbini-pay-cash"
                     onClick={() => handleSelectPaymentMethod('cash')}
                     className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
                       activePaymentMethod === 'cash'
@@ -1241,6 +1249,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                   </button>
                   <button
                     type="button"
+                    id="btn-conbini-pay-suica"
                     onClick={() => handleSelectPaymentMethod('suica')}
                     className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
                       activePaymentMethod === 'suica'
@@ -1301,6 +1310,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                 </p>
                 <button
                   type="button"
+                  id="btn-conbini-print-receipt-close"
                   onClick={handlePrintReceiptAndClose}
                   disabled={isReceiptPrinting}
                   className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-black text-sm sm:text-base rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
@@ -1318,7 +1328,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               </div>
             )}
 
-            {/* COMPLETED STAGE: ADVANCE BUTTON */}
+            {/* COMPLETED STAGE: ADVANCE BUTTON & RECEIPT ACTIONS */}
             {stage === 'completed' && (
               <div className="space-y-3 py-2 animate-fadeIn">
                 <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold flex items-center justify-between">
@@ -1329,8 +1339,20 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                   <span className="font-mono text-amber-400 font-black">+XP সংরক্ষিত</span>
                 </div>
 
+                {/* View Thermal Receipt Button */}
                 <button
                   type="button"
+                  id="btn-view-conbini-thermal-receipt"
+                  onClick={() => setShowReceiptModal(true)}
+                  className="w-full py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:opacity-95 text-white font-black text-xs sm:text-sm rounded-2xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer border border-emerald-400/40"
+                >
+                  <Receipt className="w-4 h-4 text-emerald-200" />
+                  <span>🖨️ জাপানি থার্মাল রসিদ দেখুন ও প্রিন্ট করুন (View Thermal Receipt)</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="btn-advance-conbini-next-customer"
                   onClick={handleAdvanceToNextCustomer}
                   className="w-full py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-sm rounded-2xl shadow-xl transition flex items-center justify-center gap-2 cursor-pointer"
                 >
@@ -1513,6 +1535,25 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
           </div>
         )}
       </AnimatePresence>
+      {/* =========================================================================
+          JAPANESE CONBINI THERMAL RECEIPT MODAL
+         ========================================================================= */}
+      <ConbiniThermalReceiptModal
+        isOpen={showReceiptModal}
+        onClose={() => setShowReceiptModal(false)}
+        brand={activeBrand}
+        items={scannedItems}
+        totalAmount={totalAmount}
+        paymentMethod={activePaymentMethod}
+        amountPaid={cashTendered || totalAmount}
+        changeDue={changeDue}
+        hasBag={isBagAdded}
+        bagFee={bagFee}
+        scenarioTitle={currentScenario.customerName}
+        earnedXp={shiftStats.earnedXp || 50}
+        cashierName={activeBrand.uniformBadgeTitleJa}
+        onAdvanceNextCustomer={handleAdvanceToNextCustomer}
+      />
     </div>
   );
 };

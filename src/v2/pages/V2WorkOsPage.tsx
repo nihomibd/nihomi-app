@@ -99,27 +99,8 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
     }
   };
 
-  // PRO Gating Check
-  if (!hasAccess) {
-    return (
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
-        <ProFeatureGate
-          featureName="টোকিও কনবিনি WorkOS™ সিমুলেটর"
-          featureSubtitle="7-Eleven, Lawson ও FamilyMart বাস্তব ক্যাশিয়ার ও কাস্টমার সার্ভিস ট্রেনিং"
-          featureDescription="টোকিওতে পৌঁছানোর আগেই বাস্তব টাচস্ক্রিন পিওএস রেজিস্টার, বারকোড স্ক্যানিং এবং জাপানি গ্রাহক অভিবাদন ড্রিল সম্পন্ন করতে Nihomi PRO সাবস্ক্রাইব করুন।"
-          onOpenCheckout={() => {
-            if (onOpenCheckout) {
-              onOpenCheckout('pro');
-            } else {
-              onNavigate('pricing');
-            }
-          }}
-          onBack={() => onNavigate('journey')}
-          backLabel="জার্নিতে ফিরে যান"
-        />
-      </div>
-    );
-  }
+  // Cashier simulation is open for zero-entry learners as part of Chapter 1 foundation;
+  // Scenarios catalog is gated behind Pro
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
@@ -202,6 +183,23 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
               onCompleteOrder={handleCompleteOrder}
             />
           </div>
+        </div>
+      ) : !hasAccess ? (
+        <div className="space-y-6">
+          <ProFeatureGate
+            featureName="জাপান লাইফ সিনারিও প্যাক"
+            featureSubtitle="টোকিও সাবওয়ে, অ্যাপার্টমেন্ট সাইনিং, ব্যাংক অ্যাকাউন্ট ও ভিসা ইন্টারভিউ"
+            featureDescription="বাস্তব জাপান রিলোকেশন পরিস্থিতিতে জাপানি কথোপকথন ও কালচারাল কেইগো আয়ত্ত করতে Nihomi PRO সাবস্ক্রাইব করুন।"
+            onOpenCheckout={() => {
+              if (onOpenCheckout) {
+                onOpenCheckout('pro');
+              } else {
+                onNavigate('pricing');
+              }
+            }}
+            onBack={() => setActiveTab('cashier')}
+            backLabel="কনবিনি ক্যাশিয়ারে ফিরে যান"
+          />
         </div>
       ) : (
         /* Scenarios Catalog */
