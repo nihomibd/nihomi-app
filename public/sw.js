@@ -1,7 +1,7 @@
 // NIHOMI PWA SERVICE WORKER — ULTRA-FAST CACHE & OFFLINE ENGINE V4
 // Strict PWA security: Only cache static public app-shell assets.
 // Never precache or cache /api/*, student PII, or checkout flows.
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5-production';
 const CURRENT_CACHE_NAME = `nihomi-${CACHE_VERSION}`;
 
 // Core Shell & Offline Assets

@@ -525,6 +525,25 @@ export async function verifySupabaseTokenAsync(token?: string): Promise<Authenti
       try { db.save(); } catch {}
     }
 
+    // Synchronize Google Avatar & Name to DB Profile
+    const googleAvatar = (u.user_metadata?.avatar_url || u.user_metadata?.picture || u.user_metadata?.avatar || '') as string;
+    const googleDisplayName = (u.user_metadata?.full_name || u.user_metadata?.name || u.user_metadata?.user_name || '') as string;
+    if (googleAvatar || googleDisplayName) {
+      const existingProfile = db.getProfileByUserId(user.id);
+      const updates: Record<string, any> = {};
+      if (googleAvatar && !existingProfile?.avatarSeed) {
+        updates.avatarSeed = googleAvatar;
+      }
+      if (googleDisplayName && (!existingProfile?.displayName || existingProfile.displayName === 'Learner' || existingProfile.displayName === 'Japanese Learner')) {
+        updates.displayName = googleDisplayName;
+      }
+      if (Object.keys(updates).length > 0) {
+        try {
+          db.updateProfile(user.id, updates);
+        } catch {}
+      }
+    }
+
     const authUser: AuthenticatedUser = {
       id: u.id,
       email: user?.email || email,

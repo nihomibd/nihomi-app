@@ -222,10 +222,34 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     return { view: 'landing', params: { legacy: true } };
   }
 
-  // 2. Default root path & V2 deep routes strictly resolve to V2
-  // (V2 router internally handles all sub-route hashes like #dashboard, #pricing, #kana, etc.)
-  if (path === '/' || path === '' || path === '/v2' || path.startsWith('/v2/')) {
-    return { view: 'v2', params: {} };
+// 2. All core modern routes strictly resolve to V2 (unless explicitly in legacy mode)
+  const isExplicitLegacy =
+    path === '/legacy' ||
+    path.startsWith('/legacy') ||
+    searchParams.get('mode') === 'legacy' ||
+    (typeof window !== 'undefined' && (window.location.hash === '#legacy' || window.location.hash === '#/legacy'));
+
+  if (!isExplicitLegacy) {
+    // In V2, all primary application views run inside the unified V2 shell
+    const v2Routes = new Set([
+      '/', '', '/v2',
+      '/journey', '/mission', '/tokyo',
+      '/dashboard', '/student-dashboard', '/portal',
+      '/curriculum', '/courses', '/pathways', '/syllabus',
+      '/lesson', '/lessons', '/grammar',
+      '/kana', '/hiragana', '/katakana',
+      '/exam', '/exams', '/mock', '/mock-exams', '/jlpt',
+      '/workos', '/baito', '/conbini', '/shift',
+      '/rirekisho', '/cv', '/resume',
+      '/pricing', '/plans',
+      '/founder', '/admin',
+      '/terms', '/privacy', '/refund-policy'
+    ]);
+
+    const cleanSegment = path.split('/')[1] ? '/' + path.split('/')[1] : '/';
+    if (v2Routes.has(path) || v2Routes.has(cleanSegment) || path.startsWith('/lesson') || path.startsWith('/practice') || path.startsWith('/kana')) {
+      return { view: 'v2', params: {} };
+    }
   }
 
   // 3. Hash rewriting for legacy views only when on non-root legacy paths

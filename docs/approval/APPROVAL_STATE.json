@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP16-LIVE-SEARCH-CONSOLE-AND-INDEXING-AUDIT",
-  "scope_fingerprint": "9b79c2757e390edfbe1fbb03c4cf6a6c242968b8b475ca5f54e2887e27a9c822",
-  "approved_at": "2026-10-23T02:43:59.000Z",
+  "task_id": "NIHOMI-WP17-MOBILE-AUTH-FLOW-OVERHAUL-AND-CACHE-BUSTING",
+  "scope_fingerprint": "1d451b45a30cf7998fc4b7c3b30a304201f3d9e116883a49bb52ad7901ca3fbe",
+  "approved_at": "2026-10-23T03:06:13.000Z",
   "approved_via": "nihomi-founder-explicit-chat-instruction",
   "approved_scope_summary": {
-    "title": "Live Search Engine & AI Crawler Production Verification (nihomi.com/sitemap.xml & llms.txt Live Audit)",
-    "domain": "Platform Infrastructure / SEO & Growth Engineering",
-    "base_commit": "9293ddc"
+    "title": "Mobile Sign-In/Up Responsiveness Overhaul, Google Avatar Sync, and PWA Cache Eviction",
+    "domain": "Authentication, Identity & Mobile Architecture",
+    "base_commit": "6bf2fc7"
   }
 }

@@ -60948,6 +60948,24 @@ async function verifySupabaseTokenAsync(token) {
       } catch {
       }
     }
+    const googleAvatar = u.user_metadata?.avatar_url || u.user_metadata?.picture || u.user_metadata?.avatar || "";
+    const googleDisplayName = u.user_metadata?.full_name || u.user_metadata?.name || u.user_metadata?.user_name || "";
+    if (googleAvatar || googleDisplayName) {
+      const existingProfile = db.getProfileByUserId(user.id);
+      const updates = {};
+      if (googleAvatar && !existingProfile?.avatarSeed) {
+        updates.avatarSeed = googleAvatar;
+      }
+      if (googleDisplayName && (!existingProfile?.displayName || existingProfile.displayName === "Learner" || existingProfile.displayName === "Japanese Learner")) {
+        updates.displayName = googleDisplayName;
+      }
+      if (Object.keys(updates).length > 0) {
+        try {
+          db.updateProfile(user.id, updates);
+        } catch {
+        }
+      }
+    }
     const authUser = {
       id: u.id,
       email: user?.email || email,
@@ -61536,7 +61554,7 @@ authRouter.get("/me", async (req, res) => {
       name: profile?.displayName || user.email.split("@")[0],
       role: user.role,
       planId: userPlanId,
-      studentId: "NHO-" + user.id.slice(0, 6).toUpperCase(),
+      studentId: user.role === "founder" ? "NHO-FOUNDER-01" : "NHO-" + user.id.slice(0, 6).toUpperCase(),
       avatarUrl: profile?.avatarSeed || null,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt

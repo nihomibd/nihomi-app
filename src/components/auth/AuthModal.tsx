@@ -101,7 +101,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div id="auth-modal-overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+    <div id="auth-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) closeAuthModal(); }} className="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-stone-950/85 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
       <div id="auth-modal-card" className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#17192A] rounded-3xl shadow-2xl border border-white/10 text-left my-auto text-white">
         <button
           id="btn-auth-modal-close"

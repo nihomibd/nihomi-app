@@ -572,7 +572,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           safeStorage.setItem('nihomi_just_logged_in_oauth', 'true');
           try { window.sessionStorage?.setItem('nihomi_just_logged_in_oauth', 'true'); } catch {}
         }
+        const googleAvatar = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || session.user.user_metadata?.avatar || null;
+        const googleName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || null;
         await verifyServerSession(session.access_token);
+        if (googleAvatar) {
+          setUser(prev => {
+            if (!prev) return null;
+            if (!prev.avatarUrl) {
+              const updated = {
+                ...prev,
+                avatarUrl: googleAvatar,
+                name: prev.name || googleName || prev.email.split('@')[0]
+              };
+              safeStorage.setItem('nihomi_user', JSON.stringify(updated));
+              return updated;
+            }
+            return prev;
+          });
+        }
         const savedAnswers = getSavedOnboardingAnswers();
         if (savedAnswers) {
           syncOnboardingToProfile(savedAnswers).catch(() => {});
@@ -626,7 +643,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
       const redirectUrl = getCanonicalOAuthRedirectUrl(targetPath);
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           queryParams: { prompt: 'select_account' },
@@ -634,6 +651,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
       if (error) throw error;
+      if (data?.url && typeof window !== 'undefined') {
+        window.location.assign(data.url);
+      }
       return true;
     } catch (err: any) {
       console.error('[Supabase Google Sign-In Error]:', err);

@@ -266,7 +266,7 @@ authRouter.get('/me', async (req: AuthenticatedRequest, res) => {
       name: profile?.displayName || user.email.split('@')[0],
       role: user.role,
       planId: userPlanId,
-      studentId: 'NHO-' + user.id.slice(0, 6).toUpperCase(),
+      studentId: user.role === 'founder' ? 'NHO-FOUNDER-01' : ('NHO-' + user.id.slice(0, 6).toUpperCase()),
       avatarUrl: profile?.avatarSeed || null,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
