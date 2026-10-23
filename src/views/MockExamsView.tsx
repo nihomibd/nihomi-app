@@ -103,7 +103,7 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
                   onClick={() => setSelectedLevel(lvl)}
                   className={`flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-bold transition-all ${
                     selectedLevel === lvl
-                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                      ? 'bg-[#E45147] text-white shadow-lg shadow-red-600/30'
                       : 'text-slate-500 hover:text-slate-300'
                   }`}
                   title={`${lvl} এডিটরিয়াল স্টেজিংয়ে রয়েছে`}
@@ -117,10 +117,10 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
 
         {/* N2 / N1 Staging Disclosure Banner */}
         {(selectedLevel === 'N2' || selectedLevel === 'N1') && (
-          <div className="mt-6 p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-start gap-3 text-purple-200 text-xs leading-relaxed">
-            <AlertTriangle className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
+          <div className="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-amber-200 text-xs leading-relaxed">
+            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-sm text-purple-300 mb-1">
+              <p className="font-bold text-sm text-amber-300 mb-1">
                 JLPT {selectedLevel} প্রশ্নব্যাংক বর্তমানে এডিটরিয়াল স্টেজিংয়ে রয়েছে
               </p>
               <p>
@@ -187,7 +187,7 @@ export const MockExamsView: React.FC<MockExamsViewProps> = ({ onNavigate }) => {
           {/* Section 3 */}
           <div className="p-4 rounded-2xl bg-[#0f0f1d] border border-slate-800 hover:border-slate-700 transition-colors">
             <div className="flex items-center justify-between mb-3">
-              <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+              <span className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
                 <Headphones className="w-4 h-4" />
               </span>
               <span className="text-[11px] font-mono text-slate-400">৩০ মিনিট</span>

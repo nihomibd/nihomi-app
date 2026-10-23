@@ -86,7 +86,7 @@ export const JapanReadinessSection: React.FC<JapanReadinessSectionProps> = ({ on
                 <div
                   key={idx}
                   onClick={card.action}
-                  className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer hover:border-purple-200"
+                  className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer hover:border-amber-400/50"
                 >
                   {/* Photo Thumbnail */}
                   <div className="w-full h-[108px] overflow-hidden bg-slate-100">

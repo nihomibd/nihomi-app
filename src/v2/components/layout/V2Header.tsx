@@ -185,7 +185,7 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
                     onClick={() => handleNavClick('dashboard')}
                     className="w-full text-left px-3 py-2 text-xs font-bold text-stone-200 hover:text-white hover:bg-white/5 rounded-xl flex items-center gap-2 cursor-pointer"
                   >
-                    <GraduationCap className="w-4 h-4 text-purple-400" />
+                    <GraduationCap className="w-4 h-4 text-[#E45147]" />
                     <span>আমার ড্যাশবোর্ড</span>
                   </button>
                   <button

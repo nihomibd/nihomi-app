@@ -266,13 +266,13 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
         {/* ========================================================================= */}
         {/* HERO BANNER & JOURNEY ROADMAP INTRO                                       */}
         {/* ========================================================================= */}
-        <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-gradient-to-br dark:from-[#1B1E30] dark:via-[#181B2B] dark:to-[#141726] border border-purple-200 dark:border-purple-500/30 p-6 sm:p-8 shadow-sm dark:shadow-2xl backdrop-blur-md">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-gradient-to-br dark:from-[#1B1E30] dark:via-[#181B2B] dark:to-[#141726] border border-white/10 dark:border-white/10 p-6 sm:p-8 shadow-sm dark:shadow-2xl backdrop-blur-md">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#E45147]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 font-mono text-xs font-bold border border-purple-500/30">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 font-mono text-xs font-bold border border-amber-500/30">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>NIHOMI WORKOS™ • Experience Japan Before You Arrive</span>
               </div>
@@ -291,15 +291,15 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
             </div>
 
             {/* 3-Stage Progress Gauge Overview */}
-            <div className="grid grid-cols-3 gap-2.5 w-full sm:w-auto shrink-0 bg-purple-50/50 dark:bg-[#141726] border border-purple-100 dark:border-white/10 p-3.5 rounded-2xl shadow-inner text-center font-mono">
-              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-purple-500/20">
+            <div className="grid grid-cols-3 gap-2.5 w-full sm:w-auto shrink-0 bg-[#141726] border border-white/10 p-3.5 rounded-2xl shadow-inner text-center font-mono">
+              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-amber-500/20">
                 <div className="text-[10px] text-slate-500 dark:text-stone-400">ধাপ ১: ভিসা</div>
-                <div className="text-base sm:text-lg font-black text-purple-700 dark:text-purple-300">{stats.stage1Complete}%</div>
+                <div className="text-base sm:text-lg font-black text-amber-300">{stats.stage1Complete}%</div>
                 <div className="text-[9px] text-emerald-500 dark:text-emerald-400">Ready</div>
               </div>
-              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-purple-500/20">
+              <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-amber-500/20">
                 <div className="text-[10px] text-slate-500 dark:text-stone-400">ধাপ ২: কনবিনি</div>
-                <div className="text-base sm:text-lg font-black text-purple-700 dark:text-purple-300">{stats.stage2Complete}%</div>
+                <div className="text-base sm:text-lg font-black text-amber-300">{stats.stage2Complete}%</div>
                 <div className="text-[9px] text-emerald-500 dark:text-emerald-400">Active</div>
               </div>
               <div className="p-2.5 rounded-xl bg-white dark:bg-white/[0.03] border border-emerald-500/20">
@@ -325,18 +325,18 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden ${
                   currentStage === 'stage1_visa'
-                    ? 'bg-purple-50/80 dark:bg-gradient-to-br dark:from-purple-500/20 dark:via-[#1f1938] dark:to-[#120f26] border-[#E45147] shadow-md ring-1 ring-purple-500/50'
+                    ? 'bg-red-50/80 dark:bg-gradient-to-br dark:from-[#E45147]/10 dark:via-[#1F2540] dark:to-[#121524] border-[#E45147] shadow-md ring-1 ring-red-500/30'
                     : 'bg-white dark:bg-white/[0.03] hover:bg-slate-50 dark:hover:bg-white/[0.06] border-slate-200 dark:border-white/10'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  currentStage === 'stage1_visa' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-purple-700 dark:text-purple-300'
+                  currentStage === 'stage1_visa' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-amber-300'
                 }`}>
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">
                       STAGE 1
                     </span>
                     <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{stats.stage1Complete}%</span>
@@ -359,18 +359,18 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden ${
                   currentStage === 'stage2_workplace'
-                    ? 'bg-purple-50/80 dark:bg-gradient-to-br dark:from-purple-500/20 dark:via-[#26172e] dark:to-[#120f26] border-[#E45147] shadow-md ring-1 ring-purple-500/50'
+                    ? 'bg-red-50/80 dark:bg-gradient-to-br dark:from-[#E45147]/10 dark:via-[#1F2540] dark:to-[#121524] border-[#E45147] shadow-md ring-1 ring-red-500/30'
                     : 'bg-white dark:bg-white/[0.03] hover:bg-slate-50 dark:hover:bg-white/[0.06] border-slate-200 dark:border-white/10'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  currentStage === 'stage2_workplace' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-purple-700 dark:text-purple-300'
+                  currentStage === 'stage2_workplace' ? 'bg-[#E45147] text-white font-black' : 'bg-slate-100 dark:bg-white/10 text-amber-300'
                 }`}>
                   <Store className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">
                       STAGE 2
                     </span>
                     <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{stats.stage2Complete}%</span>
@@ -429,7 +429,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#110e24] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 font-mono">STAGE 1 টুলস:</span>
+                <span className="text-xs font-bold text-amber-300 font-mono">STAGE 1 টুলস:</span>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -555,7 +555,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#171026] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 font-mono">STAGE 2 টুলস:</span>
+                <span className="text-xs font-bold text-amber-300 font-mono">STAGE 2 টুলস:</span>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -581,7 +581,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
               {/* Ambience audio controls */}
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500 dark:text-stone-400 flex items-center gap-1">
-                  <Volume2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                  <Volume2 className="w-3.5 h-3.5 text-amber-400" />
                   <span>পরিবেশ সাউন্ড:</span>
                 </span>
                 <button
@@ -599,7 +599,7 @@ export const BaitoOsView: React.FC<BaitoOsViewProps> = ({ onNavigate, initialSta
             {stage2Tool === 'pos_simulator' && (
               isPro ? (
                 <div className="space-y-4">
-                  <div className="px-4 py-2 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-mono font-bold flex flex-wrap items-center justify-between gap-2">
+                  <div className="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold flex flex-wrap items-center justify-between gap-2">
                     <span>🏪 কনবিনি ক্যাশিয়ার সিমুলেটর • প্রো ওয়ার্কপ্লেস মোড</span>
                     <span className="text-emerald-400 text-[11px] font-sans">সক্রিয় প্রো সাবস্ক্রিপশন</span>
                   </div>

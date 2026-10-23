@@ -36,7 +36,7 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
           জাপানিজ শিখুন, নিজের সম্ভাবনাকে আরও বড় করুন
         </h2>
 
-        <p className="text-[9.5px] sm:text-[10px] text-purple-100 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-normal">
+        <p className="text-[9.5px] sm:text-[10px] text-stone-200 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-normal">
           Nihomi আপনার সাথে — আজ, আগামীকাল, জাপানের পথে।
         </p>
 
@@ -44,7 +44,7 @@ export const FinalJapanCTA: React.FC<FinalJapanCTAProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('journey')}
-            className="group inline-flex items-center gap-1.5 px-4.5 py-1 rounded-full bg-gradient-to-r from-[#F472B6] via-[#E879F9] to-[#38BDF8] hover:opacity-95 text-[#101A59] font-black text-[10px] border border-white/80 shadow-[0_0_12px_rgba(232,121,249,0.5)] transition-all cursor-pointer whitespace-nowrap"
+            className="group inline-flex items-center gap-1.5 px-4.5 py-1 rounded-full bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white font-black text-[11px] border border-white/40 shadow-lg shadow-red-600/30 transition-all cursor-pointer whitespace-nowrap"
           >
             <span>বিনামূল্যে শেখা শুরু করুন</span>
             <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />

@@ -178,46 +178,46 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
           </div>
 
           {/* Kana Mastered */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-red-500/30 shadow-lg shadow-red-500/5">
-            <div className="w-8 h-8 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-[#E45147]/30 shadow-lg shadow-red-500/5">
+            <div className="w-8 h-8 rounded-xl bg-[#E45147]/20 flex items-center justify-center text-[#E45147]">
               <Award className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">জানা বর্ণমালা</div>
-              <div className="text-base font-black text-red-400 leading-none">{knownKanaCount} টি</div>
+              <div className="text-base font-black text-[#E45147] leading-none">{knownKanaCount} টি</div>
             </div>
           </div>
 
           {/* SRS Review Queue */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-purple-500/30 shadow-lg shadow-purple-500/5">
-            <div className="w-8 h-8 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-amber-500/30 shadow-lg shadow-amber-500/5">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
               <RotateCcw className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">রিভিশন বাকি</div>
-              <div className="text-base font-black text-purple-400 leading-none">{reviewDueCount} টি</div>
+              <div className="text-base font-black text-amber-400 leading-none">{reviewDueCount} টি</div>
             </div>
           </div>
 
           {/* Coins Wallet */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-yellow-500/30 shadow-lg shadow-yellow-500/5">
-            <div className="w-8 h-8 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-amber-500/30 shadow-lg shadow-amber-500/5">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
               <Coins className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">নিহোমি কয়েন</div>
-              <div className="text-base font-black text-yellow-400 leading-none">{coinBalance} কয়েন</div>
+              <div className="text-base font-black text-amber-400 leading-none">{coinBalance} কয়েন</div>
             </div>
           </div>
 
           {/* Total Study Time */}
-          <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-cyan-500/30 shadow-lg shadow-cyan-500/5">
-            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+          <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-emerald-500/30 shadow-lg shadow-emerald-500/5">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
               <Clock className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">স্টাডি সময়</div>
-              <div className="text-base font-black text-cyan-400 leading-none">
+              <div className="text-base font-black text-emerald-400 leading-none">
                 {totalStudyMinutes >= 60 ? `${(totalStudyMinutes / 60).toFixed(1)} ঘণ্টা` : `${totalStudyMinutes} মিনিট`}
               </div>
             </div>
@@ -455,14 +455,14 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
           {/* Card 4: Relocation JIS CV */}
           <div
             onClick={() => onNavigate('rirekisho')}
-            className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-cyan-500/40 transition-all cursor-pointer flex flex-col justify-between"
+            className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-[#E45147]/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-[#E45147]/20 text-[#E45147] flex items-center justify-center group-hover:scale-110 transition-transform">
                   <FileText className="w-5 h-5" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#E45147]/10 text-[#E45147] border border-[#E45147]/20">
                   {cvBriefing?.isEligible ? 'JIS রেডি' : 'ড্রাফট মোড'}
                 </span>
               </div>
@@ -471,7 +471,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
                 জাপানিজ স্ট্যান্ডার্ড A4 রিলোকেশন রিজিউমে ও কারিকুলাম ভাইটে তৈরি করে সরাসরি PDF ডাউনলোড।
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 mt-4 group-hover:translate-x-1 transition-transform">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#E45147] mt-4 group-hover:translate-x-1 transition-transform">
               <span>CV প্রস্তুত করুন</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
@@ -479,14 +479,14 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
           {/* Card 5: JLPT Exam OS */}
           <div
             onClick={() => onNavigate('exam')}
-            className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-purple-500/40 transition-all cursor-pointer flex flex-col justify-between"
+            className="group p-5 rounded-2xl bg-[#141726] hover:bg-[#191e30] border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Award className="w-5 h-5" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
                   {examBriefing?.isEligible ? 'মক টেস্ট রেডি' : 'স্বরবর্ণ বাকি'}
                 </span>
               </div>
@@ -495,7 +495,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
                 অফিসিয়াল সময়সীমা ও স্কোরকার্ড সহ N5, N4 ও N3 ফুল-লেংথ প্র্যাকটিস সিমুলেশন ও সার্টিফিকেট।
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-purple-400 mt-4 group-hover:translate-x-1 transition-transform">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 mt-4 group-hover:translate-x-1 transition-transform">
               <span>পরীক্ষা দিন</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>

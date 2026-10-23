@@ -271,12 +271,12 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
         <div className="p-5 rounded-2xl bg-[#141726] border border-white/10 space-y-2">
           <div className="flex items-center justify-between text-stone-400 text-xs">
             <span className="font-bold uppercase tracking-wider">মোট নিবন্ধিত শিক্ষার্থী</span>
-            <Users className="w-4 h-4 text-cyan-400" />
+            <Users className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-white font-mono">
             {isLoading ? '...' : `${totalStudents} জন`}
           </div>
-          <div className="text-[11px] text-cyan-400 font-mono flex items-center gap-1 pt-1 border-t border-white/5">
+          <div className="text-[11px] text-emerald-400 font-mono flex items-center gap-1 pt-1 border-t border-white/5">
             <Activity className="w-3 h-3" />
             <span>{newStudents ? `+${newStudents} জন এই মাসে নতুন` : `সক্রিয় (৭ দিন): ${activeStudents} জন`}</span>
           </div>
@@ -286,12 +286,12 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
         <div className="p-5 rounded-2xl bg-[#141726] border border-white/10 space-y-2">
           <div className="flex items-center justify-between text-stone-400 text-xs">
             <span className="font-bold uppercase tracking-wider">সিস্টেম ও পেমেন্ট লক</span>
-            <ShieldCheck className="w-4 h-4 text-purple-400" />
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-white">
             {isLoading ? '...' : '100% Active'}
           </div>
-          <div className="text-[11px] text-purple-300 font-mono pt-1 border-t border-white/5">
+          <div className="text-[11px] text-amber-300 font-mono pt-1 border-t border-white/5">
             bKash / SSLCommerz: Fail-Closed
           </div>
         </div>

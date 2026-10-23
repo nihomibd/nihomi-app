@@ -153,7 +153,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
 
             <h2 className="text-xl lg:text-[21px] font-black text-[#101A59] tracking-tight leading-[1.14]">
               এখনই একটি ছোট লেসন <br />
-              <span className="text-[#6D25EA]">চেষ্টা করে দেখুন</span>
+              <span className="text-emerald-700 font-bold">চেষ্টা করে দেখুন</span>
             </h2>
 
             <p className="text-slate-600 text-[10px] sm:text-[10.5px] leading-snug max-w-xs font-normal">
@@ -164,7 +164,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
               <button
                 type="button"
                 onClick={() => onNavigate('journey')}
-                className="group inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#6D25EA] hover:bg-[#5818D1] text-white font-extrabold text-[11px] shadow-sm shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
+                className="group inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E45147] hover:bg-[#c93f35] text-white font-extrabold text-[11px] shadow-sm shadow-purple-600/25 transition-all cursor-pointer whitespace-nowrap"
               >
                 <span>এখনই লেসন শুরু করুন</span>
                 <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
@@ -191,8 +191,8 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[9px] font-bold transition-all whitespace-nowrap cursor-pointer text-left w-full ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#6D25EA] to-[#4F46E5] text-white shadow-xs'
-                          : 'bg-transparent text-slate-700 hover:bg-purple-50/70 hover:text-[#6D25EA]'
+                          ? 'bg-gradient-to-r from-[#E45147] to-[#F59E0B] text-white shadow-xs'
+                          : 'bg-transparent text-slate-700 hover:bg-red-50 hover:text-[#E45147]'
                       }`}
                     >
                       <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
@@ -215,7 +215,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                       onClick={() => handlePlaySound(currentContent.mainChar)}
                       className={`p-1.5 rounded-full border transition-all cursor-pointer ${
                         isPlayingAudio
-                          ? 'bg-purple-100 border-[#6D25EA] text-[#6D25EA] scale-105'
+                          ? 'bg-[#E45147]/15 border-[#E45147] text-[#E45147] scale-105'
                           : 'bg-sky-50 hover:bg-sky-100 border-sky-100 text-[#0284C7]'
                       }`}
                       title="উচ্চারণ শুনুন"
@@ -244,7 +244,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                     <div
                       key={i}
                       onClick={() => handlePlaySound(ex.ja)}
-                      className="bg-slate-50/80 hover:bg-purple-50/60 p-1 rounded-xl border border-slate-100 text-center cursor-pointer transition-all flex flex-col items-center justify-center hover:scale-[1.02]"
+                      className="bg-slate-50/80 hover:bg-red-50/60 p-1 rounded-xl border border-slate-100 text-center cursor-pointer transition-all flex flex-col items-center justify-center hover:scale-[1.02]"
                     >
                       <div className="w-8 h-6 rounded-md overflow-hidden mb-1 bg-white border border-slate-100 flex items-center justify-center shrink-0">
                         <img
@@ -281,7 +281,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
                   <span className="text-[9px] font-black text-[#141726] block leading-none mb-0.5">
                     Nomi Sensei
                   </span>
-                  <div className="bg-[#FAF5FF] p-1.5 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-purple-100/70">
+                  <div className="bg-amber-500/10 p-1.5 rounded-xl text-[8.5px] font-semibold text-slate-800 leading-tight border border-amber-500/20">
                     {currentContent.senseiMsg}
                   </div>
                 </div>
@@ -289,14 +289,14 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
 
               {/* Sound Wave Visualizer Pill & Circular Microphone Button Matching Reference */}
               <div className="flex items-center gap-1.5 justify-center">
-                <div className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-[#3B1774] to-[#581C87] px-3 py-1.5 rounded-full shadow-2xs text-white">
-                  <span className={`w-0.5 h-2 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse h-3' : ''}`} />
+                <div className="flex-1 flex items-center justify-center gap-1 bg-[#141726] px-3 py-1.5 rounded-full shadow-2xs text-white">
+                  <span className={`w-0.5 h-2 rounded-full bg-amber-400 ${isPlayingAudio || isMicActive ? 'animate-pulse h-3' : ''}`} />
                   <span className={`w-0.5 h-3.5 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce h-4' : ''}`} />
-                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-amber-400 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                   <span className={`w-0.5 h-2.5 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce' : ''}`} />
-                  <span className={`w-0.5 h-1.5 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-1.5 rounded-full bg-amber-400 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                   <span className={`w-0.5 h-3 rounded-full bg-white ${isPlayingAudio || isMicActive ? 'animate-bounce' : ''}`} />
-                  <span className={`w-0.5 h-2 rounded-full bg-purple-300 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
+                  <span className={`w-0.5 h-2 rounded-full bg-amber-400 ${isPlayingAudio || isMicActive ? 'animate-pulse' : ''}`} />
                 </div>
 
                 <button
@@ -326,7 +326,7 @@ export const TryLessonSection: React.FC<TryLessonSectionProps> = ({ onNavigate }
               </div>
 
               {/* Sensei Feedback Card */}
-              <div className="flex items-start gap-1.5 bg-[#FDF2F8]/60 p-1.5 rounded-xl border border-pink-100">
+              <div className="flex items-start gap-1.5 bg-emerald-500/10 p-1.5 rounded-xl border border-emerald-500/20">
                 <img
                   src="/assets/landing-v2/sensei-avatar.png"
                   alt="Sensei Verified"

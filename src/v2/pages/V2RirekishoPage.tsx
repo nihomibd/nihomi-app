@@ -44,7 +44,7 @@ export const V2RirekishoPage: React.FC<V2RirekishoPageProps> = ({ onNavigate }) 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase bg-[#E45147]/10 text-[#E45147] border border-[#E45147]/30">
               জাপানিজ কর্মসংস্থান মানদণ্ড
             </span>
             <span className="text-xs text-stone-400 font-mono">

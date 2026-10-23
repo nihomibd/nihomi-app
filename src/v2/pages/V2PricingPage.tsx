@@ -210,7 +210,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
               }`}
             >
               <span>বাৎসরিক (১ বছর)</span>
-              <span className="text-[10px] bg-cyan-400 text-black px-1.5 py-0.2 rounded font-black">
+              <span className="text-[10px] bg-amber-400 text-black px-1.5 py-0.2 rounded font-black">
                 ১৫% ছাড়
               </span>
             </button>
@@ -354,9 +354,9 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                   </div>
                   <div className="text-xs text-amber-300 font-semibold">৳১,৯৯০ / মাস (জনপ্রিয়)</div>
                 </th>
-                <th className="p-4 sm:p-5 font-bold text-cyan-300 text-center min-w-[150px]">
+                <th className="p-4 sm:p-5 font-bold text-white text-center min-w-[150px]">
                   <div className="font-black text-sm sm:text-base text-white">Japan Ready</div>
-                  <div className="text-xs text-cyan-300">৳৩,৯৯০ / মাস</div>
+                  <div className="text-xs text-stone-300">৳৩,৯৯০ / মাস</div>
                 </th>
               </tr>
             </thead>
@@ -422,7 +422,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-emerald-500/5 text-stone-500 font-mono">—</td>
                 <td className="p-4 sm:p-5 text-center text-stone-500 font-mono">—</td>
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-stone-500 font-mono">—</td>
-                <td className="p-4 sm:p-5 text-center text-cyan-400 font-bold">✓ N2 & N1 সম্পূর্ণ</td>
+                <td className="p-4 sm:p-5 text-center text-emerald-400 font-bold">✓ N2 & N1 সম্পূর্ণ</td>
               </tr>
 
               {/* Category: কাঞ্জি ও ওয়ার্কবুক */}
@@ -440,7 +440,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-semibold">
                   ২৫০ কাঞ্জি
                 </td>
-                <td className="p-4 sm:p-5 text-center text-cyan-300 font-semibold">১,০০০+ কাঞ্জি (N5-N1)</td>
+                <td className="p-4 sm:p-5 text-center text-stone-200 font-semibold">১,০০০+ কাঞ্জি (N5-N1)</td>
               </tr>
               <tr className="hover:bg-white/[0.02] transition">
                 <td className="p-4 sm:p-5 font-medium text-stone-200">
@@ -471,7 +471,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
                   ✓ ফুল JIS এক্সপোর্ট ও PDF
                 </td>
-                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">✓ AI কাভার লেটার + PDF</td>
+                <td className="p-4 sm:p-5 text-center text-amber-300 font-bold">✓ AI কাভার লেটার + PDF</td>
               </tr>
               <tr className="hover:bg-white/[0.02] transition">
                 <td className="p-4 sm:p-5 font-medium text-stone-200">
@@ -493,7 +493,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
                   ✓ ৫টি ফুল মক + স্কোরিং
                 </td>
-                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">✓ আনলিমিটেড + সার্টিফিকেট</td>
+                <td className="p-4 sm:p-5 text-center text-amber-300 font-bold">✓ আনলিমিটেড + সার্টিফিকেট</td>
               </tr>
 
               {/* Category: এআই ও সাপোর্ট */}
@@ -511,7 +511,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-bold">
                   ১,৫০০ কয়েন / মাস
                 </td>
-                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">৪,০০০ কয়েন + প্রায়োরিটি</td>
+                <td className="p-4 sm:p-5 text-center text-amber-300 font-bold">৪,০০০ কয়েন + প্রায়োরিটি</td>
               </tr>
               <tr className="hover:bg-white/[0.02] transition">
                 <td className="p-4 sm:p-5 font-medium text-stone-200">
@@ -522,7 +522,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center bg-amber-500/10 border-x border-amber-500/20 text-amber-300 font-semibold">
                   হোয়াটসঅ্যাপ প্রায়োরিটি
                 </td>
-                <td className="p-4 sm:p-5 text-center text-cyan-300 font-bold">১-অন-১ ভিসা ও ইন্টারভিউ</td>
+                <td className="p-4 sm:p-5 text-center text-amber-300 font-bold">১-অন-১ ভিসা ও ইন্টারভিউ</td>
               </tr>
 
               {/* Action Buttons Row */}
@@ -555,7 +555,7 @@ export const V2PricingPage: React.FC<V2PricingPageProps> = ({
                 <td className="p-4 sm:p-5 text-center">
                   <button
                     onClick={() => handleOpenCheckout(ALL_PLANS[3])}
-                    className="w-full py-2.5 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition cursor-pointer shadow"
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white font-black text-xs transition cursor-pointer shadow"
                   >
                     Japan Ready
                   </button>

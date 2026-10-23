@@ -48,7 +48,7 @@ export const ConbiniCustomerFigure: React.FC<ConbiniCustomerFigureProps> = ({
                 {/* Hair */}
                 <div className="absolute -top-2 w-22 h-10 bg-stone-800 rounded-t-full"></div>
                 {/* Cap Visor */}
-                <div className="absolute top-2 w-16 h-3 bg-indigo-600 rounded-full shadow-xs"></div>
+                <div className="absolute top-2 w-16 h-3 bg-[#E45147] rounded-full shadow-xs"></div>
                 {/* Eyes & Smile */}
                 <div className="flex gap-4 mt-4">
                   <div className="w-2.5 h-2.5 bg-stone-800 rounded-full animate-bounce"></div>
@@ -62,14 +62,14 @@ export const ConbiniCustomerFigure: React.FC<ConbiniCustomerFigureProps> = ({
               </div>
 
               {/* Torso: Navy Blue Tokyo Uni Hoodie */}
-              <div className="relative w-36 h-32 bg-indigo-700 rounded-t-3xl border-t-2 border-indigo-400 shadow-lg flex flex-col items-center p-2">
+              <div className="relative w-36 h-32 bg-[#141726] rounded-t-3xl border-t-2 border-amber-500/40 shadow-lg flex flex-col items-center p-2">
                 {/* White Hoodie Drawstrings */}
                 <div className="flex gap-4 mt-1">
                   <div className="w-1 h-6 bg-white rounded-full"></div>
                   <div className="w-1 h-6 bg-white rounded-full"></div>
                 </div>
                 {/* Tokyo College Graphic */}
-                <span className="text-[10px] font-black tracking-widest text-indigo-200 uppercase mt-2">
+                <span className="text-[10px] font-black tracking-widest text-amber-200 uppercase mt-2">
                   TOKYO 24
                 </span>
 
@@ -154,7 +154,7 @@ export const ConbiniCustomerFigure: React.FC<ConbiniCustomerFigureProps> = ({
               </div>
 
               {/* Torso: Floral Scarf & Lavender Knit Cardigan */}
-              <div className="relative w-36 h-30 bg-purple-800 rounded-t-3xl border-t-2 border-purple-400 shadow-lg flex flex-col items-center">
+              <div className="relative w-36 h-30 bg-[#1F2540] rounded-t-3xl border-t-2 border-amber-500/40 shadow-lg flex flex-col items-center">
                 {/* Floral Silk Scarf */}
                 <div className="w-14 h-5 bg-rose-200 rounded-full border border-rose-300 shadow-xs flex items-center justify-center text-[8px] text-rose-800">
                   🌸
@@ -305,7 +305,7 @@ export const ConbiniCustomerFigure: React.FC<ConbiniCustomerFigureProps> = ({
           {/* Subtitles: Romaji & Bengali (Training Mode) */}
           {mode === 'training' && (
             <div className="mt-2 pt-2 border-t border-slate-800/80 space-y-1">
-              <div className="text-xs font-mono text-cyan-300/90 font-medium">
+              <div className="text-xs font-mono text-amber-200/95 font-medium">
                 {dialogueText.romaji}
               </div>
               <div className="text-xs text-slate-300 leading-relaxed">

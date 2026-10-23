@@ -9,10 +9,10 @@ interface JlptMockPracticeSectionProps {
 export const JlptMockPracticeSection: React.FC<JlptMockPracticeSectionProps> = ({ onNavigate }) => {
   const levels = [
     { level: 'N5', title: 'মৌলিক ভিত্তি', desc: 'মিন্নানো নিহঙ্গো ১-২৫ লেসন, হিরাগানা, কাতাকানা ও মৌলিক ১০০ কাঞ্জি', status: 'লাইভ পাইলট', badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
-    { level: 'N4', title: 'প্রাথমিক কথোপকথন', desc: 'দৈনন্দিন জাপানি, ব্যাকরণ প্যাটার্ন ও ৩০০ কাঞ্জি প্রস্তুতি', status: 'ফাউন্ডেশন', badgeColor: 'bg-sky-500/20 text-sky-400 border-sky-500/30' },
+    { level: 'N4', title: 'প্রাথমিক কথোপকথন', desc: 'দৈনন্দিন জাপানি, ব্যাকরণ প্যাটার্ন ও ৩০০ কাঞ্জি প্রস্তুতি', status: 'ফাউন্ডেশন', badgeColor: 'bg-amber-500/20 text-amber-400 border-amber-500/30' },
     { level: 'N3', title: 'মধ্যবর্তী সেতু', desc: 'জাপানে কাজের উপযোগী মধ্যবর্তী জাপানি ও বিজনেস কেইগো ভিত্তি', status: 'ফাউন্ডেশন', badgeColor: 'bg-amber-500/20 text-amber-400 border-amber-500/30' },
-    { level: 'N2', title: 'পেশাদার দক্ষতা', desc: 'জাপানি কোম্পানিতে সরাসরি কাজের ভাষা ও জটিল রিডিং কমপ্রিহেনশন', status: 'রোডম্যাপ', badgeColor: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-    { level: 'N1', title: 'উচ্চতর পাণ্ডিত্য', desc: 'নেটিভ সমমানের প্রাতিষ্ঠানিক ও বিশ্লেষণমূলক জাপানি ভাষা দক্ষতা', status: 'রোডম্যাপ', badgeColor: 'bg-rose-500/20 text-rose-400 border-rose-500/30' }
+    { level: 'N2', title: 'পেশাদার দক্ষতা', desc: 'জাপানি কোম্পানিতে সরাসরি কাজের ভাষা ও জটিল রিডিং কমপ্রিহেনশন', status: 'রোডম্যাপ', badgeColor: 'bg-[#E45147]/20 text-[#E45147] border-[#E45147]/30' },
+    { level: 'N1', title: 'উচ্চতর পাণ্ডিত্য', desc: 'নেটিভ সমমানের প্রাতিষ্ঠানিক ও বিশ্লেষণমূলক জাপানি ভাষা দক্ষতা', status: 'রোডম্যাপ', badgeColor: 'bg-stone-500/20 text-stone-300 border-stone-500/30' }
   ];
 
   return (

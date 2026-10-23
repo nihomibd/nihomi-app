@@ -38,8 +38,8 @@ export const LearningJourneySection: React.FC<LearningJourneySectionProps> = ({ 
       subtitle: 'I — Imitate Authentic Models',
       meta: 'হিরাগানা/কাতাকানা ক্যানভাস',
       icon: Target,
-      accent: 'text-indigo-600',
-      border: 'hover:border-indigo-600/50'
+      accent: 'text-amber-500',
+      border: 'hover:border-amber-500/50'
     },
     {
       num: '০৩',

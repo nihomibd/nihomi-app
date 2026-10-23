@@ -68,7 +68,7 @@ export const ConbiniCartoneTray: React.FC<ConbiniCartoneTrayProps> = ({
                 isTenThousand
                   ? 'bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 border-amber-500 text-amber-950'
                   : isFiveThousand
-                  ? 'bg-gradient-to-r from-purple-100 via-purple-200 to-purple-100 border-purple-500 text-purple-950'
+                  ? 'bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 border-amber-500 text-amber-950'
                   : 'bg-gradient-to-r from-sky-100 via-sky-200 to-sky-100 border-sky-500 text-sky-950'
               }`}
             >

@@ -45,17 +45,17 @@ export const ConbiniCustomerTablet: React.FC<ConbiniCustomerTabletProps> = ({
   };
 
   return (
-    <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-indigo-500/50 shadow-2xl p-4 flex flex-col justify-between">
+    <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-500/40 shadow-2xl p-4 flex flex-col justify-between">
       {/* Tablet Bezel & Camera Notch Header */}
-      <div className="flex items-center justify-between border-b border-indigo-500/30 pb-2 mb-3">
+      <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-3">
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
-          <span className="text-xs font-black text-indigo-300">
+          <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></div>
+          <span className="text-xs font-black text-amber-300">
             客側タッチパネル (Customer Semi-Self Tablet)
           </span>
         </div>
 
-        <div className="px-2 py-0.5 rounded-lg bg-black font-mono text-[10px] text-indigo-300 border border-indigo-500/30">
+        <div className="px-2 py-0.5 rounded-lg bg-black font-mono text-[10px] text-amber-300 border border-amber-500/30">
           合計: ¥{totalAmountYen.toLocaleString()}
         </div>
       </div>
@@ -165,7 +165,7 @@ export const ConbiniCustomerTablet: React.FC<ConbiniCustomerTabletProps> = ({
       </div>
 
       {/* Terminal Contactless NFC Pad Reader Graphic */}
-      <div className="mt-3 pt-2.5 border-t border-indigo-500/30 flex items-center justify-between">
+      <div className="mt-3 pt-2.5 border-t border-amber-500/30 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Glowing NFC Ring Reader */}
           <div className="w-7 h-7 rounded-full bg-blue-500/20 border-2 border-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/40">
