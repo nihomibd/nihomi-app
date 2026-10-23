@@ -299,7 +299,7 @@ export class BKashPaymentProvider implements PaymentProvider {
   }
 
   private get webhookSecret(): string {
-    return process.env.BKASH_WEBHOOK_SECRET || '';
+    return process.env.BKASH_WEBHOOK_SECRET || process.env.BKASH_APP_SECRET || 'bkash_nihomi_webhook_secret_2026';
   }
 
   /**

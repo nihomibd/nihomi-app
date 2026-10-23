@@ -4491,7 +4491,7 @@ class Database {
       // Calculate monthly recurring revenue
       let calculatedMrr = 0;
       for (const sub of activeSubs) {
-        const plan = plans.find((p) => p.id === sub.planId);
+        const plan = plans.find((p) => p.id === sub.planId || (sub.planId === "n5_pro" && p.id === "pro") || (sub.planId === "n5_lifetime" && p.id === "japan_ready"));
         if (plan) {
           calculatedMrr += sub.billingInterval === 'yearly' ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice;
         }
@@ -4663,8 +4663,9 @@ class Database {
 
       if ((sub.status === 'active' || sub.status === 'trialing') && isPeriodActive) {
         activeSubscribers += 1;
-        if (sub.planId in subscribersByPlan) {
-          subscribersByPlan[sub.planId] += 1;
+        const planKey = (sub.planId === "n5_pro" ? "pro" : sub.planId === "n5_lifetime" ? "japan_ready" : sub.planId);
+        if (planKey in subscribersByPlan) {
+          (subscribersByPlan as any)[planKey] += 1;
         }
 
         if (plan) {

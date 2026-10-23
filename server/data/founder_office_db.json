@@ -44953,6 +44953,103 @@
       },
       "id": "log-d6561621",
       "createdAt": "2026-10-17T11:38:29.068Z"
+    },
+    {
+      "id": "log-cbb77312",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "planId": "pro",
+        "status": "active",
+        "monthsToAdd": 1,
+        "note": "WP20 Real Telemetry Verification Audit"
+      },
+      "createdAt": "2026-10-23T12:45:26.097Z"
+    },
+    {
+      "id": "log-9f66782d",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "planId": "free",
+        "status": "cancelled",
+        "monthsToAdd": 0,
+        "note": "WP20 Audit Clean Reset"
+      },
+      "createdAt": "2026-10-23T12:45:29.169Z"
+    },
+    {
+      "id": "log-b864b143",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "status": "active",
+        "monthsToAdd": 1
+      },
+      "createdAt": "2026-10-23T18:28:27.420Z"
+    },
+    {
+      "id": "log-b18f3f84",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "status": "active",
+        "monthsToAdd": 1
+      },
+      "createdAt": "2026-10-23T18:34:10.925Z"
+    },
+    {
+      "id": "log-9ed98a30",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "status": "active",
+        "monthsToAdd": 1
+      },
+      "createdAt": "2026-10-23T18:38:53.068Z"
+    },
+    {
+      "id": "log-9b31cee9",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "planId": "pro",
+        "status": "cancelled",
+        "monthsToAdd": 1
+      },
+      "createdAt": "2026-10-23T19:05:33.282Z"
+    },
+    {
+      "id": "log-91c9f01e",
+      "adminUserId": "usr-admin-01",
+      "adminEmail": "mdtanvirkabirbiplob@gmail.com",
+      "action": "subscription_override",
+      "targetUserId": "usr-student-01",
+      "targetResource": "subscriptions",
+      "details": {
+        "planId": "pro",
+        "status": "active",
+        "monthsToAdd": 1
+      },
+      "createdAt": "2026-10-23T19:05:33.694Z"
     }
   ],
   "aiActionLedger": [

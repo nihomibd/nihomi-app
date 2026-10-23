@@ -1112,8 +1112,8 @@ billingRouter.post('/sslcommerz/cancel', (req: Request, res: Response) => {
 // ==========================================
 // 6. ASYNCHRONOUS WEBHOOK & IPN HANDLER (Idempotent & Cryptographically Signed)
 // ==========================================
-billingRouter.post('/webhook/:provider', async (req: Request, res: Response) => {
-  const providerParam = (req.params.provider || 'bkash').toLowerCase() as PaymentProviderType;
+billingRouter.post(['/webhook/:provider', '/webhook'], async (req: Request, res: Response) => {
+  const providerParam = (req.params.provider || (req.query.provider as string) || req.body?.provider || 'bkash').toLowerCase() as PaymentProviderType;
   const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() || req.ip || '127.0.0.1';
   const rawBody = (req as any).rawBody || (typeof req.body === 'string' ? req.body : undefined);
   const payload = req.body || {};
