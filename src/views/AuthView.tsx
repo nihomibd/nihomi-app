@@ -76,7 +76,9 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
     try {
       if (mode === 'login') {
         await login(email, password);
-        onNavigate('dashboard');
+      const isFounder = email.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
+      if (typeof window !== 'undefined') { window.location.hash = isFounder ? '#/founder' : '#/dashboard'; }
+      onNavigate(isFounder ? 'founder' : 'dashboard');
       } else if (mode === 'register') {
         await register({
           email,
@@ -87,7 +89,8 @@ export const AuthView: React.FC<AuthViewProps> = ({ initialMode = 'login', initi
         });
         trackCompleteRegistration({ method: 'Email', email });
         trackStartTrial({ trialDays: 7, planId: 'n5_trial' });
-        onNavigate('dashboard');
+      if (typeof window !== 'undefined') { window.location.hash = '#/dashboard'; }
+      onNavigate('dashboard');
       } else if (mode === 'forgot') {
         const origin = window.location.origin;
         const redirectTo = `${origin}/reset-password`;

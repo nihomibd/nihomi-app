@@ -52,13 +52,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
     setErrorMessage(null);
     setIsProcessing(true);
     try {
-      const ok = await loginWithGoogle();
+      const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/#/dashboard` : undefined;
+      const ok = await loginWithGoogle(redirectUrl);
       if (!ok) {
         setErrorMessage('গুগল সাইন-ইন চালু করা সম্ভব হয়নি। অনুগ্রহ করে পপ-আপ অথবা রিডাইরেক্ট পারমিশন চেক করে আবার চেষ্টা করুন।');
       } else {
         trackNihomiEvent('signup_completed', { method: 'google' });
         const ref = getStoredReferralCode();
         if (ref) claimReferralReward(ref).catch(() => {});
+        closeAuthModal();
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/dashboard';
+        }
+        onNavigate?.('dashboard');
       }
     } catch (err: any) {
       setErrorMessage(err?.message || 'গুগল সাইন-ইনে ত্রুটি দেখা দিয়েছে। আবার চেষ্টা করুন।');
@@ -93,8 +99,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
           trackNihomiEvent('signup_completed', { method: 'email_login', role: isFounderEmailTyped ? 'founder' : 'student' });
           closeAuthModal();
           if (isFounderEmailTyped) {
+            if (typeof window !== 'undefined') window.location.hash = '#/founder';
             onNavigate?.('founder');
           } else {
+            if (typeof window !== 'undefined') window.location.hash = '#/dashboard';
             onNavigate?.('dashboard');
           }
         } else {
@@ -112,8 +120,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
           if (ref) claimReferralReward(ref).catch(() => {});
           closeAuthModal();
           if (isFounderEmailTyped) {
+            if (typeof window !== 'undefined') window.location.hash = '#/founder';
             onNavigate?.('founder');
           } else {
+            if (typeof window !== 'undefined') window.location.hash = '#/dashboard';
             onNavigate?.('dashboard');
           }
         } else {

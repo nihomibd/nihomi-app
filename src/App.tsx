@@ -226,207 +226,36 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
   const queryCert = searchParams.get('certId') || searchParams.get('id');
 
   // 1. Explicit legacy mode requested via path, query param, or #legacy
-  if (
+  const isExplicitLegacy =
     path === '/legacy' ||
     path.startsWith('/legacy') ||
+    path === '/classic' ||
     searchParams.get('mode') === 'legacy' ||
-    (typeof window !== 'undefined' && (window.location.hash === '#legacy' || window.location.hash === '#/legacy'))
-  ) {
+    (typeof window !== 'undefined' && (
+      window.location.hash === '#legacy' ||
+      window.location.hash === '#/legacy' ||
+      window.location.hash === '#founder/legacy' ||
+      window.location.hash === '#/founder/legacy'
+    ));
+
+  if (isExplicitLegacy) {
     if (isFounderUser()) {
-      return { view: 'landing', params: { legacy: true } };
+      return { view: 'legacy', params: { legacy: true } };
     }
     if (typeof window !== 'undefined' && window.history?.replaceState) {
-      try { window.history.replaceState({}, '', '/'); } catch (_) {}
+      try { window.history.replaceState({}, '', '/#/dashboard'); } catch (_) {}
     }
     return { view: 'v2', params: {} };
   }
 
-// 2. All core modern routes strictly resolve to V2 (unless explicitly in legacy mode)
-  const isExplicitLegacy =
-    path === '/legacy' ||
-    path.startsWith('/legacy') ||
-    searchParams.get('mode') === 'legacy' ||
-    (typeof window !== 'undefined' && (window.location.hash === '#legacy' || window.location.hash === '#/legacy'));
-
-  if (!isExplicitLegacy) {
-    // In V2, all primary application views run inside the unified V2 shell
-    const v2Routes = new Set([
-      '/', '', '/v2',
-      '/journey', '/mission', '/tokyo',
-      '/dashboard', '/student-dashboard', '/portal',
-      '/curriculum', '/courses', '/pathways', '/syllabus',
-      '/lesson', '/lessons', '/grammar',
-      '/kana', '/hiragana', '/katakana',
-      '/exam', '/exams', '/mock', '/mock-exams', '/jlpt',
-      '/workos', '/baito', '/conbini', '/shift',
-      '/rirekisho', '/cv', '/resume',
-      '/pricing', '/plans',
-      '/founder', '/admin',
-      '/terms', '/privacy', '/refund-policy'
-    ]);
-
-    const cleanSegment = path.split('/')[1] ? '/' + path.split('/')[1] : '/';
-    if (v2Routes.has(path) || v2Routes.has(cleanSegment) || path.startsWith('/lesson') || path.startsWith('/practice') || path.startsWith('/kana')) {
-      return { view: 'v2', params: {} };
-    }
-  }
-
-  // 3. Hash rewriting for legacy views only when on non-root legacy paths
-  if (typeof window !== 'undefined' && window.location.hash) {
-    const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-    if (rawHash && KNOWN_VIEWS.has(rawHash)) {
-      path = '/' + rawHash;
-    }
-  }
-  if (path === '/journey' || path === '/start-journey' || path === '/onboarding' || path === '/mission') {
-    return { view: 'journey', params: {} };
-  }
-  if (path === '/start' || path === '/campaign' || path === '/ad') {
-    return { view: 'start', params: {} };
-  }
-  if (path === '/world' || path === '/canvas' || path === '/shibuya') {
-    return { view: 'landing', params: {} };
-  }
-  if (path === '/classic') {
-    return { view: 'classic', params: {} };
-  }
-  if ((path === '/' || path === '') && (searchParams.has('utm_source') || searchParams.has('fbclid') || searchParams.has('gclid') || searchParams.has('utm_campaign'))) {
-    return { view: 'start', params: {} };
-  }
-  if (path === '/courses' || path === '/curriculum' || path === '/pathways') {
-    return { view: 'courses', params: {} };
-  }
-  if (path === '/dashboard' || path === '/student-dashboard') {
-    return { view: 'dashboard', params: {} };
-  }
-  if (path === '/portal') {
-    return { view: 'portal', params: {} };
-  }
-  if (path === '/portal-settings') {
-    return { view: 'portal-settings', params: {} };
-  }
-  if (path === '/portal-subscription') {
-    return { view: 'portal-subscription', params: {} };
-  }
-  if (path.startsWith('/lesson/') || path === '/lesson') {
-    const lessonFromPath = path.replace(/^\/lesson\/?/, '');
-    const targetLesson = lessonFromPath || searchParams.get('id') || searchParams.get('lessonId') || 'n5-l1';
-    return { view: 'lesson', params: { lessonId: targetLesson } };
-  }
-  if (path.startsWith('/practice/') || path === '/practice' || path === '/lesson-practice') {
-    const practiceFromPath = path.replace(/^\/practice\/?/, '').replace(/^\/lesson-practice\/?/, '');
-    const targetLesson = practiceFromPath || searchParams.get('id') || searchParams.get('lessonId') || 'n5-l1';
-    return { view: 'practice', params: { lessonId: targetLesson } };
-  }
-  if (path === '/kana' || path === '/hiragana' || path === '/katakana' || path === '/kana-lab') {
-    const char = searchParams.get('char') || undefined;
-    const type = searchParams.get('type') || (path === '/katakana' ? 'katakana' : undefined);
-    return { view: 'kana', params: { char, type } };
-  }
-  if (path === '/kanji' || path === '/kanji-lab' || path === '/kanji-100' || path === '/n5-kanji') {
-    return { view: 'kanji', params: {} };
-  }
-  if (path === '/listening' || path === '/listening-lab') {
-    return { view: 'listening', params: {} };
-  }
-  if (path === '/baito' || path === '/baito-os' || path === '/simulation' || path === '/workos' || path === '/work-os') {
-    return { view: 'baito', params: {} };
-  }
-  if (path === '/memory-os' || path === '/memoryos' || path === '/srs' || path === '/memory') {
-    return { view: 'memory-os', params: {} };
-  }
-  if (path === '/japan-twin' || path === '/japantwin' || path === '/twin') {
-    return { view: 'japan-twin', params: {} };
-  }
-  if (path === '/pricing' || path === '/plans') {
-    const plan = searchParams.get('plan') || undefined;
-    const interval = searchParams.get('interval') || undefined;
-    return { view: 'pricing', params: { plan, interval } };
-  }
-  if (path === '/profile' || path === '/account' || path === '/me') {
-    return { view: 'profile', params: {} };
-  }
-  if (path === '/badges' || path === '/achievements') {
-    return { view: 'badges', params: {} };
-  }
-  if (path === '/progress' || path === '/stats') {
-    return { view: 'progress', params: {} };
-  }
-  if (path === '/vocabulary' || path === '/vocab') {
-    return { view: 'vocabulary', params: {} };
-  }
-  if (path === '/kotoba' || path === '/kotoba-canvas' || path === '/word-canvas') {
-    const word = searchParams.get('word') || undefined;
-    return { view: 'kotoba', params: { word } };
-  }
-  if (path === '/ai-coach' || path === '/coach') {
-    return { view: 'ai-coach', params: {} };
-  }
-  if (path === '/leaderboard' || path === '/community' || path === '/rankings') {
-    return { view: 'leaderboard', params: {} };
-  }
-  if (path === '/quizzes' || path === '/quiz') {
-    return { view: 'quizzes', params: {} };
-  }
-  if (path.startsWith('/quiz/') || path.startsWith('/quizzes/')) {
-    const quizId = path.split('/')[2] || 'quiz-n5-01';
-    return { view: 'quiz-runner', params: { quizId } };
-  }
-  if (path === '/mock-exams' || path === '/mock') {
-    return { view: 'mock-exams', params: {} };
-  }
-  if (path === '/study-plan' || path === '/roadmap') {
-    return { view: 'study-plan', params: {} };
-  }
-  if (path === '/ghost-mode' || path === '/ghost') {
-    return { view: 'ghost-mode', params: {} };
-  }
-  if (path === '/cloud' || path === '/drive') {
-    return { view: 'cloud', params: {} };
-  }
-  if (path === '/coordination') {
-    return { view: 'coordination', params: {} };
-  }
-  if (path === '/documents') {
-    return { view: 'documents', params: {} };
-  }
-  if (path === '/credits') {
-    return { view: 'credits', params: {} };
-  }
-  if (path === '/founder' || path === '/admin/founder' || path === '/command-center') {
-    return { view: 'founder', params: {} };
-  }
-  if (path === '/admin/growth' || path === '/growth' || path === '/founder/growth') {
-    return { view: 'growth', params: {} };
-  }
-  if (path === '/terms' || path === '/terms-of-service') {
-    return { view: 'terms', params: {} };
-  }
-  if (path === '/privacy' || path === '/privacy-policy') {
-    return { view: 'privacy', params: {} };
-  }
-  if (path === '/refund-policy' || path === '/refund' || path === '/refunds') {
-    return { view: 'refund-policy', params: {} };
-  }
-  if (path === '/contact' || path === '/support') {
-    return { view: 'contact', params: {} };
-  }
-  if (path === '/payment/callback' || path === '/billing/callback') {
-    return { view: 'payment-callback', params: {} };
-  }
-  if (path === '/reset-password' || path === '/auth/reset-password') {
-    return { view: 'reset-password', params: {} };
-  }
+  // 2. Certificate verification public route
   if (path.startsWith('/verify') || queryCert) {
     const certFromPath = path.replace(/^\/verify(\/cert)?\/?/, '');
     const targetCert = certFromPath || queryCert;
     return { view: 'verify-cert', params: { certId: targetCert ? decodeURIComponent(targetCert) : '' } };
   }
-  if (path === '/legacy' || path === '/classic') {
-    return { view: 'classic', params: {} };
-  }
 
-  // ALL OTHER ROUTES ARE UNIFIED UNDER V2 AS CANONICAL RUNTIME
+  // 3. ALL OTHER ROUTES ARE UNIFIED UNDER V2 / V3 AS CANONICAL RUNTIME
   return { view: 'v2', params: {} };
 };
 
@@ -436,9 +265,9 @@ export const App: React.FC = () => {
     if (typeof window !== 'undefined') {
       const search = new URLSearchParams(window.location.search);
       const { view } = resolveViewFromUrl(window.location.pathname, search);
-      return view || 'landing';
+      return view || 'v2';
     }
-    return 'landing';
+    return 'v2';
   });
   const [viewParams, setViewParams] = useState<Record<string, any>>(() => {
     if (typeof window !== 'undefined') {
@@ -466,27 +295,44 @@ export const App: React.FC = () => {
   } = useFocusMode();
 
   const handleNavigate = (view: string, params: Record<string, any> = {}) => {
-    let targetView = view;
-    let targetParams = { ...params };
-    if (view.startsWith('lesson/')) {
-      targetView = 'lesson';
-      targetParams.lessonId = view.replace('lesson/', '');
-    } else if (view.startsWith('practice/')) {
-      targetView = 'practice';
-      targetParams.lessonId = view.replace('practice/', '');
-    } else if (view.startsWith('quiz/') || view.startsWith('quizzes/')) {
-      targetView = 'quiz-runner';
-      targetParams.quizId = view.split('/')[1];
-    }
-    setCurrentView(targetView);
-    setViewParams(targetParams);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    try {
-      const targetPath = targetView === 'landing' ? '/' : `/${targetView}`;
-      if (window.location.pathname !== targetPath) {
-        window.history.pushState({}, '', targetPath);
+    if (view === 'legacy' || view === 'classic') {
+      if (isFounderUser()) {
+        setCurrentView('legacy');
+        setViewParams({ legacy: true });
+        try { window.location.hash = '#/founder/legacy'; } catch {}
+        return;
       }
+      setCurrentView('v2');
+      setViewParams({});
+      try { window.location.hash = '#/dashboard'; } catch {}
+      return;
+    }
+
+    if (view === 'verify-cert' || view === 'verify') {
+      setCurrentView('verify-cert');
+      setViewParams(params);
+      return;
+    }
+
+    // Canonical modern V2 / V3 execution
+    setCurrentView('v2');
+    setViewParams(params);
+
+    let targetHash = view;
+    if (view === 'landing' || view === '/' || view === 'home') {
+      targetHash = '';
+    } else if (view.startsWith('lesson/')) {
+      targetHash = view;
+    } else if (view.startsWith('practice/')) {
+      targetHash = `lesson/${view.replace('practice/', '')}`;
+    } else if (view.startsWith('quiz/') || view.startsWith('quizzes/')) {
+      targetHash = `exam/${view.split('/')[1] || ''}`;
+    }
+
+    try {
+      window.location.hash = targetHash ? `#/${targetHash}` : '#/';
     } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Role & Authentication Route Guard
@@ -706,17 +552,29 @@ export const App: React.FC = () => {
       </div>
     );
   }
-  if (currentView === 'v2') {
+  const isModernView = (currentView as string) !== 'legacy' && (currentView as string) !== 'verify-cert';
+  if (isModernView) {
     return (
       <NomiProvider initialView="v2">
         <Suspense fallback={<ViewLoadingFallback />}>
           <V2App onNavigateLegacy={() => {
             if (isFounderUser()) {
-              handleNavigate('landing', { legacy: true });
+              handleNavigate('legacy');
             } else {
-              handleNavigate('v2');
+              handleNavigate('dashboard');
             }
           }} />
+        </Suspense>
+      </NomiProvider>
+    );
+  }
+
+  const isLegacyUnauthorized = (currentView as string) === 'legacy' && !isFounderUser();
+  if (isLegacyUnauthorized) {
+    return (
+      <NomiProvider initialView="v2">
+        <Suspense fallback={<ViewLoadingFallback />}>
+          <V2App onNavigateLegacy={() => handleNavigate('dashboard')} />
         </Suspense>
       </NomiProvider>
     );
@@ -725,6 +583,28 @@ export const App: React.FC = () => {
   return (
     <NomiProvider initialView={currentView}>
       <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#141726] sepia:bg-[#fbf0d9] font-sans antialiased text-slate-900 dark:text-stone-100 sepia:text-[#433422] transition-colors overflow-x-hidden max-w-full">
+      {/* Founder Legacy Archive Mode Top Banner */}
+      {isFounderUser() && currentView === 'legacy' && (
+        <div className="bg-amber-950 border-b border-amber-500/40 text-amber-200 px-4 py-2.5 text-xs flex flex-wrap items-center justify-between gap-3 sticky top-0 z-50 shadow-lg">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="font-mono font-bold uppercase tracking-wider text-amber-300">
+              👑 Founder Archive Mode (Classic V1 Engine)
+            </span>
+            <span className="text-amber-400/80 hidden md:inline">
+              — সাধারণ শিক্ষার্থীদের জন্য এই ভিউ সম্পূর্ণ বন্ধ; তারা আধুনিক লাইভ V2/V3 সিস্টেমে সক্রিয় রয়েছে।
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleNavigate('dashboard')}
+            className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded text-xs transition-colors shadow-sm flex items-center gap-1.5"
+          >
+            <span>লাইভ V2/V3 ড্যাশবোর্ডে ফিরুন</span>
+            <span>→</span>
+          </button>
+        </div>
+      )}
       {/* Offline Feedback & Service Worker Resilience Banner */}
       {!isFocusMode && !isAdLanding && !isCanvasMode && <OfflineNotificationBanner />}
 
