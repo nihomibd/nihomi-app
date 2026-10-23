@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP18-LIVE-MOBILE-PRODUCTION-SANITY-AUDIT",
-  "scope_fingerprint": "5f0f2a5ab2bce1d5633882f8df2c248cf22f5e048f9c3d67a06114431511f3d2",
-  "approved_at": "2026-10-23T03:33:29.000Z",
-  "approved_via": "nihomi-founder-explicit-chat-instruction",
+  "task_id": "NIHOMI-WP32-COMMERCIAL-LAUNCH-MARKETING-CAMPAIGN-AND-GROWTH-SUITE",
+  "scope_fingerprint": "5acb64d3b233bf66cf90be5730b7787dee6d46406b090e7e1d13dea7c2d2ffaf",
+  "approved_at": "2026-10-24T04:04:10.000Z",
+  "approved_via": "nihomi-founder-direct-chat-authorization",
   "approved_scope_summary": {
-    "title": "Live Production Mobile Sanity Audit & Real Cloudflare Edge Verification",
-    "domain": "Production Operations & Edge Verification",
-    "base_commit": "19d8c05"
+    "title": "Commercial Launch Marketing Campaign, Social Share Assets & Student Growth Suite",
+    "domain": "marketing-and-growth",
+    "base_commit": "d38de3f"
   }
 }

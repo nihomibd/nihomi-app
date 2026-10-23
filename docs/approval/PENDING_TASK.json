@@ -1,39 +1,32 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-WP18-LIVE-MOBILE-PRODUCTION-SANITY-AUDIT",
-  "title": "Live Production Mobile Sanity Audit & Real Cloudflare Edge Verification",
-  "objective": "Execute live HTTP/HTTPS sanity audits on https://www.nihomi.com, verifying that the fresh v5-production service worker, mobile 1-tap bottom nav login button, Google OAuth redirect callback, and live API endpoints are serving without caching issues across global Edge networks.",
-  "domain": "Production Operations & Edge Verification",
+  "task_id": "NIHOMI-SYSTEM-PRODUCTION-MAINTENANCE-AND-MONITORING",
+  "title": "Continuous Production Maintenance, Telemetry Monitoring & Learner Growth",
+  "objective": "All 32 initial production work packages are successfully complete and live. Maintain 100% uptime, monitor student onboarding telemetry, and execute post-launch feature requests as prioritized by the Founder.",
+  "domain": "production-maintenance",
   "in_scope": [
-    "Live HTTP/HTTPS response inspection of https://www.nihomi.com and https://www.nihomi.com/sw.js",
-    "Verify Cloudflare Edge cache headers (cf-cache-status, cache-control, etag)",
-    "Verify v5-production Service Worker registration on live production domain",
-    "Verify mobile viewport rendering and auth CTA responsiveness on live domain",
-    "Record final production acceptance dossier and live evidence"
+    "Run automated production health probe scripts/monitor-production-health.cjs on schedule",
+    "Monitor Google Search Console & Bing Webmaster indexing telemetry",
+    "Track student conversion rates on Minna no Nihongo Lessons 1-5 free tier"
   ],
   "out_of_scope": [
-    "Modifying server database schemas",
-    "Changing curriculum lesson content"
+    "Unplanned schema changes without Founder approval"
   ],
   "acceptance_criteria": [
-    "https://www.nihomi.com/sw.js returns HTTP 200 with CACHE_VERSION = 'v5-production'",
-    "https://www.nihomi.com returns HTTP 200 with zero horizontal overflow",
-    "Live production API health check returns HTTP 200 with operational Gemini AI and durable storage",
-    "Zero console errors on live production homepage"
+    "Platform uptime remains >99.9%",
+    "Zero reported 405/404 edge errors on live production domains"
   ],
   "verification": [
-    "Live cURL and HTTP header analysis",
-    "Headless browser audit on live https://www.nihomi.com",
-    "Evidence screenshots captured from live domain"
+    "node scripts/monitor-production-health.cjs"
   ],
   "risks": [
-    "Cloudflare edge caching propagation delay (typically 60-120 seconds)"
+    "None"
   ],
   "dependencies": [
-    "Production Cloudflare Deployment",
-    "GitHub Actions Pipeline"
+    "dist/index.html",
+    "dist/server.cjs"
   ],
-  "base_commit": "19d8c05",
-  "created_at": "2026-10-23T03:32:00.000Z",
-  "status": "pending"
+  "base_commit": "99e4447",
+  "created_at": "2026-10-24T04:08:30.000Z",
+  "status": "idle"
 }
