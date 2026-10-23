@@ -1,5 +1,7 @@
 // src/v2/pages/V2WorkOsPage.tsx
-// NIHOMI V2 — TOKYO WORKOS™ & LIFE SIMULATION STUDIO
+// NIHOMI V2/V3 — TOKYO WORKOS™ & 7-ELEVEN POS CASHIER WORKSTATION
+// Strictly adhering to Nihomi Pedagogical Law & Brand Guidelines
+
 import React, { useState } from 'react';
 import {
   Store,
@@ -14,7 +16,10 @@ import {
   ArrowRight,
   Clock,
   Layers,
-  Award
+  Award,
+  ArrowLeft,
+  Scan,
+  Coins
 } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../types';
 import { ConbiniPosCashierSimulator } from '../../components/simulation/ConbiniPosCashierSimulator';
@@ -25,7 +30,7 @@ import { loopOrchestrator } from '../../core/loop';
 import { useAuth } from '../../context/AuthContext';
 import { isProUser } from '../utils/accessControl';
 import { ProFeatureGate } from '../components/common/ProFeatureGate';
-
+import { soundEffects } from '../../lib/soundEffects';
 
 interface V2WorkOsPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
@@ -99,12 +104,26 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
     }
   };
 
-  // Cashier simulation is open for zero-entry learners as part of Chapter 1 foundation;
-  // Scenarios catalog is gated behind Pro
-
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
-      {/* 1. Header & Tab Switcher */}
+      {/* 1. Top Breadcrumb & Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <button
+          id="btn-back-from-workos"
+          onClick={() => onNavigate('dashboard')}
+          className="flex items-center gap-2 text-xs font-bold text-stone-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>ড্যাশবোর্ডে ফিরে যান</span>
+        </button>
+
+        <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full">
+          <Store className="w-3.5 h-3.5" />
+          <span>NIHOMI WORKOS™ • 7-Eleven POS Cashier Simulation</span>
+        </div>
+      </div>
+
+      {/* 2. Header & Tab Switcher */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -126,7 +145,11 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
         {/* Tab Controls */}
         <div className="flex items-center gap-2 p-1.5 bg-[#141726] rounded-2xl border border-white/10">
           <button
-            onClick={() => setActiveTab('cashier')}
+            id="tab-btn-workos-cashier"
+            onClick={() => {
+              setActiveTab('cashier');
+              soundEffects.playButtonTap();
+            }}
             className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'cashier'
                 ? 'bg-[#E45147] text-white shadow-lg shadow-red-600/30'
@@ -136,7 +159,11 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
             🏪 কনবিনি POS ক্যাশিয়ার ড্রিল
           </button>
           <button
-            onClick={() => setActiveTab('scenarios')}
+            id="tab-btn-workos-scenarios"
+            onClick={() => {
+              setActiveTab('scenarios');
+              soundEffects.playButtonTap();
+            }}
             className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'scenarios'
                 ? 'bg-[#E45147] text-white shadow-lg shadow-red-600/30'
@@ -148,7 +175,7 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
         </div>
       </div>
 
-      {/* 2. Tab Content */}
+      {/* 3. Tab Content */}
       {activeTab === 'cashier' ? (
         <div className="space-y-6">
           <div className="p-4 rounded-2xl bg-[#141726] border border-white/10 text-xs text-stone-300 flex items-center justify-between">
@@ -216,7 +243,10 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
                 return (
                   <div
                     key={sc.id}
-                    onClick={() => setSelectedScenarioIndex(index)}
+                    onClick={() => {
+                      setSelectedScenarioIndex(index);
+                      soundEffects.playButtonTap();
+                    }}
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-gradient-to-r from-red-600/20 to-amber-500/20 border-red-500/50 text-white'
@@ -248,46 +278,37 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
                 <h2 className="text-xl font-black text-white mt-2">
                   {activeScenario.titleBn}
                 </h2>
-                <div className="text-xs text-stone-400 font-serif mt-0.5">
-                  {activeScenario.titleJa}
-                </div>
+                <p className="text-xs text-stone-400 mt-1 font-serif">
+                  {activeScenario.titleJa} • {activeScenario.interlocutorName} ({activeScenario.interlocutorRole})
+                </p>
               </div>
 
-              <div className="text-right">
-                <span className="text-xs text-stone-400 font-mono block">কথোপকথনকারী</span>
-                <span className="text-sm font-bold text-white">{activeScenario.interlocutorName}</span>
-              </div>
+              <button
+                onClick={() => speakJapanese(activeScenario.initialDialogue.ja)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white border border-white/10 text-xs font-bold transition-all cursor-pointer"
+              >
+                <Volume2 className="w-4 h-4 text-[#E45147]" />
+                <span>সংলাপ শুনুন</span>
+              </button>
             </div>
 
-            {/* Context Description */}
-            <div className="p-4 rounded-2xl bg-black/40 border border-white/5 text-xs text-stone-300 leading-relaxed">
-              <strong>পরিস্থিতি:</strong> {activeScenario.contextDescription}
+            {/* Context Narrative */}
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/5 text-xs text-stone-300 leading-relaxed">
+              <strong className="text-white block mb-1">বাস্তব প্রেক্ষাপট:</strong>
+              {activeScenario.contextDescription}
             </div>
 
-            {/* Initial Dialogue Card with Audio Button */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-[#1E2338] to-[#141726] border border-white/10 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-                  <Volume2 className="w-4 h-4" />
-                  প্রথম জাপানিজ সংলাপ
-                </span>
-                <button
-                  onClick={() => speakJapanese(activeScenario.initialDialogue.ja)}
-                  className="px-3 py-1.5 rounded-xl bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-red-400 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Volume2 className="w-3.5 h-3.5" />
-                  <span>শুনুন</span>
-                </button>
-              </div>
-
-              <div className="text-base sm:text-lg font-serif font-black text-white">
+            {/* Initial Dialogue Box */}
+            <div className="p-4 rounded-2xl bg-[#0A0A12] border border-white/10 space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">
+                {activeScenario.interlocutorRole} ({activeScenario.interlocutorName}):
+              </span>
+              <div className="text-base font-bold text-white font-japanese">
                 {activeScenario.initialDialogue.ja}
               </div>
-
-              <div className="text-xs font-mono text-stone-400">
+              <div className="text-xs text-stone-400 font-mono">
                 {activeScenario.initialDialogue.romaji}
               </div>
-
               <div className="text-xs text-stone-300 pt-2 border-t border-white/10">
                 <strong>বাংলা অর্থ:</strong> {activeScenario.initialDialogue.bn}
               </div>
@@ -342,3 +363,5 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCh
     </div>
   );
 };
+
+export default V2WorkOsPage;

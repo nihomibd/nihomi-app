@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-V3-WP03-EXAM-OS-OFFICIAL-MARKSHEET-AND-CERTIFICATE-ENGINE",
-  "scope_fingerprint": "84df696bf75b6f17c158022b799fa292e1c79529872e2e0dffe1dfd900a73a9b",
-  "approved_at": "2026-10-24T05:25:00.000Z",
+  "task_id": "NIHOMI-V3-WP04-TOKYO-KONBINI-WORKOS-AND-JIS-RIREKISHO-STUDIO",
+  "scope_fingerprint": "6b2429c4edf3bd95e770724fa1764db4ecd2daa0253646c8218dfaed917a3814",
+  "approved_at": "2026-10-24T05:46:00.000Z",
   "approved_via": "nihomi-founder-direct-chat-authorization",
   "approved_scope_summary": {
-    "title": "Version 3 CBT Exam OS, Official Branded Marksheet & Verifiable Certificate Engine",
-    "domain": "exam-and-certification",
-    "base_commit": "f5096b1"
+    "title": "Version 3 Tokyo Konbini WorkOS POS Simulator & Official JIS Rirekisho Studio",
+    "domain": "shared-loop-adapter",
+    "base_commit": "a03d5be"
   }
 }
