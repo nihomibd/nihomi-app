@@ -35,11 +35,24 @@ export type NomiEvent =
 
 export type NomiRouteFamily = 'public' | 'learner' | 'workos' | 'founder';
 
+export interface NomiPronunciationFeedback {
+  score: number;
+  accuracyGrade: 'S' | 'A' | 'B' | 'C';
+  pitchAccuracy: string;
+  moraRhythm: string;
+  detectedText: string;
+  feedbackBn: string;
+}
+
 export interface NomiMessage {
   id: string;
   sender: 'learner' | 'nomi' | 'system';
   text: string;
   audioPhrase?: string;
+  romaji?: string;
+  bengaliTranslation?: string;
+  isVoiceInput?: boolean;
+  pronunciationFeedback?: NomiPronunciationFeedback;
   timestamp: number;
   stateSnapshot?: NomiState;
 }

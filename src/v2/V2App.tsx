@@ -19,6 +19,7 @@ import { PrivacyPage } from '../pages/PrivacyPage';
 import { RefundPolicyPage } from '../pages/RefundPolicyPage';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowledgeState';
+import { NomiProvider } from '../components/nomi';
 
 const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   if (typeof window === 'undefined') return { route: 'landing', params: {} };
@@ -131,6 +132,24 @@ const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   }
 };
 
+const ROUTE_TITLES: Record<V2Route, string> = {
+  landing: 'NIHOMI (にほみ) — শূন্য থেকে JLPT N5, N4, N3 জাপানিজ লার্নিং প্ল্যাটফর্ম',
+  journey: 'লার্নার জার্নি — NIHOMI (にほみ)',
+  dashboard: 'স্টুডেন্ট ড্যাশবোর্ড — NIHOMI (にほみ)',
+  kana: 'হিরাগানা ও কাতাকানা ক্যালিগ্রাফি ক্যানভাস — NIHOMI (にほみ)',
+  curriculum: 'JLPT মাস্টার পাঠ্যক্রম (N5–N1) — NIHOMI (にほみ)',
+  lesson: 'জাপানি ব্যাকরণ ও শব্দার্থ লেসন — NIHOMI (にほみ)',
+  exam: 'JLPT CBT কম্পিউটার-বেইজড মক এক্সাম ও সার্টিফিকেট — NIHOMI (にほみ)',
+  workos: 'টোকিও কনবিনি WorkOS™ ক্যাশিয়ার সিমুলেশন — NIHOMI (にほみ)',
+  rirekisho: 'JIS স্ট্যান্ডার্ড জাপানি জীবনবৃত্তান্ত (履歴書) স্টুডিও — NIHOMI (にほみ)',
+  pricing: 'প্রাইসিং ও মেম্বারশিপ প্ল্যান — NIHOMI (にほみ)',
+  founder: 'ফাউন্ডার কমান্ড সেন্টার — NIHOMI (にほみ)',
+  terms: 'শর্তাবলী (Terms of Service) — NIHOMI (にほみ)',
+  privacy: 'গোপনীয়তা নীতি (Privacy Policy) — NIHOMI (にほみ)',
+  refund: 'রিফান্ড পলিসি — NIHOMI (にほみ)',
+  legacy: 'NIHOMI Classic'
+};
+
 export interface V2AppProps {
   onNavigateLegacy?: () => void;
 }
@@ -143,6 +162,13 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
   const [navParams, setNavParams] = useState<V2NavigationParams>(() => parseHashRoute().params);
 
   // Global Checkout Modal State
+  // Dynamic Unique Route Titles
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.title = ROUTE_TITLES[currentRoute] || 'NIHOMI (にほみ)';
+    }
+  }, [currentRoute]);
+
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<any>({
     id: 'pro',
@@ -298,9 +324,11 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
 
   return (
     <>
-      <V2AppShell currentRoute={currentRoute} onNavigate={handleNavigate}>
-        {renderActivePage()}
-      </V2AppShell>
+      <NomiProvider initialView={currentRoute}>
+        <V2AppShell currentRoute={currentRoute} onNavigate={handleNavigate}>
+          {renderActivePage()}
+        </V2AppShell>
+      </NomiProvider>
 
       <CheckoutModal
         isOpen={isCheckoutOpen}

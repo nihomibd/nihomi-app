@@ -584,6 +584,10 @@ export const App: React.FC = () => {
 
   // Dynamic SEO & Accessibility Language Engine
   useEffect(() => {
+    if (currentView === 'v2') {
+      // In V2 mode, V2App manages its own granular route titles dynamically
+      return;
+    }
     let title = 'NIHOMI (にほみ) — JLPT N5–N1 জাপানিজ লার্নিং প্ল্যাটফর্ম';
     let description =
       'বাংলায় সহজ ব্যাখ্যা, ২৪/৭ পার্সোনাল নমি সেন্সেই, অথেনটিক মিন্না নো নিহোঙ্গো ও JLPT N5, N4, N3, N2, N1 সম্পূর্ণ ২১০টি মাস্টার পাঠ্যক্রম ও টোকিও জব সিমুলেশন।';
