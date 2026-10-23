@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "include": [
+    "/api/*"
+  ],
+  "exclude": [
+    "/assets/*",
+    "/brand/*",
+    "/downloads/*",
+    "/media/*",
+    "/favicon.svg",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/llms.txt",
+    "/llms-full.txt",
+    "/manifest.json",
+    "/sw.js",
+    "/indexnow-key.txt"
+  ]
+}
