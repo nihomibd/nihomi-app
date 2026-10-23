@@ -7,15 +7,25 @@ import { MockExamsView } from '../../views/MockExamsView';
 import { MockExamRunnerView } from '../../views/MockExamRunnerView';
 import { loopOrchestrator } from '../../core/loop';
 import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
+import { useAuth } from '../../context/AuthContext';
+import { isProUser } from '../utils/accessControl';
+import { ProFeatureGate } from '../components/common/ProFeatureGate';
 
 interface V2ExamPageProps {
   examId?: string;
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
+  onOpenCheckout?: (planId?: string) => void;
 }
 
-export const V2ExamPage: React.FC<V2ExamPageProps> = ({ examId, onNavigate }) => {
+export const V2ExamPage: React.FC<V2ExamPageProps> = ({
+  examId,
+  onNavigate,
+  onOpenCheckout
+}) => {
+  const { user } = useAuth();
+  const hasAccess = isProUser(user);
+
   const [activeExamId, setActiveExamId] = useState<string | null>(examId || null);
-  const [activeRegistrationParams, setActiveRegistrationParams] = useState<Record<string, any>>({});
 
   const examLoopBriefing = React.useMemo(() => {
     try {
@@ -35,6 +45,28 @@ export const V2ExamPage: React.FC<V2ExamPageProps> = ({ examId, onNavigate }) =>
       setActiveExamId(examId);
     }
   }, [examId]);
+
+  // PRO Gating Check: Free/guest users encounter dignified paywall
+  if (!hasAccess) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
+        <ProFeatureGate
+          featureName="JLPT ও NAT-TEST CBT মক এক্সাম ওএস™"
+          featureSubtitle="টাইমড কন্ডিশন, অডিও লিসেনিং ও ইনস্ট্যান্ট স্কোরকার্ড সহ অফিসিয়াল সিমুলেটর"
+          featureDescription="আসল JLPT পরীক্ষার হলের মতো নিখুঁত সময়সীমা ও নেগেটিভ মার্কিং সহ কম্পিউটার-বেসড পরীক্ষা সম্পন্ন করুন এবং প্রামাণ্য মার্কশিট ও এনালিটিক্স পেতে Nihomi PRO সাবস্ক্রাইব করুন।"
+          onOpenCheckout={() => {
+            if (onOpenCheckout) {
+              onOpenCheckout('pro');
+            } else {
+              onNavigate('pricing');
+            }
+          }}
+          onBack={() => onNavigate('dashboard')}
+          backLabel="ড্যাশবোর্ডে ফিরে যান"
+        />
+      </div>
+    );
+  }
 
   const handleAdapterNavigate = (view: string, params?: Record<string, any>) => {
     if ((view === 'mock-exam-runner' || view === 'exam') && params?.examId) {

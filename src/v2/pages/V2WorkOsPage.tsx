@@ -22,12 +22,19 @@ import { DEFAULT_BAITO_SCENARIOS } from '../../views/BaitoOsView';
 import { speakJapanese } from '../../lib/tts';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 import { loopOrchestrator } from '../../core/loop';
+import { useAuth } from '../../context/AuthContext';
+import { isProUser } from '../utils/accessControl';
+import { ProFeatureGate } from '../components/common/ProFeatureGate';
+
 
 interface V2WorkOsPageProps {
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
+  onOpenCheckout?: (planId?: string) => void;
 }
 
-export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
+export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate, onOpenCheckout }) => {
+  const { user } = useAuth();
+  const hasAccess = isProUser(user);
   const [activeTab, setActiveTab] = useState<'cashier' | 'scenarios'>('cashier');
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(0);
 
@@ -91,6 +98,28 @@ export const V2WorkOsPage: React.FC<V2WorkOsPageProps> = ({ onNavigate }) => {
       setCompletionNotice({ score, xp: earnedXp });
     }
   };
+
+  // PRO Gating Check
+  if (!hasAccess) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
+        <ProFeatureGate
+          featureName="টোকিও কনবিনি WorkOS™ সিমুলেটর"
+          featureSubtitle="7-Eleven, Lawson ও FamilyMart বাস্তব ক্যাশিয়ার ও কাস্টমার সার্ভিস ট্রেনিং"
+          featureDescription="টোকিওতে পৌঁছানোর আগেই বাস্তব টাচস্ক্রিন পিওএস রেজিস্টার, বারকোড স্ক্যানিং এবং জাপানি গ্রাহক অভিবাদন ড্রিল সম্পন্ন করতে Nihomi PRO সাবস্ক্রাইব করুন।"
+          onOpenCheckout={() => {
+            if (onOpenCheckout) {
+              onOpenCheckout('pro');
+            } else {
+              onNavigate('pricing');
+            }
+          }}
+          onBack={() => onNavigate('journey')}
+          backLabel="জার্নিতে ফিরে যান"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">

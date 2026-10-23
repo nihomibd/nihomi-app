@@ -112,31 +112,18 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
         <span>WorkOS</span>
       </button>
 
-      {/* 5. Right Action: Prominent Login Button when logged out, Pricing/Plan when logged in */}
-      {user ? (
-        <button
-          onClick={() => onNavigate('pricing')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
-            currentRoute === 'pricing' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
-          }`}
-        >
-          <div className={`p-1 rounded-xl ${currentRoute === 'pricing' ? 'bg-[#E45147]/15' : 'bg-transparent'}`}>
-            <CreditCard className="w-4 h-4" />
-          </div>
-          <span>প্রাইসিং</span>
-        </button>
-      ) : (
-        <button
-          id="mobile-bottom-login-btn"
-          onClick={() => openAuthModal('login')}
-          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl text-[10px] font-black text-white bg-gradient-to-r from-[#E45147] to-[#DC2626] shadow-md shadow-red-600/30 scale-105 transition-all cursor-pointer"
-        >
-          <div className="p-1 rounded-xl bg-white/20">
-            <UserIcon className="w-4 h-4 text-white" />
-          </div>
-          <span>লগইন</span>
-        </button>
-      )}
+      {/* 5. Pricing Tab */}
+      <button
+        onClick={() => onNavigate('pricing')}
+        className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+          currentRoute === 'pricing' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
+        }`}
+      >
+        <div className={`p-1 rounded-xl ${currentRoute === 'pricing' ? 'bg-[#E45147]/15' : 'bg-transparent'}`}>
+          <CreditCard className="w-4 h-4" />
+        </div>
+        <span>প্রাইসিং</span>
+      </button>
     </nav>
   );
 };

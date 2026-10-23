@@ -80,17 +80,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenCali
 
             {/* High-Contrast Primary Actions & Fast-Track Calibration */}
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              {!user && (
-                <button
-                  type="button"
-                  id="hero-mobile-login-cta"
-                  onClick={() => openAuthModal('login')}
-                  className="btn-haptic inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-bold text-xs sm:text-sm border border-white/20 shadow-md transition cursor-pointer"
-                >
-                  <UserIcon className="w-4 h-4 text-amber-400" />
-                  <span>লগইন / সাইন-আপ</span>
-                </button>
-              )}
+              
               <button
                 type="button"
                 id="hero-start-journey-cta"

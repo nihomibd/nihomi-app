@@ -1,5 +1,18 @@
+// src/components/auth/AuthModal.tsx
+// NIHOMI V2 — CRYPTOGRAPHIC AUTHENTICATION MODAL (GOOGLE OAUTH & EMAIL/PASSWORD)
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, ShieldCheck, Loader2, AlertTriangle, Crown } from 'lucide-react';
+import {
+  X,
+  ShieldCheck,
+  Loader2,
+  AlertTriangle,
+  Crown,
+  Mail,
+  Lock,
+  User as UserIcon,
+  ArrowRight,
+  Sparkles
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { trackNihomiEvent } from '../../utils/analytics';
 import { getStoredReferralCode, claimReferralReward } from '../../utils/referral';
@@ -10,9 +23,15 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
-  const { isAuthModalOpen, closeAuthModal, loginWithGoogle, setUserData } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, loginWithGoogle, login, register, user } = useAuth();
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const isFounderEmailTyped = email.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com';
 
   useEffect(() => {
     if (isAuthModalOpen) {
@@ -48,61 +67,78 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
     }
   };
 
-  const handleStudentQuick = () => {
-    const studentRand = Math.floor(100000 + Math.random() * 900000);
-    const studentId = 'NHO-' + studentRand;
-    const userId = 'usr_student_' + Math.random().toString(36).substring(2, 9);
-    const studentEmail = `student.${studentRand}@nihomi.student`;
-    setUserData({
-      id: userId,
-      email: studentEmail,
-      name: `Nihomi Learner #${studentRand.toString().slice(-4)}`,
-      role: 'student',
-      planId: 'free',
-      status: 'ACTIVE',
-      studentId,
-      nihomiAccountId: 'ACC-' + Math.floor(1000 + Math.random() * 9000),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    trackNihomiEvent('signup_completed', {
-      userId,
-      method: 'quick_student',
-      studentId
-    });
-    const ref = getStoredReferralCode();
-    if (ref) claimReferralReward(ref, userId).catch(() => {});
-    closeAuthModal();
-    onNavigate?.('dashboard');
-  };
+  const handleEmailAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
 
-  const handleFounderQuick = () => {
-    const userId = 'usr_founder_tanvir';
-    setUserData({
-      id: userId,
-      email: 'mdtanvirkabirbiplob@gmail.com',
-      name: 'Tanvir Kabir Biplob',
-      role: 'founder',
-      planId: 'japan_ready',
-      status: 'ACTIVE',
-      studentId: 'NHO-FOUNDER-01',
-      nihomiAccountId: 'ACC-FOUNDER',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&fit=crop',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    trackNihomiEvent('signup_completed', {
-      userId,
-      method: 'founder_quick',
-      studentId: 'NHO-FOUNDER-01'
-    });
-    closeAuthModal();
-    onNavigate?.('founder');
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
+      setErrorMessage('অনুগ্রহ করে সঠিক ইমেইল ঠিকানা দিন।');
+      return;
+    }
+    if (!password || password.length < 6) {
+      setErrorMessage('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');
+      return;
+    }
+    if (authMode === 'register' && !name.trim()) {
+      setErrorMessage('অনুগ্রহ করে আপনার পুরো নাম প্রদান করুন।');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      if (authMode === 'login') {
+        const success = await login(cleanEmail, password);
+        if (success) {
+          trackNihomiEvent('signup_completed', { method: 'email_login', role: isFounderEmailTyped ? 'founder' : 'student' });
+          closeAuthModal();
+          if (isFounderEmailTyped) {
+            onNavigate?.('founder');
+          } else {
+            onNavigate?.('dashboard');
+          }
+        } else {
+          setErrorMessage('ইমেইল বা পাসওয়ার্ড সঠিক নয়। পুনরায় যাচাই করে চেষ্টা করুন।');
+        }
+      } else {
+        const success = await register({
+          email: cleanEmail,
+          password,
+          name: name.trim()
+        });
+        if (success) {
+          trackNihomiEvent('signup_completed', { method: 'email_register', role: isFounderEmailTyped ? 'founder' : 'student' });
+          const ref = getStoredReferralCode();
+          if (ref) claimReferralReward(ref).catch(() => {});
+          closeAuthModal();
+          if (isFounderEmailTyped) {
+            onNavigate?.('founder');
+          } else {
+            onNavigate?.('dashboard');
+          }
+        } else {
+          setErrorMessage('অ্যাকাউন্ট তৈরি করা সম্ভব হয়নি। এই ইমেইল ইতিমধ্যে নিবন্ধিত থাকতে পারে।');
+        }
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'সাইন ইন সম্পন্ন করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
-    <div id="auth-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) closeAuthModal(); }} className="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-stone-950/85 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
-      <div id="auth-modal-card" className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#17192A] rounded-3xl shadow-2xl border border-white/10 text-left my-auto text-white">
+    <div
+      id="auth-modal-overlay"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) closeAuthModal();
+      }}
+      className="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-stone-950/85 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto"
+    >
+      <div
+        id="auth-modal-card"
+        className="relative w-full max-w-md max-h-[92vh] overflow-y-auto bg-[#17192A] rounded-3xl shadow-2xl border border-white/10 text-left my-auto text-white"
+      >
         <button
           id="btn-auth-modal-close"
           onClick={closeAuthModal}
@@ -112,13 +148,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
           <X className="w-5 h-5" />
         </button>
 
+        {/* Modal Brand Header */}
         <div className="bg-[#121422] p-6 text-center border-b border-white/10">
           <NihomiBrandLogo variant="full" theme="dark" size={32} showTagline={false} className="mx-auto mb-3 justify-center" />
           <h3 className="text-xl font-bold tracking-tight text-white">
-            সাইন ইন / সাইন আপ (Sign In)
+            {authMode === 'login' ? 'সাইন ইন (Sign In)' : 'নতুন অ্যাকাউন্ট তৈরি করুন (Register)'}
           </h3>
           <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
-            Supabase Cloud Verified Authentication & Security
+            Supabase Cloud Verified OAuth 2.0 & Cryptographic Security
           </p>
         </div>
 
@@ -133,6 +170,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
           {/* Primary Google Auth Button */}
           <button
             id="btn-google-continue"
+            type="button"
             onClick={handleGoogleClick}
             disabled={isProcessing}
             className="btn-haptic w-full py-3.5 px-4 bg-white hover:bg-stone-100 text-stone-900 font-bold text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-3 cursor-pointer"
@@ -152,58 +190,133 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onNavigate }) => {
             )}
           </button>
 
+          {/* Divider */}
           <div className="relative flex items-center justify-center my-3">
             <div className="border-t border-white/10 w-full"></div>
             <span className="bg-[#17192A] px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-              ROLE TESTING / SANDBOX
+              অথবা ইমেইল দিয়ে প্রবেশ করুন
             </span>
           </div>
 
-          {/* Founder Quick Access Sandbox Action */}
-          <button
-            type="button"
-            id="btn-quick-founder-preview"
-            onClick={handleFounderQuick}
-            className="btn-haptic w-full py-2.5 px-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-200 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
-          >
-            <div className="flex items-center space-x-2.5">
-              <div className="w-7 h-7 rounded-full bg-amber-500/30 text-amber-300 font-black text-[11px] flex items-center justify-center border border-amber-500/40">
-                創
-              </div>
-              <div className="text-left">
-                <div className="font-bold text-amber-300 flex items-center gap-1.5">
-                  <span>Founder Quick Access</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold uppercase border border-amber-500/30">Founder Role</span>
+          {/* Direct Email / Password Form */}
+          <form onSubmit={handleEmailAuthSubmit} className="space-y-3">
+            {authMode === 'register' && (
+              <div>
+                <label className="block text-[11px] font-semibold text-stone-300 mb-1">
+                  আপনার পূর্ণ নাম
+                </label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+                  <input
+                    id="auth-input-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="যেমন: তানভীর কবির"
+                    required
+                    className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-white/10 rounded-xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#E45147]"
+                  />
                 </div>
-                <div className="text-[10px] text-stone-400 font-medium">mdtanvirkabirbiplob@gmail.com</div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-[11px] font-semibold text-stone-300 mb-1">
+                ইমেইল ঠিকানা (Email)
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+                <input
+                  id="auth-input-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-white/10 rounded-xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#E45147]"
+                />
               </div>
             </div>
-            <span className="text-[11px] text-amber-300 font-bold group-hover:underline">Founder →</span>
-          </button>
 
-          {/* Frictionless Demo Student Sandbox Action */}
-          <button
-            type="button"
-            id="btn-quick-student-preview"
-            onClick={handleStudentQuick}
-            className="btn-haptic w-full py-2.5 px-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-stone-200 text-xs font-semibold rounded-xl transition-all flex items-center justify-between group cursor-pointer"
-          >
-            <div className="flex items-center space-x-2.5">
-              <div className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[11px] flex items-center justify-center border border-blue-500/30">
-                学
+            {/* Founder Role Indicator Banner */}
+            {isFounderEmailTyped && (
+              <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[11px] flex items-center gap-2 animate-fadeIn">
+                <Crown className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>
+                  <strong>ফাউন্ডার অ্যাকাউন্ট শনাক্ত:</strong> লগইনের সাথে সাথে Founder Cockpit ও আনলিমিটেড এক্সেস সক্রিয় হবে।
+                </span>
               </div>
-              <div className="text-left">
-                <div className="font-bold text-white flex items-center gap-1.5">
-                  <span>Student Quick Sandbox</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-extrabold uppercase border border-blue-500/30">Student Role</span>
-                </div>
-                <div className="text-[10px] text-stone-400 font-medium">Standard Learner Account • Full Japanese Access</div>
+            )}
+
+            <div>
+              <label className="block text-[11px] font-semibold text-stone-300 mb-1">
+                পাসওয়ার্ড (Password)
+              </label>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+                <input
+                  id="auth-input-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-white/10 rounded-xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#E45147]"
+                />
               </div>
             </div>
-            <span className="text-[11px] text-stone-300 font-bold group-hover:underline">Student →</span>
-          </button>
 
-          <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1.5 pt-2">
+            <button
+              id="btn-auth-submit"
+              type="submit"
+              disabled={isProcessing}
+              className="btn-haptic w-full py-3 px-4 bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
+            >
+              {isProcessing ? (
+                <Loader2 className="w-4 h-4 animate-spin text-white" />
+              ) : (
+                <>
+                  <span>{authMode === 'login' ? 'সাইন ইন করুন' : 'অ্যাকাউন্ট তৈরি করুন'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Mode Switch Toggle */}
+          <div className="pt-2 text-center text-xs text-stone-400 border-t border-white/10">
+            {authMode === 'login' ? (
+              <div>
+                <span>নতুন শিক্ষার্থী? </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('register');
+                    setErrorMessage(null);
+                  }}
+                  className="text-amber-400 font-bold hover:underline cursor-pointer ml-1"
+                >
+                  রেজিস্ট্রেশন করুন
+                </button>
+              </div>
+            ) : (
+              <div>
+                <span>ইতিমধ্যে অ্যাকাউন্ট আছে? </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('login');
+                    setErrorMessage(null);
+                  }}
+                  className="text-amber-400 font-bold hover:underline cursor-pointer ml-1"
+                >
+                  লগইন করুন
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center text-[10px] text-stone-400 flex items-center justify-center space-x-1.5 pt-1">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Supabase Cloud OAuth 2.0 • End-to-End Cryptographic Security</span>
           </div>

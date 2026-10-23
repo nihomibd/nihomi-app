@@ -17,6 +17,7 @@ import { V2FounderPage } from './pages/V2FounderPage';
 import { TermsPage } from '../pages/TermsPage';
 import { PrivacyPage } from '../pages/PrivacyPage';
 import { RefundPolicyPage } from '../pages/RefundPolicyPage';
+import { CheckoutModal } from '../components/CheckoutModal';
 import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowledgeState';
 
 const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
@@ -141,6 +142,32 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
   });
   const [navParams, setNavParams] = useState<V2NavigationParams>(() => parseHashRoute().params);
 
+  // Global Checkout Modal State
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<any>({
+    id: 'pro',
+    name: 'Nihomi Pro',
+    monthlyPrice: 1990
+  });
+
+  const handleOpenCheckout = (planTier: string = 'pro') => {
+    let name = 'Nihomi Pro';
+    let monthlyPrice = 1990;
+    if (planTier === 'starter') {
+      name = 'Nihomi Starter';
+      monthlyPrice = 990;
+    } else if (planTier === 'japan_ready') {
+      name = 'Nihomi Japan Ready';
+      monthlyPrice = 3990;
+    }
+    setSelectedPlanForCheckout({
+      id: planTier,
+      name,
+      monthlyPrice
+    });
+    setIsCheckoutOpen(true);
+  };
+
   // Synchronize route from window.location.hash on initial mount & hashchange
   useEffect(() => {
     hydrateKnowledgeStateFromServer().catch(() => {});
@@ -215,6 +242,7 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
           <V2LessonPage
             lessonId={navParams.lessonId || 'n5-l01'}
             onNavigate={handleNavigate}
+            onOpenCheckout={handleOpenCheckout}
           />
         );
       case 'exam':
@@ -222,10 +250,16 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
           <V2ExamPage
             examId={navParams.examId}
             onNavigate={handleNavigate}
+            onOpenCheckout={handleOpenCheckout}
           />
         );
       case 'workos':
-        return <V2WorkOsPage onNavigate={handleNavigate} />;
+        return (
+          <V2WorkOsPage
+            onNavigate={handleNavigate}
+            onOpenCheckout={handleOpenCheckout}
+          />
+        );
       case 'rirekisho':
         return <V2RirekishoPage onNavigate={handleNavigate} />;
       case 'pricing':
@@ -262,9 +296,20 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
   };
 
   return (
-    <V2AppShell currentRoute={currentRoute} onNavigate={handleNavigate}>
-      {renderActivePage()}
-    </V2AppShell>
+    <>
+      <V2AppShell currentRoute={currentRoute} onNavigate={handleNavigate}>
+        {renderActivePage()}
+      </V2AppShell>
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        selectedPlan={selectedPlanForCheckout}
+        plan={selectedPlanForCheckout}
+        initialInterval="monthly"
+        onSuccess={() => setIsCheckoutOpen(false)}
+      />
+    </>
   );
 };
 export default V2App;

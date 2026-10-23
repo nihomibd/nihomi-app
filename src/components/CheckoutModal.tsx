@@ -294,7 +294,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div id="nihomi-checkout-modal" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
+      <div id="checkout-modal" data-testid="nihomi-checkout-modal" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/85 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}

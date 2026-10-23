@@ -125,11 +125,7 @@ export const V2Footer: React.FC<V2FooterProps> = ({ onNavigate }) => {
                 রিফান্ড পলিসি (Refund Policy)
               </button>
             </li>
-            <li>
-              <button onClick={() => onNavigate('legacy')} className="hover:text-amber-300 text-stone-400 transition cursor-pointer flex items-center gap-1">
-                <span>লেগ্যাসি ভিউ (Classic)</span>
-              </button>
-            </li>
+            
           </ul>
         </div>
 

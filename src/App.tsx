@@ -208,6 +208,19 @@ import {
 import { ZenSoundscapeType } from './lib/zenAudio';
 import { updatePageMetaTags } from './lib/seo';
 
+
+const isFounderUser = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = localStorage.getItem('nihomi_user');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return parsed?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' || parsed?.role === 'founder';
+    }
+  } catch {}
+  return false;
+};
+
 const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { view: string; params: Record<string, any> } => {
   let path = pathname.toLowerCase();
   const queryCert = searchParams.get('certId') || searchParams.get('id');
@@ -219,7 +232,13 @@ const resolveViewFromUrl = (pathname: string, searchParams: URLSearchParams): { 
     searchParams.get('mode') === 'legacy' ||
     (typeof window !== 'undefined' && (window.location.hash === '#legacy' || window.location.hash === '#/legacy'))
   ) {
-    return { view: 'landing', params: { legacy: true } };
+    if (isFounderUser()) {
+      return { view: 'landing', params: { legacy: true } };
+    }
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      try { window.history.replaceState({}, '', '/'); } catch (_) {}
+    }
+    return { view: 'v2', params: {} };
   }
 
 // 2. All core modern routes strictly resolve to V2 (unless explicitly in legacy mode)
@@ -687,7 +706,13 @@ export const App: React.FC = () => {
     return (
       <NomiProvider initialView="v2">
         <Suspense fallback={<ViewLoadingFallback />}>
-          <V2App onNavigateLegacy={() => handleNavigate('landing', { legacy: true })} />
+          <V2App onNavigateLegacy={() => {
+            if (isFounderUser()) {
+              handleNavigate('landing', { legacy: true });
+            } else {
+              handleNavigate('v2');
+            }
+          }} />
         </Suspense>
       </NomiProvider>
     );

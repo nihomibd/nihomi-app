@@ -15,16 +15,22 @@ import { V2Route, V2NavigationParams } from '../types';
 import { InteractiveGrammarLoop } from '../../components/learning/InteractiveGrammarLoop';
 import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
 import { isGrammarEligible } from '../../core/curriculum/journeyEngine';
+import { useAuth } from '../../context/AuthContext';
+import { isProUser, isLessonFreeTier } from '../utils/accessControl';
+import { ProFeatureGate } from '../components/common/ProFeatureGate';
 
 interface V2LessonPageProps {
   lessonId?: string;
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
+  onOpenCheckout?: (planId?: string) => void;
 }
 
 export const V2LessonPage: React.FC<V2LessonPageProps> = ({
   lessonId = 'n5-l01',
-  onNavigate
+  onNavigate,
+  onOpenCheckout
 }) => {
+  const { user } = useAuth();
   const [knowledgeState, setKnowledgeState] = useState(loadLearnerKnowledgeState());
 
   useEffect(() => {
@@ -36,6 +42,31 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
       window.removeEventListener('nihomi:memory-updated', handleUpdate);
     };
   }, []);
+
+  const isFree = isLessonFreeTier(lessonId);
+  const isPro = isProUser(user);
+
+  // PRO Gating Check: Lessons 6+ require PRO subscription
+  if (!isFree && !isPro) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
+        <ProFeatureGate
+          featureName={`JLPT ${lessonId.toUpperCase()} সম্পূর্ণ পাঠ্যক্রম`}
+          featureSubtitle="অ্যাডভান্সড ব্যাকরণ, রিয়েল-লাইফ কনভারসেশন ও কুইজ"
+          featureDescription="N5 অধ্যায় ১–৫ সম্পূর্ণ বিনামূল্যে সবার জন্য উন্মুক্ত। পরবর্তী অধ্যায় ৬ থেকে ২৫ এবং N4–N1 লেভেলে প্রবেশ করতে Nihomi PRO সাবস্ক্রাইব করুন।"
+          onOpenCheckout={() => {
+            if (onOpenCheckout) {
+              onOpenCheckout('pro');
+            } else {
+              onNavigate('pricing');
+            }
+          }}
+          onBack={() => onNavigate('curriculum')}
+          backLabel="কারিকুলামে ফিরে যান"
+        />
+      </div>
+    );
+  }
 
   const grammarEligibility = isGrammarEligible(knowledgeState);
 
@@ -58,51 +89,61 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
 
       {/* Prerequisite Gate Check */}
       {!grammarEligibility.eligible ? (
-        <div className="bg-[#141726] border-2 border-red-500/40 rounded-3xl p-8 sm:p-10 text-center space-y-6 max-w-2xl mx-auto shadow-2xl shadow-red-600/10">
-          <div className="w-16 h-16 rounded-3xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center mx-auto">
-            <Lock className="w-8 h-8" />
+        <div className="bg-[#141726] border-2 border-amber-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl text-left space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold">
+            <ShieldAlert className="w-4 h-4 text-amber-400" />
+            <span>শিক্ষণ ল্যাটিস সুরক্ষা গেট (Pedagogical Lattice Guard)</span>
           </div>
 
           <div className="space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-red-600/20 text-red-400 border border-red-500/30">
-              পেডাগোজিক্যাল ফাউন্ডেশন গেট (Prerequisite Gate)
-            </span>
-            <h2 className="text-2xl font-black text-white">
-              ব্যাকরণ শুরু করার আগে স্বরবর্ণ প্রয়োজন!
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              ব্যাকরণে প্রবেশের আগে বর্ণমালা মাস্টারি প্রয়োজন
             </h2>
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-2xl">
+              Nihomi-র প্রামাণ্য নীতি অনুযায়ী, কোনো শিক্ষার্থীকে না-শেখা বর্ণ বা শব্দ দিয়ে বিভ্রান্ত করা হয় না।
+              জাপানি ব্যাকরণ ও পূর্ণাঙ্গ বাক্য বোঝার জন্য মৌলিক হিরাগানা ও কাতাকানা পড়া এবং প্রথম কিছু শব্দ চেনা আবশ্যক।
+            </p>
           </div>
 
-          <p className="text-sm text-stone-300 leading-relaxed text-left bg-black/40 p-5 rounded-2xl border border-white/5">
-            {grammarEligibility.unmetReasonBn ||
-              'নিহোমি লার্নিং ল্যাটিসের অমোঘ নিয়ম অনুযায়ী, জাপানিজ ব্যাকরণ বা সেন্টেন্স প্যাটার্ন শুরু করার পূর্বে মৌলিক ৫টি স্বরবর্ণ (あ, い, う, え, お) নির্ভুলভাবে চেনা ও লেখার দক্ষতা অর্জন করতে হবে।'}
-          </p>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+            <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" />
+              <span>অসম্পূর্ণ পূর্বশর্তসমূহ:</span>
+            </h3>
+            <ul className="space-y-1.5 text-xs text-stone-300">
+              {grammarEligibility.missingPrerequisites.map((req, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span>{req}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <button
-              onClick={() => onNavigate('kana', { char: 'あ' })}
-              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] text-white font-black text-sm shadow-xl shadow-red-600/30 flex items-center justify-center gap-2 cursor-pointer hover:scale-105 transition-transform"
-            >
-              <span>স্বরবর্ণ অনুশীলন শুরু করুন (あ)</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               onClick={() => onNavigate('journey')}
-              className="px-6 py-3.5 rounded-2xl bg-[#1E2338] hover:bg-[#252c48] border border-white/20 text-stone-300 hover:text-white font-bold text-sm cursor-pointer transition-colors"
+              className="btn-haptic inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#E45147] hover:bg-[#c93b32] text-white font-black text-xs shadow-lg shadow-red-600/30 transition cursor-pointer"
             >
-              টোকিও জার্নি ম্যাপে যান
+              <span>জার্নিতে বর্ণমালা শেষ করুন</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigate('kana')}
+              className="btn-haptic inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-xs border border-white/10 transition cursor-pointer"
+            >
+              <span>হিরাগানা ক্যানভাস খুলুন</span>
             </button>
           </div>
         </div>
       ) : (
-        /* Full Interactive Grammar Loop */
-        <div className="bg-[#141726] border border-white/10 rounded-3xl p-6 sm:p-8">
-          <InteractiveGrammarLoop
-            lessonId={lessonId}
-            onComplete={() => onNavigate('curriculum')}
-          />
-        </div>
+        /* Eligible: Render Interactive Grammar Loop */
+        <InteractiveGrammarLoop
+          lessonId={lessonId}
+          onComplete={() => onNavigate('curriculum')}
+        />
       )}
     </div>
   );
 };
+export default V2LessonPage;
