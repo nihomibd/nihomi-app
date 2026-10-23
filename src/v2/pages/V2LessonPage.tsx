@@ -55,9 +55,6 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
   const isKanaLesson =
     Boolean(targetChar) ||
     Boolean(targetQuiz) ||
-    normalizedId === 'n5-l1' ||
-    normalizedId === 'n5-l01' ||
-    normalizedId === 'lesson-1' ||
     normalizedId === 'kana-a' ||
     normalizedId === 'vowel-mastery-gate' ||
     (normalizedId.includes('kana') && !normalizedId.includes('grammar'));

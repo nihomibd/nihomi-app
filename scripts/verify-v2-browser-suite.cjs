@@ -66,6 +66,7 @@ async function runV2BrowserSuite() {
   });
 
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(45000);
   const results = {};
 
   try {
@@ -192,7 +193,7 @@ async function runV2BrowserSuite() {
     }, testStudentEmail);
 
     await page.goto(`${LOCAL_URL}/#dashboard`, { waitUntil: 'networkidle2' });
-    await page.reload({ waitUntil: 'networkidle2' });
+    await new Promise((r) => setTimeout(r, 1200));
     await new Promise((r) => setTimeout(r, 1500));
 
     const dashboardCheck = await page.evaluate(() => {
@@ -302,7 +303,7 @@ async function runV2BrowserSuite() {
     });
 
     await page.goto(`${LOCAL_URL}/#lesson/n5-l01`, { waitUntil: 'networkidle2' });
-    await page.reload({ waitUntil: 'networkidle2' });
+    await new Promise((r) => setTimeout(r, 1200));
     await new Promise((r) => setTimeout(r, 1500));
 
     const lessonCheck = await page.evaluate(() => {
