@@ -2,6 +2,7 @@ import './server/env.js';
 import './server/polyfill.js';
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
 
@@ -225,57 +226,97 @@ async function startServer() {
     }
   });
 
-  // Automated Robots.txt generator
+  // Automated Robots.txt generator with modern search engine & AI agent directives
   app.get('/robots.txt', (_req, res) => {
-    res.type('text/plain');
-    res.send(
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const robotsPath = path.join(process.cwd(), 'public', 'robots.txt');
+    if (fs.existsSync(robotsPath)) {
+      return res.send(fs.readFileSync(robotsPath, 'utf8'));
+    }
+    return res.send(
 `User-agent: *
 Allow: /
-Disallow: /api/
+Allow: /dashboard
+Allow: /journey
+Allow: /curriculum
+Allow: /kana
+Allow: /exam
+Allow: /mock-exams
+Allow: /rirekisho
+Allow: /workos
+Allow: /pricing
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+Allow: /refund-policy
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Disallow: /founder
+Disallow: /founder/*
 Disallow: /admin
-Disallow: /founder-cockpit
+Disallow: /admin/*
+Disallow: /api/founder/*
+Disallow: /api/admin/*
+Disallow: /api/billing/webhook
 
 Sitemap: https://nihomi.com/sitemap.xml
 `
     );
   });
 
-  // Automated Crawlable Sitemap.xml generator with Google Course schemas & rich snippet links
+  // Automated Crawlable Sitemap.xml generator with V2 Canonical Routes & Course Schemas
   app.get('/sitemap.xml', (_req, res) => {
-    res.type('application/xml');
+    res.type('application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const sitemapPath = path.join(process.cwd(), 'public', 'sitemap.xml');
+    if (fs.existsSync(sitemapPath)) {
+      return res.send(fs.readFileSync(sitemapPath, 'utf8'));
+    }
+
     const baseUrl = 'https://nihomi.com';
     const now = new Date().toISOString().split('T')[0];
 
     const staticUrls = [
       { loc: `${baseUrl}/`, priority: '1.0', changefreq: 'daily' },
-      { loc: `${baseUrl}/courses`, priority: '0.9', changefreq: 'daily' },
-      { loc: `${baseUrl}/courses/minna-no-nihongo-l1`, priority: '0.9', changefreq: 'weekly' },
-      { loc: `${baseUrl}/courses/jlpt-n5`, priority: '0.9', changefreq: 'weekly' },
-      { loc: `${baseUrl}/quizzes`, priority: '0.8', changefreq: 'weekly' },
-      { loc: `${baseUrl}/baito`, priority: '0.8', changefreq: 'weekly' },
-      { loc: `${baseUrl}/pricing`, priority: '0.8', changefreq: 'monthly' },
-      { loc: `${baseUrl}/verify`, priority: '0.7', changefreq: 'daily' },
-      { loc: `${baseUrl}/terms`, priority: '0.6', changefreq: 'monthly' },
-      { loc: `${baseUrl}/privacy`, priority: '0.6', changefreq: 'monthly' },
-      { loc: `${baseUrl}/refund-policy`, priority: '0.6', changefreq: 'monthly' },
-      { loc: `${baseUrl}/contact`, priority: '0.8', changefreq: 'monthly' }
+      { loc: `${baseUrl}/dashboard`, priority: '0.95', changefreq: 'daily' },
+      { loc: `${baseUrl}/journey`, priority: '0.95', changefreq: 'daily' },
+      { loc: `${baseUrl}/curriculum`, priority: '0.95', changefreq: 'daily' },
+      { loc: `${baseUrl}/kana`, priority: '0.90', changefreq: 'weekly' },
+      { loc: `${baseUrl}/pricing`, priority: '0.90', changefreq: 'weekly' },
+      { loc: `${baseUrl}/exam`, priority: '0.90', changefreq: 'weekly' },
+      { loc: `${baseUrl}/mock-exams`, priority: '0.85', changefreq: 'weekly' },
+      { loc: `${baseUrl}/rirekisho`, priority: '0.90', changefreq: 'weekly' },
+      { loc: `${baseUrl}/workos`, priority: '0.85', changefreq: 'weekly' },
+      { loc: `${baseUrl}/contact`, priority: '0.70', changefreq: 'monthly' },
+      { loc: `${baseUrl}/terms`, priority: '0.50', changefreq: 'monthly' },
+      { loc: `${baseUrl}/privacy`, priority: '0.50', changefreq: 'monthly' },
+      { loc: `${baseUrl}/refund-policy`, priority: '0.50', changefreq: 'monthly' }
     ];
-
-    // Dynamic lesson drafts from content studio
-    const drafts = db.getContentDrafts ? db.getContentDrafts() : [];
-    const dynamicLessonUrls = drafts
-      .filter((d: any) => d.status === 'PUBLISHED' || d.status === 'APPROVED')
-      .map((d: any) => ({
-        loc: `${baseUrl}/courses/${d.id}`,
-        priority: '0.85',
-        changefreq: 'weekly'
-      }));
-
-    const allUrls = [...staticUrls, ...dynamicLessonUrls];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allUrls
+${staticUrls
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
@@ -288,6 +329,27 @@ ${allUrls
 </urlset>`;
 
     res.send(xml);
+  });
+
+  // Dedicated AI Agent & LLM Knowledge Manifest endpoints
+  app.get('/llms.txt', (_req, res) => {
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const llmsPath = path.join(process.cwd(), 'public', 'llms.txt');
+    if (fs.existsSync(llmsPath)) {
+      return res.send(fs.readFileSync(llmsPath, 'utf8'));
+    }
+    res.status(404).send('# NIHOMI LLMs Manifest Not Found');
+  });
+
+  app.get('/llms-full.txt', (_req, res) => {
+    res.type('text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const llmsFullPath = path.join(process.cwd(), 'public', 'llms-full.txt');
+    if (fs.existsSync(llmsFullPath)) {
+      return res.send(fs.readFileSync(llmsFullPath, 'utf8'));
+    }
+    res.status(404).send('# NIHOMI Full LLMs Specification Not Found');
   });
 
   // Social Media Bot OpenGraph Pre-renderer for shared student certificates
@@ -400,7 +462,21 @@ ${allUrls
     app.use(express.static(distPath));
     app.use(express.static(publicPath));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      const indexPath = path.join(distPath, 'index.html');
+      if (!fs.existsSync(indexPath)) {
+        return res.status(404).send('Not Found');
+      }
+      let html = fs.readFileSync(indexPath, 'utf8');
+      const gsc = process.env.GOOGLE_SITE_VERIFICATION || process.env.VITE_GOOGLE_SITE_VERIFICATION;
+      const bing = process.env.BING_SITE_VERIFICATION || process.env.VITE_BING_SITE_VERIFICATION;
+      if (gsc) {
+        html = html.replace(/content="GSC_VERIFICATION_TOKEN_NIHOMI_2026"/g, `content="${gsc}"`);
+      }
+      if (bing) {
+        html = html.replace(/content="BING_WEBMASTER_VERIFICATION_NIHOMI_2026"/g, `content="${bing}"`);
+      }
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.send(html);
     });
   }
 

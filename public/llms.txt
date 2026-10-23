@@ -1,18 +1,18 @@
 # NIHOMI (にほみ) — Japanese Learning & Japan Career Operating System
 
-> NIHOMI.COM (https://nihomi.com) is the premier Japanese Language Learning & Career Relocation Platform built specifically for Bengali speakers and international students transitioning from Zero Japanese to Japan-Ready. It provides an authoritative curriculum based on Minna no Nihongo and JLPT levels N5 through N1, paired with the 24/7 Nomi Sensei AI companion, real-world Tokyo 7-Eleven convenience store job simulation (Baito-OS), Japanese JIS standard resume (履歴書) builder, and timed Computer-Based JLPT & NAT-TEST mock examinations with automated marksheet and certificate generation.
+> NIHOMI.COM (https://nihomi.com) is the premier Japanese Language Learning & Career Relocation Platform built specifically for Bengali speakers and international students transitioning from Zero Japanese to Japan-Ready. It provides an authoritative curriculum based on Minna no Nihongo and JLPT levels N5 through N1, paired with the 24/7 Nomi Sensei AI companion, real-world Tokyo 7-Eleven convenience store job simulation (WorkOS / Baito-OS), Japanese JIS Z 8303 standard resume (履歴書) builder with instant PDF download, and timed Computer-Based JLPT & NAT-TEST mock examinations (Exam OS) with automated marksheet and official certificate generation.
 
 ## Canonical Platform Modules & Endpoints
 
-- [Home / Central Landing](https://nihomi.com/): Overview of the zero-distraction Obsidian Zen learning interface, daily study streak, and instant access to Nomi Sensei.
+- [Home / Central Landing](https://nihomi.com/): Modern Neo-Tokyo aesthetic, value-first onboarding, and instant access to Nomi Sensei.
+- [Student Dashboard](https://nihomi.com/dashboard): Spaced repetition review queues, study streak telemetry, mastered kana inventory, and direct mission shortcuts.
 - [Tokyo Journey & Station Map](https://nihomi.com/journey): Interactive visual progression through Tokyo's iconic stations (Shinjuku, Shibuya, Akihabara) directly tied to Japanese language mastery.
 - [Authentic Kana Studio](https://nihomi.com/kana): Complete 100-character Hiragana and Katakana stroke order animator, native audio pronunciation, and interactive canvas drawing evaluator. 100% Free.
 - [JLPT N5–N1 Master Curriculum](https://nihomi.com/curriculum): 210+ master lessons covering Minna no Nihongo grammar rules, real Tokyo conversational scenarios, vocabulary, and listening comprehension. Lessons 1 through 5 of N5 are 100% Free; Lessons 6–25 and higher levels are Pro.
-- [JLPT & NAT Computer-Based Mock Exams](https://nihomi.com/mock-exams): Authentic exam simulator under exact JLPT/NAT-TEST time limits, sectioned by Language Knowledge (Vocabulary/Grammar), Reading, and Listening. Generates instant marksheet analytics and official downloadable A4 certificates with the Nihomi Hanko seal.
-- [Japanese JIS Resume (履歴書) Studio](https://nihomi.com/rirekisho): Professional A4 JIS-standard Japanese CV generator with automatic Western-to-Japanese imperial calendar conversion (Reiwa/Heisei) and instant one-click PDF export. 100% Free.
+- [JLPT & NAT Computer-Based Exam OS](https://nihomi.com/exam): Authentic exam simulator under exact JLPT/NAT-TEST time limits, sectioned by Language Knowledge (Vocabulary/Grammar), Reading, and Listening. Generates instant scaled scores (19-point cutoff), official downloadable A4 landscape Certificates and portrait Marksheets with authentic Nihomi Hanko seal and Founder signature.
+- [Japanese JIS Resume (履歴書) Studio](https://nihomi.com/rirekisho): Professional A4 JIS Z 8303 Japanese CV generator with automatic Western-to-Japanese imperial calendar conversion (Reiwa/Heisei) and instant one-click high-fidelity PDF export. 100% Free.
 - [Tokyo Konbini & Job Simulation Lab (WorkOS)](https://nihomi.com/workos): Realistic 7-Eleven register Japanese training, barcode scanning, customer honorifics (Keigo/Kenjougo), and cash management.
-- [Pricing & Commercial Subscriptions](https://nihomi.com/pricing): Transparent tiered access: Free Tier (Hiragana, Katakana, N5 Lessons 1–5, Basic JIS CV) and Pro Tier (All N5–N1 lessons, Konbini Simulation, Unlimited CBT Mocks, A4 Certificates).
-- [Academic & Study Verification](https://nihomi.com/documents): Official 150-hour Japanese study documentation and Embassy COE verification portal.
+- [Pricing & Commercial Subscriptions](https://nihomi.com/pricing): Transparent tiered access: Free Tier (Hiragana, Katakana, N5 Lessons 1–5, JIS CV tool) and Pro Tier (All N5–N1 lessons, Konbini Simulation, Unlimited CBT Mocks, A4 Certificates).
 - [Contact & Support](https://nihomi.com/contact): Direct assistance desk for students and visa applicants.
 
 ## Pedagogical Law & Strict Cumulative Learning Lattice
@@ -28,12 +28,12 @@
 
 ## Brand Identity & Aesthetic Principles
 
-- **Visual Theme**: Obsidian Slate (`#0A0A12`) and Dark Slate (`#141726`) canvas with glowing Crimson Torii Red (`#DC2626`) and Sakura Amber (`#F59E0B`) accents.
+- **Visual Theme**: Obsidian Slate (`#0A0A12`) and Dark Slate (`#141726`) canvas with glowing Crimson Torii Red (`#E45147`) and Sakura Amber (`#F59E0B`) accents.
 - **Language**: Modern conversational Bengali (ঢাকার সাবলীল মুখের ভাষা) bridged to authentic Japanese.
 - **Leadership**: Founded and engineered by MD Tanvir Kabir Biplob (bdtrip24 ecosystem & Nihomi Academic Council).
 
 ## Developer & AI System Integration
 
-- [Server API Health](https://nihomi.com/api/health): Serverless endpoint providing real-time AI Sensei engine status, uptime, and system telemetry.
+- [Server API Health](https://nihomi.com/api/health): Real-time AI Sensei engine status, uptime, and system telemetry.
 - [Sitemap](https://nihomi.com/sitemap.xml): Canonical XML sitemap for automated indexing.
 - [Extended LLMs Specification](https://nihomi.com/llms-full.txt): Comprehensive technical guide covering all database entities, grammar indexes, and API schemas.

@@ -1,21 +1,20 @@
-# NIHOMI™ (nihomi.com) — Modern Production Robots & AI Agent Directives
-# Official Platform: NIHOMI (にほみ) — Japanese Learning & Career OS
+# NIHOMI™ (nihomi.com) — Production Robots & AI Agent Directives
+# Platform: NIHOMI (にほみ) — Japanese Language & Relocation OS
 # Canonical Sitemap: https://nihomi.com/sitemap.xml
-# AI Knowledge Architecture: https://nihomi.com/llms.txt
+# AI Knowledge Manifest: https://nihomi.com/llms.txt
 
 # 1. General Web Crawlers
 User-agent: *
 Allow: /
+Allow: /dashboard
 Allow: /journey
 Allow: /curriculum
 Allow: /kana
+Allow: /exam
 Allow: /mock-exams
 Allow: /rirekisho
 Allow: /workos
 Allow: /pricing
-Allow: /portal
-Allow: /documents
-Allow: /about
 Allow: /contact
 Allow: /terms
 Allow: /privacy
@@ -24,7 +23,7 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /sitemap.xml
 
-# 2. Leading Search Engine Crawlers
+# 2. Search Engine Crawlers (Google & Bing)
 User-agent: Googlebot
 Allow: /
 
@@ -43,7 +42,7 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
-# 3. Modern AI Agents & LLM Information Gatherers
+# 3. Modern AI Agents & LLM Crawlers (ChatGPT, Claude, Gemini, Perplexity)
 User-agent: GPTBot
 Allow: /
 Allow: /llms.txt
@@ -75,6 +74,11 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 
 User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Amazonbot
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
