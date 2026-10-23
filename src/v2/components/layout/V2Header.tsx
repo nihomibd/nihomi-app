@@ -247,12 +247,13 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
             </button>
           )}
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Hamburger Button (Accessible Touch Target) */}
           <button
             id="mobile-menu-toggle-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer"
-            aria-label="Toggle Navigation"
+            className="lg:hidden flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer select-none active:scale-95"
+            aria-label={mobileMenuOpen ? 'নেভিগেশন মেনু বন্ধ করুন' : 'নেভিগেশন মেনু খুলুন'}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>

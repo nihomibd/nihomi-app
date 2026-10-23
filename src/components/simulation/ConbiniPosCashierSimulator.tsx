@@ -671,7 +671,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
               <span>স্টোর নির্বাচন:</span>
             </span>
 
-            <div className="inline-flex rounded-xl bg-black/40 p-1 border border-white/10">
+            <div className="flex flex-wrap sm:inline-flex rounded-xl bg-black/40 p-1 border border-white/10 gap-1">
               {/* 7-Eleven */}
               <button
                 type="button"
@@ -718,7 +718,7 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
           {/* Mode Switcher: Training vs Real Shift */}
           <div className="flex items-center gap-2 shrink-0">
-            <div className="inline-flex rounded-xl bg-black/40 p-1 border border-white/10">
+            <div className="flex flex-wrap sm:inline-flex rounded-xl bg-black/40 p-1 border border-white/10 gap-1">
               <button
                 type="button"
                 onClick={() => {

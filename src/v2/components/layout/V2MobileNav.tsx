@@ -19,7 +19,7 @@ interface V2MobileNavProps {
 }
 
 export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNavigate }) => {
-  const { user, openAuthModal } = useAuth();
+  const { user } = useAuth();
 
   const isFounder = Boolean(
     (user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') ||
@@ -29,12 +29,14 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
   return (
     <nav
       id="v2-mobile-bottom-nav"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#141726]/98 backdrop-blur-lg border-t border-[#F6F0E6]/10 px-2 py-1.5 flex items-center justify-around shadow-2xl safe-area-bottom"
+      aria-label="মোবাইল তলদেশ মেনু"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#141726]/98 backdrop-blur-lg border-t border-[#F6F0E6]/10 px-2 py-1.5 flex items-center justify-around shadow-2xl safe-area-bottom pb-[max(0.375rem,env(safe-area-inset-bottom,0px))]"
     >
       {/* 1. Home / Landing Tab */}
       <button
         onClick={() => onNavigate('landing')}
-        className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+        aria-label="হোমপেজ"
+        className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
           currentRoute === 'landing' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
         }`}
       >
@@ -47,7 +49,8 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
       {/* 2. Journey Tab */}
       <button
         onClick={() => onNavigate('journey')}
-        className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+        aria-label="টোকিও লার্নিং জার্নি"
+        className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
           currentRoute === 'journey' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
         }`}
       >
@@ -62,7 +65,8 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
         <button
           id="mobile-bottom-dashboard-btn"
           onClick={() => onNavigate('dashboard')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+          aria-label="শিক্ষার্থী ড্যাশবোর্ড"
+          className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
             currentRoute === 'dashboard' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
           }`}
         >
@@ -88,7 +92,8 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
       ) : (
         <button
           onClick={() => onNavigate('curriculum')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+          aria-label="JLPT পাঠ্যক্রম"
+          className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
             currentRoute === 'curriculum' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
           }`}
         >
@@ -102,7 +107,8 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
       {/* 4. WorkOS / Baito Tab */}
       <button
         onClick={() => onNavigate('workos')}
-        className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+        aria-label="টোকিও কনবিনি WorkOS"
+        className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
           currentRoute === 'workos' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
         }`}
       >
@@ -115,7 +121,8 @@ export const V2MobileNav: React.FC<V2MobileNavProps> = ({ currentRoute, onNaviga
       {/* 5. Pricing Tab */}
       <button
         onClick={() => onNavigate('pricing')}
-        className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+        aria-label="প্রাইসিং ও মেম্বারশিপ প্ল্যান"
+        className={`flex flex-col items-center justify-center min-h-[48px] min-w-[48px] py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer select-none active:scale-95 ${
           currentRoute === 'pricing' ? 'text-[#E45147] scale-105' : 'text-stone-400 hover:text-white'
         }`}
       >
