@@ -1,23 +1,39 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V2-COMMERCIAL-SEO-AI-INDEXING-LOCKED",
-  "title": "Platform Operating in Stable Production Mode with Live SEO & AI Indexing",
-  "objective": "All work packages WP01 through WP16 successfully executed, verified, pushed, and certified live on https://www.nihomi.com.",
-  "domain": "Production Operations",
+  "task_id": "NIHOMI-WP18-LIVE-MOBILE-PRODUCTION-SANITY-AUDIT",
+  "title": "Live Production Mobile Sanity Audit & Real Cloudflare Edge Verification",
+  "objective": "Execute live HTTP/HTTPS sanity audits on https://www.nihomi.com, verifying that the fresh v5-production service worker, mobile 1-tap bottom nav login button, Google OAuth redirect callback, and live API endpoints are serving without caching issues across global Edge networks.",
+  "domain": "Production Operations & Edge Verification",
   "in_scope": [
-    "Continuous uptime and telemetry monitoring",
-    "Search engine indexing and AI crawler serving"
+    "Live HTTP/HTTPS response inspection of https://www.nihomi.com and https://www.nihomi.com/sw.js",
+    "Verify Cloudflare Edge cache headers (cf-cache-status, cache-control, etag)",
+    "Verify v5-production Service Worker registration on live production domain",
+    "Verify mobile viewport rendering and auth CTA responsiveness on live domain",
+    "Record final production acceptance dossier and live evidence"
   ],
-  "out_of_scope": [],
+  "out_of_scope": [
+    "Modifying server database schemas",
+    "Changing curriculum lesson content"
+  ],
   "acceptance_criteria": [
-    "Platform live and healthy on https://www.nihomi.com"
+    "https://www.nihomi.com/sw.js returns HTTP 200 with CACHE_VERSION = 'v5-production'",
+    "https://www.nihomi.com returns HTTP 200 with zero horizontal overflow",
+    "Live production API health check returns HTTP 200 with operational Gemini AI and durable storage",
+    "Zero console errors on live production homepage"
   ],
   "verification": [
-    "Continuous health monitoring"
+    "Live cURL and HTTP header analysis",
+    "Headless browser audit on live https://www.nihomi.com",
+    "Evidence screenshots captured from live domain"
   ],
-  "risks": [],
-  "dependencies": [],
-  "base_commit": "9293ddc",
-  "created_at": "2026-10-23T02:45:00.000Z",
-  "status": "idle"
+  "risks": [
+    "Cloudflare edge caching propagation delay (typically 60-120 seconds)"
+  ],
+  "dependencies": [
+    "Production Cloudflare Deployment",
+    "GitHub Actions Pipeline"
+  ],
+  "base_commit": "19d8c05",
+  "created_at": "2026-10-23T03:32:00.000Z",
+  "status": "pending"
 }
