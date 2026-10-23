@@ -247,7 +247,7 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
           </div>
           <div className="text-[11px] text-stone-400 font-mono flex items-center justify-between pt-1 border-t border-white/5">
             <span>ARR রানরেট:</span>
-            <span className="text-emerald-400 font-bold">`৳${currentArr.toLocaleString()} BDT`</span>
+            <span className="text-emerald-400 font-bold">৳{currentArr.toLocaleString()} BDT</span>
           </div>
         </div>
 
@@ -376,6 +376,68 @@ export const V2FounderPage: React.FC<V2FounderPageProps> = ({ onNavigate }) => {
               ? `বর্তমানে ডেটাবেসে ${activePaidMembers} জন অ্যাক্টিভ পেইড সাবস্ক্রাইবারের ভিত্তিতে রিয়েল-টাইম MRR ৳${currentMrr.toLocaleString()} BDT ও ARR ৳${currentArr.toLocaleString()} BDT নির্ভুলভাবে গণনাকৃত।`
               : 'বর্তমানে ডেটাবেসে ০ জন পেইড মেম্বার (MRR: ৳০ BDT)। কোনো কৃত্রিম বা ফেক রাজস্ব অন্তর্ভুক্ত নয়। শিক্ষার্থী পেমেন্ট সফল হলে সাথে সাথে এখানে রিয়েল-টাইম ডাটা যুক্ত হবে।'}
           </div>
+        </div>
+      </div>
+
+      {/* Executive Financial & Operations Ledger */}
+      <div className="p-6 rounded-3xl bg-[#141726] border border-white/10 space-y-5" id="founder-financial-ledger">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
+          <h3 className="text-base font-black text-white flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-emerald-400" />
+            <span>এক্সিকিউটিভ অপারেটিং ও বাজেট লেজার (Executive Operations Ledger)</span>
+          </h3>
+          <span className="text-xs text-stone-400 font-mono">
+            স্বয়ংক্রিয় bKash / Stripe অডিট
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+            <div className="text-xs text-stone-400 font-bold">মোট সংগৃহীত রাজস্ব</div>
+            <div className="text-2xl font-black text-white font-mono">৳{(telemetry?.business?.totalRevenue || 0).toLocaleString()} BDT</div>
+            <p className="text-[10px] text-stone-500 font-mono">bKash PGW + Stripe মোট ক্যাশ</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+            <div className="text-xs text-stone-400 font-bold">অনুমোদিত মাসিক বাজেট</div>
+            <div className="text-2xl font-black text-white font-mono">৳{(telemetry?.business?.approvedMonthlyBudget || 60000).toLocaleString()} BDT</div>
+            <p className="text-[10px] text-stone-500 font-mono">বাজেট সিলিং ক্যাপ</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+            <div className="text-xs text-stone-400 font-bold">চলতি মাসের খরচ</div>
+            <div className="text-2xl font-black text-amber-400 font-mono">৳{(telemetry?.business?.operatingCost || 0).toLocaleString()} BDT</div>
+            <p className="text-[10px] text-amber-500/80 font-mono">AI টোকেন ও ইনফ্রাস্ট্রাকচার</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+            <div className="text-xs text-stone-400 font-bold">অবশিষ্ট অপারেটিং ব্যালেন্স</div>
+            <div className="text-2xl font-black text-emerald-400 font-mono">৳{(telemetry?.business?.remainingApprovedBudget || 0).toLocaleString()} BDT</div>
+            <p className="text-[10px] text-emerald-500/80 font-mono">মাসিক আন-অ্যালোকেটেড ফান্ড</p>
+          </div>
+        </div>
+
+        {/* Quick Auditing Actions */}
+        <div className="pt-2 flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => onNavigate('dashboard')}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-md shadow-red-600/20 hover:brightness-110 transition-all"
+          >
+            <span>শিক্ষার্থী ভিউ অডিট (Student View)</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => onNavigate('curriculum')}
+            className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white font-bold text-xs flex items-center gap-2 cursor-pointer border border-white/10 transition-all"
+          >
+            <span>কারিকুলাম ও লেসন অডিট</span>
+          </button>
+          <button
+            onClick={() => onNavigate('exam')}
+            className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white font-bold text-xs flex items-center gap-2 cursor-pointer border border-white/10 transition-all"
+          >
+            <span>JLPT মক এক্সাম ওএস</span>
+          </button>
         </div>
       </div>
 

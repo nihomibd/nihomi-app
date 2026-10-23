@@ -30,7 +30,7 @@ interface V2DashboardPageProps {
 }
 
 export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) => {
-  const { user, progress, openAuthModal, coinWallet, refreshProgress } = useAuth();
+  const { user, progress, openAuthModal, coinWallet, refreshAuth } = useAuth();
   const [knowledgeState, setKnowledgeState] = useState(loadLearnerKnowledgeState());
   const [isCalibrationOpen, setIsCalibrationOpen] = useState(false);
 
@@ -39,14 +39,14 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
     window.addEventListener('nihomi:knowledge-state-updated', handleUpdate);
     window.addEventListener('nihomi:memory-updated', handleUpdate);
     if (user) {
-      refreshProgress();
+      refreshAuth();
       hydrateKnowledgeStateFromServer(user.id);
     }
     return () => {
       window.removeEventListener('nihomi:knowledge-state-updated', handleUpdate);
       window.removeEventListener('nihomi:memory-updated', handleUpdate);
     };
-  }, [user, refreshProgress]);
+  }, [user, refreshAuth]);
 
     const nextMission = getNextBestMission(knowledgeState);
   const grammarStatus = isGrammarEligible(knowledgeState);
@@ -103,6 +103,8 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
   // Authentic learner progress telemetry — zero fake 5-day / 1240-XP mocks
   const streakDays = progress?.currentStreak ?? progress?.streakDays ?? (user?.streakDays ?? 0);
   const xpPoints = progress?.experiencePoints ?? ((user as any)?.xpPoints ?? 0);
+  const completedLessonsCount = progress?.completedLessonIds?.length ?? (progress as any)?.completedLessonCount ?? 0;
+  const n5ProgressPct = Math.min(100, Math.round((completedLessonsCount / 25) * 100));
 
   const handleStartMission = () => {
     if (nextMission.type === 'kana' || nextMission.type === 'word_unlock') {
@@ -150,6 +152,17 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
             <div>
               <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">দৈনিক স্ট্রিক</div>
               <div className="text-base font-black text-amber-400 leading-none">{streakDays} দিন</div>
+            </div>
+          </div>
+
+          {/* Completed Lessons */}
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#141726] border border-blue-500/30 shadow-lg shadow-blue-500/5" id="student-metric-completed-lessons">
+            <div className="w-8 h-8 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[9px] text-stone-400 uppercase font-bold tracking-wider">লেসন সম্পন্ন</div>
+              <div className="text-base font-black text-blue-400 leading-none">{completedLessonsCount} / ২৫</div>
             </div>
           </div>
 
@@ -288,6 +301,70 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
               <Compass className="w-4 h-4" />
               <span>সম্পূর্ণ ম্যাপ দেখুন</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2.5 JLPT N5 Curriculum Progress & Free Tier Transparency */}
+      <div className="p-6 rounded-3xl bg-gradient-to-r from-[#141726] via-[#161B2E] to-[#141726] border border-white/10 space-y-4 shadow-xl" id="curriculum-tier-overview">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                JLPT N5 কারিকুলাম ট্র্যাকার
+              </span>
+              <span className="text-xs text-stone-400 font-mono">
+                {completedLessonsCount} / ২৫ লেসন সম্পন্ন ({n5ProgressPct}%)
+              </span>
+            </div>
+            <h3 className="text-lg font-black text-white mt-1">
+              আপনার অফিসিয়াল N5 মাস্টারি রোডম্যাপ
+            </h3>
+          </div>
+          <button
+            onClick={() => onNavigate("curriculum")}
+            className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto cursor-pointer transition-colors border border-white/10"
+          >
+            <span>লেসন লিস্ট দেখুন</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Visual Progress Bar */}
+        <div className="space-y-1.5">
+          <div className="w-full h-3 rounded-full bg-black/50 border border-white/5 overflow-hidden p-0.5">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#E45147] via-amber-500 to-emerald-400 transition-all duration-500 shadow-lg shadow-emerald-500/20"
+              style={{ width: `${Math.max(4, n5ProgressPct)}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-[11px] text-stone-400 font-mono">
+            <span>লেসন ০১ (সূচনা)</span>
+            <span className="text-emerald-400 font-bold">{n5ProgressPct}% অর্জিত</span>
+            <span>লেসন ২৫ (N5 ফাইনাল গেট)</span>
+          </div>
+        </div>
+
+        {/* Free vs Pro Access Tier Transparency */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
+          <div className="p-3.5 rounded-2xl bg-black/30 border border-emerald-500/20 space-y-1">
+            <div className="flex items-center gap-2 text-emerald-400 font-bold">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>১০০% ফ্রি উপাদান (Free Access):</span>
+            </div>
+            <p className="text-stone-300 leading-relaxed">
+              হিরাগানা ও কাতাকানা (৯২টি বর্ণ), N5 লেসন ০১ থেকে ০৫ এবং সম্পূর্ণ JIS রিলোকেশন CV স্টুডিও সবার জন্য আজীবন বিনামূল্যে উন্মুক্ত।
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-black/30 border border-amber-500/20 space-y-1">
+            <div className="flex items-center gap-2 text-amber-400 font-bold">
+              <Sparkles className="w-4 h-4" />
+              <span>প্রো সাবস্ক্রিপশন (Pro Mastery):</span>
+            </div>
+            <p className="text-stone-300 leading-relaxed">
+              লেসন ০৬ থেকে ২৫, ফুল কনবিনি ক্যাশিয়ার শিফট সিমুলেশন ও অফিশিয়াল JLPT ফুল মক এক্সাম ওএস আনলক করতে প্রো প্ল্যানে আপগ্রেড করুন।
+            </p>
           </div>
         </div>
       </div>

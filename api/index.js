@@ -55385,22 +55385,21 @@ var init_db = __esm({
               calculatedMrr += sub.billingInterval === "yearly" ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice;
             }
           }
-          const simulatedBaselineMrr = [28500, 39200, 54600, 72400, 94100, Math.max(115e3, calculatedMrr)][5 - i];
-          const effectiveMrr = Math.max(calculatedMrr, simulatedBaselineMrr);
-          const effectiveArr = effectiveMrr * 12;
-          const effectiveSubCount = Math.max(activeSubs.length, [48, 72, 106, 142, 185, Math.max(230, activeSubs.length)][5 - i]);
+          const effectiveMrr = calculatedMrr;
+          const effectiveArr = calculatedMrr * 12;
+          const effectiveSubCount = activeSubs.length;
           mrrTrends.push({
             month: monthLabel,
             mrr: effectiveMrr,
             arr: effectiveArr,
             subscribers: effectiveSubCount,
-            newRevenue: Math.max(newRev, Math.round(effectiveMrr * 0.35)),
-            churnedRevenue: Math.round(effectiveMrr * 0.04)
+            newRevenue: newRev,
+            churnedRevenue: 0
           });
-          const started = [24, 38, 52, 65, 82, 110][5 - i];
-          const converted = [16, 26, 37, 48, 62, 85][5 - i];
-          const dropped = started - converted;
-          const rate = Math.round(converted / started * 100);
+          const started = subs.filter((s) => s.trialStart && s.trialStart.startsWith(monthPrefix)).length;
+          const converted = subs.filter((s) => s.trialStart && s.trialStart.startsWith(monthPrefix) && s.status === "active" && s.lastPaymentId).length;
+          const dropped = Math.max(0, started - converted);
+          const rate = started > 0 ? Math.round(converted / started * 100) : 0;
           conversionTrends.push({
             month: monthLabel,
             trialsStarted: started,
@@ -55535,6 +55534,11 @@ var init_db = __esm({
             }
           }
         }
+        const totalStudents = (this.data.users || []).filter((u) => {
+          const email = (u.email || "").trim().toLowerCase();
+          return email && u.role !== "admin" && !isAdminEmail(email);
+        }).length;
+        subscribersByPlan.free = Math.max(0, totalStudents - activeSubscribers);
         const totalSubscribersAllTime = subs.length || 1;
         const churnRate = Math.round(cancelledSubscribers / totalSubscribersAllTime * 100);
         const trials = subs.filter((s) => s.trialStart);
