@@ -30,7 +30,7 @@ import {
   Info
 } from 'lucide-react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { JisRirekishoData } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
 import { useAuth } from '../../context/AuthContext';
@@ -249,6 +249,15 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
       clone.style.opacity = '1';
       clone.style.visibility = 'visible';
       clone.style.display = 'block';
+
+      // Ensure data-uri images do not have invalid crossOrigin flags
+      const cloneImages = clone.querySelectorAll('img');
+      cloneImages.forEach((img) => {
+        if (img.src && img.src.startsWith('data:')) {
+          img.removeAttribute('crossorigin');
+        }
+      });
+
       sandbox.appendChild(clone);
       document.body.appendChild(sandbox);
 
@@ -326,6 +335,8 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
       // Multi-platform binary download triggering (Desktop + iOS/Android mobile webviews)
       try {
+        pdf.save(fileName);
+      } catch (saveErr) {
         const blob = pdf.output('blob');
         const blobUrl = URL.createObjectURL(blob);
         const downloadLink = document.createElement('a');
@@ -340,8 +351,6 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
           }
           URL.revokeObjectURL(blobUrl);
         }, 3000);
-      } catch (blobErr) {
-        pdf.save(fileName);
       }
 
       soundEffects.playLessonCelebration();

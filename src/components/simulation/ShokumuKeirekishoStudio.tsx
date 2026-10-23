@@ -28,7 +28,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { ShokumuKeirekishoData, ShokumuProjectItem } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
 import { useAuth } from '../../context/AuthContext';

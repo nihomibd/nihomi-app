@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { LessonCurriculum } from '../data/lessons/n5MasterCurriculum';
 
 export interface StudyGuidePdfOptions {
