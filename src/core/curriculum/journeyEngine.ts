@@ -83,7 +83,8 @@ export function isGrammarEligible(state: LearnerKnowledgeState): {
  */
 export function getNextBestMission(state: LearnerKnowledgeState): NextBestMission {
   // 1. Priority 0: Unresolved repeated mistakes trigger supportive repair drill
-  const unresolvedMistakes = state.recentMistakes.filter(m => !m.resolved);
+  const mistakes = Array.isArray(state?.recentMistakes) ? state.recentMistakes : [];
+  const unresolvedMistakes = mistakes.filter(m => !m.resolved);
   if (unresolvedMistakes.length >= 2) {
     const recent = unresolvedMistakes[0];
     return {

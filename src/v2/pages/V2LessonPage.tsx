@@ -13,20 +13,24 @@ import {
 } from 'lucide-react';
 import { V2Route, V2NavigationParams } from '../types';
 import { InteractiveGrammarLoop } from '../../components/learning/InteractiveGrammarLoop';
+import { ZenLearningCanvas } from '../../components/learning/ZenLearningCanvas';
+import { VowelWordFormationCanvas } from '../../components/learning/VowelWordFormationCanvas';
 import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
-import { isGrammarEligible } from '../../core/curriculum/journeyEngine';
+import { isGrammarEligible, getNextBestMission } from '../../core/curriculum/journeyEngine';
 import { useAuth } from '../../context/AuthContext';
 import { isProUser, isLessonFreeTier } from '../utils/accessControl';
 import { ProFeatureGate } from '../components/common/ProFeatureGate';
 
 interface V2LessonPageProps {
   lessonId?: string;
+  params?: V2NavigationParams;
   onNavigate: (route: V2Route, params?: V2NavigationParams) => void;
   onOpenCheckout?: (planId?: string) => void;
 }
 
 export const V2LessonPage: React.FC<V2LessonPageProps> = ({
   lessonId = 'n5-l01',
+  params,
   onNavigate,
   onOpenCheckout
 }) => {
@@ -43,10 +47,72 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
     };
   }, []);
 
+  const normalizedId = (lessonId || '').toLowerCase().trim();
+  const hashQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.hash.split('?')[1] || '') : new URLSearchParams();
+  const targetChar = params?.char || hashQuery.get('char');
+  const targetQuiz = params?.quiz || hashQuery.get('quiz');
+
+  const isKanaLesson =
+    Boolean(targetChar) ||
+    Boolean(targetQuiz) ||
+    normalizedId === 'n5-l1' ||
+    normalizedId === 'n5-l01' ||
+    normalizedId === 'lesson-1' ||
+    normalizedId === 'kana-a' ||
+    normalizedId === 'vowel-mastery-gate' ||
+    (normalizedId.includes('kana') && !normalizedId.includes('grammar'));
+
+  const isWordFormationLesson =
+    normalizedId === 'n5-l2-words' ||
+    normalizedId === 'lesson-02-words';
+
+  // 1. Early Hiragana Foundation: Render Tactile Zen Learning Canvas
+  if (isKanaLesson && !isWordFormationLesson) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 animate-fadeIn">
+        <ZenLearningCanvas
+          initialChar={targetChar || 'あ'}
+          onBack={() => onNavigate('curriculum')}
+          onNextLesson={(target) => {
+            if (target?.lessonId) {
+              onNavigate('lesson', { lessonId: target.lessonId });
+              return;
+            }
+            const currentKState = loadLearnerKnowledgeState();
+            const nextMission = getNextBestMission(currentKState);
+            if (nextMission.viewRoute === 'lesson') {
+              onNavigate('lesson', nextMission.viewParams || { lessonId: 'n5-l2-words' });
+            } else if (nextMission.viewRoute === 'kana') {
+              onNavigate('kana', nextMission.viewParams);
+            } else {
+              onNavigate('journey');
+            }
+          }}
+        />
+      </div>
+    );
+  }
+
+  // 2. Word Formation Lab (Lesson 02 Words)
+  if (isWordFormationLesson) {
+    return (
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 animate-fadeIn">
+        <VowelWordFormationCanvas
+          onBack={() => onNavigate('lesson', { lessonId: 'n5-l1' })}
+          onNextLesson={() => {
+            const currentKState = loadLearnerKnowledgeState();
+            const nextMission = getNextBestMission(currentKState);
+            onNavigate('journey');
+          }}
+        />
+      </div>
+    );
+  }
+
+  // 3. Commercial Gating: Chapters 1-5 free; Chapter 6+ Pro subscription
   const isFree = isLessonFreeTier(lessonId);
   const isPro = isProUser(user);
 
-  // PRO Gating Check: Lessons 6+ require PRO subscription
   if (!isFree && !isPro) {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
@@ -68,6 +134,7 @@ export const V2LessonPage: React.FC<V2LessonPageProps> = ({
     );
   }
 
+  // 4. Grammar Prerequisite Lattice Guard
   const grammarEligibility = isGrammarEligible(knowledgeState);
 
   return (

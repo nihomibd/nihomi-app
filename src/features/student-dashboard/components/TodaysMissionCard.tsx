@@ -1,6 +1,7 @@
 // src/features/student-dashboard/components/TodaysMissionCard.tsx
 // NIHOMI SENSEI AI™ — REELS-STYLE ADDICTIVE MISSION HERO CARD
 // The Elevator & Reels Principle: Absolute focal point, frictionless continuous flow, zero text overload.
+// Strictly governed by Strict Cumulative Lattice & getNextBestMission(state).
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -14,20 +15,131 @@ import {
   Repeat
 } from 'lucide-react';
 import { NextExperienceData } from '../../../components/learning/GoldenLearningLoopModal';
+import { loadLearnerKnowledgeState } from '../../../core/curriculum/learnerKnowledgeState';
+import { getNextBestMission, NextBestMission } from '../../../core/curriculum/journeyEngine';
 
 interface TodaysMissionCardProps {
   onStartMission: (experience?: NextExperienceData) => void;
   userId?: string;
 }
 
+function mapMissionToExperience(mission: NextBestMission): NextExperienceData {
+  if (mission.type === 'kana') {
+    const char = mission.targetChar || 'あ';
+    return {
+      id: mission.id,
+      situation: 'Tokyo Arrival • Tactile Hiragana Foundation',
+      situationJa: `東京羽田空港・ひらがな「${char}」`,
+      situationBn: `হিরাগানা '${char}' বর্ণ পরিচিতি`,
+      goal: mission.titleBn,
+      goalJa: `ひらがな「${char}」の書き順と発音を習得する`,
+      goalBn: mission.subTitleBn,
+      whyExplanation: mission.whyItMattersBn,
+      targetPhraseJa: char,
+      targetPhraseRomaji: char === 'あ' ? 'a' : char === 'い' ? 'i' : char === 'う' ? 'u' : char === 'え' ? 'e' : 'o',
+      targetPhraseEn: `Vowel ${char}`,
+      targetPhraseBn: `স্বরবর্ণ ${char}`,
+      keigoRuleNote: mission.japanConnectionBn || 'সঠিক স্ট্রোক অর্ডার অনুসরণ করে লিখুন।',
+      actionType: 'lesson',
+      targetView: 'lesson',
+      targetParams: mission.viewParams || { lessonId: 'n5-l1', char },
+      rewardCoins: 20,
+      rewardXp: mission.xpReward || 50
+    };
+  }
+
+  if (mission.type === 'word_unlock') {
+    const word = mission.targetWord || 'あい';
+    return {
+      id: mission.id,
+      situation: 'First Pure Vowel Word Unlock (প্রথম আসল শব্দ আনলক)',
+      situationJa: `初めての単語「${word}」`,
+      situationBn: 'খাঁটি স্বরবর্ণ শব্দ আনলক',
+      goal: mission.titleBn,
+      goalJa: `「${word}」を正しく発音し、意味を理解する`,
+      goalBn: mission.subTitleBn,
+      whyExplanation: mission.whyItMattersBn,
+      targetPhraseJa: word,
+      targetPhraseRomaji: word === 'あい' ? 'Ai' : word,
+      targetPhraseEn: word === 'あい' ? 'Love' : 'Word',
+      targetPhraseBn: word === 'あい' ? 'ভালোবাসা (Love)' : 'শব্দ',
+      keigoRuleNote: mission.japanConnectionBn || 'দুটি পরিচিত স্বরবর্ণ দিয়ে গঠিত প্রথম শব্দ।',
+      actionType: 'lesson',
+      targetView: 'lesson',
+      targetParams: mission.viewParams || { lessonId: 'n5-l1', char: 'い', step: 'apply' },
+      rewardCoins: 25,
+      rewardXp: mission.xpReward || 60
+    };
+  }
+
+  if (mission.type === 'milestone_quiz') {
+    return {
+      id: mission.id,
+      situation: '5-Vowel Milestone Review Gate (৫-স্বরবর্ণ মাস্টার গেট)',
+      situationJa: '5母音マスター総合審査',
+      situationBn: '৫-স্বরবর্ণ মাইলস্টোন কুইজ',
+      goal: mission.titleBn,
+      goalJa: 'あ・い・う・え・おと関連単語の完全習得を確認する',
+      goalBn: mission.subTitleBn,
+      whyExplanation: mission.whyItMattersBn,
+      targetPhraseJa: 'あいうえお',
+      targetPhraseRomaji: 'a - i - u - e - o',
+      targetPhraseEn: '5 Vowels Review Gate',
+      targetPhraseBn: '৫টি মৌলিক স্বরবর্ণ গেট',
+      keigoRuleNote: 'পরবর্তী কনসোন্যান্ট সেটে যাওয়ার আগে ৫টি প্রশ্নের নির্ভুল উত্তর দিন।',
+      actionType: 'lesson',
+      targetView: 'lesson',
+      targetParams: mission.viewParams || { lessonId: 'n5-l1', quiz: 'vowels' },
+      rewardCoins: 50,
+      rewardXp: 100
+    };
+  }
+
+  // Fallback for real-life / konbini or other advanced missions
+  return {
+    id: mission.id || 'exp-golden-path-001',
+    situation: '7-Eleven Shibuya (渋谷スクランブル前)',
+    situationJa: 'セブン-イレブン 渋谷スクランブル店',
+    situationBn: 'শিবুয়া ক্রসিং সেভেন-ইলেভেন',
+    goal: mission.titleBn || "Buy Water & Decline Plastic Bag",
+    goalJa: '水を1本買い、レジ袋を丁寧に断る（袋は結構です）',
+    goalBn: mission.subTitleBn || 'মিশন: ১ বোতল পানি কেনা ও শপিং ব্যাগ বিনম্রভাবে না বলা',
+    whyExplanation: mission.whyItMattersBn || 'Real Tokyo survival phrase. Say it with confidence.',
+    targetPhraseJa: 'お水を1本ください。袋は結構です。',
+    targetPhraseRomaji: 'Omizu o ippon kudasai. Fukuro wa kekkou desu.',
+    targetPhraseEn: 'One bottle of water, please. No bag needed, thank you.',
+    targetPhraseBn: 'এক বোতল পানি দিন দয়া করে। ব্যাগ লাগবে না।',
+    keigoRuleNote: 'Polite refusal: 『結構です (Kekkou desu)』',
+    actionType: 'experience',
+    targetView: 'landing',
+    targetParams: { hotspotId: 'spot-conbini' },
+    rewardCoins: 20,
+    rewardXp: 50
+  };
+}
+
 export const TodaysMissionCard: React.FC<TodaysMissionCardProps> = ({
   onStartMission,
   userId
 }) => {
-  const [mission, setMission] = useState<NextExperienceData | null>(null);
-  const [isCompletedToday, setIsCompletedToday] = useState(false);
+  const resolveCurrentMission = (): NextExperienceData => {
+    const state = loadLearnerKnowledgeState(userId);
+    const next = getNextBestMission(state);
+    return mapMissionToExperience(next);
+  };
+
+  const [mission, setMission] = useState<NextExperienceData>(() => resolveCurrentMission());
 
   useEffect(() => {
+    const updateMission = () => {
+      setMission(resolveCurrentMission());
+    };
+
+    window.addEventListener('nihomi:knowledge-state-updated', updateMission);
+    window.addEventListener('nihomi:memory-updated', updateMission);
+    window.addEventListener('storage', updateMission);
+
+    // Also fetch server-side state if available
     let isMounted = true;
     fetch('/api/ai/next-experience')
       .then((res) => res.json())
@@ -37,32 +149,14 @@ export const TodaysMissionCard: React.FC<TodaysMissionCardProps> = ({
         }
       })
       .catch(() => {
-        if (isMounted) {
-          setMission({
-            id: 'exp-golden-path-001',
-            situation: '7-Eleven Shibuya (渋谷スクランブル前)',
-            situationJa: 'セブン-イレブン 渋谷スクランブル店',
-            situationBn: 'শিবুয়া ক্রসিং সেভেন-ইলেভেন',
-            goal: "Buy Water & Decline Plastic Bag",
-            goalJa: '水を1本買い、レジ袋を丁寧に断る（袋は結構です）',
-            goalBn: 'মিশন: ১ বোতল পানি কেনা ও শপিং ব্যাগ বিনম্রভাবে না বলা',
-            whyExplanation: 'Real Tokyo survival phrase. Say it with confidence.',
-            targetPhraseJa: 'お水を1本ください。袋は結構です。',
-            targetPhraseRomaji: 'Omizu o ippon kudasai. Fukuro wa kekkou desu.',
-            targetPhraseEn: 'One bottle of water, please. No bag needed, thank you.',
-            targetPhraseBn: 'এক বোতল পানি দিন দয়া করে। ব্যাগ লাগবে না।',
-            keigoRuleNote: 'Polite refusal: 『結構です (Kekkou desu)』',
-            actionType: 'experience',
-            targetView: 'landing',
-            targetParams: { hotspotId: 'spot-conbini' },
-            rewardCoins: 20,
-            rewardXp: 50
-          });
-        }
+        // Fallback remains the locally resolved lattice-compliant mission
       });
 
     return () => {
       isMounted = false;
+      window.removeEventListener('nihomi:knowledge-state-updated', updateMission);
+      window.removeEventListener('nihomi:memory-updated', updateMission);
+      window.removeEventListener('storage', updateMission);
     };
   }, [userId]);
 
@@ -83,7 +177,7 @@ export const TodaysMissionCard: React.FC<TodaysMissionCardProps> = ({
         <div className="space-y-3 max-w-2xl">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[10px] font-mono font-black uppercase tracking-wider shadow-xs">
-              <Zap className="w-3 h-3 text-amber-400 fill-amber-400" />
+              <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
               <span>REELS FLOW • TODAY'S MISSION</span>
             </span>
 
@@ -116,6 +210,7 @@ export const TodaysMissionCard: React.FC<TodaysMissionCardProps> = ({
         <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col items-center gap-3">
           <button
             type="button"
+            id="btn-start-todays-priority-mission"
             onClick={() => onStartMission(mission)}
             className="btn-haptic w-full sm:w-auto min-h-[52px] px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-stone-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/30 flex items-center justify-center gap-2.5 cursor-pointer"
           >

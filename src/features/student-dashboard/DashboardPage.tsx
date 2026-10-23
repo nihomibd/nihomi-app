@@ -39,7 +39,7 @@ import { StudentProfile as DigitalStudentProfile } from '../../types/nihomi';
 
 interface DashboardPageProps {
   onNavigateTab?: (tab: NavTab) => void;
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, params?: Record<string, any>) => void;
   onResumeLesson?: (lessonId: string) => void;
   onOpenMistakeBook?: () => void;
 }
@@ -458,6 +458,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               <TodaysMissionCard
                 userId={user?.id}
                 onStartMission={(exp) => {
+                  if (exp?.targetView === 'lesson' || exp?.actionType === 'lesson') {
+                    if (onNavigate) {
+                      onNavigate('lesson', exp.targetParams);
+                      return;
+                    }
+                    if (onResumeLesson) {
+                      onResumeLesson(exp.targetParams?.lessonId || 'n5-l1');
+                      return;
+                    }
+                  }
                   setSelectedMission(exp || null);
                   setIsGoldenLoopOpen(true);
                 }}

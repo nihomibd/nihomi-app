@@ -241,6 +241,7 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
         return (
           <V2LessonPage
             lessonId={navParams.lessonId || 'n5-l01'}
+            params={navParams}
             onNavigate={handleNavigate}
             onOpenCheckout={handleOpenCheckout}
           />

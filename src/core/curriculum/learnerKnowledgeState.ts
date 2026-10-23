@@ -169,7 +169,24 @@ export function loadLearnerKnowledgeState(userId?: string): LearnerKnowledgeStat
       raw = localStorage.getItem('nihomi_learner_knowledge_state_guest');
     }
     if (raw) {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      const initial = createInitialKnowledgeState();
+      return {
+        ...initial,
+        ...parsed,
+        knownHiragana: Array.isArray(parsed?.knownHiragana) ? parsed.knownHiragana : initial.knownHiragana,
+        knownKatakana: Array.isArray(parsed?.knownKatakana) ? parsed.knownKatakana : initial.knownKatakana,
+        knownDakuten: Array.isArray(parsed?.knownDakuten) ? parsed.knownDakuten : initial.knownDakuten,
+        knownHandakuten: Array.isArray(parsed?.knownHandakuten) ? parsed.knownHandakuten : initial.knownHandakuten,
+        knownCombinationKana: Array.isArray(parsed?.knownCombinationKana) ? parsed.knownCombinationKana : initial.knownCombinationKana,
+        knownReadingRules: Array.isArray(parsed?.knownReadingRules) ? parsed.knownReadingRules : initial.knownReadingRules,
+        knownVocabulary: Array.isArray(parsed?.knownVocabulary) ? parsed.knownVocabulary : initial.knownVocabulary,
+        knownKanji: Array.isArray(parsed?.knownKanji) ? parsed.knownKanji : initial.knownKanji,
+        knownGrammar: Array.isArray(parsed?.knownGrammar) ? parsed.knownGrammar : initial.knownGrammar,
+        masteredSkills: Array.isArray(parsed?.masteredSkills) ? parsed.masteredSkills : initial.masteredSkills,
+        recentMistakes: Array.isArray(parsed?.recentMistakes) ? parsed.recentMistakes : initial.recentMistakes,
+        reviewQueue: Array.isArray(parsed?.reviewQueue) ? parsed.reviewQueue : initial.reviewQueue
+      };
     }
     return createInitialKnowledgeState();
   } catch (err) {

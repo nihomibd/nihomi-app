@@ -60429,6 +60429,193 @@ var init_senseiNextExperienceService = __esm({
         const profile = db.getProfileByUserId(userId);
         const progress = db.getProgressByUserId(userId);
         const weakAreas = db.getWeakAreas(userId);
+        const kState = db.getKnowledgeState(userId);
+        const knownHiragana = kState?.knownHiragana || [];
+        const knownVocabulary = kState?.knownVocabulary || [];
+        const masteredSkills = kState?.masteredSkills || [];
+        if (!knownHiragana.includes("\u3042")) {
+          return {
+            id: "kana-a",
+            situation: "Tokyo Arrival \u2022 First Tactile Contact (\u099F\u09CB\u0995\u09BF\u0993 \u09AA\u09CC\u0981\u099B\u09BE\u09A8\u09CB\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u09A7\u09BE\u09AA)",
+            situationJa: "\u6771\u4EAC\u7FBD\u7530\u7A7A\u6E2F\u30FB\u65E5\u672C\u8A9E\u3068\u306E\u6700\u521D\u306E\u51FA\u4F1A\u3044",
+            situationBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09AA\u09CD\u09B0\u09A5\u09AE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF",
+            goal: "\u09AD\u09BF\u09A4\u09CD\u09A4\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 '\u3042' (\u0986) \u099C\u09DF \u0995\u09B0\u09BE",
+            goalJa: "\u57FA\u672C\u6BCD\u97F3\u300C\u3042\u300D\u306E\u66F8\u304D\u9806\u3068\u767A\u97F3\u3092\u5B8C\u74A7\u306B\u3059\u308B",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09E7: 'A' \u09A7\u09CD\u09AC\u09A8\u09BF\u09B0 \u09AA\u09B0\u09BF\u099A\u09BF\u09A4\u09BF \u0993 \u09E9\u099F\u09BF \u09B8\u09CD\u099F\u09CD\u09B0\u09CB\u0995",
+            whyExplanation: "\u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09AD\u09BE\u09B7\u09BE\u09B0 \u09B8\u09B0\u09CD\u09AC\u09AA\u09CD\u09B0\u09A5\u09AE \u0993 \u09AA\u09CD\u09B0\u09A7\u09BE\u09A8 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09B9\u09B2\u09CB '\u3042'\u0964 \u0995\u09CB\u09A8\u09CB \u09AE\u09BF\u09B6\u09CD\u09B0 \u09B6\u09AC\u09CD\u09A6 \u09A8\u09DF\u2014\u09B6\u09C1\u09A7\u09C1 '\u3042' \u09B8\u09CD\u09AA\u09B7\u09CD\u099F \u0986\u09A4\u09CD\u09AE\u09B8\u09CD\u09A5 \u0995\u09B0\u09CB!",
+            targetPhraseJa: "\u3042",
+            targetPhraseRomaji: "a",
+            targetPhraseEn: "Vowel A (Ah)",
+            targetPhraseBn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0986",
+            keigoRuleNote: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE '\u3042' \u09E9\u099F\u09BF \u099F\u09BE\u09A8\u09C7 \u09B2\u09C7\u0996\u09BE \u09B9\u09DF\u0964 \u0989\u09AA\u09B0 \u09A5\u09C7\u0995\u09C7 \u09A8\u09BF\u099A\u09C7 \u09B8\u09CB \u09A6\u09BE\u0997, \u0986\u09B0 \u09AA\u09C7\u099F \u0997\u09CB\u09B2!",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u3042" },
+            rewardCoins: 20,
+            rewardXp: 50,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        if (!knownHiragana.includes("\u3044")) {
+          return {
+            id: "kana-i",
+            situation: "Tokyo Sound Foundation \u2022 Second Vowel (\u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AD\u09BF\u09A4\u09CD\u09A4\u09BF)",
+            situationJa: "\u65E5\u672C\u8A9E\u306E\u6BCD\u97F3\u300C\u3044\u300D",
+            situationBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3",
+            goal: "\u09A6\u09CD\u09AC\u09BF\u09A4\u09C0\u09DF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 '\u3044' (\u0987) \u09B6\u09C7\u0996\u09BE",
+            goalJa: "\u6BCD\u97F3\u300C\u3044\u300D\u306E\u66F8\u304D\u9806\u3068\u767A\u97F3\u3092\u7FD2\u5F97\u3059\u308B",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09E8: 'I' \u09A7\u09CD\u09AC\u09A8\u09BF\u09B0 \u09AA\u09B0\u09BF\u099A\u09BF\u09A4\u09BF \u0993 \u09B8\u09AE\u09BE\u09A8\u09CD\u09A4\u09B0\u09BE\u09B2 \u09E8\u099F\u09BF \u099F\u09BE\u09A8",
+            whyExplanation: "\u0986\u0997\u09C7 \u09B6\u09C7\u0996\u09BE '\u3042' \u0986\u09B0 \u09A8\u09A4\u09C1\u09A8 '\u3044' \u09AE\u09BF\u09B2\u09C7 \u09A4\u09C8\u09B0\u09BF \u09B9\u09AC\u09C7 \u09A4\u09CB\u09AE\u09BE\u09B0 \u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09AC\u09CD\u09A6: '\u3042\u3044' (Ai - \u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE)!",
+            targetPhraseJa: "\u3044",
+            targetPhraseRomaji: "i",
+            targetPhraseEn: "Vowel I (Ee)",
+            targetPhraseBn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0987",
+            keigoRuleNote: "\u09AC\u09BE\u09AE\u09C7 \u098F\u0995\u099F\u09C1 \u09B2\u09AE\u09CD\u09AC\u09BE \u09A6\u09BE\u0997 \u09A6\u09BF\u09DF\u09C7 \u09B6\u09C7\u09B7\u09C7 \u099B\u09CB\u099F\u09CD\u099F \u09B9\u09C1\u0995, \u0986\u09B0 \u09A1\u09BE\u09A8\u09C7 \u099B\u09CB\u099F \u09B8\u09AE\u09BE\u09A8\u09CD\u09A4\u09B0\u09BE\u09B2 \u09A6\u09BE\u0997\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u3044" },
+            rewardCoins: 20,
+            rewardXp: 50,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        if (!knownVocabulary.includes("\u3042\u3044")) {
+          return {
+            id: "word-ai",
+            situation: "First Word Unlock \u2022 Pure Vowel Union (\u09AA\u09CD\u09B0\u09A5\u09AE \u09B6\u09AC\u09CD\u09A6 \u0986\u09A8\u09B2\u0995)",
+            situationJa: "\u521D\u3081\u3066\u306E\u5358\u8A9E\u300C\u3042\u3044\u300D",
+            situationBn: "\u0996\u09BE\u0981\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09B6\u09AC\u09CD\u09A6 \u0986\u09A8\u09B2\u0995",
+            goal: "\u09AA\u09CD\u09B0\u09A5\u09AE \u09B6\u09AC\u09CD\u09A6 '\u3042\u3044' (\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE) \u0986\u09A8\u09B2\u0995",
+            goalJa: "\u300C\u3042\u300D\u3068\u300C\u3044\u300D\u3092\u7D50\u3073\u3064\u3051\u3066\u300C\u611B\uFF08\u3042\u3044\uFF09\u300D\u3092\u8AAD\u3080",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09E9: '\u3042' + '\u3044' = '\u3042\u3044' (Ai \u2022 \u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE)",
+            whyExplanation: "\u0995\u09CB\u09A8\u09CB \u0985\u09AA\u09B0\u09BF\u099A\u09BF\u09A4 \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09AC\u09B0\u09CD\u09A3 \u099B\u09BE\u09DC\u09BE\u0987 \u09A4\u09CB\u09AE\u09BE\u09B0 \u099C\u09C0\u09AC\u09A8\u09C7\u09B0 \u09AA\u09CD\u09B0\u09A5\u09AE \u0996\u09BE\u0981\u099F\u09BF \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AE!",
+            targetPhraseJa: "\u3042\u3044",
+            targetPhraseRomaji: "Ai",
+            targetPhraseEn: "Love (Ai)",
+            targetPhraseBn: "\u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BE (Ai)",
+            keigoRuleNote: "\u09A6\u09C1\u099F\u09BF \u099A\u09C7\u09A8\u09BE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AA\u09BE\u09B6\u09BE\u09AA\u09BE\u09B6\u09BF \u09AC\u09B8\u09C7 \u09A4\u09C8\u09B0\u09BF \u0995\u09B0\u09C7 \u09AC\u09BE\u09B8\u09CD\u09A4\u09AC \u099C\u09BE\u09AA\u09BE\u09A8\u09BF \u0985\u09B0\u09CD\u09A5\u09AA\u09C2\u09B0\u09CD\u09A3 \u09B6\u09AC\u09CD\u09A6\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u3044", step: "apply" },
+            rewardCoins: 25,
+            rewardXp: 60,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        if (!knownHiragana.includes("\u3046")) {
+          return {
+            id: "kana-u",
+            situation: "Third Vowel & Action Verbs (\u09A4\u09C3\u09A4\u09C0\u09DF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993 \u0995\u09CD\u09B0\u09BF\u09DF\u09BE)",
+            situationJa: "\u6BCD\u97F3\u300C\u3046\u300D\u3068\u52D5\u8A5E\u300C\u3044\u3046\u300D",
+            situationBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09E9\u09AF\u09BC \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3",
+            goal: "\u09A4\u09C3\u09A4\u09C0\u09DF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 '\u3046' (\u0989) \u0993 '\u3044\u3046' (\u09AC\u09B2\u09BE) \u0986\u09A8\u09B2\u0995",
+            goalJa: "\u300C\u3046\u300D\u3092\u5B66\u3073\u3001\u300C\u3044\u3046\uFF08\u8A00\u3046\uFF09\u300D\u3092\u8AAD\u3081\u308B\u3088\u3046\u306B\u3059\u308B",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09EA: 'U' \u09A7\u09CD\u09AC\u09A8\u09BF \u098F\u09AC\u0982 '\u3044\u3046' (Iu \u2022 \u09AC\u09B2\u09BE)",
+            whyExplanation: "'\u3044' \u0986\u09B0 '\u3046' \u09AE\u09BF\u09B2\u09C7 \u09A4\u09C8\u09B0\u09BF \u09B9\u09DF \u09A6\u09C8\u09A8\u09A8\u09CD\u09A6\u09BF\u09A8 \u0995\u09CD\u09B0\u09BF\u09AF\u09BC\u09BE\u09AA\u09A6 '\u3044\u3046' (\u09AC\u09B2\u09BE) \u098F\u09AC\u0982 '\u3042\u3046' (\u09A6\u09C7\u0996\u09BE \u0995\u09B0\u09BE)\u0964",
+            targetPhraseJa: "\u3046",
+            targetPhraseRomaji: "u",
+            targetPhraseEn: "Vowel U (Oo)",
+            targetPhraseBn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0989",
+            keigoRuleNote: "\u0989\u09AA\u09B0\u09C7 \u099B\u09CB\u099F\u09CD\u099F \u098F\u0995\u099F\u09BE \u09AB\u09CB\u0981\u099F\u09BE, \u0986\u09B0 \u09A8\u09BF\u099A\u09C7 \u09AC\u09DC \u098F\u0995\u099F\u09BE \u09A7\u09A8\u09C1\u0995\u09C7\u09B0 \u09AE\u09A4\u09CB \u09AC\u09BE\u0981\u0995\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u3046" },
+            rewardCoins: 20,
+            rewardXp: 50,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        if (!knownHiragana.includes("\u3048")) {
+          return {
+            id: "kana-e",
+            situation: "Fourth Vowel & Shelter Words (\u099A\u09A4\u09C1\u09B0\u09CD\u09A5 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993 \u09A6\u09BF\u0995)",
+            situationJa: "\u6BCD\u97F3\u300C\u3048\u300D\u3068\u300C\u3044\u3048\uFF08\u5BB6\uFF09\u300D",
+            situationBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09EA\u09B0\u09CD\u09A5 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3",
+            goal: "\u099A\u09A4\u09C1\u09B0\u09CD\u09A5 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 '\u3048' (\u098F) \u0993 '\u3044\u3048' (\u09AC\u09BE\u09DC\u09BF) \u0986\u09A8\u09B2\u0995",
+            goalJa: "\u300C\u3048\u300D\u3092\u5B66\u3073\u3001\u300C\u3044\u3048\uFF08\u5BB6\uFF09\u300D\u300C\u3046\u3048\uFF08\u4E0A\uFF09\u300D\u3092\u8AAD\u3080",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09EB: 'E' \u09A7\u09CD\u09AC\u09A8\u09BF \u098F\u09AC\u0982 '\u3044\u3048' (Ie \u2022 \u09AC\u09BE\u09DC\u09BF)",
+            whyExplanation: "'\u3044\u3048' (Ie - \u09AC\u09BE\u09DC\u09BF) \u098F\u09AC\u0982 '\u3046\u3048' (Ue - \u0989\u09AA\u09B0\u09C7) \u09A6\u09C1\u099F\u09BF \u0985\u09A4\u09BF\u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u09C0\u09DF \u09B6\u09AC\u09CD\u09A6 \u0986\u09A8\u09B2\u0995 \u09B9\u09AC\u09C7\u0964",
+            targetPhraseJa: "\u3048",
+            targetPhraseRomaji: "e",
+            targetPhraseEn: "Vowel E (Eh)",
+            targetPhraseBn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u098F",
+            keigoRuleNote: "\u0989\u09AA\u09B0\u09C7 \u099B\u09CB\u099F \u099F\u09BE\u09A8, \u09A4\u09BE\u09B0\u09AA\u09B0 \u0987\u0982\u09B0\u09C7\u099C\u09BF 'Z' \u098F\u09B0 \u09AE\u09A4\u09CB \u098F\u0981\u0995\u09C7 \u09A8\u09BF\u099A\u09C7 \u09A2\u09C7\u0989 \u0996\u09C7\u09B2\u09BE\u09A8\u09CB\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u3048" },
+            rewardCoins: 20,
+            rewardXp: 50,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        if (!knownHiragana.includes("\u304A")) {
+          return {
+            id: "kana-o",
+            situation: "Fifth Vowel & Color Mastery (\u09AA\u099E\u09CD\u099A\u09AE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993 \u09B0\u0999)",
+            situationJa: "\u6BCD\u97F3\u300C\u304A\u300D\u3068\u300C\u3042\u304A\uFF08\u9752\uFF09\u300D",
+            situationBn: "\u09B9\u09BF\u09B0\u09BE\u0997\u09BE\u09A8\u09BE \u09EB\u09AE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3",
+            goal: "\u09AA\u099E\u09CD\u099A\u09AE \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 '\u304A' (\u0993) \u0993 '\u3042\u304A' (\u09A8\u09C0\u09B2) \u0986\u09A8\u09B2\u0995",
+            goalJa: "\u300C\u304A\u300D\u3092\u5B66\u3073\u30015\u6BCD\u97F3\u3092\u5B8C\u7D50\u3055\u305B\u3066\u300C\u3042\u304A\uFF08\u9752\uFF09\u300D\u3092\u8AAD\u3080",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09EC: 'O' \u09A7\u09CD\u09AC\u09A8\u09BF \u098F\u09AC\u0982 '\u3042\u304A' (Ao \u2022 \u09A8\u09C0\u09B2)",
+            whyExplanation: "\u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AA\u09C2\u09B0\u09CD\u09A3 \u09B9\u09AC\u09C7 \u098F\u09AC\u0982 '\u3042\u304A' (Ao - \u09A8\u09C0\u09B2) \u0993 '\u304A\u304A\u3044' (\u0985\u09A8\u09C7\u0995) \u09B6\u09AC\u09CD\u09A6 \u0986\u09DF\u09A4\u09CD\u09A4\u09C7 \u0986\u09B8\u09AC\u09C7\u0964",
+            targetPhraseJa: "\u304A",
+            targetPhraseRomaji: "o",
+            targetPhraseEn: "Vowel O (Oh)",
+            targetPhraseBn: "\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993",
+            keigoRuleNote: "\u09B8\u09CB\u099C\u09BE \u09A1\u09BE\u09A8\u09C7 \u09A6\u09BE\u0997, \u09A8\u09BF\u099A\u09C7 \u09A8\u09C7\u09AE\u09C7 \u0997\u09CB\u09B2 \u09B2\u09C1\u09AA \u0998\u09C1\u09B0\u09C7 \u09A1\u09BE\u09A8\u09C7 \u09AC\u09DC \u09AC\u09BE\u0981\u0995, \u0986\u09B0 \u0993\u09AA\u09B0\u09C7 \u09AB\u09CB\u0981\u099F\u09BE\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", char: "\u304A" },
+            rewardCoins: 20,
+            rewardXp: 50,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
+        const hasPassedVowelGate = masteredSkills.includes("vowels_5_mastered") || masteredSkills.includes("5_vowels_gate");
+        if (!hasPassedVowelGate) {
+          return {
+            id: "vowel-mastery-gate",
+            situation: "5-Vowel Review Gate (\u09EB-\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0 \u0997\u09C7\u099F)",
+            situationJa: "5\u6BCD\u97F3\u30DE\u30B9\u30BF\u30FC\u7DCF\u5408\u5BE9\u67FB",
+            situationBn: "\u09EB-\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AE\u09BE\u0987\u09B2\u09B8\u09CD\u099F\u09CB\u09A8 \u0995\u09C1\u0987\u099C",
+            goal: "\u09EB-\u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u09AE\u09BE\u09B8\u09CD\u099F\u09BE\u09B0 \u09B0\u09BF\u09AD\u09BF\u0989 \u0995\u09C1\u0987\u099C",
+            goalJa: "\u3042\u30FB\u3044\u30FB\u3046\u30FB\u3048\u30FB\u304A\u3068\u95A2\u9023\u5358\u8A9E\u306E\u5B8C\u5168\u7FD2\u5F97\u3092\u78BA\u8A8D\u3059\u308B",
+            goalBn: "\u09AE\u09BF\u09B6\u09A8 \u09ED: \u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0993 \u09B6\u09AC\u09CD\u09A6\u09C7\u09B0 \u099A\u09C2\u09DC\u09BE\u09A8\u09CD\u09A4 \u09B0\u09BF\u099F\u09C7\u09A8\u09B6\u09A8 \u0995\u09C1\u0987\u099C",
+            whyExplanation: "\u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u09AC\u09CD\u09AF\u099E\u09CD\u099C\u09A8\u09AC\u09B0\u09CD\u09A3 \u09AA\u09B0\u09BF\u09AC\u09BE\u09B0 (\u304B-\u0995) \u0986\u09A8\u09B2\u0995 \u0995\u09B0\u09BE\u09B0 \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09EB\u099F\u09BF \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3\u09C7 \u09B6\u09A4\u09AD\u09BE\u0997 \u09A6\u0995\u09CD\u09B7\u09A4\u09BE \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09BE \u09AC\u09BE\u09A7\u09CD\u09AF\u09A4\u09BE\u09AE\u09C2\u09B2\u0995\u0964",
+            targetPhraseJa: "\u3042\u3044\u3046\u3048\u304A",
+            targetPhraseRomaji: "a - i - u - e - o",
+            targetPhraseEn: "5 Foundation Vowels Mastery Gate",
+            targetPhraseBn: "\u09EB\u099F\u09BF \u09AE\u09CC\u09B2\u09BF\u0995 \u09B8\u09CD\u09AC\u09B0\u09AC\u09B0\u09CD\u09A3 \u0997\u09C7\u099F",
+            keigoRuleNote: "\u09EB\u099F\u09BF \u09AA\u09CD\u09B0\u09B6\u09CD\u09A8\u09C7\u09B0 \u09B8\u09A0\u09BF\u0995 \u0989\u09A4\u09CD\u09A4\u09B0 \u09A6\u09BF\u09DF\u09C7 \u09AA\u09B0\u09AC\u09B0\u09CD\u09A4\u09C0 \u0985\u09A7\u09CD\u09AF\u09BE\u09DF\u09C7\u09B0 \u09A6\u09B0\u099C\u09BE \u0996\u09C1\u09B2\u09C1\u09A8\u0964",
+            actionType: "lesson",
+            targetView: "lesson",
+            targetParams: { lessonId: "n5-l1", quiz: "vowels" },
+            rewardCoins: 50,
+            rewardXp: 100,
+            memoryOsContext: {
+              memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+              isRemedial: false
+            }
+          };
+        }
         const userLevel = profile?.targetLevel || progress?.currentLevel || "N5";
         if (weakAreas.weaknesses && weakAreas.weaknesses.length > 0) {
           const topWeakness = weakAreas.weaknesses[0];

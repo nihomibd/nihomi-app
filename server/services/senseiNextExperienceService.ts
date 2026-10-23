@@ -60,10 +60,209 @@ export const SenseiNextExperienceService = {
     const profile = db.getProfileByUserId(userId);
     const progress = db.getProgressByUserId(userId);
     const weakAreas = db.getWeakAreas(userId);
+    const kState = db.getKnowledgeState(userId);
+
+    const knownHiragana: string[] = kState?.knownHiragana || [];
+    const knownVocabulary: string[] = kState?.knownVocabulary || [];
+    const masteredSkills: string[] = kState?.masteredSkills || [];
+
+    // 1. Strict Cumulative Lattice Enforcement for Foundation Hiragana (Phase 1)
+    if (!knownHiragana.includes('あ')) {
+      return {
+        id: 'kana-a',
+        situation: 'Tokyo Arrival • First Tactile Contact (টোকিও পৌঁছানোর প্রথম ধাপ)',
+        situationJa: '東京羽田空港・日本語との最初の出会い',
+        situationBn: 'হিরাগানা প্রথম স্বরবর্ণ ভিত্তি',
+        goal: "ভিত্তি স্বরবর্ণ 'あ' (আ) জয় করা",
+        goalJa: '基本母音「あ」の書き順と発音を完璧にする',
+        goalBn: "মিশন ১: 'A' ধ্বনির পরিচিতি ও ৩টি স্ট্রোক",
+        whyExplanation: "জাপানি ভাষার সর্বপ্রথম ও প্রধান ভিত্তি স্বরবর্ণ হলো 'あ'। কোনো মিশ্র শব্দ নয়—শুধু 'あ' স্পষ্ট আত্মস্থ করো!",
+        targetPhraseJa: 'あ',
+        targetPhraseRomaji: 'a',
+        targetPhraseEn: 'Vowel A (Ah)',
+        targetPhraseBn: 'স্বরবর্ণ আ',
+        keigoRuleNote: "হিরাগানা 'あ' ৩টি টানে লেখা হয়। উপর থেকে নিচে সো দাগ, আর পেট গোল!",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'あ' },
+        rewardCoins: 20,
+        rewardXp: 50,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    if (!knownHiragana.includes('い')) {
+      return {
+        id: 'kana-i',
+        situation: 'Tokyo Sound Foundation • Second Vowel (দ্বিতীয় স্বরবর্ণ ভিত্তি)',
+        situationJa: '日本語の母音「い」',
+        situationBn: 'হিরাগানা দ্বিতীয় স্বরবর্ণ',
+        goal: "দ্বিতীয় স্বরবর্ণ 'い' (ই) শেখা",
+        goalJa: '母音「い」の書き順と発音を習得する',
+        goalBn: "মিশন ২: 'I' ধ্বনির পরিচিতি ও সমান্তরাল ২টি টান",
+        whyExplanation: "আগে শেখা 'あ' আর নতুন 'い' মিলে তৈরি হবে তোমার জীবনের প্রথম জাপানি শব্দ: 'あい' (Ai - ভালোবাসা)!",
+        targetPhraseJa: 'い',
+        targetPhraseRomaji: 'i',
+        targetPhraseEn: 'Vowel I (Ee)',
+        targetPhraseBn: 'স্বরবর্ণ ই',
+        keigoRuleNote: "বামে একটু লম্বা দাগ দিয়ে শেষে ছোট্ট হুক, আর ডানে ছোট সমান্তরাল দাগ।",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'い' },
+        rewardCoins: 20,
+        rewardXp: 50,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    if (!knownVocabulary.includes('あい')) {
+      return {
+        id: 'word-ai',
+        situation: 'First Word Unlock • Pure Vowel Union (প্রথম শব্দ আনলক)',
+        situationJa: '初めての単語「あい」',
+        situationBn: 'খাঁটি স্বরবর্ণ শব্দ আনলক',
+        goal: "প্রথম শব্দ 'あい' (ভালোবাসা) আনলক",
+        goalJa: '「あ」と「い」を結びつけて「愛（あい）」を読む',
+        goalBn: "মিশন ৩: 'あ' + 'い' = 'あい' (Ai • ভালোবাসা)",
+        whyExplanation: "কোনো অপরিচিত ব্যঞ্জনবর্ণ ছাড়াই তোমার জীবনের প্রথম খাঁটি জাপানি শব্দের জন্ম!",
+        targetPhraseJa: 'あい',
+        targetPhraseRomaji: 'Ai',
+        targetPhraseEn: 'Love (Ai)',
+        targetPhraseBn: 'ভালোবাসা (Ai)',
+        keigoRuleNote: "দুটি চেনা স্বরবর্ণ পাশাপাশি বসে তৈরি করে বাস্তব জাপানি অর্থপূর্ণ শব্দ।",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'い', step: 'apply' },
+        rewardCoins: 25,
+        rewardXp: 60,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    if (!knownHiragana.includes('う')) {
+      return {
+        id: 'kana-u',
+        situation: 'Third Vowel & Action Verbs (তৃতীয় স্বরবর্ণ ও ক্রিয়া)',
+        situationJa: '母音「う」と動詞「いう」',
+        situationBn: 'হিরাগানা ৩য় স্বরবর্ণ',
+        goal: "তৃতীয় স্বরবর্ণ 'う' (উ) ও 'いう' (বলা) আনলক",
+        goalJa: '「う」を学び、「いう（言う）」を読めるようにする',
+        goalBn: "মিশন ৪: 'U' ধ্বনি এবং 'いう' (Iu • বলা)",
+        whyExplanation: "'い' আর 'う' মিলে তৈরি হয় দৈনন্দিন ক্রিয়াপদ 'いう' (বলা) এবং 'あう' (দেখা করা)।",
+        targetPhraseJa: 'う',
+        targetPhraseRomaji: 'u',
+        targetPhraseEn: 'Vowel U (Oo)',
+        targetPhraseBn: 'স্বরবর্ণ উ',
+        keigoRuleNote: "উপরে ছোট্ট একটা ফোঁটা, আর নিচে বড় একটা ধনুকের মতো বাঁক।",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'う' },
+        rewardCoins: 20,
+        rewardXp: 50,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    if (!knownHiragana.includes('え')) {
+      return {
+        id: 'kana-e',
+        situation: 'Fourth Vowel & Shelter Words (চতুর্থ স্বরবর্ণ ও দিক)',
+        situationJa: '母音「え」と「いえ（家）」',
+        situationBn: 'হিরাগানা ৪র্থ স্বরবর্ণ',
+        goal: "চতুর্থ স্বরবর্ণ 'え' (এ) ও 'いえ' (বাড়ি) আনলক",
+        goalJa: '「え」を学び、「いえ（家）」「うえ（上）」を読む',
+        goalBn: "মিশন ৫: 'E' ধ্বনি এবং 'いえ' (Ie • বাড়ি)",
+        whyExplanation: "'いえ' (Ie - বাড়ি) এবং 'うえ' (Ue - উপরে) দুটি অতিপ্রয়োজনীয় শব্দ আনলক হবে।",
+        targetPhraseJa: 'え',
+        targetPhraseRomaji: 'e',
+        targetPhraseEn: 'Vowel E (Eh)',
+        targetPhraseBn: 'স্বরবর্ণ এ',
+        keigoRuleNote: "উপরে ছোট টান, তারপর ইংরেজি 'Z' এর মতো এঁকে নিচে ঢেউ খেলানো।",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'え' },
+        rewardCoins: 20,
+        rewardXp: 50,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    if (!knownHiragana.includes('お')) {
+      return {
+        id: 'kana-o',
+        situation: 'Fifth Vowel & Color Mastery (পঞ্চম স্বরবর্ণ ও রঙ)',
+        situationJa: '母音「お」と「あお（青）」',
+        situationBn: 'হিরাগানা ৫ম স্বরবর্ণ',
+        goal: "পঞ্চম স্বরবর্ণ 'お' (ও) ও 'あお' (নীল) আনলক",
+        goalJa: '「お」を学び、5母音を完結させて「あお（青）」を読む',
+        goalBn: "মিশন ৬: 'O' ধ্বনি এবং 'あお' (Ao • নীল)",
+        whyExplanation: "৫টি স্বরবর্ণ পূর্ণ হবে এবং 'あお' (Ao - নীল) ও 'おおい' (অনেক) শব্দ আয়ত্তে আসবে।",
+        targetPhraseJa: 'お',
+        targetPhraseRomaji: 'o',
+        targetPhraseEn: 'Vowel O (Oh)',
+        targetPhraseBn: 'স্বরবর্ণ ও',
+        keigoRuleNote: "সোজা ডানে দাগ, নিচে নেমে গোল লুপ ঘুরে ডানে বড় বাঁক, আর ওপরে ফোঁটা।",
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', char: 'お' },
+        rewardCoins: 20,
+        rewardXp: 50,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
+
+    // 2. 5-Vowels Milestone Review Gate check
+    const hasPassedVowelGate = masteredSkills.includes('vowels_5_mastered') ||
+      masteredSkills.includes('5_vowels_gate');
+
+    if (!hasPassedVowelGate) {
+      return {
+        id: 'vowel-mastery-gate',
+        situation: '5-Vowel Review Gate (৫-স্বরবর্ণ মাস্টার গেট)',
+        situationJa: '5母音マスター総合審査',
+        situationBn: '৫-স্বরবর্ণ মাইলস্টোন কুইজ',
+        goal: '৫-স্বরবর্ণ মাস্টার রিভিউ কুইজ',
+        goalJa: 'あ・い・う・え・おと関連単語の完全習得を確認する',
+        goalBn: 'মিশন ৭: ৫টি স্বরবর্ণ ও শব্দের চূড়ান্ত রিটেনশন কুইজ',
+        whyExplanation: 'পরবর্তী ব্যঞ্জনবর্ণ পরিবার (か-ক) আনলক করার পূর্বে ৫টি স্বরবর্ণে শতভাগ দক্ষতা নিশ্চিত করা বাধ্যতামূলক।',
+        targetPhraseJa: 'あいうえお',
+        targetPhraseRomaji: 'a - i - u - e - o',
+        targetPhraseEn: '5 Foundation Vowels Mastery Gate',
+        targetPhraseBn: '৫টি মৌলিক স্বরবর্ণ গেট',
+        keigoRuleNote: '৫টি প্রশ্নের সঠিক উত্তর দিয়ে পরবর্তী অধ্যায়ের দরজা খুলুন।',
+        actionType: 'lesson',
+        targetView: 'lesson',
+        targetParams: { lessonId: 'n5-l1', quiz: 'vowels' },
+        rewardCoins: 50,
+        rewardXp: 100,
+        memoryOsContext: {
+          memoryOsHealthScore: weakAreas.memoryOsHealthScore || 100,
+          isRemedial: false
+        }
+      };
+    }
 
     const userLevel = profile?.targetLevel || progress?.currentLevel || 'N5';
 
-    // 1. If MemoryOS detected unresolved mistakes, prioritize remedial real-world recovery
+    // 3. If MemoryOS detected unresolved mistakes, prioritize remedial real-world recovery
     if (weakAreas.weaknesses && weakAreas.weaknesses.length > 0) {
       const topWeakness = weakAreas.weaknesses[0];
 

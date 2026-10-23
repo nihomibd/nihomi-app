@@ -254,7 +254,7 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
       )}
 
       {/* 2. Primary Next Best Mission Hero */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E2338] via-[#141726] to-[#0A0A12] border-2 border-[#E45147]/40 p-6 sm:p-8 shadow-2xl shadow-red-600/10">
+      <div id="dashboard-todays-mission-card" className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E2338] via-[#141726] to-[#0A0A12] border-2 border-[#E45147]/40 p-6 sm:p-8 shadow-2xl shadow-red-600/10">
         <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
