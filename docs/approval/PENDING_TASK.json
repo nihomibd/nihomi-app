@@ -1,32 +1,42 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-SYSTEM-PRODUCTION-MAINTENANCE-AND-MONITORING",
-  "title": "Continuous Production Maintenance, Telemetry Monitoring & Learner Growth",
-  "objective": "All 32 initial production work packages are successfully complete and live. Maintain 100% uptime, monitor student onboarding telemetry, and execute post-launch feature requests as prioritized by the Founder.",
-  "domain": "production-maintenance",
+  "task_id": "NIHOMI-V3-WP02-UNIFIED-DASHBOARD-AND-LEGACY-CONSOLIDATION",
+  "title": "Version 3 Unified Student Dashboard & Legacy Feature Consolidation",
+  "objective": "Consolidate the premier features from Legacy Mode (Japan Readiness Radar, 25-Lesson Minna no Nihongo Pathway, and Memory OS Flashcard SRS Widget) into the modern Version 3 Student Dashboard (src/v2/pages/V2DashboardPage.tsx), eliminating the need for legacy mode while providing an interactive and powerful learner experience.",
+  "domain": "dashboard-and-learning",
   "in_scope": [
-    "Run automated production health probe scripts/monitor-production-health.cjs on schedule",
-    "Monitor Google Search Console & Bing Webmaster indexing telemetry",
-    "Track student conversion rates on Minna no Nihongo Lessons 1-5 free tier"
+    "Incorporate the Japan Readiness Radar (N5, N4, Work, Relocation readiness score breakdown) directly into src/v2/pages/V2DashboardPage.tsx",
+    "Integrate the 25-Lesson Minna no Nihongo Master Pathway with visual lesson milestone nodes, gate locks, and direct lesson runner launching",
+    "Embed the Memory OS SRS active flashcard review quick-widget into the dashboard for one-click spaced-repetition retention drills",
+    "Provide high-contrast Neo-Tokyo slate aesthetics (#0a0a12) with amber/rose accents, live streaks, and JLPT target milestone progression bar",
+    "Author automated test suite scripts/test-v3-wp02-dashboard-consolidation.cjs with 100% assertions passing"
   ],
   "out_of_scope": [
-    "Unplanned schema changes without Founder approval"
+    "Changing Supabase user profile schema or mutating production database rows",
+    "Altering the strict cumulative learning lattice rules for Kana introduction"
   ],
   "acceptance_criteria": [
-    "Platform uptime remains >99.9%",
-    "Zero reported 405/404 edge errors on live production domains"
+    "src/v2/pages/V2DashboardPage.tsx showcases the Japan Readiness Radar with dynamic telemetry from user progress",
+    "25 Minna no Nihongo lessons pathway is interactive, displaying completed, active, and locked nodes with milestone gating",
+    "Memory OS flashcard review widget allows launching spaced repetition drills directly from the dashboard",
+    "Automated test scripts/test-v3-wp02-dashboard-consolidation.cjs passes with 100% green assertions and browser screenshot evidence",
+    "Zero typecheck errors (tsc --noEmit) and clean production build (npm run build)"
   ],
   "verification": [
-    "node scripts/monitor-production-health.cjs"
+    "node scripts/test-v3-wp02-dashboard-consolidation.cjs",
+    "Headless browser DOM and visual verification of all consolidated widgets on #/dashboard",
+    "npx tsc --noEmit and npm run build"
   ],
   "risks": [
-    "None"
+    "Dashboard payload size or render latency (mitigated by lazy-loading heavy modal subcomponents and memoizing radar calculations)"
   ],
   "dependencies": [
-    "dist/index.html",
-    "dist/server.cjs"
+    "src/v2/pages/V2DashboardPage.tsx",
+    "src/core/curriculum/n5MasterCurriculum.ts",
+    "src/services/MemoryOSEngine.ts",
+    "src/components/dashboard/JapanReadinessRadar.tsx"
   ],
-  "base_commit": "99e4447",
-  "created_at": "2026-10-24T04:08:30.000Z",
-  "status": "idle"
+  "base_commit": "c85d541",
+  "created_at": "2026-10-24T05:00:00.000Z",
+  "status": "pending"
 }

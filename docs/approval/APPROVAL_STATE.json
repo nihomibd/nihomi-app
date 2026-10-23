@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-WP32-COMMERCIAL-LAUNCH-MARKETING-CAMPAIGN-AND-GROWTH-SUITE",
-  "scope_fingerprint": "5acb64d3b233bf66cf90be5730b7787dee6d46406b090e7e1d13dea7c2d2ffaf",
-  "approved_at": "2026-10-24T04:04:10.000Z",
+  "task_id": "NIHOMI-V3-WP02-UNIFIED-DASHBOARD-AND-LEGACY-CONSOLIDATION",
+  "scope_fingerprint": "b0b28521151d9c5481b0af9c657e6bc7d625db9f92631973092169aa1932444f",
+  "approved_at": "2026-10-24T05:00:00.000Z",
   "approved_via": "nihomi-founder-direct-chat-authorization",
   "approved_scope_summary": {
-    "title": "Commercial Launch Marketing Campaign, Social Share Assets & Student Growth Suite",
-    "domain": "marketing-and-growth",
-    "base_commit": "d38de3f"
+    "title": "Version 3 Unified Student Dashboard & Legacy Feature Consolidation",
+    "domain": "dashboard-and-learning",
+    "base_commit": "c85d541"
   }
 }
