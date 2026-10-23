@@ -118,12 +118,13 @@ export const CbtExamRegistrationModal: React.FC<CbtExamRegistrationModalProps> =
               <span>শিক্ষার্থীর পুরো নাম (ইংরেজি / Romaji — সার্টিফিকেটে প্রদর্শিত হবে):</span>
             </label>
             <input
+              id="cbt-candidate-name-input"
               type="text"
               required
               value={candidateName}
               onChange={(e) => setCandidateName(e.target.value)}
               className="w-full py-2.5 px-3.5 rounded-xl bg-slate-900 border border-white/10 text-white font-medium focus:border-red-500 outline-none transition"
-              placeholder="e.g. MD TANVIR HOSSAIN"
+              placeholder="e.g. MD TANVIR KABIR"
             />
           </div>
 
@@ -133,6 +134,7 @@ export const CbtExamRegistrationModal: React.FC<CbtExamRegistrationModalProps> =
               <span>কাতাকানা নাম (Japanese Katakana — ঐচ্ছিক / স্বয়ংক্রিয়):</span>
             </label>
             <input
+              id="cbt-candidate-name-kana-input"
               type="text"
               value={candidateNameKana}
               onChange={(e) => setCandidateNameKana(e.target.value)}
@@ -174,6 +176,7 @@ export const CbtExamRegistrationModal: React.FC<CbtExamRegistrationModalProps> =
               বাতিল করুন
             </button>
             <button
+              id="cbt-submit-registration-btn"
               type="submit"
               disabled={!agreedToRules || !candidateName.trim()}
               className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white font-black shadow-lg shadow-red-600/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"

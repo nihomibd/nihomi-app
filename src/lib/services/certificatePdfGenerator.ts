@@ -4,6 +4,7 @@
 
 import { jsPDF } from 'jspdf';
 import { MockExamAttempt } from '../../types';
+import { NIHOMI_MARK_BASE64, NIHOMI_BRAND_PALETTE } from './nihomiBrandAssets';
 
 export interface CertificateCandidateInfo {
   candidateName: string;
@@ -60,26 +61,30 @@ export function generateOfficialCertificatePdf(
     doc.circle(cx, cy, 3, 'F');
   }
 
-  // 5. Header: Academy & Brand
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.setTextColor(228, 81, 71); // Crimson
-  doc.text('NIHOMI JAPANESE LEARNING ACADEMY • TOKYO & DHAKA', width / 2, 28, { align: 'center' });
+  // 5. Header: Brand Logo & Academy Banner
+  try {
+    doc.addImage(NIHOMI_MARK_BASE64, 'PNG', width / 2 - 7, 16, 14, 14);
+  } catch {}
 
-  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10.5);
+  doc.setTextColor(228, 81, 71); // Crimson #E45147
+  doc.text('NIHOMI JAPANESE LEARNING ACADEMY • TOKYO & DHAKA', width / 2, 33.5, { align: 'center' });
+
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(115, 115, 115);
-  doc.text('Authorized by Nihomi Global Commercial Education Framework (にほみアカデミー)', width / 2, 33, { align: 'center' });
+  doc.text('Authorized by Nihomi Global Commercial Education Framework (にほみアカデミー)', width / 2, 38, { align: 'center' });
 
   // 6. Main Certificate Title
   doc.setFont('times', 'bold');
-  doc.setFontSize(26);
+  doc.setFontSize(25);
   doc.setTextColor(20, 23, 38); // Deep Slate
-  doc.text('CERTIFICATE OF ACHIEVEMENT', width / 2, 45, { align: 'center' });
+  doc.text('CERTIFICATE OF ACHIEVEMENT', width / 2, 47, { align: 'center' });
 
-  doc.setFontSize(13);
-  doc.setTextColor(245, 158, 11); // Amber
-  doc.text('日本語能力試験 模擬試験 合格認定証 (JLPT SIMULATION PASS)', width / 2, 52, { align: 'center' });
+  doc.setFontSize(12.5);
+  doc.setTextColor(245, 158, 11); // Amber #F59E0B
+  doc.text('日本語能力試験 模擬試験 合格認定証 (JLPT SIMULATION PASS)', width / 2, 53.5, { align: 'center' });
 
   // 7. Divider Ribbon
   doc.setDrawColor(228, 81, 71);
@@ -208,12 +213,12 @@ export function generateOfficialCertificatePdf(
   doc.setFont('times', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(20, 23, 38);
-  doc.text('Md Tanvir Hossain', 65, 177, { align: 'center' });
+  doc.text('Md Tanvir Kabir Biplob', 65, 177, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(100, 100, 100);
-  doc.text('Founder & System Architect', 65, 181, { align: 'center' });
+  doc.text('Founder & CEO', 65, 181, { align: 'center' });
   doc.text('Nihomi Japanese Learning Platform', 65, 185, { align: 'center' });
 
   // Center Signature: Academic Director / Sensei
@@ -265,19 +270,24 @@ export function generateOfficialMarksheetPdf(
   doc.setFillColor(228, 81, 71); // Crimson #E45147
   doc.rect(0, 40, width, 2.5, 'F');
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.setTextColor(255, 255, 255);
-  doc.text('NIHOMI.COM — OFFICIAL SCORE REPORT', 15, 18);
+  // Brand Emblem in Header
+  try {
+    doc.addImage(NIHOMI_MARK_BASE64, 'PNG', 12, 11, 18, 18);
+  } catch {}
 
-  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(17);
+  doc.setTextColor(255, 255, 255);
+  doc.text('NIHOMI.COM — OFFICIAL SCORE REPORT', 35, 18);
+
+  doc.setFontSize(10.5);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(245, 158, 11); // Amber
-  doc.text('日本語能力試験 模擬試験 成績証明書 (Official JLPT CBT Score Report)', 15, 26);
+  doc.setTextColor(245, 158, 11); // Amber #F59E0B
+  doc.text('日本語能力試験 模擬試験 成績証明書 (Official JLPT CBT Score Report)', 35, 26);
 
   doc.setFontSize(8);
   doc.setTextColor(200, 200, 200);
-  doc.text('Standardized Computer-Based Examination • Certified by Nihomi Academic Engine', 15, 33);
+  doc.text('Standardized Computer-Based Examination • Certified by Nihomi Academic Engine', 35, 33);
 
   // Candidate Profile Table
   const tableStartY = 50;
@@ -443,9 +453,10 @@ export function generateOfficialMarksheetPdf(
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
   doc.setTextColor(100, 100, 100);
-  doc.text('This is an electronically generated official scorecard issued by NIHOMI.COM.', 15, footerY + 10);
-  doc.text('Authenticity can be verified at: https://www.nihomi.com/verify/exam-score', 15, footerY + 15);
-  doc.text('Nihomi Japanese Learning Academy • All Rights Reserved © 2026', 15, footerY + 20);
+  doc.text('This is an electronically generated official scorecard issued by NIHOMI.COM.', 15, footerY + 7);
+  doc.text('Issued by Authority: Md Tanvir Kabir Biplob (Founder & CEO)', 15, footerY + 12);
+  doc.text('Authenticity can be verified at: https://www.nihomi.com/verify/exam-score', 15, footerY + 17);
+  doc.text('Nihomi Japanese Learning Academy • All Rights Reserved © 2026', 15, footerY + 22);
 
   return doc;
 }

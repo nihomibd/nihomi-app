@@ -352,8 +352,9 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
 
             <button
               type="button"
+              id="btn-start-simulation"
               onClick={handleStartSimulation}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-sm shadow-xl shadow-rose-600/30 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#E45147] via-rose-600 to-[#F59E0B] hover:brightness-110 text-white font-extrabold text-sm shadow-xl shadow-red-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Begin Official Exam Simulation</span>
               <ArrowRight className="w-4 h-4" />
@@ -393,31 +394,34 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
           {/* Section Timer Countdown */}
           <div className="flex items-center gap-4">
             <div
+              id="cbt-section-timer"
               className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-mono font-bold text-sm transition-all ${
                 isTimeCritical
-                  ? 'bg-rose-500/20 border-rose-500/60 text-rose-300 animate-pulse ring-2 ring-rose-500/30'
-                  : 'bg-slate-900 border-slate-700 text-slate-200'
+                  ? 'bg-[#E45147]/20 border-[#E45147]/60 text-red-300 animate-pulse ring-2 ring-red-500/30'
+                  : 'bg-[#0A0A12] border-amber-500/30 text-amber-300'
               }`}
             >
-              <Clock className={`w-4 h-4 ${isTimeCritical ? 'text-rose-400' : 'text-amber-400'}`} />
-              <span>{formatTime(sectionTimeRemaining)}</span>
-              {isTimeCritical && <span className="text-[10px] uppercase font-bold text-rose-400">Hurry</span>}
+              <Clock className={`w-4 h-4 ${isTimeCritical ? 'text-[#E45147]' : 'text-amber-400'}`} />
+              <span id="cbt-timer-display">{formatTime(sectionTimeRemaining)}</span>
+              {isTimeCritical && <span className="text-[10px] uppercase font-bold text-[#E45147]">Hurry</span>}
             </div>
 
             {/* Finish Section / Submit Button */}
             {currentSectionIndex < exam.sections.length - 1 ? (
               <button
                 type="button"
+                id="btn-next-section"
                 onClick={handleNextSectionManually}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
               >
                 Next Section ({currentSectionIndex + 2}/{exam.sections.length})
               </button>
             ) : (
               <button
                 type="button"
+                id="btn-submit-exam"
                 onClick={handleSubmitExam}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white text-xs font-bold shadow-md shadow-rose-600/20"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#E45147] to-[#F59E0B] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-600/20 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" /> Submit Exam (提出)
               </button>
@@ -730,6 +734,12 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
           )}
 
           {/* 3 Section Scaled Score Grid */}
+          <div className="mb-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-[#F59E0B]" />
+              <span>Sectional Scaled Score Breakdown (得点区分別得点)</span>
+            </h3>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {Object.values(attempt.sectionScores).map((secScore, idx) => (
               <div
@@ -809,10 +819,11 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
           <button
             type="button"
+            id="btn-review-score-tab"
             onClick={() => setReviewActiveTab('score')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               reviewActiveTab === 'score'
-                ? 'bg-rose-600 text-white'
+                ? 'bg-gradient-to-r from-[#E45147] to-rose-600 text-white'
                 : 'bg-slate-900 text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -821,21 +832,22 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
 
           <button
             type="button"
+            id="btn-review-certificate-tab"
             onClick={() => setReviewActiveTab('certificate')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               reviewActiveTab === 'certificate'
-                ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-lg shadow-amber-600/30'
                 : 'bg-slate-900 text-slate-400 hover:text-slate-200'
             }`}
           >
             <Award className="w-4 h-4 text-amber-300" />
-            <span>Official Evaluation Certificate</span>
+            <span>Official Evaluation Certificate & Marksheet</span>
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('ghost-mode')}
-            className="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 text-xs font-bold transition-colors"
+            className="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 text-xs font-bold transition-colors cursor-pointer"
           >
             <Flame className="w-3.5 h-3.5 text-purple-400" />
             <span>Drill Mistakes in MemoryOS™ Ghost Mode</span>
@@ -846,7 +858,7 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         {reviewActiveTab === 'certificate' && (
           <MockExamOfficialCertificate
             attempt={attempt}
-            studentName={registrationData?.candidateName || user?.name || user?.email?.split('@')[0] || 'Tanvir Hossain'}
+            studentName={registrationData?.candidateName || user?.name || 'MD TANVIR KABIR'}
             studentNameKana={registrationData?.candidateNameKana || 'タンヴィル ホセイン'}
             registrationNumber={registrationData?.registrationNumber}
           />

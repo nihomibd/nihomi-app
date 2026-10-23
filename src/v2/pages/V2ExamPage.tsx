@@ -26,6 +26,7 @@ export const V2ExamPage: React.FC<V2ExamPageProps> = ({
   const hasAccess = isProUser(user);
 
   const [activeExamId, setActiveExamId] = useState<string | null>(examId || null);
+  const [registrationData, setRegistrationData] = useState<Record<string, any> | undefined>(undefined);
 
   const examLoopBriefing = React.useMemo(() => {
     try {
@@ -71,6 +72,9 @@ export const V2ExamPage: React.FC<V2ExamPageProps> = ({
   const handleAdapterNavigate = (view: string, params?: Record<string, any>) => {
     if ((view === 'mock-exam-runner' || view === 'exam') && params?.examId) {
       setActiveExamId(params.examId);
+      if (params?.registrationData) {
+        setRegistrationData(params.registrationData);
+      }
     } else if (view === 'mock-exams' || view === 'exam-list') {
       setActiveExamId(null);
     } else if (view === 'pricing') {
@@ -115,6 +119,7 @@ export const V2ExamPage: React.FC<V2ExamPageProps> = ({
         <div className="bg-[#141726] border border-white/10 rounded-3xl p-4 sm:p-8 shadow-2xl">
           <MockExamRunnerView
             examId={activeExamId}
+            registrationData={registrationData}
             onNavigate={handleAdapterNavigate}
           />
         </div>
