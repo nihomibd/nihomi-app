@@ -1,38 +1,41 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP07-PRODUCTION-DEPLOYMENT-CLOUDFLARE-PAGES-AND-VPS-SUITE",
+  "task_id": "NIHOMI-V3-ARCH-PERMANENT-SYSTEM-ARCHITECTURE-BLUEPRINT",
   "status": "pending",
-  "created_at": "2026-10-24T22:40:00+06:00",
-  "base_commit": "6b77aee",
-  "title": "Version 3 Live Production Deployment (Cloudflare Pages, Vercel, and VPS PM2 Suite)",
-  "domain": "system-architecture-and-release",
-  "objective": "Execute the live production deployment of Version 3. Commit and sync compiled serverless API artifacts for Vercel/Cloudflare git integrations, verify Cloudflare Pages static configuration (_redirects, _headers, _routes.json) in dist/, author VPS PM2/Nginx automated deployment script, and probe live endpoints on https://www.nihomi.com to confirm 100% production health.",
+  "created_at": "2026-10-25T00:30:00+06:00",
+  "base_commit": "654af0b",
+  "title": "NIHOMI.com Permanent System Architecture Blueprint & Engineering Constitution",
+  "domain": "system-architecture-and-governance",
+  "objective": "Establish the permanent, immutable System Architecture Blueprint and Engineering Constitution for NIHOMI.com, governing core stability, Modular Monolith & Hexagonal Architecture, AI Provider Abstraction (AI Fence), Offline-resilient PWA, and zero-compromise learning & evidence integrity.",
   "in_scope": [
-    "Commit compiled api/index.js and api/index.js.map to trigger automated live production deployment on origin/main.",
-    "Verify Cloudflare Pages SPA rewrite rules (_redirects, _headers, _routes.json) inside dist/.",
-    "Author production-ready VPS automated deployment script scripts/deploy-vps.sh for PM2 and systemd environments.",
-    "Execute live production probe via scripts/verify-live-deployment-and-cloudflare.cjs to verify DNS, SSL, security gates, and V3 API health on https://www.nihomi.com.",
-    "Document complete deployment verification and operational runbook in NIHOMI_V3_WP07_DEPLOYMENT_REPORT_BN.md."
+    "Audit existing codebase modules and map them to the 5 architectural layers.",
+    "Formulate the 4 Immutable Engineering Principles (Stable Core, Replaceable Adapters, Fail Safely, Evidence Before Release).",
+    "Define the Stable Core boundaries: Learning Journey, Progress & Evidence Ledger, Assessment & Spaced Repetition, Access & Entitlements.",
+    "Formalize the AI Fence: Decoupling AI models from curriculum authority, grading, and state mutation.",
+    "Specify the Ports & Adapters interfaces for AI, Database, File Storage, Payments, and External Services.",
+    "Define the Offline Resilience and Disaster Recovery architecture (PWA, Cache, IndexedDB/LocalStorage, Server crash survival).",
+    "Create docs/NIHOMI_PERMANENT_SYSTEM_ARCHITECTURE_BLUEPRINT.md and update docs/ARCHITECTURE.md.",
+    "Deliver executive blueprint artifact in Bengali."
   ],
   "out_of_scope": [
-    "Modifying DNS nameservers at domain registrar (already pointing to Cloudflare/Vercel).",
-    "Direct SSH mutation of external unconfigured VPS instances without provided credentials."
+    "Introducing speculative third-party dependencies.",
+    "Breaking or modifying existing working runtime features."
   ],
   "acceptance_criteria": [
-    "Compiled api/index.js pushed to origin/main with 0 build warnings.",
-    "Cloudflare Pages configuration verified in build output dist/.",
-    "VPS deploy script scripts/deploy-vps.sh executable and production-hardened.",
-    "Live production probe against https://www.nihomi.com passes 100% green."
+    "Comprehensive canonical document docs/NIHOMI_PERMANENT_SYSTEM_ARCHITECTURE_BLUEPRINT.md created with complete layer mapping, Mermaid diagrams, and code references.",
+    "docs/ARCHITECTURE.md updated and aligned.",
+    "Strict AI Fence and Stable Core immutability explicitly defined.",
+    "TypeScript typecheck passes cleanly with zero errors."
   ],
   "verification": [
-    "Run node scripts/verify-live-deployment-and-cloudflare.cjs against production domain.",
-    "Verify git status clean and pushed to origin main.",
-    "Confirm HTTP 200 on https://www.nihomi.com and HTTP 401 on protected /api/founder/summary."
+    "npx tsc --noEmit passes cleanly.",
+    "npm run build passes cleanly.",
+    "Architecture documentation contains explicit filepaths for every layer."
   ],
   "risks": [
-    "Edge CDN caching old static assets during initial rollout (mitigated by versioned Vite chunk hashes and Cache-Control headers)."
+    "Documentation divergence if future engineers bypass the architecture rules (mitigated by embedding rules into constitution and automated preflights)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP06-FINAL-PRODUCTION-RELEASE-PREFLIGHT-AND-LAUNCH-CANDIDATE"
+    "NIHOMI-V3-WP09-PLATFORM-WIDE-A-TO-Z-BUG-SWEEP-AND-POLISH"
   ]
 }

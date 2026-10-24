@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-V3-WP07-PRODUCTION-DEPLOYMENT-CLOUDFLARE-PAGES-AND-VPS-SUITE",
-  "scope_fingerprint": "04987547c758089fead6ae98f0191f3c49d68fe8a96b75844cba893a58366c46",
-  "approved_at": "2026-10-24T22:40:40.000Z",
-  "approved_via": "nihomi-founder-direct-chat-authorization",
+  "task_id": "NIHOMI-V3-ARCH-PERMANENT-SYSTEM-ARCHITECTURE-BLUEPRINT",
+  "scope_fingerprint": "7ff38dd19908194a083db3f6151084a8af4dcbd1569fe7f13653b168f681c7af",
+  "approved_at": "2026-10-25T00:37:00.000Z",
+  "approved_via": "founder-explicit-strategic-mandate",
   "approved_scope_summary": {
-    "title": "Version 3 Live Production Deployment (Cloudflare Pages, Vercel, and VPS PM2 Suite)",
-    "domain": "system-architecture-and-release",
-    "base_commit": "6b77aee"
+    "title": "NIHOMI.com Permanent System Architecture Blueprint & Engineering Constitution",
+    "domain": "system-architecture-and-governance",
+    "base_commit": "654af0b"
   }
 }
