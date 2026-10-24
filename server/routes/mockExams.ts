@@ -9,13 +9,72 @@ import { subscriptionService } from '../services/subscriptionService.js';
 export const mockExamsRouter = Router();
 
 // Public Certificate Verification Endpoint (Tamper-Proof Verification)
+// In-Flight Exam OS Session Durability Endpoints
+mockExamsRouter.get('/:id/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user ? req.user.id : (req.query.guestId as string) || 'guest_default';
+    const session = db.getExamSession(userId, req.params.id);
+    return res.json({ success: true, session: session || null });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+mockExamsRouter.post('/:id/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user ? req.user.id : (req.body.guestId as string) || (req.query.guestId as string) || 'guest_default';
+    const {
+      currentSectionIndex,
+      currentQuestionIndex,
+      userAnswers,
+      bookmarkedQuestionIds,
+      sectionTimeRemaining,
+      sectionTimesSpent,
+      totalTimeSpentSeconds
+    } = req.body;
+
+    db.saveExamSession(userId, req.params.id, {
+      currentSectionIndex: typeof currentSectionIndex === 'number' ? currentSectionIndex : 0,
+      currentQuestionIndex: typeof currentQuestionIndex === 'number' ? currentQuestionIndex : 0,
+      userAnswers: userAnswers && typeof userAnswers === 'object' ? userAnswers : {},
+      bookmarkedQuestionIds: Array.isArray(bookmarkedQuestionIds) ? bookmarkedQuestionIds : [],
+      sectionTimeRemaining: typeof sectionTimeRemaining === 'number' ? sectionTimeRemaining : 0,
+      sectionTimesSpent: sectionTimesSpent && typeof sectionTimesSpent === 'object' ? sectionTimesSpent : {},
+      totalTimeSpentSeconds: typeof totalTimeSpentSeconds === 'number' ? totalTimeSpentSeconds : 0
+    });
+
+    return res.json({ success: true, message: 'Exam session persisted successfully', savedAt: new Date().toISOString() });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+mockExamsRouter.delete('/:id/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user ? req.user.id : (req.query.guestId as string) || 'guest_default';
+    db.clearExamSession(userId, req.params.id);
+    return res.json({ success: true, message: 'Exam session cleared successfully' });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 mockExamsRouter.get('/verify-certificate/:certificateId', async (req, res) => {
   try {
     const cert = await MockExamPersistenceService.verifyCertificate(req.params.certificateId);
     if (!cert.found) {
-      return res.status(404).json({ success: false, error: 'Certificate not found or invalid' });
+      return res.status(404).json({ success: false, valid: false, error: 'Certificate not found or invalid' });
     }
-    return res.json({ success: true, certificate: cert });
+    if (cert.tamperDetected) {
+      return res.status(400).json({
+        success: false,
+        valid: false,
+        tamperDetected: true,
+        error: cert.errorBn || 'Security warning: Tampered certificate data detected!',
+        certificate: cert
+      });
+    }
+    return res.json({ success: true, valid: true, tamperDetected: false, certificate: cert });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });
   }

@@ -31,6 +31,7 @@ import { dashboardRouter } from './routes/dashboard.js';
 import cloudRouter from './routes/cloud.js';
 import { founderRouter } from './routes/founder.js';
 import { SpeakingReadinessCertService } from './services/speakingReadinessCertService.js';
+import { MockExamPersistenceService } from './services/mockExamPersistenceService.js';
 import { getSafeKeyClassification } from './gemini.js';
 
 const app = express();
@@ -135,13 +136,60 @@ mountRouter('/cloud', cloudRouter);
 app.use('/api', learningRouter);
 
 // 6. Public Institutional Certificate Verification Endpoint
-app.get(['/api/public/verify-certificate/:certId', '/public/verify-certificate/:certId'], (req: Request, res: Response) => {
+// 6. Public Institutional Certificate Verification Endpoint
+app.get(['/api/public/verify-certificate/:certId', '/api/certificates/verify/:certId', '/public/verify-certificate/:certId'], async (req: Request, res: Response) => {
   try {
     const { certId } = req.params;
-    const result = SpeakingReadinessCertService.verifyCertificate(certId);
-    return res.json({
-      success: true,
-      ...result
+    if (!certId || !certId.trim()) {
+      return res.status(400).json({ success: false, valid: false, error: 'Certificate ID is required' });
+    }
+    const cleanId = certId.trim();
+
+    // 1. Check Mock Exam JLPT certificates
+    const mockCert = await MockExamPersistenceService.verifyCertificate(cleanId);
+    if (mockCert && mockCert.found) {
+      if (mockCert.tamperDetected) {
+        return res.status(400).json({
+          success: false,
+          valid: false,
+          tamperDetected: true,
+          error: mockCert.errorBn || 'Security warning: Tampered certificate detected!',
+          certificate: mockCert
+        });
+      }
+      return res.json({
+        success: true,
+        valid: true,
+        tamperDetected: false,
+        type: 'jlpt_mock_exam',
+        certificate: mockCert
+      });
+    }
+
+    // 2. Check Speaking Readiness certificates
+    const speakingCert = SpeakingReadinessCertService.verifyCertificate(cleanId);
+    if (speakingCert && speakingCert.valid) {
+      return res.json({
+        success: true,
+        valid: true,
+        tamperDetected: false,
+        type: 'speaking_readiness',
+        ...speakingCert
+      });
+    }
+    if (speakingCert && speakingCert.tamperDetected) {
+      return res.status(400).json({
+        success: false,
+        valid: false,
+        tamperDetected: true,
+        error: speakingCert.errorBn || 'Security warning: Tampered speaking certificate detected!'
+      });
+    }
+
+    return res.status(404).json({
+      success: false,
+      valid: false,
+      error: 'Certificate not found in official Nihomi registry'
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });

@@ -34,6 +34,7 @@ import { dashboardRouter } from './server/routes/dashboard.js';
 import cloudRouter from './server/routes/cloud.js';
 import { founderRouter } from './server/routes/founder.js';
 import { SpeakingReadinessCertService } from './server/services/speakingReadinessCertService.js';
+import { MockExamPersistenceService } from './server/services/mockExamPersistenceService.js';
 import { db } from './server/db.js';
 import { databaseBackupService } from './server/services/databaseBackupService.js';
 import { stateIntegrityService } from './server/services/stateIntegrityService.js';
@@ -213,20 +214,69 @@ async function startServer() {
   app.use('/api', learningRouter);
 
   // Public Institutional Certificate Verification Endpoint
-  app.get('/api/public/verify-certificate/:certId', (req, res) => {
+  // Public Unified Certificate Verification Endpoints (Mock Exam JLPT + Speaking Readiness)
+  const handleVerifyCertificate = async (req: express.Request, res: express.Response) => {
     try {
       const { certId } = req.params;
-      const result = SpeakingReadinessCertService.verifyCertificate(certId);
-      return res.json({
-        success: true,
-        ...result
+      if (!certId || !certId.trim()) {
+        return res.status(400).json({ success: false, valid: false, error: 'Certificate ID is required' });
+      }
+      const cleanId = certId.trim();
+
+      // 1. Check Mock Exam JLPT certificates (db + postgres)
+      const mockCert = await MockExamPersistenceService.verifyCertificate(cleanId);
+      if (mockCert && mockCert.found) {
+        if (mockCert.tamperDetected) {
+          return res.status(400).json({
+            success: false,
+            valid: false,
+            tamperDetected: true,
+            error: mockCert.errorBn || 'Security warning: Tampered certificate data detected!',
+            certificate: mockCert
+          });
+        }
+        return res.json({
+          success: true,
+          valid: true,
+          tamperDetected: false,
+          type: 'jlpt_mock_exam',
+          certificate: mockCert
+        });
+      }
+
+      // 2. Check Speaking Readiness certificates
+      const speakingCert = SpeakingReadinessCertService.verifyCertificate(cleanId);
+      if (speakingCert && speakingCert.valid) {
+        return res.json({
+          success: true,
+          valid: true,
+          tamperDetected: false,
+          type: 'speaking_readiness',
+          ...speakingCert
+        });
+      }
+      if (speakingCert && speakingCert.tamperDetected) {
+        return res.status(400).json({
+          success: false,
+          valid: false,
+          tamperDetected: true,
+          error: speakingCert.errorBn || 'Security warning: Tampered speaking certificate detected!'
+        });
+      }
+
+      return res.status(404).json({
+        success: false,
+        valid: false,
+        error: 'Certificate not found in official Nihomi registry'
       });
     } catch (err: any) {
       return res.status(500).json({ success: false, error: err.message });
     }
-  });
+  };
 
-  // Automated Robots.txt generator with modern search engine & AI agent directives
+  app.get(['/api/public/verify-certificate/:certId', '/api/certificates/verify/:certId', '/public/verify-certificate/:certId'], handleVerifyCertificate);
+
+// Automated Robots.txt generator with modern search engine & AI agent directives
   app.get('/robots.txt', (_req, res) => {
     res.type('text/plain; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600');

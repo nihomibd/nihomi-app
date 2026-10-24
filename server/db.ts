@@ -638,6 +638,7 @@ class Database {
     studentErrorLogs: [],
     mockExams: [],
     mockExamAttempts: [],
+    activeExamSessions: {},
     studyPlans: [],
     dailyStudySessions: [],
 
@@ -1687,6 +1688,7 @@ class Database {
       studentErrorLogs: [],
       mockExams: INITIAL_MOCK_EXAMS,
       mockExamAttempts: [],
+    activeExamSessions: {},
       srsCards: [],
       srsLogs: [],
       learnerAnalyticsSummaries: [],
@@ -6092,6 +6094,41 @@ class Database {
     return this.data.mockExamAttempts.find((a) => a.id === attemptId);
   }
 
+  public saveExamSession(userId: string, examId: string, sessionData: any): void {
+    if (!this.data.activeExamSessions) this.data.activeExamSessions = {};
+    const sessionKey = `${userId}_${examId}`;
+    this.data.activeExamSessions[sessionKey] = {
+      ...sessionData,
+      userId,
+      examId,
+      lastSavedAt: new Date().toISOString()
+    };
+    this.save();
+  }
+
+  public getExamSession(userId: string, examId: string): any {
+    if (!this.data.activeExamSessions) return null;
+    const sessionKey = `${userId}_${examId}`;
+    const session = this.data.activeExamSessions[sessionKey];
+    if (!session) return null;
+    const savedTime = new Date(session.lastSavedAt).getTime();
+    if (Date.now() - savedTime > 86400000) {
+      delete this.data.activeExamSessions[sessionKey];
+      this.save();
+      return null;
+    }
+    return session;
+  }
+
+  public clearExamSession(userId: string, examId: string): void {
+    if (!this.data.activeExamSessions) return;
+    const sessionKey = `${userId}_${examId}`;
+    if (this.data.activeExamSessions[sessionKey]) {
+      delete this.data.activeExamSessions[sessionKey];
+      this.save();
+    }
+  }
+
   public recordMockExamAttempt(params: {
     userId: string;
     mockExamId: string;
@@ -6325,6 +6362,9 @@ class Database {
     const xpAwarded = isPassed ? 250 : 100;
     const minutesStudied = Math.max(20, Math.round(params.totalTimeSpentSeconds / 60));
     const progress = this.addStudyTime(params.userId, minutesStudied, xpAwarded);
+
+    // Clear any active in-flight session now that the attempt is submitted
+    this.clearExamSession(params.userId, exam.id);
 
     this.save();
 

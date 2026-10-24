@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import fs from 'fs';
 import { prisma, isDatabaseConfigured } from '../prisma.js';
 import { supabase } from '../supabase.js';
 import { MockExamAttempt } from '../types.js';
@@ -24,6 +25,28 @@ export class MockExamPersistenceService {
   }): string {
     const rawPayload = `${attempt.certificateId}:${attempt.userId}:${attempt.examCode}:${attempt.totalScaledScore}:${attempt.submittedAt}:nihomi_jlpt_n5_official_verify`;
     return crypto.createHash('sha256').update(rawPayload).digest('hex').substring(0, 32);
+  }
+
+  /**
+   * Validates if a certificate's score, student ID, exam code, or submission timestamp has been tampered with.
+   */
+  public static validateCertificateTamperProof(attempt: {
+    certificateId: string;
+    userId: string;
+    examCode: string;
+    totalScaledScore: number;
+    submittedAt: string;
+    verificationHash?: string;
+  }): boolean {
+    if (!attempt || !attempt.verificationHash) return false;
+    const expected = this.generateVerificationHash({
+      certificateId: attempt.certificateId,
+      userId: attempt.userId,
+      examCode: attempt.examCode,
+      totalScaledScore: attempt.totalScaledScore,
+      submittedAt: attempt.submittedAt
+    });
+    return attempt.verificationHash === expected;
   }
 
   /**
@@ -174,6 +197,10 @@ export class MockExamPersistenceService {
    */
   public static async verifyCertificate(certificateId: string): Promise<{
     found: boolean;
+    valid?: boolean;
+    tamperDetected?: boolean;
+    errorBn?: string;
+    verifiedAt?: string;
     isPassed?: boolean;
     studentName?: string;
     examCode?: string;
@@ -184,16 +211,36 @@ export class MockExamPersistenceService {
     verificationHash?: string;
   }> {
     // 1. Check local DB attempts first
-    const allAttempts = (db.data as any).mockExamAttempts as MockExamAttempt[] | undefined;
-    const localAttempt = allAttempts?.find((a) => a.certificateId === certificateId);
+    let allAttempts = (db.data as any).mockExamAttempts as MockExamAttempt[] | undefined;
+    let localAttempt = allAttempts?.find((a) => a.certificateId === certificateId);
+
+    if (!localAttempt) {
+      try {
+        const dbPath = db.getDataFilePath();
+        if (fs.existsSync(dbPath)) {
+          const fresh = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+          if (fresh && Array.isArray(fresh.mockExamAttempts)) {
+            localAttempt = fresh.mockExamAttempts.find((a: any) => a.certificateId === certificateId);
+            if (localAttempt && (db.data as any).mockExamAttempts) {
+              (db.data as any).mockExamAttempts.unshift(localAttempt);
+            }
+          }
+        }
+      } catch {}
+    }
 
     if (localAttempt) {
       const user = db.findUserById(localAttempt.userId);
       const profile = db.getProfileByUserId(localAttempt.userId);
       const studentName = profile?.displayName || user?.email?.split('@')[0] || 'Nihomi Student';
+      const isValid = this.validateCertificateTamperProof(localAttempt);
 
       return {
         found: true,
+        valid: isValid,
+        tamperDetected: !isValid,
+        errorBn: isValid ? undefined : 'নিরাপত্তা সতর্কতা: সনদের ডেটা টেম্পারিং বা ক্রিপ্টোগ্রাফিক হ্যাশে গরমিল সনাক্ত হয়েছে!',
+        verifiedAt: isValid ? new Date().toISOString() : undefined,
         isPassed: localAttempt.isPassed,
         studentName,
         examCode: localAttempt.examCode,
@@ -202,7 +249,7 @@ export class MockExamPersistenceService {
         letterGrade: localAttempt.letterGrade,
         submittedAt: localAttempt.submittedAt,
         verificationHash: localAttempt.verificationHash || this.generateVerificationHash(localAttempt)
-      };
+    
     }
 
     // 2. Query PostgreSQL if not in local memory and database is configured
@@ -218,15 +265,30 @@ export class MockExamPersistenceService {
           const profile = db.getProfileByUserId(row.user_id);
           const studentName = profile?.displayName || user?.email?.split('@')[0] || 'Nihomi Student';
 
+          const attemptForValidation = {
+            certificateId: row.certificate_id,
+            userId: row.user_id,
+            examCode: row.exam_code,
+            totalScaledScore: row.total_scaled_score,
+            submittedAt: row.submitted_at instanceof Date ? row.submitted_at.toISOString() : String(row.submitted_at),
+            verificationHash: row.verification_hash
+          };
+
+          const isRowValid = this.validateCertificateTamperProof(attemptForValidation);
+
           return {
             found: true,
+            valid: isRowValid,
+            tamperDetected: !isRowValid,
+            errorBn: isRowValid ? undefined : 'নিরাপত্তা সতর্কতা: সনদের ডেটা টেম্পারিং বা ক্রিপ্টোগ্রাফিক হ্যাশে গরমিল সনাক্ত হয়েছে!',
+            verifiedAt: isRowValid ? new Date().toISOString() : undefined,
             isPassed: row.is_passed,
             studentName,
             examCode: row.exam_code,
             level: row.level,
             totalScaledScore: row.total_scaled_score,
             letterGrade: row.letter_grade,
-            submittedAt: row.submitted_at,
+            submittedAt: attemptForValidation.submittedAt,
             verificationHash: row.verification_hash
           };
         }
@@ -235,6 +297,7 @@ export class MockExamPersistenceService {
       }
     }
 
-    return { found: false };
+    return { found: false, valid: false };
   }
+}
 }

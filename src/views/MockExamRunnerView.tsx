@@ -67,6 +67,8 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
     message: string;
   } | null>(null);
   const [reviewActiveTab, setReviewActiveTab] = useState<'score' | 'answers' | 'certificate'>('score');
+  const [savedSessionFound, setSavedSessionFound] = useState<any | null>(null);
+  const [sessionAutoSaved, setSessionAutoSaved] = useState<boolean>(true);
 
   const timerIntervalRef = useRef<any>(null);
 
@@ -80,6 +82,31 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         if (res.mockExam.sections.length > 0) {
           setSectionTimeRemaining(res.mockExam.sections[0].timeLimitMinutes * 60);
         }
+
+        // Check for existing in-flight session in localStorage or server
+        try {
+          const sessionKey = `nihomi_exam_session_${examId}_${user?.id || 'guest'}`;
+          const raw = localStorage.getItem(sessionKey);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.userAnswers && Object.keys(parsed.userAnswers).length > 0) {
+              setSavedSessionFound(parsed);
+            }
+          }
+        } catch {}
+
+        try {
+          const token = localStorage.getItem('nihomi_token');
+          const headers: Record<string, string> = {};
+          if (token) headers['Authorization'] = `Bearer ${token}`;
+          const sessionRes = await fetch(`/api/mock-exams/${examId}/session`, { headers });
+          if (sessionRes.ok) {
+            const sessionData = await sessionRes.json();
+            if (sessionData && sessionData.session && sessionData.session.userAnswers && Object.keys(sessionData.session.userAnswers).length > 0) {
+              setSavedSessionFound(sessionData.session);
+            }
+          }
+        } catch {}
       }
       setLoading(false);
     }
@@ -125,6 +152,80 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
     };
   }, [stage, currentSectionIndex, exam]);
+
+  // In-Flight Session Durability Auto-Saver
+  useEffect(() => {
+    if (stage !== 'running' || !exam) return;
+    const sessionKey = `nihomi_exam_session_${examId}_${user?.id || 'guest'}`;
+    const sessionPayload = {
+      examId,
+      userId: user?.id || 'guest',
+      currentSectionIndex,
+      currentQuestionIndex,
+      userAnswers,
+      bookmarkedQuestionIds: Array.from(bookmarkedQuestionIds),
+      sectionTimeRemaining,
+      sectionTimesSpent,
+      totalTimeSpentSeconds,
+      lastSavedAt: new Date().toISOString()
+    };
+
+    // Immediate LocalStorage write
+    try {
+      localStorage.setItem(sessionKey, JSON.stringify(sessionPayload));
+      setSessionAutoSaved(true);
+    } catch {}
+
+    // Debounced remote backend sync every 4 seconds
+    const debouncedSync = setTimeout(async () => {
+      try {
+        const token = localStorage.getItem('nihomi_token');
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        await fetch(`/api/mock-exams/${examId}/session`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(sessionPayload)
+        });
+      } catch {}
+    }, 4000);
+
+    return () => clearTimeout(debouncedSync);
+  }, [stage, examId, user?.id, currentSectionIndex, currentQuestionIndex, userAnswers, bookmarkedQuestionIds, sectionTimeRemaining, sectionTimesSpent, totalTimeSpentSeconds]);
+
+  const handleResumeSavedSession = () => {
+    if (!savedSessionFound || !exam) return;
+    soundEffects.playButtonTap();
+    haptic.tap();
+    setCurrentSectionIndex(savedSessionFound.currentSectionIndex || 0);
+    setCurrentQuestionIndex(savedSessionFound.currentQuestionIndex || 0);
+    setUserAnswers(savedSessionFound.userAnswers || {});
+    if (Array.isArray(savedSessionFound.bookmarkedQuestionIds)) {
+      setBookmarkedQuestionIds(new Set(savedSessionFound.bookmarkedQuestionIds));
+    }
+    const secIdx = savedSessionFound.currentSectionIndex || 0;
+    const defaultTime = exam.sections[secIdx] ? exam.sections[secIdx].timeLimitMinutes * 60 : 1800;
+    setSectionTimeRemaining(savedSessionFound.sectionTimeRemaining > 0 ? savedSessionFound.sectionTimeRemaining : defaultTime);
+    if (savedSessionFound.sectionTimesSpent) {
+      setSectionTimesSpent(savedSessionFound.sectionTimesSpent);
+    }
+    setTotalTimeSpentSeconds(savedSessionFound.totalTimeSpentSeconds || 0);
+    setSavedSessionFound(null);
+    setStage('running');
+  };
+
+  const handleDiscardSavedSession = async () => {
+    soundEffects.playClickSoft();
+    const sessionKey = `nihomi_exam_session_${examId}_${user?.id || 'guest'}`;
+    localStorage.removeItem(sessionKey);
+    setSavedSessionFound(null);
+    try {
+      const token = localStorage.getItem('nihomi_token');
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      await fetch(`/api/mock-exams/${examId}/session`, { method: 'DELETE', headers });
+    } catch {}
+  };
 
   const handleStartSimulation = () => {
     if (!exam || exam.sections.length === 0) return;
@@ -204,6 +305,15 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         totalTimeSpentSeconds: Math.max(10, totalTimeSpentSeconds)
       });
 
+      // Clear in-flight session on submit
+      const sessionKey = `nihomi_exam_session_${examId}_${user?.id || 'guest'}`;
+      try {
+        localStorage.removeItem(sessionKey);
+        const token = localStorage.getItem('nihomi_token');
+        const headers: Record<string, string> = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        fetch(`/api/mock-exams/${examId}/session`, { method: 'DELETE', headers }).catch(() => {});
+      } catch {}
       setSubmissionResult(result);
       if (result.attempt.isPassed) {
         soundEffects.playLessonCelebration();
@@ -275,6 +385,41 @@ export const MockExamRunnerView: React.FC<MockExamRunnerViewProps> = ({ examId, 
         >
           <ChevronLeft className="w-4 h-4" /> Back to Quizzes & Exams
         </button>
+
+        {savedSessionFound && (
+          <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400">
+                <RotateCcw className="w-5 h-5 animate-spin-slow" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-amber-300">পূর্ববর্তী সক্রিয় পরীক্ষার সেশন পাওয়া গেছে</h4>
+                <p className="text-xs text-stone-300">
+                  সংরক্ষিত উত্তর: {Object.keys(savedSessionFound.userAnswers || {}).length} টি • সেকশন: {savedSessionFound.currentSectionIndex + 1} • সময় ব্যয়: {Math.round((savedSessionFound.totalTimeSpentSeconds || 0) / 60)} মিনিট
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <button
+                type="button"
+                id="btn-resume-saved-exam"
+                onClick={handleResumeSavedSession}
+                className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>সেশন পুনরুদ্ধার করুন (Resume)</span>
+              </button>
+              <button
+                type="button"
+                id="btn-discard-saved-exam"
+                onClick={handleDiscardSavedSession}
+                className="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-400 hover:text-stone-200 text-xs transition-colors border border-white/10 cursor-pointer"
+              >
+                মুছে ফেলুন (Discard)
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="rounded-3xl border border-rose-500/30 bg-gradient-to-b from-slate-900/90 via-[#0d0d18] to-[#0a0a14] p-6 md:p-10 shadow-2xl">
           {/* Header */}

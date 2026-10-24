@@ -36,7 +36,8 @@
     "test:dual-persistence": "tsx scripts/test-dual-persistence-sync.ts",
     "test:payment-security": "tsx scripts/test-payment-webhook-security.ts",
     "test:sre": "tsx scripts/test-sre-telemetry-and-cdn.ts",
-    "test:ai-cost": "tsx scripts/test-ai-gateway-cost-safety.ts"
+    "test:ai-cost": "tsx scripts/test-ai-gateway-cost-safety.ts",
+    "test:exam-os": "tsx scripts/test-exam-os-and-certificates.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

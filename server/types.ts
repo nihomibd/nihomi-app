@@ -1006,6 +1006,7 @@ export interface DatabaseSchema {
   // JLPT Mock Exam Engine Tables
   mockExams?: MockExam[];
   mockExamAttempts?: MockExamAttempt[];
+  activeExamSessions?: Record<string, any>;
 
   // Personalized Study Plan & Daily SRS Quota Tables
   studyPlans?: JLPTStudyPlan[];
