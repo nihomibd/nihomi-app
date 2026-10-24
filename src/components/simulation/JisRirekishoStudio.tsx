@@ -34,6 +34,9 @@ import html2canvas from 'html2canvas-pro';
 import { JisRirekishoData } from '../../types';
 import { soundEffects } from '../../lib/soundEffects';
 import { useAuth } from '../../context/AuthContext';
+import { cvRirekishoAdapter } from '../../core/adapters/cvRirekishoAdapter';
+import { loadLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
+import { recordOfflineAttempt } from '../../lib/offline/indexedDbLedger';
 
 export const DEFAULT_AVATAR_DATA_URI = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' width='120' height='160'><rect width='120' height='160' fill='%23f1f5f9'/><circle cx='60' cy='55' r='32' fill='%2394a3b8'/><path d='M 20 150 C 20 105, 100 105, 100 150 Z' fill='%2394a3b8'/><text x='60' y='155' font-family='sans-serif' font-size='9' fill='%2364748b' text-anchor='middle'>写真 (3cm x 4cm)</text></svg>";
 
@@ -159,17 +162,23 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
 
   const handleSave = async () => {
     soundEffects.playButtonTap();
+
+    // Always persist to local cache first so no learner loses their data
+    try {
+      localStorage.setItem('nihomi_jis_rirekisho', JSON.stringify(formData));
+    } catch {}
+
     if (!user) {
-      setShowAuthGateNotice(true);
-      openAuthModal?.('login');
+      soundEffects.playCorrectPing();
+      setSaveSuccessNotice(true);
+      setTimeout(() => setSaveSuccessNotice(false), 3500);
       return;
     }
+
     setIsSaving(true);
     let cloudSynced = false;
 
     try {
-      // Always persist to local cache first
-      localStorage.setItem('nihomi_jis_rirekisho', JSON.stringify(formData));
 
       const token = localStorage.getItem('nihomi_token');
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -351,6 +360,34 @@ export const JisRirekishoStudio: React.FC<JisRirekishoStudioProps> = ({ onSaved,
           }
           URL.revokeObjectURL(blobUrl);
         }, 3000);
+      }
+
+      // Evaluate CV attempt through cvRirekishoAdapter and log evidence
+      try {
+        const knowledge = loadLearnerKnowledgeState();
+        const activity = cvRirekishoAdapter.selectActivity(knowledge);
+        const evalResult = cvRirekishoAdapter.evaluateAttempt(activity, {
+          documentId: formData.id || 'jis-resume',
+          templateType: 'jis_standard_rirekisho',
+          data: formData,
+          userConfirmedTruthful: true,
+          timeSpentSeconds: 60
+        });
+
+        if (evalResult.passed) {
+          recordOfflineAttempt({
+            userId: user?.id || 'guest',
+            domain: 'cv-rirekisho',
+            activityId: 'jis-standard-rirekisho',
+            timestamp: new Date().toISOString(),
+            score: evalResult.score,
+            passed: true,
+            xpEarned: evalResult.xpEarned,
+            evidenceData: evalResult.evidence
+          }).catch(() => {});
+        }
+      } catch (adapterErr) {
+        console.warn('[JIS Studio] Adapter evaluation exception:', adapterErr);
       }
 
       soundEffects.playLessonCelebration();

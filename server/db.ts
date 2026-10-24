@@ -7888,24 +7888,34 @@ class Database {
     return updated;
   }
 
-  public polishRirekishoText(text: string, fieldType: 'motivation' | 'selfPr'): { polishedJa: string; explanationBn: string } {
+  public polishRirekishoText(text: string, fieldType: 'motivation' | 'selfPr' | 'career_summary'): { polishedJa: string; explanationBn: string } {
     const trimmed = text.trim();
     if (!trimmed) {
+      if (fieldType === 'career_summary') {
+        return {
+          polishedJa: 'これまでの実務において、高品質な業務遂行と納期遵守を徹底してまいりました。チーム内の情報共有と円滑な連携を重んじ、技術的課題の解決と生産性向上に貢献いたします。',
+          explanationBn: 'জাপানিজ বিজনেস স্ট্যান্ডার্ড টেকনিক্যাল ক্যারিয়ার সারাংশ ফরম্যাটে প্রস্তুত করা হয়েছে।'
+        };
+      }
       return {
         polishedJa: '貴社の店舗において、日本のハイレベルな接客マナーと丁寧なコミュニケーションを実践しながら、責任感を持って貢献いたします。',
         explanationBn: 'জাপানিজ স্ট্যান্ডার্ড ফর্মাল কেইগো ও নম্র ভাষায় আবেদন ফরম্যাট পলিশ করা হয়েছে।'
       };
     }
 
+    const cleanInput = trimmed.slice(0, 1000).replace(/[。！？\.\!\?]+$/, '');
+
     if (fieldType === 'motivation') {
-      // Clean student input of trailing punctuation
-      const cleanInput = trimmed.replace(/[。！？\.\!\?]+$/, '');
       return {
         polishedJa: `貴社の理念と業務内容に深く共感し、${cleanInput}という動機のもと、迅速な業務遂行と丁寧な接客を通じて貢献いたしたく志望いたしました。留学生として法定の週28時間就労規則を厳格に遵守し、誠心誠意努めてまいります。`,
         explanationBn: 'আপনার মূল উদ্দেশ্য বজায় রেখে অত্যন্ত মার্জিত এবং বিনীত (Kenjougo/Teineigo) কেইগোতে প্রফেশনাল রেজুমে ফরম্যাটে রূপান্তর করা হয়েছে।'
       };
+    } else if (fieldType === 'career_summary') {
+      return {
+        polishedJa: `これまでの実務において、${cleanInput}を中心に高品質なアウトプットと納期遵守を徹底してまいりました。チーム内の情報共有と円滑な連携を重んじ、技術的課題の解決と生産性向上に貢献いたします。`,
+        explanationBn: 'আপনার কাজের অভিজ্ঞতা ও ক্যারিয়ার সারাংশকে জাপানিজ বিজনেস স্ট্যান্ডার্ড টেকনিক্যাল ফরম্যাটে রূপান্তর করা হয়েছে।'
+      };
     } else {
-      const cleanInput = trimmed.replace(/[。！？\.\!\?]+$/, '');
       return {
         polishedJa: `私の最大の長所は、${cleanInput}という点にあります。異文化環境においても迅速に適応し、何事にも誠実かつ前向きに取り組む姿勢を信条としております。課題に対しても粘り強く努力を重ね、店舗およびチームの信頼に全力で応える所存です。`,
         explanationBn: 'আপনার আত্মপরিচয় ও শক্তিকে আকর্ষণীয়, বিশ্বাসযোগ্য এবং বাস্তবসম্মত জাপানিজ স্ট্যান্ডার্ড এক্সপ্রেশনে রূপান্তর করা হয়েছে।'

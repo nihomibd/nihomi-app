@@ -131,10 +131,12 @@ baitoSimulationRouter.post('/rirekisho/save', optionalAuth, (req: AuthenticatedR
 // 8. AI Keigo Polisher (Powered by Gemini API & Real Business Standards)
 baitoSimulationRouter.post('/rirekisho/polish', optionalAuth, async (req: AuthenticatedRequest, res) => {
   const { text, fieldType, targetRole } = req.body || {};
+  const safeText = typeof text === 'string' ? text.slice(0, 1000) : '';
+  const resolvedFieldType = (fieldType === 'career_summary' || fieldType === 'selfPr' || fieldType === 'motivation') ? fieldType : 'motivation';
   try {
     const polished = await processKeigoPolisherRequest({
-      text: text || '',
-      fieldType: fieldType || 'motivation',
+      text: safeText,
+      fieldType: resolvedFieldType,
       targetRole: targetRole || 'Japan Workplace Candidate'
     });
     return res.json({
@@ -142,8 +144,8 @@ baitoSimulationRouter.post('/rirekisho/polish', optionalAuth, async (req: Authen
       ...polished
     });
   } catch (err: any) {
-    console.warn('[bKash/Baito] Falling back to procedural Keigo template:', err.message);
-    const fallback = db.polishRirekishoText(text || '', fieldType || 'motivation');
+    console.warn('[Baito/Rirekisho] Falling back to procedural Keigo template:', err.message);
+    const fallback = db.polishRirekishoText(safeText, resolvedFieldType);
     return res.json({
       success: true,
       ...fallback

@@ -235,7 +235,23 @@ export const ShokumuKeirekishoStudio: React.FC<ShokumuKeirekishoStudioProps> = (
       pdf.save(`Nihomi_Shokumu_Keirekisho_${safeName}.pdf`);
       soundEffects.playLessonCelebration();
     } catch (err) {
-      console.warn('PDF export error:', err);
+      console.warn('PDF export error, falling back to structured vector generator:', err);
+      try {
+        const fallbackPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        fallbackPdf.setFontSize(18);
+        fallbackPdf.text('職務経歴書 (Shokumu Keirekisho)', 15, 20);
+        fallbackPdf.setFontSize(10);
+        fallbackPdf.text(`Candidate: ${formData.fullName}`, 15, 30);
+        fallbackPdf.text(`Date: ${formData.submissionDate}`, 15, 42);
+        fallbackPdf.text('--- Career Summary ---', 15, 52);
+        const summaryLines = fallbackPdf.splitTextToSize(formData.careerSummaryPolished || formData.careerSummary || '', 180);
+        fallbackPdf.text(summaryLines, 15, 58);
+        const safeName = formData.fullName.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'candidate';
+        fallbackPdf.save(`Nihomi_Shokumu_Keirekisho_${safeName}.pdf`);
+        soundEffects.playLessonCelebration();
+      } catch (innerErr) {
+        console.error('All Shokumu PDF export methods failed:', innerErr);
+      }
     } finally {
       setIsGeneratingPdf(false);
     }

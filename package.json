@@ -38,7 +38,8 @@
     "test:sre": "tsx scripts/test-sre-telemetry-and-cdn.ts",
     "test:ai-cost": "tsx scripts/test-ai-gateway-cost-safety.ts",
     "test:exam-os": "tsx scripts/test-exam-os-and-certificates.ts",
-    "test:baito-pos": "tsx scripts/test-baito-pos-simulator.ts"
+    "test:baito-pos": "tsx scripts/test-baito-pos-simulator.ts",
+    "test:jis-rirekisho": "tsx scripts/test-jis-rirekisho-durability.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
