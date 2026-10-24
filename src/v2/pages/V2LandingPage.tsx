@@ -98,6 +98,7 @@ export const V2LandingPage: React.FC<V2LandingPageProps> = ({ onNavigate }) => {
     else if (view === 'baito' || view === 'workos' || view === 'simulation') targetRoute = 'workos';
     else if (view === 'rirekisho' || view === 'cv-builder' || view === 'jis-rirekisho') targetRoute = 'rirekisho';
     else if (view === 'pricing' || view === 'plans') targetRoute = 'pricing';
+    else if (view === 'mock-exams' || view === 'exam' || view === 'exams' || view === 'jlpt' || view === 'cbt') targetRoute = 'exam';
     else if (view === 'founder' || view === 'admin') targetRoute = 'founder';
     onNavigate(targetRoute, params);
   };

@@ -60,9 +60,13 @@ export const JlptMockPracticeSection: React.FC<JlptMockPracticeSectionProps> = (
 
               <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
                 <span className="text-[11px] text-slate-400">মক পরীক্ষা</span>
-                <span className="text-xs text-amber-400 font-semibold group-hover:underline">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('mock-exams', { level: lvl.level })}
+                  className="text-xs text-amber-400 font-semibold hover:underline cursor-pointer bg-transparent border-none p-0"
+                >
                   যাচাই করুন →
-                </span>
+                </button>
               </div>
             </div>
           ))}
@@ -95,8 +99,11 @@ export const JlptMockPracticeSection: React.FC<JlptMockPracticeSectionProps> = (
 
         <div className="text-center">
           <button
+            type="button"
+            id="landing-jlpt-exam-cta"
+            data-testid="landing-jlpt-exam-cta"
             onClick={() => onNavigate('mock-exams')}
-            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg hover:shadow-amber-500/20"
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg hover:shadow-amber-500/20 cursor-pointer"
           >
             <span>JLPT মক টেস্ট প্র্যাকটিস শুরু করুন</span>
             <ArrowRight className="w-4 h-4" />
@@ -106,3 +113,5 @@ export const JlptMockPracticeSection: React.FC<JlptMockPracticeSectionProps> = (
     </section>
   );
 };
+
+export default JlptMockPracticeSection;

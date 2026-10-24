@@ -1,42 +1,44 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP02-UNIFIED-DASHBOARD-AND-LEGACY-CONSOLIDATION",
-  "title": "Version 3 Unified Student Dashboard & Legacy Feature Consolidation",
-  "objective": "Consolidate the premier features from Legacy Mode (Japan Readiness Radar, 25-Lesson Minna no Nihongo Pathway, and Memory OS Flashcard SRS Widget) into the modern Version 3 Student Dashboard (src/v2/pages/V2DashboardPage.tsx), eliminating the need for legacy mode while providing an interactive and powerful learner experience.",
-  "domain": "dashboard-and-learning",
+  "task_id": "NIHOMI-V3-WP05-LANDING-PAGE-V3-OVERHAUL-AND-CONVERSION-ENGINE",
+  "status": "pending",
+  "created_at": "2026-10-24T05:57:00+06:00",
+  "base_commit": "1a887eb",
+  "title": "Version 3 Futuristic Neo-Tokyo Landing Page & Frictionless Conversion Engine",
+  "domain": "shared-loop-adapter",
+  "objective": "Overhaul the public front door of NIHOMI.COM into a futuristic Neo-Tokyo learning showcase. Integrate the interactive 'First Aha Moment' Hiragana canvas, live interactive previews of the Tokyo Konbini POS Cashier simulator and CBT Exam OS, clear commercial pricing matrix, and seamless Google OAuth/email modal triggers without any cognitive clutter or legacy redirection.",
   "in_scope": [
-    "Incorporate the Japan Readiness Radar (N5, N4, Work, Relocation readiness score breakdown) directly into src/v2/pages/V2DashboardPage.tsx",
-    "Integrate the 25-Lesson Minna no Nihongo Master Pathway with visual lesson milestone nodes, gate locks, and direct lesson runner launching",
-    "Embed the Memory OS SRS active flashcard review quick-widget into the dashboard for one-click spaced-repetition retention drills",
-    "Provide high-contrast Neo-Tokyo slate aesthetics (#0a0a12) with amber/rose accents, live streaks, and JLPT target milestone progression bar",
-    "Author automated test suite scripts/test-v3-wp02-dashboard-consolidation.cjs with 100% assertions passing"
+    "Upgrade src/v2/pages/V2LandingPage.tsx with high-impact Neo-Tokyo visual polish (#0A0A12 obsidian slate, crimson/amber accents, subtle Hanabi canvas particles).",
+    "Embed the frictionless zero-sign-in 'First Aha Moment' Hiragana micro-demo (あ → い → あい ❤️) right in the hero section.",
+    "Showcase live interactive feature cards for the CBT Mock Exam OS (Pass/Cutoff matrix), Tokyo 7-Eleven POS simulator, and JIS Rirekisho Studio.",
+    "Integrate unified AuthModal triggers so Google login or email sign-in preserves landing context and seamlessly enters the V3 Dashboard.",
+    "Author automated test suite scripts/test-v3-wp05-landing-and-conversion.cjs with 100% green assertions and browser screenshot evidence."
   ],
   "out_of_scope": [
-    "Changing Supabase user profile schema or mutating production database rows",
-    "Altering the strict cumulative learning lattice rules for Kana introduction"
+    "Modifying backend PostgreSQL database schema (schema is stable and persisted).",
+    "External production marketing ad buys (reserved for GTM execution)."
   ],
   "acceptance_criteria": [
-    "src/v2/pages/V2DashboardPage.tsx showcases the Japan Readiness Radar with dynamic telemetry from user progress",
-    "25 Minna no Nihongo lessons pathway is interactive, displaying completed, active, and locked nodes with milestone gating",
-    "Memory OS flashcard review widget allows launching spaced repetition drills directly from the dashboard",
-    "Automated test scripts/test-v3-wp02-dashboard-consolidation.cjs passes with 100% green assertions and browser screenshot evidence",
-    "Zero typecheck errors (tsc --noEmit) and clean production build (npm run build)"
+    "Landing page loads with zero console errors and authentic Neo-Tokyo dark aesthetic.",
+    "Interactive Hiragana demo allows clicking strokes/hearing audio without login barrier.",
+    "CTA buttons ('লার্নিং শুরু করুন', 'ফ্রি ট্রায়াল', 'লগইন') trigger AuthModal cleanly.",
+    "Full TypeScript typecheck passes with 0 errors (npx tsc --noEmit).",
+    "Production build compiles cleanly (npm run build).",
+    "Automated test suite passes with 100% green assertions and captures screenshot evidence across mobile and desktop."
   ],
   "verification": [
-    "node scripts/test-v3-wp02-dashboard-consolidation.cjs",
-    "Headless browser DOM and visual verification of all consolidated widgets on #/dashboard",
-    "npx tsc --noEmit and npm run build"
+    "Run npx tsc --noEmit to verify type safety.",
+    "Run npm run build to verify production bundling.",
+    "Execute node scripts/test-v3-wp05-landing-and-conversion.cjs in headless browser.",
+    "Verify DOM elements for hero, Hiragana demo, CTA buttons, and auth modal."
   ],
   "risks": [
-    "Dashboard payload size or render latency (mitigated by lazy-loading heavy modal subcomponents and memoizing radar calculations)"
+    "Heavy canvas animations slowing down low-power mobile devices (mitigated by requestAnimationFrame throttling and will-change CSS optimization)."
   ],
   "dependencies": [
-    "src/v2/pages/V2DashboardPage.tsx",
-    "src/core/curriculum/n5MasterCurriculum.ts",
-    "src/services/MemoryOSEngine.ts",
-    "src/components/dashboard/JapanReadinessRadar.tsx"
-  ],
-  "base_commit": "c85d541",
-  "created_at": "2026-10-24T05:00:00.000Z",
-  "status": "pending"
+    "NIHOMI-V3-WP01-AUTH-ROUTING-UNIFICATION-AND-V1-TO-V3-CONSOLIDATION",
+    "NIHOMI-V3-WP02-UNIFIED-DASHBOARD-AND-LEGACY-CONSOLIDATION",
+    "NIHOMI-V3-WP03-EXAM-OS-OFFICIAL-MARKSHEET-AND-CERTIFICATE-ENGINE",
+    "NIHOMI-V3-WP04-TOKYO-KONBINI-WORKOS-AND-JIS-RIREKISHO-STUDIO"
+  ]
 }

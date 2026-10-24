@@ -58,6 +58,8 @@ export const WorkOsSimulationSection: React.FC<WorkOsSimulationSectionProps> = (
               </div>
             </div>
             <button
+              id="landing-card-konbini-cta"
+              data-testid="landing-card-konbini-cta"
               onClick={() => onNavigate('baito')}
               className="w-full py-3 px-4 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-md cursor-pointer"
             >
@@ -91,6 +93,8 @@ export const WorkOsSimulationSection: React.FC<WorkOsSimulationSectionProps> = (
               </div>
             </div>
             <button
+              id="landing-card-transit-cta"
+              data-testid="landing-card-transit-cta"
               onClick={() => onNavigate('baito')}
               className="w-full py-3 px-4 rounded-xl bg-[#141726] hover:bg-[#1B1E30] text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-[#141726]/10 cursor-pointer shadow-sm"
             >
@@ -124,7 +128,9 @@ export const WorkOsSimulationSection: React.FC<WorkOsSimulationSectionProps> = (
               </div>
             </div>
             <button
-              onClick={() => onNavigate('baito')}
+              id="landing-card-rirekisho-cta"
+              data-testid="landing-card-rirekisho-cta"
+              onClick={() => onNavigate('rirekisho')}
               className="w-full py-3 px-4 rounded-xl bg-[#141726] hover:bg-[#1B1E30] text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-[#141726]/10 cursor-pointer shadow-sm"
             >
               <span>রিজিউমে স্টুডিও দেখুন</span>
@@ -152,3 +158,5 @@ export const WorkOsSimulationSection: React.FC<WorkOsSimulationSectionProps> = (
     </section>
   );
 };
+
+export default WorkOsSimulationSection;

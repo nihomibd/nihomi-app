@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-V3-WP04-TOKYO-KONBINI-WORKOS-AND-JIS-RIREKISHO-STUDIO",
-  "scope_fingerprint": "6b2429c4edf3bd95e770724fa1764db4ecd2daa0253646c8218dfaed917a3814",
-  "approved_at": "2026-10-24T05:46:00.000Z",
+  "task_id": "NIHOMI-V3-WP05-LANDING-PAGE-V3-OVERHAUL-AND-CONVERSION-ENGINE",
+  "scope_fingerprint": "dedbbc1db2579e8edc1eaa6819216ce67b0e799646cfe91d38b5ea2493383d70",
+  "approved_at": "2026-10-24T05:58:00.000Z",
   "approved_via": "nihomi-founder-direct-chat-authorization",
   "approved_scope_summary": {
-    "title": "Version 3 Tokyo Konbini WorkOS POS Simulator & Official JIS Rirekisho Studio",
+    "title": "Version 3 Futuristic Neo-Tokyo Landing Page & Frictionless Conversion Engine",
     "domain": "shared-loop-adapter",
-    "base_commit": "a03d5be"
+    "base_commit": "1a887eb"
   }
 }
