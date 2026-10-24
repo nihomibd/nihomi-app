@@ -34,7 +34,8 @@
     "test:payments": "tsx scripts/test-production-payments-and-invoicing.ts",
     "test:offline-ledger": "tsx scripts/test-offline-ledger-resilience.ts",
     "test:dual-persistence": "tsx scripts/test-dual-persistence-sync.ts",
-    "test:payment-security": "tsx scripts/test-payment-webhook-security.ts"
+    "test:payment-security": "tsx scripts/test-payment-webhook-security.ts",
+    "test:sre": "tsx scripts/test-sre-telemetry-and-cdn.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

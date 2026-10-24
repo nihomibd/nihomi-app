@@ -1,38 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP13-SRE-MONITORING-CDN-PURGE-AND-TELEMETRY-PROBES",
+  "task_id": "NIHOMI-V3-WP14-AI-GATEWAY-RESILIENCY-AND-TOKEN-COST-LIMITER",
   "status": "pending",
-  "created_at": "2026-10-25T01:50:00+06:00",
-  "base_commit": "8aa5bf2",
-  "title": "Production SRE Deep Health Telemetry, Edge CDN Cache Purge & Traffic Telemetry",
-  "domain": "infrastructure-and-sre",
-  "objective": "Implement Cloudflare CDN cache-purge automation, deep system health telemetry probe (/api/health/deep), and production traffic observability metrics.",
+  "created_at": "2026-10-25T02:00:00+06:00",
+  "base_commit": "bda5417",
+  "title": "AI Gateway Resilient Fallback, Multi-Tier Token Quota & Cost-Safety Limiter",
+  "domain": "ai-and-cost-safety",
+  "objective": "Harden AI Gateway with offline curriculum fallback mode, tier-based token quotas, sliding-window rate limiting, and zero-crash AI cost-guard enforcement.",
   "in_scope": [
-    "Add Cloudflare CDN cache-purge service in server/services/cdnPurgeService.ts for edge cache invalidation.",
-    "Add deep health probe in server/routes/health.ts returning memory RSS, event loop lag, and durable database metrics.",
-    "Add automated verification test scripts/test-sre-telemetry-and-cdn.ts.",
+    "Harden server/middleware/aiCostGuard.ts or AI gateway for tier-based token quota enforcement.",
+    "Ensure graceful fallback to pre-rendered curriculum explanations when Gemini API is rate-limited or offline.",
+    "Add automated verification test scripts/test-ai-gateway-cost-safety.ts.",
     "Verify with npx tsc --noEmit and npm run build.",
-    "Document evidence in NIHOMI_V3_WP13_SRE_TELEMETRY_REPORT_BN.md."
+    "Document evidence in NIHOMI_V3_WP14_AI_GATEWAY_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Modifying core curriculum lattice or lesson progression rules.",
+    "Modifying core curriculum lattice or prerequisite unlock laws.",
     "Altering approved 12-price matrix amounts."
   ],
   "acceptance_criteria": [
-    "GET /api/health/deep returns HTTP 200 with system memory RSS, uptime, and database storage telemetry.",
-    "CDN cache-purge adapter supports automated URL/tag purging with graceful offline fallback.",
-    "Automated SRE telemetry test passes 100% of assertions.",
+    "AI endpoints reject requests exceeding tier token quotas with HTTP 429 and dignified upgrade messaging.",
+    "AI Gateway degrades gracefully to deterministic offline curriculum fallback during upstream outages without 500 errors.",
+    "Automated AI cost safety test passes 100% of assertions.",
     "Zero TypeScript errors and clean production build."
   ],
   "verification": [
-    "npx tsx scripts/test-sre-telemetry-and-cdn.ts passes cleanly.",
+    "npx tsx scripts/test-ai-gateway-cost-safety.ts passes cleanly.",
     "npx tsc --noEmit passes with 0 errors.",
     "npm run build clean verification."
   ],
   "risks": [
-    "Cloudflare API token rate limits (mitigated by batching purge requests)."
+    "Upstream Gemini API network variance (mitigated by timeout locks and cached curriculum fallbacks)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP12-LIVE-PAYMENT-GATEWAY-AND-WEBHOOK-HARDENING"
+    "NIHOMI-V3-WP13-SRE-MONITORING-CDN-PURGE-AND-TELEMETRY-PROBES"
   ]
 }

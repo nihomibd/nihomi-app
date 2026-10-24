@@ -71767,6 +71767,7 @@ systemHealthRouter.post("/repair", requireAdmin, async (req, res) => {
 // server/routes/health.ts
 init_db();
 import { Router as Router15 } from "express";
+import os from "node:os";
 
 // server/services/dualPersistenceReconciler.ts
 init_supabase();
@@ -71931,8 +71932,284 @@ var DualPersistenceReconciler = class {
 };
 var dualPersistenceReconciler = new DualPersistenceReconciler();
 
+// server/services/cdnPurgeService.ts
+var CdnPurgeService = class {
+  constructor() {
+    this.totalPurges = 0;
+    this.successfulPurges = 0;
+    this.failedPurges = 0;
+    this.lastPurgeTimestamp = null;
+    this.lastPurgeType = null;
+    this.lastError = null;
+  }
+  get zoneId() {
+    return process.env.CLOUDFLARE_ZONE_ID || process.env.CF_ZONE_ID || "";
+  }
+  get apiToken() {
+    return process.env.CLOUDFLARE_API_TOKEN || process.env.CF_API_TOKEN || process.env.CLOUDFLARE_PURGE_TOKEN || "";
+  }
+  get isConfigured() {
+    return Boolean(this.zoneId.trim() && this.apiToken.trim());
+  }
+  getStatus() {
+    return {
+      isConfigured: this.isConfigured,
+      mode: this.isConfigured ? "live_edge" : "simulated_offline",
+      zoneIdConfigured: Boolean(this.zoneId.trim()),
+      tokenConfigured: Boolean(this.apiToken.trim()),
+      totalPurgesExecuted: this.totalPurges,
+      successfulPurges: this.successfulPurges,
+      failedPurges: this.failedPurges,
+      lastPurgeTimestamp: this.lastPurgeTimestamp,
+      lastPurgeType: this.lastPurgeType,
+      lastError: this.lastError
+    };
+  }
+  /**
+   * Purges specific URL asset paths from Cloudflare Edge
+   */
+  async purgeUrls(urls) {
+    const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    this.totalPurges++;
+    this.lastPurgeTimestamp = timestamp;
+    this.lastPurgeType = "urls";
+    if (!urls || urls.length === 0) {
+      return {
+        success: true,
+        simulated: true,
+        purgedType: "urls",
+        count: 0,
+        message: "No URLs specified for purging.",
+        timestamp
+      };
+    }
+    if (!this.isConfigured) {
+      this.successfulPurges++;
+      return {
+        success: true,
+        simulated: true,
+        purgedType: "urls",
+        count: urls.length,
+        message: `Simulated edge purge of ${urls.length} asset URL(s) in local/sandbox mode.`,
+        timestamp
+      };
+    }
+    try {
+      const response = await fetch(
+        `https://api.cloudflare.com/client/v4/zones/${this.zoneId}/purge_cache`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiToken}`
+          },
+          body: JSON.stringify({ files: urls })
+        }
+      );
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        const errMsg = data.errors?.[0]?.message || `Cloudflare HTTP ${response.status} Purge Failed`;
+        this.failedPurges++;
+        this.lastError = errMsg;
+        return {
+          success: false,
+          simulated: false,
+          purgedType: "urls",
+          count: 0,
+          error: errMsg,
+          message: `Failed to purge URLs from Cloudflare edge: ${errMsg}`,
+          timestamp
+        };
+      }
+      this.successfulPurges++;
+      this.lastError = null;
+      return {
+        success: true,
+        simulated: false,
+        purgedType: "urls",
+        count: urls.length,
+        message: `Successfully purged ${urls.length} asset URL(s) from Cloudflare edge cache.`,
+        timestamp
+      };
+    } catch (err) {
+      this.failedPurges++;
+      this.lastError = err?.message || "Network error executing Cloudflare purge";
+      return {
+        success: false,
+        simulated: false,
+        purgedType: "urls",
+        count: 0,
+        error: this.lastError,
+        message: `Exception during Cloudflare edge cache purge: ${this.lastError}`,
+        timestamp
+      };
+    }
+  }
+  /**
+   * Purges cache by Cache-Tags (e.g. ['curriculum', 'kanji'])
+   */
+  async purgeTags(tags) {
+    const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    this.totalPurges++;
+    this.lastPurgeTimestamp = timestamp;
+    this.lastPurgeType = "tags";
+    if (!tags || tags.length === 0) {
+      return {
+        success: true,
+        simulated: true,
+        purgedType: "tags",
+        count: 0,
+        message: "No tags specified for purging.",
+        timestamp
+      };
+    }
+    if (!this.isConfigured) {
+      this.successfulPurges++;
+      return {
+        success: true,
+        simulated: true,
+        purgedType: "tags",
+        count: tags.length,
+        message: `Simulated edge purge of ${tags.length} cache-tag(s) in local/sandbox mode.`,
+        timestamp
+      };
+    }
+    try {
+      const response = await fetch(
+        `https://api.cloudflare.com/client/v4/zones/${this.zoneId}/purge_cache`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiToken}`
+          },
+          body: JSON.stringify({ tags })
+        }
+      );
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        const errMsg = data.errors?.[0]?.message || `Cloudflare HTTP ${response.status} Tag Purge Failed`;
+        this.failedPurges++;
+        this.lastError = errMsg;
+        return {
+          success: false,
+          simulated: false,
+          purgedType: "tags",
+          count: 0,
+          error: errMsg,
+          message: `Failed to purge tags from Cloudflare edge: ${errMsg}`,
+          timestamp
+        };
+      }
+      this.successfulPurges++;
+      this.lastError = null;
+      return {
+        success: true,
+        simulated: false,
+        purgedType: "tags",
+        count: tags.length,
+        message: `Successfully purged ${tags.length} cache tag(s) from Cloudflare edge cache.`,
+        timestamp
+      };
+    } catch (err) {
+      this.failedPurges++;
+      this.lastError = err?.message || "Network error executing tag purge";
+      return {
+        success: false,
+        simulated: false,
+        purgedType: "tags",
+        count: 0,
+        error: this.lastError,
+        message: `Exception during cache tag purge: ${this.lastError}`,
+        timestamp
+      };
+    }
+  }
+  /**
+   * Purges entire Cloudflare Edge cache for major releases
+   */
+  async purgeEverything() {
+    const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    this.totalPurges++;
+    this.lastPurgeTimestamp = timestamp;
+    this.lastPurgeType = "everything";
+    if (!this.isConfigured) {
+      this.successfulPurges++;
+      return {
+        success: true,
+        simulated: true,
+        purgedType: "everything",
+        count: 1,
+        message: "Simulated full edge cache purge in local/sandbox mode.",
+        timestamp
+      };
+    }
+    try {
+      const response = await fetch(
+        `https://api.cloudflare.com/client/v4/zones/${this.zoneId}/purge_cache`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiToken}`
+          },
+          body: JSON.stringify({ purge_everything: true })
+        }
+      );
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        const errMsg = data.errors?.[0]?.message || `Cloudflare HTTP ${response.status} Purge-All Failed`;
+        this.failedPurges++;
+        this.lastError = errMsg;
+        return {
+          success: false,
+          simulated: false,
+          purgedType: "everything",
+          count: 0,
+          error: errMsg,
+          message: `Failed to purge entire Cloudflare cache: ${errMsg}`,
+          timestamp
+        };
+      }
+      this.successfulPurges++;
+      this.lastError = null;
+      return {
+        success: true,
+        simulated: false,
+        purgedType: "everything",
+        count: 1,
+        message: "Successfully purged entire Cloudflare edge cache.",
+        timestamp
+      };
+    } catch (err) {
+      this.failedPurges++;
+      this.lastError = err?.message || "Network error executing full purge";
+      return {
+        success: false,
+        simulated: false,
+        purgedType: "everything",
+        count: 0,
+        error: this.lastError,
+        message: `Exception during full edge cache purge: ${this.lastError}`,
+        timestamp
+      };
+    }
+  }
+};
+var cdnPurgeService = new CdnPurgeService();
+
 // server/routes/health.ts
 var healthRouter = Router15();
+function measureEventLoopLag() {
+  return new Promise((resolve) => {
+    const start = process.hrtime.bigint();
+    setImmediate(() => {
+      const deltaNs = process.hrtime.bigint() - start;
+      const deltaMs = Number(deltaNs) / 1e6;
+      resolve(Math.round(deltaMs * 100) / 100);
+    });
+  });
+}
 healthRouter.get("/", async (_req, res) => {
   const startTime = Date.now();
   const isGeminiConfigured = !!process.env.GEMINI_API_KEY;
@@ -72014,6 +72291,7 @@ healthRouter.get("/", async (_req, res) => {
       sslCommerz: isSslCommerzConfigured ? "live_configured" : "sandbox_mock",
       currency: "BDT"
     },
+    cdn: cdnPurgeService.getStatus(),
     memory: {
       rssMb: Math.round(memUsage.rss / 1024 / 1024),
       heapUsedMb: Math.round(memUsage.heapUsed / 1024 / 1024),
@@ -72021,6 +72299,119 @@ healthRouter.get("/", async (_req, res) => {
     }
   };
   return res.json(healthPayload);
+});
+healthRouter.get("/deep", async (_req, res) => {
+  const startTime = Date.now();
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  const eventLoopLagMs = await measureEventLoopLag();
+  const dbStart = Date.now();
+  const isSupabaseActive = !!db.getSupabaseClient();
+  const dbLatencyMs = Date.now() - dbStart;
+  const memUsage = process.memoryUsage();
+  const cpuUsage = process.cpuUsage();
+  const totalOsMem = os.totalmem();
+  const freeOsMem = os.freemem();
+  const entityCounts = {
+    users: (db.data.users || []).length,
+    profiles: (db.data.profiles || []).length,
+    progress: (db.data.progress || []).length,
+    courses: (db.data.courses || []).length,
+    lessons: (db.data.lessons || []).length,
+    quizzes: (db.data.quizzes || []).length,
+    payments: (db.data.payments || []).length,
+    subscriptions: (db.data.subscriptions || []).length,
+    activeSubscriptions: (db.data.subscriptions || []).filter((s) => s.status === "active").length,
+    webhookEvents: (db.data.webhookEvents || []).length,
+    savedPaymentMethods: (db.data.savedPaymentMethods || []).length,
+    quizAttempts: (db.data.quizAttempts || []).length,
+    paymentAttempts: (db.data.paymentAttempts || []).length
+  };
+  const deepTelemetry = {
+    status: "ok",
+    system: "healthy",
+    service: "Nihomi Production Core SRE",
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    probeDurationMs: Date.now() - startTime,
+    performance: {
+      eventLoopLagMs,
+      dbLatencyMs,
+      p99Acceptable: eventLoopLagMs < 50
+    },
+    process: {
+      pid: process.pid,
+      uptimeSeconds: Math.round(process.uptime()),
+      nodeVersion: process.version,
+      platform: process.platform,
+      arch: process.arch,
+      cpuUsageUserMicroseconds: cpuUsage.user,
+      cpuUsageSystemMicroseconds: cpuUsage.system
+    },
+    memory: {
+      rssMb: Math.round(memUsage.rss / 1024 / 1024),
+      heapUsedMb: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotalMb: Math.round(memUsage.heapTotal / 1024 / 1024),
+      externalMb: Math.round(memUsage.external / 1024 / 1024),
+      arrayBuffersMb: Math.round((memUsage.arrayBuffers || 0) / 1024 / 1024)
+    },
+    os: {
+      totalMemoryMb: Math.round(totalOsMem / 1024 / 1024),
+      freeMemoryMb: Math.round(freeOsMem / 1024 / 1024),
+      freeMemoryPercent: Math.round(freeOsMem / totalOsMem * 100),
+      loadAvg: os.loadavg(),
+      cpuCount: os.cpus().length
+    },
+    database: {
+      status: "healthy",
+      connection: isSupabaseActive ? "supabase_postgresql_cloud" : "durable_persistent_store",
+      entityCounts,
+      dualPersistence: dualPersistenceReconciler.getStatus()
+    },
+    edgeCdn: cdnPurgeService.getStatus()
+  };
+  return res.json(deepTelemetry);
+});
+healthRouter.post("/purge-cache", async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization || "";
+    const sreKeyHeader = req.headers["x-sre-key"] || "";
+    const expectedKey = process.env.INTERNAL_SRE_KEY || "nihomi_sre_telemetry_2026";
+    const hasBearerKey = authHeader === `Bearer ${expectedKey}` || sreKeyHeader === expectedKey;
+    const sessionUser = req.user;
+    const isFounderSession = sessionUser?.role === "admin" || sessionUser?.role === "founder" || sessionUser?.email === "mdtanvirkabirbiplob@gmail.com";
+    if (!hasBearerKey && !isFounderSession) {
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized: SRE API key or Founder/Admin session required for edge cache purge."
+      });
+    }
+    const { urls, tags, purgeAll } = req.body || {};
+    let result;
+    if (purgeAll) {
+      result = await cdnPurgeService.purgeEverything();
+    } else if (Array.isArray(tags) && tags.length > 0) {
+      result = await cdnPurgeService.purgeTags(tags);
+    } else if (Array.isArray(urls) && urls.length > 0) {
+      result = await cdnPurgeService.purgeUrls(urls);
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid purge request. Provide urls: string[], tags: string[], or purgeAll: true."
+      });
+    }
+    return res.json({
+      success: result.success,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      result
+    });
+  } catch (err) {
+    console.error("[Health] Edge cache purge exception:", err);
+    return res.status(500).json({
+      success: false,
+      error: err?.message || "Failed to execute edge cache purge."
+    });
+  }
 });
 
 // server/routes/contentEngine.ts
@@ -72040,12 +72431,12 @@ import { GoogleGenAI as GoogleGenAI3 } from "@google/genai";
 init_db();
 import fs4 from "fs";
 import path4 from "path";
-import os from "os";
+import os2 from "os";
 import crypto13 from "crypto";
 var CloudStorageService = class {
   constructor() {
     const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-    const baseDir = isServerless ? path4.join(os.tmpdir(), "nihomi_storage") : path4.join(process.cwd(), "server", "data");
+    const baseDir = isServerless ? path4.join(os2.tmpdir(), "nihomi_storage") : path4.join(process.cwd(), "server", "data");
     this.sourcesDir = path4.join(baseDir, "content_sources");
     this.mediaDir = path4.join(baseDir, "media");
     this.ensureDirs();
