@@ -49,29 +49,43 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
     if (!decision.allowed) {
       if (decision.reason === 'QUOTA_EXCEEDED') {
         return res.status(429).json({
+          success: false,
           error: decision.error || `Monthly AI Sensei query quota reached (${decision.monthlyQuota} queries on ${decision.planName} plan). Top up AI credits or upgrade your plan to continue!`,
+          messageBn: `আপনার চলতি মাসের এআই সেনসেই কোটা (${decision.monthlyQuota} টি) পূর্ণ হয়েছে। চালিয়ে যেতে নিহোমি কয়েন টপ-আপ করুন বা প্ল্যান আপগ্রেড করুন।`,
           code: 'AI_QUOTA_EXCEEDED',
           quotaExceeded: true,
           currentUsage: decision.currentUsage,
           monthlyQuota: decision.monthlyQuota,
-          planId: decision.planId
+          planId: decision.planId,
+          actions: [
+            { label: 'Use Nihomi Coins', action: 'COINS', url: '/pricing' },
+            { label: 'Buy Coins', action: 'BUY_COINS', url: '/pricing' },
+            { label: 'Upgrade Plan', action: 'UPGRADE', url: '/pricing' }
+          ]
         });
       }
 
       if (decision.reason === 'TOKEN_CAP_REACHED') {
         return res.status(429).json({
+          success: false,
           error: decision.error || `Monthly AI token bandwidth budget reached for the ${decision.planName} tier.`,
+          messageBn: 'আপনার চলতি মাসের এআই টোকেন ব্যান্ডউইথ সীমা পূর্ণ হয়েছে। অব্যাহত রাখতে দয়া করে আপগ্রেড করুন।',
           code: 'AI_TOKEN_CAP_REACHED',
           quotaExceeded: true,
           tokensUsed: decision.tokensUsed,
           tokenCap: decision.tokenCap,
-          planId: decision.planId
+          planId: decision.planId,
+          actions: [
+            { label: 'Upgrade Plan', action: 'UPGRADE', url: '/pricing' }
+          ]
         });
       }
 
       if (decision.reason === 'CONCURRENT_REQUEST_BLOCKED') {
         return res.status(429).json({
+          success: false,
           error: decision.error || 'Another AI analysis is currently in progress for your account. Please wait a moment.',
+          messageBn: 'আপনার অ্যাকাউন্টে একটি এআই বিশ্লেষণ ইতিমধ্যে চলমান রয়েছে। অনুগ্রহ করে কয়েক মুহূর্ত অপেক্ষা করুন।',
           code: 'CONCURRENT_REQUEST_BLOCKED',
           retryAfterSeconds: decision.retryAfterSeconds || 2
         });
@@ -79,7 +93,9 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
 
       if (decision.reason === 'RATE_LIMIT_EXCEEDED') {
         return res.status(429).json({
+          success: false,
           error: decision.error || `AI query speed limit reached. Please wait ${decision.retryAfterSeconds} seconds before your next query.`,
+          messageBn: `এআই কুয়েরি স্পিড লিমিট পৌঁছেছে। পরবর্তী প্রশ্নের জন্য অনুগ্রহ করে ${decision.retryAfterSeconds} সেকেন্ড অপেক্ষা করুন।`,
           code: 'RATE_LIMIT_EXCEEDED',
           retryAfterSeconds: decision.retryAfterSeconds || 10
         });
@@ -87,7 +103,9 @@ export function aiCostGuard(options: AiCostGuardOptions = {}) {
 
       // Fail-Secure default for database or unexpected errors
       return res.status(429).json({
+        success: false,
         error: decision.error || 'AI request could not be safely verified. Please try again shortly.',
+        messageBn: 'এআই অনুরোধটি এই মুহূর্তে যাচাই করা যায়নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।',
         code: decision.reason || 'AI_COST_GUARD_BLOCKED'
       });
     }

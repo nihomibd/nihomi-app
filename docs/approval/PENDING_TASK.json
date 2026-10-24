@@ -1,38 +1,40 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP14-AI-GATEWAY-RESILIENCY-AND-TOKEN-COST-LIMITER",
+  "task_id": "NIHOMI-V3-WP15-EXAM-OS-SESSION-DURABILITY-AND-CERTIFICATE-TAMPER-PROOFING",
   "status": "pending",
-  "created_at": "2026-10-25T02:00:00+06:00",
-  "base_commit": "bda5417",
-  "title": "AI Gateway Resilient Fallback, Multi-Tier Token Quota & Cost-Safety Limiter",
-  "domain": "ai-and-cost-safety",
-  "objective": "Harden AI Gateway with offline curriculum fallback mode, tier-based token quotas, sliding-window rate limiting, and zero-crash AI cost-guard enforcement.",
+  "created_at": "2026-10-25T02:15:00+06:00",
+  "base_commit": "4e9b582",
+  "title": "Exam OS Session Durability & Cryptographic Certificate Tamper-Proofing",
+  "domain": "exam-os-and-credentials",
+  "objective": "Harden Exam OS session state durability against accidental browser reload/disconnect, and implement SHA-256 tamper-evident cryptographic validation for issued JLPT certificates.",
   "in_scope": [
-    "Harden server/middleware/aiCostGuard.ts or AI gateway for tier-based token quota enforcement.",
-    "Ensure graceful fallback to pre-rendered curriculum explanations when Gemini API is rate-limited or offline.",
-    "Add automated verification test scripts/test-ai-gateway-cost-safety.ts.",
+    "Harden Exam OS session runner to persist in-flight section answers and timer state so browser refresh does not wipe exam progress.",
+    "Implement SHA-256 cryptographic hash and tamper-evident signature verification for issued JLPT N5-N1 certificates.",
+    "Verify certificate verification API (/api/certificates/verify/:certId) and QR validation metadata.",
+    "Add automated test script scripts/test-exam-os-and-certificates.ts.",
     "Verify with npx tsc --noEmit and npm run build.",
-    "Document evidence in NIHOMI_V3_WP14_AI_GATEWAY_REPORT_BN.md."
+    "Document evidence in NIHOMI_V3_WP15_EXAM_OS_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Modifying core curriculum lattice or prerequisite unlock laws.",
-    "Altering approved 12-price matrix amounts."
+    "Modifying core JLPT curriculum questions or passing threshold percentages.",
+    "Altering approved subscription pricing or payment workflows."
   ],
   "acceptance_criteria": [
-    "AI endpoints reject requests exceeding tier token quotas with HTTP 429 and dignified upgrade messaging.",
-    "AI Gateway degrades gracefully to deterministic offline curriculum fallback during upstream outages without 500 errors.",
-    "Automated AI cost safety test passes 100% of assertions.",
+    "Exam OS in-flight answers and elapsed time persist across page reloads without state corruption.",
+    "Issued certificates generate deterministic SHA-256 verification hashes validated by public verification endpoint.",
+    "Tampered certificate payload is rejected by the verification endpoint.",
+    "Automated test script passes 100% of assertions.",
     "Zero TypeScript errors and clean production build."
   ],
   "verification": [
-    "npx tsx scripts/test-ai-gateway-cost-safety.ts passes cleanly.",
+    "npx tsx scripts/test-exam-os-and-certificates.ts passes cleanly.",
     "npx tsc --noEmit passes with 0 errors.",
     "npm run build clean verification."
   ],
   "risks": [
-    "Upstream Gemini API network variance (mitigated by timeout locks and cached curriculum fallbacks)."
+    "Browser storage quota or sessionStorage eviction (mitigated by dual localStorage + backend session heartbeat)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP13-SRE-MONITORING-CDN-PURGE-AND-TELEMETRY-PROBES"
+    "NIHOMI-V3-WP14-AI-GATEWAY-RESILIENCY-AND-TOKEN-COST-LIMITER"
   ]
 }

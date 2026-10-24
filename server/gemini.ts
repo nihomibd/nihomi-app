@@ -418,7 +418,7 @@ CORE TEACHING PERSONA:
   };
 }
 
-function generateSenseiOfflineResponse(req: AICoachRequest): AICoachResponse {
+export function generateSenseiOfflineResponse(req: AICoachRequest): AICoachResponse {
   const msg = (req.message || '').trim();
   const lower = msg.toLowerCase();
 

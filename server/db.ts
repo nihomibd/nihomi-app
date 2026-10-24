@@ -3630,7 +3630,7 @@ class Database {
         aiMonthlyLimit: 10
       };
 
-      const monthlyQuota = plan.aiMonthlyLimit || (planId === 'n5_pro' || planId === 'n5_lifetime' ? 99999 : planId === 'free' ? 10 : planId === 'starter' ? 100 : planId === 'pro' ? 1000 : 3000);
+      const monthlyQuota = plan.aiMonthlyLimit || (planId === 'n5_pro' || planId === 'n5_lifetime' ? 99999 : planId === 'free' ? 10 : planId === 'starter' ? 500 : planId === 'pro' ? 1500 : 4000);
       const tokenCap = monthlyQuota * 1200; // Estimated 1,200 token budget per interaction
 
       // 2. Fetch or initialize atomic Usage Record
