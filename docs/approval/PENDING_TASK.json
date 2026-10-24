@@ -1,38 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP11-DATABASE-DUAL-PERSISTENCE-SYNC-AND-RECONCILER",
+  "task_id": "NIHOMI-V3-WP12-LIVE-PAYMENT-GATEWAY-AND-WEBHOOK-HARDENING",
   "status": "pending",
-  "created_at": "2026-10-25T01:15:00+06:00",
-  "base_commit": "62ebd8e",
-  "title": "Cloud PostgreSQL & Local JSON Dual-Persistence Sync and Conflict Reconciliation Engine",
-  "domain": "data-integrity-and-persistence",
-  "objective": "Build an automated bi-directional reconciler between Supabase PostgreSQL cloud primary and local JSON failover storage, resolving potential split-brain drift and ensuring zero data loss during network restoration.",
+  "created_at": "2026-10-25T01:25:00+06:00",
+  "base_commit": "1a07fb0",
+  "title": "Live Payment Gateway Cryptographic Webhook & Anti-Fraud Idempotency Hardening",
+  "domain": "monetization-and-security",
+  "objective": "Harden live payment webhook verifiers for bKash, SSLCommerz, and Stripe with HMAC SHA-256 signature validation, persistent idempotency locks against double billing, and automated reconciliation of pending transactions.",
   "in_scope": [
-    "Implement server/services/dualPersistenceReconciler.ts with atomic transaction replay.",
-    "Add bidirectional reconciliation probe on server startup and cloud reconnect.",
-    "Create automated test scripts/test-dual-persistence-sync.ts verifying conflict resolution.",
+    "Implement HMAC SHA-256 signature verification in server/services/paymentProviders.ts and routes/billing.ts.",
+    "Add atomic idempotency lock in server/services/subscriptionService.ts to prevent concurrent duplicate activations.",
+    "Author automated verification test scripts/test-payment-webhook-security.ts verifying replay protection and signature checks.",
     "Verify with npx tsc --noEmit and npm run build.",
-    "Document evidence in NIHOMI_V3_WP11_PERSISTENCE_REPORT_BN.md."
+    "Document evidence in NIHOMI_V3_WP12_PAYMENT_SECURITY_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Altering core table schemas in Supabase.",
-    "Disrupting active student learning sessions."
+    "Modifying approved 12-price matrix amounts.",
+    "Changing client-side checkout modal visual branding."
   ],
   "acceptance_criteria": [
-    "Reconciler automatically replays offline/failover mutations to Supabase upon connection restoration.",
-    "Conflict resolution uses deterministic timestamp and highest-XP rules.",
-    "Zero unhandled sync exceptions logged.",
-    "Automated verification test passes 100% of checks."
+    "Payment webhooks reject invalid or missing HMAC cryptographic signatures with 400/401.",
+    "Duplicate webhook notifications with identical transaction ID are safely deduplicated (idempotent 200 OK without re-charging).",
+    "Tampered price amounts are rejected immediately.",
+    "Automated payment security test passes 100% of assertions."
   ],
   "verification": [
-    "npx tsx scripts/test-dual-persistence-sync.ts passes cleanly.",
+    "npx tsx scripts/test-payment-webhook-security.ts passes cleanly.",
     "npx tsc --noEmit passes with 0 errors.",
     "npm run build clean verification."
   ],
   "risks": [
-    "High latency during initial full database sync (mitigated by batch chunks of 50 records)."
+    "Network timeouts during third-party gateway verification (mitigated by exponential backoff retry in worker queue)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP10-OFFLINE-LEDGER-AND-CORE-HEXAGONAL-ISOLATION"
+    "NIHOMI-V3-WP11-DATABASE-DUAL-PERSISTENCE-SYNC-AND-RECONCILER"
   ]
 }

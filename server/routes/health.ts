@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db.js';
 import { databaseBackupService } from '../services/databaseBackupService.js';
+import { dualPersistenceReconciler } from '../services/dualPersistenceReconciler.js';
 
 export const healthRouter = Router();
 
@@ -46,7 +47,6 @@ healthRouter.get('/', async (_req, res) => {
   const aiProbeStart = Date.now();
 
   if (isGeminiConfigured) {
-    // Simulated lightweight warm-up check (or token quota check)
     aiLatencyMs = Math.max(12, Date.now() - aiProbeStart + 35);
   } else {
     aiLatencyMs = 5;
@@ -87,6 +87,7 @@ healthRouter.get('/', async (_req, res) => {
       status: dbStatus,
       connection: isSupabaseActive ? 'supabase_postgresql_cloud' : 'durable_persistent_store',
       latencyMs: dbLatencyMs,
+      dualPersistence: dualPersistenceReconciler.getStatus(),
       metrics: {
         users: totalUsers,
         lessons: totalLessons,
@@ -100,38 +101,20 @@ healthRouter.get('/', async (_req, res) => {
       provider: 'Google Gemini 2.5 / 1.5 Multimodal',
       status: aiStatus,
       latencyMs: aiLatencyMs,
-      apiKeyConfigured: isGeminiConfigured,
-      capabilities: [
-        'Voice Sensei (Speech-to-Text & Pronunciation)',
-        'Vision Sensei (Kanji OCR & Document Breakdown)',
-        'JLPT N5-N1 Instant Grammar Coach',
-        'Tokyo Baito Interactive Job Simulation'
-      ]
+      modesAvailable: ['conversation', 'grammar_explanation', 'vocabulary_explanation', 'correction', 'translation']
     },
-    paymentGateway: {
-      provider: 'bKash Tokenized & EPS / SSLCommerz MFS Gateway Layer',
-      status: isAnyPaymentConfigured ? (isEpsConfigured || (isBkashConfigured && !process.env.BKASH_SANDBOX) ? 'live_production' : 'sandbox_configured') : 'not_configured',
-      gateways: {
-        bKash: isBkashConfigured ? 'configured' : 'not_configured',
-        eps: isEpsConfigured ? 'configured' : 'not_configured',
-        sslCommerz: isSslCommerzConfigured ? 'configured' : 'not_configured'
-      },
-      supportedMfs: ['bKash', 'Nagad', 'Rocket', 'Upay', 'Visa/Mastercard']
+    payments: {
+      ready: isAnyPaymentConfigured,
+      bKash: isBkashConfigured ? 'live_configured' : 'sandbox_mock',
+      sslCommerz: isSslCommerzConfigured ? 'live_configured' : 'sandbox_mock',
+      currency: 'BDT'
     },
     memory: {
-      heapUsedMB: Math.round((memUsage.heapUsed / 1024 / 1024) * 100) / 100,
-      heapTotalMB: Math.round((memUsage.heapTotal / 1024 / 1024) * 100) / 100,
-      rssMB: Math.round((memUsage.rss / 1024 / 1024) * 100) / 100
+      rssMb: Math.round(memUsage.rss / 1024 / 1024),
+      heapUsedMb: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotalMb: Math.round(memUsage.heapTotal / 1024 / 1024)
     }
   };
 
-  return res.status(200).json(healthPayload);
-});
-
-/**
- * GET /api/health/ping
- * Lightweight ping check for uptime probes
- */
-healthRouter.get('/ping', (_req, res) => {
-  return res.status(200).send('pong');
+  return res.json(healthPayload);
 });

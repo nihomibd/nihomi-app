@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-V3-WP10-OFFLINE-LEDGER-AND-CORE-HEXAGONAL-ISOLATION",
-  "scope_fingerprint": "051e3b344bcfaf5d4119b09cb54d42f9711cab682a8bbdd91a4091f81c1f40e1",
-  "approved_at": "2026-10-25T01:04:21.000Z",
+  "task_id": "NIHOMI-V3-WP11-DATABASE-DUAL-PERSISTENCE-SYNC-AND-RECONCILER",
+  "scope_fingerprint": "1ce8f4543c7c038116780a138e1f2c4b70c52529529a5019770bf89dcf5cf8a4",
+  "approved_at": "2026-10-25T01:16:12.000Z",
   "approved_via": "user-explicit-chat-approval",
   "approved_scope_summary": {
-    "title": "Durable Offline Ledger with IndexedDB & Pure Hexagonal Boundary Isolation for the Stable Core",
-    "domain": "core-stability-and-offline-resilience",
-    "base_commit": "62ebd8e"
+    "title": "Cloud PostgreSQL & Local JSON Dual-Persistence Sync and Conflict Reconciliation Engine",
+    "domain": "data-integrity-and-persistence",
+    "base_commit": "1a07fb0"
   }
 }
