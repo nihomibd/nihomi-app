@@ -1,3 +1,9 @@
+import {
+  saveKnowledgeStateToIndexedDb,
+  loadKnowledgeStateFromIndexedDb,
+  flushSyncQueueToServer
+} from '../../lib/offline/indexedDbLedger';
+
 let _syncTimeout: any = null;
 
 export function syncKnowledgeStateToServer(state: LearnerKnowledgeState): void {
@@ -8,6 +14,7 @@ export function syncKnowledgeStateToServer(state: LearnerKnowledgeState): void {
     if (_syncTimeout) clearTimeout(_syncTimeout);
     _syncTimeout = setTimeout(async () => {
       try {
+        await flushSyncQueueToServer(token, state).catch(() => {});
         await fetch('/api/progress/knowledge-state', {
           method: 'POST',
           headers: {
@@ -205,6 +212,8 @@ export function saveLearnerKnowledgeState(state: LearnerKnowledgeState, userId?:
     if (key !== PRIMARY_KNOWLEDGE_STATE_KEY) {
       localStorage.setItem(PRIMARY_KNOWLEDGE_STATE_KEY, serialized);
     }
+    // Durable IndexedDB persistence
+    saveKnowledgeStateToIndexedDb(state, userId).catch(() => {});
     window.dispatchEvent(new CustomEvent('nihomi:knowledge-state-updated', { detail: state }));
     syncKnowledgeStateToServer(state);
   } catch (err) {
@@ -272,4 +281,28 @@ export function resolveLearnerMistake(state: LearnerKnowledgeState, item: string
   };
   saveLearnerKnowledgeState(updated);
   return updated;
+}
+
+export async function loadLearnerKnowledgeStateAsync(userId?: string): Promise<LearnerKnowledgeState> {
+  const local = loadLearnerKnowledgeState(userId);
+  try {
+    const idbState = await loadKnowledgeStateFromIndexedDb(userId);
+    if (idbState) {
+      const merged: LearnerKnowledgeState = {
+        ...local,
+        ...idbState,
+        knownHiragana: Array.from(new Set([...(local.knownHiragana || []), ...(idbState.knownHiragana || [])])),
+        knownKatakana: Array.from(new Set([...(local.knownKatakana || []), ...(idbState.knownKatakana || [])])),
+        knownVocabulary: Array.from(new Set([...(local.knownVocabulary || []), ...(idbState.knownVocabulary || [])])),
+        knownKanji: Array.from(new Set([...(local.knownKanji || []), ...(idbState.knownKanji || [])])),
+        masteredSkills: Array.from(new Set([...(local.masteredSkills || []), ...(idbState.masteredSkills || [])])),
+        totalXp: Math.max(local.totalXp || 0, idbState.totalXp || 0),
+        streakDays: Math.max(local.streakDays || 0, idbState.streakDays || 0)
+      };
+      return merged;
+    }
+  } catch (e) {
+    console.warn('[KnowledgeState] Async IDB load fallback:', e);
+  }
+  return local;
 }

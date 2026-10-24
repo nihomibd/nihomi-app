@@ -1,41 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-ARCH-PERMANENT-SYSTEM-ARCHITECTURE-BLUEPRINT",
+  "task_id": "NIHOMI-V3-WP11-DATABASE-DUAL-PERSISTENCE-SYNC-AND-RECONCILER",
   "status": "pending",
-  "created_at": "2026-10-25T00:30:00+06:00",
-  "base_commit": "654af0b",
-  "title": "NIHOMI.com Permanent System Architecture Blueprint & Engineering Constitution",
-  "domain": "system-architecture-and-governance",
-  "objective": "Establish the permanent, immutable System Architecture Blueprint and Engineering Constitution for NIHOMI.com, governing core stability, Modular Monolith & Hexagonal Architecture, AI Provider Abstraction (AI Fence), Offline-resilient PWA, and zero-compromise learning & evidence integrity.",
+  "created_at": "2026-10-25T01:15:00+06:00",
+  "base_commit": "62ebd8e",
+  "title": "Cloud PostgreSQL & Local JSON Dual-Persistence Sync and Conflict Reconciliation Engine",
+  "domain": "data-integrity-and-persistence",
+  "objective": "Build an automated bi-directional reconciler between Supabase PostgreSQL cloud primary and local JSON failover storage, resolving potential split-brain drift and ensuring zero data loss during network restoration.",
   "in_scope": [
-    "Audit existing codebase modules and map them to the 5 architectural layers.",
-    "Formulate the 4 Immutable Engineering Principles (Stable Core, Replaceable Adapters, Fail Safely, Evidence Before Release).",
-    "Define the Stable Core boundaries: Learning Journey, Progress & Evidence Ledger, Assessment & Spaced Repetition, Access & Entitlements.",
-    "Formalize the AI Fence: Decoupling AI models from curriculum authority, grading, and state mutation.",
-    "Specify the Ports & Adapters interfaces for AI, Database, File Storage, Payments, and External Services.",
-    "Define the Offline Resilience and Disaster Recovery architecture (PWA, Cache, IndexedDB/LocalStorage, Server crash survival).",
-    "Create docs/NIHOMI_PERMANENT_SYSTEM_ARCHITECTURE_BLUEPRINT.md and update docs/ARCHITECTURE.md.",
-    "Deliver executive blueprint artifact in Bengali."
+    "Implement server/services/dualPersistenceReconciler.ts with atomic transaction replay.",
+    "Add bidirectional reconciliation probe on server startup and cloud reconnect.",
+    "Create automated test scripts/test-dual-persistence-sync.ts verifying conflict resolution.",
+    "Verify with npx tsc --noEmit and npm run build.",
+    "Document evidence in NIHOMI_V3_WP11_PERSISTENCE_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Introducing speculative third-party dependencies.",
-    "Breaking or modifying existing working runtime features."
+    "Altering core table schemas in Supabase.",
+    "Disrupting active student learning sessions."
   ],
   "acceptance_criteria": [
-    "Comprehensive canonical document docs/NIHOMI_PERMANENT_SYSTEM_ARCHITECTURE_BLUEPRINT.md created with complete layer mapping, Mermaid diagrams, and code references.",
-    "docs/ARCHITECTURE.md updated and aligned.",
-    "Strict AI Fence and Stable Core immutability explicitly defined.",
-    "TypeScript typecheck passes cleanly with zero errors."
+    "Reconciler automatically replays offline/failover mutations to Supabase upon connection restoration.",
+    "Conflict resolution uses deterministic timestamp and highest-XP rules.",
+    "Zero unhandled sync exceptions logged.",
+    "Automated verification test passes 100% of checks."
   ],
   "verification": [
-    "npx tsc --noEmit passes cleanly.",
-    "npm run build passes cleanly.",
-    "Architecture documentation contains explicit filepaths for every layer."
+    "npx tsx scripts/test-dual-persistence-sync.ts passes cleanly.",
+    "npx tsc --noEmit passes with 0 errors.",
+    "npm run build clean verification."
   ],
   "risks": [
-    "Documentation divergence if future engineers bypass the architecture rules (mitigated by embedding rules into constitution and automated preflights)."
+    "High latency during initial full database sync (mitigated by batch chunks of 50 records)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP09-PLATFORM-WIDE-A-TO-Z-BUG-SWEEP-AND-POLISH"
+    "NIHOMI-V3-WP10-OFFLINE-LEDGER-AND-CORE-HEXAGONAL-ISOLATION"
   ]
 }
