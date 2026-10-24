@@ -34,7 +34,7 @@ export const NihomiBrandLogo: React.FC<NihomiBrandLogoProps> = ({
           src={markSrc}
           alt="Nihomi Mark"
           style={{ height: safeSize, width: 'auto' }}
-          className="object-contain max-h-full transition-transform duration-200 hover:scale-105"
+          className="object-contain max-h-full shrink-0 transition-transform duration-200 hover:scale-105"
           loading="eager"
         />
       </div>
@@ -47,20 +47,20 @@ export const NihomiBrandLogo: React.FC<NihomiBrandLogoProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`inline-flex items-center gap-2 select-none ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`inline-flex items-center gap-2 select-none shrink-0 min-w-fit ${onClick ? 'cursor-pointer' : ''} ${className}`}
       style={{ height: safeSize }}
     >
       <img
         src={logoSrc}
         alt="NIHOMI — From Zero Japanese to Japan-Ready"
         style={{ height: safeSize, width: 'auto' }}
-        className="object-contain max-h-full transition-opacity duration-200 hover:opacity-95"
+        className="object-contain max-h-full shrink-0 transition-opacity duration-200 hover:opacity-95"
         loading="eager"
       />
 
       {showTagline && (
         <span
-          className="hidden xl:inline-block text-[10px] font-medium tracking-wider pl-2 border-l border-white/20 whitespace-nowrap text-stone-400"
+          className="hidden xl:inline-block text-[10px] font-medium tracking-wider pl-2 border-l border-white/20 whitespace-nowrap text-stone-400 shrink-0"
           style={{ fontFamily: "'Noto Sans Bengali', sans-serif" }}
         >
           শূন্য থেকে জাপান-রেডি

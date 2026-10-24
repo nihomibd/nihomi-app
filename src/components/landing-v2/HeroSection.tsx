@@ -10,6 +10,7 @@ import {
   Compass,
   Heart,
   RotateCcw,
+  GraduationCap,
   User as UserIcon
 } from 'lucide-react';
 import { LandingPageContainer } from './LandingPageContainer';
@@ -118,16 +119,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenCali
 
             {/* High-Contrast Primary Actions & Fast-Track Calibration */}
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              
-              <button
-                type="button"
-                id="hero-start-journey-cta"
-                onClick={() => onNavigate('journey')}
-                className="btn-haptic inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#E45147] hover:bg-[#c93b32] text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition cursor-pointer"
-              >
-                <span>বিনামূল্যে পাঠ শুরু করুন</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+              {user ? (
+                <button
+                  type="button"
+                  id="hero-go-dashboard-cta"
+                  onClick={() => onNavigate('dashboard')}
+                  className="btn-haptic inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#E45147] hover:bg-[#c93b32] text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition cursor-pointer"
+                >
+                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>আমার ড্যাশবোর্ডে ফিরুন</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  id="hero-start-journey-cta"
+                  onClick={() => onNavigate('journey')}
+                  className="btn-haptic inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#E45147] hover:bg-[#c93b32] text-white font-black text-sm sm:text-base shadow-xl shadow-red-600/30 transition cursor-pointer"
+                >
+                  <span>বিনামূল্যে পাঠ শুরু করুন</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              )}
 
               {onOpenCalibration && (
                 <button
@@ -396,10 +409,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenCali
                       type="button"
                       id="hero-aha-canvas-cta"
                       data-testid="hero-aha-canvas-cta"
-                      onClick={() => onNavigate('journey')}
+                      onClick={() => onNavigate(user ? 'dashboard' : 'journey')}
                       className="flex-1 py-3 rounded-xl bg-[#E45147] hover:bg-[#c93b32] text-white font-black text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <span>সম্পূর্ণ জেন ক্যানভাসে শিখুন</span>
+                      <span>{user ? 'ড্যাশবোর্ডে ফিরে যান' : 'সম্পূর্ণ জেন ক্যানভাসে শিখুন'}</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>

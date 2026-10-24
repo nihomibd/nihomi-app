@@ -1,5 +1,5 @@
 // src/v2/V2App.tsx
-// NIHOMI V2 — UNIFIED PRODUCT ROUTER & APPLICATION ENTRY POINT
+// NIHOMI V2 / V3 — UNIFIED PRODUCT ROUTER & APPLICATION ENTRY POINT
 import React, { useState, useEffect } from 'react';
 import { V2AppShell } from './components/layout/V2AppShell';
 import { V2Route, V2NavigationParams } from './types';
@@ -20,6 +20,7 @@ import { RefundPolicyPage } from '../pages/RefundPolicyPage';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { hydrateKnowledgeStateFromServer } from '../core/curriculum/learnerKnowledgeState';
 import { NomiProvider } from '../components/nomi';
+import { useAuth } from '../context/AuthContext';
 
 const parseHashRoute = (): { route: V2Route; params: V2NavigationParams } => {
   if (typeof window === 'undefined') return { route: 'landing', params: {} };
@@ -155,6 +156,26 @@ export interface V2AppProps {
 }
 
 export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
+  const { user, loading, openAuthModal } = useAuth();
+
+  // Strict Founder Invariant: ONLY mdtanvirkabirbiplob@gmail.com
+  const isFounder = Boolean(
+    (user?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com') ||
+    user?.role === 'founder' ||
+    (() => {
+      try {
+        if (typeof window !== 'undefined') {
+          const raw = localStorage.getItem('nihomi_user');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            return parsed?.email?.trim().toLowerCase() === 'mdtanvirkabirbiplob@gmail.com' || parsed?.role === 'founder';
+          }
+        }
+      } catch {}
+      return false;
+    })()
+  );
+
   const [currentRoute, setCurrentRoute] = useState<V2Route>(() => {
     const initial = parseHashRoute();
     return initial.route === 'legacy' ? 'landing' : initial.route;
@@ -219,6 +240,41 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [onNavigateLegacy]);
 
+  // Authenticated Default Landing & Strict Route Guarding
+  useEffect(() => {
+    if (loading) return;
+
+    const rawHash = typeof window !== 'undefined' ? window.location.hash.replace(/^#\/?/, '').trim() : '';
+
+    // If an authenticated student lands on root without specific subroute, direct to dashboard
+    if (user && !rawHash && currentRoute === 'landing') {
+      setCurrentRoute('dashboard');
+      if (typeof window !== 'undefined') {
+        try { window.location.hash = '#/dashboard'; } catch {}
+      }
+      return;
+    }
+
+    // Guard: Unauthenticated visitors cannot access student dashboard or founder cockpit
+    if (!user && (currentRoute === 'dashboard' || currentRoute === 'founder')) {
+      setCurrentRoute('landing');
+      if (typeof window !== 'undefined') {
+        try { window.location.hash = '#/'; } catch {}
+      }
+      openAuthModal('login');
+      return;
+    }
+
+    // Guard: Non-founders cannot access founder cockpit
+    if (currentRoute === 'founder' && !isFounder) {
+      setCurrentRoute('dashboard');
+      if (typeof window !== 'undefined') {
+        try { window.location.hash = '#/dashboard'; } catch {}
+      }
+      return;
+    }
+  }, [user, loading, currentRoute, isFounder, openAuthModal]);
+
   const handleNavigate = (route: V2Route, params?: V2NavigationParams) => {
     if (route === 'legacy') {
       if (onNavigateLegacy) {
@@ -226,6 +282,17 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
       } else {
         window.location.href = '/legacy';
       }
+      return;
+    }
+
+    // Intercept protected routes if guest
+    if (!user && (route === 'dashboard' || route === 'founder')) {
+      openAuthModal('login');
+      return;
+    }
+
+    if (route === 'founder' && !isFounder) {
+      handleNavigate('dashboard');
       return;
     }
 
@@ -253,6 +320,9 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
       case 'journey':
         return <V2JourneyPage onNavigate={handleNavigate} />;
       case 'dashboard':
+        if (!user && !loading) {
+          return <V2LandingPage onNavigate={handleNavigate} />;
+        }
         return <V2DashboardPage onNavigate={handleNavigate} />;
       case 'kana':
         return (
@@ -298,6 +368,9 @@ export const V2App: React.FC<V2AppProps> = ({ onNavigateLegacy }) => {
           />
         );
       case 'founder':
+        if (!isFounder) {
+          return <V2DashboardPage onNavigate={handleNavigate} />;
+        }
         return <V2FounderPage onNavigate={handleNavigate} />;
       case 'terms':
         return (

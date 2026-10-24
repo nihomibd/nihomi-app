@@ -274,6 +274,30 @@ export const V2DashboardPage: React.FC<V2DashboardPageProps> = ({ onNavigate }) 
     return `${x},${y}`;
   }).join(' ');
 
+  if (!user) {
+    return (
+      <div className="w-full max-w-lg mx-auto px-4 py-24 text-center">
+        <div className="p-8 rounded-3xl bg-[#141726] border border-white/10 shadow-2xl space-y-4">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#E45147]/15 border border-[#E45147]/30 flex items-center justify-center text-[#E45147]">
+            <GraduationCap className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-black text-white">শিক্ষার্থী ড্যাশবোর্ডে স্বাগতম</h2>
+          <p className="text-stone-300 text-sm leading-relaxed">
+            আপনার ব্যক্তিগত লার্নিং প্রোগ্রেস, জাপানিজ রিভিশন স্ট্রীক এবং ২৪টি লেসনের রিপোর্ট দেখতে অনুগ্রহ করে লগইন করুন।
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => openAuthModal('login')}
+              className="btn-haptic px-6 py-3 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-sm font-extrabold shadow-lg shadow-red-600/30 transition cursor-pointer"
+            >
+              লগইন / সাইন-আপ করুন
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div id="v2-app-root" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-10 animate-fadeIn text-slate-100">
       

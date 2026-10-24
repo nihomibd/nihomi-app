@@ -48,22 +48,38 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
     })()
   );
 
-  const navLinks: {
+  // Guest Navigation: Clean, uncluttered discovery links for visitors
+  const guestNavLinks: {
     route: V2Route;
     label: string;
+    icon: React.FC<{ className?: string }>;
     badge?: string;
     badgeColor?: string;
-    icon: React.FC<{ className?: string }>;
   }[] = [
-    { route: 'landing', label: 'হোম', icon: Sparkles },
-    { route: 'journey', label: 'টোকিও জার্নি', badge: '১০০% ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: Compass },
-    { route: 'dashboard', label: 'শিক্ষার্থী ড্যাশবোর্ড', icon: GraduationCap },
-    { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', badge: 'N5 ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: BookOpen },
-    { route: 'exam', label: 'JLPT মক এক্সাম ওএস', badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Award },
-    { route: 'workos', label: 'কনবিনি WorkOS™', badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: Store },
-    { route: 'rirekisho', label: 'রিলোকেশন CV', badge: 'ফ্রি টুল', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: FileText },
-    { route: 'pricing', label: 'সাবস্ক্রিপশন', icon: CreditCard }
+    { route: 'curriculum', label: 'পাঠ্যক্রম (N5–N1)', icon: BookOpen, badge: 'N5 ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+    { route: 'workos', label: 'কনবিনি WorkOS™', icon: Store, badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+    { route: 'exam', label: 'মক এক্সাম', icon: Award, badge: 'CBT', badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
+    { route: 'rirekisho', label: 'রিলোকেশন CV', icon: FileText, badge: 'ফ্রি টুল', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+    { route: 'pricing', label: 'প্রাইসিং', icon: CreditCard }
   ];
+
+  // Student Navigation: Learning cockpit links for authenticated students
+  const studentNavLinks: {
+    route: V2Route;
+    label: string;
+    icon: React.FC<{ className?: string }>;
+    badge?: string;
+    badgeColor?: string;
+  }[] = [
+    { route: 'dashboard', label: 'ড্যাশবোর্ড', icon: GraduationCap },
+    { route: 'journey', label: 'লার্নিং জার্নি', icon: Compass, badge: '১০০% ফ্রি', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+    { route: 'curriculum', label: 'পাঠ্যক্রম', icon: BookOpen },
+    { route: 'workos', label: 'কনবিনি WorkOS™', icon: Store, badge: 'PRO', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+    { route: 'exam', label: 'মক এক্সাম', icon: Award, badge: 'CBT', badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
+    { route: 'rirekisho', label: 'রিলোকেশন CV', icon: FileText }
+  ];
+
+  const activeNavLinks = user ? studentNavLinks : guestNavLinks;
 
   const handleNavClick = (route: V2Route) => {
     setMobileMenuOpen(false);
@@ -73,12 +89,13 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
 
   return (
     <header id="v2-header" className="sticky top-0 z-40 w-full bg-[#141726]/95 backdrop-blur-md border-b border-[#F6F0E6]/10 text-[#F6F0E6]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
         
-        {/* Authentic Founder Brand Logo */}
+        {/* Authentic Founder Brand Logo — Protected from shrinking or collision */}
         <div
-          onClick={() => handleNavClick('landing')}
-          className="flex items-center gap-3 cursor-pointer select-none group"
+          onClick={() => handleNavClick(user ? 'dashboard' : 'landing')}
+          className="flex items-center gap-3 cursor-pointer select-none group shrink-0"
+          title={user ? 'আমার স্টুডেন্ট ড্যাশবোর্ড' : 'NIHOMI হোম'}
         >
           <NihomiBrandLogo
             variant="full"
@@ -88,41 +105,34 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
           />
         </div>
 
-        {/* Desktop Navigation Links (Segmented for Learning Excellence) */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-          {navLinks.map(({ route, label, badge, badgeColor }) => {
+        {/* Desktop Navigation Links — Strictly flex-nowrap to prevent line wrapping or floating over logo */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 flex-nowrap shrink-0">
+          {activeNavLinks.map(({ route, label }) => {
             const isActive = currentRoute === route;
             return (
               <button
                 key={route}
                 onClick={() => handleNavClick(route)}
-                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
                     ? 'bg-[#E45147] text-white shadow-md shadow-red-600/30'
                     : 'text-stone-300 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span>{label}</span>
-                {badge && (
-                  <span className={`px-1.5 py-0.2 rounded text-[9px] font-black uppercase tracking-wider border ${
-                    isActive ? 'bg-white/20 text-white border-white/30' : badgeColor
-                  }`}>
-                    {badge}
-                  </span>
-                )}
+                {label}
               </button>
             );
           })}
         </nav>
 
         {/* Right CTA / Auth Status */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 xl:gap-2.5 shrink-0">
           {/* Dedicated Founder Cockpit Gateway — STRICTLY visible only for mdtanvirkabirbiplob@gmail.com */}
           {isFounder && (
             <button
               id="header-founder-cockpit-btn"
               onClick={() => handleNavClick('founder')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition cursor-pointer shadow-lg shadow-amber-500/10"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition cursor-pointer shadow-lg shadow-amber-500/10 shrink-0 whitespace-nowrap"
             >
               <Crown className="w-3.5 h-3.5 text-amber-400" />
               <span>Founder Cockpit</span>
@@ -130,24 +140,24 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
           )}
 
           {user ? (
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 id="header-user-profile-btn"
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold transition cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold transition cursor-pointer shrink-0 whitespace-nowrap"
               >
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
                     alt={user.name || 'User'}
                     referrerPolicy="no-referrer"
-                    className="w-6 h-6 rounded-full object-cover border border-white/20"
+                    className="w-6 h-6 rounded-full object-cover border border-white/20 shrink-0"
                     onError={(e) => {
                       (e.target as HTMLElement).style.display = 'none';
                     }}
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-[#6D7C55] text-white flex items-center justify-center text-[11px] font-black">
+                  <div className="w-6 h-6 rounded-full bg-[#6D7C55] text-white flex items-center justify-center text-[11px] font-black shrink-0">
                     {user.name ? user.name[0].toUpperCase() : 'U'}
                   </div>
                 )}
@@ -237,21 +247,30 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
               )}
             </div>
           ) : (
-            <button
-              id="header-login-btn"
-              onClick={() => openAuthModal('login')}
-              className="btn-haptic px-4 py-2 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-xs font-extrabold shadow-md shadow-red-600/30 transition cursor-pointer flex items-center gap-1.5"
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>লগইন / সাইন-আপ</span>
-            </button>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                id="header-login-btn"
+                onClick={() => openAuthModal('login')}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold text-stone-300 hover:text-white hover:bg-white/10 transition cursor-pointer shrink-0 whitespace-nowrap"
+              >
+                লগইন
+              </button>
+              <button
+                id="header-register-btn"
+                onClick={() => onNavigate('journey')}
+                className="btn-haptic px-3.5 py-1.5 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-xs font-extrabold shadow-md shadow-red-600/30 transition cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>বিনামূল্যে শুরু করুন</span>
+              </button>
+            </div>
           )}
 
           {/* Mobile Hamburger Button (Accessible Touch Target) */}
           <button
             id="mobile-menu-toggle-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer select-none active:scale-95"
+            className="lg:hidden flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white transition cursor-pointer select-none active:scale-95 shrink-0"
             aria-label={mobileMenuOpen ? 'নেভিগেশন মেনু বন্ধ করুন' : 'নেভিগেশন মেনু খুলুন'}
             aria-expanded={mobileMenuOpen}
           >
@@ -290,26 +309,38 @@ export const V2Header: React.FC<V2HeaderProps> = ({ currentRoute, onNavigate }) 
                   logout();
                   setMobileMenuOpen(false);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-rose-500/15 text-rose-300 text-xs font-bold hover:bg-rose-500/25 transition cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg bg-rose-500/15 text-rose-300 text-xs font-bold hover:bg-rose-500/25 transition cursor-pointer shrink-0"
               >
                 লগআউট
               </button>
             </div>
           ) : (
-            <button
-              id="mobile-drawer-login-btn"
-              onClick={() => {
-                openAuthModal('login');
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-xs font-black shadow-lg shadow-red-600/30 transition cursor-pointer mb-3"
-            >
-              <User className="w-4 h-4" />
-              <span>লগইন / সাইন-আপ (Sign In / Register)</span>
-            </button>
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <button
+                id="mobile-drawer-login-btn"
+                onClick={() => {
+                  openAuthModal('login');
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition cursor-pointer"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>লগইন করুন</span>
+              </button>
+              <button
+                id="mobile-drawer-register-btn"
+                onClick={() => {
+                  handleNavClick('journey');
+                }}
+                className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#E45147] hover:bg-[#D43E34] text-white text-xs font-black shadow-md shadow-red-600/30 transition cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>ফ্রি শুরু করুন</span>
+              </button>
+            </div>
           )}
 
-          {navLinks.map(({ route, label, icon: IconComp, badge, badgeColor }) => (
+          {activeNavLinks.map(({ route, label, icon: IconComp, badge, badgeColor }) => (
             <button
               key={route}
               onClick={() => handleNavClick(route)}
