@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "status": "approved",
-  "task_id": "NIHOMI-V3-WP13-SRE-MONITORING-CDN-PURGE-AND-TELEMETRY-PROBES",
-  "scope_fingerprint": "aad58f7acb0c0575b4eb1508656b64ea289d7fe02c1a640dfad8af918610f727",
-  "approved_at": "2026-10-25T01:48:34.000Z",
+  "task_id": "NIHOMI-V3-WP16-BAITO-OS-7ELEVEN-POS-SIMULATOR-DURABILITY-AND-VOICE-HARNESS",
+  "scope_fingerprint": "c5a60cd602ab38b7e20be4c77110b6ec501f41fa553dfa976ce72ea95ab25969",
+  "approved_at": "2026-10-25T03:02:00.000Z",
   "approved_via": "user-explicit-chat-approval",
   "approved_scope_summary": {
-    "title": "Production SRE Deep Health Telemetry, Edge CDN Cache Purge & Traffic Telemetry",
-    "domain": "infrastructure-and-sre",
-    "base_commit": "bda5417"
+    "title": "Baito OS 7-Eleven POS Simulator State Durability, Audio/Voice Harness & Evidence Logging",
+    "domain": "workplace-simulation-and-pos",
+    "base_commit": "81aa3ea"
   }
 }

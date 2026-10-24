@@ -37,7 +37,8 @@
     "test:payment-security": "tsx scripts/test-payment-webhook-security.ts",
     "test:sre": "tsx scripts/test-sre-telemetry-and-cdn.ts",
     "test:ai-cost": "tsx scripts/test-ai-gateway-cost-safety.ts",
-    "test:exam-os": "tsx scripts/test-exam-os-and-certificates.ts"
+    "test:exam-os": "tsx scripts/test-exam-os-and-certificates.ts",
+    "test:baito-pos": "tsx scripts/test-baito-pos-simulator.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

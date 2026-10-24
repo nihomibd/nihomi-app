@@ -44,6 +44,58 @@ baitoSimulationRouter.get('/conbini/orders', optionalAuth, (req: AuthenticatedRe
   });
 });
 
+// 4a. Get In-Flight Conbini POS Shift Session
+baitoSimulationRouter.get('/conbini/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  const session = db.getBaitoSession(userId);
+  return res.json({
+    success: true,
+    session
+  });
+});
+
+// 4b. Save / Update In-Flight Conbini POS Shift Session
+baitoSimulationRouter.post('/conbini/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  const sessionData = req.body;
+  db.saveBaitoSession(userId, sessionData);
+  return res.json({
+    success: true,
+    session: sessionData
+  });
+});
+
+// 4c. Delete / Clear In-Flight Conbini POS Shift Session
+baitoSimulationRouter.delete('/conbini/session', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  db.clearBaitoSession(userId);
+  return res.json({
+    success: true,
+    message: 'Shift session cleared'
+  });
+});
+
+// 4d. Record Completed Conbini POS Shift Attempt
+baitoSimulationRouter.post('/conbini/attempt', optionalAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || 'usr_default';
+  const { scenarioId, brandId, score, passed, earnedXp, stepsPassed, customerSatisfaction, itemsCount, totalAmountYen } = req.body || {};
+  const result = db.recordBaitoShiftAttempt(userId, {
+    scenarioId: scenarioId || 'conbini_shift_standard_01',
+    brandId: brandId || '7eleven',
+    score: typeof score === 'number' ? score : 80,
+    passed: Boolean(passed),
+    earnedXp: typeof earnedXp === 'number' ? earnedXp : 30,
+    stepsPassed: typeof stepsPassed === 'number' ? stepsPassed : 4,
+    customerSatisfaction: customerSatisfaction || 'good',
+    itemsCount: typeof itemsCount === 'number' ? itemsCount : 1,
+    totalAmountYen: typeof totalAmountYen === 'number' ? totalAmountYen : 500
+  });
+  return res.json({
+    success: true,
+    ...result
+  });
+});
+
 // 5. Evaluate Multi-Turn Interview & Simulation Speech/Text Response
 baitoSimulationRouter.post('/interview/evaluate', optionalAuth, (req: AuthenticatedRequest, res) => {
   const { scenarioId, userText, history } = req.body;

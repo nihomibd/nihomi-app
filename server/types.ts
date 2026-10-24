@@ -1018,6 +1018,8 @@ export interface DatabaseSchema {
   conbiniOrders?: ConbiniCustomerOrder[];
   rirekishoProfiles?: JisRirekishoData[];
   keirekishoProfiles?: ShokumuKeirekishoData[];
+  activeBaitoSessions?: Record<string, any>;
+  baitoAttempts?: any[];
 
   // P1-04: Adaptive SRS (Spaced Repetition System) Engine Tables
   srsCards?: SrsCardRecord[];

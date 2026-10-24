@@ -27,7 +27,9 @@ import {
   ShoppingBag,
   Utensils,
   Play,
-  RotateCw
+  RotateCw,
+  Mic,
+  MicOff
 } from 'lucide-react';
 import { ConbiniPosProduct, ConbiniCustomerOrder } from '../../types';
 import { CONBINI_SCENARIOS, ConbiniScenarioItem } from '../../data/conbiniScenarios';
@@ -41,6 +43,14 @@ import { ConbiniThermalReceiptModal } from './conbini/ConbiniThermalReceiptModal
 import { speakJapanese, stopJapaneseSpeech } from '../../lib/tts';
 import { soundEffects } from '../../lib/soundEffects';
 import { loadLearnerKnowledgeState, saveLearnerKnowledgeState } from '../../core/curriculum/learnerKnowledgeState';
+import {
+  isSpeechRecognitionSupported,
+  startResilientSpeechRecognition,
+  matchJapaneseGreeting
+} from '../../lib/speechRecognitionHarness';
+import { conbiniSimulatorAdapter } from '../../core/adapters/conbiniSimulatorAdapter';
+import { recordOfflineAttempt } from '../../lib/offline/indexedDbLedger';
+
 
 interface ConbiniPosCashierSimulatorProps {
   onCompleteOrder?: (score: number, yenTotal: number) => void;
@@ -131,6 +141,20 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   });
 
   const [showShiftScorecardModal, setShowShiftScorecardModal] = useState(false);
+
+  // 11b. In-Flight Shift Durability & Resilient Voice Recognition
+  const [isListeningVoice, setIsListeningVoice] = useState(false);
+  const [voiceErrorMsg, setVoiceErrorMsg] = useState<string | null>(null);
+  const [isSessionResumed, setIsSessionResumed] = useState(false);
+  const speechControllerRef = useRef<{ stop: () => void } | null>(null);
+  const lastSavedPayloadRef = useRef<string>('');
+
+  const clearActiveSession = () => {
+    try {
+      localStorage.removeItem('nihomi_conbini_pos_session_v1');
+    } catch {}
+    fetch('/api/baito/conbini/session', { method: 'DELETE' }).catch(() => {});
+  };
 
   // 12. Audio & Notification Feedback
   const [feedbackNotice, setFeedbackNotice] = useState<{
@@ -259,6 +283,41 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   // -----------------------------------------------------------------------------
   // STAGE 1: GREETING (いらっしゃいませ！)
   // -----------------------------------------------------------------------------
+
+  const handleToggleVoiceGreeting = () => {
+    if (isListeningVoice) {
+      speechControllerRef.current?.stop();
+      setIsListeningVoice(false);
+      return;
+    }
+
+    setVoiceErrorMsg(null);
+    setIsListeningVoice(true);
+
+    speechControllerRef.current = startResilientSpeechRecognition({
+      lang: 'ja-JP',
+      onStart: () => {
+        setIsListeningVoice(true);
+      },
+      onResult: (transcript, isFinal) => {
+        if (matchJapaneseGreeting(transcript, ['いらっしゃいませ', 'いらっしゃい', 'irasshaimase', 'irashaimase'])) {
+          speechControllerRef.current?.stop();
+          setIsListeningVoice(false);
+          handleCashierGreeting();
+        } else if (isFinal) {
+          setVoiceErrorMsg(`শনাক্ত হয়েছে: 「${transcript}」। অনুগ্রহ করে 「いらっしゃいませ！」 বলুন।`);
+        }
+      },
+      onError: (errMsg) => {
+        setIsListeningVoice(false);
+        setVoiceErrorMsg(errMsg);
+      },
+      onEnd: () => {
+        setIsListeningVoice(false);
+      }
+    });
+  };
+
   const handleCashierGreeting = () => {
     soundEffects.playButtonTap();
     speakJapanese('いらっしゃいませ！', { rate: 0.95 });
@@ -614,6 +673,70 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
         type: 'success'
       });
 
+
+      // Build activity and attempt for conbiniSimulatorAdapter
+      try {
+        const brandShort = selectedBrandId === 'seven_eleven' ? '7eleven' : selectedBrandId === 'lawson' ? 'lawson' : 'familymart';
+        const knowledge = loadLearnerKnowledgeState();
+        const activity = conbiniSimulatorAdapter.selectActivity(knowledge, {
+          brandId: brandShort,
+          scenarioId: currentScenario.id
+        });
+        const attempt = {
+          scenarioId: currentScenario.id,
+          stepsCompleted: 5,
+          step1GreetingCorrect: isGreetingCompleted,
+          step2ItemsScanned: scannedItems.length >= currentScenario.items.length,
+          step3ServiceHandled: isPointCardAsked || isBentoWarmAsked || isBagAsked,
+          step4PaymentCalculated: isPaymentApproved,
+          step5ClosingPolite: true,
+          timeSpentSeconds: Math.max(10, currentScenario.patienceTimeSeconds - patienceSeconds)
+        };
+        const evalResult = conbiniSimulatorAdapter.evaluateAttempt(activity, attempt);
+
+        // Record in offline ledger
+        recordOfflineAttempt({
+          userId: 'student',
+          domain: 'pos-simulation',
+          activityId: `pos-${brandShort}-${currentScenario.id}`,
+          timestamp: new Date().toISOString(),
+          score: finalScore,
+          passed: finalScore >= 70,
+          xpEarned: earnedXp,
+          evidenceData: {
+            ...evalResult.evidence,
+            brandId: selectedBrandId,
+            scenarioTitle: currentScenario.roleTitleBn || currentScenario.customerName,
+            totalSalesYen: totalAmount,
+            penalty,
+            keigoScore
+          }
+        }).catch((err) => console.warn('[ConbiniPOS] Offline attempt write warning:', err));
+
+        // Sync with backend persistence
+        fetch('/api/baito/conbini/attempt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            scenarioId: currentScenario.id,
+            brandId: selectedBrandId,
+            score: finalScore,
+            passed: finalScore >= 70,
+            earnedXp,
+            stepsPassed: penalty === 0 ? 5 : 4,
+            customerSatisfaction: penalty === 0 ? 'excellent' : 'good',
+            itemsCount: scannedItems.length,
+            totalAmountYen: totalAmount
+          })
+        }).catch(() => {});
+      } catch (err) {
+        console.warn('[ConbiniPOS] Adapter evaluation exception:', err);
+      }
+
+      // Purge in-flight session upon order completion
+      clearActiveSession();
+      setIsSessionResumed(false);
+
       onCompleteOrder?.(finalScore, totalAmount);
     }, 900);
   };
@@ -633,6 +756,8 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
   };
 
   const handleRestartShift = () => {
+    clearActiveSession();
+    setIsSessionResumed(false);
     soundEffects.playButtonTap();
     setShowShiftScorecardModal(false);
     setCurrentScenarioIndex(0);
@@ -913,6 +1038,25 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
 
           {/* ACTIVE STEP CONTEXTUAL ACTION CENTER */}
           <div className="bg-[#141726] border border-white/10 rounded-3xl p-5 shadow-2xl space-y-4">
+            {isSessionResumed && (
+              <div className="flex items-center justify-between bg-emerald-500/15 border border-emerald-500/30 rounded-xl px-4 py-2.5 text-xs text-emerald-300">
+                <span className="flex items-center gap-2 font-medium">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  পূর্ববর্তী শিফট সেশন পুনরুদ্ধার করা হয়েছে। যেখান থেকে থেমেছিলেন সেখান থেকেই কাজ চালিয়ে যেতে পারেন।
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearActiveSession();
+                    setIsSessionResumed(false);
+                    window.location.reload();
+                  }}
+                  className="underline hover:text-emerald-200 ml-4 font-mono text-[11px] shrink-0 cursor-pointer"
+                >
+                  রিসেট
+                </button>
+              </div>
+            )}
             {/* Stage Title Banner */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="text-sm font-black text-white flex items-center gap-2">
@@ -937,14 +1081,39 @@ export const ConbiniPosCashierSimulator: React.FC<ConbiniPosCashierSimulatorProp
                 <p className="text-xs text-stone-300">
                   কাউন্টারে গ্রাহক আসা মাত্র বিনম্র জাপানিজ সম্বোধন করুন:
                 </p>
-                <button
-                  type="button"
-                  id="btn-conbini-greeting-action"
-                  onClick={handleCashierGreeting}
-                  className="w-full py-4 bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <span>🗣️「いらっしゃいませ！」বলুন বা ট্যাপ করুন</span>
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    type="button"
+                    id="btn-conbini-greeting-action"
+                    onClick={handleCashierGreeting}
+                    className="flex-1 py-4 bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span>🗣️「いらっしゃいませ！」ট্যাপ করুন</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="btn-conbini-voice-greeting"
+                    onClick={handleToggleVoiceGreeting}
+                    className={`px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      isListeningVoice
+                        ? 'bg-red-500/20 text-red-400 border-2 border-red-500 animate-pulse'
+                        : 'bg-white/10 hover:bg-white/15 text-stone-200 border border-white/20'
+                    }`}
+                  >
+                    {isListeningVoice ? (
+                      <Mic className="w-5 h-5 text-red-400 animate-bounce" />
+                    ) : (
+                      <Mic className="w-5 h-5 text-amber-400" />
+                    )}
+                    <span>{isListeningVoice ? 'শুনছি... (বলুন)' : 'ভয়েসে বলুন'}</span>
+                  </button>
+                </div>
+                {voiceErrorMsg && (
+                  <div className="text-xs text-amber-300/90 bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5">
+                    {voiceErrorMsg}
+                  </div>
+                )}
                 <div className="text-[11px] text-stone-400 font-mono">
                   উচ্চারণ: Irasshaimase! (স্বাগতম / আপনার সেবা করতে পেরে আনন্দিত)
                 </div>

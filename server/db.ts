@@ -639,6 +639,8 @@ class Database {
     mockExams: [],
     mockExamAttempts: [],
     activeExamSessions: {},
+    activeBaitoSessions: {},
+    baitoAttempts: [],
     studyPlans: [],
     dailyStudySessions: [],
 
@@ -1689,6 +1691,8 @@ class Database {
       mockExams: INITIAL_MOCK_EXAMS,
       mockExamAttempts: [],
     activeExamSessions: {},
+    activeBaitoSessions: {},
+    baitoAttempts: [],
       srsCards: [],
       srsLogs: [],
       learnerAnalyticsSummaries: [],
@@ -7713,6 +7717,78 @@ class Database {
       this.save();
     }
     return this.data.conbiniOrders;
+  }
+
+  public saveBaitoSession(userId: string, sessionData: any): void {
+    if (!this.data.activeBaitoSessions) this.data.activeBaitoSessions = {};
+    this.data.activeBaitoSessions[userId] = {
+      ...sessionData,
+      userId,
+      lastSavedAt: new Date().toISOString()
+    };
+    this.save();
+  }
+
+  public getBaitoSession(userId: string): any {
+    if (!this.data.activeBaitoSessions) return null;
+    const session = this.data.activeBaitoSessions[userId];
+    if (!session) return null;
+    const savedTime = new Date(session.lastSavedAt).getTime();
+    if (Date.now() - savedTime > 86400000) {
+      delete this.data.activeBaitoSessions[userId];
+      this.save();
+      return null;
+    }
+    return session;
+  }
+
+  public clearBaitoSession(userId: string): void {
+    if (!this.data.activeBaitoSessions) return;
+    if (this.data.activeBaitoSessions[userId]) {
+      delete this.data.activeBaitoSessions[userId];
+      this.save();
+    }
+  }
+
+  public recordBaitoShiftAttempt(userId: string, attemptData: {
+    scenarioId: string;
+    brandId: string;
+    score: number;
+    passed: boolean;
+    earnedXp: number;
+    stepsPassed: number;
+    customerSatisfaction: string;
+    itemsCount: number;
+    totalAmountYen: number;
+  }): { attemptId: string; success: boolean; earnedXp: number } {
+    const attemptId = 'baito_att_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+    this.clearBaitoSession(userId);
+
+    const progress = this.getProgressByUserId(userId);
+    if (progress) {
+      progress.experiencePoints = (progress.experiencePoints || 0) + (attemptData.earnedXp || 30);
+      if (attemptData.passed) {
+        if (!progress.knowledgeState) progress.knowledgeState = {};
+        if (!progress.knowledgeState.masteredSkills) progress.knowledgeState.masteredSkills = [];
+        if (!progress.knowledgeState.masteredSkills.includes('baito_conbini_cashier')) {
+          progress.knowledgeState.masteredSkills.push('baito_conbini_cashier');
+        }
+      }
+      progress.updatedAt = new Date().toISOString();
+    }
+
+    if (!this.data.baitoAttempts) {
+      this.data.baitoAttempts = [];
+    }
+    this.data.baitoAttempts.push({
+      id: attemptId,
+      userId,
+      ...attemptData,
+      recordedAt: new Date().toISOString()
+    });
+
+    this.save();
+    return { attemptId, success: true, earnedXp: attemptData.earnedXp || 30 };
   }
 
   public getRirekisho(userId: string): JisRirekishoData {
