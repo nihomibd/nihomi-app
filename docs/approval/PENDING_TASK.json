@@ -1,39 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP06-FINAL-PRODUCTION-RELEASE-PREFLIGHT-AND-LAUNCH-CANDIDATE",
+  "task_id": "NIHOMI-V3-WP07-PRODUCTION-DEPLOYMENT-CLOUDFLARE-PAGES-AND-VPS-SUITE",
   "status": "pending",
-  "created_at": "2026-10-24T06:12:00+06:00",
-  "base_commit": "c229ed9",
-  "title": "Version 3 Final Production Release Preflight, Payment Credentials Ready-State & Launch Candidate V3",
+  "created_at": "2026-10-24T22:40:00+06:00",
+  "base_commit": "6b77aee",
+  "title": "Version 3 Live Production Deployment (Cloudflare Pages, Vercel, and VPS PM2 Suite)",
   "domain": "system-architecture-and-release",
-  "objective": "Prepare the entire NIHOMI platform for live commercial launch. Configure production payment credentials ready-state (bKash/Nagad/SSLCommerz secure environment variables hydration schema), verify aiCostGuard rate limiting and token safety, run preflight security and performance audit across all 15 routes, and execute the final production release candidate verification suite.",
+  "objective": "Execute the live production deployment of Version 3. Commit and sync compiled serverless API artifacts for Vercel/Cloudflare git integrations, verify Cloudflare Pages static configuration (_redirects, _headers, _routes.json) in dist/, author VPS PM2/Nginx automated deployment script, and probe live endpoints on https://www.nihomi.com to confirm 100% production health.",
   "in_scope": [
-    "Configure production payment credentials environment loader and ready-state validation in server/payment-security.ts and server/routes/payment.ts for bKash merchant integration.",
-    "Verify aiCostGuard quota enforcement, token limits, and rate limiting across all Nomi Sensei endpoints.",
-    "Execute full preflight audit across all 15 V3 routes (landing, journey, dashboard, kana, curriculum, lesson, exam, workos, rirekisho, pricing, founder, terms, privacy, refund, legacy).",
-    "Author automated end-to-end launch verification suite scripts/test-v3-wp06-production-preflight.cjs with 100% green assertions.",
-    "Generate final Release Candidate V3 artifact and live readiness audit documentation."
+    "Commit compiled api/index.js and api/index.js.map to trigger automated live production deployment on origin/main.",
+    "Verify Cloudflare Pages SPA rewrite rules (_redirects, _headers, _routes.json) inside dist/.",
+    "Author production-ready VPS automated deployment script scripts/deploy-vps.sh for PM2 and systemd environments.",
+    "Execute live production probe via scripts/verify-live-deployment-and-cloudflare.cjs to verify DNS, SSL, security gates, and V3 API health on https://www.nihomi.com.",
+    "Document complete deployment verification and operational runbook in NIHOMI_V3_WP07_DEPLOYMENT_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Hardcoding actual live secret payment keys into source control (must reside strictly in private .env / Cloudflare deployment secrets).",
-    "Modifying canonical JLPT curriculum definitions or lattice rules."
+    "Modifying DNS nameservers at domain registrar (already pointing to Cloudflare/Vercel).",
+    "Direct SSH mutation of external unconfigured VPS instances without provided credentials."
   ],
   "acceptance_criteria": [
-    "Payment system is ready for immediate live credential input with zero runtime errors.",
-    "All AI endpoints protected by aiCostGuard with sliding window rate limiting and quota verification.",
-    "Zero TypeScript or build errors (npx tsc --noEmit && npm run build).",
-    "Automated preflight test suite passes with 100% green assertions and captures screenshot evidence across all critical user flows."
+    "Compiled api/index.js pushed to origin/main with 0 build warnings.",
+    "Cloudflare Pages configuration verified in build output dist/.",
+    "VPS deploy script scripts/deploy-vps.sh executable and production-hardened.",
+    "Live production probe against https://www.nihomi.com passes 100% green."
   ],
   "verification": [
-    "Run npx tsc --noEmit to verify zero type errors.",
-    "Run npm run build to verify production bundling.",
-    "Execute node scripts/test-v3-wp06-production-preflight.cjs in headless browser.",
-    "Verify payment callback mock cycle, aiCostGuard middleware intercept, and release checklist."
+    "Run node scripts/verify-live-deployment-and-cloudflare.cjs against production domain.",
+    "Verify git status clean and pushed to origin main.",
+    "Confirm HTTP 200 on https://www.nihomi.com and HTTP 401 on protected /api/founder/summary."
   ],
   "risks": [
-    "Live payment gateway response timeout during sandbox/production handshake (mitigated by resilient fallback and transaction retry logging)."
+    "Edge CDN caching old static assets during initial rollout (mitigated by versioned Vite chunk hashes and Cache-Control headers)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP05-LANDING-PAGE-V3-OVERHAUL-AND-CONVERSION-ENGINE"
+    "NIHOMI-V3-WP06-FINAL-PRODUCTION-RELEASE-PREFLIGHT-AND-LAUNCH-CANDIDATE"
   ]
 }

@@ -68148,6 +68148,72 @@ billingRouter.post("/auto-topup", authenticateUser2, async (req, res) => {
   }
 });
 
+// server/config/paymentConfig.ts
+var getBKashConfig = () => {
+  const mode = process.env.BKASH_MODE === "live" || process.env.BKASH_SANDBOX === "false" ? "live" : "test";
+  const isSandbox = mode !== "live";
+  const defaultBaseUrl = isSandbox ? "https://tokenized.sandbox.bka.sh/v1.2.0-beta" : "https://tokenized.pay.bka.sh/v1.2.0-beta";
+  const baseUrl = process.env.BKASH_BASE_URL?.replace(/\/+$/, "") || defaultBaseUrl;
+  const appKey = process.env.BKASH_APP_KEY || "";
+  const appSecret = process.env.BKASH_APP_SECRET || "";
+  const username = process.env.BKASH_USERNAME || "";
+  const password = process.env.BKASH_PASSWORD || "";
+  const webhookSecret = process.env.BKASH_WEBHOOK_SECRET || appSecret;
+  const isConfigured = Boolean(
+    appKey && appSecret && username && password && !appKey.includes("test_placeholder")
+  );
+  return {
+    mode,
+    isSandbox,
+    baseUrl,
+    appKey,
+    appSecret,
+    username,
+    password,
+    webhookSecret,
+    isConfigured
+  };
+};
+var getSSLCommerzConfig = () => {
+  const mode = process.env.SSLCOMMERZ_MODE === "live" || process.env.SSLCOMMERZ_IS_SANDBOX === "false" ? "live" : "test";
+  const isSandbox = mode !== "live";
+  const baseUrl = isSandbox ? "https://sandbox.sslcommerz.com" : "https://securepay.sslcommerz.com";
+  const storeId = process.env.SSLCOMMERZ_STORE_ID || process.env.STORE_ID || "";
+  const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD || process.env.STORE_PASSWORD || "";
+  const isConfigured = Boolean(
+    storeId && storePassword && !storeId.includes("test_placeholder")
+  );
+  return {
+    mode,
+    isSandbox,
+    baseUrl,
+    storeId,
+    storePassword,
+    isConfigured
+  };
+};
+var getPaymentEnvironmentSummary = () => {
+  const bkash = getBKashConfig();
+  const ssl = getSSLCommerzConfig();
+  return {
+    bkash: {
+      mode: bkash.mode,
+      isConfigured: bkash.isConfigured,
+      appKeyPrefix: bkash.appKey ? `${bkash.appKey.slice(0, 4)}...` : "not_set",
+      usernamePrefix: bkash.username ? `${bkash.username.slice(0, 3)}...` : "not_set",
+      baseUrl: bkash.baseUrl
+    },
+    sslcommerz: {
+      mode: ssl.mode,
+      isConfigured: ssl.isConfigured,
+      storeIdPrefix: ssl.storeId ? `${ssl.storeId.slice(0, 4)}...` : "not_set",
+      baseUrl: ssl.baseUrl
+    },
+    currency: "BDT",
+    vatRatePercent: 5
+  };
+};
+
 // server/routes/payment.ts
 import { Router as Router9 } from "express";
 
@@ -69285,6 +69351,32 @@ function recordDurableTrxProcessed(trxID) {
     processedTrxRegistry.add(trxID);
   }
 }
+paymentRouter.get("/status", (_req, res) => {
+  try {
+    const summary = getPaymentEnvironmentSummary();
+    return res.json({
+      success: true,
+      gateways: {
+        bkash: summary.bkash,
+        sslcommerz: summary.sslcommerz
+      },
+      currency: summary.currency,
+      vatRatePercent: summary.vatRatePercent,
+      readyForFounderCredentials: true,
+      requiredEnvVars: [
+        "BKASH_APP_KEY",
+        "BKASH_APP_SECRET",
+        "BKASH_USERNAME",
+        "BKASH_PASSWORD",
+        "BKASH_MODE"
+      ],
+      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+    });
+  } catch (err) {
+    console.error("[PaymentRouter] Error in /status:", err);
+    return res.status(500).json({ success: false, error: "Internal payment status check failure" });
+  }
+});
 paymentRouter.get("/plans", (_req, res) => {
   try {
     const plans = subscriptionService.getCatalog();
