@@ -1,3 +1,4 @@
+import { getPaymentEnvironmentSummary } from '../config/paymentConfig.js';
 import { Router, Request, Response } from 'express';
 import { bKashService } from '../services/bKashService.js';
 import { sslCommerzService } from '../services/sslCommerzService.js';
@@ -411,6 +412,36 @@ function resolveTierAndIntervalFromAmount(amount: number): { tier: SubscriptionT
 }
 
 // ========================================================
+// ========================================================
+// 0. PAYMENT GATEWAY READY-STATE & DIAGNOSTIC STATUS
+// ========================================================
+paymentRouter.get('/status', (_req: Request, res: Response) => {
+  try {
+    const summary = getPaymentEnvironmentSummary();
+    return res.json({
+      success: true,
+      gateways: {
+        bkash: summary.bkash,
+        sslcommerz: summary.sslcommerz
+      },
+      currency: summary.currency,
+      vatRatePercent: summary.vatRatePercent,
+      readyForFounderCredentials: true,
+      requiredEnvVars: [
+        'BKASH_APP_KEY',
+        'BKASH_APP_SECRET',
+        'BKASH_USERNAME',
+        'BKASH_PASSWORD',
+        'BKASH_MODE'
+      ],
+      timestamp: new Date().toISOString()
+    });
+  } catch (err: any) {
+    console.error('[PaymentRouter] Error in /status:', err);
+    return res.status(500).json({ success: false, error: 'Internal payment status check failure' });
+  }
+});
+
 // 1. PUBLIC PLAN CATALOG
 // ========================================================
 paymentRouter.get('/plans', (_req: Request, res: Response) => {

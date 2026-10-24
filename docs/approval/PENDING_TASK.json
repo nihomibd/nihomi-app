@@ -1,44 +1,39 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP05-LANDING-PAGE-V3-OVERHAUL-AND-CONVERSION-ENGINE",
+  "task_id": "NIHOMI-V3-WP06-FINAL-PRODUCTION-RELEASE-PREFLIGHT-AND-LAUNCH-CANDIDATE",
   "status": "pending",
-  "created_at": "2026-10-24T05:57:00+06:00",
-  "base_commit": "1a887eb",
-  "title": "Version 3 Futuristic Neo-Tokyo Landing Page & Frictionless Conversion Engine",
-  "domain": "shared-loop-adapter",
-  "objective": "Overhaul the public front door of NIHOMI.COM into a futuristic Neo-Tokyo learning showcase. Integrate the interactive 'First Aha Moment' Hiragana canvas, live interactive previews of the Tokyo Konbini POS Cashier simulator and CBT Exam OS, clear commercial pricing matrix, and seamless Google OAuth/email modal triggers without any cognitive clutter or legacy redirection.",
+  "created_at": "2026-10-24T06:12:00+06:00",
+  "base_commit": "c229ed9",
+  "title": "Version 3 Final Production Release Preflight, Payment Credentials Ready-State & Launch Candidate V3",
+  "domain": "system-architecture-and-release",
+  "objective": "Prepare the entire NIHOMI platform for live commercial launch. Configure production payment credentials ready-state (bKash/Nagad/SSLCommerz secure environment variables hydration schema), verify aiCostGuard rate limiting and token safety, run preflight security and performance audit across all 15 routes, and execute the final production release candidate verification suite.",
   "in_scope": [
-    "Upgrade src/v2/pages/V2LandingPage.tsx with high-impact Neo-Tokyo visual polish (#0A0A12 obsidian slate, crimson/amber accents, subtle Hanabi canvas particles).",
-    "Embed the frictionless zero-sign-in 'First Aha Moment' Hiragana micro-demo (あ → い → あい ❤️) right in the hero section.",
-    "Showcase live interactive feature cards for the CBT Mock Exam OS (Pass/Cutoff matrix), Tokyo 7-Eleven POS simulator, and JIS Rirekisho Studio.",
-    "Integrate unified AuthModal triggers so Google login or email sign-in preserves landing context and seamlessly enters the V3 Dashboard.",
-    "Author automated test suite scripts/test-v3-wp05-landing-and-conversion.cjs with 100% green assertions and browser screenshot evidence."
+    "Configure production payment credentials environment loader and ready-state validation in server/payment-security.ts and server/routes/payment.ts for bKash merchant integration.",
+    "Verify aiCostGuard quota enforcement, token limits, and rate limiting across all Nomi Sensei endpoints.",
+    "Execute full preflight audit across all 15 V3 routes (landing, journey, dashboard, kana, curriculum, lesson, exam, workos, rirekisho, pricing, founder, terms, privacy, refund, legacy).",
+    "Author automated end-to-end launch verification suite scripts/test-v3-wp06-production-preflight.cjs with 100% green assertions.",
+    "Generate final Release Candidate V3 artifact and live readiness audit documentation."
   ],
   "out_of_scope": [
-    "Modifying backend PostgreSQL database schema (schema is stable and persisted).",
-    "External production marketing ad buys (reserved for GTM execution)."
+    "Hardcoding actual live secret payment keys into source control (must reside strictly in private .env / Cloudflare deployment secrets).",
+    "Modifying canonical JLPT curriculum definitions or lattice rules."
   ],
   "acceptance_criteria": [
-    "Landing page loads with zero console errors and authentic Neo-Tokyo dark aesthetic.",
-    "Interactive Hiragana demo allows clicking strokes/hearing audio without login barrier.",
-    "CTA buttons ('লার্নিং শুরু করুন', 'ফ্রি ট্রায়াল', 'লগইন') trigger AuthModal cleanly.",
-    "Full TypeScript typecheck passes with 0 errors (npx tsc --noEmit).",
-    "Production build compiles cleanly (npm run build).",
-    "Automated test suite passes with 100% green assertions and captures screenshot evidence across mobile and desktop."
+    "Payment system is ready for immediate live credential input with zero runtime errors.",
+    "All AI endpoints protected by aiCostGuard with sliding window rate limiting and quota verification.",
+    "Zero TypeScript or build errors (npx tsc --noEmit && npm run build).",
+    "Automated preflight test suite passes with 100% green assertions and captures screenshot evidence across all critical user flows."
   ],
   "verification": [
-    "Run npx tsc --noEmit to verify type safety.",
+    "Run npx tsc --noEmit to verify zero type errors.",
     "Run npm run build to verify production bundling.",
-    "Execute node scripts/test-v3-wp05-landing-and-conversion.cjs in headless browser.",
-    "Verify DOM elements for hero, Hiragana demo, CTA buttons, and auth modal."
+    "Execute node scripts/test-v3-wp06-production-preflight.cjs in headless browser.",
+    "Verify payment callback mock cycle, aiCostGuard middleware intercept, and release checklist."
   ],
   "risks": [
-    "Heavy canvas animations slowing down low-power mobile devices (mitigated by requestAnimationFrame throttling and will-change CSS optimization)."
+    "Live payment gateway response timeout during sandbox/production handshake (mitigated by resilient fallback and transaction retry logging)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP01-AUTH-ROUTING-UNIFICATION-AND-V1-TO-V3-CONSOLIDATION",
-    "NIHOMI-V3-WP02-UNIFIED-DASHBOARD-AND-LEGACY-CONSOLIDATION",
-    "NIHOMI-V3-WP03-EXAM-OS-OFFICIAL-MARKSHEET-AND-CERTIFICATE-ENGINE",
-    "NIHOMI-V3-WP04-TOKYO-KONBINI-WORKOS-AND-JIS-RIREKISHO-STUDIO"
+    "NIHOMI-V3-WP05-LANDING-PAGE-V3-OVERHAUL-AND-CONVERSION-ENGINE"
   ]
 }
