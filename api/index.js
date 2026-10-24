@@ -55145,6 +55145,24 @@ var init_db = __esm({
             ) || null;
           }
           if (payment) {
+            if (options.amount !== void 0 && options.amount !== null && !isNaN(Number(options.amount))) {
+              const webhookAmount = Number(options.amount);
+              if (Math.abs(webhookAmount - payment.amount) > 0.01) {
+                const tamperMsg = `Price tampering rejected: webhook amount (${webhookAmount} BDT) does not match authorized payment amount (${payment.amount} BDT).`;
+                console.error(`[Security Alert] ${tamperMsg} PaymentId: ${payment.id}, EventId: ${options.eventId}`);
+                event.status = "failed";
+                event.errorMessage = tamperMsg;
+                payment.status = "failed";
+                payment.failureReason = tamperMsg;
+                this.save();
+                return {
+                  success: false,
+                  error: tamperMsg,
+                  event,
+                  payment
+                };
+              }
+            }
             const now = (/* @__PURE__ */ new Date()).toISOString();
             payment.status = "paid";
             payment.paidAt = now;
@@ -55302,6 +55320,46 @@ var init_db = __esm({
         event.processed = true;
         this.save();
         return { success: true, event, message: "Webhook event status marked as retried and resolved." };
+      }
+      /**
+       * Automated reconciliation engine for pending payments
+       */
+      reconcilePendingPayments(maxAgeHours = 24) {
+        if (!this.data.payments) return { totalChecked: 0, reconciled: 0, expired: 0, details: [] };
+        const now = Date.now();
+        const maxAgeMs = maxAgeHours * 60 * 60 * 1e3;
+        const details = [];
+        let reconciled = 0;
+        let expired = 0;
+        const pendingPayments = this.data.payments.filter((p) => p.status === "pending" || p.status === "initiated");
+        for (const payment of pendingPayments) {
+          const createdTime = new Date(payment.createdAt).getTime();
+          const matchingEvent = (this.data.webhookEvents || []).find(
+            (e) => (Boolean(e.payloadReference) && e.payloadReference === payment.id || Boolean(e.transactionId) && Boolean(payment.providerReference) && e.transactionId === payment.providerReference || Boolean(e.transactionId) && Boolean(payment.providerTransactionId) && e.transactionId === payment.providerTransactionId) && (e.status === "success" || e.processed === true)
+          );
+          if (matchingEvent) {
+            payment.status = "paid";
+            payment.paidAt = (/* @__PURE__ */ new Date()).toISOString();
+            payment.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+            reconciled++;
+            details.push({ paymentId: payment.id, status: "reconciled_paid", reason: `Matched webhook ${matchingEvent.eventId}` });
+          } else if (now - createdTime > maxAgeMs) {
+            payment.status = "failed";
+            payment.failureReason = "Payment session expired without provider confirmation.";
+            payment.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+            expired++;
+            details.push({ paymentId: payment.id, status: "expired", reason: "Session timeout exceeded" });
+          }
+        }
+        if (reconciled > 0 || expired > 0) {
+          this.save();
+        }
+        return {
+          totalChecked: pendingPayments.length,
+          reconciled,
+          expired,
+          details
+        };
       }
       creditUserCoinsAndAI(userId, coins, aiCredits, reason = "Payment settled") {
         if (!this.data.coinWallets) {
@@ -62386,6 +62444,18 @@ learningRouter.get("/progress/streak", optionalAuth2, (req, res) => {
 init_db();
 import { Router as Router3 } from "express";
 var progressRouter = Router3();
+function validateKnowledgeStateSanity(state) {
+  if (!state || typeof state !== "object") {
+    return { valid: false, reason: "knowledgeState must be a non-null object" };
+  }
+  if (typeof state.totalXp === "number" && state.totalXp < 0) {
+    return { valid: false, reason: "totalXp cannot be negative" };
+  }
+  if (state.knownHiragana && !Array.isArray(state.knownHiragana)) {
+    return { valid: false, reason: "knownHiragana must be an array" };
+  }
+  return { valid: true };
+}
 progressRouter.get("/knowledge-state", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
@@ -62403,10 +62473,11 @@ progressRouter.post("/knowledge-state", requireAuth2, (req, res) => {
   try {
     const userId = req.user.id;
     const { knowledgeState } = req.body;
-    if (!knowledgeState || typeof knowledgeState !== "object") {
+    const validation = validateKnowledgeStateSanity(knowledgeState);
+    if (!validation.valid) {
       return res.status(400).json({
         success: false,
-        error: "knowledgeState object is required",
+        error: validation.reason,
         code: "INVALID_KNOWLEDGE_STATE"
       });
     }
@@ -62419,6 +62490,66 @@ progressRouter.post("/knowledge-state", requireAuth2, (req, res) => {
   } catch (err) {
     console.error("[ProgressRouter] Error saving knowledge state:", err?.message);
     return res.status(500).json({ success: false, error: "Failed to save knowledge state" });
+  }
+});
+progressRouter.post("/sync-batch", requireAuth2, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { attempts, knowledgeState, clientTimestamp } = req.body;
+    const syncedIds = [];
+    const failedIds = [];
+    if (Array.isArray(attempts)) {
+      for (const att of attempts) {
+        if (!att || typeof att !== "object" || !att.id) {
+          if (att?.id) failedIds.push(att.id);
+          continue;
+        }
+        try {
+          const p = db.getProgressByUserId(userId);
+          if (p) {
+            if (!p.offlineAttemptHistory) {
+              p.offlineAttemptHistory = [];
+            }
+            p.offlineAttemptHistory.push({
+              id: att.id,
+              domain: att.domain || "japanese-learning",
+              activityId: att.activityId,
+              score: att.score,
+              passed: att.passed,
+              xpEarned: att.xpEarned || 0,
+              timestamp: att.timestamp || (/* @__PURE__ */ new Date()).toISOString(),
+              ingestedAt: (/* @__PURE__ */ new Date()).toISOString()
+            });
+            if (p.offlineAttemptHistory.length > 200) {
+              p.offlineAttemptHistory = p.offlineAttemptHistory.slice(-200);
+            }
+          }
+          syncedIds.push(att.id);
+        } catch {
+          failedIds.push(att.id);
+        }
+      }
+      db.save();
+    }
+    let savedKnowledgeState = null;
+    if (knowledgeState) {
+      const validation = validateKnowledgeStateSanity(knowledgeState);
+      if (validation.valid) {
+        savedKnowledgeState = db.saveKnowledgeState(userId, knowledgeState);
+      }
+    }
+    return res.json({
+      success: true,
+      syncedIds,
+      failedIds,
+      processedCount: syncedIds.length,
+      knowledgeStateSaved: !!savedKnowledgeState,
+      serverTimestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      message: `Batch sync complete: ${syncedIds.length} attempts synchronized successfully.`
+    });
+  } catch (err) {
+    console.error("[ProgressRouter] Error processing sync-batch:", err?.message);
+    return res.status(500).json({ success: false, error: "Failed to process sync-batch" });
   }
 });
 
@@ -66894,6 +67025,14 @@ billingRouter.post("/checkout", authenticateUser2, async (req, res) => {
       }
     }
     const intervalLabel = billingInterval === "yearly" ? "Annual (12M)" : billingInterval === "half_yearly" ? "6 Months" : billingInterval === "quarterly" ? "3 Months" : "Monthly";
+    if (req.body.amount !== void 0 && req.body.amount !== null && !isNaN(Number(req.body.amount))) {
+      const submittedAmount = Number(req.body.amount);
+      if (Math.abs(submittedAmount - finalAmount) > 0.01) {
+        return res.status(400).json({
+          error: `Price tampering rejected: submitted amount (${submittedAmount} BDT) does not match canonical matrix price (${finalAmount} BDT).`
+        });
+      }
+    }
     const payment = db.createPayment({
       userId,
       planId,
@@ -67683,7 +67822,8 @@ billingRouter.post(["/webhook/:provider", "/webhook"], async (req, res) => {
     });
     if (!processResult.success) {
       console.error(`[Webhook] Failed atomic processing for event ${webhookResult.eventId}:`, processResult.error);
-      return res.status(500).json({ error: "Webhook processing encountered a state error." });
+      const isTampered = processResult.error?.includes("Price tampering");
+      return res.status(isTampered ? 400 : 500).json({ error: processResult.error || "Webhook processing encountered a state error." });
     }
     return res.status(200).json({
       received: true,
@@ -67694,6 +67834,25 @@ billingRouter.post(["/webhook/:provider", "/webhook"], async (req, res) => {
   } catch (err) {
     console.error(`[Webhook] Exception handling ${providerParam} webhook:`, err);
     return res.status(500).json({ error: "Internal server error processing webhook." });
+  }
+});
+billingRouter.post("/reconcile-pending", authenticateUser2, (req, res) => {
+  try {
+    const user = req.user;
+    const isAuthorized = user?.role === "admin" || user?.role === "founder" || user?.email === "mdtanvirkabirbiplob@gmail.com";
+    if (!isAuthorized) {
+      return res.status(403).json({ error: "Unauthorized: Admin or Founder privileges required to reconcile payments." });
+    }
+    const maxAgeHours = Number(req.body?.maxAgeHours) || 24;
+    const result = db.reconcilePendingPayments(maxAgeHours);
+    return res.json({
+      success: true,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      ...result
+    });
+  } catch (err) {
+    console.error("[Billing] Reconcile pending payments failed:", err);
+    return res.status(500).json({ error: "Failed to reconcile pending payments." });
   }
 });
 billingRouter.post("/start-trial", authenticateUser2, (req, res) => {
@@ -71608,6 +71767,171 @@ systemHealthRouter.post("/repair", requireAdmin, async (req, res) => {
 // server/routes/health.ts
 init_db();
 import { Router as Router15 } from "express";
+
+// server/services/dualPersistenceReconciler.ts
+init_supabase();
+init_db();
+function resolveProgressConflict(localProgress, remoteProgress) {
+  if (!remoteProgress) return { merged: localProgress, hadConflict: false };
+  if (!localProgress) return { merged: remoteProgress, hadConflict: false };
+  const localState = localProgress.knowledgeState || {};
+  const remoteState = remoteProgress.knowledgeState || (typeof remoteProgress.knowledge_state === "string" ? JSON.parse(remoteProgress.knowledge_state) : remoteProgress.knowledge_state) || {};
+  const localXp = localProgress.experiencePoints || localState.totalXp || 0;
+  const remoteXp = remoteProgress.experience_points || remoteState.totalXp || 0;
+  const hadXpConflict = localXp !== remoteXp;
+  const mergedXp = Math.max(localXp, remoteXp);
+  const mergedStreak = Math.max(
+    localProgress.currentStreak || localState.streakDays || 0,
+    remoteProgress.current_streak || remoteState.streakDays || 0
+  );
+  const localCompleted = localProgress.completedLessonIds || [];
+  const remoteCompleted = remoteProgress.completed_lessons || [];
+  const mergedCompleted = Array.from(/* @__PURE__ */ new Set([...localCompleted, ...remoteCompleted]));
+  const mergedKnowledgeState = {
+    ...localState,
+    ...remoteState,
+    knownHiragana: Array.from(/* @__PURE__ */ new Set([...localState.knownHiragana || [], ...remoteState.knownHiragana || []])),
+    knownKatakana: Array.from(/* @__PURE__ */ new Set([...localState.knownKatakana || [], ...remoteState.knownKatakana || []])),
+    knownVocabulary: Array.from(/* @__PURE__ */ new Set([...localState.knownVocabulary || [], ...remoteState.knownVocabulary || []])),
+    knownKanji: Array.from(/* @__PURE__ */ new Set([...localState.knownKanji || [], ...remoteState.knownKanji || []])),
+    masteredSkills: Array.from(/* @__PURE__ */ new Set([...localState.masteredSkills || [], ...remoteState.masteredSkills || []])),
+    totalXp: mergedXp,
+    streakDays: mergedStreak,
+    lastActiveDate: localProgress.lastActiveDate || remoteProgress.last_active_date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+  };
+  const hadKanaConflict = (localState.knownHiragana?.length || 0) !== mergedKnowledgeState.knownHiragana.length;
+  const merged = {
+    ...localProgress,
+    experiencePoints: mergedXp,
+    currentStreak: mergedStreak,
+    completedLessonIds: mergedCompleted,
+    knowledgeState: mergedKnowledgeState,
+    updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  return {
+    merged,
+    hadConflict: hadXpConflict || hadKanaConflict
+  };
+}
+var DualPersistenceReconciler = class {
+  constructor() {
+    this.status = {
+      isCloudConnected: false,
+      lastSyncTimestamp: null,
+      totalSyncedUsers: 0,
+      totalReconciledConflicts: 0,
+      lastError: null,
+      mode: "local_resilient_failover"
+    };
+    this.isRunning = false;
+  }
+  /**
+   * Probes if the remote Supabase PostgreSQL connection is healthy and responsive
+   */
+  async probeCloudHealth() {
+    try {
+      const supabase3 = getSupabase();
+      const { error } = await supabase3.from("users").select("id").limit(1);
+      if (error && error.code !== "PGRST116") {
+        this.status.isCloudConnected = false;
+        this.status.mode = "local_resilient_failover";
+        this.status.lastError = error.message;
+        return false;
+      }
+      this.status.isCloudConnected = true;
+      this.status.mode = "cloud_active";
+      this.status.lastError = null;
+      return true;
+    } catch (err) {
+      this.status.isCloudConnected = false;
+      this.status.mode = "local_resilient_failover";
+      this.status.lastError = err?.message || "Connection timeout";
+      return false;
+    }
+  }
+  /**
+   * Runs a complete reconciliation cycle between local JSON and remote Supabase
+   */
+  async runReconciliationCycle() {
+    if (this.isRunning) {
+      return {
+        success: false,
+        usersProcessed: 0,
+        conflictsResolved: 0,
+        errors: ["Reconciliation cycle already in progress"],
+        durationMs: 0
+      };
+    }
+    this.isRunning = true;
+    const startTime = Date.now();
+    const errors = [];
+    let usersProcessed = 0;
+    let conflictsResolved = 0;
+    try {
+      const isConnected = await this.probeCloudHealth();
+      if (!isConnected) {
+        this.isRunning = false;
+        return {
+          success: true,
+          usersProcessed: 0,
+          conflictsResolved: 0,
+          errors: ["Cloud endpoint offline: operating in resilient local failover mode."],
+          durationMs: Date.now() - startTime
+        };
+      }
+      const supabase3 = getSupabase();
+      const localUsers = db.data.users || [];
+      for (const user of localUsers) {
+        try {
+          const profile = db.getProfile(user.id);
+          const progress = db.getProgressByUserId(user.id);
+          const { data: remoteProgData } = await supabase3.from("learner_progress").select("*").eq("user_id", user.id).maybeSingle();
+          const resolution = resolveProgressConflict(progress, remoteProgData);
+          if (resolution.hadConflict) {
+            conflictsResolved++;
+            progress.knowledgeState = resolution.merged.knowledgeState;
+            progress.experiencePoints = resolution.merged.experiencePoints;
+            progress.currentStreak = resolution.merged.currentStreak;
+            progress.completedLessonIds = resolution.merged.completedLessonIds;
+            db.save();
+          }
+          await db.syncUserToSupabase(user, profile, resolution.merged);
+          usersProcessed++;
+        } catch (uErr) {
+          errors.push(`User ${user.id} sync error: ${uErr?.message}`);
+        }
+      }
+      this.status.lastSyncTimestamp = (/* @__PURE__ */ new Date()).toISOString();
+      this.status.totalSyncedUsers += usersProcessed;
+      this.status.totalReconciledConflicts += conflictsResolved;
+      this.status.lastError = errors.length > 0 ? errors[0] : null;
+      this.isRunning = false;
+      return {
+        success: errors.length === 0,
+        usersProcessed,
+        conflictsResolved,
+        errors,
+        durationMs: Date.now() - startTime
+      };
+    } catch (globalErr) {
+      this.isRunning = false;
+      this.status.lastError = globalErr?.message || "Fatal reconciliation failure";
+      return {
+        success: false,
+        usersProcessed,
+        conflictsResolved,
+        errors: [globalErr?.message || "Reconciliation failed"],
+        durationMs: Date.now() - startTime
+      };
+    }
+  }
+  getStatus() {
+    return { ...this.status };
+  }
+};
+var dualPersistenceReconciler = new DualPersistenceReconciler();
+
+// server/routes/health.ts
 var healthRouter = Router15();
 healthRouter.get("/", async (_req, res) => {
   const startTime = Date.now();
@@ -71668,6 +71992,7 @@ healthRouter.get("/", async (_req, res) => {
       status: dbStatus,
       connection: isSupabaseActive ? "supabase_postgresql_cloud" : "durable_persistent_store",
       latencyMs: dbLatencyMs,
+      dualPersistence: dualPersistenceReconciler.getStatus(),
       metrics: {
         users: totalUsers,
         lessons: totalLessons,
@@ -71681,34 +72006,21 @@ healthRouter.get("/", async (_req, res) => {
       provider: "Google Gemini 2.5 / 1.5 Multimodal",
       status: aiStatus,
       latencyMs: aiLatencyMs,
-      apiKeyConfigured: isGeminiConfigured,
-      capabilities: [
-        "Voice Sensei (Speech-to-Text & Pronunciation)",
-        "Vision Sensei (Kanji OCR & Document Breakdown)",
-        "JLPT N5-N1 Instant Grammar Coach",
-        "Tokyo Baito Interactive Job Simulation"
-      ]
+      modesAvailable: ["conversation", "grammar_explanation", "vocabulary_explanation", "correction", "translation"]
     },
-    paymentGateway: {
-      provider: "bKash Tokenized & EPS / SSLCommerz MFS Gateway Layer",
-      status: isAnyPaymentConfigured ? isEpsConfigured || isBkashConfigured && !process.env.BKASH_SANDBOX ? "live_production" : "sandbox_configured" : "not_configured",
-      gateways: {
-        bKash: isBkashConfigured ? "configured" : "not_configured",
-        eps: isEpsConfigured ? "configured" : "not_configured",
-        sslCommerz: isSslCommerzConfigured ? "configured" : "not_configured"
-      },
-      supportedMfs: ["bKash", "Nagad", "Rocket", "Upay", "Visa/Mastercard"]
+    payments: {
+      ready: isAnyPaymentConfigured,
+      bKash: isBkashConfigured ? "live_configured" : "sandbox_mock",
+      sslCommerz: isSslCommerzConfigured ? "live_configured" : "sandbox_mock",
+      currency: "BDT"
     },
     memory: {
-      heapUsedMB: Math.round(memUsage.heapUsed / 1024 / 1024 * 100) / 100,
-      heapTotalMB: Math.round(memUsage.heapTotal / 1024 / 1024 * 100) / 100,
-      rssMB: Math.round(memUsage.rss / 1024 / 1024 * 100) / 100
+      rssMb: Math.round(memUsage.rss / 1024 / 1024),
+      heapUsedMb: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotalMb: Math.round(memUsage.heapTotal / 1024 / 1024)
     }
   };
-  return res.status(200).json(healthPayload);
-});
-healthRouter.get("/ping", (_req, res) => {
-  return res.status(200).send("pong");
+  return res.json(healthPayload);
 });
 
 // server/routes/contentEngine.ts

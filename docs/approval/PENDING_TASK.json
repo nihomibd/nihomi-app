@@ -1,38 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "NIHOMI-V3-WP12-LIVE-PAYMENT-GATEWAY-AND-WEBHOOK-HARDENING",
+  "task_id": "NIHOMI-V3-WP13-SRE-MONITORING-CDN-PURGE-AND-TELEMETRY-PROBES",
   "status": "pending",
-  "created_at": "2026-10-25T01:25:00+06:00",
-  "base_commit": "1a07fb0",
-  "title": "Live Payment Gateway Cryptographic Webhook & Anti-Fraud Idempotency Hardening",
-  "domain": "monetization-and-security",
-  "objective": "Harden live payment webhook verifiers for bKash, SSLCommerz, and Stripe with HMAC SHA-256 signature validation, persistent idempotency locks against double billing, and automated reconciliation of pending transactions.",
+  "created_at": "2026-10-25T01:50:00+06:00",
+  "base_commit": "8aa5bf2",
+  "title": "Production SRE Deep Health Telemetry, Edge CDN Cache Purge & Traffic Telemetry",
+  "domain": "infrastructure-and-sre",
+  "objective": "Implement Cloudflare CDN cache-purge automation, deep system health telemetry probe (/api/health/deep), and production traffic observability metrics.",
   "in_scope": [
-    "Implement HMAC SHA-256 signature verification in server/services/paymentProviders.ts and routes/billing.ts.",
-    "Add atomic idempotency lock in server/services/subscriptionService.ts to prevent concurrent duplicate activations.",
-    "Author automated verification test scripts/test-payment-webhook-security.ts verifying replay protection and signature checks.",
+    "Add Cloudflare CDN cache-purge service in server/services/cdnPurgeService.ts for edge cache invalidation.",
+    "Add deep health probe in server/routes/health.ts returning memory RSS, event loop lag, and durable database metrics.",
+    "Add automated verification test scripts/test-sre-telemetry-and-cdn.ts.",
     "Verify with npx tsc --noEmit and npm run build.",
-    "Document evidence in NIHOMI_V3_WP12_PAYMENT_SECURITY_REPORT_BN.md."
+    "Document evidence in NIHOMI_V3_WP13_SRE_TELEMETRY_REPORT_BN.md."
   ],
   "out_of_scope": [
-    "Modifying approved 12-price matrix amounts.",
-    "Changing client-side checkout modal visual branding."
+    "Modifying core curriculum lattice or lesson progression rules.",
+    "Altering approved 12-price matrix amounts."
   ],
   "acceptance_criteria": [
-    "Payment webhooks reject invalid or missing HMAC cryptographic signatures with 400/401.",
-    "Duplicate webhook notifications with identical transaction ID are safely deduplicated (idempotent 200 OK without re-charging).",
-    "Tampered price amounts are rejected immediately.",
-    "Automated payment security test passes 100% of assertions."
+    "GET /api/health/deep returns HTTP 200 with system memory RSS, uptime, and database storage telemetry.",
+    "CDN cache-purge adapter supports automated URL/tag purging with graceful offline fallback.",
+    "Automated SRE telemetry test passes 100% of assertions.",
+    "Zero TypeScript errors and clean production build."
   ],
   "verification": [
-    "npx tsx scripts/test-payment-webhook-security.ts passes cleanly.",
+    "npx tsx scripts/test-sre-telemetry-and-cdn.ts passes cleanly.",
     "npx tsc --noEmit passes with 0 errors.",
     "npm run build clean verification."
   ],
   "risks": [
-    "Network timeouts during third-party gateway verification (mitigated by exponential backoff retry in worker queue)."
+    "Cloudflare API token rate limits (mitigated by batching purge requests)."
   ],
   "dependencies": [
-    "NIHOMI-V3-WP11-DATABASE-DUAL-PERSISTENCE-SYNC-AND-RECONCILER"
+    "NIHOMI-V3-WP12-LIVE-PAYMENT-GATEWAY-AND-WEBHOOK-HARDENING"
   ]
 }

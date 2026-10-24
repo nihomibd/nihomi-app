@@ -226,6 +226,16 @@ billingRouter.post('/checkout', authenticateUser, async (req: AuthenticatedReque
       billingInterval === 'half_yearly' ? '6 Months' :
       billingInterval === 'quarterly' ? '3 Months' : 'Monthly';
 
+    // Explicit price tampering rejection if client tampered with amount parameter
+    if (req.body.amount !== undefined && req.body.amount !== null && !isNaN(Number(req.body.amount))) {
+      const submittedAmount = Number(req.body.amount);
+      if (Math.abs(submittedAmount - finalAmount) > 0.01) {
+        return res.status(400).json({
+          error: `Price tampering rejected: submitted amount (${submittedAmount} BDT) does not match canonical matrix price (${finalAmount} BDT).`
+        });
+      }
+    }
+
     // Create initiated payment record
     const payment = db.createPayment({
       userId,
@@ -1186,7 +1196,8 @@ billingRouter.post(['/webhook/:provider', '/webhook'], async (req: Request, res:
 
     if (!processResult.success) {
       console.error(`[Webhook] Failed atomic processing for event ${webhookResult.eventId}:`, processResult.error);
-      return res.status(500).json({ error: 'Webhook processing encountered a state error.' });
+      const isTampered = processResult.error?.includes('Price tampering');
+      return res.status(isTampered ? 400 : 500).json({ error: processResult.error || 'Webhook processing encountered a state error.' });
     }
 
     return res.status(200).json({
@@ -1198,6 +1209,29 @@ billingRouter.post(['/webhook/:provider', '/webhook'], async (req: Request, res:
   } catch (err: any) {
     console.error(`[Webhook] Exception handling ${providerParam} webhook:`, err);
     return res.status(500).json({ error: 'Internal server error processing webhook.' });
+  }
+});
+
+// ==========================================
+// 6b. AUTOMATED PENDING TRANSACTION RECONCILIATION
+// ==========================================
+billingRouter.post('/reconcile-pending', authenticateUser, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = req.user;
+    const isAuthorized = user?.role === 'admin' || user?.role === 'founder' || user?.email === 'mdtanvirkabirbiplob@gmail.com';
+    if (!isAuthorized) {
+      return res.status(403).json({ error: 'Unauthorized: Admin or Founder privileges required to reconcile payments.' });
+    }
+    const maxAgeHours = Number(req.body?.maxAgeHours) || 24;
+    const result = db.reconcilePendingPayments(maxAgeHours);
+    return res.json({
+      success: true,
+      timestamp: new Date().toISOString(),
+      ...result
+    });
+  } catch (err: any) {
+    console.error('[Billing] Reconcile pending payments failed:', err);
+    return res.status(500).json({ error: 'Failed to reconcile pending payments.' });
   }
 });
 

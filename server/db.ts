@@ -4210,6 +4210,26 @@ class Database {
       }
 
       if (payment) {
+        // Anti-fraud price tampering check: ensure webhook amount matches payment amount
+        if (options.amount !== undefined && options.amount !== null && !isNaN(Number(options.amount))) {
+          const webhookAmount = Number(options.amount);
+          if (Math.abs(webhookAmount - payment.amount) > 0.01) {
+            const tamperMsg = `Price tampering rejected: webhook amount (${webhookAmount} BDT) does not match authorized payment amount (${payment.amount} BDT).`;
+            console.error(`[Security Alert] ${tamperMsg} PaymentId: ${payment.id}, EventId: ${options.eventId}`);
+            event.status = 'failed';
+            event.errorMessage = tamperMsg;
+            payment.status = 'failed';
+            payment.failureReason = tamperMsg;
+            this.save();
+            return {
+              success: false,
+              error: tamperMsg,
+              event,
+              payment
+            };
+          }
+        }
+
         const now = new Date().toISOString();
         payment.status = 'paid';
         payment.paidAt = now;
@@ -4395,6 +4415,61 @@ class Database {
     event.processed = true;
     this.save();
     return { success: true, event, message: 'Webhook event status marked as retried and resolved.' };
+  }
+
+  /**
+   * Automated reconciliation engine for pending payments
+   */
+  public reconcilePendingPayments(maxAgeHours = 24): {
+    totalChecked: number;
+    reconciled: number;
+    expired: number;
+    details: Array<{ paymentId: string; status: string; reason?: string }>;
+  } {
+    if (!this.data.payments) return { totalChecked: 0, reconciled: 0, expired: 0, details: [] };
+    const now = Date.now();
+    const maxAgeMs = maxAgeHours * 60 * 60 * 1000;
+    const details: Array<{ paymentId: string; status: string; reason?: string }> = [];
+    let reconciled = 0;
+    let expired = 0;
+
+    const pendingPayments = this.data.payments.filter((p) => p.status === 'pending' || p.status === 'initiated');
+    for (const payment of pendingPayments) {
+      const createdTime = new Date(payment.createdAt).getTime();
+      // Check if there is an unlinked successful webhook event
+      const matchingEvent = (this.data.webhookEvents || []).find(
+        (e) =>
+          ((Boolean(e.payloadReference) && e.payloadReference === payment.id) ||
+            (Boolean(e.transactionId) && Boolean(payment.providerReference) && e.transactionId === payment.providerReference) ||
+            (Boolean(e.transactionId) && Boolean(payment.providerTransactionId) && e.transactionId === payment.providerTransactionId)) &&
+          (e.status === 'success' || e.processed === true)
+      );
+
+      if (matchingEvent) {
+        payment.status = 'paid';
+        payment.paidAt = new Date().toISOString();
+        payment.updatedAt = new Date().toISOString();
+        reconciled++;
+        details.push({ paymentId: payment.id, status: 'reconciled_paid', reason: `Matched webhook ${matchingEvent.eventId}` });
+      } else if (now - createdTime > maxAgeMs) {
+        payment.status = 'failed';
+        payment.failureReason = 'Payment session expired without provider confirmation.';
+        payment.updatedAt = new Date().toISOString();
+        expired++;
+        details.push({ paymentId: payment.id, status: 'expired', reason: 'Session timeout exceeded' });
+      }
+    }
+
+    if (reconciled > 0 || expired > 0) {
+      this.save();
+    }
+
+    return {
+      totalChecked: pendingPayments.length,
+      reconciled,
+      expired,
+      details
+    };
   }
 
   public creditUserCoinsAndAI(
